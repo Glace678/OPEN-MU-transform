@@ -1,0 +1,58 @@
+curl and libcurl 8.22.1
+
+ Public curl releases:         276
+ Command line options:         278
+ curl_easy_setopt() options:   312
+ Public functions in libcurl:  100
+ Authors:                      1520
+ Contributors:                 3790
+
+This release includes the following changes:
+
+
+This release includes the following bugfixes:
+
+ o CURLOPT_SHARE.md: remove bad explanation for cookie sharing [7]
+ o docs: add the missing .html to the url-encode book link [3]
+ o doh: reject undersized HTTPS RDATA [11]
+ o ngtcp2: shrink max sendbuf [13]
+ o test1399: improve reliability [9]
+ o vquic: fix preprocessor check for old Darwin versions [8]
+ o vtls: fix Curl_cert_hostcheck when the pattern is not a C string [12]
+ o x509: stricter parsing [2]
+
+This release includes the following known bugs:
+
+ See https://curl.se/docs/knownbugs.html
+
+For all changes ever done in curl:
+
+ See https://curl.se/changes.html
+
+Planned upcoming removals include:
+
+ o HTTP/2 Server Push
+ o local crypto implementations
+ o NTLM
+ o SMB
+
+ See https://curl.se/dev/deprecate.html
+
+This release would not have looked like this without help, code, reports and
+advice from friends like these:
+
+  Artem Prilutskiy, Christian Hesse, Daniel Lang, Daniel Stenberg,
+  David Benjamin, Max Dymond, Ray Satiro, Roshan Ramani, Stefan Eissing,
+  Un1q32
+  (10 contributors)
+
+References to bug reports and discussions on issues:
+
+ [2] = https://curl.se/bug/?i=22799
+ [3] = https://curl.se/bug/?i=22811
+ [7] = https://curl.se/bug/?i=22788
+ [8] = https://curl.se/bug/?i=22797
+ [9] = https://curl.se/bug/?i=22798
+ [11] = https://curl.se/bug/?i=22791
+ [12] = https://curl.se/bug/?i=22795
+ [13] = https://curl.se/bug/?i=22786
