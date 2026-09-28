@@ -1,0 +1,27 @@
+# Local credentials and signing material
+.env
+.env.local
+*.dpapi
+*.p12
+*.pfx
+*.jks
+*.keystore
+/OpenMU-Android/mobile-server-settings.json
+
+# Generated files and developer caches
+__pycache__/
+*.pyc
+*.log
+*.bak*
+*.obj
+*.pdb
+*.dmp
+**/python-libs/
+/_premigration_backup.zip
+/_codex-repair/
+/lib/
+/发布包/Server/
+/发布包/Game/
+/OpenMU-安卓手机版-可安装/OpenMU-手机服务器/
+/OpenMU-安卓手机版-可安装/*.apk
+

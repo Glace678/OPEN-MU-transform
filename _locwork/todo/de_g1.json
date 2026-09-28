@@ -1,0 +1,16 @@
+{
+"locale": "de",
+"language": "German (Deutsch)",
+"chunk": "g1",
+"out": "D:\\openmu自用\\_locwork\\out_data\\de\\de_g1.json",
+"strings": [
+{
+"id": 1708,
+"en": "If you don't want to receive party requests while hunting, simply type in 'Party off' in the Chat window. To start receiving party requests again, type in 'Request on' in the Chat window.",
+"budget": 4096,
+"kinds": [
+"questwords"
+]
+}
+]
+}

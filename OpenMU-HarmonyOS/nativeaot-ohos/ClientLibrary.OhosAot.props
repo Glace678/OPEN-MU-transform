@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup>
+    <Compile Include="$(MSBuildProjectDirectory)/*.cs" />
+    <LinkerArg Include="-Wl,-soname,libMUnique.Client.Library.so"
+               Condition="$(RuntimeIdentifier.StartsWith('linux-ohos')) Or $(RuntimeIdentifier.StartsWith('linux-bionic'))" />
+  </ItemGroup>
+</Project>

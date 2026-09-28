@@ -1,0 +1,8 @@
+{
+  "string": [
+    { "name": "app_name", "value": "OpenMU 鸿蒙版" },
+    { "name": "module_desc", "value": "OpenMU 鸿蒙游戏客户端" },
+    { "name": "ability_desc", "value": "在鸿蒙手机、折叠屏与平板上运行 OpenMU" },
+    { "name": "perm_media_reason", "value": "用于首次启动时读取并解压游戏数据" }
+  ]
+}

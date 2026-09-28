@@ -1,0 +1,138 @@
+[Editor] Save completed successfully!: ['ASCII叹号!']
+   保存成功!
+[Editor] Failed to save items!: ['ASCII叹号!']
+   保存失败!
+[Editor] Skills saved successfully!: ['ASCII叹号!']
+   技能保存成功!
+[Editor] Failed to save skills!: ['ASCII叹号!']
+   技能保存失败!
+[Editor] S6E3 export completed successfully!: ['ASCII叹号!']
+   导出 S6E3 成功!
+[Editor] Failed to export as S6E3 format!: ['ASCII叹号!']
+   导出 S6E3 格式失败!
+[Editor] CSV export completed successfully!: ['ASCII叹号!']
+   导出 CSV 成功!
+[Editor] Failed to export as CSV!: ['ASCII叹号!']
+   导出 CSV 失败!
+[Editor] Skills exported as CSV successfully!: ['ASCII叹号!']
+   技能导出 CSV 成功!
+[Editor] Failed to export skills as CSV!: ['ASCII叹号!']
+   技能导出 CSV 失败!
+[Editor] File not found: {0}: ['ASCII冒号:']
+   找不到文件: {0}
+[Editor] Invalid index: {0}: ['ASCII冒号:']
+   无效索引: {0}
+[Editor] Error: Index {0} already in use!: ['ASCII叹号!', 'ASCII冒号:']
+   错误: 索引 {0} 已被使用!
+[Editor] Search:: ['ASCII冒号:']
+   搜索:
+[Editor] No columns selected. Click 'Columns' to show columns.: ['ASCII句尾.']
+   未选择任何字段。请点击 '字段' 以显示字段.
+[Editor] Toggle Column Visibility:: ['ASCII冒号:']
+   切换字段显示状态:
+[Editor] Items saved successfully!: ['ASCII叹号!']
+   物品保存成功!
+[Editor] Exported as legacy format successfully!: ['ASCII叹号!']
+   导出旧版格式成功!
+[Editor] Failed to export as legacy format!: ['ASCII叹号!']
+   导出旧版格式失败!
+[Editor] Items exported as CSV successfully!: ['ASCII叹号!']
+   物品导出 CSV 成功!
+[Editor] Failed to export item attributes as CSV!: ['ASCII叹号!']
+   物品属性导出 CSV 失败!
+[Editor] Failed to export skill attributes as CSV!: ['ASCII叹号!']
+   技能属性导出 CSV 失败!
+[Editor] Search Skills:: ['ASCII冒号:']
+   搜索技能:
+[Editor] Render Distances:: ['ASCII冒号:']
+   绘制距离:
+[Editor] View-aligned: follows camera yaw + pitch (tracks what you look at).: ['ASCII冒号:']
+   视角对齐: 跟随相机的偏航与俯仰 (追踪所视对象)。
+[Editor] Debug Visualization:: ['ASCII冒号:']
+   调试可视化:
+[Editor] Rendering:: ['ASCII冒号:']
+   绘制:
+[Editor] TODO - Not Working:: ['ASCII冒号:']
+   待办 - 尚未正常运作:
+[Editor] TODO - Not Implemented:: ['ASCII冒号:']
+   待办 - 尚未实作:
+[Editor] WARNING: Window size mismatch detected!: ['ASCII冒号:']
+   警告: 检测到窗口尺寸不一致！
+[Game] WarningContinuedAttemptsAtHackingWill: ['叹号加空格']
+   警告！ ！ ！继续尝试黑客攻击将导致账号（%s）永久被封锁！
+[Game] [error6] No.%d error!!! Findhack.zip needs to be installed in MU folder.: ['叹号加空格']
+   [错误6]No.%d错误！ ！ ！ Findhack.zip 需要安装在 MU 文件夹中。
+[Game] [%s-%d(Non-PvP) Server]: ['ASCII括号']
+   [%s-%d(非PvP)服务器]
+[Game] 1)After moving your account into the divided server,: ['ASCII括号']
+   1)将您的账号移至分服后，
+[Game] 3)After moving your account into the divided server: ['ASCII括号']
+   3)将您的账号移至分割服务器后
+[Game] Tied!!!: ['叹号加空格']
+   绑起来！ ！ ！
+[Game] You have lost the Guild War!!!: ['叹号加空格']
+   战盟战你输了！ ！ ！
+[Game] You have won the Guild War!!!: ['叹号加空格']
+   你赢得了战盟战争！ ！ ！
+[Game] You have won the Guild War!!!(Opposing guild master left): ['叹号加空格']
+   你赢得了战盟战！ ！ ！ （对方战盟盟主离开）
+[Game] You have lost the Guild War!!!(Guild master left): ['叹号加空格']
+   战盟战你输了！ ！ ！ （战盟盟主离开）
+[Game] You have won the Guild War!!!(Opposing guild disbanded): ['叹号加空格']
+   你赢得了战盟战！ ！ ！ （敌方战盟解散）
+[Game] You have lost the Guild War!!!(Guild disbanded): ['叹号加空格']
+   战盟战你输了！ ！ ！ （战盟解散）
+[Game] Lunen(Maya2): ['ASCII括号']
+   鲁能(玛雅2)
+[Game] Ion(Wigle2): ['ASCII括号']
+   离子(Wigle2)
+[Game] Milon(Bahr2): ['ASCII括号']
+   米隆(Bahr2)
+[Game] Muren(Kara2): ['ASCII括号']
+   牧人(卡拉2)
+[Game] Luga(Lamu2): ['ASCII括号']
+   卢加(Lamu2)
+[Game] You can enter Devil Square now!!: ['叹号加空格']
+   现在可以进入恶魔广场了！ ！
+[Game] AhGreatWarriorThanksToYour: ['ASCII叹号!']
+   啊!伟大的战士。感谢您的帮助，我们才能够保护这片土地免受昆顿士兵的侵害。为了表达我们的谢意，我将与您分享我的经验。
+[Game] Dinorant, +10, +15 items, Cloak of Invisibility: ['ASCII逗号,']
+   迪诺兰特, +10, +15 物品, 透明披风
+[Game] Open personal store(S): ['ASCII括号']
+   开设个人店(S)
+[Game] Close personal store(S): ['ASCII括号']
+   关闭个人商店(S)
+[Game] Feel the new Spirit of Guardian!!: ['叹号加空格']
+   感受新的守护者精神！ ！
+[Game] Be a first Lord of the castle!!: ['叹号加空格']
+   成为城堡的第一位领主！ ！
+[Game] Warning2223: ['叹号加空格']
+   !!警告 ！ ！
+[Game] MU Item Shop(X): ['ASCII括号']
+   MU物品商店(X)
+[Game] PC cafe point (%d/%d): ['ASCII括号']
+   PC咖啡厅点(%d/%d)
+[Game] 1:30 - 13:30 Chaos Castle(PC): ['ASCII括号']
+   1:30 - 13:30 赤色要塞(PC)
+[Game] 3:30 - 15:30 Chaos Castle(PC): ['ASCII括号']
+   3:30 - 15:30 赤色要塞(PC)
+[Game] 5:30 - 17:30 Chaos Castle(PC): ['ASCII括号']
+   5:30 - 17:30 赤色要塞(PC)
+[Game] 7:30 - 19:30 Chaos Castle(PC): ['ASCII括号']
+   7:30 - 19:30 赤色要塞(PC)
+[Game] 9:30 - 21:30 Chaos Castle(PC): ['ASCII括号']
+   9:30 - 21:30 赤色要塞(PC)
+[Game] 11:30 - 23:30 Chaos Castle(PC): ['ASCII括号']
+   11:30 - 23:30 赤色要塞(PC)
+[Game] Duel Start!!: ['叹号加空格']
+   决斗开始！ ！
+[Game] [%s-%d(Gold PvP) Server]: ['ASCII括号']
+   [%s-%d(黄金PvP)服务器]
+[Game] [%s-%d(Gold) Server]: ['ASCII括号']
+   [%s-%d(金牌)服务器]
+[Game] W Coin(P): ['ASCII括号']
+   W币(P)
+[Game] My W Coin(P) : %s: ['ASCII括号']
+   我的W币(P) : %s
+[Game] Phoenix Shot (Mana:%d): ['ASCII冒号:']
+   凤凰射击 (法力:%d)

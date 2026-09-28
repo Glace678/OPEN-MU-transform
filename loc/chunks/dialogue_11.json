@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1571,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 290-319)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1572,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 320-349)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1580,
+   "en": "How can I turn him down...?;Alright, let's give it a try!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1581,
+   "en": "How do I check coordinates?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1582,
+   "en": "How do I get it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1583,
+   "en": "How do you do? I am Gregory, the Gens Duprian Steward. What is your business with our gens?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1584,
+   "en": "How have you been? On behalf of the master of our clan, I thank you for answering the call of the clan. I personally hate to let the wandering mercenaries do this job, so I requested to send someone of the clan. I hope this didn't offend you. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1585,
+   "en": "How much is the registration fee and the deposit?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1586,
+   "en": "How will you help, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1587,
+   "en": "However, journeys such as this are bound to be perilous.;If you wish, we can provide you with a simple tutorial. What do you say?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1588,
+   "en": "Hunt down 10 Spiders from around town, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1590,
+   "en": "Hunting down measly Spiders is beneath me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1591,
+   "en": "Hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1592,
+   "en": "Hunting monsters will earn you EXP points, drop items, and Zens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1600,
+   "en": "I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1601,
+   "en": "I accept your quest. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1602,
+   "en": "I already knew that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1603,
+   "en": "I already knew that. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1604,
+   "en": "I am not ready yet. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1605,
+   "en": "I can almost see the end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1606,
+   "en": "I can't pass up on this. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1607,
+   "en": "I didn't mean to pester you. But as the clan gets stronger, so do you. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1608,
+   "en": "I don't feel like doing it. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1609,
+   "en": "I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1610,
+   "en": "I don't have the time right now. I'll do it next time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1611,
+   "en": "I don't have the time. I'm sorry. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1612,
+   "en": "I don't have time right now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1613,
+   "en": "I don't know how this story can help me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1614,
+   "en": "I don't need to be judged like this! (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1615,
+   "en": "I don't think I have time for that right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1616,
+   "en": "I don't want to decide right now. Just describe them for me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1617,
+   "en": "I give up. Going any further is beyond me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1618,
+   "en": "I got it!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1619,
+   "en": "I guess Lugard was tricked by Secrarium. How do I participate?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1620,
+   "en": "I have a monster hunt quest that will take you deeper into the Dungeon than before. Will you accept this quest? (Level 101-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1621,
+   "en": "I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1622,
+   "en": "I have a quest that will take you deep inside the Dungeon. It'll be harder than last time, but there's a better reward. Will you accept this quest? (Level 121-130)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1623,
+   "en": "I have a quest that will take you deep inside the Dungeon. There have been reports of monsters attempting to make their way above ground under the command of Gorgons. I want you to defeat these monsters. (Level 111-120)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1624,
+   "en": "I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1625,
+   "en": "I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1626,
+   "en": "I have no time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1627,
+   "en": "I have plenty of experience.;To each his own!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1628,
+   "en": "I hope you realize that a hero without a fighting spirit is merely a coward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1629,
+   "en": "I know it well. I hear you need a special item to go there....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1630,
+   "en": "I know it well. I hear you need an item to participate in the event....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1631,
+   "en": "I learned a skill!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1632,
+   "en": "I need you to accept a small quest first as a test. Are you up to it? There is of course a reasonable reward for finishing.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1633,
+   "en": "I neither have the skills nor the warriors I need to take on this quest. Give me more time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1634,
+   "en": "I regret we can't be of any help to you.;Here, at least take this present. I hope, the next time we meet, a great warrior stands before my eyes.;Enjoy your time out there.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1635,
+   "en": "I respect your decision to go on this journey.;Allow me to teach you a few simple but essential things you need to know before your adventure in MU begins.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

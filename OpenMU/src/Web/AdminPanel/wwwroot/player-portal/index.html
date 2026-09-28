@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>OpenMU</title>
+  <link rel="stylesheet" href="./portal.css">
+  <script type="module" src="./portal.js"></script>
+</head>
+<body>
+  <header>
+    <strong>OpenMU</strong>
+    <select id="culture" aria-label="Language">
+      <option value="en">English</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option>
+      <option value="ja">日本語</option><option value="ko">한국어</option><option value="de">Deutsch</option>
+      <option value="es">Español</option><option value="fr">Français</option><option value="pt">Português</option>
+      <option value="ru">Русский</option><option value="uk">Українська</option><option value="pl">Polski</option>
+      <option value="id">Bahasa Indonesia</option><option value="vi">Tiếng Việt</option><option value="tl">Filipino</option>
+    </select>
+  </header>
+  <main>
+    <nav aria-label="Account" role="tablist">
+      <button type="button" role="tab" data-view="register" data-text="RegisterButton">Register</button>
+      <button type="button" role="tab" data-view="change-password" data-text="ChangePasswordLink">Change password</button>
+      <button type="button" role="tab" data-view="reset-password" data-text="ForgotPasswordLink">Forgot password?</button>
+    </nav>
+    <p id="status" role="status" aria-live="polite" hidden></p>
+    <section id="result" hidden>
+      <label for="recovery-result" data-text="RecoveryCodeLabel">Recovery code</label>
+      <textarea id="recovery-result" rows="3" readonly spellcheck="false" autocomplete="off"></textarea>
+      <p data-text="RecoveryCodeNotice">Keep this code private and safe. Recovery invalidates the old code; the replacement is displayed only in this result.</p>
+    </section>
+    <section data-panel="register">
+      <h1 data-text="GameRegistrationHeading">Create a game account</h1>
+      <form data-endpoint="create">
+        <label for="register-name" data-text="AccountNameLabel">Account name</label>
+        <input id="register-name" name="loginName" autocomplete="username" minlength="3" maxlength="10" pattern="[A-Za-z0-9]{3,10}" required>
+        <label for="register-password" data-text="PasswordLabel">Password</label>
+        <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="3" maxlength="20" pattern="[!-~]{3,20}" required>
+        <label for="register-confirm" data-text="ConfirmPasswordLabel">Confirm password</label>
+        <input id="register-confirm" name="confirmPassword" type="password" autocomplete="new-password" minlength="3" maxlength="20" required>
+        <label for="register-security" data-text="SecurityCodeLabel">Security code</label>
+        <input id="register-security" name="securityCode" type="password" autocomplete="off" minlength="3" maxlength="10" pattern="[!-~]{3,10}" required>
+        <button type="submit" data-text="RegisterButton" disabled>Register</button>
+      </form>
+    </section>
+    <section data-panel="change-password" hidden>
+      <h1 data-text="ChangePasswordHeading">Change game password</h1>
+      <form data-endpoint="change-password">
+        <label for="change-name" data-text="AccountNameLabel">Account name</label>
+        <input id="change-name" name="loginName" autocomplete="username" minlength="3" maxlength="10" pattern="[A-Za-z0-9]{3,10}" required>
+        <label for="change-current" data-text="CurrentPasswordLabel">Current password</label>
+        <input id="change-current" name="oldPassword" type="password" autocomplete="current-password" minlength="3" maxlength="20" required>
+        <label for="change-new" data-text="NewPasswordLabel">New password</label>
+        <input id="change-new" name="newPassword" type="password" autocomplete="new-password" minlength="3" maxlength="20" pattern="[!-~]{3,20}" required>
+        <label for="change-confirm" data-text="ConfirmNewPasswordLabel">Confirm new password</label>
+        <input id="change-confirm" name="confirmNewPassword" type="password" autocomplete="new-password" minlength="3" maxlength="20" required>
+        <button type="submit" data-text="ChangePasswordButton" disabled>Change password</button>
+      </form>
+    </section>
+    <section data-panel="reset-password" hidden>
+      <h1 data-text="ResetPasswordHeading">Reset game password</h1>
+      <form data-endpoint="reset-password">
+        <label for="reset-name" data-text="AccountNameLabel">Account name</label>
+        <input id="reset-name" name="loginName" autocomplete="username" minlength="3" maxlength="10" pattern="[A-Za-z0-9]{3,10}" required>
+        <label for="reset-code" data-text="RecoveryCodeLabel">Recovery code</label>
+        <textarea id="reset-code" name="recoveryCode" rows="3" maxlength="80" spellcheck="false" autocomplete="off" required></textarea>
+        <label for="reset-new" data-text="NewPasswordLabel">New password</label>
+        <input id="reset-new" name="newPassword" type="password" autocomplete="new-password" minlength="3" maxlength="20" pattern="[!-~]{3,20}" required>
+        <label for="reset-confirm" data-text="ConfirmNewPasswordLabel">Confirm new password</label>
+        <input id="reset-confirm" name="confirmNewPassword" type="password" autocomplete="new-password" minlength="3" maxlength="20" required>
+        <button type="submit" data-text="ResetPasswordButton" disabled>Reset password</button>
+      </form>
+      <details>
+        <summary data-text="RecoveryIssueTitle">Issue or replace a recovery code</summary>
+        <form data-endpoint="recovery-code">
+          <label for="issue-name" data-text="AccountNameLabel">Account name</label>
+          <input id="issue-name" name="loginName" autocomplete="username" minlength="3" maxlength="10" pattern="[A-Za-z0-9]{3,10}" required>
+          <label for="issue-password" data-text="CurrentPasswordLabel">Current password</label>
+          <input id="issue-password" name="currentPassword" type="password" autocomplete="current-password" minlength="3" maxlength="20" required>
+          <button type="submit" data-text="IssueRecoveryCodeButton" disabled>Verify password and issue code</button>
+        </form>
+      </details>
+    </section>
+  </main>
+</body>
+</html>

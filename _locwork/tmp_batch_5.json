@@ -1,0 +1,802 @@
+[
+ {
+  "id": 3606,
+  "en": "Try learning the Summon Goblin skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3607,
+  "en": "Try your hand at Blood Castle Level 1 and complete Archangel's quest. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Blood Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3608,
+  "en": "Try your hand at Blood Castle Level 1. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3609,
+  "en": "Try your hand at Blood Castle Level 2 and complete Archangel's quest. Come back afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Blood Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3610,
+  "en": "Try your hand at Blood Castle Level 2. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3611,
+  "en": "Try your hand at Blood Castle Level 3 and complete Archangel's quest. Come back afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Blood Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3612,
+  "en": "Try your hand at Blood Castle Level 3. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3613,
+  "en": "Try your hand at Blood Castle Level 4 and complete Archangel's quest. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Blood Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3614,
+  "en": "Try your hand at Blood Castle Level 4. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3615,
+  "en": "Try your hand at Blood Castle Level 5 and complete Archangel's quest. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Blood Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3616,
+  "en": "Try your hand at Blood Castle Level 5. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3617,
+  "en": "Try your hand at Blood Castle Level 6 and complete Archangel's quest. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Blood Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3618,
+  "en": "Try your hand at Blood Castle Level 6. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3619,
+  "en": "Try your hand at Blood Castle Level 7 and complete Archangel's quest. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Blood Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3620,
+  "en": "Try your hand at Blood Castle Level 7. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3621,
+  "en": "Try your hand at Blood Castle Level 8 and complete Archangel's quest. I'll give you 2 Jewels of Life as a reward when you return. However, this applies only to Blood Castle Level 8.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3622,
+  "en": "Try your hand at Blood Castle Level 8. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3623,
+  "en": "Try your hand at Chaos Castle Level 1. Come back to me after defeating 1 Guardsman, and I will give you 100,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3624,
+  "en": "Try your hand at Chaos Castle Level 1. Defeat 1 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3625,
+  "en": "Try your hand at Chaos Castle Level 2. Come back to me after defeating 3 Guardsman, and I will give you 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3626,
+  "en": "Try your hand at Chaos Castle Level 2. Defeat 3 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3627,
+  "en": "Try your hand at Chaos Castle Level 3. Come back to me after defeating 5 Guardsmen, and I will give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Chaos Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3628,
+  "en": "Try your hand at Chaos Castle Level 4. Come back to me after defeating 1 traveler wearing the Armor of Guardsman, and I will give you 300,000 Zens and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3629,
+  "en": "Try your hand at Chaos Castle Level 4. Defeat 1 traveler wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3630,
+  "en": "Try your hand at Chaos Castle Level 5. Come back to me after defeating 3 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Soul as a reward. However, this applies only to Chaos Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3631,
+  "en": "Try your hand at Chaos Castle Level 5. Defeat 3 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3632,
+  "en": "Try your hand at Chaos Castle Level 6. Come back to me after defeating 5 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Harmony as a reward. However, this applies only to Chaos Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3633,
+  "en": "Try your hand at Chaos Castle Level 6. Defeat 5 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3634,
+  "en": "Try your hand at Chaos Castle Level 7. Come back to me after defeating 10 travelers wearing the Armor of Guardsman, and I will give you 2 Jewels of Soul as a reward. However, this applies only to Chaos Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3635,
+  "en": "Try your hand at Chaos Castle Level 7. Defeat 10 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3636,
+  "en": "Try your hand at Devil Square Level 1. Defeat the monsters and score 50 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3637,
+  "en": "Try your hand at Devil Square Level 1. If you achieve 50 points, I'll give you 100,000 Zens as a reward. However, this applies only to Devil Square Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3638,
+  "en": "Try your hand at Devil Square Level 2. Defeat the monsters and score 100 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3639,
+  "en": "Try your hand at Devil Square Level 3. Defeat the monsters and score 130 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3640,
+  "en": "Try your hand at Devil Square Level 4. Defeat the monsters and score 160 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3641,
+  "en": "Try your hand at Devil Square Level 5. Defeat the monsters and score 190 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3642,
+  "en": "Try your hand at Devil Square Level 6. Defeat the monsters and score 210 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3643,
+  "en": "Try your hand at Devil Square Level 7. Defeat the monsters and score 240 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3644,
+  "en": "Try your hand at Illusion Temple Level 1. Win and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3645,
+  "en": "Try your hand at Illusion Temple Level 1. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul. However, this applies only to Illusion Temple Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3646,
+  "en": "Try your hand at Illusion Temple Level 2. Win and I'll give you 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3647,
+  "en": "Try your hand at Illusion Temple Level 2. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3648,
+  "en": "Try your hand at Illusion Temple Level 3. Win and I'll give you 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3649,
+  "en": "Try your hand at Illusion Temple Level 3. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3650,
+  "en": "Try your hand at Illusion Temple Level 4. Win and I'll give you 1 Jewel of Chaos and 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3651,
+  "en": "Try your hand at Illusion Temple Level 4. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Chaos. However, this applies only to Illusion Temple Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3652,
+  "en": "Try your hand at Illusion Temple Level 5. Win and I'll give you 1 Jewel of Soul and 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3653,
+  "en": "Try your hand at Illusion Temple Level 5. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Bless. However, this applies only to Illusion Temple Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3654,
+  "en": "Try your hand at Illusion Temple Level 6. Win and I'll give you 1 Jewel of Bless and 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3655,
+  "en": "Try your hand at Illusion Temple Level 6. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless and 1 Jewel of Life. However, this applies only to Illusion Temple Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3656,
+  "en": "Try your hand on Chaos Castle Level 3. Defeat 5 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3657,
+  "en": "Tutorials are for children. Turn down the offer.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3658,
+  "en": "Twin Tails in Kanturu Relics are causing great harm to travelers. Go to Kanturu Relics and hunt down 100 Twin Tails. Come see me when that's done to receive an Invisibility Cloak + 7 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3669,
+  "en": "Type in '/Party off' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3670,
+  "en": "Type in '/Request off' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3671,
+  "en": "Type in '/off' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3672,
+  "en": "Unfit task",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3673,
+  "en": "Unfortunately, Secrarium was betting that darkness in the hearts of the travelers would ultimately lead to hostility and discord among them. Lugard was also aware of the travelers' dark side, but his trust in them didn't waver. Ultimately, the travelers did begin to feud with one another like the dark god had anticipated, and Chaos Castle became ever more... chaotic.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3674,
+  "en": "Uniria is a mount item you can use out in the battle field. Equip it to the top left corner of your Inventory window for faster travel throughout the battle field.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3676,
+  "en": "Upon entering, you'll need to wait for other players to enter. The players will then be divided into two teams: Alliance Camp and Illusion Sorcery Camp. The camp that brings over more relics to their own side wins.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3683,
+  "en": "Using a Town Portal Scroll will return you to the last town you visited.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3685,
+  "en": "Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3692,
+  "en": "Vanert Reicht may have conceded leadership of Noble Alliance Arca to Duprian Winston at the alliance's inception, but the master has always remained committed to eliminating the foul minions of Kundun and to the revival of the MU empire. Everyone knows about Duprian Winston's desires to subjugate the empire under his absolute rule. It's imperative that heroes like you help Vanert Reicht seal away Kundun and restore peace to the MU empire.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3706,
+  "en": "Very well. Give me the quest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3707,
+  "en": "Very well. How many do I need to buy?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3708,
+  "en": "Very well. I will take on this challenge.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3709,
+  "en": "Very well. It appears Gorgons are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 60 Gorgons, and I'll give you an Invisibility Cloak + 2 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3710,
+  "en": "Very well. It appears Hell Hounds are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 40 Hell Hounds, and I'll give you an Invisibility Cloak + 1 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3711,
+  "en": "Very well. It appears Hell Spiders are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 60 Hell Spiders, I will offer you a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions. When you claim your rewards, make sure you have at least 13 empty slots in your Inventory. Remember that.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3712,
+  "en": "Very well. It appears Larvae are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 40 Larvae, I will offer you a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions. When you claim you rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3713,
+  "en": "Very well. Let me give it a go. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3714,
+  "en": "Very well. Tell me more.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3728,
+  "en": "Visit the Shadow Phantom Soldier to receive a small reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3741,
+  "en": "Warrior! Welcome.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3744,
+  "en": "Watchers of Kundun (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3745,
+  "en": "Watchers of Kundun (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3746,
+  "en": "Watchers of Kundun (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3749,
+  "en": "We have much to cover. Let's move on to the next step.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3750,
+  "en": "We launched an investigation after communication with our reconnaissance party at the Dungeon started to grow sporadic and we found out that they were too tied up in dealing with a growing number of monsters. Will you go to the Dungeon and help eradicate these monsters? (Level 66-79)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3751,
+  "en": "We're nearing the end of our tutorial. Now that you have a skill, it'll make sense for you to build more combat experience. Come back when you reach a certain level, and I will give you a Uniria as a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3761,
+  "en": "Welcome back. Now all you need to do is eliminating Gaion in Varka. Are you ready? (Lv. 350 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3762,
+  "en": "Welcome to MU.;I'll assist you on your road to becoming a true warrior.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3763,
+  "en": "Welcome to the newly founded Devias branch of the mercenary guild. We're the one who stopped Kundun's Army along with the 5 major clans but now most of the veterans have retired. So we decided to adopt the Free Mercenary system as we open this guild office.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3764,
+  "en": "Welcome to the world of Mu.;We have been waiting for a hero like you to arrive and put a stop to the chaos brought on to the Mu realm by Kundun.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3765,
+  "en": "Welcome, this is the mercenary guild. We deliver various requests to the registered free mercenaries. There are rewards when you complete the request successfully, so give it a try.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3766,
+  "en": "Well done. Now please bring me the clubs of Burnt Murderers in Vulcanus. (Lv. 350 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3767,
+  "en": "Well, you may not want to learn more about him, but a mission is still a mission. I'll tell you more if you come back. (The quest has been cancelled.)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3768,
+  "en": "Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Level 351-380)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3769,
+  "en": "Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Master Level)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3773,
+  "en": "What are the queen's guardians doing at a place like this?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3774,
+  "en": "What can I help you? Ah�� you came for the request from us. Do you know Gaion? He was actually the sworn brother of the first mercenary guild master but our elders want to get rid of him since he's sort of an icon of treason. I don't understand their concern because he can never leave Varka. (Lv. 350 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3775,
+  "en": "What can I help you? Ah�� you're the one from the mercenary guild! Speaking frankly, I would never have requested the mercenary guild if I had had any other option�� Well, never mind. There are 2 requests, first is to collect the Stardust powder and secondly, obtaining a rare jewel. Will you accept? (Lv. 350 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3776,
+  "en": "What do you do if you don't want to receive party requests?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3777,
+  "en": "What do you do if you want to trade with a character who is in front of you?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3778,
+  "en": "What is the free mercenary?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3779,
+  "en": "What is this Town Portal Scroll?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3780,
+  "en": "What is your business with our gens? I am Conrad, the Gens Vanert Steward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3781,
+  "en": "What kind of supplies...?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3782,
+  "en": "What level do I need to be?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3783,
+  "en": "What's a Uniria?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ }
+]

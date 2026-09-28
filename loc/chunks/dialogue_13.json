@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1706,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1707,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1708,
+   "en": "If you don't want to receive party requests while hunting, simply type in 'Party off' in the Chat window. To start receiving party requests again, type in 'Request on' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1709,
+   "en": "If you find yourself far away from a town or cornered while on a hunt, the Town Portal Scroll can come in really handy.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1710,
+   "en": "If you leave the gens, your contribution will be reset.;Do you still wish to leave?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1711,
+   "en": "If you want to find out when you can enter, simply move your mouse over the Armor of Guardsman. If you want to enter, simply right-click on the armor at a designated time. Come see me when you have time, and I will give you a quest that will earn you the item needed to enter the event.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1722,
+   "en": "Illusion Spells, the foundation of Illusion Sorcery, was discovered by an Archaeologist named Mirage. Mirage found the spells' power to be too dangerous and sealed it. His partner Lev, however, stole the spells to brainwash people and establish Illusion Sorcery. Illusion Sorcery gradually grew larger and brought chaos to the continent.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1723,
+   "en": "Illusion Temple Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1724,
+   "en": "Illusion Temple Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1725,
+   "en": "Illusion Temple Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1726,
+   "en": "Illusion Temple Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1727,
+   "en": "Illusion Temple Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1728,
+   "en": "Illusion Temple Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1730,
+   "en": "Illusion Temple is a place where you can acquire items and equipment for fast growth. If you wish to possess such items and equipment for yourself, inquire with the Shadow Phantom Soldier about Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1731,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1732,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1733,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 351-380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1734,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1735,
+   "en": "Illusion Temple...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1743,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest, but more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1744,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1745,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1746,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1747,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1748,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1749,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1750,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1751,
+   "en": "In MU, it's possible to combine different items to create new ones. In fact, trying out different combinations of items adds a whole new dimension to MU.;Whom should you seek out in order to combine items?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1752,
+   "en": "In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination. Discovering areas that are right for your level and hunting there can also be very fun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1857,
+   "en": "Inland Supply Route!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1879,
+   "en": "Iron Riders have been launching guerilla attacks against our forces stationed throughout Kanturu Ruins. Eliminate these Iron Riders and relieve the stress of our gens members.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1882,
+   "en": "Is it time for me to return to the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1883,
+   "en": "Is the bond of your Blood Castle party still strong? If not, I suggest you return to Blood Castle to strengthen it. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1884,
+   "en": "Is there anything I need to be cautious of?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1885,
+   "en": "Is there anything I should be aware of about Illusion Temple?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1886,
+   "en": "Is there anything I should know about Devil Square?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1887,
+   "en": "It all makes sense now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1888,
+   "en": "It doesn't matter with the travelers, but you have to be careful when you kill a corrupt guardsman. Corrupt guardsmen will explode and may even push you off the arena. If this happens, you will be disqualified.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1889,
+   "en": "It really is easy to enter. What does the event involve, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1890,
+   "en": "It seems Cursed Liches are tormenting the residents of Elveland with their dark spells and curses. Hunt down 40 of those Cursed Liches, and I'll give you a Devil's Invitation +1 as a reward. I suggest you work with others for faster results.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1891,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1892,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1893,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1894,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1895,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1896,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1897,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1898,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1899,
+   "en": "It shouldn't be too difficult for you to train in Chaos Castle. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 180-239, Advanced character: Level 160-219)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1900,
+   "en": "It sounds like an easy job...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

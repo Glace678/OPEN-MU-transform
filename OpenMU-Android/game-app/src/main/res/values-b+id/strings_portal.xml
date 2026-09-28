@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Akun</string>
+    <string name="account_portal_address">Alamat portal</string>
+    <string name="account_portal_language">Bahasa portal</string>
+    <string name="account_register">Daftar</string>
+    <string name="account_change_password">Ubah kata sandi</string>
+    <string name="account_reset_password">Lupa kata sandi?</string>
+    <string name="account_portal_settings">Pengaturan akun</string>
+    <string name="account_portal_not_configured">Masukkan alamat portal akun yang valid di pengaturan.</string>
+    <string name="account_portal_invalid">Masukkan asal HTTPS. HTTP hanya diizinkan untuk loopback langsung atau pemasangan lokal tepercaya. Kredensial, jalur, kueri, dan fragmen tidak diizinkan.</string>
+    <string name="account_portal_no_browser">Tidak ada peramban untuk membuka portal akun.</string>
+</resources>

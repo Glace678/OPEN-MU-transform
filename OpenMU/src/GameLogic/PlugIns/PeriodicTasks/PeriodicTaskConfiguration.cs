@@ -1,0 +1,84 @@
+// <copyright file="PeriodicTaskConfiguration.cs" company="MUnique">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace MUnique.OpenMU.GameLogic.PlugIns.PeriodicTasks;
+
+using MUnique.OpenMU.Interfaces;
+
+/// <summary>
+/// Configuration for the <see cref="PeriodicTaskBasePlugIn{TConfiguration,TState}"/>.
+/// </summary>
+public class PeriodicTaskConfiguration
+{
+    /// <summary>
+    /// Gets or sets a time delay.
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.PeriodicTaskConfiguration_PreStartMessageDelay_Name), Order = 1)]
+    public TimeSpan PreStartMessageDelay { get; set; } = TimeSpan.FromSeconds(3);
+
+    /// <summary>
+    /// Gets or sets the minimum time of the task duration.
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.PeriodicTaskConfiguration_TaskDuration_Name), Order = 2)]
+    public TimeSpan TaskDuration { get; set; } = TimeSpan.FromMinutes(5);
+
+    /// <summary>
+    /// Gets or sets the text which prints as a golden message in the game when task starts.
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.PeriodicTaskConfiguration_StartMessage_Name), Order = 3)]
+    public LocalizedString StartMessage { get; set; }
+
+    /// <summary>
+    /// Gets or sets the text which prints as a golden message in the game when task ends.
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.PeriodicTaskConfiguration_EndMessage_Name), Order = 4)]
+    public LocalizedString EndMessage { get; set; }
+
+    /// <summary>
+    /// Gets or sets a timetable for the event.
+    /// </summary>
+    [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.PeriodicTaskConfiguration_Timetable_Name), Order = 5)]
+    public IList<TimeOnly> Timetable { get; set; } = new List<TimeOnly>();
+
+    /// <summary>
+    /// Generate a sequence of time points like [00:00, 00:01, ...].
+    /// </summary>
+    /// <param name="duration">The duration.</param>
+    /// <param name="startLimit">The start limit, inclusive.</param>
+    /// <param name="endLimit">The end limit, exclusive.</param>
+    public static IEnumerable<TimeOnly> GenerateTimeSequence(TimeSpan duration, TimeOnly? startLimit = null, TimeOnly? endLimit = null)
+    {
+        var limit = endLimit?.ToTimeSpan() ?? TimeSpan.FromDays(1);
+        var current = startLimit?.ToTimeSpan() ?? TimeSpan.Zero;
+
+        while (current < limit)
+        {
+            yield return TimeOnly.FromTimeSpan(current);
+            current = current.Add(duration);
+        }
+    }
+
+    /// <summary>
+    /// Check if current time is OK for starting an invasion.
+    /// </summary>
+    /// <param name="serverTimeZone">
+    /// The server time zone used to interpret the <see cref="Timetable"/> times of day.
+    /// Pass <see cref="TimeZoneInfo.Utc"/> to keep the previous UTC-based behavior.
+    /// </param>
+    /// <returns>Returns true if the invasion can be started.</returns>
+    public virtual bool IsItTimeToStart(TimeZoneInfo serverTimeZone)
+    {
+        if (this.Timetable.Count == 0)
+        {
+            return false;
+        }
+
+        var nowLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+        var nowTime = TimeOnly.FromDateTime(nowLocal);
+        var earlier = nowTime.Add(TimeSpan.FromSeconds(-5));
+
+        // For example, p = 00:00. Check that time between 00:00:00 and 00:00:05
+        return this.Timetable.Any(p => p.IsBetween(earlier, nowTime));
+    }
+}

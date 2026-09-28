@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "app_name", "value": "OpenMU 鸿蒙 GM" },
+    { "name": "module_desc", "value": "OpenMU 本地服务器手机 GM" },
+    { "name": "ability_desc", "value": "向本地在线角色发放装备、道具与金币" }
+  ]
+}

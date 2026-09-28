@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">账号</string>
+    <string name="account_portal_address">账号门户地址</string>
+    <string name="account_portal_language">账号门户语言</string>
+    <string name="account_register">注册</string>
+    <string name="account_change_password">修改密码</string>
+    <string name="account_reset_password">忘记密码？</string>
+    <string name="account_portal_settings">账号设置</string>
+    <string name="account_portal_not_configured">请在设置中填写有效的账号门户地址。</string>
+    <string name="account_portal_invalid">请输入 HTTPS 根地址。HTTP 仅允许直接回环地址或可信本地配对；不能包含账号凭据、路径、查询参数或片段。</string>
+    <string name="account_portal_no_browser">没有可用于打开账号门户的浏览器。</string>
+</resources>

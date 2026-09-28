@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1636,
+   "en": "I see you've now mastered hunting. When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1637,
+   "en": "I see you've successfully completed your first hunt! Did you find it difficult? Hunting monsters will earn you EXP points, drop items, and Zens.;You can pick up items dropped by defeated monsters using the mouse or automatically by pressing the space bar.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1638,
+   "en": "I see.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1639,
+   "en": "I see. How do I enter?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1640,
+   "en": "I simply can't go on anymore. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1641,
+   "en": "I think I have enough courage already. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1642,
+   "en": "I think a quest involving the Dungeon, which is a headache for Lorencia, should be suitable for you. I want you to wipe out the monsters in the Dungeon, one by one. Will you accept this quest? (Level 91-100)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1643,
+   "en": "I trust you are quite used to Devil Square by now. However, obtaining an invitation to Devil Square remains a difficult task. Luckily, I have a quest that will earn you an invitation. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1644,
+   "en": "I trust you are somewhat familiar with Blood Castle by now. You should now focus on building the bond between you and your comrades to the point where you can rely on each another unconditionally.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1645,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. However, it should still be difficult for you to acquire the necessary item. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1646,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. The event will now be even more challenging because you will face more powerful users and corrupt guardsmen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1647,
+   "en": "I trust you are somewhat familiar with Devil Square by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades execute coordinated attacks.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1648,
+   "en": "I trust you are somewhat familiar with Illusion Temple by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades learn to work together.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1649,
+   "en": "I understand well. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1650,
+   "en": "I understand.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1651,
+   "en": "I understand. I will do what I can.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1652,
+   "en": "I want to be an Elf who focuses on defense!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1653,
+   "en": "I want to be an Elf who focuses on wizardry!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1654,
+   "en": "I want to hear more. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1655,
+   "en": "I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1656,
+   "en": "I will give you the queen's gifts if you pass a test to see if there's anything else you need to know and if you have the basic knowledge to travel throughout the MU realm. How about it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1657,
+   "en": "I will guide you through MU game play.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1658,
+   "en": "I will help you. Tell me what to do. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1659,
+   "en": "I will inform you when a request of your level is delivered. Thank you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1660,
+   "en": "I will sign up. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1661,
+   "en": "I will teach you basic hunting and controls through a simple tutorial.;It's not that difficult, and I'm sure you'll finish it in no time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1662,
+   "en": "I will teach you hunting and control commands through a simple tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1663,
+   "en": "I will tell you then. Devildom's royal guards, who were summoned when Kundun succumbed to Secrarium, posed a great threat to the heaven world. To protect their base, the Twelve Saints formed a barrier around Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1664,
+   "en": "I'd rather you give me the gifts without the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1665,
+   "en": "I'll explain this in more detail. What else do you wish to know?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1666,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you�� (The quest has been cancelled)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1667,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you�� (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1668,
+   "en": "I'll head for Vulcanus immediately. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1669,
+   "en": "I'll just take the queen's gifts without taking the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1670,
+   "en": "I'll stay focused until the very end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1671,
+   "en": "I'll test you to see if you have the basic knowledge required for travel throughout the MU empire and give you the queen's gifts if you pass.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1672,
+   "en": "I'm always up for hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1673,
+   "en": "I'm busy now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1674,
+   "en": "I'm glad we can help. We aren't difficult to find.;Simply look for and talk to the Shadow Phantom Soldier in any of the towns.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1675,
+   "en": "I'm here for your request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1676,
+   "en": "I'm not ready yet. Please wait. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1677,
+   "en": "I'm sorry to hear that. There are many ways to become stronger, but they'll all take time. Remember that well.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1678,
+   "en": "I'm sorry to hear that. You can't repeat the first mission if you abandon the second mission. You must complete the second mission before you can repeat the first mission. Please return if you change your mind.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1679,
+   "en": "I'm sorry. I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1680,
+   "en": "I'm sorry. I don't have the time. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1681,
+   "en": "I'm sure you are well aware of Kundun. The weakest and most disorganized monsters of Kundun's army are frequently attacking and plundering civilians just outside of town. I wanted to ask you to eliminate these plundering monsters.... Will you accept this quest? (Level 15-25)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1682,
+   "en": "I'm sure you have a long trail of defeated monsters behind you. However, travelers widely vary in terms of their skills. If you're unsure of your own skills, proving yourself at Chaos Castle should give you some clarity. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1683,
+   "en": "I'm too busy to help right now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1701,
+   "en": "Ice Walkers are attacking and weakening the barrier that was formed to separate La Cleon and Devias from one another. Go to La Cleon and defeat 120 Ice Walkers. Come see me once that's done to receive a Devil's Invitation + 6 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1705,
+   "en": "If you are an Agility Elf, whose priority is defense, you can equip a weapon and use its skills. If you are an Energy Elf, whose priority is wizardry, you can purchase orbs to learn skills.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

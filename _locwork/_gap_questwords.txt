@@ -1,0 +1,51 @@
+47|4096|...Whispers...
+48|4096|...trade...
+370|4096|Blood Castle Adaptation (1)
+371|4096|Blood Castle Adaptation (2)
+372|4096|Blood Castle Adaptation (3)
+373|4096|Blood Castle Adaptation (4)
+374|4096|Blood Castle Challenge (1)
+375|4096|Blood Castle Challenge (2)
+376|4096|Blood Castle Challenge (3)
+377|4096|Blood Castle Challenge (4)
+496|4096|Chaos Castle Adaptation (1)
+497|4096|Chaos Castle Adaptation (2)
+498|4096|Chaos Castle Adaptation (3)
+499|4096|Chaos Castle Adaptation (4)
+500|4096|Chaos Castle Challenge (1)
+501|4096|Chaos Castle Challenge (2)
+502|4096|Chaos Castle Challenge (3)
+503|4096|Chaos Castle Challenge (4)
+830|4096|Devil Square Adaptation (1)
+831|4096|Devil Square Adaptation (2)
+832|4096|Devil Square Adaptation (3)
+833|4096|Devil Square Adaptation (4)
+834|4096|Devil Square Challenge (1)
+835|4096|Devil Square Challenge (2)
+836|4096|Devil Square Challenge (3)
+837|4096|Devil Square Challenge (4)
+937|4096|Dungeon Sweep!
+1219|4096|Gens Ranking Reward
+1262|4096|Go beyond the walls of Lorencia and hunt down 30 Hounds. I'm sure this hunt is well within your abilities.
+1263|4096|Go beyond the walls of Noria and hunt down 3 Chain Scorpions.
+1550|4096|Heroic Courage
+1551|4096|Heroic Fighting Spirit
+1552|4096|Heroic Mentality
+1553|4096|Heroic Qualities
+1554|4096|Heroic Tenacity
+1564|4096|Hmm, Letter of Request……
+1565|4096|Hmm, free mercenary……
+1723|4096|Illusion Temple Adaptation (1)
+1724|4096|Illusion Temple Adaptation (2)
+1725|4096|Illusion Temple Adaptation (3)
+1726|4096|Illusion Temple Challenge (1)
+1727|4096|Illusion Temple Challenge (2)
+1728|4096|Illusion Temple Challenge (3)
+1735|4096|Illusion Temple...
+1857|4096|Inland Supply Route!
+2198|4096|Mercenary Guild Office?
+2256|4096|NPC dialog script error!
+2371|4096|Party request?
+3744|4096|Watchers of Kundun (1)
+3745|4096|Watchers of Kundun (2)
+3746|4096|Watchers of Kundun (3)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Cuenta</string>
+    <string name="account_portal_address">Dirección del portal</string>
+    <string name="account_portal_language">Idioma del portal</string>
+    <string name="account_register">Registrar</string>
+    <string name="account_change_password">Cambiar contraseña</string>
+    <string name="account_reset_password">¿Olvidaste la contraseña?</string>
+    <string name="account_portal_settings">Ajustes de cuenta</string>
+    <string name="account_portal_not_configured">Introduce una dirección válida del portal de cuentas en los ajustes.</string>
+    <string name="account_portal_invalid">Introduce un origen HTTPS. HTTP solo permite bucle local directo o vinculación local de confianza. No se permiten credenciales, rutas, consultas ni fragmentos.</string>
+    <string name="account_portal_no_browser">No hay un navegador disponible para abrir el portal de cuentas.</string>
+</resources>

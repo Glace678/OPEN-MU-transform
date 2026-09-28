@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3674,
+   "en": "Uniria is a mount item you can use out in the battle field. Equip it to the top left corner of your Inventory window for faster travel throughout the battle field.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3676,
+   "en": "Upon entering, you'll need to wait for other players to enter. The players will then be divided into two teams: Alliance Camp and Illusion Sorcery Camp. The camp that brings over more relics to their own side wins.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3683,
+   "en": "Using a Town Portal Scroll will return you to the last town you visited.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3685,
+   "en": "Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3692,
+   "en": "Vanert Reicht may have conceded leadership of Noble Alliance Arca to Duprian Winston at the alliance's inception, but the master has always remained committed to eliminating the foul minions of Kundun and to the revival of the MU empire. Everyone knows about Duprian Winston's desires to subjugate the empire under his absolute rule. It's imperative that heroes like you help Vanert Reicht seal away Kundun and restore peace to the MU empire.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3706,
+   "en": "Very well. Give me the quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3707,
+   "en": "Very well. How many do I need to buy?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3708,
+   "en": "Very well. I will take on this challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3709,
+   "en": "Very well. It appears Gorgons are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 60 Gorgons, and I'll give you an Invisibility Cloak + 2 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3710,
+   "en": "Very well. It appears Hell Hounds are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 40 Hell Hounds, and I'll give you an Invisibility Cloak + 1 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3711,
+   "en": "Very well. It appears Hell Spiders are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 60 Hell Spiders, I will offer you a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions. When you claim your rewards, make sure you have at least 13 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3712,
+   "en": "Very well. It appears Larvae are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 40 Larvae, I will offer you a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions. When you claim you rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3713,
+   "en": "Very well. Let me give it a go. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3714,
+   "en": "Very well. Tell me more.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3728,
+   "en": "Visit the Shadow Phantom Soldier to receive a small reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3741,
+   "en": "Warrior! Welcome.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3744,
+   "en": "Watchers of Kundun (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3745,
+   "en": "Watchers of Kundun (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3746,
+   "en": "Watchers of Kundun (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3749,
+   "en": "We have much to cover. Let's move on to the next step.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3750,
+   "en": "We launched an investigation after communication with our reconnaissance party at the Dungeon started to grow sporadic and we found out that they were too tied up in dealing with a growing number of monsters. Will you go to the Dungeon and help eradicate these monsters? (Level 66-79)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3751,
+   "en": "We're nearing the end of our tutorial. Now that you have a skill, it'll make sense for you to build more combat experience. Come back when you reach a certain level, and I will give you a Uniria as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3761,
+   "en": "Welcome back. Now all you need to do is eliminating Gaion in Varka. Are you ready? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3762,
+   "en": "Welcome to MU.;I'll assist you on your road to becoming a true warrior.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3763,
+   "en": "Welcome to the newly founded Devias branch of the mercenary guild. We're the one who stopped Kundun's Army along with the 5 major clans but now most of the veterans have retired. So we decided to adopt the Free Mercenary system as we open this guild office.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3764,
+   "en": "Welcome to the world of Mu.;We have been waiting for a hero like you to arrive and put a stop to the chaos brought on to the Mu realm by Kundun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3765,
+   "en": "Welcome, this is the mercenary guild. We deliver various requests to the registered free mercenaries. There are rewards when you complete the request successfully, so give it a try.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3766,
+   "en": "Well done. Now please bring me the clubs of Burnt Murderers in Vulcanus. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3767,
+   "en": "Well, you may not want to learn more about him, but a mission is still a mission. I'll tell you more if you come back. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3768,
+   "en": "Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Level 351-380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3769,
+   "en": "Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3773,
+   "en": "What are the queen's guardians doing at a place like this?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3774,
+   "en": "What can I help you? Ah�� you came for the request from us. Do you know Gaion? He was actually the sworn brother of the first mercenary guild master but our elders want to get rid of him since he's sort of an icon of treason. I don't understand their concern because he can never leave Varka. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3775,
+   "en": "What can I help you? Ah�� you're the one from the mercenary guild! Speaking frankly, I would never have requested the mercenary guild if I had had any other option�� Well, never mind. There are 2 requests, first is to collect the Stardust powder and secondly, obtaining a rare jewel. Will you accept? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3776,
+   "en": "What do you do if you don't want to receive party requests?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3777,
+   "en": "What do you do if you want to trade with a character who is in front of you?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3778,
+   "en": "What is the free mercenary?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3779,
+   "en": "What is this Town Portal Scroll?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3780,
+   "en": "What is your business with our gens? I am Conrad, the Gens Vanert Steward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3781,
+   "en": "What kind of supplies...?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3782,
+   "en": "What level do I need to be?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3783,
+   "en": "What's a Uniria?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3784,
+   "en": "When a warrior who possesses them becomes a consummate expert in his or her art, these rings transform into unique items that will help their master attain greater heights.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3787,
+   "en": "When you first enter Blood Castle, you'll encounter an obstacle: the trust within your party. Go see the Shadow Phantom Soldier to test the trust within your party, and take the Blood Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3788,
+   "en": "When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3792,
+   "en": "When you reach a certain level, you will be able to repair your equipment directly from the Inventory window. What level is that?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3793,
+   "en": "When you want to form a party with a character, face that character and enter '/party' in the Chat window. What do you do if you don't want to receive party requests?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3794,
+   "en": "When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3795,
+   "en": "Where can I find a merchant?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3796,
+   "en": "Where can I learn more skills?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

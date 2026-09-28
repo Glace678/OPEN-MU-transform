@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Text_0" xml:space="preserve">
+    <value>やあ！何か用かね？</value>
+    <comment>legacy_id=0</comment>
+  </data>
+  <data name="Text_1" xml:space="preserve">
+    <value>こんにちは！私は魔法使いのパシです。ハハハ！ふむ…星の運行があまり芳しくないようだね。君の未来は…ふむ…これもまた見えないな…なぜだろう…？</value>
+    <comment>legacy_id=1</comment>
+  </data>
+  <data name="Text_2" xml:space="preserve">
+    <value>こんにちは！私は倉庫番のバズです。どこへ行くにも私がお役に立ちますよ。どうぞ遠慮なく荷物を預けてください。</value>
+    <comment>legacy_id=2</comment>
+  </data>
+  <data name="Text_3" xml:space="preserve">
+    <value>多くの冒険者たちが、ハープの音色は疲れを癒し、吹き飛ばしてくれると言っています。何かお手伝いでも？</value>
+    <comment>legacy_id=3</comment>
+  </data>
+  <data name="Text_4" xml:space="preserve">
+    <value>こんにちは！私は倉庫番のバズです。どこへ行くにも私がお役に立ちますよ。どうぞ遠慮なく荷物を預けてください。</value>
+    <comment>legacy_id=4</comment>
+  </data>
+  <data name="Text_5" xml:space="preserve">
+    <value>十分なお金は持っているかね？研究を続けるにはお金が必要だから、お金なしではアイテムを合成することはできないのだ。わかったか？いくら必要か知りたいのかね？</value>
+    <comment>legacy_id=5</comment>
+  </data>
+  <data name="Text_6" xml:space="preserve">
+    <value>MUへようこそ！MU大陸を旅する中で助けが必要なときは、F1キーを押してください。</value>
+    <comment>legacy_id=6</comment>
+  </data>
+  <data name="Text_7" xml:space="preserve">
+    <value>ロレンシアは初めてですか？噴水の前の南東の出口へ行って、バジドラゴンやスパイダーを狩ってみるとよいでしょう。北西のスケルトンは危険すぎますよ。</value>
+    <comment>legacy_id=7</comment>
+  </data>
+  <data name="Text_8" xml:space="preserve">
+    <value>ノリアへようこそ。初めてなら、倉庫番を通り抜けて南の出口へ行きましょう。スコーピオンやゴブリンのような低レベルモンスターを狩ってみてください。</value>
+    <comment>legacy_id=8</comment>
+  </data>
+  <data name="Text_9" xml:space="preserve">
+    <value>MU大陸の詳しいガイドが必要なら、http://muonline.webzen.net をご覧ください。</value>
+    <comment>legacy_id=9</comment>
+  </data>
+  <data name="Text_50" xml:space="preserve">
+    <value>初代皇帝ムレンにまつわる「皇帝の勅章」は、ロストタワー、アトランス、そしてダンジョン周辺で目撃されたと言われています。</value>
+    <comment>legacy_id=50</comment>
+  </data>
+  <data name="Answer_50_Slot_0" xml:space="preserve">
+    <value>そんなものがあったとは知りませんでした…</value>
+    <comment>legacy_id=1500</comment>
+  </data>
+  <data name="Text_51" xml:space="preserve">
+    <value>神へのお供えが足りませんわ。1,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。</value>
+    <comment>legacy_id=51</comment>
+  </data>
+  <data name="Answer_51_Slot_0" xml:space="preserve">
+    <value>1,000,000 Zenを持って戻ります。</value>
+    <comment>legacy_id=1510</comment>
+  </data>
+  <data name="Text_52" xml:space="preserve">
+    <value>MUを統一した初代皇帝ムレンにまつわる「皇帝の勅章」は、ロストタワー、アトランス、そしてダンジョン周辺で目撃されたと言われています。</value>
+    <comment>legacy_id=52</comment>
+  </data>
+  <data name="Answer_52_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=1520</comment>
+  </data>
+  <data name="Text_53" xml:space="preserve">
+    <value>「皇帝の勅章」は強大な力に包まれています。それを読みし者には、その強大な力が授けられるでしょう。</value>
+    <comment>legacy_id=53</comment>
+  </data>
+  <data name="Answer_53_Slot_0" xml:space="preserve">
+    <value>話をもう一度繰り返してください。</value>
+    <comment>legacy_id=1530</comment>
+  </data>
+  <data name="Answer_53_Slot_1" xml:space="preserve">
+    <value>探しに行きます。</value>
+    <comment>legacy_id=1531</comment>
+  </data>
+  <data name="Answer_53_Slot_2" xml:space="preserve">
+    <value>どうでもいいです。</value>
+    <comment>legacy_id=1532</comment>
+  </data>
+  <data name="Text_54" xml:space="preserve">
+    <value>「皇帝の勅章」を探しなさい。それを読めば、偉大な力が授けられるでしょう。</value>
+    <comment>legacy_id=54</comment>
+  </data>
+  <data name="Answer_54_Slot_0" xml:space="preserve">
+    <value>探しに行きます。</value>
+    <comment>legacy_id=1540</comment>
+  </data>
+  <data name="Text_55" xml:space="preserve">
+    <value>「皇帝の勅章」を見つけたのですね！ここには、MU帝国初代皇帝ムレンの統一記念が魔法の力で記されているのですよ。「皇帝の勅章」を手にした者には、偉大な力が授けられるのです。</value>
+    <comment>legacy_id=55</comment>
+  </data>
+  <data name="Answer_55_Slot_0" xml:space="preserve">
+    <value>その記録について教えてください。</value>
+    <comment>legacy_id=1550</comment>
+  </data>
+  <data name="Text_56" xml:space="preserve">
+    <value>初代皇帝ムレンの歴史的記録には、ムレンがすべての軍閥を打ち負かし、大陸をMU帝国として統一したことによる平和の記念が記されています。</value>
+    <comment>legacy_id=56</comment>
+  </data>
+  <data name="Answer_56_Slot_0" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1560</comment>
+  </data>
+  <data name="Text_57" xml:space="preserve">
+    <value>ムレンは、セクネウムの侵略によって人々にもたらされた混乱を終わらせた、3人の英雄のうちの1人でした。</value>
+    <comment>legacy_id=57</comment>
+  </data>
+  <data name="Answer_57_Slot_0" xml:space="preserve">
+    <value>前の話を教えてください。</value>
+    <comment>legacy_id=1570</comment>
+  </data>
+  <data name="Answer_57_Slot_1" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1571</comment>
+  </data>
+  <data name="Text_58" xml:space="preserve">
+    <value>「折れた剣」「エルフの涙」「ウィザードの魂」と呼ばれる魔法の秘宝が見つかることでしょう。「折れた剣」は、ダークナイトたちがその勇気と忠誠、そして繁栄への願いの象徴として捧げたものです。</value>
+    <comment>legacy_id=58</comment>
+  </data>
+  <data name="Answer_58_Slot_0" xml:space="preserve">
+    <value>前の話を教えてください。</value>
+    <comment>legacy_id=1580</comment>
+  </data>
+  <data name="Answer_58_Slot_1" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1581</comment>
+  </data>
+  <data name="Text_59" xml:space="preserve">
+    <value>「ウィザードの魂」は、ダークウィザードたちが帝国の平和と自由のために自らの力を捧げるという誓いの象徴として捧げたものです。MU暦10年、平和記念記録の抜粋…</value>
+    <comment>legacy_id=59</comment>
+  </data>
+  <data name="Answer_59_Slot_0" xml:space="preserve">
+    <value>前の話を教えてください。</value>
+    <comment>legacy_id=1590</comment>
+  </data>
+  <data name="Answer_59_Slot_1" xml:space="preserve">
+    <value>そういうことだったのですね…</value>
+    <comment>legacy_id=1591</comment>
+  </data>
+  <data name="Text_60" xml:space="preserve">
+    <value>「皇帝の勅章」を読んだのなら、古代のダークナイトたちが平和記念に使用した「折れた剣」を探しなさい。聞くところによると、アトランス、ロストタワー、タルカンで何人かのダークナイトがそれを見つけたとか。</value>
+    <comment>legacy_id=60</comment>
+  </data>
+  <data name="Answer_60_Slot_0" xml:space="preserve">
+    <value>見つけてきます。</value>
+    <comment>legacy_id=1600</comment>
+  </data>
+  <data name="Answer_60_Slot_1" xml:space="preserve">
+    <value>やめます。</value>
+    <comment>legacy_id=1601</comment>
+  </data>
+  <data name="Text_61" xml:space="preserve">
+    <value>それらの場所は危険が潜んでいますし、「折れた剣」は簡単に見つかるものではありません。ですが、もし見つけられれば、新たな力が授けられるでしょう！「折れた剣」を見つけたら、また私のところへ戻ってきなさい。</value>
+    <comment>legacy_id=61</comment>
+  </data>
+  <data name="Answer_61_Slot_0" xml:space="preserve">
+    <value>必ず見つけて戻ってきます。</value>
+    <comment>legacy_id=1610</comment>
+  </data>
+  <data name="Text_62" xml:space="preserve">
+    <value>勇ましきダークナイトよ、「折れた剣」を見つけたのですね！ムー大陸統一後、初代皇帝ムレンは、二度と戦争が起こらぬよう願いの象徴として、自らの剣「黙示録」を折ったのです。</value>
+    <comment>legacy_id=62</comment>
+  </data>
+  <data name="Answer_62_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=1620</comment>
+  </data>
+  <data name="Text_63" xml:space="preserve">
+    <value>戦争後、ブレードナイトになることを志したダークナイトたちは、自らの勇気を証明するため、古代の「折れた剣」を求めるようになりました。</value>
+    <comment>legacy_id=63</comment>
+  </data>
+  <data name="Answer_63_Slot_0" xml:space="preserve">
+    <value>そういうことだったのですね！</value>
+    <comment>legacy_id=1630</comment>
+  </data>
+  <data name="Text_64" xml:space="preserve">
+    <value>「皇帝の勅章」を読んだのですね。ならば、「皇帝の勅章」に記された3つの秘宝についてもご存知でしょう。古代のエルフたちが精霊の力で作ったクリスタル「エルフの涙」を探しなさい。</value>
+    <comment>legacy_id=64</comment>
+  </data>
+  <data name="Answer_64_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=1640</comment>
+  </data>
+  <data name="Text_65" xml:space="preserve">
+    <value>その場所はたいへん危険ですし、「エルフの涙」は極めて見つけにくいものです。ですが「エルフの涙」を見つければ、新たな力が授けられるでしょう。さあ、「エルフの涙」を探しに行き、また戻ってきなさい。</value>
+    <comment>legacy_id=65</comment>
+  </data>
+  <data name="Answer_65_Slot_0" xml:space="preserve">
+    <value>「エルフの涙」を探しに行きます！</value>
+    <comment>legacy_id=1650</comment>
+  </data>
+  <data name="Text_66" xml:space="preserve">
+    <value>「エルフの涙」を見つけたのですね！戦争後、エルフの女王ルネディルは、エルフたちが女神の力を呼び起こし、力を築けるようにと、精霊石に魔法をかけて涙の石を作りました。</value>
+    <comment>legacy_id=66</comment>
+  </data>
+  <data name="Answer_66_Slot_0" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1660</comment>
+  </data>
+  <data name="Text_67" xml:space="preserve">
+    <value>「皇帝の勅章」を読んだのですね。ならば、そこに記された3つの秘宝についてもご存知でしょう。</value>
+    <comment>legacy_id=67</comment>
+  </data>
+  <data name="Answer_67_Slot_0" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1670</comment>
+  </data>
+  <data name="Text_68" xml:space="preserve">
+    <value>あなたの力なら、きっと「ウィザードの魂」を見つけられるでしょう。さあ、「ウィザードの魂」を探しに行き、見つけたらまた戻ってきなさい。</value>
+    <comment>legacy_id=68</comment>
+  </data>
+  <data name="Answer_68_Slot_0" xml:space="preserve">
+    <value>「ウィザードの魂」を探しに行きます。</value>
+    <comment>legacy_id=1680</comment>
+  </data>
+  <data name="Text_69" xml:space="preserve">
+    <value>きっと見つけてくると思っていましたよ！アルカの偉大なる魔法使いエトラムは、弱きダークナイトたちがクンドゥンの攻撃でくじけぬようにと、魂を守る魔法石を作りました。</value>
+    <comment>legacy_id=69</comment>
+  </data>
+  <data name="Answer_69_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=1690</comment>
+  </data>
+  <data name="Text_70" xml:space="preserve">
+    <value>この魔法石を持つダークウィザードは、ソウルマスターとなるのです。</value>
+    <comment>legacy_id=70</comment>
+  </data>
+  <data name="Answer_70_Slot_0" xml:space="preserve">
+    <value>私はソウルマスターになりました！</value>
+    <comment>legacy_id=1700</comment>
+  </data>
+  <data name="Text_71" xml:space="preserve">
+    <value>神へのお供えが足りませんわ。2,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。</value>
+    <comment>legacy_id=71</comment>
+  </data>
+  <data name="Answer_71_Slot_0" xml:space="preserve">
+    <value>2,000,000 Zenを持って戻ります。</value>
+    <comment>legacy_id=1710</comment>
+  </data>
+  <data name="Text_72" xml:space="preserve">
+    <value>あなたの強い意志と力の結果として、新たな力が授けられました。ルガードの加護が、いつもあなたと共にあらんことを。</value>
+    <comment>legacy_id=72</comment>
+  </data>
+  <data name="Answer_72_Slot_0" xml:space="preserve">
+    <value>神の加護がありますように…</value>
+    <comment>legacy_id=1720</comment>
+  </data>
+  <data name="Text_73" xml:space="preserve">
+    <value>あなたは既に偉大な力を持っています。私にはあなたのための神託はありませんわ。</value>
+    <comment>legacy_id=73</comment>
+  </data>
+  <data name="Answer_73_Slot_0" xml:space="preserve">
+    <value>また後で戻ってきます。</value>
+    <comment>legacy_id=1730</comment>
+  </data>
+  <data name="Text_74" xml:space="preserve">
+    <value>もっと強くなってから戻ってきなさい。</value>
+    <comment>legacy_id=74</comment>
+  </data>
+  <data name="Answer_74_Slot_0" xml:space="preserve">
+    <value>強くなったら戻ってきます。</value>
+    <comment>legacy_id=1740</comment>
+  </data>
+  <data name="Text_75" xml:space="preserve">
+    <value>強き戦士に成長したのなら、それを見つけられるはずです。</value>
+    <comment>legacy_id=75</comment>
+  </data>
+  <data name="Answer_75_Slot_0" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1750</comment>
+  </data>
+  <data name="Text_76" xml:space="preserve">
+    <value>それ以来、ブレードナイトになることを志すダークナイトたちが、決して剣を不義には振るわぬという誓いの象徴として、自らの剣を折る習わしが生まれました。</value>
+    <comment>legacy_id=76</comment>
+  </data>
+  <data name="Answer_76_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=1760</comment>
+  </data>
+  <data name="Text_77" xml:space="preserve">
+    <value>冒険好きなエルフたちの中には、ロストタワー、アトランス、タルカンで見かけたと言う者もいますわ。</value>
+    <comment>legacy_id=77</comment>
+  </data>
+  <data name="Answer_77_Slot_0" xml:space="preserve">
+    <value>探しに行きます！</value>
+    <comment>legacy_id=1770</comment>
+  </data>
+  <data name="Answer_77_Slot_1" xml:space="preserve">
+    <value>そんな場所には行きたくありません。</value>
+    <comment>legacy_id=1771</comment>
+  </data>
+  <data name="Text_78" xml:space="preserve">
+    <value>これが「エルフの涙」と呼ばれるものです。この石を見つけたエルフは、エルフの女神たちの力を呼び起こせるミューズエルフとなるのです。</value>
+    <comment>legacy_id=78</comment>
+  </data>
+  <data name="Answer_78_Slot_0" xml:space="preserve">
+    <value>私はミューズエルフになりました！</value>
+    <comment>legacy_id=1780</comment>
+  </data>
+  <data name="Text_79" xml:space="preserve">
+    <value>「皇帝の勅章」と「折れた剣」の両方を手に入れたあなたは、今後ブレードナイトと呼ばれるでしょう。</value>
+    <comment>legacy_id=79</comment>
+  </data>
+  <data name="Answer_79_Slot_0" xml:space="preserve">
+    <value>私はブレードナイトになりました！</value>
+    <comment>legacy_id=1790</comment>
+  </data>
+  <data name="Text_80" xml:space="preserve">
+    <value>帝国が統一された後、人々は皇帝に忠誠を誓いました。その忠誠の象徴として捧げられた秘宝の一部が、以下のものです。</value>
+    <comment>legacy_id=80</comment>
+  </data>
+  <data name="Answer_80_Slot_0" xml:space="preserve">
+    <value>前の話を教えてください。</value>
+    <comment>legacy_id=1800</comment>
+  </data>
+  <data name="Answer_80_Slot_1" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1801</comment>
+  </data>
+  <data name="Text_81" xml:space="preserve">
+    <value>「エルフの涙」は、エルフと人間の力を強めるという誓いの証として、エルフたちが捧げたものです。</value>
+    <comment>legacy_id=81</comment>
+  </data>
+  <data name="Answer_81_Slot_0" xml:space="preserve">
+    <value>前の話を教えてください。</value>
+    <comment>legacy_id=1810</comment>
+  </data>
+  <data name="Answer_81_Slot_1" xml:space="preserve">
+    <value>続けてください。</value>
+    <comment>legacy_id=1811</comment>
+  </data>
+  <data name="Text_82" xml:space="preserve">
+    <value>「ウィザードの魂」を探しなさい。古代のダークウィザードたちの話では、ロストタワー、アトランス、タルカン周辺で最後に目撃されたそうです。</value>
+    <comment>legacy_id=82</comment>
+  </data>
+  <data name="Answer_82_Slot_0" xml:space="preserve">
+    <value>探しに行きます</value>
+    <comment>legacy_id=1820</comment>
+  </data>
+  <data name="Answer_82_Slot_1" xml:space="preserve">
+    <value>また後で戻ってきます。</value>
+    <comment>legacy_id=1821</comment>
+  </data>
+  <data name="Text_90" xml:space="preserve">
+    <value>「皇帝の勅令」を読み終わりましたか。では、ムレンと召喚師の長セメデンの間の秘密の契約についてはご存知ですね。ムレンはエルベを帝国の傘下に置く代わりに、ある約束をしていたのです。</value>
+    <comment>legacy_id=90</comment>
+  </data>
+  <data name="Answer_90_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=1900</comment>
+  </data>
+  <data name="Text_91" xml:space="preserve">
+    <value>MU大陸には、召喚師たちが管轄する異世界の門がありました。そしてセメデンは、約束の証として「アビスオブアイ」を贈りました。どうか、「アビスオブアイ」を持ち帰ってきてください。</value>
+    <comment>legacy_id=91</comment>
+  </data>
+  <data name="Answer_91_Slot_0" xml:space="preserve">
+    <value>依頼を受ける</value>
+    <comment>legacy_id=1910</comment>
+  </data>
+  <data name="Answer_91_Slot_1" xml:space="preserve">
+    <value>依頼を断る</value>
+    <comment>legacy_id=1911</comment>
+  </data>
+  <data name="Text_92" xml:space="preserve">
+    <value>「アビスオブアイ」はアトランス、ロストタワー、タルカン周辺で発見されたと聞いております。見つけ次第、すぐに持ち帰ってください。</value>
+    <comment>legacy_id=92</comment>
+  </data>
+  <data name="Answer_92_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=1920</comment>
+  </data>
+  <data name="Text_93" xml:space="preserve">
+    <value>「アビスオブアイ」を見つけましたね。これは現実世界には存在しない元素で構成された物体だと知られています。記憶を伴った、現世以前の世界からの伝染物なのです。</value>
+    <comment>legacy_id=93</comment>
+  </data>
+  <data name="Answer_93_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=1930</comment>
+  </data>
+  <data name="Text_94" xml:space="preserve">
+    <value>「アビスオブアイ」は、この世界の次元を管轄し交信する私にとって、特別な意味を持っています。「アビスオブアイ」を持ち帰ってくれたなら、あなたの次元の管理者であるセメデンの「ブラッドサマナー」の称号を授けましょう。</value>
+    <comment>legacy_id=94</comment>
+  </data>
+  <data name="Answer_94_Slot_0" xml:space="preserve">
+    <value>ブラッドサマナーの称号を受ける</value>
+    <comment>legacy_id=1940</comment>
+  </data>
+  <data name="Text_100" xml:space="preserve">
+    <value>ムレンの祝福と力を得るには、「栄光の指輪」と呼ばれる伝説の秘宝が必要です。それが再びこの地に姿を現しました。しかしあなたはまだ準備ができていません。もっと経験を積んでから待ちなさい。</value>
+    <comment>legacy_id=100</comment>
+  </data>
+  <data name="Answer_100_Slot_0" xml:space="preserve">
+    <value>では、何をすればよいのでしょう？</value>
+    <comment>legacy_id=2000</comment>
+  </data>
+  <data name="Text_101" xml:space="preserve">
+    <value>このクエストを生き残るには、もっと経験が必要です。滅びた帝国の試練に従い、レベル220まで上げてから戻ってきなさい。</value>
+    <comment>legacy_id=101</comment>
+  </data>
+  <data name="Answer_101_Slot_0" xml:space="preserve">
+    <value>時が来たら戻ってきます。</value>
+    <comment>legacy_id=2010</comment>
+  </data>
+  <data name="Text_102" xml:space="preserve">
+    <value>ムレンの祝福と力を得るには、「栄光の指輪」と呼ばれる伝説の秘宝が必要です。それが再びこの地に姿を現しました。</value>
+    <comment>legacy_id=102</comment>
+  </data>
+  <data name="Answer_102_Slot_0" xml:space="preserve">
+    <value>もっと聞きたいです。</value>
+    <comment>legacy_id=2020</comment>
+  </data>
+  <data name="Text_103" xml:space="preserve">
+    <value>「栄光の指輪」を手にした者は、ムレンの祝福を受けるといいます。海の向こうの砂漠で見つかると言われています。</value>
+    <comment>legacy_id=103</comment>
+  </data>
+  <data name="Answer_103_Slot_0" xml:space="preserve">
+    <value>なぜそこにあるのですか？</value>
+    <comment>legacy_id=2030</comment>
+  </data>
+  <data name="Text_104" xml:space="preserve">
+    <value>そこのモンスターたちはたいへん強力です。彼らがその指輪を持っているのですよ。</value>
+    <comment>legacy_id=104</comment>
+  </data>
+  <data name="Answer_104_Slot_0" xml:space="preserve">
+    <value>話をもう一度繰り返してください。</value>
+    <comment>legacy_id=2040</comment>
+  </data>
+  <data name="Answer_104_Slot_1" xml:space="preserve">
+    <value>挑戦してみます。</value>
+    <comment>legacy_id=2041</comment>
+  </data>
+  <data name="Answer_104_Slot_2" xml:space="preserve">
+    <value>まだ準備ができていません。</value>
+    <comment>legacy_id=2042</comment>
+  </data>
+  <data name="Text_105" xml:space="preserve">
+    <value>「栄光の指輪」は、あなたが思っているよりも近くにあるかもしれません。手に入れたとき、あなたはきっと力の変化を感じるでしょう。ですが、簡単なことではありませんよ。</value>
+    <comment>legacy_id=105</comment>
+  </data>
+  <data name="Answer_105_Slot_0" xml:space="preserve">
+    <value>必ず持って帰ります。</value>
+    <comment>legacy_id=2050</comment>
+  </data>
+  <data name="Text_108" xml:space="preserve">
+    <value>これこそ「栄光の指輪」ですわ。思っていた以上に、神秘的なオーラに輝いていますわ。この指輪には、あなたには想像もつかないような伝説が秘められているのですわ。あなたの手に渡ったのは、まさに神の恵みですわ。</value>
+    <comment>legacy_id=108</comment>
+  </data>
+  <data name="Answer_108_Slot_0" xml:space="preserve">
+    <value>なるほど。</value>
+    <comment>legacy_id=2080</comment>
+  </data>
+  <data name="Text_109" xml:space="preserve">
+    <value>この指輪は生命を蘇らせ、永遠の若さをもたらすと言われています。ですが、その力を操れるだけの力を持つ英雄にしか、その真価は発揮されないのです。</value>
+    <comment>legacy_id=109</comment>
+  </data>
+  <data name="Answer_109_Slot_0" xml:space="preserve">
+    <value>なぜですか？</value>
+    <comment>legacy_id=2090</comment>
+  </data>
+  <data name="Text_110" xml:space="preserve">
+    <value>アルカの魔法使いエトラムが、悪しき者に悪用されぬよう、呪文をかけたからですわ。ですがあなたなら、その相にふさわしいようですわ。</value>
+    <comment>legacy_id=110</comment>
+  </data>
+  <data name="Answer_110_Slot_0" xml:space="preserve">
+    <value>そうですか？</value>
+    <comment>legacy_id=2100</comment>
+  </data>
+  <data name="Text_111" xml:space="preserve">
+    <value>「栄光の指輪」は、預言書「セクロミコン」が不滅の金属で作られたとき、共に作られたものです。二つは神聖なものとされてきましたが、副司令官ガイオンの反乱の際に奪われ、行方不明となりました。</value>
+    <comment>legacy_id=111</comment>
+  </data>
+  <data name="Answer_111_Slot_0" xml:space="preserve">
+    <value>そうですか！！</value>
+    <comment>legacy_id=2110</comment>
+  </data>
+  <data name="Text_112" xml:space="preserve">
+    <value>「栄光の指輪」が見つかった今、あなたは戦士としてさらに成長できるでしょう。</value>
+    <comment>legacy_id=112</comment>
+  </data>
+  <data name="Answer_112_Slot_0" xml:space="preserve">
+    <value>自分の能力が高まっていくのを感じます！</value>
+    <comment>legacy_id=2120</comment>
+  </data>
+  <data name="Text_113" xml:space="preserve">
+    <value>あなたはかつてないほど偉大な存在へと成長するでしょう。どうかその力を、帝国の平和のために使ってください。</value>
+    <comment>legacy_id=113</comment>
+  </data>
+  <data name="Answer_113_Slot_0" xml:space="preserve">
+    <value>そうします。</value>
+    <comment>legacy_id=2130</comment>
+  </data>
+  <data name="Text_114" xml:space="preserve">
+    <value>あなたは既に神聖な力を持っていますわ。</value>
+    <comment>legacy_id=114</comment>
+  </data>
+  <data name="Answer_114_Slot_0" xml:space="preserve">
+    <value>また後で戻ってきます。</value>
+    <comment>legacy_id=2140</comment>
+  </data>
+  <data name="Text_115" xml:space="preserve">
+    <value>戦士に新たな力を与えると言われる「ダークストーン」が、MU大陸で発見されました。しかしあなたはまだ、その力を使う準備ができていません。準備ができるまで待ちなさい。</value>
+    <comment>legacy_id=115</comment>
+  </data>
+  <data name="Answer_115_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2150</comment>
+  </data>
+  <data name="Text_116" xml:space="preserve">
+    <value>真の力を手に入れるには、皇帝ムレンの史実を記した「皇帝の勅章」で己を磨かねばなりません。デビアスの「セヴィナ」のところへ行きなさい。</value>
+    <comment>legacy_id=116</comment>
+  </data>
+  <data name="Answer_116_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2160</comment>
+  </data>
+  <data name="Text_117" xml:space="preserve">
+    <value>ブレードナイトになるのに失敗しましたね。「栄光の指輪」を通じて新たな力を手に入れてから、戻ってきなさい。</value>
+    <comment>legacy_id=117</comment>
+  </data>
+  <data name="Answer_117_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2170</comment>
+  </data>
+  <data name="Text_118" xml:space="preserve">
+    <value>このクエストを神聖なものとするには、神々に3,000,000 Zenを捧げねばなりません。あなたのZenでは足りませんわ。</value>
+    <comment>legacy_id=118</comment>
+  </data>
+  <data name="Answer_118_Slot_0" xml:space="preserve">
+    <value>3,000,000 Zenを持って戻ります。</value>
+    <comment>legacy_id=2180</comment>
+  </data>
+  <data name="Text_119" xml:space="preserve">
+    <value>神へのお供えが足りませんわ。2,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。</value>
+    <comment>legacy_id=119</comment>
+  </data>
+  <data name="Answer_119_Slot_0" xml:space="preserve">
+    <value>2,000,000 Zenを持って戻ります</value>
+    <comment>legacy_id=2190</comment>
+  </data>
+  <data name="Text_130" xml:space="preserve">
+    <value>これこそ「栄光の指輪」ですわ。その輝きをご覧なさい。この指輪には、あなたには想像もつかないほどの時と伝説が込められているのですわ。あなたがこれを見つけられたのは、まさに恵みですわ！</value>
+    <comment>legacy_id=130</comment>
+  </data>
+  <data name="Answer_130_Slot_0" xml:space="preserve">
+    <value>それは驚きですね！</value>
+    <comment>legacy_id=2300</comment>
+  </data>
+  <data name="Text_131" xml:space="preserve">
+    <value>ええ、この指輪には死者を蘇らせ、永遠の若さをもたらす力があると言われていますわ。指輪の力を操れる真の英雄の手に渡ってこそ、その真価を発揮するものなのですわ。</value>
+    <comment>legacy_id=131</comment>
+  </data>
+  <data name="Answer_131_Slot_0" xml:space="preserve">
+    <value>なぜですか？</value>
+    <comment>legacy_id=2310</comment>
+  </data>
+  <data name="Text_132" xml:space="preserve">
+    <value>アルカの魔法使いエトラムが、悪しき者の手に渡らぬよう呪文をかけたからですわ。ですがあなたは、真の継ぎ手のようですわね！</value>
+    <comment>legacy_id=132</comment>
+  </data>
+  <data name="Answer_132_Slot_0" xml:space="preserve">
+    <value>そうですか！</value>
+    <comment>legacy_id=2320</comment>
+  </data>
+  <data name="Text_133" xml:space="preserve">
+    <value>「栄光の指輪」は、預言書「セクロミコン」が不滅の金属で作られたとき、共に作られたものです。二つは神聖なものとされてきましたが、副司令官ガイオンの反乱の際に奪われ、行方不明となりました。</value>
+    <comment>legacy_id=133</comment>
+  </data>
+  <data name="Answer_133_Slot_0" xml:space="preserve">
+    <value>そうですか！</value>
+    <comment>legacy_id=2330</comment>
+  </data>
+  <data name="Text_134" xml:space="preserve">
+    <value>「栄光の指輪」が見つかった今、あなたは戦士としてさらに成長できるでしょう。</value>
+    <comment>legacy_id=134</comment>
+  </data>
+  <data name="Answer_134_Slot_0" xml:space="preserve">
+    <value>自分の能力が高まっていくのを感じます！</value>
+    <comment>legacy_id=2340</comment>
+  </data>
+  <data name="Text_135" xml:space="preserve">
+    <value>新たな力を手に入れたいのなら、よく聞きなさい。戦士に新たな力を与えると言われる「ダークストーン」が、MU大陸で発見されました。</value>
+    <comment>legacy_id=135</comment>
+  </data>
+  <data name="Answer_135_Slot_0" xml:space="preserve">
+    <value>もっと聞きたいです。</value>
+    <comment>legacy_id=2350</comment>
+  </data>
+  <data name="Text_136" xml:space="preserve">
+    <value>「ダークストーン」があれば、新たな能力を会得できます。簡単なことではありませんが、「栄光の指輪」を手に入れられたあなたなら、可能かもしれませんわ。</value>
+    <comment>legacy_id=136</comment>
+  </data>
+  <data name="Answer_136_Slot_0" xml:space="preserve">
+    <value>何をすればよいでしょう？</value>
+    <comment>legacy_id=2360</comment>
+  </data>
+  <data name="Text_137" xml:space="preserve">
+    <value>噂では、タルカンとイカルスで石が見つかるそうです。モンスターには気をつけなさい。その石を持つモンスターは、特別な能力を持つ者にしか反応しませんからね。</value>
+    <comment>legacy_id=137</comment>
+  </data>
+  <data name="Answer_137_Slot_0" xml:space="preserve">
+    <value>話をもう一度繰り返してください。</value>
+    <comment>legacy_id=2370</comment>
+  </data>
+  <data name="Answer_137_Slot_1" xml:space="preserve">
+    <value>ならば挑戦してみます！</value>
+    <comment>legacy_id=2371</comment>
+  </data>
+  <data name="Answer_137_Slot_2" xml:space="preserve">
+    <value>まだ自信がありません。</value>
+    <comment>legacy_id=2372</comment>
+  </data>
+  <data name="Text_138" xml:space="preserve">
+    <value>「ダークストーン」が今、あなたを呼んでいます。これを手にすれば、かつて感じたことのない力をきっと手に入れられるでしょう。ですが、他の多くの戦士たちも、必死に石を探しているのですわ。</value>
+    <comment>legacy_id=138</comment>
+  </data>
+  <data name="Answer_138_Slot_0" xml:space="preserve">
+    <value>「ダークストーン」を持って戻ります。</value>
+    <comment>legacy_id=2380</comment>
+  </data>
+  <data name="Text_139" xml:space="preserve">
+    <value>まあ、「ダークストーン」を見つけたのですね。この石は、神とサタンの戦いで戦った英雄「ベネロープ」の乾いた血であると記録されています。</value>
+    <comment>legacy_id=139</comment>
+  </data>
+  <data name="Answer_139_Slot_0" xml:space="preserve">
+    <value>もっと教えてください。</value>
+    <comment>legacy_id=2390</comment>
+  </data>
+  <data name="Text_140" xml:space="preserve">
+    <value>ベネロープは騎士の血筋です。戦いで敗れた後、彼は新たな魔法と戦闘技術の修行を積みました。それらの技術は、クンドゥンの強大な力に対抗するため、騎士の血を引く戦士たちにひっそりと伝えられてきたのです。</value>
+    <comment>legacy_id=140</comment>
+  </data>
+  <data name="Answer_140_Slot_0" xml:space="preserve">
+    <value>なるほど…</value>
+    <comment>legacy_id=2400</comment>
+  </data>
+  <data name="Text_141" xml:space="preserve">
+    <value>その通り。あなたには戦士の血が流れています。ですから、ベネロープの力がダークストーンを通じてあなたに授けられるでしょう。</value>
+    <comment>legacy_id=141</comment>
+  </data>
+  <data name="Answer_141_Slot_0" xml:space="preserve">
+    <value>新たな力を授かりました！</value>
+    <comment>legacy_id=2410</comment>
+  </data>
+  <data name="Text_142" xml:space="preserve">
+    <value>あなたは「栄光の指輪」を通じて新たな力を手に入れましたね。ですが、あなたが知らないことがまだありますわ。</value>
+    <comment>legacy_id=142</comment>
+  </data>
+  <data name="Answer_142_Slot_0" xml:space="preserve">
+    <value>それは何ですか？</value>
+    <comment>legacy_id=2420</comment>
+  </data>
+  <data name="Text_143" xml:space="preserve">
+    <value>新たな力を手に入れられる可能性があるのです。「栄光の指輪」と共に神聖視されてきた伝説の秘宝「ダークストーン」が、あなたを呼んでいますわ。</value>
+    <comment>legacy_id=143</comment>
+  </data>
+  <data name="Answer_143_Slot_0" xml:space="preserve">
+    <value>それは信じがたいです！</value>
+    <comment>legacy_id=2430</comment>
+  </data>
+  <data name="Text_144" xml:space="preserve">
+    <value>光の神ルガードが、あなたに依頼があるとおっしゃっています。ですが、まだあなたにはその資格がありません。もっと強くなってから戻ってきなさい。</value>
+    <comment>legacy_id=144</comment>
+  </data>
+  <data name="Answer_144_Slot_0" xml:space="preserve">
+    <value>強くなったら戻ってきます。</value>
+    <comment>legacy_id=2440</comment>
+  </data>
+  <data name="Text_145" xml:space="preserve">
+    <value>光の神ルガードが、あなたに依頼があるとおっしゃっています。ですが、まだあなたにはその資格がありません。前のクエストを完了してから戻ってきなさい。</value>
+    <comment>legacy_id=145</comment>
+  </data>
+  <data name="Answer_145_Slot_0" xml:space="preserve">
+    <value>終わらせたら戻ってきます。</value>
+    <comment>legacy_id=2450</comment>
+  </data>
+  <data name="Text_146" xml:space="preserve">
+    <value>Zenが足りませんわ。ルガードに5,000,000 Zenをお供えして、この任務に申し込んでください。</value>
+    <comment>legacy_id=146</comment>
+  </data>
+  <data name="Answer_146_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2460</comment>
+  </data>
+  <data name="Text_147" xml:space="preserve">
+    <value>光の神ルガードが、あなたに依頼があるとおっしゃっています。</value>
+    <comment>legacy_id=147</comment>
+  </data>
+  <data name="Answer_147_Slot_0" xml:space="preserve">
+    <value>何でしょう？</value>
+    <comment>legacy_id=2470</comment>
+  </data>
+  <data name="Text_148" xml:space="preserve">
+    <value>ルガードは、バルガスがもたらすMUへの新たな脅威に立ち向かう英雄を探すよう、あなたに求めていらっしゃいます。</value>
+    <comment>legacy_id=148</comment>
+  </data>
+  <data name="Answer_148_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2480</comment>
+  </data>
+  <data name="Text_149" xml:space="preserve">
+    <value>バルガスの軍勢がクライウォルフ要塞を通じてMU大陸に迫っていることはわかっていますが、その全貌についてはまだ正確に解読できていません。</value>
+    <comment>legacy_id=149</comment>
+  </data>
+  <data name="Answer_149_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2490</comment>
+  </data>
+  <data name="Text_150" xml:space="preserve">
+    <value>ルガードが私たちを信じてくださっている意味を理解しようと努めていますが、私たちの力不足で、まだその意味に苦しんでいるのです。</value>
+    <comment>legacy_id=150</comment>
+  </data>
+  <data name="Answer_150_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2500</comment>
+  </data>
+  <data name="Text_151" xml:space="preserve">
+    <value>あなたこそ、私たちを助けてくださる方だと信じています。私たちと共に働いてくださるおつもりですか？</value>
+    <comment>legacy_id=151</comment>
+  </data>
+  <data name="Answer_151_Slot_0" xml:space="preserve">
+    <value>もう一度聞く</value>
+    <comment>legacy_id=2510</comment>
+  </data>
+  <data name="Answer_151_Slot_1" xml:space="preserve">
+    <value>依頼を受ける</value>
+    <comment>legacy_id=2511</comment>
+  </data>
+  <data name="Answer_151_Slot_2" xml:space="preserve">
+    <value>依頼を断る</value>
+    <comment>legacy_id=2512</comment>
+  </data>
+  <data name="Text_152" xml:space="preserve">
+    <value>私たちを助けてくださるには、バルガスの軍勢に立ち向かわねばなりません。その前に、あなたがこの任務に十分な力を持っているか、確かめさせてください。</value>
+    <comment>legacy_id=152</comment>
+  </data>
+  <data name="Answer_152_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2520</comment>
+  </data>
+  <data name="Text_153" xml:space="preserve">
+    <value>タルカン、アイダ、イカルスを支配するデスビーム、ヘルメイン、ダークフェニックスのモンスターをそれぞれ討伐し、証拠を3つ持ち帰ってください。</value>
+    <comment>legacy_id=153</comment>
+  </data>
+  <data name="Answer_153_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2530</comment>
+  </data>
+  <data name="Text_154" xml:space="preserve">
+    <value>おめでとうございます、任務を完遂されましたね。ご苦労のしるしに、ささやかなものをどうぞ。</value>
+    <comment>legacy_id=154</comment>
+  </data>
+  <data name="Answer_154_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2540</comment>
+  </data>
+  <data name="Text_155" xml:space="preserve">
+    <value>バルガスは魔術女王エレジアと手を結び、この世界に危機をもたらしているという点で、それだけでもたいへんな脅威です。</value>
+    <comment>legacy_id=155</comment>
+  </data>
+  <data name="Answer_155_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2550</comment>
+  </data>
+  <data name="Text_156" xml:space="preserve">
+    <value>バルガスが、邪悪な魔術の軍勢を率いてMU大陸に新たな脅威をもたらそうとしていると、私たちは予測しています。</value>
+    <comment>legacy_id=156</comment>
+  </data>
+  <data name="Answer_156_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2560</comment>
+  </data>
+  <data name="Text_157" xml:space="preserve">
+    <value>資金が足りませんわ。ルガードに7,000,000 Zenをお供えして、この任務に申し込んでください。</value>
+    <comment>legacy_id=157</comment>
+  </data>
+  <data name="Answer_157_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2570</comment>
+  </data>
+  <data name="Text_158" xml:space="preserve">
+    <value>ようこそ、あなたは本当に私たちを助けてくださる準備ができていますね。</value>
+    <comment>legacy_id=158</comment>
+  </data>
+  <data name="Answer_158_Slot_0" xml:space="preserve">
+    <value>どんなお手伝いでしょう？</value>
+    <comment>legacy_id=2580</comment>
+  </data>
+  <data name="Text_159" xml:space="preserve">
+    <value>そうですね、情報によるとバルガスが「兵営」と呼ばれる拠点を築いたそうです。ルガードの12使徒たちは、これがバルガスからの新たな脅威であると考えています。</value>
+    <comment>legacy_id=159</comment>
+  </data>
+  <data name="Answer_159_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2590</comment>
+  </data>
+  <data name="Text_160" xml:space="preserve">
+    <value>「兵営」に関する正確な情報を得るには、兵営ゾーンに潜入してバルガス軍のさらなる脅威の芽を摘む必要があります。</value>
+    <comment>legacy_id=160</comment>
+  </data>
+  <data name="Answer_160_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2600</comment>
+  </data>
+  <data name="Text_161" xml:space="preserve">
+    <value>幸運なことに、ルガードの加護により、バルガスの兵営に入る方法が見つかりました。ゾーンに潜入し、兵士たちを討伐して正確な情報を得てください。それに応じた適切なデータを持ち帰ってくださる？</value>
+    <comment>legacy_id=161</comment>
+  </data>
+  <data name="Answer_161_Slot_0" xml:space="preserve">
+    <value>もう一度聞く</value>
+    <comment>legacy_id=2610</comment>
+  </data>
+  <data name="Answer_161_Slot_1" xml:space="preserve">
+    <value>依頼を受ける</value>
+    <comment>legacy_id=2611</comment>
+  </data>
+  <data name="Answer_161_Slot_2" xml:space="preserve">
+    <value>依頼を断る</value>
+    <comment>legacy_id=2612</comment>
+  </data>
+  <data name="Text_162" xml:space="preserve">
+    <value>クライウォルフゾーンの北の墓地へ行き、バルガス兵営の兵士の隠れ家を探しなさい。ルガードの加護により、1体が知能を持つに至りました。彼は「ウェアウルフ・ガーズマン」を名乗っています。</value>
+    <comment>legacy_id=162</comment>
+  </data>
+  <data name="Answer_162_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2620</comment>
+  </data>
+  <data name="Text_163" xml:space="preserve">
+    <value>彼がバルガスの兵営へ案内してくれるでしょう。ゾーンに潜入し、兵営で最低でも10体のモンスターを討伐しなさい。</value>
+    <comment>legacy_id=163</comment>
+  </data>
+  <data name="Answer_163_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2630</comment>
+  </data>
+  <data name="Text_164" xml:space="preserve">
+    <value>任務を無事に完遂されましたね。ご苦労と、その強い意志に感謝いたします。</value>
+    <comment>legacy_id=164</comment>
+  </data>
+  <data name="Answer_164_Slot_0" xml:space="preserve">
+    <value>まだ話しましょう。</value>
+    <comment>legacy_id=2640</comment>
+  </data>
+  <data name="Text_165" xml:space="preserve">
+    <value>あなたがもたらした情報と討伐したモンスターのおかげで、MU大陸とクライウォルフの平和を築くための大きな助けとなりました。</value>
+    <comment>legacy_id=165</comment>
+  </data>
+  <data name="Answer_165_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2650</comment>
+  </data>
+  <data name="Text_166" xml:space="preserve">
+    <value>まだ資格がありませんわ。警備員のマロンに会い、任務のための十分な資格を得てから戻ってきなさい。</value>
+    <comment>legacy_id=166</comment>
+  </data>
+  <data name="Answer_166_Slot_0" xml:space="preserve">
+    <value>話を終わらせる。</value>
+    <comment>legacy_id=2660</comment>
+  </data>
+  <data name="Text_167" xml:space="preserve">
+    <value>資金が足りませんわ。ルガードに10,000,000 Zenをお供えして、この任務に申し込んでください。</value>
+    <comment>legacy_id=167</comment>
+  </data>
+  <data name="Answer_167_Slot_0" xml:space="preserve">
+    <value>準備ができたら戻ってきます。</value>
+    <comment>legacy_id=2670</comment>
+  </data>
+  <data name="Text_168" xml:space="preserve">
+    <value>あなたの自発的な勇気が、私たち全員に大きな希望をもたらしてくれました。</value>
+    <comment>legacy_id=168</comment>
+  </data>
+  <data name="Answer_168_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2680</comment>
+  </data>
+  <data name="Text_169" xml:space="preserve">
+    <value>バルガスは、疲れた体を癒すため、別の場所に身を隠しています。</value>
+    <comment>legacy_id=169</comment>
+  </data>
+  <data name="Answer_169_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2690</comment>
+  </data>
+  <data name="Text_170" xml:space="preserve">
+    <value>ルガードから託された使命を果たすには、バルガスの正確な居場所を突き止め、訓練中の軍を壊滅させねばなりません。</value>
+    <comment>legacy_id=170</comment>
+  </data>
+  <data name="Answer_170_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2700</comment>
+  </data>
+  <data name="Text_171" xml:space="preserve">
+    <value>ルガードの使命の後に待つ最終任務には、巨大で困難な試練が含まれています。それでもまだ興味はありますか？</value>
+    <comment>legacy_id=171</comment>
+  </data>
+  <data name="Answer_171_Slot_0" xml:space="preserve">
+    <value>もう一度聞く</value>
+    <comment>legacy_id=2710</comment>
+  </data>
+  <data name="Answer_171_Slot_1" xml:space="preserve">
+    <value>依頼を受ける</value>
+    <comment>legacy_id=2711</comment>
+  </data>
+  <data name="Answer_171_Slot_2" xml:space="preserve">
+    <value>依頼を断る</value>
+    <comment>legacy_id=2712</comment>
+  </data>
+  <data name="Text_172" xml:space="preserve">
+    <value>バルガス兵営の北端にある扉から中に入りなさい。;事前に場所の準備をしておきます。</value>
+    <comment>legacy_id=172</comment>
+  </data>
+  <data name="Answer_172_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2720</comment>
+  </data>
+  <data name="Text_173" xml:space="preserve">
+    <value>おめでとうございます、ルガードの最終試練に合格されましたね。そして今や、彼の加護があなたと共に、どこへでも付いてまわるでしょう。</value>
+    <comment>legacy_id=173</comment>
+  </data>
+  <data name="Answer_173_Slot_0" xml:space="preserve">
+    <value>続けて聞かせてください。</value>
+    <comment>legacy_id=2730</comment>
+  </data>
+  <data name="Text_174" xml:space="preserve">
+    <value>あなたのご苦労が実を結び、バルガスの新たな脅威からMU大陸とクライウォルフの平和を守ることができました。心から感謝申し上げますわ。</value>
+    <comment>legacy_id=174</comment>
+  </data>
+  <data name="Answer_174_Slot_0" xml:space="preserve">
+    <value>話をここで終わらせる</value>
+    <comment>legacy_id=2740</comment>
+  </data>
+</root>

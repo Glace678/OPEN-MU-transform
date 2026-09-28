@@ -1,0 +1,27 @@
+{
+  "apiType": "stageMode",
+  "buildOption": {
+    "arkOptions": {
+      "buildProfileFields": {
+        // Same HMAC package pairing key as the Android APKs (43 base64url chars).
+        // Override at build time with -b buildMode or by editing here; the
+        // server and the game APK must share the identical key.
+        "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "DEFAULT_SERVER_URL": "http://192.168.215.56:5080"
+      }
+    }
+  },
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "arkOptions": {
+        "obfuscation": {
+          "ruleOptions": { "enable": false }
+        }
+      }
+    }
+  ],
+  "targets": [
+    { "name": "default" }
+  ]
+}

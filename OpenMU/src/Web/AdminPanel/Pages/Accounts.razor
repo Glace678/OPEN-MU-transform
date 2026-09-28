@@ -1,0 +1,79 @@
+@page "/accounts"
+@using MUnique.OpenMU.DataModel
+@using MUnique.OpenMU.DataModel.Entities;
+@using MUnique.OpenMU.Persistence;
+@using Resources = MUnique.OpenMU.Web.AdminPanel.Properties.Resources
+
+@inject AccountService _accountService;
+@inject IJSRuntime _jsRuntime;
+
+@{
+  var title = typeof(Account).GetPluralizedTypeCaption();
+}
+<PageTitle>OpenMU: @title</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@title" />
+<h1>@title</h1>
+
+<div>
+    <DataTable TItem=@Account>
+        <TableHeader>
+            <th class="col-1">@typeof(Account).GetPropertyCaption(nameof(Account.LoginName))</th>
+            <th class="col-1">@typeof(Account).GetPropertyCaption(nameof(Account.State))</th>
+            <th class="col-2">@typeof(Account).GetPropertyCaption(nameof(Account.EMail))</th>
+            <th class="col-3">@Resources.Action</th>
+        </TableHeader>
+        <FilterHeader>
+            <th colspan="5">
+                <div class="input-group">
+                    <span class="input-group-text"><span class="oi oi-magnifying-glass" aria-hidden="true"></span></span>
+                    <input class="form-control small" type="search" autofocus @bind="@this._accountService.SearchFilter" @bind:event="oninput" placeholder="@Resources.Search ..."/>
+                </div>
+            </th>
+        </FilterHeader>
+        <ItemTemplate Context="item">
+            <td>@item.LoginName</td>
+            <td>@item.State.GetEnumCaption()</td>
+            <td>@item.EMail</td>
+            <td class="text-nowrap">
+                <NavLink href="@($"edit-account/{item.GetId()}/{typeof(Account).FullName}/{item.GetId()}")" class="btn btn-primary btn-sm"><span class="oi oi-pencil" aria-hidden="true"></span> Edit</NavLink>
+                <button type="button" class="btn btn-warning btn-sm" @onclick="@(() => this.ResetPasswordAsync(item))">
+                    <span class="oi oi-lock-unlocked" aria-hidden="true"></span> Reset password
+                </button>
+            </td>
+        </ItemTemplate>
+        <TableFooter>
+            <td><button type="button" class="btn btn-primary" @onclick="@this._accountService.CreateNewInModalDialogAsync">@Resources.Create</button></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </TableFooter>
+    </DataTable>
+</div>
+
+@code {
+    private async Task ResetPasswordAsync(Account account)
+    {
+        var newPassword = await this._jsRuntime.InvokeAsync<string?>(
+            "prompt",
+            $"Set a new password for account '{account.LoginName}' (3-20 characters, no spaces):").ConfigureAwait(true);
+        if (string.IsNullOrEmpty(newPassword))
+        {
+            return;
+        }
+
+        if (newPassword.Length is < 3 or > 20 || newPassword.Any(c => c < 0x21 || c > 0x7e))
+        {
+            await this._jsRuntime.InvokeVoidAsync(
+                "alert",
+                "The password must be 3-20 characters and must not contain spaces.").ConfigureAwait(true);
+            return;
+        }
+
+        var error = await this._accountService.ResetPasswordAsync(account, newPassword).ConfigureAwait(true);
+        if (error is not null)
+        {
+            await this._jsRuntime.InvokeVoidAsync("alert", error).ConfigureAwait(true);
+        }
+    }
+}

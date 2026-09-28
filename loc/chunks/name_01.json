@@ -1,0 +1,1049 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 427,
+   "en": "Broken Horn",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 428,
+   "en": "Broken Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 429,
+   "en": "Bronze Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 430,
+   "en": "Bronze Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 431,
+   "en": "Bronze Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 432,
+   "en": "Bronze Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 433,
+   "en": "Bronze Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 434,
+   "en": "Bronze Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 435,
+   "en": "Brova",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 437,
+   "en": "Buckler",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 442,
+   "en": "Burnt Murderer's Club",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 446,
+   "en": "Cancel Invisibility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 447,
+   "en": "Cancel Stun",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 450,
+   "en": "Cape of Emperor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 451,
+   "en": "Cape of Fighter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 452,
+   "en": "Cape of Lord",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 453,
+   "en": "Cape of Overrule",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 456,
+   "en": "Cast Invincibility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 465,
+   "en": "Celestial Bow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 467,
+   "en": "Chain Drive",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 468,
+   "en": "Chain Drive Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 469,
+   "en": "Chain Drive Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 470,
+   "en": "Chain Drive Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 471,
+   "en": "Chain Lightning",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 472,
+   "en": "Chain Lightning Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 473,
+   "en": "Chain Lightning Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 479,
+   "en": "Chaos Card",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 480,
+   "en": "Chaos Card  Mini",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 481,
+   "en": "Chaos Card Gold",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 483,
+   "en": "Chaos Card Rare",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 509,
+   "en": "Chaos Dragon Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 511,
+   "en": "Chaos Lighting Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 512,
+   "en": "Chaos Nature Bow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 513,
+   "en": "Chaotic Diseier",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 514,
+   "en": "Chaotic Diseier Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 516,
+   "en": "Character Relocation Service",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 517,
+   "en": "Character Rename Service",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 520,
+   "en": "Charge",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 525,
+   "en": "Cherry Blossom Flower Petal",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 526,
+   "en": "Cherry Blossom Play-Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 527,
+   "en": "Cherry Blossom Rice Cake",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 530,
+   "en": "Cherry Blossom Wine",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 533,
+   "en": "Chistmas Star",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 535,
+   "en": "Christmas Firecracker",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 536,
+   "en": "Chromatic Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 538,
+   "en": "Claw of Beast",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 551,
+   "en": "Combo Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 557,
+   "en": "Cometfall",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 559,
+   "en": "Command Attack Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 569,
+   "en": "Complete Secromicon",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 571,
+   "en": "Complex Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 572,
+   "en": "Condor Feather",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 573,
+   "en": "Condor Flame",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 600,
+   "en": "Contract (Summon)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 604,
+   "en": "Crescent Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 605,
+   "en": "Crescent Moon Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 606,
+   "en": "Crimson Glory",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 607,
+   "en": "Critical DMG Increase PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 608,
+   "en": "Critical DMG Increase PowUp (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 609,
+   "en": "Critical DMG Increase PowUp (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 611,
+   "en": "Critical Damage Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 621,
+   "en": "Cross Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 622,
+   "en": "Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 623,
+   "en": "Crossbow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 624,
+   "en": "Crossbow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 634,
+   "en": "Crystal Morning Star",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 635,
+   "en": "Crystal Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 636,
+   "en": "Crystal of Destruction",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 637,
+   "en": "Crystal of Flame Strike",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 638,
+   "en": "Crystal of Multi-Shot",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 639,
+   "en": "Crystal of Recovery",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 641,
+   "en": "Cure",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 644,
+   "en": "Cursed Castle Water",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 651,
+   "en": "Cyclone",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 652,
+   "en": "Cyclone Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 657,
+   "en": "Damage Reflection",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 658,
+   "en": "Damage Reflection Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 671,
+   "en": "Dark Breaker",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 676,
+   "en": "Dark Horse",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 677,
+   "en": "Dark Horse Strengthener (1)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 684,
+   "en": "Dark Master Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 685,
+   "en": "Dark Master Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 686,
+   "en": "Dark Master Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 687,
+   "en": "Dark Master Mask",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 688,
+   "en": "Dark Master Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 689,
+   "en": "Dark Phoenix Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 690,
+   "en": "Dark Phoenix Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 691,
+   "en": "Dark Phoenix Feather",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 692,
+   "en": "Dark Phoenix Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 693,
+   "en": "Dark Phoenix Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 694,
+   "en": "Dark Phoenix Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 695,
+   "en": "Dark Raven",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 696,
+   "en": "Dark Reign Blade",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 698,
+   "en": "Dark Side",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 699,
+   "en": "Dark Side Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 700,
+   "en": "Dark Side Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 701,
+   "en": "Dark Side Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 703,
+   "en": "Dark Soul Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 704,
+   "en": "Dark Soul Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 705,
+   "en": "Dark Soul Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 706,
+   "en": "Dark Soul Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 707,
+   "en": "Dark Soul Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 708,
+   "en": "Dark Spirit Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 709,
+   "en": "Dark Spirit Strengthener (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 710,
+   "en": "Dark Spirit Strengthener (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 711,
+   "en": "Dark Spirit Strengthener (4)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 712,
+   "en": "Dark Spirit Strengthener (5)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 720,
+   "en": "Dark Steel Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 721,
+   "en": "Dark Steel Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 722,
+   "en": "Dark Steel Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 723,
+   "en": "Dark Steel Mask",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 724,
+   "en": "Dark Steel Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 725,
+   "en": "Dark Stinger",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 730,
+   "en": "Daybreak",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 731,
+   "en": "Deadly Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 743,
+   "en": "Death Stab",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 744,
+   "en": "Death Stab Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 745,
+   "en": "Death Stab Proficiency",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 749,
+   "en": "Death-beam Knight Flame",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 750,
+   "en": "Decay",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 751,
+   "en": "Decay Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 754,
+   "en": "Decrease Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 759,
+   "en": "Def Success Rate Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 760,
+   "en": "Def SuccessRate Increase PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 761,
+   "en": "DefSuccessRate Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 780,
+   "en": "Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 781,
+   "en": "Defense Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 782,
+   "en": "Defense Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 783,
+   "en": "Defense Increase Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 785,
+   "en": "Defense Success Rate Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  }
+ ]
+}

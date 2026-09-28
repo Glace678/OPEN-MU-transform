@@ -1,0 +1,166 @@
+{
+ "data_dirs": {
+  "en": [
+   "Eng",
+   "eng"
+  ],
+  "de": [
+   "Ger",
+   "ger"
+  ],
+  "es": [
+   "Spn",
+   "spn"
+  ],
+  "id": [
+   "Ind",
+   "ind"
+  ],
+  "ja": [
+   "Jpn",
+   "jpn"
+  ],
+  "pl": [
+   "Pol",
+   "pol"
+  ],
+  "pt": [
+   "Por",
+   "por"
+  ],
+  "ru": [
+   "Rus",
+   "rus"
+  ],
+  "tl": [
+   "Tgl",
+   "tgl"
+  ],
+  "uk": [
+   "Ukr",
+   "ukr"
+  ],
+  "zh-CN": [
+   "Chs",
+   "chs"
+  ],
+  "zh-TW": [
+   "Cht",
+   "cht"
+  ]
+ },
+ "mt_data_langs": [
+  "de",
+  "id",
+  "ja",
+  "pl",
+  "ru",
+  "tl",
+  "uk"
+ ],
+ "lang_names": {
+  "en": "English",
+  "de": "German",
+  "es": "Spanish",
+  "id": "Indonesian (Bahasa Indonesia)",
+  "ja": "Japanese",
+  "pl": "Polish",
+  "pt": "Brazilian Portuguese",
+  "ru": "Russian",
+  "tl": "Tagalog/Filipino",
+  "uk": "Ukrainian",
+  "zh-CN": "Simplified Chinese",
+  "zh-TW": "Traditional Chinese (Taiwan)"
+ },
+ "resx_missing": {
+  "de": 96,
+  "es": 96,
+  "id": 329,
+  "ja": 812,
+  "pl": 89,
+  "pt": 96,
+  "ru": 329,
+  "tl": 329,
+  "uk": 329,
+  "zh-TW": 329
+ },
+ "data_chunks": {
+  "de": {
+   "language": "German",
+   "dir": "Ger",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "id": {
+   "language": "Indonesian (Bahasa Indonesia)",
+   "dir": "Ind",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "ja": {
+   "language": "Japanese",
+   "dir": "Jpn",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "pl": {
+   "language": "Polish",
+   "dir": "Pol",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "ru": {
+   "language": "Russian",
+   "dir": "Rus",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "tl": {
+   "language": "Tagalog/Filipino",
+   "dir": "Tgl",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  },
+  "uk": {
+   "language": "Ukrainian",
+   "dir": "Ukr",
+   "chunks": {
+    "g1": 692,
+    "g2": 691,
+    "g3": 1258,
+    "g4": 715,
+    "g5": 613
+   }
+  }
+ }
+}

@@ -1,0 +1,802 @@
+[
+ {
+  "id": 2298,
+  "en": "Oh, this is a request from the Shadow Phantom unit in Kanturu Ruins asking for help repelling Splinter Wolves and finding the training material for recruits. Kill 20 Splinter Wolves and find 1 Ancient Stick (Wizardry damage +12). I will reward you when you bring me the stick.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2299,
+  "en": "Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 1 Staff of Resurrection (Wizardry damage +12). I will reward you when you bring me the staff.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2300,
+  "en": "Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 10 Unirias. I will reward you when you bring me the Unirias.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2301,
+  "en": "Ok, I will head for Aida at once. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2302,
+  "en": "Ok, I will take care of him right away. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2303,
+  "en": "Ok, I'll give it a try. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2304,
+  "en": "Ok, I'll try it. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2305,
+  "en": "Ok, I'm ready. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2310,
+  "en": "One of the places our reconnaissance party hasn't been able to reach is the Tarkan desert. The reasons behind their failure include the harsh environment and most importantly the monsters known as Mutants. Will you eliminate these Mutants to allow our reconnaissance party to advance? (Level 230-234)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2339,
+  "en": "Our continued assault on the Dungeon has secured a somewhat secure entryway. However, there are still monsters hindering the efforts of our reconnaissance party. Will you accept this quest? (Level 141-160)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2340,
+  "en": "Our entry into the Floating Castle has been hampered mostly by Queen Rainiers. It appears Queen Rainiers are controlling Mega Crusts and Alquamoses from behind the scenes. I wish to ask for your help in eliminating these Queen Rainiers. Will you accept? (Level 255-259)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2341,
+  "en": "Our forces in Kanturu Ruins are under attack. Eliminate 50 Splinter Wolves and return to me for a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2342,
+  "en": "Our reconnaissance party reports of severe resistance from monsters at Dungeon Level 2. I'd like to ask you to do away with these monsters. Will you accept this quest? (Level 111-120)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2343,
+  "en": "Our reconnaissance party reports that some low-ranking monsters are causing quite a headache for them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 161-165)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2344,
+  "en": "Our reconnaissance party reports that stolen supplies are being sent to Kundun's army. Please defeat the monsters controlling these plunderers while we ascertain the location of the supply route. Will you accept this quest? (Level 26-35)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2345,
+  "en": "Our reconnaissance party reports the Army of Darkness formed by Gorgons has lost much of its might. This is the moment you've carried out all these quests for. It's now time to strike the final blow against the Army of Darkness. Will you accept this quest? (Level 141-160)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2346,
+  "en": "Outside Devias, you'll encounter white monsters known as Worms. Defeat 25 Worms and return to me for a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2356,
+  "en": "Packs of Iron Wheels often attack travelers in Tarkan. Go to Tarkan and hunt down 100 Iron Wheels. Come see me afterwards to receive a Devil's Invitation + 4 as a reward. They are strong foes, and you should hunt them with the help of others.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2371,
+  "en": "Party request?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2398,
+  "en": "Phantom Knights in Icarus are causing great harm to travelers there. Go to Icarus and hunt down 100 Phantom Knights. Come see me when that's done to receive an Invisibility Cloak + 6 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2429,
+  "en": "Plunderers are too much for me to handle. (Refuse)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2430,
+  "en": "Plunderers...",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2432,
+  "en": "Points and Status",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2433,
+  "en": "Points gained from leveling up can be used to enhance your strength, agility, stamina, and energy, and thereby affect your damage, defense, HP, and MP levels, respectively.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2462,
+  "en": "Press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2463,
+  "en": "Press D and select Trade or type in '/exchange' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2464,
+  "en": "Press D and select Trade or type in '/invite' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2465,
+  "en": "Press D and select Trade or type in '/trade' in the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2468,
+  "en": "Press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2469,
+  "en": "Press the Q button to use apples, potions, and other HP recovery items, and the W button to use MP recovery items.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2470,
+  "en": "Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2472,
+  "en": "Prevent the Vepars from interrupting with the expedition. Defeat 50 of them, and I'll give you a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2474,
+  "en": "Progress of the business",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2475,
+  "en": "Proof of Fellowship (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2476,
+  "en": "Proof of Fellowship (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2477,
+  "en": "Proof of Fellowship (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2478,
+  "en": "Proof of Fellowship (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2479,
+  "en": "Proof of Fellowship (5)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2480,
+  "en": "Proof of Fellowship (6)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2482,
+  "en": "Proving One's Worth (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2483,
+  "en": "Proving One's Worth (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2484,
+  "en": "Proving One's Worth (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2485,
+  "en": "Proving One's Worth (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2486,
+  "en": "Proving One's Worth (5)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2489,
+  "en": "Purchase and bring back 1 Town Portal Scroll.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2490,
+  "en": "Purchase and bring back 5 apples from a merchant.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2493,
+  "en": "Put 500,000 Zen as deposit and I will offer you a Letter of Request came to the mercenary guild. Each request has its level and difficulty. Right click on the Letter of Request to check the information. Please note that you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Do you want to take a Letter of Request? (Lv. 350 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2494,
+  "en": "Put a stop to the plundering by eliminating 50 Silver Valkyries. After that, return to me for a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2495,
+  "en": "Put the Lost Tower to Sleep! (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2496,
+  "en": "Put the Lost Tower to Sleep! (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2497,
+  "en": "Put the Lost Tower to Sleep! (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2498,
+  "en": "Put the Lost Tower to Sleep! (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2499,
+  "en": "Put the Lost Tower to Sleep! (5)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2500,
+  "en": "Put the Lost Tower to Sleep! (6)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2501,
+  "en": "Put the past behind",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2512,
+  "en": "Queen Rainiers in Icarus should suffice. Go to Icarus and defeat 100 Queen Rainiers. Come see me after that, and I will give you a choice between 10 Large SD Potions and 30 Complex Potions as your reward. When you claim you rewards, make sure you have at least 10 empty slots in your Inventory. Remember that.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2513,
+  "en": "Quick, on to the next step!",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2514,
+  "en": "Rage of Vepars",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2562,
+  "en": "Rebels of the Forest",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2563,
+  "en": "Receive damage and defense increase buff.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2564,
+  "en": "Receiving Lv. 1 Letter of Request",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2565,
+  "en": "Recent report from the Shadow Phantom unit in Kanturu Ruins has it that Splinter Wolves and Blade Hunters are making surprise attack on them frequently. Go to Kanturu Ruins, kill 20 Splinter Wolves and 10 Blade Hunters. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2566,
+  "en": "Recent report from the Shadow Phantom unit in Tarkan Desert has it that Mutants and Tantaloses are creating mayhem there. Go to Tarkan and kill 20 Mutants and 20 Tataloses. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2567,
+  "en": "Recently the Shadow Phantom unit in Kanturu Ruins has been raided by Splinter Wolves and Satyroses. Go to Kanturu Ruins, kill 20 Splinter Wolves and 20 Satyroses. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2568,
+  "en": "Recently the Shadow Phantom unit in Kanturu Ruins is frequently raided by Splinter Wolves and Kentauroses. Go to Kanturu Ruins and kill 20 Splinter Wolves and 5 Kentauroses. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2569,
+  "en": "Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by Mutants and Beam Knights. Go to Tarkan and kill 20 Mutants and 10 Beam Knights. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2570,
+  "en": "Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by the Iron Wheels. Go to Tarkan and kill 30 Iron Wheels. I will reward you when you come back and report me.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2571,
+  "en": "Recognition as a hero...",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2572,
+  "en": "Reconnaissance Party's Mission (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2573,
+  "en": "Reconnaissance Party's Mission (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2574,
+  "en": "Reconnaissance Party's Mission (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2575,
+  "en": "Reconnaissance Party's Mission (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2613,
+  "en": "Regrettably, you are not eligible for a reward. Please try harder next time.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2619,
+  "en": "Request from Kalima; Location: Kalima 6; Task: Talk to Priestess Beina in the Underwater Temple; Reward: Random, Red Box; Note: Drop Lost Map +6 on the ground to enter Kalima",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2620,
+  "en": "Request from Merchant Zyro; Location: in every town; Task: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2621,
+  "en": "Request from Merchant Zyro; Region: can be found in every town; Mission: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2622,
+  "en": "Request from Shadow Phantom unit (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2623,
+  "en": "Request from Shadow Phantom unit (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2624,
+  "en": "Request from Shadow Phantom unit (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2625,
+  "en": "Request from mercenary guild; Location: Devias mercenary guild; Task: Talk to Mercenary Guild Manager Tercia; Reward: Random, Red Box, Purple box; Note: The elders of the guild are real old fossils..",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2626,
+  "en": "Request from the Gens Steward; Location: Gens Duprian- Lorencia, Gens Banert- Noria; Task: Talk to the Gens Steward; Reward: Random, Purple Box; Note: If you haven't joined the Gens yet, choose one and join now to proceed.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2627,
+  "en": "Request from the Underwater Temple",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2628,
+  "en": "Request from the mercenary guild",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2629,
+  "en": "Request from the mercenary guild. Find Tercia.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2630,
+  "en": "Request from the merchant Zyro",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2631,
+  "en": "Request from the priestess",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2632,
+  "en": "Request information invalid; Location: none; Task: none; Reward: none; Note: Go back to Mercenary Guild Manager Tercia in Devias.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2633,
+  "en": "Request of Elveland's Elder!",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2831,
+  "en": "Return to the Shadow Phantom Soldier after defeating 10 Spiders.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2832,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Agons.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2833,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Balrogs.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2834,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Giants.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2835,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Gorgons.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2836,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Liches.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2837,
+  "en": "Return to the Shadow Phantom Soldier after defeating 15 Polluted Butterflies.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2838,
+  "en": "Return to the Shadow Phantom Soldier after defeating 20 Giants.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2839,
+  "en": "Return to the Shadow Phantom Soldier after defeating 20 Polluted Butterflies.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2840,
+  "en": "Return to the Shadow Phantom Soldier after defeating 20 Skeleton Warriors.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2841,
+  "en": "Return to the Shadow Phantom Soldier after defeating 20 Stone Golems.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2842,
+  "en": "Return to the Shadow Phantom Soldier after defeating 25 Ice Monsters.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ }
+]

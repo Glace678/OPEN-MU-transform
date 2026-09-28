@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0</value></resheader>
+  <data name="GameRegistrationTitle" xml:space="preserve"><value>Game account registration</value></data>
+  <data name="GameRegistrationHeading" xml:space="preserve"><value>Create a game account</value></data>
+  <data name="AccountNameLabel" xml:space="preserve"><value>Account name</value></data>
+  <data name="AccountNameHelp" xml:space="preserve"><value>3-10 ASCII letters or digits.</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Password</value></data>
+  <data name="PasswordHelp" xml:space="preserve"><value>3-20 printable characters; spaces are not allowed.</value></data>
+  <data name="ConfirmPasswordLabel" xml:space="preserve"><value>Confirm password</value></data>
+  <data name="SecurityCodeLabel" xml:space="preserve"><value>Security code</value></data>
+  <data name="SecurityCodeHelp" xml:space="preserve"><value>Used for character deletion and selected account actions. Use 3-10 printable characters; ask an administrator if it is lost.</value></data>
+  <data name="RegisterButton" xml:space="preserve"><value>Register</value></data>
+  <data name="BackToLoginLink" xml:space="preserve"><value>Back to sign in</value></data>
+  <data name="ChangePasswordLink" xml:space="preserve"><value>Change password</value></data>
+  <data name="ForgotPasswordLink" xml:space="preserve"><value>Forgot password?</value></data>
+  <data name="RegisterAdminLink" xml:space="preserve"><value>Register an admin account</value></data>
+  <data name="ChangePasswordTitle" xml:space="preserve"><value>Change game password</value></data>
+  <data name="ChangePasswordHeading" xml:space="preserve"><value>Change game password</value></data>
+  <data name="ChangePasswordDescription" xml:space="preserve"><value>Enter your current password to verify the account. Game clients which are already signed in must sign in again after the change.</value></data>
+  <data name="CurrentPasswordLabel" xml:space="preserve"><value>Current password</value></data>
+  <data name="NewPasswordLabel" xml:space="preserve"><value>New password</value></data>
+  <data name="NewPasswordHelp" xml:space="preserve"><value>3-20 printable characters; spaces are not allowed.</value></data>
+  <data name="ConfirmNewPasswordLabel" xml:space="preserve"><value>Confirm new password</value></data>
+  <data name="ChangePasswordButton" xml:space="preserve"><value>Change password</value></data>
+  <data name="RegisterNewAccountLink" xml:space="preserve"><value>Register a new game account</value></data>
+  <data name="ResetPasswordTitle" xml:space="preserve"><value>Reset game password</value></data>
+  <data name="ResetPasswordHeading" xml:space="preserve"><value>Reset game password</value></data>
+  <data name="ResetPasswordDescription" xml:space="preserve"><value>A recovery code is required. Accounts without one need password verification or administrator assistance.</value></data>
+  <data name="ResetPasswordButton" xml:space="preserve"><value>Reset password</value></data>
+  <data name="RegistrationPageNotReady" xml:space="preserve"><value>The page is still loading. Please try again in a moment.</value></data>
+  <data name="RegistrationFailed" xml:space="preserve"><value>Registration failed. Check that the server is running.</value></data>
+  <data name="CannotConnect" xml:space="preserve"><value>Cannot connect to the server. Check that it is running.</value></data>
+  <data name="ResetFailed" xml:space="preserve"><value>Password reset failed. Check that the server is running.</value></data>
+  <data name="ChangeFailed" xml:space="preserve"><value>Password change failed. Check that the server is running.</value></data>
+  <data name="RequiredAccountName" xml:space="preserve"><value>Enter an account name.</value></data>
+  <data name="RequiredPassword" xml:space="preserve"><value>Enter a password.</value></data>
+  <data name="RequiredConfirmPassword" xml:space="preserve"><value>Enter the password again.</value></data>
+  <data name="RequiredSecurityCode" xml:space="preserve"><value>Enter a security code.</value></data>
+  <data name="RequiredCurrentPassword" xml:space="preserve"><value>Enter the current password.</value></data>
+  <data name="RequiredNewPassword" xml:space="preserve"><value>Enter a new password.</value></data>
+  <data name="RequiredNewConfirmPassword" xml:space="preserve"><value>Enter the new password again.</value></data>
+  <data name="InvalidName" xml:space="preserve"><value>The account name must contain 3-10 letters or digits.</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>The password must contain 3-20 characters and no spaces.</value></data>
+  <data name="InvalidPasswordChars" xml:space="preserve"><value>The password may use only ASCII letters, digits and common symbols; spaces are not allowed.</value></data>
+  <data name="PasswordMismatch" xml:space="preserve"><value>The two passwords do not match.</value></data>
+  <data name="InvalidSecurityCode" xml:space="preserve"><value>The security code must contain 3-10 letters, digits or common symbols.</value></data>
+  <data name="ServerNotInitialized" xml:space="preserve"><value>The server has not finished initialization. Please try again later.</value></data>
+  <data name="DuplicateAccount" xml:space="preserve"><value>That account name is already in use. Choose another one.</value></data>
+  <data name="ServerBusy" xml:space="preserve"><value>The server is busy. Please try again.</value></data>
+  <data name="RegistrationSuccess" xml:space="preserve"><value>Registration succeeded. You can sign in now.</value></data>
+  <data name="InvalidOldPassword" xml:space="preserve"><value>Enter the current password.</value></data>
+  <data name="BadCredentials" xml:space="preserve"><value>The account name or current password is incorrect.</value></data>
+  <data name="PasswordChangeSuccess" xml:space="preserve"><value>Password changed. Use the new password next time you sign in.</value></data>
+  <data name="PasswordChangeFailed" xml:space="preserve"><value>Password change failed. Check that the server is running.</value></data>
+  <data name="ResetForbidden" xml:space="preserve"><value>Password reset is available only on the computer running the server, or through an administrator in the admin panel.</value></data>
+  <data name="AccountNotFound" xml:space="preserve"><value>That account name does not exist.</value></data>
+  <data name="PasswordResetSuccess" xml:space="preserve"><value>Password reset succeeded. You can sign in with the new password now.</value></data>
+  <data name="PasswordResetFailed" xml:space="preserve"><value>Password reset failed. Check that the server is running.</value></data>
+  <data name="InvalidResponse" xml:space="preserve"><value>The server did not return a valid response.</value></data>
+  <data name="ResetDisabled" xml:space="preserve"><value>Recovery without an ownership credential is disabled. Use a recovery code or contact an administrator.</value></data>
+  <data name="LocalPasswordResetWarning" xml:space="preserve"><value>Local maintenance without ownership proof is enabled. Disable it before exposing account services to proxies or other devices.</value></data>
+  <data name="RecoveryCodeLabel" xml:space="preserve"><value>Recovery code</value></data>
+  <data name="RecoveryCodeNotice" xml:space="preserve"><value>Keep this code private and safe. Recovery invalidates the old code; the replacement is displayed only in this result.</value></data>
+  <data name="RequiredRecoveryCode" xml:space="preserve"><value>Enter your recovery code.</value></data>
+  <data name="InvalidRecoveryCode" xml:space="preserve"><value>The account or recovery code is invalid, unenrolled, or already used.</value></data>
+  <data name="RecoveryUnavailable" xml:space="preserve"><value>This storage does not support atomic recovery. Contact an administrator.</value></data>
+  <data name="RecoveryIssueTitle" xml:space="preserve"><value>Issue or replace a recovery code</value></data>
+  <data name="IssueRecoveryCodeButton" xml:space="preserve"><value>Verify password and issue code</value></data>
+  <data name="RecoveryIssueSuccess" xml:space="preserve"><value>A new recovery code has been issued. The previous code is invalid.</value></data>
+  <data name="RecoveryIssueFailed" xml:space="preserve"><value>Could not issue a recovery code. Try again or contact an administrator.</value></data>
+</root>

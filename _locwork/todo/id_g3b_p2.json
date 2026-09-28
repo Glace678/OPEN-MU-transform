@@ -1,0 +1,2519 @@
+{
+"locale": "id",
+"language": "Indonesian (Bahasa Indonesia)",
+"chunk": "g3b",
+"out": "D:\\openmu自用\\_locwork\\out_data\\id\\id_g3b_p2.json",
+"strings": [
+{
+"id": 632,
+"en": "Crypos",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 633,
+"en": "Crypta",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 640,
+"en": "Cupid",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 645,
+"en": "Cursed Goblin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 646,
+"en": "Cursed Lich",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 647,
+"en": "Cursed Santa",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 648,
+"en": "Cursed Wizard",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 649,
+"en": "Cursed king",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 654,
+"en": "Cyclops",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 672,
+"en": "Dark Coolutin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 673,
+"en": "Dark Elf",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 674,
+"en": "Dark Elf (Trainee Soldier)",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 675,
+"en": "Dark Giant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 678,
+"en": "Dark Iron Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 679,
+"en": "Dark Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 683,
+"en": "Dark Mammoth",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 702,
+"en": "Dark Skull Soldier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 728,
+"en": "Dasher",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 729,
+"en": "David",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 732,
+"en": "Death Angel",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 733,
+"en": "Death Beam Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 734,
+"en": "Death Bone",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 735,
+"en": "Death Centurion",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 736,
+"en": "Death Cow",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 737,
+"en": "Death Gorgon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 738,
+"en": "Death King",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 739,
+"en": "Death Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 741,
+"en": "Death Rider",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 742,
+"en": "Death Spirit (Trainee Soldier)",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 747,
+"en": "Death Tree",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 748,
+"en": "Death spirit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 808,
+"en": "Delgado",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 816,
+"en": "Destler",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 821,
+"en": "Destructive ogre archer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 822,
+"en": "Destructive ogre soldier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 829,
+"en": "Devil",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 873,
+"en": "Donner",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 874,
+"en": "Doorkeeper Titus",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 876,
+"en": "Doppelganger",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 877,
+"en": "Doppelganger Dark Lord",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 878,
+"en": "Doppelganger Elf",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 879,
+"en": "Doppelganger Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 880,
+"en": "Doppelganger Magic Gladiator",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 881,
+"en": "Doppelganger Summoner",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 882,
+"en": "Doppelganger Wizard",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 889,
+"en": "Dragon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 924,
+"en": "Drakan",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 926,
+"en": "Dreadfear",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 979,
+"en": "Elf Lala",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1003,
+"en": "Elite Bull Fighter",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1004,
+"en": "Elite Goblin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1007,
+"en": "Elite Ogre",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1009,
+"en": "Elite Skull Soldier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1010,
+"en": "Elite Yeti",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1016,
+"en": "Elpis",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1070,
+"en": "Eo the Craftsman",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1080,
+"en": "Erkanne",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1081,
+"en": "Erohim",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1129,
+"en": "Final Reward Chest",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1143,
+"en": "Fire",
+"budget": 49,
+"kinds": [
+"buff",
+"npcname"
+]
+},
+{
+"id": 1151,
+"en": "Fire Flame Ghost",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1152,
+"en": "Fire Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1184,
+"en": "Forest Monster",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1185,
+"en": "Forest Orc",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1198,
+"en": "Furious Slaughterer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1204,
+"en": "Gaion Kharein",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1207,
+"en": "Galia",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1208,
+"en": "GameMaster",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1211,
+"en": "Gatekeeper",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1212,
+"en": "Gateway Machine",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1215,
+"en": "Genocider",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1216,
+"en": "Genocider Warrior",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1217,
+"en": "Gens Duprian Steward",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1220,
+"en": "Gens Vanert Steward",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1230,
+"en": "Ghost",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1231,
+"en": "Ghost Napin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1232,
+"en": "Giant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1233,
+"en": "Giant Mammoth",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1234,
+"en": "Giant Ogre",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1240,
+"en": "Gigantis",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1241,
+"en": "Gigantis Warrior",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1242,
+"en": "Gigas Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1411,
+"en": "Goblin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1414,
+"en": "Golden Archer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1416,
+"en": "Golden Budge Dragon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1419,
+"en": "Golden Crust",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1420,
+"en": "Golden Dark Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1421,
+"en": "Golden Derkon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1422,
+"en": "Golden Devil",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1423,
+"en": "Golden Goblin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1424,
+"en": "Golden Iron Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1425,
+"en": "Golden Lizard King",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1427,
+"en": "Golden Napin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1429,
+"en": "Golden Rabbit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1430,
+"en": "Golden Satyros",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1431,
+"en": "Golden Soldier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1432,
+"en": "Golden Stone Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1433,
+"en": "Golden Tantalos",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1434,
+"en": "Golden Titan",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1435,
+"en": "Golden Twin Tail",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1436,
+"en": "Golden Vepar",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1437,
+"en": "Golden Wheel",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1438,
+"en": "Gollock",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1446,
+"en": "Gorgon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1455,
+"en": "Grand Wizard",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1457,
+"en": "Great Bahamut",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1463,
+"en": "Great Drakan",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1464,
+"en": "Great Golden Dragon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1476,
+"en": "Grizzly",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1477,
+"en": "Guard",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1478,
+"en": "Guardian",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1491,
+"en": "Guardian Statue",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1492,
+"en": "Guardsman",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1507,
+"en": "Hammer Scout",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1509,
+"en": "Hanzo the Blacksmith",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1535,
+"en": "Hell Hound",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1536,
+"en": "Hell Maine",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1537,
+"en": "Hell Spider",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1543,
+"en": "Helper Ellen",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1549,
+"en": "Hero Mutant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1558,
+"en": "Hideous Rabbit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1574,
+"en": "Hommerd",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1579,
+"en": "Hound",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1589,
+"en": "Hunter",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1597,
+"en": "Hydra",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1689,
+"en": "Ice Giant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1691,
+"en": "Ice Monster",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1692,
+"en": "Ice Napin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1693,
+"en": "Ice Queen",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1700,
+"en": "Ice Walker",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1717,
+"en": "Illusion Castle Sacred Item Storage",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1718,
+"en": "Illusion Sorcerer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1720,
+"en": "Illusion Sorcerer Elder",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1721,
+"en": "Illusion Sorcerer Spirit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1739,
+"en": "Illusion of Kundun",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1863,
+"en": "Interim Reward Chest",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1877,
+"en": "Iron Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1878,
+"en": "Iron Rider",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1880,
+"en": "Iron Stick",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1881,
+"en": "Iron Wheel",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1923,
+"en": "Jack Olantern",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1925,
+"en": "Jerint",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1926,
+"en": "Jerint the Assistant",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1927,
+"en": "Jerridon",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1943,
+"en": "Jeweler Raul",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1962,
+"en": "Kato",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1965,
+"en": "Kentauros",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1966,
+"en": "Kentauros Warrior",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1967,
+"en": "Kermit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1973,
+"en": "Knight Commander",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1974,
+"en": "Knights",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1976,
+"en": "Kundun",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1980,
+"en": "LIch",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1983,
+"en": "Lahap",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 1984,
+"en": "Lance",
+"budget": 31,
+"kinds": [
+"npcname",
+"skill"
+]
+},
+{
+"id": 1985,
+"en": "Lance Scout",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1992,
+"en": "Larva",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 1993,
+"en": "Laser Trap",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2030,
+"en": "Leina the General Goods Merchant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2032,
+"en": "Leo the Helper",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2050,
+"en": "Life Stone",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2080,
+"en": "Little Santa",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2082,
+"en": "Lizard King",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2083,
+"en": "Lizard Warrior",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2110,
+"en": "Lugard",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2111,
+"en": "Luke the Helper",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2112,
+"en": "Lumen the Barmaid",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2113,
+"en": "Lunar Rabbit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2120,
+"en": "MU Allies",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2121,
+"en": "MU Allies General",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2131,
+"en": "Magic Skeleton",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2132,
+"en": "Magic stone of %s",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2144,
+"en": "Marce",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2145,
+"en": "Market Union Member Julia",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2146,
+"en": "Marlon",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2147,
+"en": "Master Assassin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2185,
+"en": "Maya",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2186,
+"en": "Maya Hand",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2187,
+"en": "Medic",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2191,
+"en": "Medusa",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2192,
+"en": "Mega Crust",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2197,
+"en": "Mercenary Guild Manager Tercia",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2200,
+"en": "Messenger of Archangel",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2201,
+"en": "Metal Balrog",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2205,
+"en": "Meteorite",
+"budget": 31,
+"kinds": [
+"npcname",
+"skill"
+]
+},
+{
+"id": 2220,
+"en": "Mirage",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2226,
+"en": "Molt",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2236,
+"en": "Monster7",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2246,
+"en": "Moss",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2252,
+"en": "Mutant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2257,
+"en": "Narcondra",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2258,
+"en": "Natasha the Firecracker Merchant",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2259,
+"en": "Necron",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2262,
+"en": "Nightmare",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2288,
+"en": "Ogre archer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2308,
+"en": "Omega Wing",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2323,
+"en": "Oracle Layla",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2334,
+"en": "Orcus",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2336,
+"en": "Osbourne",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2363,
+"en": "Pamela the Supplier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2372,
+"en": "Pasi the Mage",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2385,
+"en": "Persona",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2390,
+"en": "Pet Trainer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2397,
+"en": "Phantom Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2399,
+"en": "Phoenix Darkness shield",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2406,
+"en": "Phoenix of Darkness",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2440,
+"en": "Poison Bull Fighter",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2441,
+"en": "Poison Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2443,
+"en": "Poison Shadow",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2448,
+"en": "Polluted Butterfly",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2450,
+"en": "Potion Girl Amy",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2455,
+"en": "Pouch of Blessing",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2460,
+"en": "Prancer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2473,
+"en": "Priestess Veina",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2509,
+"en": "Quartermaster",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2510,
+"en": "Queen Bee",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2511,
+"en": "Queen Rainier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2561,
+"en": "Raymond",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2589,
+"en": "Red Skeleton Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2830,
+"en": "Resurrected Gladiator",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2878,
+"en": "Rhea",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2891,
+"en": "Rogue Centurion",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2895,
+"en": "Royal Guard Captain Lorence",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2902,
+"en": "Ruthless Lava Giant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2918,
+"en": "Safety Guardian",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 2921,
+"en": "Santa",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2922,
+"en": "Santa Claus",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2929,
+"en": "Sapi Queen",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2930,
+"en": "Sapi-Duo",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2931,
+"en": "Sapi-Tres",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2932,
+"en": "Sapi-Unus",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2935,
+"en": "Satyros",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2941,
+"en": "Scarecrow",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2945,
+"en": "Schriker",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2946,
+"en": "Scout(Hero)",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2987,
+"en": "Sea Worm",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 2997,
+"en": "Sebina the Priest",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3008,
+"en": "Seed Master",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3009,
+"en": "Seed Researcher",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3017,
+"en": "Selupan",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3019,
+"en": "Senior",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3033,
+"en": "Shadow",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3034,
+"en": "Shadow Knight",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3035,
+"en": "Shadow Look",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3036,
+"en": "Shadow Master",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3037,
+"en": "Shadow Pawn",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3039,
+"en": "Shadow Phantom Soldier",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3044,
+"en": "Shield",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3045,
+"en": "Shield Bearer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3069,
+"en": "Silver Valkyrie",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3071,
+"en": "Silvia",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3080,
+"en": "Skeleton",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3081,
+"en": "Skeleton Archer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3090,
+"en": "Slaughterer",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3095,
+"en": "Slingshot attack",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3096,
+"en": "Slingshot defense",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3108,
+"en": "Snowman",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3117,
+"en": "Soccer Ball",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3118,
+"en": "Soldier",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3121,
+"en": "Soram",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3122,
+"en": "Soram (Trainee Soldier)",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3132,
+"en": "Spearman",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3145,
+"en": "Spider",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3146,
+"en": "Spider Eggs",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3158,
+"en": "Splinter Wolf",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3171,
+"en": "Statue of Saint",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3176,
+"en": "Stone Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3177,
+"en": "Stone Statue",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3178,
+"en": "Stone Statue 1",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3198,
+"en": "Strange Rabbit",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3314,
+"en": "Tanker",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3315,
+"en": "Tantalos",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3546,
+"en": "Thompson Kenel",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3555,
+"en": "Thunder Lich",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3556,
+"en": "Thunder Napin",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3585,
+"en": "Totem Golem",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3589,
+"en": "Trainer",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3592,
+"en": "Transformed Panda",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3593,
+"en": "Transformed Skeleton",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3594,
+"en": "Transformed Snowman",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3596,
+"en": "Trap",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3659,
+"en": "Twin Tale",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3690,
+"en": "Valkyrie",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3703,
+"en": "Venomous Chain Scorpion",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3704,
+"en": "Vepar",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3705,
+"en": "Vermont",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3729,
+"en": "Vixen",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3735,
+"en": "Wandering Merchant",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3736,
+"en": "Wandering Merchant Alex",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3738,
+"en": "Wandering Merchant Martin",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3739,
+"en": "Wandering Merchant Zyro",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3757,
+"en": "Weapons Merchant Bolo",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3759,
+"en": "Weapons Merchant Zienna",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3770,
+"en": "Werewolf",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3771,
+"en": "Werewolf Quarel",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3772,
+"en": "Werewolf(Hero)",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3802,
+"en": "White wizard",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3835,
+"en": "Witch Queen",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3837,
+"en": "Wizard Izabel",
+"budget": 99,
+"kinds": [
+"minimap",
+"npcname"
+]
+},
+{
+"id": 3848,
+"en": "Wolf Altar1",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3849,
+"en": "Wolf Altar2",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3850,
+"en": "Wolf Altar3",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3851,
+"en": "Wolf Altar4",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3852,
+"en": "Wolf Altar5",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3853,
+"en": "Wolf Status",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3854,
+"en": "Worm",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3864,
+"en": "Yeti",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3939,
+"en": "Zaikan",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+},
+{
+"id": 3942,
+"en": "Zombie Fighter",
+"budget": 99,
+"kinds": [
+"npcname"
+]
+}
+]
+}

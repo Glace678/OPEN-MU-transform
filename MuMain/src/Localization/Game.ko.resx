@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0</value></resheader>
+  <data name="AccountRegister" xml:space="preserve">
+    <value>등록</value>
+  </data>
+  <data name="AccountChangePassword" xml:space="preserve">
+    <value>비밀번호 변경</value>
+  </data>
+  <data name="AccountResetPassword" xml:space="preserve">
+    <value>비밀번호 재설정</value>
+  </data>
+  <data name="AccountPortalUnavailable" xml:space="preserve">
+    <value>서버에 연결할 수 없습니다. 서버가 실행 중인지 확인하세요.</value>
+  </data>
+</root>

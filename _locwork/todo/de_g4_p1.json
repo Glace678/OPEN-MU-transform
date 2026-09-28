@@ -1,0 +1,2568 @@
+{
+"locale": "de",
+"language": "German (Deutsch)",
+"chunk": "g4",
+"out": "D:\\openmu自用\\_locwork\\out_data\\de\\de_g4_p1.json",
+"strings": [
+{
+"id": 0,
+"en": "%0.2%% chance ignoring enemy armor",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1,
+"en": "%0.2%% chance of doing double damage.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2,
+"en": "%0.2%% chance to deal triple damage.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3,
+"en": "%0.2%% chance to fully recover your HP.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 4,
+"en": "%0.2%% chance to fully recover your mana.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 5,
+"en": "%0.2f HP increases your defense rate by 1.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 6,
+"en": "%0.2f PvP attack power bonus will be added while equipping Two-handed Sword.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 7,
+"en": "%0.2f%% chance of damaging your target with 10%% of your strength stat each second for 10 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 8,
+"en": "%0.2f%% chance of fully recovering SD.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 9,
+"en": "%0.2f%% chance to counter with the same amount of damage when hit.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 10,
+"en": "%0.2f%% chance to decrease the durability of one of the target's armor parts by 10%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 11,
+"en": "%0.2f%% chance to fully recover SD when attacking a target.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 12,
+"en": "%0.2f%% chance to make the victim of Strike of Destruction immobile for 3 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 13,
+"en": "%0.2f%% chance to produce an invulnerable shield wall when hit. #lasts for 5 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 14,
+"en": "%0.2f%% chance to push back the target.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 15,
+"en": "%0.2f%% chance to slow down the movement speed of the victim of Strike of Destruction by 50%%. Duration: 5 seconds",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 16,
+"en": "%0.2f%% chance to stun the target for 2 seconds while equipping Mace.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 17,
+"en": "%0.2f%% chance to stun the target for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 18,
+"en": "%0.2f%% chance to stun the victim of Death Stab for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 19,
+"en": "%d Rank, skill level %d/10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 20,
+"en": "%d Rank, skill level %d/20",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 21,
+"en": "'Increase minimum attack power' rank 5 requires level 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 22,
+"en": "'Recover HP fully' rank 7 requires level 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 49,
+"en": "0 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 52,
+"en": "10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 145,
+"en": "Agility increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 269,
+"en": "Attack Increase skill effect increases by %0.2f%%, and skill duration increases per skill level.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 281,
+"en": "Attack power increase by %0.2f while equipping the Wing of Ruin.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 282,
+"en": "Attack power increases by %0.2f while equipping Scepter.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 283,
+"en": "Attack power increases by %0.2f while equipping the Cape of Emperor.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 284,
+"en": "Attack power increases by %0.2f while equipping the Wing of Illusion.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 285,
+"en": "Attack power increases by %0.2f#while equipping the Wing of Storm.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 286,
+"en": "Attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 294,
+"en": "Attack speed increases by %0.2f while equipping Bow.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 295,
+"en": "Attack speed increases by %0.2f while equipping One-handed Staff.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 296,
+"en": "Attack speed increases by %0.2f while equipping One-handed Sword.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 297,
+"en": "Attack speed increases by %0.2f while equipping the Other World Tome.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 299,
+"en": "Attack success rate increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 303,
+"en": "Automatic AG recovery increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 305,
+"en": "Automatic HP recovery increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 309,
+"en": "Automatic Mana regeneration increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 310,
+"en": "Automatic SD recovery increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 339,
+"en": "Berserker skill increases Attack speed and Wizardry by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 340,
+"en": "Berserker skill increases Cures, Wizardry and Attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 341,
+"en": "Berserker skill increases Curse by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 361,
+"en": "Bless skill increases stats by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 389,
+"en": "Blood Storm damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 474,
+"en": "Chain Lightning skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 477,
+"en": "Chance to inflict damage ignoring enemy's defense increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 515,
+"en": "Chaotic Diseier skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 552,
+"en": "Combo skill damage increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 558,
+"en": "Cometfall skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 560,
+"en": "Command stat increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 612,
+"en": "Critical Damage Increase skill increases Critical damage rate by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 613,
+"en": "Critical Damage Increase skill increases Excellent damage rate by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 614,
+"en": "Critical Damage Increase skill increases critical damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 620,
+"en": "Critical damage rate increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 642,
+"en": "Curse increase by %0.2f while equipping the Other World Tome.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 653,
+"en": "Cyclone skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 655,
+"en": "Damage Absorption increases by %0.2f%% while equipping the Wing of Dimension.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 656,
+"en": "Damage Reduction increases by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 660,
+"en": "Damage absorption increases by %0.2f%% while equipping the Cape of Emperor.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 661,
+"en": "Damage absorption increases by %0.2f%% while equipping the Wing of Eternal.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 662,
+"en": "Damage absorption increases by %0.2f%% while equipping the Wing of Illusion.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 663,
+"en": "Damage absorption increases by %0.2f%% while equipping the Wing of Ruin.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 664,
+"en": "Damage absorption increases by %0.2f%%#while equipping the Wing of Storm.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 665,
+"en": "Damage buff effect increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 667,
+"en": "Damage increases by %0.2f while equipping Bow.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 668,
+"en": "Damage increases by %0.2f while equipping Crossbow.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 713,
+"en": "Dark Spirit's attack power increases by %0.2f while equipping Scepter.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 714,
+"en": "Dark Spirit's attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 715,
+"en": "Dark Spirit's attack speed increases by additional %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 716,
+"en": "Dark Spirit's chance to inflict damage ignoring enemy's defense increases by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 717,
+"en": "Dark Spirit's critical damage rate increases by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 718,
+"en": "Dark Spirit's double damage rate increases by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 719,
+"en": "Dark Spirit's excellent damage rate increases by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 746,
+"en": "Death Stab skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 752,
+"en": "Decay skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 784,
+"en": "Defense Increase skill effect increases by %0.2f%%, and skill duration increases per skill level.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 787,
+"en": "Defense buff effect increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 789,
+"en": "Defense increase by %0.2f while equipping the Wing of Eternal.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 790,
+"en": "Defense increases by %0.2f when a full armor set#(helmet, armor, pants, gloves and boots)#is equipped.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 791,
+"en": "Defense increases by %0.2f while equipping Dark Horse.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 792,
+"en": "Defense increases by %0.2f while equipping Shield.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 793,
+"en": "Defense increases by %0.2f while equipping a Shield.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 794,
+"en": "Defense increases by %0.2f while equipping the Cape of Emperor.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 795,
+"en": "Defense increases by %0.2f while equipping the Wing of Dimension.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 796,
+"en": "Defense increases by %0.2f while equipping the Wing of Illusion.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 797,
+"en": "Defense increases by %0.2f while equipping the Wing of Ruin.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 798,
+"en": "Defense increases by %0.2f#while equipping the Wing of Storm.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 799,
+"en": "Defense increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 802,
+"en": "Defense success rate increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 885,
+"en": "Double Damage rate increases by %0.2f%% while equipping Spear.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 888,
+"en": "Double damage rate increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 922,
+"en": "Drain Life skill damage and the amount of health absorbed increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 944,
+"en": "Durability reduction speed#of the consumable items#(Satan, Guardian Angel, Dinorant & Penril)#decreases by %0.2f%%. #(excluding Cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 945,
+"en": "Durability reduction speed#of the equipped accessories (necklace & rings)#decreases by %0.2f%%.#(excluding Cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 946,
+"en": "Durability reduction speed#of the weapons and armor equipped#decreases by %0.2f%%.#(excluding Cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 961,
+"en": "Earthshake skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 962,
+"en": "Earthshake victim gets stunned for 2 seconds with %0.2f%% chance.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 968,
+"en": "Effect duration increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 974,
+"en": "Electric Spark skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1040,
+"en": "Energy increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1074,
+"en": "Equipping the eternal wings increases your wizardry by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1075,
+"en": "Equipping the fist weapon increases attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1076,
+"en": "Equipping the fist weapon increases the chance of dealing double damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1077,
+"en": "Equipping the reigning cloak increases your attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1078,
+"en": "Equipping the reigning cloak increases your damage absorption rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1079,
+"en": "Equipping the reigning cloak increases your defense by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1094,
+"en": "Evil Spirit skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1101,
+"en": "Excellent damage rate increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1112,
+"en": "Expansion of Wizardry increases max. Wizardry by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1113,
+"en": "Expansion of Wizardry skill increases critical damage rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1120,
+"en": "Falling Slash skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1150,
+"en": "Fire Burst skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1156,
+"en": "Fire Scream skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1159,
+"en": "Fire Slash skill damage increases by %0.2f. & Skill",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1160,
+"en": "Fire Slash skill's defense reduction increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1161,
+"en": "Fire Storm skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1164,
+"en": "Fire Tome skill increase damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1165,
+"en": "Fire Tome skill increases damage over time by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1176,
+"en": "Flame Strike skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1178,
+"en": "Flame skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1183,
+"en": "Force Wave skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1190,
+"en": "Freeze Earth skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1225,
+"en": "Gets additional 1 Defense per %0.2f Command stat while equipping Scepter.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1226,
+"en": "Gets additional 1 Physical attack power per %0.2f Defense.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1227,
+"en": "Gets additional 1 Wizardry and Curse per %0.2f Defense.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1228,
+"en": "Gets additional 1 Wizardry per %0.2f Defense.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1229,
+"en": "Gets additional 1 attack power per %0.2f Defense.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1239,
+"en": "Gigantic Storm skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1524,
+"en": "Healing increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1541,
+"en": "Hellfire skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1688,
+"en": "Ice Arrow skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1698,
+"en": "Ice Storm skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1702,
+"en": "Ice resistance increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1703,
+"en": "Ice skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1715,
+"en": "Ignore enemy's defense has a chance to decrease the enemy's defense success rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1716,
+"en": "Ignore enemy's defense has a chance to increase your defense success rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1789,
+"en": "Increases AG recovery rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1793,
+"en": "Increases Dragon Slasher attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1795,
+"en": "Increases HP recovery rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1796,
+"en": "Increases HP stat by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1799,
+"en": "Increases SD recovery rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1800,
+"en": "Increases agility stat by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1802,
+"en": "Increases attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1803,
+"en": "Increases attack success rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1804,
+"en": "Increases automatic mana recovery by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1805,
+"en": "Increases beast uppercut attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1806,
+"en": "Increases chain drive attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1811,
+"en": "Increases critical damage chance by %0.2%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1813,
+"en": "Increases dark side attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1814,
+"en": "Increases dark side skill damage area by 2. requires 10 points.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1815,
+"en": "Increases defense rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1816,
+"en": "Increases defense success rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1817,
+"en": "Increases defense success rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1820,
+"en": "Increases dragon roar attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1821,
+"en": "Increases energy stat by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1824,
+"en": "Increases ice resistance by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1825,
+"en": "Increases killing blow attack power by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1826,
+"en": "Increases lightning resistance by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1829,
+"en": "Increases maximum AG by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1830,
+"en": "Increases maximum HP by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1831,
+"en": "Increases maximum SD by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1832,
+"en": "Increases maximum attack by %0.2f",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1835,
+"en": "Increases maximum mana by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1838,
+"en": "Increases poison resistance by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1839,
+"en": "Increases pvp attack success rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1840,
+"en": "Increases pvp defense rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1841,
+"en": "Increases strength stat by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1842,
+"en": "Increases the blood howling skill's bleeding effect and chance rate by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1843,
+"en": "Increases the chance of doing excellent damage by %0.2%%",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1848,
+"en": "Increases your multishot skill damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1852,
+"en": "Inferno skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1856,
+"en": "Infinity Arrow damage increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1862,
+"en": "Innovation skill's defense reduction increases by %0.2f and duration increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1994,
+"en": "Learn 'blind'.#Blinds targets and reduces the success rate of target's attack. Cool Time-10 sec.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1995,
+"en": "Learn 'blood howling'.#Gives a 10% chance to bleed targets for 10 sec. Cool Time-2 mins.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1996,
+"en": "Learn 'blood storm'.#Damages targets within 3 tiles. Cool Time-10 sec#(Can use it with combo, Must equip a sword).",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1997,
+"en": "Learn 'earth prison'.#Damages & stuns targets for 5 sec. Cool Time-10 sec.#Must equip a staff.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1998,
+"en": "Learn the 'bless' skill. #This skill increases all of your target's stats.(By 1 for every 100 your energy)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 1999,
+"en": "Learns 'Anger Explosion'.#Greatly increase Attack power and Wizardry with the bursting power of anger. Duration: 10 seconds. Cooldown: 1 minute",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2000,
+"en": "Learns 'Aqua Blast'.#Inflicts damage on enemy target with a chance to make the victim immobile for 3 seconds. Cooldown: 5 seconds",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2001,
+"en": "Learns 'Cure'.#Removes target's debuff. Cooldown: 20 seconds",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2002,
+"en": "Learns 'Death Blow'.#Forcefully pierces the target to inflict double damage by consuming 30% of max HP.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2003,
+"en": "Learns 'Illusion'.#Creates a reflection to absorb damage dealt to the caster. Cooldown: 1 minute",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2004,
+"en": "Learns 'Iron Defense'.#Increases Defense and HP by 800 (max)#for 10 seconds. Cooldown: 1 minute",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2005,
+"en": "Learns 'Party Healing'.#Additional 3 party members around the target gets healed. The amount healed decreases by 20% every time the target changes. Cooldown: 10 seconds",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2006,
+"en": "Learns 'Poison Arrow'.#Inflicts damage and poisons the target. Poison effect lasts for 10 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2007,
+"en": "Learns 'Summon Satyros'.#Summons a Satyros to fight for the summoner.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2072,
+"en": "Lightning Shock skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2076,
+"en": "Lightning Tome skill increases damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2077,
+"en": "Lightning Tome skill pushes the victim 2 tiles backward with %0.2f%% chance.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2078,
+"en": "Lightning resistance increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2079,
+"en": "Lightning skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2116,
+"en": "Lunge skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2137,
+"en": "Mana cost decreases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2154,
+"en": "Max AG increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2155,
+"en": "Max HP increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2156,
+"en": "Max Mana increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2158,
+"en": "Max SD increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2161,
+"en": "Max. Physical attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2162,
+"en": "Max. Wizardry increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2164,
+"en": "Max. attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2178,
+"en": "Maximum Wizardry and Curser increase by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2204,
+"en": "Meteor skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2207,
+"en": "Min. Physical attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2208,
+"en": "Min. Wizardry increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2210,
+"en": "Min. attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2216,
+"en": "Minimum Wizardry and Curse increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2274,
+"en": "Nova skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2309,
+"en": "One more arrow will be fired with Triple Shot skill.#(Consumed at once by 10 points, you will learn this skill.)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2368,
+"en": "Party Heal amount increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2384,
+"en": "Penetration skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2392,
+"en": "Pet's life reduction speed decreases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2408,
+"en": "Physical attack power increases by %0.2f while equipping Mace.#(When equipping 2 Maces, 50%% increment will be applied to each one.)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2409,
+"en": "Physical attack power increases by %0.2f while equipping One-handed Sword.#(When equipping 2 swords, 50%% increment will be applied to each one.)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2410,
+"en": "Physical attack power increases by %0.2f while equipping Spear.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2411,
+"en": "Physical attack power increases by %0.2f while equipping Two-handed Sword.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2412,
+"en": "Physical attack power increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2434,
+"en": "Points required : %d",
+"budget": 31,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2435,
+"en": "Points required: %d",
+"budget": 31,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2439,
+"en": "Poison Arrow skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2445,
+"en": "Poison resistance increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2446,
+"en": "Poison skill increases poison damage over time by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2458,
+"en": "Power Slash skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2481,
+"en": "Protection shield activates which absorbs#all incoming damage#with %0.2f%% chance when hit.#Duration: 5 seconds",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2503,
+"en": "PvP attack power increases by additional %0.2f while equipping Crossbow.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2504,
+"en": "PvP attack power increases by additional %0.2f while equipping Scepter.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2505,
+"en": "PvP attack power increases by additional %0.2f while equipping Stick.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2506,
+"en": "PvP attack power increases by additional %0.2f while equipping Two-handed Staff.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2507,
+"en": "PvP attack success rate increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2508,
+"en": "PvP defense rate increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2519,
+"en": "Rageful Blow skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2522,
+"en": "Rank %d, Skill Level: %d/1",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2523,
+"en": "Rank %d, Skill Level: %d/10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2524,
+"en": "Rank %d, Skill Level: %d/20",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2525,
+"en": "Rank 2 'Increase defense success rate strengthener' requires lev",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2526,
+"en": "Rank 2 'Increases poison resistance' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2527,
+"en": "Rank 2 'beast uppercut strengthener' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2528,
+"en": "Rank 2 'killing blow strengthener' requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2529,
+"en": "Rank 3 'Increase HP recovery rate' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2530,
+"en": "Rank 3 'Increase lightning resistance' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2531,
+"en": "Rank 3 'Reduce durability loss (2)' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2532,
+"en": "Rank 4 'Increase maximum HP' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2533,
+"en": "Rank 4 'Increases defense rate' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2534,
+"en": "Rank 5 'Ignore additional enemy armor' requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2535,
+"en": "Rank 5 'Increase maximum mana' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2536,
+"en": "Rank 5 'Increases defense success rate' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2537,
+"en": "Rank 5 'chain drive strengthener' requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2538,
+"en": "Rank 5 'dark side strengthener' requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2539,
+"en": "Rank 6 'Increase critical damage chance' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2540,
+"en": "Rank 6 'Increases set defense rate' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2541,
+"en": "Rank 6 'meteor strengthener' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2542,
+"en": "Rank 7 'dragon slasher strengthener' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2543,
+"en": "Rank 8 'Increase chance of ignoring enemy's cefense' skill requi",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2544,
+"en": "Rank 8 'Increase double damage chance' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2545,
+"en": "Rank 8 'blood howling' skill required",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2581,
+"en": "Recovers Mana by max mana/%0.2f when killing a monster.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2583,
+"en": "Recovers SD by max SD/%0.2f when killing a monster.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2609,
+"en": "Reduces mana cost for skills by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2610,
+"en": "Reduces the speed of durability loss for accessories (necklaces, rings) by %0.2f%%.# (excludes cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2611,
+"en": "Reduces the speed of durability loss for weapons and armor by %0.2f%%.# (excludes cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2612,
+"en": "Reducing the speed of durability loss for equipped consumable items #(satan, guardian angel, horn of uniria, horn of dinorant, fenrir's horn) by %0.2f%%. #(excludes cash items)",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2635,
+"en": "Required Point: %d point",
+"budget": 31,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2638,
+"en": "Requires 'Berserker' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2639,
+"en": "Requires 'Bless' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2640,
+"en": "Requires 'Chain Lightening' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2641,
+"en": "Requires 'Chaotic Diseier' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2642,
+"en": "Requires 'Cometfall' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2643,
+"en": "Requires 'Critical Damage Increase' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2644,
+"en": "Requires 'Cyclone' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2645,
+"en": "Requires 'Damage Increase' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2646,
+"en": "Requires 'Death Stab' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2647,
+"en": "Requires 'Decay' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2648,
+"en": "Requires 'Defense Increase' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2649,
+"en": "Requires 'Drain Life' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2650,
+"en": "Requires 'Earthshake' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2651,
+"en": "Requires 'Electric Spark' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2652,
+"en": "Requires 'Evil Spirit' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2653,
+"en": "Requires 'Expansion of Wizardry' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2654,
+"en": "Requires 'Falling Slash' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2655,
+"en": "Requires 'Fire Burst' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2656,
+"en": "Requires 'Fire Scream' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2657,
+"en": "Requires 'Fire Slash' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2658,
+"en": "Requires 'Fire Storm' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2659,
+"en": "Requires 'Flame Strike' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2660,
+"en": "Requires 'Flame' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2661,
+"en": "Requires 'Force Wave' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2662,
+"en": "Requires 'Freeze Earth' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2663,
+"en": "Requires 'Gigantic Storm' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2664,
+"en": "Requires 'Heal' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2665,
+"en": "Requires 'Hellfire' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2666,
+"en": "Requires 'Ice Arrow' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2667,
+"en": "Requires 'Ice Storm' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2668,
+"en": "Requires 'Ice' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2669,
+"en": "Requires 'Inferno' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2670,
+"en": "Requires 'Infinity Arrow' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2671,
+"en": "Requires 'Innovation' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2672,
+"en": "Requires 'Lightening Shock' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2673,
+"en": "Requires 'Lightening' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2674,
+"en": "Requires 'Lunge' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2675,
+"en": "Requires 'Meteor' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2676,
+"en": "Requires 'Nova' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2677,
+"en": "Requires 'Party Healing' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2678,
+"en": "Requires 'Penetration' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2679,
+"en": "Requires 'Poison Arrow' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2680,
+"en": "Requires 'Poison' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2681,
+"en": "Requires 'Power Slash' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2682,
+"en": "Requires 'Rageful Blow' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2683,
+"en": "Requires 'Slash' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2684,
+"en": "Requires 'Sleep' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2685,
+"en": "Requires 'Soul Barrier' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2686,
+"en": "Requires 'Strike of Destruction' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2687,
+"en": "Requires 'Swell Life' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2688,
+"en": "Requires 'Triple Shot' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2689,
+"en": "Requires 'Twisting Slash' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2690,
+"en": "Requires 'Weakeness' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2691,
+"en": "Requires Rank 1 'Durability Reduction (1)' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2692,
+"en": "Requires Rank 1 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+}
+]
+}

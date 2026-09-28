@@ -1,0 +1,7219 @@
+{
+  "Policy": "Real CreateCharacterAction with configured creation plugins, legal possible gear, real skill consume/damage. Static one-second attack estimate only; not AI, kills, repair wear or item acquisition acceptance.",
+  "Rows": [
+    {
+      "Stage": 0,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [],
+      "Hp": 61,
+      "Mp": 62,
+      "Ap": 21.300001,
+      "HpRegen": 0,
+      "MpRegen": 0.7646667162577311,
+      "ApRegen": 1.8796666463216145,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 3.796875,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 17,
+          "Payload": 6.84375,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 4.383561643835616
+        },
+        {
+          "Skill": null,
+          "Payload": 1.50390625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.948051948051948
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 17.080000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 24.8,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 1,
+          "Name": "Hand Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=26 rank=1 raw=3"
+        }
+      ],
+      "Hp": 112,
+      "Mp": 20.5,
+      "Ap": 25.7,
+      "HpRegen": 0,
+      "MpRegen": 0.2528333266576131,
+      "ApRegen": 2.0949999491373696,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 3.46875,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": null,
+          "Payload": 10.46875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.8656716417910446
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 31.360000000000003,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 8.200000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 0,
+          "Name": "Small Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=3 rank=1 raw=2"
+        }
+      ],
+      "Hp": 80,
+      "Mp": 30,
+      "Ap": 20.6,
+      "HpRegen": 0,
+      "MpRegen": 0.3700000047683716,
+      "ApRegen": 1.8726666768391926,
+      "Map": 3,
+      "Monster": 26,
+      "Rank": 1,
+      "MonsterHp": 45,
+      "Incoming": 6.83984375,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": null,
+          "Payload": 10.09375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 4.458204334365325
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 22.400000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 12,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 0,
+          "Name": "Small Axe",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=26 rank=1 raw=3"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 2,
+          "Name": "Pad Gloves",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=26 rank=1 raw=3"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 2,
+          "Name": "Pad Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        }
+      ],
+      "Hp": 110,
+      "Mp": 60,
+      "Ap": 23.400002,
+      "HpRegen": 0,
+      "MpRegen": 0.7400000095367432,
+      "ApRegen": 1.9006667137145996,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 3.59375,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": null,
+          "Payload": 12.18359375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.4623276691247193
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 30.800000000000004,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 24,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 0,
+          "Name": "Small Axe",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=26 rank=1 raw=3"
+        }
+      ],
+      "Hp": 90,
+      "Mp": 39,
+      "Ap": 23.55,
+      "HpRegen": 0,
+      "MpRegen": 0.48100002606709796,
+      "ApRegen": 1.9021666844685872,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 3.78515625,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 46.1171875,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 0.6505166864306285
+        },
+        {
+          "Skill": null,
+          "Payload": 9.90625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 3.028391167192429
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 25.200000000000003,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 15.600000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 0,
+          "Name": "Small Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=3 rank=1 raw=2"
+        }
+      ],
+      "Hp": 76,
+      "Mp": 46.600002,
+      "Ap": 18.300001,
+      "HpRegen": 0,
+      "MpRegen": 0.5747333765029907,
+      "ApRegen": 1.8496665954589844,
+      "Map": 51,
+      "Monster": 418,
+      "Rank": 1,
+      "MonsterHp": 60,
+      "Incoming": 9.78515625,
+      "EnemySeconds": 1.5,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": null,
+          "Payload": 9.8828125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.071146245059288
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 21.28,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 18.640000915527345,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 1,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 1,
+          "Name": "Hand Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        }
+      ],
+      "Hp": 108.3,
+      "Mp": 34,
+      "Ap": 37.7,
+      "HpRegen": 0,
+      "MpRegen": 0.4193333387374878,
+      "ApRegen": 2.04366668065389,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 3.95703125,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 62.44921875,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 0.4803903171326703
+        },
+        {
+          "Skill": null,
+          "Payload": 11.76171875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.55064762537363
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 30.32400085449219,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 13.600000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 1,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 1,
+          "Name": "Hand Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=418 rank=1 raw=4"
+        }
+      ],
+      "Hp": 108.3,
+      "Mp": 34,
+      "Ap": 37.7,
+      "HpRegen": 0,
+      "MpRegen": 0.4193333387374878,
+      "ApRegen": 2.04366668065389,
+      "Map": 0,
+      "Monster": 3,
+      "Rank": 1,
+      "MonsterHp": 30,
+      "Incoming": 4.06640625,
+      "EnemySeconds": 1.8,
+      "ZenAmount": 9,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 64.0859375,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 0.4681214189930513
+        },
+        {
+          "Skill": null,
+          "Payload": 12,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.5
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 30.32400085449219,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 13.600000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [],
+      "Hp": 85,
+      "Mp": 150,
+      "Ap": 33.4,
+      "HpRegen": 0,
+      "MpRegen": 1.8500000635782878,
+      "ApRegen": 2.000666618347168,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 22.140625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 4,
+          "Payload": 18.5546875,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.545263157894737
+        },
+        {
+          "Skill": 17,
+          "Payload": 12.40625,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 11.28463476070529
+        },
+        {
+          "Skill": null,
+          "Payload": 2.03515625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 68.79078694817659
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 23.8,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 60,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 1,
+          "Name": "Hand Axe",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 5,
+          "Name": "Leather Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 5,
+          "Name": "Leather Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 5,
+          "Name": "Leather Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 5,
+          "Name": "Leather Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 5,
+          "Name": "Leather Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        }
+      ],
+      "Hp": 168,
+      "Mp": 27.5,
+      "Ap": 37.05,
+      "HpRegen": 0,
+      "MpRegen": 0.33916668097178143,
+      "ApRegen": 2.2841666539510093,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 17.875,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": null,
+          "Payload": 23.26953125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.016451233842538
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 47.040000000000006,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 11,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 8,
+          "Name": "Crossbow",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 10,
+          "Name": "Vine Helm",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 10,
+          "Name": "Vine Pants",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 10,
+          "Name": "Vine Gloves",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 10,
+          "Name": "Vine Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        }
+      ],
+      "Hp": 110,
+      "Mp": 52.5,
+      "Ap": 32.1,
+      "HpRegen": 0,
+      "MpRegen": 0.6474999984105428,
+      "ApRegen": 1.9876666069030762,
+      "Map": 3,
+      "Monster": 33,
+      "Rank": 10.67,
+      "MonsterHp": 120,
+      "Incoming": 17.05859375,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 20,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 26.34375,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 4.555160142348755
+        },
+        {
+          "Skill": null,
+          "Payload": 25.36328125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 4.731249037424919
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 30.800000000000004,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 21,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 4,
+          "Name": "Sword of Assassin",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=420 rank=10.89 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=420 rank=10.89 raw=19"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 2,
+          "Name": "Pad Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 2,
+          "Name": "Pad Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        }
+      ],
+      "Hp": 140,
+      "Mp": 80,
+      "Ap": 34.65,
+      "HpRegen": 0,
+      "MpRegen": 0.9866666793823242,
+      "ApRegen": 2.0131667455037436,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 17.70703125,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 21,
+          "Payload": 49.3203125,
+          "Consumed": true,
+          "Mp": 8,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.838587042610486
+        },
+        {
+          "Skill": null,
+          "Payload": 24.71875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 5.663716814159292
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 39.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 32,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 1,
+          "Name": "Hand Axe",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 5,
+          "Name": "Leather Helm",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 5,
+          "Name": "Leather Gloves",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 5,
+          "Name": "Leather Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        }
+      ],
+      "Hp": 125,
+      "Mp": 56.5,
+      "Ap": 35.300003,
+      "HpRegen": 0,
+      "MpRegen": 0.6968333721160889,
+      "ApRegen": 2.0196666717529297,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 21.55859375,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 54.21875,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 2.5821325648414986
+        },
+        {
+          "Skill": null,
+          "Payload": 13.9765625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 10.016769144773617
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 35,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 22.6,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 0,
+          "Name": "Small Axe",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=3 rank=1 raw=2"
+        }
+      ],
+      "Hp": 106,
+      "Mp": 109.200005,
+      "Ap": 28.400002,
+      "HpRegen": 0,
+      "MpRegen": 1.3468000094095867,
+      "ApRegen": 1.9506667455037434,
+      "Map": 51,
+      "Monster": 420,
+      "Rank": 10.89,
+      "MonsterHp": 520,
+      "Incoming": 62.4140625,
+      "EnemySeconds": 1.5,
+      "ZenAmount": 20,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 4,
+          "Payload": 14.28125,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 36.411378555798684
+        },
+        {
+          "Skill": null,
+          "Payload": 9.91796875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 52.43009058684522
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 29.680000000000003,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 43.68000183105469,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 11,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 0,
+          "Name": "Kris",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 5,
+          "Name": "Leather Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 5,
+          "Name": "Leather Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 5,
+          "Name": "Leather Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 5,
+          "Name": "Leather Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        }
+      ],
+      "Hp": 151.3,
+      "Mp": 46.6,
+      "Ap": 49.65,
+      "HpRegen": 0,
+      "MpRegen": 0.5747333367665609,
+      "ApRegen": 2.1631666819254556,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 18.9765625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 66.42578125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 2.1076154072331668
+        },
+        {
+          "Skill": null,
+          "Payload": 22.79296875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.1422450728363325
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 42.36400085449219,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 18.639999389648438,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 11,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 0,
+          "Name": "Kris",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=419 rank=6.93 raw=13"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 5,
+          "Name": "Leather Helm",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 5,
+          "Name": "Leather Pants",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 5,
+          "Name": "Leather Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0003-0000-0000-000000000000 monster=33 rank=10.67 raw=8"
+        }
+      ],
+      "Hp": 173.3,
+      "Mp": 46.6,
+      "Ap": 51.300003,
+      "HpRegen": 0,
+      "MpRegen": 0.5747333367665609,
+      "ApRegen": 2.1796666781107583,
+      "Map": 0,
+      "Monster": 1,
+      "Rank": 12.94,
+      "MonsterHp": 140,
+      "Incoming": 20.78515625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 23,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 67.2578125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 2.081542571727262
+        },
+        {
+          "Skill": null,
+          "Payload": 21.90234375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.392009987515605
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 48.52400085449219,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 18.639999389648438,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=1 rank=12.94 raw=9"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=2 rank=4.41 raw=4"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 2,
+          "Name": "Pad Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=4 rank=18.06 raw=12"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=4 rank=18.06 raw=12"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 2,
+          "Name": "Pad Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=4 rank=18.06 raw=12"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 2,
+          "Name": "Pad Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        }
+      ],
+      "Hp": 182,
+      "Mp": 482,
+      "Ap": 81.1,
+      "HpRegen": 0,
+      "MpRegen": 5.9446665445963545,
+      "ApRegen": 1.4776665369669597,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 102.265625,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 45.125,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 26.592797783933516
+        },
+        {
+          "Skill": 4,
+          "Payload": 35.30078125,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 33.99358194090959
+        },
+        {
+          "Skill": 17,
+          "Payload": 30.1484375,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 39.803057786991445
+        },
+        {
+          "Skill": null,
+          "Payload": 8.15234375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 147.1969333972209
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 50.96000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 5,
+          "Name": "Battle Axe",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 6,
+          "Name": "Scale Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 8,
+          "Name": "Brass Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 8,
+          "Name": "Brass Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 8,
+          "Name": "Brass Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        }
+      ],
+      "Hp": 393,
+      "Mp": 57,
+      "Ap": 83.600006,
+      "HpRegen": 0,
+      "MpRegen": 0.702999989191691,
+      "ApRegen": 2.0600001017252603,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 89.78125,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 19,
+          "Payload": 125.953125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 9.527353926311871
+        },
+        {
+          "Skill": null,
+          "Payload": 61.6875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.45288753799392
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 110.04,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 22.8,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 10,
+          "Name": "Arquebus",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 11,
+          "Name": "Silk Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 11,
+          "Name": "Silk Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 11,
+          "Name": "Silk Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 11,
+          "Name": "Silk Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=23 rank=30 raw=24"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 11,
+          "Name": "Silk Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        }
+      ],
+      "Hp": 227,
+      "Mp": 139.5,
+      "Ap": 76.9,
+      "HpRegen": 0,
+      "MpRegen": 1.7204999923706055,
+      "ApRegen": 1.4356667200724285,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 94.66796875,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 60.1875,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.937694704049843
+        },
+        {
+          "Skill": null,
+          "Payload": 60.640625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.78871424890492
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 63.56000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 55.800000000000004,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 8,
+          "Name": "Brass Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 8,
+          "Name": "Brass Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 8,
+          "Name": "Brass Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        }
+      ],
+      "Hp": 257,
+      "Mp": 157,
+      "Ap": 78.55,
+      "HpRegen": 0,
+      "MpRegen": 1.9363333384195964,
+      "ApRegen": 1.4521667162577312,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 94.31640625,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 164.3671875,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.300727220875517
+        },
+        {
+          "Skill": null,
+          "Payload": 83.1171875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 14.43744712848952
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 71.96000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 62.800000000000004,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 2,
+          "Name": "Double Axe",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=23 rank=30 raw=24"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 0,
+          "Name": "Bronze Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 0,
+          "Name": "Bronze Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 0,
+          "Name": "Bronze Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=21 rank=32.5 raw=26"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 0,
+          "Name": "Bronze Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=22 rank=27.5 raw=22"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 0,
+          "Name": "Bronze Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=22 rank=27.5 raw=22"
+        }
+      ],
+      "Hp": 261.5,
+      "Mp": 124,
+      "Ap": 81.25,
+      "HpRegen": 0,
+      "MpRegen": 1.5293334325154622,
+      "ApRegen": 1.4791666666666667,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 94.796875,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 96.65234375,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 12.415632704199167
+        },
+        {
+          "Skill": null,
+          "Payload": 35.30078125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 33.99358194090959
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 73.22000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 49.6,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=1 rank=12.94 raw=9"
+        }
+      ],
+      "Hp": 223,
+      "Mp": 349.6,
+      "Ap": 67.9,
+      "HpRegen": 0,
+      "MpRegen": 4.311733563741048,
+      "ApRegen": 1.3456665674845378,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 112.39453125,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 58.359375,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 20.562248995983936
+        },
+        {
+          "Skill": 4,
+          "Payload": 30.6875,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 39.10386965376782
+        },
+        {
+          "Skill": null,
+          "Payload": 19.3359375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 62.06060606060606
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 62.440000000000005,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 50,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 2,
+          "Name": "Flail",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 6,
+          "Name": "Scale Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 8,
+          "Name": "Brass Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 8,
+          "Name": "Brass Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        }
+      ],
+      "Hp": 318,
+      "Mp": 98.6,
+      "Ap": 98.05,
+      "HpRegen": 0,
+      "MpRegen": 1.2160666783650715,
+      "ApRegen": 1.6471665700276692,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 93.60546875,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 82.4453125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 14.555102814365583
+        },
+        {
+          "Skill": null,
+          "Payload": 50.01953125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 23.990628660679423
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 89.04,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 39.43999938964844,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 50,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 2,
+          "Name": "Flail",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 5,
+          "Name": "Leather Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 5,
+          "Name": "Leather Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 5,
+          "Name": "Leather Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 5,
+          "Name": "Leather Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        }
+      ],
+      "Hp": 418,
+      "Mp": 98.6,
+      "Ap": 105.55,
+      "HpRegen": 0,
+      "MpRegen": 1.2160666783650715,
+      "ApRegen": 1.7221666971842449,
+      "Map": 2,
+      "Monster": 20,
+      "Rank": 45,
+      "MonsterHp": 1200,
+      "Incoming": 98.94140625,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 66,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 86.8046875,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 13.824138241382414
+        },
+        {
+          "Skill": null,
+          "Payload": 45.2109375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 26.54224987039917
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 117.04,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 39.43999938964844,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=4 rank=18.06 raw=12"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 2,
+          "Name": "Pad Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 4,
+          "Name": "Bone Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 2,
+          "Name": "Pad Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        }
+      ],
+      "Hp": 255,
+      "Mp": 728,
+      "Ap": 116.700005,
+      "HpRegen": 0,
+      "MpRegen": 8.97866694132487,
+      "ApRegen": 1.8336668014526367,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 105.09375,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 64.07421875,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 21.849661647259648
+        },
+        {
+          "Skill": 4,
+          "Payload": 53.234375,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 26.298796595245083
+        },
+        {
+          "Skill": 17,
+          "Payload": 47.31640625,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.588045901097995
+        },
+        {
+          "Skill": null,
+          "Payload": 11.9765625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 116.89497716894977
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 71.4,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 559,
+      "Mp": 78.5,
+      "Ap": 117.8,
+      "HpRegen": 0,
+      "MpRegen": 0.9681666692097982,
+      "ApRegen": 2.630000114440918,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 97.42578125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 206.48828125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.780045780443049
+        },
+        {
+          "Skill": null,
+          "Payload": 100.57421875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 13.920068357478542
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 156.52,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 31.400000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 11,
+          "Name": "Light Crossbow",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 12,
+          "Name": "Wind Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 12,
+          "Name": "Wind Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 12,
+          "Name": "Wind Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 12,
+          "Name": "Wind Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 12,
+          "Name": "Wind Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        }
+      ],
+      "Hp": 314,
+      "Mp": 205.5,
+      "Ap": 110.3,
+      "HpRegen": 0,
+      "MpRegen": 2.5344999631245932,
+      "ApRegen": 1.7696666717529297,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 101.46484375,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 88.6796875,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.787155316712184
+        },
+        {
+          "Skill": null,
+          "Payload": 88.66015625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.790633123320262
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 87.92,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 82.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 344,
+      "Mp": 216,
+      "Ap": 111.149994,
+      "HpRegen": 0,
+      "MpRegen": 2.6640000343322754,
+      "ApRegen": 1.7781666119893391,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 102.6015625,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 202.53125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.912513501002931
+        },
+        {
+          "Skill": null,
+          "Payload": 100.79296875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 13.889857768476533
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 96.32000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 86.4,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 6,
+          "Name": "Gladius",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 25,
+          "Name": "Light Plate Mask",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 0,
+          "Name": "Bronze Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=17 rank=70 raw=28"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 6,
+          "Name": "Scale Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 25,
+          "Name": "Light Plate Gloves",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 25,
+          "Name": "Light Plate Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        }
+      ],
+      "Hp": 363,
+      "Mp": 175.5,
+      "Ap": 115.20001,
+      "HpRegen": 0,
+      "MpRegen": 2.164500077565511,
+      "ApRegen": 1.8186667760213215,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 102.37109375,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 127.04296875,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 11.01989361375027
+        },
+        {
+          "Skill": null,
+          "Payload": 47.2421875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.63452951876964
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 101.64000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 70.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 39,
+          "Name": "Mistery Gloves",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 310,
+      "Mp": 529.1,
+      "Ap": 97.25,
+      "HpRegen": 0,
+      "MpRegen": 6.525566736857097,
+      "ApRegen": 1.6391666730244954,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 111.703125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 78.01953125,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 17.944224703349523
+        },
+        {
+          "Skill": 4,
+          "Payload": 46.3515625,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 30.203944041800103
+        },
+        {
+          "Skill": null,
+          "Payload": 31.14453125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 44.95171202809482
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 86.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 79,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 443.7,
+      "Mp": 136.7,
+      "Ap": 133.8,
+      "HpRegen": 0,
+      "MpRegen": 1.6859666506449382,
+      "ApRegen": 2.0046666463216147,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 102.21875,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 206.15625,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.790965590419888
+        },
+        {
+          "Skill": 269,
+          "Payload": 110.6953125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 12.647328675277013
+        },
+        {
+          "Skill": null,
+          "Payload": 80.8359375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 17.319029670435874
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 124.23600341796876,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 54.67999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 79,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 2,
+          "Name": "Flail",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 6,
+          "Name": "Scale Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 6,
+          "Name": "Scale Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 601.7,
+      "Mp": 136.7,
+      "Ap": 145.65001,
+      "HpRegen": 0,
+      "MpRegen": 1.6859666506449382,
+      "ApRegen": 2.1231667200724282,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 107.23828125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 107.7578125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 12.992097440730806
+        },
+        {
+          "Skill": null,
+          "Payload": 60.140625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 23.278773707456484
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 54.67999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=4 rank=18.06 raw=12"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=0 rank=7.82 raw=6"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 2,
+          "Name": "Pad Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 4,
+          "Name": "Bone Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 2,
+          "Name": "Pad Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=6 rank=21.47 raw=14"
+        }
+      ],
+      "Hp": 258,
+      "Mp": 736,
+      "Ap": 118.00001,
+      "HpRegen": 0,
+      "MpRegen": 9.077333450317383,
+      "ApRegen": 1.846666653951009,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 105.7421875,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 65.62890625,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 21.332063567644784
+        },
+        {
+          "Skill": 4,
+          "Payload": 53.4453125,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 26.195000730887298
+        },
+        {
+          "Skill": 17,
+          "Payload": 47.9453125,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.199934821574058
+        },
+        {
+          "Skill": null,
+          "Payload": 12.24609375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 114.32216905901116
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 72.24000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 72.24000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 294.40000000000003,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 564,
+      "Mp": 79,
+      "Ap": 118.75001,
+      "HpRegen": 0,
+      "MpRegen": 0.9743333657582601,
+      "ApRegen": 2.6458334922790527,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 96.73828125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 209.05078125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.6969374217538356
+        },
+        {
+          "Skill": null,
+          "Payload": 100.828125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 13.885014721834805
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 157.92000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 157.92000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 31.6,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 31.6,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 11,
+          "Name": "Light Crossbow",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 12,
+          "Name": "Wind Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 12,
+          "Name": "Wind Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 12,
+          "Name": "Wind Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 12,
+          "Name": "Wind Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 12,
+          "Name": "Wind Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        }
+      ],
+      "Hp": 317,
+      "Mp": 207,
+      "Ap": 111.40001,
+      "HpRegen": 0,
+      "MpRegen": 2.552999973297119,
+      "ApRegen": 1.780666669209798,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 102.27734375,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 88.609375,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.79968259566214
+        },
+        {
+          "Skill": null,
+          "Payload": 89.94140625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.565689467969598
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 88.76,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 88.76,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 82.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 82.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 347,
+      "Mp": 217,
+      "Ap": 112.3,
+      "HpRegen": 0,
+      "MpRegen": 2.676333427429199,
+      "ApRegen": 1.7896666526794434,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 100.5703125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 201.28125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.95544170159913
+        },
+        {
+          "Skill": null,
+          "Payload": 103.7890625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 13.48889725254046
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 97.16000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 97.16000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 86.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 86.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 6,
+          "Name": "Gladius",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 25,
+          "Name": "Light Plate Mask",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 0,
+          "Name": "Bronze Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=17 rank=70 raw=28"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 6,
+          "Name": "Scale Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 25,
+          "Name": "Light Plate Gloves",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 25,
+          "Name": "Light Plate Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        }
+      ],
+      "Hp": 366.5,
+      "Mp": 176.5,
+      "Ap": 116.5,
+      "HpRegen": 0,
+      "MpRegen": 2.1768333117167153,
+      "ApRegen": 1.831666628519694,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 103.53125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 128.375,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 10.905550146056475
+        },
+        {
+          "Skill": null,
+          "Payload": 48.04296875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.140580535002847
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 102.62,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 102.62,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 70.60000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 70.60000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 39,
+          "Name": "Mistery Gloves",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 313,
+      "Mp": 535.7,
+      "Ap": 98.25,
+      "HpRegen": 0,
+      "MpRegen": 6.606966654459636,
+      "ApRegen": 1.649166742960612,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 114.23828125,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 78.26953125,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 17.886909217946798
+        },
+        {
+          "Skill": 4,
+          "Payload": 46.921875,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.836829836829835
+        },
+        {
+          "Skill": null,
+          "Payload": 32.19140625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 43.48986773449824
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 87.64000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 87.64000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 214.2800048828125,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 80,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=424 rank=26.7 raw=43"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=425 rank=30 raw=48"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 447,
+      "Mp": 137.7,
+      "Ap": 134.75,
+      "HpRegen": 0,
+      "MpRegen": 1.698300043741862,
+      "ApRegen": 2.0141666730244956,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 103.96875,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 207.21875,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.756145377771075
+        },
+        {
+          "Skill": 269,
+          "Payload": 111.95703125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 12.504797459963015
+        },
+        {
+          "Skill": null,
+          "Payload": 81.55078125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 17.16721751209465
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 125.16000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 125.16000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 55.07999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 55.07999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 80,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 2,
+          "Name": "Flail",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 6,
+          "Name": "Scale Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 6,
+          "Name": "Scale Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 609,
+      "Mp": 137.7,
+      "Ap": 146.90001,
+      "HpRegen": 0,
+      "MpRegen": 1.698300043741862,
+      "ApRegen": 2.1356666882832847,
+      "Map": 1,
+      "Monster": 5,
+      "Rank": 81.11,
+      "MonsterHp": 1400,
+      "Incoming": 107.48046875,
+      "EnemySeconds": 1.2,
+      "ZenAmount": 124,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 108.62109375,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 12.888840939331823
+        },
+        {
+          "Skill": null,
+          "Payload": 59.5,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 23.529411764705884
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 170.52,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 55.07999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 55.07999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=1 rank=12.94 raw=9"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 4,
+          "Name": "Bone Helm",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=22 rank=27.5 raw=22"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 7,
+          "Name": "Sphinx Gloves",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 4,
+          "Name": "Bone Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=22 rank=27.5 raw=22"
+        }
+      ],
+      "Hp": 282,
+      "Mp": 822,
+      "Ap": 130.1,
+      "HpRegen": 0,
+      "MpRegen": 10.137999852498373,
+      "ApRegen": 1.9676666259765625,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 123.75390625,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 69.3203125,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 36.06446523160149
+        },
+        {
+          "Skill": 4,
+          "Payload": 57.9765625,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 43.12087319768225
+        },
+        {
+          "Skill": 17,
+          "Payload": 53.07421875,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 47.10384926768234
+        },
+        {
+          "Skill": null,
+          "Payload": 14.296875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 174.86338797814207
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 78.96000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 78.96000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 328.8,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 623,
+      "Mp": 87,
+      "Ap": 131.1,
+      "HpRegen": 0,
+      "MpRegen": 1.0730000336964924,
+      "ApRegen": 2.8516667683919272,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 112.23046875,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 210.7265625,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 11.863715567419272
+        },
+        {
+          "Skill": null,
+          "Payload": 101.765625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 24.566252111162292
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 174.44000000000003,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 34.800000000000004,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 34.800000000000004,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 12,
+          "Name": "Serpent Crossbow",
+          "Level": 1,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 12,
+          "Name": "Wind Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 12,
+          "Name": "Wind Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=16 rank=85.56 raw=42"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 12,
+          "Name": "Wind Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=13 rank=83.33 raw=40"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 12,
+          "Name": "Wind Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 12,
+          "Name": "Wind Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        }
+      ],
+      "Hp": 347,
+      "Mp": 229.5,
+      "Ap": 122.90001,
+      "HpRegen": 0,
+      "MpRegen": 2.8304999669392905,
+      "ApRegen": 1.8956667582194011,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 118.49609375,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 99.37109375,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 25.158221628208658
+        },
+        {
+          "Skill": null,
+          "Payload": 99.85546875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 25.036185111293666
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 97.16000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 97.16000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 91.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 91.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 377,
+      "Mp": 237,
+      "Ap": 123.55,
+      "HpRegen": 0,
+      "MpRegen": 2.9230000178019204,
+      "ApRegen": 1.9021666844685872,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 117.55859375,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 207.0546875,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 12.074104818322454
+        },
+        {
+          "Skill": null,
+          "Payload": 102.4140625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 24.410710199099857
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 105.56000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 105.56000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 94.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 94.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 8,
+          "Name": "Serpent Sword",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 25,
+          "Name": "Light Plate Mask",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 25,
+          "Name": "Light Plate Pants",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 25,
+          "Name": "Light Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 25,
+          "Name": "Light Plate Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 401.5,
+      "Mp": 194,
+      "Ap": 128.25,
+      "HpRegen": 0,
+      "MpRegen": 2.3926666577657065,
+      "ApRegen": 1.9491666158040364,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 119.703125,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 128.6953125,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.4257269471256
+        },
+        {
+          "Skill": null,
+          "Payload": 47.7421875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 52.36458844706267
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 112.42000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 112.42000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 77.60000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 77.60000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 39,
+          "Name": "Mistery Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 39,
+          "Name": "Mistery Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0033-0000-0000-000000000000 monster=422 rank=18.14 raw=30"
+        }
+      ],
+      "Hp": 343,
+      "Mp": 596.6,
+      "Ap": 108.4,
+      "HpRegen": 0,
+      "MpRegen": 7.358066558837891,
+      "ApRegen": 1.750666618347168,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 128.13671875,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 80.578125,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 31.025790188093854
+        },
+        {
+          "Skill": 4,
+          "Payload": 50.5703125,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 49.436119264637725
+        },
+        {
+          "Skill": null,
+          "Payload": 31.64453125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 79.00259227255894
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 96.04,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 96.04,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 238.639990234375,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 90,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 490,
+      "Mp": 151.6,
+      "Ap": 147.55,
+      "HpRegen": 0,
+      "MpRegen": 1.869733492533366,
+      "ApRegen": 2.1421666145324707,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 119.55859375,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 212.65625,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 11.756061719324027
+        },
+        {
+          "Skill": 269,
+          "Payload": 110.28125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 22.66931141966563
+        },
+        {
+          "Skill": null,
+          "Payload": 81.09765625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 30.827031453205528
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 137.20000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 137.20000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 60.64000244140625,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 60.64000244140625,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 90,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 2,
+          "Name": "Flail",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=13 rank=83.33 raw=40"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=16 rank=85.56 raw=42"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 8,
+          "Name": "Brass Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=16 rank=85.56 raw=42"
+        }
+      ],
+      "Hp": 670,
+      "Mp": 151.6,
+      "Ap": 161.05,
+      "HpRegen": 0,
+      "MpRegen": 1.869733492533366,
+      "ApRegen": 2.2771666844685874,
+      "Map": 1,
+      "Monster": 8,
+      "Rank": 90,
+      "MonsterHp": 2500,
+      "Incoming": 121.25390625,
+      "EnemySeconds": 1.4,
+      "ZenAmount": 139,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 269,
+          "Payload": 108.62890625,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 23.014132115502175
+        },
+        {
+          "Skill": null,
+          "Payload": 60.734375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 41.16285052739902
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 187.60000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 60.64000244140625,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 60.64000244140625,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=1 rank=12.94 raw=9"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 4,
+          "Name": "Bone Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 7,
+          "Name": "Sphinx Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 4,
+          "Name": "Bone Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        }
+      ],
+      "Hp": 302,
+      "Mp": 890,
+      "Ap": 139.9,
+      "HpRegen": 0,
+      "MpRegen": 10.976666768391928,
+      "ApRegen": 2.0656665166219077,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 47.203125,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 70.140625,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 22.811318291935844
+        },
+        {
+          "Skill": 4,
+          "Payload": 59.19140625,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 27.03095302910315
+        },
+        {
+          "Skill": 17,
+          "Payload": 53.484375,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 29.915281277388257
+        },
+        {
+          "Skill": null,
+          "Payload": 14.015625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 114.15831417224081
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 84.56,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 84.56,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 356,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 669,
+      "Mp": 93,
+      "Ap": 140.6,
+      "HpRegen": 0,
+      "MpRegen": 1.146999994913737,
+      "ApRegen": 3.010000228881836,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 43.7265625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 200.8359375,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.966702284397246
+        },
+        {
+          "Skill": null,
+          "Payload": 101.27734375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.798203851197593
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 187.32000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 37.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 37.2,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 12,
+          "Name": "Serpent Crossbow",
+          "Level": 1,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 12,
+          "Name": "Wind Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 12,
+          "Name": "Wind Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=16 rank=85.56 raw=42"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 12,
+          "Name": "Wind Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=13 rank=83.33 raw=40"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 12,
+          "Name": "Wind Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 12,
+          "Name": "Wind Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        }
+      ],
+      "Hp": 371,
+      "Mp": 247.5,
+      "Ap": 132.1,
+      "HpRegen": 0,
+      "MpRegen": 3.052500089009603,
+      "ApRegen": 1.9876667658487956,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.86328125,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 97.984375,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 16.329135355206507
+        },
+        {
+          "Skill": null,
+          "Payload": 98.7109375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 16.20894464780372
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 103.88000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 103.88000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 99,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 99,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 4,
+          "Name": "Serpent Spear",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 401,
+      "Mp": 253,
+      "Ap": 132.55,
+      "HpRegen": 0,
+      "MpRegen": 3.1203333536783853,
+      "ApRegen": 1.9921666781107585,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 46.03515625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 20,
+          "Payload": 205.359375,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.791220255078749
+        },
+        {
+          "Skill": null,
+          "Payload": 101.90234375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.70130836240273
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 112.28000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 112.28000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 101.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 101.2,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 7,
+          "Name": "Falchion",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 25,
+          "Name": "Light Plate Mask",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 25,
+          "Name": "Light Plate Pants",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 25,
+          "Name": "Light Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 25,
+          "Name": "Light Plate Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 429.5,
+      "Mp": 208,
+      "Ap": 137.65001,
+      "HpRegen": 0,
+      "MpRegen": 2.565333366394043,
+      "ApRegen": 2.0431667963663735,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.875,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 127.484375,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 12.550558623912243
+        },
+        {
+          "Skill": null,
+          "Payload": 49.62890625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 32.239278335301066
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 120.26,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 120.26,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 83.2,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 83.2,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 39,
+          "Name": "Mistery Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 39,
+          "Name": "Mistery Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 367,
+      "Mp": 646,
+      "Ap": 116.5,
+      "HpRegen": 0,
+      "MpRegen": 7.967333475748698,
+      "ApRegen": 1.831666628519694,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 48.5,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 79.875,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 20.031300432805164
+        },
+        {
+          "Skill": 4,
+          "Payload": 51.328125,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 31.171996289954336
+        },
+        {
+          "Skill": null,
+          "Payload": 32.33984375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 49.47457799855055
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 102.76,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 102.76,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 258.40000000000003,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 98,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 524.4,
+      "Mp": 162.2,
+      "Ap": 157.45001,
+      "HpRegen": 0,
+      "MpRegen": 2.0004666646321616,
+      "ApRegen": 2.2411667505900064,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.69140625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 216.921875,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.375927955953324
+        },
+        {
+          "Skill": 269,
+          "Payload": 110.20703125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 14.518131047743948
+        },
+        {
+          "Skill": null,
+          "Payload": 80.109375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.972695106787594
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 146.8320068359375,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 146.8320068359375,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 64.87999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 64.87999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 98,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=9 rank=87.78 raw=44"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 8,
+          "Name": "Brass Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=8 rank=90 raw=46"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=8 rank=90 raw=46"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 0,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 720.4,
+      "Mp": 162.2,
+      "Ap": 172.15,
+      "HpRegen": 0,
+      "MpRegen": 2.0004666646321616,
+      "ApRegen": 2.388166586558024,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 47.12890625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 226.90625,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.05137087264151
+        },
+        {
+          "Skill": 269,
+          "Payload": 119.75,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 13.361170121672755
+        },
+        {
+          "Skill": null,
+          "Payload": 73.921875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 21.64447427869372
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 201.71200683593753,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 64.87999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 64.87999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 0,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        17
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 0,
+          "Name": "Small Shield",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=1 rank=12.94 raw=9"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 4,
+          "Name": "Bone Helm",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 2,
+          "Name": "Pad Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=14 rank=30 raw=19"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 2,
+          "Name": "Pad Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 7,
+          "Name": "Sphinx Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 4,
+          "Name": "Bone Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=12 rank=66.67 raw=25"
+        }
+      ],
+      "Hp": 308,
+      "Mp": 906,
+      "Ap": 142.5,
+      "HpRegen": 0,
+      "MpRegen": 11.173999786376953,
+      "ApRegen": 2.0916666984558105,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 47.2734375,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 3,
+          "Payload": 71.33984375,
+          "Consumed": true,
+          "Mp": 15,
+          "Ap": 0,
+          "TtkAtOneSecond": 22.427861317965284
+        },
+        {
+          "Skill": 4,
+          "Payload": 60.72265625,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 26.349310469604376
+        },
+        {
+          "Skill": 17,
+          "Payload": 55.81640625,
+          "Consumed": true,
+          "Mp": 1,
+          "Ap": 0,
+          "TtkAtOneSecond": 28.665409143397017
+        },
+        {
+          "Skill": null,
+          "Payload": 14.3046875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 111.85145583014746
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 86.24000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 86.24000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 362.40000000000003,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 4,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        44
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 1,
+          "Number": 8,
+          "Name": "Crescent Axe",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 9,
+          "Name": "Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        }
+      ],
+      "Hp": 679,
+      "Mp": 94,
+      "Ap": 142.5,
+      "HpRegen": 0,
+      "MpRegen": 1.1593333880106609,
+      "ApRegen": 3.0416666666666665,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 43.6796875,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 19,
+          "Payload": 213.87890625,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.480869198948003
+        },
+        {
+          "Skill": null,
+          "Payload": 104.77734375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.270477994631474
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 190.12,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 37.6,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 37.6,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 8,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        46
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 4,
+          "Number": 12,
+          "Name": "Serpent Crossbow",
+          "Level": 2,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 1,
+          "Group": 4,
+          "Number": 7,
+          "Name": "Bolt",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "merchant map=0 npc=253"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 12,
+          "Name": "Wind Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 12,
+          "Name": "Wind Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=16 rank=85.56 raw=42"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 12,
+          "Name": "Wind Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=13 rank=83.33 raw=40"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 12,
+          "Name": "Wind Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=20 rank=45 raw=36"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 12,
+          "Name": "Wind Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        }
+      ],
+      "Hp": 377,
+      "Mp": 252,
+      "Ap": 134.4,
+      "HpRegen": 0,
+      "MpRegen": 3.108000119527181,
+      "ApRegen": 2.010666529337565,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.6171875,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 24,
+          "Payload": 101.8359375,
+          "Consumed": true,
+          "Mp": 5,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.711547036823935
+        },
+        {
+          "Skill": null,
+          "Payload": 102.0546875,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 15.677869985837862
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 105.56000000000002,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 105.56000000000002,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 100.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 100.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 12,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        57,
+        73
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 3,
+          "Number": 8,
+          "Name": "Great Scythe",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 9,
+          "Name": "Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 3,
+          "Name": "Legendary Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        }
+      ],
+      "Hp": 407,
+      "Mp": 257,
+      "Ap": 134.8,
+      "HpRegen": 0,
+      "MpRegen": 3.169666608174642,
+      "ApRegen": 2.014666716257731,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.55859375,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 22,
+          "Payload": 216.953125,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.374865524846957
+        },
+        {
+          "Skill": null,
+          "Payload": 109.1640625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 14.656839306161883
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 113.96000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 113.96000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 102.80000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 102.80000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 16,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        60,
+        74
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 2,
+          "Number": 8,
+          "Name": "Battle Scepter",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 1,
+          "Group": 6,
+          "Number": 4,
+          "Name": "Buckler",
+          "Level": 3,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 25,
+          "Name": "Light Plate Mask",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 6,
+          "Name": "Scale Armor",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=5 rank=81.11 raw=38"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 25,
+          "Name": "Light Plate Pants",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 25,
+          "Name": "Light Plate Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 25,
+          "Name": "Light Plate Boots",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        }
+      ],
+      "Hp": 436.5,
+      "Mp": 211.5,
+      "Ap": 140,
+      "HpRegen": 0,
+      "MpRegen": 2.6085000038146973,
+      "ApRegen": 2.066666603088379,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 45.015625,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 60,
+          "Payload": 144.84375,
+          "Consumed": true,
+          "Mp": 10,
+          "Ap": 0,
+          "TtkAtOneSecond": 11.046387034789644
+        },
+        {
+          "Skill": null,
+          "Payload": 57.70703125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 27.726259476748123
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 122.22000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 122.22000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 84.60000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 84.60000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 20,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        45
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 5,
+          "Number": 0,
+          "Name": "Skull Staff",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+        },
+        {
+          "Slot": 5,
+          "Group": 10,
+          "Number": 39,
+          "Name": "Mistery Gloves",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=15 rank=76.67 raw=34"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 39,
+          "Name": "Mistery Boots",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=11 rank=74.44 raw=32"
+        }
+      ],
+      "Hp": 373,
+      "Mp": 659.2,
+      "Ap": 118.5,
+      "HpRegen": 0,
+      "MpRegen": 8.130133310953775,
+      "ApRegen": 1.8516666094462078,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 49.83203125,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 214,
+          "Payload": 81.34765625,
+          "Consumed": true,
+          "Mp": 50,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.668668967587035
+        },
+        {
+          "Skill": 4,
+          "Payload": 52.6875,
+          "Consumed": true,
+          "Mp": 3,
+          "Ap": 0,
+          "TtkAtOneSecond": 30.36773659919929
+        },
+        {
+          "Skill": null,
+          "Payload": 32.51953125,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 49.20120495495495
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 104.44000000000001,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 104.44000000000001,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 120,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 263.6800048828125,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 100,
+      "Build": "baseline",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 1,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 9,
+          "Name": "Plate Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 9,
+          "Name": "Plate Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 9,
+          "Name": "Plate Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        }
+      ],
+      "Hp": 533,
+      "Mp": 164.2,
+      "Ap": 159.5,
+      "HpRegen": 0,
+      "MpRegen": 2.0251332918802896,
+      "ApRegen": 2.2616666158040366,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 44.98046875,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 220.734375,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 7.24853173444468
+        },
+        {
+          "Skill": 269,
+          "Payload": 111.97265625,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 14.289203950811094
+        },
+        {
+          "Skill": null,
+          "Payload": 82.6015625,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 19.370095112550835
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 149.24,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 149.24,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 65.67999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 65.67999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    },
+    {
+      "Stage": 24,
+      "Level": 100,
+      "Build": "vitality",
+      "InitialSkills": [
+        269
+      ],
+      "Wallet": 0,
+      "Equipped": [
+        {
+          "Slot": 0,
+          "Group": 0,
+          "Number": 32,
+          "Name": "Sacred Glove",
+          "Level": 0,
+          "HasSkill": true,
+          "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+        },
+        {
+          "Slot": 2,
+          "Group": 7,
+          "Number": 8,
+          "Name": "Brass Helm",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=8 rank=90 raw=46"
+        },
+        {
+          "Slot": 3,
+          "Group": 8,
+          "Number": 8,
+          "Name": "Brass Armor",
+          "Level": 2,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=8 rank=90 raw=46"
+        },
+        {
+          "Slot": 4,
+          "Group": 9,
+          "Number": 8,
+          "Name": "Brass Pants",
+          "Level": 3,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=8 rank=90 raw=46"
+        },
+        {
+          "Slot": 6,
+          "Group": 11,
+          "Number": 59,
+          "Name": "Sacred Boots",
+          "Level": 1,
+          "HasSkill": false,
+          "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+        }
+      ],
+      "Hp": 735,
+      "Mp": 164.2,
+      "Ap": 174.65001,
+      "HpRegen": 0,
+      "MpRegen": 2.0251332918802896,
+      "ApRegen": 2.4131666819254556,
+      "Map": 1,
+      "Monster": 18,
+      "Rank": 100,
+      "MonsterHp": 1600.0001,
+      "Incoming": 46.51953125,
+      "EnemySeconds": 1.6,
+      "ZenAmount": 158,
+      "ExpectedMoneyProbability": 0.65,
+      "Actions": [
+        {
+          "Skill": 260,
+          "Payload": 230.046875,
+          "Consumed": true,
+          "Mp": 9,
+          "Ap": 0,
+          "TtkAtOneSecond": 6.955104789275284
+        },
+        {
+          "Skill": 269,
+          "Payload": 123.73828125,
+          "Consumed": true,
+          "Mp": 20,
+          "Ap": 15,
+          "TtkAtOneSecond": 12.930518396628468
+        },
+        {
+          "Skill": null,
+          "Payload": 74.18359375,
+          "Consumed": true,
+          "Mp": 0,
+          "Ap": 0,
+          "TtkAtOneSecond": 21.568112856089726
+        }
+      ],
+      "Potions": [
+        {
+          "Number": 1,
+          "Group": "Health",
+          "Recovery": 160,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 2,
+          "Group": "Health",
+          "Recovery": 205.8,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        },
+        {
+          "Number": 4,
+          "Group": "Mana",
+          "Recovery": 65.67999877929688,
+          "UnitLegacyPrice": 80,
+          "UnlockLevel": 1
+        },
+        {
+          "Number": 5,
+          "Group": "Mana",
+          "Recovery": 65.67999877929688,
+          "UnitLegacyPrice": 330,
+          "UnlockLevel": 80
+        }
+      ]
+    }
+  ]
+}

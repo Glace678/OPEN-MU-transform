@@ -1,0 +1,691 @@
+ID 1893: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 15-80, Advanced character: Level 10-60)
+ID 1894: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 181-230, Advanced character: Level 161-210)
+ID 1895: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 231-280, Advanced character: Level 211-260)
+ID 1896: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 281-330, Advanced character: Level 261-310)
+ID 1897: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 331-400, Advanced character: Level 311-400)
+ID 1898: It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 81-130, Advanced character: Level 61-110)
+ID 1899: It shouldn't be too difficult for you to train in Chaos Castle. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 180-239, Advanced character: Level 160-219)
+ID 1900: It sounds like an easy job...
+ID 1901: It won't take up too much of your time. I'll simply explain basic controls and hunting techniques.;Are you sure you don't want our help?
+ID 1902: It wouldn't be easy to attack Gaion hiding in Varka. You'd better eliminate Raymond and Erkanne first to weaken his power. Without these two Gaion will not be as invincible. Go to Varka, kill Raymond and Erkanne and come back to me to get the reward from the guild.
+ID 1903: It's becoming more and more difficult. I accept the mission. (Accept)
+ID 1904: It's easier than anticipated.
+ID 1905: It's fighting spirit this time? I accept the mission. (Accept)
+ID 1906: It's nice to meet you.;May I ask who you are?
+ID 1907: It's possible to find out the location of myself and others using coordinates? Amazing!
+ID 1908: It's the quartermaster unit's job. (Refuse)
+ID 1909: It's time for you to test your limits at Chaos Castle. Go see the Shadow Phantom Soldier, test your limitations, and then take the Chaos Castle challenge.
+ID 1910: It's too late to pull out now....
+ID 1911: It's very easy to enter Blood Castle. The battle event takes place every two hours from 12:30am and on. To enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel in Devias, five minutes before a Blood Castle event commences and ask to join. The Messenger of Archangel will then send you to the castle.
+ID 1912: It's very easy to enter Chaos Castle. Simply right-click on your Armor of Guardsman at the appropriate times (12:00am, 14:00pm, 16:00pm, 18:00pm, 20:00pm, and 22:00pm) to enter. Players in designated locations, such as a PC cafe, will have more opportunities to enter.
+ID 1913: It's very easy to enter Devil Square. It can be entered every four hours from 3:00 a.m. and on (3:00 a.m., 7:00 a.m., 11:00 a.m., 3:00 p.m., 7:00 p.m., and 11:00 p.m.). To enter, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before a scheduled entry time and ask to join. Charon will then send you to Devil Square.
+ID 1914: It's very easy to enter Illusion Temple. It can be entered every four hours from 01:00 a.m. and on: 01:00 a.m., 05:00 a.m., 09:00 a.m., 01:00 p.m., 05:00 p.m., and 09:00 p.m. To enter, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before an Illusion Temple event commences and ask to join. Mirage will then send you to the temple.
+ID 1944: Join Gens Duprian.
+ID 1945: Join Gens Vanert.
+ID 1946: Just say the word!
+ID 1963: Keeping the peace of the hero
+ID 1977: Kundun's Royal Guards, however, continue to attack the barrier, and are weakening it. We need Archangel's weapon in order to prevent this weakening of the barrier, and that's why we are now seeking the help of travelers.
+ID 1978: Kundun, however, must've anticipated such a move. He hid beyond the range of the barrier and eliminated the Twelve Saints as soon as the barrier was formed. Luckily, Archangel evaded that peril and sacrificed himself for the barrier.
+ID 1979: Kundun�� He's a hard target��
+ID 1982: Ladies' appetite for collecting
+ID 2013: Leave Gens Duprian.
+ID 2014: Leave Gens Vanert.
+ID 2033: Let me give it a go. (Accept)
+ID 2034: Let me give you a Dark Knight weapon to use so that you can understand better.
+ID 2035: Let me give you a Dark Wizard's scroll to use so that you can understand better.
+ID 2036: Let me give you a Summoner's scroll to use so that you can understand better.
+ID 2037: Let me give you an Agility Elf weapon to use so that you can understand how skills work better.
+ID 2038: Let me give you an Energy Elf's orb to use so that you can understand how skills work better.
+ID 2039: Let's get you some real combat experience.
+ID 2040: Let's hear it.
+ID 2041: Let's start with something simple.;Close your quest window and either press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.
+ID 2043: Level 10 and 2,000 Zens
+ID 2044: Level 30
+ID 2045: Level 30 and 3000 Zens
+ID 2046: Level 50
+ID 2047: Level 50 and 4000 Zens
+ID 2048: Level 75
+ID 2049: Leveling up will earn you points. These points can be used to enhance your strength, agility, stamina, and energy and thereby affect your damage, defense, HP, and MP levels, respectively.;Carefully use these points, for how you develop your character will determine its combat characteristics and the types of weapons and skills it can use.
+ID 2085: Look at the right side of your screen. Do you see the apples you just bought? Adding a potion to the Inventory will automatically register it.;Press the Q button to use apples, potions, and other HP recovery items and the W button to use MP recovery items.
+ID 2104: Loud and clear! Give me the next quest!
+ID 2117: Lurkers in the Dark
+ID 2141: Many of the monsters that attacked our barrier have been dealt with, but their superiors are now physically attacking the barrier. Will you eliminate these monsters for us? (Level 200-209)
+ID 2142: Many travelers are disappearing from the Swamp of Peace because of Shadow Knights. Go to the Swamp of Peace and defeat 140 Shadow Knights. Come see me once that's done to receive a Devil's Invitation + 7 as a reward. They are strong foes, and you should hunt them with the help of others.
+ID 2181: May I help you? My collection is much more diverse than the ordinary merchants. That's the secret of my success, haha.
+ID 2182: May the glory be with you�� Good job. It must be the enemy clan who's controlling these Hero monsters. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)
+ID 2183: May the glory be with you�� Good job. We found an evidence of the enemy clan from the investigation. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)
+ID 2184: May the grace of Lugard be with you�� This is the entrance to the Underwater Temple. Kundun's army is captivated in this temple by the sealed stone.
+ID 2193: Mega Crusts in Icarus are causing great harm to travelers. Go to Icarus and defeat 80 Mega Crusts. Come see me when that's done to receive an Invisibility Cloak + 4 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 2194: Mega Crusts who rank higher than Alquamoses, are planning something in Icarus. Whatever they are planning, it will likely harm our reconnaissance party. Will you help eliminate more of these Mega Crusts? (Level 250-254)
+ID 2195: Members of our reconnaissance party continue to lose their lives to Iron Wheels. Will you help eliminate more of these Iron Wheels? (Level 240-244)
+ID 2196: Members of our reconnaissance party continue to lose their lives to the slashes of Bloody Wolves. Will you help eliminate more of these Bloody Wolves? (Level 235-239)
+ID 2198: Mercenary Guild Office?
+ID 2199: Mercenary's request varies depending on the day of the week. Please check the location and task before you start. (Lv. 350 - 400)
+ID 2232: Monster Supply Route in Devias!
+ID 2235: Monster hunting is my specialty....
+ID 2237: Monsters are continuing to hamper advancement into Icarus. Go meet with the Shadow Phantom Soldier.
+ID 2238: Monsters are posing a threat to the safe zone once again. Go meet with the Shadow Phantom Soldier.
+ID 2239: Monsters are still trying to mobilize and set a blockade on the path to Icarus. Will you help eliminate more of these monsters? (Level 220-229)
+ID 2240: Monsters are taking over the Dungeon in Lorencia once again. Our reconnaissance party is too busy dealing with monsters and can't make prompt reports. I wish to ask for your help with this matter. Will you accept this quest? (Level 91-100)
+ID 2241: Monsters have started attacking the soldiers again. Go meet with the Shadow Phantom Soldier.
+ID 2242: Monsters, however, continued to spawn at regular intervals from the spot where the tree once stood. After careful consideration, the queen of the Elves decided to make a training arena of this place for travelers.
+ID 2247: Much of the evil energy from the Lost Tower has subsided, but the guardians at the tower are struggling to cope with a sudden increase in monsters. I have a quest that will help them. Will you accept this quest? (Level 190-193)
+ID 2254: My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the Elf queen. I am happy to make your acquaintance.
+ID 2256: NPC dialog script error!
+ID 2261: New request for you hasn't been delivered yet. You can start a new request after 24 hours since a request has been cleared. Please come back after that.
+ID 2264: No more. Going any further is beyond me. (Refuse)
+ID 2266: No, I don't want to. (Refuse)
+ID 2267: No, I need some rest first. (Refuse)
+ID 2268: No. I will give it more thought.
+ID 2270: Not at all. It's only natural to work for the clan. (Accept)
+ID 2275: Now that the defense of the supply route has weakened, it's time to stir up the enemy's command structure a bit more. I'd like to ask you to defeat the high-ranking monsters that control those in charge of the supply route. Will you accept this quest? (Level 46-55)
+ID 2276: Now, press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.
+ID 2278: Obtain 10 Clubs from Burnt Murderers in Vulcanus and bring them to Zyro to get the reward.
+ID 2279: Obtain 10 Kalt Stones from Witch Queens in Aida and bring them to Zyro to get the reward.
+ID 2280: Obtain 20 suits of Tantalos's Armor from Tantaloses in Tarkan 2 and then go back to Zyro to get the reward.
+ID 2281: Obtain rare jewels
+ID 2283: Of course I did.
+ID 2284: Of course I know. What's the next quest?
+ID 2285: Of course I'm up for hunting down monsters....
+ID 2286: Of course. I gladly accept Archangel's quest.
+ID 2287: Of course...
+ID 2289: Oh! Thanks to your bravery, we were able to crush those good-for-nothing Duprians once again. This is a reward bestowed to you by Vanert Reicht himself for your contributions in battle. I hope to see you in action once again next month.
+ID 2290: Oh! That will surely come in handy!
+ID 2291: Oh! You wish to become a member of Gens Duprian? Share our virtues of honor and respect, and help in the fight to crush the greed of Gens Vanert and find the stone that will seal away Kundun.
+ID 2292: Oh, I didn't recognize how strong you are and gave you a wrong request. Would you give me back the Lv. 1 Letter of Request?
+ID 2293: Oh, I haven't introduced myself yet. My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the queen of Noria.
+ID 2294: Oh, already gone...
+ID 2295: Oh, there are different requests depending on the day of the week.
+ID 2296: Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Crystal Sword (Attack power +12). I will reward you when you bring me the sword.
+ID 2297: Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Sword of Destruction (Attack power +12). I will reward you when you bring me the sword.
+ID 2298: Oh, this is a request from the Shadow Phantom unit in Kanturu Ruins asking for help repelling Splinter Wolves and finding the training material for recruits. Kill 20 Splinter Wolves and find 1 Ancient Stick (Wizardry damage +12). I will reward you when you bring me the stick.
+ID 2299: Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 1 Staff of Resurrection (Wizardry damage +12). I will reward you when you bring me the staff.
+ID 2300: Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 10 Unirias. I will reward you when you bring me the Unirias.
+ID 2301: Ok, I will head for Aida at once. (Accept)
+ID 2302: Ok, I will take care of him right away. (Accept)
+ID 2303: Ok, I'll give it a try. (Accept)
+ID 2304: Ok, I'll try it. (Accept)
+ID 2305: Ok, I'm ready. (Accept)
+ID 2310: One of the places our reconnaissance party hasn't been able to reach is the Tarkan desert. The reasons behind their failure include the harsh environment and most importantly the monsters known as Mutants. Will you eliminate these Mutants to allow our reconnaissance party to advance? (Level 230-234)
+ID 2339: Our continued assault on the Dungeon has secured a somewhat secure entryway. However, there are still monsters hindering the efforts of our reconnaissance party. Will you accept this quest? (Level 141-160)
+ID 2340: Our entry into the Floating Castle has been hampered mostly by Queen Rainiers. It appears Queen Rainiers are controlling Mega Crusts and Alquamoses from behind the scenes. I wish to ask for your help in eliminating these Queen Rainiers. Will you accept? (Level 255-259)
+ID 2341: Our forces in Kanturu Ruins are under attack. Eliminate 50 Splinter Wolves and return to me for a reward.
+ID 2342: Our reconnaissance party reports of severe resistance from monsters at Dungeon Level 2. I'd like to ask you to do away with these monsters. Will you accept this quest? (Level 111-120)
+ID 2343: Our reconnaissance party reports that some low-ranking monsters are causing quite a headache for them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 161-165)
+ID 2344: Our reconnaissance party reports that stolen supplies are being sent to Kundun's army. Please defeat the monsters controlling these plunderers while we ascertain the location of the supply route. Will you accept this quest? (Level 26-35)
+ID 2345: Our reconnaissance party reports the Army of Darkness formed by Gorgons has lost much of its might. This is the moment you've carried out all these quests for. It's now time to strike the final blow against the Army of Darkness. Will you accept this quest? (Level 141-160)
+ID 2346: Outside Devias, you'll encounter white monsters known as Worms. Defeat 25 Worms and return to me for a reward.
+ID 2356: Packs of Iron Wheels often attack travelers in Tarkan. Go to Tarkan and hunt down 100 Iron Wheels. Come see me afterwards to receive a Devil's Invitation + 4 as a reward. They are strong foes, and you should hunt them with the help of others.
+ID 2371: Party request?
+ID 2398: Phantom Knights in Icarus are causing great harm to travelers there. Go to Icarus and hunt down 100 Phantom Knights. Come see me when that's done to receive an Invisibility Cloak + 6 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 2429: Plunderers are too much for me to handle. (Refuse)
+ID 2430: Plunderers...
+ID 2432: Points and Status
+ID 2433: Points gained from leveling up can be used to enhance your strength, agility, stamina, and energy, and thereby affect your damage, defense, HP, and MP levels, respectively.
+ID 2462: Press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.
+ID 2463: Press D and select Trade or type in '/exchange' in the Chat window.
+ID 2464: Press D and select Trade or type in '/invite' in the Chat window.
+ID 2465: Press D and select Trade or type in '/trade' in the Chat window.
+ID 2468: Press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.
+ID 2469: Press the Q button to use apples, potions, and other HP recovery items, and the W button to use MP recovery items.
+ID 2470: Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.
+ID 2472: Prevent the Vepars from interrupting with the expedition. Defeat 50 of them, and I'll give you a reward.
+ID 2474: Progress of the business
+ID 2475: Proof of Fellowship (1)
+ID 2476: Proof of Fellowship (2)
+ID 2477: Proof of Fellowship (3)
+ID 2478: Proof of Fellowship (4)
+ID 2479: Proof of Fellowship (5)
+ID 2480: Proof of Fellowship (6)
+ID 2482: Proving One's Worth (1)
+ID 2483: Proving One's Worth (2)
+ID 2484: Proving One's Worth (3)
+ID 2485: Proving One's Worth (4)
+ID 2486: Proving One's Worth (5)
+ID 2489: Purchase and bring back 1 Town Portal Scroll.
+ID 2490: Purchase and bring back 5 apples from a merchant.
+ID 2493: Put 500,000 Zen as deposit and I will offer you a Letter of Request came to the mercenary guild. Each request has its level and difficulty. Right click on the Letter of Request to check the information. Please note that you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Do you want to take a Letter of Request? (Lv. 350 - 400)
+ID 2494: Put a stop to the plundering by eliminating 50 Silver Valkyries. After that, return to me for a reward.
+ID 2495: Put the Lost Tower to Sleep! (1)
+ID 2496: Put the Lost Tower to Sleep! (2)
+ID 2497: Put the Lost Tower to Sleep! (3)
+ID 2498: Put the Lost Tower to Sleep! (4)
+ID 2499: Put the Lost Tower to Sleep! (5)
+ID 2500: Put the Lost Tower to Sleep! (6)
+ID 2501: Put the past behind
+ID 2512: Queen Rainiers in Icarus should suffice. Go to Icarus and defeat 100 Queen Rainiers. Come see me after that, and I will give you a choice between 10 Large SD Potions and 30 Complex Potions as your reward. When you claim you rewards, make sure you have at least 10 empty slots in your Inventory. Remember that.
+ID 2513: Quick, on to the next step!
+ID 2514: Rage of Vepars
+ID 2562: Rebels of the Forest
+ID 2563: Receive damage and defense increase buff.
+ID 2564: Receiving Lv. 1 Letter of Request
+ID 2565: Recent report from the Shadow Phantom unit in Kanturu Ruins has it that Splinter Wolves and Blade Hunters are making surprise attack on them frequently. Go to Kanturu Ruins, kill 20 Splinter Wolves and 10 Blade Hunters. I will reward you when you come back and report me.
+ID 2566: Recent report from the Shadow Phantom unit in Tarkan Desert has it that Mutants and Tantaloses are creating mayhem there. Go to Tarkan and kill 20 Mutants and 20 Tataloses. I will reward you when you come back and report me.
+ID 2567: Recently the Shadow Phantom unit in Kanturu Ruins has been raided by Splinter Wolves and Satyroses. Go to Kanturu Ruins, kill 20 Splinter Wolves and 20 Satyroses. I will reward you when you come back and report me.
+ID 2568: Recently the Shadow Phantom unit in Kanturu Ruins is frequently raided by Splinter Wolves and Kentauroses. Go to Kanturu Ruins and kill 20 Splinter Wolves and 5 Kentauroses. I will reward you when you come back and report me.
+ID 2569: Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by Mutants and Beam Knights. Go to Tarkan and kill 20 Mutants and 10 Beam Knights. I will reward you when you come back and report me.
+ID 2570: Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by the Iron Wheels. Go to Tarkan and kill 30 Iron Wheels. I will reward you when you come back and report me.
+ID 2571: Recognition as a hero...
+ID 2572: Reconnaissance Party's Mission (1)
+ID 2573: Reconnaissance Party's Mission (2)
+ID 2574: Reconnaissance Party's Mission (3)
+ID 2575: Reconnaissance Party's Mission (4)
+ID 2613: Regrettably, you are not eligible for a reward. Please try harder next time.
+ID 2619: Request from Kalima; Location: Kalima 6; Task: Talk to Priestess Beina in the Underwater Temple; Reward: Random, Red Box; Note: Drop Lost Map +6 on the ground to enter Kalima
+ID 2620: Request from Merchant Zyro; Location: in every town; Task: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.
+ID 2621: Request from Merchant Zyro; Region: can be found in every town; Mission: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.
+ID 2622: Request from Shadow Phantom unit (1)
+ID 2623: Request from Shadow Phantom unit (2)
+ID 2624: Request from Shadow Phantom unit (3)
+ID 2625: Request from mercenary guild; Location: Devias mercenary guild; Task: Talk to Mercenary Guild Manager Tercia; Reward: Random, Red Box, Purple box; Note: The elders of the guild are real old fossils..
+ID 2626: Request from the Gens Steward; Location: Gens Duprian- Lorencia, Gens Banert- Noria; Task: Talk to the Gens Steward; Reward: Random, Purple Box; Note: If you haven't joined the Gens yet, choose one and join now to proceed.
+ID 2627: Request from the Underwater Temple
+ID 2628: Request from the mercenary guild
+ID 2629: Request from the mercenary guild. Find Tercia.
+ID 2630: Request from the merchant Zyro
+ID 2631: Request from the priestess
+ID 2632: Request information invalid; Location: none; Task: none; Reward: none; Note: Go back to Mercenary Guild Manager Tercia in Devias.
+ID 2633: Request of Elveland's Elder!
+ID 2831: Return to the Shadow Phantom Soldier after defeating 10 Spiders.
+ID 2832: Return to the Shadow Phantom Soldier after defeating 15 Agons.
+ID 2833: Return to the Shadow Phantom Soldier after defeating 15 Balrogs.
+ID 2834: Return to the Shadow Phantom Soldier after defeating 15 Giants.
+ID 2835: Return to the Shadow Phantom Soldier after defeating 15 Gorgons.
+ID 2836: Return to the Shadow Phantom Soldier after defeating 15 Liches.
+ID 2837: Return to the Shadow Phantom Soldier after defeating 15 Polluted Butterflies.
+ID 2838: Return to the Shadow Phantom Soldier after defeating 20 Giants.
+ID 2839: Return to the Shadow Phantom Soldier after defeating 20 Polluted Butterflies.
+ID 2840: Return to the Shadow Phantom Soldier after defeating 20 Skeleton Warriors.
+ID 2841: Return to the Shadow Phantom Soldier after defeating 20 Stone Golems.
+ID 2842: Return to the Shadow Phantom Soldier after defeating 25 Ice Monsters.
+ID 2843: Return to the Shadow Phantom Soldier after defeating 25 Worms.
+ID 2844: Return to the Shadow Phantom Soldier after defeating 3 Ice Queens.
+ID 2845: Return to the Shadow Phantom Soldier after defeating 30 Assassins.
+ID 2846: Return to the Shadow Phantom Soldier after defeating 30 Hommerds.
+ID 2847: Return to the Shadow Phantom Soldier after defeating 30 Ice Monsters.
+ID 2848: Return to the Shadow Phantom Soldier after defeating 30 Yetis.
+ID 2849: Return to the Shadow Phantom Soldier after defeating 40 Cyclopses.
+ID 2850: Return to the Shadow Phantom Soldier after defeating 40 Larvae.
+ID 2851: Return to the Shadow Phantom Soldier after defeating 50 Captain Grizzlies.
+ID 2852: Return to the Shadow Phantom Soldier after defeating 50 Cursed Liches.
+ID 2853: Return to the Shadow Phantom Soldier after defeating 50 Cursed Wizards.
+ID 2854: Return to the Shadow Phantom Soldier after defeating 50 Cyclopses.
+ID 2855: Return to the Shadow Phantom Soldier after defeating 50 Dark Knights.
+ID 2856: Return to the Shadow Phantom Soldier after defeating 50 Death Cows.
+ID 2857: Return to the Shadow Phantom Soldier after defeating 50 Death Knights.
+ID 2858: Return to the Shadow Phantom Soldier after defeating 50 Devils.
+ID 2859: Return to the Shadow Phantom Soldier after defeating 50 Grizzlies.
+ID 2860: Return to the Shadow Phantom Soldier after defeating 50 Hell Hounds.
+ID 2861: Return to the Shadow Phantom Soldier after defeating 50 Hell Spiders.
+ID 2862: Return to the Shadow Phantom Soldier after defeating 50 Poison Bull Fighters.
+ID 2863: Return to the Shadow Phantom Soldier after defeating 50 Poison Shadows.
+ID 2864: Return to the Shadow Phantom Soldier after defeating 50 Shadows.
+ID 2865: Return to the Shadow Phantom Soldier after defeating 50 Skeleton Archers.
+ID 2866: Return to the Shadow Phantom Soldier after defeating 50 Thunder Liches.
+ID 2867: Return to the Shadow Phantom Soldier after defeating 50 Totem Golems.
+ID 2868: Return to the Shadow Phantom Soldier after defeating 60 Bloody Wolves.
+ID 2869: Return to the Shadow Phantom Soldier after defeating 60 Death Gorgons.
+ID 2870: Return to the Shadow Phantom Soldier after defeating 60 Death Knights.
+ID 2871: Return to the Shadow Phantom Soldier after defeating 60 Devils.
+ID 2872: Return to the Shadow Phantom Soldier after defeating 60 Iron Wheels.
+ID 2873: Return to the Shadow Phantom Soldier after defeating 60 Mutants.
+ID 2874: Return to the Shadow Phantom Soldier after defeating 80 Alquamoses.
+ID 2875: Return to the Shadow Phantom Soldier after defeating 80 Mega Crusts.
+ID 2876: Return to the Shadow Phantom Soldier after defeating 80 Queen Rainiers.
+ID 2883: Ring of Hero? Ring of Warrior? What are they?
+ID 2888: Road to Floating Castle (1)
+ID 2889: Road to Floating Castle (2)
+ID 2890: Road to Floating Castle (3)
+ID 2986: Scrolls can be purchased from Pasi the Mage (119,112) in Lorencia and Marce (36,218) in Elveland.
+ID 3000: Secure war supplies (1)
+ID 3001: Secure war supplies (2)
+ID 3016: Select a quest.
+ID 3038: Shadow Pawns from the Swamp of Peace should suffice. Go to the Swamp of Peace and defeat 100 Shadow Pawns. Come see me after that, and I will give you a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward. When you claim your reward, make sure you have at least 30 empty slots in your Inventory. Remember that.
+ID 3041: Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 290-319)
+ID 3042: Shadow of Evil
+ID 3055: Show Lv. 1 Request Completion Certificate to Mercenary Guild Manager Tercia.
+ID 3070: Silver Valkyries are regularly plundering supplies for our search party at Atlans. Would you mind getting rid of these Silver Valkyries for us?
+ID 3072: Since you now have potions, would you like to leave the safe zone and do some real hunting? Are you ready?
+ID 3073: Situation at the Dungeon (1)
+ID 3074: Situation at the Dungeon (2)
+ID 3075: Situation at the Dungeon (3)
+ID 3076: Situation at the Dungeon (4)
+ID 3077: Situation at the Dungeon (5)
+ID 3078: Situation at the Dungeon (6)
+ID 3110: So I need to get those two items. (Accept)
+ID 3111: So it's not just about equipment or level.
+ID 3112: So it's the real deal from now on. I understand.
+ID 3113: So she imbued rings with the power of the Elves and gave them to warriors in honor of Muren's practice of handing out warriors' rings bearing the emperor's crest.
+ID 3114: So you want me to take the With Queen's jewel.
+ID 3115: So you've decided to become an Agility Elf, a class for whom defense is crucial. Agility Elves are unique in that they employ splendid bow skills. Let me give you a weapon to use so that you can understand better.
+ID 3116: So you've decided to become an Energy Elf, a class for whom wizardry is crucial. Energy Elves are unique in that they employ a variety of summoning and magic spells. Let me give you an orb as a gift so that you can understand what I mean.
+ID 3120: Something strange is happening. Death Riders, who serve as Arca's Aida protectors, are frequently and indiscriminately attacking our gens members exploring the Aida region. Lemuria must be behind it all.  Please eliminate these Death Riders and protect our gens members.
+ID 3147: Spider Hunt!
+ID 3179: Stop the attacks on the gens members by eliminating 50 Burning Lava Giants, and I'll give you a reward.
+ID 3194: Strange Confrontation (1)
+ID 3195: Strange Confrontation (2)
+ID 3196: Strange Confrontation (3)
+ID 3197: Strange Confrontation (4)
+ID 3228: Summoners are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.
+ID 3229: Summoners can learn additional skills by going to Elveland and purchasing scrolls from Marce (36,218). After purchasing a scroll, right-click on it to learn the skill.
+ID 3235: Supply route of the monsters...
+ID 3236: Sure! What's this simple mission about? (Accept)
+ID 3237: Survive through Chaos Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.
+ID 3238: Survive through Chaos Castle Level 1. Come back to me after that, and I will give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.
+ID 3239: Survive through Chaos Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.
+ID 3240: Survive through Chaos Castle Level 2. Come back to me after that, and I will give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.
+ID 3241: Survive through Chaos Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.
+ID 3242: Survive through Chaos Castle Level 3. Come back to me after that, and I will give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 3.
+ID 3243: Survive through Chaos Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.
+ID 3244: Survive through Chaos Castle Level 4. I will give you 1 Jewel of Soul as a reward when you return. However, this applies only to Chaos Castle Level 4.
+ID 3245: Survive through Chaos Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.
+ID 3246: Survive through Chaos Castle Level 5. I will give you 1 Jewel of Bless as a reward when you return. However, this applies only to Chaos Castle Level 5.
+ID 3247: Survive through Chaos Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.
+ID 3248: Survive through Chaos Castle Level 6. I will give you 1 Jewel of Life as a reward when you return. However, this applies only to Chaos Castle Level 6.
+ID 3249: Survive through Chaos Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.
+ID 3250: Survive through Chaos Castle Level 7. I will give you 2 Jewels of Bless as a reward when you return. However, this applies only to Chaos Castle Level 7.
+ID 3251: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)
+ID 3252: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)
+ID 3253: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)
+ID 3254: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)
+ID 3255: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)
+ID 3256: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)
+ID 3257: Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)
+ID 3285: Take the rings.
+ID 3286: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)
+ID 3287: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)
+ID 3288: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)
+ID 3289: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)
+ID 3290: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)
+ID 3291: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)
+ID 3292: Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)
+ID 3309: Talk to General Goods Merchant Zyro and check the details of his request to the mercenary guild.
+ID 3310: Talk to Mercenary Guild Manager Tercia for the details of the request from the mercenary guild elders.
+ID 3311: Talk to Priestess Beina of the Underwater Temple and check the details of her request to the mercenary guild.
+ID 3312: Talk to me again and receive a damage and defense increase buff.
+ID 3313: Talk to your Gens Steward and check the details of his request to the mercenary guild.
+ID 3317: Tantaloses from Tarkan Level 2 are causing great harm to travelers there. Go to Tarkan Level 2 and hunt down 100 Tantaloses. Come see me when that's done to receive an Invisibility Cloak + 5 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 3326: Tenacity is another trait that a hero can't do without. Please remember that you can't get stronger if you aren't tenacious enough.
+ID 3327: Thank you for helping with the barrier fortification mission. Having failed to attack the barriers, monsters are now launching frequent attacks against guardians stationed at Lost Tower. The number of monsters must be reduced at any cost. Will you accept this quest? (Level 202-205)
+ID 3328: Thank you!
+ID 3329: Thank you. Recently things get in the way of the clan's business. Especially things in Vulcanus are the worst. We did some investigation and our people got killed by the assassins. Please go to Vulcanus and eliminate 20 Bloody Slayers and 10 Vicious Bloody Slayers.
+ID 3330: Thank you. You saved me from the execution ground. Second task is to get me the rare jewel Witch Queens in Aida carry on them. It's so beautiful as to captivate Witch Queens with such brilliance. Naturally, it's extremely expensive in the market. (Lv. 350 - 400)
+ID 3331: Thanks to you, our reconnaissance party has stabilized a great deal. However, our reconnaissance party reports that a fearsome enemy has appeared and that they don't know what to do about it. I wish to ask you to assist the reconnaissance party. Will you accept this quest? (Level 180-185)
+ID 3332: Thanks to your help with previous party reconnaissance missions, all regions seem to be becoming more stable. Captain of the Shadow Phantom Guardians has noticed your achievements and asked you to help our corps members in each of the regions. Will you accept this quest? (Level 166-170)
+ID 3333: That custom all but disappeared when peace finally came. However, Kundun and the chaos he brought motivated Erin Gustiv, the reigning queen of the Elves, to reinstate it.
+ID 3334: That is correct! If you don't want to receive party requests while hunting, simply type in '/Request off' in the Chat window. To start receiving party requests again, type in '/Request on' in the Chat window.
+ID 3335: That is correct! In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination.;Discovering areas that's right for your level, and hunting there, can also be very fun.
+ID 3336: That is correct! Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.
+ID 3337: That is correct! When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.
+ID 3338: That is correct! With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.
+ID 3339: That is correct! You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.
+ID 3340: That will surely make things easier. Do you have any other tips?
+ID 3341: That's a piece of cake.
+ID 3342: That's right. You do need good equipment and a high level to test your mettle against other travelers, yes. But just that isn't enough for you to become a hero of MU. I will help you receive recognition as a hero by giving you a series of missions. You may repeat these missions as often as desired.
+ID 3343: That's unfortunate, please come back later when you have time. (Failed to receive the Letter of Request.)
+ID 3344: That's unfortunate, the reward is quite awesome. Please come back if you change your mind. (Free mercenary registration has been cancelled.)
+ID 3345: That's unfortunate. Come see me again when the bond between you and your comrades is stronger. (The quest has been cancelled.)
+ID 3346: That's unfortunate. Come see me again when you find the right warriors to fight at your side. (The quest has been cancelled.)
+ID 3347: That's unfortunate. If you change your mind, come back before you reach level 190. (The quest has been cancelled.)
+ID 3348: That's unfortunate. If you change your mind, come back before you reach level 194. (The quest has been cancelled.)
+ID 3349: That's unfortunate. If you change your mind, come back before you reach level 206. (The quest has been cancelled.)
+ID 3350: That's unfortunate. If you change your mind, come back before you reach level 210. (The quest has been cancelled.)
+ID 3351: That's unfortunate. If you change your mind, please come back before you reach level 101. (The quest has been cancelled.)
+ID 3352: That's unfortunate. If you change your mind, please come back before you reach level 111. (The quest has been cancelled.)
+ID 3353: That's unfortunate. If you change your mind, please come back before you reach level 121. (The quest has been cancelled.)
+ID 3354: That's unfortunate. If you change your mind, please come back before you reach level 131. (The quest has been cancelled.)
+ID 3355: That's unfortunate. If you change your mind, please come back before you reach level 141. (The quest has been cancelled.)
+ID 3356: That's unfortunate. If you change your mind, please come back before you reach level 161. (The quest has been cancelled.)
+ID 3357: That's unfortunate. If you change your mind, please come back before you reach level 166. (The quest has been cancelled.)
+ID 3358: That's unfortunate. If you change your mind, please come back before you reach level 171. (The quest has been cancelled.)
+ID 3359: That's unfortunate. If you change your mind, please come back before you reach level 180. (The quest has been cancelled.)
+ID 3360: That's unfortunate. If you change your mind, please come back before you reach level 186. (The quest has been cancelled.)
+ID 3361: That's unfortunate. If you change your mind, please come back before you reach level 198. (The quest has been cancelled.)
+ID 3362: That's unfortunate. If you change your mind, please come back before you reach level 202. (The quest has been cancelled.)
+ID 3363: That's unfortunate. If you change your mind, please come back before you reach level 91. (The quest has been cancelled.)
+ID 3364: That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)
+ID 3365: That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)
+ID 3366: That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)
+ID 3367: That's unfortunate. Please come back if you change your mind. (The quest has been cancelled.)
+ID 3368: That's unfortunate. The reward for this mission is quite big... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)
+ID 3369: That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)
+ID 3370: That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)
+ID 3371: That's unfortunate. You shouldn't pass this up if you want fast growth.... Come see me again before you reach level 15 if you want to accept the quest. (The quest has been cancelled.)
+ID 3372: That's unfortunate. You shouldn't pass up on this if you want fast growth... (The quest has been cancelled.)
+ID 3373: That's unfortunate. You shouldn't pass up on this if you want fast growth.... (The quest has been cancelled.)
+ID 3374: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come back before you reach level 230 if you change your mind. (The quest has been cancelled.)
+ID 3375: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 235 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3376: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 240 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3377: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 250 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3378: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 255 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3379: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 26 if you want to accept the request. (The quest has been cancelled.)
+ID 3380: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 260 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3381: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 36 if you want to accept the request. (The quest has been cancelled.)
+ID 3382: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 46 if you want to accept the request. (The quest has been cancelled.)
+ID 3383: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 56 if you want to accept the quest. (The quest has been cancelled.)
+ID 3384: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 66 if you want to accept the quest. (The quest has been cancelled.)
+ID 3385: That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 80 if you want to accept the quest. (The quest has been cancelled.)
+ID 3386: That's unfortunate. You shouldn't pass up on this up if you want fast growth... Come see me again before you reach level 245 if you decide to accept the quest. (The quest has been cancelled.)
+ID 3387: The Atlans expedition party reports that the chief commander of the Evil Army is using Vepars to go after Gens members searching for the sealed stone. Please banish these Vepars and protect the Gens members.
+ID 3388: The Beginning of Requests
+ID 3390: The Character Stats window will tell you the name and level of your character, the name of the current server, and character status information.
+ID 3391: The Character Stats window will tell you the name of your character, the name of the current server, and your character's class.
+ID 3392: The Character Stats window will tell you the name of your character, the name of the current server, and your character's class. It's possible to connect to different channels within a single server using the same character.;There are four basic character classes: the Elf, the Dark Knight, the Dark Wizard, and the Summoner. Reach level 220 with any of these basic characters to unlock the Magic Gladiator, and level 250 to unlock the Dark Lord.
+ID 3393: The Dungeon shouldn't be so difficult.
+ID 3394: The Dungeon shouldn't be so hard. After all, I do need new equipment. Should I give it a shot?
+ID 3395: The Falling Slash skill should now be one of the skills you can use. Try clicking the icon.
+ID 3396: The Fire Ball skill should now be one of the skills you can use. Try clicking the icon.
+ID 3397: The Goblin NPC in Noria.
+ID 3399: The Inventory window will display the items you have and the equipment you are wearing.
+ID 3400: The Inventory window will display the items you have and the equipments you are wearing.;Click on an item to change its position or, if it's a consumable, right-click on it to use it. Did you get all that?
+ID 3401: The Lost Tower is proving to be quite a headache. I received word of the mobilization of monsters in regions where reconnaissance party members have gone missing. It appears the monsters are planning something. I want you to stop them from mobilizing. Will you accept this quest? (Level 194-197)
+ID 3403: The Seed Master NPC in Elveland.
+ID 3404: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 131.
+ID 3405: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 101.
+ID 3406: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 111.
+ID 3407: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 121.
+ID 3408: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 141.
+ID 3409: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 161.
+ID 3410: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 166.
+ID 3411: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 171.
+ID 3412: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 180.
+ID 3413: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 186.
+ID 3414: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 190.
+ID 3415: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 194.
+ID 3416: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 198.
+ID 3417: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 202.
+ID 3418: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 206.
+ID 3419: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 210.
+ID 3420: The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 91.
+ID 3421: The Shadow Phantom Guardians have done so much for me....
+ID 3422: The Shadow Phantom Soldier is looking for someone he can rely on to carry out Shadow Phantom Guardians' quests. Go see the Shadow Phantom Soldier again.
+ID 3423: The Shadow Phantom Soldier will give you a small reward if you manage fast growth at Devil Square. Accept the Shadow Phantom Soldier's test and take the Devil Square challenge.
+ID 3424: The Shadow Phantom Soldier will give you a small reward if you win at Illusion Temple. Accept the Shadow Phantom Soldier's test and take the Illusion Temple challenge.
+ID 3425: The Shadow Phantom Soldier will give you an Armor of Guardsman, which you'll need to enter Chaos Castle. Receive the armor and take the Chaos Castle challenge.
+ID 3426: The Shadow Phantom unit has trouble controlling the increasing number of Alquamoses and Drakans in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 20 Alquamoses and 20 Drakans. I will reward you when you come back and report me.
+ID 3427: The Shadow Phantom unit has trouble dealing with Queen Rainiers in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 30 Queen Rainiers. I will reward you when you come back and report me.
+ID 3428: The Shadow Phantom unit in Icarus, gateway to the Castle in Heaven is in trouble since Alquamoses and Alpha Crusts have blocked their supply route. Go to Icarus and kill 20 Alquamoses and 10 Alpha Crusts. I will reward you when you come back and report me.
+ID 3429: The Shadow Phantom unit in Kanturu Ruins is suffering from the attacks of Iron Riders. Go to Kanturu Ruins and kill 30 Mutants. I will reward you when you come back and report me.
+ID 3430: The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 260-289)
+ID 3431: The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 320-349)
+ID 3432: The Summon Goblin skill should now be one of the skills you can use. Try clicking the icon.
+ID 3433: The Trainer NPC in Lorencia.
+ID 3434: The Triple Shot skill should now be one of the skills you can use. Try clicking the icon.
+ID 3435: The answer is obvious!
+ID 3436: The barrier at the Lost Tower is now somewhat stable and secure. However, there are still high-ranking monsters looking to take advantage of any chance they can get. Will you eliminate these monsters for us? (Level 210-219)
+ID 3438: The biggest obstacle to entering Devil Square, a training arena for fast growth, is probably obtaining an invitation. I have a simple quest that will earn you an invitation to Devil Square. Will you accept this quest? (Basic character: 330-400 Level, Advanced character: Level 311-400)
+ID 3440: The bond between my comrades and I isn't strong enough yet.
+ID 3441: The bond of fellowship.... Of course comrades should be trusted and valued.
+ID 3442: The captain asked me to thank you for your contribution in the previous quest. The captain also said you've proved your worth and are ready for a more critical quest. Will you accept this quest? (Level 171-179)
+ID 3444: The character's current coordinates are shown on the top left corner of the screen. Movement in the �� or �� direction changes the first number, and movement in the �� or �� direction the second.
+ID 3446: The conflict between the genses over the sealed stone is growing fiercer. Cornered, the opposing gens forces are attacking our side using Sapi-Duos. Please eliminate these Sapi-Duos.
+ID 3447: The dark energy Gorgons give off has weakened considerably, and the monsters seem to have calmed down quite a bit because of it. It's a good time to squeeze our grip on the Gorgons. Will you accept this quest? (Level 131-140)
+ID 3452: The elder says Spiders are spinning webs on the outer walls of the town and has asked us to take care of them. Although the request was made to the Shadow Phantom Guardians, I believe the job is suitable for travelers who are just starting out on their journey. Will you accept this quest? (Level 1-14)
+ID 3453: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)
+ID 3454: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (All characters: Master Level)
+ID 3455: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: 330-400 Level, Advanced character: Level 311-400)
+ID 3456: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 131-180, Advanced character: Level 111-160)
+ID 3457: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 231-280, Advanced character: Level 211-260)
+ID 3458: The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 281-330, Advanced character: Level 261-310)
+ID 3459: The endless spawning of monsters in Devil Square will help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 181-230, Advanced character: Level 161-210)
+ID 3466: The final hurdle, eh? I accept the mission. (Accept)
+ID 3467: The gate that leads into Blood Castle is probably the greatest obstacle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.
+ID 3468: The guild master cannot leave the gens.
+ID 3469: The guild master is not a member of the gens. The guild master must be a member of the gens in order for you to join that gens.
+ID 3470: The higher the level, the more distance you get to travel. Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?
+ID 3474: The increasing number of Bloody Wolves in Tarkan is becoming worrisome. Hunt down 50 Bloody Wolves, and I'll give you a Scroll of Blood + 1 as a reward.
+ID 3475: The increasing number of Iron Wheels in Tarkan is becoming worrisome. Hunt down 70 Iron Wheels, and I'll give you a Scroll of Blood + 2 as a reward.
+ID 3479: The last ones to deal with are Bloody Soldiers and Death Angels casting spell on the sealed stone. Kill 30 Bloody Soldiers and 20 Death Angels and come back to me to get reward. (Party Possible)
+ID 3480: The losses caused by the scheming of Queen Rainiers are continuing to stack up. Will you help eliminate more of these Queen Rainiers? (Level 255-259)
+ID 3481: The mercenary guild office has been newly founded in Devias. Please find the guild office manager Tercia.
+ID 3483: The monsters are behaving oddly. It seems Iron Wheels who rank higher than Bloody Wolves, are plotting something. I wish to ask for your help in eliminating these Iron Wheels. Will you accept? (Level 240-244)
+ID 3485: The number of Alquamoses has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Alquamoses? (Level 245-249)
+ID 3486: The number of Death Beam Knights in Tarkan 2 is increasing beyond control. Hunt down 30 Death Beam Knights, and I'll give you a Scroll of Blood + 4 as a reward.
+ID 3487: The number of Drakans in Icarus is increasing beyond control. Hunt down 90 Drakans, and I'll give you a Scroll of Blood + 3 as a reward.
+ID 3488: The number of Giant Drakans in Icarus is increasing beyond control. Hunt down 130 Giant Drakans, and I'll give you a Scroll of Blood + 5 as a reward.
+ID 3489: The number of Mega Crusts has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Mega Crusts? (Level 250-254)
+ID 3490: The number of Shadow Looks in the Swamp of Peace is increasing beyond control. Hunt down 150 Shadow Looks, and I'll give you a Scroll of Blood + 6 as a reward.
+ID 3491: The objective now is to complete Archangel's quest in Blood Castle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.
+ID 3492: The objective should be defending this place, then.
+ID 3493: The orb I gave you will teach you the Summon Goblin skill. Right-click on the item to learn the skill. Go ahead and learn the skill.
+ID 3494: The queen's orders are to help those warriors starting out on their journey so that they can at least defend themselves against the forces of Kundun.
+ID 3495: The quest to eliminate Totem Golems and Cursed Liches in Elveland was actually set by the elder of Elveland. He says now a larger number of monsters have appeared and asks us to deal with them. Will you accept this quest? (Level 80-90)
+ID 3503: The reconnaissance party has sent us a request. They say doing away with the higher ranking monsters that control the low-ranking ones will make their work much easier. Defeat these monsters. Will you accept this quest? (Level 166-170)
+ID 3504: The reconnaissance party has successfully made their way into Tarkan, but are now forced to deal with Bloody Wolves. They are higher-ranking than monsters. I wish to ask for your help in eliminating these Bloody Wolves. Will you accept? (Level 235-239)
+ID 3505: The reconnaissance party is advancing, but Mutants are starting to amass in greater numbers. Will you help eliminate more of the Mutants? (Level 230-234)
+ID 3506: The reconnaissance party is struggling with surprise attacks against them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 180-189)
+ID 3507: The reconnaissance party reports that the stolen supplies are being delivered to the Lost Tower by way of Devias. Severing the Kundun's supply route in Devias will be a devastating blow to the enemy. Will you accept this quest? (Level 36-45)
+ID 3508: The reconnaissance party reports the situation has much improved. I thank you on behalf of our captain. However, there are still monsters interfering with our scouting efforts. It seems these monsters are somewhat higher in rank than the ones before and are proving to be difficult to deal with. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 171-179)
+ID 3509: The reward has already been handed out.
+ID 3510: The scroll I gave you will teach you the Fire Ball skill. Right-click on the item to learn the skill. Go ahead and learn the skill.
+ID 3513: The test is simple enough, and it won't matter if you don't get everything right. If you do, however, there's a small bonus gift.;Are you sure you don't want to take the test?
+ID 3514: The town's Shadow Phantom Soldier is looking for someone he can rely on to carry out quests both big and small. Go see the Shadow Phantom Soldier again.
+ID 3517: The weapon I gave you is a Double Axe. To equip it, load the Double Axe item to the equipment slot in your Inventory. Go ahead and equip it.
+ID 3518: The weapon I gave you is a crossbow. To equip it, load the crossbow item to the equipment slot in your Inventory. Go ahead and equip it.
+ID 3521: Then I will give you the second mission right away. Attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp. Please lead MU to an age of great prosperity.
+ID 3522: Then I will give you the second mission right away. I know victory in Illusion Temple is difficult to achieve. Persevere again and again, and victory will be yours. Complete the mission and you'll be rewarded with 8,000,000 Exp.
+ID 3523: Then I will give you the second mission right away. Protect the sacred item and don't give up before you are victorious in Illusion Temple. Complete the mission and you'll be rewarded with 8,000,000 Exp.
+ID 3524: Then I will give you the second mission right away. Shock your rivals out of their senses by attaining a victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp.
+ID 3525: Then I will give you the second mission right away. Show no fear against a number of foes at once, and attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 3,000,000 Exp.
+ID 3526: Then you must clear Illusion Temple. Find a Phantom Soldier to begin the Illusion Temple quest.
+ID 3527: Then you must clear Illusion Temple. Find a Phantom Soldier to undertake the Illusion Temple quest.
+ID 3528: There are a number of ways you can prove your worth on the continent of MU. You can try to be the last one standing in Chaos Castle, or work with your comrades to battle through Blood Castle, Devil Square, or Illusion Temple. Travelers regard such feats as some of the worthiest accomplishments one can achieve.
+ID 3530: There are many types of monsters lurking in the Dungeon. And those on Level 2 have become particularly troublesome. I would like to ask you to deal with them. Will you accept this quest? (Level 101-110)
+ID 3531: There are too many monsters guarding the path between Dungeon Level 2 and Level 3, preventing our reconnaissance party from reaching the third level. I'd like ask you to do away with these monsters. Will you accept this quest? (Level 121-130)
+ID 3532: There is a place called Icarus, which is accessible through the topmost level of the Lost Tower. You can reach the level if you have the ability to fly. However, a group of monsters has emerged and is now blocking entry into Icarus. Will you eliminate these monsters for us? (Level 220-229)
+ID 3533: There is no available quest. Please come back later.
+ID 3534: There is now a unit of monsters ceaselessly attacking our barrier that contains the energy of the Lost Tower. Devils and Cursed Wizards appear to be inflicting the most amount of damage on the barrier. Will you eliminate these monsters for us? (Level 191-199)
+ID 3535: There's a rumor about Dark Knights and Gorgons from the lowest level of the Dungeon planning something sinister. Go to Dungeon Level 3 and defeat 80 Dark Knights. Do this, and I will give you a choice of two rewards from 30 Large Healing Potions, 30 Large Mana Potions, and 15 Small Complex Potions. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+ID 3536: They say Death Cows, driven by an evil energy, are up to something suspicious in the Lost Tower. Hunt down 60 Death Cows, and I'll give you a Devil's Invitation + 2 as a reward. It'd be wise to take on this quest together with others you can trust.
+ID 3537: They say the number of Alquamoses in Icarus is increasing and causing quite a headache for travelers. Go to Icarus and hunt down 80 Alquamoses. Come see me once that's done to receive a Devil's Invitation + 3 as a reward. They are strong foes, and you should hunt them with the help of others.
+ID 3538: Things are becoming serious....
+ID 3540: This door will not always be open to you.
+ID 3541: This is common knowledge.
+ID 3542: This is the end of the tutorial. Please enjoy your MU experience.
+ID 3543: This one might be a little challenging, eh? I accept the mission. (Accept)
+ID 3544: This quest shouldn't be too of a problem.
+ID 3545: This time, the objective is to survive Chaos Castle. Go see the Shadow Phantom Soldier, take the extreme test, and then take on the Chaos Castle challenge.
+ID 3548: Those who wish to serve a gens should seek out the corresponding clan's steward.
+ID 3565: To find out when you can enter, press the F1 key. Then, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before the entry time you've chosen. You'll be sent to Devil Square. Come see me when you have time, and I'll give you a quest that will earn you the item you need to enter Devil Square.
+ID 3566: To find out when you can enter, press the F1 key. Then, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before the entry time you've chosen. You'll then be sent to Illusion Temple. Come see me when you have time, and I'll give you a quest that will earn you the item needed to enter Illusion Temple.
+ID 3567: To find out when you can enter, simply press the F1 key. If you want to enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel before the scheduled start time. Come see me when you have time, and I will give you a quest that will earn you the Invisibility Cloak so that you can enter Blood Castle.
+ID 3569: To grow quickly and become a powerful warrior, you must complete various event maps. Find a Phantom Soldier if you want to undertake an event map quest.
+ID 3571: To restore balance to the battle event, Secrarium made Lugard an offer and suggested implementation of a new rule. This rule was for everyone participating in the event to wear guardsman's armor. Lugard, believing the offer to be fair, accepted.
+ID 3576: To start off, I'll give you a simple mission to see if you have the right qualities to be a hero. Will you accept this mission? (Basic character: Level 240 - 270, Advanced character: Level 220 - 260)
+ID 3581: Today's request is closed. Come back same time tomorrow and I will give you a new request. Thank you.
+ID 3583: Too easy! To repair equipment without the help of an NPC, I need to be at...
+ID 3588: Town Portal Scrolls can be purchased from potion merchants in towns. They are single-use items that will bring you back to the last town you visited.;Since we're on the subject, will you go and purchase a Town Portal Scroll from the merchant? It'll be easier to understand if you try it for yourself.
+ID 3597: Traveler, you are now strong enough to make a difference in Kundun's battlefield. The Shadow Phantom Guardians' reconnaissance party has made a simple request. They have a simple quest involving the eradication of monsters and a powerful weapon will be given as a reward. Will you accept this quest? (Level 161-165)
+ID 3604: Try equipping the Double Axe.
+ID 3605: Try equipping the crossbow.
+ID 3606: Try learning the Summon Goblin skill.
+ID 3607: Try your hand at Blood Castle Level 1 and complete Archangel's quest. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Blood Castle Level 1.
+ID 3608: Try your hand at Blood Castle Level 1. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.
+ID 3609: Try your hand at Blood Castle Level 2 and complete Archangel's quest. Come back afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Blood Castle Level 2.
+ID 3610: Try your hand at Blood Castle Level 2. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.
+ID 3611: Try your hand at Blood Castle Level 3 and complete Archangel's quest. Come back afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Blood Castle Level 3.
+ID 3612: Try your hand at Blood Castle Level 3. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.
+ID 3613: Try your hand at Blood Castle Level 4 and complete Archangel's quest. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Blood Castle Level 4.
+ID 3614: Try your hand at Blood Castle Level 4. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.
+ID 3615: Try your hand at Blood Castle Level 5 and complete Archangel's quest. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Blood Castle Level 5.
+ID 3616: Try your hand at Blood Castle Level 5. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.
+ID 3617: Try your hand at Blood Castle Level 6 and complete Archangel's quest. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Blood Castle Level 6.
+ID 3618: Try your hand at Blood Castle Level 6. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.
+ID 3619: Try your hand at Blood Castle Level 7 and complete Archangel's quest. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Blood Castle Level 7.
+ID 3620: Try your hand at Blood Castle Level 7. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.
+ID 3621: Try your hand at Blood Castle Level 8 and complete Archangel's quest. I'll give you 2 Jewels of Life as a reward when you return. However, this applies only to Blood Castle Level 8.
+ID 3622: Try your hand at Blood Castle Level 8. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.
+ID 3623: Try your hand at Chaos Castle Level 1. Come back to me after defeating 1 Guardsman, and I will give you 100,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.
+ID 3624: Try your hand at Chaos Castle Level 1. Defeat 1 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.
+ID 3625: Try your hand at Chaos Castle Level 2. Come back to me after defeating 3 Guardsman, and I will give you 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.
+ID 3626: Try your hand at Chaos Castle Level 2. Defeat 3 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.
+ID 3627: Try your hand at Chaos Castle Level 3. Come back to me after defeating 5 Guardsmen, and I will give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Chaos Castle Level 3.
+ID 3628: Try your hand at Chaos Castle Level 4. Come back to me after defeating 1 traveler wearing the Armor of Guardsman, and I will give you 300,000 Zens and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 4.
+ID 3629: Try your hand at Chaos Castle Level 4. Defeat 1 traveler wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.
+ID 3630: Try your hand at Chaos Castle Level 5. Come back to me after defeating 3 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Soul as a reward. However, this applies only to Chaos Castle Level 5.
+ID 3631: Try your hand at Chaos Castle Level 5. Defeat 3 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.
+ID 3632: Try your hand at Chaos Castle Level 6. Come back to me after defeating 5 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Harmony as a reward. However, this applies only to Chaos Castle Level 6.
+ID 3633: Try your hand at Chaos Castle Level 6. Defeat 5 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.
+ID 3634: Try your hand at Chaos Castle Level 7. Come back to me after defeating 10 travelers wearing the Armor of Guardsman, and I will give you 2 Jewels of Soul as a reward. However, this applies only to Chaos Castle Level 7.
+ID 3635: Try your hand at Chaos Castle Level 7. Defeat 10 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.
+ID 3636: Try your hand at Devil Square Level 1. Defeat the monsters and score 50 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.
+ID 3637: Try your hand at Devil Square Level 1. If you achieve 50 points, I'll give you 100,000 Zens as a reward. However, this applies only to Devil Square Level 1.
+ID 3638: Try your hand at Devil Square Level 2. Defeat the monsters and score 100 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.
+ID 3639: Try your hand at Devil Square Level 3. Defeat the monsters and score 130 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.
+ID 3640: Try your hand at Devil Square Level 4. Defeat the monsters and score 160 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.
+ID 3641: Try your hand at Devil Square Level 5. Defeat the monsters and score 190 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.
+ID 3642: Try your hand at Devil Square Level 6. Defeat the monsters and score 210 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.
+ID 3643: Try your hand at Devil Square Level 7. Defeat the monsters and score 240 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.
+ID 3644: Try your hand at Illusion Temple Level 1. Win and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 1.
+ID 3645: Try your hand at Illusion Temple Level 1. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul. However, this applies only to Illusion Temple Level 1.
+ID 3646: Try your hand at Illusion Temple Level 2. Win and I'll give you 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 2.
+ID 3647: Try your hand at Illusion Temple Level 2. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 2.
+ID 3648: Try your hand at Illusion Temple Level 3. Win and I'll give you 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 3.
+ID 3649: Try your hand at Illusion Temple Level 3. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 3.
+ID 3650: Try your hand at Illusion Temple Level 4. Win and I'll give you 1 Jewel of Chaos and 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 4.
+ID 3651: Try your hand at Illusion Temple Level 4. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Chaos. However, this applies only to Illusion Temple Level 4.
+ID 3652: Try your hand at Illusion Temple Level 5. Win and I'll give you 1 Jewel of Soul and 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 5.
+ID 3653: Try your hand at Illusion Temple Level 5. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Bless. However, this applies only to Illusion Temple Level 5.
+ID 3654: Try your hand at Illusion Temple Level 6. Win and I'll give you 1 Jewel of Bless and 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 6.
+ID 3655: Try your hand at Illusion Temple Level 6. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless and 1 Jewel of Life. However, this applies only to Illusion Temple Level 6.
+ID 3656: Try your hand on Chaos Castle Level 3. Defeat 5 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.
+ID 3657: Tutorials are for children. Turn down the offer.
+ID 3658: Twin Tails in Kanturu Relics are causing great harm to travelers. Go to Kanturu Relics and hunt down 100 Twin Tails. Come see me when that's done to receive an Invisibility Cloak + 7 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 3669: Type in '/Party off' in the Chat window.
+ID 3670: Type in '/Request off' in the Chat window.
+ID 3671: Type in '/off' in the Chat window.
+ID 3672: Unfit task
+ID 3673: Unfortunately, Secrarium was betting that darkness in the hearts of the travelers would ultimately lead to hostility and discord among them. Lugard was also aware of the travelers' dark side, but his trust in them didn't waver. Ultimately, the travelers did begin to feud with one another like the dark god had anticipated, and Chaos Castle became ever more... chaotic.
+ID 3674: Uniria is a mount item you can use out in the battle field. Equip it to the top left corner of your Inventory window for faster travel throughout the battle field.
+ID 3676: Upon entering, you'll need to wait for other players to enter. The players will then be divided into two teams: Alliance Camp and Illusion Sorcery Camp. The camp that brings over more relics to their own side wins.
+ID 3683: Using a Town Portal Scroll will return you to the last town you visited.
+ID 3685: Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?
+ID 3692: Vanert Reicht may have conceded leadership of Noble Alliance Arca to Duprian Winston at the alliance's inception, but the master has always remained committed to eliminating the foul minions of Kundun and to the revival of the MU empire. Everyone knows about Duprian Winston's desires to subjugate the empire under his absolute rule. It's imperative that heroes like you help Vanert Reicht seal away Kundun and restore peace to the MU empire.
+ID 3706: Very well. Give me the quest.
+ID 3707: Very well. How many do I need to buy?
+ID 3708: Very well. I will take on this challenge.
+ID 3709: Very well. It appears Gorgons are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 60 Gorgons, and I'll give you an Invisibility Cloak + 2 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 3710: Very well. It appears Hell Hounds are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 40 Hell Hounds, and I'll give you an Invisibility Cloak + 1 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+ID 3711: Very well. It appears Hell Spiders are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 60 Hell Spiders, I will offer you a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions. When you claim your rewards, make sure you have at least 13 empty slots in your Inventory. Remember that.
+ID 3712: Very well. It appears Larvae are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 40 Larvae, I will offer you a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions. When you claim you rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+ID 3713: Very well. Let me give it a go. (Accept)
+ID 3714: Very well. Tell me more.
+ID 3728: Visit the Shadow Phantom Soldier to receive a small reward.
+ID 3741: Warrior! Welcome.
+ID 3744: Watchers of Kundun (1)
+ID 3745: Watchers of Kundun (2)
+ID 3746: Watchers of Kundun (3)
+ID 3749: We have much to cover. Let's move on to the next step.
+ID 3750: We launched an investigation after communication with our reconnaissance party at the Dungeon started to grow sporadic and we found out that they were too tied up in dealing with a growing number of monsters. Will you go to the Dungeon and help eradicate these monsters? (Level 66-79)
+ID 3751: We're nearing the end of our tutorial. Now that you have a skill, it'll make sense for you to build more combat experience. Come back when you reach a certain level, and I will give you a Uniria as a reward.
+ID 3761: Welcome back. Now all you need to do is eliminating Gaion in Varka. Are you ready? (Lv. 350 - 400)
+ID 3762: Welcome to MU.;I'll assist you on your road to becoming a true warrior.
+ID 3763: Welcome to the newly founded Devias branch of the mercenary guild. We're the one who stopped Kundun's Army along with the 5 major clans but now most of the veterans have retired. So we decided to adopt the Free Mercenary system as we open this guild office.
+ID 3764: Welcome to the world of Mu.;We have been waiting for a hero like you to arrive and put a stop to the chaos brought on to the Mu realm by Kundun.
+ID 3765: Welcome, this is the mercenary guild. We deliver various requests to the registered free mercenaries. There are rewards when you complete the request successfully, so give it a try.
+ID 3766: Well done. Now please bring me the clubs of Burnt Murderers in Vulcanus. (Lv. 350 - 400)
+ID 3767: Well, you may not want to learn more about him, but a mission is still a mission. I'll tell you more if you come back. (The quest has been cancelled.)
+ID 3768: Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Level 351-380)
+ID 3769: Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Master Level)
+ID 3773: What are the queen's guardians doing at a place like this?
+ID 3774: What can I help you? Ah�� you came for the request from us. Do you know Gaion? He was actually the sworn brother of the first mercenary guild master but our elders want to get rid of him since he's sort of an icon of treason. I don't understand their concern because he can never leave Varka. (Lv. 350 - 400)
+ID 3775: What can I help you? Ah�� you're the one from the mercenary guild! Speaking frankly, I would never have requested the mercenary guild if I had had any other option�� Well, never mind. There are 2 requests, first is to collect the Stardust powder and secondly, obtaining a rare jewel. Will you accept? (Lv. 350 - 400)
+ID 3776: What do you do if you don't want to receive party requests?
+ID 3777: What do you do if you want to trade with a character who is in front of you?
+ID 3778: What is the free mercenary?
+ID 3779: What is this Town Portal Scroll?
+ID 3780: What is your business with our gens? I am Conrad, the Gens Vanert Steward.
+ID 3781: What kind of supplies...?
+ID 3782: What level do I need to be?
+ID 3783: What's a Uniria?
+ID 3784: When a warrior who possesses them becomes a consummate expert in his or her art, these rings transform into unique items that will help their master attain greater heights.
+ID 3787: When you first enter Blood Castle, you'll encounter an obstacle: the trust within your party. Go see the Shadow Phantom Soldier to test the trust within your party, and take the Blood Castle challenge.
+ID 3788: When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.
+ID 3792: When you reach a certain level, you will be able to repair your equipment directly from the Inventory window. What level is that?
+ID 3793: When you want to form a party with a character, face that character and enter '/party' in the Chat window. What do you do if you don't want to receive party requests?
+ID 3794: When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.
+ID 3795: Where can I find a merchant?
+ID 3796: Where can I learn more skills?
+ID 3797: Where can I learn skills?
+ID 3798: Which button is used to send whispers from the Chat window?
+ID 3799: While in a town, seek out the Shadow Phantom Soldier NPC.
+ID 3800: Whispers are used to talk to friends who are far away or to pass on private messages. Which button is used to send whispers from the Chat window?
+ID 3803: Who do you need to see to combine items?
+ID 3804: Whoa! That's really convenient!
+ID 3834: Wipe Out the Elusive Iron Riders
+ID 3836: With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.
+ID 3856: Would you bring me Tantalos's Armor first? I will reward you fairly when you come back with 20 suits of armor from Tantalos in Tarkan 2.
+ID 3857: Would you like to visit Chaos Castle, the arena of the gods? There is no better place to prove your strength. Why don't you listen to what I have to say and then decide? (Basic character: Level 15-49, Advanced character: Level 15-29)
+ID 3858: Yes, I'll take it. (Accept)
+ID 3859: Yes, please. (Accept)
+ID 3860: Yes, right away. (Accept)
+ID 3861: Yes. I wish to join.
+ID 3862: Yes. I wish to leave.
+ID 3863: Yes. I'll take your test.
+ID 3865: You are a member of a different gens.
+ID 3866: You are back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 81-130, Advanced character: Level 61-110)
+ID 3867: You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 220-270)
+ID 3868: You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 271-320)
+ID 3869: You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)
+ID 3870: You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 15-130, Advanced character: Level 10-110)
+ID 3871: You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 15-49, Advanced character: Level 15-29)
+ID 3872: You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 50-119, Advanced character: Level 30-99)
+ID 3874: You are full of zeal! Very well. Let's try adding an item to your inventory. Take the Zen I just gave you and purchase 5 apples from a merchant.
+ID 3876: You can acquire excellent equipment at Illusion Temple. Prepare thoroughly before entering as this is not a place to be taken lightly. Go to the Shadow Phantom Soldier and accept a quest that will earn you an item that will grant you access to Illusion Temple.
+ID 3877: You can find both wealth and fame at Illusion Temple. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 220-270)
+ID 3879: You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.
+ID 3884: You can register to the mercenary guild as a free mercenary with 1 million Zen. Tercia gives the registered free mercenaries 1 mission per day.
+ID 3885: You cannot join a gens if you are a member of the guild alliance.
+ID 3886: You cannot join a gens if you are a member of the guild alliance. Leave the guild alliance and try joining the gens again.
+ID 3887: You cannot join a gens while in a party.
+ID 3888: You cannot join the gens.
+ID 3889: You cannot leave the gens.
+ID 3890: You do not have enough space for the item. Please free up your Inventory and try again.
+ID 3895: You have accepted the first trial. I want you to prove your combat prowess by defeating 5 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving till the end in Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Soul, or a Jewel of Chaos.
+ID 3896: You have already joined the gens.
+ID 3897: You have completed the fifth trial to become a hero. The next mission I'm about to give you is the last one to see if you are worthy of being a hero. (Master level)
+ID 3898: You have completed the first trial to become a hero. The next mission I'll give you is to see if you have the courage to be a hero. Will you accept this mission? (Basic character: Level 300 - 320, Advanced character: Level 271 - 320)
+ID 3899: You have completed the tutorial. Take this Ring of Hero and Ring of Warrior. They are gifts to you from the queen.
+ID 3900: You have left the gens.
+ID 3901: You have not joined the gens.
+ID 3902: You have not joined the gens. You must first be a member of the gens in order to leave it.
+ID 3903: You have now completed the fourth trial to become a hero. The next mission I'm about to give you is to see if you have the tenacity to be a hero. Will you accept this mission? (Level 381 - 400)
+ID 3904: You have now completed the second trial to become a hero. The next mission I'll give you is to see if you have the fighting spirit to be a hero. Will you accept this mission? (Level 331 - 350)
+ID 3905: You have now completed the third trial to become a hero. The next mission I'll give you is to see if you have the right mentality to be a hero. Will you accept this mission? (Level 351 - 380)
+ID 3906: You have to be at least level 50 in order to join the gens.
+ID 3907: You know well enough. I don't want to talk about it. (Refuse)
+ID 3908: You left the gens. Your contribution has been reset to 0.
+ID 3910: You might not find Blood Castle challenging anymore. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)
+ID 3913: You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers and corrupt guardsmen will fight each other to the death in a no-holds-barred melee.
+ID 3914: You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers are pitted against 50 corrupt guardsmen in a no-holds-barred melee to the death.
+ID 3915: You will stand by for about a minute before actually entering. You'll enter Blood Castle after this standby time has elapsed. Once inside Blood Castle, you can buy some time by defeating 40 monsters summoned by a necromancer named Red Skull.
+ID 3916: You'd be mistaken to think you've reached the peak. Testing yourself and your abilities at Chaos Castle isn't a bad idea. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 300-400, Advanced character: Level 280-400)
+ID 3917: You'll be able to use the Ring of Hero at level 40 and the Ring of Warrior at level 80. Dropping the rings will break their seal and transform them into items.;Next time we meet, I sincerely hope to see a mightier warrior before me. Go now and build your experience and strength and free this world from Kundun's grasp!;(You've completed the tutorial.)
+ID 3918: You'll face a steady stream of powerful monsters at Devil Square. Forming a party with other travelers before entering will give you a better chance of survival.
+ID 3919: You'll need to regularly repair your equipments since their durability will diminish as you hunt monsters. When you reach a certain level, you will be able to repair your equipments directly from the Inventory window. What level is that?
+ID 3920: You'll not be able to use certain skills like Teleport or Telekinesis while holding on to a relic. On the other hand, there are special skills that can only be used in Illusion Temple. Using these skills to your advantage will make it easier for your camp to win.
+ID 3921: You'll now find it increasingly difficult to find suitable hunting ground. How about discovering hunting grounds by accepting quests from Shadow Phantom Soldiers? Come see me when you reach a new level to receive quests that will earn you prized equipment.
+ID 3922: You'll now have to focus more on coordinated attacks with your comrades than on simply defeating monsters. There is no better place than Devil Square to train for this. Complete a simple mission that will earn you an invitation to Devil Square, and train there at the side of your comrades. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)
+ID 3923: You'll stand by for about a minute before actually entering. Once this standby time passes, monsters will start to appear. The monsters will continue to attack for ten minutes, and killing them will earn you points. If you score high enough, you might even receive a reward.
+ID 3924: You're back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 15-80, Advanced character: Level 10-60)
+ID 3925: You're well-informed. I will give you the item you need to access Chaos Castle. When you have time, come see me for an easy quest.
+ID 3926: You're well-informed. I'll give you the item you'll need to enter Devil Square. When you have time, come see me for an easy quest.
+ID 3927: You're well-informed. I'm in charge of distributing items that are necessary to enter Illusion Temple. When you have time, come see me for an easy quest that will earn you a ticket in.
+ID 3928: You're well-informed. In order to penetrate the barrier surrounding Blood Castle, you will need an Invisibility Cloak. If you pass a simple test of mine, I will provide you with an Invisibility Cloak before you head to Blood Castle. When you have time, come see me for an easy quest.
+ID 3929: You've done well. Let's see to one more thing before I ask you to face tougher monsters. Talk to me again and receive a damage and defense increase buff.
+ID 3930: You've done well. The Falling Slash skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Falling Slash? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+ID 3931: You've done well. The Fire Ball skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Fire Ball? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+ID 3932: You've done well. The Summon Goblin skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Summon Goblin? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+ID 3933: You've done well. The Triple Shot skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Triple Shot? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+ID 3934: You've explained enough. Let's continue with the tutorial.
+ID 3935: You've made a wise choice. The first mission for the third trial involves defeating 20 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.
+ID 3936: You've reached the final stage of Blood Castle, but it should still be enjoyable if you have your comrades at your side. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept? (All characters: Master Level)
+ID 3937: You've truly become a fine warrior. I'm sure the queen herself will be proud of you. Truth be told, she has arranged a few items for warriors such as you.
+ID 3938: Your guild is part of a different gens.
+ID 3940: Zaikans from Tarkan 2 should suffice. Go to Tarkan 2 and defeat 30 Zaikans. Come see me after that, and I will give you a choice between 20 Large SD Potions and 30 Large Complex Potions as your reward. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+ID 3963: ���� He seems to be a miser����
+ID 3964: ���� Hmm, for the clan����
+ID 3965: ���� Something pestering seems to happen����
+ID 3966: ���� That's what happened.
+ID 3967: ����Both are fairly easy...
+ID 3968: ������... What's behind this story?

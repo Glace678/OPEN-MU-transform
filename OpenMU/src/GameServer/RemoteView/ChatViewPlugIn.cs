@@ -1,0 +1,46 @@
+﻿// <copyright file="ChatViewPlugIn.cs" company="MUnique">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace MUnique.OpenMU.GameServer.RemoteView;
+
+using System.Runtime.InteropServices;
+using MUnique.OpenMU.GameLogic.Views;
+using MUnique.OpenMU.Network.Packets.ServerToClient;
+using MUnique.OpenMU.PlugIns;
+
+/// <summary>
+/// The default implementation of the chat view which is forwarding everything to the game client which specific data packets.
+/// </summary>
+[PlugIn]
+[Display(Name = nameof(PlugInResources.ChatViewPlugIn_Name), Description = nameof(PlugInResources.ChatViewPlugIn_Description), ResourceType = typeof(PlugInResources))]
+[Guid("F0B5BAD4-B97C-49F1-84E0-25EDC796B0E4")]
+public class ChatViewPlugIn : IChatViewPlugIn
+{
+    private readonly RemotePlayer _player;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ChatViewPlugIn"/> class.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    public ChatViewPlugIn(RemotePlayer player)
+    {
+        this._player = player;
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask ChatMessageAsync(string message, string sender, ChatMessageType type)
+    {
+        await this._player.Connection.SendChatMessageAsync(ConvertChatMessageType(type), sender, message).ConfigureAwait(false);
+    }
+
+    private static ChatMessage.ChatMessageType ConvertChatMessageType(ChatMessageType type)
+    {
+        if (type == ChatMessageType.Whisper)
+        {
+            return Network.Packets.ServerToClient.ChatMessage.ChatMessageType.Whisper;
+        }
+
+        return Network.Packets.ServerToClient.ChatMessage.ChatMessageType.Normal;
+    }
+}

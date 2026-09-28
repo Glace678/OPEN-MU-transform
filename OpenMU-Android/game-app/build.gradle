@@ -1,0 +1,120 @@
+plugins {
+    id 'com.android.application'
+}
+
+// No default: a hardcoded LAN address here would silently bake one developer's
+// IP into any APK built by hand with `gradlew assembleDebug`. Fail instead,
+// the way the package key below does. Build-AndroidPackage.ps1 passes this with
+// -POPENMU_SERVER_ADDRESS=<ip or hostname>.
+def openMuServerAddress = providers.gradleProperty('OPENMU_SERVER_ADDRESS').getOrElse('')
+if (!(openMuServerAddress ==~ /[A-Za-z0-9.-]+/)) {
+    throw new GradleException('OPENMU_SERVER_ADDRESS must be an IPv4 address or ' +
+        'hostname (letters, digits, dots, hyphens only). Pass it with ' +
+        '-POPENMU_SERVER_ADDRESS=<address>.')
+}
+def mobilePackageKey = providers.gradleProperty('OPENMU_MOBILE_PACKAGE_KEY').getOrElse('')
+if (!(mobilePackageKey ==~ /[A-Za-z0-9_-]{43}/)) {
+    throw new GradleException('OPENMU_MOBILE_PACKAGE_KEY must be exactly 43 base64url characters')
+}
+def gameDataArchive = file('src/main/assets/game-data.zip')
+if (!gameDataArchive.isFile()) {
+    throw new GradleException("Missing complete game data archive: ${gameDataArchive}")
+}
+def gameDataDigest = java.security.MessageDigest.getInstance('SHA-256')
+gameDataArchive.withInputStream { input ->
+    byte[] buffer = new byte[1024 * 1024]
+    for (int count = input.read(buffer); count >= 0; count = input.read(buffer)) {
+        if (count > 0) {
+            gameDataDigest.update(buffer, 0, count)
+        }
+    }
+}
+def gameDataVersion = gameDataDigest.digest().collect { String.format('%02x', it & 0xff) }.join()
+
+// NDK 路径不再硬编码到某台开发机：优先 -POPENMU_ANDROID_NDK_PATH，其次环境
+// 变量 ANDROID_NDK_HOME / ANDROID_NDK_ROOT；都未设置时留给 AGP 按 ndkVersion
+// 在 Android SDK 目录内自动解析（sdkmanager 安装的 NDK 即可被找到）。
+def ndkPathOverride = providers.gradleProperty('OPENMU_ANDROID_NDK_PATH').getOrElse('')
+if (!ndkPathOverride) {
+    ndkPathOverride = System.getenv('ANDROID_NDK_HOME') ?: System.getenv('ANDROID_NDK_ROOT') ?: ''
+}
+
+android {
+    namespace 'net.munique.openmu.game'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+    ndkVersion '27.2.12479018'
+    if (ndkPathOverride) {
+        ndkPath ndkPathOverride
+    }
+
+    defaultConfig {
+        applicationId 'net.munique.openmu.game'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0-mobile-preview'
+        buildConfigField 'String', 'GAME_DATA_VERSION', '"sha256:' + gameDataVersion + '"'
+        buildConfigField 'String', 'DEFAULT_SERVER_ADDRESS', '"' + openMuServerAddress + '"'
+        buildConfigField 'String', 'MOBILE_PACKAGE_KEY', '"' + mobilePackageKey + '"'
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled false
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = [
+                'src/main/java',
+                '../../MuMain/src/ThirdParty/SDL/android-project/app/src/main/java'
+            ]
+            jniLibs.srcDirs = ['../native']
+        }
+    }
+
+    androidResources {
+        noCompress 'zip'
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError true
+        lintConfig file('lint.xml')
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}

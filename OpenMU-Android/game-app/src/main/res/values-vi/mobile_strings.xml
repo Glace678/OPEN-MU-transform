@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Đang chuẩn bị dữ liệu trò chơi</string>
+    <string name="preparing_detail">Lần mở đầu tiên sẽ giải nén dữ liệu vào bộ nhớ trong. Hãy giữ ứng dụng ở màn hình trước.</string>
+    <string name="ready">Sẵn sàng chơi</string>
+    <string name="start_game">Vào trò chơi</string>
+    <string name="settings">Cài đặt</string>
+    <string name="gesture_help">Cử chỉ</string>
+    <string name="retry">Thử lại</string>
+    <string name="extract_failed">Không thể chuẩn bị dữ liệu trò chơi</string>
+    <string name="save">Lưu</string>
+    <string name="back">Quay lại</string>
+    <string name="display">Đồ họa</string>
+    <string name="controls">Điều khiển</string>
+    <string name="network">Máy chủ</string>
+    <string name="fps">Tốc độ khung hình</string>
+    <string name="render_scale">Tỷ lệ kết xuất</string>
+    <string name="effects">Chất lượng hiệu ứng</string>
+    <string name="ui_scale">Kích thước nút cảm ứng</string>
+    <string name="safe_margin">Khoảng cách mép an toàn</string>
+    <string name="touch_opacity">Độ đục của nút cảm ứng</string>
+    <string name="vibration">Rung khi chạm và chiến đấu</string>
+    <string name="handedness">Tay thuận</string>
+    <string name="server_address">Địa chỉ máy chủ</string>
+    <string name="server_port">Cổng kết nối</string>
+    <string name="local_pairing">Ghép nối cục bộ không cần đăng nhập (chỉ LAN)</string>
+    <string name="restart_note">Thay đổi đồ họa và máy chủ có hiệu lực vào lần vào trò chơi tiếp theo.</string>
+    <string name="invalid_server">Nhập địa chỉ IPv4 hoặc tên máy chủ, không kèm giao thức hay cổng.</string>
+    <string name="invalid_local_server">Ghép nối cục bộ cần địa chỉ IPv4 loopback hoặc LAN, chẳng hạn 192.168.1.20. Hãy tắt khi dùng máy chủ đám mây.</string>
+    <string name="invalid_port">Cổng phải nằm trong khoảng từ 1 đến 65535.</string>
+    <string name="saved">Đã lưu cài đặt</string>
+    <string name="tutorial_title">Điều khiển trên điện thoại</string>
+    <string name="tutorial_body">Menu: chạm bằng một ngón để chọn hoặc xác nhận.\nChọn nhân vật: chạm nhân vật, rồi chạm nút vào game ở góc dưới bên phải.\n\nTúi đồ thường: chạm để xem chi tiết; giữ yên nửa giây để dùng vật phẩm dùng được hoặc học kỹ năng. Để di chuyển, nhấn rồi kéo ngay; thả ngoài túi sẽ trả vật phẩm về chỗ cũ.\nBốn ô bình thuốc phía dưới: chạm để dùng; giữ lâu không dùng liên tục.\n\nTrong thế giới trò chơi:\nKéo một ngón ở vùng di chuyển để di chuyển.\nChạm vùng kỹ năng để chọn; chạm hai lần để dùng kỹ năng hiện tại.\nVuốt hai ngón sang trái hoặc phải để đổi kỹ năng.\nVuốt hai ngón lên hoặc xuống, hoặc chụm/tách ngón, để chỉnh góc nhìn.\nVuốt ba ngón lên để mở bản đồ hoặc xuống để mở cài đặt.\n\nThanh bình thuốc phía dưới và thao tác giao diện không kích hoạt kỹ năng trong thế giới trò chơi.</string>
+    <string name="understood">Đã hiểu, vào chơi</string>
+    <string name="help_close">Đóng</string>
+    <string name="game_data_missing">APK thiếu game-data.zip; đây không phải gói trò chơi đầy đủ.</string>
+    <string name="storage_low">Không đủ bộ nhớ trong. Cần thêm ít nhất %1$s.</string>
+    <string name="current_display">Màn hình hiện tại: %1$d × %2$d</string>
+    <string name="max_refresh">Tần số quét tối đa: %1$d Hz. Chọn tốc độ khung hình từ 30 đến %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Tối đa %1$d Hz (theo màn hình)</string>
+    <string name="game_settings">Cài đặt điện thoại</string>
+    <string name="open_settings">Mở cài đặt</string>
+    <string-array name="effect_labels">
+        <item>Thấp (mượt hơn)</item>
+        <item>Trung bình (khuyên dùng)</item>
+        <item>Cao (đồ họa đẹp nhất)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Tay phải</item>
+        <item>Tay trái</item>
+    </string-array>
+</resources>

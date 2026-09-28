@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Обліковий запис</string>
+    <string name="account_portal_address">Адреса порталу</string>
+    <string name="account_portal_language">Мова порталу</string>
+    <string name="account_register">Зареєструвати</string>
+    <string name="account_change_password">Змінити пароль</string>
+    <string name="account_reset_password">Забули пароль?</string>
+    <string name="account_portal_settings">Налаштування облікового запису</string>
+    <string name="account_portal_not_configured">Укажіть дійсну адресу порталу облікових записів у налаштуваннях.</string>
+    <string name="account_portal_invalid">Введіть адресу HTTPS без шляху. HTTP дозволено лише для прямого loopback або довіреного локального сполучення. Облікові дані, шляхи, запити та фрагменти заборонені.</string>
+    <string name="account_portal_no_browser">Немає браузера для відкриття порталу облікових записів.</string>
+</resources>

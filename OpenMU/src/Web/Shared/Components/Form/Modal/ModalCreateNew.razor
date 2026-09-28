@@ -1,0 +1,84 @@
+@* <copyright file="ModalCreateNew.razor" company="MUnique">
+   Licensed under the MIT License. See LICENSE file in the project root for full license information.
+   </copyright> *@
+
+@using MUnique.OpenMU.Persistence
+@using MUnique.OpenMU.Web.Shared.Components.Form
+@using MUnique.OpenMU.Web.Shared.Components.Modal
+
+@typeparam TItem
+
+@if (this._error is not null)
+{
+    <div class="alert alert-danger" role="alert">@this._error</div>
+}
+<fieldset disabled="@this._isSaving">
+    <ItemCreationForm Item="@(this.Item!)"
+                  PersistenceContext="@this.PersistenceContext"
+                  Owner="@this.Owner"
+                  OnValidSubmit="@this.SubmitAsync"
+                  OnCancel="@this.CancelAsync" />
+</fieldset>
+
+@code {
+    private bool _isSaving;
+    private string? _error;
+
+    [Parameter]
+    public ModalInstance Modal { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the item which should be created.
+    /// </summary>
+    [Parameter]
+    public TItem Item { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the persistence context which should be used. It's required for lookups.
+    /// </summary>
+    [Parameter]
+    public IContext PersistenceContext { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the owner object of the collection containing this item.
+    /// Used to provide context for creation (e.g., filtering skills by character class).
+    /// </summary>
+    [Parameter]
+    public object? Owner { get; set; }
+
+    /// <summary>Optionally saves the item before closing; an error keeps the form open.</summary>
+    [Parameter]
+    public Func<TItem, Task<string?>>? CreateAsync { get; set; }
+
+    private async Task SubmitAsync()
+    {
+        if (this._isSaving)
+        {
+            return;
+        }
+
+        this._isSaving = true;
+        this._error = null;
+        try
+        {
+            if (this.CreateAsync is not null)
+            {
+                this._error = await this.CreateAsync(this.Item);
+            }
+
+            if (this._error is null)
+            {
+                await this.Modal.CloseAsync(ModalResult.Ok(this.Item));
+            }
+        }
+        finally
+        {
+            this._isSaving = false;
+        }
+    }
+
+    private Task CancelAsync()
+    {
+        return this._isSaving ? Task.CompletedTask : this.Modal.CancelAsync();
+    }
+}

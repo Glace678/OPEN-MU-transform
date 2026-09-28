@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1253,
+   "en": "Go ahead and learn the Fire Ball skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1254,
+   "en": "Go back.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1255,
+   "en": "Go beyond the walls of Elveland and hunt down 3 Strange Rabbits.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1256,
+   "en": "Go beyond the walls of Elveland and hunt down 3 Strange Rabbits.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1257,
+   "en": "Go beyond the walls of Elveland and hunt down 30 Polluted Butterflies.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1258,
+   "en": "Go beyond the walls of Elveland and hunt down 30 Polluted Butterflies. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1259,
+   "en": "Go beyond the walls of Lorencia and hunt down 3 Budge Dragons.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1260,
+   "en": "Go beyond the walls of Lorencia and hunt down 3 Budge Dragons.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1261,
+   "en": "Go beyond the walls of Lorencia and hunt down 30 Hounds.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1262,
+   "en": "Go beyond the walls of Lorencia and hunt down 30 Hounds. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1263,
+   "en": "Go beyond the walls of Noria and hunt down 3 Chain Scorpions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1264,
+   "en": "Go beyond the walls of Noria and hunt down 3 Chain Scorpions.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1265,
+   "en": "Go beyond the walls of Noria and hunt down 30 Beetle Monsters.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1266,
+   "en": "Go beyond the walls of Noria and hunt down 30 Beetle Monsters. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1267,
+   "en": "Go find the merchant in town and bring back 5 apples.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1268,
+   "en": "Go find the merchant in town and bring back 5 apples.;The NPC's name will be shown in light blue, and the point symbol will turn into a tooth symbol when you scroll over it with your mouse.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1269,
+   "en": "Go past the castle gate and defeat two Red Skulls who have hidden the Absolute Weapon. This will buy you some more time and reveal a casket containing the weapon. Destroy the casket, defeat more monsters, and return the Absolute Weapon to Archangel to successfully complete the Blood Castle quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1270,
+   "en": "Go see the potion merchant again and buy just 1 Town Portal Scroll.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1271,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1272,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. When you return, I'll give you Ancient Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1273,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. When you return, I'll give you Eclipse Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1274,
+   "en": "Go to Devil Square Level 1. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1275,
+   "en": "Go to Devil Square Level 2. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1276,
+   "en": "Go to Devil Square Level 3. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1277,
+   "en": "Go to Devil Square Level 4. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1278,
+   "en": "Go to Devil Square Level 5. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1279,
+   "en": "Go to Devil Square Level 6. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1280,
+   "en": "Go to Devil Square Level 7. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1281,
+   "en": "Go to Dungeon Level 2 and defeat 50 Chief Skeleton Warriors and 30 Thunder Liches. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1282,
+   "en": "Go to Dungeon Level 2 and defeat 50 Hell Hounds and 30 Hell Spiders. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1283,
+   "en": "Go to Dungeon Level 2 and defeat 50 Hell Spiders and 30 Chief Skeleton Warriors. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1284,
+   "en": "Go to Dungeon Level 2 and defeat 50 Poison Bull Fighters and 30 Dark Knights. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1285,
+   "en": "Go to Dungeon Level 2 and defeat 50 Skeleton Archers and 30 Hell Hounds. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1286,
+   "en": "Go to Dungeon Level 2. Defeat 40 Hell Hounds and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 1, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1287,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Dragon Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1288,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Guardian Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1289,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Legendary Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1290,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Red Wing Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1291,
+   "en": "Go to Dungeon Level 2. Defeat 50 Cyclopses and 30 Ghosts, and I'll give you Legendary Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1292,
+   "en": "Go to Dungeon Level 2. Defeat 50 Cyclopses and 30 Ghosts, and I'll give you Red Wing Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1293,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you Dragon Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1294,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you Guardian Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1295,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you a Legendary Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1296,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you a Red Wing Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1297,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Spiders and 30 Chief Skeleton Warriors, and I'll give you Legendary Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1298,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Spiders and 30 Chief Skeleton Warriors, and I'll give you Red Wing Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1299,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Dragon Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1300,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Guardian Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1301,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Legendary Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1302,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Red Wing Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

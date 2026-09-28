@@ -1,0 +1,640 @@
+### 3339 | budget=4096 | questwords
+That is correct! You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.
+### 3340 | budget=4096 | questwords
+That will surely make things easier. Do you have any other tips?
+### 3341 | budget=4096 | questwords
+That's a piece of cake.
+### 3342 | budget=4096 | questwords
+That's right. You do need good equipment and a high level to test your mettle against other travelers, yes. But just that isn't enough for you to become a hero of MU. I will help you receive recognition as a hero by giving you a series of missions. You may repeat these missions as often as desired.
+### 3343 | budget=4096 | questwords
+That's unfortunate, please come back later when you have time. (Failed to receive the Letter of Request.)
+### 3344 | budget=4096 | questwords
+That's unfortunate, the reward is quite awesome. Please come back if you change your mind. (Free mercenary registration has been cancelled.)
+### 3345 | budget=4096 | questwords
+That's unfortunate. Come see me again when the bond between you and your comrades is stronger. (The quest has been cancelled.)
+### 3346 | budget=4096 | questwords
+That's unfortunate. Come see me again when you find the right warriors to fight at your side. (The quest has been cancelled.)
+### 3347 | budget=4096 | questwords
+That's unfortunate. If you change your mind, come back before you reach level 190. (The quest has been cancelled.)
+### 3348 | budget=4096 | questwords
+That's unfortunate. If you change your mind, come back before you reach level 194. (The quest has been cancelled.)
+### 3349 | budget=4096 | questwords
+That's unfortunate. If you change your mind, come back before you reach level 206. (The quest has been cancelled.)
+### 3350 | budget=4096 | questwords
+That's unfortunate. If you change your mind, come back before you reach level 210. (The quest has been cancelled.)
+### 3351 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 101. (The quest has been cancelled.)
+### 3352 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 111. (The quest has been cancelled.)
+### 3353 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 121. (The quest has been cancelled.)
+### 3354 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 131. (The quest has been cancelled.)
+### 3355 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 141. (The quest has been cancelled.)
+### 3356 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 161. (The quest has been cancelled.)
+### 3357 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 166. (The quest has been cancelled.)
+### 3358 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 171. (The quest has been cancelled.)
+### 3359 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 180. (The quest has been cancelled.)
+### 3360 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 186. (The quest has been cancelled.)
+### 3361 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 198. (The quest has been cancelled.)
+### 3362 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 202. (The quest has been cancelled.)
+### 3363 | budget=4096 | questwords
+That's unfortunate. If you change your mind, please come back before you reach level 91. (The quest has been cancelled.)
+### 3364 | budget=4096 | questwords
+That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)
+### 3365 | budget=4096 | questwords
+That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)
+### 3366 | budget=4096 | questwords
+That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)
+### 3367 | budget=4096 | questwords
+That's unfortunate. Please come back if you change your mind. (The quest has been cancelled.)
+### 3368 | budget=4096 | questwords
+That's unfortunate. The reward for this mission is quite big... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)
+### 3369 | budget=4096 | questwords
+That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)
+### 3370 | budget=4096 | questwords
+That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)
+### 3371 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass this up if you want fast growth.... Come see me again before you reach level 15 if you want to accept the quest. (The quest has been cancelled.)
+### 3372 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth... (The quest has been cancelled.)
+### 3373 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... (The quest has been cancelled.)
+### 3374 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come back before you reach level 230 if you change your mind. (The quest has been cancelled.)
+### 3375 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 235 if you decide to accept the quest. (The quest has been cancelled.)
+### 3376 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 240 if you decide to accept the quest. (The quest has been cancelled.)
+### 3377 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 250 if you decide to accept the quest. (The quest has been cancelled.)
+### 3378 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 255 if you decide to accept the quest. (The quest has been cancelled.)
+### 3379 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 26 if you want to accept the request. (The quest has been cancelled.)
+### 3380 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 260 if you decide to accept the quest. (The quest has been cancelled.)
+### 3381 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 36 if you want to accept the request. (The quest has been cancelled.)
+### 3382 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 46 if you want to accept the request. (The quest has been cancelled.)
+### 3383 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 56 if you want to accept the quest. (The quest has been cancelled.)
+### 3384 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 66 if you want to accept the quest. (The quest has been cancelled.)
+### 3385 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 80 if you want to accept the quest. (The quest has been cancelled.)
+### 3386 | budget=4096 | questwords
+That's unfortunate. You shouldn't pass up on this up if you want fast growth... Come see me again before you reach level 245 if you decide to accept the quest. (The quest has been cancelled.)
+### 3387 | budget=4096 | questwords
+The Atlans expedition party reports that the chief commander of the Evil Army is using Vepars to go after Gens members searching for the sealed stone. Please banish these Vepars and protect the Gens members.
+### 3388 | budget=4096 | questwords
+The Beginning of Requests
+### 3390 | budget=4096 | questwords
+The Character Stats window will tell you the name and level of your character, the name of the current server, and character status information.
+### 3391 | budget=4096 | questwords
+The Character Stats window will tell you the name of your character, the name of the current server, and your character's class.
+### 3392 | budget=4096 | questwords
+The Character Stats window will tell you the name of your character, the name of the current server, and your character's class. It's possible to connect to different channels within a single server using the same character.;There are four basic character classes: the Elf, the Dark Knight, the Dark Wizard, and the Summoner. Reach level 220 with any of these basic characters to unlock the Magic Gladiator, and level 250 to unlock the Dark Lord.
+### 3393 | budget=4096 | questwords
+The Dungeon shouldn't be so difficult.
+### 3394 | budget=4096 | questwords
+The Dungeon shouldn't be so hard. After all, I do need new equipment. Should I give it a shot?
+### 3395 | budget=4096 | questwords
+The Falling Slash skill should now be one of the skills you can use. Try clicking the icon.
+### 3396 | budget=4096 | questwords
+The Fire Ball skill should now be one of the skills you can use. Try clicking the icon.
+### 3397 | budget=4096 | questwords
+The Goblin NPC in Noria.
+### 3399 | budget=4096 | questwords
+The Inventory window will display the items you have and the equipment you are wearing.
+### 3400 | budget=4096 | questwords
+The Inventory window will display the items you have and the equipments you are wearing.;Click on an item to change its position or, if it's a consumable, right-click on it to use it. Did you get all that?
+### 3401 | budget=4096 | questwords
+The Lost Tower is proving to be quite a headache. I received word of the mobilization of monsters in regions where reconnaissance party members have gone missing. It appears the monsters are planning something. I want you to stop them from mobilizing. Will you accept this quest? (Level 194-197)
+### 3403 | budget=4096 | questwords
+The Seed Master NPC in Elveland.
+### 3404 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 131.
+### 3405 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 101.
+### 3406 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 111.
+### 3407 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 121.
+### 3408 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 141.
+### 3409 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 161.
+### 3410 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 166.
+### 3411 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 171.
+### 3412 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 180.
+### 3413 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 186.
+### 3414 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 190.
+### 3415 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 194.
+### 3416 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 198.
+### 3417 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 202.
+### 3418 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 206.
+### 3419 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 210.
+### 3420 | budget=4096 | questwords
+The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 91.
+### 3421 | budget=4096 | questwords
+The Shadow Phantom Guardians have done so much for me....
+### 3422 | budget=4096 | questwords
+The Shadow Phantom Soldier is looking for someone he can rely on to carry out Shadow Phantom Guardians' quests. Go see the Shadow Phantom Soldier again.
+### 3423 | budget=4096 | questwords
+The Shadow Phantom Soldier will give you a small reward if you manage fast growth at Devil Square. Accept the Shadow Phantom Soldier's test and take the Devil Square challenge.
+### 3424 | budget=4096 | questwords
+The Shadow Phantom Soldier will give you a small reward if you win at Illusion Temple. Accept the Shadow Phantom Soldier's test and take the Illusion Temple challenge.
+### 3425 | budget=4096 | questwords
+The Shadow Phantom Soldier will give you an Armor of Guardsman, which you'll need to enter Chaos Castle. Receive the armor and take the Chaos Castle challenge.
+### 3426 | budget=4096 | questwords
+The Shadow Phantom unit has trouble controlling the increasing number of Alquamoses and Drakans in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 20 Alquamoses and 20 Drakans. I will reward you when you come back and report me.
+### 3427 | budget=4096 | questwords
+The Shadow Phantom unit has trouble dealing with Queen Rainiers in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 30 Queen Rainiers. I will reward you when you come back and report me.
+### 3428 | budget=4096 | questwords
+The Shadow Phantom unit in Icarus, gateway to the Castle in Heaven is in trouble since Alquamoses and Alpha Crusts have blocked their supply route. Go to Icarus and kill 20 Alquamoses and 10 Alpha Crusts. I will reward you when you come back and report me.
+### 3429 | budget=4096 | questwords
+The Shadow Phantom unit in Kanturu Ruins is suffering from the attacks of Iron Riders. Go to Kanturu Ruins and kill 30 Mutants. I will reward you when you come back and report me.
+### 3430 | budget=4096 | questwords
+The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 260-289)
+### 3431 | budget=4096 | questwords
+The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 320-349)
+### 3432 | budget=4096 | questwords
+The Summon Goblin skill should now be one of the skills you can use. Try clicking the icon.
+### 3433 | budget=4096 | questwords
+The Trainer NPC in Lorencia.
+### 3434 | budget=4096 | questwords
+The Triple Shot skill should now be one of the skills you can use. Try clicking the icon.
+### 3435 | budget=4096 | questwords
+The answer is obvious!
+### 3436 | budget=4096 | questwords
+The barrier at the Lost Tower is now somewhat stable and secure. However, there are still high-ranking monsters looking to take advantage of any chance they can get. Will you eliminate these monsters for us? (Level 210-219)
+### 3438 | budget=4096 | questwords
+The biggest obstacle to entering Devil Square, a training arena for fast growth, is probably obtaining an invitation. I have a simple quest that will earn you an invitation to Devil Square. Will you accept this quest? (Basic character: 330-400 Level, Advanced character: Level 311-400)
+### 3440 | budget=4096 | questwords
+The bond between my comrades and I isn't strong enough yet.
+### 3441 | budget=4096 | questwords
+The bond of fellowship.... Of course comrades should be trusted and valued.
+### 3442 | budget=4096 | questwords
+The captain asked me to thank you for your contribution in the previous quest. The captain also said you've proved your worth and are ready for a more critical quest. Will you accept this quest? (Level 171-179)
+### 3444 | budget=4096 | questwords
+The character's current coordinates are shown on the top left corner of the screen. Movement in the ↖ or ↘ direction changes the first number, and movement in the ↗ or ↙ direction the second.
+### 3446 | budget=4096 | questwords
+The conflict between the genses over the sealed stone is growing fiercer. Cornered, the opposing gens forces are attacking our side using Sapi-Duos. Please eliminate these Sapi-Duos.
+### 3447 | budget=4096 | questwords
+The dark energy Gorgons give off has weakened considerably, and the monsters seem to have calmed down quite a bit because of it. It's a good time to squeeze our grip on the Gorgons. Will you accept this quest? (Level 131-140)
+### 3452 | budget=4096 | questwords
+The elder says Spiders are spinning webs on the outer walls of the town and has asked us to take care of them. Although the request was made to the Shadow Phantom Guardians, I believe the job is suitable for travelers who are just starting out on their journey. Will you accept this quest? (Level 1-14)
+### 3453 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)
+### 3454 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (All characters: Master Level)
+### 3455 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: 330-400 Level, Advanced character: Level 311-400)
+### 3456 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 131-180, Advanced character: Level 111-160)
+### 3457 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 231-280, Advanced character: Level 211-260)
+### 3458 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 281-330, Advanced character: Level 261-310)
+### 3459 | budget=4096 | questwords
+The endless spawning of monsters in Devil Square will help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 181-230, Advanced character: Level 161-210)
+### 3466 | budget=4096 | questwords
+The final hurdle, eh? I accept the mission. (Accept)
+### 3467 | budget=4096 | questwords
+The gate that leads into Blood Castle is probably the greatest obstacle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.
+### 3468 | budget=4096 | questwords
+The guild master cannot leave the gens.
+### 3469 | budget=4096 | questwords
+The guild master is not a member of the gens. The guild master must be a member of the gens in order for you to join that gens.
+### 3470 | budget=4096 | questwords
+The higher the level, the more distance you get to travel. Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?
+### 3474 | budget=4096 | questwords
+The increasing number of Bloody Wolves in Tarkan is becoming worrisome. Hunt down 50 Bloody Wolves, and I'll give you a Scroll of Blood + 1 as a reward.
+### 3475 | budget=4096 | questwords
+The increasing number of Iron Wheels in Tarkan is becoming worrisome. Hunt down 70 Iron Wheels, and I'll give you a Scroll of Blood + 2 as a reward.
+### 3479 | budget=4096 | questwords
+The last ones to deal with are Bloody Soldiers and Death Angels casting spell on the sealed stone. Kill 30 Bloody Soldiers and 20 Death Angels and come back to me to get reward. (Party Possible)
+### 3480 | budget=4096 | questwords
+The losses caused by the scheming of Queen Rainiers are continuing to stack up. Will you help eliminate more of these Queen Rainiers? (Level 255-259)
+### 3481 | budget=4096 | questwords
+The mercenary guild office has been newly founded in Devias. Please find the guild office manager Tercia.
+### 3483 | budget=4096 | questwords
+The monsters are behaving oddly. It seems Iron Wheels who rank higher than Bloody Wolves, are plotting something. I wish to ask for your help in eliminating these Iron Wheels. Will you accept? (Level 240-244)
+### 3485 | budget=4096 | questwords
+The number of Alquamoses has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Alquamoses? (Level 245-249)
+### 3486 | budget=4096 | questwords
+The number of Death Beam Knights in Tarkan 2 is increasing beyond control. Hunt down 30 Death Beam Knights, and I'll give you a Scroll of Blood + 4 as a reward.
+### 3487 | budget=4096 | questwords
+The number of Drakans in Icarus is increasing beyond control. Hunt down 90 Drakans, and I'll give you a Scroll of Blood + 3 as a reward.
+### 3488 | budget=4096 | questwords
+The number of Giant Drakans in Icarus is increasing beyond control. Hunt down 130 Giant Drakans, and I'll give you a Scroll of Blood + 5 as a reward.
+### 3489 | budget=4096 | questwords
+The number of Mega Crusts has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Mega Crusts? (Level 250-254)
+### 3490 | budget=4096 | questwords
+The number of Shadow Looks in the Swamp of Peace is increasing beyond control. Hunt down 150 Shadow Looks, and I'll give you a Scroll of Blood + 6 as a reward.
+### 3491 | budget=4096 | questwords
+The objective now is to complete Archangel's quest in Blood Castle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.
+### 3492 | budget=4096 | questwords
+The objective should be defending this place, then.
+### 3493 | budget=4096 | questwords
+The orb I gave you will teach you the Summon Goblin skill. Right-click on the item to learn the skill. Go ahead and learn the skill.
+### 3494 | budget=4096 | questwords
+The queen's orders are to help those warriors starting out on their journey so that they can at least defend themselves against the forces of Kundun.
+### 3495 | budget=4096 | questwords
+The quest to eliminate Totem Golems and Cursed Liches in Elveland was actually set by the elder of Elveland. He says now a larger number of monsters have appeared and asks us to deal with them. Will you accept this quest? (Level 80-90)
+### 3503 | budget=4096 | questwords
+The reconnaissance party has sent us a request. They say doing away with the higher ranking monsters that control the low-ranking ones will make their work much easier. Defeat these monsters. Will you accept this quest? (Level 166-170)
+### 3504 | budget=4096 | questwords
+The reconnaissance party has successfully made their way into Tarkan, but are now forced to deal with Bloody Wolves. They are higher-ranking than monsters. I wish to ask for your help in eliminating these Bloody Wolves. Will you accept? (Level 235-239)
+### 3505 | budget=4096 | questwords
+The reconnaissance party is advancing, but Mutants are starting to amass in greater numbers. Will you help eliminate more of the Mutants? (Level 230-234)
+### 3506 | budget=4096 | questwords
+The reconnaissance party is struggling with surprise attacks against them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 180-189)
+### 3507 | budget=4096 | questwords
+The reconnaissance party reports that the stolen supplies are being delivered to the Lost Tower by way of Devias. Severing the Kundun's supply route in Devias will be a devastating blow to the enemy. Will you accept this quest? (Level 36-45)
+### 3508 | budget=4096 | questwords
+The reconnaissance party reports the situation has much improved. I thank you on behalf of our captain. However, there are still monsters interfering with our scouting efforts. It seems these monsters are somewhat higher in rank than the ones before and are proving to be difficult to deal with. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 171-179)
+### 3509 | budget=4096 | questwords
+The reward has already been handed out.
+### 3510 | budget=4096 | questwords
+The scroll I gave you will teach you the Fire Ball skill. Right-click on the item to learn the skill. Go ahead and learn the skill.
+### 3513 | budget=4096 | questwords
+The test is simple enough, and it won't matter if you don't get everything right. If you do, however, there's a small bonus gift.;Are you sure you don't want to take the test?
+### 3514 | budget=4096 | questwords
+The town's Shadow Phantom Soldier is looking for someone he can rely on to carry out quests both big and small. Go see the Shadow Phantom Soldier again.
+### 3517 | budget=4096 | questwords
+The weapon I gave you is a Double Axe. To equip it, load the Double Axe item to the equipment slot in your Inventory. Go ahead and equip it.
+### 3518 | budget=4096 | questwords
+The weapon I gave you is a crossbow. To equip it, load the crossbow item to the equipment slot in your Inventory. Go ahead and equip it.
+### 3521 | budget=4096 | questwords
+Then I will give you the second mission right away. Attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp. Please lead MU to an age of great prosperity.
+### 3522 | budget=4096 | questwords
+Then I will give you the second mission right away. I know victory in Illusion Temple is difficult to achieve. Persevere again and again, and victory will be yours. Complete the mission and you'll be rewarded with 8,000,000 Exp.
+### 3523 | budget=4096 | questwords
+Then I will give you the second mission right away. Protect the sacred item and don't give up before you are victorious in Illusion Temple. Complete the mission and you'll be rewarded with 8,000,000 Exp.
+### 3524 | budget=4096 | questwords
+Then I will give you the second mission right away. Shock your rivals out of their senses by attaining a victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp.
+### 3525 | budget=4096 | questwords
+Then I will give you the second mission right away. Show no fear against a number of foes at once, and attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 3,000,000 Exp.
+### 3526 | budget=4096 | questwords
+Then you must clear Illusion Temple. Find a Phantom Soldier to begin the Illusion Temple quest.
+### 3527 | budget=4096 | questwords
+Then you must clear Illusion Temple. Find a Phantom Soldier to undertake the Illusion Temple quest.
+### 3528 | budget=4096 | questwords
+There are a number of ways you can prove your worth on the continent of MU. You can try to be the last one standing in Chaos Castle, or work with your comrades to battle through Blood Castle, Devil Square, or Illusion Temple. Travelers regard such feats as some of the worthiest accomplishments one can achieve.
+### 3530 | budget=4096 | questwords
+There are many types of monsters lurking in the Dungeon. And those on Level 2 have become particularly troublesome. I would like to ask you to deal with them. Will you accept this quest? (Level 101-110)
+### 3531 | budget=4096 | questwords
+There are too many monsters guarding the path between Dungeon Level 2 and Level 3, preventing our reconnaissance party from reaching the third level. I'd like ask you to do away with these monsters. Will you accept this quest? (Level 121-130)
+### 3532 | budget=4096 | questwords
+There is a place called Icarus, which is accessible through the topmost level of the Lost Tower. You can reach the level if you have the ability to fly. However, a group of monsters has emerged and is now blocking entry into Icarus. Will you eliminate these monsters for us? (Level 220-229)
+### 3533 | budget=4096 | questwords
+There is no available quest. Please come back later.
+### 3534 | budget=4096 | questwords
+There is now a unit of monsters ceaselessly attacking our barrier that contains the energy of the Lost Tower. Devils and Cursed Wizards appear to be inflicting the most amount of damage on the barrier. Will you eliminate these monsters for us? (Level 191-199)
+### 3535 | budget=4096 | questwords
+There's a rumor about Dark Knights and Gorgons from the lowest level of the Dungeon planning something sinister. Go to Dungeon Level 3 and defeat 80 Dark Knights. Do this, and I will give you a choice of two rewards from 30 Large Healing Potions, 30 Large Mana Potions, and 15 Small Complex Potions. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+### 3536 | budget=4096 | questwords
+They say Death Cows, driven by an evil energy, are up to something suspicious in the Lost Tower. Hunt down 60 Death Cows, and I'll give you a Devil's Invitation + 2 as a reward. It'd be wise to take on this quest together with others you can trust.
+### 3537 | budget=4096 | questwords
+They say the number of Alquamoses in Icarus is increasing and causing quite a headache for travelers. Go to Icarus and hunt down 80 Alquamoses. Come see me once that's done to receive a Devil's Invitation + 3 as a reward. They are strong foes, and you should hunt them with the help of others.
+### 3538 | budget=4096 | questwords
+Things are becoming serious....
+### 3540 | budget=4096 | questwords
+This door will not always be open to you.
+### 3541 | budget=4096 | questwords
+This is common knowledge.
+### 3542 | budget=4096 | questwords
+This is the end of the tutorial. Please enjoy your MU experience.
+### 3543 | budget=4096 | questwords
+This one might be a little challenging, eh? I accept the mission. (Accept)
+### 3544 | budget=4096 | questwords
+This quest shouldn't be too of a problem.
+### 3545 | budget=4096 | questwords
+This time, the objective is to survive Chaos Castle. Go see the Shadow Phantom Soldier, take the extreme test, and then take on the Chaos Castle challenge.
+### 3548 | budget=4096 | questwords
+Those who wish to serve a gens should seek out the corresponding clan's steward.
+### 3565 | budget=4096 | questwords
+To find out when you can enter, press the F1 key. Then, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before the entry time you've chosen. You'll be sent to Devil Square. Come see me when you have time, and I'll give you a quest that will earn you the item you need to enter Devil Square.
+### 3566 | budget=4096 | questwords
+To find out when you can enter, press the F1 key. Then, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before the entry time you've chosen. You'll then be sent to Illusion Temple. Come see me when you have time, and I'll give you a quest that will earn you the item needed to enter Illusion Temple.
+### 3567 | budget=4096 | questwords
+To find out when you can enter, simply press the F1 key. If you want to enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel before the scheduled start time. Come see me when you have time, and I will give you a quest that will earn you the Invisibility Cloak so that you can enter Blood Castle.
+### 3569 | budget=4096 | questwords
+To grow quickly and become a powerful warrior, you must complete various event maps. Find a Phantom Soldier if you want to undertake an event map quest.
+### 3571 | budget=4096 | questwords
+To restore balance to the battle event, Secrarium made Lugard an offer and suggested implementation of a new rule. This rule was for everyone participating in the event to wear guardsman's armor. Lugard, believing the offer to be fair, accepted.
+### 3576 | budget=4096 | questwords
+To start off, I'll give you a simple mission to see if you have the right qualities to be a hero. Will you accept this mission? (Basic character: Level 240 - 270, Advanced character: Level 220 - 260)
+### 3581 | budget=4096 | questwords
+Today's request is closed. Come back same time tomorrow and I will give you a new request. Thank you.
+### 3583 | budget=4096 | questwords
+Too easy! To repair equipment without the help of an NPC, I need to be at...
+### 3588 | budget=4096 | questwords
+Town Portal Scrolls can be purchased from potion merchants in towns. They are single-use items that will bring you back to the last town you visited.;Since we're on the subject, will you go and purchase a Town Portal Scroll from the merchant? It'll be easier to understand if you try it for yourself.
+### 3597 | budget=4096 | questwords
+Traveler, you are now strong enough to make a difference in Kundun's battlefield. The Shadow Phantom Guardians' reconnaissance party has made a simple request. They have a simple quest involving the eradication of monsters and a powerful weapon will be given as a reward. Will you accept this quest? (Level 161-165)
+### 3604 | budget=4096 | questwords
+Try equipping the Double Axe.
+### 3605 | budget=4096 | questwords
+Try equipping the crossbow.
+### 3606 | budget=4096 | questwords
+Try learning the Summon Goblin skill.
+### 3607 | budget=4096 | questwords
+Try your hand at Blood Castle Level 1 and complete Archangel's quest. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Blood Castle Level 1.
+### 3608 | budget=4096 | questwords
+Try your hand at Blood Castle Level 1. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.
+### 3609 | budget=4096 | questwords
+Try your hand at Blood Castle Level 2 and complete Archangel's quest. Come back afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Blood Castle Level 2.
+### 3610 | budget=4096 | questwords
+Try your hand at Blood Castle Level 2. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.
+### 3611 | budget=4096 | questwords
+Try your hand at Blood Castle Level 3 and complete Archangel's quest. Come back afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Blood Castle Level 3.
+### 3612 | budget=4096 | questwords
+Try your hand at Blood Castle Level 3. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.
+### 3613 | budget=4096 | questwords
+Try your hand at Blood Castle Level 4 and complete Archangel's quest. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Blood Castle Level 4.
+### 3614 | budget=4096 | questwords
+Try your hand at Blood Castle Level 4. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.
+### 3615 | budget=4096 | questwords
+Try your hand at Blood Castle Level 5 and complete Archangel's quest. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Blood Castle Level 5.
+### 3616 | budget=4096 | questwords
+Try your hand at Blood Castle Level 5. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.
+### 3617 | budget=4096 | questwords
+Try your hand at Blood Castle Level 6 and complete Archangel's quest. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Blood Castle Level 6.
+### 3618 | budget=4096 | questwords
+Try your hand at Blood Castle Level 6. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.
+### 3619 | budget=4096 | questwords
+Try your hand at Blood Castle Level 7 and complete Archangel's quest. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Blood Castle Level 7.
+### 3620 | budget=4096 | questwords
+Try your hand at Blood Castle Level 7. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.
+### 3621 | budget=4096 | questwords
+Try your hand at Blood Castle Level 8 and complete Archangel's quest. I'll give you 2 Jewels of Life as a reward when you return. However, this applies only to Blood Castle Level 8.
+### 3622 | budget=4096 | questwords
+Try your hand at Blood Castle Level 8. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.
+### 3623 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 1. Come back to me after defeating 1 Guardsman, and I will give you 100,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.
+### 3624 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 1. Defeat 1 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.
+### 3625 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 2. Come back to me after defeating 3 Guardsman, and I will give you 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.
+### 3626 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 2. Defeat 3 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.
+### 3627 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 3. Come back to me after defeating 5 Guardsmen, and I will give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Chaos Castle Level 3.
+### 3628 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 4. Come back to me after defeating 1 traveler wearing the Armor of Guardsman, and I will give you 300,000 Zens and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 4.
+### 3629 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 4. Defeat 1 traveler wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.
+### 3630 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 5. Come back to me after defeating 3 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Soul as a reward. However, this applies only to Chaos Castle Level 5.
+### 3631 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 5. Defeat 3 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.
+### 3632 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 6. Come back to me after defeating 5 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Harmony as a reward. However, this applies only to Chaos Castle Level 6.
+### 3633 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 6. Defeat 5 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.
+### 3634 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 7. Come back to me after defeating 10 travelers wearing the Armor of Guardsman, and I will give you 2 Jewels of Soul as a reward. However, this applies only to Chaos Castle Level 7.
+### 3635 | budget=4096 | questwords
+Try your hand at Chaos Castle Level 7. Defeat 10 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.
+### 3636 | budget=4096 | questwords
+Try your hand at Devil Square Level 1. Defeat the monsters and score 50 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.
+### 3637 | budget=4096 | questwords
+Try your hand at Devil Square Level 1. If you achieve 50 points, I'll give you 100,000 Zens as a reward. However, this applies only to Devil Square Level 1.
+### 3638 | budget=4096 | questwords
+Try your hand at Devil Square Level 2. Defeat the monsters and score 100 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.
+### 3639 | budget=4096 | questwords
+Try your hand at Devil Square Level 3. Defeat the monsters and score 130 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.
+### 3640 | budget=4096 | questwords
+Try your hand at Devil Square Level 4. Defeat the monsters and score 160 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.
+### 3641 | budget=4096 | questwords
+Try your hand at Devil Square Level 5. Defeat the monsters and score 190 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.
+### 3642 | budget=4096 | questwords
+Try your hand at Devil Square Level 6. Defeat the monsters and score 210 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.
+### 3643 | budget=4096 | questwords
+Try your hand at Devil Square Level 7. Defeat the monsters and score 240 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.
+### 3644 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 1. Win and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 1.
+### 3645 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 1. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul. However, this applies only to Illusion Temple Level 1.
+### 3646 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 2. Win and I'll give you 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 2.
+### 3647 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 2. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 2.
+### 3648 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 3. Win and I'll give you 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 3.
+### 3649 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 3. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 3.
+### 3650 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 4. Win and I'll give you 1 Jewel of Chaos and 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 4.
+### 3651 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 4. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Chaos. However, this applies only to Illusion Temple Level 4.
+### 3652 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 5. Win and I'll give you 1 Jewel of Soul and 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 5.
+### 3653 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 5. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Bless. However, this applies only to Illusion Temple Level 5.
+### 3654 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 6. Win and I'll give you 1 Jewel of Bless and 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 6.
+### 3655 | budget=4096 | questwords
+Try your hand at Illusion Temple Level 6. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless and 1 Jewel of Life. However, this applies only to Illusion Temple Level 6.
+### 3656 | budget=4096 | questwords
+Try your hand on Chaos Castle Level 3. Defeat 5 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.
+### 3657 | budget=4096 | questwords
+Tutorials are for children. Turn down the offer.
+### 3658 | budget=4096 | questwords
+Twin Tails in Kanturu Relics are causing great harm to travelers. Go to Kanturu Relics and hunt down 100 Twin Tails. Come see me when that's done to receive an Invisibility Cloak + 7 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 3669 | budget=4096 | questwords
+Type in '/Party off' in the Chat window.
+### 3670 | budget=4096 | questwords
+Type in '/Request off' in the Chat window.
+### 3671 | budget=4096 | questwords
+Type in '/off' in the Chat window.
+### 3672 | budget=4096 | questwords
+Unfit task
+### 3673 | budget=4096 | questwords
+Unfortunately, Secrarium was betting that darkness in the hearts of the travelers would ultimately lead to hostility and discord among them. Lugard was also aware of the travelers' dark side, but his trust in them didn't waver. Ultimately, the travelers did begin to feud with one another like the dark god had anticipated, and Chaos Castle became ever more... chaotic.
+### 3674 | budget=4096 | questwords
+Uniria is a mount item you can use out in the battle field. Equip it to the top left corner of your Inventory window for faster travel throughout the battle field.
+### 3676 | budget=4096 | questwords
+Upon entering, you'll need to wait for other players to enter. The players will then be divided into two teams: Alliance Camp and Illusion Sorcery Camp. The camp that brings over more relics to their own side wins.
+### 3683 | budget=4096 | questwords
+Using a Town Portal Scroll will return you to the last town you visited.
+### 3685 | budget=4096 | questwords
+Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?
+### 3692 | budget=4096 | questwords
+Vanert Reicht may have conceded leadership of Noble Alliance Arca to Duprian Winston at the alliance's inception, but the master has always remained committed to eliminating the foul minions of Kundun and to the revival of the MU empire. Everyone knows about Duprian Winston's desires to subjugate the empire under his absolute rule. It's imperative that heroes like you help Vanert Reicht seal away Kundun and restore peace to the MU empire.
+### 3706 | budget=4096 | questwords
+Very well. Give me the quest.
+### 3707 | budget=4096 | questwords
+Very well. How many do I need to buy?
+### 3708 | budget=4096 | questwords
+Very well. I will take on this challenge.
+### 3709 | budget=4096 | questwords
+Very well. It appears Gorgons are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 60 Gorgons, and I'll give you an Invisibility Cloak + 2 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 3710 | budget=4096 | questwords
+Very well. It appears Hell Hounds are causing quite a headache for novice travelers to the Dungeon these days. Hunt down 40 Hell Hounds, and I'll give you an Invisibility Cloak + 1 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 3711 | budget=4096 | questwords
+Very well. It appears Hell Spiders are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 60 Hell Spiders, I will offer you a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions. When you claim your rewards, make sure you have at least 13 empty slots in your Inventory. Remember that.
+### 3712 | budget=4096 | questwords
+Very well. It appears Larvae are causing quite a headache for novice travelers to the Dungeon these days. If you defeat 40 Larvae, I will offer you a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions. When you claim you rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+### 3713 | budget=4096 | questwords
+Very well. Let me give it a go. (Accept)
+### 3714 | budget=4096 | questwords
+Very well. Tell me more.
+### 3728 | budget=4096 | questwords
+Visit the Shadow Phantom Soldier to receive a small reward.
+### 3741 | budget=4096 | questwords
+Warrior! Welcome.
+### 3744 | budget=4096 | questwords
+Watchers of Kundun (1)
+### 3745 | budget=4096 | questwords
+Watchers of Kundun (2)
+### 3746 | budget=4096 | questwords
+Watchers of Kundun (3)
+### 3749 | budget=4096 | questwords
+We have much to cover. Let's move on to the next step.
+### 3750 | budget=4096 | questwords
+We launched an investigation after communication with our reconnaissance party at the Dungeon started to grow sporadic and we found out that they were too tied up in dealing with a growing number of monsters. Will you go to the Dungeon and help eradicate these monsters? (Level 66-79)
+### 3751 | budget=4096 | questwords
+We're nearing the end of our tutorial. Now that you have a skill, it'll make sense for you to build more combat experience. Come back when you reach a certain level, and I will give you a Uniria as a reward.
+### 3761 | budget=4096 | questwords
+Welcome back. Now all you need to do is eliminating Gaion in Varka. Are you ready? (Lv. 350 - 400)
+### 3762 | budget=4096 | questwords
+Welcome to MU.;I'll assist you on your road to becoming a true warrior.
+### 3763 | budget=4096 | questwords
+Welcome to the newly founded Devias branch of the mercenary guild. We're the one who stopped Kundun's Army along with the 5 major clans but now most of the veterans have retired. So we decided to adopt the Free Mercenary system as we open this guild office.
+### 3764 | budget=4096 | questwords
+Welcome to the world of Mu.;We have been waiting for a hero like you to arrive and put a stop to the chaos brought on to the Mu realm by Kundun.
+### 3765 | budget=4096 | questwords
+Welcome, this is the mercenary guild. We deliver various requests to the registered free mercenaries. There are rewards when you complete the request successfully, so give it a try.
+### 3766 | budget=4096 | questwords
+Well done. Now please bring me the clubs of Burnt Murderers in Vulcanus. (Lv. 350 - 400)
+### 3767 | budget=4096 | questwords
+Well, you may not want to learn more about him, but a mission is still a mission. I'll tell you more if you come back. (The quest has been cancelled.)
+### 3768 | budget=4096 | questwords
+Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Level 351-380)
+### 3769 | budget=4096 | questwords
+Were you able to acquire plenty of items for your training? I should tell you now that it's not so easy to enter Illusion Temple. I, however, have a quest that will earn you a ticket into Illusion Temple. Will you accept? (All characters: Master Level)
+### 3773 | budget=4096 | questwords
+What are the queen's guardians doing at a place like this?
+### 3774 | budget=4096 | questwords
+What can I help you? Ah… you came for the request from us. Do you know Gaion? He was actually the sworn brother of the first mercenary guild master but our elders want to get rid of him since he's sort of an icon of treason. I don't understand their concern because he can never leave Varka. (Lv. 350 - 400)
+### 3775 | budget=4096 | questwords
+What can I help you? Ah… you're the one from the mercenary guild! Speaking frankly, I would never have requested the mercenary guild if I had had any other option… Well, never mind. There are 2 requests, first is to collect the Stardust powder and secondly, obtaining a rare jewel. Will you accept? (Lv. 350 - 400)
+### 3776 | budget=4096 | questwords
+What do you do if you don't want to receive party requests?
+### 3777 | budget=4096 | questwords
+What do you do if you want to trade with a character who is in front of you?
+### 3778 | budget=4096 | questwords
+What is the free mercenary?
+### 3779 | budget=4096 | questwords
+What is this Town Portal Scroll?
+### 3780 | budget=4096 | questwords
+What is your business with our gens? I am Conrad, the Gens Vanert Steward.
+### 3781 | budget=4096 | questwords
+What kind of supplies...?
+### 3782 | budget=4096 | questwords
+What level do I need to be?
+### 3783 | budget=4096 | questwords
+What's a Uniria?
+### 3784 | budget=4096 | questwords
+When a warrior who possesses them becomes a consummate expert in his or her art, these rings transform into unique items that will help their master attain greater heights.
+### 3787 | budget=4096 | questwords
+When you first enter Blood Castle, you'll encounter an obstacle: the trust within your party. Go see the Shadow Phantom Soldier to test the trust within your party, and take the Blood Castle challenge.
+### 3788 | budget=4096 | questwords
+When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.
+### 3792 | budget=4096 | questwords
+When you reach a certain level, you will be able to repair your equipment directly from the Inventory window. What level is that?
+### 3793 | budget=4096 | questwords
+When you want to form a party with a character, face that character and enter '/party' in the Chat window. What do you do if you don't want to receive party requests?
+### 3794 | budget=4096 | questwords
+When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.
+### 3795 | budget=4096 | questwords
+Where can I find a merchant?
+### 3796 | budget=4096 | questwords
+Where can I learn more skills?
+### 3797 | budget=4096 | questwords
+Where can I learn skills?
+### 3798 | budget=4096 | questwords
+Which button is used to send whispers from the Chat window?
+### 3799 | budget=4096 | questwords
+While in a town, seek out the Shadow Phantom Soldier NPC.
+### 3800 | budget=4096 | questwords
+Whispers are used to talk to friends who are far away or to pass on private messages. Which button is used to send whispers from the Chat window?
+### 3803 | budget=4096 | questwords
+Who do you need to see to combine items?
+### 3804 | budget=4096 | questwords
+Whoa! That's really convenient!
+### 3834 | budget=4096 | questwords
+Wipe Out the Elusive Iron Riders
+### 3836 | budget=4096 | questwords
+With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.
+### 3856 | budget=4096 | questwords
+Would you bring me Tantalos's Armor first? I will reward you fairly when you come back with 20 suits of armor from Tantalos in Tarkan 2.
+### 3857 | budget=4096 | questwords
+Would you like to visit Chaos Castle, the arena of the gods? There is no better place to prove your strength. Why don't you listen to what I have to say and then decide? (Basic character: Level 15-49, Advanced character: Level 15-29)
+### 3858 | budget=4096 | questwords
+Yes, I'll take it. (Accept)
+### 3859 | budget=4096 | questwords
+Yes, please. (Accept)
+### 3860 | budget=4096 | questwords
+Yes, right away. (Accept)
+### 3861 | budget=4096 | questwords
+Yes. I wish to join.
+### 3862 | budget=4096 | questwords
+Yes. I wish to leave.
+### 3863 | budget=4096 | questwords
+Yes. I'll take your test.
+### 3865 | budget=4096 | questwords
+You are a member of a different gens.
+### 3866 | budget=4096 | questwords
+You are back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 81-130, Advanced character: Level 61-110)
+### 3867 | budget=4096 | questwords
+You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 220-270)
+### 3868 | budget=4096 | questwords
+You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 271-320)
+### 3869 | budget=4096 | questwords
+You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)
+### 3870 | budget=4096 | questwords
+You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 15-130, Advanced character: Level 10-110)
+### 3871 | budget=4096 | questwords
+You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 15-49, Advanced character: Level 15-29)
+### 3872 | budget=4096 | questwords
+You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 50-119, Advanced character: Level 30-99)
+### 3874 | budget=4096 | questwords
+You are full of zeal! Very well. Let's try adding an item to your inventory. Take the Zen I just gave you and purchase 5 apples from a merchant.
+### 3876 | budget=4096 | questwords
+You can acquire excellent equipment at Illusion Temple. Prepare thoroughly before entering as this is not a place to be taken lightly. Go to the Shadow Phantom Soldier and accept a quest that will earn you an item that will grant you access to Illusion Temple.
+### 3877 | budget=4096 | questwords
+You can find both wealth and fame at Illusion Temple. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 220-270)
+### 3879 | budget=4096 | questwords
+You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.
+### 3884 | budget=4096 | questwords
+You can register to the mercenary guild as a free mercenary with 1 million Zen. Tercia gives the registered free mercenaries 1 mission per day.
+### 3885 | budget=4096 | questwords
+You cannot join a gens if you are a member of the guild alliance.
+### 3886 | budget=4096 | questwords
+You cannot join a gens if you are a member of the guild alliance. Leave the guild alliance and try joining the gens again.
+### 3887 | budget=4096 | questwords
+You cannot join a gens while in a party.

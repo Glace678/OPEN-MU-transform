@@ -1,0 +1,38 @@
+{
+  "apiType": "stageMode",
+  "buildOption": {
+    "arkOptions": {
+      "buildProfileFields": {
+        "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "DEFAULT_SERVER_ADDRESS": "192.168.215.56"
+      }
+    },
+    "externalNativeOptions": {
+      "path": "./src/main/cpp/CMakeLists.txt",
+      "arguments": [
+        // MU_REPOSITORY_ROOT defaults to the shared MuMain checkout next to this
+        // OpenMU-HarmonyOS folder (resolved by cpp/CMakeLists.txt). Only set this
+        // if MuMain lives elsewhere, and use an ABSOLUTE path:
+        // "-DMU_REPOSITORY_ROOT=D:/openmu自用/MuMain",
+        // gl4es for OHOS (desktop GL -> GLES); build from the gl4es source:
+        // "-DMU_OHOS_GL4ES_ROOT=D:/path/to/gl4es",
+        "-DOHOS=ON"
+      ],
+      "cppFlags": "-std=c++20",
+      "abiFilters": ["arm64-v8a", "x86_64"]
+    }
+  },
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "arkOptions": {
+        "obfuscation": {
+          "ruleOptions": { "enable": false }
+        }
+      }
+    }
+  ],
+  "targets": [
+    { "name": "default" }
+  ]
+}

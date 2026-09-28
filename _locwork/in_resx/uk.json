@@ -1,0 +1,1980 @@
+{
+ "locale": "uk",
+ "language": "Ukrainian",
+ "items": [
+  {
+   "group": "Game",
+   "key": "LoginRememberUsername",
+   "en": "Remember Username",
+   "comment": "Login screen: remember-username checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginRememberPassword",
+   "en": "Remember Password",
+   "comment": "Login screen: remember-password checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginTrustWarning",
+   "en": "Only save the password on a PC you trust.",
+   "comment": "Login screen: warning under the remember-password checkbox."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningTitle",
+   "en": "WARNING!!!",
+   "comment": "Remember-password confirmation dialog: header."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningBody",
+   "en": "Saving the password lets anyone using this computer log into your account. Only do this on a PC you trust. Save the password?",
+   "comment": "Remember-password confirmation dialog: body."
+  },
+  {
+   "group": "Game",
+   "key": "BasicAttackFallback",
+   "en": "Basic Attack Fallback",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Connection lost",
+   "en": "Connection lost",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Checking server availability",
+   "en": "Checking server availability",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Logging in",
+   "en": "Logging in",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Loading character list",
+   "en": "Loading character list",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Entering the game",
+   "en": "Entering the game",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Retrying in seconds",
+   "en": "Retrying in %d seconds...",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTitle",
+   "en": "Commands",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNotSupported",
+   "en": "This server does not offer a command list.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsExecute",
+   "en": "Execute",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "JToggleChatCommands",
+   "en": "J : Chat Commands On/Off",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SpecialCommands",
+   "en": "Special",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsBack",
+   "en": "Back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTemplates",
+   "en": "Templates",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNoTemplates",
+   "en": "No templates saved yet.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsSaveTemplate",
+   "en": "Save as template",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsAddFavourite",
+   "en": "Add to favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsRemoveFavourite",
+   "en": "Remove from favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsFillRequired",
+   "en": "Please enter the required values first.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsUnknownCommand",
+   "en": "This command is not available anymore.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameRate",
+   "en": "Frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FollowDisplay",
+   "en": "Follow display",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayNativeMaximum",
+   "en": "Display native maximum",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "VerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RequestedFrameRate",
+   "en": "Requested frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EffectiveFrameRate",
+   "en": "Effective frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayRefreshRate",
+   "en": "Display refresh rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ActualFrameRate",
+   "en": "Actual frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "AverageFrameRate",
+   "en": "Average FPS",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "OnePercentLow",
+   "en": "1% Low",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LimitReason",
+   "en": "Limit reason",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Gamepad",
+   "en": "Gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadEnabled",
+   "en": "Enable gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Haptics",
+   "en": "Vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HapticIntensity",
+   "en": "Vibration intensity",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CombatHaptics",
+   "en": "Combat vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "UIHaptics",
+   "en": "UI vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TransactionHaptics",
+   "en": "Transaction vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ShortRumbleTest",
+   "en": "Test short vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LongRumbleTest",
+   "en": "Test long vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RumbleUnsupported",
+   "en": "Vibration is not supported by this controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "StickDeadZone",
+   "en": "Stick dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PointerSpeed",
+   "en": "Pointer speed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitFrameLimiter",
+   "en": "Frame limiter",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitVerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitDisplayFallback",
+   "en": "Refresh rate unavailable, falling back to 60 Hz",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitBackground",
+   "en": "Background frame rate limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitUnevenVSync",
+   "en": "VSync uneven cadence",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitPerformanceOrExternal",
+   "en": "Performance/external limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ControllerMapping",
+   "en": "Controller mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GenericController",
+   "en": "Generic controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadAction",
+   "en": "Action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PhysicalControl",
+   "en": "Physical control",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TriggerDeadZone",
+   "en": "Trigger dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "InvertPointerY",
+   "en": "Invert pointer Y",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CurrentMapping",
+   "en": "Current mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestoreDefaultMapping",
+   "en": "Restore default mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionConfirm",
+   "en": "Confirm / interact",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionCancel",
+   "en": "Cancel / back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPrimaryAttack",
+   "en": "Primary attack",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionContext",
+   "en": "Context action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionUseSkill",
+   "en": "Use current skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionLockTarget",
+   "en": "Lock target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPreviousSkill",
+   "en": "Previous skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextSkill",
+   "en": "Next skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem1",
+   "en": "Quick item 1",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem2",
+   "en": "Quick item 2",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem3",
+   "en": "Quick item 3",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem4",
+   "en": "Quick item 4",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMap",
+   "en": "Map",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMenu",
+   "en": "System menu",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionHelper",
+   "en": "MU Helper",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextTarget",
+   "en": "Next target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplaySettingsConfirmation",
+   "en": "Keep these display settings? Reverting in %d seconds.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "KeepDisplaySettings",
+   "en": "Keep (A / Enter)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RevertDisplaySettings",
+   "en": "Revert (B / Esc)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopTitle",
+   "en": "Solo Shop",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopEquipment",
+   "en": "Equipment",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopMaterials",
+   "en": "Materials",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopSkills",
+   "en": "Skills",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopPets",
+   "en": "Pets / Tickets",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopConsumables",
+   "en": "Consumables",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchange",
+   "en": "Exchange 1,000 Zen for 100 WCoin(C)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchangeSucceeded",
+   "en": "1,000 Zen exchanged for 100 WCoin(C).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopOperationFailed",
+   "en": "Operation failed. Check gold, storage and connection.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceOpenedNotice",
+   "en": "%ls entrance is open and closes in %ls minute(s).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceClosedNotice",
+   "en": "%ls entrance closed.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourStartedNotice",
+   "en": "Happy Hour event has been started!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourEndedNotice",
+   "en": "Happy Hour event has ended!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartRequiredTitle",
+   "en": "Language changed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartLanguageMessage",
+   "en": "The game content language (NPC names, quests, items and skills) only changes after restarting the game. Restart now?",
+   "comment": null
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_0",
+   "en": "Aye! Is there anything you need?",
+   "comment": "legacy_id=0"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_1",
+   "en": "Hello! I am Pasi the Mage. Hahaha! Hmmm... The movement of the stars doesn't seem quite right. Your future... Hmm... I can't see your future either... Why's that...?",
+   "comment": "legacy_id=1"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_2",
+   "en": "Hello! My name is Baz and I am the vault keeper. I can be of help to you wherever you go. Don't hesitate to leave your belongings with me.",
+   "comment": "legacy_id=2"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_3",
+   "en": "Many adventurers have told me that the sound of the harp soothes and wipes away their fatigue. Do you need my help?",
+   "comment": "legacy_id=3"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_4",
+   "en": "Hello! My name is Baz and I am the vault keeper. I can be of help to you wherever you go. Don't hesitate to leave your belongings with me.",
+   "comment": "legacy_id=4"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_5",
+   "en": "Have you brought enough money? Without it, I can't combine the items because I need money to continue with my research. Understood? Do you want to know how much money is needed?",
+   "comment": "legacy_id=5"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_6",
+   "en": "Welcome to MU! Press the F1 key if you need any assistance while traveling around the MU continent.",
+   "comment": "legacy_id=6"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_7",
+   "en": "Is it your first time in Lorencia? Go to the southeast exit in front of the fountain and try to hunt Budge Dragons or Spiders. The Skeletons in Northwest are too dangerous.",
+   "comment": "legacy_id=7"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_8",
+   "en": "Welcome to Noria. If it's your first time, pass through the vault guard and go to the south exit. Try to hunt low level monsters like Scorpions or Goblins.",
+   "comment": "legacy_id=8"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_9",
+   "en": "If you need a detailed guide of the MU continent check out http://muonline.webzen.net",
+   "comment": "legacy_id=9"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_50",
+   "en": "The 'Scroll of the Emperor', which speaks of Muren, the first emperor of MU, is said to have been seen around the Lost Tower, Atlans, and the Dungeon.",
+   "comment": "legacy_id=50"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_50_Slot_0",
+   "en": "I didn't know such a thing existed...",
+   "comment": "legacy_id=1500"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_51",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 1,000,000 Zen.",
+   "comment": "legacy_id=51"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_51_Slot_0",
+   "en": "I shall return with 1,000,000 Zen.",
+   "comment": "legacy_id=1510"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_52",
+   "en": "The 'Scroll of the Emperor', which speaks of Muren, the first emperor to unify MU, is said to have been seen around the Lost Tower, Atlans, and the Dungeon.",
+   "comment": "legacy_id=52"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_52_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1520"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_53",
+   "en": "The 'Scroll of the Emperor' is enwrapped in a powerful force. Anyone who reads it shall be blessed with that powerful force.",
+   "comment": "legacy_id=53"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_0",
+   "en": "Please repeat the story.",
+   "comment": "legacy_id=1530"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_1",
+   "en": "I will go find it.",
+   "comment": "legacy_id=1531"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_2",
+   "en": "I don't care.",
+   "comment": "legacy_id=1532"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_54",
+   "en": "Go find the 'Scroll of the Emperor'. You will be granted with great power upon reading it.",
+   "comment": "legacy_id=54"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_54_Slot_0",
+   "en": "I will go find it.",
+   "comment": "legacy_id=1540"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_55",
+   "en": "You've found the 'Scroll of the Emperor'! The commemoration of unification of the Mu Empire's first emperor Muren was recorded with the power of magic here, you see. The one who possesses the 'Scroll of the Emperor' is granted with great power.",
+   "comment": "legacy_id=55"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_55_Slot_0",
+   "en": "Tell me about the record.",
+   "comment": "legacy_id=1550"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_56",
+   "en": "A historical record of the first emperor Muren contains the commemoration of peace through the triumph of Muren over all warlords and by doing so, unified the continent into the Empire or MU.",
+   "comment": "legacy_id=56"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_56_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1560"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_57",
+   "en": "Muren was one of the three heroes that ended the chaos brought upon the people by Sekneum's invasion.",
+   "comment": "legacy_id=57"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_57_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1570"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_57_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1571"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_58",
+   "en": "Magical artifacts may be found and they are called the 'Broken Sword', 'Tear of Elf', and the 'Soul of Wizard'. The 'Broken Sword' was offered by the dark knights as a symbol of their bravery, loyalty and their wish for prosperity.",
+   "comment": "legacy_id=58"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_58_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1580"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_58_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1581"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_59",
+   "en": "The 'Soul of Wizard' was offered by the dark wizards as a symbol of their vow to use their power for the peace and freedom of the empire. Mu Year 10, an excerpt of the commemoration of peace record...",
+   "comment": "legacy_id=59"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_59_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1590"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_59_Slot_1",
+   "en": "That's what happened...",
+   "comment": "legacy_id=1591"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_60",
+   "en": "If you've read the 'Scroll of the Emperor', seek out the 'Broken Sword' that the ancient dark knights used at the commemoration of peace. From what I've heard, a few dark knights have found it in Atlans, the Lost Tower and Tarkan.",
+   "comment": "legacy_id=60"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_60_Slot_0",
+   "en": "I will find it.",
+   "comment": "legacy_id=1600"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_60_Slot_1",
+   "en": "I give up.",
+   "comment": "legacy_id=1601"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_61",
+   "en": "Danger lurks behind every corner in those places and the 'Broken Sword' is not easily spotted. But if you find it, new power will be bestowed upon you! Return to me once you find the 'Broken Sword'.",
+   "comment": "legacy_id=61"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_61_Slot_0",
+   "en": "I shall find and return with it.",
+   "comment": "legacy_id=1610"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_62",
+   "en": "Brave dark knight, you've found the 'Broken Sword'! After the unification of the Mu Continent, Muren, the first emperor, broke his sword 'Apocalypse' as a symbol of his wish that no war ever erupts again.",
+   "comment": "legacy_id=62"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_62_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1620"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_63",
+   "en": "After the War, dark knights who wished to become blade knights started seeking the ancient 'Broken Sword' in order to prove their bravery.",
+   "comment": "legacy_id=63"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_63_Slot_0",
+   "en": "That's what happened!",
+   "comment": "legacy_id=1630"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_64",
+   "en": "You've read the 'Scroll of the Emperor', haven't you. Then you must know about the 3 treasures recorded in the 'Scroll of the Emperor'. Go find the crystal 'Tear of Elf' made by the ancient elves with the strength of the spirit.",
+   "comment": "legacy_id=64"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_64_Slot_0",
+   "en": "Please tell me more.",
+   "comment": "legacy_id=1640"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_65",
+   "en": "That place is a very dangerous place and the 'Tear of Elf' is extremely hard to find. But if you find the 'Tear of Elf', new power will be bestowed upon you. Now, go find the 'Tear of Elf' and return to me.",
+   "comment": "legacy_id=65"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_65_Slot_0",
+   "en": " I will go find the 'Tear of Elf'!",
+   "comment": "legacy_id=1650"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_66",
+   "en": "You've found the 'Tear of Elf'! After the War, Lunedil, the elf queen, created the tear stone by casting magic on the spirit stone so that elves could invoke the goddess' power and build their power.",
+   "comment": "legacy_id=66"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_66_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1660"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_67",
+   "en": "You've read the 'Scroll of the Emperor', haven't you. Then you must know about the 3 treasures recorded in it.",
+   "comment": "legacy_id=67"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_67_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1670"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_68",
+   "en": "With your power, I am sure that you will find the 'Soul of Wizard'. Now go find the 'Soul of Wizard' and return to me once you've found it.",
+   "comment": "legacy_id=68"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_68_Slot_0",
+   "en": "I'm going to find the 'Soul of Wizard'.",
+   "comment": "legacy_id=1680"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_69",
+   "en": "I knew you'd find the 'Soul of Wizard'! Etramu, the greatest wizard of Arka, created a soul-protecting magic stone, worried that the weak dark knights might falter at the attack of Kundun.",
+   "comment": "legacy_id=69"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_69_Slot_0",
+   "en": "Please tell me more.",
+   "comment": "legacy_id=1690"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_70",
+   "en": "A dark wizard with this magic stone becomes a soul master.",
+   "comment": "legacy_id=70"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_70_Slot_0",
+   "en": "I am now a soul master!",
+   "comment": "legacy_id=1700"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_71",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 2,000,000 Zen.",
+   "comment": "legacy_id=71"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_71_Slot_0",
+   "en": "I shall return with 2,000,000 Zen.",
+   "comment": "legacy_id=1710"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_72",
+   "en": "New power has been bestowed upon you as a result of your strong will and strength. May the grace of Lugard be with you at all times.",
+   "comment": "legacy_id=72"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_72_Slot_0",
+   "en": "May the grace of God be with you...",
+   "comment": "legacy_id=1720"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_73",
+   "en": "You already possess great power. I do not have an oracle for you.",
+   "comment": "legacy_id=73"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_73_Slot_0",
+   "en": "I will return later.",
+   "comment": "legacy_id=1730"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_74",
+   "en": "Return after you've become stronger.",
+   "comment": "legacy_id=74"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_74_Slot_0",
+   "en": "I shall return when I'm stronger.",
+   "comment": "legacy_id=1740"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_75",
+   "en": "If you've developed into a strong warrior, you will be able to find it.",
+   "comment": "legacy_id=75"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_75_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1750"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_76",
+   "en": "From then on, a custom was born where dark knights who wished to become blade knights broke their swords as a symbol of their vow to never wield their swords unjustly.",
+   "comment": "legacy_id=76"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_76_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1760"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_77",
+   "en": "Some of the adventurous elves have said that they were seen in the Lost Tower, Atlans and Tarkan.",
+   "comment": "legacy_id=77"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_77_Slot_0",
+   "en": "'I will go find it!",
+   "comment": "legacy_id=1770"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_77_Slot_1",
+   "en": "I do not wish to go to such a place.",
+   "comment": "legacy_id=1771"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_78",
+   "en": "This is called the 'Tear of Elf', and the elf that finds this stone becomes a muse elf, able to conjure the power of the elven Goddesses.",
+   "comment": "legacy_id=78"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_78_Slot_0",
+   "en": "I've become a muse elf!",
+   "comment": "legacy_id=1780"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_79",
+   "en": "Since you have found both the 'Scroll of the Emperor' and the 'Broken Sword', you will be called a blade knight from now on.",
+   "comment": "legacy_id=79"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_79_Slot_0",
+   "en": "I've become a Blade Knight!",
+   "comment": "legacy_id=1790"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_80",
+   "en": "After the empire was united, people swore loyalty to the emperor. Some of the treasures offered as a symbol of their loyalty are as follows.",
+   "comment": "legacy_id=80"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_80_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1800"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_80_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1801"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_81",
+   "en": "The 'Tear of Elf' was offered by the elves as a token of their vow to strengthen the power of elves and humans.",
+   "comment": "legacy_id=81"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_81_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1810"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_81_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1811"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_82",
+   "en": "Go find the 'Soul of Wizard'. According to the ancient dark wizards, it was last seen around the Lost Tower, Atlans and Tarkan.",
+   "comment": "legacy_id=82"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_82_Slot_0",
+   "en": "I will go find the it",
+   "comment": "legacy_id=1820"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_82_Slot_1",
+   "en": "I will return later.",
+   "comment": "legacy_id=1821"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_90",
+   "en": "You've finished reading the 'Decree of the Emperor'. But do you know about the confidential contract between Muren and Semeden the leader summoner? Muren was promised of one thing instead of transferring Elbe to be under the empire.",
+   "comment": "legacy_id=90"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_90_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=1900"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_91",
+   "en": "The Continent of MU had the gate of a dimension of the world under the supervision of the summoners. And Semeden had given the Abyss of Eye as a token of promise. Please go and bring back the Abyss of Eye.",
+   "comment": "legacy_id=91"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_91_Slot_0",
+   "en": "Accept the request",
+   "comment": "legacy_id=1910"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_91_Slot_1",
+   "en": "Deny the request",
+   "comment": "legacy_id=1911"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_92",
+   "en": "I've heard that the Abyss of Eye was found around Atlance, Lost Tower and Tarkan. Come back with the Abyss of Eye as soon as you find it.",
+   "comment": "legacy_id=92"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_92_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=1920"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_93",
+   "en": "You've found the Abyss of Eye. This has been known as an object composed of the element inexistent in the real world. It's contagious from the world prior to the present, which the memory returns along with it.",
+   "comment": "legacy_id=93"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_93_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=1930"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_94",
+   "en": "Abyss of Eye holds a special meaning for me as I supervise and communicate through the dimensions of this world. If you bring back the Abyss of Eye, I will give you the Blood Summoner title for Semeden the supervisor of your dimension.",
+   "comment": "legacy_id=94"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_94_Slot_0",
+   "en": "Imposition as the Blood Summoner",
+   "comment": "legacy_id=1940"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_100",
+   "en": "The legendary treasure called 'Ring of Glory' is needed to acquire the blessing and strength of Muren. It has manifested its presence once more within our lands. But you are not ready. Wait until you are more experienced.",
+   "comment": "legacy_id=100"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_100_Slot_0",
+   "en": "Then what do I need to do?",
+   "comment": "legacy_id=2000"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_101",
+   "en": "More experience is required to survive this Quest. Return when you have gained up too 220 levels according to the trials of the lost empire.",
+   "comment": "legacy_id=101"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_101_Slot_0",
+   "en": "I will return when my time has come.",
+   "comment": "legacy_id=2010"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_102",
+   "en": "The legendary treasure called 'Ring of Glory' is needed to acquire the blessing and strength of Muren. It has manifested its presence once more within our lands.",
+   "comment": "legacy_id=102"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_102_Slot_0",
+   "en": "I wish to hear more.",
+   "comment": "legacy_id=2020"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_103",
+   "en": "Whoever possesses the 'Ring of Glory' gains the blessing of Muren. It is said to be found in the deserts across the sea.",
+   "comment": "legacy_id=103"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_103_Slot_0",
+   "en": "Why is that?",
+   "comment": "legacy_id=2030"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_104",
+   "en": "The monsters there are quite powerful. They posses the ring.",
+   "comment": "legacy_id=104"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_0",
+   "en": "Please repeat the story.",
+   "comment": "legacy_id=2040"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_1",
+   "en": "I shall try.",
+   "comment": "legacy_id=2041"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_2",
+   "en": "I'm not ready yet.",
+   "comment": "legacy_id=2042"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_105",
+   "en": "The 'Ring of Glory' may be in a place closer than you think. When you acquire it, you will definitely feel a change in your power. But it won't be an easy task.",
+   "comment": "legacy_id=105"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_105_Slot_0",
+   "en": "I will return with it.",
+   "comment": "legacy_id=2050"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_108",
+   "en": "This is indeed the 'Ring of Glory.' It glows with a mystical aura, more so than I imagined. This ring possesses a legend that you cannot even fathom. It is a true blessing in your hands.",
+   "comment": "legacy_id=108"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_108_Slot_0",
+   "en": "I see.",
+   "comment": "legacy_id=2080"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_109",
+   "en": "This ring is said to revive life and grant perpetual youth. But it only works on heroes that possess the power to wield its strength.",
+   "comment": "legacy_id=109"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_109_Slot_0",
+   "en": "Why's that?",
+   "comment": "legacy_id=2090"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_110",
+   "en": "It's because Etramu, the Wizard of Arka, cast a spell in order to prevent the evil from taking advantage of it. But the ring says you are fit for it.",
+   "comment": "legacy_id=110"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_110_Slot_0",
+   "en": "Is that so?",
+   "comment": "legacy_id=2100"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_111",
+   "en": "The 'Ring of Glory' was created when the prophecy Secromicon was created with an imperishable metal. The two have been considered sacred, but the whereabouts became unknown when it was taken during the revolt of the deputy commander Gaion.",
+   "comment": "legacy_id=111"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_111_Slot_0",
+   "en": "Is that so?!",
+   "comment": "legacy_id=2110"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_112",
+   "en": "Now that the 'Ring of Glory' has been found, you will be able to grow even more as a warrior.",
+   "comment": "legacy_id=112"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_112_Slot_0",
+   "en": "I feel my ability increasing!",
+   "comment": "legacy_id=2120"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_113",
+   "en": "You will grow into a being far greater than before. Please use your power for the peace of our empire.",
+   "comment": "legacy_id=113"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_113_Slot_0",
+   "en": "I will.",
+   "comment": "legacy_id=2130"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_114",
+   "en": "You already possess the sacred power.",
+   "comment": "legacy_id=114"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_114_Slot_0",
+   "en": "I will return later.",
+   "comment": "legacy_id=2140"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_115",
+   "en": "The 'Dark Stone' that is said to give warriors new power was found on the continent of Mu. However, you are not ready to use that power. Wait till you are ready.",
+   "comment": "legacy_id=115"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_115_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2150"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_116",
+   "en": "In order to acquire the full power, you need to prepare yourself with the 'Scroll of the Emperor' which records the historical facts of Emperor Muren. Go to 'Sevina' in Devias.",
+   "comment": "legacy_id=116"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_116_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2160"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_117",
+   "en": "You have failed to become a Blade Knight. Return after you have acquired new power through the 'Ring of Glory.",
+   "comment": "legacy_id=117"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_117_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2170"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_118",
+   "en": "You must offer 3,000,000 zen to the Gods to sanctify this quest. Your zen is not enough",
+   "comment": "legacy_id=118"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_118_Slot_0",
+   "en": "I will return with 3,000,000 Zen.",
+   "comment": "legacy_id=2180"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_119",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 2,000,000 Zen.",
+   "comment": "legacy_id=119"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_119_Slot_0",
+   "en": "I will return with 2,000,000 Zen",
+   "comment": "legacy_id=2190"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_130",
+   "en": "It indeed is the 'Ring of Glory'. Look at how it shines. This ring contains time and legend that you cannot even begin to fathom. It's a blessing that you have found it!.",
+   "comment": "legacy_id=130"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_130_Slot_0",
+   "en": "I'm surprised to hear that!",
+   "comment": "legacy_id=2300"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_131",
+   "en": "Yes, the ring is said to have the power to bring life to the dead and grant perpetual youth. It will only perform its best when it is in the hands of a true hero that can control the ring's power.",
+   "comment": "legacy_id=131"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_131_Slot_0",
+   "en": "Why is that so?",
+   "comment": "legacy_id=2310"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_132",
+   "en": "It is because Etramu, the Wizard of Arka, put a spell on it so that it doesn't fall into the hands of the wrong people. But it seems as though you are the right person!",
+   "comment": "legacy_id=132"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_132_Slot_0",
+   "en": "Is that so!",
+   "comment": "legacy_id=2320"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_133",
+   "en": "The 'Ring of Glory' was created when the prophecy Secromicon was created with an imperishable metal. The two have been considered sacred, but the whereabouts became unknown when it was taken during the revolt of the deputy commander Gaion.",
+   "comment": "legacy_id=133"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_133_Slot_0",
+   "en": "Is that so!",
+   "comment": "legacy_id=2330"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_134",
+   "en": "Now that the 'Ring of Glory' has been found, you will be able to grow even more as a warrior.",
+   "comment": "legacy_id=134"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_134_Slot_0",
+   "en": "I feel my ability increasing!",
+   "comment": "legacy_id=2340"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_135",
+   "en": "If you would like to acquire new power, listen to me carefully. The 'Dark Stone' that is said to give warriors new power was found on the continent of Mu.",
+   "comment": "legacy_id=135"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_135_Slot_0",
+   "en": "I would like to hear more.",
+   "comment": "legacy_id=2350"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_136",
+   "en": "With the 'Dark Stone', you can master a new ability. It won't be an easy task, but since you were able to acquire the 'Ring of Glory' it might be possible for you.",
+   "comment": "legacy_id=136"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_136_Slot_0",
+   "en": "What do I need to do?",
+   "comment": "legacy_id=2360"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_137",
+   "en": "Rumor has it that you can find the stone in Tarkan and Icarus. Be careful of the monsters. Those monsters that possess the stone will only react to those who have a special ability.",
+   "comment": "legacy_id=137"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_0",
+   "en": "Please repeat the story again.",
+   "comment": "legacy_id=2370"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_1",
+   "en": "Then I shall try!",
+   "comment": "legacy_id=2371"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_2",
+   "en": "I do not feel confident yet.",
+   "comment": "legacy_id=2372"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_138",
+   "en": "The 'Dark Stone' is calling on you right now. With it in hand, you will surely acquire power that you have never felt before, but many other warriors are desperately in search of the stone as well.",
+   "comment": "legacy_id=138"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_138_Slot_0",
+   "en": "I shall return with the 'Dark Stone'.",
+   "comment": "legacy_id=2380"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_139",
+   "en": "So you've found the 'Dark Stone. It is recorded that this stone is the dried up blood of the hero 'Benelope' who fought in the War of the Gods and Satan.",
+   "comment": "legacy_id=139"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_139_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=2390"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_140",
+   "en": "Benelope is of a knight descent. After his defeat in the War, he trained for new magic and fighting skills. These skills have been silently initiated to warriors with the blood of a knight in order to fight against the powerful force of Kundun.",
+   "comment": "legacy_id=140"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_140_Slot_0",
+   "en": "So...",
+   "comment": "legacy_id=2400"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_141",
+   "en": "Yes, the blood of a warrior runs through you. Thus, the power of Benelope will be granted to you through the Dark Stone.",
+   "comment": "legacy_id=141"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_141_Slot_0",
+   "en": "I have been granted new power!",
+   "comment": "legacy_id=2410"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_142",
+   "en": "You have acquired new power through the 'Ring of Glory'. But there is something that you don't know.",
+   "comment": "legacy_id=142"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_142_Slot_0",
+   "en": "What is that?",
+   "comment": "legacy_id=2420"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_143",
+   "en": "It is possible that you might be able to acquire new power. The legendary treasure called 'Dark Stone', which was considered sacred along with the 'Ring of Glory', is calling on you.",
+   "comment": "legacy_id=143"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_143_Slot_0",
+   "en": "That is hard to believe!",
+   "comment": "legacy_id=2430"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_144",
+   "en": "Lugard the God of Light has requested a favor of you. However, you're still not qualified. I suggest you come back when you've become stronger.",
+   "comment": "legacy_id=144"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_144_Slot_0",
+   "en": "I'll be back when I'm stronger.",
+   "comment": "legacy_id=2440"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_145",
+   "en": " Lugard the God of Light has requested a favor of you. However, you're still not qualified. Please come back when you've completed the previous quest.",
+   "comment": "legacy_id=145"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_145_Slot_0",
+   "en": "I'll come back when I've completed it.",
+   "comment": "legacy_id=2450"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_146",
+   "en": "You do not have enough Zen. You may apply for this mission by offering 5,000,000 Zen to Lugard.",
+   "comment": "legacy_id=146"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_146_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2460"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_147",
+   "en": " Lugard the God of Light has requested a favor of you.",
+   "comment": "legacy_id=147"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_147_Slot_0",
+   "en": "What is it?",
+   "comment": "legacy_id=2470"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_148",
+   "en": " Lugard has asked you to seek heroes to oppose Balgass' new threat to MU.",
+   "comment": "legacy_id=148"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_148_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2480"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_149",
+   "en": "We understand that Balgass' army's coming against the Continent of MU through the Cry Wolf Fortress, but there has not been an exact interpretation of the whole story.",
+   "comment": "legacy_id=149"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_149_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2490"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_150",
+   "en": "We're trying hard to understand the meaning of Lugar's trust towards us, but we still struggle to due to our inadequate ability.",
+   "comment": "legacy_id=150"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_150_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2500"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_151",
+   "en": "I believe you are the people to offer us help. Are you interested in working with us?",
+   "comment": "legacy_id=151"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2510"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2511"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2512"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_152",
+   "en": "In order for you to help us, you must oppose Balgass' army. Before you begin, I need to check if you're adequately powerful for the mission.",
+   "comment": "legacy_id=152"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_152_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2520"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_153",
+   "en": "Destroy Death Beam, Hellmaine and Dark Phoenix monsters which dominate over Tarkan, Aida and Icarus and bring back 3 pieces of evidence accordingly.",
+   "comment": "legacy_id=153"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_153_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2530"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_154",
+   "en": "Congratulations, you've completed the duty. Here's a small something for your hard work.",
+   "comment": "legacy_id=154"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_154_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2540"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_155",
+   "en": "Balgass is a great threat as he is since he's in cooperation with Eresia the Queen of Sorcery and has brought such danger into this world",
+   "comment": "legacy_id=155"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_155_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2550"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_156",
+   "en": "We predict that Balgass is attempting a new threat against the Continent of MU with his army of evil sorcery.",
+   "comment": "legacy_id=156"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_156_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2560"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_157",
+   "en": "You don't have enough fund. Please offer 7,000,000 Zen to Lugard to apply for this mission.",
+   "comment": "legacy_id=157"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_157_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2570"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_158",
+   "en": "Welcome, you are truly ready to help us now.",
+   "comment": "legacy_id=158"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_158_Slot_0",
+   "en": "What do you need help with?",
+   "comment": "legacy_id=2580"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_159",
+   "en": "Well, according to our information Balgass has formed a locations called the Barracks. The 12 apostles of Lugard believe that this is a new threat from Balgass.",
+   "comment": "legacy_id=159"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_159_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2590"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_160",
+   "en": "Exact information about the 'Barrack' drives one to enter the Barrack zone to diminish the threat of the further development of Balgass' army.",
+   "comment": "legacy_id=160"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_160_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2600"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_161",
+   "en": "Fortunately Lugar's guardianship could help find the way to enter Balgass' Barrack. Enter the zone, destroy the soldiers and gain accurate information. Will you bring back the proper data accordingly?",
+   "comment": "legacy_id=161"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2610"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2611"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2612"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_162",
+   "en": "Go to the northern graveyard of Cry Wolf zone and find the soldier refuge from Balgass' Barrack. Lugar's blessing has caused one to have intelligence. He calls himself, Werewolf Guardsman.",
+   "comment": "legacy_id=162"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_162_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2620"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_163",
+   "en": "He will lead you to Balgass' Barrack. Enter the zone and destroy minimum 10 monsters in the Barrack.",
+   "comment": "legacy_id=163"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_163_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2630"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_164",
+   "en": "You've safely completed the duty I appreciate your hard work and the strong will.",
+   "comment": "legacy_id=164"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_164_Slot_0",
+   "en": "Continue talking.",
+   "comment": "legacy_id=2640"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_165",
+   "en": "You have brought great help to build peace to the Continent of MU and Cry Wolf with the information and all the destroyed monsters.",
+   "comment": "legacy_id=165"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_165_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2650"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_166",
+   "en": "You are not qualified yet. Visit Security Guard Mallon, and come back when you are fully qualified for the mission.",
+   "comment": "legacy_id=166"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_166_Slot_0",
+   "en": "Finish the story.",
+   "comment": "legacy_id=2660"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_167",
+   "en": "You don't have enough fund. Please offer 10,000,000 Zen to Lugard to apply for this mission.",
+   "comment": "legacy_id=167"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_167_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2670"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_168",
+   "en": "Your initiative courage has shown a great hope to us all.",
+   "comment": "legacy_id=168"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_168_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2680"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_169",
+   "en": "Balgass has hidden himself in a separate place to restore himself from the tiresome body.",
+   "comment": "legacy_id=169"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_169_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2690"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_170",
+   "en": "In order to follow Lugar's entrusted mission, Balgass' exact location must be found and the army in training destroyed.",
+   "comment": "legacy_id=170"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_170_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2700"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_171",
+   "en": "The final mission to follow after Lugar's mission includes a huge and difficult test. Are you still interested?",
+   "comment": "legacy_id=171"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2710"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2711"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2712"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_172",
+   "en": "Enter inside through the door at the northern edge of Balgass' Barrack; We will have the place ready beforehand.",
+   "comment": "legacy_id=172"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_172_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2720"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_173",
+   "en": "Congratulations, you've passed Lugar's final test. And now his blessing will be with you wherever you go.",
+   "comment": "legacy_id=173"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_173_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2730"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_174",
+   "en": "Your hard work has paid off to keep peace in the Continent of MU and Cry Wolf from Balgass' new threat. I deeply appreciate your help.",
+   "comment": "legacy_id=174"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_174_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2740"
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+name: Provider API - one Issue to full review and draft PR (0 Zapier tasks)
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Issue used as the task prompt
+        required: true
+        type: string
+      model_id:
+        description: 'Provider model (openai/<model> or anthropic/<model>)'
+        default: openai/gpt-5.6-luna
+        type: string
+      max_tasks:
+        description: Token budget (total input+output tokens, default 100M)
+        default: '100000000'
+        type: string
+      policy:
+        description: Review policy
+        default: 完整审核所有文本源码，包括第三方和生成代码；按Issue正文修改；覆盖不全不得声称完成；输出中文报告和草稿PR。
+        type: string
+      job_branch:
+        description: Automatic continuation only
+        default: ''
+        type: string
+      plan_only:
+        description: Prepare inventory only, without invoking models
+        default: true
+        type: boolean
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: provider-api-autonomous-repository-3
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Resolve fixed snapshot for this whole task
+        id: snapshot
+        uses: actions/github-script@v7
+        env:
+          JOB_BRANCH: ${{ inputs.job_branch }}
+        with:
+          script: |
+            if (context.repo.owner !== 'Glace678' || context.repo.repo !== '3') throw Error('Repository mismatch');
+            const branch = process.env.JOB_BRANCH;
+            if (!branch) { core.setOutput('sha', context.sha); return; }
+            if (!/^codex\/provider-job-\d+-[a-f0-9]{12}$/.test(branch)) throw Error('Invalid continuation');
+            const {data} = await github.rest.repos.getContent({...context.repo, path: '.github/zapier-review/cloud-job.json', ref: branch, mediaType: {format: 'raw'}});
+            const state = typeof data === 'string' ? JSON.parse(data) : data;
+            if (!/^[a-f0-9]{40}$/.test(state.sourceCommit)) throw Error('Invalid saved snapshot');
+            core.setOutput('sha', state.sourceCommit);
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.snapshot.outputs.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Load executor from this workflow revision without changing source snapshot
+        env:
+          EXECUTOR_SHA: ${{ github.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$EXECUTOR_SHA"
+          git restore --source="$EXECUTOR_SHA" --worktree -- .github/zapier-review
+      - name: Install fixed dependencies
+        working-directory: .github/zapier-review
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify guards before inference
+        run: node --test .github/zapier-review/file-operations.test.mjs .github/zapier-review/worker.test.mjs .github/zapier-review/coverage-repair.test.mjs
+      - name: Automatically review, fix, validate coverage and upload
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: node .github/zapier-review/provider-autonomous.mjs
+      - name: Keep complete inventory and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provider-full-repository-${{ inputs.issue_number }}
+          path: .luna-output/
+          include-hidden-files: true
+          retention-days: 30
+      - name: Report an automatic stop honestly
+        if: failure()
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        with:
+          script: |
+            const n = Number(process.env.ISSUE_NUMBER);
+            if (!Number.isSafeInteger(n) || n < 1) return;
+            const {data: issue} = await github.rest.issues.get({...context.repo, issue_number: n});
+            if (issue.user.login !== context.repo.owner || issue.pull_request) return;
+            await github.rest.issues.createComment({...context.repo, issue_number: n, body: `Provider API 整仓流程自动停止，未声称完成。已保存源码清单和完成结果。请查看[本次运行](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})。`});

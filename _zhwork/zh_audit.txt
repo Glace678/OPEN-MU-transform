@@ -1,0 +1,305 @@
+[Dialog] Text_0
+  现: 嗯！有什么需要吗？
+  建议: 嗯！有什幺需要吗？
+  换: [('么', '幺')]
+
+[Dialog] Text_1
+  现: 你好！我是魔导师帕西。哈哈哈！嗯……星象似乎有些异常。你的未来……嗯……我竟然也看不清。为什么会这样……？
+  建议: 你好！我是魔导师帕西。哈哈哈！嗯……星象似乎有些异常。你的未来……嗯……我竟然也看不清。为什幺会这样……？
+  换: [('么', '幺')]
+
+[Dialog] Text_8
+  现: 欢迎来到仙踪林。第一次来这里的话，经过仓库守卫后从南门出去，先狩猎蝎子或哥布林等低级怪物吧。
+  建议: 欢迎来到仙踪林。第一次来这里的话，经过仓库守卫后从南门出去，先狩猎蝎子或哥布尔等低级怪物吧。
+  换: [('林', '尔')]
+
+[Dialog] Text_56
+  现: 第一位皇帝穆伦击败各地军阀，结束战争、统一大陆并建立奇迹帝国。这本史书正是为了纪念他带来的和平。
+  建议: 第一位皇帝穆伦击败各地军阀，结束战争、统一大陆并创建奇迹帝国。这本史书正是为了纪念他带来的和平。
+  换: [('', '创'), ('立', '')]
+
+[Dialog] Text_64
+  现: 你已经读过“帝王之书”了吧？那么你应该知道书中记载的三件宝物。去寻找古代精灵用灵魂之力制成的水晶“精灵之泪”吧。
+  建议: 你已经读过“帝王之书”了吧？那幺你应该知道书中记载的三件宝物。去寻找古代精灵用灵魂之力制成的水晶“精灵之泪”吧。
+  换: [('么', '幺')]
+
+[Dialog] Text_67
+  现: 你已经读过“帝王之书”了吧？那么你应该知道书中记载的三件宝物。
+  建议: 你已经读过“帝王之书”了吧？那幺你应该知道书中记载的三件宝物。
+  换: [('么', '幺')]
+
+[Dialog] Answer_77_Slot_1
+  现: 我不想去那么危险的地方。
+  建议: 我不想去那幺危险的地方。
+  换: [('么', '幺')]
+
+[Dialog] Answer_100_Slot_0
+  现: 那我需要做什么？
+  建议: 那我需要做什幺？
+  换: [('么', '幺')]
+
+[Dialog] Answer_103_Slot_0
+  现: 为什么会在那里？
+  建议: 为什幺会在那里？
+  换: [('么', '幺')]
+
+[Dialog] Answer_109_Slot_0
+  现: 为什么？
+  建议: 为什幺？
+  换: [('么', '幺')]
+
+[Dialog] Answer_131_Slot_0
+  现: 为什么会这样？
+  建议: 为什幺会这样？
+  换: [('么', '幺')]
+
+[Dialog] Answer_136_Slot_0
+  现: 我需要做什么？
+  建议: 我需要做什幺？
+  换: [('么', '幺')]
+
+[Dialog] Answer_142_Slot_0
+  现: 是什么事？
+  建议: 是什幺事？
+  换: [('么', '幺')]
+
+[Dialog] Answer_147_Slot_0
+  现: 是什么事？
+  建议: 是什幺事？
+  换: [('么', '幺')]
+
+[Dialog] Answer_158_Slot_0
+  现: 需要我做什么？
+  建议: 需要我做什幺？
+  换: [('么', '幺')]
+
+[Dialog] Text_159
+  现: 根据情报，巴卡斯建立了一处名为“巴卡斯兵营”的据点。陆迦德的十二使徒认为，这是巴卡斯带来的新威胁。
+  建议: 根据情报，巴卡斯创建了一处名为“巴卡斯兵营”的据点。陆迦德的十二使徒认为，这是巴卡斯带来的新威胁。
+  换: [('', '创'), ('立', '')]
+
+[Dialog] Text_172
+  现: 从巴卡斯兵营北端的门进入内部。我们会提前为你打开通道。
+  建议: 从巴卡斯兵营北端的门进入内部。我们会提前为你打开信道。
+  换: [('通', '信')]
+
+[Editor] File not found: {0}
+  现: 找不到文件: {0}
+  建议: 找不到文档: {0}
+  换: [('件', '档')]
+
+[Game] FindHack file is damaged. Please reinstall MU client.
+  现: FindHack 文件已损坏。请重新安装MU客户端。
+  建议: FindHack 文档已损坏。请重新安装MU客户端。
+  换: [('件', '档')]
+
+[Game] Install the latest graphics card driver.
+  现: 安装最新的显卡驱动程序。
+  建议: 安装最新的显卡驱动进程。
+  换: [('', '进'), ('序', '')]
+
+[Game] Error2TheHackingToolCheckingProgram
+  现: [error2] 黑客工具检查程序未成功下载。请稍后再尝试连接。 \n\n 如果您仍然遇到相同的问题，请随时通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心
+  建议: [error2] 黑客工具检查进程未成功下载。请稍后再尝试连接。 \n\n 如果您仍然遇到相同的问题，请随时通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心
+  换: [('', '进'), ('序', '')]
+
+[Game] Error3NPXDLLRegistrationErrorRequired
+  现: [错误3] NPX.DLL 注册错误，缺少运行 nProtect 所需的文件。请从 Muonline.\n\n 下载 np_setup.exe 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心。
+  建议: [错误3] NPX.DLL 注册错误，缺少运行 nProtect 所需的文档。请从 Muonline.\n\n 下载 np_setup.exe 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心。
+  换: [('件', '档')]
+
+[Game] Error4AnErrorHasOccurredIn
+  现: [error4] 程序中发生错误。 \n\n 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心
+  建议: [error4] 进程中发生错误。 \n\n 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心
+  换: [('', '进'), ('序', '')]
+
+[Game] [error6] No.%d error!!! Findhack.zip needs to be installed in MU folder.
+  现: [错误6]No.%d错误！ ！ ！ Findhack.zip 需要安装在 MU 文件夹中。
+  建议: [错误6]No.%d错误！ ！ ！ Findhack.zip 需要安装在 MU 文档夹中。
+  换: [('件', '档')]
+
+[Game] Error7CertainFilesConnectedToFindhack
+  现: [错误7] FindHack 所需文件丢失，请重新安装 FindHack。
+  建议: [错误7] FindHack 所需文档丢失，请重新安装 FindHack。
+  换: [('件', '档')]
+
+[Game] Error8FailedConnectingToFindhackUpdating
+  现: [error8] 无法连接到 Findhack 更新服务器。如果此问题继续出现，请从 Muonline.com 实用程序下载页面安装 findhack.exe。
+  建议: [error8] 无法连接到 Findhack 更新服务器。如果此问题继续出现，请从 Muonline.com 实用进程下载页面安装 findhack.exe。
+  换: [('', '进'), ('序', '')]
+
+[Game] RumorHasItThatRecentlyMonsters
+  现: 有传言说，最近仙踪林周围有怪物出没。我以为这些生物只是传说中的一部分……我想知道是什么将它们带到了这里。
+  建议: 有传言说，最近仙踪林周围有怪物出没。我以为这些生物只是传说中的一部分……我想知道是什幺将它们带到了这里。
+  换: [('么', '幺')]
+
+[Game] TheDevilSquareIsAPlace
+  现: 恶魔广场是战士们证明勇气的地方。符合条件的战士将会收到恶魔邀请函。带着恶魔之眼、恶魔之钥、玛雅之石和足够的金币前往仙踪林的玛雅哥布林。
+  建议: 恶魔广场是战士们证明勇气的地方。符合条件的战士将会收到恶魔邀请函。带着恶魔之眼、恶魔之钥、玛雅之石和足够的金币前往仙踪林的玛雅哥布尔。
+  换: [('林', '尔')]
+
+[Game] ThousandsOfYearsAgoTheDevil
+  现: 数千年前，魔眼和钥匙曾存在于奇迹大陆，但后来消失了。但现在整个大陆都可以看到它们的身影。去找他们，把他们带到仙踪林的玛雅哥布林那里
+  建议: 数千年前，魔眼和钥匙曾存在于奇迹大陆，但后来消失了。但现在整个大陆都可以看到它们的身影。去找他们，把他们带到仙踪林的玛雅哥布尔那里
+  换: [('林', '尔')]
+
+[Game] AfterTheResurrectionOfKundunI
+  现: 昆顿复活后，我发现大陆上的一些怪物竟然拥有天之盒。我不知道昆顿到底在想什么，但我确信的一件事是昆顿正在尝试利用瑞纳的力量。
+  建议: 昆顿复活后，我发现大陆上的一些怪物竟然拥有天之盒。我不知道昆顿到底在想什幺，但我确信的一件事是昆顿正在尝试利用瑞纳的力量。
+  换: [('么', '幺')]
+
+[Game] [error27] A file is missing. Please reinstall the game.
+  现: [错误27] 游戏文件丢失，请重新安装游戏。
+  建议: [错误27] 游戏文档丢失，请重新安装游戏。
+  换: [('件', '档')]
+
+[Game] [error28] An important file has been corrupted. Please reinstall the game.
+  现: [错误28] 重要游戏文件已损坏，请重新安装游戏。
+  建议: [错误28] 重要游戏文档已损坏，请重新安装游戏。
+  换: [('件', '档')]
+
+[Game] [error29] An important file has been corrupted. Please reinstall the game.
+  现: [error29] 重要文件已损坏。请重新安装游戏。
+  建议: [error29] 重要文档已损坏。请重新安装游戏。
+  换: [('件', '档')]
+
+[Game] [error30] A file is missing. Please reinstall the game.
+  现: [错误30] 游戏文件丢失，请重新安装游戏。
+  建议: [错误30] 游戏文档丢失，请重新安装游戏。
+  换: [('件', '档')]
+
+[Game] [error32] A game file has been corrupted.
+  现: [error32] 游戏文件已损坏。
+  建议: [error32] 游戏文档已损坏。
+  换: [('件', '档')]
+
+[Game] Error1003DIfTheSameError
+  现: [error1003-%d]：如果仍然出现相同的错误，请通过我们的网站 http://muonline.webzen.com 联系我们的客户支持，并附上 GameGuard 文件夹中的错误号码和 erl 文件。
+  建议: [error1003-%d]：如果仍然出现相同的错误，请通过我们的网站 http://muonline.webzen.com 联系我们的客户支持，并附上 GameGuard 文档夹中的错误号码和 erl 文档。
+  换: [('件', '档'), ('件', '档')]
+
+[Game] Error1007AnIllegalProgramHasBeen
+  现: [error1007]：检测到非法程序。请关闭不必要的程序并重新启动游戏。
+  建议: [error1007]：检测到非法进程。请关闭不必要的进程并重新启动游戏。
+  换: [('', '进'), ('序', ''), ('', '进'), ('序', '')]
+
+[Game] Error1008WindowSSystemFilesHave
+  现: [error1008]：Windows 的系统文件已部分损坏。尝试重新安装 Internet Explorer(IE)。
+  建议: [error1008]：Windows 的系统文档已部分损坏。尝试重新安装 Internet Explorer(IE)。
+  换: [('件', '档')]
+
+[Game] Error1009GameGuardHasFailedToRun
+  现: [error1009]：GameGuard 运行失败。尝试重新安装 GameGuard 安装文件。
+  建议: [error1009]：GameGuard 运行失败。尝试重新安装 GameGuard 安装文档。
+  换: [('件', '档')]
+
+[Game] Error1011DIfTheSameError
+  现: [error1011-%d] ：如果仍然出现相同的错误，请发送电子邮件至 gameguard@inca.co.kr，并附上错误号码和 GameGuard 文件夹中的 erl 文件。
+  建议: [error1011-%d] ：如果仍然出现相同的错误，请发送电子邮件至 gameguard@inca.co.kr，并附上错误号码和 GameGuard 文档夹中的 erl 文档。
+  换: [('件', '档'), ('件', '档')]
+
+[Game] YouVeComeToPurchaseA
+  现: 你是来购买透明披风的吗？获得“血灵之书”和“血灵之骷”并拜访玛雅哥布林。你可以在那里得到一个。
+  建议: 你是来购买透明披风的吗？获得“血灵之书”和“血灵之骷”并拜访玛雅哥布尔。你可以在那里得到一个。
+  换: [('林', '尔')]
+
+[Game] HaveYouComeToRepairSomething
+  现: 你是来修东西的吗？我不知道血色城堡在哪里。为什么不去问问冰风谷的大天使使者呢？
+  建议: 你是来修东西的吗？我不知道血色城堡在哪里。为什幺不去问问冰风谷的大天使使者呢？
+  换: [('么', '幺')]
+
+[Game] TheArchangelIsFightingTheEvil
+  现: 大天使独自在血色城堡中与昆顿的邪恶生物战斗！如果你确实像你所说的那么勇敢，就去帮助大天使吧！
+  建议: 大天使独自在血色城堡中与昆顿的邪恶生物战斗！如果你确实像你所说的那幺勇敢，就去帮助大天使吧！
+  换: [('么', '幺')]
+
+[Game] %s what is your command?
+  现: %s 你的指令是什么？
+  建议: %s 你的指令是什幺？
+  换: [('么', '幺')]
+
+[Game] What would you like to know?
+  现: 您想知道什么？
+  建议: 您想知道什幺？
+  换: [('么', '幺')]
+
+[Game] CodeNameSTX813ElpisI
+  现: 代号 ST-X813，艾尔菲丝。我是坎特鲁实验室制造的生命体。你想知道什么？
+  建议: 代号 ST-X813，艾尔菲丝。我是坎特鲁实验室制造的生命体。你想知道什幺？
+  换: [('么', '幺')]
+
+[Game] What do you want to know?
+  现: 你想知道什么？
+  建议: 你想知道什幺？
+  换: [('么', '幺')]
+
+[Game] Save the application location.
+  现: 保存应用程序位置。
+  建议: 保存应用进程位置。
+  换: [('', '进'), ('序', '')]
+
+[Game] It's a worn piece of paper containing incomprehensible text.
+  现: 这是一张破旧的纸，上面写着难以理解的文字。
+  建议: 这是一张破旧的纸，上面写着难以理解的文本。
+  换: [('字', '本')]
+
+[Game] You can acquire Goblin Points by using the MU Item Shop's storage.
+  现: 使用 MU 商城保管箱可以获得哥布林点数。
+  建议: 使用 MU 商城保管箱可以获得哥布尔点数。
+  换: [('林', '尔')]
+
+[Game] EXP10IncreasePCCafeChaos
+  现: 经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布林点数增加
+  建议: 经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布尔点数增加
+  换: [('林', '尔')]
+
+[Game] EXP10IncreasePCCafeChaos3061
+  现: 经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布林点数增加 / 可使用移动命令窗口 / 不适用体力系统
+  建议: 经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布尔点数增加 / 可使用移动命令窗口 / 不适用体力系统
+  换: [('林', '尔')]
+
+[Game] You can enter to Gold Channel.
+  现: 您可以进入黄金通道。
+  建议: 您可以进入黄金信道。
+  换: [('通', '信')]
+
+[Game] Please purchase 'gold channel ticket' to enter.
+  现: 请购买「黄金通道门票」进入。
+  建议: 请购买「黄金信道门票」进入。
+  换: [('通', '信')]
+
+[Game] Your gold channel ticket is valid for next %d minutes.
+  现: 您的黄金通道门票在接下来的 %d 分钟内有效。
+  建议: 您的黄金信道门票在接下来的 %d 分钟内有效。
+  换: [('通', '信')]
+
+[Game] Move to a closed channel?
+  现: 转移到封闭通道？
+  建议: 转移到封闭信道？
+  换: [('通', '信')]
+
+[Game] Adding a $ in front of text: Chat to Gens members
+  现: 在文字前面加上 $：与 家族 成员聊天
+  建议: 在文本前面加上 $：与 家族 成员聊天
+  换: [('字', '本')]
+
+[Game] WhatSGoingOnDoYou
+  现: 这是怎么回事？你想去阿刻戎吗？我必须冒着生命危险才能到达那里。您心中一定有合适的价格吧？
+  建议: 这是怎幺回事？你想去阿刻戎吗？我必须冒着生命危险才能到达那里。您心中一定有合适的价格吧？
+  换: [('么', '幺')]
+
+[Game] What? You wanted to go to Acheron without a map?
+  现: 什么？没有精灵地图也想前往阿卡伦吗？
+  建议: 什幺？没有精灵地图也想前往阿卡伦吗？
+  换: [('么', '幺')]
+
+[Game] Client file has been corrupted. Please reinstall the client again.
+  现: 客户端文件已损坏。请重新安装客户端。
+  建议: 客户端文档已损坏。请重新安装客户端。
+  换: [('件', '档')]
+
+[Game] ChatCommandsNotSupported
+  现: 当前服务器未提供命令列表。
+  建议: 当前服务器未提供命令行表。
+  换: [('列', '行')]
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">アカウント</string>
+    <string name="account_portal_address">ポータルのアドレス</string>
+    <string name="account_portal_language">ポータルの言語</string>
+    <string name="account_register">登録</string>
+    <string name="account_change_password">パスワードを変更</string>
+    <string name="account_reset_password">パスワードを忘れた場合</string>
+    <string name="account_portal_settings">アカウント設定</string>
+    <string name="account_portal_not_configured">設定で有効なアカウントポータルのアドレスを指定してください。</string>
+    <string name="account_portal_invalid">HTTPS のオリジンを入力してください。HTTP は直接のループバックか信頼できるローカルペアリングのみ使用できます。認証情報、パス、クエリ、フラグメントは指定できません。</string>
+    <string name="account_portal_no_browser">アカウントポータルを開くブラウザーがありません。</string>
+</resources>

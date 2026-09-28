@@ -1,0 +1,229 @@
+{
+  "version": "1.0.1-candidate-contract-review",
+  "normalCap": 400,
+  "masterCap": 200,
+  "pointsPerLevel": 5,
+  "masterRankPerLevel": 0.35,
+  "combat": {
+    "hitBase": 0.92, "hitSlope": 0.08, "hitMin": 0.60, "hitMax": 0.98,
+    "armorConstant": 80, "armorPerRank": 2.4, "armorCap": 0.60,
+    "critBase": 0.05, "critCap": 0.30, "critMultiplier": 1.50,
+    "excellentCap": 0.15, "excellentMultiplier": 1.80,
+    "totalReductionCap": 0.70, "penetrationCap": 0.25,
+    "hasteCap": 0.45, "minimumActionSeconds": 0.55,
+    "inCombatRegen": 0.004, "outOfCombatRegen": 0.06,
+    "manaRegen": 0.018, "packSize": 3, "travelSeconds": 2.5,
+    "referenceKillCycleSeconds": 7.5,
+    "bossTelegraphSeconds": 8, "bossTelegraphMultiplier": 3,
+    "trainedDodgeChance": 0.80, "beginnerDodgeChance": 0.40
+  },
+  "growth": {
+    "baseHealth": 100, "healthPerLevel": 2.8, "healthPerVitality": 3.3,
+    "baseMana": 60, "manaPerLevel": 0.8, "manaPerEnergy": 1.2,
+    "basePower": 30, "powerPerRank": 3.3,
+    "gearPowerShare": 0.32, "gearArmorShare": 0.13,
+    "armorPerAgility": 0.12, "baseArmor": 12,
+    "masterDamageCap": 0.12, "masterHealthCap": 0.15, "masterArmorCap": 0.10,
+    "masterManaCap": 0.10, "partyDamageBuffCap": 0.12, "partyDefenseBuffCap": 0.12,
+    "lifeStealCapPerSecond": 0.015, "petDamageBudget": 0.22
+  },
+  "profiles": [
+    { "id": "standard", "normalXp": 1, "masterXp": 1 },
+    { "id": "relaxed", "normalXp": 1.5, "masterXp": 1.5 },
+    { "id": "journey", "normalXp": 0.75, "masterXp": 0.75 }
+  ],
+  "gear": [
+    { "id": "undergeared", "factor": 0.70, "crit": 0, "excellent": 0, "reduction": 0 },
+    { "id": "progression", "factor": 1, "crit": 0.04, "excellent": 0, "reduction": 0.02 },
+    { "id": "excellent", "factor": 1.22, "crit": 0.08, "excellent": 0.04, "reduction": 0.05 },
+    { "id": "aspirational", "factor": 1.55, "crit": 0.14, "excellent": 0.08, "reduction": 0.10 }
+  ],
+  "classes": [
+    {
+      "id": "DK", "name": "剑士", "engineIds": [4,6,7],
+      "health": 1.13, "damage": 1.00, "armor": 1.08, "mana": 0.95, "rangedUptime": 1,
+      "builds": [
+        { "id": "assault", "name": "力量剑士", "allocation": [0.55,0.15,0.25,0.05,0], "powerWeights": [0.95,0.20,0,0.15,0], "single": "dk_stab", "area": "dk_twist", "bonusReduction": 0, "lifeSteal": 0, "support": 0 },
+        { "id": "guard", "name": "守护剑士", "allocation": [0.40,0.15,0.40,0.05,0], "powerWeights": [0.95,0.20,0,0.15,0], "single": "dk_stab", "area": "dk_twist", "bonusReduction": 0.06, "lifeSteal": 0, "support": 0 }
+      ]
+    },
+    {
+      "id": "DW", "name": "魔法师", "engineIds": [0,2,3],
+      "health": 0.99, "damage": 1.06, "armor": 0.94, "mana": 1.25, "rangedUptime": 0.86,
+      "builds": [
+        { "id": "elemental", "name": "元素法师", "allocation": [0.05,0.15,0.15,0.65,0], "powerWeights": [0,0,0,0.90,0], "single": "dw_beam", "area": "dw_spirit", "bonusReduction": 0, "lifeSteal": 0, "support": 0 },
+        { "id": "barrier", "name": "护盾法师", "allocation": [0.05,0.15,0.30,0.50,0], "powerWeights": [0,0,0,0.90,0], "single": "dw_beam", "area": "dw_spirit", "bonusReduction": 0.08, "lifeSteal": 0, "support": 0 }
+      ]
+    },
+    {
+      "id": "FE", "name": "弓箭手", "engineIds": [8,10,11],
+      "health": 1.00, "damage": 1.00, "armor": 0.95, "mana": 1.05, "rangedUptime": 0.84,
+      "builds": [
+        { "id": "marksman", "name": "敏捷弓手", "allocation": [0.10,0.60,0.20,0.10,0], "powerWeights": [0.25,0.82,0,0,0], "single": "fe_penetration", "area": "fe_triple", "bonusReduction": 0, "lifeSteal": 0, "support": 0 },
+        { "id": "support", "name": "智力辅助", "allocation": [0.05,0.20,0.20,0.55,0], "powerWeights": [0,0.20,0,0.79,0], "single": "fe_penetration", "area": "fe_triple", "bonusReduction": 0.04, "lifeSteal": 0.006, "support": 0.10 }
+      ]
+    },
+    {
+      "id": "MG", "name": "魔剑士", "engineIds": [12,13],
+      "health": 1.03, "damage": 1.02, "armor": 0.97, "mana": 1.12, "rangedUptime": 0.94,
+      "builds": [
+        { "id": "blade", "name": "力魔", "allocation": [0.50,0.20,0.20,0.10,0], "powerWeights": [0.97,0.18,0,0.12,0], "single": "mg_fire", "area": "mg_power", "bonusReduction": 0, "lifeSteal": 0, "support": 0 },
+        { "id": "spell", "name": "法魔", "allocation": [0.10,0.20,0.20,0.50,0], "powerWeights": [0.12,0.18,0,0.97,0], "single": "dw_beam", "area": "dw_spirit", "bonusReduction": 0, "lifeSteal": 0, "support": 0 }
+      ]
+    },
+    {
+      "id": "DL", "name": "圣导师", "engineIds": [16,17],
+      "health": 1.04, "damage": 1.06, "armor": 1.00, "mana": 1.05, "rangedUptime": 0.90,
+      "builds": [
+        { "id": "command", "name": "统率导师", "allocation": [0.25,0.10,0.20,0.10,0.35], "powerWeights": [0.90,0,0,0.20,0.86], "single": "dl_burst", "area": "dl_quake", "bonusReduction": 0, "lifeSteal": 0, "support": 0.06 },
+        { "id": "force", "name": "战斗导师", "allocation": [0.50,0.10,0.20,0.15,0.05], "powerWeights": [0.90,0,0,0.20,0.86], "single": "dl_burst", "area": "dl_quake", "bonusReduction": 0, "lifeSteal": 0, "support": 0 }
+      ]
+    },
+    {
+      "id": "SU", "name": "召唤术师", "engineIds": [20,22,23],
+      "health": 0.99, "damage": 1.02, "armor": 0.95, "mana": 1.20, "rangedUptime": 0.88,
+      "builds": [
+        { "id": "curse", "name": "诅咒召唤", "allocation": [0.05,0.20,0.20,0.55,0], "powerWeights": [0,0.15,0,0.94,0], "single": "su_drain", "area": "su_chain", "bonusReduction": 0, "lifeSteal": 0.008, "support": 0 },
+        { "id": "sustain", "name": "汲取召唤", "allocation": [0.05,0.15,0.30,0.50,0], "powerWeights": [0,0.15,0,0.94,0], "single": "su_drain", "area": "su_chain", "bonusReduction": 0, "lifeSteal": 0.012, "support": 0 }
+      ]
+    },
+    {
+      "id": "RF", "name": "格斗家", "engineIds": [24,25],
+      "health": 1.12, "damage": 1.02, "armor": 0.97, "mana": 0.95, "rangedUptime": 1,
+      "builds": [
+        { "id": "brawler", "name": "力量格斗", "allocation": [0.45,0.20,0.30,0.05,0], "powerWeights": [0.88,0.16,0.28,0,0], "single": "rf_phoenix", "area": "rf_darkside", "bonusReduction": 0, "lifeSteal": 0, "support": 0 },
+        { "id": "vitality", "name": "体格", "allocation": [0.25,0.20,0.50,0.05,0], "powerWeights": [0.88,0.16,0.28,0,0], "single": "rf_phoenix", "area": "rf_darkside", "bonusReduction": 0.02, "lifeSteal": 0, "support": 0 }
+      ]
+    }
+  ],
+  "skills": [
+    { "id": "basic", "engineIds": [], "unlock": 1, "coefficient": 1, "actionSeconds": 1.15, "manaFraction": 0, "manaFlat": 0, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "dk_stab", "engineIds": [43], "unlock": 40, "coefficient": 1.23, "actionSeconds": 1.15, "manaFraction": 0.012, "manaFlat": 2, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "dk_twist", "engineIds": [41], "unlock": 20, "coefficient": 0.96, "actionSeconds": 1.25, "manaFraction": 0.023, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1,0.80,0.60] },
+    { "id": "dw_beam", "engineIds": [12], "unlock": 40, "coefficient": 1.27, "actionSeconds": 1.20, "manaFraction": 0.013, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "dw_spirit", "engineIds": [9], "unlock": 20, "coefficient": 1.03, "actionSeconds": 1.30, "manaFraction": 0.023, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1,0.80,0.65,0.45,0.30] },
+    { "id": "fe_penetration", "engineIds": [52], "unlock": 40, "coefficient": 1.20, "actionSeconds": 1.20, "manaFraction": 0.012, "manaFlat": 2, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "fe_triple", "engineIds": [24], "unlock": 20, "coefficient": 0.92, "actionSeconds": 1.30, "manaFraction": 0.022, "manaFlat": 3, "hitWeights": [0.34,0.33,0.33], "targetWeights": [1,0.75,0.55,0.35] },
+    { "id": "mg_fire", "engineIds": [55], "unlock": 40, "coefficient": 1.22, "actionSeconds": 1.16, "manaFraction": 0.013, "manaFlat": 2, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "mg_power", "engineIds": [56], "unlock": 20, "coefficient": 0.94, "actionSeconds": 1.30, "manaFraction": 0.023, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1,0.75,0.55,0.35] },
+    { "id": "dl_burst", "engineIds": [61], "unlock": 40, "coefficient": 1.22, "actionSeconds": 1.20, "manaFraction": 0.013, "manaFlat": 2, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "dl_quake", "engineIds": [62], "unlock": 20, "coefficient": 1.00, "actionSeconds": 1.32, "manaFraction": 0.023, "manaFlat": 3, "hitWeights": [0.25,0.25,0.25,0.25], "targetWeights": [1,0.80,0.65,0.40,0.25] },
+    { "id": "su_drain", "engineIds": [214], "unlock": 40, "coefficient": 1.22, "actionSeconds": 1.20, "manaFraction": 0.013, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1] },
+    { "id": "su_chain", "engineIds": [215], "unlock": 20, "coefficient": 0.93, "actionSeconds": 1.30, "manaFraction": 0.023, "manaFlat": 3, "hitWeights": [0.5,0.5], "targetWeights": [1,0.75,0.55,0.35],
+      "runtimeContract": { "classIds": [20,22,23], "caller": "AreaSkillAttackAction + ChainLightningSkillPlugIn", "category": "chain-burst", "mana": 85, "ability": 0, "payloadHits": 1, "unlock": "Energy 245 and actual scroll requirements; candidate unlock 20 is not installed", "effects": "Initial target full hit, then 300ms 0.7 hit and another 300ms 0.5 hit; fallback may repeat one target; no normalized whole-cast weights", "resourcePolicy": "Preserve original 85 MP; model fractional MP is candidate-only and not installed" } },
+    { "id": "su_lightning_shock", "engineIds": [230], "unlock": 20, "coefficient": 0.93, "actionSeconds": 1.30, "manaFraction": 0, "manaFlat": 115, "hitWeights": [1], "targetWeights": [1,0.75,0.55,0.35],
+      "runtimeContract": { "classIds": [20,22,23], "caller": "AreaSkillAttackAction automatic-hit budget", "category": "area-burst", "mana": 115, "ability": 7, "payloadHits": 1, "unlock": "Energy 823 and actual scroll requirements; not Chain Lightning", "effects": "Area diameter 14; original minimum 5, maximum 12 hits per attack distributed by area settings", "resourcePolicy": "Preserve original 115 MP and 7 AP; excluded from routine AP cap" } },
+    { "id": "rf_phoenix", "engineIds": [270], "unlock": 40, "coefficient": 1.25, "actionSeconds": 1.18, "manaFraction": 0.012, "manaFlat": 2, "hitWeights": [0.25,0.25,0.25,0.25], "targetWeights": [1],
+      "runtimeContract": { "classIds": [24,25], "caller": "AreaSkillAttackAction + PhoenixShotSkillPlugIn", "category": "weapon-area", "mana": 30, "ability": 0, "payloadHits": 4, "unlock": "Actual equipped skill-bearing glove and its item/stat/class requirements; not the level 200 Dragon Slasher orb", "effects": "Four full payload hits on initial target; radius 2 strategy adds up to seven targets, first three guaranteed and others probabilistic", "resourcePolicy": "Preserve original 30 MP and 0 AP; no fallback alias to 265; candidate MP and normalized weights not installed" } },
+    { "id": "rf_dragon_slasher", "engineIds": [265], "unlock": 200, "coefficient": 1.25, "actionSeconds": 1.18, "manaFraction": 0, "manaFlat": 100, "hitWeights": [1], "targetWeights": [1],
+      "runtimeContract": { "classIds": [24,25], "caller": "TargetedSkillDefaultPlugin", "category": "tactical-burst", "mana": 100, "ability": 100, "payloadHits": 1, "unlock": "Level 200; actual Dragon Slasher orb/class requirements and reachable source", "effects": "One full direct payload; no Phoenix Shot area strategy", "resourcePolicy": "Preserve original 100 MP plus 100 AP; excluded from routine AP cap" } },
+    { "id": "rf_darkside", "engineIds": [263], "unlock": 180, "coefficient": 0.95, "actionSeconds": 1.25, "manaFraction": 0.022, "manaFlat": 3, "hitWeights": [1], "targetWeights": [1,0.80,0.60],
+      "runtimeContract": { "classIds": [24,25], "caller": "TargetedSkillDefaultPlugin", "category": "direct-attack", "mana": 70, "ability": 0, "payloadHits": 1, "unlock": "Level 180; actual Dark Side orb and class requirements", "effects": "One full direct payload in current S6 initializer; not Dragon Roar", "resourcePolicy": "Preserve original 70 MP; model fractional MP and target weights not installed" } },
+    { "id": "rf_dragon_roar", "engineIds": [264], "unlock": 150, "coefficient": 0.95, "actionSeconds": 1.25, "manaFraction": 0, "manaFlat": 50, "hitWeights": [0.25,0.25,0.25,0.25], "targetWeights": [1,0.80,0.60],
+      "runtimeContract": { "classIds": [24,25], "caller": "AreaSkillAttackAction + DragonRoarSkillPlugIn", "category": "area-burst", "mana": 50, "ability": 30, "payloadHits": 4, "unlock": "Level 150; actual Dragon Roar orb and class requirements", "effects": "Four full payload hits; radius 3 strategy adds up to seven targets; not normalized to a one-hit budget", "resourcePolicy": "Preserve original 50 MP plus 30 AP; excluded from routine AP cap" } }
+  ],
+  "monsters": {
+    "hpBase": 100, "hpLinear": 10, "hpQuadratic": 0.012,
+    "damageBase": 10, "damageLinear": 0.78, "armorBase": 10, "armorLinear": 0.65,
+    "ranks": [
+      { "id": "normal", "hp": 1, "damage": 1, "armor": 1, "attackSeconds": 1.8, "xp": 1, "zen": 1, "telegraph": false },
+      { "id": "elite", "hp": 3.5, "damage": 1.15, "armor": 1.05, "attackSeconds": 2, "xp": 4, "zen": 4, "telegraph": false },
+      { "id": "boss", "hp": 26, "damage": 0.85, "armor": 1.10, "attackSeconds": 2.5, "xp": 30, "zen": 30, "telegraph": true }
+    ],
+    "bossIds": [38,49,77,275,412,459],
+    "eliteIds": [43,44,78,79,80,81,82,83],
+    "xpBase": 25, "xpLinear": 12, "xpQuadratic": 0.55,
+    "zenBase": 8, "zenLinear": 1.1, "zenQuadratic": 0.004
+  },
+  "progression": {
+    "normalSeconds": [[1,25],[20,80],[80,190],[150,330],[220,450],[300,600],[350,720],[399,900]],
+    "masterSeconds": [[1,720],[50,900],[100,1140],[150,1380],[200,1620]],
+    "overlevelGraceRanks": 20, "overlevelDecayRanks": 80, "overlevelFloor": 0.10,
+    "underlevelRewardCap": 1.15, "deathXpLoss": 0,
+    "partyMonsterHpPerExtra": 0.75, "partyMonsterDamagePerExtra": 0.12,
+    "partyXpPerExtra": 0.90, "partyMaxMembers": 5,
+    "masterAllocation": { "offense": 60, "defense": 60, "utility": 40, "specialization": 40 }
+  },
+  "loot": {
+    "moneyChance": 0.65, "jewelChance": 0.035, "smartClassChance": 0.70,
+    "excellentPityKills": 250, "rareEligibilityRank": 80,
+    "equipment": [
+      { "id": "none", "chance": 0.8 }, { "id": "common", "chance": 0.196 },
+      { "id": "excellent", "chance": 0.0035 }, { "id": "ancient", "chance": 0.00035 },
+      { "id": "socket", "chance": 0.00015 }
+    ],
+    "bossTokens": 2, "eliteTokens": 0,
+    "excellentTokenCost": 8, "ancientTokenCost": 24, "socketTokenCost": 40,
+    "bossTokenCooldownMinutes": 30, "eventTokenCapPerDay": 12
+  },
+  "economy": {
+    "startingZen": 300, "walletCap": 2000000000, "vendorBuybackFraction": 0.15,
+    "repairZenPerCombatMinuteRank": 0.55, "travelZenPerRank": 0.5,
+    "respecFreeThroughLevel": 150, "respecZenPerRank": 30,
+    "healthPotionCooldown": 8, "manaPotionCooldown": 12, "sdPotionCooldown": 15,
+    "plannedCraftSpendFraction": 0.42, "saleValuePerNormalMonsterZen": 0.35,
+    "potions": [
+      { "id": "health_small", "group": 14, "number": 1, "kind": "health", "unlock": 1, "fraction": 0.28, "cap": 160, "price": 12 },
+      { "id": "health_medium", "group": 14, "number": 2, "kind": "health", "unlock": 80, "fraction": 0.28, "cap": 600, "price": 90 },
+      { "id": "health_large", "group": 14, "number": 3, "kind": "health", "unlock": 180, "fraction": 0.28, "cap": 2200, "price": 360 },
+      { "id": "mana_small", "group": 14, "number": 4, "kind": "mana", "unlock": 1, "fraction": 0.40, "cap": 120, "price": 8 },
+      { "id": "mana_medium", "group": 14, "number": 5, "kind": "mana", "unlock": 80, "fraction": 0.40, "cap": 400, "price": 65 },
+      { "id": "mana_large", "group": 14, "number": 6, "kind": "mana", "unlock": 180, "fraction": 0.40, "cap": 1600, "price": 240 },
+      { "id": "sd_small", "group": 14, "number": 35, "kind": "sd", "unlock": 150, "fraction": 0.20, "cap": 500, "price": 140 },
+      { "id": "sd_medium", "group": 14, "number": 36, "kind": "sd", "unlock": 250, "fraction": 0.20, "cap": 900, "price": 300 },
+      { "id": "sd_large", "group": 14, "number": 37, "kind": "sd", "unlock": 350, "fraction": 0.20, "cap": 1600, "price": 600 }
+    ]
+  },
+  "enhancement": {
+    "maxLevel": 15, "statGainPerLevel": 0.022, "zenFeeBase": 8, "zenFeeSquared": 1.5,
+    "steps": [
+      { "level": 1, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 2, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 3, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 4, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 5, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 6, "chance": 1, "pity": 1, "jewels": 1 },
+      { "level": 7, "chance": 0.85, "pity": 3, "jewels": 1 },
+      { "level": 8, "chance": 0.75, "pity": 4, "jewels": 1 },
+      { "level": 9, "chance": 0.65, "pity": 5, "jewels": 2 },
+      { "level": 10, "chance": 0.55, "pity": 6, "jewels": 2 },
+      { "level": 11, "chance": 0.45, "pity": 7, "jewels": 2 },
+      { "level": 12, "chance": 0.35, "pity": 8, "jewels": 3 },
+      { "level": 13, "chance": 0.28, "pity": 9, "jewels": 3 },
+      { "level": 14, "chance": 0.22, "pity": 10, "jewels": 4 },
+      { "level": 15, "chance": 0.18, "pity": 12, "jewels": 4 }
+    ]
+  },
+  "events": [
+    { "id": "blood_castle", "durationMinutes": 12, "rewardKillEquivalents": 100, "tokens": 2, "repeatMinutes": 30 },
+    { "id": "devil_square", "durationMinutes": 15, "rewardKillEquivalents": 130, "tokens": 2, "repeatMinutes": 30 },
+    { "id": "chaos_castle", "durationMinutes": 10, "rewardKillEquivalents": 80, "tokens": 2, "repeatMinutes": 30 },
+    { "id": "imperial_guardian", "durationMinutes": 20, "rewardKillEquivalents": 170, "tokens": 3, "repeatMinutes": 45 }
+  ],
+  "pvp": {
+    "damageMultiplier": 0.32, "shieldToHealthRatio": 0.60, "shieldDamageShare": 0.70,
+    "controlDurationCapSeconds": 1.5, "controlImmunitySeconds": 4,
+    "healingMultiplier": 0.5, "lifeStealMultiplier": 0.25,
+    "matchLevel": 400, "matchMasterLevel": 0, "gearFactorCap": 1.22,
+    "referenceHealth": 3300, "allocatedHealthWeight": 0.35
+  },
+  "routes": [
+    { "id": "start", "mapIds": [0,3,51], "minRank": 1, "maxRank": 30, "master": false },
+    { "id": "devias", "mapIds": [2], "minRank": 25, "maxRank": 65, "master": false },
+    { "id": "dungeon", "mapIds": [1], "minRank": 60, "maxRank": 100, "master": false },
+    { "id": "lost_tower", "mapIds": [4], "minRank": 95, "maxRank": 150, "master": false },
+    { "id": "atlans", "mapIds": [7], "minRank": 145, "maxRank": 190, "master": false },
+    { "id": "tarkan", "mapIds": [8], "minRank": 185, "maxRank": 230, "master": false },
+    { "id": "icarus", "mapIds": [10], "minRank": 225, "maxRank": 265, "master": false },
+    { "id": "aida", "mapIds": [33], "minRank": 260, "maxRank": 300, "master": false },
+    { "id": "kanturu", "mapIds": [37,38], "minRank": 295, "maxRank": 335, "master": false },
+    { "id": "karutan", "mapIds": [80,81], "minRank": 330, "maxRank": 365, "master": false },
+    { "id": "swamp", "mapIds": [56], "minRank": 360, "maxRank": 390, "master": false },
+    { "id": "raklion", "mapIds": [57], "minRank": 385, "maxRank": 400, "master": false },
+    { "id": "kalima_7", "mapIds": [36], "minRank": 355, "maxRank": 400, "master": false },
+    { "id": "selupan", "mapIds": [58], "minRank": 450, "maxRank": 450, "master": true },
+    { "id": "master_1", "mapIds": [37,38,56], "minRank": 400, "maxRank": 420, "master": true },
+    { "id": "master_2", "mapIds": [56,57,80], "minRank": 417, "maxRank": 440, "master": true },
+    { "id": "master_3", "mapIds": [57,80,81], "minRank": 437, "maxRank": 470, "master": true }
+  ]
+}

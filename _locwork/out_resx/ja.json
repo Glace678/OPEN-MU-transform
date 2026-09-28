@@ -1,0 +1,3252 @@
+{
+ "results": [
+  {
+   "key": "F9 - Toggle 3D Camera",
+   "tx": "F9 - 3Dカメラ切り替え"
+  },
+  {
+   "key": "F10 - Lock / Unlock Camera Zoom",
+   "tx": "F10 - ズームロック/解除"
+  },
+  {
+   "key": "F11 - Reset Camera View",
+   "tx": "F11 - カメラ視点リセット"
+  },
+  {
+   "key": "Home - Toggle MU Helper",
+   "tx": "Home - MUヘルパー切り替え"
+  },
+  {
+   "key": "/mu",
+   "tx": "/mu"
+  },
+  {
+   "key": "Sound volume",
+   "tx": "サウンド音量"
+  },
+  {
+   "key": "Music volume",
+   "tx": "音楽音量"
+  },
+  {
+   "key": "Render full effects",
+   "tx": "フルエフェクト表示"
+  },
+  {
+   "key": "Resolution",
+   "tx": "解像度"
+  },
+  {
+   "key": "Language",
+   "tx": "言語"
+  },
+  {
+   "key": "Windowed mode",
+   "tx": "ウィンドウモード"
+  },
+  {
+   "key": "LoginRememberUsername",
+   "tx": "IDを保存"
+  },
+  {
+   "key": "LoginRememberPassword",
+   "tx": "パスワードを保存"
+  },
+  {
+   "key": "LoginTrustWarning",
+   "tx": "信頼できるPCでのみパスワードを保存してください。"
+  },
+  {
+   "key": "LoginSavePasswordWarningTitle",
+   "tx": "警告！！！"
+  },
+  {
+   "key": "LoginSavePasswordWarningBody",
+   "tx": "パスワードを保存すると、このPCを使用する誰もがあなたのアカウントにログインできるようになります。信頼できるPCでのみ実行してください。パスワードを保存しますか？"
+  },
+  {
+   "key": "Valhalla",
+   "tx": "Valhalla"
+  },
+  {
+   "key": "Helheim",
+   "tx": "Helheim"
+  },
+  {
+   "key": "Midgard",
+   "tx": "Midgard"
+  },
+  {
+   "key": "Kara",
+   "tx": "Kara"
+  },
+  {
+   "key": "Lamu",
+   "tx": "Lamu"
+  },
+  {
+   "key": "Nacal",
+   "tx": "Nacal"
+  },
+  {
+   "key": "Rasa",
+   "tx": "Rasa"
+  },
+  {
+   "key": "Rance",
+   "tx": "Rance"
+  },
+  {
+   "key": "Tarh",
+   "tx": "Tarh"
+  },
+  {
+   "key": "Uz",
+   "tx": "Uz"
+  },
+  {
+   "key": "Moz",
+   "tx": "Moz"
+  },
+  {
+   "key": "Luga(Lamu2)",
+   "tx": "Luga(Lamu2)"
+  },
+  {
+   "key": "Titan",
+   "tx": "Titan"
+  },
+  {
+   "key": "Elca",
+   "tx": "Elca"
+  },
+  {
+   "key": "test",
+   "tx": "test"
+  },
+  {
+   "key": "June 7-8, 'MU Level UP 2003' event will be held in Coex Mall.",
+   "tx": "6月7日～8日、コエックスモールで「MU Level UP 2003」イベントが開催されます。"
+  },
+  {
+   "key": "Loren (New)",
+   "tx": "ロレン (New)"
+  },
+  {
+   "key": "LorenIsTheNameOfA",
+   "tx": "ロレンは、高度な剣術を誇る王国の名であり、多くの名高きダークナイトたちの故郷です。"
+  },
+  {
+   "key": "ThisGameMayBeInappropriateFor",
+   "tx": "このゲームは12歳未満のプレイヤーには不適切な場合があります。保護者の指導と監督のもとでプレイしてください。"
+  },
+  {
+   "key": "ThisGameMayBeInappropriateFor1077",
+   "tx": "このゲームは15歳未満のプレイヤーには不適切な場合があります。保護者の指導と監督のもとでプレイしてください。"
+  },
+  {
+   "key": "ThisGameMayBeInappropriateFor1078",
+   "tx": "このゲームは18歳未満のプレイヤーには不適切な場合があります。保護者の指導と監督のもとでプレイしてください。"
+  },
+  {
+   "key": "You haven't paid the subscription.",
+   "tx": "定期利用料金が未払いです。"
+  },
+  {
+   "key": "Before my parents died, they taught me how to make the portion.",
+   "tx": "両親が亡くなる前に、ポーションの作り方を教わりました。"
+  },
+  {
+   "key": "Queen Ariel will bless you.",
+   "tx": "アリエル女王があなたを祝福するでしょう。"
+  },
+  {
+   "key": "ToBeatAgainstKundunMoreOrganizational",
+   "tx": "クンドゥンに打ち勝つには、より組織的な行動が必要です。つまり、ギルドが不可欠なのです。"
+  },
+  {
+   "key": "<AM> <PM>",
+   "tx": "<午前> <午後>"
+  },
+  {
+   "key": "0:30 Blood Castle 12:30 Blood Castle",
+   "tx": "0:30 ブラッドキャッスル 12:30 ブラッドキャッスル"
+  },
+  {
+   "key": "1:00 Illusion Temple 13:00 Illusion Temple",
+   "tx": "1:00 イリュージョンテンプル 13:00 イリュージョンテンプル"
+  },
+  {
+   "key": "1:30 - 13:30 Chaos Castle(PC)",
+   "tx": "1:30 - 13:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "2:00 - 14:00 Chaos Castle",
+   "tx": "2:00 - 14:00 カオスキャッスル"
+  },
+  {
+   "key": "2:30 Blood Castle 14:30 Blood Castle",
+   "tx": "2:30 ブラッドキャッスル 14:30 ブラッドキャッスル"
+  },
+  {
+   "key": "3:00 Devil's Square 15:00 Devil's Square",
+   "tx": "3:00 デビルスクエア 15:00 デビルスクエア"
+  },
+  {
+   "key": "3:30 - 15:30 Chaos Castle(PC)",
+   "tx": "3:30 - 15:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "4:00 - 16:00 Chaos Castle",
+   "tx": "4:00 - 16:00 カオスキャッスル"
+  },
+  {
+   "key": "4:30 Blood Castle 16:30 Blood Castle",
+   "tx": "4:30 ブラッドキャッスル 16:30 ブラッドキャッスル"
+  },
+  {
+   "key": "5:00 Illusion Temple 17:00 Illusion Temple",
+   "tx": "5:00 イリュージョンテンプル 17:00 イリュージョンテンプル"
+  },
+  {
+   "key": "5:30 - 17:30 Chaos Castle(PC)",
+   "tx": "5:30 - 17:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "6:00 - 18:00 Chaos Castle",
+   "tx": "6:00 - 18:00 カオスキャッスル"
+  },
+  {
+   "key": "6:30 Blood Castle 18:30 Blood Castle",
+   "tx": "6:30 ブラッドキャッスル 18:30 ブラッドキャッスル"
+  },
+  {
+   "key": "7:00 Devil's Square 19:00 Devil's Square",
+   "tx": "7:00 デビルスクエア 19:00 デビルスクエア"
+  },
+  {
+   "key": "7:30 - 19:30 Chaos Castle(PC)",
+   "tx": "7:30 - 19:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "8:00 - 20:00 Chaos Castle",
+   "tx": "8:00 - 20:00 カオスキャッスル"
+  },
+  {
+   "key": "8:30 Blood Castle 20:30 Blood Castle",
+   "tx": "8:30 ブラッドキャッスル 20:30 ブラッドキャッスル"
+  },
+  {
+   "key": "9:00 Illusion Temple 21:00 Illusion Temple",
+   "tx": "9:00 イリュージョンテンプル 21:00 イリュージョンテンプル"
+  },
+  {
+   "key": "9:30 - 21:30 Chaos Castle(PC)",
+   "tx": "9:30 - 21:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "10:00 - 22:00 Chaos Castle",
+   "tx": "10:00 - 22:00 カオスキャッスル"
+  },
+  {
+   "key": "10:30 Blood Castle 22:30 Blood Castle",
+   "tx": "10:30 ブラッドキャッスル 22:30 ブラッドキャッスル"
+  },
+  {
+   "key": "11:00 Devil's Square 23:00 Devil's Square",
+   "tx": "11:00 デビルスクエア 23:00 デビルスクエア"
+  },
+  {
+   "key": "11:30 - 23:30 Chaos Castle(PC)",
+   "tx": "11:30 - 23:30 カオスキャッスル(PC)"
+  },
+  {
+   "key": "12:00 Chaos Castle 24:00 -",
+   "tx": "12:00 カオスキャッスル 24:00 -"
+  },
+  {
+   "key": " << Chaos Castle >> << Devil's Square >>",
+   "tx": " << カオスキャッスル >> << デビルスクエア >>"
+  },
+  {
+   "key": " 2 50-119 30-99 2 131-180 111-160",
+   "tx": " 2 50-119 30-99 2 131-180 111-160"
+  },
+  {
+   "key": " 3 120-179 100-159 3 181-230 161-210",
+   "tx": " 3 120-179 100-159 3 181-230 161-210"
+  },
+  {
+   "key": " 4 180-239 160-219 4 231-280 211-260",
+   "tx": " 4 180-239 160-219 4 231-280 211-260"
+  },
+  {
+   "key": " 5 240-299 220-279 5 281-330 261-310",
+   "tx": " 5 240-299 220-279 5 281-330 261-310"
+  },
+  {
+   "key": " 6 300-400 280-400 6 331-400 311-400",
+   "tx": " 6 300-400 280-400 6 331-400 311-400"
+  },
+  {
+   "key": " 7 Master Master 7 Master Master",
+   "tx": " 7 マスター マスター 7 マスター マスター"
+  },
+  {
+   "key": " << Blood Castle >> << Illusion Temple >>",
+   "tx": " << ブラッドキャッスル >> << イリュージョンテンプル >>"
+  },
+  {
+   "key": " 1 15-80 10-60 1 220-270",
+   "tx": " 1 15-80 10-60 1 220-270"
+  },
+  {
+   "key": " 2 81-130 61-110 2 271-320",
+   "tx": " 2 81-130 61-110 2 271-320"
+  },
+  {
+   "key": " 3 131-180 111-160 3 321-350",
+   "tx": " 3 131-180 111-160 3 321-350"
+  },
+  {
+   "key": " 6 281-330 261-310 6 Master",
+   "tx": " 6 281-330 261-310 6 マスター"
+  },
+  {
+   "key": "Reward for Every 255 Pieces",
+   "tx": "255個ごとの報酬"
+  },
+  {
+   "key": "255 Golden Cherry Blossom Branches",
+   "tx": "黄金の桜の枝 255本"
+  },
+  {
+   "key": "CharacterNamesMustStartWithA",
+   "tx": "キャラクター名は大文字で始めてください。最大10文字までです。"
+  },
+  {
+   "key": "Fee: 5,000 Zens",
+   "tx": "料金: 5,000 Zen"
+  },
+  {
+   "key": "TheElfQueenWhoBattledBy",
+   "tx": "ムレンの側で戦ったエルフの女王。セクラリウムとクンドゥンから長らくノリアを守り続けてきた。"
+  },
+  {
+   "key": "TheHeadOfTheEvilArmy",
+   "tx": "エビルアーミーの首領。魔術女王と協定を結んだクンドゥンによって召喚され、クライウォルフ要塞を攻略せんとした。"
+  },
+  {
+   "key": "Lemuria (New)",
+   "tx": "レムリア (New)"
+  },
+  {
+   "key": "TheWizardWhoBroughtDownElve",
+   "tx": "エルフを陥れた魔法使い。アントニアスを誘惑してクンドゥンを復活させ、第二次デモゴルゴン戦争を引き起こす。"
+  },
+  {
+   "key": "Cannot be equipped while another Transformation Ring is equipped.",
+   "tx": "他の変身リングを装備中は装備できません。"
+  },
+  {
+   "key": "Dark Lord use only.",
+   "tx": "ダークロード専用"
+  },
+  {
+   "key": "You can enter to Gold Channel.",
+   "tx": "ゴールドチャンネルに入場できます。"
+  },
+  {
+   "key": "TheGameClientIsLoadedOnly",
+   "tx": "ゲームクライアントは公式ウェブサイトからのみ起動されます。アプリケーションを終了し、もう一度お試しください。"
+  },
+  {
+   "key": "Please purchase 'gold channel ticket' to enter.",
+   "tx": "入場するには「ゴールドチャンネルチケット」を購入してください。"
+  },
+  {
+   "key": "Your gold channel ticket is valid for next %d minutes.",
+   "tx": "ゴールドチャンネルチケットは残り %d 分有効です。"
+  },
+  {
+   "key": "EXP gain 100%%",
+   "tx": "経験値獲得 100%%"
+  },
+  {
+   "key": "Item Drop 100%%",
+   "tx": "アイテムドロップ 100%%"
+  },
+  {
+   "key": "Stamina will not decrease temporarily.",
+   "tx": "スタミナが一時的に減少しなくなります。"
+  },
+  {
+   "key": "Enemy Gens Member x %lu/%lu",
+   "tx": "敵対Gensメンバー x %lu/%lu"
+  },
+  {
+   "key": "You cannot accept any more quest.",
+   "tx": "これ以上クエストを受けることはできません。"
+  },
+  {
+   "key": "You can proceed maximum 10 quests",
+   "tx": "同時に進行できるクエストは最大10個です"
+  },
+  {
+   "key": "at the same time.",
+   "tx": "同時に進行できます。"
+  },
+  {
+   "key": "You need to clear at least 1 quest to",
+   "tx": "このクエストを受けるには、"
+  },
+  {
+   "key": "accept this one.",
+   "tx": "少なくとも1つのクエストをクリアする必要があります。"
+  },
+  {
+   "key": "Gens Chat On/Off",
+   "tx": "Gensチャット ON/OFF"
+  },
+  {
+   "key": "Open Expanded Inventory (K)",
+   "tx": "拡張インベントリを開く (K)"
+  },
+  {
+   "key": "Expanded Inventory",
+   "tx": "拡張インベントリ"
+  },
+  {
+   "key": "You lack %d points.",
+   "tx": "ポイントが %d 不足しています。"
+  },
+  {
+   "key": "You can't raise any more levels.",
+   "tx": "これ以上レベルを上げることはできません。"
+  },
+  {
+   "key": "You must meet all skill requirements.",
+   "tx": "すべてのスキル条件を満たしている必要があります。"
+  },
+  {
+   "key": "# #Next Level:#",
+   "tx": "# 次のレベル:#"
+  },
+  {
+   "key": "Requirements3329",
+   "tx": "# 必要条件:#"
+  },
+  {
+   "key": "Willpower: %d",
+   "tx": "意志力: %d"
+  },
+  {
+   "key": "Destruction: %d",
+   "tx": "破壊: %d"
+  },
+  {
+   "key": "Min & Max Wizardry Increase",
+   "tx": "最小/最大呪術力上昇"
+  },
+  {
+   "key": "Min & Max Wizardry, Critical Damage Rate Increase",
+   "tx": "最小/最大呪術力、クリティカルダメージ率上昇"
+  },
+  {
+   "key": "EXP: %6.2f%%",
+   "tx": "経験値: %6.2f%%"
+  },
+  {
+   "key": "You need to wear the required equipment to level up this skill.",
+   "tx": "このスキルをレベルアップするには、必要な装備を着用している必要があります。"
+  },
+  {
+   "key": "Opening an Expanded Vault (H)",
+   "tx": "拡張倉庫を開く (H)"
+  },
+  {
+   "key": "Expanded Vault",
+   "tx": "拡張倉庫"
+  },
+  {
+   "key": "Move to a closed channel?",
+   "tx": "閉鎖チャンネルに移動しますか？"
+  },
+  {
+   "key": "Insufficient space in the expanded inventory",
+   "tx": "拡張インベントリの空きが不足しています"
+  },
+  {
+   "key": "Insufficient space in the expanded vault",
+   "tx": "拡張倉庫の空きが不足しています"
+  },
+  {
+   "key": "You can use it after expanding it.",
+   "tx": "拡張後に使用できます。"
+  },
+  {
+   "key": "Adding a $ in front of text: Chat to Gens members",
+   "tx": "文章の先頭に$を付ける: Gensメンバーとのチャット"
+  },
+  {
+   "key": "F6: Normal Chat On/Off",
+   "tx": "F6: 通常チャット ON/OFF"
+  },
+  {
+   "key": "F7: Party Chat On/Off",
+   "tx": "F7: パーティチャット ON/OFF"
+  },
+  {
+   "key": "F8: Guild Chat On/Off",
+   "tx": "F8: ギルドチャット ON/OFF"
+  },
+  {
+   "key": "F9: Gens Chat On/Off",
+   "tx": "F9: Gensチャット ON/OFF"
+  },
+  {
+   "key": "Please log in to game again to use the expanded inventory/vault.",
+   "tx": "拡張インベントリ/倉庫を使用するには、再度ゲームにログインしてください。"
+  },
+  {
+   "key": "Cannot be used any more.",
+   "tx": "これ以上使用できません。"
+  },
+  {
+   "key": "Use this to expand your vault.",
+   "tx": "倉庫を拡張するために使用します。"
+  },
+  {
+   "key": "Use this to expand your inventory.",
+   "tx": "インベントリを拡張するために使用します。"
+  },
+  {
+   "key": "Use this and log in to game again to activate.",
+   "tx": "これを使用し、再度ゲームにログインすると有効になります。"
+  },
+  {
+   "key": "TheNumberOfSkillPointsPossessed",
+   "tx": "所有しているスキルポイント数が、マスタースキルレベルに到達するのに必要なポイント数と一致しません。カスタマーサービスまでお問い合わせください。"
+  },
+  {
+   "key": "Increases max HP by 6%%",
+   "tx": "最大HP 6%%上昇"
+  },
+  {
+   "key": "Decreases damage by 6%%",
+   "tx": "被ダメージ 6%%減少"
+  },
+  {
+   "key": "Increases the amount of Zen received from killing monsters by 60%%",
+   "tx": "モンスター討伐時のZen獲得量 60%%上昇"
+  },
+  {
+   "key": "Increases the chance of causing Excellent Damage by 15%%",
+   "tx": "エクセレントダメージ発生確率 15%%上昇"
+  },
+  {
+   "key": "Increases attack speed by 10d",
+   "tx": "攻撃速度 10上昇"
+  },
+  {
+   "key": "Increases max Mana by 6%%",
+   "tx": "最大マナ 6%%上昇"
+  },
+  {
+   "key": "You need a 5 person party to enter this area.",
+   "tx": "このエリアに入場するには、5人パーティが必要です。"
+  },
+  {
+   "key": "All party members must be of the same level for this area.",
+   "tx": "パーティメンバーは全員、このエリアと同レベル帯である必要があります。"
+  },
+  {
+   "key": "Players with an Outlaw or Killer status cannot enter this area.",
+   "tx": "無法者またはキラー状態のプレイヤーはこのエリアに入場できません。"
+  },
+  {
+   "key": " << Doppelganger entry level >>",
+   "tx": " << ドッペルゲンガー入場レベル >>"
+  },
+  {
+   "key": "Level#Basic#Advanced",
+   "tx": "レベル#基本#上級"
+  },
+  {
+   "key": "15#80#81#130#131#180#181#230#231#280#281#330#331#400",
+   "tx": "15#80#81#130#131#180#181#230#231#280#281#330#331#400"
+  },
+  {
+   "key": "10#60#61#110#111#160#161#210#211#260#261#310#311#400",
+   "tx": "10#60#61#110#111#160#161#210#211#260#261#310#311#400"
+  },
+  {
+   "key": "1#100#101#200",
+   "tx": "1#100#101#200"
+  },
+  {
+   "key": "DoppelgangerWillEndBecauseTheCompeting",
+   "tx": "対戦パーティが入場しなかったため、ドッペルゲンガーは終了します。"
+  },
+  {
+   "key": "WhatSGoingOnDoYou",
+   "tx": "どうした？ アケロンに行きたいのか？ 命がけの場所だ。相応の対価は覚悟しているだろうな？"
+  },
+  {
+   "key": "What? You wanted to go to Acheron without a map?",
+   "tx": "はぁ？ 地図も持たずにアケロンに行くつもりか？"
+  },
+  {
+   "key": "The ships are full. Let's wait until we can go.",
+   "tx": "船が満杯だ。行けるようになるまで待とう。"
+  },
+  {
+   "key": "Are you here to join the Arca War?",
+   "tx": "アルカ戦争に参加しに来たのか？"
+  },
+  {
+   "key": "1. Ask about the Arca War.",
+   "tx": "1. アルカ戦争について聞く"
+  },
+  {
+   "key": "2. Register for the Arca War (Guild master)",
+   "tx": "2. アルカ戦争に登録する（ギルドマスター）"
+  },
+  {
+   "key": "3. Register to participate in the Arca War (Guild member)",
+   "tx": "3. アルカ戦争に参加登録する（ギルドメンバー）"
+  },
+  {
+   "key": "4. Exchange Trophies of Battle",
+   "tx": "4. 戦いの勲章を交換する"
+  },
+  {
+   "key": "5. Enter the Arca War",
+   "tx": "5. アルカ戦争に入場する"
+  },
+  {
+   "key": "TheArcaWarStartedInThe",
+   "tx": "アルカ戦争は、クンドゥンの魔術によって倒れた精霊たちを救うため、アケロン征服同盟で始まった。しかし、デュプリアンが偉大な王ラクス・ミロンを殺そうとしたことで、アルカでの戦いへと発展した。"
+  },
+  {
+   "key": "SuccessfullyRegisteredToParticipateInThe",
+   "tx": "アルカ戦争への参加登録が完了しました。ギルドメンバーに参加を呼びかけてください。"
+  },
+  {
+   "key": "Successfully registered to participate in the Arca War. I wish you luck.",
+   "tx": "アルカ戦争への参加登録が完了しました。幸運を祈ります。"
+  },
+  {
+   "key": "YouCannotParticipateOnlyTheGuild",
+   "tx": "参加できません。アルカ戦争の登録はギルドマスターのみが行えます。"
+  },
+  {
+   "key": "YouCannotParticipateOnlyGuildsWith",
+   "tx": "参加できません。アルカ戦争に参加できるのは、メンバーが10人以上のギルドのみです。"
+  },
+  {
+   "key": "IMSorryTheMaximumNumber",
+   "tx": "申し訳ありません。参加者数が上限に達しました。これ以上登録は受け付けておりません。次回お試しください。"
+  },
+  {
+   "key": "You have already registered. Please get ready for the Arca War.",
+   "tx": "既に登録済みです。アルカ戦争の準備をしてください。"
+  },
+  {
+   "key": "I'm sorry. The registration period has ended. Please try again next time.",
+   "tx": "申し訳ありません。登録期間が終了しました。次回お試しください。"
+  },
+  {
+   "key": "YouCannotParticipateYouNeedA",
+   "tx": "参加できません。アルカ戦争に参加するには、ロードの紋章を10束以上持っている必要があります。"
+  },
+  {
+   "key": "YouCannotParticipateInTheArca",
+   "tx": "アルカ戦争に参加できません。登録されたギルドのメンバーではありません。"
+  },
+  {
+   "key": "IMSorryTheMaximumNumber3395",
+   "tx": "申し訳ありません。参加者数が上限に達しました。これ以上登録は受け付けておりません。ギルドごとの参加上限は20人です。"
+  },
+  {
+   "key": "YouHaveAlreadyRegisteredTheGuild",
+   "tx": "既に登録済みです。ギルドマスターは自動的に登録されます。"
+  },
+  {
+   "key": "YouCannotParticipateInTheArca3398",
+   "tx": "アルカ戦争に参加できません。まずアルカ戦争に登録してください。"
+  },
+  {
+   "key": "The Arca War is not going on at the moment. Please enter during the Arca War.",
+   "tx": "現在アルカ戦争は開催されていません。開催中に入場してください。"
+  },
+  {
+   "key": "View Details",
+   "tx": "詳細を見る"
+  },
+  {
+   "key": "My Quests",
+   "tx": "マイクエスト"
+  },
+  {
+   "key": "Life",
+   "tx": "生命力"
+  },
+  {
+   "key": "Attack Power (Rate)",
+   "tx": "攻撃力（成功率）"
+  },
+  {
+   "key": "Attack Speed",
+   "tx": "攻撃速度"
+  },
+  {
+   "key": "Leadership available",
+   "tx": "リーダーシップ使用可能"
+  },
+  {
+   "key": "General",
+   "tx": "全般"
+  },
+  {
+   "key": "System",
+   "tx": "システム"
+  },
+  {
+   "key": "Chatting",
+   "tx": "チャット"
+  },
+  {
+   "key": "AMPM3409",
+   "tx": "午前/午後"
+  },
+  {
+   "key": "Rating",
+   "tx": "レーティング"
+  },
+  {
+   "key": "2nd",
+   "tx": "2次"
+  },
+  {
+   "key": "Event Entry Time",
+   "tx": "イベント入場時間"
+  },
+  {
+   "key": "Event Entry Level",
+   "tx": "イベント入場レベル"
+  },
+  {
+   "key": "Chaos Castle (PC)",
+   "tx": "カオスキャッスル (PC)"
+  },
+  {
+   "key": "Help",
+   "tx": "ヘルプ"
+  },
+  {
+   "key": "Hot Key",
+   "tx": "ホットキー"
+  },
+  {
+   "key": "Chatting Mode Hot Key",
+   "tx": "チャットモード ホットキー"
+  },
+  {
+   "key": "Feature",
+   "tx": "機能"
+  },
+  {
+   "key": "X",
+   "tx": "X"
+  },
+  {
+   "key": "In-game Shop",
+   "tx": "ゲーム内ショップ"
+  },
+  {
+   "key": "C",
+   "tx": "C"
+  },
+  {
+   "key": "I",
+   "tx": "I"
+  },
+  {
+   "key": "T",
+   "tx": "T"
+  },
+  {
+   "key": "Community",
+   "tx": "コミュニティ"
+  },
+  {
+   "key": "View Map",
+   "tx": "マップを見る"
+  },
+  {
+   "key": "Etc.",
+   "tx": "その他"
+  },
+  {
+   "key": "Guild Mark",
+   "tx": "ギルドマーク"
+  },
+  {
+   "key": "Choose color",
+   "tx": "色を選ぶ"
+  },
+  {
+   "key": "Guild Score",
+   "tx": "ギルドスコア"
+  },
+  {
+   "key": "Guild Members",
+   "tx": "ギルドメンバー"
+  },
+  {
+   "key": "Choose Hostility Guild",
+   "tx": "敵対ギルドを選ぶ"
+  },
+  {
+   "key": "Score3438",
+   "tx": "スコア:"
+  },
+  {
+   "key": "People",
+   "tx": "人数"
+  },
+  {
+   "key": "Normal Guild Members",
+   "tx": "一般ギルドメンバー"
+  },
+  {
+   "key": "F1",
+   "tx": "F1"
+  },
+  {
+   "key": "M",
+   "tx": "M"
+  },
+  {
+   "key": "O",
+   "tx": "O"
+  },
+  {
+   "key": "U",
+   "tx": "U"
+  },
+  {
+   "key": "Move",
+   "tx": "移動"
+  },
+  {
+   "key": "F",
+   "tx": "F"
+  },
+  {
+   "key": "P",
+   "tx": "P"
+  },
+  {
+   "key": "G",
+   "tx": "G"
+  },
+  {
+   "key": "B",
+   "tx": "B"
+  },
+  {
+   "key": "System Menu",
+   "tx": "システムメニュー"
+  },
+  {
+   "key": "You must purchase Expanded Inventory first.",
+   "tx": "まず拡張インベントリを購入する必要があります。"
+  },
+  {
+   "key": "Store Name",
+   "tx": "店舗名"
+  },
+  {
+   "key": "%sZen required",
+   "tx": "%s Zen必要"
+  },
+  {
+   "key": "%d pieces combined",
+   "tx": "%d個結合済み"
+  },
+  {
+   "key": "Entrance Fee",
+   "tx": "入場料"
+  },
+  {
+   "key": "NPC Quest",
+   "tx": "NPCクエスト"
+  },
+  {
+   "key": "Register Guild",
+   "tx": "ギルド登録"
+  },
+  {
+   "key": "Trade Target",
+   "tx": "取引相手"
+  },
+  {
+   "key": "Price3464",
+   "tx": "価格"
+  },
+  {
+   "key": "You cannot do this during the Arca War event.",
+   "tx": "アルカ戦争開催中は実行できません。"
+  },
+  {
+   "key": "Improper items for combination/refinement",
+   "tx": "結合/精製に不適切なアイテムです"
+  },
+  {
+   "key": "Exiting Game.",
+   "tx": "ゲームを終了します。"
+  },
+  {
+   "key": "Moving back to server selection window.",
+   "tx": "サーバー選択画面に戻ります。"
+  },
+  {
+   "key": "Moving to safety.",
+   "tx": "安全地帯に移動します。"
+  },
+  {
+   "key": "Moving back to character selection window.",
+   "tx": "キャラクター選択画面に戻ります。"
+  },
+  {
+   "key": "Moving to another area.",
+   "tx": "他のエリアに移動します。"
+  },
+  {
+   "key": "Hunting",
+   "tx": "狩猟"
+  },
+  {
+   "key": "Obtaining",
+   "tx": "取得"
+  },
+  {
+   "key": "Setting",
+   "tx": "設定"
+  },
+  {
+   "key": "Save Setting",
+   "tx": "設定を保存"
+  },
+  {
+   "key": "Initialization",
+   "tx": "初期化"
+  },
+  {
+   "key": "Add",
+   "tx": "追加"
+  },
+  {
+   "key": "Potion",
+   "tx": "ポーション"
+  },
+  {
+   "key": "Long-Distance Counter Attack",
+   "tx": "遠距離カウンター攻撃"
+  },
+  {
+   "key": "Original Position",
+   "tx": "元の位置"
+  },
+  {
+   "key": "Delay",
+   "tx": "遅延"
+  },
+  {
+   "key": "Con",
+   "tx": "条件"
+  },
+  {
+   "key": "Buff Duration",
+   "tx": "バフ持続時間"
+  },
+  {
+   "key": "Use Dark Spirits",
+   "tx": "ダークスピリット使用"
+  },
+  {
+   "key": "Auto Heal",
+   "tx": "自動回復"
+  },
+  {
+   "key": "Drain Life",
+   "tx": "ドレインライフ"
+  },
+  {
+   "key": "Repair Item",
+   "tx": "アイテム修理"
+  },
+  {
+   "key": "Pick All Near Items",
+   "tx": "周囲のアイテムをすべて拾う"
+  },
+  {
+   "key": "Pick Selected Items",
+   "tx": "選択したアイテムを拾う"
+  },
+  {
+   "key": "Jewel/Gem",
+   "tx": "宝石/ジェム"
+  },
+  {
+   "key": "Set Item",
+   "tx": "セットアイテム"
+  },
+  {
+   "key": "Excellent Item",
+   "tx": "エクセレントアイテム"
+  },
+  {
+   "key": "Add Extra Item",
+   "tx": "追加アイテムを追加"
+  },
+  {
+   "key": "Range",
+   "tx": "範囲"
+  },
+  {
+   "key": "Distance",
+   "tx": "距離"
+  },
+  {
+   "key": "Min",
+   "tx": "最小"
+  },
+  {
+   "key": "Basic Skill",
+   "tx": "基本スキル"
+  },
+  {
+   "key": "Activation Skill 1",
+   "tx": "発動スキル1"
+  },
+  {
+   "key": "Activation Skill 2",
+   "tx": "発動スキル2"
+  },
+  {
+   "key": "Cease Attack",
+   "tx": "攻撃停止"
+  },
+  {
+   "key": "Auto Attack",
+   "tx": "自動攻撃"
+  },
+  {
+   "key": "Attack Together",
+   "tx": "共に攻撃"
+  },
+  {
+   "key": "Official MU Helper",
+   "tx": "公式MUヘルパー"
+  },
+  {
+   "key": "Used Extension function",
+   "tx": "拡張機能使用中"
+  },
+  {
+   "key": "No Extension Function Being Used",
+   "tx": "拡張機能は使用されていません"
+  },
+  {
+   "key": "Preference of Party Heal",
+   "tx": "パーティ回復の優先度"
+  },
+  {
+   "key": "Buff Duration for All Party Members",
+   "tx": "パーティメンバー全員のバフ持続時間"
+  },
+  {
+   "key": "Save setup",
+   "tx": "設定を保存"
+  },
+  {
+   "key": "Pre-con",
+   "tx": "プレ条件"
+  },
+  {
+   "key": "Sub-con",
+   "tx": "サブ条件"
+  },
+  {
+   "key": "Auto Potion",
+   "tx": "自動ポーション"
+  },
+  {
+   "key": "HP Status",
+   "tx": "HP状態"
+  },
+  {
+   "key": "Heal Support",
+   "tx": "回復サポート"
+  },
+  {
+   "key": "Buff Support",
+   "tx": "バフサポート"
+  },
+  {
+   "key": "HP Status of Party Members",
+   "tx": "パーティメンバーのHP状態"
+  },
+  {
+   "key": "Time Space of Casting Buff",
+   "tx": "バフ詠唱の時間間隔"
+  },
+  {
+   "key": "Activation Skill",
+   "tx": "発動スキル"
+  },
+  {
+   "key": "Auto Recovery",
+   "tx": "自動回復"
+  },
+  {
+   "key": "Monster Within Hunting range",
+   "tx": "狩猟範囲内のモンスター"
+  },
+  {
+   "key": "Monster Attacking Me",
+   "tx": "自分を攻撃しているモンスター"
+  },
+  {
+   "key": "More Than 2 Mobs",
+   "tx": "2体以上のモンスター"
+  },
+  {
+   "key": "More Than 3 Mobs",
+   "tx": "3体以上のモンスター"
+  },
+  {
+   "key": "More than 4 mobs",
+   "tx": "4体以上のモンスター"
+  },
+  {
+   "key": "More than 5 mobs",
+   "tx": "5体以上のモンスター"
+  },
+  {
+   "key": "Official MU Helper Setting",
+   "tx": "公式MUヘルパー設定"
+  },
+  {
+   "key": "Start Official MU Helper",
+   "tx": "公式MUヘルパー開始"
+  },
+  {
+   "key": "Stop Official MU Helper",
+   "tx": "公式MUヘルパー停止"
+  },
+  {
+   "key": "InTheCaseOfDeregisteringBasic",
+   "tx": "基本スキルと発動スキル1・2の登録を解除した場合、コンボスキルは使用できなくなります。"
+  },
+  {
+   "key": "InOrderToUseComboSkill",
+   "tx": "コンボスキルを使用するには、基本スキルと発動スキルを先に登録してください。"
+  },
+  {
+   "key": "DelayAndConditionSettingMenusCan",
+   "tx": "コンボスキル使用中は、遅延および条件設定メニューは利用できません。"
+  },
+  {
+   "key": "Please Enter the Item Name for Addition",
+   "tx": "追加するアイテム名を入力してください"
+  },
+  {
+   "key": "Same name of the item exists in the list",
+   "tx": "リストに同名のアイテムが存在します"
+  },
+  {
+   "key": "ThisSkillWasAlreadyRegisteredRegistered",
+   "tx": "このスキルは既に登録されています。右クリックで登録を解除できます。"
+  },
+  {
+   "key": "Selected Item can be added to maximum %d piece(s)",
+   "tx": "選択したアイテムは最大 %d 個まで追加できます"
+  },
+  {
+   "key": "The list of Add Selected Items is emptied",
+   "tx": "選択アイテム追加リストが空になりました"
+  },
+  {
+   "key": "There is no selected item",
+   "tx": "選択されたアイテムがありません"
+  },
+  {
+   "key": "Any characters under level %d can't run Official MU Helper.",
+   "tx": "レベル %d 未満のキャラクターは公式MUヘルパーを使用できません。"
+  },
+  {
+   "key": "Official MU Helper only runs in filed",
+   "tx": "公式MUヘルパーはフィールドでのみ動作します"
+  },
+  {
+   "key": "In order to run Official MU Helper, please close Inventory window",
+   "tx": "公式MUヘルパーを起動するには、インベントリウィンドウを閉じてください"
+  },
+  {
+   "key": "In order to run Official MU Helper, please close MU Guide window",
+   "tx": "公式MUヘルパーを起動するには、MUガイドウィンドウを閉じてください"
+  },
+  {
+   "key": "InOrderToRunOfficialMU",
+   "tx": "公式MUヘルパーを正常に使用するには、スキルを登録してください（妖精を除く）"
+  },
+  {
+   "key": "Official MU Helper is running.",
+   "tx": "公式MUヘルパーが動作中です。"
+  },
+  {
+   "key": "Official MU Helper is closed",
+   "tx": "公式MUヘルパーは終了しました"
+  },
+  {
+   "key": "Official MU Helper Setting has been saved.",
+   "tx": "公式MUヘルパー設定が保存されました。"
+  },
+  {
+   "key": "Official MU Helper can't be implemented in this region.",
+   "tx": "この地域では公式MUヘルパーは使用できません。"
+  },
+  {
+   "key": "CertainAmountOfZenIsSpent",
+   "tx": "公式MUヘルパーの使用中は、5分ごとに一定量のZenが消費されます"
+  },
+  {
+   "key": "Spent Time %d Minute(s)/",
+   "tx": "使用時間 %d 分/"
+  },
+  {
+   "key": "Spent Time %d Minute(s)/ Spent Zen? %d Stage / Cost %d zen(s)",
+   "tx": "使用時間 %d 分/ 消費Zen %d 段階 / コスト %d Zen"
+  },
+  {
+   "key": "Spent Time %d hour(s) %d Minute(s)/ Spent Zen  %d Stage / Cost %d zen(s)",
+   "tx": "使用時間 %d 時間 %d 分/ 消費Zen  %d 段階 / コスト %d Zen"
+  },
+  {
+   "key": "%d zen(s) have been spent in implementing Official MU Helper",
+   "tx": "公式MUヘルパーの使用により %d Zen消費されました"
+  },
+  {
+   "key": "Zen is not sufficient to run Official MU Helper",
+   "tx": "公式MUヘルパーを使用するためのZenが不足しています"
+  },
+  {
+   "key": "In order to run Official MU Helper, please install Add-on first",
+   "tx": "公式MUヘルパーを使用するには、まずアドオンをインストールしてください"
+  },
+  {
+   "key": "Official MU Helper is closed due to the excess of %d hour(s)",
+   "tx": "%d 時間を超過したため、公式MUヘルパーは終了しました"
+  },
+  {
+   "key": "Other Settings",
+   "tx": "その他の設定"
+  },
+  {
+   "key": "Auto accept - Friend",
+   "tx": "自動承認 - フレンド"
+  },
+  {
+   "key": "Auto accept - Guild Member",
+   "tx": "自動承認 - ギルドメンバー"
+  },
+  {
+   "key": "PVP Counterattack",
+   "tx": "PVPカウンター攻撃"
+  },
+  {
+   "key": "Use Elite Mana Potion",
+   "tx": "エリートマナポーション使用"
+  },
+  {
+   "key": "Unable to use if you have not spent points on your master skill tree.",
+   "tx": "マスタースキルツリーにポイントを割り振っていないと使用できません。"
+  },
+  {
+   "key": "The master skill point will reset.",
+   "tx": "マスタースキルポイントがリセットされます。"
+  },
+  {
+   "key": "Do you want to reset?",
+   "tx": "リセットしますか？"
+  },
+  {
+   "key": "The first tree",
+   "tx": "第1ツリー"
+  },
+  {
+   "key": "ProtectionTranquilityBlessingDivineResilienceConviction",
+   "tx": "＜守護、静穏、祝福、神威、不屈、信念、決断＞"
+  },
+  {
+   "key": "The game will restart after reset!",
+   "tx": "リセット後、ゲームが再起動します！"
+  },
+  {
+   "key": "The second tree",
+   "tx": "第2ツリー"
+  },
+  {
+   "key": "<Valor, Wisdom, Salvation, Chaos, Determination, Justice, Volition>",
+   "tx": "＜勇猛、英知、救済、混沌、決意、正義、意志＞"
+  },
+  {
+   "key": "The third tree",
+   "tx": "第3ツリー"
+  },
+  {
+   "key": "<Rage, Transcendence, Storm, Honor, Ultimacy, Conquest, Destruction>",
+   "tx": "＜激憤、超越、疾嵐、栄光、究極、制覇、破滅＞"
+  },
+  {
+   "key": "Reset all master skill trees",
+   "tx": "すべてのマスタースキルツリーをリセット"
+  },
+  {
+   "key": "Help is active",
+   "tx": "ヘルプは有効です"
+  },
+  {
+   "key": "Spirit Map Combination",
+   "tx": "スピリットマップ結合"
+  },
+  {
+   "key": "Trophies of Battle Combination",
+   "tx": "戦いの勲章結合"
+  },
+  {
+   "key": "SD3610",
+   "tx": "%s : %d%%"
+  },
+  {
+   "key": "Combination Available",
+   "tx": "結合可能"
+  },
+  {
+   "key": "[Combine] %d Level",
+   "tx": "[結合] %d レベル"
+  },
+  {
+   "key": "You need ( %d~%d ) number of Trophies of Battle",
+   "tx": "戦いの勲章が ( %d~%d ) 個必要です"
+  },
+  {
+   "key": "Success rate of combination",
+   "tx": "結合成功率"
+  },
+  {
+   "key": "Success rate of combination: Minimum %d%%, Increase by %d%%",
+   "tx": "結合成功率: 最小 %d%%、%d%%ずつ上昇"
+  },
+  {
+   "key": "Entering Acheron",
+   "tx": "アケロン入場"
+  },
+  {
+   "key": "You can enter Acheron or combine Entrance Items.",
+   "tx": "アケロンに入場するか、入場アイテムを結合できます。"
+  },
+  {
+   "key": "Participating guild member status",
+   "tx": "参加ギルドメンバー状況"
+  },
+  {
+   "key": "Currently, %d people are registered to participate.",
+   "tx": "現在、%d 人が参加登録しています。"
+  },
+  {
+   "key": "You're not in a guild.",
+   "tx": "ギルドに所属していません。"
+  },
+  {
+   "key": "You can only participate in the Arca War if you're in a guild.",
+   "tx": "アルカ戦争にはギルドに所属していないと参加できません。"
+  },
+  {
+   "key": "Register to participate in the Arca War (Guild member)",
+   "tx": "アルカ戦争に参加登録する（ギルドメンバー）"
+  },
+  {
+   "key": "InOrderToProceedWithThe",
+   "tx": "アルカ戦争を進めるには、ギルドマスターがアルカ戦争の登録を完了させる必要があります。"
+  },
+  {
+   "key": "The Arca War is not going on at the moment.",
+   "tx": "現在アルカ戦争は開催されていません。"
+  },
+  {
+   "key": "Please wait until the next Arca War.",
+   "tx": "次回のアルカ戦争までお待ちください。"
+  },
+  {
+   "key": "You cannot enter because you don't have a Spirit Map.",
+   "tx": "スピリットマップがないため入場できません。"
+  },
+  {
+   "key": "You need a Spirit Map to enter Acheron.",
+   "tx": "アケロンに入場するにはスピリットマップが必要です。"
+  },
+  {
+   "key": "Need more guild members to register for the Arca War.",
+   "tx": "アルカ戦争に登録するには、より多くのギルドメンバーが必要です。"
+  },
+  {
+   "key": "Minimum participants: %d, Participants: %d",
+   "tx": "最少参加人数: %d、参加人数: %d"
+  },
+  {
+   "key": "Cancel participation in the Arca War.",
+   "tx": "アルカ戦争への参加を取り消します。"
+  },
+  {
+   "key": "YouDonTHaveEnoughPeople",
+   "tx": "ギルドのアルカ戦争参加人数が十分ではありません。アルカ戦争への参加が取り消されました。"
+  },
+  {
+   "key": "Acheron",
+   "tx": "アケロン"
+  },
+  {
+   "key": "Arca War",
+   "tx": "アルカ戦争"
+  },
+  {
+   "key": "Arca War results",
+   "tx": "アルカ戦争結果"
+  },
+  {
+   "key": "Are you going to participate in the Arca War?",
+   "tx": "アルカ戦争に参加しますか？"
+  },
+  {
+   "key": "Congratulations. You have successfully conquered Obelisk.",
+   "tx": "おめでとうございます。オベリスクの制圧に成功しました。"
+  },
+  {
+   "key": "Sorry! Please conquer Obelisk on your next try.",
+   "tx": "残念！次はオベリスクを制圧してください。"
+  },
+  {
+   "key": "Fire Tower",
+   "tx": "火の塔"
+  },
+  {
+   "key": "Water Tower",
+   "tx": "水の塔"
+  },
+  {
+   "key": "Earth Tower",
+   "tx": "大地の塔"
+  },
+  {
+   "key": "Wind Tower",
+   "tx": "風の塔"
+  },
+  {
+   "key": "Darkness Tower",
+   "tx": "闇の塔"
+  },
+  {
+   "key": "Obtain Trophies of Battle",
+   "tx": "戦いの勲章を獲得"
+  },
+  {
+   "key": "Rewarded EXP",
+   "tx": "報酬経験値"
+  },
+  {
+   "key": "No conquered guild",
+   "tx": "制圧ギルドなし"
+  },
+  {
+   "key": "%s guild conquered",
+   "tx": "%s ギルドが制圧"
+  },
+  {
+   "key": "%d points",
+   "tx": "%d ポイント"
+  },
+  {
+   "key": "Pentagram item",
+   "tx": "五芒星アイテム"
+  },
+  {
+   "key": "Slot of Anger (1)",
+   "tx": "怒りのスロット (1)"
+  },
+  {
+   "key": "Slot of Blessing (2)",
+   "tx": "祝福のスロット (2)"
+  },
+  {
+   "key": "Slot of Integrity (3)",
+   "tx": "誠実のスロット (3)"
+  },
+  {
+   "key": "Slot of Divinity (4)",
+   "tx": "神威のスロット (4)"
+  },
+  {
+   "key": "Slot of Gale (5)",
+   "tx": "疾風のスロット (5)"
+  },
+  {
+   "key": "No information regarding Errtel. (DB:%d)",
+   "tx": "エルテルに関する情報がありません。(DB:%d)"
+  },
+  {
+   "key": "Errtel List does not exist. (DB:%d)",
+   "tx": "エルテルリストが存在しません。(DB:%d)"
+  },
+  {
+   "key": "%s-%d Rank",
+   "tx": "%s-%d ランク"
+  },
+  {
+   "key": "%d Rank Errtel",
+   "tx": "%d ランク エルテル"
+  },
+  {
+   "key": "%d Rank Option +%d",
+   "tx": "%d ランク オプション +%d"
+  },
+  {
+   "key": "Option number (%d)",
+   "tx": "オプション番号 (%d)"
+  },
+  {
+   "key": "Errtel information does not exist or is incorrect. (%d)",
+   "tx": "エルテル情報が存在しないか、正しくありません。(%d)"
+  },
+  {
+   "key": "Element Master Adniel",
+   "tx": "エレメントマスター アドニエル"
+  },
+  {
+   "key": "You can refine Pentagram items or upgrade Errtel.",
+   "tx": "五芒星アイテムの精製、またはエルテルの強化ができます。"
+  },
+  {
+   "key": "Elemental items refinement/combination",
+   "tx": "エレメンタルアイテム 精製/結合"
+  },
+  {
+   "key": "Errtel Level up",
+   "tx": "エルテル レベルアップ"
+  },
+  {
+   "key": "Errtel Rank up",
+   "tx": "エルテル ランクアップ"
+  },
+  {
+   "key": "Pentagram Item %d",
+   "tx": "五芒星アイテム %d"
+  },
+  {
+   "key": "SD3681",
+   "tx": "%s %d"
+  },
+  {
+   "key": "Errtel Level Upgrade",
+   "tx": "エルテル レベルアップ"
+  },
+  {
+   "key": "Errtel Rank Upgrade",
+   "tx": "エルテル ランクアップ"
+  },
+  {
+   "key": "Refinement/Combination",
+   "tx": "精製/結合"
+  },
+  {
+   "key": "Move the item in the inventory area and close the combination window.",
+   "tx": "アイテムをインベントリエリアに移動し、結合ウィンドウを閉じてください。"
+  },
+  {
+   "key": "[Mithril Fragment Refinement]",
+   "tx": "[ミスリル破片 精製]"
+  },
+  {
+   "key": "[Elixir Fragment Refinement]",
+   "tx": "[エリクサー破片 精製]"
+  },
+  {
+   "key": "[Errtel Combination]",
+   "tx": "[エルテル 結合]"
+  },
+  {
+   "key": "[Pentagram item Combination]",
+   "tx": "[五芒星アイテム 結合]"
+  },
+  {
+   "key": "1 Errtel",
+   "tx": "1 エルテル"
+  },
+  {
+   "key": "1 Errtel (Active rank +7 or more)",
+   "tx": "1 エルテル（アクティブランク +7以上）"
+  },
+  {
+   "key": "Set item +7 or more, additional options +4 or more. %d",
+   "tx": "セットアイテム +7以上、追加オプション +4以上 %d"
+  },
+  {
+   "key": "Do you want to refine/combine items?",
+   "tx": "アイテムを精製/結合しますか？"
+  },
+  {
+   "key": "DoYouWantToUpgradeThe",
+   "tx": "以下のエルテルをレベルアップしますか？（注意：アイテムが消滅する場合があります。）"
+  },
+  {
+   "key": "DoYouWantToUpgradeThe3700",
+   "tx": "以下のエルテルをランクアップしますか？（注意：アイテムが消滅する場合があります。）"
+  },
+  {
+   "key": "There's not enough materials for item refinement/combination.",
+   "tx": "アイテム精製/結合の素材が足りません。"
+  },
+  {
+   "key": "You don't have enough materials for an upgrade.",
+   "tx": "強化の素材が足りません。"
+  },
+  {
+   "key": "Combination window is already open. [0x%02X]",
+   "tx": "結合ウィンドウが既に開いています。[0x%02X]"
+  },
+  {
+   "key": "You cannot combine while personal store is open. [0x%02X]",
+   "tx": "個人商店を開いている間は結合できません。[0x%02X]"
+  },
+  {
+   "key": "Combination script does not match. [0x%02X]",
+   "tx": "結合スクリプトが一致しません。[0x%02X]"
+  },
+  {
+   "key": "The item properties do not match for combination. Cannot combine items.",
+   "tx": "結合するアイテムのプロパティが一致しません。結合できません。"
+  },
+  {
+   "key": "Not enough material items for combination.",
+   "tx": "結合の素材アイテムが足りません。"
+  },
+  {
+   "key": "NotEnoughZenToCombineItems3709",
+   "tx": "結合するためのZenが足りません。"
+  },
+  {
+   "key": "Combination failed. Item has disappeared.",
+   "tx": "結合に失敗しました。アイテムが消滅しました。"
+  },
+  {
+   "key": "Upgrade failed.",
+   "tx": "強化に失敗しました。"
+  },
+  {
+   "key": "Refinement/Combination failed.",
+   "tx": "精製/結合に失敗しました。"
+  },
+  {
+   "key": "(Fire element)",
+   "tx": "（火属性）"
+  },
+  {
+   "key": "(Water element)",
+   "tx": "（水属性）"
+  },
+  {
+   "key": "(Earth element)",
+   "tx": "（大地属性）"
+  },
+  {
+   "key": "(Wind element)",
+   "tx": "（風属性）"
+  },
+  {
+   "key": "(Darkness element)",
+   "tx": "（闇属性）"
+  },
+  {
+   "key": "Invalid elements. (%d)",
+   "tx": "無効な属性です。(%d)"
+  },
+  {
+   "key": "%d Rank",
+   "tx": "%d ランク"
+  },
+  {
+   "key": "Do you want to equip the selected Errtel on the Pentagram?",
+   "tx": "選択したエルテルを五芒星に装備しますか？"
+  },
+  {
+   "key": "WhenYouTakeAnErrtelOut",
+   "tx": "エルテルを五芒星から外すと、消滅する場合があります。それでも外しますか？"
+  },
+  {
+   "key": "YouCannotEquipTheSelectedItem",
+   "tx": "選択したアイテムは装備できません。スロットに対応したエルテルを装備してください。"
+  },
+  {
+   "key": "ThereAlreadyIsAnEquippedErrtel",
+   "tx": "既に装備されているエルテルがあります。装備中のエルテルを外してからお試しください。"
+  },
+  {
+   "key": "CannotEquipTheErrtelThatYou",
+   "tx": "装備できません。装備しようとしているエルテルと五芒星の属性が異なります。正しいエルテルを装備してください。"
+  },
+  {
+   "key": "YouCanOnlyEquipOrTake",
+   "tx": "エルテルの装備/取り外しはインベントリ内でのみ行えます。五芒星をインベントリに移動してからお試しください。"
+  },
+  {
+   "key": "YourInventoryIsFullCannotTake",
+   "tx": "インベントリがいっぱいです。エルテルを取り出せません。インベントリを空けてからお試しください。"
+  },
+  {
+   "key": "Pentagram item trade limits have been exceeded. Cannot trade.",
+   "tx": "五芒星アイテムの取引制限を超えています。取引できません。"
+  },
+  {
+   "key": "You have more than 255 Errtels equipped on the Pentagram item you own.",
+   "tx": "所有している五芒星アイテムに、255個を超えるエルテルが装備されています。"
+  },
+  {
+   "key": "Errtel has been successfully equipped.",
+   "tx": "エルテルの装備に成功しました。"
+  },
+  {
+   "key": "Unequip has failed. The Errtel was destroyed.",
+   "tx": "取り外しに失敗しました。エルテルは破壊されました。"
+  },
+  {
+   "key": "Errtel has been successfully unequipped.",
+   "tx": "エルテルの取り外しに成功しました。"
+  },
+  {
+   "key": "Confirm equipping of Errtel",
+   "tx": "エルテル装備の確認"
+  },
+  {
+   "key": "Confirm unequipping of Errtel",
+   "tx": "エルテル取り外しの確認"
+  },
+  {
+   "key": "YouCannotUseTheElementalChaos",
+   "tx": "エレメンタルカオス集合のお守りと、幸運のエレメンタルお守りを同時に使用することはできません。"
+  },
+  {
+   "key": "Congratulations. Combination successful.",
+   "tx": "おめでとうございます。結合に成功しました。"
+  },
+  {
+   "key": "Congratulations. Upgrade successful.",
+   "tx": "おめでとうございます。強化に成功しました。"
+  },
+  {
+   "key": "You cannot use the following feature in this area.",
+   "tx": "このエリアでは以下の機能は使用できません。"
+  },
+  {
+   "key": "An error has occurred in the following feature.",
+   "tx": "以下の機能でエラーが発生しました。"
+  },
+  {
+   "key": "You cannot combine while personal store is open.",
+   "tx": "個人商店を開いている間は結合できません。"
+  },
+  {
+   "key": "Warning3750",
+   "tx": "警告"
+  },
+  {
+   "key": "You cannot restore a deleted character!!",
+   "tx": "削除したキャラクターは復元できません！！"
+  },
+  {
+   "key": "(General items and cash items are not recoverable)",
+   "tx": "（一般アイテムおよびキャッシュアイテムは復元できません）"
+  },
+  {
+   "key": "You cannot use this while the same buff and seals last for 6 hours or more.",
+   "tx": "同じバフとシールが6時間以上残っている間は使用できません。"
+  },
+  {
+   "key": "Client file has been corrupted. Please reinstall the client again.",
+   "tx": "クライアントファイルが破損しています。クライアントを再インストールしてください。"
+  },
+  {
+   "key": "Monster wings",
+   "tx": "モンスターの翼"
+  },
+  {
+   "key": "Monster wings ingredient",
+   "tx": "モンスターの翼の素材"
+  },
+  {
+   "key": "Socket items",
+   "tx": "ソケットアイテム"
+  },
+  {
+   "key": "Item Refinement",
+   "tx": "アイテム精製"
+  },
+  {
+   "key": "Sub-materials %d",
+   "tx": "副素材 %d"
+  },
+  {
+   "key": "Parent-materials %d",
+   "tx": "主素材 %d"
+  },
+  {
+   "key": "ICanFeelThePowerOf",
+   "tx": "バリアの力を感じる。イダスバリアエリアに入りたいなら、左の入場ボタンを押せ。ピッケの耐久度を修理するには、宝石を使わなければならない。"
+  },
+  {
+   "key": "IfYouWantToRepairClick",
+   "tx": "修理したいなら、右のキャンセルボタンを押せ。その後、様々な宝石で強化できる。修理に使える宝石は、祝福の宝石、魂の宝石、創造の宝石、混沌の宝石（束を含む）だ。"
+  },
+  {
+   "key": "Only Level 170 and above may enter.",
+   "tx": "レベル170以上から入場できます。"
+  },
+  {
+   "key": "You cannot attack.",
+   "tx": "攻撃できません。"
+  },
+  {
+   "key": "Use skills closely",
+   "tx": "間近でスキルを使う"
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²",
+   "tx": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²"
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§",
+   "tx": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§"
+  },
+  {
+   "key": "µî·Ï °³¼ö",
+   "tx": "µî·Ï °³¼ö"
+  },
+  {
+   "key": "¿ì¸® ±æµå ÇöÈ²",
+   "tx": "¿ì¸® ±æµå ÇöÈ²"
+  },
+  {
+   "key": "µÚ·Î°¡±â",
+   "tx": "µÚ·Î°¡±â"
+  },
+  {
+   "key": "µî·Ï °¡´É",
+   "tx": "µî·Ï °¡´É"
+  },
+  {
+   "key": "µî·Ï ºÒ°¡",
+   "tx": "µî·Ï ºÒ°¡"
+  },
+  {
+   "key": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³",
+   "tx": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³"
+  },
+  {
+   "key": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.",
+   "tx": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä."
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+   "tx": "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù."
+  },
+  {
+   "key": "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³",
+   "tx": "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³"
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï",
+   "tx": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï"
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?",
+   "tx": "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?"
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.",
+   "tx": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù."
+  },
+  {
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.",
+   "tx": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù."
+  },
+  {
+   "key": "ｼﾓｼｺ",
+   "tx": "ｼﾓｼｺ"
+  },
+  {
+   "key": "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ",
+   "tx": "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ"
+  },
+  {
+   "key": "ﾀ盂ﾝ",
+   "tx": "ﾀ盂ﾝ"
+  },
+  {
+   "key": "ﾇﾘﾁｦ",
+   "tx": "ﾇﾘﾁｦ"
+  },
+  {
+   "key": "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä",
+   "tx": "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä"
+  },
+  {
+   "key": "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?",
+   "tx": "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?"
+  },
+  {
+   "key": "¼­¹ö",
+   "tx": "¼­¹ö"
+  },
+  {
+   "key": "ESC",
+   "tx": "ESC"
+  },
+  {
+   "key": "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡",
+   "tx": "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡"
+  },
+  {
+   "key": "ÀüÃ¼¼ö¸®ºñ¿ë",
+   "tx": "ÀüÃ¼¼ö¸®ºñ¿ë"
+  },
+  {
+   "key": "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù",
+   "tx": "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù"
+  },
+  {
+   "key": "°Å·¡ ½ÂÀÎ ´ë±âÁß",
+   "tx": "°Å·¡ ½ÂÀÎ ´ë±âÁß"
+  },
+  {
+   "key": "You can purchase it after a while.",
+   "tx": "しばらくしてから購入できます。"
+  },
+  {
+   "key": "You can gift it after a while.",
+   "tx": "しばらくしてからギフトできます。"
+  },
+  {
+   "key": "Level: %u | Resets: %u",
+   "tx": "レベル: %u | リセット: %u"
+  },
+  {
+   "key": "BasicAttackFallback",
+   "tx": "基本攻撃フォールバック"
+  },
+  {
+   "key": "Connection lost",
+   "tx": "接続が切断されました"
+  },
+  {
+   "key": "Checking server availability",
+   "tx": "サーバーの状態を確認中"
+  },
+  {
+   "key": "Logging in",
+   "tx": "ログイン中"
+  },
+  {
+   "key": "Loading character list",
+   "tx": "キャラクターリスト読み込み中"
+  },
+  {
+   "key": "Entering the game",
+   "tx": "ゲームに入場中"
+  },
+  {
+   "key": "Retrying in seconds",
+   "tx": "%d 秒後にリトライします..."
+  },
+  {
+   "key": "ChatCommandsTitle",
+   "tx": "コマンド"
+  },
+  {
+   "key": "ChatCommandsNotSupported",
+   "tx": "このサーバーではコマンドリストを提供していません。"
+  },
+  {
+   "key": "ChatCommandsExecute",
+   "tx": "実行"
+  },
+  {
+   "key": "JToggleChatCommands",
+   "tx": "J : チャットコマンド ON/OFF"
+  },
+  {
+   "key": "SpecialCommands",
+   "tx": "スペシャル"
+  },
+  {
+   "key": "ChatCommandsBack",
+   "tx": "戻る"
+  },
+  {
+   "key": "ChatCommandsTemplates",
+   "tx": "テンプレート"
+  },
+  {
+   "key": "ChatCommandsNoTemplates",
+   "tx": "まだテンプレートは保存されていません。"
+  },
+  {
+   "key": "ChatCommandsSaveTemplate",
+   "tx": "テンプレートとして保存"
+  },
+  {
+   "key": "ChatCommandsAddFavourite",
+   "tx": "お気に入りに追加"
+  },
+  {
+   "key": "ChatCommandsRemoveFavourite",
+   "tx": "お気に入りから削除"
+  },
+  {
+   "key": "ChatCommandsFillRequired",
+   "tx": "必要な値を先に入力してください。"
+  },
+  {
+   "key": "ChatCommandsUnknownCommand",
+   "tx": "このコマンドは現在利用できません。"
+  },
+  {
+   "key": "FrameRate",
+   "tx": "フレームレート"
+  },
+  {
+   "key": "FollowDisplay",
+   "tx": "ディスプレイに追従"
+  },
+  {
+   "key": "DisplayNativeMaximum",
+   "tx": "ディスプレイ最大値"
+  },
+  {
+   "key": "VerticalSync",
+   "tx": "垂直同期"
+  },
+  {
+   "key": "RequestedFrameRate",
+   "tx": "設定フレームレート"
+  },
+  {
+   "key": "EffectiveFrameRate",
+   "tx": "実効フレームレート"
+  },
+  {
+   "key": "DisplayRefreshRate",
+   "tx": "ディスプレイリフレッシュレート"
+  },
+  {
+   "key": "ActualFrameRate",
+   "tx": "実測フレームレート"
+  },
+  {
+   "key": "AverageFrameRate",
+   "tx": "平均FPS"
+  },
+  {
+   "key": "OnePercentLow",
+   "tx": "1% Low"
+  },
+  {
+   "key": "LimitReason",
+   "tx": "制限要因"
+  },
+  {
+   "key": "Gamepad",
+   "tx": "ゲームパッド"
+  },
+  {
+   "key": "GamepadEnabled",
+   "tx": "ゲームパッドを有効にする"
+  },
+  {
+   "key": "Haptics",
+   "tx": "振動"
+  },
+  {
+   "key": "HapticIntensity",
+   "tx": "振動の強さ"
+  },
+  {
+   "key": "CombatHaptics",
+   "tx": "戦闘時振動"
+  },
+  {
+   "key": "UIHaptics",
+   "tx": "UI振動"
+  },
+  {
+   "key": "TransactionHaptics",
+   "tx": "取引時振動"
+  },
+  {
+   "key": "ShortRumbleTest",
+   "tx": "ショート振動テスト"
+  },
+  {
+   "key": "LongRumbleTest",
+   "tx": "ロング振動テスト"
+  },
+  {
+   "key": "RumbleUnsupported",
+   "tx": "このコントローラーは振動に対応していません"
+  },
+  {
+   "key": "StickDeadZone",
+   "tx": "スティックデッドゾーン"
+  },
+  {
+   "key": "PointerSpeed",
+   "tx": "ポインター速度"
+  },
+  {
+   "key": "FrameLimitFrameLimiter",
+   "tx": "フレームリミッター"
+  },
+  {
+   "key": "FrameLimitVerticalSync",
+   "tx": "垂直同期"
+  },
+  {
+   "key": "FrameLimitDisplayFallback",
+   "tx": "リフレッシュレートが取得できないため、60Hzにフォールバック"
+  },
+  {
+   "key": "FrameLimitBackground",
+   "tx": "バックグラウンド時フレームレート制限"
+  },
+  {
+   "key": "FrameLimitUnevenVSync",
+   "tx": "VSyncの周期が不均一"
+  },
+  {
+   "key": "FrameLimitPerformanceOrExternal",
+   "tx": "性能/外部要因による制限"
+  },
+  {
+   "key": "ControllerMapping",
+   "tx": "コントローラーマッピング"
+  },
+  {
+   "key": "GenericController",
+   "tx": "汎用コントローラー"
+  },
+  {
+   "key": "GamepadAction",
+   "tx": "アクション"
+  },
+  {
+   "key": "PhysicalControl",
+   "tx": "物理ボタン"
+  },
+  {
+   "key": "TriggerDeadZone",
+   "tx": "トリガーデッドゾーン"
+  },
+  {
+   "key": "InvertPointerY",
+   "tx": "ポインターY軸反転"
+  },
+  {
+   "key": "CurrentMapping",
+   "tx": "現在のマッピング"
+  },
+  {
+   "key": "RestoreDefaultMapping",
+   "tx": "デフォルトのマッピングに戻す"
+  },
+  {
+   "key": "GamepadActionConfirm",
+   "tx": "決定 / インタラクト"
+  },
+  {
+   "key": "GamepadActionCancel",
+   "tx": "キャンセル / 戻る"
+  },
+  {
+   "key": "GamepadActionPrimaryAttack",
+   "tx": "通常攻撃"
+  },
+  {
+   "key": "GamepadActionContext",
+   "tx": "コンテキストアクション"
+  },
+  {
+   "key": "GamepadActionUseSkill",
+   "tx": "現在のスキルを使用"
+  },
+  {
+   "key": "GamepadActionLockTarget",
+   "tx": "ターゲットロック"
+  },
+  {
+   "key": "GamepadActionPreviousSkill",
+   "tx": "前のスキル"
+  },
+  {
+   "key": "GamepadActionNextSkill",
+   "tx": "次のスキル"
+  },
+  {
+   "key": "GamepadActionQuickItem1",
+   "tx": "クイックアイテム1"
+  },
+  {
+   "key": "GamepadActionQuickItem2",
+   "tx": "クイックアイテム2"
+  },
+  {
+   "key": "GamepadActionQuickItem3",
+   "tx": "クイックアイテム3"
+  },
+  {
+   "key": "GamepadActionQuickItem4",
+   "tx": "クイックアイテム4"
+  },
+  {
+   "key": "GamepadActionMap",
+   "tx": "マップ"
+  },
+  {
+   "key": "GamepadActionMenu",
+   "tx": "システムメニュー"
+  },
+  {
+   "key": "GamepadActionHelper",
+   "tx": "MUヘルパー"
+  },
+  {
+   "key": "GamepadActionNextTarget",
+   "tx": "次のターゲット"
+  },
+  {
+   "key": "DisplaySettingsConfirmation",
+   "tx": "この画面設定を維持しますか？ %d 秒後に元に戻ります。"
+  },
+  {
+   "key": "KeepDisplaySettings",
+   "tx": "維持 (A / Enter)"
+  },
+  {
+   "key": "RevertDisplaySettings",
+   "tx": "元に戻す (B / Esc)"
+  },
+  {
+   "key": "SoloShopTitle",
+   "tx": "ソロショップ"
+  },
+  {
+   "key": "SoloShopEquipment",
+   "tx": "装備"
+  },
+  {
+   "key": "SoloShopMaterials",
+   "tx": "素材"
+  },
+  {
+   "key": "SoloShopSkills",
+   "tx": "スキル"
+  },
+  {
+   "key": "SoloShopPets",
+   "tx": "ペット / チケット"
+  },
+  {
+   "key": "SoloShopConsumables",
+   "tx": "消耗品"
+  },
+  {
+   "key": "SoloShopExchange",
+   "tx": "1,000 Zenを100 WCoin(C)に交換"
+  },
+  {
+   "key": "SoloShopExchangeSucceeded",
+   "tx": "1,000 Zenを100 WCoin(C)に交換しました。"
+  },
+  {
+   "key": "SoloShopOperationFailed",
+   "tx": "操作に失敗しました。ゴールド、倉庫、接続状態を確認してください。"
+  },
+  {
+   "key": "EventEntranceOpenedNotice",
+   "tx": "%ls の入場が開始されました。%ls 分後に閉鎖します。"
+  },
+  {
+   "key": "EventEntranceClosedNotice",
+   "tx": "%ls の入場が終了しました。"
+  },
+  {
+   "key": "HappyHourStartedNotice",
+   "tx": "ハッピーアワーイベントが開始されました！"
+  },
+  {
+   "key": "HappyHourEndedNotice",
+   "tx": "ハッピーアワーイベントが終了しました！"
+  },
+  {
+   "key": "RestartRequiredTitle",
+   "tx": "言語を変更しました"
+  },
+  {
+   "key": "RestartLanguageMessage",
+   "tx": "ゲーム内の表記（NPC名、クエスト、アイテム、スキルなど）はゲームを再起動するまで反映されません。今すぐ再起動しますか？"
+  },
+  {
+   "key": "Text_0",
+   "tx": "やあ！何か用かね？"
+  },
+  {
+   "key": "Text_1",
+   "tx": "こんにちは！私は魔法使いのパシです。ハハハ！ふむ…星の運行があまり芳しくないようだね。君の未来は…ふむ…これもまた見えないな…なぜだろう…？"
+  },
+  {
+   "key": "Text_2",
+   "tx": "こんにちは！私は倉庫番のバズです。どこへ行くにも私がお役に立ちますよ。どうぞ遠慮なく荷物を預けてください。"
+  },
+  {
+   "key": "Text_3",
+   "tx": "多くの冒険者たちが、ハープの音色は疲れを癒し、吹き飛ばしてくれると言っています。何かお手伝いでも？"
+  },
+  {
+   "key": "Text_4",
+   "tx": "こんにちは！私は倉庫番のバズです。どこへ行くにも私がお役に立ちますよ。どうぞ遠慮なく荷物を預けてください。"
+  },
+  {
+   "key": "Text_5",
+   "tx": "十分なお金は持っているかね？研究を続けるにはお金が必要だから、お金なしではアイテムを合成することはできないのだ。わかったか？いくら必要か知りたいのかね？"
+  },
+  {
+   "key": "Text_6",
+   "tx": "MUへようこそ！MU大陸を旅する中で助けが必要なときは、F1キーを押してください。"
+  },
+  {
+   "key": "Text_7",
+   "tx": "ロレンシアは初めてですか？噴水の前の南東の出口へ行って、バジドラゴンやスパイダーを狩ってみるとよいでしょう。北西のスケルトンは危険すぎますよ。"
+  },
+  {
+   "key": "Text_8",
+   "tx": "ノリアへようこそ。初めてなら、倉庫番を通り抜けて南の出口へ行きましょう。スコーピオンやゴブリンのような低レベルモンスターを狩ってみてください。"
+  },
+  {
+   "key": "Text_9",
+   "tx": "MU大陸の詳しいガイドが必要なら、http://muonline.webzen.net をご覧ください。"
+  },
+  {
+   "key": "Text_50",
+   "tx": "初代皇帝ムレンにまつわる「皇帝の勅章」は、ロストタワー、アトランス、そしてダンジョン周辺で目撃されたと言われています。"
+  },
+  {
+   "key": "Answer_50_Slot_0",
+   "tx": "そんなものがあったとは知りませんでした…"
+  },
+  {
+   "key": "Text_51",
+   "tx": "神へのお供えが足りませんわ。1,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。"
+  },
+  {
+   "key": "Answer_51_Slot_0",
+   "tx": "1,000,000 Zenを持って戻ります。"
+  },
+  {
+   "key": "Text_52",
+   "tx": "MUを統一した初代皇帝ムレンにまつわる「皇帝の勅章」は、ロストタワー、アトランス、そしてダンジョン周辺で目撃されたと言われています。"
+  },
+  {
+   "key": "Answer_52_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_53",
+   "tx": "「皇帝の勅章」は強大な力に包まれています。それを読みし者には、その強大な力が授けられるでしょう。"
+  },
+  {
+   "key": "Answer_53_Slot_0",
+   "tx": "話をもう一度繰り返してください。"
+  },
+  {
+   "key": "Answer_53_Slot_1",
+   "tx": "探しに行きます。"
+  },
+  {
+   "key": "Answer_53_Slot_2",
+   "tx": "どうでもいいです。"
+  },
+  {
+   "key": "Text_54",
+   "tx": "「皇帝の勅章」を探しなさい。それを読めば、偉大な力が授けられるでしょう。"
+  },
+  {
+   "key": "Answer_54_Slot_0",
+   "tx": "探しに行きます。"
+  },
+  {
+   "key": "Text_55",
+   "tx": "「皇帝の勅章」を見つけたのですね！ここには、MU帝国初代皇帝ムレンの統一記念が魔法の力で記されているのですよ。「皇帝の勅章」を手にした者には、偉大な力が授けられるのです。"
+  },
+  {
+   "key": "Answer_55_Slot_0",
+   "tx": "その記録について教えてください。"
+  },
+  {
+   "key": "Text_56",
+   "tx": "初代皇帝ムレンの歴史的記録には、ムレンがすべての軍閥を打ち負かし、大陸をMU帝国として統一したことによる平和の記念が記されています。"
+  },
+  {
+   "key": "Answer_56_Slot_0",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_57",
+   "tx": "ムレンは、セクネウムの侵略によって人々にもたらされた混乱を終わらせた、3人の英雄のうちの1人でした。"
+  },
+  {
+   "key": "Answer_57_Slot_0",
+   "tx": "前の話を教えてください。"
+  },
+  {
+   "key": "Answer_57_Slot_1",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_58",
+   "tx": "「折れた剣」「エルフの涙」「ウィザードの魂」と呼ばれる魔法の秘宝が見つかることでしょう。「折れた剣」は、ダークナイトたちがその勇気と忠誠、そして繁栄への願いの象徴として捧げたものです。"
+  },
+  {
+   "key": "Answer_58_Slot_0",
+   "tx": "前の話を教えてください。"
+  },
+  {
+   "key": "Answer_58_Slot_1",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_59",
+   "tx": "「ウィザードの魂」は、ダークウィザードたちが帝国の平和と自由のために自らの力を捧げるという誓いの象徴として捧げたものです。MU暦10年、平和記念記録の抜粋…"
+  },
+  {
+   "key": "Answer_59_Slot_0",
+   "tx": "前の話を教えてください。"
+  },
+  {
+   "key": "Answer_59_Slot_1",
+   "tx": "そういうことだったのですね…"
+  },
+  {
+   "key": "Text_60",
+   "tx": "「皇帝の勅章」を読んだのなら、古代のダークナイトたちが平和記念に使用した「折れた剣」を探しなさい。聞くところによると、アトランス、ロストタワー、タルカンで何人かのダークナイトがそれを見つけたとか。"
+  },
+  {
+   "key": "Answer_60_Slot_0",
+   "tx": "見つけてきます。"
+  },
+  {
+   "key": "Answer_60_Slot_1",
+   "tx": "やめます。"
+  },
+  {
+   "key": "Text_61",
+   "tx": "それらの場所は危険が潜んでいますし、「折れた剣」は簡単に見つかるものではありません。ですが、もし見つけられれば、新たな力が授けられるでしょう！「折れた剣」を見つけたら、また私のところへ戻ってきなさい。"
+  },
+  {
+   "key": "Answer_61_Slot_0",
+   "tx": "必ず見つけて戻ってきます。"
+  },
+  {
+   "key": "Text_62",
+   "tx": "勇ましきダークナイトよ、「折れた剣」を見つけたのですね！ムー大陸統一後、初代皇帝ムレンは、二度と戦争が起こらぬよう願いの象徴として、自らの剣「黙示録」を折ったのです。"
+  },
+  {
+   "key": "Answer_62_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_63",
+   "tx": "戦争後、ブレードナイトになることを志したダークナイトたちは、自らの勇気を証明するため、古代の「折れた剣」を求めるようになりました。"
+  },
+  {
+   "key": "Answer_63_Slot_0",
+   "tx": "そういうことだったのですね！"
+  },
+  {
+   "key": "Text_64",
+   "tx": "「皇帝の勅章」を読んだのですね。ならば、「皇帝の勅章」に記された3つの秘宝についてもご存知でしょう。古代のエルフたちが精霊の力で作ったクリスタル「エルフの涙」を探しなさい。"
+  },
+  {
+   "key": "Answer_64_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_65",
+   "tx": "その場所はたいへん危険ですし、「エルフの涙」は極めて見つけにくいものです。ですが「エルフの涙」を見つければ、新たな力が授けられるでしょう。さあ、「エルフの涙」を探しに行き、また戻ってきなさい。"
+  },
+  {
+   "key": "Answer_65_Slot_0",
+   "tx": "「エルフの涙」を探しに行きます！"
+  },
+  {
+   "key": "Text_66",
+   "tx": "「エルフの涙」を見つけたのですね！戦争後、エルフの女王ルネディルは、エルフたちが女神の力を呼び起こし、力を築けるようにと、精霊石に魔法をかけて涙の石を作りました。"
+  },
+  {
+   "key": "Answer_66_Slot_0",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_67",
+   "tx": "「皇帝の勅章」を読んだのですね。ならば、そこに記された3つの秘宝についてもご存知でしょう。"
+  },
+  {
+   "key": "Answer_67_Slot_0",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_68",
+   "tx": "あなたの力なら、きっと「ウィザードの魂」を見つけられるでしょう。さあ、「ウィザードの魂」を探しに行き、見つけたらまた戻ってきなさい。"
+  },
+  {
+   "key": "Answer_68_Slot_0",
+   "tx": "「ウィザードの魂」を探しに行きます。"
+  },
+  {
+   "key": "Text_69",
+   "tx": "きっと見つけてくると思っていましたよ！アルカの偉大なる魔法使いエトラムは、弱きダークナイトたちがクンドゥンの攻撃でくじけぬようにと、魂を守る魔法石を作りました。"
+  },
+  {
+   "key": "Answer_69_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_70",
+   "tx": "この魔法石を持つダークウィザードは、ソウルマスターとなるのです。"
+  },
+  {
+   "key": "Answer_70_Slot_0",
+   "tx": "私はソウルマスターになりました！"
+  },
+  {
+   "key": "Text_71",
+   "tx": "神へのお供えが足りませんわ。2,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。"
+  },
+  {
+   "key": "Answer_71_Slot_0",
+   "tx": "2,000,000 Zenを持って戻ります。"
+  },
+  {
+   "key": "Text_72",
+   "tx": "あなたの強い意志と力の結果として、新たな力が授けられました。ルガードの加護が、いつもあなたと共にあらんことを。"
+  },
+  {
+   "key": "Answer_72_Slot_0",
+   "tx": "神の加護がありますように…"
+  },
+  {
+   "key": "Text_73",
+   "tx": "あなたは既に偉大な力を持っています。私にはあなたのための神託はありませんわ。"
+  },
+  {
+   "key": "Answer_73_Slot_0",
+   "tx": "また後で戻ってきます。"
+  },
+  {
+   "key": "Text_74",
+   "tx": "もっと強くなってから戻ってきなさい。"
+  },
+  {
+   "key": "Answer_74_Slot_0",
+   "tx": "強くなったら戻ってきます。"
+  },
+  {
+   "key": "Text_75",
+   "tx": "強き戦士に成長したのなら、それを見つけられるはずです。"
+  },
+  {
+   "key": "Answer_75_Slot_0",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_76",
+   "tx": "それ以来、ブレードナイトになることを志すダークナイトたちが、決して剣を不義には振るわぬという誓いの象徴として、自らの剣を折る習わしが生まれました。"
+  },
+  {
+   "key": "Answer_76_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_77",
+   "tx": "冒険好きなエルフたちの中には、ロストタワー、アトランス、タルカンで見かけたと言う者もいますわ。"
+  },
+  {
+   "key": "Answer_77_Slot_0",
+   "tx": "探しに行きます！"
+  },
+  {
+   "key": "Answer_77_Slot_1",
+   "tx": "そんな場所には行きたくありません。"
+  },
+  {
+   "key": "Text_78",
+   "tx": "これが「エルフの涙」と呼ばれるものです。この石を見つけたエルフは、エルフの女神たちの力を呼び起こせるミューズエルフとなるのです。"
+  },
+  {
+   "key": "Answer_78_Slot_0",
+   "tx": "私はミューズエルフになりました！"
+  },
+  {
+   "key": "Text_79",
+   "tx": "「皇帝の勅章」と「折れた剣」の両方を手に入れたあなたは、今後ブレードナイトと呼ばれるでしょう。"
+  },
+  {
+   "key": "Answer_79_Slot_0",
+   "tx": "私はブレードナイトになりました！"
+  },
+  {
+   "key": "Text_80",
+   "tx": "帝国が統一された後、人々は皇帝に忠誠を誓いました。その忠誠の象徴として捧げられた秘宝の一部が、以下のものです。"
+  },
+  {
+   "key": "Answer_80_Slot_0",
+   "tx": "前の話を教えてください。"
+  },
+  {
+   "key": "Answer_80_Slot_1",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_81",
+   "tx": "「エルフの涙」は、エルフと人間の力を強めるという誓いの証として、エルフたちが捧げたものです。"
+  },
+  {
+   "key": "Answer_81_Slot_0",
+   "tx": "前の話を教えてください。"
+  },
+  {
+   "key": "Answer_81_Slot_1",
+   "tx": "続けてください。"
+  },
+  {
+   "key": "Text_82",
+   "tx": "「ウィザードの魂」を探しなさい。古代のダークウィザードたちの話では、ロストタワー、アトランス、タルカン周辺で最後に目撃されたそうです。"
+  },
+  {
+   "key": "Answer_82_Slot_0",
+   "tx": "探しに行きます"
+  },
+  {
+   "key": "Answer_82_Slot_1",
+   "tx": "また後で戻ってきます。"
+  },
+  {
+   "key": "Text_90",
+   "tx": "「皇帝の勅令」を読み終わりましたか。では、ムレンと召喚師の長セメデンの間の秘密の契約についてはご存知ですね。ムレンはエルベを帝国の傘下に置く代わりに、ある約束をしていたのです。"
+  },
+  {
+   "key": "Answer_90_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_91",
+   "tx": "MU大陸には、召喚師たちが管轄する異世界の門がありました。そしてセメデンは、約束の証として「アビスオブアイ」を贈りました。どうか、「アビスオブアイ」を持ち帰ってきてください。"
+  },
+  {
+   "key": "Answer_91_Slot_0",
+   "tx": "依頼を受ける"
+  },
+  {
+   "key": "Answer_91_Slot_1",
+   "tx": "依頼を断る"
+  },
+  {
+   "key": "Text_92",
+   "tx": "「アビスオブアイ」はアトランス、ロストタワー、タルカン周辺で発見されたと聞いております。見つけ次第、すぐに持ち帰ってください。"
+  },
+  {
+   "key": "Answer_92_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_93",
+   "tx": "「アビスオブアイ」を見つけましたね。これは現実世界には存在しない元素で構成された物体だと知られています。記憶を伴った、現世以前の世界からの伝染物なのです。"
+  },
+  {
+   "key": "Answer_93_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_94",
+   "tx": "「アビスオブアイ」は、この世界の次元を管轄し交信する私にとって、特別な意味を持っています。「アビスオブアイ」を持ち帰ってくれたなら、あなたの次元の管理者であるセメデンの「ブラッドサマナー」の称号を授けましょう。"
+  },
+  {
+   "key": "Answer_94_Slot_0",
+   "tx": "ブラッドサマナーの称号を受ける"
+  },
+  {
+   "key": "Text_100",
+   "tx": "ムレンの祝福と力を得るには、「栄光の指輪」と呼ばれる伝説の秘宝が必要です。それが再びこの地に姿を現しました。しかしあなたはまだ準備ができていません。もっと経験を積んでから待ちなさい。"
+  },
+  {
+   "key": "Answer_100_Slot_0",
+   "tx": "では、何をすればよいのでしょう？"
+  },
+  {
+   "key": "Text_101",
+   "tx": "このクエストを生き残るには、もっと経験が必要です。滅びた帝国の試練に従い、レベル220まで上げてから戻ってきなさい。"
+  },
+  {
+   "key": "Answer_101_Slot_0",
+   "tx": "時が来たら戻ってきます。"
+  },
+  {
+   "key": "Text_102",
+   "tx": "ムレンの祝福と力を得るには、「栄光の指輪」と呼ばれる伝説の秘宝が必要です。それが再びこの地に姿を現しました。"
+  },
+  {
+   "key": "Answer_102_Slot_0",
+   "tx": "もっと聞きたいです。"
+  },
+  {
+   "key": "Text_103",
+   "tx": "「栄光の指輪」を手にした者は、ムレンの祝福を受けるといいます。海の向こうの砂漠で見つかると言われています。"
+  },
+  {
+   "key": "Answer_103_Slot_0",
+   "tx": "なぜそこにあるのですか？"
+  },
+  {
+   "key": "Text_104",
+   "tx": "そこのモンスターたちはたいへん強力です。彼らがその指輪を持っているのですよ。"
+  },
+  {
+   "key": "Answer_104_Slot_0",
+   "tx": "話をもう一度繰り返してください。"
+  },
+  {
+   "key": "Answer_104_Slot_1",
+   "tx": "挑戦してみます。"
+  },
+  {
+   "key": "Answer_104_Slot_2",
+   "tx": "まだ準備ができていません。"
+  },
+  {
+   "key": "Text_105",
+   "tx": "「栄光の指輪」は、あなたが思っているよりも近くにあるかもしれません。手に入れたとき、あなたはきっと力の変化を感じるでしょう。ですが、簡単なことではありませんよ。"
+  },
+  {
+   "key": "Answer_105_Slot_0",
+   "tx": "必ず持って帰ります。"
+  },
+  {
+   "key": "Text_108",
+   "tx": "これこそ「栄光の指輪」ですわ。思っていた以上に、神秘的なオーラに輝いていますわ。この指輪には、あなたには想像もつかないような伝説が秘められているのですわ。あなたの手に渡ったのは、まさに神の恵みですわ。"
+  },
+  {
+   "key": "Answer_108_Slot_0",
+   "tx": "なるほど。"
+  },
+  {
+   "key": "Text_109",
+   "tx": "この指輪は生命を蘇らせ、永遠の若さをもたらすと言われています。ですが、その力を操れるだけの力を持つ英雄にしか、その真価は発揮されないのです。"
+  },
+  {
+   "key": "Answer_109_Slot_0",
+   "tx": "なぜですか？"
+  },
+  {
+   "key": "Text_110",
+   "tx": "アルカの魔法使いエトラムが、悪しき者に悪用されぬよう、呪文をかけたからですわ。ですがあなたなら、その相にふさわしいようですわ。"
+  },
+  {
+   "key": "Answer_110_Slot_0",
+   "tx": "そうですか？"
+  },
+  {
+   "key": "Text_111",
+   "tx": "「栄光の指輪」は、預言書「セクロミコン」が不滅の金属で作られたとき、共に作られたものです。二つは神聖なものとされてきましたが、副司令官ガイオンの反乱の際に奪われ、行方不明となりました。"
+  },
+  {
+   "key": "Answer_111_Slot_0",
+   "tx": "そうですか！！"
+  },
+  {
+   "key": "Text_112",
+   "tx": "「栄光の指輪」が見つかった今、あなたは戦士としてさらに成長できるでしょう。"
+  },
+  {
+   "key": "Answer_112_Slot_0",
+   "tx": "自分の能力が高まっていくのを感じます！"
+  },
+  {
+   "key": "Text_113",
+   "tx": "あなたはかつてないほど偉大な存在へと成長するでしょう。どうかその力を、帝国の平和のために使ってください。"
+  },
+  {
+   "key": "Answer_113_Slot_0",
+   "tx": "そうします。"
+  },
+  {
+   "key": "Text_114",
+   "tx": "あなたは既に神聖な力を持っていますわ。"
+  },
+  {
+   "key": "Answer_114_Slot_0",
+   "tx": "また後で戻ってきます。"
+  },
+  {
+   "key": "Text_115",
+   "tx": "戦士に新たな力を与えると言われる「ダークストーン」が、MU大陸で発見されました。しかしあなたはまだ、その力を使う準備ができていません。準備ができるまで待ちなさい。"
+  },
+  {
+   "key": "Answer_115_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_116",
+   "tx": "真の力を手に入れるには、皇帝ムレンの史実を記した「皇帝の勅章」で己を磨かねばなりません。デビアスの「セヴィナ」のところへ行きなさい。"
+  },
+  {
+   "key": "Answer_116_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_117",
+   "tx": "ブレードナイトになるのに失敗しましたね。「栄光の指輪」を通じて新たな力を手に入れてから、戻ってきなさい。"
+  },
+  {
+   "key": "Answer_117_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_118",
+   "tx": "このクエストを神聖なものとするには、神々に3,000,000 Zenを捧げねばなりません。あなたのZenでは足りませんわ。"
+  },
+  {
+   "key": "Answer_118_Slot_0",
+   "tx": "3,000,000 Zenを持って戻ります。"
+  },
+  {
+   "key": "Text_119",
+   "tx": "神へのお供えが足りませんわ。2,000,000 Zenをお供えしてくだされば、神託をお伝えしますわ。"
+  },
+  {
+   "key": "Answer_119_Slot_0",
+   "tx": "2,000,000 Zenを持って戻ります"
+  },
+  {
+   "key": "Text_130",
+   "tx": "これこそ「栄光の指輪」ですわ。その輝きをご覧なさい。この指輪には、あなたには想像もつかないほどの時と伝説が込められているのですわ。あなたがこれを見つけられたのは、まさに恵みですわ！"
+  },
+  {
+   "key": "Answer_130_Slot_0",
+   "tx": "それは驚きですね！"
+  },
+  {
+   "key": "Text_131",
+   "tx": "ええ、この指輪には死者を蘇らせ、永遠の若さをもたらす力があると言われていますわ。指輪の力を操れる真の英雄の手に渡ってこそ、その真価を発揮するものなのですわ。"
+  },
+  {
+   "key": "Answer_131_Slot_0",
+   "tx": "なぜですか？"
+  },
+  {
+   "key": "Text_132",
+   "tx": "アルカの魔法使いエトラムが、悪しき者の手に渡らぬよう呪文をかけたからですわ。ですがあなたは、真の継ぎ手のようですわね！"
+  },
+  {
+   "key": "Answer_132_Slot_0",
+   "tx": "そうですか！"
+  },
+  {
+   "key": "Text_133",
+   "tx": "「栄光の指輪」は、預言書「セクロミコン」が不滅の金属で作られたとき、共に作られたものです。二つは神聖なものとされてきましたが、副司令官ガイオンの反乱の際に奪われ、行方不明となりました。"
+  },
+  {
+   "key": "Answer_133_Slot_0",
+   "tx": "そうですか！"
+  },
+  {
+   "key": "Text_134",
+   "tx": "「栄光の指輪」が見つかった今、あなたは戦士としてさらに成長できるでしょう。"
+  },
+  {
+   "key": "Answer_134_Slot_0",
+   "tx": "自分の能力が高まっていくのを感じます！"
+  },
+  {
+   "key": "Text_135",
+   "tx": "新たな力を手に入れたいのなら、よく聞きなさい。戦士に新たな力を与えると言われる「ダークストーン」が、MU大陸で発見されました。"
+  },
+  {
+   "key": "Answer_135_Slot_0",
+   "tx": "もっと聞きたいです。"
+  },
+  {
+   "key": "Text_136",
+   "tx": "「ダークストーン」があれば、新たな能力を会得できます。簡単なことではありませんが、「栄光の指輪」を手に入れられたあなたなら、可能かもしれませんわ。"
+  },
+  {
+   "key": "Answer_136_Slot_0",
+   "tx": "何をすればよいでしょう？"
+  },
+  {
+   "key": "Text_137",
+   "tx": "噂では、タルカンとイカルスで石が見つかるそうです。モンスターには気をつけなさい。その石を持つモンスターは、特別な能力を持つ者にしか反応しませんからね。"
+  },
+  {
+   "key": "Answer_137_Slot_0",
+   "tx": "話をもう一度繰り返してください。"
+  },
+  {
+   "key": "Answer_137_Slot_1",
+   "tx": "ならば挑戦してみます！"
+  },
+  {
+   "key": "Answer_137_Slot_2",
+   "tx": "まだ自信がありません。"
+  },
+  {
+   "key": "Text_138",
+   "tx": "「ダークストーン」が今、あなたを呼んでいます。これを手にすれば、かつて感じたことのない力をきっと手に入れられるでしょう。ですが、他の多くの戦士たちも、必死に石を探しているのですわ。"
+  },
+  {
+   "key": "Answer_138_Slot_0",
+   "tx": "「ダークストーン」を持って戻ります。"
+  },
+  {
+   "key": "Text_139",
+   "tx": "まあ、「ダークストーン」を見つけたのですね。この石は、神とサタンの戦いで戦った英雄「ベネロープ」の乾いた血であると記録されています。"
+  },
+  {
+   "key": "Answer_139_Slot_0",
+   "tx": "もっと教えてください。"
+  },
+  {
+   "key": "Text_140",
+   "tx": "ベネロープは騎士の血筋です。戦いで敗れた後、彼は新たな魔法と戦闘技術の修行を積みました。それらの技術は、クンドゥンの強大な力に対抗するため、騎士の血を引く戦士たちにひっそりと伝えられてきたのです。"
+  },
+  {
+   "key": "Answer_140_Slot_0",
+   "tx": "なるほど…"
+  },
+  {
+   "key": "Text_141",
+   "tx": "その通り。あなたには戦士の血が流れています。ですから、ベネロープの力がダークストーンを通じてあなたに授けられるでしょう。"
+  },
+  {
+   "key": "Answer_141_Slot_0",
+   "tx": "新たな力を授かりました！"
+  },
+  {
+   "key": "Text_142",
+   "tx": "あなたは「栄光の指輪」を通じて新たな力を手に入れましたね。ですが、あなたが知らないことがまだありますわ。"
+  },
+  {
+   "key": "Answer_142_Slot_0",
+   "tx": "それは何ですか？"
+  },
+  {
+   "key": "Text_143",
+   "tx": "新たな力を手に入れられる可能性があるのです。「栄光の指輪」と共に神聖視されてきた伝説の秘宝「ダークストーン」が、あなたを呼んでいますわ。"
+  },
+  {
+   "key": "Answer_143_Slot_0",
+   "tx": "それは信じがたいです！"
+  },
+  {
+   "key": "Text_144",
+   "tx": "光の神ルガードが、あなたに依頼があるとおっしゃっています。ですが、まだあなたにはその資格がありません。もっと強くなってから戻ってきなさい。"
+  },
+  {
+   "key": "Answer_144_Slot_0",
+   "tx": "強くなったら戻ってきます。"
+  },
+  {
+   "key": "Text_145",
+   "tx": "光の神ルガードが、あなたに依頼があるとおっしゃっています。ですが、まだあなたにはその資格がありません。前のクエストを完了してから戻ってきなさい。"
+  },
+  {
+   "key": "Answer_145_Slot_0",
+   "tx": "終わらせたら戻ってきます。"
+  },
+  {
+   "key": "Text_146",
+   "tx": "Zenが足りませんわ。ルガードに5,000,000 Zenをお供えして、この任務に申し込んでください。"
+  },
+  {
+   "key": "Answer_146_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_147",
+   "tx": "光の神ルガードが、あなたに依頼があるとおっしゃっています。"
+  },
+  {
+   "key": "Answer_147_Slot_0",
+   "tx": "何でしょう？"
+  },
+  {
+   "key": "Text_148",
+   "tx": "ルガードは、バルガスがもたらすMUへの新たな脅威に立ち向かう英雄を探すよう、あなたに求めていらっしゃいます。"
+  },
+  {
+   "key": "Answer_148_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_149",
+   "tx": "バルガスの軍勢がクライウォルフ要塞を通じてMU大陸に迫っていることはわかっていますが、その全貌についてはまだ正確に解読できていません。"
+  },
+  {
+   "key": "Answer_149_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_150",
+   "tx": "ルガードが私たちを信じてくださっている意味を理解しようと努めていますが、私たちの力不足で、まだその意味に苦しんでいるのです。"
+  },
+  {
+   "key": "Answer_150_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_151",
+   "tx": "あなたこそ、私たちを助けてくださる方だと信じています。私たちと共に働いてくださるおつもりですか？"
+  },
+  {
+   "key": "Answer_151_Slot_0",
+   "tx": "もう一度聞く"
+  },
+  {
+   "key": "Answer_151_Slot_1",
+   "tx": "依頼を受ける"
+  },
+  {
+   "key": "Answer_151_Slot_2",
+   "tx": "依頼を断る"
+  },
+  {
+   "key": "Text_152",
+   "tx": "私たちを助けてくださるには、バルガスの軍勢に立ち向かわねばなりません。その前に、あなたがこの任務に十分な力を持っているか、確かめさせてください。"
+  },
+  {
+   "key": "Answer_152_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_153",
+   "tx": "タルカン、アイダ、イカルスを支配するデスビーム、ヘルメイン、ダークフェニックスのモンスターをそれぞれ討伐し、証拠を3つ持ち帰ってください。"
+  },
+  {
+   "key": "Answer_153_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_154",
+   "tx": "おめでとうございます、任務を完遂されましたね。ご苦労のしるしに、ささやかなものをどうぞ。"
+  },
+  {
+   "key": "Answer_154_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_155",
+   "tx": "バルガスは魔術女王エレジアと手を結び、この世界に危機をもたらしているという点で、それだけでもたいへんな脅威です。"
+  },
+  {
+   "key": "Answer_155_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_156",
+   "tx": "バルガスが、邪悪な魔術の軍勢を率いてMU大陸に新たな脅威をもたらそうとしていると、私たちは予測しています。"
+  },
+  {
+   "key": "Answer_156_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_157",
+   "tx": "資金が足りませんわ。ルガードに7,000,000 Zenをお供えして、この任務に申し込んでください。"
+  },
+  {
+   "key": "Answer_157_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_158",
+   "tx": "ようこそ、あなたは本当に私たちを助けてくださる準備ができていますね。"
+  },
+  {
+   "key": "Answer_158_Slot_0",
+   "tx": "どんなお手伝いでしょう？"
+  },
+  {
+   "key": "Text_159",
+   "tx": "そうですね、情報によるとバルガスが「兵営」と呼ばれる拠点を築いたそうです。ルガードの12使徒たちは、これがバルガスからの新たな脅威であると考えています。"
+  },
+  {
+   "key": "Answer_159_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_160",
+   "tx": "「兵営」に関する正確な情報を得るには、兵営ゾーンに潜入してバルガス軍のさらなる脅威の芽を摘む必要があります。"
+  },
+  {
+   "key": "Answer_160_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_161",
+   "tx": "幸運なことに、ルガードの加護により、バルガスの兵営に入る方法が見つかりました。ゾーンに潜入し、兵士たちを討伐して正確な情報を得てください。それに応じた適切なデータを持ち帰ってくださる？"
+  },
+  {
+   "key": "Answer_161_Slot_0",
+   "tx": "もう一度聞く"
+  },
+  {
+   "key": "Answer_161_Slot_1",
+   "tx": "依頼を受ける"
+  },
+  {
+   "key": "Answer_161_Slot_2",
+   "tx": "依頼を断る"
+  },
+  {
+   "key": "Text_162",
+   "tx": "クライウォルフゾーンの北の墓地へ行き、バルガス兵営の兵士の隠れ家を探しなさい。ルガードの加護により、1体が知能を持つに至りました。彼は「ウェアウルフ・ガーズマン」を名乗っています。"
+  },
+  {
+   "key": "Answer_162_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_163",
+   "tx": "彼がバルガスの兵営へ案内してくれるでしょう。ゾーンに潜入し、兵営で最低でも10体のモンスターを討伐しなさい。"
+  },
+  {
+   "key": "Answer_163_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_164",
+   "tx": "任務を無事に完遂されましたね。ご苦労と、その強い意志に感謝いたします。"
+  },
+  {
+   "key": "Answer_164_Slot_0",
+   "tx": "まだ話しましょう。"
+  },
+  {
+   "key": "Text_165",
+   "tx": "あなたがもたらした情報と討伐したモンスターのおかげで、MU大陸とクライウォルフの平和を築くための大きな助けとなりました。"
+  },
+  {
+   "key": "Answer_165_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_166",
+   "tx": "まだ資格がありませんわ。警備員のマロンに会い、任務のための十分な資格を得てから戻ってきなさい。"
+  },
+  {
+   "key": "Answer_166_Slot_0",
+   "tx": "話を終わらせる。"
+  },
+  {
+   "key": "Text_167",
+   "tx": "資金が足りませんわ。ルガードに10,000,000 Zenをお供えして、この任務に申し込んでください。"
+  },
+  {
+   "key": "Answer_167_Slot_0",
+   "tx": "準備ができたら戻ってきます。"
+  },
+  {
+   "key": "Text_168",
+   "tx": "あなたの自発的な勇気が、私たち全員に大きな希望をもたらしてくれました。"
+  },
+  {
+   "key": "Answer_168_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_169",
+   "tx": "バルガスは、疲れた体を癒すため、別の場所に身を隠しています。"
+  },
+  {
+   "key": "Answer_169_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_170",
+   "tx": "ルガードから託された使命を果たすには、バルガスの正確な居場所を突き止め、訓練中の軍を壊滅させねばなりません。"
+  },
+  {
+   "key": "Answer_170_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_171",
+   "tx": "ルガードの使命の後に待つ最終任務には、巨大で困難な試練が含まれています。それでもまだ興味はありますか？"
+  },
+  {
+   "key": "Answer_171_Slot_0",
+   "tx": "もう一度聞く"
+  },
+  {
+   "key": "Answer_171_Slot_1",
+   "tx": "依頼を受ける"
+  },
+  {
+   "key": "Answer_171_Slot_2",
+   "tx": "依頼を断る"
+  },
+  {
+   "key": "Text_172",
+   "tx": "バルガス兵営の北端にある扉から中に入りなさい。;事前に場所の準備をしておきます。"
+  },
+  {
+   "key": "Answer_172_Slot_0",
+   "tx": "話をここで終わらせる"
+  },
+  {
+   "key": "Text_173",
+   "tx": "おめでとうございます、ルガードの最終試練に合格されましたね。そして今や、彼の加護があなたと共に、どこへでも付いてまわるでしょう。"
+  },
+  {
+   "key": "Answer_173_Slot_0",
+   "tx": "続けて聞かせてください。"
+  },
+  {
+   "key": "Text_174",
+   "tx": "あなたのご苦労が実を結び、バルガスの新たな脅威からMU大陸とクライウォルフの平和を守ることができました。心から感謝申し上げますわ。"
+  },
+  {
+   "key": "Answer_174_Slot_0",
+   "tx": "話をここで終わらせる"
+  }
+ ]
+}

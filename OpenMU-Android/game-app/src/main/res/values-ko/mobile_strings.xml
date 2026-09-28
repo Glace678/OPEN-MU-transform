@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">게임 데이터 준비 중</string>
+    <string name="preparing_detail">첫 실행 시 게임 데이터를 내부 저장소에 압축 해제합니다. 앱을 열어 두세요.</string>
+    <string name="ready">게임 준비 완료</string>
+    <string name="start_game">게임 시작</string>
+    <string name="settings">설정</string>
+    <string name="gesture_help">제스처</string>
+    <string name="retry">다시 시도</string>
+    <string name="extract_failed">게임 데이터를 준비하지 못했습니다</string>
+    <string name="save">저장</string>
+    <string name="back">뒤로</string>
+    <string name="display">화면</string>
+    <string name="controls">조작</string>
+    <string name="network">서버</string>
+    <string name="fps">프레임 속도</string>
+    <string name="render_scale">렌더링 비율</string>
+    <string name="effects">효과 품질</string>
+    <string name="ui_scale">터치 버튼 크기</string>
+    <string name="safe_margin">화면 가장자리 여백</string>
+    <string name="touch_opacity">터치 버튼 불투명도</string>
+    <string name="vibration">터치 및 전투 진동</string>
+    <string name="handedness">주로 사용하는 손</string>
+    <string name="server_address">서버 주소</string>
+    <string name="server_port">연결 포트</string>
+    <string name="local_pairing">로그인 없는 로컬 페어링 (LAN 전용)</string>
+    <string name="restart_note">화면과 서버 설정 변경은 다음에 게임에 들어갈 때 적용됩니다.</string>
+    <string name="invalid_server">서버 IPv4 주소 또는 호스트 이름을 입력하세요. 프로토콜과 포트는 제외하세요.</string>
+    <string name="invalid_local_server">로컬 페어링에는 루프백 또는 LAN IPv4 주소(예: 192.168.1.20)가 필요합니다. 클라우드 서버에서는 로컬 페어링을 끄세요.</string>
+    <string name="invalid_port">포트는 1부터 65535까지여야 합니다.</string>
+    <string name="saved">설정이 저장되었습니다</string>
+    <string name="tutorial_title">모바일 조작</string>
+    <string name="tutorial_body">메뉴: 한 손가락으로 탭하여 선택하거나 확인합니다.\n캐릭터 선택: 캐릭터를 탭한 다음 오른쪽 아래 입장 버튼을 탭합니다.\n\n일반 인벤토리: 탭하여 상세 정보를 봅니다. 움직이지 않고 0.5초 누르면 사용 가능한 아이템을 쓰거나 스킬을 배웁니다. 옮기려면 누른 뒤 바로 끌고, 인벤토리 밖에서 놓으면 원래 자리로 돌아갑니다.\n하단 물약 네 칸: 탭하여 사용합니다. 길게 눌러도 반복 사용하지 않습니다.\n\n게임 월드에서는:\n이동 영역에서 한 손가락으로 끌기: 이동\n스킬 영역 탭: 선택, 두 번 탭: 현재 스킬 사용\n두 손가락으로 좌우 밀기: 스킬 변경\n두 손가락으로 위아래 밀기 또는 오므리거나 벌리기: 카메라 조절\n세 손가락으로 위로 밀기: 지도, 아래로 밀기: 설정\n\n하단 물약 바와 인터페이스 조작은 월드 스킬을 발동하지 않습니다.</string>
+    <string name="understood">확인, 게임 시작</string>
+    <string name="help_close">닫기</string>
+    <string name="game_data_missing">APK에 game-data.zip이 없습니다. 완전한 게임 패키지가 아닙니다.</string>
+    <string name="storage_low">내부 저장소 공간이 부족합니다. 최소 %1$s가 더 필요합니다.</string>
+    <string name="current_display">현재 화면: %1$d × %2$d</string>
+    <string name="max_refresh">최대 화면 주사율: %1$d Hz. 프레임 속도는 30~%1$d로 설정할 수 있습니다.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">최대 %1$d Hz (화면에 맞춤)</string>
+    <string name="game_settings">모바일 설정</string>
+    <string name="open_settings">설정 열기</string>
+    <string-array name="effect_labels">
+        <item>낮음 (부드러운 화면)</item>
+        <item>중간 (권장)</item>
+        <item>높음 (최고 화질)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>오른손</item>
+        <item>왼손</item>
+    </string-array>
+</resources>

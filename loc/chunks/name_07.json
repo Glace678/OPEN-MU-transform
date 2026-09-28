@@ -1,0 +1,1061 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 2825,
+   "en": "Reset Fruit Strength",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2827,
+   "en": "Restores all HP",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2828,
+   "en": "Restores all Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2829,
+   "en": "Restores all SD",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2880,
+   "en": "Ring of Earth",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2881,
+   "en": "Ring of Fire",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2882,
+   "en": "Ring of GM",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2884,
+   "en": "Ring of Ice",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2885,
+   "en": "Ring of Magic",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2886,
+   "en": "Ring of Poison",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2887,
+   "en": "Ring of Wind",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2892,
+   "en": "Royal Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2893,
+   "en": "Royal Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2894,
+   "en": "Royal Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2896,
+   "en": "Royal Mask",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2897,
+   "en": "Royal Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2898,
+   "en": "Ruby Necklace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2899,
+   "en": "Ruby Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2900,
+   "en": "Rune Bastard Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2901,
+   "en": "Rune Blade",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2903,
+   "en": "SD Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2904,
+   "en": "SD Recovery Speed Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2908,
+   "en": "Sacred Fire Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2909,
+   "en": "Sacred Fire Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2910,
+   "en": "Sacred Fire Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2911,
+   "en": "Sacred Fire Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2912,
+   "en": "Sacred Fire Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2913,
+   "en": "Sacred Fire Helm-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2914,
+   "en": "Sacred Fire Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2915,
+   "en": "Sacred Fire Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2916,
+   "en": "Sacred Glove",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2917,
+   "en": "Sacred Glove-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2919,
+   "en": "Saint Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2920,
+   "en": "Salamander Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2933,
+   "en": "Sapphire Necklace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2934,
+   "en": "Sapphire Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2936,
+   "en": "Scale Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2937,
+   "en": "Scale Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2938,
+   "en": "Scale Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2939,
+   "en": "Scale Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2940,
+   "en": "Scale Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2942,
+   "en": "Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2943,
+   "en": "Scepter Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2944,
+   "en": "Scepter Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2947,
+   "en": "Scroll of Aqua Beam",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2948,
+   "en": "Scroll of Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2949,
+   "en": "Scroll of Battle",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2950,
+   "en": "Scroll of Blood",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2951,
+   "en": "Scroll of Chaotic Diseier",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2952,
+   "en": "Scroll of Cometfall",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2953,
+   "en": "Scroll of Critical Damage",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2954,
+   "en": "Scroll of Decay",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2955,
+   "en": "Scroll of Defense",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2956,
+   "en": "Scroll of Electric Spark",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2957,
+   "en": "Scroll of Evil Spirit",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2958,
+   "en": "Scroll of Fire Ball",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2959,
+   "en": "Scroll of Fire Scream",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2960,
+   "en": "Scroll of FireBurst",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2961,
+   "en": "Scroll of Flame",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2962,
+   "en": "Scroll of Gigantic Storm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2963,
+   "en": "Scroll of Healing",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2964,
+   "en": "Scroll of Health",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2965,
+   "en": "Scroll of Hellfire",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2966,
+   "en": "Scroll of Ice",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2967,
+   "en": "Scroll of Ice Storm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2968,
+   "en": "Scroll of Inferno",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2969,
+   "en": "Scroll of Lighting",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2970,
+   "en": "Scroll of Mana",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2971,
+   "en": "Scroll of Meteorite",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2972,
+   "en": "Scroll of Nova",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2973,
+   "en": "Scroll of Poison",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2974,
+   "en": "Scroll of Power Wave",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2975,
+   "en": "Scroll of Quickness",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2976,
+   "en": "Scroll of Soul Barrier",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2977,
+   "en": "Scroll of Strength",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2978,
+   "en": "Scroll of Summon",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2979,
+   "en": "Scroll of Teleport",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2980,
+   "en": "Scroll of Teleport Ally",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2981,
+   "en": "Scroll of Twister",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2982,
+   "en": "Scroll of Wizardry",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2983,
+   "en": "Scroll of Wizardry Enhance",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2984,
+   "en": "Scroll of Wrath",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2985,
+   "en": "Scroll of the Emperor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2988,
+   "en": "Seal of Ascension",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2989,
+   "en": "Seal of Divinity",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2990,
+   "en": "Seal of Healing",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2991,
+   "en": "Seal of Mobility",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2992,
+   "en": "Seal of Strength",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2993,
+   "en": "Seal of Sustenance",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2994,
+   "en": "Seal of Wealth",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2995,
+   "en": "Sealed Golden Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2996,
+   "en": "Sealed Silver Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2998,
+   "en": "Second Secromicon Fragment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2999,
+   "en": "Secret of'Dark Stone'",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 3002,
+   "en": "Seed (Earth)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3003,
+   "en": "Seed (Fire)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3004,
+   "en": "Seed (Ice)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3005,
+   "en": "Seed (Lightning)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3006,
+   "en": "Seed (Water)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3007,
+   "en": "Seed (Wind)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3010,
+   "en": "Seed Sphere (Earth)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3011,
+   "en": "Seed Sphere (Fire)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3012,
+   "en": "Seed Sphere (Ice)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3013,
+   "en": "Seed Sphere (Lightning)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3014,
+   "en": "Seed Sphere (Water)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3015,
+   "en": "Seed Sphere (Wind)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3020,
+   "en": "Seraphim Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3021,
+   "en": "Seraphim Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3022,
+   "en": "Seraphim Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3023,
+   "en": "Seraphim Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3024,
+   "en": "Seraphim Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3025,
+   "en": "Serpent Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3026,
+   "en": "Serpent Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3027,
+   "en": "Serpent Shield-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3028,
+   "en": "Serpent Spear",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3029,
+   "en": "Serpent Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3030,
+   "en": "Serpent Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3031,
+   "en": "Server Relocation Service",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3043,
+   "en": "Shied-Burn",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3046,
+   "en": "Shield Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3047,
+   "en": "Shield Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3049,
+   "en": "Shining Jewelry Case",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3050,
+   "en": "Shining Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3051,
+   "en": "Short Bow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3052,
+   "en": "Short Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3056,
+   "en": "Siege Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3057,
+   "en": "Sign of Dimensions",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3060,
+   "en": "Silk Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3061,
+   "en": "Silk Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 3062,
+   "en": "Silk Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  }
+ ]
+}

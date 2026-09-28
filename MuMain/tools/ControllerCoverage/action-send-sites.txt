@@ -1,0 +1,41 @@
+# Exact source-site baseline for Send* helpers outside generated/custom PacketFunctions.
+# This intentionally includes UI dispatch and downloader helpers: each new bypass-shaped
+# helper must be reviewed before it is accepted as non-player-facing.
+Core/Platform/WinUser.cpp|SendMessage
+Engine/Object/ZzzInterface.cpp|SendCharacterMove
+Engine/Object/ZzzInterface.cpp|SendMacroChat
+Engine/Object/ZzzInterface.cpp|SendMove
+Engine/Object/ZzzInterface.cpp|SendRequestAction
+Engine/Object/ZzzInterface.cpp|SendRequestMagic
+Engine/Object/ZzzInterface.cpp|SendRequestMagicContinue
+Engine/Object/ZzzInventory.cpp|SendRequestEquipmentItem
+Engine/Object/ZzzInventory.cpp|SendRequestUse
+GameLogic/Combat/DuelMgr.cpp|CDuelMgr::SendDuelRequestAnswer
+GameLogic/Items/CComGem.cpp|COMGEM::SendReqMix
+GameLogic/Items/CComGem.cpp|COMGEM::SendReqUnMix
+GameLogic/NPCs/npcGateSwitch.cpp|SendToggleGate
+GameLogic/Pets/GIPetManager.cpp|SendPetCommand
+GameLogic/Quests/QuestMng.cpp|CQuestMng::SendQuestIndexByEtcSelection
+GameLogic/Skills/SummonSystem.cpp|CSummonSystem::SendRequestSummonSkill
+GameLogic/Social/MonkSystem.cpp|CMonkSystem::SendAttackPacket
+GameLogic/Social/MonkSystem.cpp|CMonkSystem::SendDarksideAtt
+GameShop/FileDownloader/FileDownloader.cpp|FileDownloader::SendCompletedDownloadFileEvent
+GameShop/FileDownloader/FileDownloader.cpp|FileDownloader::SendProgressDownloadFileEvent
+GameShop/FileDownloader/FileDownloader.cpp|FileDownloader::SendStartedDownloadFileEvent
+Network/Server/CSMapServer.cpp|CSMServer::SendChangeMapServer
+UI/Legacy/UIControls.cpp|CUIControl::SendUIMessageDirect
+UI/Legacy/UIControls.cpp|CUIMessage::SendUIMessage
+UI/Legacy/UIGateKeeper.cpp|CUIGateKeeper::SendEnter
+UI/Legacy/UIGateKeeper.cpp|CUIGateKeeper::SendEnteranceFee
+UI/Legacy/UIGateKeeper.cpp|CUIGateKeeper::SendPublicSetting
+UI/Legacy/UIWindows.cpp|CUIFriendMenu::SendChatRoomConnectCheck
+UI/Legacy/UIWindows.cpp|CUIWindowMgr::SendUIMessageToWindow
+UI/NewUI/Dialogs/NewUIMessageBox.cpp|SEASON3B::CNewUIMessageBoxBase::SendEvent
+UI/NewUI/Dialogs/NewUIMessageBox.cpp|SEASON3B::CNewUIMessageBoxMng::SendEvent
+UI/NewUI/Events/NewUIKanturuEvent.cpp|SEASON3B::CNewUIKanturu2ndEnterNpc::SendRequestKanturu3rdEnter
+UI/NewUI/Events/NewUIKanturuEvent.cpp|SEASON3B::CNewUIKanturu2ndEnterNpc::SendRequestKanturu3rdInfo
+UI/NewUI/Inventory/NewUIStorageInventory.cpp|CNewUIStorageInventory::SendRequestItemToMyInven
+UI/NewUI/Inventory/NewUIStorageInventory.cpp|CNewUIStorageInventory::SendRequestItemToStorage
+UI/NewUI/Inventory/NewUITrade.cpp|CNewUITrade::SendRequestItemToMyInven
+UI/NewUI/Inventory/NewUITrade.cpp|CNewUITrade::SendRequestItemToTrade
+UI/NewUI/Inventory/NewUITrade.cpp|CNewUITrade::SendRequestMyGoldInput

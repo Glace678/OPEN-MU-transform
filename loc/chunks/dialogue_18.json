@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 2851,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Captain Grizzlies.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2852,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Cursed Liches.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2853,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Cursed Wizards.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2854,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Cyclopses.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2855,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Dark Knights.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2856,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Death Cows.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2857,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Death Knights.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2858,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Devils.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2859,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Grizzlies.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2860,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Hell Hounds.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2861,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Hell Spiders.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2862,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Poison Bull Fighters.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2863,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Poison Shadows.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2864,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Shadows.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2865,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Skeleton Archers.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2866,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Thunder Liches.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2867,
+   "en": "Return to the Shadow Phantom Soldier after defeating 50 Totem Golems.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2868,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Bloody Wolves.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2869,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Death Gorgons.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2870,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Death Knights.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2871,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Devils.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2872,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Iron Wheels.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2873,
+   "en": "Return to the Shadow Phantom Soldier after defeating 60 Mutants.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2874,
+   "en": "Return to the Shadow Phantom Soldier after defeating 80 Alquamoses.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2875,
+   "en": "Return to the Shadow Phantom Soldier after defeating 80 Mega Crusts.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2876,
+   "en": "Return to the Shadow Phantom Soldier after defeating 80 Queen Rainiers.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2883,
+   "en": "Ring of Hero? Ring of Warrior? What are they?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2888,
+   "en": "Road to Floating Castle (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2889,
+   "en": "Road to Floating Castle (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2890,
+   "en": "Road to Floating Castle (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2986,
+   "en": "Scrolls can be purchased from Pasi the Mage (119,112) in Lorencia and Marce (36,218) in Elveland.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3000,
+   "en": "Secure war supplies (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3001,
+   "en": "Secure war supplies (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3016,
+   "en": "Select a quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3038,
+   "en": "Shadow Pawns from the Swamp of Peace should suffice. Go to the Swamp of Peace and defeat 100 Shadow Pawns. Come see me after that, and I will give you a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward. When you claim your reward, make sure you have at least 30 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3041,
+   "en": "Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 290-319)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3042,
+   "en": "Shadow of Evil",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3055,
+   "en": "Show Lv. 1 Request Completion Certificate to Mercenary Guild Manager Tercia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3070,
+   "en": "Silver Valkyries are regularly plundering supplies for our search party at Atlans. Would you mind getting rid of these Silver Valkyries for us?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3072,
+   "en": "Since you now have potions, would you like to leave the safe zone and do some real hunting? Are you ready?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3073,
+   "en": "Situation at the Dungeon (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3074,
+   "en": "Situation at the Dungeon (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3075,
+   "en": "Situation at the Dungeon (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3076,
+   "en": "Situation at the Dungeon (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3077,
+   "en": "Situation at the Dungeon (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3078,
+   "en": "Situation at the Dungeon (6)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3110,
+   "en": "So I need to get those two items. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3111,
+   "en": "So it's not just about equipment or level.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3112,
+   "en": "So it's the real deal from now on. I understand.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3113,
+   "en": "So she imbued rings with the power of the Elves and gave them to warriors in honor of Muren's practice of handing out warriors' rings bearing the emperor's crest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

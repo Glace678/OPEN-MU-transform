@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3114,
+   "en": "So you want me to take the With Queen's jewel.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3115,
+   "en": "So you've decided to become an Agility Elf, a class for whom defense is crucial. Agility Elves are unique in that they employ splendid bow skills. Let me give you a weapon to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3116,
+   "en": "So you've decided to become an Energy Elf, a class for whom wizardry is crucial. Energy Elves are unique in that they employ a variety of summoning and magic spells. Let me give you an orb as a gift so that you can understand what I mean.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3120,
+   "en": "Something strange is happening. Death Riders, who serve as Arca's Aida protectors, are frequently and indiscriminately attacking our gens members exploring the Aida region. Lemuria must be behind it all.  Please eliminate these Death Riders and protect our gens members.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3147,
+   "en": "Spider Hunt!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3179,
+   "en": "Stop the attacks on the gens members by eliminating 50 Burning Lava Giants, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3194,
+   "en": "Strange Confrontation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3195,
+   "en": "Strange Confrontation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3196,
+   "en": "Strange Confrontation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3197,
+   "en": "Strange Confrontation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3228,
+   "en": "Summoners are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3229,
+   "en": "Summoners can learn additional skills by going to Elveland and purchasing scrolls from Marce (36,218). After purchasing a scroll, right-click on it to learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3235,
+   "en": "Supply route of the monsters...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3236,
+   "en": "Sure! What's this simple mission about? (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3237,
+   "en": "Survive through Chaos Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3238,
+   "en": "Survive through Chaos Castle Level 1. Come back to me after that, and I will give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3239,
+   "en": "Survive through Chaos Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3240,
+   "en": "Survive through Chaos Castle Level 2. Come back to me after that, and I will give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3241,
+   "en": "Survive through Chaos Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3242,
+   "en": "Survive through Chaos Castle Level 3. Come back to me after that, and I will give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3243,
+   "en": "Survive through Chaos Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3244,
+   "en": "Survive through Chaos Castle Level 4. I will give you 1 Jewel of Soul as a reward when you return. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3245,
+   "en": "Survive through Chaos Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3246,
+   "en": "Survive through Chaos Castle Level 5. I will give you 1 Jewel of Bless as a reward when you return. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3247,
+   "en": "Survive through Chaos Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3248,
+   "en": "Survive through Chaos Castle Level 6. I will give you 1 Jewel of Life as a reward when you return. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3249,
+   "en": "Survive through Chaos Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3250,
+   "en": "Survive through Chaos Castle Level 7. I will give you 2 Jewels of Bless as a reward when you return. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3251,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3252,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3253,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3254,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3255,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3256,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3257,
+   "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3285,
+   "en": "Take the rings.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3286,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3287,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3288,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3289,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3290,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3291,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3292,
+   "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3309,
+   "en": "Talk to General Goods Merchant Zyro and check the details of his request to the mercenary guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3310,
+   "en": "Talk to Mercenary Guild Manager Tercia for the details of the request from the mercenary guild elders.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3311,
+   "en": "Talk to Priestess Beina of the Underwater Temple and check the details of her request to the mercenary guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3312,
+   "en": "Talk to me again and receive a damage and defense increase buff.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3313,
+   "en": "Talk to your Gens Steward and check the details of his request to the mercenary guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3317,
+   "en": "Tantaloses from Tarkan Level 2 are causing great harm to travelers there. Go to Tarkan Level 2 and hunt down 100 Tantaloses. Come see me when that's done to receive an Invisibility Cloak + 5 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3326,
+   "en": "Tenacity is another trait that a hero can't do without. Please remember that you can't get stronger if you aren't tenacious enough.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

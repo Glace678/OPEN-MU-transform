@@ -1,0 +1,12 @@
+# Rime settings for MuMain's controller keyboard.
+config_version: '1.0'
+
+schema_list:
+  - schema: pinyin_simp_game
+
+menu:
+  page_size: 5
+
+switcher:
+  hotkeys: []
+

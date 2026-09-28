@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Inihahanda ang datos ng laro</string>
+    <string name="preparing_detail">Sa unang pagbukas, ie-extract ang datos ng laro sa internal storage. Panatilihing bukas ang app.</string>
+    <string name="ready">Handa nang maglaro</string>
+    <string name="start_game">Maglaro</string>
+    <string name="settings">Mga setting</string>
+    <string name="gesture_help">Mga gesture</string>
+    <string name="retry">Subukan muli</string>
+    <string name="extract_failed">Hindi maihanda ang datos ng laro</string>
+    <string name="save">I-save</string>
+    <string name="back">Bumalik</string>
+    <string name="display">Graphics</string>
+    <string name="controls">Mga kontrol</string>
+    <string name="network">Server</string>
+    <string name="fps">Frame rate</string>
+    <string name="render_scale">Render scale</string>
+    <string name="effects">Kalidad ng mga effect</string>
+    <string name="ui_scale">Laki ng mga touch button</string>
+    <string name="safe_margin">Ligtas na margin sa gilid</string>
+    <string name="touch_opacity">Opacity ng mga touch button</string>
+    <string name="vibration">Vibration sa paghawak at labanan</string>
+    <string name="handedness">Pangunahing kamay</string>
+    <string name="server_address">Address ng server</string>
+    <string name="server_port">Port ng koneksyon</string>
+    <string name="local_pairing">Lokal na pagpapares nang walang login (LAN lang)</string>
+    <string name="restart_note">Magkakabisa ang mga pagbabago sa graphics at server sa susunod na pagpasok sa laro.</string>
+    <string name="invalid_server">Ilagay ang IPv4 address o hostname ng server, nang walang protocol o port.</string>
+    <string name="invalid_local_server">Kailangan ng lokal na pagpapares ang loopback o LAN IPv4 address, tulad ng 192.168.1.20. I-off ito para sa cloud server.</string>
+    <string name="invalid_port">Ang port ay dapat mula 1 hanggang 65535.</string>
+    <string name="saved">Na-save ang mga setting</string>
+    <string name="tutorial_title">Mga kontrol sa mobile</string>
+    <string name="tutorial_body">Mga menu: i-tap gamit ang isang daliri para pumili o magkumpirma.\nPagpili ng karakter: i-tap ang karakter, saka ang pindutang pumasok sa kanang ibaba.\n\nKaraniwang inventory: i-tap para makita ang detalye; hawakan nang hindi gumagalaw sa loob ng kalahating segundo para gumamit ng puwedeng gamiting item o matuto ng skill. Para ilipat, pindutin at agad i-drag; bitawan sa labas para ibalik sa dating puwesto.\nApat na potion slot sa ibaba: i-tap para gamitin; hindi umuulit ang paggamit kapag hinawakan nang matagal.\n\nSa mundo ng laro:\nI-drag ang isang daliri sa galaw na bahagi para gumalaw.\nI-tap ang skill na bahagi para pumili; i-double-tap para gamitin ang kasalukuyang skill.\nMag-swipe ng dalawang daliri pakaliwa o pakanan para magpalit ng skill.\nMag-swipe ng dalawang daliri pataas o pababa, o mag-pinch, para ayusin ang camera.\nMag-swipe ng tatlong daliri pataas para sa mapa o pababa para sa mga setting.\n\nHindi nagpapagana ng world skill ang potion bar sa ibaba at ang mga kontrol ng interface.</string>
+    <string name="understood">Naintindihan, maglaro</string>
+    <string name="help_close">Isara</string>
+    <string name="game_data_missing">Walang game-data.zip sa APK; hindi ito kumpletong pakete ng laro.</string>
+    <string name="storage_low">Kulang ang internal storage. Kailangan pa ng hindi bababa sa %1$s.</string>
+    <string name="current_display">Kasalukuyang screen: %1$d × %2$d</string>
+    <string name="max_refresh">Pinakamataas na refresh rate: %1$d Hz. Pumili ng frame rate mula 30 hanggang %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Hanggang %1$d Hz (ayon sa screen)</string>
+    <string name="game_settings">Mga setting sa mobile</string>
+    <string name="open_settings">Buksan ang mga setting</string>
+    <string-array name="effect_labels">
+        <item>Mababa (mas makinis)</item>
+        <item>Katamtaman (inirerekomenda)</item>
+        <item>Mataas (pinakamagandang graphics)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Kanang kamay</item>
+        <item>Kaliwang kamay</item>
+    </string-array>
+</resources>

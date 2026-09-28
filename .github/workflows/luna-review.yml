@@ -1,0 +1,86 @@
+name: Zapier Luna - full repository review and Issue fixes
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process/resume'
+        required: true
+        type: number
+      plan_only:
+        description: 'Only inventory and estimate; never call Zapier'
+        default: true
+        type: boolean
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+concurrency:
+  group: zapier-luna-repository-3
+  cancel-in-progress: false
+jobs:
+  review:
+    if: (github.event_name == 'workflow_dispatch' && inputs.plan_only) || (vars.LUNA_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || github.event.issue.user.login == github.repository_owner))
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare stable Issue event
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        with:
+          script: |
+            const fs=require('fs');
+            const event=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH,'utf8'));
+            if(context.eventName === 'workflow_dispatch') {
+              const {data:issue}=await github.rest.issues.get({...context.repo,issue_number:Number(process.env.ISSUE_NUMBER)});
+              event.issue=issue;
+            }
+            if(event.issue?.user.login !== context.repo.owner) throw new Error('Only repository-owner issues may run');
+            const path=require('path').join(process.env.RUNNER_TEMP,'luna-event.json');
+            fs.writeFileSync(path,JSON.stringify(event));
+            core.exportVariable('LUNA_EVENT_PATH',path);
+      - name: Install pinned worker dependencies
+        working-directory: .github/zapier-review
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify worker safety and coverage checks
+        working-directory: .github/zapier-review
+        run: npm test
+      - name: Review through Zapier native Luna only
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ZAPIER_HOOK_URL: ${{ secrets.ZAPIER_HOOK_URL }}
+          ZAPIER_CALLBACK_AUTH: ${{ secrets.ZAPIER_CALLBACK_AUTH }}
+          ZAPIER_SDK_CLIENT_ID: ${{ secrets.ZAPIER_SDK_CLIENT_ID }}
+          ZAPIER_SDK_CLIENT_SECRET: ${{ secrets.ZAPIER_SDK_CLIENT_SECRET }}
+          ZAPIER_TABLE_ID: '01M36XPZ65N821F3AN8FZCW045'
+          LUNA_MAX_TASKS: ${{ vars.LUNA_MAX_TASKS || '49' }}
+          LUNA_NATIVE_AI_BILLING_VERIFIED: ${{ vars.LUNA_NATIVE_AI_BILLING_VERIFIED || 'false' }}
+          LUNA_MAX_MODEL_CALLS: ${{ vars.LUNA_MAX_MODEL_CALLS || '1000' }}
+          LUNA_CHUNK_TOKENS: ${{ vars.LUNA_CHUNK_TOKENS || '650000' }}
+          LUNA_PLAN_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.plan_only && 'true' || 'false' }}
+        run: node .github/zapier-review/worker.mjs
+      - name: Preserve inventory, coverage and review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: luna-review
+          path: .luna-output/
+          retention-days: 7
+          include-hidden-files: true
+      - name: Explain stopped jobs
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const event=JSON.parse(require('fs').readFileSync(process.env.LUNA_EVENT_PATH || process.env.GITHUB_EVENT_PATH,'utf8'));
+            if(event.issue) await github.rest.issues.createComment({...context.repo,issue_number:event.issue.number,body:`Luna 自动处理已停止，未声称全量审查完成。请查看 [运行日志](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) 与 luna-review artifact。预算、编码、上下文、补丁冲突或结果超时均会停止；不自动重发状态不明的模型请求。`});

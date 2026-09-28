@@ -1,0 +1,1058 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 1687,
+   "en": "Ice Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1690,
+   "en": "Ice Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1694,
+   "en": "Ice Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1695,
+   "en": "Ice Storm",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1696,
+   "en": "Ice Storm Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1697,
+   "en": "Ice Storm Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1699,
+   "en": "Ice Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1712,
+   "en": "Ignore Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1713,
+   "en": "Ignore Defense Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1719,
+   "en": "Illusion Sorcerer Covenant",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1729,
+   "en": "Illusion Temple Ticket",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1736,
+   "en": "Illusion Wings Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1737,
+   "en": "Illusion Wings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1738,
+   "en": "Illusion Wings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1741,
+   "en": "Imp",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1742,
+   "en": "Impale",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1754,
+   "en": "Inberial Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1755,
+   "en": "Increase Agility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1757,
+   "en": "Increase Attack Success Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1758,
+   "en": "Increase Block",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1759,
+   "en": "Increase Block Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1760,
+   "en": "Increase Critical Damage",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1763,
+   "en": "Increase Defense Success Rate",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1764,
+   "en": "Increase Double Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1765,
+   "en": "Increase Energy",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1766,
+   "en": "Increase Excellent Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1767,
+   "en": "Increase HP",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1768,
+   "en": "Increase HP Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1769,
+   "en": "Increase Health",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1770,
+   "en": "Increase Health Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1771,
+   "en": "Increase Ice Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1772,
+   "en": "Increase Ignore Def Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1773,
+   "en": "Increase Lightning Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1774,
+   "en": "Increase Mana Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1775,
+   "en": "Increase Maximum AG",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1776,
+   "en": "Increase Maximum Attack Power",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1777,
+   "en": "Increase Maximum HP",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1778,
+   "en": "Increase Maximum Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1779,
+   "en": "Increase Maximum SD",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1780,
+   "en": "Increase Minimum Attack Power",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1781,
+   "en": "Increase Poison Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1782,
+   "en": "Increase PvP Attack Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1783,
+   "en": "Increase PvP Defense Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1784,
+   "en": "Increase SD Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1785,
+   "en": "Increase Set Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1786,
+   "en": "Increase Strength",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1787,
+   "en": "Increase Triple Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1788,
+   "en": "Increases AG Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1791,
+   "en": "Increases Critical Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1792,
+   "en": "Increases Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1807,
+   "en": "Increases chance of ignore Def",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1812,
+   "en": "Increases critical damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1819,
+   "en": "Increases double damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1822,
+   "en": "Increases excellent damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1845,
+   "en": "Increases triple damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1849,
+   "en": "Indulgence",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1850,
+   "en": "Inferno",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1851,
+   "en": "Inferno Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1853,
+   "en": "Infiltrate into Balgass Barrack",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1854,
+   "en": "Infinity Arrow",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1855,
+   "en": "Infinity Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1859,
+   "en": "Innovation",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1860,
+   "en": "Innovation Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1861,
+   "en": "Innovation Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1864,
+   "en": "Into the 'Darkness' zone",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1867,
+   "en": "Invisibility",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1868,
+   "en": "Invisibility Cloak",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1869,
+   "en": "Invitation to Santa Village",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1870,
+   "en": "Iris Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1871,
+   "en": "Iris Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1872,
+   "en": "Iris Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1873,
+   "en": "Iris Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1874,
+   "en": "Iris Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1875,
+   "en": "Iron Defense",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1876,
+   "en": "Iron Defense Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1918,
+   "en": "Jack O'Lantern Blessings",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1919,
+   "en": "Jack O'Lantern Cry",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1920,
+   "en": "Jack O'Lantern Drink",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1921,
+   "en": "Jack O'Lantern Food",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1922,
+   "en": "Jack O'Lantern Wrath",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1924,
+   "en": "Jack Olantern Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1928,
+   "en": "Jewel of Bless",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1929,
+   "en": "Jewel of Chaos",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1930,
+   "en": "Jewel of Chaos Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1932,
+   "en": "Jewel of Creation",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1933,
+   "en": "Jewel of Creation Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1934,
+   "en": "Jewel of Elevation",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1935,
+   "en": "Jewel of Extension",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1936,
+   "en": "Jewel of Guardian",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1937,
+   "en": "Jewel of Guardian Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1938,
+   "en": "Jewel of Harmony",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1939,
+   "en": "Jewel of Harmony Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1940,
+   "en": "Jewel of Life",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1941,
+   "en": "Jewel of Life Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1942,
+   "en": "Jewel of Soul",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1947,
+   "en": "Kalima Ticket",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1948,
+   "en": "Kalt Stone",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1950,
+   "en": "KanturuRelics",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1951,
+   "en": "KanturuRuins1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1952,
+   "en": "KanturuRuins2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1953,
+   "en": "KanturuRuins3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1954,
+   "en": "Kanturu_Remain",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1955,
+   "en": "Kanturu_ruin1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1956,
+   "en": "Kanturu_ruin2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1957,
+   "en": "Kanturu_ruin_island",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1959,
+   "en": "Karutan1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1960,
+   "en": "Karutan2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1961,
+   "en": "Katana",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1968,
+   "en": "Killing Blow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1969,
+   "en": "Killing Blow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1970,
+   "en": "Killing Blow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1971,
+   "en": "Kite Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1972,
+   "en": "Knight Blade",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1975,
+   "en": "Kris",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1981,
+   "en": "LaCleon",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1984,
+   "en": "Lance",
+   "budget": 31,
+   "kinds": [
+    "npcname",
+    "skill"
+   ]
+  },
+  {
+   "id": 1986,
+   "en": "Large Complex Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1987,
+   "en": "Large Healing Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1988,
+   "en": "Large Mana Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1989,
+   "en": "Large Round Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1990,
+   "en": "Large SD Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1991,
+   "en": "Larkan Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2008,
+   "en": "Leather Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2009,
+   "en": "Leather Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2010,
+   "en": "Leather Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2011,
+   "en": "Leather Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2012,
+   "en": "Leather Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2015,
+   "en": "Legendary Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2016,
+   "en": "Legendary Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2017,
+   "en": "Legendary Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  }
+ ]
+}

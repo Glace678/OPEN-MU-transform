@@ -1,0 +1,288 @@
+Red Wing Helm-J
+Red Wing Pants
+Red Wing Pants-J
+Red Wing Stick
+Red Wing Stick-J
+Remedy of Love
+Reset Fruit Control
+Reset Fruit Energy
+Reset Fruit Health
+Reset Fruit Quickness
+Reset Fruit Strength
+Ring of Earth
+Ring of Fire
+Ring of GM
+Ring of Ice
+Ring of Magic
+Ring of Poison
+Ring of Wind
+Royal Armor
+Royal Boots
+Royal Gloves
+Royal Mask
+Royal Pants
+Ruby Necklace
+Ruby Ring
+Rune Bastard Sword
+Rune Blade
+SD Potion
+Sacred Fire Armor
+Sacred Fire Armor-J
+Sacred Fire Boots
+Sacred Fire Boots-J
+Sacred Fire Helm
+Sacred Fire Helm-J
+Sacred Fire Pants
+Sacred Fire Pants-J
+Sacred Glove
+Sacred Glove-J
+Saint Crossbow
+Salamander Shield
+Sapphire Necklace
+Sapphire Ring
+Scale Armor
+Scale Boots
+Scale Gloves
+Scale Helm
+Scale Pants
+Scepter
+Scroll of Aqua Beam
+Scroll of Archangel
+Scroll of Blood
+Scroll of Chaotic Diseier
+Scroll of Cometfall
+Scroll of Critical Damage
+Scroll of Decay
+Scroll of Electric Spark
+Scroll of Evil Spirit
+Scroll of Fire Ball
+Scroll of Fire Scream
+Scroll of FireBurst
+Scroll of Flame
+Scroll of Gigantic Storm
+Scroll of Hellfire
+Scroll of Ice
+Scroll of Ice Storm
+Scroll of Inferno
+Scroll of Lighting
+Scroll of Meteorite
+Scroll of Nova
+Scroll of Poison
+Scroll of Power Wave
+Scroll of Soul Barrier
+Scroll of Summon
+Scroll of Teleport
+Scroll of Teleport Ally
+Scroll of Twister
+Scroll of Wizardry Enhance
+Scroll of the Emperor
+Sealed Golden Box
+Sealed Silver Box
+Second Secromicon Fragment
+Seed (Earth)
+Seed (Fire)
+Seed (Ice)
+Seed (Lightning)
+Seed (Water)
+Seed Sphere (Earth)
+Seed Sphere (Fire)
+Seed Sphere (Ice)
+Seed Sphere (Lightning)
+Seed Sphere (Water)
+Seed Sphere (Wind)
+Seraphim Armor
+Seraphim Boots
+Seraphim Gloves
+Seraphim Helm
+Seraphim Pants
+Serpent Crossbow
+Serpent Shield
+Serpent Shield-J
+Serpent Spear
+Serpent Staff
+Serpent Sword
+Server Relocation Service
+Shining Jewelry Case
+Shining Scepter
+Short Bow
+Short Sword
+Siege Potion
+Sign of Dimensions
+Silk Armor
+Silk Boots
+Silk Gloves
+Silk Helm
+Silk Pants
+Silver Bow
+Silver Bow-J
+Silver Box
+Silver Key
+Sixth Secromicon Fragment
+Skeleton Transformation Ring
+Skull Shield
+Skull Staff
+Sleep Parchment
+Small Axe
+Small Cape of Lord
+Small Complex Potion
+Small Healing Potion
+Small Mana Potion
+Small SD Potion
+Small Shield
+Small Wing of Curse
+Small Wings of Elf
+Small Wings of Heaven
+Small Wings of Satan
+Snowman Transformation Ring
+Soleil Sceptor
+Soul Shard of Wizard
+Spear
+Sphere (Di)
+Sphere (Mono)
+Sphere (Tri)
+Sphinx Armor
+Sphinx Boots
+Sphinx Gloves
+Sphinx Helm
+Sphinx Mask
+Sphinx Pants
+Spiked Shield
+Spirit
+Spirit Armor
+Spirit Boots
+Spirit Gloves
+Spirit Helm
+Spirit Pants
+Spirit of Guardian
+Splinter of Armor
+Staff
+Staff of Destruction
+Staff of Kundun
+Staff of Resurrection
+Stardust
+Stat Adjustment
+Steel Jewelry Case
+Stick
+Storm Blitz Armor
+Storm Blitz Boots
+Storm Blitz Gloves
+Storm Blitz Helm
+Storm Blitz Pants
+Storm Blitz Stick
+Storm Crow Armor
+Storm Crow Boots
+Storm Crow Gloves
+Storm Crow Pants
+Storm Jahad Armor
+Storm Jahad Boots
+Storm Jahad Helm
+Storm Jahad Pants
+Striker Scepter
+Summoner Character Card
+Sunlight Armor
+Sunlight Boots
+Sunlight Gloves
+Sunlight Mask
+Sunlight Pants
+Suspicious Scrap of Paper
+Sword Breaker
+Sword Dancer
+Sword of Assassin
+Sword of Destruction
+Sword of Salamander
+Sword/Mace/Spear
+Sylph Wind Bow
+Sylphid Ray Armor
+Sylphid Ray Boots
+Sylphid Ray Gloves
+Sylphid Ray Helm
+Sylphid Ray Pants
+Symbol of Kundun
+Talisman of Cape of Emperor
+Talisman of Chaos Assembly
+Talisman of Luck
+Talisman of Mobility
+Talisman of Resurrection
+Talisman of Wing of Curse
+Talisman of Wing of Despair
+Talisman of Wings of Darkness
+Talisman of Wings of Dragon
+Talisman of Wings of Elf
+Talisman of Wings of Heaven
+Talisman of Wings of Satan
+Talisman of Wings of Soul
+Talisman of Wings of Spirits
+Tantalos's Armor
+Tear of Elf
+Third Secromicon Fragment
+Thunder Blade
+Thunder Hawk Armor
+Thunder Hawk Boots
+Thunder Hawk Gloves
+Thunder Hawk Pants
+Thunder Staff
+Tiger Bow
+Titan  Armor
+Titan  Gloves
+Titan  Helm
+Titan  Pants
+Titan Boots
+Topaz Ring
+Tower Shield
+Town Portal Scroll
+Transfer Christmas Ring
+Transformation Ring
+Valiant Armor
+Valiant Boots
+Valiant Gloves
+Valiant Pants
+Vault Expansion Certificate
+Venom Mist Armor
+Venom Mist Boots
+Venom Mist Gloves
+Venom Mist Helm
+Venom Mist Pants
+Vine Armor
+Vine Boots
+Vine Gloves
+Vine Helm
+Vine Pants
+Violent Wind Armor
+Violent Wind Boots
+Violent Wind Gloves
+Violent Wind Helm
+Violent Wind Pants
+Violent Wind Stick
+Volcano Armor
+Volcano Boots
+Volcano Gloves
+Volcano Pants
+Weakness Parchment
+White Cherry Blossom Branch
+Wind Armor
+Wind Boots
+Wind Gloves
+Wind Helm
+Wind Pants
+Wind of Despair
+Wing of Curse
+Wing of Dimension
+Wing of Eternal
+Wing of Illusion
+Wing of Ruin
+Wing of Storm
+Wings of Darkness
+Wings of Dragon
+Wings of Elf
+Wings of Heaven
+Wings of Satan
+Wings of Soul
+Wings of Spirits
+Wizards Ring
+Worn Horseshoe
+box of blue ribbon
+box of green ribbon
+box of red ribbon
+budle of Jewel of Soul
+bundle of Jewel of Bless
+gem of secret

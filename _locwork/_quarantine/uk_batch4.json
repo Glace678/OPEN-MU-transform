@@ -1,0 +1,1116 @@
+{
+ "strings": [
+  {
+   "id": 3441,
+   "en": "The bond of fellowship.... Of course comrades should be trusted and valued.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3442,
+   "en": "The captain asked me to thank you for your contribution in the previous quest. The captain also said you've proved your worth and are ready for a more critical quest. Will you accept this quest? (Level 171-179)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3444,
+   "en": "The character's current coordinates are shown on the top left corner of the screen. Movement in the �� or �� direction changes the first number, and movement in the �� or �� direction the second.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3446,
+   "en": "The conflict between the genses over the sealed stone is growing fiercer. Cornered, the opposing gens forces are attacking our side using Sapi-Duos. Please eliminate these Sapi-Duos.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3447,
+   "en": "The dark energy Gorgons give off has weakened considerably, and the monsters seem to have calmed down quite a bit because of it. It's a good time to squeeze our grip on the Gorgons. Will you accept this quest? (Level 131-140)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3452,
+   "en": "The elder says Spiders are spinning webs on the outer walls of the town and has asked us to take care of them. Although the request was made to the Shadow Phantom Guardians, I believe the job is suitable for travelers who are just starting out on their journey. Will you accept this quest? (Level 1-14)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3453,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3454,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3455,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: 330-400 Level, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3456,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3457,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3458,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3459,
+   "en": "The endless spawning of monsters in Devil Square will help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3466,
+   "en": "The final hurdle, eh? I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3467,
+   "en": "The gate that leads into Blood Castle is probably the greatest obstacle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3468,
+   "en": "The guild master cannot leave the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3469,
+   "en": "The guild master is not a member of the gens. The guild master must be a member of the gens in order for you to join that gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3470,
+   "en": "The higher the level, the more distance you get to travel. Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3474,
+   "en": "The increasing number of Bloody Wolves in Tarkan is becoming worrisome. Hunt down 50 Bloody Wolves, and I'll give you a Scroll of Blood + 1 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3475,
+   "en": "The increasing number of Iron Wheels in Tarkan is becoming worrisome. Hunt down 70 Iron Wheels, and I'll give you a Scroll of Blood + 2 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3479,
+   "en": "The last ones to deal with are Bloody Soldiers and Death Angels casting spell on the sealed stone. Kill 30 Bloody Soldiers and 20 Death Angels and come back to me to get reward. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3480,
+   "en": "The losses caused by the scheming of Queen Rainiers are continuing to stack up. Will you help eliminate more of these Queen Rainiers? (Level 255-259)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3481,
+   "en": "The mercenary guild office has been newly founded in Devias. Please find the guild office manager Tercia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3483,
+   "en": "The monsters are behaving oddly. It seems Iron Wheels who rank higher than Bloody Wolves, are plotting something. I wish to ask for your help in eliminating these Iron Wheels. Will you accept? (Level 240-244)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3485,
+   "en": "The number of Alquamoses has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Alquamoses? (Level 245-249)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3486,
+   "en": "The number of Death Beam Knights in Tarkan 2 is increasing beyond control. Hunt down 30 Death Beam Knights, and I'll give you a Scroll of Blood + 4 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3487,
+   "en": "The number of Drakans in Icarus is increasing beyond control. Hunt down 90 Drakans, and I'll give you a Scroll of Blood + 3 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3488,
+   "en": "The number of Giant Drakans in Icarus is increasing beyond control. Hunt down 130 Giant Drakans, and I'll give you a Scroll of Blood + 5 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3489,
+   "en": "The number of Mega Crusts has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Mega Crusts? (Level 250-254)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3490,
+   "en": "The number of Shadow Looks in the Swamp of Peace is increasing beyond control. Hunt down 150 Shadow Looks, and I'll give you a Scroll of Blood + 6 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3491,
+   "en": "The objective now is to complete Archangel's quest in Blood Castle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3492,
+   "en": "The objective should be defending this place, then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3493,
+   "en": "The orb I gave you will teach you the Summon Goblin skill. Right-click on the item to learn the skill. Go ahead and learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3494,
+   "en": "The queen's orders are to help those warriors starting out on their journey so that they can at least defend themselves against the forces of Kundun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3495,
+   "en": "The quest to eliminate Totem Golems and Cursed Liches in Elveland was actually set by the elder of Elveland. He says now a larger number of monsters have appeared and asks us to deal with them. Will you accept this quest? (Level 80-90)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3503,
+   "en": "The reconnaissance party has sent us a request. They say doing away with the higher ranking monsters that control the low-ranking ones will make their work much easier. Defeat these monsters. Will you accept this quest? (Level 166-170)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3504,
+   "en": "The reconnaissance party has successfully made their way into Tarkan, but are now forced to deal with Bloody Wolves. They are higher-ranking than monsters. I wish to ask for your help in eliminating these Bloody Wolves. Will you accept? (Level 235-239)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3505,
+   "en": "The reconnaissance party is advancing, but Mutants are starting to amass in greater numbers. Will you help eliminate more of the Mutants? (Level 230-234)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3506,
+   "en": "The reconnaissance party is struggling with surprise attacks against them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 180-189)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3507,
+   "en": "The reconnaissance party reports that the stolen supplies are being delivered to the Lost Tower by way of Devias. Severing the Kundun's supply route in Devias will be a devastating blow to the enemy. Will you accept this quest? (Level 36-45)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3508,
+   "en": "The reconnaissance party reports the situation has much improved. I thank you on behalf of our captain. However, there are still monsters interfering with our scouting efforts. It seems these monsters are somewhat higher in rank than the ones before and are proving to be difficult to deal with. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 171-179)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3509,
+   "en": "The reward has already been handed out.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3510,
+   "en": "The scroll I gave you will teach you the Fire Ball skill. Right-click on the item to learn the skill. Go ahead and learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3513,
+   "en": "The test is simple enough, and it won't matter if you don't get everything right. If you do, however, there's a small bonus gift.;Are you sure you don't want to take the test?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3514,
+   "en": "The town's Shadow Phantom Soldier is looking for someone he can rely on to carry out quests both big and small. Go see the Shadow Phantom Soldier again.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3517,
+   "en": "The weapon I gave you is a Double Axe. To equip it, load the Double Axe item to the equipment slot in your Inventory. Go ahead and equip it.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3518,
+   "en": "The weapon I gave you is a crossbow. To equip it, load the crossbow item to the equipment slot in your Inventory. Go ahead and equip it.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3521,
+   "en": "Then I will give you the second mission right away. Attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp. Please lead MU to an age of great prosperity.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3522,
+   "en": "Then I will give you the second mission right away. I know victory in Illusion Temple is difficult to achieve. Persevere again and again, and victory will be yours. Complete the mission and you'll be rewarded with 8,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3523,
+   "en": "Then I will give you the second mission right away. Protect the sacred item and don't give up before you are victorious in Illusion Temple. Complete the mission and you'll be rewarded with 8,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3524,
+   "en": "Then I will give you the second mission right away. Shock your rivals out of their senses by attaining a victory in Illusion Temple. Complete the mission and you'll be rewarded with 5,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3525,
+   "en": "Then I will give you the second mission right away. Show no fear against a number of foes at once, and attain victory in Illusion Temple. Complete the mission and you'll be rewarded with 3,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3526,
+   "en": "Then you must clear Illusion Temple. Find a Phantom Soldier to begin the Illusion Temple quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3527,
+   "en": "Then you must clear Illusion Temple. Find a Phantom Soldier to undertake the Illusion Temple quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3528,
+   "en": "There are a number of ways you can prove your worth on the continent of MU. You can try to be the last one standing in Chaos Castle, or work with your comrades to battle through Blood Castle, Devil Square, or Illusion Temple. Travelers regard such feats as some of the worthiest accomplishments one can achieve.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3530,
+   "en": "There are many types of monsters lurking in the Dungeon. And those on Level 2 have become particularly troublesome. I would like to ask you to deal with them. Will you accept this quest? (Level 101-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3531,
+   "en": "There are too many monsters guarding the path between Dungeon Level 2 and Level 3, preventing our reconnaissance party from reaching the third level. I'd like ask you to do away with these monsters. Will you accept this quest? (Level 121-130)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3532,
+   "en": "There is a place called Icarus, which is accessible through the topmost level of the Lost Tower. You can reach the level if you have the ability to fly. However, a group of monsters has emerged and is now blocking entry into Icarus. Will you eliminate these monsters for us? (Level 220-229)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3533,
+   "en": "There is no available quest. Please come back later.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3534,
+   "en": "There is now a unit of monsters ceaselessly attacking our barrier that contains the energy of the Lost Tower. Devils and Cursed Wizards appear to be inflicting the most amount of damage on the barrier. Will you eliminate these monsters for us? (Level 191-199)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3535,
+   "en": "There's a rumor about Dark Knights and Gorgons from the lowest level of the Dungeon planning something sinister. Go to Dungeon Level 3 and defeat 80 Dark Knights. Do this, and I will give you a choice of two rewards from 30 Large Healing Potions, 30 Large Mana Potions, and 15 Small Complex Potions. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3536,
+   "en": "They say Death Cows, driven by an evil energy, are up to something suspicious in the Lost Tower. Hunt down 60 Death Cows, and I'll give you a Devil's Invitation + 2 as a reward. It'd be wise to take on this quest together with others you can trust.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3537,
+   "en": "They say the number of Alquamoses in Icarus is increasing and causing quite a headache for travelers. Go to Icarus and hunt down 80 Alquamoses. Come see me once that's done to receive a Devil's Invitation + 3 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3538,
+   "en": "Things are becoming serious....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3540,
+   "en": "This door will not always be open to you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3541,
+   "en": "This is common knowledge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3542,
+   "en": "This is the end of the tutorial. Please enjoy your MU experience.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3543,
+   "en": "This one might be a little challenging, eh? I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3544,
+   "en": "This quest shouldn't be too of a problem.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3545,
+   "en": "This time, the objective is to survive Chaos Castle. Go see the Shadow Phantom Soldier, take the extreme test, and then take on the Chaos Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3548,
+   "en": "Those who wish to serve a gens should seek out the corresponding clan's steward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3565,
+   "en": "To find out when you can enter, press the F1 key. Then, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before the entry time you've chosen. You'll be sent to Devil Square. Come see me when you have time, and I'll give you a quest that will earn you the item you need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3566,
+   "en": "To find out when you can enter, press the F1 key. Then, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before the entry time you've chosen. You'll then be sent to Illusion Temple. Come see me when you have time, and I'll give you a quest that will earn you the item needed to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3567,
+   "en": "To find out when you can enter, simply press the F1 key. If you want to enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel before the scheduled start time. Come see me when you have time, and I will give you a quest that will earn you the Invisibility Cloak so that you can enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3569,
+   "en": "To grow quickly and become a powerful warrior, you must complete various event maps. Find a Phantom Soldier if you want to undertake an event map quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3571,
+   "en": "To restore balance to the battle event, Secrarium made Lugard an offer and suggested implementation of a new rule. This rule was for everyone participating in the event to wear guardsman's armor. Lugard, believing the offer to be fair, accepted.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3576,
+   "en": "To start off, I'll give you a simple mission to see if you have the right qualities to be a hero. Will you accept this mission? (Basic character: Level 240 - 270, Advanced character: Level 220 - 260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3581,
+   "en": "Today's request is closed. Come back same time tomorrow and I will give you a new request. Thank you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3583,
+   "en": "Too easy! To repair equipment without the help of an NPC, I need to be at...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3588,
+   "en": "Town Portal Scrolls can be purchased from potion merchants in towns. They are single-use items that will bring you back to the last town you visited.;Since we're on the subject, will you go and purchase a Town Portal Scroll from the merchant? It'll be easier to understand if you try it for yourself.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3597,
+   "en": "Traveler, you are now strong enough to make a difference in Kundun's battlefield. The Shadow Phantom Guardians' reconnaissance party has made a simple request. They have a simple quest involving the eradication of monsters and a powerful weapon will be given as a reward. Will you accept this quest? (Level 161-165)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3604,
+   "en": "Try equipping the Double Axe.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3605,
+   "en": "Try equipping the crossbow.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3606,
+   "en": "Try learning the Summon Goblin skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3607,
+   "en": "Try your hand at Blood Castle Level 1 and complete Archangel's quest. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Blood Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3608,
+   "en": "Try your hand at Blood Castle Level 1. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3609,
+   "en": "Try your hand at Blood Castle Level 2 and complete Archangel's quest. Come back afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3610,
+   "en": "Try your hand at Blood Castle Level 2. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3611,
+   "en": "Try your hand at Blood Castle Level 3 and complete Archangel's quest. Come back afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3612,
+   "en": "Try your hand at Blood Castle Level 3. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3613,
+   "en": "Try your hand at Blood Castle Level 4 and complete Archangel's quest. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3614,
+   "en": "Try your hand at Blood Castle Level 4. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3615,
+   "en": "Try your hand at Blood Castle Level 5 and complete Archangel's quest. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3616,
+   "en": "Try your hand at Blood Castle Level 5. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3617,
+   "en": "Try your hand at Blood Castle Level 6 and complete Archangel's quest. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3618,
+   "en": "Try your hand at Blood Castle Level 6. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3619,
+   "en": "Try your hand at Blood Castle Level 7 and complete Archangel's quest. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3620,
+   "en": "Try your hand at Blood Castle Level 7. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3621,
+   "en": "Try your hand at Blood Castle Level 8 and complete Archangel's quest. I'll give you 2 Jewels of Life as a reward when you return. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3622,
+   "en": "Try your hand at Blood Castle Level 8. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3623,
+   "en": "Try your hand at Chaos Castle Level 1. Come back to me after defeating 1 Guardsman, and I will give you 100,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3624,
+   "en": "Try your hand at Chaos Castle Level 1. Defeat 1 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3625,
+   "en": "Try your hand at Chaos Castle Level 2. Come back to me after defeating 3 Guardsman, and I will give you 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3626,
+   "en": "Try your hand at Chaos Castle Level 2. Defeat 3 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3627,
+   "en": "Try your hand at Chaos Castle Level 3. Come back to me after defeating 5 Guardsmen, and I will give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3628,
+   "en": "Try your hand at Chaos Castle Level 4. Come back to me after defeating 1 traveler wearing the Armor of Guardsman, and I will give you 300,000 Zens and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3629,
+   "en": "Try your hand at Chaos Castle Level 4. Defeat 1 traveler wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3630,
+   "en": "Try your hand at Chaos Castle Level 5. Come back to me after defeating 3 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Soul as a reward. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3631,
+   "en": "Try your hand at Chaos Castle Level 5. Defeat 3 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3632,
+   "en": "Try your hand at Chaos Castle Level 6. Come back to me after defeating 5 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Harmony as a reward. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3633,
+   "en": "Try your hand at Chaos Castle Level 6. Defeat 5 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3634,
+   "en": "Try your hand at Chaos Castle Level 7. Come back to me after defeating 10 travelers wearing the Armor of Guardsman, and I will give you 2 Jewels of Soul as a reward. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3635,
+   "en": "Try your hand at Chaos Castle Level 7. Defeat 10 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3636,
+   "en": "Try your hand at Devil Square Level 1. Defeat the monsters and score 50 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3637,
+   "en": "Try your hand at Devil Square Level 1. If you achieve 50 points, I'll give you 100,000 Zens as a reward. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3638,
+   "en": "Try your hand at Devil Square Level 2. Defeat the monsters and score 100 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3639,
+   "en": "Try your hand at Devil Square Level 3. Defeat the monsters and score 130 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3640,
+   "en": "Try your hand at Devil Square Level 4. Defeat the monsters and score 160 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3641,
+   "en": "Try your hand at Devil Square Level 5. Defeat the monsters and score 190 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3642,
+   "en": "Try your hand at Devil Square Level 6. Defeat the monsters and score 210 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3643,
+   "en": "Try your hand at Devil Square Level 7. Defeat the monsters and score 240 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3644,
+   "en": "Try your hand at Illusion Temple Level 1. Win and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3645,
+   "en": "Try your hand at Illusion Temple Level 1. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul. However, this applies only to Illusion Temple Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3646,
+   "en": "Try your hand at Illusion Temple Level 2. Win and I'll give you 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3647,
+   "en": "Try your hand at Illusion Temple Level 2. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3648,
+   "en": "Try your hand at Illusion Temple Level 3. Win and I'll give you 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3649,
+   "en": "Try your hand at Illusion Temple Level 3. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3650,
+   "en": "Try your hand at Illusion Temple Level 4. Win and I'll give you 1 Jewel of Chaos and 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3651,
+   "en": "Try your hand at Illusion Temple Level 4. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Chaos. However, this applies only to Illusion Temple Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3652,
+   "en": "Try your hand at Illusion Temple Level 5. Win and I'll give you 1 Jewel of Soul and 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3653,
+   "en": "Try your hand at Illusion Temple Level 5. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Bless. However, this applies only to Illusion Temple Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3654,
+   "en": "Try your hand at Illusion Temple Level 6. Win and I'll give you 1 Jewel of Bless and 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3655,
+   "en": "Try your hand at Illusion Temple Level 6. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless and 1 Jewel of Life. However, this applies only to Illusion Temple Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3656,
+   "en": "Try your hand on Chaos Castle Level 3. Defeat 5 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3657,
+   "en": "Tutorials are for children. Turn down the offer.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3658,
+   "en": "Twin Tails in Kanturu Relics are causing great harm to travelers. Go to Kanturu Relics and hunt down 100 Twin Tails. Come see me when that's done to receive an Invisibility Cloak + 7 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3669,
+   "en": "Type in '/Party off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3670,
+   "en": "Type in '/Request off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3671,
+   "en": "Type in '/off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

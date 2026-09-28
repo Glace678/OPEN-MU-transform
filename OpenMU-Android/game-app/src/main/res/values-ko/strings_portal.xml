@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">계정</string>
+    <string name="account_portal_address">포털 주소</string>
+    <string name="account_portal_language">포털 언어</string>
+    <string name="account_register">등록</string>
+    <string name="account_change_password">비밀번호 변경</string>
+    <string name="account_reset_password">비밀번호를 잊으셨나요?</string>
+    <string name="account_portal_settings">계정 설정</string>
+    <string name="account_portal_not_configured">설정에서 유효한 계정 포털 주소를 입력하세요.</string>
+    <string name="account_portal_invalid">HTTPS 기본 주소를 입력하세요. HTTP는 직접 루프백 또는 신뢰할 수 있는 로컬 페어링에만 허용됩니다. 인증 정보, 경로, 쿼리, 프래그먼트는 포함할 수 없습니다.</string>
+    <string name="account_portal_no_browser">계정 포털을 열 수 있는 브라우저가 없습니다.</string>
+</resources>

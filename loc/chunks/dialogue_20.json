@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3327,
+   "en": "Thank you for helping with the barrier fortification mission. Having failed to attack the barriers, monsters are now launching frequent attacks against guardians stationed at Lost Tower. The number of monsters must be reduced at any cost. Will you accept this quest? (Level 202-205)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3328,
+   "en": "Thank you!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3329,
+   "en": "Thank you. Recently things get in the way of the clan's business. Especially things in Vulcanus are the worst. We did some investigation and our people got killed by the assassins. Please go to Vulcanus and eliminate 20 Bloody Slayers and 10 Vicious Bloody Slayers.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3330,
+   "en": "Thank you. You saved me from the execution ground. Second task is to get me the rare jewel Witch Queens in Aida carry on them. It's so beautiful as to captivate Witch Queens with such brilliance. Naturally, it's extremely expensive in the market. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3331,
+   "en": "Thanks to you, our reconnaissance party has stabilized a great deal. However, our reconnaissance party reports that a fearsome enemy has appeared and that they don't know what to do about it. I wish to ask you to assist the reconnaissance party. Will you accept this quest? (Level 180-185)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3332,
+   "en": "Thanks to your help with previous party reconnaissance missions, all regions seem to be becoming more stable. Captain of the Shadow Phantom Guardians has noticed your achievements and asked you to help our corps members in each of the regions. Will you accept this quest? (Level 166-170)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3333,
+   "en": "That custom all but disappeared when peace finally came. However, Kundun and the chaos he brought motivated Erin Gustiv, the reigning queen of the Elves, to reinstate it.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3334,
+   "en": "That is correct! If you don't want to receive party requests while hunting, simply type in '/Request off' in the Chat window. To start receiving party requests again, type in '/Request on' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3335,
+   "en": "That is correct! In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination.;Discovering areas that's right for your level, and hunting there, can also be very fun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3336,
+   "en": "That is correct! Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3337,
+   "en": "That is correct! When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3338,
+   "en": "That is correct! With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3339,
+   "en": "That is correct! You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3340,
+   "en": "That will surely make things easier. Do you have any other tips?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3341,
+   "en": "That's a piece of cake.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3342,
+   "en": "That's right. You do need good equipment and a high level to test your mettle against other travelers, yes. But just that isn't enough for you to become a hero of MU. I will help you receive recognition as a hero by giving you a series of missions. You may repeat these missions as often as desired.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3343,
+   "en": "That's unfortunate, please come back later when you have time. (Failed to receive the Letter of Request.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3344,
+   "en": "That's unfortunate, the reward is quite awesome. Please come back if you change your mind. (Free mercenary registration has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3345,
+   "en": "That's unfortunate. Come see me again when the bond between you and your comrades is stronger. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3346,
+   "en": "That's unfortunate. Come see me again when you find the right warriors to fight at your side. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3347,
+   "en": "That's unfortunate. If you change your mind, come back before you reach level 190. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3348,
+   "en": "That's unfortunate. If you change your mind, come back before you reach level 194. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3349,
+   "en": "That's unfortunate. If you change your mind, come back before you reach level 206. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3350,
+   "en": "That's unfortunate. If you change your mind, come back before you reach level 210. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3351,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 101. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3352,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 111. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3353,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 121. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3354,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 131. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3355,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 141. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3356,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 161. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3357,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 166. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3358,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 171. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3359,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 180. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3360,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 186. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3361,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 198. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3362,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 202. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3363,
+   "en": "That's unfortunate. If you change your mind, please come back before you reach level 91. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3364,
+   "en": "That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3365,
+   "en": "That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3366,
+   "en": "That's unfortunate. It wouldn't take much time ... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3367,
+   "en": "That's unfortunate. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3368,
+   "en": "That's unfortunate. The reward for this mission is quite big... If you change your mind, please come back before you reach level 290. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3369,
+   "en": "That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 320. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3370,
+   "en": "That's unfortunate. The reward for this quest is quite big... If you change your mind, please come back before you reach level 350. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3371,
+   "en": "That's unfortunate. You shouldn't pass this up if you want fast growth.... Come see me again before you reach level 15 if you want to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3372,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth... (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3373,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3374,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come back before you reach level 230 if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3375,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 235 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3376,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 240 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

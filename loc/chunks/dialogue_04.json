@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 582,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Master level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 583,
+   "en": "Congratulations. You have contributed more to the cause of the gens than any other member. Duprian Winston rewards your accomplishments. I hope to see even greater achievements from you next month.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 584,
+   "en": "Congratulations. You've completed the tutorial. Take this Ring of Hero and this Ring of Warrior. They are gifts to you from the queen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 585,
+   "en": "Conquer the Dungeon! (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 586,
+   "en": "Conquer the Dungeon! (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 587,
+   "en": "Conquer the Dungeon! (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 588,
+   "en": "Conquer the Dungeon! (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 589,
+   "en": "Conquer the Dungeon! (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 590,
+   "en": "Conquer the Dungeon! (6)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 591,
+   "en": "Continue listening.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 592,
+   "en": "Continue the conversation.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 593,
+   "en": "Continuing Attacks on Barriers (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 594,
+   "en": "Continuing Attacks on Barriers (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 595,
+   "en": "Continuing Attacks on Barriers (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 596,
+   "en": "Continuing Requests for Help (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 597,
+   "en": "Continuing Requests for Help (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 598,
+   "en": "Continuing Requests for Help (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 599,
+   "en": "Continuing Requests for Help (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 603,
+   "en": "Courage is the most important trait for a hero. If you lack the proper courage, you can never be reborn as a hero.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 650,
+   "en": "Cutting down the enemy clan's force will be the best revenge. Teach them a lesson by eliminating 5 of them who infiltrated in Vulcanus. Kill the enemy clan member in Vulcanus and come back to me to get the reward. (Can proceed only in Vulcanus)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 680,
+   "en": "Dark Knights are unique in that they are powerful swordsmen who rely on both weapons and orbs. Let me give you a weapon to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 681,
+   "en": "Dark Knights can learn additional skills by going to Lorencia and purchasing orbs from Pasi the Mage (119,112). After purchasing an orb, right-click on it to learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 682,
+   "en": "Dark Knights can learn additional skills by going to Lorencia and purchasing scrolls from Pasi the Mage (119,112). After purchasing a scroll, right-click on it to learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 726,
+   "en": "Dark Wizards are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 727,
+   "en": "Dark Wizards can learn additional skills by going to Lorencia and purchasing scrolls from Pasi the Mage (119,112) or weapons from Hanzo the Blacksmith (116,142).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 740,
+   "en": "Death Knights from the Lost Tower Levels 5 through 7 are causing great harm to travelers there. Go to the Lost Tower and defeat 80 Death Knights. Come see me when that's done to receive an Invisibility Cloak + 3 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 762,
+   "en": "Defeat 10 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 763,
+   "en": "Defeat 100 Queen Rainiers in Icarus and then go back to the Shadow Phantom Soldier to receive a choice between 10 Large SD Potions and 30 Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 764,
+   "en": "Defeat 15 Agons from near the south side (173, 222) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 765,
+   "en": "Defeat 15 Giants from near the Devias entrance (22, 45) on the east side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 766,
+   "en": "Defeat 15 Liches from near the Dungeon entrance (159, 205) on the southwest side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 767,
+   "en": "Defeat 15 Polluted Butterflies from near the tombstone (121, 156) on the north side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 768,
+   "en": "Defeat 20 Giants from near the Devias entrance (22, 45) on the east side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 769,
+   "en": "Defeat 20 Hideous Rabbits from near the face sculpture on the north side (151, 146) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 770,
+   "en": "Defeat 20 Skeleton Warriors from near the Dungeon entrance (123, 227) on the southwest side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 771,
+   "en": "Defeat 20 Stone Golems from near the southwest side (30, 214) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 772,
+   "en": "Defeat 20 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 773,
+   "en": "Defeat 30 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 774,
+   "en": "Defeat 40 Larvae from Dungeon Level 1 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 775,
+   "en": "Defeat 5 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 776,
+   "en": "Defeat 50 Cursed Liches in Elveland (Area 2) and 50 Yetis in Devias (Area 2). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 777,
+   "en": "Defeat 50 Totem Golems in Elveland (Area 3) and 50 Elite Yetis in Devias (Area 3). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 778,
+   "en": "Defeat 60 Hell Spiders from Dungeon Level 2 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 779,
+   "en": "Defeat 80 Dark Knights from Dungeon Level 3 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 30 Large Healing Potions, 30 Large Mana Potions, and 15 Small Complex Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 830,
+   "en": "Devil Square Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 831,
+   "en": "Devil Square Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 832,
+   "en": "Devil Square Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 833,
+   "en": "Devil Square Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 834,
+   "en": "Devil Square Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 835,
+   "en": "Devil Square Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

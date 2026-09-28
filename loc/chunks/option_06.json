@@ -1,0 +1,493 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 3484,
+   "en": "The multishot skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3496,
+   "en": "The rank 1 Reduce durability loss (1) skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3497,
+   "en": "The rank 2 'Increase maximum SD' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3498,
+   "en": "The rank 2 'Increase maximum mana recovery' skill requires level",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3499,
+   "en": "The rank 2 fist weapon strengthener requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3500,
+   "en": "The rank 4 recover HP from monster kills skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3501,
+   "en": "The rank 5 'dragon roar strengthener' requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3502,
+   "en": "The rank 8 reigning cloak defense strengthener requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3515,
+   "en": "The victim becomes immobile for 3 seconds with %0.2f%% chance.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3516,
+   "en": "The victim of Twisting Slash will be pushed 2 tiles backward with %0.2f%% chance.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3595,
+   "en": "Transparency Status",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3601,
+   "en": "Triple Shot skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3602,
+   "en": "Triple damage rate increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3603,
+   "en": "Trite's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3664,
+   "en": "Twisting Slash skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3675,
+   "en": "Up to 170% EXP gain, depending on the number of members in the party.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3680,
+   "en": "Use of iron defense skill increases your defense rate and HP by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3682,
+   "en": "Uses Mana to absorb damage,/ and increases max Mana.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3691,
+   "en": "Vampiric",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3696,
+   "en": "Vega's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3715,
+   "en": "Vicious's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3740,
+   "en": "Warp Command Window access restricted for five minutes.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3742,
+   "en": "Warrior's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3743,
+   "en": "Watch",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3747,
+   "en": "Watching over the castle.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3748,
+   "en": "Watchtower",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3752,
+   "en": "Weaken",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3789,
+   "en": "When you kill a monster you recover %0.2f of your maximum HP.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3790,
+   "en": "When you kill a monster you recover %0.2f of your maximum SD.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3791,
+   "en": "When you kill a monster you recover %0.2f of your maximum mana.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3812,
+   "en": "Wind Tome skill increases damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3813,
+   "en": "Wind Tome skill stuns the victim for 2 seconds with %0.2f%% chance.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3838,
+   "en": "Wizardry and Curse increase by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3839,
+   "en": "Wizardry and Curse increases by %0.2f while equipping the Wing of Dimension.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3840,
+   "en": "Wizardry increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 3841,
+   "en": "Wizardry increase +30",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3842,
+   "en": "Wizardry increase reduction",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3843,
+   "en": "Wizardry increases by %0.2f while equipping One-handed Staff.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3844,
+   "en": "Wizardry increases by %0.2f while equipping Stick.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3845,
+   "en": "Wizardry increases by %0.2f while equipping Two-handed Staff.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3846,
+   "en": "Wizardry increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3873,
+   "en": "You are blinded./Decreases attack success rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3891,
+   "en": "You feel exhausted.",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3892,
+   "en": "You feel tired.",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3893,
+   "en": "You have a %0.2f%% chance to fully recover your HP any time you take damage.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3894,
+   "en": "You have a %0.2f%% chance to fully recover your mana any time you take damage.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3909,
+   "en": "You may enter and watch a duel in Arena.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3948,
+   "en": "el 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3949,
+   "en": "er",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3950,
+   "en": "er.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3952,
+   "en": "gher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3953,
+   "en": "her",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3954,
+   "en": "her.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3955,
+   "en": "higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3956,
+   "en": "higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3957,
+   "en": "igher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3958,
+   "en": "or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3959,
+   "en": "r",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3960,
+   "en": "r higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3961,
+   "en": "res level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3962,
+   "en": "v. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  }
+ ]
+}

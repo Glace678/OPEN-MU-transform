@@ -1,0 +1,644 @@
+{
+ "de": [
+  [
+   "Game",
+   "Gamepad",
+   "Gamepad",
+   null
+  ],
+  [
+   "Game",
+   "Haptics",
+   "Vibration",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ],
+  [
+   "Game",
+   "SoloShopSkills",
+   "Skills",
+   null
+  ]
+ ],
+ "es": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ],
+  [
+   "Dialog",
+   "Text_0",
+   "Aye! Is there anything you need?",
+   "legacy_id=0"
+  ]
+ ],
+ "id": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "Gamepad",
+   "Gamepad",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ]
+ ],
+ "ja": [
+  [
+   "Game",
+   "/mu",
+   "/mu",
+   "legacy_id=349"
+  ],
+  [
+   "Game",
+   "Valhalla",
+   "Valhalla",
+   "legacy_id=540"
+  ],
+  [
+   "Game",
+   "Helheim",
+   "Helheim",
+   "legacy_id=541"
+  ],
+  [
+   "Game",
+   "Midgard",
+   "Midgard",
+   "legacy_id=542"
+  ],
+  [
+   "Game",
+   "Kara",
+   "Kara",
+   "legacy_id=543"
+  ],
+  [
+   "Game",
+   "Lamu",
+   "Lamu",
+   "legacy_id=544"
+  ],
+  [
+   "Game",
+   "Nacal",
+   "Nacal",
+   "legacy_id=545"
+  ],
+  [
+   "Game",
+   "Rasa",
+   "Rasa",
+   "legacy_id=546"
+  ],
+  [
+   "Game",
+   "Rance",
+   "Rance",
+   "legacy_id=547"
+  ],
+  [
+   "Game",
+   "Tarh",
+   "Tarh",
+   "legacy_id=548"
+  ],
+  [
+   "Game",
+   "Uz",
+   "Uz",
+   "legacy_id=549"
+  ],
+  [
+   "Game",
+   "Moz",
+   "Moz",
+   "legacy_id=550"
+  ],
+  [
+   "Game",
+   "Luga(Lamu2)",
+   "Luga(Lamu2)",
+   "legacy_id=556"
+  ],
+  [
+   "Game",
+   "Titan",
+   "Titan",
+   "legacy_id=557"
+  ],
+  [
+   "Game",
+   "Elca",
+   "Elca",
+   "legacy_id=558"
+  ],
+  [
+   "Game",
+   "test",
+   "test",
+   "legacy_id=559"
+  ],
+  [
+   "Game",
+   " 2 50-119 30-99 2 131-180 111-160",
+   " 2 50-119 30-99 2 131-180 111-160",
+   "legacy_id=2449"
+  ],
+  [
+   "Game",
+   " 3 120-179 100-159 3 181-230 161-210",
+   " 3 120-179 100-159 3 181-230 161-210",
+   "legacy_id=2450"
+  ],
+  [
+   "Game",
+   " 4 180-239 160-219 4 231-280 211-260",
+   " 4 180-239 160-219 4 231-280 211-260",
+   "legacy_id=2451"
+  ],
+  [
+   "Game",
+   " 5 240-299 220-279 5 281-330 261-310",
+   " 5 240-299 220-279 5 281-330 261-310",
+   "legacy_id=2452"
+  ],
+  [
+   "Game",
+   " 6 300-400 280-400 6 331-400 311-400",
+   " 6 300-400 280-400 6 331-400 311-400",
+   "legacy_id=2453"
+  ],
+  [
+   "Game",
+   " 1 15-80 10-60 1 220-270",
+   " 1 15-80 10-60 1 220-270",
+   "legacy_id=2457"
+  ],
+  [
+   "Game",
+   " 2 81-130 61-110 2 271-320",
+   " 2 81-130 61-110 2 271-320",
+   "legacy_id=2458"
+  ],
+  [
+   "Game",
+   " 3 131-180 111-160 3 321-350",
+   " 3 131-180 111-160 3 321-350",
+   "legacy_id=2459"
+  ],
+  [
+   "Game",
+   "15#80#81#130#131#180#181#230#231#280#281#330#331#400",
+   "15#80#81#130#131#180#181#230#231#280#281#330#331#400",
+   "legacy_id=3366"
+  ],
+  [
+   "Game",
+   "10#60#61#110#111#160#161#210#211#260#261#310#311#400",
+   "10#60#61#110#111#160#161#210#211#260#261#310#311#400",
+   "legacy_id=3367"
+  ],
+  [
+   "Game",
+   "1#100#101#200",
+   "1#100#101#200",
+   "legacy_id=3368"
+  ],
+  [
+   "Game",
+   "X",
+   "X",
+   "legacy_id=3420"
+  ],
+  [
+   "Game",
+   "C",
+   "C",
+   "legacy_id=3422"
+  ],
+  [
+   "Game",
+   "I",
+   "I",
+   "legacy_id=3424"
+  ],
+  [
+   "Game",
+   "T",
+   "T",
+   "legacy_id=3426"
+  ],
+  [
+   "Game",
+   "F1",
+   "F1",
+   "legacy_id=3441"
+  ],
+  [
+   "Game",
+   "M",
+   "M",
+   "legacy_id=3442"
+  ],
+  [
+   "Game",
+   "O",
+   "O",
+   "legacy_id=3443"
+  ],
+  [
+   "Game",
+   "U",
+   "U",
+   "legacy_id=3444"
+  ],
+  [
+   "Game",
+   "F",
+   "F",
+   "legacy_id=3446"
+  ],
+  [
+   "Game",
+   "P",
+   "P",
+   "legacy_id=3447"
+  ],
+  [
+   "Game",
+   "G",
+   "G",
+   "legacy_id=3448"
+  ],
+  [
+   "Game",
+   "B",
+   "B",
+   "legacy_id=3449"
+  ],
+  [
+   "Game",
+   "SD3610",
+   "%s : %d%%",
+   "legacy_id=3610"
+  ],
+  [
+   "Game",
+   "SD3681",
+   "%s %d",
+   "legacy_id=3681"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²",
+   "legacy_id=3766"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§",
+   "legacy_id=3767"
+  ],
+  [
+   "Game",
+   "µî·Ï °³¼ö",
+   "µî·Ï °³¼ö",
+   "legacy_id=3768"
+  ],
+  [
+   "Game",
+   "¿ì¸® ±æµå ÇöÈ²",
+   "¿ì¸® ±æµå ÇöÈ²",
+   "legacy_id=3769"
+  ],
+  [
+   "Game",
+   "µÚ·Î°¡±â",
+   "µÚ·Î°¡±â",
+   "legacy_id=3770"
+  ],
+  [
+   "Game",
+   "µî·Ï °¡´É",
+   "µî·Ï °¡´É",
+   "legacy_id=3771"
+  ],
+  [
+   "Game",
+   "µî·Ï ºÒ°¡",
+   "µî·Ï ºÒ°¡",
+   "legacy_id=3772"
+  ],
+  [
+   "Game",
+   "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³",
+   "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³",
+   "legacy_id=3773"
+  ],
+  [
+   "Game",
+   "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.",
+   "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.",
+   "legacy_id=3774"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+   "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+   "legacy_id=3775"
+  ],
+  [
+   "Game",
+   "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³",
+   "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³",
+   "legacy_id=3776"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·Ï",
+   "legacy_id=3777"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?",
+   "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?",
+   "legacy_id=3778"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.",
+   "legacy_id=3779"
+  ],
+  [
+   "Game",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.",
+   "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.",
+   "legacy_id=3780"
+  ],
+  [
+   "Game",
+   "ｼﾓｼｺ",
+   "ｼﾓｼｺ",
+   "legacy_id=3781"
+  ],
+  [
+   "Game",
+   "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ",
+   "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ",
+   "legacy_id=3782"
+  ],
+  [
+   "Game",
+   "ﾀ盂ﾝ",
+   "ﾀ盂ﾝ",
+   "legacy_id=3783"
+  ],
+  [
+   "Game",
+   "ﾇﾘﾁｦ",
+   "ﾇﾘﾁｦ",
+   "legacy_id=3784"
+  ],
+  [
+   "Game",
+   "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä",
+   "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä",
+   "legacy_id=3785"
+  ],
+  [
+   "Game",
+   "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?",
+   "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?",
+   "legacy_id=3786"
+  ],
+  [
+   "Game",
+   "¼­¹ö",
+   "¼­¹ö",
+   "legacy_id=3787"
+  ],
+  [
+   "Game",
+   "ESC",
+   "ESC",
+   "legacy_id=3788"
+  ],
+  [
+   "Game",
+   "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡",
+   "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡",
+   "legacy_id=3789"
+  ],
+  [
+   "Game",
+   "ÀüÃ¼¼ö¸®ºñ¿ë",
+   "ÀüÃ¼¼ö¸®ºñ¿ë",
+   "legacy_id=3790"
+  ],
+  [
+   "Game",
+   "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù",
+   "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù",
+   "legacy_id=3791"
+  ],
+  [
+   "Game",
+   "°Å·¡ ½ÂÀÎ ´ë±âÁß",
+   "°Å·¡ ½ÂÀÎ ´ë±âÁß",
+   "legacy_id=3792"
+  ],
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game-EMPTY",
+   "Phoenix Shot (Mana:%d)",
+   "Phoenix Shot (Mana:%d)",
+   "legacy_id=3158"
+  ]
+ ],
+ "pl": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ]
+ ],
+ "pt": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ],
+  [
+   "Dialog",
+   "Text_0",
+   "Aye! Is there anything you need?",
+   "legacy_id=0"
+  ]
+ ],
+ "ru": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ]
+ ],
+ "tl": [
+  [
+   "Game",
+   "JToggleChatCommands",
+   "J : Chat Commands On/Off",
+   null
+  ],
+  [
+   "Game",
+   "VerticalSync",
+   "Vertical sync",
+   null
+  ],
+  [
+   "Game",
+   "AverageFrameRate",
+   "Average FPS",
+   null
+  ],
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "Gamepad",
+   "Gamepad",
+   null
+  ],
+  [
+   "Game",
+   "Haptics",
+   "Vibration",
+   null
+  ],
+  [
+   "Game",
+   "FrameLimitFrameLimiter",
+   "Frame limiter",
+   null
+  ],
+  [
+   "Game",
+   "FrameLimitVerticalSync",
+   "Vertical sync",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionQuickItem1",
+   "Quick item 1",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionQuickItem2",
+   "Quick item 2",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionQuickItem3",
+   "Quick item 3",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionQuickItem4",
+   "Quick item 4",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionMenu",
+   "System menu",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ],
+  [
+   "Game",
+   "SoloShopTitle",
+   "Solo Shop",
+   null
+  ]
+ ],
+ "uk": [
+  [
+   "Game",
+   "OnePercentLow",
+   "1% Low",
+   null
+  ],
+  [
+   "Game",
+   "GamepadActionHelper",
+   "MU Helper",
+   null
+  ]
+ ]
+}

@@ -1,0 +1,42 @@
+﻿@page "/setup"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using MUnique.OpenMU.Web.AdminPanel.Properties
+
+<PageTitle>OpenMU: @Resources.Setup</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Setup"/>
+
+@if (this.ShowInstall)
+{
+    <Install InstallationFinished="() => this.ShowInstall = false" />
+}
+else if (!this.SetupService.CanConnectToDatabase)
+{
+    <p>@Resources.DatabaseStatus: <span class="badge bg-danger">@Resources.CantConnectToTheDatabaseProbablyNotCreatedYet</span></p>
+
+    <button class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
+}
+else if (!this.SetupService.IsInstalled)
+{
+    <p>@Resources.DatabaseStatus: <span class="badge bg-warning text-dark">@Resources.NotCreated</span></p>
+
+    <button class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
+}
+else if (this.SetupService.IsUpdateRequired)
+{
+    <p>@Resources.DatabaseStatus: <span class="badge bg-warning text-dark">@Resources.UpdateRequired</span></p>
+    <button class="btn btn-primary" @onclick="this.OnUpdateClickAsync">@Resources.Update</button>
+}
+else
+{
+    <p>@Resources.DatabaseStatus: <span class="badge bg-success">@Resources.UpToDate</span></p>
+    @if (!this._isDataInitialized)
+    {
+        <p>@Resources.InitializedGameVersion: <span class="badge bg-warning text-dark">@Resources.NoInitializedDataFound</span></p>
+    }
+    else
+    {
+        <p>@Resources.InitializedGameVersion: <span class="badge bg-success">@this._gameClientVersion</span></p>
+    }
+
+    <button class="btn btn-warning" @onclick="this.OnReInstallClickAsync">@Resources.ReInstall</button>
+}

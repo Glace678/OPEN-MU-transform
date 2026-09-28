@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Preparando dados do jogo</string>
+    <string name="preparing_detail">Na primeira abertura, os dados do jogo são extraídos para o armazenamento interno. Mantenha o aplicativo aberto.</string>
+    <string name="ready">Pronto para jogar</string>
+    <string name="start_game">Jogar</string>
+    <string name="settings">Configurações</string>
+    <string name="gesture_help">Gestos</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="extract_failed">Não foi possível preparar os dados do jogo</string>
+    <string name="save">Salvar</string>
+    <string name="back">Voltar</string>
+    <string name="display">Gráficos</string>
+    <string name="controls">Controles</string>
+    <string name="network">Servidor</string>
+    <string name="fps">Taxa de quadros</string>
+    <string name="render_scale">Escala de renderização</string>
+    <string name="effects">Qualidade dos efeitos</string>
+    <string name="ui_scale">Tamanho dos botões de toque</string>
+    <string name="safe_margin">Margem de segurança</string>
+    <string name="touch_opacity">Opacidade dos botões de toque</string>
+    <string name="vibration">Vibração de toque e combate</string>
+    <string name="handedness">Mão preferida</string>
+    <string name="server_address">Endereço do servidor</string>
+    <string name="server_port">Porta de conexão</string>
+    <string name="local_pairing">Pareamento local sem login (somente LAN)</string>
+    <string name="restart_note">As alterações de gráficos e servidor serão aplicadas na próxima entrada no jogo.</string>
+    <string name="invalid_server">Informe o endereço IPv4 ou nome do servidor, sem protocolo nem porta.</string>
+    <string name="invalid_local_server">O pareamento local exige um IPv4 de loopback ou LAN, como 192.168.1.20. Desative-o para servidores na nuvem.</string>
+    <string name="invalid_port">A porta deve estar entre 1 e 65535.</string>
+    <string name="saved">Configurações salvas</string>
+    <string name="tutorial_title">Controles móveis</string>
+    <string name="tutorial_body">Menus: toque com um dedo para selecionar ou confirmar.\nSeleção de personagem: toque no personagem e depois no botão de entrada no canto inferior direito.\n\nInventário normal: toque para ver detalhes; segure sem mover por meio segundo para usar um item utilizável ou aprender uma habilidade. Para mover, pressione e arraste logo; soltar fora devolve o item ao lugar.\nOs quatro espaços inferiores de poções: toque para usar; segurar não repete a ação.\n\nNo mundo do jogo:\nArraste um dedo na área de movimento para se mover.\nToque na área de habilidades para selecionar; toque duas vezes para usar a habilidade atual.\nDeslize dois dedos para a esquerda ou direita para trocar de habilidade.\nDeslize dois dedos para cima ou baixo, ou faça uma pinça, para ajustar a câmera.\nDeslize três dedos para cima para o mapa ou para baixo para as configurações.\n\nA barra inferior de poções e os controles da interface não ativam habilidades do mundo.</string>
+    <string name="understood">Entendi, jogar</string>
+    <string name="help_close">Fechar</string>
+    <string name="game_data_missing">O APK não contém game-data.zip; este não é um pacote completo do jogo.</string>
+    <string name="storage_low">Armazenamento interno insuficiente. São necessários pelo menos mais %1$s.</string>
+    <string name="current_display">Tela atual: %1$d × %2$d</string>
+    <string name="max_refresh">Taxa máxima da tela: %1$d Hz. Escolha uma taxa de quadros de 30 a %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Até %1$d Hz (acompanha a tela)</string>
+    <string name="game_settings">Configurações móveis</string>
+    <string name="open_settings">Abrir configurações</string>
+    <string-array name="effect_labels">
+        <item>Baixa (mais fluidez)</item>
+        <item>Média (recomendada)</item>
+        <item>Alta (melhores gráficos)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Mão direita</item>
+        <item>Mão esquerda</item>
+    </string-array>
+</resources>

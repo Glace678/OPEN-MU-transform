@@ -1,0 +1,968 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 615,
+   "en": "Critical Damage increase",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 616,
+   "en": "Critical damage increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 617,
+   "en": "Critical damage increase at 20%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 618,
+   "en": "Critical damage increases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 619,
+   "en": "Critical damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 620,
+   "en": "Critical damage rate increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 626,
+   "en": "Crown Registration Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 630,
+   "en": "Cry Wolf Divine Protection Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 631,
+   "en": "Cry Wolf NPC transparency",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 642,
+   "en": "Curse increase by %0.2f while equipping the Other World Tome.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 643,
+   "en": "Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 653,
+   "en": "Cyclone skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 655,
+   "en": "Damage Absorption increases by %0.2f%% while equipping the Wing of Dimension.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 656,
+   "en": "Damage Reduction increases by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 659,
+   "en": "Damage absorbed at 100%%.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 660,
+   "en": "Damage absorption increases by %0.2f%% while equipping the Cape of Emperor.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 661,
+   "en": "Damage absorption increases by %0.2f%% while equipping the Wing of Eternal.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 662,
+   "en": "Damage absorption increases by %0.2f%% while equipping the Wing of Illusion.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 663,
+   "en": "Damage absorption increases by %0.2f%% while equipping the Wing of Ruin.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 664,
+   "en": "Damage absorption increases by %0.2f%%#while equipping the Wing of Storm.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 665,
+   "en": "Damage buff effect increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 666,
+   "en": "Damage decrement increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 667,
+   "en": "Damage increases by %0.2f while equipping Bow.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 668,
+   "en": "Damage increases by %0.2f while equipping Crossbow.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 669,
+   "en": "Damage reduction",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 670,
+   "en": "Damage reflection",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 697,
+   "en": "Dark Rod Battle Skill",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 713,
+   "en": "Dark Spirit's attack power increases by %0.2f while equipping Scepter.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 714,
+   "en": "Dark Spirit's attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 715,
+   "en": "Dark Spirit's attack speed increases by additional %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 716,
+   "en": "Dark Spirit's chance to inflict damage ignoring enemy's defense increases by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 717,
+   "en": "Dark Spirit's critical damage rate increases by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 718,
+   "en": "Dark Spirit's double damage rate increases by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 719,
+   "en": "Dark Spirit's excellent damage rate increases by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 746,
+   "en": "Death Stab skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 752,
+   "en": "Decay skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 753,
+   "en": "Decrease Defense Rate",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 755,
+   "en": "Decreases attack rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 756,
+   "en": "Decreases defense and defense success rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 757,
+   "en": "Decreases defense rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 758,
+   "en": "Decreases defense success rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 784,
+   "en": "Defense Increase skill effect increases by %0.2f%%, and skill duration increases per skill level.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 787,
+   "en": "Defense buff effect increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 788,
+   "en": "Defense increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 789,
+   "en": "Defense increase by %0.2f while equipping the Wing of Eternal.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 790,
+   "en": "Defense increases by %0.2f when a full armor set#(helmet, armor, pants, gloves and boots)#is equipped.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 791,
+   "en": "Defense increases by %0.2f while equipping Dark Horse.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 792,
+   "en": "Defense increases by %0.2f while equipping Shield.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 793,
+   "en": "Defense increases by %0.2f while equipping a Shield.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 794,
+   "en": "Defense increases by %0.2f while equipping the Cape of Emperor.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 795,
+   "en": "Defense increases by %0.2f while equipping the Wing of Dimension.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 796,
+   "en": "Defense increases by %0.2f while equipping the Wing of Illusion.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 797,
+   "en": "Defense increases by %0.2f while equipping the Wing of Ruin.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 798,
+   "en": "Defense increases by %0.2f#while equipping the Wing of Storm.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 799,
+   "en": "Defense increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 800,
+   "en": "Defense success rate decrease",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 801,
+   "en": "Defense success rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 802,
+   "en": "Defense success rate increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 803,
+   "en": "Defensibility +100",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 804,
+   "en": "Defensibility increase +100",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 805,
+   "en": "Defensibility increase +60",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 806,
+   "en": "Defensibility increases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 807,
+   "en": "Defensibility reduction",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 823,
+   "en": "Detrimental cold reduces /the mobility speed.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 859,
+   "en": "Dione's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 885,
+   "en": "Double Damage rate increases by %0.2f%% while equipping Spear.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 887,
+   "en": "Double damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 888,
+   "en": "Double damage rate increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 922,
+   "en": "Drain Life skill damage and the amount of health absorbed increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 923,
+   "en": "Drains HP per every second.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 925,
+   "en": "Drake's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 944,
+   "en": "Durability reduction speed#of the consumable items#(Satan, Guardian Angel, Dinorant & Penril)#decreases by %0.2f%%. #(excluding Cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 945,
+   "en": "Durability reduction speed#of the equipped accessories (necklace & rings)#decreases by %0.2f%%.#(excluding Cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 946,
+   "en": "Durability reduction speed#of the weapons and armor equipped#decreases by %0.2f%%.#(excluding Cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 949,
+   "en": "EXP gain disabled",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 950,
+   "en": "EXP gain increase 150%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 951,
+   "en": "EXP gain increase 150%%/Automatic Life recovery at 5%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 952,
+   "en": "EXP gain increase 150%%/item gain increase 200%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 953,
+   "en": "EXP gain increase 200%%/Item gain increase 150%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 955,
+   "en": "Earth Binds",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 961,
+   "en": "Earthshake skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 962,
+   "en": "Earthshake victim gets stunned for 2 seconds with %0.2f%% chance.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 968,
+   "en": "Effect duration increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 974,
+   "en": "Electric Spark skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1031,
+   "en": "Elvian's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1039,
+   "en": "Energy Status +50",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1040,
+   "en": "Energy increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1041,
+   "en": "Enis",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1071,
+   "en": "Eplete's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1074,
+   "en": "Equipping the eternal wings increases your wizardry by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1075,
+   "en": "Equipping the fist weapon increases attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1076,
+   "en": "Equipping the fist weapon increases the chance of dealing double damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1077,
+   "en": "Equipping the reigning cloak increases your attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1078,
+   "en": "Equipping the reigning cloak increases your damage absorption rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1079,
+   "en": "Equipping the reigning cloak increases your defense by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1094,
+   "en": "Evil Spirit skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1096,
+   "en": "Evis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1098,
+   "en": "Excellent damage increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1099,
+   "en": "Excellent damage increase at 20%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1100,
+   "en": "Excellent damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1101,
+   "en": "Excellent damage rate increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1112,
+   "en": "Expansion of Wizardry increases max. Wizardry by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1113,
+   "en": "Expansion of Wizardry skill increases critical damage rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1120,
+   "en": "Falling Slash skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1121,
+   "en": "Fase's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1143,
+   "en": "Fire",
+   "budget": 49,
+   "kinds": [
+    "buff",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1150,
+   "en": "Fire Burst skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1156,
+   "en": "Fire Scream skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1159,
+   "en": "Fire Slash skill damage increases by %0.2f. & Skill",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1160,
+   "en": "Fire Slash skill's defense reduction increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1161,
+   "en": "Fire Storm skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1164,
+   "en": "Fire Tome skill increase damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1165,
+   "en": "Fire Tome skill increases damage over time by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1176,
+   "en": "Flame Strike skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1178,
+   "en": "Flame skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1183,
+   "en": "Force Wave skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1189,
+   "en": "Freeze",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1190,
+   "en": "Freeze Earth skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1194,
+   "en": "Frost",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1199,
+   "en": "GM",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  }
+ ]
+}

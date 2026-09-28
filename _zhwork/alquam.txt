@@ -1,0 +1,4 @@
+40: EN=Death Knight | ZH=死亡骑士
+47: EN=Valkyrie | ZH=女武神
+52: EN=Silver Valkyrie | ZH=银色女武神
+69: EN=Alquamos | ZH=阿尔夸莫斯

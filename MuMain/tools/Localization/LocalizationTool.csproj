@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>MuMain.Tools.Localization</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="OpenCcBridge.mjs" CopyToOutputDirectory="PreserveNewest" />
+    <InternalsVisibleTo Include="MuMain.Tools.Localization.Tests" />
+  </ItemGroup>
+
+</Project>

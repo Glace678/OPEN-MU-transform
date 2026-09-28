@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1403,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you an Iris Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1404,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1405,
+   "en": "Go to the Lost Tower. Defeat 80 Death Knights and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 3, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1406,
+   "en": "Go to the Swamp of Peace and defeat 100 Shadow Pawns. Go see the Shadow Phantom Soldier again to receive a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1407,
+   "en": "Go to the Swamp of Peace. Defeat 140 Shadow Knights and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 7, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1408,
+   "en": "Go to the Swamp of Peace. Defeat 150 Shadow Looks and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 6, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1409,
+   "en": "Go to the area between Tarkan 1 and Tarkan 2, and you will see these assassins known as Iron Wheels. Defeat 60 Iron Wheels and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1439,
+   "en": "Good decision. The first mission for the second trial involves defeating 10 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Soul, a Jewel of Chaos, or a Jewel of Harmony.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1440,
+   "en": "Good decision. The first mission of the fifth trial involves surviving in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1441,
+   "en": "Good decision. The first mission of the fourth trial involves defeating 30 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1442,
+   "en": "Good decision. The first mission of the last trial involves surviving in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete this mission successfully and you may be reborn as hero. Your fame will echo across the whole continent of MU. You'll be rewarded with either a Jewel of Bless, two Jewels of Life, or two Jewels of Soul upon completion.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1443,
+   "en": "Good decision. This mission requires you to raise your worth by claiming victory in Illusion Temple. Complete the mission and you'll be rewarded with 800,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1444,
+   "en": "Good job. The energy of insanity is safely contained since Necrons and Death Centurions have been eliminated. But the portion they already absorbed has been transferred to Kundun so we need to directly attack him. Can you help us? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1445,
+   "en": "Good job. You made it easier for us to protect the temple entrance. The 2nd goal is to punish the enemies attacking the sealed stone. Etramu saved the empire by changing his body into a sealed stone, but his soul is getting engulfed with madness. Do you want to proceed? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1456,
+   "en": "Grand Wizard Etramu vowed to destroy Illusion Sorcery and formed an army to subjugate its followers. Under Etramu's command, the alliance engaged the followers of Illusion Sorcery with formidable force. Despite having been driven all the way back to Illusion Temple, the followers continued to resist. As battle raged on, Lev disappeared and left the followers of Illusion Sorcery in confusion. Ultimately, they all met their death at the hands of the alliance on the temple grounds.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1470,
+   "en": "Great! I finally get the chance to show off what I can do.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1471,
+   "en": "Great! I'll finish this tutorial in no time!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1511,
+   "en": "Have you been to Chaos Castle? If not, it'll be an excellent opportunity to prove your strength. Why don't you listen to what I have to say and then decide? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1512,
+   "en": "Have you cleared today's request? Show me Lv. 1 Request Completion Certificate then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1513,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join in the fight for the castle? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1514,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join the fight for the castle? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1515,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 220-270)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1516,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1517,
+   "en": "Having set his eyes on the tree's power of birth, Secrarium corrupted the Elf Tree and transformed it into an Immoral Tree that gave birth to monsters.  The monsters horde grew to astronomical proportions, and the kingdoms of the MU continent combined their forces to entrap the immoral tree in a space of nothingness.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1518,
+   "en": "Having trustworthy comrades at your side makes all the difference when it comes to Blood Castle quests. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1528,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Blood Castle challenge. Successfully complete the Blood Castle quest to receive a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1529,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Chaos Castle challenge. If you survive Chaos Castle, you can claim a hefty reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1530,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Devil Square challenge. Training at Devil Square will earn you a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1531,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Illusion Temple challenge. Win at Illusion Temple to claim a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1542,
+   "en": "Help the reconnaissance party....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1545,
+   "en": "Here is the Letter of Request for you. Right click on the letter to check the information. Please note that you cannot receive refund of 500,000 Zen deposit if you give up the quest. You also need to bring the 'Request Completion Certificate' to get the refund. Once again, you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Good bye, then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1546,
+   "en": "Here it is.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1547,
+   "en": "Here you go.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1548,
+   "en": "Here's your first question.;How do you trade with a character that's in front of you?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1550,
+   "en": "Heroic Courage",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1551,
+   "en": "Heroic Fighting Spirit",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1552,
+   "en": "Heroic Mentality",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1553,
+   "en": "Heroic Qualities",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1554,
+   "en": "Heroic Tenacity",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1555,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. The sealed stone got stronger thanks to your effort, but Kundun's army is also getting stronger now. We investigated the sealed stone and found that Kundun's army absorbs its energy while Etramu's soul is taking a rest. Please help us and confine the energy of insanity within the sealed stone. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1556,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. This temple is Kundun's first target since Etramu keeps his body in the sealed stone. We're always short of fighters so I request help to the mercenary guild. Would you check the request? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1557,
+   "en": "Hidden history of the rebellion",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1561,
+   "en": "High ranking monsters deep inside the Lost Tower have launched a surprise attack on our reconnaissance party. Under the captain's orders to retaliate, we are now forming a punishment force. Will you accept this quest? (Level 206-209)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1564,
+   "en": "Hmm, Letter of Request����",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1565,
+   "en": "Hmm, free mercenary����",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1566,
+   "en": "Hmm... that doesn't sound all that bad.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1567,
+   "en": "Hmm... you are a wise warrior. Go now and achieve great things in the name Gens Vanert, knowing that I will always be here to assist you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1568,
+   "en": "Hmm...First, press M and then...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1569,
+   "en": "Hmm...a test...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1570,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 260-289)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

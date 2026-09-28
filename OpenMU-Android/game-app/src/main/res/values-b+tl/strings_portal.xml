@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Account</string>
+    <string name="account_portal_address">Address ng portal</string>
+    <string name="account_portal_language">Wika ng portal</string>
+    <string name="account_register">Magparehistro</string>
+    <string name="account_change_password">Palitan ang password</string>
+    <string name="account_reset_password">Nakalimutan ang password?</string>
+    <string name="account_portal_settings">Mga setting ng account</string>
+    <string name="account_portal_not_configured">Maglagay ng wastong address ng account portal sa mga setting.</string>
+    <string name="account_portal_invalid">Maglagay ng HTTPS origin. Ang HTTP ay para lamang sa direktang loopback o pinagkakatiwalaang lokal na pagpapares. Bawal ang credentials, path, query at fragment.</string>
+    <string name="account_portal_no_browser">Walang browser na magbubukas ng account portal.</string>
+</resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">ゲームデータを準備中</string>
+    <string name="preparing_detail">初回起動時にゲームデータを内部ストレージへ展開します。アプリを開いたままにしてください。</string>
+    <string name="ready">プレイの準備ができました</string>
+    <string name="start_game">ゲーム開始</string>
+    <string name="settings">設定</string>
+    <string name="gesture_help">ジェスチャー</string>
+    <string name="retry">再試行</string>
+    <string name="extract_failed">ゲームデータを準備できませんでした</string>
+    <string name="save">保存</string>
+    <string name="back">戻る</string>
+    <string name="display">画面</string>
+    <string name="controls">操作</string>
+    <string name="network">サーバー</string>
+    <string name="fps">フレームレート</string>
+    <string name="render_scale">描画スケール</string>
+    <string name="effects">エフェクト品質</string>
+    <string name="ui_scale">タッチボタンのサイズ</string>
+    <string name="safe_margin">画面端の余白</string>
+    <string name="touch_opacity">タッチボタンの不透明度</string>
+    <string name="vibration">タッチ・戦闘時の振動</string>
+    <string name="handedness">利き手</string>
+    <string name="server_address">サーバーアドレス</string>
+    <string name="server_port">接続ポート</string>
+    <string name="local_pairing">ログイン不要のローカルペアリング（LAN限定）</string>
+    <string name="restart_note">画面とサーバーの変更は、次にゲームに入るときに反映されます。</string>
+    <string name="invalid_server">サーバーのIPv4アドレスまたはホスト名を入力してください。プロトコルやポートは不要です。</string>
+    <string name="invalid_local_server">ローカルペアリングには、ループバックまたはLAN内のIPv4アドレス（例：192.168.1.20）が必要です。クラウドサーバーでは無効にしてください。</string>
+    <string name="invalid_port">ポートは1から65535の範囲で指定してください。</string>
+    <string name="saved">設定を保存しました</string>
+    <string name="tutorial_title">モバイル操作</string>
+    <string name="tutorial_body">メニュー：1本指でタップして選択・決定。\nキャラクター選択：キャラクターをタップしてから、右下の入場ボタンをタップ。\n\n通常の所持品：タップで詳細。動かさずに0.5秒押すと、使用可能なアイテムの使用やスキルの習得。移動するときは押してすぐドラッグし、所持品の外で離すと元の位置に戻ります。\n下部の4つのポーション枠：タップで使用。押し続けても連続使用しません。\n\nゲームワールドでは：\n移動エリアを1本指でドラッグ：移動\nスキルエリアをタップ：選択、ダブルタップ：現在のスキルを使用\n2本指で左右にスワイプ：スキル切り替え\n2本指で上下にスワイプ、またはピンチ：カメラ調整\n3本指で上にスワイプ：マップ、下にスワイプ：設定\n\n下部のポーションバーや画面上のUI操作では、ワールドのスキルは発動しません。</string>
+    <string name="understood">了解、ゲーム開始</string>
+    <string name="help_close">閉じる</string>
+    <string name="game_data_missing">APKにgame-data.zipがありません。完全なゲームパッケージではありません。</string>
+    <string name="storage_low">内部ストレージの空き容量が不足しています。あと最低%1$s必要です。</string>
+    <string name="current_display">現在の画面：%1$d × %2$d</string>
+    <string name="max_refresh">画面の最大リフレッシュレート：%1$d Hz。フレームレートは30～%1$dで設定できます。</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">最大%1$d Hz（画面に合わせる）</string>
+    <string name="game_settings">モバイル設定</string>
+    <string name="open_settings">設定を開く</string>
+    <string-array name="effect_labels">
+        <item>低（滑らかさ優先）</item>
+        <item>中（推奨）</item>
+        <item>高（画質優先）</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>右手</item>
+        <item>左手</item>
+    </string-array>
+</resources>

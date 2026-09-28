@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Konto</string>
+    <string name="account_portal_address">Adres portalu</string>
+    <string name="account_portal_language">Język portalu</string>
+    <string name="account_register">Zarejestruj</string>
+    <string name="account_change_password">Zmień hasło</string>
+    <string name="account_reset_password">Nie pamiętasz hasła?</string>
+    <string name="account_portal_settings">Ustawienia konta</string>
+    <string name="account_portal_not_configured">Podaj prawidłowy adres portalu kont w ustawieniach.</string>
+    <string name="account_portal_invalid">Podaj adres bazowy HTTPS. HTTP wymaga bezpośredniego adresu loopback lub zaufanego parowania lokalnego. Dane logowania, ścieżki, zapytania i fragmenty są niedozwolone.</string>
+    <string name="account_portal_no_browser">Brak przeglądarki umożliwiającej otwarcie portalu kont.</string>
+</resources>

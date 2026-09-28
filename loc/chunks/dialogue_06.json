@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1042,
+   "en": "Enter Devil Square Level 1, defeat the monsters that appear, and survive to the bitter end. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1043,
+   "en": "Enter Devil Square Level 2, defeat the monsters that appear, and survive to the bitter end. Come back to me afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1044,
+   "en": "Enter Devil Square Level 3, defeat the monsters that appear, and survive to the bitter end. Come back to me afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1045,
+   "en": "Enter Devil Square Level 4, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1046,
+   "en": "Enter Devil Square Level 5, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1047,
+   "en": "Enter Devil Square Level 6, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1048,
+   "en": "Enter Devil Square Level 7, defeat the monsters that appear, and survive to the bitter end. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1049,
+   "en": "Enter into Aida 2 and you will find Witch Queens. They always carry 'Kalt Stone' on themselves so eliminate them and take the jewel from them. Bring me 10 Kalt Stones. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1095,
+   "en": "Evil energy has escaped from the Lost Tower and is now corrupting the souls of Devias residents, turning them into monsters. I'd like to ask you to purify their souls and give them eternal rest for us. Will you accept this quest? (Level 186-189)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1103,
+   "en": "Excellent! Bring on the test!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1104,
+   "en": "Excellent! I will be back in a flash.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1105,
+   "en": "Excellent! It's time for the next quest. Since you are now familiar with hunting, let's get you to go after a tougher monster.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1106,
+   "en": "Excellent! Let's get started with the tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1107,
+   "en": "Excellent! What is the name of the monster you want me to hunt down?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1108,
+   "en": "Expanding businesses",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1114,
+   "en": "Explain potions to me once more.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1122,
+   "en": "Fast growth...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1123,
+   "en": "Fastest Way to Train (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1124,
+   "en": "Fastest Way to Train (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1125,
+   "en": "Fastest Way to Train (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1126,
+   "en": "Fastest Way to Train (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1127,
+   "en": "Fastest Way to Train (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1130,
+   "en": "Final Test to become a Hero",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1131,
+   "en": "Finally, a quest! You want me to buy 5 apples from a merchant?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1132,
+   "en": "Find 2 pages of 'Lost Map Lv. 4' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1133,
+   "en": "Find 2 pages of 'Lost Map Lv. 5' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1134,
+   "en": "Find 3 pages of 'Lost Map Lv. 3' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1135,
+   "en": "Find General Goods Merchant Zyro",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1136,
+   "en": "Find General Goods Merchant Zyro and check the details of his request to the mercenary guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1137,
+   "en": "Find General Goods Merchant Zyro who goes round Noria, Elveland, Lorencia and Devias and sell things.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1138,
+   "en": "Find Priestess Beina of the Underwater Temple in Kalima 6 and check the request information.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1139,
+   "en": "Find merchant Zyro, who goes round Noria, Elveland, Lorencia and Devias and sell things.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1141,
+   "en": "Find the guild office manager Tercia and pay 500,000 Zen as a deposit to receive Lv. 1 Letter of Request which contains the quest of the day.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1142,
+   "en": "Find your Gens Steward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1168,
+   "en": "First task is to collect the Stardust, which is the base material of the popular cosmetic product, Della. The ladies in a queue threaten me so I had to ask the mercenary guild. You can extract a small amount of Stardust from Queen Rainiers in the Icarus. Please bring me 20 units of Stardust. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1169,
+   "en": "First you need to eliminate Kundun's combatants who attack the temple entrance and then get rid of the enemies who cast spell on the sealed stone. I'll give you the 2nd goal when you finish 1st goal and come back to me. Here's the 1st goal; go to Kalima 6 and eliminate 30 Aegis and 20 Rogue Centurions, Kundun's combatants. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1188,
+   "en": "Free mercenary doesn't really belong to the mercenary guild; anybody can receive a request and get the reward only if he or she has certain sum of money for registration. We take the deposit for each request, but it's fully refundable as you finish the request. Don't you worry. We request you what you can handle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1191,
+   "en": "From the Chat window, use the Ctrl button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1192,
+   "en": "From the Chat window, use the Shift button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1193,
+   "en": "From the Chat window, use the Tab button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1202,
+   "en": "Gain EXP points to level up.;You can find out how many more points you need to reach the next level by checking your Character Stats window or the EXP bar located at the bottom of your screen.;The bar is divided into ten segments, and filling them up will elevate you to the next level.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1218,
+   "en": "Gens Duprian is a guild of the greatest heroes in Arca and at its heart is the Duprian clan, the mightiest noble bloodline in MU. We are led by Duprian Winston, a knight who knows no equal in the whole of the MU empire.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1219,
+   "en": "Gens Ranking Reward",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1221,
+   "en": "Gens Vanert is a noble family led by Vanert Reicht, the greatest socialite in the whole of the MU empire. The master strives around the clock to put a stop to Duprian Winston and his dream of absolute rule over the empire.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1222,
+   "en": "Gens dispute��? Gens Vanert��s rebellion is more like it. The gens dispute started because of the greed of Vanert Reicht, the commanding knight of Gens Vanert. Exactly five years ago, a band of heroes who were searching in La Cleon for a stone with the power to seal away Kundun were slaughtered. At the time, we believed it was the work of Selupan, a giant spider and the ruler of La Cleon, but soon learned that it was actually Gens Vanert. It is the duty of our proud Gens Duprian champions to retaliate and fight.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1223,
+   "en": "Gens ranking rewards are given out in the first week of each month.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1224,
+   "en": "Get rid of Kundun and 10 Schrikers, the guard soldiers in the innermost depth of Kalima 6 and come back to me to get reward. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1243,
+   "en": "Give me a letter of request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1244,
+   "en": "Give me some time to prepare. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1252,
+   "en": "Glory to the Gens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

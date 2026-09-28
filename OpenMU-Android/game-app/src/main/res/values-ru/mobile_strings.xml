@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Подготовка данных игры</string>
+    <string name="preparing_detail">При первом запуске данные игры распаковываются во внутреннюю память. Не закрывайте приложение.</string>
+    <string name="ready">Игра готова</string>
+    <string name="start_game">Играть</string>
+    <string name="settings">Настройки</string>
+    <string name="gesture_help">Жесты</string>
+    <string name="retry">Повторить</string>
+    <string name="extract_failed">Не удалось подготовить данные игры</string>
+    <string name="save">Сохранить</string>
+    <string name="back">Назад</string>
+    <string name="display">Графика</string>
+    <string name="controls">Управление</string>
+    <string name="network">Сервер</string>
+    <string name="fps">Частота кадров</string>
+    <string name="render_scale">Масштаб рендеринга</string>
+    <string name="effects">Качество эффектов</string>
+    <string name="ui_scale">Размер сенсорных кнопок</string>
+    <string name="safe_margin">Отступ от краёв</string>
+    <string name="touch_opacity">Непрозрачность сенсорных кнопок</string>
+    <string name="vibration">Вибрация касаний и боя</string>
+    <string name="handedness">Предпочитаемая рука</string>
+    <string name="server_address">Адрес сервера</string>
+    <string name="server_port">Порт подключения</string>
+    <string name="local_pairing">Локальное сопряжение без входа (только LAN)</string>
+    <string name="restart_note">Изменения графики и сервера вступят в силу при следующем входе в игру.</string>
+    <string name="invalid_server">Введите IPv4-адрес или имя сервера без протокола и порта.</string>
+    <string name="invalid_local_server">Для локального сопряжения нужен IPv4-адрес обратной петли или локальной сети, например 192.168.1.20. Для облачного сервера отключите сопряжение.</string>
+    <string name="invalid_port">Порт должен быть от 1 до 65535.</string>
+    <string name="saved">Настройки сохранены</string>
+    <string name="tutorial_title">Мобильное управление</string>
+    <string name="tutorial_body">Меню: касайтесь одним пальцем для выбора или подтверждения.\nВыбор персонажа: коснитесь персонажа, затем кнопки входа внизу справа.\n\nОбычный инвентарь: касание показывает описание; удерживайте палец неподвижно полсекунды, чтобы использовать пригодный предмет или изучить умение. Для переноса сразу тяните; отпускание вне инвентаря возвращает предмет на место.\nЧетыре нижних слота зелий: коснитесь для применения; удержание не повторяет действие.\n\nВ игровом мире:\nВедите одним пальцем в зоне движения, чтобы перемещаться.\nКоснитесь зоны умений для выбора; коснитесь дважды для применения текущего умения.\nСмахните двумя пальцами влево или вправо для смены умения.\nСмахните двумя пальцами вверх или вниз либо сведите или разведите их для настройки камеры.\nСмахните тремя пальцами вверх для карты или вниз для настроек.\n\nНижняя панель зелий и элементы интерфейса не запускают умения игрового мира.</string>
+    <string name="understood">Понятно, играть</string>
+    <string name="help_close">Закрыть</string>
+    <string name="game_data_missing">В APK отсутствует game-data.zip; это неполный пакет игры.</string>
+    <string name="storage_low">Недостаточно внутренней памяти. Нужно ещё не менее %1$s.</string>
+    <string name="current_display">Текущий экран: %1$d × %2$d</string>
+    <string name="max_refresh">Максимальная частота экрана: %1$d Гц. Выберите частоту кадров от 30 до %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">До %1$d Гц (по экрану)</string>
+    <string name="game_settings">Мобильные настройки</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string-array name="effect_labels">
+        <item>Низкое (плавность)</item>
+        <item>Среднее (рекомендуется)</item>
+        <item>Высокое (лучшая графика)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Правая рука</item>
+        <item>Левая рука</item>
+    </string-array>
+</resources>

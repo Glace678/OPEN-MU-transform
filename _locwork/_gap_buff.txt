@@ -1,0 +1,149 @@
+26|99|+3%% HP Regen/+100 HP
+70|99|50%% EXP Gain /0%% Item Drop Rate
+71|99|50%% EXP Gain /50%% Item Drop Rate
+111|99|AG recovery speed increase +10
+114|31|Abolish Magic
+144|99|Agility Status +50
+172|49|Altar of Wolf besiegement Status
+173|49|Altar of Wolf contract Status
+174|49|Altar of Wolf contract attempt
+175|49|Altar of Wolf contract disabled
+176|49|Altar of Wolf contract enabled
+177|49|Altar of Wolf hero contract Status
+213|49|Ascension
+274|99|Attack power +20%% increase
+275|99|Attack power +30
+278|99|Attack power increase +25
+279|99|Attack power increase +30
+280|99|Attack power increase +40
+290|99|Attack speed +15
+292|99|Attack speed increase +10
+293|99|Attack speed increase +15
+343|49|Besiegement Guild1
+344|49|Besiegement Guild2
+345|49|Besiegement Guild3
+357|49|Bleeding
+362|49|Blessing of Christmas
+363|31|Blind
+383|49|Blood Howl
+525|29|Cherry Blossom Flower Petal
+527|29|Cherry Blossom Rice Cake
+530|29|Cherry Blossom Wine
+548|49|Cold
+601|99|Control Status +50
+615|49|Critical Damage increase
+626|49|Crown Registration Status
+630|49|Cry Wolf Divine Protection Status
+631|49|Cry Wolf NPC transparency
+657|31|Damage Reflection
+697|49|Dark Rod Battle Skill
+753|49|Decrease Defense Rate
+800|49|Defense success rate decrease
+803|99|Defensibility +100
+804|99|Defensibility increase +100
+805|99|Defensibility increase +60
+807|49|Defensibility reduction
+950|99|EXP gain increase 150%%
+951|99|EXP gain increase 150%%/Automatic Life recovery at 5%%
+952|99|EXP gain increase 150%%/item gain increase 200%%
+953|99|EXP gain increase 200%%/Item gain increase 150%%
+955|49|Earth Binds
+1011|29|Elixir of Agility
+1012|29|Elixir of Control
+1013|29|Elixir of Energy
+1014|29|Elixir of Health
+1015|29|Elixir of Strength
+1039|99|Energy Status +50
+1143|49|Fire
+1189|49|Freeze
+1210|49|Gate Open/Close Status
+1245|29|Gladiator's Honor
+1494|99|HP increase +200
+1525|99|Health Status +50
+1559|49|High Vitality
+1685|31|Ice
+1704|49|Iced Arrow
+1714|49|Ignore Enemy's Defense
+1756|49|Increase Attack Power
+1761|49|Increase Defense
+1762|49|Increase Defense Rate
+1763|31|Increase Defense Success Rate
+1767|31|Increase HP
+1769|31|Increase Health
+1858|49|Innovate
+1865|49|Invincibility
+1866|99|Invincible
+1867|31|Invisibility
+1875|31|Iron Defense
+1916|99|Item gain increase at 150%%/Automatic Mana recovery at 5%%
+1918|29|Jack O'Lantern Blessings
+1919|29|Jack O'Lantern Cry
+1920|29|Jack O'Lantern Drink
+1921|29|Jack O'Lantern Food
+1922|29|Jack O'Lantern Wrath
+2105|49|Low Vitality
+2128|49|Magic Defense
+2138|99|Mana increase +300
+2150|29|Master Seal of Ascension
+2151|29|Master Seal of Wealth
+2153|29|Max AG Boost Aura
+2157|29|Max SD Boost Aura
+2170|99|Maximum Life increase +500
+2171|99|Maximum Life increase +700
+2174|99|Maximum Mana increase +500
+2175|99|Maximum Mana increase +700
+2189|49|Medium Vitality
+2213|49|Minimum Vitality
+2230|49|Monster Chemistry Attack Resistance
+2231|49|Monster Magic Attack Resistance
+2348|49|PK Penalty
+2366|49|Party EXP Bonus Item
+2381|49|Penetrate Armor
+2436|31|Poison
+2453|49|Potion of Blessing
+2454|31|Potion of Soul
+2488|49|Punishment for Illicit Software Use
+2607|49|Reduce attack speed
+2923|49|Santa Defense
+2924|49|Santa Fortune
+2925|49|Santa Healing
+2926|49|Santa Protection
+2927|49|Santa Quickness
+2928|49|Santa Strengthener
+2949|29|Scroll of Battle
+2955|29|Scroll of Defense
+2963|29|Scroll of Healing
+2964|29|Scroll of Health
+2970|29|Scroll of Mana
+2975|29|Scroll of Quickness
+2977|29|Scroll of Strength
+2982|29|Scroll of Wizardry
+2984|29|Scroll of Wrath
+2988|29|Seal of Ascension
+2989|29|Seal of Divinity
+2990|29|Seal of Healing
+2991|29|Seal of Mobility
+2992|29|Seal of Strength
+2993|29|Seal of Sustenance
+2994|29|Seal of Wealth
+3040|49|Shadow Phantom effect
+3091|31|Sleep
+3123|31|Soul Barrier
+3133|31|Spell of Protection
+3135|31|Spell of Restriction
+3200|99|Strength Status +50
+3208|31|Stun
+3226|99|Summoner Neil attack
+3227|99|Summoner Shamut attack
+3295|29|Talisman of Guardian
+3296|29|Talisman of Item Protection
+3324|49|Temple - Spell of Quickness
+3325|49|Temple - Spell of Sublimation
+3595|99|Transparency Status
+3691|49|Vampiric
+3743|49|Watch
+3748|49|Watchtower
+3752|49|Weaken
+3753|31|Weakness
+3841|99|Wizardry increase +30
+3842|49|Wizardry increase reduction

@@ -1,0 +1,965 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 2611,
+   "en": "Reduces the speed of durability loss for weapons and armor by %0.2f%%.# (excludes cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2612,
+   "en": "Reducing the speed of durability loss for equipped consumable items #(satan, guardian angel, horn of uniria, horn of dinorant, fenrir's horn) by %0.2f%%. #(excludes cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2636,
+   "en": "Required agility decrease",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2637,
+   "en": "Required strength decrease",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2638,
+   "en": "Requires 'Berserker' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2639,
+   "en": "Requires 'Bless' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2640,
+   "en": "Requires 'Chain Lightening' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2641,
+   "en": "Requires 'Chaotic Diseier' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2642,
+   "en": "Requires 'Cometfall' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2643,
+   "en": "Requires 'Critical Damage Increase' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2644,
+   "en": "Requires 'Cyclone' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2645,
+   "en": "Requires 'Damage Increase' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2646,
+   "en": "Requires 'Death Stab' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2647,
+   "en": "Requires 'Decay' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2648,
+   "en": "Requires 'Defense Increase' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2649,
+   "en": "Requires 'Drain Life' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2650,
+   "en": "Requires 'Earthshake' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2651,
+   "en": "Requires 'Electric Spark' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2652,
+   "en": "Requires 'Evil Spirit' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2653,
+   "en": "Requires 'Expansion of Wizardry' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2654,
+   "en": "Requires 'Falling Slash' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2655,
+   "en": "Requires 'Fire Burst' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2656,
+   "en": "Requires 'Fire Scream' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2657,
+   "en": "Requires 'Fire Slash' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2658,
+   "en": "Requires 'Fire Storm' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2659,
+   "en": "Requires 'Flame Strike' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2660,
+   "en": "Requires 'Flame' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2661,
+   "en": "Requires 'Force Wave' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2662,
+   "en": "Requires 'Freeze Earth' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2663,
+   "en": "Requires 'Gigantic Storm' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2664,
+   "en": "Requires 'Heal' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2665,
+   "en": "Requires 'Hellfire' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2666,
+   "en": "Requires 'Ice Arrow' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2667,
+   "en": "Requires 'Ice Storm' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2668,
+   "en": "Requires 'Ice' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2669,
+   "en": "Requires 'Inferno' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2670,
+   "en": "Requires 'Infinity Arrow' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2671,
+   "en": "Requires 'Innovation' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2672,
+   "en": "Requires 'Lightening Shock' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2673,
+   "en": "Requires 'Lightening' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2674,
+   "en": "Requires 'Lunge' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2675,
+   "en": "Requires 'Meteor' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2676,
+   "en": "Requires 'Nova' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2677,
+   "en": "Requires 'Party Healing' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2678,
+   "en": "Requires 'Penetration' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2679,
+   "en": "Requires 'Poison Arrow' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2680,
+   "en": "Requires 'Poison' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2681,
+   "en": "Requires 'Power Slash' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2682,
+   "en": "Requires 'Rageful Blow' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2683,
+   "en": "Requires 'Slash' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2684,
+   "en": "Requires 'Sleep' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2685,
+   "en": "Requires 'Soul Barrier' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2686,
+   "en": "Requires 'Strike of Destruction' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2687,
+   "en": "Requires 'Swell Life' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2688,
+   "en": "Requires 'Triple Shot' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2689,
+   "en": "Requires 'Twisting Slash' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2690,
+   "en": "Requires 'Weakeness' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2691,
+   "en": "Requires Rank 1 'Durability Reduction (1)' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2692,
+   "en": "Requires Rank 1 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2693,
+   "en": "Requires Rank 2 'Automatic Mana Recovery Increase' of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2694,
+   "en": "Requires Rank 2 'Blast Strengthener' of Lv. of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2695,
+   "en": "Requires Rank 2 'Bow Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2696,
+   "en": "Requires Rank 2 'Crossbow Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2697,
+   "en": "Requires Rank 2 'Dark Spirit Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2698,
+   "en": "Requires Rank 2 'Expansion of Wizardry Strengthener' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2699,
+   "en": "Requires Rank 2 'Fire Burst Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2700,
+   "en": "Requires Rank 2 'Fire Tome Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2701,
+   "en": "Requires Rank 2 'Flame Strengthener' of Lv. of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2702,
+   "en": "Requires Rank 2 'Lightning Strengthener' of Lv. of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2703,
+   "en": "Requires Rank 2 'Lightning Tome Strengthener' of Lv. 10 or highe",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2704,
+   "en": "Requires Rank 2 'Mace Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2705,
+   "en": "Requires Rank 2 'Maximum SD Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2706,
+   "en": "Requires Rank 2 'One-handed Staff Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2707,
+   "en": "Requires Rank 2 'One-handed Sword Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2708,
+   "en": "Requires Rank 2 'Other World Tome Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2709,
+   "en": "Requires Rank 2 'Poison Resistance Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2710,
+   "en": "Requires Rank 2 'Power Slash Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2711,
+   "en": "Requires Rank 2 'Scepter Strengthener : Pet Strengthener' of Lv.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2712,
+   "en": "Requires Rank 2 'Scepter Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2713,
+   "en": "Requires Rank 2 'Shied Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2714,
+   "en": "Requires Rank 2 'Shield Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2715,
+   "en": "Requires Rank 2 'Spear Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2716,
+   "en": "Requires Rank 2 'Stick Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2717,
+   "en": "Requires Rank 2 'Summoned Monster Strengthener (1)' of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2718,
+   "en": "Requires Rank 2 'Triple Shot Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2719,
+   "en": "Requires Rank 2 'Twisting Slash Strengthener' of Lv. 10 or highe",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2720,
+   "en": "Requires Rank 2 'Two-handed Staff Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2721,
+   "en": "Requires Rank 2 'Two-handed Sword Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2722,
+   "en": "Requires Rank 2 'Wind Tome Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2723,
+   "en": "Requires Rank 2 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2724,
+   "en": "Requires Rank 3 'Automatic HP Recovery Increase' of Lv. 10 or hi",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2725,
+   "en": "Requires Rank 3 'Critical Damage Increase Strengthener' of Lv. 1",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2726,
+   "en": "Requires Rank 3 'Dark Horse Strengthener (2)' of Lv. 10 or highe",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2727,
+   "en": "Requires Rank 3 'Dark Spirit Strengthener (2)' of Lv. 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2728,
+   "en": "Requires Rank 3 'Defense Increase Strengthener' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2729,
+   "en": "Requires Rank 3 'Durability Reduction (2)' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2730,
+   "en": "Requires Rank 3 'Flame Strengthener' of Lv. of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2731,
+   "en": "Requires Rank 3 'Lightning Resistance Increase' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2732,
+   "en": "Requires Rank 3 'Poison Strengthener' of Lv. of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2733,
+   "en": "Requires Rank 3 'Rageful Blow Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2734,
+   "en": "Requires Rank 3 'Twisting Slash Strengthener' of Lv. 10 or highe",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2735,
+   "en": "Requires Rank 3 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2736,
+   "en": "Requires Rank 4 'Attack Power Increase Strengthener' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2737,
+   "en": "Requires Rank 4 'Berserker Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2738,
+   "en": "Requires Rank 4 'Critical Damage Increase Strengthener (2)' of L",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2739,
+   "en": "Requires Rank 4 'Defense Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2740,
+   "en": "Requires Rank 4 'Evil Spirit Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2741,
+   "en": "Requires Rank 4 'Maximum Life Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2742,
+   "en": "Requires Rank 4 'Monster Attack Life Increment' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2743,
+   "en": "Requires Rank 4 'Soul Barrier Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2744,
+   "en": "Requires Rank 4 'Swell Life Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2745,
+   "en": "Requires Rank 4 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2746,
+   "en": "Requires Rank 5 'Berserker Proficiency' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2747,
+   "en": "Requires Rank 5 'Critical Damage Increase Strengthener (3)' of L",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2748,
+   "en": "Requires Rank 5 'Dark Spirit Strengthener (3)' of Lv. 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2749,
+   "en": "Requires Rank 5 'Death Stab Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2750,
+   "en": "Requires Rank 5 'Defense Increase Mastery' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2751,
+   "en": "Requires Rank 5 'Defense Success Rate Increase' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2752,
+   "en": "Requires Rank 5 'Drain Life Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2753,
+   "en": "Requires Rank 5 'Fire Scream Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  }
+ ]
+}

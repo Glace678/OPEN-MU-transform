@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="bf39d54a-bff2-444f-a054-03cdb400ca53" name="Glace@DESKTOP-K1C5373 2026-09-27 09:18:34" runUser="DESKTOP-K1C5373\Glace" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-27T09:18:34.0348484+08:00" queuing="2026-09-27T09:18:34.0348487+08:00" start="2026-09-27T09:17:26.9227929+08:00" finish="2026-09-27T09:18:57.1764195+08:00" />
+  <TestSettings name="default" id="bc68a295-fbe8-40f3-9b80-f6083b0dd0a6">
+    <Deployment runDeploymentRoot="Glace_DESKTOP-K1C5373_2026-09-27_09_18_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="48031f9e-c57f-49ff-9bbb-b1a0624d60a1" testId="6aaf08d3-a21e-bfe5-522c-2f4782ea1ff5" testName="RoutineReductionRemainsBoundedAsync(-0.5f)" computerName="DESKTOP-K1C5373" duration="00:00:00.8026050" startTime="2026-09-27T09:18:53.6317533+08:00" endTime="2026-09-27T09:18:54.4343573+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48031f9e-c57f-49ff-9bbb-b1a0624d60a1" />
+    <UnitTestResult executionId="07a76cd1-1e5b-4cd8-ba42-ac6a9fdc9603" testId="68033a45-a2ad-b647-27be-4d6d25ca5620" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,200,55)" computerName="DESKTOP-K1C5373" duration="00:00:00.7092070" startTime="2026-09-27T09:18:46.5194099+08:00" endTime="2026-09-27T09:18:47.2286164+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="07a76cd1-1e5b-4cd8-ba42-ac6a9fdc9603" />
+    <UnitTestResult executionId="a4c0c796-3359-4b6c-884b-4903dbb15fea" testId="eb024b00-ee24-2487-64ee-5c164402c06f" testName="ActualCombatCallerConsumesOnceAndHitsAsync(6,43)" computerName="DESKTOP-K1C5373" duration="00:00:01.0393260" startTime="2026-09-27T09:18:33.9908329+08:00" endTime="2026-09-27T09:18:35.0301587+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4c0c796-3359-4b6c-884b-4903dbb15fea" />
+    <UnitTestResult executionId="dded01a9-237c-4ca7-9bf4-5d83db132057" testId="8c31c0e0-8f2d-5d2a-6153-30c5d9c061bf" testName="ActualClockSixtySecondRoutineNeverResetsResourcesAsync" computerName="DESKTOP-K1C5373" duration="00:01:06.0530660" startTime="2026-09-27T09:17:27.9361840+08:00" endTime="2026-09-27T09:18:33.9891794+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dded01a9-237c-4ca7-9bf4-5d83db132057" />
+    <UnitTestResult executionId="446be671-0e24-4188-b2db-c89e42813b76" testId="aa7ecc31-2417-0d84-3154-fc805cd8f298" testName="RoutineReductionRemainsBoundedAsync(2.0f)" computerName="DESKTOP-K1C5373" duration="00:00:00.8954040" startTime="2026-09-27T09:18:56.1296035+08:00" endTime="2026-09-27T09:18:57.0250065+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="446be671-0e24-4188-b2db-c89e42813b76" />
+    <UnitTestResult executionId="6522d653-fb2c-4a39-ab9b-ec51995368aa" testId="acd40ffa-a3b5-d040-c6f5-fd4de19ab655" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,200,43)" computerName="DESKTOP-K1C5373" duration="00:00:00.7556100" startTime="2026-09-27T09:18:40.5702318+08:00" endTime="2026-09-27T09:18:41.3258408+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6522d653-fb2c-4a39-ab9b-ec51995368aa" />
+    <UnitTestResult executionId="ef10b475-c34b-4b1e-80cb-8368fc6423a4" testId="a4f2f5ac-f279-0609-4184-b5e548762c3b" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,400,262)" computerName="DESKTOP-K1C5373" duration="00:00:00.8158200" startTime="2026-09-27T09:18:50.2462779+08:00" endTime="2026-09-27T09:18:51.0620972+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef10b475-c34b-4b1e-80cb-8368fc6423a4" />
+    <UnitTestResult executionId="dd2e8207-326e-4f76-a371-a61309b82db0" testId="90822c61-4b18-e6ce-5340-60e3d2ef2bd7" testName="ActualLearnablesRetainClassAndUnlockRequirementsAsync" computerName="DESKTOP-K1C5373" duration="00:00:00.8175190" startTime="2026-09-27T09:18:37.7638694+08:00" endTime="2026-09-27T09:18:38.5813884+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd2e8207-326e-4f76-a371-a61309b82db0">
+      <Output>
+        <ErrorInfo>
+          <Message>  Original skill-use unlock 4/200/43&#xD;
+  Expected: False&#xD;
+  But was:  True&#xD;
+</Message>
+          <StackTrace>   at MUnique.OpenMU.Tests.BalanceV1SkillResourceTests.ActualLearnablesRetainClassAndUnlockRequirementsAsync() in D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\BalanceV1SkillResourceTests.cs:line 295&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.GetResult()&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.RunTestMethod(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)&#xD;
+
+1)    at MUnique.OpenMU.Tests.BalanceV1SkillResourceTests.ActualLearnablesRetainClassAndUnlockRequirementsAsync() in D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\BalanceV1SkillResourceTests.cs:line 295&#xD;
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine&amp; stateMachine)&#xD;
+   at MUnique.OpenMU.Tests.BalanceV1SkillResourceTests.ActualLearnablesRetainClassAndUnlockRequirementsAsync()&#xD;
+
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="612e6920-5d9a-4934-82fd-50c5ef2069a5" testId="68a2e77b-3260-3d9d-b76e-8206f28a74c2" testName="EveryOriginalClassAndLearnedCostRemainsUnchangedAsync" computerName="DESKTOP-K1C5373" duration="00:00:01.2406360" startTime="2026-09-27T09:18:38.5815366+08:00" endTime="2026-09-27T09:18:39.8221720+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="612e6920-5d9a-4934-82fd-50c5ef2069a5" />
+    <UnitTestResult executionId="1a15c183-a964-467a-a52e-bf1e380b4745" testId="d9d9364a-0758-2cd6-32bd-1c0893020f52" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,200,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.7680570" startTime="2026-09-27T09:18:42.7788117+08:00" endTime="2026-09-27T09:18:43.5468680+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a15c183-a964-467a-a52e-bf1e380b4745" />
+    <UnitTestResult executionId="5088215d-8926-4fca-94a6-6c8529e1ef14" testId="ffeab205-f1e4-51ce-7011-c90d48898e2b" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,400,43)" computerName="DESKTOP-K1C5373" duration="00:00:00.7234050" startTime="2026-09-27T09:18:41.3258579+08:00" endTime="2026-09-27T09:18:42.0492627+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5088215d-8926-4fca-94a6-6c8529e1ef14" />
+    <UnitTestResult executionId="e53b8d20-b010-4856-8993-3924f931a658" testId="c28f5985-a10c-0aa4-b9fa-899fd5df6e6e" testName="ActualCombatCallerConsumesOnceAndHitsAsync(8,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.9178460" startTime="2026-09-27T09:18:35.0302005+08:00" endTime="2026-09-27T09:18:35.9480457+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e53b8d20-b010-4856-8993-3924f931a658" />
+    <UnitTestResult executionId="e91b6ed1-36e6-42ae-b050-b0e526009c99" testId="b0c5f228-35f2-f432-4491-c23542e65fb3" testName="OriginalSpecialSkillContractsAreDistinct" computerName="DESKTOP-K1C5373" duration="00:00:00.8397450" startTime="2026-09-27T09:18:51.9418236+08:00" endTime="2026-09-27T09:18:52.7815675+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e91b6ed1-36e6-42ae-b050-b0e526009c99" />
+    <UnitTestResult executionId="581d3ff0-3575-4cd2-979d-499a5c3468c6" testId="20b26b14-41e9-6f56-5bd9-541890fe1d50" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,400,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.7397960" startTime="2026-09-27T09:18:43.5468972+08:00" endTime="2026-09-27T09:18:44.2866930+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="581d3ff0-3575-4cd2-979d-499a5c3468c6" />
+    <UnitTestResult executionId="5d834bd2-d3c0-4f4f-9081-f169a542e334" testId="28bed599-bb93-3b6f-0ba7-ab2d6d253c20" testName="RoutineReductionRemainsBoundedAsync(1.0f)" computerName="DESKTOP-K1C5373" duration="00:00:00.8123190" startTime="2026-09-27T09:18:55.3172496+08:00" endTime="2026-09-27T09:18:56.1295683+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d834bd2-d3c0-4f4f-9081-f169a542e334" />
+    <UnitTestResult executionId="7292e579-1306-4066-ab19-fb5bb28df4a6" testId="845abc28-5453-0b0d-81ab-3524303c7add" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(7,400,43)" computerName="DESKTOP-K1C5373" duration="00:00:00.7294980" startTime="2026-09-27T09:18:42.0492886+08:00" endTime="2026-09-27T09:18:42.7787861+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7292e579-1306-4066-ab19-fb5bb28df4a6" />
+    <UnitTestResult executionId="779be8f2-1f28-4a44-b3b5-69f2c9c51e38" testId="ff3e729d-530b-cc36-c67b-a1c057c70863" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(25,400,262)" computerName="DESKTOP-K1C5373" duration="00:00:00.8796460" startTime="2026-09-27T09:18:51.0621230+08:00" endTime="2026-09-27T09:18:51.9417682+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="779be8f2-1f28-4a44-b3b5-69f2c9c51e38" />
+    <UnitTestResult executionId="ab8ac356-0b69-4211-a33b-441d21c61d50" testId="eba42b89-9017-f18b-e0a5-3a5dead3deb9" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,200,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.7312770" startTime="2026-09-27T09:18:44.2867175+08:00" endTime="2026-09-27T09:18:45.0179943+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab8ac356-0b69-4211-a33b-441d21c61d50" />
+    <UnitTestResult executionId="95d2ddfb-37f3-4d67-8546-86d1247da611" testId="ca39c6cc-ed12-caef-fc63-7b59d60b5e43" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(11,400,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.7474710" startTime="2026-09-27T09:18:45.7719173+08:00" endTime="2026-09-27T09:18:46.5193874+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95d2ddfb-37f3-4d67-8546-86d1247da611" />
+    <UnitTestResult executionId="1e74b654-cc1e-4ce2-9688-4730c174bfed" testId="2f634256-9a95-651c-1d18-45091217b75b" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(13,400,55)" computerName="DESKTOP-K1C5373" duration="00:00:00.7549890" startTime="2026-09-27T09:18:48.7307622+08:00" endTime="2026-09-27T09:18:49.4857510+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e74b654-cc1e-4ce2-9688-4730c174bfed" />
+    <UnitTestResult executionId="48bb89ce-537b-4a31-b578-ad6298aaaf63" testId="d29a6d7f-0b6c-0610-150b-d0b9ffe25e19" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,300,55)" computerName="DESKTOP-K1C5373" duration="00:00:00.7297330" startTime="2026-09-27T09:18:47.2286352+08:00" endTime="2026-09-27T09:18:47.9583679+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48bb89ce-537b-4a31-b578-ad6298aaaf63" />
+    <UnitTestResult executionId="2f0dee6c-b8ad-46cc-86f6-e49e3347882d" testId="e77f7e0a-107b-ff46-8848-fae82b72e28d" testName="ActualCombatCallerConsumesOnceAndHitsAsync(24,262)" computerName="DESKTOP-K1C5373" duration="00:00:00.9041550" startTime="2026-09-27T09:18:36.8582751+08:00" endTime="2026-09-27T09:18:37.7624299+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f0dee6c-b8ad-46cc-86f6-e49e3347882d" />
+    <UnitTestResult executionId="3044c7a7-c9fc-4819-88cb-dcaae236b7ed" testId="e44769e0-8e30-9e63-3f65-7503dbef8383" testName="RoutineReductionRemainsBoundedAsync(0.5f)" computerName="DESKTOP-K1C5373" duration="00:00:00.8828270" startTime="2026-09-27T09:18:54.4343881+08:00" endTime="2026-09-27T09:18:55.3172143+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3044c7a7-c9fc-4819-88cb-dcaae236b7ed" />
+    <UnitTestResult executionId="a39e8f7a-71be-4300-8e96-39f4ceaef29f" testId="0b3f1181-9c83-d7e6-d098-7e7b114cc03a" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,300,262)" computerName="DESKTOP-K1C5373" duration="00:00:00.7604830" startTime="2026-09-27T09:18:49.4857714+08:00" endTime="2026-09-27T09:18:50.2462538+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a39e8f7a-71be-4300-8e96-39f4ceaef29f" />
+    <UnitTestResult executionId="bbaf4a2f-bddd-49aa-baaa-65ce9a2510e3" testId="36c6b19c-bab7-195b-5d46-94a8449b930e" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,400,52)" computerName="DESKTOP-K1C5373" duration="00:00:00.7538780" startTime="2026-09-27T09:18:45.0180190+08:00" endTime="2026-09-27T09:18:45.7718965+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbaf4a2f-bddd-49aa-baaa-65ce9a2510e3" />
+    <UnitTestResult executionId="e336a676-b6ad-4fcb-82e5-9d170f283d62" testId="1b4473c4-c9fb-a021-3de7-084af84e64ef" testName="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,400,55)" computerName="DESKTOP-K1C5373" duration="00:00:00.7723510" startTime="2026-09-27T09:18:47.9583853+08:00" endTime="2026-09-27T09:18:48.7307363+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e336a676-b6ad-4fcb-82e5-9d170f283d62" />
+    <UnitTestResult executionId="0f0c3ca7-5605-4c4a-a463-5ce129d3d33f" testId="26b79c9e-c096-e5bb-5cfa-ca7521351891" testName="InsufficientResourcesCannotProduceFreeOrPartialCastAsync" computerName="DESKTOP-K1C5373" duration="00:00:00.7479600" startTime="2026-09-27T09:18:39.8222077+08:00" endTime="2026-09-27T09:18:40.5701669+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f0c3ca7-5605-4c4a-a463-5ce129d3d33f" />
+    <UnitTestResult executionId="7d51b4ab-e2b0-4c4d-ab05-bdb92fac986a" testId="c7de2a41-c36a-f847-f7a9-1d1df733e693" testName="ProfileAndContractExclusionsPreserveOriginalCostsAsync" computerName="DESKTOP-K1C5373" duration="00:00:00.8500950" startTime="2026-09-27T09:18:52.7816017+08:00" endTime="2026-09-27T09:18:53.6316966+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7d51b4ab-e2b0-4c4d-ab05-bdb92fac986a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.MissingMethodException : Constructor on type 'MUnique.OpenMU.Persistence.BasicModel.ConstValueAttribute' not found.&#xD;
+  ----&gt; System.MissingMethodException : Member not found.</Message>
+          <StackTrace>   at System.RuntimeType.CreateInstanceImpl(BindingFlags bindingAttr, Binder binder, Object[] args, CultureInfo culture)&#xD;
+   at System.Activator.CreateInstance(Type type, Object[] args)&#xD;
+   at MUnique.OpenMU.Persistence.TypeHelper.CreateNew[TBase](Assembly origin, Object[] args) in D:\openmu自用\OpenMU\src\Persistence\TypeHelper.cs:line 74&#xD;
+   at MUnique.OpenMU.Persistence.InMemory.InMemoryContext.CreateNew[T](Object[] args) in D:\openmu自用\OpenMU\src\Persistence\InMemory\InMemoryContext.cs:line 109&#xD;
+   at MUnique.OpenMU.Tests.BalanceV1SkillResourceTests.ProfileAndContractExclusionsPreserveOriginalCostsAsync() in D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\BalanceV1SkillResourceTests.cs:line 266&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.GetResult()&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.RunTestMethod(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)&#xD;
+--MissingMethodException&#xD;
+   at System.DefaultBinder.BindToMethod(BindingFlags bindingAttr, MethodBase[] match, Object[]&amp; args, ParameterModifier[] modifiers, CultureInfo cultureInfo, String[] names, Object&amp; state)&#xD;
+   at System.RuntimeType.CreateInstanceImpl(BindingFlags bindingAttr, Binder binder, Object[] args, CultureInfo culture)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d19f1406-4532-4dcc-baa1-d0c280dbf491" testId="5088a084-69c9-e432-6c6c-63bc220f29b4" testName="ActualCombatCallerConsumesOnceAndHitsAsync(12,55)" computerName="DESKTOP-K1C5373" duration="00:00:00.9101700" startTime="2026-09-27T09:18:35.9480760+08:00" endTime="2026-09-27T09:18:36.8582459+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d19f1406-4532-4dcc-baa1-d0c280dbf491" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ActualLearnablesRetainClassAndUnlockRequirementsAsync" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="90822c61-4b18-e6ce-5340-60e3d2ef2bd7">
+      <Execution id="dd2e8207-326e-4f76-a371-a61309b82db0" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualLearnablesRetainClassAndUnlockRequirementsAsync" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(7,400,43)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="845abc28-5453-0b0d-81ab-3524303c7add">
+      <Execution id="7292e579-1306-4066-ab19-fb5bb28df4a6" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(7,400,43)" />
+    </UnitTest>
+    <UnitTest name="EveryOriginalClassAndLearnedCostRemainsUnchangedAsync" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="68a2e77b-3260-3d9d-b76e-8206f28a74c2">
+      <Execution id="612e6920-5d9a-4934-82fd-50c5ef2069a5" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="EveryOriginalClassAndLearnedCostRemainsUnchangedAsync" />
+    </UnitTest>
+    <UnitTest name="RoutineReductionRemainsBoundedAsync(1.0f)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="28bed599-bb93-3b6f-0ba7-ab2d6d253c20">
+      <Execution id="5d834bd2-d3c0-4f4f-9081-f169a542e334" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="RoutineReductionRemainsBoundedAsync(1.0f)" />
+    </UnitTest>
+    <UnitTest name="RoutineReductionRemainsBoundedAsync(-0.5f)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="6aaf08d3-a21e-bfe5-522c-2f4782ea1ff5">
+      <Execution id="48031f9e-c57f-49ff-9bbb-b1a0624d60a1" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="RoutineReductionRemainsBoundedAsync(-0.5f)" />
+    </UnitTest>
+    <UnitTest name="InsufficientResourcesCannotProduceFreeOrPartialCastAsync" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="26b79c9e-c096-e5bb-5cfa-ca7521351891">
+      <Execution id="0f0c3ca7-5605-4c4a-a463-5ce129d3d33f" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="InsufficientResourcesCannotProduceFreeOrPartialCastAsync" />
+    </UnitTest>
+    <UnitTest name="ActualClockSixtySecondRoutineNeverResetsResourcesAsync" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="8c31c0e0-8f2d-5d2a-6153-30c5d9c061bf">
+      <Execution id="dded01a9-237c-4ca7-9bf4-5d83db132057" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualClockSixtySecondRoutineNeverResetsResourcesAsync" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,400,262)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="a4f2f5ac-f279-0609-4184-b5e548762c3b">
+      <Execution id="ef10b475-c34b-4b1e-80cb-8368fc6423a4" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,400,262)" />
+    </UnitTest>
+    <UnitTest name="OriginalSpecialSkillContractsAreDistinct" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="b0c5f228-35f2-f432-4491-c23542e65fb3">
+      <Execution id="e91b6ed1-36e6-42ae-b050-b0e526009c99" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="OriginalSpecialSkillContractsAreDistinct" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,300,262)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="0b3f1181-9c83-d7e6-d098-7e7b114cc03a">
+      <Execution id="a39e8f7a-71be-4300-8e96-39f4ceaef29f" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(24,300,262)" />
+    </UnitTest>
+    <UnitTest name="ActualCombatCallerConsumesOnceAndHitsAsync(8,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="c28f5985-a10c-0aa4-b9fa-899fd5df6e6e">
+      <Execution id="e53b8d20-b010-4856-8993-3924f931a658" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualCombatCallerConsumesOnceAndHitsAsync(8,52)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,200,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="d9d9364a-0758-2cd6-32bd-1c0893020f52">
+      <Execution id="1a15c183-a964-467a-a52e-bf1e380b4745" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,200,52)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,400,43)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="ffeab205-f1e4-51ce-7011-c90d48898e2b">
+      <Execution id="5088215d-8926-4fca-94a6-6c8529e1ef14" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,400,43)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,200,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="eba42b89-9017-f18b-e0a5-3a5dead3deb9">
+      <Execution id="ab8ac356-0b69-4211-a33b-441d21c61d50" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,200,52)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,400,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="36c6b19c-bab7-195b-5d46-94a8449b930e">
+      <Execution id="bbaf4a2f-bddd-49aa-baaa-65ce9a2510e3" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(10,400,52)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,300,55)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="d29a6d7f-0b6c-0610-150b-d0b9ffe25e19">
+      <Execution id="48bb89ce-537b-4a31-b578-ad6298aaaf63" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,300,55)" />
+    </UnitTest>
+    <UnitTest name="RoutineReductionRemainsBoundedAsync(2.0f)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="aa7ecc31-2417-0d84-3154-fc805cd8f298">
+      <Execution id="446be671-0e24-4188-b2db-c89e42813b76" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="RoutineReductionRemainsBoundedAsync(2.0f)" />
+    </UnitTest>
+    <UnitTest name="ActualCombatCallerConsumesOnceAndHitsAsync(6,43)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="eb024b00-ee24-2487-64ee-5c164402c06f">
+      <Execution id="a4c0c796-3359-4b6c-884b-4903dbb15fea" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualCombatCallerConsumesOnceAndHitsAsync(6,43)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,200,43)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="acd40ffa-a3b5-d040-c6f5-fd4de19ab655">
+      <Execution id="6522d653-fb2c-4a39-ab9b-ec51995368aa" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(6,200,43)" />
+    </UnitTest>
+    <UnitTest name="ProfileAndContractExclusionsPreserveOriginalCostsAsync" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="c7de2a41-c36a-f847-f7a9-1d1df733e693">
+      <Execution id="7d51b4ab-e2b0-4c4d-ab05-bdb92fac986a" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ProfileAndContractExclusionsPreserveOriginalCostsAsync" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(25,400,262)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="ff3e729d-530b-cc36-c67b-a1c057c70863">
+      <Execution id="779be8f2-1f28-4a44-b3b5-69f2c9c51e38" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(25,400,262)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(13,400,55)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="2f634256-9a95-651c-1d18-45091217b75b">
+      <Execution id="1e74b654-cc1e-4ce2-9688-4730c174bfed" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(13,400,55)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,400,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="20b26b14-41e9-6f56-5bd9-541890fe1d50">
+      <Execution id="581d3ff0-3575-4cd2-979d-499a5c3468c6" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(8,400,52)" />
+    </UnitTest>
+    <UnitTest name="RoutineReductionRemainsBoundedAsync(0.5f)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="e44769e0-8e30-9e63-3f65-7503dbef8383">
+      <Execution id="3044c7a7-c9fc-4819-88cb-dcaae236b7ed" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="RoutineReductionRemainsBoundedAsync(0.5f)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,200,55)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="68033a45-a2ad-b647-27be-4d6d25ca5620">
+      <Execution id="07a76cd1-1e5b-4cd8-ba42-ac6a9fdc9603" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,200,55)" />
+    </UnitTest>
+    <UnitTest name="ActualCombatCallerConsumesOnceAndHitsAsync(12,55)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="5088a084-69c9-e432-6c6c-63bc220f29b4">
+      <Execution id="d19f1406-4532-4dcc-baa1-d0c280dbf491" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualCombatCallerConsumesOnceAndHitsAsync(12,55)" />
+    </UnitTest>
+    <UnitTest name="ActualCombatCallerConsumesOnceAndHitsAsync(24,262)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="e77f7e0a-107b-ff46-8848-fae82b72e28d">
+      <Execution id="2f0dee6c-b8ad-46cc-86f6-e49e3347882d" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="ActualCombatCallerConsumesOnceAndHitsAsync(24,262)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,400,55)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="1b4473c4-c9fb-a021-3de7-084af84e64ef">
+      <Execution id="e336a676-b6ad-4fcb-82e5-9d170f283d62" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(12,400,55)" />
+    </UnitTest>
+    <UnitTest name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(11,400,52)" storage="d:\openmu自用\openmu\tests\munique.openmu.tests\bin\debug\munique.openmu.tests.dll" id="ca39c6cc-ed12-caef-fc63-7b59d60b5e43">
+      <Execution id="95d2ddfb-37f3-4d67-8546-86d1247da611" />
+      <TestMethod codeBase="D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MUnique.OpenMU.Tests.BalanceV1SkillResourceTests" name="LegalRoutineCostsPreserveManaAndSixtySecondBudgetAsync(11,400,52)" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6aaf08d3-a21e-bfe5-522c-2f4782ea1ff5" executionId="48031f9e-c57f-49ff-9bbb-b1a0624d60a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68033a45-a2ad-b647-27be-4d6d25ca5620" executionId="07a76cd1-1e5b-4cd8-ba42-ac6a9fdc9603" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb024b00-ee24-2487-64ee-5c164402c06f" executionId="a4c0c796-3359-4b6c-884b-4903dbb15fea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8c31c0e0-8f2d-5d2a-6153-30c5d9c061bf" executionId="dded01a9-237c-4ca7-9bf4-5d83db132057" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aa7ecc31-2417-0d84-3154-fc805cd8f298" executionId="446be671-0e24-4188-b2db-c89e42813b76" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acd40ffa-a3b5-d040-c6f5-fd4de19ab655" executionId="6522d653-fb2c-4a39-ab9b-ec51995368aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a4f2f5ac-f279-0609-4184-b5e548762c3b" executionId="ef10b475-c34b-4b1e-80cb-8368fc6423a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90822c61-4b18-e6ce-5340-60e3d2ef2bd7" executionId="dd2e8207-326e-4f76-a371-a61309b82db0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68a2e77b-3260-3d9d-b76e-8206f28a74c2" executionId="612e6920-5d9a-4934-82fd-50c5ef2069a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9d9364a-0758-2cd6-32bd-1c0893020f52" executionId="1a15c183-a964-467a-a52e-bf1e380b4745" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ffeab205-f1e4-51ce-7011-c90d48898e2b" executionId="5088215d-8926-4fca-94a6-6c8529e1ef14" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c28f5985-a10c-0aa4-b9fa-899fd5df6e6e" executionId="e53b8d20-b010-4856-8993-3924f931a658" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0c5f228-35f2-f432-4491-c23542e65fb3" executionId="e91b6ed1-36e6-42ae-b050-b0e526009c99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="20b26b14-41e9-6f56-5bd9-541890fe1d50" executionId="581d3ff0-3575-4cd2-979d-499a5c3468c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28bed599-bb93-3b6f-0ba7-ab2d6d253c20" executionId="5d834bd2-d3c0-4f4f-9081-f169a542e334" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="845abc28-5453-0b0d-81ab-3524303c7add" executionId="7292e579-1306-4066-ab19-fb5bb28df4a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff3e729d-530b-cc36-c67b-a1c057c70863" executionId="779be8f2-1f28-4a44-b3b5-69f2c9c51e38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eba42b89-9017-f18b-e0a5-3a5dead3deb9" executionId="ab8ac356-0b69-4211-a33b-441d21c61d50" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca39c6cc-ed12-caef-fc63-7b59d60b5e43" executionId="95d2ddfb-37f3-4d67-8546-86d1247da611" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2f634256-9a95-651c-1d18-45091217b75b" executionId="1e74b654-cc1e-4ce2-9688-4730c174bfed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d29a6d7f-0b6c-0610-150b-d0b9ffe25e19" executionId="48bb89ce-537b-4a31-b578-ad6298aaaf63" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e77f7e0a-107b-ff46-8848-fae82b72e28d" executionId="2f0dee6c-b8ad-46cc-86f6-e49e3347882d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e44769e0-8e30-9e63-3f65-7503dbef8383" executionId="3044c7a7-c9fc-4819-88cb-dcaae236b7ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b3f1181-9c83-d7e6-d098-7e7b114cc03a" executionId="a39e8f7a-71be-4300-8e96-39f4ceaef29f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="36c6b19c-bab7-195b-5d46-94a8449b930e" executionId="bbaf4a2f-bddd-49aa-baaa-65ce9a2510e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b4473c4-c9fb-a021-3de7-084af84e64ef" executionId="e336a676-b6ad-4fcb-82e5-9d170f283d62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26b79c9e-c096-e5bb-5cfa-ca7521351891" executionId="0f0c3ca7-5605-4c4a-a463-5ce129d3d33f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7de2a41-c36a-f847-f7a9-1d1df733e693" executionId="7d51b4ab-e2b0-4c4d-ab05-bdb92fac986a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5088a084-69c9-e432-6c6c-63bc220f29b4" executionId="d19f1406-4532-4dcc-baa1-d0c280dbf491" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有已加载的结果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="29" executed="29" passed="27" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.6.0.0: Test execution started&#xD;
+Running selected tests in D:\openmu自用\OpenMU\tests\MUnique.OpenMU.Tests\bin\Debug\MUnique.OpenMU.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 29 of 29 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+class=6 level=200 skill=43 AP=261.25 regen=6.0208/s original=12 new=8 casts=40/60 end=261.25&#xD;
+class=6 level=400 skill=43 AP=498.75 regen=9.9792/s original=12 new=12 casts=60/60 end=367.52&#xD;
+class=7 level=400 skill=43 AP=498.75 regen=9.9792/s original=12 new=12 casts=60/60 end=367.52&#xD;
+class=8 level=200 skill=52 AP=249.40 regen=4.1607/s original=9 new=6 casts=60/60 end=134.88&#xD;
+class=8 level=400 skill=52 AP=479.40 regen=6.4607/s original=9 new=9 casts=60/60 end=320.58&#xD;
+class=10 level=200 skill=52 AP=249.40 regen=4.1607/s original=9 new=6 casts=60/60 end=134.88&#xD;
+class=10 level=400 skill=52 AP=479.40 regen=6.4607/s original=9 new=9 casts=60/60 end=320.58&#xD;
+class=11 level=400 skill=52 AP=479.40 regen=6.4607/s original=9 new=9 casts=60/60 end=320.58&#xD;
+class=12 level=200 skill=55 AP=247.30 regen=4.1397/s original=20 new=6 casts=60/60 end=131.54&#xD;
+class=12 level=300 skill=55 AP=359.80 regen=5.2647/s original=20 new=8 casts=60/60 end=190.42&#xD;
+class=12 level=400 skill=55 AP=472.30 regen=6.3897/s original=20 new=10 casts=60/60 end=249.29&#xD;
+class=13 level=400 skill=55 AP=472.30 regen=6.3897/s original=20 new=10 casts=60/60 end=249.29&#xD;
+class=24 level=300 skill=262 AP=407.00 regen=5.7367/s original=20 new=9 casts=60/60 end=205.46&#xD;
+class=24 level=400 skill=262 AP=530.75 regen=6.9742/s original=20 new=11 casts=60/60 end=282.23&#xD;
+class=25 level=400 skill=262 AP=530.75 regen=6.9742/s original=20 new=11 casts=60/60 end=282.23&#xD;
+NUnit Adapter 4.6.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,249 @@
+{
+ "group": "text",
+ "items": [
+  {
+   "id": 3757,
+   "en": "Weapons Merchant Bolo",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3758,
+   "en": "Weapons Merchant Rhea",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3759,
+   "en": "Weapons Merchant Zienna",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3760,
+   "en": "Wearing a level +5 or above boots allows you to run.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3770,
+   "en": "Werewolf",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3771,
+   "en": "Werewolf Quarel",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3772,
+   "en": "Werewolf(Hero)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3785,
+   "en": "When poisoned, you can cure yourself by using the antidote.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3786,
+   "en": "When poisoned, your character becomes green and continues to receive damage for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3802,
+   "en": "White wizard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3835,
+   "en": "Witch Queen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3837,
+   "en": "Wizard Izabel",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3848,
+   "en": "Wolf Altar1",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3849,
+   "en": "Wolf Altar2",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3850,
+   "en": "Wolf Altar3",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3851,
+   "en": "Wolf Altar4",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3852,
+   "en": "Wolf Altar5",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3853,
+   "en": "Wolf Status",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3854,
+   "en": "Worm",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3864,
+   "en": "Yeti",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3875,
+   "en": "You can access in-game shop with the shortcut key 'X' or the in-game shop button at the bottom right corner of the screen.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3878,
+   "en": "You can get various quests of your level from the Shadow Phantom Soldiers in every village.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3880,
+   "en": "You can join 'Gens Duprian' or 'Gens Vanert' when you become level 50.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3881,
+   "en": "You can open the World Map with Tab key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3882,
+   "en": "You can raise weapon/armor/wing level up to 6 by using the Jewel of Bless.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3883,
+   "en": "You can raise weapon/armor/wing level up to 9 by using the Jewel of Soul.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3911,
+   "en": "You must be at least level 15 to enter Devias",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3912,
+   "en": "You must be at least level 20 to enter the Dungeon.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3939,
+   "en": "Zaikan",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3942,
+   "en": "Zombie Fighter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  }
+ ]
+}

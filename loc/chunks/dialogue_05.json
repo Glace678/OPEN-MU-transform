@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 836,
+   "en": "Devil Square Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 837,
+   "en": "Devil Square Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 839,
+   "en": "Devil Square is a place where you can develop your abilities quickly. Prepare thoroughly before entering as this is not a place to be taken lightly. Go to the Shadow Phantom Soldier and accept the quest to earn a Devil's Invitation, which you'll need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 840,
+   "en": "Devil Square is a place where you can hone and develop your skills fast. If you want to get stronger quickly, inquire with the Shadow Phantom Soldier about Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 841,
+   "en": "Devil Square is the place where the Elf Tree once stood. The Elf Tree was created by the mother of all Elves, an underground Elf known as Aria. This tree had the ability to produce Elves regularly. Then Secrarium tricked Lugard and appeared in Noria, at the location of the Elf Tree.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 842,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 843,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: 330-400 Level, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 844,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 845,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 846,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 847,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 848,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 849,
+   "en": "Devil Square...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 853,
+   "en": "Devils located on Levels 4 through 6 of the Lost Tower should suffice. Go to the Lost Tower and defeat 100 Devils. Come see me after that, and I will give you a choice between 15 SD Potions and 15 Complex Potions as your reward. When you claim your rewards, make sure you have at least 15 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 854,
+   "en": "Did you launch the Character Stats window?;That window contains the character's name and level, the name of the current server, and character statuses.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 855,
+   "en": "Did you say the space bar?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 860,
+   "en": "Dispose of the Plunderers' Leader!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 861,
+   "en": "Dispose of the Town Plunderers!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 872,
+   "en": "Doesn't sound too difficult....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 927,
+   "en": "Dreadfears in Kanturu Relics are causing great harm to travelers there. Go to Kanturu Relics and hunt down 100 Dreadfears. Come see me when that's done to receive an Invisibility Cloak + 8 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 928,
+   "en": "Due to Lev's illusion spells, however, the souls of the dead followers remained in this world to defend the temple. These souls believed Lev's return would allow them to reclaim their bodies and continued to safeguard the temple. Today, the temple is guarded by the alliance in case Lev does actually return and Illusion Sorcery uses ancient relics to lure in unsuspecting travelers to their cause.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 937,
+   "en": "Dungeon Sweep!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 947,
+   "en": "Dural, the first master of the guild was a legendary commander who led us to a great victory against Kundun's army. He had to seclude himself from the world since Gaion's rebellion and the order of exterminating 5 major clans. The newly formed mercenary guild severed whatever relations with Gaion, but 5 major clans still want the mercenary guild to get rid of Gaion.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 948,
+   "en": "EXP Points and Leveling Up",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 954,
+   "en": "Earn valuable equipment by completing simple quests?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 981,
+   "en": "Eliminate 1 Hero Zombie Fighter and 1 Hero Reborn Gladiator and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 982,
+   "en": "Eliminate 20 Bloody Slayer and 10 Vicious Bloody Slayer and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 983,
+   "en": "Eliminate 30 Aegis and 20 Rogue Centurions and go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 984,
+   "en": "Eliminate 30 Bloody Soldiers and 20 Death Angels in Kalima 6 and go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 985,
+   "en": "Eliminate 30 Necrons and 20 Death Centurions and then go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 986,
+   "en": "Eliminate 5 players of your enemy Gens and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 987,
+   "en": "Eliminate 50 Blood Assassins, and I will give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 988,
+   "en": "Eliminate 50 Burning Lava Giants and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 989,
+   "en": "Eliminate 50 Death Riders and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 990,
+   "en": "Eliminate 50 Death Trees and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 991,
+   "en": "Eliminate 50 Ghost Napins and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 992,
+   "en": "Eliminate 50 Iron Riders to put a stop to their guerilla attacks, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 993,
+   "en": "Eliminate 50 Sapi-Duos to stop the attacks against our gens members, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 994,
+   "en": "Eliminate 50 Silver Valkyries and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 995,
+   "en": "Eliminate 50 Splinter Wolves and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 996,
+   "en": "Eliminate Advisor Jerind and Gaion Kharein and then go back to Mercenary Guild Manager Tercia to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 997,
+   "en": "Eliminate Blood Assassins",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 998,
+   "en": "Eliminate Kundun and 10 Schrikers, the guard soldiers and then go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 999,
+   "en": "Eliminate Plundering Silver Valkyries",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1000,
+   "en": "Eliminate Raymond and Erkanne in Varka and then go back to Mercenary Guild Manager Tercia to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1001,
+   "en": "Eliminate Sapi-Duos",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1002,
+   "en": "Eliminate Splinter Wolves",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1024,
+   "en": "Elveland shouldn't be so difficult.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1030,
+   "en": "Elves can learn additional skills by going to Noria and purchasing orbs from Elf Lala (173,124) or weapons from Eo the Craftsman (195,123).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1036,
+   "en": "End the Spread of Death Trees",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

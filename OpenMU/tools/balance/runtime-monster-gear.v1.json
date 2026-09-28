@@ -1,0 +1,870 @@
+[
+  {
+    "Stage": 0,
+    "Skill": 12,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 5,
+        "Number": 4,
+        "Name": "Gorgon Staff",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=40 rank=138.42 raw=62"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 3,
+        "Name": "Legendary Helm",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=37 rank=132.63 raw=60"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 3,
+        "Name": "Legendary Armor",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=38 rank=150 raw=66"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 3,
+        "Name": "Legendary Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=35 rank=144.21 raw=64"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 3,
+        "Name": "Legendary Gloves",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 3,
+        "Name": "Legendary Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 5,
+        "Number": 3,
+        "Name": "Thunder Staff",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0002-0000-0000-000000000000 monster=25 rank=65 raw=52"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 3,
+        "Name": "Legendary Helm",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=37 rank=132.63 raw=60"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 7,
+        "Name": "Sphinx Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=10 rank=92.22 raw=48"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 3,
+        "Name": "Legendary Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=35 rank=144.21 raw=64"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 3,
+        "Name": "Legendary Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 3,
+        "Name": "Legendary Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 2176.73046875,
+    "AdjustedIncoming": 107.15234375,
+    "CommonPayload": 254.07421875,
+    "EnhancedPayload": 276.078125,
+    "CommonTtkAtOneActionSecond": 14.562673923404517,
+    "NoPotionSurvivalAtSourceCadence": 24.684481061572672
+  },
+  {
+    "Stage": 6,
+    "Skill": 43,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 24,
+        "Name": "Daybreak",
+        "Level": 3,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=335 rank=376.72 raw=125"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 29,
+        "Name": "Dragon Knight Helm",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 29,
+        "Name": "Dragon Knight Armor",
+        "Level": 2,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 29,
+        "Name": "Dragon Knight Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=563 rank=398.37 raw=143"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 29,
+        "Name": "Dragon Knight Gloves",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=335 rank=376.72 raw=125"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 29,
+        "Name": "Dragon Knight Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 24,
+        "Name": "Daybreak",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=335 rank=376.72 raw=125"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 29,
+        "Name": "Dragon Knight Helm",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 21,
+        "Name": "Great Dragon Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=337 rank=392.24 raw=135"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 29,
+        "Name": "Dragon Knight Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=563 rank=398.37 raw=143"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 29,
+        "Name": "Dragon Knight Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=335 rank=376.72 raw=125"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 29,
+        "Name": "Dragon Knight Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 1893.390625,
+    "AdjustedIncoming": 92.703125,
+    "CommonPayload": 594.05078125,
+    "EnhancedPayload": 623.96484375,
+    "CommonTtkAtOneActionSecond": 6.228423759016814,
+    "NoPotionSurvivalAtSourceCadence": 64.83060846114951
+  },
+  {
+    "Stage": 8,
+    "Skill": 52,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 4,
+        "Number": 19,
+        "Name": "Great Reign Crossbow",
+        "Level": 3,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=331 rank=355 raw=111"
+      },
+      {
+        "Slot": 1,
+        "Group": 4,
+        "Number": 7,
+        "Name": "Bolt",
+        "Level": 2,
+        "HasSkill": false,
+        "Source": "merchant map=0 npc=253"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 31,
+        "Name": "Sylphid Ray Helm",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=337 rank=392.24 raw=135"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 31,
+        "Name": "Sylphid Ray Armor",
+        "Level": 0,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 31,
+        "Name": "Sylphid Ray Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=564 rank=399.02 raw=145"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 31,
+        "Name": "Sylphid Ray Gloves",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=552 rank=300 raw=120"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 31,
+        "Name": "Sylphid Ray Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 4,
+        "Number": 16,
+        "Name": "Saint Crossbow",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0008-0000-0000-000000000000 monster=63 rank=230 raw=93"
+      },
+      {
+        "Slot": 1,
+        "Group": 4,
+        "Number": 7,
+        "Name": "Bolt",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "merchant map=0 npc=253"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 31,
+        "Name": "Sylphid Ray Helm",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=337 rank=392.24 raw=135"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 31,
+        "Name": "Sylphid Ray Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 31,
+        "Name": "Sylphid Ray Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=564 rank=399.02 raw=145"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 31,
+        "Name": "Sylphid Ray Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=552 rank=300 raw=120"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 31,
+        "Name": "Sylphid Ray Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 1960.44921875,
+    "AdjustedIncoming": 97.234375,
+    "CommonPayload": 575.0234375,
+    "EnhancedPayload": 524.8984375,
+    "CommonTtkAtOneActionSecond": 6.434520332051683,
+    "NoPotionSurvivalAtSourceCadence": 32.83303872730195
+  },
+  {
+    "Stage": 12,
+    "Skill": 55,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 18,
+        "Name": "Thunder Blade",
+        "Level": 3,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=549 rank=295 raw=114"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 32,
+        "Name": "Volcano Armor",
+        "Level": 0,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 32,
+        "Name": "Volcano Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=564 rank=399.02 raw=145"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 32,
+        "Name": "Volcano Gloves",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0038-0000-0000-000000000000 monster=559 rank=390 raw=137"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 32,
+        "Name": "Volcano Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 18,
+        "Name": "Thunder Blade",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=549 rank=295 raw=114"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 32,
+        "Name": "Volcano Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 32,
+        "Name": "Volcano Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=564 rank=399.02 raw=145"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 32,
+        "Name": "Volcano Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0038-0000-0000-000000000000 monster=559 rank=390 raw=137"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 32,
+        "Name": "Volcano Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 1986.484375,
+    "AdjustedIncoming": 99.52734375,
+    "CommonPayload": 514.171875,
+    "EnhancedPayload": 557.171875,
+    "CommonTtkAtOneActionSecond": 7.196037317288115,
+    "NoPotionSurvivalAtSourceCadence": 32.83017386867616
+  },
+  {
+    "Stage": 16,
+    "Skill": 61,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 2,
+        "Number": 14,
+        "Name": "Soleil Scepter",
+        "Level": 0,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 1,
+        "Group": 6,
+        "Number": 4,
+        "Name": "Buckler",
+        "Level": 3,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 33,
+        "Name": "Sunlight Mask",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 33,
+        "Name": "Sunlight Armor",
+        "Level": 0,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 33,
+        "Name": "Sunlight Pants",
+        "Level": 2,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 33,
+        "Name": "Sunlight Gloves",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=552 rank=300 raw=120"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 33,
+        "Name": "Sunlight Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 2,
+        "Number": 14,
+        "Name": "Soleil Scepter",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 1,
+        "Group": 6,
+        "Number": 4,
+        "Name": "Buckler",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0000-0000-0000-000000000000 monster=7 rank=26.59 raw=17"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 33,
+        "Name": "Sunlight Mask",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=275 rank=400 raw=140"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 33,
+        "Name": "Sunlight Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 33,
+        "Name": "Sunlight Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 33,
+        "Name": "Sunlight Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=552 rank=300 raw=120"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 33,
+        "Name": "Sunlight Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 2041.5625,
+    "AdjustedIncoming": 103.56640625,
+    "CommonPayload": 451.41796875,
+    "EnhancedPayload": 478.03125,
+    "CommonTtkAtOneActionSecond": 8.196395039934927,
+    "NoPotionSurvivalAtSourceCadence": 35.88277448798703
+  },
+  {
+    "Stage": 20,
+    "Skill": 214,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 5,
+        "Number": 16,
+        "Name": "Red Wing Stick",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0007-0000-0000-000000000000 monster=48 rank=184.19 raw=70"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 40,
+        "Name": "Red Wing Helm",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=37 rank=132.63 raw=60"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 40,
+        "Name": "Red Wing Armor",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=38 rank=150 raw=66"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 40,
+        "Name": "Red Wing Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=35 rank=144.21 raw=64"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 41,
+        "Name": "Ancient Gloves",
+        "Level": 1,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=35 rank=144.21 raw=64"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 40,
+        "Name": "Red Wing Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 5,
+        "Number": 16,
+        "Name": "Red Wing Stick",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0007-0000-0000-000000000000 monster=48 rank=184.19 raw=70"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 40,
+        "Name": "Red Wing Helm",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=37 rank=132.63 raw=60"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 40,
+        "Name": "Red Wing Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=38 rank=150 raw=66"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 40,
+        "Name": "Red Wing Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0004-0000-0000-000000000000 monster=35 rank=144.21 raw=64"
+      },
+      {
+        "Slot": 5,
+        "Group": 10,
+        "Number": 40,
+        "Name": "Red Wing Gloves",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 40,
+        "Name": "Red Wing Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0001-0000-0000-000000000000 monster=18 rank=100 raw=55"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 2109.125,
+    "AdjustedIncoming": 103.32421875,
+    "CommonPayload": 182.85546875,
+    "EnhancedPayload": 204.6015625,
+    "CommonTtkAtOneActionSecond": 20.234560252932003,
+    "NoPotionSurvivalAtSourceCadence": 30.801103928017845
+  },
+  {
+    "Stage": 24,
+    "Skill": 262,
+    "CommonItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 34,
+        "Name": "Piercing Blade Glove",
+        "Level": 3,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=549 rank=295 raw=114"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 73,
+        "Name": "Phoenix Soul Helmet",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0038-0000-0000-000000000000 monster=559 rank=390 raw=137"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 73,
+        "Name": "Phoenix Soul Armor",
+        "Level": 1,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 73,
+        "Name": "Phoenix Soul Pants",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=563 rank=398.37 raw=143"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 73,
+        "Name": "Phoenix Soul Boots",
+        "Level": 3,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "EnhancedItems": [
+      {
+        "Slot": 0,
+        "Group": 0,
+        "Number": 34,
+        "Name": "Piercing Blade Glove",
+        "Level": 9,
+        "HasSkill": true,
+        "Source": "common-drop map=00000300-0021-0000-0000-000000000000 monster=549 rank=295 raw=114"
+      },
+      {
+        "Slot": 2,
+        "Group": 7,
+        "Number": 73,
+        "Name": "Phoenix Soul Helmet",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0038-0000-0000-000000000000 monster=559 rank=390 raw=137"
+      },
+      {
+        "Slot": 3,
+        "Group": 8,
+        "Number": 73,
+        "Name": "Phoenix Soul Armor",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=565 rank=400 raw=148"
+      },
+      {
+        "Slot": 4,
+        "Group": 9,
+        "Number": 73,
+        "Name": "Phoenix Soul Pants",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0039-0000-0000-000000000000 monster=563 rank=398.37 raw=143"
+      },
+      {
+        "Slot": 6,
+        "Group": 11,
+        "Number": 73,
+        "Name": "Phoenix Soul Boots",
+        "Level": 9,
+        "HasSkill": false,
+        "Source": "common-drop map=00000300-0024-0000-0000-000000000000 monster=336 rank=384.48 raw=130"
+      }
+    ],
+    "SourceHealth": 265000,
+    "AdjustedHealth": 3700,
+    "OldIncoming": 2040.875,
+    "AdjustedIncoming": 100.92578125,
+    "CommonPayload": 700.703125,
+    "EnhancedPayload": 754.5625,
+    "CommonTtkAtOneActionSecond": 5.280410302151856,
+    "NoPotionSurvivalAtSourceCadence": 45.15694546580485
+  }
+]

@@ -1,0 +1,1048 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 2351,
+   "en": "Package Box B",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2352,
+   "en": "Package Box C",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2353,
+   "en": "Package Box D",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2354,
+   "en": "Package Box E",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2355,
+   "en": "Package Box F",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2357,
+   "en": "Pad Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2358,
+   "en": "Pad Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2359,
+   "en": "Pad Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2360,
+   "en": "Pad Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2361,
+   "en": "Pad Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2362,
+   "en": "Paid Channel Access Ticket",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2364,
+   "en": "Panda Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2367,
+   "en": "Party EXP Scroll",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2369,
+   "en": "Party Healing",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2370,
+   "en": "Party Healing Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2374,
+   "en": "PeaceSwamp",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2375,
+   "en": "Pendant of Ability",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2376,
+   "en": "Pendant of Fire",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2377,
+   "en": "Pendant of Ice",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2378,
+   "en": "Pendant of Lighting",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2379,
+   "en": "Pendant of Water",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2380,
+   "en": "Pendant of Wind",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2382,
+   "en": "Penetration",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2383,
+   "en": "Penetration Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2386,
+   "en": "Pet Durability Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2387,
+   "en": "Pet Panda",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2388,
+   "en": "Pet Rudolf",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2389,
+   "en": "Pet Skeleton",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2391,
+   "en": "Pet Unicorn",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2393,
+   "en": "Phantom  Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2394,
+   "en": "Phantom  Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2395,
+   "en": "Phantom  Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2396,
+   "en": "Phantom Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2400,
+   "en": "Phoenix Shot",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2401,
+   "en": "Phoenix Soul Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2402,
+   "en": "Phoenix Soul Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2403,
+   "en": "Phoenix Soul Helmet",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2404,
+   "en": "Phoenix Soul Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2405,
+   "en": "Phoenix Soul Star",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2407,
+   "en": "Physical Attack Immunity",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2413,
+   "en": "Piercing Blade Glove",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2414,
+   "en": "Piercing Groove Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2415,
+   "en": "Piercing Groove Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2416,
+   "en": "Piercing Groove Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2417,
+   "en": "Piercing Groove Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2418,
+   "en": "Pink Chocolate Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2419,
+   "en": "Plasma Storm",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2420,
+   "en": "Plate Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2421,
+   "en": "Plate Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2422,
+   "en": "Plate Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2423,
+   "en": "Plate Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2424,
+   "en": "Plate Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2425,
+   "en": "Plate Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2426,
+   "en": "Platina Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2434,
+   "en": "Points required : %d",
+   "budget": 31,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2435,
+   "en": "Points required: %d",
+   "budget": 31,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2436,
+   "en": "Poison",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 2437,
+   "en": "Poison Arrow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2438,
+   "en": "Poison Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2442,
+   "en": "Poison Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2444,
+   "en": "Poison Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2449,
+   "en": "Pollution",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2452,
+   "en": "Potion of Bless",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2454,
+   "en": "Potion of Soul",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 2456,
+   "en": "Power Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2457,
+   "en": "Power Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2459,
+   "en": "Power Wave",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2461,
+   "en": "Premium Package",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2487,
+   "en": "Pumpkin of Luck",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2491,
+   "en": "Purple Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2492,
+   "en": "Purple Chaos Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2502,
+   "en": "PvP Defence Rate Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2515,
+   "en": "RageFighter Character Card",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2516,
+   "en": "Rageful Blow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2517,
+   "en": "Rageful Blow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2518,
+   "en": "Rageful Blow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2520,
+   "en": "Raklion",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2546,
+   "en": "Rapier",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2547,
+   "en": "Rare Item Ticket",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2548,
+   "en": "Rare Item Ticket 10",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2549,
+   "en": "Rare Item Ticket 11",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2550,
+   "en": "Rare Item Ticket 12",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2551,
+   "en": "Rare Item Ticket 7",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2552,
+   "en": "Rare Item Ticket 8",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2553,
+   "en": "Rare Item Ticket 9",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2554,
+   "en": "Rare Item Ticket1",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2555,
+   "en": "Rare Item Ticket2",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2556,
+   "en": "Rare Item Ticket3",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2557,
+   "en": "Rare Item Ticket4",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2558,
+   "en": "Rare Item Ticket5",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2560,
+   "en": "Raven Stick",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2576,
+   "en": "Recover HP from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2577,
+   "en": "Recover Mana Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2578,
+   "en": "Recover Mana from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2579,
+   "en": "Recover SD from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2580,
+   "en": "Recovers HP Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2582,
+   "en": "Recovers SD Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2584,
+   "en": "Recovery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2585,
+   "en": "Red Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2586,
+   "en": "Red Chaos Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2587,
+   "en": "Red Cherry Blossom Branch",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2588,
+   "en": "Red Chocolate Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2590,
+   "en": "Red Spirit Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2591,
+   "en": "Red Spirit Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2592,
+   "en": "Red Spirit Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2593,
+   "en": "Red Spirit Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2594,
+   "en": "Red Sprit Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2595,
+   "en": "Red Wing Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2596,
+   "en": "Red Wing Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2597,
+   "en": "Red Wing Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2598,
+   "en": "Red Wing Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2599,
+   "en": "Red Wing Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2600,
+   "en": "Red Wing Gloves-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2601,
+   "en": "Red Wing Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2602,
+   "en": "Red Wing Helm-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2603,
+   "en": "Red Wing Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2604,
+   "en": "Red Wing Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2605,
+   "en": "Red Wing Stick",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2606,
+   "en": "Red Wing Stick-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2614,
+   "en": "Reigning Cloak Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2615,
+   "en": "Reigning Cloak Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2616,
+   "en": "Reigning Cloak Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2617,
+   "en": "Remedy of Love",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2618,
+   "en": "Rena",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2634,
+   "en": "Requiem",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 2635,
+   "en": "Required Point: %d point",
+   "budget": 31,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2821,
+   "en": "Reset Fruit Control",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2822,
+   "en": "Reset Fruit Energy",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2823,
+   "en": "Reset Fruit Health",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2824,
+   "en": "Reset Fruit Quickness",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  }
+ ]
+}

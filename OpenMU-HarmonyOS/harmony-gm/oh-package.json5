@@ -1,0 +1,11 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "openmu-harmony-gm",
+  "version": "1.0.0",
+  "description": "OpenMU mobile GM for HarmonyOS (grant items and Zen on the local server).",
+  "dependencies": {},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.19",
+    "@ohos/hvigor-ohos-plugin": "5.0.2"
+  }
+}

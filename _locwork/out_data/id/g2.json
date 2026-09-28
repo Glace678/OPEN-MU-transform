@@ -1,0 +1,2768 @@
+{
+ "results": [
+  {
+   "id": 1893,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 15-80, Karakter lanjutan: Level 10-60)"
+  },
+  {
+   "id": 1894,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 181-230, Karakter lanjutan: Level 161-210)"
+  },
+  {
+   "id": 1895,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 231-280, Karakter lanjutan: Level 211-260)"
+  },
+  {
+   "id": 1896,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 281-330, Karakter lanjutan: Level 261-310)"
+  },
+  {
+   "id": 1897,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 331-400, Karakter lanjutan: Level 311-400)"
+  },
+  {
+   "id": 1898,
+   "tx": "Sepertinya kau memiliki prajurit perkasa yang bersedia bertempur di sisimu. Menghadapi tantangan Blood Castle bersama-sama pasti akan mempererat ikatanmu dengan rekan-rekanmu. Maukah kau kembali ke Blood Castle dan menjalankan misi Archangel lainnya? (Karakter dasar: Level 81-130, Karakter lanjutan: Level 61-110)"
+  },
+  {
+   "id": 1899,
+   "tx": "Seharusnya tidak terlalu sulit bagimu berlatih di Chaos Castle. Aku punya misi untukmu. Misi di mana kau bisa mendapatkan item yang kau butuhkan di Chaos Castle.... Maukah kau menerimanya? (Karakter dasar: Level 180-239, Karakter lanjutan: Level 160-219)"
+  },
+  {
+   "id": 1900,
+   "tx": "Kedengarannya seperti pekerjaan mudah..."
+  },
+  {
+   "id": 1901,
+   "tx": "Tidak akan memakan banyak waktumu. Aku hanya akan menjelaskan kontrol dasar dan teknik berburu.;Yakin kau tidak ingin bantuan kami?"
+  },
+  {
+   "id": 1902,
+   "tx": "Tidak akan mudah menyerang Gaion yang bersembunyi di Varka. Sebaiknya kau kalahkan Raymond dan Erkanne terlebih dahulu untuk melemahkan kekuatannya. Tanpa keduanya, Gaion tidak akan sekuat sebelumnya. Pergilah ke Varka, bunuh Raymond dan Erkanne, lalu kembali ke sini untuk mengambil hadiah dari guild."
+  },
+  {
+   "id": 1903,
+   "tx": "Ini semakin lama semakin sulit. Aku menerima misinya. (Terima)"
+  },
+  {
+   "id": 1904,
+   "tx": "Lebih mudah dari perkiraan."
+  },
+  {
+   "id": 1905,
+   "tx": "Kali ini semangat tempur ya? Aku menerima misinya. (Terima)"
+  },
+  {
+   "id": 1906,
+   "tx": "Senang berteman denganmu.;Boleh aku tahu siapa kau?"
+  },
+  {
+   "id": 1907,
+   "tx": "Bisa mengetahui lokasi diri sendiri dan orang lain menggunakan koordinat? Luar biasa!"
+  },
+  {
+   "id": 1908,
+   "tx": "Itu tugas unit perbekalan. (Tolak)"
+  },
+  {
+   "id": 1909,
+   "tx": "Sudah waktunya kau menguji batas kemampuanmu di Chaos Castle. Temui Shadow Phantom Soldier, uji batasmu, lalu hadapi tantangan Chaos Castle."
+  },
+  {
+   "id": 1910,
+   "tx": "Sudah terlambat untuk mundur sekarang...."
+  },
+  {
+   "id": 1911,
+   "tx": "Sangat mudah memasuki Blood Castle. Pertempuran ini berlangsung setiap dua jam mulai dari pukul 00.30. Untuk masuk, bawa Invisibility Cloak yang sesuai dengan levelmu ke Messenger of Archangel di Devias, lima menit sebelum acara Blood Castle dimulai, dan mintalah untuk bergabung. Messenger of Archangel kemudian akan mengirimmu ke kastil tersebut."
+  },
+  {
+   "id": 1912,
+   "tx": "Sangat mudah memasuki Chaos Castle. Cukup klik kanan pada Armor of Guardsman pada waktu yang ditentukan (00.00, 14.00, 16.00, 18.00, 20.00, dan 22.00) untuk masuk. Pemain di lokasi tertentu, seperti warnet, akan memiliki lebih banyak kesempatan untuk masuk."
+  },
+  {
+   "id": 1913,
+   "tx": "Sangat mudah memasuki Devil Square. Tempat ini bisa dimasuki setiap empat jam mulai dari pukul 03.00 dini hari (03.00, 07.00, 11.00, 15.00, 19.00, dan 23.00). Untuk masuk, bawa Devil's Invitation yang sesuai dengan levelmu ke Charon di Noria lima menit sebelum waktu masuk dijadwalkan dan mintalah untuk bergabung. Charon kemudian akan mengirimmu ke Devil Square."
+  },
+  {
+   "id": 1914,
+   "tx": "Sangat mudah memasuki Illusion Temple. Tempat ini bisa dimasuki setiap empat jam mulai dari pukul 01.00 dini hari: 01.00, 05.00, 09.00, 13.00, 17.00, dan 21.00. Untuk masuk, bawa Scroll of Blood yang sesuai dengan levelmu ke Mirage di Elveland lima menit sebelum acara Illusion Temple dimulai dan mintalah untuk bergabung. Mirage kemudian akan mengirimmu ke kuil tersebut."
+  },
+  {
+   "id": 1944,
+   "tx": "Bergabung dengan Gens Duprian."
+  },
+  {
+   "id": 1945,
+   "tx": "Bergabung dengan Gens Vanert."
+  },
+  {
+   "id": 1946,
+   "tx": "Tinggal katakan saja!"
+  },
+  {
+   "id": 1963,
+   "tx": "Menjaga perdamaian sang pahlawan"
+  },
+  {
+   "id": 1977,
+   "tx": "Namun, Penjaga Kerajaan Kundun terus menyerang penghalang itu, dan mulai melemahkannya. Kita membutuhkan senjata Archangel untuk mencegah melemahnya penghalang ini, dan itulah sebabnya kami sekarang meminta bantuan para pengembara."
+  },
+  {
+   "id": 1978,
+   "tx": "Namun, Kundun pasti sudah mengantisipasi langkah seperti itu. Dia bersembunyi di luar jangkauan penghalang dan melenyapkan Dua Belas Orang Suci segera setelah penghalang itu terbentuk. Untungnya, Archangel berhasil menghindari bahaya itu dan mengorbankan dirinya demi penghalang tersebut."
+  },
+  {
+   "id": 1979,
+   "tx": "Kundun... Dia target yang sulit..."
+  },
+  {
+   "id": 1982,
+   "tx": "Nafsu mengoleksi para wanita"
+  },
+  {
+   "id": 2013,
+   "tx": "Keluar dari Gens Duprian."
+  },
+  {
+   "id": 2014,
+   "tx": "Keluar dari Gens Vanert."
+  },
+  {
+   "id": 2033,
+   "tx": "Biar aku coba. (Terima)"
+  },
+  {
+   "id": 2034,
+   "tx": "Biar aku berikan senjata Dark Knight untukmu gunakan agar kau lebih paham."
+  },
+  {
+   "id": 2035,
+   "tx": "Biar aku berikan gulungan Dark Wizard untukmu gunakan agar kau lebih paham."
+  },
+  {
+   "id": 2036,
+   "tx": "Biar aku berikan gulungan Summoner untukmu gunakan agar kau lebih paham."
+  },
+  {
+   "id": 2037,
+   "tx": "Biar aku berikan senjata Agility Elf untukmu gunakan agar kau lebih memahami cara kerja skill."
+  },
+  {
+   "id": 2038,
+   "tx": "Biar aku berikan orb Energy Elf untukmu gunakan agar kau lebih memahami cara kerja skill."
+  },
+  {
+   "id": 2039,
+   "tx": "Ayo kita berikanmu pengalaman tempur yang nyata."
+  },
+  {
+   "id": 2040,
+   "tx": "Ayo dengar."
+  },
+  {
+   "id": 2041,
+   "tx": "Mari kita mulai dengan sesuatu yang sederhana.;Tutup jendela questmu dan tekan C atau klik tombol Character (C) yang ada di pojok kanan bawah layarmu untuk membuka jendela Character Stats."
+  },
+  {
+   "id": 2043,
+   "tx": "Level 10 dan 2.000 Zen"
+  },
+  {
+   "id": 2044,
+   "tx": "Level 30"
+  },
+  {
+   "id": 2045,
+   "tx": "Level 30 dan 3.000 Zen"
+  },
+  {
+   "id": 2046,
+   "tx": "Level 50"
+  },
+  {
+   "id": 2047,
+   "tx": "Level 50 dan 4.000 Zen"
+  },
+  {
+   "id": 2048,
+   "tx": "Level 75"
+  },
+  {
+   "id": 2049,
+   "tx": "Naik level akan memberimu poin. Poin-poin ini bisa digunakan untuk meningkatkan kekuatan, kelincahan, stamina, dan energimu, sehingga memengaruhi level serangan, pertahanan, HP, dan MP secara berurutan.;Gunakan poin-poin ini dengan hati-hati, karena bagaimana kau mengembangkan karaktermu akan menentukan karakteristik tempurnya serta jenis senjata dan skill yang bisa digunakannya."
+  },
+  {
+   "id": 2085,
+   "tx": "Lihat sisi kanan layarmu. Apa kau melihat apel yang baru saja kau beli? Menambahkan ramuan ke Inventory akan mendaftarkannya secara otomatis.;Tekan tombol Q untuk menggunakan apel, ramuan, dan item pemulih HP lainnya, dan tombol W untuk menggunakan item pemulih MP."
+  },
+  {
+   "id": 2104,
+   "tx": "Jelas sekali! Berikan misi berikutnya!"
+  },
+  {
+   "id": 2117,
+   "tx": "Pengintai di Kegelapan"
+  },
+  {
+   "id": 2141,
+   "tx": "Banyak monster yang menyerang penghalang kita sudah berhasil diatasi, tetapi atasan mereka sekarang menyerang penghalang secara fisik. Maukah kau melenyapkan monster-monster ini untuk kami? (Level 200-209)"
+  },
+  {
+   "id": 2142,
+   "tx": "Banyak pengembara yang menghilang dari Swamp of Peace karena Shadow Knights. Pergilah ke Swamp of Peace dan kalahkan 140 Shadow Knights. Temui aku setelah itu untuk menerima Devil's Invitation + 7 sebagai hadiah. Mereka adalah musuh yang kuat, dan sebaiknya kau berburu dengan bantuan orang lain."
+  },
+  {
+   "id": 2181,
+   "tx": "Boleh aku bantu? Koleksiku jauh lebih beragam daripada pedagang biasa. Itu rahasia kesuksesanku, haha."
+  },
+  {
+   "id": 2182,
+   "tx": "Semoga kemuliaan menyertaimu... Kerja bagus. Pasti klan musuh yang mengendalikan monster Hero ini. Kita harus menyerang mereka untuk membalas dendam segera. Maukah kau mengambil pekerjaan ini? (Lv. 350 - 400)"
+  },
+  {
+   "id": 2183,
+   "tx": "Semoga kemuliaan menyertaimu... Kerja bagus. Kami menemukan bukti klan musuh dari penyelidikan. Kita harus menyerang mereka untuk membalas dendam segera. Maukah kau mengambil pekerjaan ini? (Lv. 350 - 400)"
+  },
+  {
+   "id": 2184,
+   "tx": "Semoga rahmat Lugard menyertaimu... Ini adalah pintu masuk ke Underwater Temple. Tentara Kundun terkurung di kuil ini oleh batu segel."
+  },
+  {
+   "id": 2193,
+   "tx": "Mega Crust di Icarus sangat merugikan para pengembara. Pergilah ke Icarus dan kalahkan 80 Mega Crust. Temui aku setelah selesai untuk menerima Invisibility Cloak + 4 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 2194,
+   "tx": "Mega Crust yang peringkatnya lebih tinggi dari Alquamos, sedang merencanakan sesuatu di Icarus. Apa pun rencana mereka, kemungkinan besar akan membahayakan tim pengintai kita. Maukah kau membantu melenyapkan lebih banyak Mega Crust ini? (Level 250-254)"
+  },
+  {
+   "id": 2195,
+   "tx": "Anggota tim pengintai kita terus gugur oleh Iron Wheels. Maukah kau membantu melenyapkan lebih banyak Iron Wheels ini? (Level 240-244)"
+  },
+  {
+   "id": 2196,
+   "tx": "Anggota tim pengintai kita terus gugur oleh tebasan Bloody Wolves. Maukah kau membantu melenyapkan lebih banyak Bloody Wolves ini? (Level 235-239)"
+  },
+  {
+   "id": 2198,
+   "tx": "Kantor Guild Tentara Bayaran?"
+  },
+  {
+   "id": 2199,
+   "tx": "Permintaan tentara bayaran bervariasi tergantung hari dalam seminggu. Silakan periksa lokasi dan tugasnya sebelum memulai. (Lv. 350 - 400)"
+  },
+  {
+   "id": 2232,
+   "tx": "Rute Pasokan Monster di Devias!"
+  },
+  {
+   "id": 2235,
+   "tx": "Berburu monster adalah keahlianku...."
+  },
+  {
+   "id": 2237,
+   "tx": "Monster terus menghambat kemajuan ke Icarus. Temui Shadow Phantom Soldier."
+  },
+  {
+   "id": 2238,
+   "tx": "Monster kembali mengancam zona aman. Temui Shadow Phantom Soldier."
+  },
+  {
+   "id": 2239,
+   "tx": "Monster masih berusaha bergerak dan memblokade jalan menuju Icarus. Maukah kau membantu melenyapkan lebih banyak monster ini? (Level 220-229)"
+  },
+  {
+   "id": 2240,
+   "tx": "Monster kembali menguasai Dungeon di Lorencia. Tim pengintai kita terlalu sibuk menghadapi monster dan tidak bisa membuat laporan tepat waktu. Aku ingin meminta bantuanmu dalam hal ini. Maukah kau menerima misi ini? (Level 91-100)"
+  },
+  {
+   "id": 2241,
+   "tx": "Monster mulai menyerang para prajurit lagi. Temui Shadow Phantom Soldier."
+  },
+  {
+   "id": 2242,
+   "tx": "Namun, monster terus muncul secara berkala dari tempat pohon itu dulu berdiri. Setelah pertimbangan matang, ratu Para Elf memutuskan untuk menjadikan tempat ini sebagai arena latihan bagi para pengembara."
+  },
+  {
+   "id": 2247,
+   "tx": "Banyak energi jahat dari Lost Tower yang telah mereda, tetapi para penjaga di menara itu berjuang menghadapi peningkatan jumlah monster secara tiba-tiba. Aku punya misi yang akan membantu mereka. Maukah kau menerima misi ini? (Level 190-193)"
+  },
+  {
+   "id": 2254,
+   "tx": "Namaku Olga. Rekan-rekanku dari Shadow Phantom Guardians dan aku mengabdi pada Erin Gustiv, ratu Elf. Aku senang berkenalan denganmu."
+  },
+  {
+   "id": 2256,
+   "tx": "Kesalahan skrip dialog NPC!"
+  },
+  {
+   "id": 2261,
+   "tx": "Permintaan baru untukmu belum dikirimkan. Kau bisa memulai permintaan baru setelah 24 jam sejak permintaan diselesaikan. Silakan kembali setelah itu."
+  },
+  {
+   "id": 2264,
+   "tx": "Tidak cukup. Melangkah lebih jauh di luar kemampuanku. (Tolak)"
+  },
+  {
+   "id": 2266,
+   "tx": "Tidak, aku tidak mau. (Tolak)"
+  },
+  {
+   "id": 2267,
+   "tx": "Tidak, aku butuh istirahat dulu. (Tolak)"
+  },
+  {
+   "id": 2268,
+   "tx": "Tidak. Aku akan memikirkannya lebih lanjut."
+  },
+  {
+   "id": 2270,
+   "tx": "Sama sekali tidak. Wajar saja bekerja untuk klan. (Terima)"
+  },
+  {
+   "id": 2275,
+   "tx": "Sekarang pertahanan rute pasokan telah melemah, saatnya mengacaukan struktur komando musuh sedikit lagi. Aku ingin memintamu mengalahkan monster peringkat tinggi yang mengendalikan mereka yang bertanggung jawab atas rute pasokan. Maukah kau menerima misi ini? (Level 46-55)"
+  },
+  {
+   "id": 2276,
+   "tx": "Sekarang, tekan tombol I atau klik tombol Inventory (I/V) yang ada di pojok kanan bawah untuk membuka jendela Inventory."
+  },
+  {
+   "id": 2278,
+   "tx": "Dapatkan 10 Club dari Burnt Murderer di Vulcanus dan bawa ke Zyro untuk mendapatkan hadiah."
+  },
+  {
+   "id": 2279,
+   "tx": "Dapatkan 10 Kalt Stone dari Witch Queen di Aida dan bawa ke Zyro untuk mendapatkan hadiah."
+  },
+  {
+   "id": 2280,
+   "tx": "Dapatkan 20 set Tantalos's Armor dari Tantalos di Tarkan 2 lalu kembali ke Zyro untuk mendapatkan hadiah."
+  },
+  {
+   "id": 2281,
+   "tx": "Dapatkan permata langka"
+  },
+  {
+   "id": 2283,
+   "tx": "Tentu saja."
+  },
+  {
+   "id": 2284,
+   "tx": "Tentu saja aku tahu. Apa misi berikutnya?"
+  },
+  {
+   "id": 2285,
+   "tx": "Tentu saja aku mau berburu monster...."
+  },
+  {
+   "id": 2286,
+   "tx": "Tentu. Aku dengan senang hati menerima misi Archangel."
+  },
+  {
+   "id": 2287,
+   "tx": "Tentu saja..."
+  },
+  {
+   "id": 2289,
+   "tx": "Oh! Berkat keberanianmu, kita berhasil mengalahkan kaum Duprian yang tidak berguna itu sekali lagi. Ini adalah hadiah yang diberikan kepadamu oleh Vanert Reicht sendiri atas kontribusimu dalam pertempuran. Aku berharap melihatmu beraksi lagi bulan depan."
+  },
+  {
+   "id": 2290,
+   "tx": "Oh! Itu pasti akan berguna!"
+  },
+  {
+   "id": 2291,
+   "tx": "Oh! Kau ingin menjadi anggota Gens Duprian? Bagikan nilai kehormatan dan rasa hormat kami, serta bantu dalam pertempuran untuk menghancurkan keserakahan Gens Vanert dan temukan batu yang akan menyegel Kundun."
+  },
+  {
+   "id": 2292,
+   "tx": "Oh, aku tidak menyadari seberapa kuat kau dan memberimu permintaan yang salah. Maukah kau mengembalikan Lv. 1 Letter of Request?"
+  },
+  {
+   "id": 2293,
+   "tx": "Oh, aku belum memperkenalkan diri. Namaku Olga. Rekan-rekanku dari Shadow Phantom Guardians dan aku mengabdi pada Erin Gustiv, ratu Noria."
+  },
+  {
+   "id": 2294,
+   "tx": "Oh, sudah pergi..."
+  },
+  {
+   "id": 2295,
+   "tx": "Oh, ada permintaan yang berbeda tergantung hari dalam seminggu."
+  },
+  {
+   "id": 2296,
+   "tx": "Oh, ini adalah permintaan dari unit Shadow Phantom di Icarus yang meminta bantuan untuk mengusir Alquamos dan menemukan materi latihan untuk rekrutan. Pergilah ke Icarus, bunuh 20 Alquamos dan temukan 1 Crystal Sword (Kekuatan serangan +12). Aku akan memberimu hadiah saat kau membawakanku pedang itu."
+  },
+  {
+   "id": 2297,
+   "tx": "Oh, ini adalah permintaan dari unit Shadow Phantom di Icarus yang meminta bantuan untuk mengusir Alquamos dan menemukan materi latihan untuk rekrutan. Pergilah ke Icarus, bunuh 20 Alquamos dan temukan 1 Sword of Destruction (Kekuatan serangan +12). Aku akan memberimu hadiah saat kau membawakanku pedang itu."
+  },
+  {
+   "id": 2298,
+   "tx": "Oh, ini adalah permintaan dari unit Shadow Phantom di Kanturu Ruins yang meminta bantuan untuk mengusir Splinter Wolf dan menemukan materi latihan untuk rekrutan. Bunuh 20 Splinter Wolf dan temukan 1 Ancient Stick (Kerusakan sihir +12). Aku akan memberimu hadiah saat kau membawakanku tongkat itu."
+  },
+  {
+   "id": 2299,
+   "tx": "Oh, ini adalah permintaan dari unit Shadow Phantom di Tarkan Desert yang meminta bantuan untuk mengusir Mutant dan menemukan materi latihan untuk rekrutan. Pergilah ke Tarkan, bunuh 20 Mutant dan temukan 1 Staff of Resurrection (Kerusakan sihir +12). Aku akan memberimu hadiah saat kau membawakanku tongkat itu."
+  },
+  {
+   "id": 2300,
+   "tx": "Oh, ini adalah permintaan dari unit Shadow Phantom di Tarkan Desert yang meminta bantuan untuk mengusir Mutant dan menemukan materi latihan untuk rekrutan. Pergilah ke Tarkan, bunuh 20 Mutant dan temukan 10 Uniria. Aku akan memberimu hadiah saat kau membawakan Uniria itu."
+  },
+  {
+   "id": 2301,
+   "tx": "Baik, aku akan segera menuju Aida. (Terima)"
+  },
+  {
+   "id": 2302,
+   "tx": "Baik, aku akan segera mengurusnya. (Terima)"
+  },
+  {
+   "id": 2303,
+   "tx": "Baik, aku akan mencobanya. (Terima)"
+  },
+  {
+   "id": 2304,
+   "tx": "Baik, aku akan mencobanya. (Terima)"
+  },
+  {
+   "id": 2305,
+   "tx": "Baik, aku siap. (Terima)"
+  },
+  {
+   "id": 2310,
+   "tx": "Salah satu tempat yang belum bisa dijangkau tim pengintai kita adalah gurun Tarkan. Alasan di balik kegagalan mereka termasuk lingkungan yang keras dan yang paling penting adalah monster yang dikenal sebagai Mutant. Maukah kau melenyapkan Mutant ini agar tim pengintai kita bisa maju? (Level 230-234)"
+  },
+  {
+   "id": 2339,
+   "tx": "Serangan terus-menerus kita ke Dungeon telah mengamankan jalan masuk yang cukup aman. Namun, masih ada monster yang menghambat upaya tim pengintai kita. Maukah kau menerima misi ini? (Level 141-160)"
+  },
+  {
+   "id": 2340,
+   "tx": "Masuk kita ke Floating Castle sebagian besar terhambat oleh Queen Rainier. Tampaknya Queen Rainier mengendalikan Mega Crust dan Alquamos dari balik layar. Aku ingin meminta bantuanmu untuk melenyapkan Queen Rainier ini. Maukah kau menerimanya? (Level 255-259)"
+  },
+  {
+   "id": 2341,
+   "tx": "Pasukan kita di Kanturu Ruins sedang diserang. Kalahkan 50 Splinter Wolf dan kembali padaku untuk hadiah."
+  },
+  {
+   "id": 2342,
+   "tx": "Tim pengintai kita melaporkan perlawanan sengit dari monster di Dungeon Level 2. Aku ingin memintamu melenyapkan monster-monster ini. Maukah kau menerima misi ini? (Level 111-120)"
+  },
+  {
+   "id": 2343,
+   "tx": "Tim pengintai kita melaporkan bahwa beberapa monster peringkat rendah cukup menyusahkan mereka. Aku ingin meminta bantuanmu untuk melenyapkan monster-monster ini. Maukah kau menerima misi ini? (Level 161-165)"
+  },
+  {
+   "id": 2344,
+   "tx": "Tim pengintai kita melaporkan bahwa pasokan curian dikirim ke tentara Kundun. Tolong kalahkan monster yang mengendalikan penjarah ini selagi kami memastikan lokasi rute pasokan. Maukah kau menerima misi ini? (Level 26-35)"
+  },
+  {
+   "id": 2345,
+   "tx": "Tim pengintai kita melaporkan bahwa Tentara Kegelapan yang dibentuk Gorgon telah kehilangan banyak kekuatannya. Inilah saat yang kau nantikan setelah menjalankan semua misi ini. Sekarang waktunya menyerang pukulan terakhir melawan Tentara Kegelapan. Maukah kau menerima misi ini? (Level 141-160)"
+  },
+  {
+   "id": 2346,
+   "tx": "Di luar Devias, kau akan bertemu monster putih yang dikenal sebagai Worm. Kalahkan 25 Worm dan kembali padaku untuk hadiah."
+  },
+  {
+   "id": 2356,
+   "tx": "Kelompok Iron Wheels sering menyerang pengembara di Tarkan. Pergilah ke Tarkan dan buru 100 Iron Wheels. Temui aku setelahnya untuk menerima Devil's Invitation + 4 sebagai hadiah. Mereka adalah musuh yang kuat, dan sebaiknya kau berburu dengan bantuan orang lain."
+  },
+  {
+   "id": 2371,
+   "tx": "Permintaan party?"
+  },
+  {
+   "id": 2398,
+   "tx": "Phantom Knight di Icarus sangat merugikan para pengembara di sana. Pergilah ke Icarus dan buru 100 Phantom Knight. Temui aku setelah selesai untuk menerima Invisibility Cloak + 6 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 2429,
+   "tx": "Penjarah terlalu sulit untukku tangani. (Tolak)"
+  },
+  {
+   "id": 2430,
+   "tx": "Penjarah..."
+  },
+  {
+   "id": 2432,
+   "tx": "Poin dan Status"
+  },
+  {
+   "id": 2433,
+   "tx": "Poin yang didapat dari naik level bisa digunakan untuk meningkatkan kekuatan, kelincahan, stamina, dan energi, sehingga memengaruhi level serangan, pertahanan, HP, dan MP secara berurutan."
+  },
+  {
+   "id": 2462,
+   "tx": "Tekan C atau klik tombol Character (C) yang ada di pojok kanan bawah layarmu untuk membuka jendela Character Stats."
+  },
+  {
+   "id": 2463,
+   "tx": "Tekan D dan pilih Trade atau ketik '/exchange' di jendela Chat."
+  },
+  {
+   "id": 2464,
+   "tx": "Tekan D dan pilih Trade atau ketik '/invite' di jendela Chat."
+  },
+  {
+   "id": 2465,
+   "tx": "Tekan D dan pilih Trade atau ketik '/trade' di jendela Chat."
+  },
+  {
+   "id": 2468,
+   "tx": "Tekan tombol I atau klik tombol Inventory (I/V) yang ada di pojok kanan bawah untuk membuka jendela Inventory."
+  },
+  {
+   "id": 2469,
+   "tx": "Tekan tombol Q untuk menggunakan apel, ramuan, dan item pemulih HP lainnya, dan tombol W untuk menggunakan item pemulih MP."
+  },
+  {
+   "id": 2470,
+   "tx": "Menekan D akan memberimu akses ke berbagai perintah, termasuk Trade, Party, Buy, dan Follow. Gunakan perintah ini dengan baik."
+  },
+  {
+   "id": 2472,
+   "tx": "Cegah Vepar mengganggu ekspedisi. Kalahkan 50 di antaranya, dan aku akan memberimu hadiah."
+  },
+  {
+   "id": 2474,
+   "tx": "Kemajuan bisnis"
+  },
+  {
+   "id": 2475,
+   "tx": "Bukti Persaudaraan (1)"
+  },
+  {
+   "id": 2476,
+   "tx": "Bukti Persaudaraan (2)"
+  },
+  {
+   "id": 2477,
+   "tx": "Bukti Persaudaraan (3)"
+  },
+  {
+   "id": 2478,
+   "tx": "Bukti Persaudaraan (4)"
+  },
+  {
+   "id": 2479,
+   "tx": "Bukti Persaudaraan (5)"
+  },
+  {
+   "id": 2480,
+   "tx": "Bukti Persaudaraan (6)"
+  },
+  {
+   "id": 2482,
+   "tx": "Membuktikan Nilai Diri (1)"
+  },
+  {
+   "id": 2483,
+   "tx": "Membuktikan Nilai Diri (2)"
+  },
+  {
+   "id": 2484,
+   "tx": "Membuktikan Nilai Diri (3)"
+  },
+  {
+   "id": 2485,
+   "tx": "Membuktikan Nilai Diri (4)"
+  },
+  {
+   "id": 2486,
+   "tx": "Membuktikan Nilai Diri (5)"
+  },
+  {
+   "id": 2489,
+   "tx": "Beli dan bawa kembali 1 Town Portal Scroll."
+  },
+  {
+   "id": 2490,
+   "tx": "Beli dan bawa kembali 5 apel dari pedagang."
+  },
+  {
+   "id": 2493,
+   "tx": "Berikan jaminan sebesar 500.000 Zen dan aku akan memberimu Letter of Request yang datang ke guild tentara bayaran. Setiap permintaan memiliki level dan tingkat kesulitannya sendiri. Klik kanan pada Letter of Request untuk memeriksa informasinya. Harap dicatat bahwa kau perlu menekan (T) dan klik tombol 'Start Quest' di bagian bawah untuk memeriksa informasi lagi setelah menutup jendela informasi. Apakah kau ingin mengambil Letter of Request? (Lv. 350 - 400)"
+  },
+  {
+   "id": 2494,
+   "tx": "Hentikan penjarahan dengan melenyapkan 50 Silver Valkyrie. Setelah itu, kembali padaku untuk hadiah."
+  },
+  {
+   "id": 2495,
+   "tx": "Tidurkan Lost Tower! (1)"
+  },
+  {
+   "id": 2496,
+   "tx": "Tidurkan Lost Tower! (2)"
+  },
+  {
+   "id": 2497,
+   "tx": "Tidurkan Lost Tower! (3)"
+  },
+  {
+   "id": 2498,
+   "tx": "Tidurkan Lost Tower! (4)"
+  },
+  {
+   "id": 2499,
+   "tx": "Tidurkan Lost Tower! (5)"
+  },
+  {
+   "id": 2500,
+   "tx": "Tidurkan Lost Tower! (6)"
+  },
+  {
+   "id": 2501,
+   "tx": "Lupakan masa lalu"
+  },
+  {
+   "id": 2512,
+   "tx": "Queen Rainier di Icarus seharusnya cukup. Pergilah ke Icarus dan kalahkan 100 Queen Rainier. Temui aku setelah itu, dan aku akan memberimu pilihan antara 10 Large SD Potion dan 30 Complex Potion sebagai hadiahmu. Saat mengambil hadiah, pastikan kau memiliki setidaknya 10 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 2513,
+   "tx": "Cepat, lanjut ke langkah berikutnya!"
+  },
+  {
+   "id": 2514,
+   "tx": "Kemarahan Vepar"
+  },
+  {
+   "id": 2562,
+   "tx": "Pemberontak Hutan"
+  },
+  {
+   "id": 2563,
+   "tx": "Terima buff peningkatan serangan dan pertahanan."
+  },
+  {
+   "id": 2564,
+   "tx": "Menerima Lv. 1 Letter of Request"
+  },
+  {
+   "id": 2565,
+   "tx": "Laporan terbaru dari unit Shadow Phantom di Kanturu Ruins menyebutkan bahwa Splinter Wolf dan Blade Hunter sering menyerang mereka secara mendadak. Pergilah ke Kanturu Ruins, bunuh 20 Splinter Wolf dan 10 Blade Hunter. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2566,
+   "tx": "Laporan terbaru dari unit Shadow Phantom di Tarkan Desert menyebutkan bahwa Mutant dan Tantalos menciptakan kekacauan di sana. Pergilah ke Tarkan dan bunuh 20 Mutant dan 20 Tantalos. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2567,
+   "tx": "Baru-baru ini unit Shadow Phantom di Kanturu Ruins diserang oleh Splinter Wolf dan Satyros. Pergilah ke Kanturu Ruins, bunuh 20 Splinter Wolf dan 20 Satyros. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2568,
+   "tx": "Baru-baru ini unit Shadow Phantom di Kanturu Ruins sering diserang oleh Splinter Wolf dan Kentauros. Pergilah ke Kanturu Ruins dan bunuh 20 Splinter Wolf dan 5 Kentauros. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2569,
+   "tx": "Baru-baru ini unit Shadow Phantom di Tarkan Desert sering diserang oleh Mutant dan Beam Knight. Pergilah ke Tarkan dan bunuh 20 Mutant dan 10 Beam Knight. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2570,
+   "tx": "Baru-baru ini unit Shadow Phantom di Tarkan Desert sering diserang oleh Iron Wheels. Pergilah ke Tarkan dan bunuh 30 Iron Wheels. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 2571,
+   "tx": "Pengakuan sebagai pahlawan..."
+  },
+  {
+   "id": 2572,
+   "tx": "Misi Tim Pengintai (1)"
+  },
+  {
+   "id": 2573,
+   "tx": "Misi Tim Pengintai (2)"
+  },
+  {
+   "id": 2574,
+   "tx": "Misi Tim Pengintai (3)"
+  },
+  {
+   "id": 2575,
+   "tx": "Misi Tim Pengintai (4)"
+  },
+  {
+   "id": 2613,
+   "tx": "Sayangnya, kau tidak memenuhi syarat untuk hadiah. Silakan berusaha lebih keras lain kali."
+  },
+  {
+   "id": 2619,
+   "tx": "Permintaan dari Kalima; Lokasi: Kalima 6; Tugas: Bicaralah dengan Priestess Beina di Underwater Temple; Hadiah: Acak, Red Box; Catatan: Jatuhkan Lost Map +6 ke tanah untuk masuk ke Kalima"
+  },
+  {
+   "id": 2620,
+   "tx": "Permintaan dari Merchant Zyro; Lokasi: di setiap kota; Tugas: Bicaralah dengan General Goods Merchant Zyro; Hadiah: Acak, Green Box; Catatan: General Goods Merchant Zyro berkeliling Noria, Elveland, Lorencia, dan Devias untuk berjualan."
+  },
+  {
+   "id": 2621,
+   "tx": "Permintaan dari Merchant Zyro; Wilayah: bisa ditemukan di setiap kota; Misi: Bicaralah dengan General Goods Merchant Zyro; Hadiah: Acak, Green Box; Catatan: General Goods Merchant Zyro berkeliling Noria, Elveland, Lorencia, dan Devias untuk berjualan."
+  },
+  {
+   "id": 2622,
+   "tx": "Permintaan dari unit Shadow Phantom (1)"
+  },
+  {
+   "id": 2623,
+   "tx": "Permintaan dari unit Shadow Phantom (2)"
+  },
+  {
+   "id": 2624,
+   "tx": "Permintaan dari unit Shadow Phantom (3)"
+  },
+  {
+   "id": 2625,
+   "tx": "Permintaan dari guild tentara bayaran; Lokasi: guild tentara bayaran Devias; Tugas: Bicaralah dengan Mercenary Guild Manager Tercia; Hadiah: Acak, Red Box, Purple Box; Catatan: Para tetua guild benar-benar kolot.."
+  },
+  {
+   "id": 2626,
+   "tx": "Permintaan dari Gens Steward; Lokasi: Gens Duprian- Lorencia, Gens Vanert- Noria; Tugas: Bicaralah dengan Gens Steward; Hadiah: Acak, Purple Box; Catatan: Jika kau belum bergabung dengan Gens, pilih satu dan gabung sekarang untuk melanjutkan."
+  },
+  {
+   "id": 2627,
+   "tx": "Permintaan dari Underwater Temple"
+  },
+  {
+   "id": 2628,
+   "tx": "Permintaan dari guild tentara bayaran"
+  },
+  {
+   "id": 2629,
+   "tx": "Permintaan dari guild tentara bayaran. Temui Tercia."
+  },
+  {
+   "id": 2630,
+   "tx": "Permintaan dari pedagang Zyro"
+  },
+  {
+   "id": 2631,
+   "tx": "Permintaan dari pendeta wanita"
+  },
+  {
+   "id": 2632,
+   "tx": "Informasi permintaan tidak valid; Lokasi: tidak ada; Tugas: tidak ada; Hadiah: tidak ada; Catatan: Kembalilah ke Mercenary Guild Manager Tercia di Devias."
+  },
+  {
+   "id": 2633,
+   "tx": "Permintaan dari Sesepuh Elveland!"
+  },
+  {
+   "id": 2831,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 10 Spider."
+  },
+  {
+   "id": 2832,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Agon."
+  },
+  {
+   "id": 2833,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Balrog."
+  },
+  {
+   "id": 2834,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Giant."
+  },
+  {
+   "id": 2835,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Gorgon."
+  },
+  {
+   "id": 2836,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Lich."
+  },
+  {
+   "id": 2837,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 15 Polluted Butterfly."
+  },
+  {
+   "id": 2838,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 20 Giant."
+  },
+  {
+   "id": 2839,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 20 Polluted Butterfly."
+  },
+  {
+   "id": 2840,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 20 Skeleton Warrior."
+  },
+  {
+   "id": 2841,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 20 Stone Golem."
+  },
+  {
+   "id": 2842,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 25 Ice Monster."
+  },
+  {
+   "id": 2843,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 25 Worm."
+  },
+  {
+   "id": 2844,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 3 Ice Queen."
+  },
+  {
+   "id": 2845,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 30 Assassin."
+  },
+  {
+   "id": 2846,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 30 Hommerd."
+  },
+  {
+   "id": 2847,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 30 Ice Monster."
+  },
+  {
+   "id": 2848,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 30 Yeti."
+  },
+  {
+   "id": 2849,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 40 Cyclops."
+  },
+  {
+   "id": 2850,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 40 Larva."
+  },
+  {
+   "id": 2851,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Captain Grizzly."
+  },
+  {
+   "id": 2852,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Cursed Lich."
+  },
+  {
+   "id": 2853,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Cursed Wizard."
+  },
+  {
+   "id": 2854,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Cyclops."
+  },
+  {
+   "id": 2855,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Dark Knight."
+  },
+  {
+   "id": 2856,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Death Cow."
+  },
+  {
+   "id": 2857,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Death Knight."
+  },
+  {
+   "id": 2858,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Devil."
+  },
+  {
+   "id": 2859,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Grizzly."
+  },
+  {
+   "id": 2860,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Hell Hound."
+  },
+  {
+   "id": 2861,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Hell Spider."
+  },
+  {
+   "id": 2862,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Poison Bull Fighter."
+  },
+  {
+   "id": 2863,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Poison Shadow."
+  },
+  {
+   "id": 2864,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Shadow."
+  },
+  {
+   "id": 2865,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Skeleton Archer."
+  },
+  {
+   "id": 2866,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Thunder Lich."
+  },
+  {
+   "id": 2867,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 50 Totem Golem."
+  },
+  {
+   "id": 2868,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Bloody Wolf."
+  },
+  {
+   "id": 2869,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Death Gorgon."
+  },
+  {
+   "id": 2870,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Death Knight."
+  },
+  {
+   "id": 2871,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Devil."
+  },
+  {
+   "id": 2872,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Iron Wheel."
+  },
+  {
+   "id": 2873,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 60 Mutant."
+  },
+  {
+   "id": 2874,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 80 Alquamos."
+  },
+  {
+   "id": 2875,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 80 Mega Crust."
+  },
+  {
+   "id": 2876,
+   "tx": "Kembali ke Shadow Phantom Soldier setelah mengalahkan 80 Queen Rainier."
+  },
+  {
+   "id": 2883,
+   "tx": "Ring of Hero? Ring of Warrior? Apa itu?"
+  },
+  {
+   "id": 2888,
+   "tx": "Jalan Menuju Floating Castle (1)"
+  },
+  {
+   "id": 2889,
+   "tx": "Jalan Menuju Floating Castle (2)"
+  },
+  {
+   "id": 2890,
+   "tx": "Jalan Menuju Floating Castle (3)"
+  },
+  {
+   "id": 2986,
+   "tx": "Gulungan bisa dibeli dari Pasi the Mage (119,112) di Lorencia dan Marce (36,218) di Elveland."
+  },
+  {
+   "id": 3000,
+   "tx": "Amankan perbekalan perang (1)"
+  },
+  {
+   "id": 3001,
+   "tx": "Amankan perbekalan perang (2)"
+  },
+  {
+   "id": 3016,
+   "tx": "Pilih misi."
+  },
+  {
+   "id": 3038,
+   "tx": "Shadow Pawn dari Swamp of Peace seharusnya cukup. Pergilah ke Swamp of Peace dan kalahkan 100 Shadow Pawn. Temui aku setelah itu, dan aku akan memberimu pilihan antara 30 Large SD Potion dan 45 Large Complex Potion sebagai hadiahmu. Saat mengambil hadiah, pastikan kau memiliki setidaknya 30 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 3041,
+   "tx": "Unit Shadow Phantom melaporkan bahwa Watchers of Kundun kekurangan beberapa perbekalan penting. Aku memberikan misi dengan hadiah melimpah bagi mereka yang membawakanku perbekalan untuk Watcher. Apakah kau tertarik? (Level 290-319)"
+  },
+  {
+   "id": 3042,
+   "tx": "Bayangan Kejahatan"
+  },
+  {
+   "id": 3055,
+   "tx": "Tunjukkan Lv. 1 Request Completion Certificate kepada Mercenary Guild Manager Tercia."
+  },
+  {
+   "id": 3070,
+   "tx": "Silver Valkyrie secara teratur menjarah perbekalan tim pencari kita di Atlans. Maukah kau menyingkirkan Silver Valkyrie ini untuk kami?"
+  },
+  {
+   "id": 3072,
+   "tx": "Karena kau sekarang punya ramuan, maukah kau meninggalkan zona aman dan melakukan perburuan sungguhan? Apakah kau siap?"
+  },
+  {
+   "id": 3073,
+   "tx": "Situasi di Dungeon (1)"
+  },
+  {
+   "id": 3074,
+   "tx": "Situasi di Dungeon (2)"
+  },
+  {
+   "id": 3075,
+   "tx": "Situasi di Dungeon (3)"
+  },
+  {
+   "id": 3076,
+   "tx": "Situasi di Dungeon (4)"
+  },
+  {
+   "id": 3077,
+   "tx": "Situasi di Dungeon (5)"
+  },
+  {
+   "id": 3078,
+   "tx": "Situasi di Dungeon (6)"
+  },
+  {
+   "id": 3110,
+   "tx": "Jadi aku harus mengambil dua item itu. (Terima)"
+  },
+  {
+   "id": 3111,
+   "tx": "Jadi ini bukan hanya soal peralatan atau level."
+  },
+  {
+   "id": 3112,
+   "tx": "Jadi ini yang sebenarnya mulai sekarang. Aku mengerti."
+  },
+  {
+   "id": 3113,
+   "tx": "Jadi dia menyematkan kekuatan Elf pada cincin dan memberikannya kepada para prajurit sebagai penghormatan terhadap tradisi Muren yang membagikan cincin prajurit bert lambang kaisar."
+  },
+  {
+   "id": 3114,
+   "tx": "Jadi kau ingin aku mengambil permata With Queen."
+  },
+  {
+   "id": 3115,
+   "tx": "Jadi kau telah memutuskan untuk menjadi Agility Elf, kelas yang pertahanannya sangat penting. Agility Elf unik karena mereka menggunakan skill panah yang luar biasa. Biar aku berikan senjata untukmu gunakan agar kau lebih paham."
+  },
+  {
+   "id": 3116,
+   "tx": "Jadi kau telah memutuskan untuk menjadi Energy Elf, kelas yang kemampuan sihirnya sangat penting. Energy Elf unik karena mereka menggunakan berbagai macam mantra pemanggilan dan sihir. Biar aku berikan orb sebagai hadiah agar kau memahami maksudku."
+  },
+  {
+   "id": 3120,
+   "tx": "Sesuatu yang aneh terjadi. Death Rider, yang berfungsi sebagai pelindung Aida Arca, sering menyerang anggota gens kita yang menjelajahi wilayah Aida secara sembarangan. Lemuria pasti berada di balik semua ini. Tolong lenyapkan Death Rider ini dan lindungi anggota gens kita."
+  },
+  {
+   "id": 3147,
+   "tx": "Perburuan Laba-laba!"
+  },
+  {
+   "id": 3179,
+   "tx": "Hentikan serangan terhadap anggota gens dengan melenyapkan 50 Burning Lava Giant, dan aku akan memberimu hadiah."
+  },
+  {
+   "id": 3194,
+   "tx": "Konfrontasi Aneh (1)"
+  },
+  {
+   "id": 3195,
+   "tx": "Konfrontasi Aneh (2)"
+  },
+  {
+   "id": 3196,
+   "tx": "Konfrontasi Aneh (3)"
+  },
+  {
+   "id": 3197,
+   "tx": "Konfrontasi Aneh (4)"
+  },
+  {
+   "id": 3228,
+   "tx": "Summoner unik karena mereka mampu menguasai berbagai mantra sihir dari gulungan dan perkamen. Biar aku berikan gulungan sebagai hadiah agar kau memahami maksudku."
+  },
+  {
+   "id": 3229,
+   "tx": "Summoner bisa mempelajari skill tambahan dengan pergi ke Elveland dan membeli gulungan dari Marce (36,218). Setelah membeli gulungan, klik kanan padanya untuk mempelajari skill tersebut."
+  },
+  {
+   "id": 3235,
+   "tx": "Rute pasokan monster..."
+  },
+  {
+   "id": 3236,
+   "tx": "Tentu! Apa misi sederhana ini? (Terima)"
+  },
+  {
+   "id": 3237,
+   "tx": "Bertahanlah melalui Chaos Castle Level 1 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 1."
+  },
+  {
+   "id": 3238,
+   "tx": "Bertahanlah melalui Chaos Castle Level 1. Kembali padaku setelah itu, dan aku akan memberimu 100.000 poin EXP dan 200.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 1."
+  },
+  {
+   "id": 3239,
+   "tx": "Bertahanlah melalui Chaos Castle Level 2 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 2."
+  },
+  {
+   "id": 3240,
+   "tx": "Bertahanlah melalui Chaos Castle Level 2. Kembali padaku setelah itu, dan aku akan memberimu 400.000 poin EXP dan 300.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 2."
+  },
+  {
+   "id": 3241,
+   "tx": "Bertahanlah melalui Chaos Castle Level 3 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 3."
+  },
+  {
+   "id": 3242,
+   "tx": "Bertahanlah melalui Chaos Castle Level 3. Kembali padaku setelah itu, dan aku akan memberimu 1.000.000 poin EXP dan 1 Jewel of Chaos sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 3."
+  },
+  {
+   "id": 3243,
+   "tx": "Bertahanlah melalui Chaos Castle Level 4 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 4."
+  },
+  {
+   "id": 3244,
+   "tx": "Bertahanlah melalui Chaos Castle Level 4. Aku akan memberimu 1 Jewel of Soul sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Chaos Castle Level 4."
+  },
+  {
+   "id": 3245,
+   "tx": "Bertahanlah melalui Chaos Castle Level 5 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 5."
+  },
+  {
+   "id": 3246,
+   "tx": "Bertahanlah melalui Chaos Castle Level 5. Aku akan memberimu 1 Jewel of Bless sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Chaos Castle Level 5."
+  },
+  {
+   "id": 3247,
+   "tx": "Bertahanlah melalui Chaos Castle Level 6 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 6."
+  },
+  {
+   "id": 3248,
+   "tx": "Bertahanlah melalui Chaos Castle Level 6. Aku akan memberimu 1 Jewel of Life sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Chaos Castle Level 6."
+  },
+  {
+   "id": 3249,
+   "tx": "Bertahanlah melalui Chaos Castle Level 7 lalu kembali ke Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 7."
+  },
+  {
+   "id": 3250,
+   "tx": "Bertahanlah melalui Chaos Castle Level 7. Aku akan memberimu 2 Jewel of Bless sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Chaos Castle Level 7."
+  },
+  {
+   "id": 3251,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Semua karakter: Master Level)"
+  },
+  {
+   "id": 3252,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 120-179, Karakter lanjutan: Level 100-159)"
+  },
+  {
+   "id": 3253,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 15-49, Karakter lanjutan: Level 15-29)"
+  },
+  {
+   "id": 3254,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 180-239, Karakter lanjutan: Level 160-219)"
+  },
+  {
+   "id": 3255,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 240-299, Karakter lanjutan: Level 220-279)"
+  },
+  {
+   "id": 3256,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 300-400, Karakter lanjutan: Level 280-400)"
+  },
+  {
+   "id": 3257,
+   "tx": "Bertahan di Chaos Castle adalah bukti seberapa baik latihanmu. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 50-119, Karakter lanjutan: Level 30-99)"
+  },
+  {
+   "id": 3285,
+   "tx": "Ambil cincinnya."
+  },
+  {
+   "id": 3286,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Semua karakter: Master Level)"
+  },
+  {
+   "id": 3287,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 120-179, Karakter lanjutan: Level 100-159)"
+  },
+  {
+   "id": 3288,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 15-49, Karakter lanjutan: Level 15-29)"
+  },
+  {
+   "id": 3289,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 180-239, Karakter lanjutan: Level 160-219)"
+  },
+  {
+   "id": 3290,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 240-299, Karakter lanjutan: Level 220-279)"
+  },
+  {
+   "id": 3291,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 300-400, Karakter lanjutan: Level 280-400)"
+  },
+  {
+   "id": 3292,
+   "tx": "Menghadapi tantangan Chaos Castle sama saja dengan menguji batas kemampuan diri sendiri. Maukah kau pergi ke Chaos Castle dan melihat seberapa jauh latihanmu membawamu? (Karakter dasar: Level 50-119, Karakter lanjutan: Level 30-99)"
+  },
+  {
+   "id": 3309,
+   "tx": "Bicaralah dengan General Goods Merchant Zyro dan periksa detail permintaannya kepada guild tentara bayaran."
+  },
+  {
+   "id": 3310,
+   "tx": "Bicaralah dengan Mercenary Guild Manager Tercia untuk detail permintaan dari tetua guild tentara bayaran."
+  },
+  {
+   "id": 3311,
+   "tx": "Bicaralah dengan Priestess Beina dari Underwater Temple dan periksa detail permintaannya kepada guild tentara bayaran."
+  },
+  {
+   "id": 3312,
+   "tx": "Bicaralah denganku lagi dan terima buff peningkatan serangan dan pertahanan."
+  },
+  {
+   "id": 3313,
+   "tx": "Bicaralah dengan Gens Steward-mu dan periksa detail permintaannya kepada guild tentara bayaran."
+  },
+  {
+   "id": 3317,
+   "tx": "Tantalos dari Tarkan Level 2 sangat merugikan para pengembara di sana. Pergilah ke Tarkan Level 2 dan buru 100 Tantalos. Temui aku setelah selesai untuk menerima Invisibility Cloak + 5 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 3326,
+   "tx": "Kegigihan adalah sifat lain yang tidak boleh dimiliki seorang pahlawan. Ingatlah bahwa kau tidak bisa menjadi lebih kuat jika tidak cukup gigih."
+  },
+  {
+   "id": 3327,
+   "tx": "Terima kasih telah membantu misi benteng penghalang. Karena gagal menyerang penghalang, monster sekarang sering menyerang penjaga yang ditempatkan di Lost Tower. Jumlah monster harus dikurangi seberapa pun harganya. Maukah kau menerima misi ini? (Level 202-205)"
+  },
+  {
+   "id": 3328,
+   "tx": "Terima kasih!"
+  },
+  {
+   "id": 3329,
+   "tx": "Terima kasih. Akhir-akhir ini banyak hal yang mengganggu urusan klan. Terutama keadaan di Vulcanus yang terburuk. Kami telah melakukan penyelidikan dan orang-orang kami tewas dibunuh oleh para pembunuh. Tolong pergilah ke Vulcanus dan lenyapkan 20 Bloody Slayer dan 10 Vicious Bloody Slayer."
+  },
+  {
+   "id": 3330,
+   "tx": "Terima kasih. Kau menyelamatkanku dari tempat eksekusi. Tugas kedua adalah mengambilkan permata langka yang dibawa Witch Queen di Aida. Permata itu sangat indah hingga mempesona Witch Queen dengan kilaunya. Tentu saja, harganya sangat mahal di pasar. (Lv. 350 - 400)"
+  },
+  {
+   "id": 3331,
+   "tx": "Berkatmu, tim pengintai kita jauh lebih stabil. Namun, tim pengintai kita melaporkan bahwa musuh yang mengerikan telah muncul dan mereka tidak tahu harus berbuat apa. Aku ingin memintamu membantu tim pengintai. Maukah kau menerima misi ini? (Level 180-185)"
+  },
+  {
+   "id": 3332,
+   "tx": "Berkat bantuanmu dengan misi pengintaian party sebelumnya, semua wilayah tampak menjadi lebih stabil. Kapten Shadow Phantom Guardians telah memperhatikan pencapaianmu dan memintamu membantu anggota korps kita di setiap wilayah. Maukah kau menerima misi ini? (Level 166-170)"
+  },
+  {
+   "id": 3333,
+   "tx": "Kebiasaan itu hampir menghilang ketika perdamaian akhirnya tiba. Namun, Kundun dan kekacauan yang dia bawa memotivasi Erin Gustiv, ratu Para Elf yang sedang berkuasa, untuk memberlakukannya kembali."
+  },
+  {
+   "id": 3334,
+   "tx": "Betul sekali! Jika kau tidak ingin menerima permintaan party saat berburu, cukup ketik '/Request off' di jendela Chat. Untuk mulai menerima permintaan party lagi, ketik '/Request on' di jendela Chat."
+  },
+  {
+   "id": 3335,
+   "tx": "Betul sekali! Di dunia MU, kau bisa menggunakan tombol M untuk bepergian dengan mudah, asalkan levelmu cukup tinggi dan kau punya cukup uang untuk tujuan tersebut.;Menemukan area yang sesuai dengan levelmu, dan berburu di sana, juga bisa sangat menyenangkan."
+  },
+  {
+   "id": 3336,
+   "tx": "Betul sekali! Menekan D akan memberimu akses ke berbagai perintah, termasuk Trade, Party, Buy, dan Follow. Gunakan perintah ini dengan baik."
+  },
+  {
+   "id": 3337,
+   "tx": "Betul sekali! Saat kau ingin berbicara dengan teman dan tahu ID-nya, atau jika kau ingin menyampaikan pesan pribadi, kirimkan bisikan menggunakan Tab dari jendela Chat."
+  },
+  {
+   "id": 3338,
+   "tx": "Betul sekali! Dengan bantuan NPC di kota, kau tidak hanya bisa menggabungkan item, tetapi juga meningkatkan baju zirahmu dengan menambahkan permata dan banyak lagi. Pastikan untuk mengunjungi mereka semua."
+  },
+  {
+   "id": 3339,
+   "tx": "Betul sekali! Kau bisa memperbaiki peralatanmu oleh Hanzo the Blacksmith (117,140) di Lorencia, Rhea (30, 235) di Elveland, atau Eo the Craftsman (194, 123) di Noria. Gunakan jasa mereka sesering mungkin."
+  },
+  {
+   "id": 3340,
+   "tx": "Itu pasti akan mempermudah keadaan. Apa ada tips lain?"
+  },
+  {
+   "id": 3341,
+   "tx": "Itu mudah sekali."
+  },
+  {
+   "id": 3342,
+   "tx": "Benar. Kau memang butuh peralatan bagus dan level tinggi untuk menguji kemampuanmu melawan pengembara lain, ya. Tapi hanya itu saja tidak cukup untuk membuatmu menjadi pahlawan MU. Aku akan membantumu mendapatkan pengakuan sebagai pahlawan dengan memberimu serangkaian misi. Kau boleh mengulangi misi ini sesering mungkin."
+  },
+  {
+   "id": 3343,
+   "tx": "Sayang sekali, silakan kembali lagi nanti saat kau punya waktu. (Gagal menerima Letter of Request.)"
+  },
+  {
+   "id": 3344,
+   "tx": "Sayang sekali, hadiahnya cukup bagus. Silakan kembali jika kau berubah pikiran. (Pendaftaran tentara bayaran gratis dibatalkan.)"
+  },
+  {
+   "id": 3345,
+   "tx": "Sayang sekali. Temui aku lagi saat ikatanmu dengan rekan-rekanmu lebih kuat. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3346,
+   "tx": "Sayang sekali. Temui aku lagi saat kau menemukan prajurit yang tepat untuk bertempur di sisimu. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3347,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, kembalilah sebelum mencapai level 190. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3348,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, kembalilah sebelum mencapai level 194. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3349,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, kembalilah sebelum mencapai level 206. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3350,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, kembalilah sebelum mencapai level 210. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3351,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 101. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3352,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 111. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3353,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 121. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3354,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 131. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3355,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 141. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3356,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 161. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3357,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 166. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3358,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 171. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3359,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 180. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3360,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 186. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3361,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 198. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3362,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 202. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3363,
+   "tx": "Sayang sekali. Jika kau berubah pikiran, silakan kembali sebelum mencapai level 91. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3364,
+   "tx": "Sayang sekali. Tidak akan memakan banyak waktu... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 290. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3365,
+   "tx": "Sayang sekali. Tidak akan memakan banyak waktu... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 320. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3366,
+   "tx": "Sayang sekali. Tidak akan memakan banyak waktu... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 350. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3367,
+   "tx": "Sayang sekali. Silakan kembali jika kau berubah pikiran. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3368,
+   "tx": "Sayang sekali. Hadiah untuk misi ini cukup besar... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 290. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3369,
+   "tx": "Sayang sekali. Hadiah untuk misi ini cukup besar... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 320. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3370,
+   "tx": "Sayang sekali. Hadiah untuk misi ini cukup besar... Jika kau berubah pikiran, silakan kembali sebelum mencapai level 350. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3371,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 15 jika kau ingin menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3372,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3373,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3374,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Kembalilah sebelum mencapai level 230 jika kau berubah pikiran. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3375,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 235 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3376,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 240 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3377,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 250 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3378,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 255 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3379,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 26 jika kau ingin menerima permintaan. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3380,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 260 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3381,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 36 jika kau ingin menerima permintaan. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3382,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 46 jika kau ingin menerima permintaan. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3383,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 56 jika kau ingin menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3384,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 66 jika kau ingin menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3385,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 80 jika kau ingin menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3386,
+   "tx": "Sayang sekali. Kau tidak boleh melewatkan ini jika ingin berkembang cepat... Temui aku lagi sebelum mencapai level 245 jika kau memutuskan untuk menerima misi. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3387,
+   "tx": "Tim ekspedisi Atlans melaporkan bahwa komandan tertinggi Tentara Jahat menggunakan Vepar untuk mengejar anggota Gens yang mencari batu segel. Tolong usir Vepar ini dan lindungi anggota Gens."
+  },
+  {
+   "id": 3388,
+   "tx": "Awal dari Permintaan"
+  },
+  {
+   "id": 3390,
+   "tx": "Jendela Character Stats akan memberitahumu nama dan level karaktermu, nama server saat ini, dan informasi status karakter."
+  },
+  {
+   "id": 3391,
+   "tx": "Jendela Character Stats akan memberitahumu nama karaktermu, nama server saat ini, dan kelas karaktermu."
+  },
+  {
+   "id": 3392,
+   "tx": "Jendela Character Stats akan memberitahumu nama karaktermu, nama server saat ini, dan kelas karaktermu. Dimungkinkan untuk terhubung ke saluran yang berbeda dalam satu server yang sama menggunakan karakter yang sama.;Ada empat kelas karakter dasar: Elf, Dark Knight, Dark Wizard, dan Summoner. Capai level 220 dengan salah satu karakter dasar ini untuk membuka Magic Gladiator, dan level 250 untuk membuka Dark Lord."
+  },
+  {
+   "id": 3393,
+   "tx": "Dungeon seharusnya tidak terlalu sulit."
+  },
+  {
+   "id": 3394,
+   "tx": "Dungeon seharusnya tidak terlalu sulit. Lagipula, aku memang butuh peralatan baru. Haruskah aku mencobanya?"
+  },
+  {
+   "id": 3395,
+   "tx": "Skill Falling Slash sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Coba klik ikonnya."
+  },
+  {
+   "id": 3396,
+   "tx": "Skill Fire Ball sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Coba klik ikonnya."
+  },
+  {
+   "id": 3397,
+   "tx": "NPC Goblin di Noria."
+  },
+  {
+   "id": 3399,
+   "tx": "Jendela Inventory akan menampilkan item yang kau miliki dan peralatan yang kau pakai."
+  },
+  {
+   "id": 3400,
+   "tx": "Jendela Inventory akan menampilkan item yang kau miliki dan peralatan yang kau pakai.;Klik sebuah item untuk mengubah posisinya atau, jika itu barang habis pakai, klik kanan padanya untuk menggunakannya. Sudah mengerti semua?"
+  },
+  {
+   "id": 3401,
+   "tx": "Lost Tower terbukti cukup merepotkan. Aku menerima kabar tentang pergerakan monster di wilayah di mana anggota tim pengintai menghilang. Tampaknya monster sedang merencanakan sesuatu. Aku ingin kau menghentikan pergerakan mereka. Maukah kau menerima misi ini? (Level 194-197)"
+  },
+  {
+   "id": 3403,
+   "tx": "NPC Seed Master di Elveland."
+  },
+  {
+   "id": 3404,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 131."
+  },
+  {
+   "id": 3405,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 101."
+  },
+  {
+   "id": 3406,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 111."
+  },
+  {
+   "id": 3407,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 121."
+  },
+  {
+   "id": 3408,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 141."
+  },
+  {
+   "id": 3409,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 161."
+  },
+  {
+   "id": 3410,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 166."
+  },
+  {
+   "id": 3411,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 171."
+  },
+  {
+   "id": 3412,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 180."
+  },
+  {
+   "id": 3413,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 186."
+  },
+  {
+   "id": 3414,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 190."
+  },
+  {
+   "id": 3415,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 194."
+  },
+  {
+   "id": 3416,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 198."
+  },
+  {
+   "id": 3417,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 202."
+  },
+  {
+   "id": 3418,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 206."
+  },
+  {
+   "id": 3419,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 210."
+  },
+  {
+   "id": 3420,
+   "tx": "Shadow Phantom Guardians punya misi untukmu, pengembara. Aku sarankan kau menerimanya, jika kau menginginkan peralatan baru untuk perjalananmu ke depan. Temui Shadow Phantom Soldier sebelum mencapai level 91."
+  },
+  {
+   "id": 3421,
+   "tx": "Shadow Phantom Guardians telah berbuat banyak untukku...."
+  },
+  {
+   "id": 3422,
+   "tx": "Shadow Phantom Soldier sedang mencari seseorang yang bisa diandalkan untuk menjalankan misi Shadow Phantom Guardians. Temui Shadow Phantom Soldier lagi."
+  },
+  {
+   "id": 3423,
+   "tx": "Shadow Phantom Soldier akan memberimu hadiah kecil jika kau berhasil berkembang cepat di Devil Square. Terima ujian Shadow Phantom Soldier dan hadapi tantangan Devil Square."
+  },
+  {
+   "id": 3424,
+   "tx": "Shadow Phantom Soldier akan memberimu hadiah kecil jika kau menang di Illusion Temple. Terima ujian Shadow Phantom Soldier dan hadapi tantangan Illusion Temple."
+  },
+  {
+   "id": 3425,
+   "tx": "Shadow Phantom Soldier akan memberimu Armor of Guardsman, yang kau butuhkan untuk masuk ke Chaos Castle. Terima baju zirah itu dan hadapi tantangan Chaos Castle."
+  },
+  {
+   "id": 3426,
+   "tx": "Unit Shadow Phantom kesulitan mengendalikan jumlah Alquamos dan Drakan yang semakin banyak di Icarus, gerbang menuju Castle in Heaven. Pergilah ke Icarus dan bunuh 20 Alquamos dan 20 Drakan. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 3427,
+   "tx": "Unit Shadow Phantom kesulitan menghadapi Queen Rainier di Icarus, gerbang menuju Castle in Heaven. Pergilah ke Icarus dan bunuh 30 Queen Rainier. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 3428,
+   "tx": "Unit Shadow Phantom di Icarus, gerbang menuju Castle in Heaven, dalam kesulitan karena Alquamos dan Alpha Crust telah memblokir rute pasokan mereka. Pergilah ke Icarus dan bunuh 20 Alquamos dan 10 Alpha Crust. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 3429,
+   "tx": "Unit Shadow Phantom di Kanturu Ruins menderita akibat serangan Iron Rider. Pergilah ke Kanturu Ruins dan bunuh 30 Mutant. Aku akan memberimu hadiah saat kau kembali dan melaporkannya padaku."
+  },
+  {
+   "id": 3430,
+   "tx": "Unit Shadow Phantom melaporkan bahwa Watchers of Kundun kekurangan beberapa perbekalan penting. Aku memberikan misi dengan hadiah melimpah bagi mereka yang membawakanku perbekalan untuk Watcher. Apakah kau tertarik? (Level 260-289)"
+  },
+  {
+   "id": 3431,
+   "tx": "Unit Shadow Phantom melaporkan bahwa Watchers of Kundun kekurangan beberapa perbekalan penting. Aku memberikan misi dengan hadiah melimpah bagi mereka yang membawakanku perbekalan untuk Watcher. Apakah kau tertarik? (Level 320-349)"
+  },
+  {
+   "id": 3432,
+   "tx": "Skill Summon Goblin sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Coba klik ikonnya."
+  },
+  {
+   "id": 3433,
+   "tx": "NPC Pelatih di Lorencia."
+  },
+  {
+   "id": 3434,
+   "tx": "Skill Triple Shot sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Coba klik ikonnya."
+  },
+  {
+   "id": 3435,
+   "tx": "Jawabannya jelas!"
+  },
+  {
+   "id": 3436,
+   "tx": "Penghalang di Lost Tower sekarang agak stabil dan aman. Namun, masih ada monster peringkat tinggi yang ingin memanfaatkan setiap kesempatan yang ada. Maukah kau melenyapkan monster-monster ini untuk kami? (Level 210-219)"
+  },
+  {
+   "id": 3438,
+   "tx": "Rintangan terbesar untuk memasuki Devil Square, arena latihan untuk pertumbuhan cepat, mungkin adalah mendapatkan undangan. Aku punya misi sederhana yang akan memberimu undangan ke Devil Square. Maukah kau menerima misi ini? (Karakter dasar: Level 330-400, Karakter lanjutan: Level 311-400)"
+  },
+  {
+   "id": 3440,
+   "tx": "Ikatan antara rekan-rekanku dan aku belum cukup kuat."
+  },
+  {
+   "id": 3441,
+   "tx": "Ikatan persaudaraan... Tentu saja rekan harus dipercaya dan dihargai."
+  },
+  {
+   "id": 3442,
+   "tx": "Kapten memintaku berterima kasih atas kontribusimu dalam misi sebelumnya. Kapten juga mengatakan kau telah membuktikan nilaimu dan siap untuk misi yang lebih kritis. Maukah kau menerima misi ini? (Level 171-179)"
+  },
+  {
+   "id": 3444,
+   "tx": "Koordinat saat ini karakter ditampilkan di pojok kiri atas layar. Pergerakan ke arah atau mengubah angka pertama, dan pergerakan ke arah atau mengubah angka kedua."
+  },
+  {
+   "id": 3446,
+   "tx": "Konflik antar gens memperebutkan batu segel semakin memanas. Terdesak, pasukan gens lawan menyerang pihak kita menggunakan Sapi-Duo. Tolong lenyapkan Sapi-Duo ini."
+  },
+  {
+   "id": 3447,
+   "tx": "Energi gelap yang dipancarkan Gorgon telah melemah cukup banyak, dan monster tampaknya sudah cukup tenang karenanya. Ini saat yang tepat untuk memperketat cengkeraman kita pada Gorgon. Maukah kau menerima misi ini? (Level 131-140)"
+  },
+  {
+   "id": 3452,
+   "tx": "Sesepuh mengatakan Spider sedang menenun jaring di dinding luar kota dan meminta kita untuk menanganinya. Meskipun permintaan itu ditujukan kepada Shadow Phantom Guardians, aku yakin pekerjaan ini cocok untuk pengembara yang baru memulai perjalanan. Maukah kau menerima misi ini? (Level 1-14)"
+  },
+  {
+   "id": 3453,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau berlatih di Devil Square? (Karakter dasar: Level 15-130, Karakter lanjutan: Level 10-110)"
+  },
+  {
+   "id": 3454,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Semua karakter: Master Level)"
+  },
+  {
+   "id": 3455,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Karakter dasar: Level 330-400, Karakter lanjutan: Level 311-400)"
+  },
+  {
+   "id": 3456,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Karakter dasar: Level 131-180, Karakter lanjutan: Level 111-160)"
+  },
+  {
+   "id": 3457,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Karakter dasar: Level 231-280, Karakter lanjutan: Level 211-260)"
+  },
+  {
+   "id": 3458,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan sangat membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Karakter dasar: Level 281-330, Karakter lanjutan: Level 261-310)"
+  },
+  {
+   "id": 3459,
+   "tx": "Munculnya monster yang tak henti-hentinya di Devil Square akan membantu latihanmu. Luncurkan serangan gabungan dengan rekan party untuk hasil yang lebih baik. Maukah kau mencoba menaklukkan Devil Square? (Karakter dasar: Level 181-230, Karakter lanjutan: Level 161-210)"
+  },
+  {
+   "id": 3466,
+   "tx": "Rintangan terakhir, ya? Aku menerima misinya. (Terima)"
+  },
+  {
+   "id": 3467,
+   "tx": "Gerbang yang menuju ke Blood Castle mungkin merupakan rintangan terbesar. Ikuti ujian Shadow Phantom Soldier lalu hadapi tantangan Blood Castle."
+  },
+  {
+   "id": 3468,
+   "tx": "Master guild tidak bisa meninggalkan gens."
+  },
+  {
+   "id": 3469,
+   "tx": "Master guild bukan anggota gens. Master guild harus menjadi anggota gens agar kau bisa bergabung dengan gens tersebut."
+  },
+  {
+   "id": 3470,
+   "tx": "Semakin tinggi level, semakin jauh jarak yang bisa kau tempuh. Namun, menggunakan tombol M, dimungkinkan untuk bepergian ke area jauh dalam sekejap. Berapakah level minimum yang harus dicapai dan jumlah Zen yang dibutuhkan untuk memasuki Dungeon?"
+  },
+  {
+   "id": 3474,
+   "tx": "Jumlah Bloody Wolf di Tarkan yang semakin meningkat menjadi mengkhawatirkan. Burulah 50 Bloody Wolf, dan aku akan memberimu Scroll of Blood + 1 sebagai hadiah."
+  },
+  {
+   "id": 3475,
+   "tx": "Jumlah Iron Wheel di Tarkan yang semakin meningkat menjadi mengkhawatirkan. Burulah 70 Iron Wheel, dan aku akan memberimu Scroll of Blood + 2 sebagai hadiah."
+  },
+  {
+   "id": 3479,
+   "tx": "Yang terakhir harus dihadapi adalah Bloody Soldier dan Death Angel yang merapal mantra pada batu segel. Bunuh 30 Bloody Soldier dan 20 Death Angel lalu kembali padaku untuk mengambil hadiah. (Bisa Party)"
+  },
+  {
+   "id": 3480,
+   "tx": "Kerugian yang disebabkan oleh intrik Queen Rainier terus bertambah. Maukah kau membantu melenyapkan lebih banyak Queen Rainier ini? (Level 255-259)"
+  },
+  {
+   "id": 3481,
+   "tx": "Kantor guild tentara bayaran baru saja didirikan di Devias. Silakan temukan manajer kantor guild Tercia."
+  },
+  {
+   "id": 3483,
+   "tx": "Monster-monster itu berperilaku aneh. Tampaknya Iron Wheel yang peringkatnya lebih tinggi dari Bloody Wolf sedang merencanakan sesuatu. Aku ingin meminta bantuanmu untuk melenyapkan Iron Wheel ini. Maukah kau menerimanya? (Level 240-244)"
+  },
+  {
+   "id": 3485,
+   "tx": "Jumlah Alquamos tidak berkurang, dan tim pengintai kita terus menderita kerugian. Maukah kau membantu melenyapkan lebih banyak Alquamos ini? (Level 245-249)"
+  },
+  {
+   "id": 3486,
+   "tx": "Jumlah Death Beam Knight di Tarkan 2 meningkat tak terkendali. Burulah 30 Death Beam Knight, dan aku akan memberimu Scroll of Blood + 4 sebagai hadiah."
+  },
+  {
+   "id": 3487,
+   "tx": "Jumlah Drakan di Icarus meningkat tak terkendali. Burulah 90 Drakan, dan aku akan memberimu Scroll of Blood + 3 sebagai hadiah."
+  },
+  {
+   "id": 3488,
+   "tx": "Jumlah Giant Drakan di Icarus meningkat tak terkendali. Burulah 130 Giant Drakan, dan aku akan memberimu Scroll of Blood + 5 sebagai hadiah."
+  },
+  {
+   "id": 3489,
+   "tx": "Jumlah Mega Crust tidak berkurang, dan tim pengintai kita terus menderita kerugian. Maukah kau membantu melenyapkan lebih banyak Mega Crust ini? (Level 250-254)"
+  },
+  {
+   "id": 3490,
+   "tx": "Jumlah Shadow Look di Swamp of Peace meningkat tak terkendali. Burulah 150 Shadow Look, dan aku akan memberimu Scroll of Blood + 6 sebagai hadiah."
+  },
+  {
+   "id": 3491,
+   "tx": "Tujuan sekarang adalah menyelesaikan misi Archangel di Blood Castle. Ikuti ujian Shadow Phantom Soldier lalu hadapi tantangan Blood Castle."
+  },
+  {
+   "id": 3492,
+   "tx": "Tujuannya seharusnya mempertahankan tempat ini, ya."
+  },
+  {
+   "id": 3493,
+   "tx": "Orb yang kuberikan akan mengajarimu skill Summon Goblin. Klik kanan pada item tersebut untuk mempelajari skillnya. Ayo pelajari skillnya."
+  },
+  {
+   "id": 3494,
+   "tx": "Perintah ratu adalah membantu para prajurit yang baru memulai perjalanan agar setidaknya bisa membela diri melawan pasukan Kundun."
+  },
+  {
+   "id": 3495,
+   "tx": "Misi untuk melenyapkan Totem Golem dan Cursed Lich di Elveland sebenarnya ditetapkan oleh sesepuh Elveland. Dia mengatakan sekarang jumlah monster yang lebih banyak telah muncul dan meminta kita untuk menanganinya. Maukah kau menerima misi ini? (Level 80-90)"
+  },
+  {
+   "id": 3503,
+   "tx": "Tim pengintai telah mengirimkan permintaan kepada kita. Mereka mengatakan dengan melenyapkan monster peringkat lebih tinggi yang mengendalikan yang peringkat rendah akan membuat pekerjaan mereka jauh lebih mudah. Kalahkan monster-monster ini. Maukah kau menerima misi ini? (Level 166-170)"
+  },
+  {
+   "id": 3504,
+   "tx": "Tim pengintai telah berhasil masuk ke Tarkan, tetapi sekarang dipaksa menghadapi Bloody Wolf. Mereka peringkat lebih tinggi dari monster biasa. Aku ingin meminta bantuanmu untuk melenyapkan Bloody Wolf ini. Maukah kau menerimanya? (Level 235-239)"
+  },
+  {
+   "id": 3505,
+   "tx": "Tim pengintai sedang maju, tetapi Mutant mulai berkumpul dalam jumlah lebih banyak. Maukah kau membantu melenyapkan lebih banyak Mutant? (Level 230-234)"
+  },
+  {
+   "id": 3506,
+   "tx": "Tim pengintai sedang berjuang menghadapi serangan mendadak terhadap mereka. Aku ingin meminta bantuanmu untuk melenyapkan monster-monster ini. Maukah kau menerima misi ini? (Level 180-189)"
+  },
+  {
+   "id": 3507,
+   "tx": "Tim pengintai melaporkan bahwa pasokan curian dikirim ke Lost Tower melalui Devias. Memutus rute pasokan Kundun di Devias akan menjadi pukulan telak bagi musuh. Maukah kau menerima misi ini? (Level 36-45)"
+  },
+  {
+   "id": 3508,
+   "tx": "Tim pengintai melaporkan situasi telah jauh membaik. Aku berterima kasih atas nama kapten kita. Namun, masih ada monster yang mengganggu upaya pengintaian kita. Tampaknya monster-monster ini agak lebih tinggi peringkatnya dari yang sebelumnya dan terbukti sulit dihadapi. Aku ingin meminta bantuanmu untuk melenyapkan monster-monster ini. Maukah kau menerima misi ini? (Level 171-179)"
+  },
+  {
+   "id": 3509,
+   "tx": "Hadiah sudah dibagikan."
+  },
+  {
+   "id": 3510,
+   "tx": "Gulungan yang kuberikan akan mengajarimu skill Fire Ball. Klik kanan pada item tersebut untuk mempelajari skillnya. Ayo pelajari skillnya."
+  },
+  {
+   "id": 3513,
+   "tx": "Tesnya cukup sederhana, dan tidak masalah jika kau tidak menjawab semuanya dengan benar. Namun jika benar, ada hadiah bonus kecil.;Yakin kau tidak ingin mengikuti tesnya?"
+  },
+  {
+   "id": 3514,
+   "tx": "Shadow Phantom Soldier di kota sedang mencari seseorang yang bisa diandalkan untuk menjalankan misi besar maupun kecil. Temui Shadow Phantom Soldier lagi."
+  },
+  {
+   "id": 3517,
+   "tx": "Senjata yang kuberikan adalah Double Axe. Untuk memakainya, pasang item Double Axe ke slot peralatan di Inventorymu. Ayo pasang saja."
+  },
+  {
+   "id": 3518,
+   "tx": "Senjata yang kuberikan adalah busur panah (crossbow). Untuk memakainya, pasang item crossbow ke slot peralatan di Inventorymu. Ayo pasang saja."
+  },
+  {
+   "id": 3521,
+   "tx": "Kalau begitu aku akan memberimu misi kedua segera. Raihlah kemenangan di Illusion Temple. Selesaikan misi dan kau akan dihadiahi 5.000.000 Exp. Tolong bawa MU ke zaman kemakmuran yang besar."
+  },
+  {
+   "id": 3522,
+   "tx": "Kalau begitu aku akan memberimu misi kedua segera. Aku tahu kemenangan di Illusion Temple sulit dicapai. Tetap gigih lagi dan lagi, dan kemenangan akan menjadi milikmu. Selesaikan misi dan kau akan dihadiahi 8.000.000 Exp."
+  },
+  {
+   "id": 3523,
+   "tx": "Kalau begitu aku akan memberimu misi kedua segera. Lindungi barang suci dan jangan menyerah sebelum kau menang di Illusion Temple. Selesaikan misi dan kau akan dihadiahi 8.000.000 Exp."
+  },
+  {
+   "id": 3524,
+   "tx": "Kalau begitu aku akan memberimu misi kedua segera. Kejutkan rival-rivalmu dengan meraih kemenangan di Illusion Temple. Selesaikan misi dan kau akan dihadiahi 5.000.000 Exp."
+  },
+  {
+   "id": 3525,
+   "tx": "Kalau begitu aku akan memberimu misi kedua segera. Jangan menunjukkan rasa takut terhadap banyak musuh sekaligus, dan raihlah kemenangan di Illusion Temple. Selesaikan misi dan kau akan dihadiahi 3.000.000 Exp."
+  },
+  {
+   "id": 3526,
+   "tx": "Kalau begitu kau harus menaklukkan Illusion Temple. Temui Phantom Soldier untuk memulai misi Illusion Temple."
+  },
+  {
+   "id": 3527,
+   "tx": "Kalau begitu kau harus menaklukkan Illusion Temple. Temui Phantom Soldier untuk menjalankan misi Illusion Temple."
+  },
+  {
+   "id": 3528,
+   "tx": "Ada banyak cara untuk membuktikan nilaimu di benua MU. Kau bisa mencoba menjadi yang terakhir bertahan di Chaos Castle, atau bekerja sama dengan rekan-rekanmu untuk bertempur melalui Blood Castle, Devil Square, atau Illusion Temple. Para pengembara menganggap pencapaian seperti itu sebagai beberapa pencapaian paling berharga yang bisa diraih seseorang."
+  },
+  {
+   "id": 3530,
+   "tx": "Ada banyak jenis monster yang mengintai di Dungeon. Dan yang ada di Level 2 menjadi sangat merepotkan. Aku ingin memintamu menanganinya. Maukah kau menerima misi ini? (Level 101-110)"
+  },
+  {
+   "id": 3531,
+   "tx": "Terlalu banyak monster yang menjaga jalan antara Dungeon Level 2 dan Level 3, menghalangi tim pengintai kita mencapai tingkat ketiga. Aku ingin memintamu melenyapkan monster-monster ini. Maukah kau menerima misi ini? (Level 121-130)"
+  },
+  {
+   "id": 3532,
+   "tx": "Ada tempat bernama Icarus, yang bisa diakses melalui tingkat tertinggi Lost Tower. Kau bisa mencapai tingkat itu jika memiliki kemampuan terbang. Namun, sekelompok monster telah muncul dan sekarang menghalangi masuk ke Icarus. Maukah kau melenyapkan monster-monster ini untuk kami? (Level 220-229)"
+  },
+  {
+   "id": 3533,
+   "tx": "Tidak ada misi yang tersedia. Silakan kembali lagi nanti."
+  },
+  {
+   "id": 3534,
+   "tx": "Sekarang ada sekelompok monster yang terus-menerus menyerang penghalang kita yang menampung energi Lost Tower. Devil dan Cursed Wizard tampaknya memberikan kerusakan paling besar pada penghalang. Maukah kau melenyapkan monster-monster ini untuk kami? (Level 191-199)"
+  },
+  {
+   "id": 3535,
+   "tx": "Ada rumor tentang Dark Knight dan Gorgon dari tingkat terendah Dungeon yang merencanakan sesuatu yang jahat. Pergilah ke Dungeon Level 3 dan kalahkan 80 Dark Knight. Lakukan ini, dan aku akan memberimu pilihan dua hadiah dari 30 Large Healing Potion, 30 Large Mana Potion, dan 15 Small Complex Potion. Saat mengambil hadiahmu, pastikan kau memiliki setidaknya 20 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 3536,
+   "tx": "Kabarnya Death Cow, yang didorong oleh energi jahat, sedang melakukan sesuatu yang mencurigakan di Lost Tower. Burulah 60 Death Cow, dan aku akan memberimu Devil's Invitation + 2 sebagai hadiah. Akan bijaksana jika mengambil misi ini bersama orang lain yang bisa kau percayai."
+  },
+  {
+   "id": 3537,
+   "tx": "Kabarnya jumlah Alquamos di Icarus semakin bertambah dan cukup merepotkan para pengembara. Pergilah ke Icarus dan burulah 80 Alquamos. Temui aku setelah selesai untuk menerima Devil's Invitation + 3 sebagai hadiah. Mereka adalah musuh yang kuat, dan sebaiknya kau berburu dengan bantuan orang lain."
+  },
+  {
+   "id": 3538,
+   "tx": "Keadaan menjadi serius...."
+  },
+  {
+   "id": 3540,
+   "tx": "Pintu ini tidak akan selalu terbuka untukmu."
+  },
+  {
+   "id": 3541,
+   "tx": "Ini adalah pengetahuan umum."
+  },
+  {
+   "id": 3542,
+   "tx": "Ini adalah akhir dari tutorial. Silakan nikmati pengalaman MU-mu."
+  },
+  {
+   "id": 3543,
+   "tx": "Yang ini mungkin sedikit menantang, ya? Aku menerima misinya. (Terima)"
+  },
+  {
+   "id": 3544,
+   "tx": "Misi ini seharusnya tidak terlalu menjadi masalah."
+  },
+  {
+   "id": 3545,
+   "tx": "Kali ini, tujuannya adalah bertahan di Chaos Castle. Temui Shadow Phantom Soldier, ikuti ujian ekstrem, lalu hadapi tantangan Chaos Castle."
+  },
+  {
+   "id": 3548,
+   "tx": "Mereka yang ingin mengabdi pada gens harus mencari pelayan klan yang sesuai."
+  },
+  {
+   "id": 3565,
+   "tx": "Untuk mengetahui kapan kau bisa masuk, tekan tombol F1. Lalu, bawa Devil's Invitation yang sesuai dengan levelmu ke Charon di Noria lima menit sebelum waktu masuk yang kau pilih. Kau akan dikirim ke Devil Square. Temui aku saat kau punya waktu, dan aku akan memberimu misi yang akan memberimu item yang dibutuhkan untuk masuk ke Devil Square."
+  },
+  {
+   "id": 3566,
+   "tx": "Untuk mengetahui kapan kau bisa masuk, tekan tombol F1. Lalu, bawa Scroll of Blood yang sesuai dengan levelmu ke Mirage di Elveland lima menit sebelum waktu masuk yang kau pilih. Kau kemudian akan dikirim ke Illusion Temple. Temui aku saat kau punya waktu, dan aku akan memberimu misi yang akan memberimu item yang dibutuhkan untuk masuk ke Illusion Temple."
+  },
+  {
+   "id": 3567,
+   "tx": "Untuk mengetahui kapan kau bisa masuk, cukup tekan tombol F1. Jika kau ingin masuk, bawa Invisibility Cloak yang sesuai dengan levelmu ke Messenger of Archangel sebelum waktu mulai yang dijadwalkan. Temui aku saat kau punya waktu, dan aku akan memberimu misi yang akan memberimu Invisibility Cloak agar kau bisa masuk ke Blood Castle."
+  },
+  {
+   "id": 3569,
+   "tx": "Untuk berkembang cepat dan menjadi prajurit perkasa, kau harus menyelesaikan berbagai peta acara. Temui Phantom Soldier jika kau ingin menjalankan misi peta acara."
+  },
+  {
+   "id": 3571,
+   "tx": "Untuk mengembalikan keseimbangan acara pertempuran, Secrarium memberikan tawaran kepada Lugard dan mengusulkan penerapan aturan baru. Aturan ini adalah semua orang yang berpartisipasi dalam acara harus mengenakan baju zirah penjaga. Lugard, yang menganggap tawaran itu adil, menerimanya."
+  },
+  {
+   "id": 3576,
+   "tx": "Sebagai permulaan, aku akan memberimu misi sederhana untuk melihat apakah kau memiliki kualitas yang tepat untuk menjadi pahlawan. Maukah kau menerima misi ini? (Karakter dasar: Level 240 - 270, Karakter lanjutan: Level 220 - 260)"
+  },
+  {
+   "id": 3581,
+   "tx": "Permintaan hari ini sudah ditutup. Kembalilah pada jam yang sama besok dan aku akan memberimu permintaan baru. Terima kasih."
+  },
+  {
+   "id": 3583,
+   "tx": "Terlalu mudah! Untuk memperbaiki peralatan tanpa bantuan NPC, aku harus berada di..."
+  },
+  {
+   "id": 3588,
+   "tx": "Town Portal Scroll bisa dibeli dari pedagang ramuan di kota. Ini adalah barang sekali pakai yang akan membawamu kembali ke kota terakhir yang kau kunjungi.;Karena kita sedang membahasnya, maukah kau pergi membeli Town Portal Scroll dari pedagang? Akan lebih mudah dipahami jika kau mencobanya sendiri."
+  },
+  {
+   "id": 3597,
+   "tx": "Pengembara, kau sekarang cukup kuat untuk membuat perbedaan di medan perang Kundun. Tim pengintai Shadow Phantom Guardians telah mengajukan permintaan sederhana. Mereka punya misi sederhana tentang pemusnahan monster dan senjata ampuh akan diberikan sebagai hadiah. Maukah kau menerima misi ini? (Level 161-165)"
+  },
+  {
+   "id": 3604,
+   "tx": "Coba pasang Double Axe."
+  },
+  {
+   "id": 3605,
+   "tx": "Coba pasang crossbow."
+  },
+  {
+   "id": 3606,
+   "tx": "Coba pelajari skill Summon Goblin."
+  },
+  {
+   "id": 3607,
+   "tx": "Coba tantang Blood Castle Level 1 dan selesaikan misi Archangel. Kembali setelahnya, dan aku akan memberimu 100.000 poin EXP dan 200.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Blood Castle Level 1."
+  },
+  {
+   "id": 3608,
+   "tx": "Coba tantang Blood Castle Level 1. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 1."
+  },
+  {
+   "id": 3609,
+   "tx": "Coba tantang Blood Castle Level 2 dan selesaikan misi Archangel. Kembali setelahnya, dan aku akan memberimu 400.000 poin EXP dan 300.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Blood Castle Level 2."
+  },
+  {
+   "id": 3610,
+   "tx": "Coba tantang Blood Castle Level 2. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 2."
+  },
+  {
+   "id": 3611,
+   "tx": "Coba tantang Blood Castle Level 3 dan selesaikan misi Archangel. Kembali setelahnya, dan aku akan memberimu 1.000.000 poin EXP dan 1 Jewel of Chaos sebagai hadiah. Namun, ini hanya berlaku untuk Blood Castle Level 3."
+  },
+  {
+   "id": 3612,
+   "tx": "Coba tantang Blood Castle Level 3. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 3."
+  },
+  {
+   "id": 3613,
+   "tx": "Coba tantang Blood Castle Level 4 dan selesaikan misi Archangel. Aku akan memberimu 1 Jewel of Soul sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Blood Castle Level 4."
+  },
+  {
+   "id": 3614,
+   "tx": "Coba tantang Blood Castle Level 4. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 4."
+  },
+  {
+   "id": 3615,
+   "tx": "Coba tantang Blood Castle Level 5 dan selesaikan misi Archangel. Aku akan memberimu 1 Jewel of Bless sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Blood Castle Level 5."
+  },
+  {
+   "id": 3616,
+   "tx": "Coba tantang Blood Castle Level 5. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 5."
+  },
+  {
+   "id": 3617,
+   "tx": "Coba tantang Blood Castle Level 6 dan selesaikan misi Archangel. Aku akan memberimu 1 Jewel of Life sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Blood Castle Level 6."
+  },
+  {
+   "id": 3618,
+   "tx": "Coba tantang Blood Castle Level 6. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 6."
+  },
+  {
+   "id": 3619,
+   "tx": "Coba tantang Blood Castle Level 7 dan selesaikan misi Archangel. Aku akan memberimu 2 Jewel of Bless sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Blood Castle Level 7."
+  },
+  {
+   "id": 3620,
+   "tx": "Coba tantang Blood Castle Level 7. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 7."
+  },
+  {
+   "id": 3621,
+   "tx": "Coba tantang Blood Castle Level 8 dan selesaikan misi Archangel. Aku akan memberimu 2 Jewel of Life sebagai hadiah saat kau kembali. Namun, ini hanya berlaku untuk Blood Castle Level 8."
+  },
+  {
+   "id": 3622,
+   "tx": "Coba tantang Blood Castle Level 8. Hancurkan gerbang kastil dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Blood Castle Level 8."
+  },
+  {
+   "id": 3623,
+   "tx": "Coba tantang Chaos Castle Level 1. Kembali padaku setelah mengalahkan 1 Guardsman, dan aku akan memberimu 100.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 1."
+  },
+  {
+   "id": 3624,
+   "tx": "Coba tantang Chaos Castle Level 1. Kalahkan 1 Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 1."
+  },
+  {
+   "id": 3625,
+   "tx": "Coba tantang Chaos Castle Level 2. Kembali padaku setelah mengalahkan 3 Guardsman, dan aku akan memberimu 200.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 2."
+  },
+  {
+   "id": 3626,
+   "tx": "Coba tantang Chaos Castle Level 2. Kalahkan 3 Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 2."
+  },
+  {
+   "id": 3627,
+   "tx": "Coba tantang Chaos Castle Level 3. Kembali padaku setelah mengalahkan 5 Guardsman, dan aku akan memberimu 800.000 poin EXP dan 500.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 3."
+  },
+  {
+   "id": 3628,
+   "tx": "Coba tantang Chaos Castle Level 4. Kembali padaku setelah mengalahkan 1 pengembara yang mengenakan Armor of Guardsman, dan aku akan memberimu 300.000 Zen dan 1 Jewel of Chaos sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 4."
+  },
+  {
+   "id": 3629,
+   "tx": "Coba tantang Chaos Castle Level 4. Kalahkan 1 pengembara yang mengenakan Armor of Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 4."
+  },
+  {
+   "id": 3630,
+   "tx": "Coba tantang Chaos Castle Level 5. Kembali padaku setelah mengalahkan 3 pengembara yang mengenakan Armor of Guardsman, dan aku akan memberimu 1 Jewel of Soul sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 5."
+  },
+  {
+   "id": 3631,
+   "tx": "Coba tantang Chaos Castle Level 5. Kalahkan 3 pengembara yang mengenakan Armor of Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 5."
+  },
+  {
+   "id": 3632,
+   "tx": "Coba tantang Chaos Castle Level 6. Kembali padaku setelah mengalahkan 5 pengembara yang mengenakan Armor of Guardsman, dan aku akan memberimu 1 Jewel of Harmony sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 6."
+  },
+  {
+   "id": 3633,
+   "tx": "Coba tantang Chaos Castle Level 6. Kalahkan 5 pengembara yang mengenakan Armor of Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 6."
+  },
+  {
+   "id": 3634,
+   "tx": "Coba tantang Chaos Castle Level 7. Kembali padaku setelah mengalahkan 10 pengembara yang mengenakan Armor of Guardsman, dan aku akan memberimu 2 Jewel of Soul sebagai hadiah. Namun, ini hanya berlaku untuk Chaos Castle Level 7."
+  },
+  {
+   "id": 3635,
+   "tx": "Coba tantang Chaos Castle Level 7. Kalahkan 10 pengembara yang mengenakan Armor of Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 7."
+  },
+  {
+   "id": 3636,
+   "tx": "Coba tantang Devil Square Level 1. Kalahkan monster dan raih 50 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 1."
+  },
+  {
+   "id": 3637,
+   "tx": "Coba tantang Devil Square Level 1. Jika kau meraih 50 poin, aku akan memberimu 100.000 Zen sebagai hadiah. Namun, ini hanya berlaku untuk Devil Square Level 1."
+  },
+  {
+   "id": 3638,
+   "tx": "Coba tantang Devil Square Level 2. Kalahkan monster dan raih 100 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 2."
+  },
+  {
+   "id": 3639,
+   "tx": "Coba tantang Devil Square Level 3. Kalahkan monster dan raih 130 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 3."
+  },
+  {
+   "id": 3640,
+   "tx": "Coba tantang Devil Square Level 4. Kalahkan monster dan raih 160 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 4."
+  },
+  {
+   "id": 3641,
+   "tx": "Coba tantang Devil Square Level 5. Kalahkan monster dan raih 190 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 5."
+  },
+  {
+   "id": 3642,
+   "tx": "Coba tantang Devil Square Level 6. Kalahkan monster dan raih 210 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 6."
+  },
+  {
+   "id": 3643,
+   "tx": "Coba tantang Devil Square Level 7. Kalahkan monster dan raih 240 poin untuk menerima hadiah dari Shadow Phantom Soldier. Namun, ini hanya berlaku untuk Devil Square Level 7."
+  },
+  {
+   "id": 3644,
+   "tx": "Coba tantang Illusion Temple Level 1. Menanglah dan aku akan memberimu 1 Jewel of Soul sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 1."
+  },
+  {
+   "id": 3645,
+   "tx": "Coba tantang Illusion Temple Level 1. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Soul. Namun, ini hanya berlaku untuk Illusion Temple Level 1."
+  },
+  {
+   "id": 3646,
+   "tx": "Coba tantang Illusion Temple Level 2. Menanglah dan aku akan memberimu 1 Jewel of Bless sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 2."
+  },
+  {
+   "id": 3647,
+   "tx": "Coba tantang Illusion Temple Level 2. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Bless. Namun, ini hanya berlaku untuk Illusion Temple Level 2."
+  },
+  {
+   "id": 3648,
+   "tx": "Coba tantang Illusion Temple Level 3. Menanglah dan aku akan memberimu 1 Jewel of Life sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 3."
+  },
+  {
+   "id": 3649,
+   "tx": "Coba tantang Illusion Temple Level 3. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Bless. Namun, ini hanya berlaku untuk Illusion Temple Level 3."
+  },
+  {
+   "id": 3650,
+   "tx": "Coba tantang Illusion Temple Level 4. Menanglah dan aku akan memberimu 1 Jewel of Chaos dan 1 Jewel of Soul sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 4."
+  },
+  {
+   "id": 3651,
+   "tx": "Coba tantang Illusion Temple Level 4. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Soul dan 1 Jewel of Chaos. Namun, ini hanya berlaku untuk Illusion Temple Level 4."
+  },
+  {
+   "id": 3652,
+   "tx": "Coba tantang Illusion Temple Level 5. Menanglah dan aku akan memberimu 1 Jewel of Soul dan 1 Jewel of Bless sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 5."
+  },
+  {
+   "id": 3653,
+   "tx": "Coba tantang Illusion Temple Level 5. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Soul dan 1 Jewel of Bless. Namun, ini hanya berlaku untuk Illusion Temple Level 5."
+  },
+  {
+   "id": 3654,
+   "tx": "Coba tantang Illusion Temple Level 6. Menanglah dan aku akan memberimu 1 Jewel of Bless dan 1 Jewel of Life sebagai hadiah. Namun, ini hanya berlaku untuk Illusion Temple Level 6."
+  },
+  {
+   "id": 3655,
+   "tx": "Coba tantang Illusion Temple Level 6. Menanglah dan kembali ke Shadow Phantom Soldier untuk menerima 1 Jewel of Bless dan 1 Jewel of Life. Namun, ini hanya berlaku untuk Illusion Temple Level 6."
+  },
+  {
+   "id": 3656,
+   "tx": "Coba tantang Chaos Castle Level 3. Kalahkan 5 Guardsman dan kembali menemui Shadow Phantom Soldier untuk mengklaim hadiahmu. Namun, ini hanya berlaku untuk Chaos Castle Level 3."
+  },
+  {
+   "id": 3657,
+   "tx": "Tutorial itu untuk anak-anak. Tolak saja."
+  },
+  {
+   "id": 3658,
+   "tx": "Twin Tail di Kanturu Relics sangat merugikan para pengembara. Pergilah ke Kanturu Relics dan burulah 100 Twin Tail. Temui aku setelah selesai untuk menerima Invisibility Cloak + 7 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 3669,
+   "tx": "Ketik '/Party off' di jendela Chat."
+  },
+  {
+   "id": 3670,
+   "tx": "Ketik '/Request off' di jendela Chat."
+  },
+  {
+   "id": 3671,
+   "tx": "Ketik '/off' di jendela Chat."
+  },
+  {
+   "id": 3672,
+   "tx": "Tugas yang tidak pantas"
+  },
+  {
+   "id": 3673,
+   "tx": "Sayangnya, Secrarium bertaruh bahwa kegelapan di hati para pengembara pada akhirnya akan memicu permusuhan dan perselisihan di antara mereka. Lugard juga menyadari sisi gelap para pengembara, tetapi kepercayaannya pada mereka tidak goyah. Pada akhirnya, para pengembara memang mulai berselisih satu sama lain seperti yang diantisipasi dewa kegelapan, dan Chaos Castle menjadi semakin... kacau."
+  },
+  {
+   "id": 3674,
+   "tx": "Uniria adalah item tunggangan yang bisa kau gunakan di medan perang. Pasang di pojok kiri atas jendela Inventory untuk perjalanan lebih cepat di seluruh medan perang."
+  },
+  {
+   "id": 3676,
+   "tx": "Setelah masuk, kau harus menunggu pemain lain masuk. Para pemain kemudian akan dibagi menjadi dua tim: Alliance Camp dan Illusion Sorcery Camp. Pihak yang membawa lebih banyak relik ke sisi mereka sendiri menang."
+  },
+  {
+   "id": 3683,
+   "tx": "Menggunakan Town Portal Scroll akan membawamu kembali ke kota terakhir yang kau kunjungi."
+  },
+  {
+   "id": 3685,
+   "tx": "Namun, menggunakan tombol M, dimungkinkan untuk bepergian ke area jauh dalam sekejap. Berapakah level minimum yang harus dicapai dan jumlah Zen yang dibutuhkan untuk memasuki Dungeon?"
+  },
+  {
+   "id": 3692,
+   "tx": "Vanert Reicht mungkin telah menyerahkan kepemimpinan Noble Alliance Arca kepada Duprian Winston pada awal aliansi, tetapi sang master selalu berkomitmen untuk melenyapkan antek-antek busuk Kundun dan kebangkitan kekaisaran MU. Semua orang tahu tentang keinginan Duprian Winston untuk menaklukkan kekaisaran di bawah pemerintahannya yang mutlak. Sangat penting bagi pahlawan sepertimu untuk membantu Vanert Reicht menyegel Kundun dan memulihkan perdamaian di kekaisaran MU."
+  },
+  {
+   "id": 3706,
+   "tx": "Baiklah. Berikan misinya padaku."
+  },
+  {
+   "id": 3707,
+   "tx": "Baiklah. Berapa banyak yang harus kubeli?"
+  },
+  {
+   "id": 3708,
+   "tx": "Baiklah. Aku akan menerima tantangan ini."
+  },
+  {
+   "id": 3709,
+   "tx": "Baiklah. Tampaknya Gorgon cukup merepotkan pengembara pemula di Dungeon akhir-akhir ini. Burulah 60 Gorgon, dan aku akan memberimu Invisibility Cloak + 2 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 3710,
+   "tx": "Baiklah. Tampaknya Hell Hound cukup merepotkan pengembara pemula di Dungeon akhir-akhir ini. Burulah 40 Hell Hound, dan aku akan memberimu Invisibility Cloak + 1 sebagai hadiah. Di levelmu sekarang, terlalu berbahaya bagimu berburu monster sendirian. Lebih baik kau berburu dalam party."
+  },
+  {
+   "id": 3711,
+   "tx": "Baiklah. Tampaknya Hell Spider cukup merepotkan pengembara pemula di Dungeon akhir-akhir ini. Jika kau mengalahkan 60 Hell Spider, aku akan menawarkanmu pilihan dua hadiah dari 15 Large Healing Potion, 15 Large Mana Potion, dan 8 Small SD Potion. Saat mengambil hadiahmu, pastikan kau memiliki setidaknya 13 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 3712,
+   "tx": "Baiklah. Tampaknya Larva cukup merepotkan pengembara pemula di Dungeon akhir-akhir ini. Jika kau mengalahkan 40 Larva, aku akan menawarkanmu pilihan dua hadiah dari 30 Healing Potion, 30 Mana Potion, dan 4 Small SD Potion. Saat mengambil hadiahmu, pastikan kau memiliki setidaknya 20 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 3713,
+   "tx": "Baiklah. Biarkan aku mencobanya. (Terima)"
+  },
+  {
+   "id": 3714,
+   "tx": "Baiklah. Ceritakan lebih lanjut."
+  },
+  {
+   "id": 3728,
+   "tx": "Kunjungi Shadow Phantom Soldier untuk menerima hadiah kecil."
+  },
+  {
+   "id": 3741,
+   "tx": "Prajurit! Selamat datang."
+  },
+  {
+   "id": 3744,
+   "tx": "Watchers of Kundun (1)"
+  },
+  {
+   "id": 3745,
+   "tx": "Watchers of Kundun (2)"
+  },
+  {
+   "id": 3746,
+   "tx": "Watchers of Kundun (3)"
+  },
+  {
+   "id": 3749,
+   "tx": "Banyak yang harus kita bahas. Mari lanjut ke langkah berikutnya."
+  },
+  {
+   "id": 3750,
+   "tx": "Kami melakukan penyelidikan setelah komunikasi dengan tim pengintai kita di Dungeon mulai jarang dan kami menemukan bahwa mereka terlalu sibuk menghadapi semakin banyaknya monster. Maukah kau pergi ke Dungeon dan membantu membasmi monster-monster ini? (Level 66-79)"
+  },
+  {
+   "id": 3751,
+   "tx": "Kita hampir sampai di akhir tutorial. Sekarang setelah kau memiliki skill, masuk akal jika kau menambah pengalaman tempur. Kembalilah saat mencapai level tertentu, dan aku akan memberimu Uniria sebagai hadiah."
+  },
+  {
+   "id": 3761,
+   "tx": "Selamat datang kembali. Sekarang yang perlu kau lakukan hanyalah melenyapkan Gaion di Varka. Apakah kau siap? (Lv. 350 - 400)"
+  },
+  {
+   "id": 3762,
+   "tx": "Selamat datang di MU.;Aku akan membantumu dalam perjalananmu menjadi prajurit sejati."
+  },
+  {
+   "id": 3763,
+   "tx": "Selamat datang di cabang Devias guild tentara bayaran yang baru didirikan. Kami adalah pihak yang menghentikan Tentara Kundun bersama dengan 5 klan besar, tetapi sekarang sebagian besar veteran telah pensiun. Jadi kami memutuskan untuk menerapkan sistem Tentara Bayaran Gratis saat membuka kantor guild ini."
+  },
+  {
+   "id": 3764,
+   "tx": "Selamat datang di dunia Mu.;Kami telah menunggu pahlawan sepertimu untuk tiba dan menghentikan kekacauan yang dibawa Kundun ke alam Mu."
+  },
+  {
+   "id": 3765,
+   "tx": "Selamat datang, ini adalah guild tentara bayaran. Kami menyampaikan berbagai permintaan kepada tentara bayaran gratis yang terdaftar. Ada hadiah saat kau berhasil menyelesaikan permintaan, jadi cobalah."
+  },
+  {
+   "id": 3766,
+   "tx": "Bagus sekali. Sekarang tolong bawakan aku tongkat dari Burnt Murderer di Vulcanus. (Lv. 350 - 400)"
+  },
+  {
+   "id": 3767,
+   "tx": "Yah, kau mungkin tidak ingin tahu lebih banyak tentang dia, tapi misi tetaplah misi. Aku akan memberitahumu lebih lanjut jika kau kembali. (Misi telah dibatalkan.)"
+  },
+  {
+   "id": 3768,
+   "tx": "Apakah kau berhasil mendapatkan banyak item untuk latihanmu? Aku harus memberitahumu sekarang bahwa tidak mudah memasuki Illusion Temple. Namun, aku punya misi yang akan memberimu tiket masuk ke Illusion Temple. Maukah kau menerimanya? (Semua karakter: Level 351-380)"
+  },
+  {
+   "id": 3769,
+   "tx": "Apakah kau berhasil mendapatkan banyak item untuk latihanmu? Aku harus memberitahumu sekarang bahwa tidak mudah memasuki Illusion Temple. Namun, aku punya misi yang akan memberimu tiket masuk ke Illusion Temple. Maukah kau menerimanya? (Semua karakter: Master Level)"
+  },
+  {
+   "id": 3773,
+   "tx": "Apa yang dilakukan penjaga ratu di tempat seperti ini?"
+  },
+  {
+   "id": 3774,
+   "tx": "Ada yang bisa kubantu? Ah... kau datang karena permintaan dari kami. Apakah kau tahu Gaion? Dia sebenarnya adalah saudara seperjuangan master guild tentara bayaran pertama, tetapi para tetua kami ingin menyingkirkannya karena dia semacam simbol pengkhianatan. Aku tidak mengerti kekhawatiran mereka karena dia tidak akan pernah bisa meninggalkan Varka. (Lv. 350 - 400)"
+  },
+  {
+   "id": 3775,
+   "tx": "Ada yang bisa kubantu? Ah... kaulah dari guild tentara bayaran! Sejujurnya, aku tidak akan pernah meminta bantuan guild tentara bayaran jika punya pilihan lain... Yah, lupakan saja. Ada 2 permintaan, pertama adalah mengumpulkan bubuk Stardust dan kedua, mendapatkan permata langka. Maukah kau menerima? (Lv. 350 - 400)"
+  },
+  {
+   "id": 3776,
+   "tx": "Apa yang harus dilakukan jika tidak ingin menerima permintaan party?"
+  },
+  {
+   "id": 3777,
+   "tx": "Apa yang harus dilakukan jika ingin berdagang dengan karakter yang ada di depanmu?"
+  },
+  {
+   "id": 3778,
+   "tx": "Apa itu tentara bayaran gratis?"
+  },
+  {
+   "id": 3779,
+   "tx": "Apa itu Town Portal Scroll?"
+  },
+  {
+   "id": 3780,
+   "tx": "Apa urusanmu dengan gens kami? Aku Conrad, Gens Vanert Steward."
+  },
+  {
+   "id": 3781,
+   "tx": "Perbekalan macam apa...?"
+  },
+  {
+   "id": 3782,
+   "tx": "Level berapa yang harus aku capai?"
+  },
+  {
+   "id": 3783,
+   "tx": "Apa itu Uniria?"
+  },
+  {
+   "id": 3784,
+   "tx": "Ketika seorang prajurit yang memilikinya menjadi ahli yang sempurna dalam bidangnya, cincin ini berubah menjadi item unik yang akan membantu tuannya mencapai ketinggian yang lebih besar."
+  },
+  {
+   "id": 3787,
+   "tx": "Saat pertama kali memasuki Blood Castle, kau akan menemui rintangan: kepercayaan di dalam party-mu. Temui Shadow Phantom Soldier untuk menguji kepercayaan di dalam party-mu, dan hadapi tantangan Blood Castle."
+  },
+  {
+   "id": 3788,
+   "tx": "Saat berburu monster, kau bisa menggunakan serangan biasa dengan klik kiri atau menggunakan serangan skill dengan klik kanan."
+  },
+  {
+   "id": 3792,
+   "tx": "Saat mencapai level tertentu, kau akan bisa memperbaiki peralatanmu langsung dari jendela Inventory. Level berapakah itu?"
+  },
+  {
+   "id": 3793,
+   "tx": "Saat ingin membentuk party dengan seorang karakter, hadapi karakter tersebut dan ketik '/party' di jendela Chat. Apa yang harus dilakukan jika tidak ingin menerima permintaan party?"
+  },
+  {
+   "id": 3794,
+   "tx": "Saat kau ingin berbicara dengan teman dan tahu ID-nya, atau jika kau ingin menyampaikan pesan pribadi, kirimkan bisikan menggunakan Tab dari jendela Chat."
+  },
+  {
+   "id": 3795,
+   "tx": "Di mana aku bisa menemukan pedagang?"
+  },
+  {
+   "id": 3796,
+   "tx": "Di mana aku bisa mempelajari lebih banyak skill?"
+  },
+  {
+   "id": 3797,
+   "tx": "Di mana aku bisa mempelajari skill?"
+  },
+  {
+   "id": 3798,
+   "tx": "Tombol mana yang digunakan untuk mengirim bisikan dari jendela Chat?"
+  },
+  {
+   "id": 3799,
+   "tx": "Saat berada di kota, carilah NPC Shadow Phantom Soldier."
+  },
+  {
+   "id": 3800,
+   "tx": "Bisikan digunakan untuk berbicara dengan teman yang jauh atau untuk menyampaikan pesan pribadi. Tombol mana yang digunakan untuk mengirim bisikan dari jendela Chat?"
+  },
+  {
+   "id": 3803,
+   "tx": "Siapa yang harus kau temui untuk menggabungkan item?"
+  },
+  {
+   "id": 3804,
+   "tx": "Wah! Itu benar-benar praktis!"
+  },
+  {
+   "id": 3834,
+   "tx": "Basmi Iron Rider yang sulit ditangkap"
+  },
+  {
+   "id": 3836,
+   "tx": "Dengan bantuan NPC di kota, kau tidak hanya bisa menggabungkan item, tetapi juga meningkatkan baju zirahmu dengan menambahkan permata dan banyak lagi. Pastikan untuk mengunjungi mereka semua."
+  },
+  {
+   "id": 3856,
+   "tx": "Maukah kau membawakan Tantalos's Armor terlebih dahulu? Aku akan memberimu hadiah yang pantas saat kau kembali dengan 20 set baju zirah dari Tantalos di Tarkan 2."
+  },
+  {
+   "id": 3857,
+   "tx": "Maukah kau mengunjungi Chaos Castle, arena para dewa? Tidak ada tempat yang lebih baik untuk membuktikan kekuatanmu. Mengapa tidak mendengarkan apa yang kukatakan lalu memutuskan? (Karakter dasar: Level 15-49, Karakter lanjutan: Level 15-29)"
+  },
+  {
+   "id": 3858,
+   "tx": "Ya, aku akan menerimanya. (Terima)"
+  },
+  {
+   "id": 3859,
+   "tx": "Ya, tolong. (Terima)"
+  },
+  {
+   "id": 3860,
+   "tx": "Ya, segera. (Terima)"
+  },
+  {
+   "id": 3861,
+   "tx": "Ya. Aku ingin bergabung."
+  },
+  {
+   "id": 3862,
+   "tx": "Ya. Aku ingin pergi."
+  },
+  {
+   "id": 3863,
+   "tx": "Ya. Aku akan mengikuti tesmu."
+  },
+  {
+   "id": 3865,
+   "tx": "Kau adalah anggota gens yang berbeda."
+  },
+  {
+   "id": 3866,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi yang akan memberimu item yang kau butuhkan untuk masuk ke Blood Castle. Maukah kau menerima misi ini? (Karakter dasar: Level 81-130, Karakter lanjutan: Level 61-110)"
+  },
+  {
+   "id": 3867,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi sederhana yang akan memberimu Scroll of Blood, yang akan memberimu akses ke Illusion Temple. Maukah kau menerimanya? (Semua karakter: Level 220-270)"
+  },
+  {
+   "id": 3868,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi sederhana yang akan memberimu Scroll of Blood, yang akan memberimu akses ke Illusion Temple. Maukah kau menerimanya? (Semua karakter: Level 271-320)"
+  },
+  {
+   "id": 3869,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi sederhana yang akan memberimu undangan yang memberimu akses ke Devil Square. Maukah kau menerima misi ini? (Karakter dasar: Level 131-180, Karakter lanjutan: Level 111-160)"
+  },
+  {
+   "id": 3870,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi sederhana yang akan memberimu undangan yang memberimu akses ke Devil Square. Maukah kau menerima misi ini? (Karakter dasar: Level 15-130, Karakter lanjutan: Level 10-110)"
+  },
+  {
+   "id": 3871,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku akan memberimu misi yang akan memberimu item yang kau butuhkan untuk memasuki acara tersebut. Maukah kau menerima misi ini? (Karakter dasar: Level 15-49, Karakter lanjutan: Level 15-29)"
+  },
+  {
+   "id": 3872,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku akan memberimu misi yang akan memberimu item yang kau butuhkan untuk memasuki acara tersebut. Maukah kau menerima misi ini? (Karakter dasar: Level 50-119, Karakter lanjutan: Level 30-99)"
+  },
+  {
+   "id": 3874,
+   "tx": "Kau penuh semangat! Baiklah. Mari coba tambahkan item ke inventarisimu. Ambil Zen yang baru kuberikan dan belilah 5 apel dari pedagang."
+  },
+  {
+   "id": 3876,
+   "tx": "Kau bisa mendapatkan peralatan luar biasa di Illusion Temple. Bersiaplah dengan matang sebelum masuk karena ini bukan tempat yang bisa dianggap remeh. Pergilah ke Shadow Phantom Soldier dan terimalah misi yang akan memberimu item yang memberimu akses ke Illusion Temple."
+  },
+  {
+   "id": 3877,
+   "tx": "Kau bisa menemukan kekayaan dan ketenaran di Illusion Temple. Jika kau mengambil tantangan kuil, kau mungkin mendapatkan sesuatu yang penting untuk latihanmu. Maukah kau mengambil tantangan tersebut? (Semua karakter: Level 220-270)"
+  },
+  {
+   "id": 3879,
+   "tx": "Kau bisa memperbaiki peralatanmu oleh Hanzo the Blacksmith (117,140) di Lorencia, Rhea (30, 235) di Elveland, atau Eo the Craftsman (194, 123) di Noria. Gunakan jasa mereka sesering mungkin."
+  },
+  {
+   "id": 3884,
+   "tx": "Kau bisa mendaftar ke guild tentara bayaran sebagai tentara bayaran gratis dengan 1 juta Zen. Tercia memberikan 1 misi per hari kepada tentara bayaran gratis yang terdaftar."
+  },
+  {
+   "id": 3885,
+   "tx": "Kau tidak bisa bergabung dengan gens jika kau anggota aliansi guild."
+  },
+  {
+   "id": 3886,
+   "tx": "Kau tidak bisa bergabung dengan gens jika kau anggota aliansi guild. Tinggalkan aliansi guild dan coba bergabung dengan gens lagi."
+  },
+  {
+   "id": 3887,
+   "tx": "Kau tidak bisa bergabung dengan gens saat sedang dalam party."
+  },
+  {
+   "id": 3888,
+   "tx": "Kau tidak bisa bergabung dengan gens tersebut."
+  },
+  {
+   "id": 3889,
+   "tx": "Kau tidak bisa meninggalkan gens."
+  },
+  {
+   "id": 3890,
+   "tx": "Kau tidak punya cukup ruang untuk item tersebut. Silakan kosongkan Inventorymu dan coba lagi."
+  },
+  {
+   "id": 3895,
+   "tx": "Kau telah menerima ujian pertama. Aku ingin kau membuktikan kemampuan tempurmu dengan mengalahkan 5 Guardsman di Chaos Castle, mengantarkan senjata Archangel di Blood Castle, dan bertahan sampai akhir di Devil Square. Selesaikan misi dan kau akan dihadiahi Jewel of Bless, Jewel of Soul, atau Jewel of Chaos."
+  },
+  {
+   "id": 3896,
+   "tx": "Kau sudah bergabung dengan gens tersebut."
+  },
+  {
+   "id": 3897,
+   "tx": "Kau telah menyelesaikan ujian kelima untuk menjadi pahlawan. Misi berikutnya yang akan kuberikan adalah yang terakhir untuk melihat apakah kau layak menjadi pahlawan. (Master level)"
+  },
+  {
+   "id": 3898,
+   "tx": "Kau telah menyelesaikan ujian pertama untuk menjadi pahlawan. Misi berikutnya yang akan kuberikan adalah untuk melihat apakah kau punya keberanian menjadi pahlawan. Maukah kau menerima misi ini? (Karakter dasar: Level 300 - 320, Karakter lanjutan: Level 271 - 320)"
+  },
+  {
+   "id": 3899,
+   "tx": "Kau telah menyelesaikan tutorial. Terimalah Ring of Hero dan Ring of Warrior ini. Ini adalah hadiah untukmu dari ratu."
+  },
+  {
+   "id": 3900,
+   "tx": "Kau telah meninggalkan gens."
+  },
+  {
+   "id": 3901,
+   "tx": "Kau belum bergabung dengan gens."
+  },
+  {
+   "id": 3902,
+   "tx": "Kau belum bergabung dengan gens. Kau harus terlebih dahulu menjadi anggota gens agar bisa meninggalkannya."
+  },
+  {
+   "id": 3903,
+   "tx": "Kau sekarang telah menyelesaikan ujian keempat untuk menjadi pahlawan. Misi berikutnya yang akan kuberikan adalah untuk melihat apakah kau punya kegigihan menjadi pahlawan. Maukah kau menerima misi ini? (Level 381 - 400)"
+  },
+  {
+   "id": 3904,
+   "tx": "Kau sekarang telah menyelesaikan ujian kedua untuk menjadi pahlawan. Misi berikutnya yang akan kuberikan adalah untuk melihat apakah kau punya semangat tempur menjadi pahlawan. Maukah kau menerima misi ini? (Level 331 - 350)"
+  },
+  {
+   "id": 3905,
+   "tx": "Kau sekarang telah menyelesaikan ujian ketiga untuk menjadi pahlawan. Misi berikutnya yang akan kuberikan adalah untuk melihat apakah kau punya mentalitas yang tepat menjadi pahlawan. Maukah kau menerima misi ini? (Level 351 - 380)"
+  },
+  {
+   "id": 3906,
+   "tx": "Kau harus setidaknya level 50 untuk bisa bergabung dengan gens."
+  },
+  {
+   "id": 3907,
+   "tx": "Kau sudah cukup tahu. Aku tidak ingin membicarakannya. (Tolak)"
+  },
+  {
+   "id": 3908,
+   "tx": "Kau meninggalkan gens. Kontribusimu telah direset menjadi 0."
+  },
+  {
+   "id": 3910,
+   "tx": "Kau mungkin tidak lagi menganggap Blood Castle menantang. Namun, masih akan sulit bagimu mendapatkan Invisibility Cloak yang sesuai dengan levelmu. Aku punya misi yang akan memberimu item yang kau butuhkan untuk masuk ke Blood Castle. Maukah kau menerima misi ini? (Karakter dasar: Level 281-330, Karakter lanjutan: Level 261-310)"
+  },
+  {
+   "id": 3913,
+   "tx": "Kau akan menunggu sekitar satu menit sebelum benar-benar masuk. Acara dimulai setelah waktu tunggu ini berlalu. Setelah dimulai, para pengembara dan penjaga yang korup akan saling bertarung sampai mati dalam pertempuran bebas tanpa aturan."
+  },
+  {
+   "id": 3914,
+   "tx": "Kau akan menunggu sekitar satu menit sebelum benar-benar masuk. Acara dimulai setelah waktu tunggu ini berlalu. Setelah dimulai, para pengembara diadu dengan 50 penjaga korup dalam pertempuran bebas sampai mati tanpa aturan."
+  },
+  {
+   "id": 3915,
+   "tx": "Kau akan menunggu sekitar satu menit sebelum benar-benar masuk. Kau akan masuk ke Blood Castle setelah waktu tunggu ini berlalu. Begitu berada di dalam Blood Castle, kau bisa membeli waktu dengan mengalahkan 40 monster yang dipanggil oleh seorang nekromancer bernama Red Skull."
+  },
+  {
+   "id": 3916,
+   "tx": "Kau salah besar jika mengira telah mencapai puncak. Menguji dirimu dan kemampuanmu di Chaos Castle bukanlah ide buruk. Aku punya misi untukmu. Misi di mana kau bisa mendapatkan item yang kau butuhkan di Chaos Castle.... Maukah kau menerima? (Karakter dasar: Level 300-400, Karakter lanjutan: Level 280-400)"
+  },
+  {
+   "id": 3917,
+   "tx": "Kau akan bisa menggunakan Ring of Hero di level 40 dan Ring of Warrior di level 80. Menjatuhkan cincin akan memecahkan segelnya dan mengubahnya menjadi item.;Lain kali kita bertemu, aku sungguh berharap melihat prajurit yang lebih perkasa di hadapanku. Pergilah sekarang dan bangun pengalaman serta kekuatanmu dan bebaskan dunia ini dari cengkeraman Kundun!;(Kau telah menyelesaikan tutorial.)"
+  },
+  {
+   "id": 3918,
+   "tx": "Kau akan menghadapi aliran monster kuat yang terus-menerus di Devil Square. Membentuk party dengan pengembara lain sebelum masuk akan memberimu peluang bertahan hidup yang lebih baik."
+  },
+  {
+   "id": 3919,
+   "tx": "Kau perlu rutin memperbaiki peralatanmu karena daya tahannya akan berkurang seiring kau berburu monster. Saat mencapai level tertentu, kau akan bisa memperbaiki peralatanmu langsung dari jendela Inventory. Level berapakah itu?"
+  },
+  {
+   "id": 3920,
+   "tx": "Kau tidak akan bisa menggunakan skill tertentu seperti Teleport atau Telekinesis sambil memegang relik. Di sisi lain, ada skill khusus yang hanya bisa digunakan di Illusion Temple. Menggunakan skill ini dengan bijak akan memudahkan pihakmu untuk menang."
+  },
+  {
+   "id": 3921,
+   "tx": "Kau sekarang akan semakin sulit menemukan tempat berburu yang cocok. Bagaimana kalau menemukan tempat berburu dengan menerima misi dari Shadow Phantom Soldier? Temui aku saat mencapai level baru untuk menerima misi yang akan memberimu peralatan berharga."
+  },
+  {
+   "id": 3922,
+   "tx": "Kau sekarang harus lebih fokus pada serangan terkoordinasi dengan rekan-rekanmu daripada hanya mengalahkan monster. Tidak ada tempat yang lebih baik daripada Devil Square untuk berlatih hal ini. Selesaikan misi sederhana yang akan memberimu undangan ke Devil Square, dan berlatihlah di sana bersama rekan-rekanmu. Maukah kau menerima misi ini? (Karakter dasar: Level 281-330, Karakter lanjutan: Level 261-310)"
+  },
+  {
+   "id": 3923,
+   "tx": "Kau akan menunggu sekitar satu menit sebelum benar-benar masuk. Setelah waktu tunggu ini berlalu, monster akan mulai muncul. Monster akan terus menyerang selama sepuluh menit, dan membunuh mereka akan memberimu poin. Jika skor cukup tinggi, kau bahkan mungkin menerima hadiah."
+  },
+  {
+   "id": 3924,
+   "tx": "Kau kembali lebih cepat dari yang kuduga. Aku punya misi yang akan memberimu item yang kau butuhkan untuk masuk ke Blood Castle. Maukah kau menerima misi ini? (Karakter dasar: Level 15-80, Karakter lanjutan: Level 10-60)"
+  },
+  {
+   "id": 3925,
+   "tx": "Kau cukup berwawasan. Aku akan memberimu item yang kau butuhkan untuk mengakses Chaos Castle. Saat kau punya waktu, temui aku untuk misi yang mudah."
+  },
+  {
+   "id": 3926,
+   "tx": "Kau cukup berwawasan. Aku akan memberimu item yang kau butuhkan untuk masuk ke Devil Square. Saat kau punya waktu, temui aku untuk misi yang mudah."
+  },
+  {
+   "id": 3927,
+   "tx": "Kau cukup berwawasan. Aku bertanggung jawab mendistribusikan item yang diperlukan untuk masuk ke Illusion Temple. Saat kau punya waktu, temui aku untuk misi mudah yang akan memberimu tiket masuk."
+  },
+  {
+   "id": 3928,
+   "tx": "Kau cukup berwawasan. Untuk menembus penghalang di sekeliling Blood Castle, kau membutuhkan Invisibility Cloak. Jika kau lulus ujian sederhana dariku, aku akan memberimu Invisibility Cloak sebelum kau menuju Blood Castle. Saat kau punya waktu, temui aku untuk misi yang mudah."
+  },
+  {
+   "id": 3929,
+   "tx": "Kau melakukannya dengan baik. Mari kita urus satu hal lagi sebelum aku memintamu menghadapi monster yang lebih tangguh. Bicaralah denganku lagi dan terima buff peningkatan serangan dan pertahanan."
+  },
+  {
+   "id": 3930,
+   "tx": "Kau melakukannya dengan baik. Skill Falling Slash sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Klik ikonnya.;Apakah ikon skill di sebelah kanan berubah menjadi Falling Slash? Saat berburu monster, cukup klik kanan mouse untuk menggunakan skill yang ditetapkan."
+  },
+  {
+   "id": 3931,
+   "tx": "Kau melakukannya dengan baik. Skill Fire Ball sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Klik ikonnya.;Apakah ikon skill di sebelah kanan berubah menjadi Fire Ball? Saat berburu monster, cukup klik kanan mouse untuk menggunakan skill yang ditetapkan."
+  },
+  {
+   "id": 3932,
+   "tx": "Kau melakukannya dengan baik. Skill Summon Goblin sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Klik ikonnya.;Apakah ikon skill di sebelah kanan berubah menjadi Summon Goblin? Saat berburu monster, cukup klik kanan mouse untuk menggunakan skill yang ditetapkan."
+  },
+  {
+   "id": 3933,
+   "tx": "Kau melakukannya dengan baik. Skill Triple Shot sekarang seharusnya menjadi salah satu skill yang bisa kau gunakan. Klik ikonnya.;Apakah ikon skill di sebelah kanan berubah menjadi Triple Shot? Saat berburu monster, cukup klik kanan mouse untuk menggunakan skill yang ditetapkan."
+  },
+  {
+   "id": 3934,
+   "tx": "Kau sudah menjelaskan cukup. Mari lanjut tutorialnya."
+  },
+  {
+   "id": 3935,
+   "tx": "Kau membuat pilihan yang bijak. Misi pertama untuk ujian ketiga melibatkan mengalahkan 20 Guardsman di Chaos Castle, mengantarkan senjata Archangel di Blood Castle, dan bertahan sampai akhir Devil Square. Selesaikan misi dan kau akan dihadiahi Jewel of Bless, Jewel of Life, Jewel of Harmony, atau dua Jewel of Soul."
+  },
+  {
+   "id": 3936,
+   "tx": "Kau telah mencapai tahap akhir Blood Castle, tetapi seharusnya tetap menyenangkan jika memiliki rekan di sisimu. Namun, masih akan sulit bagimu mendapatkan Invisibility Cloak yang sesuai dengan levelmu. Aku punya misi yang akan memberimu item yang kau butuhkan untuk masuk ke Blood Castle. Maukah kau menerimanya? (Semua karakter: Master Level)"
+  },
+  {
+   "id": 3937,
+   "tx": "Kau benar-benar telah menjadi prajurit yang hebat. Aku yakin ratu sendiri akan bangga padamu. Sejujurnya, dia telah menyiapkan beberapa item untuk prajurit sepertimu."
+  },
+  {
+   "id": 3938,
+   "tx": "Guildmu adalah bagian dari gens yang berbeda."
+  },
+  {
+   "id": 3940,
+   "tx": "Zaikan dari Tarkan 2 seharusnya cukup. Pergilah ke Tarkan 2 dan kalahkan 30 Zaikan. Temui aku setelah itu, dan aku akan memberimu pilihan antara 20 Large SD Potion dan 30 Large Complex Potion sebagai hadiahmu. Saat mengambil hadiahmu, pastikan kau memiliki setidaknya 20 slot kosong di Inventory. Ingat itu."
+  },
+  {
+   "id": 3963,
+   "tx": "... Dia tampaknya orang yang pelit..."
+  },
+  {
+   "id": 3964,
+   "tx": "... Hmm, demi klan..."
+  },
+  {
+   "id": 3965,
+   "tx": "... Sepertinya ada sesuatu yang mengganggu..."
+  },
+  {
+   "id": 3966,
+   "tx": "... Begitulah yang terjadi."
+  },
+  {
+   "id": 3967,
+   "tx": "...Keduanya cukup mudah..."
+  },
+  {
+   "id": 3968,
+   "tx": "... Apa yang ada di balik cerita ini?"
+  }
+ ]
+}

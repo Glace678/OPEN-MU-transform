@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">準備遊戲資源</string>
+    <string name="preparing_detail">首次啟動會將遊戲資料解壓縮至手機內部儲存空間。請保持應用程式在前景執行。</string>
+    <string name="ready">遊戲已準備就緒</string>
+    <string name="start_game">進入遊戲</string>
+    <string name="settings">設定</string>
+    <string name="gesture_help">手勢說明</string>
+    <string name="retry">重試</string>
+    <string name="extract_failed">遊戲資源準備失敗</string>
+    <string name="save">儲存</string>
+    <string name="back">返回</string>
+    <string name="display">畫面</string>
+    <string name="controls">操作</string>
+    <string name="network">伺服器</string>
+    <string name="fps">影格率</string>
+    <string name="render_scale">算繪比例</string>
+    <string name="effects">特效品質</string>
+    <string name="ui_scale">觸控按鈕大小</string>
+    <string name="safe_margin">邊緣安全區</string>
+    <string name="touch_opacity">觸控按鈕透明度</string>
+    <string name="vibration">觸控與戰鬥震動</string>
+    <string name="handedness">主要操作手</string>
+    <string name="server_address">伺服器位址</string>
+    <string name="server_port">連線埠</string>
+    <string name="local_pairing">本機配對免登入（僅限區域網路）</string>
+    <string name="restart_note">畫面與伺服器設定會在下次進入遊戲時生效。</string>
+    <string name="invalid_server">請輸入伺服器的 IPv4 位址或網域名稱，不要包含通訊協定與連線埠。</string>
+    <string name="invalid_local_server">本機配對只支援本機或區域網路 IPv4 位址，例如 192.168.1.20。使用雲端伺服器時請關閉本機配對。</string>
+    <string name="invalid_port">連線埠必須介於 1 到 65535。</string>
+    <string name="saved">設定已儲存</string>
+    <string name="tutorial_title">手機操作方式</string>
+    <string name="tutorial_body">選單：單指點選以選取或確認。\n角色選擇：點選角色，再點右下角的進入按鈕。\n\n一般背包：點一下查看；原地按住半秒使用可用物品或學習技能。要換格，按住後直接拖曳；拖出背包放開會放回原位。\n底部四個藥水格：點一下使用；長按不會連續使用。\n\n進入遊戲世界後：\n在移動區單指拖曳：移動\n技能區點一下：選取；點兩下：施放目前技能\n雙指左右滑動：切換技能\n雙指上下滑動或捏合：調整鏡頭\n三指上滑：地圖；三指下滑：設定\n\n底部藥水列與介面操作不會觸發世界技能。</string>
+    <string name="understood">了解，進入遊戲</string>
+    <string name="help_close">關閉</string>
+    <string name="game_data_missing">APK 中缺少 game-data.zip，這不是完整的遊戲套件。</string>
+    <string name="storage_low">手機內部儲存空間不足，至少還需要 %1$s。</string>
+    <string name="current_display">目前螢幕：%1$d × %2$d</string>
+    <string name="max_refresh">螢幕最高更新率：%1$d Hz，影格率可設定為 30～%1$d。</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">最高 %1$d Hz（配合螢幕）</string>
+    <string name="game_settings">手機版設定</string>
+    <string name="open_settings">開啟設定</string>
+    <string-array name="effect_labels">
+        <item>低（流暢優先）</item>
+        <item>中（建議）</item>
+        <item>高（畫質優先）</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>右手</item>
+        <item>左手</item>
+    </string-array>
+</resources>

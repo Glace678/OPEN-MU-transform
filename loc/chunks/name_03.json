@@ -1,0 +1,1050 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 1110,
+   "en": "Expansion of Wizardry Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1111,
+   "en": "Expansion of Wizardry Strengthen",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1115,
+   "en": "Explosion",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1116,
+   "en": "Explosion Blade",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1117,
+   "en": "Falchion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1118,
+   "en": "Falling Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1119,
+   "en": "Falling Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1128,
+   "en": "Fifth Secromicon Fragment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1140,
+   "en": "Find the 'Scroll of Emperor'!",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1144,
+   "en": "Fire Ball",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1145,
+   "en": "Fire Blast",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1146,
+   "en": "Fire Breath",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1147,
+   "en": "Fire Burst",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1148,
+   "en": "Fire Burst Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1149,
+   "en": "Fire Burst Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1153,
+   "en": "Fire Scream",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1154,
+   "en": "Fire Scream Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1155,
+   "en": "Fire Scream Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1157,
+   "en": "Fire Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1158,
+   "en": "Fire Slash Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1162,
+   "en": "Fire Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1163,
+   "en": "Fire Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1166,
+   "en": "Firecracker",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1167,
+   "en": "First Secromicon Fragment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1170,
+   "en": "Flail",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1171,
+   "en": "Flame",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1172,
+   "en": "Flame Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1173,
+   "en": "Flame Strike",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1174,
+   "en": "Flame Strike Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1175,
+   "en": "Flame Strike Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1177,
+   "en": "Flame of Evil (Monster)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1179,
+   "en": "Flameberge",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1180,
+   "en": "Force",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1181,
+   "en": "Force Wave",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1182,
+   "en": "Force Wave Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1186,
+   "en": "Fourth Secromicon Fragment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1187,
+   "en": "Fragment of Horn",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1195,
+   "en": "Frost Barrier",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1196,
+   "en": "Frost Mace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1197,
+   "en": "Fruits",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1200,
+   "en": "GM Gift",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1203,
+   "en": "Gain'Hero status'!",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1206,
+   "en": "Gaion¡¯s Order",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1213,
+   "en": "Gemstone",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1214,
+   "en": "Gemstone Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1235,
+   "en": "Giant Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1236,
+   "en": "Giant Trident",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1237,
+   "en": "Gigantic Storm",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1238,
+   "en": "Gigantic Storm Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1245,
+   "en": "Gladiator's Honor",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1246,
+   "en": "Gladius",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1247,
+   "en": "Glorious Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1248,
+   "en": "Glorious Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1249,
+   "en": "Glorious Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1250,
+   "en": "Glorious Mask",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1251,
+   "en": "Glorious Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1410,
+   "en": "Goat Figurine",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1412,
+   "en": "Goblin Gold Coin",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1413,
+   "en": "Gold Key",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1415,
+   "en": "Golden Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1417,
+   "en": "Golden Cherry Blossom Branch",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1418,
+   "en": "Golden Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1426,
+   "en": "Golden Maple Charm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1428,
+   "en": "Golden Oak Charm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1447,
+   "en": "Gorgon Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1448,
+   "en": "Grand Soul Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1449,
+   "en": "Grand Soul Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1450,
+   "en": "Grand Soul Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1451,
+   "en": "Grand Soul Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1452,
+   "en": "Grand Soul Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1453,
+   "en": "Grand Soul Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1454,
+   "en": "Grand Viper Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1458,
+   "en": "Great Dragon Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1459,
+   "en": "Great Dragon Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1460,
+   "en": "Great Dragon Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1461,
+   "en": "Great Dragon Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1462,
+   "en": "Great Dragon Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1465,
+   "en": "Great Hammer",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1466,
+   "en": "Great Lord Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1467,
+   "en": "Great Reign Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1468,
+   "en": "Great Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1469,
+   "en": "Great Scythe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1472,
+   "en": "Greater Damage",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1473,
+   "en": "Greater Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1474,
+   "en": "Green Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1475,
+   "en": "Green Chaos Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1479,
+   "en": "Guardian Angel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1480,
+   "en": "Guardian Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1481,
+   "en": "Guardian Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1482,
+   "en": "Guardian Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1483,
+   "en": "Guardian Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1484,
+   "en": "Guardian Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1485,
+   "en": "Guardian Gloves-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1486,
+   "en": "Guardian Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1487,
+   "en": "Guardian Helm-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1488,
+   "en": "Guardian Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1489,
+   "en": "Guardian Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1490,
+   "en": "Guardian Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1500,
+   "en": "Hades Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1501,
+   "en": "Hades Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1502,
+   "en": "Hades Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1503,
+   "en": "Hades Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1504,
+   "en": "Hades Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1506,
+   "en": "Halberd",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1508,
+   "en": "Hand Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1519,
+   "en": "Hawk Figurine",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1520,
+   "en": "Heal",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1521,
+   "en": "Heal Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1522,
+   "en": "Healing Orb",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1523,
+   "en": "Healing Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1532,
+   "en": "Heart",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1534,
+   "en": "Heliacal Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1538,
+   "en": "Hell-Miner Horn",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1539,
+   "en": "Hellfire",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1540,
+   "en": "Hellfire Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1560,
+   "en": "High Vitality Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1562,
+   "en": "Higher Refining Stone Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1563,
+   "en": "Higher refining stone",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1573,
+   "en": "Holy Storm Claw",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1575,
+   "en": "Horn Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1576,
+   "en": "Horn of Dinorant",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1577,
+   "en": "Horn of Fenrir",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1578,
+   "en": "Horn of Uniria",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1593,
+   "en": "Hurricane Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1594,
+   "en": "Hurricane Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1595,
+   "en": "Hurricane Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1596,
+   "en": "Hurricane Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1684,
+   "en": "Icarus",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1685,
+   "en": "Ice",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 1686,
+   "en": "Ice Arrow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  }
+ ]
+}

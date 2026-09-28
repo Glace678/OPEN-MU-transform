@@ -1,0 +1,2493 @@
+{
+"locale": "pl",
+"language": "Polish (polski)",
+"chunk": "g3a",
+"out": "D:\\openmu自用\\_locwork\\out_data\\pl\\pl_g3a_p2.json",
+"strings": [
+{
+"id": 1502,
+"en": "Hades Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1503,
+"en": "Hades Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1504,
+"en": "Hades Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1506,
+"en": "Halberd",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1508,
+"en": "Hand Axe",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1519,
+"en": "Hawk Figurine",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1522,
+"en": "Healing Orb",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1523,
+"en": "Healing Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1532,
+"en": "Heart",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1534,
+"en": "Heliacal Sword",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1538,
+"en": "Hell-Miner Horn",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1560,
+"en": "High Vitality Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1562,
+"en": "Higher Refining Stone Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1563,
+"en": "Higher refining stone",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1573,
+"en": "Holy Storm Claw",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1575,
+"en": "Horn Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1576,
+"en": "Horn of Dinorant",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1577,
+"en": "Horn of Fenrir",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1578,
+"en": "Horn of Uniria",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1593,
+"en": "Hurricane Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1594,
+"en": "Hurricane Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1595,
+"en": "Hurricane Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1596,
+"en": "Hurricane Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1713,
+"en": "Ignore Defense Parchment",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1719,
+"en": "Illusion Sorcerer Covenant",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1729,
+"en": "Illusion Temple Ticket",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1741,
+"en": "Imp",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1754,
+"en": "Inberial Staff",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1759,
+"en": "Increase Block Parchment",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1770,
+"en": "Increase Health Parchment",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1849,
+"en": "Indulgence",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1860,
+"en": "Innovation Parchment",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1868,
+"en": "Invisibility Cloak",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1869,
+"en": "Invitation to Santa Village",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1870,
+"en": "Iris Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1871,
+"en": "Iris Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1872,
+"en": "Iris Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1873,
+"en": "Iris Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1874,
+"en": "Iris Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1918,
+"en": "Jack O'Lantern Blessings",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 1919,
+"en": "Jack O'Lantern Cry",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 1920,
+"en": "Jack O'Lantern Drink",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 1921,
+"en": "Jack O'Lantern Food",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 1922,
+"en": "Jack O'Lantern Wrath",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 1924,
+"en": "Jack Olantern Ring",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1928,
+"en": "Jewel of Bless",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1929,
+"en": "Jewel of Chaos",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1930,
+"en": "Jewel of Chaos Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1932,
+"en": "Jewel of Creation",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1933,
+"en": "Jewel of Creation Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1934,
+"en": "Jewel of Elevation",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1935,
+"en": "Jewel of Extension",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1936,
+"en": "Jewel of Guardian",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1937,
+"en": "Jewel of Guardian Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1938,
+"en": "Jewel of Harmony",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1939,
+"en": "Jewel of Harmony Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1940,
+"en": "Jewel of Life",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1941,
+"en": "Jewel of Life Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1942,
+"en": "Jewel of Soul",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1947,
+"en": "Kalima Ticket",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1948,
+"en": "Kalt Stone",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1961,
+"en": "Katana",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1971,
+"en": "Kite Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1972,
+"en": "Knight Blade",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1975,
+"en": "Kris",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1986,
+"en": "Large Complex Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1987,
+"en": "Large Healing Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1988,
+"en": "Large Mana Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1989,
+"en": "Large Round Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1990,
+"en": "Large SD Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 1991,
+"en": "Larkan Axe",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2008,
+"en": "Leather Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2009,
+"en": "Leather Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2010,
+"en": "Leather Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2011,
+"en": "Leather Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2012,
+"en": "Leather Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2015,
+"en": "Legendary Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2016,
+"en": "Legendary Armor-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2017,
+"en": "Legendary Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2018,
+"en": "Legendary Boots-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2019,
+"en": "Legendary Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2020,
+"en": "Legendary Gloves-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2021,
+"en": "Legendary Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2022,
+"en": "Legendary Helm-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2023,
+"en": "Legendary Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2024,
+"en": "Legendary Pants-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2025,
+"en": "Legendary Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2026,
+"en": "Legendary Shield-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2027,
+"en": "Legendary Staff",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2028,
+"en": "Legendary Staff-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2029,
+"en": "Legendary Sword",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2042,
+"en": "Lethal Wizard's Ring",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2052,
+"en": "Light Crossbow",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2053,
+"en": "Light Plate Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2054,
+"en": "Light Plate Armor-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2055,
+"en": "Light Plate Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2056,
+"en": "Light Plate Boots-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2057,
+"en": "Light Plate Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2058,
+"en": "Light Plate Gloves-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2059,
+"en": "Light Plate Mask",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2060,
+"en": "Light Plate Mask-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2061,
+"en": "Light Plate Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2062,
+"en": "Light Plate Pants-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2063,
+"en": "Light Saber",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2064,
+"en": "Light Spear",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2065,
+"en": "Lighting Sword",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2066,
+"en": "Lighting Sword-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2070,
+"en": "Lightning Shock Parchment",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2081,
+"en": "Little Warrior's Cloak",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2084,
+"en": "Loch's Feather",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2086,
+"en": "Lord Scepter",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2090,
+"en": "Lost Map",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2106,
+"en": "Low Vitality Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2107,
+"en": "Lower Refining Stone Bundle",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2108,
+"en": "Lower refining stone",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2109,
+"en": "Lucky Coin",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2118,
+"en": "Lv. 1 Completion Certificate",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2119,
+"en": "Lv. 1 Letter of Request",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2123,
+"en": "Mace",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2127,
+"en": "Magic Backpack",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2133,
+"en": "Mana Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2143,
+"en": "Maple Charm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2148,
+"en": "Master Scepter",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2149,
+"en": "Master Scepter-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2150,
+"en": "Master Seal of Ascension",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2151,
+"en": "Master Seal of Wealth",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2152,
+"en": "Master Skill Reset",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2153,
+"en": "Max AG Boost Aura",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2157,
+"en": "Max SD Boost Aura",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2188,
+"en": "Medium Elite Healing Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2190,
+"en": "Medium Vitality Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2214,
+"en": "Minimum Vitality Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2221,
+"en": "Mirror of Dimensions",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2243,
+"en": "Moonstone Pendant",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2244,
+"en": "Morning Star",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2255,
+"en": "Mystery Stick",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2263,
+"en": "Nikea Axe",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2277,
+"en": "Oak Charm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2306,
+"en": "Old Jewelry Case",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2307,
+"en": "Old Scroll",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2317,
+"en": "Open Access Ticket to Chaos Ca",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2318,
+"en": "Open Access Ticket to Doppelga",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2319,
+"en": "Open Access Ticket to Varka",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2320,
+"en": "Open Access Ticket to Varka Ma",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2324,
+"en": "Orb of Death Stab",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2325,
+"en": "Orb of Fire Slash",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2326,
+"en": "Orb of Greater Damage",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2327,
+"en": "Orb of Greater Fortitude",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2328,
+"en": "Orb of Ice Arrow",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2329,
+"en": "Orb of Impale",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2330,
+"en": "Orb of Penetration",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2331,
+"en": "Orb of Rageful Blow",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2332,
+"en": "Orb of Summoning",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2333,
+"en": "Orb of Twisting Slash",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2335,
+"en": "Order (Guardian/Life Stone)",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2349,
+"en": "Package Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2350,
+"en": "Package Box A",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2351,
+"en": "Package Box B",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2352,
+"en": "Package Box C",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2353,
+"en": "Package Box D",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2354,
+"en": "Package Box E",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2355,
+"en": "Package Box F",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2357,
+"en": "Pad Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2358,
+"en": "Pad Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2359,
+"en": "Pad Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2360,
+"en": "Pad Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2361,
+"en": "Pad Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2362,
+"en": "Paid Channel Access Ticket",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2364,
+"en": "Panda Ring",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2367,
+"en": "Party EXP Scroll",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2375,
+"en": "Pendant of Ability",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2376,
+"en": "Pendant of Fire",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2377,
+"en": "Pendant of Ice",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2378,
+"en": "Pendant of Lighting",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2379,
+"en": "Pendant of Water",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2380,
+"en": "Pendant of Wind",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2387,
+"en": "Pet Panda",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2388,
+"en": "Pet Rudolf",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2389,
+"en": "Pet Skeleton",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2391,
+"en": "Pet Unicorn",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2393,
+"en": "Phantom  Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2394,
+"en": "Phantom  Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2395,
+"en": "Phantom  Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2396,
+"en": "Phantom Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2401,
+"en": "Phoenix Soul Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2402,
+"en": "Phoenix Soul Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2403,
+"en": "Phoenix Soul Helmet",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2404,
+"en": "Phoenix Soul Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2405,
+"en": "Phoenix Soul Star",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2413,
+"en": "Piercing Blade Glove",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2414,
+"en": "Piercing Groove Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2415,
+"en": "Piercing Groove Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2416,
+"en": "Piercing Groove Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2417,
+"en": "Piercing Groove Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2418,
+"en": "Pink Chocolate Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2420,
+"en": "Plate Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2421,
+"en": "Plate Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2422,
+"en": "Plate Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2423,
+"en": "Plate Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2424,
+"en": "Plate Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2425,
+"en": "Plate Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2426,
+"en": "Platina Staff",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2461,
+"en": "Premium Package",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2487,
+"en": "Pumpkin of Luck",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2491,
+"en": "Purple Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2492,
+"en": "Purple Chaos Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2515,
+"en": "RageFighter Character Card",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2546,
+"en": "Rapier",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2547,
+"en": "Rare Item Ticket",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2548,
+"en": "Rare Item Ticket 10",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2549,
+"en": "Rare Item Ticket 11",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2550,
+"en": "Rare Item Ticket 12",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2551,
+"en": "Rare Item Ticket 7",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2552,
+"en": "Rare Item Ticket 8",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2553,
+"en": "Rare Item Ticket 9",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2554,
+"en": "Rare Item Ticket1",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2555,
+"en": "Rare Item Ticket2",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2556,
+"en": "Rare Item Ticket3",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2557,
+"en": "Rare Item Ticket4",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2558,
+"en": "Rare Item Ticket5",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2560,
+"en": "Raven Stick",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2585,
+"en": "Red Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2586,
+"en": "Red Chaos Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2587,
+"en": "Red Cherry Blossom Branch",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2588,
+"en": "Red Chocolate Box",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2590,
+"en": "Red Spirit Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2591,
+"en": "Red Spirit Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2592,
+"en": "Red Spirit Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2593,
+"en": "Red Spirit Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2594,
+"en": "Red Sprit Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2595,
+"en": "Red Wing Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2596,
+"en": "Red Wing Armor-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2597,
+"en": "Red Wing Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2598,
+"en": "Red Wing Boots-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2599,
+"en": "Red Wing Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2600,
+"en": "Red Wing Gloves-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2601,
+"en": "Red Wing Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2602,
+"en": "Red Wing Helm-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2603,
+"en": "Red Wing Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2604,
+"en": "Red Wing Pants-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2605,
+"en": "Red Wing Stick",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2606,
+"en": "Red Wing Stick-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2617,
+"en": "Remedy of Love",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2618,
+"en": "Rena",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2821,
+"en": "Reset Fruit Control",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2822,
+"en": "Reset Fruit Energy",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2823,
+"en": "Reset Fruit Health",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2824,
+"en": "Reset Fruit Quickness",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2825,
+"en": "Reset Fruit Strength",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2880,
+"en": "Ring of Earth",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2881,
+"en": "Ring of Fire",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2882,
+"en": "Ring of GM",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2884,
+"en": "Ring of Ice",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2885,
+"en": "Ring of Magic",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2886,
+"en": "Ring of Poison",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2887,
+"en": "Ring of Wind",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2892,
+"en": "Royal Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2893,
+"en": "Royal Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2894,
+"en": "Royal Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2896,
+"en": "Royal Mask",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2897,
+"en": "Royal Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2898,
+"en": "Ruby Necklace",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2899,
+"en": "Ruby Ring",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2900,
+"en": "Rune Bastard Sword",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2901,
+"en": "Rune Blade",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2903,
+"en": "SD Potion",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2908,
+"en": "Sacred Fire Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2909,
+"en": "Sacred Fire Armor-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2910,
+"en": "Sacred Fire Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2911,
+"en": "Sacred Fire Boots-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2912,
+"en": "Sacred Fire Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2913,
+"en": "Sacred Fire Helm-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2914,
+"en": "Sacred Fire Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2915,
+"en": "Sacred Fire Pants-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2916,
+"en": "Sacred Glove",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2917,
+"en": "Sacred Glove-J",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2919,
+"en": "Saint Crossbow",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2920,
+"en": "Salamander Shield",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2933,
+"en": "Sapphire Necklace",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2934,
+"en": "Sapphire Ring",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2936,
+"en": "Scale Armor",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2937,
+"en": "Scale Boots",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2938,
+"en": "Scale Gloves",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2939,
+"en": "Scale Helm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2940,
+"en": "Scale Pants",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2942,
+"en": "Scepter",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2947,
+"en": "Scroll of Aqua Beam",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2948,
+"en": "Scroll of Archangel",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2949,
+"en": "Scroll of Battle",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2950,
+"en": "Scroll of Blood",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2951,
+"en": "Scroll of Chaotic Diseier",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2952,
+"en": "Scroll of Cometfall",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2953,
+"en": "Scroll of Critical Damage",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2954,
+"en": "Scroll of Decay",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2955,
+"en": "Scroll of Defense",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2956,
+"en": "Scroll of Electric Spark",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2957,
+"en": "Scroll of Evil Spirit",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2958,
+"en": "Scroll of Fire Ball",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2959,
+"en": "Scroll of Fire Scream",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2960,
+"en": "Scroll of FireBurst",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2961,
+"en": "Scroll of Flame",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2962,
+"en": "Scroll of Gigantic Storm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2963,
+"en": "Scroll of Healing",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2964,
+"en": "Scroll of Health",
+"budget": 29,
+"kinds": [
+"buff",
+"item"
+]
+},
+{
+"id": 2965,
+"en": "Scroll of Hellfire",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2966,
+"en": "Scroll of Ice",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2967,
+"en": "Scroll of Ice Storm",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2968,
+"en": "Scroll of Inferno",
+"budget": 29,
+"kinds": [
+"item"
+]
+},
+{
+"id": 2969,
+"en": "Scroll of Lighting",
+"budget": 29,
+"kinds": [
+"item"
+]
+}
+]
+}

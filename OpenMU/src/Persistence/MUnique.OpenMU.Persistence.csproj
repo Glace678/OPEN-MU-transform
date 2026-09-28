@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable;CS4014;VSTHRD110;VSTHRD100</WarningsAsErrors>
+    <GeneratePersistenceModels Condition="'$(GeneratePersistenceModels)' == ''">false</GeneratePersistenceModels>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <DocumentationFile>..\..\bin\Debug\MUnique.OpenMU.Persistence.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin\Release\</OutputPath>
+	<DocumentationFile>..\..\bin\Release\MUnique.OpenMU.Persistence.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="EntityFramework\**" />
+    <Compile Remove="Initialization\**" />
+    <Compile Remove="InMemory\**" />
+    <Compile Remove="SourceGenerator\**" />
+    <EmbeddedResource Remove="EntityFramework\**" />
+    <EmbeddedResource Remove="Initialization\**" />
+    <EmbeddedResource Remove="InMemory\**" />
+    <EmbeddedResource Remove="SourceGenerator\**" />
+    <None Remove="EntityFramework\**" />
+    <None Remove="Initialization\**" />
+    <None Remove="InMemory\**" />
+    <None Remove="SourceGenerator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataModel\MUnique.OpenMU.DataModel.csproj" />
+    <ProjectReference Include="..\Interfaces\MUnique.OpenMU.Interfaces.csproj" />
+    <ProjectReference Include="..\PlugIns\MUnique.OpenMU.PlugIns.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <Target Name="GeneratePersistenceBasicModels"
+          BeforeTargets="BeforeCompile"
+          Condition="'$(GeneratePersistenceModels)' == 'true' and '$(PersistenceGeneratorRunning)' != 'true' and '$(DesignTimeBuild)' != 'true'">
+    <PropertyGroup>
+      <PersistenceGeneratorAssembly>$(ProjectDir)SourceGenerator\bin\$(Configuration)\MUnique.OpenMU.Persistence.SourceGenerator.dll</PersistenceGeneratorAssembly>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(PersistenceGeneratorAssembly)')"
+           Text="The persistence model generator has not been built. Run tools/Generate-PersistenceModels.ps1 instead of enabling GeneratePersistenceModels in a normal build." />
+    <Exec Command="&quot;$(DotNetHostPath)&quot; exec &quot;$(PersistenceGeneratorAssembly)&quot; MUnique.OpenMU.Persistence &quot;$(ProjectDir)BasicModel&quot;" />
+  </Target>
+
+</Project>

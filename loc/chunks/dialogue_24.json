@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3614,
+   "en": "Try your hand at Blood Castle Level 4. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3615,
+   "en": "Try your hand at Blood Castle Level 5 and complete Archangel's quest. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3616,
+   "en": "Try your hand at Blood Castle Level 5. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3617,
+   "en": "Try your hand at Blood Castle Level 6 and complete Archangel's quest. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3618,
+   "en": "Try your hand at Blood Castle Level 6. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3619,
+   "en": "Try your hand at Blood Castle Level 7 and complete Archangel's quest. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3620,
+   "en": "Try your hand at Blood Castle Level 7. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3621,
+   "en": "Try your hand at Blood Castle Level 8 and complete Archangel's quest. I'll give you 2 Jewels of Life as a reward when you return. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3622,
+   "en": "Try your hand at Blood Castle Level 8. Destroy the castle gate and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3623,
+   "en": "Try your hand at Chaos Castle Level 1. Come back to me after defeating 1 Guardsman, and I will give you 100,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3624,
+   "en": "Try your hand at Chaos Castle Level 1. Defeat 1 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3625,
+   "en": "Try your hand at Chaos Castle Level 2. Come back to me after defeating 3 Guardsman, and I will give you 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3626,
+   "en": "Try your hand at Chaos Castle Level 2. Defeat 3 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3627,
+   "en": "Try your hand at Chaos Castle Level 3. Come back to me after defeating 5 Guardsmen, and I will give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3628,
+   "en": "Try your hand at Chaos Castle Level 4. Come back to me after defeating 1 traveler wearing the Armor of Guardsman, and I will give you 300,000 Zens and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3629,
+   "en": "Try your hand at Chaos Castle Level 4. Defeat 1 traveler wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3630,
+   "en": "Try your hand at Chaos Castle Level 5. Come back to me after defeating 3 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Soul as a reward. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3631,
+   "en": "Try your hand at Chaos Castle Level 5. Defeat 3 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3632,
+   "en": "Try your hand at Chaos Castle Level 6. Come back to me after defeating 5 travelers wearing the Armor of Guardsman, and I will give you 1 Jewel of Harmony as a reward. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3633,
+   "en": "Try your hand at Chaos Castle Level 6. Defeat 5 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3634,
+   "en": "Try your hand at Chaos Castle Level 7. Come back to me after defeating 10 travelers wearing the Armor of Guardsman, and I will give you 2 Jewels of Soul as a reward. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3635,
+   "en": "Try your hand at Chaos Castle Level 7. Defeat 10 travelers wearing the Armor of Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3636,
+   "en": "Try your hand at Devil Square Level 1. Defeat the monsters and score 50 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3637,
+   "en": "Try your hand at Devil Square Level 1. If you achieve 50 points, I'll give you 100,000 Zens as a reward. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3638,
+   "en": "Try your hand at Devil Square Level 2. Defeat the monsters and score 100 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3639,
+   "en": "Try your hand at Devil Square Level 3. Defeat the monsters and score 130 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3640,
+   "en": "Try your hand at Devil Square Level 4. Defeat the monsters and score 160 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3641,
+   "en": "Try your hand at Devil Square Level 5. Defeat the monsters and score 190 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3642,
+   "en": "Try your hand at Devil Square Level 6. Defeat the monsters and score 210 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3643,
+   "en": "Try your hand at Devil Square Level 7. Defeat the monsters and score 240 points to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3644,
+   "en": "Try your hand at Illusion Temple Level 1. Win and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3645,
+   "en": "Try your hand at Illusion Temple Level 1. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul. However, this applies only to Illusion Temple Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3646,
+   "en": "Try your hand at Illusion Temple Level 2. Win and I'll give you 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3647,
+   "en": "Try your hand at Illusion Temple Level 2. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3648,
+   "en": "Try your hand at Illusion Temple Level 3. Win and I'll give you 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3649,
+   "en": "Try your hand at Illusion Temple Level 3. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless. However, this applies only to Illusion Temple Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3650,
+   "en": "Try your hand at Illusion Temple Level 4. Win and I'll give you 1 Jewel of Chaos and 1 Jewel of Soul as a reward. However, this applies only to Illusion Temple Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3651,
+   "en": "Try your hand at Illusion Temple Level 4. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Chaos. However, this applies only to Illusion Temple Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3652,
+   "en": "Try your hand at Illusion Temple Level 5. Win and I'll give you 1 Jewel of Soul and 1 Jewel of Bless as a reward. However, this applies only to Illusion Temple Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3653,
+   "en": "Try your hand at Illusion Temple Level 5. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Soul and 1 Jewel of Bless. However, this applies only to Illusion Temple Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3654,
+   "en": "Try your hand at Illusion Temple Level 6. Win and I'll give you 1 Jewel of Bless and 1 Jewel of Life as a reward. However, this applies only to Illusion Temple Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3655,
+   "en": "Try your hand at Illusion Temple Level 6. Win and go back to the Shadow Phantom Soldier to receive 1 Jewel of Bless and 1 Jewel of Life. However, this applies only to Illusion Temple Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3656,
+   "en": "Try your hand on Chaos Castle Level 3. Defeat 5 Guardsman and go back to see the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3657,
+   "en": "Tutorials are for children. Turn down the offer.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3658,
+   "en": "Twin Tails in Kanturu Relics are causing great harm to travelers. Go to Kanturu Relics and hunt down 100 Twin Tails. Come see me when that's done to receive an Invisibility Cloak + 7 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3669,
+   "en": "Type in '/Party off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3670,
+   "en": "Type in '/Request off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3671,
+   "en": "Type in '/off' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3672,
+   "en": "Unfit task",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3673,
+   "en": "Unfortunately, Secrarium was betting that darkness in the hearts of the travelers would ultimately lead to hostility and discord among them. Lugard was also aware of the travelers' dark side, but his trust in them didn't waver. Ultimately, the travelers did begin to feud with one another like the dark god had anticipated, and Chaos Castle became ever more... chaotic.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

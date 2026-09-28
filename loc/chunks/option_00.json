@@ -1,0 +1,965 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 0,
+   "en": "%0.2%% chance ignoring enemy armor",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1,
+   "en": "%0.2%% chance of doing double damage.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2,
+   "en": "%0.2%% chance to deal triple damage.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3,
+   "en": "%0.2%% chance to fully recover your HP.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 4,
+   "en": "%0.2%% chance to fully recover your mana.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 5,
+   "en": "%0.2f HP increases your defense rate by 1.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 6,
+   "en": "%0.2f PvP attack power bonus will be added while equipping Two-handed Sword.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 7,
+   "en": "%0.2f%% chance of damaging your target with 10%% of your strength stat each second for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 8,
+   "en": "%0.2f%% chance of fully recovering SD.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 9,
+   "en": "%0.2f%% chance to counter with the same amount of damage when hit.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 10,
+   "en": "%0.2f%% chance to decrease the durability of one of the target's armor parts by 10%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 11,
+   "en": "%0.2f%% chance to fully recover SD when attacking a target.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 12,
+   "en": "%0.2f%% chance to make the victim of Strike of Destruction immobile for 3 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 13,
+   "en": "%0.2f%% chance to produce an invulnerable shield wall when hit. #lasts for 5 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 14,
+   "en": "%0.2f%% chance to push back the target.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 15,
+   "en": "%0.2f%% chance to slow down the movement speed of the victim of Strike of Destruction by 50%%. Duration: 5 seconds",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 16,
+   "en": "%0.2f%% chance to stun the target for 2 seconds while equipping Mace.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 17,
+   "en": "%0.2f%% chance to stun the target for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 18,
+   "en": "%0.2f%% chance to stun the victim of Death Stab for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 19,
+   "en": "%d Rank, skill level %d/10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 20,
+   "en": "%d Rank, skill level %d/20",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 21,
+   "en": "'Increase minimum attack power' rank 5 requires level 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 22,
+   "en": "'Recover HP fully' rank 7 requires level 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 25,
+   "en": "(Level type)Attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 26,
+   "en": "+3%% HP Regen/+100 HP",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 49,
+   "en": "0 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 52,
+   "en": "10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 54,
+   "en": "100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 70,
+   "en": "50%% EXP Gain /0%% Item Drop Rate",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 71,
+   "en": "50%% EXP Gain /50%% Item Drop Rate",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 109,
+   "en": "AG cost decrease",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 110,
+   "en": "AG recovery speed increase",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 111,
+   "en": "AG recovery speed increase +10",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 112,
+   "en": "AG recovery speed increase +8/Lightning and Ice resistance increase/attack speed increase +20",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 113,
+   "en": "AG value increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 144,
+   "en": "Agility Status +50",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 145,
+   "en": "Agility increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 146,
+   "en": "Agnis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 172,
+   "en": "Altar of Wolf besiegement Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 173,
+   "en": "Altar of Wolf contract Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 174,
+   "en": "Altar of Wolf contract attempt",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 175,
+   "en": "Altar of Wolf contract disabled",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 176,
+   "en": "Altar of Wolf contract enabled",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 177,
+   "en": "Altar of Wolf hero contract Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 179,
+   "en": "Amis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 188,
+   "en": "Anonymous's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 190,
+   "en": "Anubis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 191,
+   "en": "Apollo's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 203,
+   "en": "Argo's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 209,
+   "en": "Arrows are not consumed,/ and increases your damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 210,
+   "en": "Arrows do not become consumed.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 211,
+   "en": "Aruan's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 213,
+   "en": "Ascension",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 269,
+   "en": "Attack Increase skill effect increases by %0.2f%%, and skill duration increases per skill level.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 272,
+   "en": "Attack increase(Min,Max)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 274,
+   "en": "Attack power +20%% increase",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 275,
+   "en": "Attack power +30",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 276,
+   "en": "Attack power and Defensibility increases",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 277,
+   "en": "Attack power increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 278,
+   "en": "Attack power increase +25",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 279,
+   "en": "Attack power increase +30",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 280,
+   "en": "Attack power increase +40",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 281,
+   "en": "Attack power increase by %0.2f while equipping the Wing of Ruin.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 282,
+   "en": "Attack power increases by %0.2f while equipping Scepter.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 283,
+   "en": "Attack power increases by %0.2f while equipping the Cape of Emperor.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 284,
+   "en": "Attack power increases by %0.2f while equipping the Wing of Illusion.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 285,
+   "en": "Attack power increases by %0.2f#while equipping the Wing of Storm.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 286,
+   "en": "Attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 287,
+   "en": "Attack power increases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 288,
+   "en": "Attack power reduction",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 289,
+   "en": "Attack rating increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 290,
+   "en": "Attack speed +15",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 291,
+   "en": "Attack speed increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 292,
+   "en": "Attack speed increase +10",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 293,
+   "en": "Attack speed increase +15",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 294,
+   "en": "Attack speed increases by %0.2f while equipping Bow.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 295,
+   "en": "Attack speed increases by %0.2f while equipping One-handed Staff.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 296,
+   "en": "Attack speed increases by %0.2f while equipping One-handed Sword.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 297,
+   "en": "Attack speed increases by %0.2f while equipping the Other World Tome.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 298,
+   "en": "Attack success rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 299,
+   "en": "Attack success rate increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 300,
+   "en": "Attack sucess rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 301,
+   "en": "Attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 303,
+   "en": "Automatic AG recovery increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 305,
+   "en": "Automatic HP recovery increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 306,
+   "en": "Automatic Life recovery increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 308,
+   "en": "Automatic Mana recovery increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 309,
+   "en": "Automatic Mana regeneration increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 310,
+   "en": "Automatic SD recovery increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 319,
+   "en": "Barnake's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 339,
+   "en": "Berserker skill increases Attack speed and Wizardry by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 340,
+   "en": "Berserker skill increases Cures, Wizardry and Attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 341,
+   "en": "Berserker skill increases Curse by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 342,
+   "en": "Berserker's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 343,
+   "en": "Besiegement Guild1",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 344,
+   "en": "Besiegement Guild2",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 345,
+   "en": "Besiegement Guild3",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 357,
+   "en": "Bleeding",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 361,
+   "en": "Bless skill increases stats by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 362,
+   "en": "Blessing of Christmas",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 366,
+   "en": "Block rating increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 383,
+   "en": "Blood Howl",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 389,
+   "en": "Blood Storm damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 436,
+   "en": "Broy's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 463,
+   "en": "Castol's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 466,
+   "en": "Ceto's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 474,
+   "en": "Chain Lightning skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 476,
+   "en": "Chamer's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 477,
+   "en": "Chance to inflict damage ignoring enemy's defense increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 515,
+   "en": "Chaotic Diseier skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 537,
+   "en": "Chrono¡¯s",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 547,
+   "en": "Cloud's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 548,
+   "en": "Cold",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 552,
+   "en": "Combo skill damage increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 558,
+   "en": "Cometfall skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 560,
+   "en": "Command stat increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 601,
+   "en": "Control Status +50",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 612,
+   "en": "Critical Damage Increase skill increases Critical damage rate by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 613,
+   "en": "Critical Damage Increase skill increases Excellent damage rate by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 614,
+   "en": "Critical Damage Increase skill increases critical damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  }
+ ]
+}

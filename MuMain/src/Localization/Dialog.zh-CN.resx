@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Text_0" xml:space="preserve">
+    <value>嗯！有什么需要吗？</value>
+    <comment>legacy_id=0</comment>
+  </data>
+  <data name="Text_1" xml:space="preserve">
+    <value>你好！我是魔导师帕西。哈哈哈！嗯……星象似乎有些异常。你的未来……嗯……我竟然也看不清。为什么会这样……？</value>
+    <comment>legacy_id=1</comment>
+  </data>
+  <data name="Text_2" xml:space="preserve">
+    <value>你好！我是仓库管理员巴兹。无论你走到哪里，我都能为你保管物品。放心把东西交给我吧。</value>
+    <comment>legacy_id=2</comment>
+  </data>
+  <data name="Text_3" xml:space="preserve">
+    <value>许多冒险者都说，竖琴声能抚慰心灵、消除疲劳。需要我的帮助吗？</value>
+    <comment>legacy_id=3</comment>
+  </data>
+  <data name="Text_4" xml:space="preserve">
+    <value>你好！我是仓库管理员巴兹。无论你走到哪里，我都能为你保管物品。放心把东西交给我吧。</value>
+    <comment>legacy_id=4</comment>
+  </data>
+  <data name="Text_5" xml:space="preserve">
+    <value>带够钱了吗？我的研究需要经费，没有足够的金币就无法合成物品。明白了吗？想知道需要多少钱吗？</value>
+    <comment>legacy_id=5</comment>
+  </data>
+  <data name="Text_6" xml:space="preserve">
+    <value>欢迎来到奇迹大陆！旅途中需要帮助时，请按 F1 键查看说明。</value>
+    <comment>legacy_id=6</comment>
+  </data>
+  <data name="Text_7" xml:space="preserve">
+    <value>第一次来到勇者大陆吗？从喷泉前的东南出口出去，可以先狩猎幼龙或蜘蛛。西北方向的骷髅兵对你来说太危险了。</value>
+    <comment>legacy_id=7</comment>
+  </data>
+  <data name="Text_8" xml:space="preserve">
+    <value>欢迎来到仙踪林。第一次来这里的话，经过仓库守卫后从南门出去，先狩猎蝎子或哥布林等低级怪物吧。</value>
+    <comment>legacy_id=8</comment>
+  </data>
+  <data name="Text_9" xml:space="preserve">
+    <value>需要奇迹大陆的详细指南时，请访问 http://muonline.webzen.net</value>
+    <comment>legacy_id=9</comment>
+  </data>
+  <data name="Text_50" xml:space="preserve">
+    <value>据说记载奇迹大陆第一位皇帝穆伦事迹的“帝王之书”，曾在失落之塔、亚特兰蒂斯和地下城一带出现。</value>
+    <comment>legacy_id=50</comment>
+  </data>
+  <data name="Answer_50_Slot_0" xml:space="preserve">
+    <value>我从来不知道还有这样的东西……</value>
+    <comment>legacy_id=1500</comment>
+  </data>
+  <data name="Text_51" xml:space="preserve">
+    <value>你献给神的贡金还不够。献上 1,000,000 金币，我就把神谕告诉你。</value>
+    <comment>legacy_id=51</comment>
+  </data>
+  <data name="Answer_51_Slot_0" xml:space="preserve">
+    <value>我会带着 1,000,000 金币回来。</value>
+    <comment>legacy_id=1510</comment>
+  </data>
+  <data name="Text_52" xml:space="preserve">
+    <value>据说记载奇迹大陆统一者、第一位皇帝穆伦事迹的“帝王之书”，曾在失落之塔、亚特兰蒂斯和地下城一带出现。</value>
+    <comment>legacy_id=52</comment>
+  </data>
+  <data name="Answer_52_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=1520</comment>
+  </data>
+  <data name="Text_53" xml:space="preserve">
+    <value>“帝王之书”被强大的力量环绕。任何读过它的人，都将得到这股力量的祝福。</value>
+    <comment>legacy_id=53</comment>
+  </data>
+  <data name="Answer_53_Slot_0" xml:space="preserve">
+    <value>请再讲一遍。</value>
+    <comment>legacy_id=1530</comment>
+  </data>
+  <data name="Answer_53_Slot_1" xml:space="preserve">
+    <value>我去找它。</value>
+    <comment>legacy_id=1531</comment>
+  </data>
+  <data name="Answer_53_Slot_2" xml:space="preserve">
+    <value>我不感兴趣。</value>
+    <comment>legacy_id=1532</comment>
+  </data>
+  <data name="Text_54" xml:space="preserve">
+    <value>去寻找“帝王之书”吧。读过它之后，你将获得强大的力量。</value>
+    <comment>legacy_id=54</comment>
+  </data>
+  <data name="Answer_54_Slot_0" xml:space="preserve">
+    <value>我去找它。</value>
+    <comment>legacy_id=1540</comment>
+  </data>
+  <data name="Text_55" xml:space="preserve">
+    <value>你找到了“帝王之书”！这里用魔法记录着奇迹帝国第一位皇帝穆伦统一大陆的功绩。拥有“帝王之书”的人将获得强大的力量。</value>
+    <comment>legacy_id=55</comment>
+  </data>
+  <data name="Answer_55_Slot_0" xml:space="preserve">
+    <value>请告诉我书中的记载。</value>
+    <comment>legacy_id=1550</comment>
+  </data>
+  <data name="Text_56" xml:space="preserve">
+    <value>第一位皇帝穆伦击败各地军阀，结束战争、统一大陆并建立奇迹帝国。这本史书正是为了纪念他带来的和平。</value>
+    <comment>legacy_id=56</comment>
+  </data>
+  <data name="Answer_56_Slot_0" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1560</comment>
+  </data>
+  <data name="Text_57" xml:space="preserve">
+    <value>瑟克尼姆入侵大陆、百姓陷入混乱时，穆伦正是终结乱世的三位英雄之一。</value>
+    <comment>legacy_id=57</comment>
+  </data>
+  <data name="Answer_57_Slot_0" xml:space="preserve">
+    <value>请讲讲前面的故事。</value>
+    <comment>legacy_id=1570</comment>
+  </data>
+  <data name="Answer_57_Slot_1" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1571</comment>
+  </data>
+  <data name="Text_58" xml:space="preserve">
+    <value>书中还记载了三件魔法信物：“断魂之剑”“精灵之泪”和“先知之魂”。“断魂之剑”由剑士们献上，象征他们的勇气、忠诚以及对繁荣的愿望。</value>
+    <comment>legacy_id=58</comment>
+  </data>
+  <data name="Answer_58_Slot_0" xml:space="preserve">
+    <value>请讲讲前面的故事。</value>
+    <comment>legacy_id=1580</comment>
+  </data>
+  <data name="Answer_58_Slot_1" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1581</comment>
+  </data>
+  <data name="Text_59" xml:space="preserve">
+    <value>“先知之魂”由魔法师们献上，象征他们立誓为帝国的和平与自由使用力量。奇迹历 10 年，《和平纪念录》节选……</value>
+    <comment>legacy_id=59</comment>
+  </data>
+  <data name="Answer_59_Slot_0" xml:space="preserve">
+    <value>请讲讲前面的故事。</value>
+    <comment>legacy_id=1590</comment>
+  </data>
+  <data name="Answer_59_Slot_1" xml:space="preserve">
+    <value>原来是这样……</value>
+    <comment>legacy_id=1591</comment>
+  </data>
+  <data name="Text_60" xml:space="preserve">
+    <value>既然你已经读过“帝王之书”，就去寻找古代剑士在和平庆典上使用过的“断魂之剑”吧。听说有人曾在亚特兰蒂斯、失落之塔和死亡沙漠找到它。</value>
+    <comment>legacy_id=60</comment>
+  </data>
+  <data name="Answer_60_Slot_0" xml:space="preserve">
+    <value>我会找到它。</value>
+    <comment>legacy_id=1600</comment>
+  </data>
+  <data name="Answer_60_Slot_1" xml:space="preserve">
+    <value>我放弃。</value>
+    <comment>legacy_id=1601</comment>
+  </data>
+  <data name="Text_61" xml:space="preserve">
+    <value>那些地方处处潜藏危险，“断魂之剑”也很难被发现。不过只要找到它，你就会获得新的力量！找到后再来见我。</value>
+    <comment>legacy_id=61</comment>
+  </data>
+  <data name="Answer_61_Slot_0" xml:space="preserve">
+    <value>我一定会把它带回来。</value>
+    <comment>legacy_id=1610</comment>
+  </data>
+  <data name="Text_62" xml:space="preserve">
+    <value>勇敢的剑士，你找到了“断魂之剑”！奇迹大陆统一后，第一位皇帝穆伦折断自己的宝剑“末日”，以此表达不愿战争再次发生的心愿。</value>
+    <comment>legacy_id=62</comment>
+  </data>
+  <data name="Answer_62_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=1620</comment>
+  </data>
+  <data name="Text_63" xml:space="preserve">
+    <value>战争结束后，想要成为骑士的剑士开始寻找古代的“断魂之剑”，以此证明自己的勇气。</value>
+    <comment>legacy_id=63</comment>
+  </data>
+  <data name="Answer_63_Slot_0" xml:space="preserve">
+    <value>原来是这样！</value>
+    <comment>legacy_id=1630</comment>
+  </data>
+  <data name="Text_64" xml:space="preserve">
+    <value>你已经读过“帝王之书”了吧？那么你应该知道书中记载的三件宝物。去寻找古代精灵用灵魂之力制成的水晶“精灵之泪”吧。</value>
+    <comment>legacy_id=64</comment>
+  </data>
+  <data name="Answer_64_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=1640</comment>
+  </data>
+  <data name="Text_65" xml:space="preserve">
+    <value>那里非常危险，“精灵之泪”也极难找到。不过只要找到它，你就会获得新的力量。现在去寻找“精灵之泪”，找到后再回来见我。</value>
+    <comment>legacy_id=65</comment>
+  </data>
+  <data name="Answer_65_Slot_0" xml:space="preserve">
+    <value>我这就去寻找“精灵之泪”！</value>
+    <comment>legacy_id=1650</comment>
+  </data>
+  <data name="Text_66" xml:space="preserve">
+    <value>你找到了“精灵之泪”！战争结束后，精灵女王露内迪尔对灵魂之石施加魔法，制成这颗泪石，让精灵能够召唤女神之力并增强自身力量。</value>
+    <comment>legacy_id=66</comment>
+  </data>
+  <data name="Answer_66_Slot_0" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1660</comment>
+  </data>
+  <data name="Text_67" xml:space="preserve">
+    <value>你已经读过“帝王之书”了吧？那么你应该知道书中记载的三件宝物。</value>
+    <comment>legacy_id=67</comment>
+  </data>
+  <data name="Answer_67_Slot_0" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1670</comment>
+  </data>
+  <data name="Text_68" xml:space="preserve">
+    <value>凭你的力量，一定能找到“先知之魂”。现在就去寻找它，找到后再回来见我。</value>
+    <comment>legacy_id=68</comment>
+  </data>
+  <data name="Answer_68_Slot_0" xml:space="preserve">
+    <value>我去寻找“先知之魂”。</value>
+    <comment>legacy_id=1680</comment>
+  </data>
+  <data name="Text_69" xml:space="preserve">
+    <value>我就知道你能找到“先知之魂”！阿卡最伟大的魔法师艾特拉穆担心力量薄弱的魔法师会在昆顿的攻击下动摇，因此创造了这块守护灵魂的魔法石。</value>
+    <comment>legacy_id=69</comment>
+  </data>
+  <data name="Answer_69_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=1690</comment>
+  </data>
+  <data name="Text_70" xml:space="preserve">
+    <value>拥有这块魔法石的魔法师，将成为魔导师。</value>
+    <comment>legacy_id=70</comment>
+  </data>
+  <data name="Answer_70_Slot_0" xml:space="preserve">
+    <value>我现在是魔导师了！</value>
+    <comment>legacy_id=1700</comment>
+  </data>
+  <data name="Text_71" xml:space="preserve">
+    <value>你献给神的贡金还不够。献上 2,000,000 金币，我就把神谕告诉你。</value>
+    <comment>legacy_id=71</comment>
+  </data>
+  <data name="Answer_71_Slot_0" xml:space="preserve">
+    <value>我会带着 2,000,000 金币回来。</value>
+    <comment>legacy_id=1710</comment>
+  </data>
+  <data name="Text_72" xml:space="preserve">
+    <value>你的坚强意志和实力为你赢得了新的力量。愿陆迦德的恩典永远与你同在。</value>
+    <comment>legacy_id=72</comment>
+  </data>
+  <data name="Answer_72_Slot_0" xml:space="preserve">
+    <value>愿神的恩典与我同在……</value>
+    <comment>legacy_id=1720</comment>
+  </data>
+  <data name="Text_73" xml:space="preserve">
+    <value>你已经拥有强大的力量，我没有新的神谕可以告诉你。</value>
+    <comment>legacy_id=73</comment>
+  </data>
+  <data name="Answer_73_Slot_0" xml:space="preserve">
+    <value>我以后再来。</value>
+    <comment>legacy_id=1730</comment>
+  </data>
+  <data name="Text_74" xml:space="preserve">
+    <value>等你变得更强之后再来吧。</value>
+    <comment>legacy_id=74</comment>
+  </data>
+  <data name="Answer_74_Slot_0" xml:space="preserve">
+    <value>等我变强后再回来。</value>
+    <comment>legacy_id=1740</comment>
+  </data>
+  <data name="Text_75" xml:space="preserve">
+    <value>只要成长为强大的战士，你就能找到它。</value>
+    <comment>legacy_id=75</comment>
+  </data>
+  <data name="Answer_75_Slot_0" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1750</comment>
+  </data>
+  <data name="Text_76" xml:space="preserve">
+    <value>从那以后，想成为骑士的剑士都会折断自己的剑，以此立誓绝不为非正义之事挥剑，这也逐渐成为一种传统。</value>
+    <comment>legacy_id=76</comment>
+  </data>
+  <data name="Answer_76_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=1760</comment>
+  </data>
+  <data name="Text_77" xml:space="preserve">
+    <value>一些富有冒险精神的精灵说，他们曾在失落之塔、亚特兰蒂斯和死亡沙漠见过它。</value>
+    <comment>legacy_id=77</comment>
+  </data>
+  <data name="Answer_77_Slot_0" xml:space="preserve">
+    <value>我去找它！</value>
+    <comment>legacy_id=1770</comment>
+  </data>
+  <data name="Answer_77_Slot_1" xml:space="preserve">
+    <value>我不想去那么危险的地方。</value>
+    <comment>legacy_id=1771</comment>
+  </data>
+  <data name="Text_78" xml:space="preserve">
+    <value>这就是“精灵之泪”。找到这块宝石的弓箭手将成为圣射手，并能召唤精灵女神的力量。</value>
+    <comment>legacy_id=78</comment>
+  </data>
+  <data name="Answer_78_Slot_0" xml:space="preserve">
+    <value>我成为圣射手了！</value>
+    <comment>legacy_id=1780</comment>
+  </data>
+  <data name="Text_79" xml:space="preserve">
+    <value>你已经找到“帝王之书”和“断魂之剑”，从现在起，你将被称为骑士。</value>
+    <comment>legacy_id=79</comment>
+  </data>
+  <data name="Answer_79_Slot_0" xml:space="preserve">
+    <value>我成为骑士了！</value>
+    <comment>legacy_id=1790</comment>
+  </data>
+  <data name="Text_80" xml:space="preserve">
+    <value>帝国统一后，人们向皇帝宣誓效忠。下面这些宝物，就是当时献上的忠诚信物。</value>
+    <comment>legacy_id=80</comment>
+  </data>
+  <data name="Answer_80_Slot_0" xml:space="preserve">
+    <value>请讲讲前面的故事。</value>
+    <comment>legacy_id=1800</comment>
+  </data>
+  <data name="Answer_80_Slot_1" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1801</comment>
+  </data>
+  <data name="Text_81" xml:space="preserve">
+    <value>“精灵之泪”由精灵们献上，象征他们立誓增强精灵与人类的力量。</value>
+    <comment>legacy_id=81</comment>
+  </data>
+  <data name="Answer_81_Slot_0" xml:space="preserve">
+    <value>请讲讲前面的故事。</value>
+    <comment>legacy_id=1810</comment>
+  </data>
+  <data name="Answer_81_Slot_1" xml:space="preserve">
+    <value>请继续说。</value>
+    <comment>legacy_id=1811</comment>
+  </data>
+  <data name="Text_82" xml:space="preserve">
+    <value>去寻找“先知之魂”吧。据古代魔法师所说，它最后一次出现在失落之塔、亚特兰蒂斯和死亡沙漠一带。</value>
+    <comment>legacy_id=82</comment>
+  </data>
+  <data name="Answer_82_Slot_0" xml:space="preserve">
+    <value>我去找它。</value>
+    <comment>legacy_id=1820</comment>
+  </data>
+  <data name="Answer_82_Slot_1" xml:space="preserve">
+    <value>我以后再来。</value>
+    <comment>legacy_id=1821</comment>
+  </data>
+  <data name="Text_90" xml:space="preserve">
+    <value>你已经读完“帝王之书”。不过，你知道穆伦与召唤术师首领塞梅丹之间的秘密契约吗？穆伦把艾尔贝纳入帝国版图时，曾向塞梅丹许下一个承诺。</value>
+    <comment>legacy_id=90</comment>
+  </data>
+  <data name="Answer_90_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=1900</comment>
+  </data>
+  <data name="Text_91" xml:space="preserve">
+    <value>召唤术师曾负责看守连接奇迹大陆与异界的次元之门，塞梅丹则以“深渊之眼”作为约定的信物。请去把“深渊之眼”带回来。</value>
+    <comment>legacy_id=91</comment>
+  </data>
+  <data name="Answer_91_Slot_0" xml:space="preserve">
+    <value>接受任务</value>
+    <comment>legacy_id=1910</comment>
+  </data>
+  <data name="Answer_91_Slot_1" xml:space="preserve">
+    <value>拒绝任务</value>
+    <comment>legacy_id=1911</comment>
+  </data>
+  <data name="Text_92" xml:space="preserve">
+    <value>听说“深渊之眼”曾在亚特兰蒂斯、失落之塔和死亡沙漠一带出现。找到后尽快把它带回来。</value>
+    <comment>legacy_id=92</comment>
+  </data>
+  <data name="Answer_92_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=1920</comment>
+  </data>
+  <data name="Text_93" xml:space="preserve">
+    <value>你找到了“深渊之眼”。它由现实世界中不存在的元素构成，来自过去的异界，同时承载着那个世界的记忆。</value>
+    <comment>legacy_id=93</comment>
+  </data>
+  <data name="Answer_93_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=1930</comment>
+  </data>
+  <data name="Text_94" xml:space="preserve">
+    <value>我负责监视各个次元并与异界沟通，因此“深渊之眼”对我有特殊意义。把它交给我，我将以次元守护者塞梅丹之名授予你召唤导师的称号。</value>
+    <comment>legacy_id=94</comment>
+  </data>
+  <data name="Answer_94_Slot_0" xml:space="preserve">
+    <value>晋升为召唤导师</value>
+    <comment>legacy_id=1940</comment>
+  </data>
+  <data name="Text_100" xml:space="preserve">
+    <value>若想获得穆伦的祝福与力量，就需要传说中的宝物“荣誉戒指”。它再次出现在这片大陆上，但你还没有准备好。等你拥有更多历练后再来吧。</value>
+    <comment>legacy_id=100</comment>
+  </data>
+  <data name="Answer_100_Slot_0" xml:space="preserve">
+    <value>那我需要做什么？</value>
+    <comment>legacy_id=2000</comment>
+  </data>
+  <data name="Text_101" xml:space="preserve">
+    <value>这项任务需要更丰富的经验才能完成。按照失落帝国的试炼，等你达到 220 级后再回来。</value>
+    <comment>legacy_id=101</comment>
+  </data>
+  <data name="Answer_101_Slot_0" xml:space="preserve">
+    <value>时机成熟后我会回来。</value>
+    <comment>legacy_id=2010</comment>
+  </data>
+  <data name="Text_102" xml:space="preserve">
+    <value>若想获得穆伦的祝福与力量，就需要传说中的宝物“荣誉戒指”。它再次出现在这片大陆上。</value>
+    <comment>legacy_id=102</comment>
+  </data>
+  <data name="Answer_102_Slot_0" xml:space="preserve">
+    <value>我想听听详情。</value>
+    <comment>legacy_id=2020</comment>
+  </data>
+  <data name="Text_103" xml:space="preserve">
+    <value>拥有“荣誉戒指”的人将得到穆伦的祝福。据说它出现在大海彼岸的沙漠中。</value>
+    <comment>legacy_id=103</comment>
+  </data>
+  <data name="Answer_103_Slot_0" xml:space="preserve">
+    <value>为什么会在那里？</value>
+    <comment>legacy_id=2030</comment>
+  </data>
+  <data name="Text_104" xml:space="preserve">
+    <value>那里的怪物非常强大，戒指就在它们手中。</value>
+    <comment>legacy_id=104</comment>
+  </data>
+  <data name="Answer_104_Slot_0" xml:space="preserve">
+    <value>请再讲一遍。</value>
+    <comment>legacy_id=2040</comment>
+  </data>
+  <data name="Answer_104_Slot_1" xml:space="preserve">
+    <value>我去试试。</value>
+    <comment>legacy_id=2041</comment>
+  </data>
+  <data name="Answer_104_Slot_2" xml:space="preserve">
+    <value>我还没准备好。</value>
+    <comment>legacy_id=2042</comment>
+  </data>
+  <data name="Text_105" xml:space="preserve">
+    <value>“荣誉戒指”出现的地方可能比你想象中更近。得到它后，你一定会感受到力量的变化，不过这绝非易事。</value>
+    <comment>legacy_id=105</comment>
+  </data>
+  <data name="Answer_105_Slot_0" xml:space="preserve">
+    <value>我会把它带回来。</value>
+    <comment>legacy_id=2050</comment>
+  </data>
+  <data name="Text_108" xml:space="preserve">
+    <value>这确实是“荣誉戒指”。它散发着比我想象中更神秘的光芒。这枚戒指承载着你无法想象的悠久传说，能得到它是你的福分。</value>
+    <comment>legacy_id=108</comment>
+  </data>
+  <data name="Answer_108_Slot_0" xml:space="preserve">
+    <value>原来如此。</value>
+    <comment>legacy_id=2080</comment>
+  </data>
+  <data name="Text_109" xml:space="preserve">
+    <value>据说这枚戒指能令生命复苏、让人青春永驻。不过，只有真正能驾驭它力量的英雄才能发挥其作用。</value>
+    <comment>legacy_id=109</comment>
+  </data>
+  <data name="Answer_109_Slot_0" xml:space="preserve">
+    <value>为什么？</value>
+    <comment>legacy_id=2090</comment>
+  </data>
+  <data name="Text_110" xml:space="preserve">
+    <value>因为阿卡的魔法师艾特拉穆施加了法术，防止邪恶之人利用戒指。不过戒指已经认定你有资格驾驭它。</value>
+    <comment>legacy_id=110</comment>
+  </data>
+  <data name="Answer_110_Slot_0" xml:space="preserve">
+    <value>是这样吗？</value>
+    <comment>legacy_id=2100</comment>
+  </data>
+  <data name="Text_111" xml:space="preserve">
+    <value>“荣誉戒指”与预言书《西克罗米康》一同用不朽金属制成，两者一直被奉为圣物。副指挥官盖恩发动叛乱并将它们夺走后，其下落便无人知晓。</value>
+    <comment>legacy_id=111</comment>
+  </data>
+  <data name="Answer_111_Slot_0" xml:space="preserve">
+    <value>竟然是这样？！</value>
+    <comment>legacy_id=2110</comment>
+  </data>
+  <data name="Text_112" xml:space="preserve">
+    <value>如今“荣誉戒指”已经重现，你将能够成长为更强大的战士。</value>
+    <comment>legacy_id=112</comment>
+  </data>
+  <data name="Answer_112_Slot_0" xml:space="preserve">
+    <value>我能感觉到自己的能力正在提升！</value>
+    <comment>legacy_id=2120</comment>
+  </data>
+  <data name="Text_113" xml:space="preserve">
+    <value>你将成长为远胜从前的强者。请把这份力量用于守护帝国的和平。</value>
+    <comment>legacy_id=113</comment>
+  </data>
+  <data name="Answer_113_Slot_0" xml:space="preserve">
+    <value>我会的。</value>
+    <comment>legacy_id=2130</comment>
+  </data>
+  <data name="Text_114" xml:space="preserve">
+    <value>你已经拥有神圣的力量。</value>
+    <comment>legacy_id=114</comment>
+  </data>
+  <data name="Answer_114_Slot_0" xml:space="preserve">
+    <value>我以后再来。</value>
+    <comment>legacy_id=2140</comment>
+  </data>
+  <data name="Text_115" xml:space="preserve">
+    <value>据说能赋予战士新力量的“暗黑之石”已经出现在奇迹大陆。不过你还没有准备好驾驭这股力量，准备充分后再来吧。</value>
+    <comment>legacy_id=115</comment>
+  </data>
+  <data name="Answer_115_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2150</comment>
+  </data>
+  <data name="Text_116" xml:space="preserve">
+    <value>若想获得完整的力量，你必须先找到记录穆伦皇帝历史的“帝王之书”并完成准备。去冰风谷找圣导士赛维娜吧。</value>
+    <comment>legacy_id=116</comment>
+  </data>
+  <data name="Answer_116_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2160</comment>
+  </data>
+  <data name="Text_117" xml:space="preserve">
+    <value>你还无法成为骑士。先通过“荣誉戒指”获得新的力量，再回来吧。</value>
+    <comment>legacy_id=117</comment>
+  </data>
+  <data name="Answer_117_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2170</comment>
+  </data>
+  <data name="Text_118" xml:space="preserve">
+    <value>要让神圣化这项任务，你必须献上 3,000,000 金币。你的金币还不够。</value>
+    <comment>legacy_id=118</comment>
+  </data>
+  <data name="Answer_118_Slot_0" xml:space="preserve">
+    <value>我会带着 3,000,000 金币回来。</value>
+    <comment>legacy_id=2180</comment>
+  </data>
+  <data name="Text_119" xml:space="preserve">
+    <value>你献给神的贡金还不够。献上 2,000,000 金币，我就把神谕告诉你。</value>
+    <comment>legacy_id=119</comment>
+  </data>
+  <data name="Answer_119_Slot_0" xml:space="preserve">
+    <value>我会带着 2,000,000 金币回来。</value>
+    <comment>legacy_id=2190</comment>
+  </data>
+  <data name="Text_130" xml:space="preserve">
+    <value>这确实是“荣誉戒指”。看它闪耀的光芒！这枚戒指承载着你无法想象的悠久岁月与传说。能找到它，是你的福分！</value>
+    <comment>legacy_id=130</comment>
+  </data>
+  <data name="Answer_130_Slot_0" xml:space="preserve">
+    <value>没想到还有这样的传说！</value>
+    <comment>legacy_id=2300</comment>
+  </data>
+  <data name="Text_131" xml:space="preserve">
+    <value>没错，据说这枚戒指能令死者复生、让人青春永驻。不过，只有真正能够掌控戒指力量的英雄才能发挥它的全部威力。</value>
+    <comment>legacy_id=131</comment>
+  </data>
+  <data name="Answer_131_Slot_0" xml:space="preserve">
+    <value>为什么会这样？</value>
+    <comment>legacy_id=2310</comment>
+  </data>
+  <data name="Text_132" xml:space="preserve">
+    <value>因为阿卡的魔法师艾特拉穆对它施加了法术，以免戒指落入歹人之手。现在看来，你正是合适的人选！</value>
+    <comment>legacy_id=132</comment>
+  </data>
+  <data name="Answer_132_Slot_0" xml:space="preserve">
+    <value>是这样吗！</value>
+    <comment>legacy_id=2320</comment>
+  </data>
+  <data name="Text_133" xml:space="preserve">
+    <value>“荣誉戒指”与预言书《西克罗米康》一同用不朽金属制成，两者一直被奉为圣物。副指挥官盖恩发动叛乱并将它们夺走后，其下落便无人知晓。</value>
+    <comment>legacy_id=133</comment>
+  </data>
+  <data name="Answer_133_Slot_0" xml:space="preserve">
+    <value>竟然是这样！</value>
+    <comment>legacy_id=2330</comment>
+  </data>
+  <data name="Text_134" xml:space="preserve">
+    <value>如今“荣誉戒指”已经重现，你将能够成长为更强大的战士。</value>
+    <comment>legacy_id=134</comment>
+  </data>
+  <data name="Answer_134_Slot_0" xml:space="preserve">
+    <value>我能感觉到自己的能力正在提升！</value>
+    <comment>legacy_id=2340</comment>
+  </data>
+  <data name="Text_135" xml:space="preserve">
+    <value>如果想获得新的力量，就仔细听我说。据说能赋予战士新力量的“暗黑之石”已经出现在奇迹大陆。</value>
+    <comment>legacy_id=135</comment>
+  </data>
+  <data name="Answer_135_Slot_0" xml:space="preserve">
+    <value>我想听听详情。</value>
+    <comment>legacy_id=2350</comment>
+  </data>
+  <data name="Text_136" xml:space="preserve">
+    <value>拥有“暗黑之石”，你就能掌握新的能力。这绝非易事，不过既然你能取得“荣誉戒指”，也一定有机会找到它。</value>
+    <comment>legacy_id=136</comment>
+  </data>
+  <data name="Answer_136_Slot_0" xml:space="preserve">
+    <value>我需要做什么？</value>
+    <comment>legacy_id=2360</comment>
+  </data>
+  <data name="Text_137" xml:space="preserve">
+    <value>传闻在死亡沙漠和天空之城能找到这块石头。务必小心那里的怪物，持有石头的怪物只会对拥有特殊能力的人作出反应。</value>
+    <comment>legacy_id=137</comment>
+  </data>
+  <data name="Answer_137_Slot_0" xml:space="preserve">
+    <value>请再讲一遍。</value>
+    <comment>legacy_id=2370</comment>
+  </data>
+  <data name="Answer_137_Slot_1" xml:space="preserve">
+    <value>那我去试试！</value>
+    <comment>legacy_id=2371</comment>
+  </data>
+  <data name="Answer_137_Slot_2" xml:space="preserve">
+    <value>我还没有信心。</value>
+    <comment>legacy_id=2372</comment>
+  </data>
+  <data name="Text_138" xml:space="preserve">
+    <value>“暗黑之石”此刻正呼唤着你。只要将它握在手中，你必定能获得从未感受过的力量。不过，还有许多战士也在拼命寻找它。</value>
+    <comment>legacy_id=138</comment>
+  </data>
+  <data name="Answer_138_Slot_0" xml:space="preserve">
+    <value>我会带着“暗黑之石”回来。</value>
+    <comment>legacy_id=2380</comment>
+  </data>
+  <data name="Text_139" xml:space="preserve">
+    <value>看来你找到了“暗黑之石”。据记载，这块石头是英雄贝内洛普在神魔战争中奋战时流下并凝固的鲜血。</value>
+    <comment>legacy_id=139</comment>
+  </data>
+  <data name="Answer_139_Slot_0" xml:space="preserve">
+    <value>请再多告诉我一些。</value>
+    <comment>legacy_id=2390</comment>
+  </data>
+  <data name="Text_140" xml:space="preserve">
+    <value>贝内洛普出身骑士世家。战败后，他潜心修炼新的魔法和战斗技巧。为了对抗昆顿的强大势力，这些技巧一直秘密传授给继承骑士血脉的战士。</value>
+    <comment>legacy_id=140</comment>
+  </data>
+  <data name="Answer_140_Slot_0" xml:space="preserve">
+    <value>原来如此……</value>
+    <comment>legacy_id=2400</comment>
+  </data>
+  <data name="Text_141" xml:space="preserve">
+    <value>没错，战士的血脉正在你体内流淌。因此，贝内洛普的力量将通过“暗黑之石”传给你。</value>
+    <comment>legacy_id=141</comment>
+  </data>
+  <data name="Answer_141_Slot_0" xml:space="preserve">
+    <value>我获得了新的力量！</value>
+    <comment>legacy_id=2410</comment>
+  </data>
+  <data name="Text_142" xml:space="preserve">
+    <value>你已经通过“荣誉戒指”获得了新的力量，但还有一件事你并不知道。</value>
+    <comment>legacy_id=142</comment>
+  </data>
+  <data name="Answer_142_Slot_0" xml:space="preserve">
+    <value>是什么事？</value>
+    <comment>legacy_id=2420</comment>
+  </data>
+  <data name="Text_143" xml:space="preserve">
+    <value>你也许还能获得另一种新力量。与“荣誉戒指”一同被奉为圣物的传说宝物“暗黑之石”，正在呼唤着你。</value>
+    <comment>legacy_id=143</comment>
+  </data>
+  <data name="Answer_143_Slot_0" xml:space="preserve">
+    <value>真让人难以置信！</value>
+    <comment>legacy_id=2430</comment>
+  </data>
+  <data name="Text_144" xml:space="preserve">
+    <value>光明之神陆迦德有事委托你，不过你现在还不够资格。等你变得更强后再来吧。</value>
+    <comment>legacy_id=144</comment>
+  </data>
+  <data name="Answer_144_Slot_0" xml:space="preserve">
+    <value>等我变强后再回来。</value>
+    <comment>legacy_id=2440</comment>
+  </data>
+  <data name="Text_145" xml:space="preserve">
+    <value>光明之神陆迦德有事委托你，不过你现在还不够资格。请先完成之前的任务，再回来见我。</value>
+    <comment>legacy_id=145</comment>
+  </data>
+  <data name="Answer_145_Slot_0" xml:space="preserve">
+    <value>完成任务后我会回来。</value>
+    <comment>legacy_id=2450</comment>
+  </data>
+  <data name="Text_146" xml:space="preserve">
+    <value>你的金币不够。向陆迦德献上 5,000,000 金币，才能申请这项任务。</value>
+    <comment>legacy_id=146</comment>
+  </data>
+  <data name="Answer_146_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2460</comment>
+  </data>
+  <data name="Text_147" xml:space="preserve">
+    <value>光明之神陆迦德有事委托你。</value>
+    <comment>legacy_id=147</comment>
+  </data>
+  <data name="Answer_147_Slot_0" xml:space="preserve">
+    <value>是什么事？</value>
+    <comment>legacy_id=2470</comment>
+  </data>
+  <data name="Text_148" xml:space="preserve">
+    <value>陆迦德希望你寻找英雄，一同抵御巴卡斯给奇迹大陆带来的新威胁。</value>
+    <comment>legacy_id=148</comment>
+  </data>
+  <data name="Answer_148_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2480</comment>
+  </data>
+  <data name="Text_149" xml:space="preserve">
+    <value>我们知道巴卡斯的军队正试图通过狼魂要塞进攻奇迹大陆，但目前还无法完全掌握事情的全貌。</value>
+    <comment>legacy_id=149</comment>
+  </data>
+  <data name="Answer_149_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2490</comment>
+  </data>
+  <data name="Text_150" xml:space="preserve">
+    <value>我们一直努力理解陆迦德托付给我们的使命，但由于能力不足，至今仍未能参透其中的全部含义。</value>
+    <comment>legacy_id=150</comment>
+  </data>
+  <data name="Answer_150_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2500</comment>
+  </data>
+  <data name="Text_151" xml:space="preserve">
+    <value>我相信你正是能够帮助我们的人。愿意与我们并肩作战吗？</value>
+    <comment>legacy_id=151</comment>
+  </data>
+  <data name="Answer_151_Slot_0" xml:space="preserve">
+    <value>再听一遍。</value>
+    <comment>legacy_id=2510</comment>
+  </data>
+  <data name="Answer_151_Slot_1" xml:space="preserve">
+    <value>接受任务</value>
+    <comment>legacy_id=2511</comment>
+  </data>
+  <data name="Answer_151_Slot_2" xml:space="preserve">
+    <value>拒绝任务</value>
+    <comment>legacy_id=2512</comment>
+  </data>
+  <data name="Text_152" xml:space="preserve">
+    <value>要帮助我们，你就必须与巴卡斯军团为敌。行动之前，我需要确认你是否拥有完成任务所需的力量。</value>
+    <comment>legacy_id=152</comment>
+  </data>
+  <data name="Answer_152_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2520</comment>
+  </data>
+  <data name="Text_153" xml:space="preserve">
+    <value>击败盘踞在死亡沙漠、幽暗森林和天空之城的炽炎魔、丛林召唤者与天魔菲尼斯，并分别带回三件强者的证明。</value>
+    <comment>legacy_id=153</comment>
+  </data>
+  <data name="Answer_153_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2530</comment>
+  </data>
+  <data name="Text_154" xml:space="preserve">
+    <value>恭喜你完成任务。这份小小的奖励，是对你辛劳的谢意。</value>
+    <comment>legacy_id=154</comment>
+  </data>
+  <data name="Answer_154_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2540</comment>
+  </data>
+  <data name="Text_155" xml:space="preserve">
+    <value>巴卡斯与魔界女王艾丽丝迦联手，给这个世界带来了巨大的危险，因此他本身就是极其严重的威胁。</value>
+    <comment>legacy_id=155</comment>
+  </data>
+  <data name="Answer_155_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2550</comment>
+  </data>
+  <data name="Text_156" xml:space="preserve">
+    <value>我们推测，巴卡斯正准备率领邪恶魔法军团，再次威胁奇迹大陆。</value>
+    <comment>legacy_id=156</comment>
+  </data>
+  <data name="Answer_156_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2560</comment>
+  </data>
+  <data name="Text_157" xml:space="preserve">
+    <value>你的金币不够。向陆迦德献上 7,000,000 金币，才能申请这项任务。</value>
+    <comment>legacy_id=157</comment>
+  </data>
+  <data name="Answer_157_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2570</comment>
+  </data>
+  <data name="Text_158" xml:space="preserve">
+    <value>欢迎回来。现在你确实已经拥有帮助我们的力量。</value>
+    <comment>legacy_id=158</comment>
+  </data>
+  <data name="Answer_158_Slot_0" xml:space="preserve">
+    <value>需要我做什么？</value>
+    <comment>legacy_id=2580</comment>
+  </data>
+  <data name="Text_159" xml:space="preserve">
+    <value>根据情报，巴卡斯建立了一处名为“巴卡斯兵营”的据点。陆迦德的十二使徒认为，这是巴卡斯带来的新威胁。</value>
+    <comment>legacy_id=159</comment>
+  </data>
+  <data name="Answer_159_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2590</comment>
+  </data>
+  <data name="Text_160" xml:space="preserve">
+    <value>为了查明“巴卡斯兵营”的确切情况，必须潜入兵营，削弱巴卡斯正在扩张的军力。</value>
+    <comment>legacy_id=160</comment>
+  </data>
+  <data name="Answer_160_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2600</comment>
+  </data>
+  <data name="Text_161" xml:space="preserve">
+    <value>幸运的是，陆迦德的守护能帮助你找到进入巴卡斯兵营的道路。潜入那里，消灭训练兵并取得准确情报。你愿意把调查结果带回来吗？</value>
+    <comment>legacy_id=161</comment>
+  </data>
+  <data name="Answer_161_Slot_0" xml:space="preserve">
+    <value>再听一遍。</value>
+    <comment>legacy_id=2610</comment>
+  </data>
+  <data name="Answer_161_Slot_1" xml:space="preserve">
+    <value>接受任务</value>
+    <comment>legacy_id=2611</comment>
+  </data>
+  <data name="Answer_161_Slot_2" xml:space="preserve">
+    <value>拒绝任务</value>
+    <comment>legacy_id=2612</comment>
+  </data>
+  <data name="Text_162" xml:space="preserve">
+    <value>前往狼魂要塞北部的墓地，寻找从巴卡斯兵营逃出的士兵。陆迦德的祝福让他恢复了灵智，他自称“暗黑血狼人扩雷”。</value>
+    <comment>legacy_id=162</comment>
+  </data>
+  <data name="Answer_162_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2620</comment>
+  </data>
+  <data name="Text_163" xml:space="preserve">
+    <value>他会带你进入巴卡斯兵营。潜入兵营，至少消灭 10 名训练兵。</value>
+    <comment>legacy_id=163</comment>
+  </data>
+  <data name="Answer_163_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2630</comment>
+  </data>
+  <data name="Text_164" xml:space="preserve">
+    <value>你平安完成了任务。你的辛劳和坚强意志令我敬佩。</value>
+    <comment>legacy_id=164</comment>
+  </data>
+  <data name="Answer_164_Slot_0" xml:space="preserve">
+    <value>继续交谈。</value>
+    <comment>legacy_id=2640</comment>
+  </data>
+  <data name="Text_165" xml:space="preserve">
+    <value>你带回的情报和消灭的怪物，为守护奇迹大陆与狼魂要塞的和平提供了巨大帮助。</value>
+    <comment>legacy_id=165</comment>
+  </data>
+  <data name="Answer_165_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2650</comment>
+  </data>
+  <data name="Text_166" xml:space="preserve">
+    <value>你目前还不具备资格。去找警卫队长摩伦，完成准备后再来申请这项任务。</value>
+    <comment>legacy_id=166</comment>
+  </data>
+  <data name="Answer_166_Slot_0" xml:space="preserve">
+    <value>结束对话。</value>
+    <comment>legacy_id=2660</comment>
+  </data>
+  <data name="Text_167" xml:space="preserve">
+    <value>你的金币不够。向陆迦德献上 10,000,000 金币，才能申请这项任务。</value>
+    <comment>legacy_id=167</comment>
+  </data>
+  <data name="Answer_167_Slot_0" xml:space="preserve">
+    <value>准备好后我会回来。</value>
+    <comment>legacy_id=2670</comment>
+  </data>
+  <data name="Text_168" xml:space="preserve">
+    <value>你主动挺身而出的勇气，让我们所有人都看到了希望。</value>
+    <comment>legacy_id=168</comment>
+  </data>
+  <data name="Answer_168_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2680</comment>
+  </data>
+  <data name="Text_169" xml:space="preserve">
+    <value>巴卡斯藏在一个独立区域，正在让疲惫的身体恢复力量。</value>
+    <comment>legacy_id=169</comment>
+  </data>
+  <data name="Answer_169_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2690</comment>
+  </data>
+  <data name="Text_170" xml:space="preserve">
+    <value>为了完成陆迦德托付的使命，必须找到巴卡斯的确切位置，并消灭那里的训练军队。</value>
+    <comment>legacy_id=170</comment>
+  </data>
+  <data name="Answer_170_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2700</comment>
+  </data>
+  <data name="Text_171" xml:space="preserve">
+    <value>陆迦德使命的最后阶段，是一场艰巨而危险的考验。你仍然愿意接受吗？</value>
+    <comment>legacy_id=171</comment>
+  </data>
+  <data name="Answer_171_Slot_0" xml:space="preserve">
+    <value>再听一遍。</value>
+    <comment>legacy_id=2710</comment>
+  </data>
+  <data name="Answer_171_Slot_1" xml:space="preserve">
+    <value>接受任务</value>
+    <comment>legacy_id=2711</comment>
+  </data>
+  <data name="Answer_171_Slot_2" xml:space="preserve">
+    <value>拒绝任务</value>
+    <comment>legacy_id=2712</comment>
+  </data>
+  <data name="Text_172" xml:space="preserve">
+    <value>从巴卡斯兵营北端的门进入内部。我们会提前为你打开通道。</value>
+    <comment>legacy_id=172</comment>
+  </data>
+  <data name="Answer_172_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2720</comment>
+  </data>
+  <data name="Text_173" xml:space="preserve">
+    <value>恭喜你通过陆迦德最后的考验。从今以后，无论你去往何处，他的祝福都会与你同在。</value>
+    <comment>legacy_id=173</comment>
+  </data>
+  <data name="Answer_173_Slot_0" xml:space="preserve">
+    <value>继续听。</value>
+    <comment>legacy_id=2730</comment>
+  </data>
+  <data name="Text_174" xml:space="preserve">
+    <value>你的努力粉碎了巴卡斯的新威胁，守护了奇迹大陆和狼魂要塞的和平。衷心感谢你的帮助。</value>
+    <comment>legacy_id=174</comment>
+  </data>
+  <data name="Answer_174_Slot_0" xml:space="preserve">
+    <value>结束对话</value>
+    <comment>legacy_id=2740</comment>
+  </data>
+</root>

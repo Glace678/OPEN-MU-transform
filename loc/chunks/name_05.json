@@ -1,0 +1,1051 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 2018,
+   "en": "Legendary Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2019,
+   "en": "Legendary Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2020,
+   "en": "Legendary Gloves-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2021,
+   "en": "Legendary Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2022,
+   "en": "Legendary Helm-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2023,
+   "en": "Legendary Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2024,
+   "en": "Legendary Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2025,
+   "en": "Legendary Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2026,
+   "en": "Legendary Shield-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2027,
+   "en": "Legendary Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2028,
+   "en": "Legendary Staff-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2029,
+   "en": "Legendary Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2042,
+   "en": "Lethal Wizard's Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2052,
+   "en": "Light Crossbow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2053,
+   "en": "Light Plate Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2054,
+   "en": "Light Plate Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2055,
+   "en": "Light Plate Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2056,
+   "en": "Light Plate Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2057,
+   "en": "Light Plate Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2058,
+   "en": "Light Plate Gloves-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2059,
+   "en": "Light Plate Mask",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2060,
+   "en": "Light Plate Mask-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2061,
+   "en": "Light Plate Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2062,
+   "en": "Light Plate Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2063,
+   "en": "Light Saber",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2064,
+   "en": "Light Spear",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2065,
+   "en": "Lighting Sword",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2066,
+   "en": "Lighting Sword-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2067,
+   "en": "Lightning",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2068,
+   "en": "Lightning Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2069,
+   "en": "Lightning Shock",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  },
+  {
+   "id": 2070,
+   "en": "Lightning Shock Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2071,
+   "en": "Lightning Shock Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2073,
+   "en": "Lightning Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2074,
+   "en": "Lightning Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2075,
+   "en": "Lightning Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2081,
+   "en": "Little Warrior's Cloak",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2084,
+   "en": "Loch's Feather",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2086,
+   "en": "Lord Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2087,
+   "en": "Lorencia",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2090,
+   "en": "Lost Map",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2097,
+   "en": "LostTower",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2098,
+   "en": "LostTower2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2099,
+   "en": "LostTower3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2100,
+   "en": "LostTower4",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2101,
+   "en": "LostTower5",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2102,
+   "en": "LostTower6",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2103,
+   "en": "LostTower7",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2106,
+   "en": "Low Vitality Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2107,
+   "en": "Lower Refining Stone Bundle",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2108,
+   "en": "Lower refining stone",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2109,
+   "en": "Lucky Coin",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2114,
+   "en": "Lunge",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2115,
+   "en": "Lunge Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2118,
+   "en": "Lv. 1 Completion Certificate",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2119,
+   "en": "Lv. 1 Letter of Request",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2123,
+   "en": "Mace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2124,
+   "en": "Mace Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2125,
+   "en": "Mace Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2126,
+   "en": "Magic Attack Immunity",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2127,
+   "en": "Magic Backpack",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2129,
+   "en": "Magic Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2133,
+   "en": "Mana Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2134,
+   "en": "Mana Rays",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2135,
+   "en": "Mana Reduction",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2143,
+   "en": "Maple Charm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2148,
+   "en": "Master Scepter",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2149,
+   "en": "Master Scepter-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2150,
+   "en": "Master Seal of Ascension",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2151,
+   "en": "Master Seal of Wealth",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2152,
+   "en": "Master Skill Reset",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2153,
+   "en": "Max AG Boost Aura",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2157,
+   "en": "Max SD Boost Aura",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 2165,
+   "en": "Maximum AG Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2167,
+   "en": "Maximum Attack Power Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2168,
+   "en": "Maximum Life Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2172,
+   "en": "Maximum Mana Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2176,
+   "en": "Maximum SD increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2177,
+   "en": "Maximum Wizardry Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2179,
+   "en": "Maximum Wizardry/Curse Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2188,
+   "en": "Medium Elite Healing Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2190,
+   "en": "Medium Vitality Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2202,
+   "en": "Meteor Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2203,
+   "en": "Meteor Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2205,
+   "en": "Meteorite",
+   "budget": 31,
+   "kinds": [
+    "npcname",
+    "skill"
+   ]
+  },
+  {
+   "id": 2212,
+   "en": "Minimum Attack Power Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2214,
+   "en": "Minimum Vitality Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2215,
+   "en": "Minimum Wizardry Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2218,
+   "en": "Minimum Wizardry/Curse Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2221,
+   "en": "Mirror of Dimensions",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2227,
+   "en": "Monster Attack Life Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2228,
+   "en": "Monster Attack Mana Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2229,
+   "en": "Monster Attack SD Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2243,
+   "en": "Moonstone Pendant",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2244,
+   "en": "Morning Star",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2248,
+   "en": "Multi-Shot",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2249,
+   "en": "Multi-Shot Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2250,
+   "en": "Multi-Shot Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2255,
+   "en": "Mystery Stick",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2263,
+   "en": "Nikea Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2269,
+   "en": "Noria",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2271,
+   "en": "Nova",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2272,
+   "en": "Nova Cast Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2273,
+   "en": "Nova Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2277,
+   "en": "Oak Charm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2306,
+   "en": "Old Jewelry Case",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2307,
+   "en": "Old Scroll",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2311,
+   "en": "One-handed Staff Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2312,
+   "en": "One-handed Staff Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2313,
+   "en": "One-handed Sword Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2314,
+   "en": "One-handed Sword Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2317,
+   "en": "Open Access Ticket to Chaos Ca",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2318,
+   "en": "Open Access Ticket to Doppelga",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2319,
+   "en": "Open Access Ticket to Varka",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2320,
+   "en": "Open Access Ticket to Varka Ma",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2324,
+   "en": "Orb of Death Stab",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2325,
+   "en": "Orb of Fire Slash",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2326,
+   "en": "Orb of Greater Damage",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2327,
+   "en": "Orb of Greater Fortitude",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2328,
+   "en": "Orb of Ice Arrow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2329,
+   "en": "Orb of Impale",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2330,
+   "en": "Orb of Penetration",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2331,
+   "en": "Orb of Rageful Blow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2332,
+   "en": "Orb of Summoning",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2333,
+   "en": "Orb of Twisting Slash",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2335,
+   "en": "Order (Guardian/Life Stone)",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2337,
+   "en": "Other World Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2338,
+   "en": "Other World Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2349,
+   "en": "Package Box",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 2350,
+   "en": "Package Box A",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  }
+ ]
+}

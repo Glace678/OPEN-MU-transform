@@ -1,0 +1,59 @@
+plugins {
+    id 'com.android.application'
+}
+
+// No default: a hardcoded LAN address here would silently bake one developer's
+// IP into any APK built by hand with `gradlew assembleDebug`. Fail instead, the
+// way the package key below does. Build-AndroidPackage.ps1 passes this with
+// -POPENMU_SERVER_ADDRESS=<ip or hostname>.
+def openMuServerAddress = providers.gradleProperty('OPENMU_SERVER_ADDRESS').getOrElse('')
+if (!(openMuServerAddress ==~ /[A-Za-z0-9.-]+/)) {
+    throw new GradleException('OPENMU_SERVER_ADDRESS must be an IPv4 address or ' +
+        'hostname (letters, digits, dots, hyphens only). Pass it with ' +
+        '-POPENMU_SERVER_ADDRESS=<address>.')
+}
+def mobilePackageKey = providers.gradleProperty('OPENMU_MOBILE_PACKAGE_KEY').getOrElse('')
+if (!(mobilePackageKey ==~ /[A-Za-z0-9_-]{43}/)) {
+    throw new GradleException('OPENMU_MOBILE_PACKAGE_KEY must be exactly 43 base64url characters')
+}
+
+android {
+    namespace 'net.munique.openmu.gm'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+
+    defaultConfig {
+        applicationId 'net.munique.openmu.gm'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
+        buildConfigField 'String', 'DEFAULT_SERVER_URL', '"http://' + openMuServerAddress + ':5080"'
+        buildConfigField 'String', 'MOBILE_PACKAGE_KEY', '"' + mobilePackageKey + '"'
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Preparando datos del juego</string>
+    <string name="preparing_detail">El primer inicio extrae los datos del juego al almacenamiento interno. Mantén la aplicación abierta.</string>
+    <string name="ready">Todo listo para jugar</string>
+    <string name="start_game">Jugar</string>
+    <string name="settings">Ajustes</string>
+    <string name="gesture_help">Gestos</string>
+    <string name="retry">Reintentar</string>
+    <string name="extract_failed">No se pudieron preparar los datos del juego</string>
+    <string name="save">Guardar</string>
+    <string name="back">Volver</string>
+    <string name="display">Gráficos</string>
+    <string name="controls">Controles</string>
+    <string name="network">Servidor</string>
+    <string name="fps">Fotogramas por segundo</string>
+    <string name="render_scale">Escala de renderizado</string>
+    <string name="effects">Calidad de efectos</string>
+    <string name="ui_scale">Tamaño de botones táctiles</string>
+    <string name="safe_margin">Margen seguro</string>
+    <string name="touch_opacity">Opacidad de botones táctiles</string>
+    <string name="vibration">Vibración táctil y de combate</string>
+    <string name="handedness">Mano preferida</string>
+    <string name="server_address">Dirección del servidor</string>
+    <string name="server_port">Puerto de conexión</string>
+    <string name="local_pairing">Emparejamiento local sin inicio de sesión (solo LAN)</string>
+    <string name="restart_note">Los cambios de gráficos y servidor se aplicarán la próxima vez que entres al juego.</string>
+    <string name="invalid_server">Introduce la dirección IPv4 o el nombre del servidor, sin protocolo ni puerto.</string>
+    <string name="invalid_local_server">El emparejamiento local requiere una dirección IPv4 de loopback o LAN, como 192.168.1.20. Desactívalo para servidores en la nube.</string>
+    <string name="invalid_port">El puerto debe estar entre 1 y 65535.</string>
+    <string name="saved">Ajustes guardados</string>
+    <string name="tutorial_title">Controles móviles</string>
+    <string name="tutorial_body">Menús: toca con un dedo para seleccionar o confirmar.\nSelección de personaje: toca un personaje y luego el botón de entrada abajo a la derecha.\n\nInventario normal: toca para ver detalles; mantén el dedo quieto medio segundo para usar un objeto utilizable o aprender una habilidad. Para moverlo, pulsa y arrastra enseguida; soltar fuera lo devuelve a su lugar.\nLos cuatro espacios inferiores de pociones: toca para usar; mantener pulsado no repite la acción.\n\nEn el mundo del juego:\nArrastra un dedo en la zona de movimiento para moverte.\nToca la zona de habilidades para seleccionar; toca dos veces para usar la habilidad actual.\nDesliza dos dedos a izquierda o derecha para cambiar de habilidad.\nDesliza dos dedos arriba o abajo, o pellizca, para ajustar la cámara.\nDesliza tres dedos arriba para el mapa o abajo para los ajustes.\n\nLa barra inferior de pociones y los controles de interfaz no activan habilidades del mundo.</string>
+    <string name="understood">Entendido, jugar</string>
+    <string name="help_close">Cerrar</string>
+    <string name="game_data_missing">Falta game-data.zip en el APK; este no es un paquete completo del juego.</string>
+    <string name="storage_low">No hay suficiente almacenamiento interno. Se necesitan al menos %1$s más.</string>
+    <string name="current_display">Pantalla actual: %1$d × %2$d</string>
+    <string name="max_refresh">Frecuencia máxima de pantalla: %1$d Hz. Elige entre 30 y %1$d fotogramas por segundo.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Hasta %1$d Hz (según pantalla)</string>
+    <string name="game_settings">Ajustes móviles</string>
+    <string name="open_settings">Abrir ajustes</string>
+    <string-array name="effect_labels">
+        <item>Baja (más fluidez)</item>
+        <item>Media (recomendada)</item>
+        <item>Alta (mejores gráficos)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Mano derecha</item>
+        <item>Mano izquierda</item>
+    </string-array>
+</resources>

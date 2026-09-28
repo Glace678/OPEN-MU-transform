@@ -1,0 +1,11 @@
+507|99|Chaos Castle13
+508|99|Chaos Castle14
+627|99|Crown Switch1
+628|99|Crown Switch2
+2132|99|Magic stone of %s
+2236|99|Monster7
+3848|99|Wolf Altar1
+3849|99|Wolf Altar2
+3850|99|Wolf Altar3
+3851|99|Wolf Altar4
+3852|99|Wolf Altar5

@@ -1,0 +1,11 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "openmu-harmony-game",
+  "version": "1.0.0",
+  "description": "OpenMU game client for HarmonyOS (phones, foldables and tablets).",
+  "dependencies": {},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.19",
+    "@ohos/hvigor-ohos-plugin": "5.0.2"
+  }
+}

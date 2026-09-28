@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Przygotowywanie danych gry</string>
+    <string name="preparing_detail">Przy pierwszym uruchomieniu dane gry są rozpakowywane do pamięci wewnętrznej. Nie zamykaj aplikacji.</string>
+    <string name="ready">Gra jest gotowa</string>
+    <string name="start_game">Graj</string>
+    <string name="settings">Ustawienia</string>
+    <string name="gesture_help">Gesty</string>
+    <string name="retry">Spróbuj ponownie</string>
+    <string name="extract_failed">Nie udało się przygotować danych gry</string>
+    <string name="save">Zapisz</string>
+    <string name="back">Wstecz</string>
+    <string name="display">Grafika</string>
+    <string name="controls">Sterowanie</string>
+    <string name="network">Serwer</string>
+    <string name="fps">Liczba klatek</string>
+    <string name="render_scale">Skala renderowania</string>
+    <string name="effects">Jakość efektów</string>
+    <string name="ui_scale">Rozmiar przycisków dotykowych</string>
+    <string name="safe_margin">Bezpieczny margines</string>
+    <string name="touch_opacity">Krycie przycisków dotykowych</string>
+    <string name="vibration">Wibracje dotyku i walki</string>
+    <string name="handedness">Preferowana ręka</string>
+    <string name="server_address">Adres serwera</string>
+    <string name="server_port">Port połączenia</string>
+    <string name="local_pairing">Parowanie lokalne bez logowania (tylko LAN)</string>
+    <string name="restart_note">Zmiany grafiki i serwera zostaną zastosowane przy kolejnym wejściu do gry.</string>
+    <string name="invalid_server">Podaj adres IPv4 lub nazwę serwera, bez protokołu i portu.</string>
+    <string name="invalid_local_server">Parowanie lokalne wymaga adresu IPv4 pętli zwrotnej lub LAN, np. 192.168.1.20. Wyłącz je dla serwera w chmurze.</string>
+    <string name="invalid_port">Port musi mieścić się w zakresie od 1 do 65535.</string>
+    <string name="saved">Ustawienia zapisane</string>
+    <string name="tutorial_title">Sterowanie mobilne</string>
+    <string name="tutorial_body">Menu: dotknij jednym palcem, aby wybrać lub potwierdzić.\nWybór postaci: dotknij postaci, a potem przycisku wejścia w prawym dolnym rogu.\n\nZwykły ekwipunek: dotknij, aby zobaczyć szczegóły; przytrzymaj nieruchomo pół sekundy, aby użyć przedmiotu lub nauczyć się umiejętności. Aby przenieść, od razu przeciągnij; puszczenie poza ekwipunkiem odkłada przedmiot.\nCztery dolne miejsca na mikstury: dotknij, aby użyć; przytrzymanie nie powtarza użycia.\n\nW świecie gry:\nPrzeciągnij jednym palcem w obszarze ruchu, aby się poruszać.\nDotknij obszaru umiejętności, aby wybrać; dotknij dwukrotnie, aby użyć bieżącej umiejętności.\nPrzesuń dwoma palcami w lewo lub prawo, aby zmienić umiejętność.\nPrzesuń dwoma palcami w górę lub dół albo wykonaj gest szczypania, aby ustawić kamerę.\nPrzesuń trzema palcami w górę dla mapy lub w dół dla ustawień.\n\nDolny pasek mikstur i elementy interfejsu nie uruchamiają umiejętności świata.</string>
+    <string name="understood">Rozumiem, graj</string>
+    <string name="help_close">Zamknij</string>
+    <string name="game_data_missing">W pliku APK brakuje game-data.zip; ten pakiet gry jest niekompletny.</string>
+    <string name="storage_low">Za mało pamięci wewnętrznej. Potrzeba jeszcze co najmniej %1$s.</string>
+    <string name="current_display">Bieżący ekran: %1$d × %2$d</string>
+    <string name="max_refresh">Maksymalne odświeżanie ekranu: %1$d Hz. Wybierz liczbę klatek od 30 do %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Do %1$d Hz (według ekranu)</string>
+    <string name="game_settings">Ustawienia mobilne</string>
+    <string name="open_settings">Otwórz ustawienia</string>
+    <string-array name="effect_labels">
+        <item>Niska (płynność)</item>
+        <item>Średnia (zalecana)</item>
+        <item>Wysoka (lepsza grafika)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Prawa ręka</item>
+        <item>Lewa ręka</item>
+    </string-array>
+</resources>

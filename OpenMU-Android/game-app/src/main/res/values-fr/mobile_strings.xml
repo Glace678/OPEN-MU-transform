@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Préparation des données du jeu</string>
+    <string name="preparing_detail">Au premier lancement, les données sont extraites vers le stockage interne. Gardez l\'application ouverte.</string>
+    <string name="ready">Prêt à jouer</string>
+    <string name="start_game">Jouer</string>
+    <string name="settings">Paramètres</string>
+    <string name="gesture_help">Gestes</string>
+    <string name="retry">Réessayer</string>
+    <string name="extract_failed">Impossible de préparer les données du jeu</string>
+    <string name="save">Enregistrer</string>
+    <string name="back">Retour</string>
+    <string name="display">Graphismes</string>
+    <string name="controls">Commandes</string>
+    <string name="network">Serveur</string>
+    <string name="fps">Images par seconde</string>
+    <string name="render_scale">Échelle de rendu</string>
+    <string name="effects">Qualité des effets</string>
+    <string name="ui_scale">Taille des boutons tactiles</string>
+    <string name="safe_margin">Marge de sécurité</string>
+    <string name="touch_opacity">Opacité des boutons tactiles</string>
+    <string name="vibration">Vibrations tactiles et de combat</string>
+    <string name="handedness">Main préférée</string>
+    <string name="server_address">Adresse du serveur</string>
+    <string name="server_port">Port de connexion</string>
+    <string name="local_pairing">Appairage local sans connexion (LAN uniquement)</string>
+    <string name="restart_note">Les changements de graphismes et de serveur s\'appliquent à la prochaine entrée dans le jeu.</string>
+    <string name="invalid_server">Saisissez l\'adresse IPv4 ou le nom du serveur, sans protocole ni port.</string>
+    <string name="invalid_local_server">L\'appairage local nécessite une adresse IPv4 de boucle locale ou LAN, comme 192.168.1.20. Désactivez-le pour un serveur cloud.</string>
+    <string name="invalid_port">Le port doit être compris entre 1 et 65535.</string>
+    <string name="saved">Paramètres enregistrés</string>
+    <string name="tutorial_title">Commandes mobiles</string>
+    <string name="tutorial_body">Menus : touchez avec un doigt pour sélectionner ou confirmer.\nChoix du personnage : touchez un personnage, puis le bouton pour entrer en bas à droite.\n\nInventaire normal : touchez pour voir les détails ; maintenez sans bouger une demi-seconde pour utiliser un objet utilisable ou apprendre une compétence. Pour déplacer, faites glisser immédiatement ; relâcher hors de cet inventaire remet en place.\nLes quatre emplacements de potions en bas : touchez pour utiliser ; maintenir ne répète pas cette action.\n\nDans le monde du jeu :\nFaites glisser un doigt dans la zone de déplacement pour bouger.\nTouchez la zone des compétences pour sélectionner ; touchez deux fois pour lancer la compétence actuelle.\nBalayez avec deux doigts à gauche ou à droite pour changer de compétence.\nBalayez avec deux doigts vers le haut ou le bas, ou pincez, pour régler la caméra.\nBalayez avec trois doigts vers le haut pour la carte ou vers le bas pour les paramètres.\n\nLa barre de potions en bas et les commandes de l\'interface ne déclenchent pas de compétences du monde.</string>
+    <string name="understood">Compris, jouer</string>
+    <string name="help_close">Fermer</string>
+    <string name="game_data_missing">Le fichier game-data.zip manque dans l\'APK ; ce paquet de jeu est incomplet.</string>
+    <string name="storage_low">Stockage interne insuffisant. Il manque au moins %1$s.</string>
+    <string name="current_display">Écran actuel : %1$d × %2$d</string>
+    <string name="max_refresh">Fréquence maximale de l\'écran : %1$d Hz. Choisissez entre 30 et %1$d images par seconde.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Jusqu\'à %1$d Hz (selon l\'écran)</string>
+    <string name="game_settings">Paramètres mobiles</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+    <string-array name="effect_labels">
+        <item>Basse (plus fluide)</item>
+        <item>Moyenne (recommandée)</item>
+        <item>Haute (meilleurs graphismes)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Main droite</item>
+        <item>Main gauche</item>
+    </string-array>
+</resources>

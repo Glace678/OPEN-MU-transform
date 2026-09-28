@@ -1,0 +1,323 @@
+129|31|Adds Command Stat
+143|31|Agility Increase
+195|31|Aqua Beam
+204|31|Armor Set Bonus Increase
+267|31|Attack Increase Mastery
+268|31|Attack Increase Strengthener
+270|31|Attack Rate
+271|31|Attack Success Rate Increase
+302|31|Automatic AG Recovery Increase
+304|31|Automatic HP Recovery Increase
+327|31|Beast Uppercut
+328|31|Beast Uppercut Mastery
+329|31|Beast Uppercut Strengthener
+334|31|Berserker Mastery
+336|31|Berserker Proficiency
+337|31|Berserker Strengthener
+355|31|Blast Strengthener
+359|31|Bless Strengthener
+364|31|Blind Strengthener
+368|31|Blood Attack Strengthener
+384|31|Blood Howling
+385|31|Blood Howling Strengthener
+387|31|Blood Storm
+388|31|Blood Storm Strengthener
+412|31|Bow Mastery
+414|31|Bow Strengthener
+446|31|Cancel Invisibility
+447|31|Cancel Stun
+456|31|Cast Invincibility
+467|31|Chain Drive
+468|31|Chain Drive Mastery
+470|31|Chain Drive Strengthener
+471|31|Chain Lightning
+473|31|Chain Lightning Strengthener
+514|31|Chaotic Diseier Strengthener
+520|31|Charge
+551|31|Combo Strengthener
+557|31|Cometfall
+559|31|Command Attack Increase
+605|31|Crescent Moon Slash
+607|31|Critical DMG Increase PowUp
+608|31|Critical DMG Increase PowUp (2)
+609|31|Critical DMG Increase PowUp (3)
+623|31|Crossbow Mastery
+624|31|Crossbow Strengthener
+641|31|Cure
+651|31|Cyclone
+652|31|Cyclone Strengthener
+677|31|Dark Horse Strengthener (1)
+699|31|Dark Side Mastery
+701|31|Dark Side Strengthener
+708|31|Dark Spirit Strengthener
+709|31|Dark Spirit Strengthener (2)
+710|31|Dark Spirit Strengthener (3)
+711|31|Dark Spirit Strengthener (4)
+712|31|Dark Spirit Strengthener (5)
+743|31|Death Stab
+744|31|Death Stab Mastery
+745|31|Death Stab Proficiency
+750|31|Decay
+751|31|Decay Strengthener
+754|31|Decrease Mana
+759|31|Def Success Rate Strengthener
+760|31|Def SuccessRate Increase PowUp
+761|31|DefSuccessRate Increase Mastery
+780|31|Defense
+781|31|Defense Increase
+782|31|Defense Increase Mastery
+783|31|Defense Increase Strengthener
+785|31|Defense Success Rate Increase
+786|31|Defense Switch
+856|31|DimensionWings Absorb PowUp
+857|31|DimensionWings Attack PowUp
+858|31|DimensionWings Defense PowUp
+906|31|Dragon Roar
+907|31|Dragon Roar Mastery
+909|31|Dragon Roar Strengthener
+911|31|Dragon Slasher
+912|31|Dragon Slasher Mastery
+914|31|Dragon Slasher Strengthener
+918|31|Drain Life
+919|31|Drain Life Mastery
+921|31|Drain Life Strengthener
+940|31|Durability Reduction (1)
+941|31|Durability Reduction (2)
+942|31|Durability Reduction (3)
+943|31|Durability Reduction(3)
+956|31|Earth Prison
+957|31|Earth Prison Strengthener
+958|31|Earthshake
+959|31|Earthshake Mastery
+960|31|Earthshake Strengthener
+973|31|Electric Spark Strengthener
+975|31|Electric Spike
+1033|31|Emperor Cape Absorption PowUp
+1034|31|Emperor Cape Attack PowUp
+1035|31|Emperor Cape Defense PowUp
+1037|31|Energy Ball
+1038|31|Energy Increase
+1072|31|Equipped Weapon Mastery
+1073|31|Equipped Weapon Strengthener
+1088|31|Eternal Wings Absorption PowUp
+1089|31|Eternal Wings Attack PowUp
+1090|31|Eternal Wings Defense PowUp
+1092|31|Evil Spirit
+1093|31|Evil Spirit Strengthener
+1110|31|Expansion of Wizardry Mastery
+1118|31|Falling Slash
+1119|31|Falling Slash Strengthener
+1144|31|Fire Ball
+1145|31|Fire Blast
+1146|31|Fire Breath
+1147|31|Fire Burst
+1148|31|Fire Burst Mastery
+1149|31|Fire Burst Strengthener
+1153|31|Fire Scream
+1154|31|Fire Scream Mastery
+1155|31|Fire Scream Strengthener
+1157|31|Fire Slash
+1158|31|Fire Slash Mastery
+1162|31|Fire Tome Mastery
+1163|31|Fire Tome Strengthener
+1171|31|Flame
+1172|31|Flame Strengthener
+1174|31|Flame Strike Mastery
+1175|31|Flame Strike Strengthener
+1177|31|Flame of Evil (Monster)
+1180|31|Force
+1181|31|Force Wave
+1182|31|Force Wave Strengthener
+1238|31|Gigantic Storm Strengthener
+1472|31|Greater Damage
+1473|31|Greater Defense
+1520|31|Heal
+1521|31|Heal Strengthener
+1539|31|Hellfire
+1540|31|Hellfire Strengthener
+1686|31|Ice Arrow
+1687|31|Ice Arrow Strengthener
+1690|31|Ice Mastery
+1694|31|Ice Resistance Increase
+1695|31|Ice Storm
+1696|31|Ice Storm Mastery
+1697|31|Ice Storm Strengthener
+1699|31|Ice Strengthener
+1712|31|Ignore Defense
+1736|31|Illusion Wings Absorption PowUp
+1737|31|Illusion Wings Attack PowUp
+1738|31|Illusion Wings Defense PowUp
+1742|31|Impale
+1755|31|Increase Agility
+1757|31|Increase Attack Success Rate
+1758|31|Increase Block
+1760|31|Increase Critical Damage
+1764|31|Increase Double Damage Chance
+1765|31|Increase Energy
+1768|31|Increase HP Recovery Rate
+1771|31|Increase Ice Resistance
+1772|31|Increase Ignore Def Chance
+1773|31|Increase Lightning Resistance
+1774|31|Increase Mana Recovery Rate
+1775|31|Increase Maximum AG
+1776|31|Increase Maximum Attack Power
+1777|31|Increase Maximum HP
+1778|31|Increase Maximum Mana
+1779|31|Increase Maximum SD
+1780|31|Increase Minimum Attack Power
+1781|31|Increase Poison Resistance
+1782|31|Increase PvP Attack Rate
+1783|31|Increase PvP Defense Rate
+1784|31|Increase SD Recovery Rate
+1785|31|Increase Set Defense
+1786|31|Increase Strength
+1787|31|Increase Triple Damage Chance
+1788|31|Increases AG Recovery Rate
+1792|31|Increases Defense
+1807|31|Increases chance of ignore Def
+1812|31|Increases critical damage rate
+1819|31|Increases double damage rate
+1822|31|Increases excellent damage rate
+1845|31|Increases triple damage rate
+1851|31|Inferno Strengthener
+1855|31|Infinity Arrow Strengthener
+1861|31|Innovation Strengthener
+1876|31|Iron Defense Strengthener
+1968|31|Killing Blow
+1969|31|Killing Blow Mastery
+1970|31|Killing Blow Strengthener
+2067|31|Lightning
+2068|31|Lightning Resistance Increase
+2071|31|Lightning Shock Strengthener
+2073|31|Lightning Strengthener
+2074|31|Lightning Tome Mastery
+2075|31|Lightning Tome Strengthener
+2114|31|Lunge
+2115|31|Lunge Strengthener
+2124|31|Mace Mastery
+2125|31|Mace Strengthener
+2126|31|Magic Attack Immunity
+2129|31|Magic Mastery
+2134|31|Mana Rays
+2135|31|Mana Reduction
+2165|31|Maximum AG Increase
+2167|31|Maximum Attack Power Increase
+2168|31|Maximum Life Increase
+2172|31|Maximum Mana Increase
+2176|31|Maximum SD increase
+2177|31|Maximum Wizardry Increase
+2179|31|Maximum Wizardry/Curse Increase
+2202|31|Meteor Mastery
+2203|31|Meteor Strengthener
+2212|31|Minimum Attack Power Increase
+2215|31|Minimum Wizardry Increase
+2218|31|Minimum Wizardry/Curse Increase
+2227|31|Monster Attack Life Increment
+2228|31|Monster Attack Mana Increment
+2229|31|Monster Attack SD Increment
+2248|31|Multi-Shot
+2249|31|Multi-Shot Mastery
+2250|31|Multi-Shot Strengthener
+2272|31|Nova Cast Strengthener
+2273|31|Nova Strengthener
+2311|31|One-handed Staff Mastery
+2312|31|One-handed Staff Strengthener
+2313|31|One-handed Sword Mastery
+2314|31|One-handed Sword Strengthener
+2337|31|Other World Tome Mastery
+2338|31|Other World Tome Strengthener
+2369|31|Party Healing
+2370|31|Party Healing Strengthener
+2382|31|Penetration
+2383|31|Penetration Strengthener
+2386|31|Pet Durability Strengthener
+2400|31|Phoenix Shot
+2407|31|Physical Attack Immunity
+2419|31|Plasma Storm
+2437|31|Poison Arrow
+2438|31|Poison Arrow Strengthener
+2442|31|Poison Resistance Increase
+2444|31|Poison Strengthener
+2449|31|Pollution
+2452|31|Potion of Bless
+2456|31|Power Slash
+2457|31|Power Slash Strengthener
+2459|31|Power Wave
+2502|31|PvP Defence Rate Increase
+2516|31|Rageful Blow
+2517|31|Rageful Blow Mastery
+2518|31|Rageful Blow Strengthener
+2576|31|Recover HP from Monster Kills
+2577|31|Recover Mana Fully
+2578|31|Recover Mana from Monster Kills
+2579|31|Recover SD from Monster Kills
+2580|31|Recovers HP Fully
+2582|31|Recovers SD Fully
+2584|31|Recovery
+2614|31|Reigning Cloak Absorption PowUp
+2615|31|Reigning Cloak Attack PowUp
+2616|31|Reigning Cloak Defense PowUp
+2827|31|Restores all HP
+2828|31|Restores all Mana
+2829|31|Restores all SD
+2904|31|SD Recovery Speed Increase
+2943|31|Scepter Mastery
+2944|31|Scepter Strengthener
+3043|31|Shied-Burn
+3046|31|Shield Mastery
+3047|31|Shield Strengthener
+3087|31|Slash
+3088|31|Slash Strengthener
+3093|31|Sleep Strengthener
+3124|31|Soul Barrier Mastery
+3125|31|Soul Barrier Proficiency
+3126|31|Soul Barrier Strengthener
+3130|31|Spear Mastery
+3131|31|Spear Strengthener
+3134|31|Spell of Pursuit
+3149|31|Spiral Slash
+3155|31|Spirit Lord
+3164|31|Stamina Increase
+3165|31|Stamina Increase Strengthener
+3169|31|Starfall
+3174|31|Stick Mastery
+3175|31|Stick Strengthener
+3199|31|Strength Increase
+3202|31|Strike of Destruction
+3203|31|Strike of Destruction Mastery
+3209|31|Summon
+3210|31|Summon Assassin
+3211|31|Summon Bali
+3212|31|Summon Dark Knight
+3213|31|Summon Elite Yeti
+3214|31|Summon Goblin
+3215|31|Summon Monster
+3216|31|Summon Satyros
+3217|31|Summon Soldier
+3218|31|Summon Stone Golem
+3265|31|Swell Life Mastery
+3266|31|Swell Life Proficiency
+3267|31|Swell Life Strengthener
+3323|31|Teleport Ally
+3598|31|Triple Shot
+3599|31|Triple Shot Mastery
+3600|31|Triple Shot Strengthener
+3661|31|Twisting Slash
+3662|31|Twisting Slash Mastery
+3663|31|Twisting Slash Strengthener
+3665|31|Two-handed Staff Mastery
+3666|31|Two-handed Staff Strengthener
+3667|31|Two-handed Sword Mastery
+3668|31|Two-handed Sword Strengthener
+3679|31|Use Scepter : Pet Strengthener
+3697|31|Vengeance
+3755|31|Weakness Strengthener
+3756|31|Weapon Mastery
+3810|31|Wind Tome Mastery
+3811|31|Wind Tome Strengthener
+3820|31|Wing of Ruin Absorption PowUp
+3821|31|Wing of Ruin Attack PowUp
+3822|31|Wing of Ruin Defense PowUp
+3824|31|Wing of Storm Absorption PowUp
+3825|31|Wing of Storm Attack PowUp
+3826|31|Wing of Storm Defense PowUp

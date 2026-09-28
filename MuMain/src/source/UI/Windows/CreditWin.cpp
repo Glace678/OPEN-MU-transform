@@ -1,0 +1,504 @@
+//*****************************************************************************
+// File: CreditWin.cpp
+//*****************************************************************************
+
+#include "stdafx.h"
+#include "UI/Windows/CreditWin.h"
+#include "Render/Core/RenderConfig.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Core/Input/Input.h"
+#include "UI/Legacy/UIMng.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Audio/DSPlaySound.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "App/Platform/Windows/Local.h"
+#include "I18N/All.h"
+#include "Core/Platform/PathResolve.h"
+
+#include "UI/Legacy/UIControls.h"
+
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <cstdio>
+#include <cwchar>
+#include <memory>
+#include <string_view>
+
+namespace
+{
+    using DurationMs = std::chrono::duration<double, std::milli>;
+
+    constexpr DurationMs kIllustFadeDuration{2000.0};
+    constexpr DurationMs kIllustShowDuration{22000.0};
+    constexpr DurationMs kTextFadeDuration{1000.0};
+    constexpr DurationMs kNameShowDuration{2300.0};
+    constexpr std::string_view kCreditDataPath = "Data\\Local\\credit.bmd";
+
+    constexpr std::array<std::array<const wchar_t*, 2>, CRW_ILLUST_MAX> kIllustPaths = {{
+        {L"Interface\\im1_1.jpg", L"Interface\\im1_2.jpg"},
+        {L"Interface\\im2_1.jpg", L"Interface\\im2_2.jpg"},
+        {L"Interface\\im3_1.jpg", L"Interface\\im3_2.jpg"},
+        {L"Interface\\im4_1.jpg", L"Interface\\im4_2.jpg"},
+        {L"Interface\\im5_1.jpg", L"Interface\\im5_2.jpg"},
+        {L"Interface\\im6_1.jpg", L"Interface\\im6_2.jpg"},
+        {L"Interface\\im7_1.jpg", L"Interface\\im7_2.jpg"},
+        {L"Interface\\im8_1.jpg", L"Interface\\im8_2.jpg"},
+    }};
+
+    template<typename T>
+    short IncreaseAlpha(short alpha, T ratio)
+    {
+        const double delta = 255.0 * std::clamp(static_cast<double>(ratio), 0.0, 1.0);
+        return static_cast<short>(std::min<double>(255.0, static_cast<double>(alpha) + delta));
+    }
+
+    template<typename T>
+    short DecreaseAlpha(short alpha, T ratio)
+    {
+        const double delta = 255.0 * std::clamp(static_cast<double>(ratio), 0.0, 1.0);
+        return static_cast<short>(std::max<double>(0.0, static_cast<double>(alpha) - delta));
+    }
+
+    template<std::size_t N>
+    void CopyNameToWide(const char* source, wchar_t (&destination)[N])
+    {
+        if (source == nullptr)
+        {
+            destination[0] = L'\0';
+            return;
+        }
+
+        std::mbstowcs(destination, source, N);
+        destination[N - 1] = L'\0';
+    }
+
+    void FontDeleter(HFONT font)
+    {
+        if (font != nullptr)
+        {
+            ::DeleteObject(font);
+        }
+    }
+}
+
+
+
+
+CCreditWin::CCreditWin()
+    : m_eIllustState(HIDE)
+    , m_illustElapsed(DurationMs::zero())
+    , m_byIllust(0)
+    , m_illustPaths(kIllustPaths)
+    , m_font(nullptr, &FontDeleter)
+    , m_nNowIndex(0)
+    , m_nNameCount(0)
+    , m_anTextIndex{}
+    , m_aeTextState{}
+    , m_textElapsed(DurationMs::zero())
+{
+}
+
+CCreditWin::~CCreditWin()
+{
+
+}
+
+void CCreditWin::Create()
+{
+	CInput rInput = CInput::Instance();
+
+	// Fullscreen art backdrop; hit-test size stays device space.
+	CWin::Create(REFERENCE_WIDTH, REFERENCE_HEIGHT);
+	m_Size.cx = int(REFERENCE_WIDTH * CSprite::ResolutionScaleX());
+	m_Size.cy = int(REFERENCE_HEIGHT * CSprite::ResolutionScaleY());
+	CWin::SetBgAlpha(255);
+
+	// Credit art is laid out on an 800x600 canvas mapped into 640x480 ref.
+	constexpr float kCanvasS = (float)REFERENCE_WIDTH / 800.0f; // 0.8 both axes
+
+	m_aSpr[CRW_SPR_DECO].Create(189, 103, BITMAP_LOG_IN + 6);
+	m_aSpr[CRW_SPR_LOGO].Create(int(290 * kCanvasS), int(41 * kCanvasS),
+		BITMAP_LOG_IN + 14);
+
+	for (int i = CRW_SPR_TXT_HIDE0; i <= CRW_SPR_TXT_HIDE2; ++i)
+	{
+		m_aSpr[i].Create(int(800 * kCanvasS), int(42 * kCanvasS), -1);
+		m_aSpr[i].SetColor(0, 0, 0);
+	}
+
+	m_btnClose.Create(54, 30, BITMAP_BUTTON + 2, 3, 2, 1);
+	CWin::RegisterButton(&m_btnClose);
+
+	// Staff names must scale with the game window. The old lookup only knew
+	// three exact desktop widths (14/18/24 px) and fell back to a 10px font at
+	// every other resolution, which made the credits unreadable in scaled
+	// windows. 14px at the 800px reference width, scaled continuously (the old
+	// 1024 step rounds to 18 and the 1280 step to 23).
+	int nFontSize = std::lround(14.0f * g_fScreenRate_x);
+	if (nFontSize < 14)
+		nFontSize = 14;
+	else if (nFontSize > 64)
+		nFontSize = 64;
+	HFONT fontHandle = CreateFont(nFontSize, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, I18N::Game::Gulim[0] ? I18N::Game::Gulim : NULL);
+	m_font.reset(fontHandle);
+
+	LoadText();
+	SetPosition();
+}
+
+void CCreditWin::PreRelease()
+{
+	for (int i = 0; i < CRW_SPR_MAX; ++i)
+		m_aSpr[i].Release();
+	m_font.reset();
+}
+
+void CCreditWin::SetPosition()
+{
+	constexpr float kCanvasS = (float)REFERENCE_WIDTH / 800.0f; // 0.8
+
+	m_aSpr[CRW_SPR_PIC_L].SetPositionArt(0, 126 * kCanvasS);
+	m_aSpr[CRW_SPR_PIC_R].SetPositionArt(400 * kCanvasS, 126 * kCanvasS);
+	m_aSpr[CRW_SPR_LOGO].SetPositionArt(241 * kCanvasS, 549 * kCanvasS);
+
+
+	CInput rInput = CInput::Instance();
+
+	int nBaseY = int(527.0f / 600.0f * (float)rInput.GetScreenHeight());
+	m_aSpr[CRW_SPR_DECO].SetPosition(rInput.GetScreenWidth() - m_aSpr[CRW_SPR_DECO].GetWidth(), nBaseY - m_aSpr[CRW_SPR_DECO].GetHeight());
+
+	for (int i = CRW_SPR_TXT_HIDE0; i <= CRW_SPR_TXT_HIDE2; ++i)
+		m_aSpr[i].SetPositionArt(0, 42 * kCanvasS * (i - CRW_SPR_TXT_HIDE0));
+
+	// Close button sits on the deco piece: +122/+63 on the 800x600 canvas.
+	m_btnClose.SetPositionArt(m_aSpr[CRW_SPR_DECO].GetXPos()
+		/ CSprite::ResolutionScaleX() + 122 * kCanvasS,
+		m_aSpr[CRW_SPR_DECO].GetYPos() / CSprite::ResolutionScaleY()
+		+ 63 * kCanvasS);
+}
+
+void CCreditWin::Show(bool bShow)
+{
+	CWin::Show(bShow);
+
+	for (int i = 0; i < CRW_SPR_MAX; ++i)
+		m_aSpr[i].Show(bShow);
+
+	m_btnClose.Show(bShow);
+
+	if (bShow)
+		Init();
+	else
+		m_eIllustState = HIDE;
+}
+
+bool CCreditWin::CursorInWin(int nArea)
+{
+	if (!CWin::m_bShow)
+		return false;
+
+	switch (nArea)
+	{
+	case WA_MOVE:
+		return false;
+	}
+
+	return CWin::CursorInWin(nArea);
+}
+
+void CCreditWin::UpdateWhileActive(double deltaMilliseconds)
+{
+	const DurationMs deltaTime{ deltaMilliseconds };
+
+	if (m_btnClose.IsClick())
+		CloseWin();
+	else if (CInput::Instance().IsKeyDown(VK_ESCAPE))
+	{
+		::PlayBuffer(SOUND_CLICK01);
+		CloseWin();
+		CUIMng::Instance().SetSysMenuWinShow(false);
+	}
+
+	for (int i = 0; i <= CRW_INDEX_NAME; ++i)
+		AnimationText(i, deltaTime);
+	AnimationIllust(deltaTime);
+}
+
+void CCreditWin::RenderControls()
+{
+	::DisableAlphaTestRaw();
+
+	for (int i = 0; i <= CRW_SPR_LOGO; ++i)
+		m_aSpr[i].Render();
+
+	long lScreenWidth = CInput::Instance().GetScreenWidth();
+	int nTextBoxWidth;
+
+	g_pRenderText->SetFont(m_font.get());
+	g_pRenderText->SetTextColor(CLRDW_BR_GRAY);
+	g_pRenderText->SetBgColor(0);
+	nTextBoxWidth = lScreenWidth / g_fScreenRate_x;
+
+	auto renderCentered = [&](const SCreditItem& item, int x, int y, int width)
+	{
+		wchar_t buffer[CRW_NAME_MAX]{};
+		CopyNameToWide(item.szName, buffer);
+		g_pRenderText->RenderText(x, y, buffer, width, 0, RT3_SORT_CENTER);
+	};
+
+	// Text Y positions are on the 800x600 canvas; map with 480/600.
+	constexpr int kNameY = int(72.0f * REFERENCE_HEIGHT / 600.0f); // 58
+	constexpr int kDeptY = int(20.0f * REFERENCE_HEIGHT / 600.0f); // 16
+	constexpr int kTeamY = int(46.0f * REFERENCE_HEIGHT / 600.0f); // 37
+
+	renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_DEPARTMENT]], 0, kDeptY, nTextBoxWidth);
+	renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_TEAM]], 0, kTeamY, nTextBoxWidth);
+
+	g_pRenderText->SetTextColor(CLRDW_BR_YELLOW);
+
+	switch (m_nNameCount)
+	{
+	case 1:
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME0]], 0, kNameY, nTextBoxWidth);
+		break;
+	case 2:
+		nTextBoxWidth = lScreenWidth / 4 / g_fScreenRate_x;
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME0]], 160 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME1]], 320 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		break;
+	case 3:
+		nTextBoxWidth = lScreenWidth / 3 / g_fScreenRate_x;
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME0]], 0, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME1]], 213 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME2]], 426 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		break;
+	case 4:
+		nTextBoxWidth = lScreenWidth / 4 / g_fScreenRate_x;
+
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME0]], 0, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME1]], 160 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME2]], 320 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		renderCentered(m_aCredit[m_anTextIndex[CRW_INDEX_NAME3]], 480 * REFERENCE_WIDTH / 800, kNameY, nTextBoxWidth);
+		break;
+	}
+
+	for (int i = CRW_SPR_TXT_HIDE0; i <= CRW_SPR_TXT_HIDE2; ++i)
+		m_aSpr[i].Render();
+
+	EnableAlphaTestRaw();
+
+	CWin::RenderButtons();
+}
+
+void CCreditWin::CloseWin()
+{
+	CUIMng::Instance().HideWin(this);
+
+	SocketClient->ToConnectServer()->SendServerListRequest();
+
+	::StopMp3(MUSIC_MUTHEME);
+	::PlayMp3(MUSIC_MAIN_THEME);
+}
+
+void CCreditWin::Init()
+{
+	m_eIllustState = FADEIN;
+	m_illustElapsed = DurationMs::zero();
+	m_byIllust = 0;
+	LoadIllust();
+
+	for (int i = 0; i <= CRW_INDEX_NAME; ++i)
+		m_aeTextState[i] = FADEIN;
+	m_textElapsed = DurationMs::zero();
+	m_nNowIndex = 0;
+	m_nNameCount = 0;
+	SetTextIndex();
+}
+
+void CCreditWin::LoadIllust()
+{
+	constexpr float kCanvasS = (float)REFERENCE_WIDTH / 800.0f; // 0.8
+
+	for (int i = 0; i < 2; ++i)
+	{
+		const auto& illustPath = m_illustPaths[m_byIllust][i];
+		LoadBitmap(illustPath, BITMAP_TEMP + i, GL_LINEAR);
+
+		m_aSpr[i].Create(int(400 * kCanvasS), int(400 * kCanvasS),
+			BITMAP_TEMP + i);
+		m_aSpr[i].SetAlpha(0);
+		m_aSpr[i].Show(true);
+	}
+
+	m_aSpr[CRW_SPR_PIC_L].SetPositionArt(0, 126 * kCanvasS);
+	m_aSpr[CRW_SPR_PIC_R].SetPositionArt(400 * kCanvasS, 126 * kCanvasS);
+}
+
+
+void CCreditWin::AnimationIllust(DurationMs deltaTime)
+{
+	short nAlpha;
+	switch (m_eIllustState)
+	{
+	case FADEIN:
+		nAlpha = short(m_aSpr[CRW_SPR_PIC_L].GetAlpha());
+		nAlpha = IncreaseAlpha(nAlpha, deltaTime / kIllustFadeDuration);
+		if (255 <= nAlpha)
+		{
+			m_eIllustState = SHOW;
+			nAlpha = 255;
+		}
+		m_aSpr[CRW_SPR_PIC_L].SetAlpha((BYTE)nAlpha);
+		m_aSpr[CRW_SPR_PIC_R].SetAlpha((BYTE)nAlpha);
+		break;
+
+	case SHOW:
+		m_illustElapsed += deltaTime;
+		if (m_illustElapsed > kIllustShowDuration)
+		{
+			m_eIllustState = FADEOUT;
+			m_illustElapsed = DurationMs::zero();
+		}
+		break;
+
+	case FADEOUT:
+		nAlpha = short(m_aSpr[CRW_SPR_PIC_L].GetAlpha());
+		nAlpha = DecreaseAlpha(nAlpha, deltaTime / kIllustFadeDuration);
+		if (0 >= nAlpha)
+		{
+			m_eIllustState = FADEIN;
+			nAlpha = 0;
+
+			m_byIllust = ++m_byIllust == CRW_ILLUST_MAX ? 0 : m_byIllust;
+			LoadIllust();
+		}
+		m_aSpr[CRW_SPR_PIC_L].SetAlpha((BYTE)nAlpha);
+		m_aSpr[CRW_SPR_PIC_R].SetAlpha((BYTE)nAlpha);
+		break;
+	}
+}
+
+void CCreditWin::LoadText()
+{
+#ifdef _WIN32
+	std::unique_ptr<FILE, decltype(&std::fclose)> file(std::fopen(kCreditDataPath.data(), "rb"), &std::fclose);
+#else
+	// The path is Windows-spelled (backslashes, mixed case); resolve it against
+	// the case-sensitive filesystem.
+	std::unique_ptr<FILE, decltype(&std::fclose)> file(std::fopen(MuResolvePath(kCreditDataPath.data()).c_str(), "rb"), &std::fclose);
+#endif
+	if (!file)
+	{
+		wchar_t szMessage[256];
+		std::swprintf(szMessage, std::size(szMessage), L"%hs file not found.\r\n", kCreditDataPath.data());
+		g_ErrorReport.Write(szMessage);
+		::MessageBox(g_hWnd, szMessage, NULL, MB_OK);
+		::PostMessage(g_hWnd, WM_DESTROY, 0, 0);
+		return;
+	}
+
+	const std::size_t nSize = sizeof(SCreditItem) * CRW_ITEM_MAX;
+	if (std::fread(m_aCredit, nSize, 1, file.get()) != 1)
+	{
+		wchar_t szMessage[256];
+		std::swprintf(szMessage, std::size(szMessage), L"Failed to read %hs file or file is corrupt.\r\n", kCreditDataPath.data());
+		g_ErrorReport.Write(szMessage);
+		::MessageBox(g_hWnd, szMessage, NULL, MB_OK);
+		::PostMessage(g_hWnd, WM_DESTROY, 0, 0);
+		return;
+	}
+	::BuxConvert(reinterpret_cast<BYTE*>(m_aCredit), static_cast<int>(nSize));
+}
+
+void CCreditWin::SetTextIndex()
+{
+	if (0 == m_aCredit[m_nNowIndex].byClass)
+	{
+		::PlayBuffer(SOUND_CLICK01);
+		CloseWin();
+	}
+
+	if (1 == m_aCredit[m_nNowIndex].byClass)
+	{
+		m_anTextIndex[CRW_INDEX_DEPARTMENT] = m_nNowIndex;
+		++m_nNowIndex;
+	}
+	if (2 == m_aCredit[m_nNowIndex].byClass)
+	{
+		m_anTextIndex[CRW_INDEX_TEAM] = m_nNowIndex;
+		++m_nNowIndex;
+	}
+
+	int iNameCnt = 0;
+	for (int i = 0; i < 4; ++i)
+	{
+		iNameCnt = i;
+		if (3 == m_aCredit[m_nNowIndex].byClass)
+		{
+			m_anTextIndex[CRW_INDEX_NAME0 + i] = m_nNowIndex;
+			++m_nNowIndex;
+		}
+		else
+			break;
+	}
+	m_nNameCount = iNameCnt;
+}
+
+void CCreditWin::AnimationText(int nClass, DurationMs deltaTime)
+{
+	SHOW_STATE* peTextState = &m_aeTextState[nClass];
+	short nAlpha;
+
+	CSprite* psprHide = &m_aSpr[CRW_SPR_TXT_HIDE0 + nClass];
+
+	switch (*peTextState)
+	{
+	case FADEIN:
+		nAlpha = short(psprHide->GetAlpha());
+		nAlpha = DecreaseAlpha(nAlpha, deltaTime / kTextFadeDuration);
+		if (0 >= nAlpha)
+		{
+			*peTextState = SHOW;
+			nAlpha = 0;
+		}
+		psprHide->SetAlpha((BYTE)nAlpha);
+		break;
+
+	case SHOW:
+		if (nClass != CRW_INDEX_NAME)
+			break;
+
+		m_textElapsed += deltaTime;
+		if (m_textElapsed > kNameShowDuration)
+		{
+			m_aeTextState[CRW_INDEX_NAME] = FADEOUT;
+			m_textElapsed = DurationMs::zero();
+
+			if (3 != m_aCredit[m_nNowIndex].byClass)
+			{
+				m_aeTextState[CRW_INDEX_TEAM] = FADEOUT;
+				if (2 != m_aCredit[m_nNowIndex].byClass)
+					m_aeTextState[CRW_INDEX_DEPARTMENT] = FADEOUT;
+			}
+		}
+		break;
+
+	case FADEOUT:
+		nAlpha = short(psprHide->GetAlpha());
+		nAlpha = IncreaseAlpha(nAlpha, deltaTime / kTextFadeDuration);
+		if (255 <= nAlpha)
+		{
+			*peTextState = FADEIN;
+			nAlpha = 255;
+
+			if (nClass == CRW_INDEX_NAME)
+				SetTextIndex();
+		}
+		psprHide->SetAlpha((BYTE)nAlpha);
+		break;
+	}
+}

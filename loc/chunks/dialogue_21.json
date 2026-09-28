@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3377,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 250 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3378,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 255 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3379,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 26 if you want to accept the request. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3380,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 260 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3381,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 36 if you want to accept the request. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3382,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 46 if you want to accept the request. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3383,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 56 if you want to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3384,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 66 if you want to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3385,
+   "en": "That's unfortunate. You shouldn't pass up on this if you want fast growth.... Come see me again before you reach level 80 if you want to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3386,
+   "en": "That's unfortunate. You shouldn't pass up on this up if you want fast growth... Come see me again before you reach level 245 if you decide to accept the quest. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3387,
+   "en": "The Atlans expedition party reports that the chief commander of the Evil Army is using Vepars to go after Gens members searching for the sealed stone. Please banish these Vepars and protect the Gens members.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3388,
+   "en": "The Beginning of Requests",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3390,
+   "en": "The Character Stats window will tell you the name and level of your character, the name of the current server, and character status information.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3391,
+   "en": "The Character Stats window will tell you the name of your character, the name of the current server, and your character's class.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3392,
+   "en": "The Character Stats window will tell you the name of your character, the name of the current server, and your character's class. It's possible to connect to different channels within a single server using the same character.;There are four basic character classes: the Elf, the Dark Knight, the Dark Wizard, and the Summoner. Reach level 220 with any of these basic characters to unlock the Magic Gladiator, and level 250 to unlock the Dark Lord.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3393,
+   "en": "The Dungeon shouldn't be so difficult.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3394,
+   "en": "The Dungeon shouldn't be so hard. After all, I do need new equipment. Should I give it a shot?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3395,
+   "en": "The Falling Slash skill should now be one of the skills you can use. Try clicking the icon.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3396,
+   "en": "The Fire Ball skill should now be one of the skills you can use. Try clicking the icon.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3397,
+   "en": "The Goblin NPC in Noria.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3399,
+   "en": "The Inventory window will display the items you have and the equipment you are wearing.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3400,
+   "en": "The Inventory window will display the items you have and the equipments you are wearing.;Click on an item to change its position or, if it's a consumable, right-click on it to use it. Did you get all that?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3401,
+   "en": "The Lost Tower is proving to be quite a headache. I received word of the mobilization of monsters in regions where reconnaissance party members have gone missing. It appears the monsters are planning something. I want you to stop them from mobilizing. Will you accept this quest? (Level 194-197)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3403,
+   "en": "The Seed Master NPC in Elveland.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3404,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 131.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3405,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 101.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3406,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 111.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3407,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 121.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3408,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 141.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3409,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 161.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3410,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 166.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3411,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 171.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3412,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 180.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3413,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 186.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3414,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 190.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3415,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 194.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3416,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 198.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3417,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 202.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3418,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 206.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3419,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 210.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3420,
+   "en": "The Shadow Phantom Guardians have a quest for you, traveler. I suggest you accept it, should you want new equipment for your travels ahead. Meet with a Shadow Phantom Soldier before you reach level 91.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3421,
+   "en": "The Shadow Phantom Guardians have done so much for me....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3422,
+   "en": "The Shadow Phantom Soldier is looking for someone he can rely on to carry out Shadow Phantom Guardians' quests. Go see the Shadow Phantom Soldier again.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3423,
+   "en": "The Shadow Phantom Soldier will give you a small reward if you manage fast growth at Devil Square. Accept the Shadow Phantom Soldier's test and take the Devil Square challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3424,
+   "en": "The Shadow Phantom Soldier will give you a small reward if you win at Illusion Temple. Accept the Shadow Phantom Soldier's test and take the Illusion Temple challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3425,
+   "en": "The Shadow Phantom Soldier will give you an Armor of Guardsman, which you'll need to enter Chaos Castle. Receive the armor and take the Chaos Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3426,
+   "en": "The Shadow Phantom unit has trouble controlling the increasing number of Alquamoses and Drakans in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 20 Alquamoses and 20 Drakans. I will reward you when you come back and report me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3427,
+   "en": "The Shadow Phantom unit has trouble dealing with Queen Rainiers in Icarus, gateway to the Castle in Heaven. Go to Icarus and kill 30 Queen Rainiers. I will reward you when you come back and report me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3428,
+   "en": "The Shadow Phantom unit in Icarus, gateway to the Castle in Heaven is in trouble since Alquamoses and Alpha Crusts have blocked their supply route. Go to Icarus and kill 20 Alquamoses and 10 Alpha Crusts. I will reward you when you come back and report me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3429,
+   "en": "The Shadow Phantom unit in Kanturu Ruins is suffering from the attacks of Iron Riders. Go to Kanturu Ruins and kill 30 Mutants. I will reward you when you come back and report me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

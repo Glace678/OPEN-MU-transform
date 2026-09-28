@@ -1,0 +1,14 @@
+[Dialog.zh-CN.resx] Text_152: ['行动']
+   要帮助我们，你就必须与巴卡斯军团为敌。行动之前，我需要确认你是否拥有完成任务所需的力量。
+[Game.zh-CN.resx] Sound volume: ['音效']
+   音效音量
+[Game.zh-CN.resx] Suspend hostilities: ['行动']
+   暂停敌对行动
+[Game.zh-CN.resx] /Hostilities: ['行动']
+   /敌对行动
+[Game.zh-CN.resx] SuspendHostilities1357: ['行动']
+   /暂停敌对行动
+[Game.zh-CN.resx] ToBeatAgainstKundunMoreOrganizational: ['行动']
+   为了对抗昆顿，需要更多的组织行动，这意味着战盟是不可或缺的。
+[Game.zh-CN.resx] Mobility disabled.: ['行动']
+   行动不便。

@@ -1,0 +1,1051 @@
+{
+ "group": "name",
+ "items": [
+  {
+   "id": 786,
+   "en": "Defense Switch",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 809,
+   "en": "Demon",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 810,
+   "en": "Demonic Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 811,
+   "en": "Demonic Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 812,
+   "en": "Demonic Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 813,
+   "en": "Demonic Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 814,
+   "en": "Demonic Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 815,
+   "en": "Demonic Stick",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 817,
+   "en": "Destroy Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 818,
+   "en": "Destroy Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 819,
+   "en": "Destroy Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 820,
+   "en": "Destroy Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 824,
+   "en": "Devias",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 826,
+   "en": "Devias2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 827,
+   "en": "Devias3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 828,
+   "en": "Devias4",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 838,
+   "en": "Devil Square Ticket",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 850,
+   "en": "Devil's Eye",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 851,
+   "en": "Devil's Invitation",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 852,
+   "en": "Devil's Key",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 856,
+   "en": "DimensionWings Absorb PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 857,
+   "en": "DimensionWings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 858,
+   "en": "DimensionWings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 862,
+   "en": "Divine Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 863,
+   "en": "Divine Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 864,
+   "en": "Divine Crossbow of Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 865,
+   "en": "Divine Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 866,
+   "en": "Divine Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 867,
+   "en": "Divine Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 868,
+   "en": "Divine Scepter of Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 869,
+   "en": "Divine Staff of Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 870,
+   "en": "Divine Stick of the Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 871,
+   "en": "Divine Sword of Archangel",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 875,
+   "en": "Doppeganger Self Explosion Skill",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 883,
+   "en": "Double Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 884,
+   "en": "Double Blade",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 886,
+   "en": "Double Poleaxe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 890,
+   "en": "Dragon Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 891,
+   "en": "Dragon Armor-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 892,
+   "en": "Dragon Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 893,
+   "en": "Dragon Boots-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 894,
+   "en": "Dragon Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 895,
+   "en": "Dragon Gloves-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 896,
+   "en": "Dragon Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 897,
+   "en": "Dragon Helm-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 898,
+   "en": "Dragon Knight Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 899,
+   "en": "Dragon Knight Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 900,
+   "en": "Dragon Knight Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 901,
+   "en": "Dragon Knight Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 902,
+   "en": "Dragon Knight Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 903,
+   "en": "Dragon Lance",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 904,
+   "en": "Dragon Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 905,
+   "en": "Dragon Pants-J",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 906,
+   "en": "Dragon Roar",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 907,
+   "en": "Dragon Roar Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 908,
+   "en": "Dragon Roar Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 909,
+   "en": "Dragon Roar Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 910,
+   "en": "Dragon Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 911,
+   "en": "Dragon Slasher",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 912,
+   "en": "Dragon Slasher Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 913,
+   "en": "Dragon Slasher Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 914,
+   "en": "Dragon Slasher Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 915,
+   "en": "Dragon Slayer Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 916,
+   "en": "Dragon Soul Staff",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 917,
+   "en": "Dragon Spear",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 918,
+   "en": "Drain Life",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 919,
+   "en": "Drain Life Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 920,
+   "en": "Drain Life Parchment",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 921,
+   "en": "Drain Life Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 929,
+   "en": "Dungeon",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 938,
+   "en": "Dungeon2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 939,
+   "en": "Dungeon3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 940,
+   "en": "Durability Reduction (1)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 941,
+   "en": "Durability Reduction (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 942,
+   "en": "Durability Reduction (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 943,
+   "en": "Durability Reduction(3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 956,
+   "en": "Earth Prison",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 957,
+   "en": "Earth Prison Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 958,
+   "en": "Earthshake",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 959,
+   "en": "Earthshake Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 960,
+   "en": "Earthshake Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 963,
+   "en": "Eclipse Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 964,
+   "en": "Eclipse Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 965,
+   "en": "Eclipse Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 966,
+   "en": "Eclipse Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 967,
+   "en": "Eclipse Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 969,
+   "en": "Eilte Transfer Skeleton Ring",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 970,
+   "en": "Elbeland",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 971,
+   "en": "Elbeland2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 972,
+   "en": "Elbeland3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 973,
+   "en": "Electric Spark Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 975,
+   "en": "Electric Spike",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 976,
+   "en": "Elegant Jewelry Case",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 977,
+   "en": "Elemental Mace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 978,
+   "en": "Elemental Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1005,
+   "en": "Elite Healing Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1006,
+   "en": "Elite Mana Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1008,
+   "en": "Elite SD Potion",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1011,
+   "en": "Elixir of Agility",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1012,
+   "en": "Elixir of Control",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1013,
+   "en": "Elixir of Energy",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1014,
+   "en": "Elixir of Health",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1015,
+   "en": "Elixir of Strength",
+   "budget": 29,
+   "kinds": [
+    "buff",
+    "item"
+   ]
+  },
+  {
+   "id": 1017,
+   "en": "Elveland",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1025,
+   "en": "Elveland2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1026,
+   "en": "Elveland3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1027,
+   "en": "Elven Axe",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1028,
+   "en": "Elven Bow",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1029,
+   "en": "Elven Shield",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1032,
+   "en": "Emerald Necklace",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1033,
+   "en": "Emperor Cape Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1034,
+   "en": "Emperor Cape Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1035,
+   "en": "Emperor Cape Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1037,
+   "en": "Energy Ball",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1038,
+   "en": "Energy Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1072,
+   "en": "Equipped Weapon Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1073,
+   "en": "Equipped Weapon Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1082,
+   "en": "Eternal Wing Armor",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1083,
+   "en": "Eternal Wing Boots",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1084,
+   "en": "Eternal Wing Gloves",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1085,
+   "en": "Eternal Wing Helm",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1086,
+   "en": "Eternal Wing Pants",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1087,
+   "en": "Eternal Wing Stick",
+   "budget": 29,
+   "kinds": [
+    "item"
+   ]
+  },
+  {
+   "id": 1088,
+   "en": "Eternal Wings Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1089,
+   "en": "Eternal Wings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1090,
+   "en": "Eternal Wings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1091,
+   "en": "Evidence of Strength",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1092,
+   "en": "Evil Spirit",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1093,
+   "en": "Evil Spirit Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1109,
+   "en": "Expansion of Wizardry",
+   "budget": 31,
+   "kinds": [
+    "buff",
+    "skill"
+   ]
+  }
+ ]
+}

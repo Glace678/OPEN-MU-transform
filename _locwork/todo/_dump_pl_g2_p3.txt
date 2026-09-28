@@ -1,0 +1,102 @@
+### 3888 | budget=4096 | questwords
+You cannot join the gens.
+### 3889 | budget=4096 | questwords
+You cannot leave the gens.
+### 3890 | budget=4096 | questwords
+You do not have enough space for the item. Please free up your Inventory and try again.
+### 3895 | budget=4096 | questwords
+You have accepted the first trial. I want you to prove your combat prowess by defeating 5 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving till the end in Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Soul, or a Jewel of Chaos.
+### 3896 | budget=4096 | questwords
+You have already joined the gens.
+### 3897 | budget=4096 | questwords
+You have completed the fifth trial to become a hero. The next mission I'm about to give you is the last one to see if you are worthy of being a hero. (Master level)
+### 3898 | budget=4096 | questwords
+You have completed the first trial to become a hero. The next mission I'll give you is to see if you have the courage to be a hero. Will you accept this mission? (Basic character: Level 300 - 320, Advanced character: Level 271 - 320)
+### 3899 | budget=4096 | questwords
+You have completed the tutorial. Take this Ring of Hero and Ring of Warrior. They are gifts to you from the queen.
+### 3900 | budget=4096 | questwords
+You have left the gens.
+### 3901 | budget=4096 | questwords
+You have not joined the gens.
+### 3902 | budget=4096 | questwords
+You have not joined the gens. You must first be a member of the gens in order to leave it.
+### 3903 | budget=4096 | questwords
+You have now completed the fourth trial to become a hero. The next mission I'm about to give you is to see if you have the tenacity to be a hero. Will you accept this mission? (Level 381 - 400)
+### 3904 | budget=4096 | questwords
+You have now completed the second trial to become a hero. The next mission I'll give you is to see if you have the fighting spirit to be a hero. Will you accept this mission? (Level 331 - 350)
+### 3905 | budget=4096 | questwords
+You have now completed the third trial to become a hero. The next mission I'll give you is to see if you have the right mentality to be a hero. Will you accept this mission? (Level 351 - 380)
+### 3906 | budget=4096 | questwords
+You have to be at least level 50 in order to join the gens.
+### 3907 | budget=4096 | questwords
+You know well enough. I don't want to talk about it. (Refuse)
+### 3908 | budget=4096 | questwords
+You left the gens. Your contribution has been reset to 0.
+### 3910 | budget=4096 | questwords
+You might not find Blood Castle challenging anymore. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)
+### 3913 | budget=4096 | questwords
+You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers and corrupt guardsmen will fight each other to the death in a no-holds-barred melee.
+### 3914 | budget=4096 | questwords
+You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers are pitted against 50 corrupt guardsmen in a no-holds-barred melee to the death.
+### 3915 | budget=4096 | questwords
+You will stand by for about a minute before actually entering. You'll enter Blood Castle after this standby time has elapsed. Once inside Blood Castle, you can buy some time by defeating 40 monsters summoned by a necromancer named Red Skull.
+### 3916 | budget=4096 | questwords
+You'd be mistaken to think you've reached the peak. Testing yourself and your abilities at Chaos Castle isn't a bad idea. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 300-400, Advanced character: Level 280-400)
+### 3917 | budget=4096 | questwords
+You'll be able to use the Ring of Hero at level 40 and the Ring of Warrior at level 80. Dropping the rings will break their seal and transform them into items.;Next time we meet, I sincerely hope to see a mightier warrior before me. Go now and build your experience and strength and free this world from Kundun's grasp!;(You've completed the tutorial.)
+### 3918 | budget=4096 | questwords
+You'll face a steady stream of powerful monsters at Devil Square. Forming a party with other travelers before entering will give you a better chance of survival.
+### 3919 | budget=4096 | questwords
+You'll need to regularly repair your equipments since their durability will diminish as you hunt monsters. When you reach a certain level, you will be able to repair your equipments directly from the Inventory window. What level is that?
+### 3920 | budget=4096 | questwords
+You'll not be able to use certain skills like Teleport or Telekinesis while holding on to a relic. On the other hand, there are special skills that can only be used in Illusion Temple. Using these skills to your advantage will make it easier for your camp to win.
+### 3921 | budget=4096 | questwords
+You'll now find it increasingly difficult to find suitable hunting ground. How about discovering hunting grounds by accepting quests from Shadow Phantom Soldiers? Come see me when you reach a new level to receive quests that will earn you prized equipment.
+### 3922 | budget=4096 | questwords
+You'll now have to focus more on coordinated attacks with your comrades than on simply defeating monsters. There is no better place than Devil Square to train for this. Complete a simple mission that will earn you an invitation to Devil Square, and train there at the side of your comrades. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)
+### 3923 | budget=4096 | questwords
+You'll stand by for about a minute before actually entering. Once this standby time passes, monsters will start to appear. The monsters will continue to attack for ten minutes, and killing them will earn you points. If you score high enough, you might even receive a reward.
+### 3924 | budget=4096 | questwords
+You're back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 15-80, Advanced character: Level 10-60)
+### 3925 | budget=4096 | questwords
+You're well-informed. I will give you the item you need to access Chaos Castle. When you have time, come see me for an easy quest.
+### 3926 | budget=4096 | questwords
+You're well-informed. I'll give you the item you'll need to enter Devil Square. When you have time, come see me for an easy quest.
+### 3927 | budget=4096 | questwords
+You're well-informed. I'm in charge of distributing items that are necessary to enter Illusion Temple. When you have time, come see me for an easy quest that will earn you a ticket in.
+### 3928 | budget=4096 | questwords
+You're well-informed. In order to penetrate the barrier surrounding Blood Castle, you will need an Invisibility Cloak. If you pass a simple test of mine, I will provide you with an Invisibility Cloak before you head to Blood Castle. When you have time, come see me for an easy quest.
+### 3929 | budget=4096 | questwords
+You've done well. Let's see to one more thing before I ask you to face tougher monsters. Talk to me again and receive a damage and defense increase buff.
+### 3930 | budget=4096 | questwords
+You've done well. The Falling Slash skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Falling Slash? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+### 3931 | budget=4096 | questwords
+You've done well. The Fire Ball skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Fire Ball? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+### 3932 | budget=4096 | questwords
+You've done well. The Summon Goblin skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Summon Goblin? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+### 3933 | budget=4096 | questwords
+You've done well. The Triple Shot skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Triple Shot? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.
+### 3934 | budget=4096 | questwords
+You've explained enough. Let's continue with the tutorial.
+### 3935 | budget=4096 | questwords
+You've made a wise choice. The first mission for the third trial involves defeating 20 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.
+### 3936 | budget=4096 | questwords
+You've reached the final stage of Blood Castle, but it should still be enjoyable if you have your comrades at your side. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept? (All characters: Master Level)
+### 3937 | budget=4096 | questwords
+You've truly become a fine warrior. I'm sure the queen herself will be proud of you. Truth be told, she has arranged a few items for warriors such as you.
+### 3938 | budget=4096 | questwords
+Your guild is part of a different gens.
+### 3940 | budget=4096 | questwords
+Zaikans from Tarkan 2 should suffice. Go to Tarkan 2 and defeat 30 Zaikans. Come see me after that, and I will give you a choice between 20 Large SD Potions and 30 Large Complex Potions as your reward. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.
+### 3963 | budget=4096 | questwords
+…… He seems to be a miser……
+### 3964 | budget=4096 | questwords
+…… Hmm, for the clan……
+### 3965 | budget=4096 | questwords
+…… Something pestering seems to happen……
+### 3966 | budget=4096 | questwords
+…… That's what happened.
+### 3967 | budget=4096 | questwords
+……Both are fairly easy...
+### 3968 | budget=4096 | questwords
+………... What's behind this story?

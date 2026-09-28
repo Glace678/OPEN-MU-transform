@@ -1,0 +1,279 @@
+[Game] WarningContinuedAttemptsAtHackingWill
+  EN: Warning!!! Continued attempts at hacking will result in a permanent account(%s) ban!!
+  ZH: 警告！ ！ ！继续尝试黑客攻击将导致账号（%s）永久被封锁！
+
+[Game] Error1HackingOrComputerVirusTest
+  EN: [error1] Hacking or computer virus test has not been completely finished. V3 or Birobot by Hawoori Corp. is needed to finish the test.
+  ZH: [error1] 黑客或电脑病毒测试尚未完全完成。完成测试需要 Hawoori Corp. 的 V3 或 Birobot。
+
+[Game] Error2TheHackingToolCheckingProgram
+  EN: [error2] The hacking tool checking program has not been successfully downloaded. Please try connecting again in a moment. \n\n If you continue to experience the same problem, feel free to contact our customer service center through our website at http://muonline.webzen.com
+  ZH: [error2] 黑客工具检查程序未成功下载。请稍后再尝试连接。 \n\n 如果您仍然遇到相同的问题，请随时通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心
+
+[Game] Error9AHackingToolHasBeen
+  EN: [error9] A hacking tool has been found. If you are not using a hacking tool, contact our customer service center through our website at support.http://muonline.webzen.com
+  ZH: [error9] 已发现黑客工具。如果您没有使用黑客工具，请通过我们的网站 support.http://muonline.webzen.com 联系我们的客户服务中心。
+
+[Game] Num: Use skill hot keys
+  EN: Num: Use skill hot keys
+  ZH: Num：使用技能热键
+
+[Game] You can enter Icarus only with wings, dinorant, fenrirr
+  EN: You can enter Icarus only with wings, dinorant, fenrirr
+  ZH: 只有带着翅膀、迪诺兰特、芬里尔才能进入天空之城
+
+[Game] Dinorant
+  EN: Dinorant
+  ZH: 迪诺兰特
+
+[Game] Create Dinorant
+  EN: Create Dinorant
+  ZH: 创建迪诺兰特
+
+[Game] You have exchanged Dinorants
+  EN: You have exchanged Dinorants
+  ZH: 您已交换迪诺兰特
+
+[Game] [error25] A hacking tool (%s) has been detected. The game will shut down.
+  EN: [error25] A hacking tool (%s) has been detected. The game will shut down.
+  ZH: [error25] 检测到黑客工具（%s）。游戏将关闭。
+
+[Game] [error26] A hacking tool (%s) has been detected. The game will shut down.
+  EN: [error26] A hacking tool (%s) has been detected. The game will shut down.
+  ZH: [error26] 检测到黑客工具（%s）。游戏将关闭。
+
+[Game] [error1004] : A speed hack has been detected. The game will shut down.
+  EN: [error1004] : A speed hack has been detected. The game will shut down.
+  ZH: [error1004]：检测到速度黑客。游戏将关闭。
+
+[Game] [error1005] : Game hack (%d) detected. The game will shut down.
+  EN: [error1005] : Game hack (%d) detected. The game will shut down.
+  ZH: [错误1005]：检测到游戏黑客（%d）。游戏将关闭。
+
+[Game] AhGreatWarriorThanksToYour
+  EN: Ah! Great warrior. Thanks to your help, we have been able to protect the lands from Kundun's soldiers. As a token of our appreciation, I will share my experience with you.
+  ZH: 啊!伟大的战士。感谢您的帮助，我们才能够保护这片土地免受昆顿士兵的侵害。为了表达我们的谢意，我将与您分享我的经验。
+
+[Game] Dinorant, +10, +15 items, Cloak of Invisibility
+  EN: Dinorant, +10, +15 items, Cloak of Invisibility
+  ZH: 迪诺兰特, +10, +15 物品, 透明披风
+
+[Game] Register the lucky number on the 100%% winning card.
+  EN: Register the lucky number on the 100%% winning card.
+  ZH: 将幸运数字登记在100%中奖卡上。
+
+[Game] PleaseCheckOutTheAnnouncementOn
+  EN: Please check out the announcement on the official website on how to receive a 100%% winning card.
+  ZH: 如何获得100%中奖卡请查看官网公告。
+
+[Game] Chaos combination Goblin tax rate %d%%
+  EN: Chaos combination Goblin tax rate %d%%
+  ZH: 混沌组合哥布尔税率%d%%
+
+[Game] Chaos combination Goblin: %d(%d)%%
+  EN: Chaos combination Goblin: %d(%d)%%
+  ZH: 混沌组合哥布尔：%d(%d)%%
+
+[Game] PC cafe point (%d/%d)
+  EN: PC cafe point (%d/%d)
+  ZH: PC咖啡厅点(%d/%d)
+
+[Game] PC cafe point store
+  EN: PC cafe point store
+  ZH: PC咖啡厅积分店
+
+[Game] YouCanDoAGoblinCombination
+  EN: You can do a Goblin combination with a Sealed Golden Box to create a Golden Box.
+  ZH: 您可以将哥布尔与密封金盒进行组合来创建金盒。
+
+[Game] YouCanDoAGoblinCombination2876
+  EN: You can do a Goblin combination with a Sealed Silver Box to create a Silver Box.
+  ZH: 您可以将哥布尔与密封银盒进行组合来创建银盒。
+
+[Game] You can do a Goblin combination with a Gold Key to create a Golden Box.
+  EN: You can do a Goblin combination with a Gold Key to create a Golden Box.
+  ZH: 您可以将哥布尔与密钥匙组合来创建金盒子。
+
+[Game] You can do a Goblin combination with a Silver Key to create a Silver Box.
+  EN: You can do a Goblin combination with a Silver Key to create a Silver Box.
+  ZH: 您可以将哥布尔与银钥匙组合来创建银盒子。
+
+[Game] Goblin Points : %s
+  EN: Goblin Points : %s
+  ZH: 哥布尔点数：%s
+
+[Game] Hot Key
+  EN: Hot Key
+  ZH: 热键
+
+[Game] Chatting Mode Hot Key
+  EN: Chatting Mode Hot Key
+  ZH: 聊天模式热键
+
+[Game] WarningContinuedAttemptsAtHackingWill
+  EN: Warning!!! Continued attempts at hacking will result in a permanent account(%s) ban!!
+  ZH: 警告！ ！ ！继续尝试黑客攻击将导致账号（%s）永久被封锁！
+
+[Game] Warning!
+  EN: Warning!
+  ZH: 警告！
+
+[Game] LoginSavePasswordWarningTitle
+  EN: WARNING!!!
+  ZH: 警告！
+
+[Game] Outlaw Warning
+  EN: Outlaw Warning
+  ZH: 非法警告
+
+[Game] Warning2223
+  EN: !! Warning !!
+  ZH: !!警告 ！ ！
+
+[Game] DoYouWantToUpgradeThe
+  EN: Do you want to upgrade the level for the following Errtel? (Warning : Items may disappear.)
+  ZH: 您想升级以下 艾尔特 的等级吗？ （警告：物品可能会消失。）
+
+[Game] DoYouWantToUpgradeThe3700
+  EN: Do you want to upgrade the rank for the following Errtel? (Warning : Items may disappear.)
+  ZH: 您想升级以下 艾尔特 的等级吗？ （警告：物品可能会消失。）
+
+[Game] Warning3750
+  EN: Warning
+  ZH: 警告
+
+[Editor-PUNCT] Save completed successfully!
+  ZH: 保存成功!
+
+[Editor-PUNCT] Failed to save items!
+  ZH: 保存失败!
+
+[Editor-PUNCT] Skills saved successfully!
+  ZH: 技能保存成功!
+
+[Editor-PUNCT] Failed to save skills!
+  ZH: 技能保存失败!
+
+[Editor-PUNCT] S6E3 export completed successfully!
+  ZH: 导出 S6E3 成功!
+
+[Editor-PUNCT] Failed to export as S6E3 format!
+  ZH: 导出 S6E3 格式失败!
+
+[Editor-PUNCT] CSV export completed successfully!
+  ZH: 导出 CSV 成功!
+
+[Editor-PUNCT] Failed to export as CSV!
+  ZH: 导出 CSV 失败!
+
+[Editor-PUNCT] Skills exported as CSV successfully!
+  ZH: 技能导出 CSV 成功!
+
+[Editor-PUNCT] Failed to export skills as CSV!
+  ZH: 技能导出 CSV 失败!
+
+[Editor-PUNCT] File not found: {0}
+  ZH: 找不到文件: {0}
+
+[Editor-PUNCT] Invalid index: {0}
+  ZH: 无效索引: {0}
+
+[Editor-PUNCT] Error: Index {0} already in use!
+  ZH: 错误: 索引 {0} 已被使用!
+
+[Editor-PUNCT] Search:
+  ZH: 搜索:
+
+[Editor-PUNCT] No columns selected. Click 'Columns' to show columns.
+  ZH: 未选择任何字段。请点击 '字段' 以显示字段.
+
+[Editor-PUNCT] Toggle Column Visibility:
+  ZH: 切换字段显示状态:
+
+[Editor-PUNCT] Items saved successfully!
+  ZH: 物品保存成功!
+
+[Editor-PUNCT] Exported as legacy format successfully!
+  ZH: 导出旧版格式成功!
+
+[Editor-PUNCT] Failed to export as legacy format!
+  ZH: 导出旧版格式失败!
+
+[Editor-PUNCT] Items exported as CSV successfully!
+  ZH: 物品导出 CSV 成功!
+
+[Editor-PUNCT] Failed to export item attributes as CSV!
+  ZH: 物品属性导出 CSV 失败!
+
+[Editor-PUNCT] Failed to export skill attributes as CSV!
+  ZH: 技能属性导出 CSV 失败!
+
+[Editor-PUNCT] Search Skills:
+  ZH: 搜索技能:
+
+[Editor-PUNCT] Render Distances:
+  ZH: 绘制距离:
+
+[Editor-PUNCT] View-aligned: follows camera yaw + pitch (tracks what you look at).
+  ZH: 视角对齐: 跟随相机的偏航与俯仰 (追踪所视对象)。
+
+[Editor-PUNCT] Debug Visualization:
+  ZH: 调试可视化:
+
+[Editor-PUNCT] Rendering:
+  ZH: 绘制:
+
+[Editor-PUNCT] TODO - Not Working:
+  ZH: 待办 - 尚未正常运作:
+
+[Editor-PUNCT] TODO - Not Implemented:
+  ZH: 待办 - 尚未实作:
+
+[Editor-PUNCT] WARNING: Window size mismatch detected!
+  ZH: 警告: 检测到窗口尺寸不一致！
+
+[Game-BANG] WarningContinuedAttemptsAtHackingWill
+  ZH: 警告！ ！ ！继续尝试黑客攻击将导致账号（%s）永久被封锁！
+
+[Game-BANG] [error6] No.%d error!!! Findhack.zip needs to be installed in MU folder.
+  ZH: [错误6]No.%d错误！ ！ ！ Findhack.zip 需要安装在 MU 文件夹中。
+
+[Game-BANG] Tied!!!
+  ZH: 绑起来！ ！ ！
+
+[Game-BANG] You have lost the Guild War!!!
+  ZH: 战盟战你输了！ ！ ！
+
+[Game-BANG] You have won the Guild War!!!
+  ZH: 你赢得了战盟战争！ ！ ！
+
+[Game-BANG] You have won the Guild War!!!(Opposing guild master left)
+  ZH: 你赢得了战盟战！ ！ ！ （对方战盟盟主离开）
+
+[Game-BANG] You have lost the Guild War!!!(Guild master left)
+  ZH: 战盟战你输了！ ！ ！ （战盟盟主离开）
+
+[Game-BANG] You have won the Guild War!!!(Opposing guild disbanded)
+  ZH: 你赢得了战盟战！ ！ ！ （敌方战盟解散）
+
+[Game-BANG] You have lost the Guild War!!!(Guild disbanded)
+  ZH: 战盟战你输了！ ！ ！ （战盟解散）
+
+[Game-BANG] You can enter Devil Square now!!
+  ZH: 现在可以进入恶魔广场了！ ！
+
+[Game-BANG] AhGreatWarriorThanksToYour
+  ZH: 啊!伟大的战士。感谢您的帮助，我们才能够保护这片土地免受昆顿士兵的侵害。为了表达我们的谢意，我将与您分享我的经验。
+
+[Game-BANG] Feel the new Spirit of Guardian!!
+  ZH: 感受新的守护者精神！ ！
+
+[Game-BANG] Be a first Lord of the castle!!
+  ZH: 成为城堡的第一位领主！ ！
+
+[Game-BANG] Warning2223
+  ZH: !!警告 ！ ！
+
+[Game-BANG] Duel Start!!
+  ZH: 决斗开始！ ！
+

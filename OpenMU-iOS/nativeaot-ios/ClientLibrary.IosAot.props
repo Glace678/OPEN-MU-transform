@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup>
+    <Compile Include="$(MSBuildProjectDirectory)/*.cs" />
+    <!-- iOS 动态库用 install_name 声明加载路径；引擎侧 dlopen 使用
+         @rpath/libMUnique.Client.Library.dylib（见 BUILD-iOS构建说明.md）。 -->
+    <LinkerArg Include="-Wl,-install_name,@rpath/libMUnique.Client.Library.dylib"
+               Condition="$(RuntimeIdentifier.StartsWith('ios'))" />
+  </ItemGroup>
+</Project>

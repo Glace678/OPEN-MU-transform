@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1901,
+   "en": "It won't take up too much of your time. I'll simply explain basic controls and hunting techniques.;Are you sure you don't want our help?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1902,
+   "en": "It wouldn't be easy to attack Gaion hiding in Varka. You'd better eliminate Raymond and Erkanne first to weaken his power. Without these two Gaion will not be as invincible. Go to Varka, kill Raymond and Erkanne and come back to me to get the reward from the guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1903,
+   "en": "It's becoming more and more difficult. I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1904,
+   "en": "It's easier than anticipated.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1905,
+   "en": "It's fighting spirit this time? I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1906,
+   "en": "It's nice to meet you.;May I ask who you are?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1907,
+   "en": "It's possible to find out the location of myself and others using coordinates? Amazing!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1908,
+   "en": "It's the quartermaster unit's job. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1909,
+   "en": "It's time for you to test your limits at Chaos Castle. Go see the Shadow Phantom Soldier, test your limitations, and then take the Chaos Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1910,
+   "en": "It's too late to pull out now....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1911,
+   "en": "It's very easy to enter Blood Castle. The battle event takes place every two hours from 12:30am and on. To enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel in Devias, five minutes before a Blood Castle event commences and ask to join. The Messenger of Archangel will then send you to the castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1912,
+   "en": "It's very easy to enter Chaos Castle. Simply right-click on your Armor of Guardsman at the appropriate times (12:00am, 14:00pm, 16:00pm, 18:00pm, 20:00pm, and 22:00pm) to enter. Players in designated locations, such as a PC cafe, will have more opportunities to enter.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1913,
+   "en": "It's very easy to enter Devil Square. It can be entered every four hours from 3:00 a.m. and on (3:00 a.m., 7:00 a.m., 11:00 a.m., 3:00 p.m., 7:00 p.m., and 11:00 p.m.). To enter, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before a scheduled entry time and ask to join. Charon will then send you to Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1914,
+   "en": "It's very easy to enter Illusion Temple. It can be entered every four hours from 01:00 a.m. and on: 01:00 a.m., 05:00 a.m., 09:00 a.m., 01:00 p.m., 05:00 p.m., and 09:00 p.m. To enter, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before an Illusion Temple event commences and ask to join. Mirage will then send you to the temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1944,
+   "en": "Join Gens Duprian.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1945,
+   "en": "Join Gens Vanert.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1946,
+   "en": "Just say the word!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1963,
+   "en": "Keeping the peace of the hero",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1977,
+   "en": "Kundun's Royal Guards, however, continue to attack the barrier, and are weakening it. We need Archangel's weapon in order to prevent this weakening of the barrier, and that's why we are now seeking the help of travelers.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1978,
+   "en": "Kundun, however, must've anticipated such a move. He hid beyond the range of the barrier and eliminated the Twelve Saints as soon as the barrier was formed. Luckily, Archangel evaded that peril and sacrificed himself for the barrier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1979,
+   "en": "Kundun�� He's a hard target��",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1982,
+   "en": "Ladies' appetite for collecting",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2013,
+   "en": "Leave Gens Duprian.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2014,
+   "en": "Leave Gens Vanert.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2033,
+   "en": "Let me give it a go. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2034,
+   "en": "Let me give you a Dark Knight weapon to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2035,
+   "en": "Let me give you a Dark Wizard's scroll to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2036,
+   "en": "Let me give you a Summoner's scroll to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2037,
+   "en": "Let me give you an Agility Elf weapon to use so that you can understand how skills work better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2038,
+   "en": "Let me give you an Energy Elf's orb to use so that you can understand how skills work better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2039,
+   "en": "Let's get you some real combat experience.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2040,
+   "en": "Let's hear it.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2041,
+   "en": "Let's start with something simple.;Close your quest window and either press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2043,
+   "en": "Level 10 and 2,000 Zens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2044,
+   "en": "Level 30",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2045,
+   "en": "Level 30 and 3000 Zens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2046,
+   "en": "Level 50",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2047,
+   "en": "Level 50 and 4000 Zens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2048,
+   "en": "Level 75",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2049,
+   "en": "Leveling up will earn you points. These points can be used to enhance your strength, agility, stamina, and energy and thereby affect your damage, defense, HP, and MP levels, respectively.;Carefully use these points, for how you develop your character will determine its combat characteristics and the types of weapons and skills it can use.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2085,
+   "en": "Look at the right side of your screen. Do you see the apples you just bought? Adding a potion to the Inventory will automatically register it.;Press the Q button to use apples, potions, and other HP recovery items and the W button to use MP recovery items.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2104,
+   "en": "Loud and clear! Give me the next quest!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2117,
+   "en": "Lurkers in the Dark",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2141,
+   "en": "Many of the monsters that attacked our barrier have been dealt with, but their superiors are now physically attacking the barrier. Will you eliminate these monsters for us? (Level 200-209)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2142,
+   "en": "Many travelers are disappearing from the Swamp of Peace because of Shadow Knights. Go to the Swamp of Peace and defeat 140 Shadow Knights. Come see me once that's done to receive a Devil's Invitation + 7 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2181,
+   "en": "May I help you? My collection is much more diverse than the ordinary merchants. That's the secret of my success, haha.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2182,
+   "en": "May the glory be with you�� Good job. It must be the enemy clan who's controlling these Hero monsters. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2183,
+   "en": "May the glory be with you�� Good job. We found an evidence of the enemy clan from the investigation. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2184,
+   "en": "May the grace of Lugard be with you�� This is the entrance to the Underwater Temple. Kundun's army is captivated in this temple by the sealed stone.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2193,
+   "en": "Mega Crusts in Icarus are causing great harm to travelers. Go to Icarus and defeat 80 Mega Crusts. Come see me when that's done to receive an Invisibility Cloak + 4 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Compte</string>
+    <string name="account_portal_address">Adresse du portail</string>
+    <string name="account_portal_language">Langue du portail</string>
+    <string name="account_register">S\'inscrire</string>
+    <string name="account_change_password">Modifier le mot de passe</string>
+    <string name="account_reset_password">Mot de passe oublié?</string>
+    <string name="account_portal_settings">Paramètres du compte</string>
+    <string name="account_portal_not_configured">Définissez une adresse valide du portail des comptes dans les paramètres.</string>
+    <string name="account_portal_invalid">Saisissez une origine HTTPS. HTTP exige une adresse de boucle locale directe ou un appairage local de confiance. Les identifiants, chemins, requêtes et fragments sont interdits.</string>
+    <string name="account_portal_no_browser">Aucun navigateur disponible pour ouvrir le portail des comptes.</string>
+</resources>

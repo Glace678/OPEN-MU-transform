@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0-candidate",
+  "status": "design-budgets-not-installed-runtime-effects",
+  "skillTypeBudgets": {
+    "DirectHit": { "totalCastCoefficient": 1.15, "actionSeconds": 1.2, "manaFraction": 0.012, "maxTargets": 1 },
+    "AreaSkillAutomaticHits": { "totalCastCoefficient": 0.95, "actionSeconds": 1.3, "manaFraction": 0.023, "targetWeights": [1,0.75,0.55,0.35] },
+    "AreaSkillExplicitTarget": { "totalCastCoefficient": 1.15, "actionSeconds": 1.2, "manaFraction": 0.014, "maxTargets": 1 },
+    "Buff": { "durationSeconds": 60, "cooldownSeconds": 12, "manaFraction": 0.08, "sameEffectStacking": "strongest-only" },
+    "Regeneration": { "targetMaxHealthFraction": 0.12, "casterPowerCoefficient": 0.15, "cooldownSeconds": 5, "manaFraction": 0.10 },
+    "PassiveBoost": { "maxNodeRanks": 5, "rankValueFraction": [0,0.005,0.009,0.012,0.014,0.015], "mustRespectMasterBranchCap": true },
+    "SummonMonster": { "ownerTotalDamageShare": 0.22, "healthOwnerFraction": 0.75, "activeSummonsCap": 1, "resummonSeconds": 20, "manaFraction": 0.15 },
+    "Other": { "directDamage": 0, "preserveTargetingAndEventSemantics": true, "requiresExplicitUtilityHandler": true }
+  },
+  "utilitySkills": [
+    { "engineIds": [16], "effect": "mana_barrier", "damageReductionCap": 0.15, "manaPaidPerAbsorbedDamage": 0.5, "emptyManaDisablesEffect": true },
+    { "engineIds": [18], "effect": "guard", "damageReductionCap": 0.20, "moveSpeedMultiplier": 0.70, "durationSeconds": 3, "cooldownSeconds": 8 },
+    { "engineIds": [26,234], "effect": "heal", "targetMaxHealthFraction": 0.12, "casterPowerCoefficient": 0.15, "cooldownSeconds": 5, "pvpMultiplier": 0.5 },
+    { "engineIds": [27,268], "effect": "defense_buff", "damageReductionCap": 0.12, "stackRule": "strongest-only" },
+    { "engineIds": [28,233], "effect": "attack_buff", "damageIncreaseCap": 0.12, "stackRule": "strongest-only" },
+    { "engineIds": [48,267], "effect": "health_buff", "maximumHealthIncreaseCap": 0.15, "healOnRefresh": false },
+    { "engineIds": [64], "effect": "critical_buff", "criticalChanceAddition": 0.05, "respectsGlobalCritCap": true },
+    { "engineIds": [77], "effect": "infinite_arrow", "arrowConsumptionMultiplier": 0, "damageIncrease": 0 },
+    { "engineIds": [217], "effect": "reflection", "reflectedDamageFraction": 0.08, "bossReflectionCapOfTargetHealthPerSecond": 0.001, "canReflectReflectedDamage": false },
+    { "engineIds": [218], "effect": "berserker", "damageIncrease": 0.10, "damageTakenIncrease": 0.08, "durationSeconds": 20, "cooldownSeconds": 30 },
+    { "engineIds": [219], "effect": "sleep", "pvmDurationSeconds": 3, "pvpDurationSeconds": 1.5, "bossDurationSeconds": 0, "breakOnDamage": true },
+    { "engineIds": [221], "effect": "weakness", "attackReduction": 0.10, "bossMultiplier": 0.5, "stackRule": "strongest-only" },
+    { "engineIds": [222,266], "effect": "armor_break", "armorReduction": 0.15, "bossMultiplier": 0.5, "globalPenetrationCap": 0.25 },
+    { "engineIds": [6,15,63], "effect": "teleport", "cooldownSeconds": 4, "manaFraction": 0.06, "noDamageIframes": true },
+    { "engineIds": [68], "effect": "cleanse", "cooldownSeconds": 15, "postCleanseImmunitySeconds": 2 },
+    { "engineIds": [58], "effect": "nova_charge", "chargeSecondsCap": 3, "totalCastCoefficientCap": 3.2, "chargeStartDealsDamage": false },
+    { "engineIds": [150], "effect": "monster_special", "usesEncounterAttackBudget": true, "requiresTelegraphForDamageAboveNormalAttack": 2 }
+  ],
+  "equipment": {
+    "rarityFactors": { "common": 1, "excellent": 1.12, "ancient": 1.16, "socket": 1.16 },
+    "enhancementFactor": "1 + 0.022 * itemLevel",
+    "totalLoadoutFactorCap": 1.55,
+    "dualWieldTotalWeaponBudgetMultiplier": 1,
+    "oneHandAndShieldWeaponBudgetMultiplier": 0.92,
+    "shieldBonusReduction": 0.04,
+    "armorSlotWeights": { "helm": 0.18, "chest": 0.30, "pants": 0.22, "gloves": 0.15, "boots": 0.15 },
+    "missingSlots": { "MG": ["helm"], "RF": ["gloves"] },
+    "redistributeMissingSlotBudget": true,
+    "minimumMainStatFractionOfRecommendedBuild": 0.65,
+    "minimumSecondaryStatFractionOfRecommendedBuild": 0.40,
+    "fullSetOffenseCapInsideRarityBudget": 0.08,
+    "fullSetDefenseCapInsideRarityBudget": 0.08,
+    "excellentOptionsMax": 2,
+    "socketCountMax": 3,
+    "duplicateOffensiveSocketCap": 1,
+    "setWingPetBonusesAreNotAdditionalMultipliersBeyondLoadoutCap": true
+  },
+  "wingsAndPets": {
+    "wingTiers": [
+      { "tier": 1, "unlockLevel": 150, "offensiveBudgetShare": 0.04, "defensiveBudgetShare": 0.03 },
+      { "tier": 2, "unlockLevel": 250, "offensiveBudgetShare": 0.07, "defensiveBudgetShare": 0.05 },
+      { "tier": 3, "unlockLevel": 400, "offensiveBudgetShare": 0.10, "defensiveBudgetShare": 0.07 }
+    ],
+    "darkRavenDamageShareInsideOwnerBudget": 0.22,
+    "darkHorseAoeUsesWholeCastEarthshakeBudget": true,
+    "petDeathDestroysItem": false,
+    "petOutOfCombatRecoverySeconds": 30,
+    "petMaximumLevel": 50,
+    "petTotalTrainingHoursReference": 12,
+    "mountDamageMultiplierOutsideEquipmentBudget": 1
+  },
+  "recipes": [
+    { "id": "wing_1", "unlockLevel": 150, "successChance": 1, "pityAttempts": 1, "zenInNormalMonsterUnits": 70, "materials": { "chaos": 1, "bless": 2, "soul": 2 }, "failureKeepsBaseItem": true },
+    { "id": "wing_2", "unlockLevel": 250, "successChance": 0.75, "pityAttempts": 3, "zenInNormalMonsterUnits": 180, "materials": { "chaos": 2, "creation": 1, "feather": 1 }, "failureKeepsBaseItem": true },
+    { "id": "wing_3", "unlockLevel": 400, "successChance": 0.40, "pityAttempts": 5, "zenInNormalMonsterUnits": 600, "materials": { "chaos": 3, "creation": 3, "wing_fragment": 10 }, "failureKeepsBaseItem": true },
+    { "id": "socket_insert", "unlockLevel": 300, "successChance": 1, "pityAttempts": 1, "zenInNormalMonsterUnits": 150, "materials": { "bless": 3, "soul": 3, "creation": 1 }, "failureKeepsBaseItem": true },
+    { "id": "harmony_reroll", "unlockLevel": 250, "successChance": 1, "pityAttempts": 1, "zenInNormalMonsterUnits": 80, "materials": { "harmony": 1 }, "failureKeepsBaseItem": true }
+  ],
+  "materialDropWeights": { "bless": 0.30, "soul": 0.27, "chaos": 0.18, "life": 0.10, "creation": 0.07, "harmony": 0.08 },
+  "quests": {
+    "advancementLevels": [150,220,400],
+    "freeExtraAttributePoints": 0,
+    "completionXpInCurrentLevelFractions": [0.5,0.5,0.25],
+    "failedQuestDestroysProgress": false,
+    "questItemGuaranteedAfterEligibleKills": 40,
+    "masterUnlockBossContentRank": 390,
+    "dailyQuestXpMinutesOfNormalFarming": 15,
+    "dailyQuestTokens": 2,
+    "dailyTokensShareGlobalCap": true,
+    "respecRefundFraction": 1
+  },
+  "deathAndAutomation": {
+    "normalExperienceLost": 0,
+    "masterExperienceLost": 0,
+    "equipmentLost": false,
+    "zenLost": 0,
+    "respawnDelaySeconds": 10,
+    "muHelperZenPerHour": 0,
+    "offlineExperience": 0,
+    "paidPowerOrDropBoosts": false,
+    "resetCountStatBonuses": false
+  },
+  "multiplayer": {
+    "partyMaxMembers": 5,
+    "equalLevelContributionXpShare": "total encounter XP divided among eligible active participants",
+    "minimumActiveContributionFraction": 0.05,
+    "supportContributionEligible": true,
+    "dungeonMonsterHealthAddedPerExtraPlayer": 0.75,
+    "dungeonMonsterAttackAddedPerExtraPlayer": 0.12,
+    "encounterXpAddedPerExtraPlayer": 0.90,
+    "castleSiegeEnabledByDefault": false,
+    "tradingEnabledByDefault": false,
+    "multiplayerEconomyValidated": false
+  }
+}

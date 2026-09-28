@@ -1,0 +1,3012 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_TypeCaption" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="Account_TypeCaptionPlural" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="Account_LoginName_Caption" xml:space="preserve">
+    <value>登录名</value>
+  </data>
+  <data name="Account_PasswordHash_Caption" xml:space="preserve">
+    <value>密码哈希</value>
+  </data>
+  <data name="Account_SecurityCode_Caption" xml:space="preserve">
+    <value>安全码</value>
+  </data>
+  <data name="Account_EMail_Caption" xml:space="preserve">
+    <value>电子邮箱</value>
+  </data>
+  <data name="Account_LanguageIsoCode_Caption" xml:space="preserve">
+    <value>语言 ISO 代码</value>
+  </data>
+  <data name="Account_ChatBanUntil_Caption" xml:space="preserve">
+    <value>聊天封禁截止时间</value>
+  </data>
+  <data name="Account_UnlockedCharacterClasses_Caption" xml:space="preserve">
+    <value>已解锁职业</value>
+  </data>
+  <data name="Account_RegistrationDate_Caption" xml:space="preserve">
+    <value>注册日期</value>
+  </data>
+  <data name="Account_State_Caption" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Account_TimeZone_Caption" xml:space="preserve">
+    <value>时区</value>
+  </data>
+  <data name="Account_VaultPassword_Caption" xml:space="preserve">
+    <value>仓库密码</value>
+  </data>
+  <data name="Account_Vault_Caption" xml:space="preserve">
+    <value>仓库</value>
+  </data>
+  <data name="Account_IsVaultExtended_Caption" xml:space="preserve">
+    <value>仓库是否已扩展</value>
+  </data>
+  <data name="Account_IsTemplate_Caption" xml:space="preserve">
+    <value>是否为模板账号</value>
+  </data>
+  <data name="Account_IsTemplate_Description" xml:space="preserve">
+    <value>测试用途的模板账号可以同时多次登录，但仅可读取。</value>
+  </data>
+  <data name="Account_Characters_Caption" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Account_Attributes_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="AccountState_TypeCaption" xml:space="preserve">
+    <value>账号状态</value>
+  </data>
+  <data name="AccountState_Normal_Caption" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="AccountState_Spectator_Caption" xml:space="preserve">
+    <value>观战者</value>
+  </data>
+  <data name="AccountState_GameMaster_Caption" xml:space="preserve">
+    <value>游戏管理员</value>
+  </data>
+  <data name="AccountState_GameMasterInvisible_Caption" xml:space="preserve">
+    <value>隐身游戏管理员</value>
+  </data>
+  <data name="AccountState_Banned_Caption" xml:space="preserve">
+    <value>已封禁</value>
+  </data>
+  <data name="AccountState_TemporarilyBanned_Caption" xml:space="preserve">
+    <value>临时封禁</value>
+  </data>
+  <data name="AggregateRootAttribute_TypeCaption" xml:space="preserve">
+    <value>聚合根特性</value>
+  </data>
+  <data name="AggregateRootAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>聚合根特性</value>
+  </data>
+  <data name="AppearanceData_TypeCaption" xml:space="preserve">
+    <value>外观数据</value>
+  </data>
+  <data name="AppearanceData_TypeCaptionPlural" xml:space="preserve">
+    <value>外观数据</value>
+  </data>
+  <data name="AppearanceData_CharacterClass_Caption" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="AppearanceData_CharacterStatus_Caption" xml:space="preserve">
+    <value>角色状态</value>
+  </data>
+  <data name="AppearanceData_Pose_Caption" xml:space="preserve">
+    <value>姿态</value>
+  </data>
+  <data name="AppearanceData_FullAncientSetEquipped_Caption" xml:space="preserve">
+    <value>已装备完整套装</value>
+  </data>
+  <data name="AppearanceData_EquippedItems_Caption" xml:space="preserve">
+    <value>已装备物品</value>
+  </data>
+  <data name="AreaSkillSettings_TypeCaption" xml:space="preserve">
+    <value>范围技能设置</value>
+  </data>
+  <data name="AreaSkillSettings_TypeCaptionPlural" xml:space="preserve">
+    <value>范围技能设置</value>
+  </data>
+  <data name="AreaSkillSettings_UseFrustumFilter_Caption" xml:space="preserve">
+    <value>使用视锥筛选</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumStartWidth_Caption" xml:space="preserve">
+    <value>视锥起始宽度</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumEndWidth_Caption" xml:space="preserve">
+    <value>视锥末端宽度</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumDistance_Caption" xml:space="preserve">
+    <value>视锥距离</value>
+  </data>
+  <data name="AreaSkillSettings_UseTargetAreaFilter_Caption" xml:space="preserve">
+    <value>使用目标区域筛选</value>
+  </data>
+  <data name="AreaSkillSettings_TargetAreaDiameter_Caption" xml:space="preserve">
+    <value>目标区域直径</value>
+  </data>
+  <data name="AreaSkillSettings_UseDeferredHits_Caption" xml:space="preserve">
+    <value>使用延迟命中</value>
+  </data>
+  <data name="AreaSkillSettings_DelayPerOneDistance_Caption" xml:space="preserve">
+    <value>每单位距离延迟</value>
+  </data>
+  <data name="AreaSkillSettings_DelayBetweenHits_Caption" xml:space="preserve">
+    <value>命中间隔</value>
+  </data>
+  <data name="AreaSkillSettings_MinimumNumberOfHitsPerTarget_Caption" xml:space="preserve">
+    <value>每个目标的最小命中次数</value>
+  </data>
+  <data name="AreaSkillSettings_MaximumNumberOfHitsPerTarget_Caption" xml:space="preserve">
+    <value>每个目标的最大命中次数</value>
+  </data>
+  <data name="AreaSkillSettings_MaximumNumberOfHitsPerAttack_Caption" xml:space="preserve">
+    <value>每次攻击的最大命中次数</value>
+  </data>
+  <data name="AreaSkillSettings_HitChancePerDistanceMultiplier_Caption" xml:space="preserve">
+    <value>命中概率距离倍率</value>
+  </data>
+  <data name="AssignableExtensions_TypeCaption" xml:space="preserve">
+    <value>可分配扩展</value>
+  </data>
+  <data name="AssignableExtensions_TypeCaptionPlural" xml:space="preserve">
+    <value>可分配扩展</value>
+  </data>
+  <data name="AttributeRequirement_TypeCaption" xml:space="preserve">
+    <value>属性要求</value>
+  </data>
+  <data name="AttributeRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>属性要求</value>
+  </data>
+  <data name="AttributeRequirement_Attribute_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="AttributeRequirement_MinimumValue_Caption" xml:space="preserve">
+    <value>最小值</value>
+  </data>
+  <data name="BattleType_TypeCaption" xml:space="preserve">
+    <value>战斗类型</value>
+  </data>
+  <data name="BattleType_Normal_Caption" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="BattleType_Soccer_Caption" xml:space="preserve">
+    <value>战盟足球</value>
+  </data>
+  <data name="BattleZoneDefinition_TypeCaption" xml:space="preserve">
+    <value>战斗区域</value>
+  </data>
+  <data name="BattleZoneDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>战斗区域</value>
+  </data>
+  <data name="BattleZoneDefinition_Type_Caption" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftTeamSpawnPointX_Caption" xml:space="preserve">
+    <value>左队出生点 X</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftTeamSpawnPointY_Caption" xml:space="preserve">
+    <value>左队出生点 Y</value>
+  </data>
+  <data name="BattleZoneDefinition_RightTeamSpawnPointX_Caption" xml:space="preserve">
+    <value>右队出生点 X</value>
+  </data>
+  <data name="BattleZoneDefinition_RightTeamSpawnPointY_Caption" xml:space="preserve">
+    <value>右队出生点 Y</value>
+  </data>
+  <data name="BattleZoneDefinition_Ground_Caption" xml:space="preserve">
+    <value>地面</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftGoal_Caption" xml:space="preserve">
+    <value>左侧球门</value>
+  </data>
+  <data name="BattleZoneDefinition_RightGoal_Caption" xml:space="preserve">
+    <value>右侧球门</value>
+  </data>
+  <data name="Character_TypeCaption" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Character_TypeCaptionPlural" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Character_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Character_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Character_CharacterClass_Caption" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="Character_CharacterSlot_Caption" xml:space="preserve">
+    <value>角色槽位</value>
+  </data>
+  <data name="Character_CreateDate_Caption" xml:space="preserve">
+    <value>创建日期</value>
+  </data>
+  <data name="Character_Experience_Caption" xml:space="preserve">
+    <value>经验</value>
+  </data>
+  <data name="Character_MasterExperience_Caption" xml:space="preserve">
+    <value>大师经验</value>
+  </data>
+  <data name="Character_LevelUpPoints_Caption" xml:space="preserve">
+    <value>升级点数</value>
+  </data>
+  <data name="Character_MasterLevelUpPoints_Caption" xml:space="preserve">
+    <value>大师升级点数</value>
+  </data>
+  <data name="Character_CurrentMap_Caption" xml:space="preserve">
+    <value>当前地图</value>
+  </data>
+  <data name="Character_PositionX_Caption" xml:space="preserve">
+    <value>X 坐标</value>
+  </data>
+  <data name="Character_PositionY_Caption" xml:space="preserve">
+    <value>Y 坐标</value>
+  </data>
+  <data name="Character_PlayerKillCount_Caption" xml:space="preserve">
+    <value>击杀玩家数</value>
+  </data>
+  <data name="Character_StateRemainingSeconds_Caption" xml:space="preserve">
+    <value>状态剩余秒数</value>
+  </data>
+  <data name="Character_State_Caption" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Character_CharacterStatus_Caption" xml:space="preserve">
+    <value>角色状态</value>
+  </data>
+  <data name="Character_Pose_Caption" xml:space="preserve">
+    <value>姿态</value>
+  </data>
+  <data name="Character_UsedFruitPoints_Caption" xml:space="preserve">
+    <value>已使用正果实点数</value>
+  </data>
+  <data name="Character_UsedNegFruitPoints_Caption" xml:space="preserve">
+    <value>已使用负果实点数</value>
+  </data>
+  <data name="Character_InventoryExtensions_Caption" xml:space="preserve">
+    <value>背包扩展</value>
+  </data>
+  <data name="Character_KeyConfiguration_Caption" xml:space="preserve">
+    <value>按键配置</value>
+  </data>
+  <data name="Character_MuHelperConfiguration_Caption" xml:space="preserve">
+    <value>MU Helper 配置</value>
+  </data>
+  <data name="Character_StoreName_Caption" xml:space="preserve">
+    <value>商店名称</value>
+  </data>
+  <data name="Character_IsStoreOpened_Caption" xml:space="preserve">
+    <value>个人商店是否已开启</value>
+  </data>
+  <data name="Character_Attributes_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="Character_Letters_Caption" xml:space="preserve">
+    <value>邮件</value>
+  </data>
+  <data name="Character_LearnedSkills_Caption" xml:space="preserve">
+    <value>已学技能</value>
+  </data>
+  <data name="Character_Inventory_Caption" xml:space="preserve">
+    <value>背包</value>
+  </data>
+  <data name="Character_DropItemGroups_Caption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="Character_QuestStates_Caption" xml:space="preserve">
+    <value>任务状态</value>
+  </data>
+  <data name="CharacterClass_TypeCaption" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="CharacterClass_TypeCaptionPlural" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="CharacterClass_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="CharacterClass_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="CharacterClass_CanGetCreated_Caption" xml:space="preserve">
+    <value>允许创建</value>
+  </data>
+  <data name="CharacterClass_LevelRequirementByCreation_Caption" xml:space="preserve">
+    <value>创建等级要求</value>
+  </data>
+  <data name="CharacterClass_CreationAllowedFlag_Caption" xml:space="preserve">
+    <value>允许创建标志</value>
+  </data>
+  <data name="CharacterClass_NextGenerationClass_Caption" xml:space="preserve">
+    <value>下一转职业</value>
+  </data>
+  <data name="CharacterClass_IsMasterClass_Caption" xml:space="preserve">
+    <value>是否为大师职业</value>
+  </data>
+  <data name="CharacterClass_LevelWarpRequirementReductionPercent_Caption" xml:space="preserve">
+    <value>移动等级要求降低百分比</value>
+  </data>
+  <data name="CharacterClass_FruitCalculation_Caption" xml:space="preserve">
+    <value>果实计算</value>
+  </data>
+  <data name="CharacterClass_StatAttributes_Caption" xml:space="preserve">
+    <value>基础点数属性</value>
+  </data>
+  <data name="CharacterClass_AttributeCombinations_Caption" xml:space="preserve">
+    <value>属性组合</value>
+  </data>
+  <data name="CharacterClass_BaseAttributeValues_Caption" xml:space="preserve">
+    <value>基础属性值</value>
+  </data>
+  <data name="CharacterClass_HomeMap_Caption" xml:space="preserve">
+    <value>出生地图</value>
+  </data>
+  <data name="CharacterClass_ComboDefinition_Caption" xml:space="preserve">
+    <value>连击</value>
+  </data>
+  <data name="CharacterPose_TypeCaption" xml:space="preserve">
+    <value>角色姿态</value>
+  </data>
+  <data name="CharacterPose_Standing_Caption" xml:space="preserve">
+    <value>站立</value>
+  </data>
+  <data name="CharacterPose_Sitting_Caption" xml:space="preserve">
+    <value>坐下</value>
+  </data>
+  <data name="CharacterPose_Leaning_Caption" xml:space="preserve">
+    <value>倚靠</value>
+  </data>
+  <data name="CharacterPose_Hanging_Caption" xml:space="preserve">
+    <value>悬挂</value>
+  </data>
+  <data name="CharacterQuestState_TypeCaption" xml:space="preserve">
+    <value>角色任务状态</value>
+  </data>
+  <data name="CharacterQuestState_TypeCaptionPlural" xml:space="preserve">
+    <value>角色任务状态</value>
+  </data>
+  <data name="CharacterQuestState_Group_Caption" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="CharacterQuestState_ClientActionPerformed_Caption" xml:space="preserve">
+    <value>客户端操作已执行</value>
+  </data>
+  <data name="CharacterQuestState_LastFinishedQuest_Caption" xml:space="preserve">
+    <value>上一个已完成任务</value>
+  </data>
+  <data name="CharacterQuestState_ActiveQuest_Caption" xml:space="preserve">
+    <value>当前任务</value>
+  </data>
+  <data name="CharacterQuestState_RequirementStates_Caption" xml:space="preserve">
+    <value>要求状态</value>
+  </data>
+  <data name="CharacterStatus_TypeCaption" xml:space="preserve">
+    <value>角色状态</value>
+  </data>
+  <data name="CharacterStatus_Normal_Caption" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="CharacterStatus_Banned_Caption" xml:space="preserve">
+    <value>已封禁</value>
+  </data>
+  <data name="CharacterStatus_GameMaster_Caption" xml:space="preserve">
+    <value>游戏管理员</value>
+  </data>
+  <data name="ChatServerDefinition_TypeCaption" xml:space="preserve">
+    <value>聊天服务器</value>
+  </data>
+  <data name="ChatServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>聊天服务器</value>
+  </data>
+  <data name="ChatServerDefinition_ServerId_Caption" xml:space="preserve">
+    <value>服务器 ID</value>
+  </data>
+  <data name="ChatServerDefinition_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ChatServerDefinition_MaximumConnections_Caption" xml:space="preserve">
+    <value>最大连接数</value>
+  </data>
+  <data name="ChatServerDefinition_ClientTimeout_Caption" xml:space="preserve">
+    <value>客户端超时</value>
+  </data>
+  <data name="ChatServerDefinition_ClientCleanUpInterval_Caption" xml:space="preserve">
+    <value>客户端清理间隔</value>
+  </data>
+  <data name="ChatServerDefinition_RoomCleanUpInterval_Caption" xml:space="preserve">
+    <value>房间清理间隔</value>
+  </data>
+  <data name="ChatServerDefinition_Endpoints_Caption" xml:space="preserve">
+    <value>端点</value>
+  </data>
+  <data name="ChatServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>聊天服务器端点</value>
+  </data>
+  <data name="ChatServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>聊天服务器端点</value>
+  </data>
+  <data name="CombinationBonusRequirement_TypeCaption" xml:space="preserve">
+    <value>组合加成要求</value>
+  </data>
+  <data name="CombinationBonusRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>组合加成要求</value>
+  </data>
+  <data name="CombinationBonusRequirement_OptionType_Caption" xml:space="preserve">
+    <value>属性类型</value>
+  </data>
+  <data name="CombinationBonusRequirement_SubOptionType_Caption" xml:space="preserve">
+    <value>子属性类型</value>
+  </data>
+  <data name="CombinationBonusRequirement_MinimumCount_Caption" xml:space="preserve">
+    <value>最小数量</value>
+  </data>
+  <data name="ConfigurationUpdate_TypeCaption" xml:space="preserve">
+    <value>配置更新</value>
+  </data>
+  <data name="ConfigurationUpdate_TypeCaptionPlural" xml:space="preserve">
+    <value>配置更新</value>
+  </data>
+  <data name="ConfigurationUpdate_Version_Caption" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="ConfigurationUpdate_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ConfigurationUpdate_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ConfigurationUpdate_CreatedAt_Caption" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="ConfigurationUpdate_InstalledAt_Caption" xml:space="preserve">
+    <value>安装时间</value>
+  </data>
+  <data name="ConfigurationUpdateState_TypeCaption" xml:space="preserve">
+    <value>配置更新状态</value>
+  </data>
+  <data name="ConfigurationUpdateState_TypeCaptionPlural" xml:space="preserve">
+    <value>配置更新状态</value>
+  </data>
+  <data name="ConfigurationUpdateState_InitializationKey_Caption" xml:space="preserve">
+    <value>初始化密钥</value>
+  </data>
+  <data name="ConfigurationUpdateState_CurrentInstalledVersion_Caption" xml:space="preserve">
+    <value>当前安装版本</value>
+  </data>
+  <data name="ConnectServerDefinition_TypeCaption" xml:space="preserve">
+    <value>连接服务器</value>
+  </data>
+  <data name="ConnectServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>连接服务器</value>
+  </data>
+  <data name="ConnectServerDefinition_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ConnectServerDefinition_ConfigurationId_Caption" xml:space="preserve">
+    <value>配置 ID</value>
+  </data>
+  <data name="ConnectServerDefinition_ServerId_Caption" xml:space="preserve">
+    <value>服务器 ID</value>
+  </data>
+  <data name="ConnectServerDefinition_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ConnectServerDefinition_Client_Caption" xml:space="preserve">
+    <value>客户端</value>
+  </data>
+  <data name="ConnectServerDefinition_DisconnectOnUnknownPacket_Caption" xml:space="preserve">
+    <value>收到未知数据包时断开连接</value>
+  </data>
+  <data name="ConnectServerDefinition_MaximumReceiveSize_Caption" xml:space="preserve">
+    <value>最大接收大小</value>
+  </data>
+  <data name="ConnectServerDefinition_ClientListenerPort_Caption" xml:space="preserve">
+    <value>客户端监听端口</value>
+  </data>
+  <data name="ConnectServerDefinition_Timeout_Caption" xml:space="preserve">
+    <value>超时</value>
+  </data>
+  <data name="ConnectServerDefinition_CurrentPatchVersion_Caption" xml:space="preserve">
+    <value>当前补丁版本</value>
+  </data>
+  <data name="ConnectServerDefinition_PatchAddress_Caption" xml:space="preserve">
+    <value>补丁地址</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxConnectionsPerAddress_Caption" xml:space="preserve">
+    <value>每个地址的最大连接数</value>
+  </data>
+  <data name="ConnectServerDefinition_CheckMaxConnectionsPerAddress_Caption" xml:space="preserve">
+    <value>检查每个地址的最大连接数</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxConnections_Caption" xml:space="preserve">
+    <value>最大连接数</value>
+  </data>
+  <data name="ConnectServerDefinition_ListenerBacklog_Caption" xml:space="preserve">
+    <value>监听器积压队列</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxFtpRequests_Caption" xml:space="preserve">
+    <value>最大 FTP 请求数</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxIpRequests_Caption" xml:space="preserve">
+    <value>最大 IP 请求数</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxServerListRequests_Caption" xml:space="preserve">
+    <value>最大服务器列表请求数</value>
+  </data>
+  <data name="DamageType_TypeCaption" xml:space="preserve">
+    <value>伤害类型</value>
+  </data>
+  <data name="DamageType_None_Caption" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="DamageType_Physical_Caption" xml:space="preserve">
+    <value>物理</value>
+  </data>
+  <data name="DamageType_Wizardry_Caption" xml:space="preserve">
+    <value>魔法攻击力</value>
+  </data>
+  <data name="DamageType_Curse_Caption" xml:space="preserve">
+    <value>诅咒</value>
+  </data>
+  <data name="DamageType_SummonedMonster_Caption" xml:space="preserve">
+    <value>被召唤怪物</value>
+  </data>
+  <data name="DamageType_Fenrir_Caption" xml:space="preserve">
+    <value>炎狼兽</value>
+  </data>
+  <data name="DamageType_All_Caption" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="Direction_TypeCaption" xml:space="preserve">
+    <value>方向</value>
+  </data>
+  <data name="Direction_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="Direction_West_Caption" xml:space="preserve">
+    <value>西</value>
+  </data>
+  <data name="Direction_SouthWest_Caption" xml:space="preserve">
+    <value>西南</value>
+  </data>
+  <data name="Direction_South_Caption" xml:space="preserve">
+    <value>南</value>
+  </data>
+  <data name="Direction_SouthEast_Caption" xml:space="preserve">
+    <value>东南</value>
+  </data>
+  <data name="Direction_East_Caption" xml:space="preserve">
+    <value>东</value>
+  </data>
+  <data name="Direction_NorthEast_Caption" xml:space="preserve">
+    <value>东北</value>
+  </data>
+  <data name="Direction_North_Caption" xml:space="preserve">
+    <value>北</value>
+  </data>
+  <data name="Direction_NorthWest_Caption" xml:space="preserve">
+    <value>西北</value>
+  </data>
+  <data name="DropItemGroup_TypeCaption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="DropItemGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="DropItemGroup_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="DropItemGroup_Chance_Caption" xml:space="preserve">
+    <value>概率</value>
+  </data>
+  <data name="DropItemGroup_MinimumMonsterLevel_Caption" xml:space="preserve">
+    <value>最低怪物等级</value>
+  </data>
+  <data name="DropItemGroup_MaximumMonsterLevel_Caption" xml:space="preserve">
+    <value>最高怪物等级</value>
+  </data>
+  <data name="DropItemGroup_Monster_Caption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="DropItemGroup_ItemLevel_Caption" xml:space="preserve">
+    <value>物品等级</value>
+  </data>
+  <data name="DropItemGroup_ItemType_Caption" xml:space="preserve">
+    <value>物品类型</value>
+  </data>
+  <data name="DropItemGroup_PossibleItems_Caption" xml:space="preserve">
+    <value>可用物品</value>
+  </data>
+  <data name="DuelArea_TypeCaption" xml:space="preserve">
+    <value>决斗区域</value>
+  </data>
+  <data name="DuelArea_TypeCaptionPlural" xml:space="preserve">
+    <value>决斗区域</value>
+  </data>
+  <data name="DuelArea_Index_Caption" xml:space="preserve">
+    <value>索引</value>
+  </data>
+  <data name="DuelArea_FirstPlayerGate_Caption" xml:space="preserve">
+    <value>第一位玩家的传送门</value>
+  </data>
+  <data name="DuelArea_SecondPlayerGate_Caption" xml:space="preserve">
+    <value>第二位玩家的传送门</value>
+  </data>
+  <data name="DuelArea_SpectatorsGate_Caption" xml:space="preserve">
+    <value>观战者传送门</value>
+  </data>
+  <data name="DuelConfiguration_TypeCaption" xml:space="preserve">
+    <value>决斗配置</value>
+  </data>
+  <data name="DuelConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>决斗配置</value>
+  </data>
+  <data name="DuelConfiguration_MaximumScore_Caption" xml:space="preserve">
+    <value>最高积分</value>
+  </data>
+  <data name="DuelConfiguration_EntranceFee_Caption" xml:space="preserve">
+    <value>入场费</value>
+  </data>
+  <data name="DuelConfiguration_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>最低角色等级</value>
+  </data>
+  <data name="DuelConfiguration_MaximumSpectatorsPerDuelRoom_Caption" xml:space="preserve">
+    <value>每个决斗房间的最大观战人数</value>
+  </data>
+  <data name="DuelConfiguration_Exit_Caption" xml:space="preserve">
+    <value>出口</value>
+  </data>
+  <data name="DuelConfiguration_DuelAreas_Caption" xml:space="preserve">
+    <value>决斗区域</value>
+  </data>
+  <data name="EnterGate_TypeCaption" xml:space="preserve">
+    <value>入口传送门</value>
+  </data>
+  <data name="EnterGate_TypeCaptionPlural" xml:space="preserve">
+    <value>入口传送门</value>
+  </data>
+  <data name="EnterGate_TargetGate_Caption" xml:space="preserve">
+    <value>目标传送门</value>
+  </data>
+  <data name="EnterGate_LevelRequirement_Caption" xml:space="preserve">
+    <value>等级要求</value>
+  </data>
+  <data name="EnterGate_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="Error_TypeCaption" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Error_TypeCaptionPlural" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="ExitGate_TypeCaption" xml:space="preserve">
+    <value>出口传送门</value>
+  </data>
+  <data name="ExitGate_TypeCaptionPlural" xml:space="preserve">
+    <value>出口传送门</value>
+  </data>
+  <data name="ExitGate_Direction_Caption" xml:space="preserve">
+    <value>方向</value>
+  </data>
+  <data name="ExitGate_Map_Caption" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="ExitGate_IsSpawnGate_Caption" xml:space="preserve">
+    <value>是否为出生传送门</value>
+  </data>
+  <data name="FruitCalculationStrategy_TypeCaption" xml:space="preserve">
+    <value>果实计算策略</value>
+  </data>
+  <data name="FruitCalculationStrategy_Default_Caption" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="FruitCalculationStrategy_MagicGladiator_Caption" xml:space="preserve">
+    <value>魔剑士</value>
+  </data>
+  <data name="FruitCalculationStrategy_DarkLord_Caption" xml:space="preserve">
+    <value>圣导师</value>
+  </data>
+  <data name="GameClientDefinition_TypeCaption" xml:space="preserve">
+    <value>游戏客户端</value>
+  </data>
+  <data name="GameClientDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏客户端</value>
+  </data>
+  <data name="GameClientDefinition_Season_Caption" xml:space="preserve">
+    <value>赛季</value>
+  </data>
+  <data name="GameClientDefinition_Episode_Caption" xml:space="preserve">
+    <value>章节</value>
+  </data>
+  <data name="GameClientDefinition_Language_Caption" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="GameClientDefinition_Version_Caption" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="GameClientDefinition_Serial_Caption" xml:space="preserve">
+    <value>序列号</value>
+  </data>
+  <data name="GameClientDefinition_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="GameConfiguration_TypeCaption" xml:space="preserve">
+    <value>游戏配置</value>
+  </data>
+  <data name="GameConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏配置</value>
+  </data>
+  <data name="GameConfiguration_MaximumLevel_Caption" xml:space="preserve">
+    <value>最高等级</value>
+  </data>
+  <data name="GameConfiguration_MaximumMasterLevel_Caption" xml:space="preserve">
+    <value>最高大师等级</value>
+  </data>
+  <data name="GameConfiguration_ExperienceRate_Caption" xml:space="preserve">
+    <value>经验倍率</value>
+  </data>
+  <data name="GameConfiguration_MasterExperienceRate_Caption" xml:space="preserve">
+    <value>大师经验倍率</value>
+  </data>
+  <data name="GameConfiguration_PreventExperienceOverflow_Caption" xml:space="preserve">
+    <value>防止经验溢出</value>
+  </data>
+  <data name="GameConfiguration_MinimumMonsterLevelForMasterExperience_Caption" xml:space="preserve">
+    <value>获得大师经验所需的最低怪物等级</value>
+  </data>
+  <data name="GameConfiguration_InfoRange_Caption" xml:space="preserve">
+    <value>信息范围</value>
+  </data>
+  <data name="GameConfiguration_AreaSkillHitsPlayer_Caption" xml:space="preserve">
+    <value>范围技能命中玩家</value>
+  </data>
+  <data name="GameConfiguration_MaximumInventoryMoney_Caption" xml:space="preserve">
+    <value>背包金币上限</value>
+  </data>
+  <data name="GameConfiguration_MaximumVaultMoney_Caption" xml:space="preserve">
+    <value>仓库金币上限</value>
+  </data>
+  <data name="GameConfiguration_ClampMoneyOnPickup_Caption" xml:space="preserve">
+    <value>拾取时限制金币上限</value>
+  </data>
+  <data name="GameConfiguration_ExperienceFormula_Caption" xml:space="preserve">
+    <value>经验公式</value>
+  </data>
+  <data name="GameConfiguration_MasterExperienceFormula_Caption" xml:space="preserve">
+    <value>大师经验公式</value>
+  </data>
+  <data name="GameConfiguration_RecoveryInterval_Caption" xml:space="preserve">
+    <value>恢复间隔</value>
+  </data>
+  <data name="GameConfiguration_MaximumLetters_Caption" xml:space="preserve">
+    <value>最大邮件数</value>
+  </data>
+  <data name="GameConfiguration_LetterSendPrice_Caption" xml:space="preserve">
+    <value>邮件发送费用</value>
+  </data>
+  <data name="GameConfiguration_MaximumCharactersPerAccount_Caption" xml:space="preserve">
+    <value>每个账号的最大角色数</value>
+  </data>
+  <data name="GameConfiguration_CharacterNameRegex_Caption" xml:space="preserve">
+    <value>角色名正则表达式</value>
+  </data>
+  <data name="GameConfiguration_MaximumPasswordLength_Caption" xml:space="preserve">
+    <value>密码最大长度</value>
+  </data>
+  <data name="GameConfiguration_MaximumPartySize_Caption" xml:space="preserve">
+    <value>队伍人数上限</value>
+  </data>
+  <data name="GameConfiguration_ShouldDropMoney_Caption" xml:space="preserve">
+    <value>是否掉落金币</value>
+  </data>
+  <data name="GameConfiguration_ItemDropDuration_Caption" xml:space="preserve">
+    <value>物品掉落持续时间</value>
+  </data>
+  <data name="GameConfiguration_MaximumItemOptionLevelDrop_Caption" xml:space="preserve">
+    <value>掉落物品最高追加等级</value>
+  </data>
+  <data name="GameConfiguration_DamagePerOneItemDurability_Caption" xml:space="preserve">
+    <value>每点物品耐久对应伤害</value>
+  </data>
+  <data name="GameConfiguration_DamagePerOnePetDurability_Caption" xml:space="preserve">
+    <value>每点宠物耐久对应伤害</value>
+  </data>
+  <data name="GameConfiguration_HitsPerOneItemDurability_Caption" xml:space="preserve">
+    <value>每点物品耐久对应命中次数</value>
+  </data>
+  <data name="GameConfiguration_DuelConfiguration_Caption" xml:space="preserve">
+    <value>决斗配置</value>
+  </data>
+  <data name="GameConfiguration_JewelMixes_Caption" xml:space="preserve">
+    <value>宝石合成</value>
+  </data>
+  <data name="GameConfiguration_WarpList_Caption" xml:space="preserve">
+    <value>移动列表</value>
+  </data>
+  <data name="GameConfiguration_DropItemGroups_Caption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="GameConfiguration_Skills_Caption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="GameConfiguration_CharacterClasses_Caption" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="GameConfiguration_Items_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="GameConfiguration_ItemLevelBonusTables_Caption" xml:space="preserve">
+    <value>物品等级加成表</value>
+  </data>
+  <data name="GameConfiguration_ItemSlotTypes_Caption" xml:space="preserve">
+    <value>物品槽位类型</value>
+  </data>
+  <data name="GameConfiguration_ItemOptions_Caption" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="GameConfiguration_ItemOptionTypes_Caption" xml:space="preserve">
+    <value>物品属性类型</value>
+  </data>
+  <data name="GameConfiguration_ItemSetGroups_Caption" xml:space="preserve">
+    <value>套装组</value>
+  </data>
+  <data name="GameConfiguration_ItemOptionCombinationBonuses_Caption" xml:space="preserve">
+    <value>物品属性组合加成</value>
+  </data>
+  <data name="GameConfiguration_Maps_Caption" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="GameConfiguration_Monsters_Caption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="GameConfiguration_Attributes_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="GameConfiguration_MagicEffects_Caption" xml:space="preserve">
+    <value>魔法效果</value>
+  </data>
+  <data name="GameConfiguration_MasterSkillRoots_Caption" xml:space="preserve">
+    <value>大师技能树根节点</value>
+  </data>
+  <data name="GameConfiguration_PlugInConfigurations_Caption" xml:space="preserve">
+    <value>插件配置</value>
+  </data>
+  <data name="GameConfiguration_MiniGameDefinitions_Caption" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="GameConfigurationHelper_TypeCaption" xml:space="preserve">
+    <value>游戏配置辅助项</value>
+  </data>
+  <data name="GameConfigurationHelper_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏配置辅助项</value>
+  </data>
+  <data name="GameMapDefinition_TypeCaption" xml:space="preserve">
+    <value>游戏地图</value>
+  </data>
+  <data name="GameMapDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏地图</value>
+  </data>
+  <data name="GameMapDefinition_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="GameMapDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="GameMapDefinition_TerrainData_Caption" xml:space="preserve">
+    <value>地形数据</value>
+  </data>
+  <data name="GameMapDefinition_MonsterSpawns_Caption" xml:space="preserve">
+    <value>怪物刷新点</value>
+  </data>
+  <data name="GameMapDefinition_EnterGates_Caption" xml:space="preserve">
+    <value>入口传送门</value>
+  </data>
+  <data name="GameMapDefinition_ExpMultiplier_Caption" xml:space="preserve">
+    <value>经验倍率</value>
+  </data>
+  <data name="GameMapDefinition_Discriminator_Caption" xml:space="preserve">
+    <value>判定标识</value>
+  </data>
+  <data name="GameMapDefinition_SafezoneMap_Caption" xml:space="preserve">
+    <value>安全区地图</value>
+  </data>
+  <data name="GameMapDefinition_BattleZone_Caption" xml:space="preserve">
+    <value>战斗区域</value>
+  </data>
+  <data name="GameMapDefinition_ExitGates_Caption" xml:space="preserve">
+    <value>出口传送门</value>
+  </data>
+  <data name="GameMapDefinition_DropItemGroups_Caption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="GameMapDefinition_MapRequirements_Caption" xml:space="preserve">
+    <value>地图要求</value>
+  </data>
+  <data name="GameMapDefinition_CharacterPowerUpDefinitions_Caption" xml:space="preserve">
+    <value>角色强化效果</value>
+  </data>
+  <data name="GameServerConfiguration_TypeCaption" xml:space="preserve">
+    <value>游戏服务器配置</value>
+  </data>
+  <data name="GameServerConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏服务器配置</value>
+  </data>
+  <data name="GameServerConfiguration_MaximumPlayers_Caption" xml:space="preserve">
+    <value>最大玩家数</value>
+  </data>
+  <data name="GameServerConfiguration_Maps_Caption" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="GameServerDefinition_TypeCaption" xml:space="preserve">
+    <value>游戏服务器</value>
+  </data>
+  <data name="GameServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏服务器</value>
+  </data>
+  <data name="GameServerDefinition_ServerID_Caption" xml:space="preserve">
+    <value>服务器 ID</value>
+  </data>
+  <data name="GameServerDefinition_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="GameServerDefinition_ExperienceRate_Caption" xml:space="preserve">
+    <value>经验倍率</value>
+  </data>
+  <data name="GameServerDefinition_PvpEnabled_Caption" xml:space="preserve">
+    <value>启用 PvP</value>
+  </data>
+  <data name="GameServerDefinition_ServerConfiguration_Caption" xml:space="preserve">
+    <value>服务器配置</value>
+  </data>
+  <data name="GameServerDefinition_GameConfiguration_Caption" xml:space="preserve">
+    <value>游戏配置</value>
+  </data>
+  <data name="GameServerDefinition_Endpoints_Caption" xml:space="preserve">
+    <value>端点</value>
+  </data>
+  <data name="GameServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>游戏服务器端点</value>
+  </data>
+  <data name="GameServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>游戏服务器端点</value>
+  </data>
+  <data name="GameServerEndpoint_AlternativePublishedPort_Caption" xml:space="preserve">
+    <value>备用发布端口</value>
+  </data>
+  <data name="Gate_TypeCaption" xml:space="preserve">
+    <value>传送门</value>
+  </data>
+  <data name="Gate_TypeCaptionPlural" xml:space="preserve">
+    <value>传送门</value>
+  </data>
+  <data name="Gate_X1_Caption" xml:space="preserve">
+    <value>X1</value>
+  </data>
+  <data name="Gate_Y1_Caption" xml:space="preserve">
+    <value>Y1</value>
+  </data>
+  <data name="Gate_X2_Caption" xml:space="preserve">
+    <value>X2</value>
+  </data>
+  <data name="Gate_Y2_Caption" xml:space="preserve">
+    <value>Y2</value>
+  </data>
+  <data name="Guild_TypeCaption" xml:space="preserve">
+    <value>战盟</value>
+  </data>
+  <data name="Guild_TypeCaptionPlural" xml:space="preserve">
+    <value>战盟</value>
+  </data>
+  <data name="Guild_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Guild_Members_Caption" xml:space="preserve">
+    <value>成员</value>
+  </data>
+  <data name="GuildMember_TypeCaption" xml:space="preserve">
+    <value>战盟成员</value>
+  </data>
+  <data name="GuildMember_TypeCaptionPlural" xml:space="preserve">
+    <value>战盟成员</value>
+  </data>
+  <data name="GuildMember_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="GuildMember_GuildId_Caption" xml:space="preserve">
+    <value>战盟 ID</value>
+  </data>
+  <data name="GuildMember_Status_Caption" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="HeroState_TypeCaption" xml:space="preserve">
+    <value>英雄状态</value>
+  </data>
+  <data name="HeroState_New_Caption" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="HeroState_Hero_Caption" xml:space="preserve">
+    <value>英雄</value>
+  </data>
+  <data name="HeroState_LightHero_Caption" xml:space="preserve">
+    <value>浅色英雄</value>
+  </data>
+  <data name="HeroState_Normal_Caption" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="HeroState_PlayerKillWarning_Caption" xml:space="preserve">
+    <value>红名警告</value>
+  </data>
+  <data name="HeroState_PlayerKiller1stStage_Caption" xml:space="preserve">
+    <value>红名第一阶段</value>
+  </data>
+  <data name="HeroState_PlayerKiller2ndStage_Caption" xml:space="preserve">
+    <value>红名第二阶段</value>
+  </data>
+  <data name="HiddenAtCreationAttribute_TypeCaption" xml:space="preserve">
+    <value>创建时隐藏属性</value>
+  </data>
+  <data name="HiddenAtCreationAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>创建时隐藏属性</value>
+  </data>
+  <data name="IncreasableItemOption_TypeCaption" xml:space="preserve">
+    <value>可提升物品属性</value>
+  </data>
+  <data name="IncreasableItemOption_TypeCaptionPlural" xml:space="preserve">
+    <value>可提升物品属性</value>
+  </data>
+  <data name="IncreasableItemOption_LevelType_Caption" xml:space="preserve">
+    <value>等级类型</value>
+  </data>
+  <data name="IncreasableItemOption_Weight_Caption" xml:space="preserve">
+    <value>权重</value>
+  </data>
+  <data name="IncreasableItemOption_LevelDependentOptions_Caption" xml:space="preserve">
+    <value>等级相关属性</value>
+  </data>
+  <data name="InventoryConstants_TypeCaption" xml:space="preserve">
+    <value>背包常量</value>
+  </data>
+  <data name="InventoryConstants_TypeCaptionPlural" xml:space="preserve">
+    <value>背包常量</value>
+  </data>
+  <data name="Item_TypeCaption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="Item_TypeCaptionPlural" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="Item_ItemSlot_Caption" xml:space="preserve">
+    <value>物品槽位</value>
+  </data>
+  <data name="Item_Definition_Caption" xml:space="preserve">
+    <value>定义</value>
+  </data>
+  <data name="Item_Durability_Caption" xml:space="preserve">
+    <value>耐久度</value>
+  </data>
+  <data name="Item_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="Item_HasSkill_Caption" xml:space="preserve">
+    <value>附带技能</value>
+  </data>
+  <data name="Item_ItemOptions_Caption" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="Item_ItemSetGroups_Caption" xml:space="preserve">
+    <value>套装组</value>
+  </data>
+  <data name="Item_SocketCount_Caption" xml:space="preserve">
+    <value>镶嵌孔数量</value>
+  </data>
+  <data name="Item_StorePrice_Caption" xml:space="preserve">
+    <value>商店价格</value>
+  </data>
+  <data name="Item_PetExperience_Caption" xml:space="preserve">
+    <value>宠物经验</value>
+  </data>
+  <data name="ItemAppearance_TypeCaption" xml:space="preserve">
+    <value>物品外观</value>
+  </data>
+  <data name="ItemAppearance_TypeCaptionPlural" xml:space="preserve">
+    <value>物品外观</value>
+  </data>
+  <data name="ItemAppearance_ItemSlot_Caption" xml:space="preserve">
+    <value>物品槽位</value>
+  </data>
+  <data name="ItemAppearance_Definition_Caption" xml:space="preserve">
+    <value>定义</value>
+  </data>
+  <data name="ItemAppearance_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="ItemAppearance_VisibleOptions_Caption" xml:space="preserve">
+    <value>可见属性</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TypeCaption" xml:space="preserve">
+    <value>物品基础强化效果</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>物品基础强化效果</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>目标属性</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_BaseValueElement_Caption" xml:space="preserve">
+    <value>基础元素值</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_BonusPerLevelTable_Caption" xml:space="preserve">
+    <value>每级加成表</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_BaseValue_Caption" xml:space="preserve">
+    <value>基础值</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_AggregateType_Caption" xml:space="preserve">
+    <value>聚合类型</value>
+  </data>
+  <data name="ItemCrafting_TypeCaption" xml:space="preserve">
+    <value>物品合成</value>
+  </data>
+  <data name="ItemCrafting_TypeCaptionPlural" xml:space="preserve">
+    <value>物品合成</value>
+  </data>
+  <data name="ItemCrafting_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="ItemCrafting_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemCrafting_ItemCraftingHandlerClassName_Caption" xml:space="preserve">
+    <value>物品合成处理类名称</value>
+  </data>
+  <data name="ItemCrafting_SimpleCraftingSettings_Caption" xml:space="preserve">
+    <value>简单合成设置</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_TypeCaption" xml:space="preserve">
+    <value>物品合成所需物品</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_TypeCaptionPlural" xml:space="preserve">
+    <value>物品合成所需物品</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_PossibleItems_Caption" xml:space="preserve">
+    <value>可用物品</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MinimumItemLevel_Caption" xml:space="preserve">
+    <value>最低物品等级</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MaximumItemLevel_Caption" xml:space="preserve">
+    <value>最高物品等级</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_RequiredItemOptions_Caption" xml:space="preserve">
+    <value>所需物品属性</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MinimumAmount_Caption" xml:space="preserve">
+    <value>最小数量</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MaximumAmount_Caption" xml:space="preserve">
+    <value>最大数量</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_SuccessResult_Caption" xml:space="preserve">
+    <value>成功结果</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_FailResult_Caption" xml:space="preserve">
+    <value>失败结果</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_NpcPriceDivisor_Caption" xml:space="preserve">
+    <value>NPC 价格除数</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_AddPercentage_Caption" xml:space="preserve">
+    <value>附加百分比</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_Reference_Caption" xml:space="preserve">
+    <value>引用</value>
+  </data>
+  <data name="ItemCraftingResultItem_TypeCaption" xml:space="preserve">
+    <value>物品合成结果物品</value>
+  </data>
+  <data name="ItemCraftingResultItem_TypeCaptionPlural" xml:space="preserve">
+    <value>物品合成结果物品</value>
+  </data>
+  <data name="ItemCraftingResultItem_ItemDefinition_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemCraftingResultItem_RandomMinimumLevel_Caption" xml:space="preserve">
+    <value>随机最低等级</value>
+  </data>
+  <data name="ItemCraftingResultItem_RandomMaximumLevel_Caption" xml:space="preserve">
+    <value>随机最高等级</value>
+  </data>
+  <data name="ItemCraftingResultItem_Durability_Caption" xml:space="preserve">
+    <value>耐久度</value>
+  </data>
+  <data name="ItemCraftingResultItem_Reference_Caption" xml:space="preserve">
+    <value>引用</value>
+  </data>
+  <data name="ItemCraftingResultItem_AddLevel_Caption" xml:space="preserve">
+    <value>附加等级</value>
+  </data>
+  <data name="ItemDefinition_TypeCaption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemDefinition_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="ItemDefinition_ItemSlot_Caption" xml:space="preserve">
+    <value>物品槽位</value>
+  </data>
+  <data name="ItemDefinition_Width_Caption" xml:space="preserve">
+    <value>宽度</value>
+  </data>
+  <data name="ItemDefinition_Height_Caption" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="ItemDefinition_DropsFromMonsters_Caption" xml:space="preserve">
+    <value>由怪物掉落</value>
+  </data>
+  <data name="ItemDefinition_IsAmmunition_Caption" xml:space="preserve">
+    <value>是否为弹药</value>
+  </data>
+  <data name="ItemDefinition_IsBoundToCharacter_Caption" xml:space="preserve">
+    <value>是否绑定角色</value>
+  </data>
+  <data name="ItemDefinition_StorageLimitPerCharacter_Caption" xml:space="preserve">
+    <value>每个角色的存储上限</value>
+  </data>
+  <data name="ItemDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemDefinition_DropLevel_Caption" xml:space="preserve">
+    <value>掉落等级</value>
+  </data>
+  <data name="ItemDefinition_MaximumDropLevel_Caption" xml:space="preserve">
+    <value>最高掉落等级</value>
+  </data>
+  <data name="ItemDefinition_MaximumItemLevel_Caption" xml:space="preserve">
+    <value>最高物品等级</value>
+  </data>
+  <data name="ItemDefinition_Durability_Caption" xml:space="preserve">
+    <value>耐久度</value>
+  </data>
+  <data name="ItemDefinition_Group_Caption" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="ItemDefinition_Value_Caption" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="ItemDefinition_PetExperienceFormula_Caption" xml:space="preserve">
+    <value>宠物经验公式</value>
+  </data>
+  <data name="ItemDefinition_ConsumeEffect_Caption" xml:space="preserve">
+    <value>消耗效果</value>
+  </data>
+  <data name="ItemDefinition_MaximumSockets_Caption" xml:space="preserve">
+    <value>最大镶嵌孔数</value>
+  </data>
+  <data name="ItemDefinition_Skill_Caption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="ItemDefinition_QualifiedCharacters_Caption" xml:space="preserve">
+    <value>符合条件的角色</value>
+  </data>
+  <data name="ItemDefinition_PossibleItemSetGroups_Caption" xml:space="preserve">
+    <value>可用套装组</value>
+  </data>
+  <data name="ItemDefinition_PossibleItemOptions_Caption" xml:space="preserve">
+    <value>可用物品属性</value>
+  </data>
+  <data name="ItemDefinition_Requirements_Caption" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="ItemDefinition_BasePowerUpAttributes_Caption" xml:space="preserve">
+    <value>基础强化属性</value>
+  </data>
+  <data name="ItemDefinition_DropItems_Caption" xml:space="preserve">
+    <value>掉落物品</value>
+  </data>
+  <data name="ItemDropEffect_TypeCaption" xml:space="preserve">
+    <value>物品掉落效果</value>
+  </data>
+  <data name="ItemDropEffect_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="ItemDropEffect_Fireworks_Caption" xml:space="preserve">
+    <value>烟花</value>
+  </data>
+  <data name="ItemDropEffect_ChristmasFireworks_Caption" xml:space="preserve">
+    <value>圣诞烟花</value>
+  </data>
+  <data name="ItemDropEffect_FanfareSound_Caption" xml:space="preserve">
+    <value>胜利音效</value>
+  </data>
+  <data name="ItemDropEffect_Swirl_Caption" xml:space="preserve">
+    <value>旋转特效</value>
+  </data>
+  <data name="ItemDropItemGroup_TypeCaption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="ItemDropItemGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="ItemDropItemGroup_SourceItemLevel_Caption" xml:space="preserve">
+    <value>来源物品等级</value>
+  </data>
+  <data name="ItemDropItemGroup_MoneyAmount_Caption" xml:space="preserve">
+    <value>金币数量</value>
+  </data>
+  <data name="ItemDropItemGroup_MinimumLevel_Caption" xml:space="preserve">
+    <value>最低等级</value>
+  </data>
+  <data name="ItemDropItemGroup_MaximumLevel_Caption" xml:space="preserve">
+    <value>最高等级</value>
+  </data>
+  <data name="ItemDropItemGroup_RequiredCharacterLevel_Caption" xml:space="preserve">
+    <value>所需角色等级</value>
+  </data>
+  <data name="ItemDropItemGroup_DropEffect_Caption" xml:space="preserve">
+    <value>掉落效果</value>
+  </data>
+  <data name="ItemExtensions_TypeCaption" xml:space="preserve">
+    <value>物品扩展</value>
+  </data>
+  <data name="ItemExtensions_TypeCaptionPlural" xml:space="preserve">
+    <value>物品扩展</value>
+  </data>
+  <data name="ItemLevelBonusTable_TypeCaption" xml:space="preserve">
+    <value>物品等级加成表</value>
+  </data>
+  <data name="ItemLevelBonusTable_TypeCaptionPlural" xml:space="preserve">
+    <value>物品等级加成表</value>
+  </data>
+  <data name="ItemLevelBonusTable_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemLevelBonusTable_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ItemLevelBonusTable_BonusPerLevel_Caption" xml:space="preserve">
+    <value>每级加成</value>
+  </data>
+  <data name="ItemOfItemSet_TypeCaption" xml:space="preserve">
+    <value>套装中的物品</value>
+  </data>
+  <data name="ItemOfItemSet_TypeCaptionPlural" xml:space="preserve">
+    <value>套装中的物品</value>
+  </data>
+  <data name="ItemOfItemSet_AncientSetDiscriminator_Caption" xml:space="preserve">
+    <value>套装判定标识</value>
+  </data>
+  <data name="ItemOfItemSet_ItemSetGroup_Caption" xml:space="preserve">
+    <value>套装组</value>
+  </data>
+  <data name="ItemOfItemSet_ItemDefinition_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemOfItemSet_BonusOption_Caption" xml:space="preserve">
+    <value>加成属性</value>
+  </data>
+  <data name="ItemOfItemSet_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemOption_TypeCaption" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="ItemOption_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="ItemOption_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="ItemOption_SubOptionType_Caption" xml:space="preserve">
+    <value>子属性类型</value>
+  </data>
+  <data name="ItemOption_OptionType_Caption" xml:space="preserve">
+    <value>属性类型</value>
+  </data>
+  <data name="ItemOption_PowerUpDefinition_Caption" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_TypeCaption" xml:space="preserve">
+    <value>物品属性组合加成</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性组合加成</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_AppliesMultipleTimes_Caption" xml:space="preserve">
+    <value>可多次应用</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Requirements_Caption" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Bonus_Caption" xml:space="preserve">
+    <value>加成</value>
+  </data>
+  <data name="ItemOptionDefinition_TypeCaption" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="ItemOptionDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="ItemOptionDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemOptionDefinition_AddsRandomly_Caption" xml:space="preserve">
+    <value>随机附加</value>
+  </data>
+  <data name="ItemOptionDefinition_AddChance_Caption" xml:space="preserve">
+    <value>附加概率</value>
+  </data>
+  <data name="ItemOptionDefinition_MaximumOptionsPerItem_Caption" xml:space="preserve">
+    <value>每件物品的最大属性数</value>
+  </data>
+  <data name="ItemOptionDefinition_PossibleOptions_Caption" xml:space="preserve">
+    <value>可用属性</value>
+  </data>
+  <data name="ItemOptionLink_TypeCaption" xml:space="preserve">
+    <value>物品属性关联</value>
+  </data>
+  <data name="ItemOptionLink_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性关联</value>
+  </data>
+  <data name="ItemOptionLink_ItemOption_Caption" xml:space="preserve">
+    <value>物品属性</value>
+  </data>
+  <data name="ItemOptionLink_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="ItemOptionLink_Index_Caption" xml:space="preserve">
+    <value>索引</value>
+  </data>
+  <data name="ItemOptionOfLevel_TypeCaption" xml:space="preserve">
+    <value>等级物品属性</value>
+  </data>
+  <data name="ItemOptionOfLevel_TypeCaptionPlural" xml:space="preserve">
+    <value>等级物品属性</value>
+  </data>
+  <data name="ItemOptionOfLevel_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="ItemOptionOfLevel_RequiredItemLevel_Caption" xml:space="preserve">
+    <value>所需物品等级</value>
+  </data>
+  <data name="ItemOptionOfLevel_PowerUpDefinition_Caption" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="ItemOptionType_TypeCaption" xml:space="preserve">
+    <value>物品属性类型</value>
+  </data>
+  <data name="ItemOptionType_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性类型</value>
+  </data>
+  <data name="ItemOptionType_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ItemOptionType_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemOptionType_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ItemOptionType_IsVisible_Caption" xml:space="preserve">
+    <value>是否可见</value>
+  </data>
+  <data name="ItemOptionTypes_TypeCaption" xml:space="preserve">
+    <value>物品属性类型</value>
+  </data>
+  <data name="ItemOptionTypes_TypeCaptionPlural" xml:space="preserve">
+    <value>物品属性类型</value>
+  </data>
+  <data name="ItemOptionTypes_Excellent_Caption" xml:space="preserve">
+    <value>卓越</value>
+  </data>
+  <data name="ItemOptionTypes_Wing_Caption" xml:space="preserve">
+    <value>翅膀</value>
+  </data>
+  <data name="ItemOptionTypes_Luck_Caption" xml:space="preserve">
+    <value>幸运</value>
+  </data>
+  <data name="ItemOptionTypes_Option_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="ItemOptionTypes_HarmonyOption_Caption" xml:space="preserve">
+    <value>荧光属性</value>
+  </data>
+  <data name="ItemOptionTypes_AncientOption_Caption" xml:space="preserve">
+    <value>套装属性</value>
+  </data>
+  <data name="ItemOptionTypes_AncientBonus_Caption" xml:space="preserve">
+    <value>套装加成</value>
+  </data>
+  <data name="ItemOptionTypes_GuardianOption_Caption" xml:space="preserve">
+    <value>守护属性</value>
+  </data>
+  <data name="ItemOptionTypes_SocketOption_Caption" xml:space="preserve">
+    <value>镶嵌属性</value>
+  </data>
+  <data name="ItemOptionTypes_SocketBonusOption_Caption" xml:space="preserve">
+    <value>镶嵌加成属性</value>
+  </data>
+  <data name="ItemOptionTypes_BlueFenrir_Caption" xml:space="preserve">
+    <value>蓝色炎狼兽</value>
+  </data>
+  <data name="ItemOptionTypes_BlackFenrir_Caption" xml:space="preserve">
+    <value>黑色炎狼兽</value>
+  </data>
+  <data name="ItemOptionTypes_GoldFenrir_Caption" xml:space="preserve">
+    <value>金色炎狼兽</value>
+  </data>
+  <data name="ItemOptionTypes_DarkHorse_Caption" xml:space="preserve">
+    <value>黑王马</value>
+  </data>
+  <data name="ItemSetGroup_TypeCaption" xml:space="preserve">
+    <value>套装组</value>
+  </data>
+  <data name="ItemSetGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>套装组</value>
+  </data>
+  <data name="ItemSetGroup_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ItemSetGroup_AlwaysApplies_Caption" xml:space="preserve">
+    <value>始终应用</value>
+  </data>
+  <data name="ItemSetGroup_CountDistinct_Caption" xml:space="preserve">
+    <value>不重复计数</value>
+  </data>
+  <data name="ItemSetGroup_MinimumItemCount_Caption" xml:space="preserve">
+    <value>最少物品数</value>
+  </data>
+  <data name="ItemSetGroup_SetLevel_Caption" xml:space="preserve">
+    <value>套装等级</value>
+  </data>
+  <data name="ItemSetGroup_Options_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="ItemSetGroup_Items_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemSlotType_TypeCaption" xml:space="preserve">
+    <value>物品槽位类型</value>
+  </data>
+  <data name="ItemSlotType_TypeCaptionPlural" xml:space="preserve">
+    <value>物品槽位类型</value>
+  </data>
+  <data name="ItemSlotType_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="ItemSlotType_ItemSlots_Caption" xml:space="preserve">
+    <value>物品槽位</value>
+  </data>
+  <data name="ItemStorage_TypeCaption" xml:space="preserve">
+    <value>物品存储</value>
+  </data>
+  <data name="ItemStorage_TypeCaptionPlural" xml:space="preserve">
+    <value>物品存储</value>
+  </data>
+  <data name="ItemStorage_Items_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="ItemStorage_Money_Caption" xml:space="preserve">
+    <value>金币</value>
+  </data>
+  <data name="JewelMix_TypeCaption" xml:space="preserve">
+    <value>宝石合成</value>
+  </data>
+  <data name="JewelMix_TypeCaptionPlural" xml:space="preserve">
+    <value>宝石合成</value>
+  </data>
+  <data name="JewelMix_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="JewelMix_SingleJewel_Caption" xml:space="preserve">
+    <value>单颗宝石</value>
+  </data>
+  <data name="JewelMix_MixedJewel_Caption" xml:space="preserve">
+    <value>合成宝石</value>
+  </data>
+  <data name="KillTarget_TypeCaption" xml:space="preserve">
+    <value>击杀目标</value>
+  </data>
+  <data name="KillTarget_AnyObject_Caption" xml:space="preserve">
+    <value>任意对象</value>
+  </data>
+  <data name="KillTarget_AnyMonster_Caption" xml:space="preserve">
+    <value>任意怪物</value>
+  </data>
+  <data name="KillTarget_Specific_Caption" xml:space="preserve">
+    <value>指定</value>
+  </data>
+  <data name="LetterBody_TypeCaption" xml:space="preserve">
+    <value>邮件正文</value>
+  </data>
+  <data name="LetterBody_TypeCaptionPlural" xml:space="preserve">
+    <value>邮件正文</value>
+  </data>
+  <data name="LetterBody_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="LetterBody_Header_Caption" xml:space="preserve">
+    <value>标头</value>
+  </data>
+  <data name="LetterBody_Message_Caption" xml:space="preserve">
+    <value>消息</value>
+  </data>
+  <data name="LetterBody_Rotation_Caption" xml:space="preserve">
+    <value>旋转</value>
+  </data>
+  <data name="LetterBody_Animation_Caption" xml:space="preserve">
+    <value>动画</value>
+  </data>
+  <data name="LetterBody_SenderAppearance_Caption" xml:space="preserve">
+    <value>发送者外观</value>
+  </data>
+  <data name="LevelBonus_TypeCaption" xml:space="preserve">
+    <value>等级加成</value>
+  </data>
+  <data name="LevelBonus_TypeCaptionPlural" xml:space="preserve">
+    <value>等级加成</value>
+  </data>
+  <data name="LevelBonus_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="LevelBonus_AdditionalValue_Caption" xml:space="preserve">
+    <value>附加值</value>
+  </data>
+  <data name="LevelDependentDamage_TypeCaption" xml:space="preserve">
+    <value>等级相关伤害</value>
+  </data>
+  <data name="LevelDependentDamage_TypeCaptionPlural" xml:space="preserve">
+    <value>等级相关伤害</value>
+  </data>
+  <data name="LevelDependentDamage_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="LevelDependentDamage_Damage_Caption" xml:space="preserve">
+    <value>伤害</value>
+  </data>
+  <data name="LevelType_TypeCaption" xml:space="preserve">
+    <value>等级类型</value>
+  </data>
+  <data name="LevelType_OptionLevel_Caption" xml:space="preserve">
+    <value>属性等级</value>
+  </data>
+  <data name="LevelType_ItemLevel_Caption" xml:space="preserve">
+    <value>物品等级</value>
+  </data>
+  <data name="MagicEffectDefinition_TypeCaption" xml:space="preserve">
+    <value>魔法效果</value>
+  </data>
+  <data name="MagicEffectDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>魔法效果</value>
+  </data>
+  <data name="MagicEffectDefinition_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="MagicEffectDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="MagicEffectDefinition_SubType_Caption" xml:space="preserve">
+    <value>子类型</value>
+  </data>
+  <data name="MagicEffectDefinition_InformObservers_Caption" xml:space="preserve">
+    <value>通知观察者</value>
+  </data>
+  <data name="MagicEffectDefinition_StopByDeath_Caption" xml:space="preserve">
+    <value>死亡时停止</value>
+  </data>
+  <data name="MagicEffectDefinition_SendDuration_Caption" xml:space="preserve">
+    <value>发送持续时间</value>
+  </data>
+  <data name="MagicEffectDefinition_DurationDependsOnTargetLevel_Caption" xml:space="preserve">
+    <value>持续时间取决于目标等级</value>
+  </data>
+  <data name="MagicEffectDefinition_MonsterTargetLevelDivisor_Caption" xml:space="preserve">
+    <value>怪物目标等级除数</value>
+  </data>
+  <data name="MagicEffectDefinition_PlayerTargetLevelDivisor_Caption" xml:space="preserve">
+    <value>玩家目标等级除数</value>
+  </data>
+  <data name="MagicEffectDefinition_Chance_Caption" xml:space="preserve">
+    <value>概率</value>
+  </data>
+  <data name="MagicEffectDefinition_ChancePvp_Caption" xml:space="preserve">
+    <value>PvP 概率</value>
+  </data>
+  <data name="MagicEffectDefinition_Duration_Caption" xml:space="preserve">
+    <value>持续时间</value>
+  </data>
+  <data name="MagicEffectDefinition_DurationPvp_Caption" xml:space="preserve">
+    <value>PvP 持续时间</value>
+  </data>
+  <data name="MagicEffectDefinition_PowerUpDefinitions_Caption" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="MagicEffectDefinition_PowerUpDefinitionsPvp_Caption" xml:space="preserve">
+    <value>PvP 强化效果</value>
+  </data>
+  <data name="MasterSkillDefinition_TypeCaption" xml:space="preserve">
+    <value>大师技能</value>
+  </data>
+  <data name="MasterSkillDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>大师技能</value>
+  </data>
+  <data name="MasterSkillDefinition_Root_Caption" xml:space="preserve">
+    <value>根节点</value>
+  </data>
+  <data name="MasterSkillDefinition_RequiredMasterSkills_Caption" xml:space="preserve">
+    <value>所需大师技能</value>
+  </data>
+  <data name="MasterSkillDefinition_Rank_Caption" xml:space="preserve">
+    <value>排名</value>
+  </data>
+  <data name="MasterSkillDefinition_MaximumLevel_Caption" xml:space="preserve">
+    <value>最高等级</value>
+  </data>
+  <data name="MasterSkillDefinition_MinimumLevel_Caption" xml:space="preserve">
+    <value>最低等级</value>
+  </data>
+  <data name="MasterSkillDefinition_ValueFormula_Caption" xml:space="preserve">
+    <value>值公式</value>
+  </data>
+  <data name="MasterSkillDefinition_DisplayValueFormula_Caption" xml:space="preserve">
+    <value>显示值公式</value>
+  </data>
+  <data name="MasterSkillDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>目标属性</value>
+  </data>
+  <data name="MasterSkillDefinition_Aggregation_Caption" xml:space="preserve">
+    <value>聚合</value>
+  </data>
+  <data name="MasterSkillDefinition_ReplacedSkill_Caption" xml:space="preserve">
+    <value>被替换技能</value>
+  </data>
+  <data name="MasterSkillDefinition_ExtendsDuration_Caption" xml:space="preserve">
+    <value>延长持续时间</value>
+  </data>
+  <data name="MasterSkillRoot_TypeCaption" xml:space="preserve">
+    <value>大师技能树根节点</value>
+  </data>
+  <data name="MasterSkillRoot_TypeCaptionPlural" xml:space="preserve">
+    <value>大师技能树根节点</value>
+  </data>
+  <data name="MasterSkillRoot_Id_Caption" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="MasterSkillRoot_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="MemberOfAggregateAttribute_TypeCaption" xml:space="preserve">
+    <value>聚合属性成员</value>
+  </data>
+  <data name="MemberOfAggregateAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>聚合属性成员</value>
+  </data>
+  <data name="MiniGameChangeEvent_TypeCaption" xml:space="preserve">
+    <value>活动变更事件</value>
+  </data>
+  <data name="MiniGameChangeEvent_TypeCaptionPlural" xml:space="preserve">
+    <value>活动变更事件</value>
+  </data>
+  <data name="MiniGameChangeEvent_Index_Caption" xml:space="preserve">
+    <value>索引</value>
+  </data>
+  <data name="MiniGameChangeEvent_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="MiniGameChangeEvent_Message_Caption" xml:space="preserve">
+    <value>消息</value>
+  </data>
+  <data name="MiniGameChangeEvent_Target_Caption" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="MiniGameChangeEvent_MinimumTargetLevel_Caption" xml:space="preserve">
+    <value>目标最低等级</value>
+  </data>
+  <data name="MiniGameChangeEvent_NumberOfKills_Caption" xml:space="preserve">
+    <value>击杀数量</value>
+  </data>
+  <data name="MiniGameChangeEvent_MultiplyKillsByPlayers_Caption" xml:space="preserve">
+    <value>按玩家数乘算击杀数</value>
+  </data>
+  <data name="MiniGameChangeEvent_TargetDefinition_Caption" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="MiniGameChangeEvent_SpawnArea_Caption" xml:space="preserve">
+    <value>刷新区域</value>
+  </data>
+  <data name="MiniGameChangeEvent_TerrainChanges_Caption" xml:space="preserve">
+    <value>地形变更</value>
+  </data>
+  <data name="MiniGameDefinition_TypeCaption" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="MiniGameDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="MiniGameDefinition_Type_Caption" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="MiniGameDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="MiniGameDefinition_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="MiniGameDefinition_GameLevel_Caption" xml:space="preserve">
+    <value>活动等级</value>
+  </data>
+  <data name="MiniGameDefinition_MapCreationPolicy_Caption" xml:space="preserve">
+    <value>地图创建策略</value>
+  </data>
+  <data name="MiniGameDefinition_EnterDuration_Caption" xml:space="preserve">
+    <value>进入持续时间</value>
+  </data>
+  <data name="MiniGameDefinition_GameDuration_Caption" xml:space="preserve">
+    <value>活动持续时间</value>
+  </data>
+  <data name="MiniGameDefinition_ExitDuration_Caption" xml:space="preserve">
+    <value>退出持续时间</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumPlayerCount_Caption" xml:space="preserve">
+    <value>玩家人数上限</value>
+  </data>
+  <data name="MiniGameDefinition_SaveRankingStatistics_Caption" xml:space="preserve">
+    <value>保存排名统计</value>
+  </data>
+  <data name="MiniGameDefinition_RequiresMasterClass_Caption" xml:space="preserve">
+    <value>需要大师职业</value>
+  </data>
+  <data name="MiniGameDefinition_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>最低角色等级</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumCharacterLevel_Caption" xml:space="preserve">
+    <value>最高角色等级</value>
+  </data>
+  <data name="MiniGameDefinition_MinimumSpecialCharacterLevel_Caption" xml:space="preserve">
+    <value>特殊职业最低等级</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumSpecialCharacterLevel_Caption" xml:space="preserve">
+    <value>特殊职业最高等级</value>
+  </data>
+  <data name="MiniGameDefinition_TicketItemLevel_Caption" xml:space="preserve">
+    <value>门票物品等级</value>
+  </data>
+  <data name="MiniGameDefinition_EntranceFee_Caption" xml:space="preserve">
+    <value>入场费</value>
+  </data>
+  <data name="MiniGameDefinition_ArePlayerKillersAllowedToEnter_Caption" xml:space="preserve">
+    <value>是否允许红名玩家进入</value>
+  </data>
+  <data name="MiniGameDefinition_AllowParty_Caption" xml:space="preserve">
+    <value>允许组队</value>
+  </data>
+  <data name="MiniGameDefinition_Entrance_Caption" xml:space="preserve">
+    <value>入口</value>
+  </data>
+  <data name="MiniGameDefinition_TicketItem_Caption" xml:space="preserve">
+    <value>门票物品</value>
+  </data>
+  <data name="MiniGameDefinition_Rewards_Caption" xml:space="preserve">
+    <value>奖励</value>
+  </data>
+  <data name="MiniGameDefinition_SpawnWaves_Caption" xml:space="preserve">
+    <value>刷新波次</value>
+  </data>
+  <data name="MiniGameDefinition_ChangeEvents_Caption" xml:space="preserve">
+    <value>变更事件</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_TypeCaption" xml:space="preserve">
+    <value>活动地图创建策略</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_OnePerParty_Caption" xml:space="preserve">
+    <value>每支队伍一个</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_OnePerPlayer_Caption" xml:space="preserve">
+    <value>每名玩家一个</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_Shared_Caption" xml:space="preserve">
+    <value>共享</value>
+  </data>
+  <data name="MiniGameRankingEntry_TypeCaption" xml:space="preserve">
+    <value>活动排名条目</value>
+  </data>
+  <data name="MiniGameRankingEntry_TypeCaptionPlural" xml:space="preserve">
+    <value>活动排名条目</value>
+  </data>
+  <data name="MiniGameRankingEntry_GameInstanceId_Caption" xml:space="preserve">
+    <value>活动实例 ID</value>
+  </data>
+  <data name="MiniGameRankingEntry_Timestamp_Caption" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
+  <data name="MiniGameRankingEntry_Score_Caption" xml:space="preserve">
+    <value>积分</value>
+  </data>
+  <data name="MiniGameRankingEntry_Rank_Caption" xml:space="preserve">
+    <value>排名</value>
+  </data>
+  <data name="MiniGameRankingEntry_Character_Caption" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="MiniGameRankingEntry_MiniGame_Caption" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="MiniGameReward_TypeCaption" xml:space="preserve">
+    <value>活动奖励</value>
+  </data>
+  <data name="MiniGameReward_TypeCaptionPlural" xml:space="preserve">
+    <value>活动奖励</value>
+  </data>
+  <data name="MiniGameReward_Rank_Caption" xml:space="preserve">
+    <value>排名</value>
+  </data>
+  <data name="MiniGameReward_RewardType_Caption" xml:space="preserve">
+    <value>奖励类型</value>
+  </data>
+  <data name="MiniGameReward_RewardAmount_Caption" xml:space="preserve">
+    <value>奖励数量</value>
+  </data>
+  <data name="MiniGameReward_RequiredSuccess_Caption" xml:space="preserve">
+    <value>要求成功</value>
+  </data>
+  <data name="MiniGameReward_ItemReward_Caption" xml:space="preserve">
+    <value>物品奖励</value>
+  </data>
+  <data name="MiniGameReward_RequiredKill_Caption" xml:space="preserve">
+    <value>所需击杀</value>
+  </data>
+  <data name="MiniGameRewardType_TypeCaption" xml:space="preserve">
+    <value>活动奖励类型</value>
+  </data>
+  <data name="MiniGameRewardType_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="MiniGameRewardType_Money_Caption" xml:space="preserve">
+    <value>金币</value>
+  </data>
+  <data name="MiniGameRewardType_Experience_Caption" xml:space="preserve">
+    <value>经验</value>
+  </data>
+  <data name="MiniGameRewardType_ExperiencePerRemainingSeconds_Caption" xml:space="preserve">
+    <value>每剩余秒数奖励经验</value>
+  </data>
+  <data name="MiniGameRewardType_Item_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="MiniGameRewardType_ItemDrop_Caption" xml:space="preserve">
+    <value>物品掉落</value>
+  </data>
+  <data name="MiniGameRewardType_Score_Caption" xml:space="preserve">
+    <value>积分</value>
+  </data>
+  <data name="MiniGameSpawnWave_TypeCaption" xml:space="preserve">
+    <value>活动刷新波次</value>
+  </data>
+  <data name="MiniGameSpawnWave_TypeCaptionPlural" xml:space="preserve">
+    <value>活动刷新波次</value>
+  </data>
+  <data name="MiniGameSpawnWave_WaveNumber_Caption" xml:space="preserve">
+    <value>波次编号</value>
+  </data>
+  <data name="MiniGameSpawnWave_Description_Caption" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="MiniGameSpawnWave_Message_Caption" xml:space="preserve">
+    <value>消息</value>
+  </data>
+  <data name="MiniGameSpawnWave_StartTime_Caption" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="MiniGameSpawnWave_EndTime_Caption" xml:space="preserve">
+    <value>结束时间</value>
+  </data>
+  <data name="MiniGameSuccessFlags_TypeCaption" xml:space="preserve">
+    <value>活动成功标志</value>
+  </data>
+  <data name="MiniGameSuccessFlags_None_Caption" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Winner_Caption" xml:space="preserve">
+    <value>获胜方</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinningParty_Caption" xml:space="preserve">
+    <value>获胜队伍</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerOrInWinningParty_Caption" xml:space="preserve">
+    <value>获胜者或获胜队伍成员</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Loser_Caption" xml:space="preserve">
+    <value>失败方</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Alive_Caption" xml:space="preserve">
+    <value>存活</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Dead_Caption" xml:space="preserve">
+    <value>死亡</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerExists_Caption" xml:space="preserve">
+    <value>存在获胜方</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerNotExists_Caption" xml:space="preserve">
+    <value>不存在获胜方</value>
+  </data>
+  <data name="MiniGameTerrainChange_TypeCaption" xml:space="preserve">
+    <value>活动地形变更</value>
+  </data>
+  <data name="MiniGameTerrainChange_TypeCaptionPlural" xml:space="preserve">
+    <value>活动地形变更</value>
+  </data>
+  <data name="MiniGameTerrainChange_TerrainAttribute_Caption" xml:space="preserve">
+    <value>地形属性</value>
+  </data>
+  <data name="MiniGameTerrainChange_SetTerrainAttribute_Caption" xml:space="preserve">
+    <value>设置地形属性</value>
+  </data>
+  <data name="MiniGameTerrainChange_IsClientUpdateRequired_Caption" xml:space="preserve">
+    <value>是否要求客户端更新</value>
+  </data>
+  <data name="MiniGameTerrainChange_StartX_Caption" xml:space="preserve">
+    <value>起始 X 坐标</value>
+  </data>
+  <data name="MiniGameTerrainChange_StartY_Caption" xml:space="preserve">
+    <value>起始 Y 坐标</value>
+  </data>
+  <data name="MiniGameTerrainChange_EndX_Caption" xml:space="preserve">
+    <value>结束 X 坐标</value>
+  </data>
+  <data name="MiniGameTerrainChange_EndY_Caption" xml:space="preserve">
+    <value>结束 Y 坐标</value>
+  </data>
+  <data name="MiniGameType_TypeCaption" xml:space="preserve">
+    <value>活动类型</value>
+  </data>
+  <data name="MiniGameType_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="MiniGameType_DevilSquare_Caption" xml:space="preserve">
+    <value>恶魔广场</value>
+  </data>
+  <data name="MiniGameType_BloodCastle_Caption" xml:space="preserve">
+    <value>血色城堡</value>
+  </data>
+  <data name="MiniGameType_ChaosCastle_Caption" xml:space="preserve">
+    <value>赤色要塞</value>
+  </data>
+  <data name="MiniGameType_IllusionTemple_Caption" xml:space="preserve">
+    <value>幻影寺院</value>
+  </data>
+  <data name="MiniGameType_Doppelganger_Caption" xml:space="preserve">
+    <value>生魂广场</value>
+  </data>
+  <data name="MixResult_TypeCaption" xml:space="preserve">
+    <value>合成结果</value>
+  </data>
+  <data name="MixResult_Disappear_Caption" xml:space="preserve">
+    <value>消失</value>
+  </data>
+  <data name="MixResult_StaysAsIs_Caption" xml:space="preserve">
+    <value>保持不变</value>
+  </data>
+  <data name="MixResult_ChaosWeaponAndFirstWingsDowngradedRandom_Caption" xml:space="preserve">
+    <value>玛雅武器与一代翅膀随机降级</value>
+  </data>
+  <data name="MixResult_ThirdWingsDowngradedRandom_Caption" xml:space="preserve">
+    <value>三代翅膀随机降级</value>
+  </data>
+  <data name="ModelResourceProvider_TypeCaption" xml:space="preserve">
+    <value>模型资源提供程序</value>
+  </data>
+  <data name="ModelResourceProvider_TypeCaptionPlural" xml:space="preserve">
+    <value>模型资源提供程序</value>
+  </data>
+  <data name="MonsterAttribute_TypeCaption" xml:space="preserve">
+    <value>怪物属性</value>
+  </data>
+  <data name="MonsterAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>怪物属性</value>
+  </data>
+  <data name="MonsterAttribute_AttributeDefinition_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="MonsterAttribute_Value_Caption" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="MonsterDefinition_TypeCaption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="MonsterDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="MonsterDefinition_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="MonsterDefinition_Designation_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="MonsterDefinition_MoveRange_Caption" xml:space="preserve">
+    <value>移动范围</value>
+  </data>
+  <data name="MonsterDefinition_AttackRange_Caption" xml:space="preserve">
+    <value>攻击范围</value>
+  </data>
+  <data name="MonsterDefinition_ViewRange_Caption" xml:space="preserve">
+    <value>视野范围</value>
+  </data>
+  <data name="MonsterDefinition_MoveDelay_Caption" xml:space="preserve">
+    <value>移动间隔</value>
+  </data>
+  <data name="MonsterDefinition_AttackDelay_Caption" xml:space="preserve">
+    <value>攻击间隔</value>
+  </data>
+  <data name="MonsterDefinition_RespawnDelay_Caption" xml:space="preserve">
+    <value>重生延迟</value>
+  </data>
+  <data name="MonsterDefinition_Attribute_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="MonsterDefinition_NumberOfMaximumItemDrops_Caption" xml:space="preserve">
+    <value>物品最大掉落数量</value>
+  </data>
+  <data name="MonsterDefinition_NpcWindow_Caption" xml:space="preserve">
+    <value>NPC 窗口</value>
+  </data>
+  <data name="MonsterDefinition_ObjectKind_Caption" xml:space="preserve">
+    <value>对象类型</value>
+  </data>
+  <data name="MonsterDefinition_IntelligenceTypeName_Caption" xml:space="preserve">
+    <value>智能类型名称</value>
+  </data>
+  <data name="MonsterDefinition_AttackSkill_Caption" xml:space="preserve">
+    <value>攻击技能</value>
+  </data>
+  <data name="MonsterDefinition_MerchantStore_Caption" xml:space="preserve">
+    <value>NPC 商店</value>
+  </data>
+  <data name="MonsterDefinition_ItemCraftings_Caption" xml:space="preserve">
+    <value>物品合成</value>
+  </data>
+  <data name="MonsterDefinition_DropItemGroups_Caption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="MonsterDefinition_Attributes_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="MonsterDefinition_Quests_Caption" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="MonsterDefinition_this[]_Caption" xml:space="preserve">
+    <value>当前项[]</value>
+  </data>
+  <data name="MonsterSpawnArea_TypeCaption" xml:space="preserve">
+    <value>怪物刷新区域</value>
+  </data>
+  <data name="MonsterSpawnArea_TypeCaptionPlural" xml:space="preserve">
+    <value>怪物刷新区域</value>
+  </data>
+  <data name="MonsterSpawnArea_MonsterDefinition_Caption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="MonsterSpawnArea_GameMap_Caption" xml:space="preserve">
+    <value>游戏地图</value>
+  </data>
+  <data name="MonsterSpawnArea_X1_Caption" xml:space="preserve">
+    <value>X1</value>
+  </data>
+  <data name="MonsterSpawnArea_Y1_Caption" xml:space="preserve">
+    <value>Y1</value>
+  </data>
+  <data name="MonsterSpawnArea_X2_Caption" xml:space="preserve">
+    <value>X2</value>
+  </data>
+  <data name="MonsterSpawnArea_Y2_Caption" xml:space="preserve">
+    <value>Y2</value>
+  </data>
+  <data name="MonsterSpawnArea_Direction_Caption" xml:space="preserve">
+    <value>方向</value>
+  </data>
+  <data name="MonsterSpawnArea_Quantity_Caption" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="MonsterSpawnArea_SpawnTrigger_Caption" xml:space="preserve">
+    <value>刷新触发器</value>
+  </data>
+  <data name="MonsterSpawnArea_WaveNumber_Caption" xml:space="preserve">
+    <value>波次编号</value>
+  </data>
+  <data name="MonsterSpawnArea_MaximumHealthOverride_Caption" xml:space="preserve">
+    <value>最大生命值覆盖</value>
+  </data>
+  <data name="NpcObjectKind_TypeCaption" xml:space="preserve">
+    <value>NPC 对象类型</value>
+  </data>
+  <data name="NpcObjectKind_Monster_Caption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="NpcObjectKind_PassiveNpc_Caption" xml:space="preserve">
+    <value>被动 NPC</value>
+  </data>
+  <data name="NpcObjectKind_Guard_Caption" xml:space="preserve">
+    <value>守卫</value>
+  </data>
+  <data name="NpcObjectKind_Trap_Caption" xml:space="preserve">
+    <value>陷阱</value>
+  </data>
+  <data name="NpcObjectKind_Gate_Caption" xml:space="preserve">
+    <value>传送门</value>
+  </data>
+  <data name="NpcObjectKind_Statue_Caption" xml:space="preserve">
+    <value>雕像</value>
+  </data>
+  <data name="NpcObjectKind_SoccerBall_Caption" xml:space="preserve">
+    <value>足球</value>
+  </data>
+  <data name="NpcObjectKind_Destructible_Caption" xml:space="preserve">
+    <value>可破坏</value>
+  </data>
+  <data name="NpcWindow_TypeCaption" xml:space="preserve">
+    <value>NPC 窗口</value>
+  </data>
+  <data name="NpcWindow_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="NpcWindow_Merchant_Caption" xml:space="preserve">
+    <value>商人</value>
+  </data>
+  <data name="NpcWindow_Merchant1_Caption" xml:space="preserve">
+    <value>商人 1</value>
+  </data>
+  <data name="NpcWindow_Storage_Caption" xml:space="preserve">
+    <value>存储</value>
+  </data>
+  <data name="NpcWindow_VaultStorage_Caption" xml:space="preserve">
+    <value>仓库存储</value>
+  </data>
+  <data name="NpcWindow_ChaosMachine_Caption" xml:space="preserve">
+    <value>玛雅哥布林</value>
+  </data>
+  <data name="NpcWindow_DevilSquare_Caption" xml:space="preserve">
+    <value>恶魔广场</value>
+  </data>
+  <data name="NpcWindow_BloodCastle_Caption" xml:space="preserve">
+    <value>血色城堡</value>
+  </data>
+  <data name="NpcWindow_PetTrainer_Caption" xml:space="preserve">
+    <value>宠物训练师</value>
+  </data>
+  <data name="NpcWindow_Lahap_Caption" xml:space="preserve">
+    <value>拉荷</value>
+  </data>
+  <data name="NpcWindow_CastleSeniorNPC_Caption" xml:space="preserve">
+    <value>攻城高级 NPC</value>
+  </data>
+  <data name="NpcWindow_ElphisRefinery_Caption" xml:space="preserve">
+    <value>艾尔菲斯提炼</value>
+  </data>
+  <data name="NpcWindow_RefineStoneMaking_Caption" xml:space="preserve">
+    <value>再生宝石提炼</value>
+  </data>
+  <data name="NpcWindow_RemoveJohOption_Caption" xml:space="preserve">
+    <value>移除再生属性</value>
+  </data>
+  <data name="NpcWindow_IllusionTemple_Caption" xml:space="preserve">
+    <value>幻影寺院</value>
+  </data>
+  <data name="NpcWindow_ChaosCardCombination_Caption" xml:space="preserve">
+    <value>混沌卡片合成</value>
+  </data>
+  <data name="NpcWindow_CherryBlossomBranchesAssembly_Caption" xml:space="preserve">
+    <value>樱花树枝合成</value>
+  </data>
+  <data name="NpcWindow_SeedMaster_Caption" xml:space="preserve">
+    <value>荧光宝石合成大师</value>
+  </data>
+  <data name="NpcWindow_SeedResearcher_Caption" xml:space="preserve">
+    <value>荧光宝石研究员</value>
+  </data>
+  <data name="NpcWindow_StatReInitializer_Caption" xml:space="preserve">
+    <value>属性点重置</value>
+  </data>
+  <data name="NpcWindow_DelgadoLuckyCoinRegistration_Caption" xml:space="preserve">
+    <value>德尔加多幸运币登记</value>
+  </data>
+  <data name="NpcWindow_DoorkeeperTitusDuelWatch_Caption" xml:space="preserve">
+    <value>守门人泰特斯决斗观战</value>
+  </data>
+  <data name="NpcWindow_LugardDoppelgangerEntry_Caption" xml:space="preserve">
+    <value>陆迦德生魂广场入口</value>
+  </data>
+  <data name="NpcWindow_JerintGaionEvententry_Caption" xml:space="preserve">
+    <value>杰瑞敦盖恩活动入口</value>
+  </data>
+  <data name="NpcWindow_JuliaWarpMarketServer_Caption" xml:space="preserve">
+    <value>尤莉亚市场服务器传送</value>
+  </data>
+  <data name="NpcWindow_GuildMaster_Caption" xml:space="preserve">
+    <value>战盟盟主</value>
+  </data>
+  <data name="NpcWindow_CombineLuckyItem_Caption" xml:space="preserve">
+    <value>合成幸运物品</value>
+  </data>
+  <data name="NpcWindow_NpcDialog_Caption" xml:space="preserve">
+    <value>NPC 对话</value>
+  </data>
+  <data name="NpcWindow_LegacyQuest_Caption" xml:space="preserve">
+    <value>旧版任务</value>
+  </data>
+  <data name="PowerUpDefinition_TypeCaption" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="PowerUpDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="PowerUpDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>目标属性</value>
+  </data>
+  <data name="PowerUpDefinition_Boost_Caption" xml:space="preserve">
+    <value>强化</value>
+  </data>
+  <data name="PowerUpDefinitionValue_TypeCaption" xml:space="preserve">
+    <value>强化效果值</value>
+  </data>
+  <data name="PowerUpDefinitionValue_TypeCaptionPlural" xml:space="preserve">
+    <value>强化效果值</value>
+  </data>
+  <data name="PowerUpDefinitionValue_ConstantValue_Caption" xml:space="preserve">
+    <value>常量值</value>
+  </data>
+  <data name="PowerUpDefinitionValue_RelatedValues_Caption" xml:space="preserve">
+    <value>相关值</value>
+  </data>
+  <data name="PowerUpDefinitionValue_MaximumValue_Caption" xml:space="preserve">
+    <value>最大值</value>
+  </data>
+  <data name="QuestDefinition_TypeCaption" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="QuestDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="QuestDefinition_QuestGiver_Caption" xml:space="preserve">
+    <value>任务发布者</value>
+  </data>
+  <data name="QuestDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="QuestDefinition_Group_Caption" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="QuestDefinition_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="QuestDefinition_StartingNumber_Caption" xml:space="preserve">
+    <value>起始编号</value>
+  </data>
+  <data name="QuestDefinition_RefuseNumber_Caption" xml:space="preserve">
+    <value>拒绝编号</value>
+  </data>
+  <data name="QuestDefinition_Repeatable_Caption" xml:space="preserve">
+    <value>可重复</value>
+  </data>
+  <data name="QuestDefinition_RequiresClientAction_Caption" xml:space="preserve">
+    <value>需要客户端操作</value>
+  </data>
+  <data name="QuestDefinition_RequiredStartMoney_Caption" xml:space="preserve">
+    <value>所需初始金币</value>
+  </data>
+  <data name="QuestDefinition_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>最低角色等级</value>
+  </data>
+  <data name="QuestDefinition_MaximumCharacterLevel_Caption" xml:space="preserve">
+    <value>最高角色等级</value>
+  </data>
+  <data name="QuestDefinition_QualifiedCharacter_Caption" xml:space="preserve">
+    <value>符合条件的角色</value>
+  </data>
+  <data name="QuestDefinition_RequiredMonsterKills_Caption" xml:space="preserve">
+    <value>所需怪物击杀数</value>
+  </data>
+  <data name="QuestDefinition_RequiredItems_Caption" xml:space="preserve">
+    <value>所需物品</value>
+  </data>
+  <data name="QuestDefinition_Rewards_Caption" xml:space="preserve">
+    <value>奖励</value>
+  </data>
+  <data name="QuestItemRequirement_TypeCaption" xml:space="preserve">
+    <value>任务物品要求</value>
+  </data>
+  <data name="QuestItemRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>任务物品要求</value>
+  </data>
+  <data name="QuestItemRequirement_Item_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="QuestItemRequirement_DropItemGroup_Caption" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="QuestItemRequirement_MinimumNumber_Caption" xml:space="preserve">
+    <value>最小数量</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_TypeCaption" xml:space="preserve">
+    <value>任务怪物击杀要求</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>任务怪物击杀要求</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_Monster_Caption" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_MinimumNumber_Caption" xml:space="preserve">
+    <value>最小数量</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_TypeCaption" xml:space="preserve">
+    <value>任务怪物击杀要求状态</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_TypeCaptionPlural" xml:space="preserve">
+    <value>任务怪物击杀要求状态</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_Requirement_Caption" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_KillCount_Caption" xml:space="preserve">
+    <value>击杀数</value>
+  </data>
+  <data name="QuestReward_TypeCaption" xml:space="preserve">
+    <value>任务奖励</value>
+  </data>
+  <data name="QuestReward_TypeCaptionPlural" xml:space="preserve">
+    <value>任务奖励</value>
+  </data>
+  <data name="QuestReward_RewardType_Caption" xml:space="preserve">
+    <value>奖励类型</value>
+  </data>
+  <data name="QuestReward_Value_Caption" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="QuestReward_ItemReward_Caption" xml:space="preserve">
+    <value>物品奖励</value>
+  </data>
+  <data name="QuestReward_AttributeReward_Caption" xml:space="preserve">
+    <value>属性奖励</value>
+  </data>
+  <data name="QuestReward_SkillReward_Caption" xml:space="preserve">
+    <value>技能奖励</value>
+  </data>
+  <data name="QuestRewardType_TypeCaption" xml:space="preserve">
+    <value>任务奖励类型</value>
+  </data>
+  <data name="QuestRewardType_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="QuestRewardType_Experience_Caption" xml:space="preserve">
+    <value>经验</value>
+  </data>
+  <data name="QuestRewardType_Money_Caption" xml:space="preserve">
+    <value>金币</value>
+  </data>
+  <data name="QuestRewardType_Item_Caption" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="QuestRewardType_GensAttribution_Caption" xml:space="preserve">
+    <value>阵营归属</value>
+  </data>
+  <data name="QuestRewardType_LevelUpPoints_Caption" xml:space="preserve">
+    <value>升级点数</value>
+  </data>
+  <data name="QuestRewardType_CharacterEvolutionFirstToSecond_Caption" xml:space="preserve">
+    <value>角色一转至二转</value>
+  </data>
+  <data name="QuestRewardType_CharacterEvolutionSecondToThird_Caption" xml:space="preserve">
+    <value>角色二转至三转</value>
+  </data>
+  <data name="QuestRewardType_Attribute_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="QuestRewardType_Skill_Caption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="Rectangle_TypeCaption" xml:space="preserve">
+    <value>矩形</value>
+  </data>
+  <data name="Rectangle_TypeCaptionPlural" xml:space="preserve">
+    <value>矩形</value>
+  </data>
+  <data name="Rectangle_X1_Caption" xml:space="preserve">
+    <value>X1</value>
+  </data>
+  <data name="Rectangle_Y1_Caption" xml:space="preserve">
+    <value>Y1</value>
+  </data>
+  <data name="Rectangle_X2_Caption" xml:space="preserve">
+    <value>X2</value>
+  </data>
+  <data name="Rectangle_Y2_Caption" xml:space="preserve">
+    <value>Y2</value>
+  </data>
+  <data name="Resources_TypeCaption" xml:space="preserve">
+    <value>资源</value>
+  </data>
+  <data name="Resources_TypeCaptionPlural" xml:space="preserve">
+    <value>资源</value>
+  </data>
+  <data name="Resources_ResourceManager_Caption" xml:space="preserve">
+    <value>资源管理器</value>
+  </data>
+  <data name="Resources_Culture_Caption" xml:space="preserve">
+    <value>区域文化</value>
+  </data>
+  <data name="Resources_SystemConfiguration_AutoStart_Description_Caption" xml:space="preserve">
+    <value>系统配置_自动启动_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_AutoStart_Name_Caption" xml:space="preserve">
+    <value>系统配置_自动启动_名称</value>
+  </data>
+  <data name="Resources_SystemConfiguration_AutoUpdateSchema_Description_Caption" xml:space="preserve">
+    <value>系统配置_自动更新数据库架构_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_AutoUpdateSchema_Name_Caption" xml:space="preserve">
+    <value>系统配置_自动更新数据库架构_名称</value>
+  </data>
+  <data name="Resources_SystemConfiguration_Description_Caption" xml:space="preserve">
+    <value>系统配置_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_IpResolver_Description_Caption" xml:space="preserve">
+    <value>系统配置_IP 地址解析_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_IpResolver_Name_Caption" xml:space="preserve">
+    <value>系统配置_IP 地址解析_名称</value>
+  </data>
+  <data name="Resources_SystemConfiguration_IpResolverParameter_Description_Caption" xml:space="preserve">
+    <value>系统配置_IP 地址解析参数_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_IpResolverParameter_Name_Caption" xml:space="preserve">
+    <value>系统配置_IP 地址解析参数_名称</value>
+  </data>
+  <data name="Resources_SystemConfiguration_Name_Caption" xml:space="preserve">
+    <value>系统配置_名称</value>
+  </data>
+  <data name="Resources_SystemConfiguration_ReadConsoleInput_Description_Caption" xml:space="preserve">
+    <value>系统配置_读取控制台输入_说明</value>
+  </data>
+  <data name="Resources_SystemConfiguration_ReadConsoleInput_Name_Caption" xml:space="preserve">
+    <value>系统配置_读取控制台输入_名称</value>
+  </data>
+  <data name="ResultItemSelection_TypeCaption" xml:space="preserve">
+    <value>结果物品选择</value>
+  </data>
+  <data name="ResultItemSelection_Any_Caption" xml:space="preserve">
+    <value>任意</value>
+  </data>
+  <data name="ResultItemSelection_All_Caption" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="ServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>服务器端点</value>
+  </data>
+  <data name="ServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>服务器端点</value>
+  </data>
+  <data name="ServerEndpoint_NetworkPort_Caption" xml:space="preserve">
+    <value>网络端口</value>
+  </data>
+  <data name="ServerEndpoint_Client_Caption" xml:space="preserve">
+    <value>客户端</value>
+  </data>
+  <data name="SimpleCraftingSettings_TypeCaption" xml:space="preserve">
+    <value>简单合成设置</value>
+  </data>
+  <data name="SimpleCraftingSettings_TypeCaptionPlural" xml:space="preserve">
+    <value>简单合成设置</value>
+  </data>
+  <data name="SimpleCraftingSettings_Money_Caption" xml:space="preserve">
+    <value>金币</value>
+  </data>
+  <data name="SimpleCraftingSettings_MoneyPerFinalSuccessPercentage_Caption" xml:space="preserve">
+    <value>每点最终成功率所需金币</value>
+  </data>
+  <data name="SimpleCraftingSettings_NpcPriceDivisor_Caption" xml:space="preserve">
+    <value>NPC 价格除数</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercent_Caption" xml:space="preserve">
+    <value>成功率</value>
+  </data>
+  <data name="SimpleCraftingSettings_MaximumSuccessPercent_Caption" xml:space="preserve">
+    <value>最高成功率</value>
+  </data>
+  <data name="SimpleCraftingSettings_MultipleAllowed_Caption" xml:space="preserve">
+    <value>允许多个</value>
+  </data>
+  <data name="SimpleCraftingSettings_RequiredItems_Caption" xml:space="preserve">
+    <value>所需物品</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItems_Caption" xml:space="preserve">
+    <value>结果物品</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemSelect_Caption" xml:space="preserve">
+    <value>选择结果物品</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForLuck_Caption" xml:space="preserve">
+    <value>幸运属性成功率加成</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForExcellentItem_Caption" xml:space="preserve">
+    <value>卓越物品成功率加成</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForAncientItem_Caption" xml:space="preserve">
+    <value>套装物品成功率加成</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForGuardianItem_Caption" xml:space="preserve">
+    <value>守护物品成功率加成</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForSocketItem_Caption" xml:space="preserve">
+    <value>镶嵌物品成功率加成</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemLuckOptionChance_Caption" xml:space="preserve">
+    <value>结果物品幸运属性概率</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemSkillChance_Caption" xml:space="preserve">
+    <value>结果物品技能属性概率</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemExcellentOptionChance_Caption" xml:space="preserve">
+    <value>结果物品卓越属性概率</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemMaxExcOptionCount_Caption" xml:space="preserve">
+    <value>结果物品最大卓越属性数</value>
+  </data>
+  <data name="Skill_TypeCaption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="Skill_TypeCaptionPlural" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="Skill_Number_Caption" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="Skill_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Skill_AttackDamage_Caption" xml:space="preserve">
+    <value>攻击伤害</value>
+  </data>
+  <data name="Skill_Requirements_Caption" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="Skill_ConsumeRequirements_Caption" xml:space="preserve">
+    <value>消耗要求</value>
+  </data>
+  <data name="Skill_AttributeRelationships_Caption" xml:space="preserve">
+    <value>属性关系</value>
+  </data>
+  <data name="Skill_Range_Caption" xml:space="preserve">
+    <value>范围</value>
+  </data>
+  <data name="Skill_DamageType_Caption" xml:space="preserve">
+    <value>伤害类型</value>
+  </data>
+  <data name="Skill_SkillType_Caption" xml:space="preserve">
+    <value>技能类型</value>
+  </data>
+  <data name="Skill_Target_Caption" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="Skill_ImplicitTargetRange_Caption" xml:space="preserve">
+    <value>隐式目标范围</value>
+  </data>
+  <data name="Skill_TargetRestriction_Caption" xml:space="preserve">
+    <value>目标限制</value>
+  </data>
+  <data name="Skill_MovesToTarget_Caption" xml:space="preserve">
+    <value>向目标移动</value>
+  </data>
+  <data name="Skill_MovesTarget_Caption" xml:space="preserve">
+    <value>移动目标</value>
+  </data>
+  <data name="Skill_ElementalModifierTarget_Caption" xml:space="preserve">
+    <value>元素修正目标</value>
+  </data>
+  <data name="Skill_MagicEffectDef_Caption" xml:space="preserve">
+    <value>魔法效果定义</value>
+  </data>
+  <data name="Skill_QualifiedCharacters_Caption" xml:space="preserve">
+    <value>符合条件的角色</value>
+  </data>
+  <data name="Skill_MasterDefinition_Caption" xml:space="preserve">
+    <value>大师</value>
+  </data>
+  <data name="Skill_AreaSkillSettings_Caption" xml:space="preserve">
+    <value>范围技能设置</value>
+  </data>
+  <data name="SkillComboDefinition_TypeCaption" xml:space="preserve">
+    <value>技能连击</value>
+  </data>
+  <data name="SkillComboDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>技能连击</value>
+  </data>
+  <data name="SkillComboDefinition_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="SkillComboDefinition_MaximumCompletionTime_Caption" xml:space="preserve">
+    <value>最长完成时间</value>
+  </data>
+  <data name="SkillComboDefinition_Steps_Caption" xml:space="preserve">
+    <value>步骤</value>
+  </data>
+  <data name="SkillComboStep_TypeCaption" xml:space="preserve">
+    <value>连击技能步骤</value>
+  </data>
+  <data name="SkillComboStep_TypeCaptionPlural" xml:space="preserve">
+    <value>连击技能步骤</value>
+  </data>
+  <data name="SkillComboStep_Order_Caption" xml:space="preserve">
+    <value>顺序</value>
+  </data>
+  <data name="SkillComboStep_IsFinalStep_Caption" xml:space="preserve">
+    <value>是否为最后一步</value>
+  </data>
+  <data name="SkillComboStep_Skill_Caption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="SkillEntry_TypeCaption" xml:space="preserve">
+    <value>技能条目</value>
+  </data>
+  <data name="SkillEntry_TypeCaptionPlural" xml:space="preserve">
+    <value>技能条目</value>
+  </data>
+  <data name="SkillEntry_Skill_Caption" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="SkillEntry_Level_Caption" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="SkillEntry_PowerUps_Caption" xml:space="preserve">
+    <value>强化效果</value>
+  </data>
+  <data name="SkillEntry_PowerUpsPvp_Caption" xml:space="preserve">
+    <value>PvP 强化效果</value>
+  </data>
+  <data name="SkillEntry_PowerUpDuration_Caption" xml:space="preserve">
+    <value>强化持续时间</value>
+  </data>
+  <data name="SkillEntry_PowerUpDurationPvp_Caption" xml:space="preserve">
+    <value>PvP 强化持续时间</value>
+  </data>
+  <data name="SkillEntry_PowerUpChance_Caption" xml:space="preserve">
+    <value>强化概率</value>
+  </data>
+  <data name="SkillEntry_PowerUpChancePvp_Caption" xml:space="preserve">
+    <value>PvP 强化概率</value>
+  </data>
+  <data name="SkillEntry_Attributes_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="SkillTarget_TypeCaption" xml:space="preserve">
+    <value>技能目标</value>
+  </data>
+  <data name="SkillTarget_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="SkillTarget_Explicit_Caption" xml:space="preserve">
+    <value>指定</value>
+  </data>
+  <data name="SkillTarget_ImplicitParty_Caption" xml:space="preserve">
+    <value>队伍隐式目标</value>
+  </data>
+  <data name="SkillTarget_ImplicitPlayersInRange_Caption" xml:space="preserve">
+    <value>范围内玩家隐式目标</value>
+  </data>
+  <data name="SkillTarget_ImplicitNpcsInRange_Caption" xml:space="preserve">
+    <value>范围内 NPC 隐式目标</value>
+  </data>
+  <data name="SkillTarget_ImplicitAllInRange_Caption" xml:space="preserve">
+    <value>范围内全部隐式目标</value>
+  </data>
+  <data name="SkillTarget_ExplicitWithImplicitInRange_Caption" xml:space="preserve">
+    <value>指定目标并包含范围内隐式目标</value>
+  </data>
+  <data name="SkillTarget_ImplicitPlayer_Caption" xml:space="preserve">
+    <value>玩家隐式目标</value>
+  </data>
+  <data name="SkillTargetRestriction_TypeCaption" xml:space="preserve">
+    <value>技能目标限制</value>
+  </data>
+  <data name="SkillTargetRestriction_Undefined_Caption" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="SkillTargetRestriction_Self_Caption" xml:space="preserve">
+    <value>自身</value>
+  </data>
+  <data name="SkillTargetRestriction_Party_Caption" xml:space="preserve">
+    <value>队伍</value>
+  </data>
+  <data name="SkillTargetRestriction_Player_Caption" xml:space="preserve">
+    <value>玩家</value>
+  </data>
+  <data name="SkillType_TypeCaption" xml:space="preserve">
+    <value>技能类型</value>
+  </data>
+  <data name="SkillType_DirectHit_Caption" xml:space="preserve">
+    <value>直接命中</value>
+  </data>
+  <data name="SkillType_CastleSiegeSpecial_Caption" xml:space="preserve">
+    <value>攻城战特殊设置</value>
+  </data>
+  <data name="SkillType_CastleSiegeSkill_Caption" xml:space="preserve">
+    <value>攻城战技能</value>
+  </data>
+  <data name="SkillType_AreaSkillAutomaticHits_Caption" xml:space="preserve">
+    <value>范围技能自动命中</value>
+  </data>
+  <data name="SkillType_AreaSkillExplicitHits_Caption" xml:space="preserve">
+    <value>范围技能指定命中</value>
+  </data>
+  <data name="SkillType_AreaSkillExplicitTarget_Caption" xml:space="preserve">
+    <value>范围技能指定目标</value>
+  </data>
+  <data name="SkillType_Buff_Caption" xml:space="preserve">
+    <value>增益效果</value>
+  </data>
+  <data name="SkillType_Regeneration_Caption" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="SkillType_PassiveBoost_Caption" xml:space="preserve">
+    <value>被动强化</value>
+  </data>
+  <data name="SkillType_SummonMonster_Caption" xml:space="preserve">
+    <value>召唤怪物</value>
+  </data>
+  <data name="SkillType_Other_Caption" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="SpawnTrigger_TypeCaption" xml:space="preserve">
+    <value>刷新触发器</value>
+  </data>
+  <data name="SpawnTrigger_Automatic_Caption" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="SpawnTrigger_AutomaticDuringEvent_Caption" xml:space="preserve">
+    <value>活动期间自动执行</value>
+  </data>
+  <data name="SpawnTrigger_OnceAtEventStart_Caption" xml:space="preserve">
+    <value>活动开始时执行一次</value>
+  </data>
+  <data name="SpawnTrigger_AutomaticDuringWave_Caption" xml:space="preserve">
+    <value>每波期间自动执行</value>
+  </data>
+  <data name="SpawnTrigger_OnceAtWaveStart_Caption" xml:space="preserve">
+    <value>波次开始时执行一次</value>
+  </data>
+  <data name="SpawnTrigger_ManuallyForEvent_Caption" xml:space="preserve">
+    <value>活动期间手动执行</value>
+  </data>
+  <data name="SpawnTrigger_Wandering_Caption" xml:space="preserve">
+    <value>游荡</value>
+  </data>
+  <data name="SpecialItemType_TypeCaption" xml:space="preserve">
+    <value>特殊物品类型</value>
+  </data>
+  <data name="SpecialItemType_None_Caption" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="SpecialItemType_Ancient_Caption" xml:space="preserve">
+    <value>套装</value>
+  </data>
+  <data name="SpecialItemType_Excellent_Caption" xml:space="preserve">
+    <value>卓越</value>
+  </data>
+  <data name="SpecialItemType_RandomItem_Caption" xml:space="preserve">
+    <value>随机物品</value>
+  </data>
+  <data name="SpecialItemType_SocketItem_Caption" xml:space="preserve">
+    <value>镶嵌物品</value>
+  </data>
+  <data name="SpecialItemType_Money_Caption" xml:space="preserve">
+    <value>金币</value>
+  </data>
+  <data name="StatAttributeDefinition_TypeCaption" xml:space="preserve">
+    <value>基础点数属性</value>
+  </data>
+  <data name="StatAttributeDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>基础点数属性</value>
+  </data>
+  <data name="StatAttributeDefinition_Attribute_Caption" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="StatAttributeDefinition_BaseValue_Caption" xml:space="preserve">
+    <value>基础值</value>
+  </data>
+  <data name="StatAttributeDefinition_IncreasableByPlayer_Caption" xml:space="preserve">
+    <value>可由玩家提升</value>
+  </data>
+  <data name="SystemConfiguration_TypeCaption" xml:space="preserve">
+    <value>系统配置</value>
+  </data>
+  <data name="SystemConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>系统配置</value>
+  </data>
+  <data name="SystemConfiguration_IpResolver_Caption" xml:space="preserve">
+    <value>IP 地址解析器</value>
+  </data>
+  <data name="SystemConfiguration_IpResolverParameter_Caption" xml:space="preserve">
+    <value>IP 地址解析参数</value>
+  </data>
+  <data name="SystemConfiguration_AutoStart_Caption" xml:space="preserve">
+    <value>自动启动</value>
+  </data>
+  <data name="SystemConfiguration_AutoUpdateSchema_Caption" xml:space="preserve">
+    <value>自动更新数据库架构</value>
+  </data>
+  <data name="SystemConfiguration_ReadConsoleInput_Caption" xml:space="preserve">
+    <value>读取控制台输入</value>
+  </data>
+  <data name="TerrainAttributeType_TypeCaption" xml:space="preserve">
+    <value>地形属性类型</value>
+  </data>
+  <data name="TerrainAttributeType_Safezone_Caption" xml:space="preserve">
+    <value>安全区</value>
+  </data>
+  <data name="TerrainAttributeType_Character_Caption" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="TerrainAttributeType_Blocked_Caption" xml:space="preserve">
+    <value>已阻止</value>
+  </data>
+  <data name="TerrainAttributeType_NoGround_Caption" xml:space="preserve">
+    <value>无地面</value>
+  </data>
+  <data name="TerrainAttributeType_Water_Caption" xml:space="preserve">
+    <value>水域</value>
+  </data>
+  <data name="TransientAttribute_TypeCaption" xml:space="preserve">
+    <value>临时属性</value>
+  </data>
+  <data name="TransientAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>临时属性</value>
+  </data>
+  <data name="WarpInfo_TypeCaption" xml:space="preserve">
+    <value>移动信息</value>
+  </data>
+  <data name="WarpInfo_TypeCaptionPlural" xml:space="preserve">
+    <value>移动信息</value>
+  </data>
+  <data name="WarpInfo_Index_Caption" xml:space="preserve">
+    <value>索引</value>
+  </data>
+  <data name="WarpInfo_Name_Caption" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="WarpInfo_Costs_Caption" xml:space="preserve">
+    <value>费用</value>
+  </data>
+  <data name="WarpInfo_LevelRequirement_Caption" xml:space="preserve">
+    <value>等级要求</value>
+  </data>
+  <data name="WarpInfo_Gate_Caption" xml:space="preserve">
+    <value>传送门</value>
+  </data>
+</root>

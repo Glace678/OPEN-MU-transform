@@ -1,0 +1,32 @@
+# Build outputs and scratch directories. None of these are source, and several
+# of them (publish.log, the NativeAOT obj cache) are regenerated on every build.
+
+# NativeAOT .NET protocol library build for OpenHarmony.
+nativeaot-ohos/build/
+nativeaot-ohos/publish.log
+nativeaot-ohos/verify.txt
+nativeaot-ohos/expected-exports.txt
+nativeaot-ohos/actual-exports.txt
+nativeaot-ohos/missing-exports.txt
+
+# Prebuilt native libraries. These are produced by build-clientlibrary-ohos.sh
+# and dropped here; they are large and must never be committed.
+*/entry/src/main/cpp/prebuilt/
+
+# The ~740 MB game data archive. Copied in from the Android build, extracted to
+# the device sandbox on first launch.
+*/entry/src/main/resources/rawfile/game-data.zip
+
+# DevEco / hvigor.
+/.hvigor/
+/.cxx/
+**/build/
+/.idea/
+/.vscode/
+local.properties
+
+# Signing material is generated per developer and never shared.
+*.p12
+*.pfx
+*.jks
+*.keystore

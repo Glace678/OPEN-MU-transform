@@ -1,0 +1,802 @@
+[
+ {
+  "id": 2843,
+  "en": "Return to the Shadow Phantom Soldier after defeating 25 Worms.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2844,
+  "en": "Return to the Shadow Phantom Soldier after defeating 3 Ice Queens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2845,
+  "en": "Return to the Shadow Phantom Soldier after defeating 30 Assassins.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2846,
+  "en": "Return to the Shadow Phantom Soldier after defeating 30 Hommerds.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2847,
+  "en": "Return to the Shadow Phantom Soldier after defeating 30 Ice Monsters.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2848,
+  "en": "Return to the Shadow Phantom Soldier after defeating 30 Yetis.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2849,
+  "en": "Return to the Shadow Phantom Soldier after defeating 40 Cyclopses.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2850,
+  "en": "Return to the Shadow Phantom Soldier after defeating 40 Larvae.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2851,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Captain Grizzlies.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2852,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Cursed Liches.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2853,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Cursed Wizards.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2854,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Cyclopses.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2855,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Dark Knights.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2856,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Death Cows.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2857,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Death Knights.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2858,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Devils.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2859,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Grizzlies.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2860,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Hell Hounds.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2861,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Hell Spiders.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2862,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Poison Bull Fighters.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2863,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Poison Shadows.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2864,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Shadows.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2865,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Skeleton Archers.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2866,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Thunder Liches.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2867,
+  "en": "Return to the Shadow Phantom Soldier after defeating 50 Totem Golems.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2868,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Bloody Wolves.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2869,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Death Gorgons.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2870,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Death Knights.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2871,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Devils.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2872,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Iron Wheels.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2873,
+  "en": "Return to the Shadow Phantom Soldier after defeating 60 Mutants.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2874,
+  "en": "Return to the Shadow Phantom Soldier after defeating 80 Alquamoses.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2875,
+  "en": "Return to the Shadow Phantom Soldier after defeating 80 Mega Crusts.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2876,
+  "en": "Return to the Shadow Phantom Soldier after defeating 80 Queen Rainiers.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2883,
+  "en": "Ring of Hero? Ring of Warrior? What are they?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2888,
+  "en": "Road to Floating Castle (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2889,
+  "en": "Road to Floating Castle (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2890,
+  "en": "Road to Floating Castle (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 2986,
+  "en": "Scrolls can be purchased from Pasi the Mage (119,112) in Lorencia and Marce (36,218) in Elveland.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3000,
+  "en": "Secure war supplies (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3001,
+  "en": "Secure war supplies (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3016,
+  "en": "Select a quest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3038,
+  "en": "Shadow Pawns from the Swamp of Peace should suffice. Go to the Swamp of Peace and defeat 100 Shadow Pawns. Come see me after that, and I will give you a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward. When you claim your reward, make sure you have at least 30 empty slots in your Inventory. Remember that.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3041,
+  "en": "Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 290-319)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3042,
+  "en": "Shadow of Evil",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3055,
+  "en": "Show Lv. 1 Request Completion Certificate to Mercenary Guild Manager Tercia.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3070,
+  "en": "Silver Valkyries are regularly plundering supplies for our search party at Atlans. Would you mind getting rid of these Silver Valkyries for us?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3072,
+  "en": "Since you now have potions, would you like to leave the safe zone and do some real hunting? Are you ready?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3073,
+  "en": "Situation at the Dungeon (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3074,
+  "en": "Situation at the Dungeon (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3075,
+  "en": "Situation at the Dungeon (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3076,
+  "en": "Situation at the Dungeon (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3077,
+  "en": "Situation at the Dungeon (5)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3078,
+  "en": "Situation at the Dungeon (6)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3110,
+  "en": "So I need to get those two items. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3111,
+  "en": "So it's not just about equipment or level.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3112,
+  "en": "So it's the real deal from now on. I understand.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3113,
+  "en": "So she imbued rings with the power of the Elves and gave them to warriors in honor of Muren's practice of handing out warriors' rings bearing the emperor's crest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3114,
+  "en": "So you want me to take the With Queen's jewel.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3115,
+  "en": "So you've decided to become an Agility Elf, a class for whom defense is crucial. Agility Elves are unique in that they employ splendid bow skills. Let me give you a weapon to use so that you can understand better.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3116,
+  "en": "So you've decided to become an Energy Elf, a class for whom wizardry is crucial. Energy Elves are unique in that they employ a variety of summoning and magic spells. Let me give you an orb as a gift so that you can understand what I mean.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3120,
+  "en": "Something strange is happening. Death Riders, who serve as Arca's Aida protectors, are frequently and indiscriminately attacking our gens members exploring the Aida region. Lemuria must be behind it all.  Please eliminate these Death Riders and protect our gens members.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3147,
+  "en": "Spider Hunt!",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3179,
+  "en": "Stop the attacks on the gens members by eliminating 50 Burning Lava Giants, and I'll give you a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3194,
+  "en": "Strange Confrontation (1)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3195,
+  "en": "Strange Confrontation (2)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3196,
+  "en": "Strange Confrontation (3)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3197,
+  "en": "Strange Confrontation (4)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3228,
+  "en": "Summoners are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3229,
+  "en": "Summoners can learn additional skills by going to Elveland and purchasing scrolls from Marce (36,218). After purchasing a scroll, right-click on it to learn the skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3235,
+  "en": "Supply route of the monsters...",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3236,
+  "en": "Sure! What's this simple mission about? (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3237,
+  "en": "Survive through Chaos Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3238,
+  "en": "Survive through Chaos Castle Level 1. Come back to me after that, and I will give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3239,
+  "en": "Survive through Chaos Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3240,
+  "en": "Survive through Chaos Castle Level 2. Come back to me after that, and I will give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3241,
+  "en": "Survive through Chaos Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3242,
+  "en": "Survive through Chaos Castle Level 3. Come back to me after that, and I will give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 3.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3243,
+  "en": "Survive through Chaos Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3244,
+  "en": "Survive through Chaos Castle Level 4. I will give you 1 Jewel of Soul as a reward when you return. However, this applies only to Chaos Castle Level 4.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3245,
+  "en": "Survive through Chaos Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3246,
+  "en": "Survive through Chaos Castle Level 5. I will give you 1 Jewel of Bless as a reward when you return. However, this applies only to Chaos Castle Level 5.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3247,
+  "en": "Survive through Chaos Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3248,
+  "en": "Survive through Chaos Castle Level 6. I will give you 1 Jewel of Life as a reward when you return. However, this applies only to Chaos Castle Level 6.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3249,
+  "en": "Survive through Chaos Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3250,
+  "en": "Survive through Chaos Castle Level 7. I will give you 2 Jewels of Bless as a reward when you return. However, this applies only to Chaos Castle Level 7.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3251,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3252,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3253,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3254,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3255,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3256,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3257,
+  "en": "Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3285,
+  "en": "Take the rings.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3286,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3287,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3288,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3289,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3290,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3291,
+  "en": "Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ }
+]

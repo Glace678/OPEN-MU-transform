@@ -1,0 +1,978 @@
+{
+ "group": "text",
+ "items": [
+  {
+   "id": 1510,
+   "en": "Hanzo the Blacksmith in Lorencia who sells knight equipment is located at coordinates 117, 140",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1535,
+   "en": "Hell Hound",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1536,
+   "en": "Hell Maine",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1537,
+   "en": "Hell Spider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1543,
+   "en": "Helper Ellen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1549,
+   "en": "Hero Mutant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1558,
+   "en": "Hideous Rabbit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1574,
+   "en": "Hommerd",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1579,
+   "en": "Hound",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1589,
+   "en": "Hunter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1597,
+   "en": "Hydra",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1689,
+   "en": "Ice Giant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1691,
+   "en": "Ice Monster",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1692,
+   "en": "Ice Napin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1693,
+   "en": "Ice Queen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1700,
+   "en": "Ice Walker",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1717,
+   "en": "Illusion Castle Sacred Item Storage",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1718,
+   "en": "Illusion Sorcerer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1720,
+   "en": "Illusion Sorcerer Elder",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1721,
+   "en": "Illusion Sorcerer Spirit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1739,
+   "en": "Illusion of Kundun",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1863,
+   "en": "Interim Reward Chest",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1877,
+   "en": "Iron Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1878,
+   "en": "Iron Rider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1880,
+   "en": "Iron Stick",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1881,
+   "en": "Iron Wheel",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1917,
+   "en": "Item's performance level decreases when the durability decreases.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1923,
+   "en": "Jack Olantern",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1925,
+   "en": "Jerint",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1926,
+   "en": "Jerint the Assistant",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1927,
+   "en": "Jerridon",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1931,
+   "en": "Jewel of Chaos is used to combining items.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1943,
+   "en": "Jeweler Raul",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1962,
+   "en": "Kato",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1965,
+   "en": "Kentauros",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1966,
+   "en": "Kentauros Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1967,
+   "en": "Kermit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1973,
+   "en": "Knight Commander",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1974,
+   "en": "Knights",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1976,
+   "en": "Kundun",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1980,
+   "en": "LIch",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1983,
+   "en": "Lahap",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1985,
+   "en": "Lance Scout",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1992,
+   "en": "Larva",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1993,
+   "en": "Laser Trap",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2030,
+   "en": "Leina the General Goods Merchant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2031,
+   "en": "Leina, the General Goods Merchant",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2032,
+   "en": "Leo the Helper",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2050,
+   "en": "Life Stone",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2080,
+   "en": "Little Santa",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2082,
+   "en": "Lizard King",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2083,
+   "en": "Lizard Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2088,
+   "en": "Lorencia's Vault Coordinates: (140, 110), (147, 144)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2089,
+   "en": "Lorencia's Vault Coordinates: (173, 95)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2091,
+   "en": "Lost Tower Level 2 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2092,
+   "en": "Lost Tower Level 3 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2093,
+   "en": "Lost Tower Level 4 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2094,
+   "en": "Lost Tower Level 5 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2095,
+   "en": "Lost Tower Level 6 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2096,
+   "en": "Lost Tower Level 7 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2110,
+   "en": "Lugard",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2111,
+   "en": "Luke the Helper",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2112,
+   "en": "Lumen the Barmaid",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2113,
+   "en": "Lunar Rabbit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2120,
+   "en": "MU Allies",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2121,
+   "en": "MU Allies General",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2122,
+   "en": "MU operator admins do not ask for your account or password; please take precaution in informing others of your cliental identity.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2130,
+   "en": "Magic Shop Owner Marce",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2131,
+   "en": "Magic Skeleton",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2132,
+   "en": "Magic stone of %s",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2144,
+   "en": "Marce",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2145,
+   "en": "Market Union Member Julia",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2146,
+   "en": "Marlon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2147,
+   "en": "Master Assassin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2185,
+   "en": "Maya",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2186,
+   "en": "Maya Hand",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2187,
+   "en": "Medic",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2191,
+   "en": "Medusa",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2192,
+   "en": "Mega Crust",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2197,
+   "en": "Mercenary Guild Manager Tercia",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2200,
+   "en": "Messenger of Archangel",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2201,
+   "en": "Metal Balrog",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2220,
+   "en": "Mirage",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2226,
+   "en": "Molt",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2236,
+   "en": "Monster7",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2246,
+   "en": "Moss",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2252,
+   "en": "Mutant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2253,
+   "en": "My Friend function is accessible only from level 6.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2257,
+   "en": "Narcondra",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2258,
+   "en": "Natasha the Firecracker Merchant",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2259,
+   "en": "Necron",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2262,
+   "en": "Nightmare",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2288,
+   "en": "Ogre archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2308,
+   "en": "Omega Wing",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2315,
+   "en": "Only the level above 10 can use the Chaos Goblin.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2316,
+   "en": "Only the level above 6 can use the personal store. The commands are '/personal store' and '/purchase', it can be created by shortcut key S.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2323,
+   "en": "Oracle Layla",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2334,
+   "en": "Orcus",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2336,
+   "en": "Osbourne",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2347,
+   "en": "PC cafe allows the Chaos Castle for free while the daily zone open hours are 1:00, 10:30, 12:00, 15:00, 18:00 and 22:00.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2363,
+   "en": "Pamela the Supplier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2372,
+   "en": "Pasi the Mage",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2373,
+   "en": "Pasi the Mage in Lorencia who sells wizard equipment is located at coordinates 119, 112.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2385,
+   "en": "Persona",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2390,
+   "en": "Pet Trainer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2397,
+   "en": "Phantom Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2399,
+   "en": "Phoenix Darkness shield",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2406,
+   "en": "Phoenix of Darkness",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2427,
+   "en": "Please notify any hacking/scam through the total notification page. We will try our best to minimize the fraud activities.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2428,
+   "en": "Please report hackers via our submit ticket tool on the http://muonline.webzen.com website",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2431,
+   "en": "Point the cursor on the skill button and press ctrl+number key to set hotkey.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2440,
+   "en": "Poison Bull Fighter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2441,
+   "en": "Poison Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2443,
+   "en": "Poison Shadow",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2448,
+   "en": "Polluted Butterfly",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2450,
+   "en": "Potion Girl Amy",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2451,
+   "en": "Potion Merchant Silvia",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2455,
+   "en": "Pouch of Blessing",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2460,
+   "en": "Prancer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2466,
+   "en": "Press Q, W, E to use the items such as healing potion, mana potion, antidote, alcohol or town portal scroll registered under those keys.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  }
+ ]
+}

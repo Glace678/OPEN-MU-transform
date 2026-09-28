@@ -1,0 +1,128 @@
+---
+# clang-tidy configuration for the MU client.
+#
+# THIS IS A DEFECT HUNTER, NOT A STYLE GATE.
+#
+# The check list below is deliberately narrow. It targets the bug classes this
+# codebase actually produces -- mismatched new[]/delete, memset over non-trivial
+# types, sizeof on a pointer where an array was meant, use-after-move, dropped
+# statements after an if-condition's semicolon, and swapped arguments.
+#
+# Style and modernization checks (modernize-*, performance-*, readability-*)
+# are intentionally OFF. Enabling them here would emit thousands of findings in
+# pre-existing code -- 3127 modernize-use-trailing-return-type and 1037
+# modernize-use-override hits in ZzzObject.cpp alone -- which
+# docs/CODING_RULES.md and AGENTS.md explicitly put out of scope ("don't
+# perform large retroactive cleanups"). Those rules govern *changed* code;
+# this file governs *broken* code.
+#
+# Warnings never fail the build (WarningsAsErrors is empty). Run it to find
+# things to look at, not to block work.
+#
+# IMPORTANT: the Checks value below is a YAML block scalar, so `#` inside it is
+# literal text, not a comment -- the exclusions must stay comment-free, and
+# their rationale lives here.
+#
+#   Excluded, and why:
+#
+#   -bugprone-reserved-identifier
+#       Microsoft's own macros (_CRT_SECURE_NO_DEPRECATE, and every header
+#       guard the platform emits) are reserved identifiers by definition.
+#       Flagging them asks us to rename Microsoft's headers.
+#
+#   -bugprone-narrowing-conversions / -implicit-integer-sign-change /
+#       -unsigned-interger-overflow
+#       332 narrowing findings in a single legacy file. The codebase is built
+#       on C-style narrowing casts; each is individually real but collectively
+#       they are the background radiation of the port and drown the signal.
+#       Narrowing in *new* code is caught at review.
+#
+#   -bugprone-easily-swappable-parameters
+#       Every legacy setter takes (int, int) or (float, float). Fixing them is
+#       an API refactor of the whole engine.
+#
+#   -bugprone-branch-clone
+#       115 duplicated branches in ZzzObject.cpp alone. Real, but each needs a
+#       human to decide whether the duplication is a bug or two genuinely
+#       identical asset paths. Out of scope for the baseline.
+#
+#   -bugprone-assignment-in-if-condition / -multi-level-implicit-pointer-conversion
+#       Legacy idioms; the findings are stylistic, not defects.
+#
+#   -bugprone-macro-parentheses / -incorrect-roundings / -integer-division /
+#       -crtp-constructor-accessibility
+#       These four were enabled for the first full sweep and removed afterwards
+#       because they are style checks in disguise on this codebase. Measured
+#       over all 700 translation units they produced 2438 / 64 / 23 / 80
+#       findings respectively and not one actionable defect between them:
+#       macro-parentheses wants parentheses added to 30-year-old #defines;
+#       incorrect-roundings flags the intentional (int)(x + 0.5) rounding idiom
+#       the renderer is built on; integer-division flags viewport math like
+#       vpWidth / 2 where the truncation is the point; and
+#       crtp-constructor-accessibility fires on the engine's Singleton.h CRTP
+#       base, which is its intended design. The checks that did find real
+#       defects in the same sweep -- undefined-memory-manipulation,
+#       misplaced-widening-cast, suspicious-semicolon, swapped-arguments --
+#       are still enabled.
+#
+#   -clang-analyzer-cplusplus.NewDelete
+#       The delete/delete[] pairing in this codebase was hand-audited (see the
+#       delete[] fix in ZzzBMD.cpp); the analyzer's version is noisy here.
+#
+#   -clang-diagnostic-error / -inconsistent-missing-override
+#       clang's own warnings leaking in. The build compiles with /EHsc; without
+#       that hint clang-tidy reports "cannot use throw" on every throw in
+#       BaseCls.h. The CMake integration passes -fexceptions, so the error is
+#       only reachable when running by hand without it.
+
+Checks: >
+  -*,
+  bugprone-undefined-memory-manipulation,
+  bugprone-shared-ptr-array-mismatch,
+  bugprone-suspicious-memset-usage,
+  bugprone-suspicious-sizeof,
+  bugprone-suspicious-memory-comparison,
+  bugprone-suspicious-enum-usage,
+  bugprone-suspicious-include,
+  bugprone-suspicious-semicolon,
+  bugprone-suspicious-missing-comma,
+  bugprone-suspicious-stringview-nullptr,
+  bugprone-dangling-handle,
+  bugprone-use-after-move,
+  bugprone-move-forwarding-reference,
+  bugprone-forwarding-reference-overload,
+  bugprone-inaccurate-erase,
+  bugprone-infinite-loop,
+  bugprone-misplaced-widening-cast,
+  bugprone-implicit-widening-of-multiplying-result,
+  bugprone-swapped-arguments,
+  bugprone-terminating-continue,
+  bugprone-undelegated-constructor,
+  bugprone-unused-raii,
+  bugprone-virtual-near-miss,
+  bugprone-string-constructor,
+  bugprone-unintended-char-ostream-output,
+  bugprone-multiple-statement-macro,
+  clang-analyzer-*,
+  -clang-analyzer-cplusplus.NewDelete,
+  -clang-analyzer-optin.cplusplus.UninitializedObject,
+  -clang-analyzer-optin.cplusplus.VirtualCall,
+  -clang-diagnostic-error,
+  -clang-diagnostic-inconsistent-missing-override,
+  -bugprone-reserved-identifier,
+  -bugprone-narrowing-conversions,
+  -bugprone-implicit-integer-sign-change,
+  -bugprone-unsigned-interger-overflow,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-branch-clone,
+  -bugprone-assignment-in-if-condition,
+  -bugprone-multi-level-implicit-pointer-conversion
+
+# Only report findings in our own headers. Third-party (GLEW, SDL, librime) is
+# vendored and its findings are not actionable here. Paths arrive from MSVC as
+# mixed-separator (D:\...\src/source/...), so the regex matches both.
+HeaderFilterRegex: '.*src[\\/]source[\\/].*'
+
+# Never turn findings into build failures. The tool is advisory.
+WarningsAsErrors: ''
+...

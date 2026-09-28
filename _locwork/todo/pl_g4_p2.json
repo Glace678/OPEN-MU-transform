@@ -1,0 +1,2582 @@
+{
+"locale": "pl",
+"language": "Polish (polski)",
+"chunk": "g4",
+"out": "D:\\openmu自用\\_locwork\\out_data\\pl\\pl_g4_p2.json",
+"strings": [
+{
+"id": 2693,
+"en": "Requires Rank 2 'Automatic Mana Recovery Increase' of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2694,
+"en": "Requires Rank 2 'Blast Strengthener' of Lv. of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2695,
+"en": "Requires Rank 2 'Bow Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2696,
+"en": "Requires Rank 2 'Crossbow Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2697,
+"en": "Requires Rank 2 'Dark Spirit Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2698,
+"en": "Requires Rank 2 'Expansion of Wizardry Strengthener' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2699,
+"en": "Requires Rank 2 'Fire Burst Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2700,
+"en": "Requires Rank 2 'Fire Tome Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2701,
+"en": "Requires Rank 2 'Flame Strengthener' of Lv. of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2702,
+"en": "Requires Rank 2 'Lightning Strengthener' of Lv. of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2703,
+"en": "Requires Rank 2 'Lightning Tome Strengthener' of Lv. 10 or highe",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2704,
+"en": "Requires Rank 2 'Mace Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2705,
+"en": "Requires Rank 2 'Maximum SD Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2706,
+"en": "Requires Rank 2 'One-handed Staff Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2707,
+"en": "Requires Rank 2 'One-handed Sword Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2708,
+"en": "Requires Rank 2 'Other World Tome Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2709,
+"en": "Requires Rank 2 'Poison Resistance Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2710,
+"en": "Requires Rank 2 'Power Slash Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2711,
+"en": "Requires Rank 2 'Scepter Strengthener : Pet Strengthener' of Lv.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2712,
+"en": "Requires Rank 2 'Scepter Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2713,
+"en": "Requires Rank 2 'Shied Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2714,
+"en": "Requires Rank 2 'Shield Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2715,
+"en": "Requires Rank 2 'Spear Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2716,
+"en": "Requires Rank 2 'Stick Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2717,
+"en": "Requires Rank 2 'Summoned Monster Strengthener (1)' of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2718,
+"en": "Requires Rank 2 'Triple Shot Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2719,
+"en": "Requires Rank 2 'Twisting Slash Strengthener' of Lv. 10 or highe",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2720,
+"en": "Requires Rank 2 'Two-handed Staff Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2721,
+"en": "Requires Rank 2 'Two-handed Sword Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2722,
+"en": "Requires Rank 2 'Wind Tome Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2723,
+"en": "Requires Rank 2 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2724,
+"en": "Requires Rank 3 'Automatic HP Recovery Increase' of Lv. 10 or hi",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2725,
+"en": "Requires Rank 3 'Critical Damage Increase Strengthener' of Lv. 1",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2726,
+"en": "Requires Rank 3 'Dark Horse Strengthener (2)' of Lv. 10 or highe",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2727,
+"en": "Requires Rank 3 'Dark Spirit Strengthener (2)' of Lv. 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2728,
+"en": "Requires Rank 3 'Defense Increase Strengthener' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2729,
+"en": "Requires Rank 3 'Durability Reduction (2)' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2730,
+"en": "Requires Rank 3 'Flame Strengthener' of Lv. of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2731,
+"en": "Requires Rank 3 'Lightning Resistance Increase' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2732,
+"en": "Requires Rank 3 'Poison Strengthener' of Lv. of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2733,
+"en": "Requires Rank 3 'Rageful Blow Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2734,
+"en": "Requires Rank 3 'Twisting Slash Strengthener' of Lv. 10 or highe",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2735,
+"en": "Requires Rank 3 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2736,
+"en": "Requires Rank 4 'Attack Power Increase Strengthener' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2737,
+"en": "Requires Rank 4 'Berserker Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2738,
+"en": "Requires Rank 4 'Critical Damage Increase Strengthener (2)' of L",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2739,
+"en": "Requires Rank 4 'Defense Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2740,
+"en": "Requires Rank 4 'Evil Spirit Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2741,
+"en": "Requires Rank 4 'Maximum Life Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2742,
+"en": "Requires Rank 4 'Monster Attack Life Increment' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2743,
+"en": "Requires Rank 4 'Soul Barrier Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2744,
+"en": "Requires Rank 4 'Swell Life Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2745,
+"en": "Requires Rank 4 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2746,
+"en": "Requires Rank 5 'Berserker Proficiency' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2747,
+"en": "Requires Rank 5 'Critical Damage Increase Strengthener (3)' of L",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2748,
+"en": "Requires Rank 5 'Dark Spirit Strengthener (3)' of Lv. 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2749,
+"en": "Requires Rank 5 'Death Stab Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2750,
+"en": "Requires Rank 5 'Defense Increase Mastery' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2751,
+"en": "Requires Rank 5 'Defense Success Rate Increase' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2752,
+"en": "Requires Rank 5 'Drain Life Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2753,
+"en": "Requires Rank 5 'Fire Scream Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2754,
+"en": "Requires Rank 5 'Fire Slash Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2755,
+"en": "Requires Rank 5 'Hellfire Strengthener' of Lv. of Lv. 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2756,
+"en": "Requires Rank 5 'Ice Strengthener' of Lv. of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2757,
+"en": "Requires Rank 5 'Maximum Mana Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2758,
+"en": "Requires Rank 5 'Minimum Attack Power Increase' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2759,
+"en": "Requires Rank 5 'Minimum Wizardry Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2760,
+"en": "Requires Rank 5 'Minimum Wizardry/Curse Increase' of Lv. 10 or h",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2761,
+"en": "Requires Rank 5 'Soul Barrier Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2762,
+"en": "Requires Rank 5 'Strike of Destruction Strengthener' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2763,
+"en": "Requires Rank 5 'Swell Life Proficiency' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2764,
+"en": "Requires Rank 5 'blind' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2765,
+"en": "Requires Rank 5 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2766,
+"en": "Requires Rank 6 'Aqua Beam Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2767,
+"en": "Requires Rank 6 'Critical Damage Rate Increase' of Lv. 10 or hig",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2768,
+"en": "Requires Rank 6 'Dark Spirit Strengthener (4)' of Lv. 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2769,
+"en": "Requires Rank 6 'Death Stab Proficiency' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2770,
+"en": "Requires Rank 6 'Flame Strike Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2771,
+"en": "Requires Rank 6 'Ice Storm Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2772,
+"en": "Requires Rank 6 'Innovation Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2773,
+"en": "Requires Rank 6 'Multi-Shot Strengthener' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2774,
+"en": "Requires Rank 6 'Set Defense Increase' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2775,
+"en": "Requires Rank 6 'Strike of Destruction Proficiency' of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2776,
+"en": "Requires Rank 6 'Weakness Strengthener' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2777,
+"en": "Requires Rank 6 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2778,
+"en": "Requires Rank 7 'Dark Spirit Strengthener (5)' of Lv. 10 or high",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2779,
+"en": "Requires Rank 7 'Full HP Recovery' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2780,
+"en": "Requires Rank 7 'Party Heal' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2781,
+"en": "Requires Rank 7 'Summoned Monster Strengthener (3)' of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2782,
+"en": "Requires Rank 7 'Twister Strengthener' skill of Lv. of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2783,
+"en": "Requires Rank 7 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2784,
+"en": "Requires Rank 8 'Bless' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2785,
+"en": "Requires Rank 8 'Blood Storm' skill learned",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2786,
+"en": "Requires Rank 8 'Cape of the Emperor Strengthener (1)' of Lv. 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2787,
+"en": "Requires Rank 8 'Cape of the Emperor Strengthener (2)' of Lv. 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2788,
+"en": "Requires Rank 8 'Double Damage Rate Increase' of Lv. 10 or highe",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2789,
+"en": "Requires Rank 8 'Eternal Wings Defense Strengthener' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2790,
+"en": "Requires Rank 8 'Fire Storm' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2791,
+"en": "Requires Rank 8 'Freeze Earth' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2792,
+"en": "Requires Rank 8 'Ignore Enemy Defense Rate Increase' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2793,
+"en": "Requires Rank 8 'Poison Arrow' skill.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2794,
+"en": "Requires Rank 8 'Wing of Dimension Defense Strengthener' of Lv.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2795,
+"en": "Requires Rank 8 'Wing of Illusion Defense Strengthener' of Lv. 1",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2796,
+"en": "Requires Rank 8 'Wing of Ruin Defense Strengthener' of Lv. 10 or",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2797,
+"en": "Requires Rank 8 'Wing of Storm Defense Strengthener' of Lv. 10 o",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2798,
+"en": "Requires Rank 8 'iron defense' of Lv. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2799,
+"en": "Requires Rank 8 skill of Lv. 10 or higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2800,
+"en": "Requires a level 10, rank 1 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2801,
+"en": "Requires a level 10, rank 2 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2802,
+"en": "Requires a level 10, rank 3 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2803,
+"en": "Requires a level 10, rank 4 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2804,
+"en": "Requires a level 10, rank 5 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2805,
+"en": "Requires a level 10, rank 6 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2806,
+"en": "Requires a level 10, rank 7 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2807,
+"en": "Requires a level 10, rank 8 skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2808,
+"en": "Requires the 'Dragon Slasher' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2809,
+"en": "Requires the 'beast uppercut' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2810,
+"en": "Requires the 'blind' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2811,
+"en": "Requires the 'blood howling' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2812,
+"en": "Requires the 'chain drive' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2813,
+"en": "Requires the 'dark side' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2814,
+"en": "Requires the 'dragon roar' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2815,
+"en": "Requires the 'ignore enemy's defense' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2816,
+"en": "Requires the 'increase HP' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2817,
+"en": "Requires the 'increase defense success rate' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2818,
+"en": "Requires the 'iron defense' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2819,
+"en": "Requires the 'killing blow' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2820,
+"en": "Requires the 'multishot' skill",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2826,
+"en": "Restores HP by max HP/%0.2f when killing a monster.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 2877,
+"en": "Returns 1 incoming damage to the dealer#with %0.2f%% chance#when hit.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3032,
+"en": "Set (helm, vest, pants, gloves, and boots) bonus: increases defense by %0.2.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3084,
+"en": "Skill duration increases by %0.2f second(s).",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3089,
+"en": "Slash skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3094,
+"en": "Sleep skill damage increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3127,
+"en": "Soul Barrier skill increases max. Mana by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3166,
+"en": "Stamina buff effect increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3167,
+"en": "Stamina increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3201,
+"en": "Strength increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3206,
+"en": "Strike of Destruction skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3222,
+"en": "Summoned monster's Defense increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3223,
+"en": "Summoned monster's HP increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3224,
+"en": "Summoned monster's attack power increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3268,
+"en": "Swell Life additionally increases max. AG by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3269,
+"en": "Swell Life skill increases Max Mana by additional %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3437,
+"en": "The beast uppercut skill has a chance of reducing the target's defense rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3439,
+"en": "The blind skill has a %0.2f%% chance of stunning your targets for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3443,
+"en": "The chain drive has a %0.2f%% chance of doing 100 frost damage per second for 10 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3449,
+"en": "The dragon roar has a %0.2f%% chance to of doing 100 fire damage per second for 10 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3450,
+"en": "The dragon slasher skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3451,
+"en": "The drain life skill has a 30%% chance of absorbing your target's HP by %0.2f for 5 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3465,
+"en": "The explosive damage of Fire Scream skill increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3471,
+"en": "The ice skill has a %0.2f%% chance of immobilzing your target for 3 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3472,
+"en": "The increase HP skill increases 'STA' by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3473,
+"en": "The increase defense success rate skill increases your defense rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3476,
+"en": "The innovation skill reduces your target's defense rate by %0.2f. The duration of skill increases per level.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3478,
+"en": "The killing blow skill has a chance of reducing your target's attack rate by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3482,
+"en": "The meteor skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3484,
+"en": "The multishot skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3496,
+"en": "The rank 1 Reduce durability loss (1) skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3497,
+"en": "The rank 2 'Increase maximum SD' skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3498,
+"en": "The rank 2 'Increase maximum mana recovery' skill requires level",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3499,
+"en": "The rank 2 fist weapon strengthener requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3500,
+"en": "The rank 4 recover HP from monster kills skill requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3501,
+"en": "The rank 5 'dragon roar strengthener' requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3502,
+"en": "The rank 8 reigning cloak defense strengthener requires level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3515,
+"en": "The victim becomes immobile for 3 seconds with %0.2f%% chance.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3516,
+"en": "The victim of Twisting Slash will be pushed 2 tiles backward with %0.2f%% chance.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3601,
+"en": "Triple Shot skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3602,
+"en": "Triple damage rate increases by %0.2f%%.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3664,
+"en": "Twisting Slash skill damage increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3680,
+"en": "Use of iron defense skill increases your defense rate and HP by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3789,
+"en": "When you kill a monster you recover %0.2f of your maximum HP.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3790,
+"en": "When you kill a monster you recover %0.2f of your maximum SD.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3791,
+"en": "When you kill a monster you recover %0.2f of your maximum mana.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3812,
+"en": "Wind Tome skill increases damage by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3813,
+"en": "Wind Tome skill stuns the victim for 2 seconds with %0.2f%% chance.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3838,
+"en": "Wizardry and Curse increase by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3839,
+"en": "Wizardry and Curse increases by %0.2f while equipping the Wing of Dimension.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3843,
+"en": "Wizardry increases by %0.2f while equipping One-handed Staff.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3844,
+"en": "Wizardry increases by %0.2f while equipping Stick.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3845,
+"en": "Wizardry increases by %0.2f while equipping Two-handed Staff.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3846,
+"en": "Wizardry increases by %0.2f.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3893,
+"en": "You have a %0.2f%% chance to fully recover your HP any time you take damage.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3894,
+"en": "You have a %0.2f%% chance to fully recover your mana any time you take damage.",
+"budget": 255,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3948,
+"en": "el 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3949,
+"en": "er",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3950,
+"en": "er.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3952,
+"en": "gher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3953,
+"en": "her",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3954,
+"en": "her.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3955,
+"en": "higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3956,
+"en": "higher.",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3957,
+"en": "igher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3958,
+"en": "or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3959,
+"en": "r",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3960,
+"en": "r higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3961,
+"en": "res level 10",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 3962,
+"en": "v. 10 or higher",
+"budget": 63,
+"kinds": [
+"mastertooltip"
+]
+},
+{
+"id": 26,
+"en": "+3%% HP Regen/+100 HP",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 54,
+"en": "100%% EXP Gain/100%% Item Drop Rate/Stops stamina from diminishing for a fixed duration of time.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 70,
+"en": "50%% EXP Gain /0%% Item Drop Rate",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 71,
+"en": "50%% EXP Gain /50%% Item Drop Rate",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 110,
+"en": "AG recovery speed increase",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 111,
+"en": "AG recovery speed increase +10",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 112,
+"en": "AG recovery speed increase +8/Lightning and Ice resistance increase/attack speed increase +20",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 114,
+"en": "Abolish Magic",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 144,
+"en": "Agility Status +50",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 172,
+"en": "Altar of Wolf besiegement Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 173,
+"en": "Altar of Wolf contract Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 174,
+"en": "Altar of Wolf contract attempt",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 175,
+"en": "Altar of Wolf contract disabled",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 176,
+"en": "Altar of Wolf contract enabled",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 177,
+"en": "Altar of Wolf hero contract Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 209,
+"en": "Arrows are not consumed,/ and increases your damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 210,
+"en": "Arrows do not become consumed.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 213,
+"en": "Ascension",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 274,
+"en": "Attack power +20%% increase",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 275,
+"en": "Attack power +30",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 276,
+"en": "Attack power and Defensibility increases",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 278,
+"en": "Attack power increase +25",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 279,
+"en": "Attack power increase +30",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 280,
+"en": "Attack power increase +40",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 287,
+"en": "Attack power increases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 288,
+"en": "Attack power reduction",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 290,
+"en": "Attack speed +15",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 292,
+"en": "Attack speed increase +10",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 293,
+"en": "Attack speed increase +15",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 343,
+"en": "Besiegement Guild1",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 344,
+"en": "Besiegement Guild2",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 345,
+"en": "Besiegement Guild3",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 357,
+"en": "Bleeding",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 358,
+"en": "Bless",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 362,
+"en": "Blessing of Christmas",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 363,
+"en": "Blind",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 383,
+"en": "Blood Howl",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 548,
+"en": "Cold",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 601,
+"en": "Control Status +50",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 615,
+"en": "Critical Damage increase",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 617,
+"en": "Critical damage increase at 20%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 618,
+"en": "Critical damage increases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 626,
+"en": "Crown Registration Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 630,
+"en": "Cry Wolf Divine Protection Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 631,
+"en": "Cry Wolf NPC transparency",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 643,
+"en": "Curse spell, Wizardry, Attack power and Maximum Mana increases, Defense and Maximum Life decreases",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 657,
+"en": "Damage Reflection",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 659,
+"en": "Damage absorbed at 100%%.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 697,
+"en": "Dark Rod Battle Skill",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 753,
+"en": "Decrease Defense Rate",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 755,
+"en": "Decreases attack rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 756,
+"en": "Decreases defense and defense success rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 757,
+"en": "Decreases defense rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 758,
+"en": "Decreases defense success rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 800,
+"en": "Defense success rate decrease",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 803,
+"en": "Defensibility +100",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 804,
+"en": "Defensibility increase +100",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 805,
+"en": "Defensibility increase +60",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 806,
+"en": "Defensibility increases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 807,
+"en": "Defensibility reduction",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 823,
+"en": "Detrimental cold reduces /the mobility speed.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 923,
+"en": "Drains HP per every second.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 949,
+"en": "EXP gain disabled",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 950,
+"en": "EXP gain increase 150%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 951,
+"en": "EXP gain increase 150%%/Automatic Life recovery at 5%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 952,
+"en": "EXP gain increase 150%%/item gain increase 200%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 953,
+"en": "EXP gain increase 200%%/Item gain increase 150%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 955,
+"en": "Earth Binds",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1039,
+"en": "Energy Status +50",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1099,
+"en": "Excellent damage increase at 20%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1109,
+"en": "Expansion of Wizardry",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1115,
+"en": "Explosion",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1173,
+"en": "Flame Strike",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1189,
+"en": "Freeze",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1194,
+"en": "Frost",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1199,
+"en": "GM",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1210,
+"en": "Gate Open/Close Status",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1237,
+"en": "Gigantic Storm",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1494,
+"en": "HP increase +200",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1495,
+"en": "HP is drained every second and transferred to the target.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1496,
+"en": "HP is reduced every second.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1497,
+"en": "HP is reduced for every second of fire damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1498,
+"en": "HP is reduced for every second of frost damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1499,
+"en": "HP is reduced for every second of poison damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1525,
+"en": "Health Status +50",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1527,
+"en": "Health stat increases to maximum.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1559,
+"en": "High Vitality",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1685,
+"en": "Ice",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1704,
+"en": "Iced Arrow",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1714,
+"en": "Ignore Enemy's Defense",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1740,
+"en": "Immobilized when you are frozen.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1753,
+"en": "In the process of attacking the castle",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1756,
+"en": "Increase Attack Power",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1761,
+"en": "Increase Defense",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1762,
+"en": "Increase Defense Rate",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1763,
+"en": "Increase Defense Success Rate",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1767,
+"en": "Increase HP",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1769,
+"en": "Increase Health",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1790,
+"en": "Increases Attack Rate and Defense Rate'",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1794,
+"en": "Increases EXP by 20%% /Rare Item drop rate/can be used in Vulcanus only.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1797,
+"en": "Increases HP.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1798,
+"en": "Increases Item Drop Rate to 150%%.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1801,
+"en": "Increases all stats by %d.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1808,
+"en": "Increases chance to ignore enemy's defense and inflict damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1809,
+"en": "Increases critical damage and critical damage rate,/ and also increases excellent damage rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1810,
+"en": "Increases critical damage and critical damage rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1818,
+"en": "Increases defense success rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1823,
+"en": "Increases health stat.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1827,
+"en": "Increases max life and Mana.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1828,
+"en": "Increases max life, Mana, and AG.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1833,
+"en": "Increases maximum defend rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1834,
+"en": "Increases maximum defense and defense success rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1836,
+"en": "Increases min Wizardry and max Wizardry.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1837,
+"en": "Increases min Wizardry, max Wizardry,/ and critical damage rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1844,
+"en": "Increases the chance of ignoring Enemy DEF. If successful, enemy a chance to take a Penetrate Armor.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1846,
+"en": "Increases your max AG.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1847,
+"en": "Increases your max SD.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1854,
+"en": "Infinity Arrow",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1858,
+"en": "Innovate",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1859,
+"en": "Innovation",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1865,
+"en": "Invincibility",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1866,
+"en": "Invincible",
+"budget": 99,
+"kinds": [
+"buff"
+]
+}
+]
+}

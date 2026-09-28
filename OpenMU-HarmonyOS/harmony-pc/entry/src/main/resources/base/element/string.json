@@ -1,0 +1,8 @@
+{
+  "string": [
+    { "name": "app_name", "value": "OpenMU 鸿蒙电脑版" },
+    { "name": "module_desc", "value": "OpenMU 鸿蒙电脑 / 二合一设备客户端" },
+    { "name": "ability_desc", "value": "在鸿蒙电脑与二合一设备上以窗口化运行 OpenMU（键鼠操作）" },
+    { "name": "perm_media_reason", "value": "用于首次启动时读取并解压游戏数据" }
+  ]
+}

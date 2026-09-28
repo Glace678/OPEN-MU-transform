@@ -1,0 +1,622 @@
+{
+"locale": "ja",
+"language": "Japanese (日本語)",
+"chunk": "g4",
+"out": "D:\\openmu自用\\_locwork\\out_data\\ja\\ja_g4_p3.json",
+"strings": [
+{
+"id": 1867,
+"en": "Invisibility",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1875,
+"en": "Iron Defense",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 1916,
+"en": "Item gain increase at 150%%/Automatic Mana recovery at 5%%",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 1964,
+"en": "Keeps item durable",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2069,
+"en": "Lightning Shock",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 2105,
+"en": "Low Vitality",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2128,
+"en": "Magic Defense",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2138,
+"en": "Mana increase +300",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2139,
+"en": "Mana stat increases to maximum.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2140,
+"en": "Manna absorbs the damage.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2170,
+"en": "Maximum Life increase +500",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2171,
+"en": "Maximum Life increase +700",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2174,
+"en": "Maximum Mana increase +500",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2175,
+"en": "Maximum Mana increase +700",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2189,
+"en": "Medium Vitality",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2213,
+"en": "Minimum Vitality",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2217,
+"en": "Minimum Wizardry increases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2223,
+"en": "Mobility disabled",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2224,
+"en": "Mobility enabled",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2225,
+"en": "Mobility speed decreases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2230,
+"en": "Monster Chemistry Attack Resistance",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2231,
+"en": "Monster Magic Attack Resistance",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2265,
+"en": "No penalty for dying.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2348,
+"en": "PK Penalty",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2365,
+"en": "Partial damage reflected out.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2366,
+"en": "Party EXP Bonus Item",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2381,
+"en": "Penetrate Armor",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2436,
+"en": "Poison",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 2447,
+"en": "Poisoned status of condition",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2453,
+"en": "Potion of Blessing",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2454,
+"en": "Potion of Soul",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 2488,
+"en": "Punishment for Illicit Software Use",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2521,
+"en": "Random defensibility decreases at 10%%.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2607,
+"en": "Reduce attack speed",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2608,
+"en": "Reduces Attack speed.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2634,
+"en": "Requiem",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 2923,
+"en": "Santa Defense",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2924,
+"en": "Santa Fortune",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2925,
+"en": "Santa Healing",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2926,
+"en": "Santa Protection",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2927,
+"en": "Santa Quickness",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 2928,
+"en": "Santa Strengthener",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3040,
+"en": "Shadow Phantom effect",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3053,
+"en": "Short period of nap",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3054,
+"en": "Shortened view and the attack accuracy decreases.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3058,
+"en": "Significantly increases defense and HP.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3059,
+"en": "Significantly increases defense rate and HP.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3091,
+"en": "Sleep",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3123,
+"en": "Soul Barrier",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3133,
+"en": "Spell of Protection",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3135,
+"en": "Spell of Restriction",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3200,
+"en": "Strength Status +50",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3208,
+"en": "Stun",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3226,
+"en": "Summoner Neil attack",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3227,
+"en": "Summoner Shamut attack",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3264,
+"en": "Swell Life",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3270,
+"en": "Swell Mana",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3324,
+"en": "Temple - Spell of Quickness",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3325,
+"en": "Temple - Spell of Sublimation",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3595,
+"en": "Transparency Status",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3675,
+"en": "Up to 170% EXP gain, depending on the number of members in the party.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3682,
+"en": "Uses Mana to absorb damage,/ and increases max Mana.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3691,
+"en": "Vampiric",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3740,
+"en": "Warp Command Window access restricted for five minutes.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3743,
+"en": "Watch",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3747,
+"en": "Watching over the castle.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3748,
+"en": "Watchtower",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3752,
+"en": "Weaken",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3753,
+"en": "Weakness",
+"budget": 31,
+"kinds": [
+"buff",
+"skill"
+]
+},
+{
+"id": 3841,
+"en": "Wizardry increase +30",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3842,
+"en": "Wizardry increase reduction",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3873,
+"en": "You are blinded./Decreases attack success rate.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3891,
+"en": "You feel exhausted.",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3892,
+"en": "You feel tired.",
+"budget": 49,
+"kinds": [
+"buff"
+]
+},
+{
+"id": 3909,
+"en": "You may enter and watch a duel in Arena.",
+"budget": 99,
+"kinds": [
+"buff"
+]
+}
+]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "mumain-localization-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned OpenCC dependency used to regenerate Mainland Chinese resources.",
+  "dependencies": {
+    "opencc": "1.4.1"
+  }
+}

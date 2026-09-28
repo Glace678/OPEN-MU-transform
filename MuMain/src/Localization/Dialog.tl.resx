@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Text_0" xml:space="preserve">
+    <value>Oho! May kailangan ka ba?</value>
+    <comment>legacy_id=0</comment>
+  </data>
+  <data name="Text_1" xml:space="preserve">
+    <value>Kumusta! Ako si Pasi the Mage. Hahaha! Hmmm... Ang galaw ng mga bituin ay tila hindi tama. Ang iyong kinabukasan... Hmm... Hindi ko rin makita ang iyong kinabukasan... Bakit kaya...?</value>
+    <comment>legacy_id=1</comment>
+  </data>
+  <data name="Text_2" xml:space="preserve">
+    <value>Kumusta! Ako si Baz at ako ang tagapangalaga ng bodega. Maaari akong tumulong sa iyo saan ka man pumunta. Huwag mag-atubiling iwan ang iyong mga gamit sa akin.</value>
+    <comment>legacy_id=2</comment>
+  </data>
+  <data name="Text_3" xml:space="preserve">
+    <value>Maraming adventurer ang nagsabi sa akin na ang tunog ng alpa ay nagpapakalma at nag-aalis ng kanilang pagod. Kailangan mo ba ng tulong ko?</value>
+    <comment>legacy_id=3</comment>
+  </data>
+  <data name="Text_4" xml:space="preserve">
+    <value>Kumusta! Ako si Baz at ako ang tagapangalaga ng bodega. Maaari akong tumulong sa iyo saan ka man pumunta. Huwag mag-atubiling iwan ang iyong mga gamit sa akin.</value>
+    <comment>legacy_id=4</comment>
+  </data>
+  <data name="Text_5" xml:space="preserve">
+    <value>Nagdala ka ba ng sapat na pera? Kung wala nito, hindi ko maaaring pagsamahin ang mga item dahil kailangan ko ng pera para ituloy ang aking pananaliksik. Naiintindihan mo? Gusto mo bang malaman kung magkano ang kailangang pera?</value>
+    <comment>legacy_id=5</comment>
+  </data>
+  <data name="Text_6" xml:space="preserve">
+    <value>Maligayang pagdating sa MU! Pindutin ang F1 key kung kailangan mo ng tulong habang naglalakbay sa kontinente ng MU.</value>
+    <comment>legacy_id=6</comment>
+  </data>
+  <data name="Text_7" xml:space="preserve">
+    <value>Unang beses mo ba sa Lorencia? Pumunta sa timog-silangang labasan sa harap ng fountain at subukang manghuli ng Budge Dragons o Spider. Masyadong mapanganib ang mga Skeleton sa Hilagang-Kanluran.</value>
+    <comment>legacy_id=7</comment>
+  </data>
+  <data name="Text_8" xml:space="preserve">
+    <value>Maligayang pagdating sa Noria. Kung ito ang iyong unang pagkakataon, dumaan sa bantay ng bodega at pumunta sa timog na labasan. Subukang manghuli ng mga mababang antas na halimaw tulad ng Scorpion o Goblin.</value>
+    <comment>legacy_id=8</comment>
+  </data>
+  <data name="Text_9" xml:space="preserve">
+    <value>Kung kailangan mo ng detalyadong gabay sa kontinente ng MU, bisitahin ang http://muonline.webzen.net</value>
+    <comment>legacy_id=9</comment>
+  </data>
+  <data name="Text_50" xml:space="preserve">
+    <value>Ang 'Scroll of the Emperor', na nagsasalita tungkol kay Muren, ang unang emperador ng MU, ay sinasabing nakita sa paligid ng Lost Tower, Atlans, at ng Dungeon.</value>
+    <comment>legacy_id=50</comment>
+  </data>
+  <data name="Answer_50_Slot_0" xml:space="preserve">
+    <value>Hindi ko alam na may ganoong bagay pala...</value>
+    <comment>legacy_id=1500</comment>
+  </data>
+  <data name="Text_51" xml:space="preserve">
+    <value>Hindi sapat ang iyong handog sa Diyos. Sasabihin ko sa iyo ang tungkol sa orakulo kung maghahandog ka ng 1,000,000 Zen.</value>
+    <comment>legacy_id=51</comment>
+  </data>
+  <data name="Answer_51_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang 1,000,000 Zen.</value>
+    <comment>legacy_id=1510</comment>
+  </data>
+  <data name="Text_52" xml:space="preserve">
+    <value>Ang 'Scroll of the Emperor', na nagsasalita tungkol kay Muren, ang unang emperador na nagkaisang MU, ay sinasabing nakita sa paligid ng Lost Tower, Atlans, at ng Dungeon.</value>
+    <comment>legacy_id=52</comment>
+  </data>
+  <data name="Answer_52_Slot_0" xml:space="preserve">
+    <value>Sabihin mo pa.</value>
+    <comment>legacy_id=1520</comment>
+  </data>
+  <data name="Text_53" xml:space="preserve">
+    <value>Ang 'Scroll of the Emperor' ay balot ng isang makapangyarihang puwersa. Sinumang makabasa nito ay bibiyayaan ng makapangyarihang puwersang iyon.</value>
+    <comment>legacy_id=53</comment>
+  </data>
+  <data name="Answer_53_Slot_0" xml:space="preserve">
+    <value>Mangyaring ulitin ang kuwento.</value>
+    <comment>legacy_id=1530</comment>
+  </data>
+  <data name="Answer_53_Slot_1" xml:space="preserve">
+    <value>Hahanapin ko ito.</value>
+    <comment>legacy_id=1531</comment>
+  </data>
+  <data name="Answer_53_Slot_2" xml:space="preserve">
+    <value>Wala akong pakialam.</value>
+    <comment>legacy_id=1532</comment>
+  </data>
+  <data name="Text_54" xml:space="preserve">
+    <value>Hanapin ang 'Scroll of the Emperor'. Bibigyan ka ng dakilang kapangyarihan kapag nabasa mo ito.</value>
+    <comment>legacy_id=54</comment>
+  </data>
+  <data name="Answer_54_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko ito.</value>
+    <comment>legacy_id=1540</comment>
+  </data>
+  <data name="Text_55" xml:space="preserve">
+    <value>Nahanap mo na ang 'Scroll of the Emperor'! Ang paggunita sa pagkakaisa ng unang emperador ng Imperyong Mu na si Muren ay naitala rito gamit ang kapangyarihan ng mahika, alam mo. Ang sinumang may hawak ng 'Scroll of the Emperor' ay bibigyan ng dakilang kapangyarihan.</value>
+    <comment>legacy_id=55</comment>
+  </data>
+  <data name="Answer_55_Slot_0" xml:space="preserve">
+    <value>Sabihin mo sa akin ang tungkol sa talaan.</value>
+    <comment>legacy_id=1550</comment>
+  </data>
+  <data name="Text_56" xml:space="preserve">
+    <value>Isang makasaysayang talaan ng unang emperador na si Muren na naglalaman ng paggunita sa kapayapaan sa pamamagitan ng pagtatagumpay ni Muren laban sa lahat ng mga warlord, at sa pamamagitan nito, pinag-isa ang kontinente sa Imperyo ng MU.</value>
+    <comment>legacy_id=56</comment>
+  </data>
+  <data name="Answer_56_Slot_0" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1560</comment>
+  </data>
+  <data name="Text_57" xml:space="preserve">
+    <value>Si Muren ay isa sa tatlong bayani na nagtapos sa kaguluhang idinulot sa mga tao ng pagsalakay ni Sekneum.</value>
+    <comment>legacy_id=57</comment>
+  </data>
+  <data name="Answer_57_Slot_0" xml:space="preserve">
+    <value>Sabihin mo ang nakaraang kuwento.</value>
+    <comment>legacy_id=1570</comment>
+  </data>
+  <data name="Answer_57_Slot_1" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1571</comment>
+  </data>
+  <data name="Text_58" xml:space="preserve">
+    <value>Maaaring makatagpo ng mga mahiwagang artifact at tinatawag silang 'Broken Sword', 'Tear of Elf', at 'Soul of Wizard'. Ang 'Broken Sword' ay inialay ng mga dark knight bilang simbolo ng kanilang katapangan, katapatan, at hangarin para sa kasaganaan.</value>
+    <comment>legacy_id=58</comment>
+  </data>
+  <data name="Answer_58_Slot_0" xml:space="preserve">
+    <value>Sabihin mo ang nakaraang kuwento.</value>
+    <comment>legacy_id=1580</comment>
+  </data>
+  <data name="Answer_58_Slot_1" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1581</comment>
+  </data>
+  <data name="Text_59" xml:space="preserve">
+    <value>Ang 'Soul of Wizard' ay inialay ng mga dark wizard bilang simbolo ng kanilang panata na gamitin ang kanilang kapangyarihan para sa kapayapaan at kalayaan ng imperyo. Taong 10 ng Mu, isang sipi mula sa talaan ng paggunita sa kapayapaan...</value>
+    <comment>legacy_id=59</comment>
+  </data>
+  <data name="Answer_59_Slot_0" xml:space="preserve">
+    <value>Sabihin mo ang nakaraang kuwento.</value>
+    <comment>legacy_id=1590</comment>
+  </data>
+  <data name="Answer_59_Slot_1" xml:space="preserve">
+    <value>Ganoon pala iyon...</value>
+    <comment>legacy_id=1591</comment>
+  </data>
+  <data name="Text_60" xml:space="preserve">
+    <value>Kung nabasa mo na ang 'Scroll of the Emperor', hanapin ang 'Broken Sword' na ginamit ng mga sinaunang dark knight sa paggunita sa kapayapaan. Sa narinig ko, ilang dark knight ang nakahanap nito sa Atlans, Lost Tower, at Tarkan.</value>
+    <comment>legacy_id=60</comment>
+  </data>
+  <data name="Answer_60_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko ito.</value>
+    <comment>legacy_id=1600</comment>
+  </data>
+  <data name="Answer_60_Slot_1" xml:space="preserve">
+    <value>Sumusuko na ako.</value>
+    <comment>legacy_id=1601</comment>
+  </data>
+  <data name="Text_61" xml:space="preserve">
+    <value>Ang panganib ay nagtatago sa bawat sulok ng mga lugar na iyon at ang 'Broken Sword' ay hindi madaling makita. Ngunit kung mahahanap mo ito, bagong kapangyarihan ang ibibigay sa iyo! Bumalik ka sa akin kapag nahanap mo na ang 'Broken Sword'.</value>
+    <comment>legacy_id=61</comment>
+  </data>
+  <data name="Answer_61_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko ito at babalik na may dalang nito.</value>
+    <comment>legacy_id=1610</comment>
+  </data>
+  <data name="Text_62" xml:space="preserve">
+    <value>Matapang na dark knight, nahanap mo na ang 'Broken Sword'! Matapos ang pagkakaisa ng Kontinente ng Mu, binali ni Muren, ang unang emperador, ang kanyang espada na 'Apocalypse' bilang simbolo ng kanyang hangarin na hindi na muling magkaroon ng digmaan.</value>
+    <comment>legacy_id=62</comment>
+  </data>
+  <data name="Answer_62_Slot_0" xml:space="preserve">
+    <value>Sabihin mo pa.</value>
+    <comment>legacy_id=1620</comment>
+  </data>
+  <data name="Text_63" xml:space="preserve">
+    <value>Matapos ang Digmaan, ang mga dark knight na nagnanais na maging blade knight ay nagsimulang maghanap ng sinaunang 'Broken Sword' upang patunayan ang kanilang katapangan.</value>
+    <comment>legacy_id=63</comment>
+  </data>
+  <data name="Answer_63_Slot_0" xml:space="preserve">
+    <value>Ganoon pala!</value>
+    <comment>legacy_id=1630</comment>
+  </data>
+  <data name="Text_64" xml:space="preserve">
+    <value>Nabasa mo na ang 'Scroll of the Emperor', hindi ba. Kung gayon, dapat alam mo ang tungkol sa 3 kayamanan na nakatala sa 'Scroll of the Emperor'. Hanapin ang kristal na 'Tear of Elf' na ginawa ng mga sinaunang elf gamit ang lakas ng espiritu.</value>
+    <comment>legacy_id=64</comment>
+  </data>
+  <data name="Answer_64_Slot_0" xml:space="preserve">
+    <value>Mangyaring sabihin mo pa.</value>
+    <comment>legacy_id=1640</comment>
+  </data>
+  <data name="Text_65" xml:space="preserve">
+    <value>Ang lugar na iyon ay isang napakadelikadong lugar at ang 'Tear of Elf' ay lubhang mahirap hanapin. Ngunit kung mahahanap mo ang 'Tear of Elf', bagong kapangyarihan ang ibibigay sa iyo. Ngayon, hanapin ang 'Tear of Elf' at bumalik ka sa akin.</value>
+    <comment>legacy_id=65</comment>
+  </data>
+  <data name="Answer_65_Slot_0" xml:space="preserve">
+    <value> Hahanapin ko ang 'Tear of Elf'!</value>
+    <comment>legacy_id=1650</comment>
+  </data>
+  <data name="Text_66" xml:space="preserve">
+    <value>Nahanap mo na ang 'Tear of Elf'! Matapos ang Digmaan, nilikha ni Lunedil, ang reyna ng mga elf, ang tear stone sa pamamagitan ng paglalagay ng mahika sa spirit stone upang ang mga elf ay makatawag ng kapangyarihan ng diyosa at mapaunlad ang kanilang kapangyarihan.</value>
+    <comment>legacy_id=66</comment>
+  </data>
+  <data name="Answer_66_Slot_0" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1660</comment>
+  </data>
+  <data name="Text_67" xml:space="preserve">
+    <value>Nabasa mo na ang 'Scroll of the Emperor', hindi ba. Kung gayon, dapat alam mo ang tungkol sa 3 kayamanan na nakatala rito.</value>
+    <comment>legacy_id=67</comment>
+  </data>
+  <data name="Answer_67_Slot_0" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1670</comment>
+  </data>
+  <data name="Text_68" xml:space="preserve">
+    <value>Sa iyong kapangyarihan, sigurado akong mahahanap mo ang 'Soul of Wizard'. Ngayon, hanapin ang 'Soul of Wizard' at bumalik ka sa akin kapag nahanap mo na ito.</value>
+    <comment>legacy_id=68</comment>
+  </data>
+  <data name="Answer_68_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko ang 'Soul of Wizard'.</value>
+    <comment>legacy_id=1680</comment>
+  </data>
+  <data name="Text_69" xml:space="preserve">
+    <value>Alam kong mahahanap mo ang 'Soul of Wizard'! Si Etramu, ang pinakadakilang wizard ng Arka, ay lumikha ng isang mahiwagang bato na nagpoprotekta sa kaluluwa, dahil nag-aalala siya na ang mga mahihinang dark knight ay maaaring manghina sa pag-atake ni Kundun.</value>
+    <comment>legacy_id=69</comment>
+  </data>
+  <data name="Answer_69_Slot_0" xml:space="preserve">
+    <value>Mangyaring sabihin mo pa.</value>
+    <comment>legacy_id=1690</comment>
+  </data>
+  <data name="Text_70" xml:space="preserve">
+    <value>Ang isang dark wizard na may hawak ng mahiwagang batong ito ay nagiging isang soul master.</value>
+    <comment>legacy_id=70</comment>
+  </data>
+  <data name="Answer_70_Slot_0" xml:space="preserve">
+    <value>Isa na akong soul master!</value>
+    <comment>legacy_id=1700</comment>
+  </data>
+  <data name="Text_71" xml:space="preserve">
+    <value>Hindi sapat ang iyong handog sa Diyos. Sasabihin ko sa iyo ang tungkol sa orakulo kung maghahandog ka ng 2,000,000 Zen.</value>
+    <comment>legacy_id=71</comment>
+  </data>
+  <data name="Answer_71_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang 2,000,000 Zen.</value>
+    <comment>legacy_id=1710</comment>
+  </data>
+  <data name="Text_72" xml:space="preserve">
+    <value>Bagong kapangyarihan ang ibinigay sa iyo bilang resulta ng iyong matibay na kalooban at lakas. Nawa'y laging kasama mo ang biyaya ni Lugard.</value>
+    <comment>legacy_id=72</comment>
+  </data>
+  <data name="Answer_72_Slot_0" xml:space="preserve">
+    <value>Nawa'y kasama ko ang biyaya ng Diyos...</value>
+    <comment>legacy_id=1720</comment>
+  </data>
+  <data name="Text_73" xml:space="preserve">
+    <value>Mayroon ka nang dakilang kapangyarihan. Wala na akong orakulo para sa iyo.</value>
+    <comment>legacy_id=73</comment>
+  </data>
+  <data name="Answer_73_Slot_0" xml:space="preserve">
+    <value>Babalik ako mamaya.</value>
+    <comment>legacy_id=1730</comment>
+  </data>
+  <data name="Text_74" xml:space="preserve">
+    <value>Bumalik ka kapag ikaw ay mas naging malakas na.</value>
+    <comment>legacy_id=74</comment>
+  </data>
+  <data name="Answer_74_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag mas malakas na ako.</value>
+    <comment>legacy_id=1740</comment>
+  </data>
+  <data name="Text_75" xml:space="preserve">
+    <value>Kung ikaw ay naging isang malakas na mandirigma, magagawa mo itong hanapin.</value>
+    <comment>legacy_id=75</comment>
+  </data>
+  <data name="Answer_75_Slot_0" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1750</comment>
+  </data>
+  <data name="Text_76" xml:space="preserve">
+    <value>Mula noon, nagkaroon ng kaugalian kung saan ang mga dark knight na nagnanais na maging blade knight ay bumabali ng kanilang mga espada bilang simbolo ng kanilang panata na hindi na muling gagamit ng kanilang mga espada sa maling paraan.</value>
+    <comment>legacy_id=76</comment>
+  </data>
+  <data name="Answer_76_Slot_0" xml:space="preserve">
+    <value>Sabihin mo pa.</value>
+    <comment>legacy_id=1760</comment>
+  </data>
+  <data name="Text_77" xml:space="preserve">
+    <value>Ang ilan sa mga mapangahas na elf ay nagsabi na nakita sila sa Lost Tower, Atlans, at Tarkan.</value>
+    <comment>legacy_id=77</comment>
+  </data>
+  <data name="Answer_77_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko ito!</value>
+    <comment>legacy_id=1770</comment>
+  </data>
+  <data name="Answer_77_Slot_1" xml:space="preserve">
+    <value>Ayaw kong pumunta sa ganoong lugar.</value>
+    <comment>legacy_id=1771</comment>
+  </data>
+  <data name="Text_78" xml:space="preserve">
+    <value>Ito ay tinatawag na 'Tear of Elf', at ang elf na makakahanap ng batong ito ay magiging isang muse elf, na may kakayahang tawagin ang kapangyarihan ng mga diyosang elf.</value>
+    <comment>legacy_id=78</comment>
+  </data>
+  <data name="Answer_78_Slot_0" xml:space="preserve">
+    <value>Isa na akong muse elf!</value>
+    <comment>legacy_id=1780</comment>
+  </data>
+  <data name="Text_79" xml:space="preserve">
+    <value>Dahil nahanap mo ang parehong 'Scroll of the Emperor' at 'Broken Sword', tatawagin ka nang blade Knight mula ngayon.</value>
+    <comment>legacy_id=79</comment>
+  </data>
+  <data name="Answer_79_Slot_0" xml:space="preserve">
+    <value>Isa na akong Blade Knight!</value>
+    <comment>legacy_id=1790</comment>
+  </data>
+  <data name="Text_80" xml:space="preserve">
+    <value>Matapos mapag-isa ang imperyo, nangako ang mga tao ng katapatan sa emperador. Ang ilan sa mga kayamanang inialay bilang simbolo ng kanilang katapatan ay ang mga sumusunod.</value>
+    <comment>legacy_id=80</comment>
+  </data>
+  <data name="Answer_80_Slot_0" xml:space="preserve">
+    <value>Sabihin mo ang nakaraang kuwento.</value>
+    <comment>legacy_id=1800</comment>
+  </data>
+  <data name="Answer_80_Slot_1" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1801</comment>
+  </data>
+  <data name="Text_81" xml:space="preserve">
+    <value>Ang 'Tear of Elf' ay inialay ng mga elf bilang tanda ng kanilang panata na palakasin ang kapangyarihan ng mga elf at tao.</value>
+    <comment>legacy_id=81</comment>
+  </data>
+  <data name="Answer_81_Slot_0" xml:space="preserve">
+    <value>Sabihin mo ang nakaraang kuwento.</value>
+    <comment>legacy_id=1810</comment>
+  </data>
+  <data name="Answer_81_Slot_1" xml:space="preserve">
+    <value>Mangyaring magpatuloy.</value>
+    <comment>legacy_id=1811</comment>
+  </data>
+  <data name="Text_82" xml:space="preserve">
+    <value>Hanapin ang 'Soul of Wizard'. Ayon sa mga sinaunang dark wizard, ito ay huling nakita sa paligid ng Lost Tower, Atlans, at Tarkan.</value>
+    <comment>legacy_id=82</comment>
+  </data>
+  <data name="Answer_82_Slot_0" xml:space="preserve">
+    <value>Hahanapin ko iyon</value>
+    <comment>legacy_id=1820</comment>
+  </data>
+  <data name="Answer_82_Slot_1" xml:space="preserve">
+    <value>Babalik ako mamaya.</value>
+    <comment>legacy_id=1821</comment>
+  </data>
+  <data name="Text_90" xml:space="preserve">
+    <value>Natapos mo nang basahin ang 'Decree of the Emperor'. Ngunit alam mo ba ang tungkol sa kumpidensyal na kasunduan sa pagitan ni Muren at Semeden ang pinuno ng mga summoner? Nangako si Muren ng isang bagay kapalit ng paglilipat kay Elbe sa ilalim ng imperyo.</value>
+    <comment>legacy_id=90</comment>
+  </data>
+  <data name="Answer_90_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=1900</comment>
+  </data>
+  <data name="Text_91" xml:space="preserve">
+    <value>Ang Kontinente ng MU ay may tarangkahan ng dimensyon ng mundo sa ilalim ng pangangasiwa ng mga summoner. At ibinigay ni Semeden ang Abyss of Eye bilang tala ng pangako. Mangyaring kunin at ibalik ang Abyss of Eye.</value>
+    <comment>legacy_id=91</comment>
+  </data>
+  <data name="Answer_91_Slot_0" xml:space="preserve">
+    <value>Tanggapin ang hiling</value>
+    <comment>legacy_id=1910</comment>
+  </data>
+  <data name="Answer_91_Slot_1" xml:space="preserve">
+    <value>Tanggihan ang hiling</value>
+    <comment>legacy_id=1911</comment>
+  </data>
+  <data name="Text_92" xml:space="preserve">
+    <value>Narinig ko na ang Abyss of Eye ay natagpuan sa paligid ng Atlans, Lost Tower, at Tarkan. Bumalik ka dala ang Abyss of Eye sa sandaling mahanap mo ito.</value>
+    <comment>legacy_id=92</comment>
+  </data>
+  <data name="Answer_92_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=1920</comment>
+  </data>
+  <data name="Text_93" xml:space="preserve">
+    <value>Nahanap mo na ang Abyss of Eye. Ito ay kilala bilang isang bagay na binubuo ng elementong hindi umiiral sa totoong mundo. Ito ay nagmula sa mundo bago ang kasalukuyan, na may dalang alaala kasama nito.</value>
+    <comment>legacy_id=93</comment>
+  </data>
+  <data name="Answer_93_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=1930</comment>
+  </data>
+  <data name="Text_94" xml:space="preserve">
+    <value>Ang Abyss of Eye ay may espesyal na kahulugan para sa akin bilang tagapangasiwa at nakikipag-ugnayan sa mga dimensyon ng mundong ito. Kung maibabalik mo ang Abyss of Eye, ibibigay ko sa iyo ang titulong Blood Summoner para kay Semeden ang tagapangasiwa ng iyong dimensyon.</value>
+    <comment>legacy_id=94</comment>
+  </data>
+  <data name="Answer_94_Slot_0" xml:space="preserve">
+    <value>Itinalaga bilang Blood Summoner</value>
+    <comment>legacy_id=1940</comment>
+  </data>
+  <data name="Text_100" xml:space="preserve">
+    <value>Ang maalamat na kayamanan na tinatawag na 'Ring of Glory' ay kailangan upang makuha ang pagpapala at lakas ni Muren. Muling nagpakita ang presensya nito sa ating mga lupain. Ngunit hindi ka pa handa. Maghintay hanggang sa ikaw ay mas may karanasan na.</value>
+    <comment>legacy_id=100</comment>
+  </data>
+  <data name="Answer_100_Slot_0" xml:space="preserve">
+    <value>Kung gayon, ano ang kailangan kong gawin?</value>
+    <comment>legacy_id=2000</comment>
+  </data>
+  <data name="Text_101" xml:space="preserve">
+    <value>Mas maraming karanasan ang kailangan upang malampasan ang Quest na ito. Bumalik ka kapag nakakuha ka na ng hanggang 220 na antas ayon sa mga pagsubok ng nawawalang imperyo.</value>
+    <comment>legacy_id=101</comment>
+  </data>
+  <data name="Answer_101_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag dumating na ang aking oras.</value>
+    <comment>legacy_id=2010</comment>
+  </data>
+  <data name="Text_102" xml:space="preserve">
+    <value>Ang maalamat na kayamanan na tinatawag na 'Ring of Glory' ay kailangan upang makuha ang pagpapala at lakas ni Muren. Muling nagpakita ang presensya nito sa ating mga lupain.</value>
+    <comment>legacy_id=102</comment>
+  </data>
+  <data name="Answer_102_Slot_0" xml:space="preserve">
+    <value>Nais kong makarinig pa.</value>
+    <comment>legacy_id=2020</comment>
+  </data>
+  <data name="Text_103" xml:space="preserve">
+    <value>Ang sinumang may hawak ng 'Ring of Glory' ay nakakakuha ng pagpapala ni Muren. Sinasabing matatagpuan ito sa mga disyerto sa kabila ng dagat.</value>
+    <comment>legacy_id=103</comment>
+  </data>
+  <data name="Answer_103_Slot_0" xml:space="preserve">
+    <value>Bakit kaya?</value>
+    <comment>legacy_id=2030</comment>
+  </data>
+  <data name="Text_104" xml:space="preserve">
+    <value>Ang mga halimaw doon ay medyo makapangyarihan. Sila ang may hawak ng singsing.</value>
+    <comment>legacy_id=104</comment>
+  </data>
+  <data name="Answer_104_Slot_0" xml:space="preserve">
+    <value>Mangyaring ulitin ang kuwento.</value>
+    <comment>legacy_id=2040</comment>
+  </data>
+  <data name="Answer_104_Slot_1" xml:space="preserve">
+    <value>Susubukan ko.</value>
+    <comment>legacy_id=2041</comment>
+  </data>
+  <data name="Answer_104_Slot_2" xml:space="preserve">
+    <value>Hindi pa ako handa.</value>
+    <comment>legacy_id=2042</comment>
+  </data>
+  <data name="Text_105" xml:space="preserve">
+    <value>Ang 'Ring of Glory' ay maaaring nasa isang lugar na mas malapit kaysa sa iyong iniisip. Kapag nakuha mo ito, tiyak na mararamdaman mo ang pagbabago sa iyong kapangyarihan. Ngunit hindi ito magiging madaling gawain.</value>
+    <comment>legacy_id=105</comment>
+  </data>
+  <data name="Answer_105_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang nito.</value>
+    <comment>legacy_id=2050</comment>
+  </data>
+  <data name="Text_108" xml:space="preserve">
+    <value>Ito nga ang 'Ring of Glory'. Kumikinang ito ng mahiwagang aura, higit pa sa aking inakala. Ang singsing na ito ay may taglay na alamat na hindi mo man lang maisip. Ito ay isang tunay na pagpapala sa iyong mga kamay.</value>
+    <comment>legacy_id=108</comment>
+  </data>
+  <data name="Answer_108_Slot_0" xml:space="preserve">
+    <value>Naiintindihan ko.</value>
+    <comment>legacy_id=2080</comment>
+  </data>
+  <data name="Text_109" xml:space="preserve">
+    <value>Ang singsing na ito ay sinasabing nagbibigay-buhay muli at nagbibigay ng walang hanggang kabataan. Ngunit gumagana lamang ito sa mga bayaning may kapangyarihang gamitin ang lakas nito.</value>
+    <comment>legacy_id=109</comment>
+  </data>
+  <data name="Answer_109_Slot_0" xml:space="preserve">
+    <value>Bakit kaya?</value>
+    <comment>legacy_id=2090</comment>
+  </data>
+  <data name="Text_110" xml:space="preserve">
+    <value>Iyon ay dahil si Etramu, ang Wizard ng Arka, ay naglagay ng sumpa upang pigilan ang masama na samantalahin ito. Ngunit sinasabi ng singsing na karapat-dapat ka rito.</value>
+    <comment>legacy_id=110</comment>
+  </data>
+  <data name="Answer_110_Slot_0" xml:space="preserve">
+    <value>Ganoon ba?</value>
+    <comment>legacy_id=2100</comment>
+  </data>
+  <data name="Text_111" xml:space="preserve">
+    <value>Ang 'Ring of Glory' ay nilikha noong ang propesiyang Secromicon ay ginawa gamit ang isang hindi nasisira na metal. Ang dalawa ay itinuturing na banal, ngunit ang kanilang kinalalagyan ay naging hindi alam nang ito ay kunin sa panahon ng pag-aalsa ng kinatawang kumander na si Gaion.</value>
+    <comment>legacy_id=111</comment>
+  </data>
+  <data name="Answer_111_Slot_0" xml:space="preserve">
+    <value>Ganoon ba?!</value>
+    <comment>legacy_id=2110</comment>
+  </data>
+  <data name="Text_112" xml:space="preserve">
+    <value>Ngayong nahanap na ang 'Ring of Glory', mas mapapaunlad mo pa ang iyong sarili bilang mandirigma.</value>
+    <comment>legacy_id=112</comment>
+  </data>
+  <data name="Answer_112_Slot_0" xml:space="preserve">
+    <value>Nararamdaman kong lumalakas ang aking kakayahan!</value>
+    <comment>legacy_id=2120</comment>
+  </data>
+  <data name="Text_113" xml:space="preserve">
+    <value>Magiging mas dakila ka kaysa dati. Mangyaring gamitin ang iyong kapangyarihan para sa kapayapaan ng ating imperyo.</value>
+    <comment>legacy_id=113</comment>
+  </data>
+  <data name="Answer_113_Slot_0" xml:space="preserve">
+    <value>Gagawin ko.</value>
+    <comment>legacy_id=2130</comment>
+  </data>
+  <data name="Text_114" xml:space="preserve">
+    <value>Mayroon ka na ng banal na kapangyarihan.</value>
+    <comment>legacy_id=114</comment>
+  </data>
+  <data name="Answer_114_Slot_0" xml:space="preserve">
+    <value>Babalik ako mamaya.</value>
+    <comment>legacy_id=2140</comment>
+  </data>
+  <data name="Text_115" xml:space="preserve">
+    <value>Ang 'Dark Stone' na sinasabing nagbibigay ng bagong kapangyarihan sa mga mandirigma ay natagpuan sa kontinente ng Mu. Gayunpaman, hindi ka pa handang gamitin ang kapangyarihang iyon. Maghintay hanggang sa ikaw ay handa na.</value>
+    <comment>legacy_id=115</comment>
+  </data>
+  <data name="Answer_115_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2150</comment>
+  </data>
+  <data name="Text_116" xml:space="preserve">
+    <value>Upang makuha ang ganap na kapangyarihan, kailangan mong ihanda ang iyong sarili gamit ang 'Scroll of the Emperor' na nagtatala ng mga makasaysayang katotohanan ni Emperador Muren. Pumunta kay 'Sevina' sa Devias.</value>
+    <comment>legacy_id=116</comment>
+  </data>
+  <data name="Answer_116_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2160</comment>
+  </data>
+  <data name="Text_117" xml:space="preserve">
+    <value>Nabigo kang maging isang Blade Knight. Bumalik ka matapos mong makakuha ng bagong kapangyarihan sa pamamagitan ng 'Ring of Glory'.</value>
+    <comment>legacy_id=117</comment>
+  </data>
+  <data name="Answer_117_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2170</comment>
+  </data>
+  <data name="Text_118" xml:space="preserve">
+    <value>Kailangan mong maghandog ng 3,000,000 zen sa mga Diyos upang pagpalain ang quest na ito. Hindi sapat ang iyong zen</value>
+    <comment>legacy_id=118</comment>
+  </data>
+  <data name="Answer_118_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang 3,000,000 Zen.</value>
+    <comment>legacy_id=2180</comment>
+  </data>
+  <data name="Text_119" xml:space="preserve">
+    <value>Hindi sapat ang iyong handog sa Diyos. Sasabihin ko sa iyo ang tungkol sa orakulo kung maghahandog ka ng 2,000,000 Zen.</value>
+    <comment>legacy_id=119</comment>
+  </data>
+  <data name="Answer_119_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang 2,000,000 Zen</value>
+    <comment>legacy_id=2190</comment>
+  </data>
+  <data name="Text_130" xml:space="preserve">
+    <value>Ito nga ang 'Ring of Glory'. Tingnan mo kung paano ito kumikinang. Ang singsing na ito ay naglalaman ng oras at alamat na hindi mo man lang maisip. Isang pagpapala na nahanap mo ito!</value>
+    <comment>legacy_id=130</comment>
+  </data>
+  <data name="Answer_130_Slot_0" xml:space="preserve">
+    <value>Nagulat ako sa narinig ko!</value>
+    <comment>legacy_id=2300</comment>
+  </data>
+  <data name="Text_131" xml:space="preserve">
+    <value>Oo, ang singsing ay sinasabing may kapangyarihang magbigay-buhay sa mga patay at magbigay ng walang hanggang kabataan. Gagana lamang ito nang husto kapag ito ay nasa kamay ng isang tunay na bayaning may kakayahang kontrolin ang kapangyarihan ng singsing.</value>
+    <comment>legacy_id=131</comment>
+  </data>
+  <data name="Answer_131_Slot_0" xml:space="preserve">
+    <value>Bakit kaya?</value>
+    <comment>legacy_id=2310</comment>
+  </data>
+  <data name="Text_132" xml:space="preserve">
+    <value>Iyon ay dahil si Etramu, ang Wizard ng Arka, ay naglagay ng sumpa dito upang hindi ito mapunta sa maling mga tao. Ngunit tila ikaw ang tamang tao!</value>
+    <comment>legacy_id=132</comment>
+  </data>
+  <data name="Answer_132_Slot_0" xml:space="preserve">
+    <value>Ganoon ba!</value>
+    <comment>legacy_id=2320</comment>
+  </data>
+  <data name="Text_133" xml:space="preserve">
+    <value>Ang 'Ring of Glory' ay nilikha noong ang propesiyang Secromicon ay ginawa gamit ang isang hindi nasisira na metal. Ang dalawa ay itinuturing na banal, ngunit ang kanilang kinalalagyan ay naging hindi alam nang ito ay kunin sa panahon ng pag-aalsa ng kinatawang kumander na si Gaion.</value>
+    <comment>legacy_id=133</comment>
+  </data>
+  <data name="Answer_133_Slot_0" xml:space="preserve">
+    <value>Ganoon ba!</value>
+    <comment>legacy_id=2330</comment>
+  </data>
+  <data name="Text_134" xml:space="preserve">
+    <value>Ngayong nahanap na ang 'Ring of Glory', mas mapapaunlad mo pa ang iyong sarili bilang mandirigma.</value>
+    <comment>legacy_id=134</comment>
+  </data>
+  <data name="Answer_134_Slot_0" xml:space="preserve">
+    <value>Nararamdaman kong lumalakas ang aking kakayahan!</value>
+    <comment>legacy_id=2340</comment>
+  </data>
+  <data name="Text_135" xml:space="preserve">
+    <value>Kung nais mong makakuha ng bagong kapangyarihan, makinig ka nang mabuti sa akin. Ang 'Dark Stone' na sinasabing nagbibigay ng bagong kapangyarihan sa mga mandirigma ay natagpuan sa kontinente ng Mu.</value>
+    <comment>legacy_id=135</comment>
+  </data>
+  <data name="Answer_135_Slot_0" xml:space="preserve">
+    <value>Nais kong makarinig pa.</value>
+    <comment>legacy_id=2350</comment>
+  </data>
+  <data name="Text_136" xml:space="preserve">
+    <value>Gamit ang 'Dark Stone', makakakuha ka ng bagong kakayahan. Hindi ito magiging madaling gawain, ngunit dahil nakuha mo ang 'Ring of Glory', maaaring magagawa mo ito.</value>
+    <comment>legacy_id=136</comment>
+  </data>
+  <data name="Answer_136_Slot_0" xml:space="preserve">
+    <value>Ano ang kailangan kong gawin?</value>
+    <comment>legacy_id=2360</comment>
+  </data>
+  <data name="Text_137" xml:space="preserve">
+    <value>Sabi ng sabi-sabi, mahahanap mo ang bato sa Tarkan at Icarus. Mag-ingat sa mga halimaw. Ang mga halimaw na may hawak ng bato ay tutugon lamang sa mga may espesyal na kakayahan.</value>
+    <comment>legacy_id=137</comment>
+  </data>
+  <data name="Answer_137_Slot_0" xml:space="preserve">
+    <value>Mangyaring ulitin muli ang kuwento.</value>
+    <comment>legacy_id=2370</comment>
+  </data>
+  <data name="Answer_137_Slot_1" xml:space="preserve">
+    <value>Kung gayon, susubukan ko!</value>
+    <comment>legacy_id=2371</comment>
+  </data>
+  <data name="Answer_137_Slot_2" xml:space="preserve">
+    <value>Hindi pa ako kumpiyansa.</value>
+    <comment>legacy_id=2372</comment>
+  </data>
+  <data name="Text_138" xml:space="preserve">
+    <value>Ang 'Dark Stone' ay tinatawag ka ngayon. Gamit ito sa kamay, tiyak na makakakuha ka ng kapangyarihang hindi mo pa nararamdaman kailanman, ngunit marami ring ibang mandirigma ang desperadong naghahanap din ng bato.</value>
+    <comment>legacy_id=138</comment>
+  </data>
+  <data name="Answer_138_Slot_0" xml:space="preserve">
+    <value>Babalik ako na may dalang 'Dark Stone'.</value>
+    <comment>legacy_id=2380</comment>
+  </data>
+  <data name="Text_139" xml:space="preserve">
+    <value>Kaya nahanap mo ang 'Dark Stone'. Naitala na ang batong ito ay ang tuyong dugo ng bayaning si 'Benelope' na nakipaglaban sa Digmaan ng mga Diyos at ni Satanas.</value>
+    <comment>legacy_id=139</comment>
+  </data>
+  <data name="Answer_139_Slot_0" xml:space="preserve">
+    <value>Sabihin mo pa.</value>
+    <comment>legacy_id=2390</comment>
+  </data>
+  <data name="Text_140" xml:space="preserve">
+    <value>Si Benelope ay nagmula sa lahi ng knight. Matapos ang kanyang pagkatalo sa Digmaan, nagsanay siya para sa bagong mahika at mga kasanayan sa pakikipaglaban. Ang mga kasanayang ito ay tahimik na ipinamana sa mga mandirigmang may dugo ng knight upang labanan ang makapangyarihang puwersa ni Kundun.</value>
+    <comment>legacy_id=140</comment>
+  </data>
+  <data name="Answer_140_Slot_0" xml:space="preserve">
+    <value>Kaya pala...</value>
+    <comment>legacy_id=2400</comment>
+  </data>
+  <data name="Text_141" xml:space="preserve">
+    <value>Oo, ang dugo ng mandirigma ay dumadaloy sa iyo. Kung gayon, ang kapangyarihan ni Benelope ay ibibigay sa iyo sa pamamagitan ng Dark Stone.</value>
+    <comment>legacy_id=141</comment>
+  </data>
+  <data name="Answer_141_Slot_0" xml:space="preserve">
+    <value>Nabigyan ako ng bagong kapangyarihan!</value>
+    <comment>legacy_id=2410</comment>
+  </data>
+  <data name="Text_142" xml:space="preserve">
+    <value>Nakakuha ka ng bagong kapangyarihan sa pamamagitan ng 'Ring of Glory'. Ngunit mayroong isang bagay na hindi mo alam.</value>
+    <comment>legacy_id=142</comment>
+  </data>
+  <data name="Answer_142_Slot_0" xml:space="preserve">
+    <value>Ano iyon?</value>
+    <comment>legacy_id=2420</comment>
+  </data>
+  <data name="Text_143" xml:space="preserve">
+    <value>Posibleng makakuha ka pa ng bagong kapangyarihan. Ang maalamat na kayamanan na tinatawag na 'Dark Stone', na itinuturing na banal kasama ng 'Ring of Glory', ay tinatawag ka.</value>
+    <comment>legacy_id=143</comment>
+  </data>
+  <data name="Answer_143_Slot_0" xml:space="preserve">
+    <value>Mahirap paniwalaan iyon!</value>
+    <comment>legacy_id=2430</comment>
+  </data>
+  <data name="Text_144" xml:space="preserve">
+    <value>Si Lugard ang Diyos ng Liwanag ay may hinihinging pabor sa iyo. Gayunpaman, hindi ka pa kwalipikado. Iminumungkahi kong bumalik ka kapag ikaw ay mas naging malakas na.</value>
+    <comment>legacy_id=144</comment>
+  </data>
+  <data name="Answer_144_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag mas malakas na ako.</value>
+    <comment>legacy_id=2440</comment>
+  </data>
+  <data name="Text_145" xml:space="preserve">
+    <value> Si Lugard ang Diyos ng Liwanag ay may hinihinging pabor sa iyo. Gayunpaman, hindi ka pa kwalipikado. Mangyaring bumalik ka kapag natapos mo na ang nakaraang quest.</value>
+    <comment>legacy_id=145</comment>
+  </data>
+  <data name="Answer_145_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag natapos ko na ito.</value>
+    <comment>legacy_id=2450</comment>
+  </data>
+  <data name="Text_146" xml:space="preserve">
+    <value>Hindi sapat ang iyong Zen. Maaari kang mag-apply para sa misyong ito sa pamamagitan ng paghahandog ng 5,000,000 Zen kay Lugard.</value>
+    <comment>legacy_id=146</comment>
+  </data>
+  <data name="Answer_146_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2460</comment>
+  </data>
+  <data name="Text_147" xml:space="preserve">
+    <value> Si Lugard ang Diyos ng Liwanag ay may hinihinging pabor sa iyo.</value>
+    <comment>legacy_id=147</comment>
+  </data>
+  <data name="Answer_147_Slot_0" xml:space="preserve">
+    <value>Ano iyon?</value>
+    <comment>legacy_id=2470</comment>
+  </data>
+  <data name="Text_148" xml:space="preserve">
+    <value> Hiniling ni Lugard na humanap ka ng mga bayaning lalaban sa bagong banta ni Balgass sa MU.</value>
+    <comment>legacy_id=148</comment>
+  </data>
+  <data name="Answer_148_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2480</comment>
+  </data>
+  <data name="Text_149" xml:space="preserve">
+    <value>Alam namin na ang hukbo ni Balgass ay paparating laban sa Kontinente ng MU sa pamamagitan ng Cry Wolf Fortress, ngunit wala pang eksaktong interpretasyon ng buong kuwento.</value>
+    <comment>legacy_id=149</comment>
+  </data>
+  <data name="Answer_149_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2490</comment>
+  </data>
+  <data name="Text_150" xml:space="preserve">
+    <value>Pilit naming naiintindihan ang kahulugan ng tiwala ni Lugard sa amin, ngunit nahihirapan pa rin kami dahil sa aming hindi sapat na kakayahan.</value>
+    <comment>legacy_id=150</comment>
+  </data>
+  <data name="Answer_150_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2500</comment>
+  </data>
+  <data name="Text_151" xml:space="preserve">
+    <value>Naniniwala ako na kayo ang mga taong makakatulong sa amin. Interesado ka bang makipagtulungan sa amin?</value>
+    <comment>legacy_id=151</comment>
+  </data>
+  <data name="Answer_151_Slot_0" xml:space="preserve">
+    <value>Makinig muli.</value>
+    <comment>legacy_id=2510</comment>
+  </data>
+  <data name="Answer_151_Slot_1" xml:space="preserve">
+    <value>Tanggapin ang hiling</value>
+    <comment>legacy_id=2511</comment>
+  </data>
+  <data name="Answer_151_Slot_2" xml:space="preserve">
+    <value>Tanggihan ang hiling</value>
+    <comment>legacy_id=2512</comment>
+  </data>
+  <data name="Text_152" xml:space="preserve">
+    <value>Upang matulungan mo kami, kailangan mong labanan ang hukbo ni Balgass. Bago ka magsimula, kailangan kong suriin kung sapat ang iyong kapangyarihan para sa misyon.</value>
+    <comment>legacy_id=152</comment>
+  </data>
+  <data name="Answer_152_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2520</comment>
+  </data>
+  <data name="Text_153" xml:space="preserve">
+    <value>Lupigin ang mga halimaw na Death Beam, Hellmaine, at Dark Phoenix na namumuno sa Tarkan, Aida, at Icarus at ibalik ang 3 piraso ng ebidensya nang naaayon.</value>
+    <comment>legacy_id=153</comment>
+  </data>
+  <data name="Answer_153_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2530</comment>
+  </data>
+  <data name="Text_154" xml:space="preserve">
+    <value>Binabati kita, natapos mo ang tungkulin. Narito ang kaunting regalo para sa iyong pagsisikap.</value>
+    <comment>legacy_id=154</comment>
+  </data>
+  <data name="Answer_154_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2540</comment>
+  </data>
+  <data name="Text_155" xml:space="preserve">
+    <value>Si Balgass ay isang malaking banta dahil nakikipagtulungan siya kay Eresia ang Reyna ng Mahika at nagdala ng ganitong panganib sa mundong ito</value>
+    <comment>legacy_id=155</comment>
+  </data>
+  <data name="Answer_155_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2550</comment>
+  </data>
+  <data name="Text_156" xml:space="preserve">
+    <value>Inaasahan namin na si Balgass ay nagtatangka ng bagong banta laban sa Kontinente ng MU gamit ang kanyang hukbo ng masamang mahika.</value>
+    <comment>legacy_id=156</comment>
+  </data>
+  <data name="Answer_156_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2560</comment>
+  </data>
+  <data name="Text_157" xml:space="preserve">
+    <value>Hindi sapat ang iyong pondo. Mangyaring maghandog ng 7,000,000 Zen kay Lugard upang mag-apply para sa misyong ito.</value>
+    <comment>legacy_id=157</comment>
+  </data>
+  <data name="Answer_157_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2570</comment>
+  </data>
+  <data name="Text_158" xml:space="preserve">
+    <value>Maligayang pagdating, talagang handa ka na tulungan kami ngayon.</value>
+    <comment>legacy_id=158</comment>
+  </data>
+  <data name="Answer_158_Slot_0" xml:space="preserve">
+    <value>Ano ang kailangan ninyong tulong?</value>
+    <comment>legacy_id=2580</comment>
+  </data>
+  <data name="Text_159" xml:space="preserve">
+    <value>Buweno, ayon sa aming impormasyon si Balgass ay bumuo ng mga lugar na tinatawag na Barracks. Naniniwala ang 12 apostol ni Lugard na ito ay isang bagong banta mula kay Balgass.</value>
+    <comment>legacy_id=159</comment>
+  </data>
+  <data name="Answer_159_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2590</comment>
+  </data>
+  <data name="Text_160" xml:space="preserve">
+    <value>Ang tumpak na impormasyon tungkol sa 'Barrack' ay nagtutulak sa isa na pumasok sa Barrack zone upang bawasan ang banta ng karagdagang pag-unlad ng hukbo ni Balgass.</value>
+    <comment>legacy_id=160</comment>
+  </data>
+  <data name="Answer_160_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2600</comment>
+  </data>
+  <data name="Text_161" xml:space="preserve">
+    <value>Sa kabutihang palad, ang pangangalaga ni Lugard ay nakatulong na mahanap ang paraan upang makapasok sa Barrack ni Balgass. Pumasok sa zone, lipulin ang mga sundalo, at kumuha ng tumpak na impormasyon. Ibabalik mo ba ang tamang datos nang naaayon?</value>
+    <comment>legacy_id=161</comment>
+  </data>
+  <data name="Answer_161_Slot_0" xml:space="preserve">
+    <value>Makinig muli.</value>
+    <comment>legacy_id=2610</comment>
+  </data>
+  <data name="Answer_161_Slot_1" xml:space="preserve">
+    <value>Tanggapin ang hiling</value>
+    <comment>legacy_id=2611</comment>
+  </data>
+  <data name="Answer_161_Slot_2" xml:space="preserve">
+    <value>Tanggihan ang hiling</value>
+    <comment>legacy_id=2612</comment>
+  </data>
+  <data name="Text_162" xml:space="preserve">
+    <value>Pumunta sa hilagang sementeryo ng Cry Wolf zone at hanapin ang kanlungan ng sundalo mula sa Barrack ni Balgass. Ang pagpapala ni Lugard ay nagdulot ng katalinuhan sa isa. Tinatawag niya ang kanyang sarili na Werewolf Guardsman.</value>
+    <comment>legacy_id=162</comment>
+  </data>
+  <data name="Answer_162_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2620</comment>
+  </data>
+  <data name="Text_163" xml:space="preserve">
+    <value>Dadala ka niya sa Barrack ni Balgass. Pumasok sa zone at lipulin ang hindi bababa sa 10 halimaw sa Barrack.</value>
+    <comment>legacy_id=163</comment>
+  </data>
+  <data name="Answer_163_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2630</comment>
+  </data>
+  <data name="Text_164" xml:space="preserve">
+    <value>Ligtas mong natapos ang tungkulin. Pinahahalagahan ko ang iyong pagsisikap at ang matibay mong kalooban.</value>
+    <comment>legacy_id=164</comment>
+  </data>
+  <data name="Answer_164_Slot_0" xml:space="preserve">
+    <value>Ituloy ang usapan.</value>
+    <comment>legacy_id=2640</comment>
+  </data>
+  <data name="Text_165" xml:space="preserve">
+    <value>Malaki ang naitulong mo sa pagbuo ng kapayapaan sa Kontinente ng MU at Cry Wolf gamit ang impormasyon at lahat ng mga nalipol na halimaw.</value>
+    <comment>legacy_id=165</comment>
+  </data>
+  <data name="Answer_165_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2650</comment>
+  </data>
+  <data name="Text_166" xml:space="preserve">
+    <value>Hindi ka pa kwalipikado. Bisitahin si Security Guard Mallon, at bumalik ka kapag ganap ka nang kwalipikado para sa misyon.</value>
+    <comment>legacy_id=166</comment>
+  </data>
+  <data name="Answer_166_Slot_0" xml:space="preserve">
+    <value>Tapusin ang kuwento.</value>
+    <comment>legacy_id=2660</comment>
+  </data>
+  <data name="Text_167" xml:space="preserve">
+    <value>Hindi sapat ang iyong pondo. Mangyaring maghandog ng 10,000,000 Zen kay Lugard upang mag-apply para sa misyong ito.</value>
+    <comment>legacy_id=167</comment>
+  </data>
+  <data name="Answer_167_Slot_0" xml:space="preserve">
+    <value>Babalik ako kapag handa na ako.</value>
+    <comment>legacy_id=2670</comment>
+  </data>
+  <data name="Text_168" xml:space="preserve">
+    <value>Ang iyong inisyatibong katapangan ay nagpakita ng dakilang pag-asa sa ating lahat.</value>
+    <comment>legacy_id=168</comment>
+  </data>
+  <data name="Answer_168_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2680</comment>
+  </data>
+  <data name="Text_169" xml:space="preserve">
+    <value>Nagtatago si Balgass sa kanyang sarili sa isang hiwalay na lugar upang maibalik ang kanyang sarili mula sa pagkapagod ng katawan.</value>
+    <comment>legacy_id=169</comment>
+  </data>
+  <data name="Answer_169_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2690</comment>
+  </data>
+  <data name="Text_170" xml:space="preserve">
+    <value>Upang sundin ang ipinagkatiwalang misyon ni Lugard, ang eksaktong lokasyon ni Balgass ay dapat matagpuan at ang hukbong nagsasanay ay dapat lipulin.</value>
+    <comment>legacy_id=170</comment>
+  </data>
+  <data name="Answer_170_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2700</comment>
+  </data>
+  <data name="Text_171" xml:space="preserve">
+    <value>Ang huling misyon na susundin matapos ang misyon ni Lugard ay may kasamang malaki at mahirap na pagsubok. Interesado ka pa rin ba?</value>
+    <comment>legacy_id=171</comment>
+  </data>
+  <data name="Answer_171_Slot_0" xml:space="preserve">
+    <value>Makinig muli.</value>
+    <comment>legacy_id=2710</comment>
+  </data>
+  <data name="Answer_171_Slot_1" xml:space="preserve">
+    <value>Tanggapin ang hiling</value>
+    <comment>legacy_id=2711</comment>
+  </data>
+  <data name="Answer_171_Slot_2" xml:space="preserve">
+    <value>Tanggihan ang hiling</value>
+    <comment>legacy_id=2712</comment>
+  </data>
+  <data name="Text_172" xml:space="preserve">
+    <value>Pumasok sa loob sa pamamagitan ng pinto sa hilagang gilid ng Barrack ni Balgass; Ihahanda namin ang lugar nang maaga.</value>
+    <comment>legacy_id=172</comment>
+  </data>
+  <data name="Answer_172_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2720</comment>
+  </data>
+  <data name="Text_173" xml:space="preserve">
+    <value>Binabati kita, nalampasan mo ang huling pagsubok ni Lugard. At ngayon, ang kanyang pagpapala ay sasaiyo saan ka man pumunta.</value>
+    <comment>legacy_id=173</comment>
+  </data>
+  <data name="Answer_173_Slot_0" xml:space="preserve">
+    <value>Ituloy ang pakikinig.</value>
+    <comment>legacy_id=2730</comment>
+  </data>
+  <data name="Text_174" xml:space="preserve">
+    <value>Ang iyong pagsisikap ay nagbunga upang mapanatili ang kapayapaan sa Kontinente ng MU at Cry Wolf mula sa bagong banta ni Balgass. Lubos kong pinahahalagahan ang iyong tulong.</value>
+    <comment>legacy_id=174</comment>
+  </data>
+  <data name="Answer_174_Slot_0" xml:space="preserve">
+    <value>Tapusin na ang kuwento</value>
+    <comment>legacy_id=2740</comment>
+  </data>
+</root>

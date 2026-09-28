@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">帳號</string>
+    <string name="account_portal_address">帳號入口網址</string>
+    <string name="account_portal_language">帳號入口語言</string>
+    <string name="account_register">註冊</string>
+    <string name="account_change_password">修改密碼</string>
+    <string name="account_reset_password">忘記密碼？</string>
+    <string name="account_portal_settings">帳號設定</string>
+    <string name="account_portal_not_configured">請在設定中填入有效的帳號入口網址。</string>
+    <string name="account_portal_invalid">請輸入 HTTPS 根網址。HTTP 僅允許直接回環位址或可信本機配對；不能包含帳號憑證、路徑、查詢參數或片段。</string>
+    <string name="account_portal_no_browser">沒有可用來開啟帳號入口的瀏覽器。</string>
+</resources>

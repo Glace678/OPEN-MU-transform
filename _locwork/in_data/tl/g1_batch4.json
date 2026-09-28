@@ -1,0 +1,1388 @@
+{
+ "strings": [
+  {
+   "id": 1513,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join in the fight for the castle? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1514,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join the fight for the castle? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1515,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 220-270)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1516,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1517,
+   "en": "Having set his eyes on the tree's power of birth, Secrarium corrupted the Elf Tree and transformed it into an Immoral Tree that gave birth to monsters.  The monsters horde grew to astronomical proportions, and the kingdoms of the MU continent combined their forces to entrap the immoral tree in a space of nothingness.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1518,
+   "en": "Having trustworthy comrades at your side makes all the difference when it comes to Blood Castle quests. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1528,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Blood Castle challenge. Successfully complete the Blood Castle quest to receive a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1529,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Chaos Castle challenge. If you survive Chaos Castle, you can claim a hefty reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1530,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Devil Square challenge. Training at Devil Square will earn you a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1531,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Illusion Temple challenge. Win at Illusion Temple to claim a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1542,
+   "en": "Help the reconnaissance party....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1545,
+   "en": "Here is the Letter of Request for you. Right click on the letter to check the information. Please note that you cannot receive refund of 500,000 Zen deposit if you give up the quest. You also need to bring the 'Request Completion Certificate' to get the refund. Once again, you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Good bye, then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1546,
+   "en": "Here it is.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1547,
+   "en": "Here you go.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1548,
+   "en": "Here's your first question.;How do you trade with a character that's in front of you?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1550,
+   "en": "Heroic Courage",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1551,
+   "en": "Heroic Fighting Spirit",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1552,
+   "en": "Heroic Mentality",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1553,
+   "en": "Heroic Qualities",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1554,
+   "en": "Heroic Tenacity",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1555,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. The sealed stone got stronger thanks to your effort, but Kundun's army is also getting stronger now. We investigated the sealed stone and found that Kundun's army absorbs its energy while Etramu's soul is taking a rest. Please help us and confine the energy of insanity within the sealed stone. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1556,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. This temple is Kundun's first target since Etramu keeps his body in the sealed stone. We're always short of fighters so I request help to the mercenary guild. Would you check the request? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1557,
+   "en": "Hidden history of the rebellion",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1561,
+   "en": "High ranking monsters deep inside the Lost Tower have launched a surprise attack on our reconnaissance party. Under the captain's orders to retaliate, we are now forming a punishment force. Will you accept this quest? (Level 206-209)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1564,
+   "en": "Hmm, Letter of Request……",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1565,
+   "en": "Hmm, free mercenary……",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1566,
+   "en": "Hmm... that doesn't sound all that bad.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1567,
+   "en": "Hmm... you are a wise warrior. Go now and achieve great things in the name Gens Vanert, knowing that I will always be here to assist you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1568,
+   "en": "Hmm...First, press M and then...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1569,
+   "en": "Hmm...a test...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1570,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 260-289)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1571,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 290-319)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1572,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 320-349)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1580,
+   "en": "How can I turn him down...?;Alright, let's give it a try!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1581,
+   "en": "How do I check coordinates?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1582,
+   "en": "How do I get it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1583,
+   "en": "How do you do? I am Gregory, the Gens Duprian Steward. What is your business with our gens?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1584,
+   "en": "How have you been? On behalf of the master of our clan, I thank you for answering the call of the clan. I personally hate to let the wandering mercenaries do this job, so I requested to send someone of the clan. I hope this didn't offend you. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1585,
+   "en": "How much is the registration fee and the deposit?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1586,
+   "en": "How will you help, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1587,
+   "en": "However, journeys such as this are bound to be perilous.;If you wish, we can provide you with a simple tutorial. What do you say?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1588,
+   "en": "Hunt down 10 Spiders from around town, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1590,
+   "en": "Hunting down measly Spiders is beneath me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1591,
+   "en": "Hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1592,
+   "en": "Hunting monsters will earn you EXP points, drop items, and Zens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1600,
+   "en": "I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1601,
+   "en": "I accept your quest. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1602,
+   "en": "I already knew that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1603,
+   "en": "I already knew that. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1604,
+   "en": "I am not ready yet. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1605,
+   "en": "I can almost see the end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1606,
+   "en": "I can't pass up on this. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1607,
+   "en": "I didn't mean to pester you. But as the clan gets stronger, so do you. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1608,
+   "en": "I don't feel like doing it. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1609,
+   "en": "I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1610,
+   "en": "I don't have the time right now. I'll do it next time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1611,
+   "en": "I don't have the time. I'm sorry. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1612,
+   "en": "I don't have time right now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1613,
+   "en": "I don't know how this story can help me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1614,
+   "en": "I don't need to be judged like this! (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1615,
+   "en": "I don't think I have time for that right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1616,
+   "en": "I don't want to decide right now. Just describe them for me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1617,
+   "en": "I give up. Going any further is beyond me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1618,
+   "en": "I got it!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1619,
+   "en": "I guess Lugard was tricked by Secrarium. How do I participate?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1620,
+   "en": "I have a monster hunt quest that will take you deeper into the Dungeon than before. Will you accept this quest? (Level 101-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1621,
+   "en": "I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1622,
+   "en": "I have a quest that will take you deep inside the Dungeon. It'll be harder than last time, but there's a better reward. Will you accept this quest? (Level 121-130)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1623,
+   "en": "I have a quest that will take you deep inside the Dungeon. There have been reports of monsters attempting to make their way above ground under the command of Gorgons. I want you to defeat these monsters. (Level 111-120)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1624,
+   "en": "I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1625,
+   "en": "I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1626,
+   "en": "I have no time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1627,
+   "en": "I have plenty of experience.;To each his own!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1628,
+   "en": "I hope you realize that a hero without a fighting spirit is merely a coward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1629,
+   "en": "I know it well. I hear you need a special item to go there....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1630,
+   "en": "I know it well. I hear you need an item to participate in the event....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1631,
+   "en": "I learned a skill!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1632,
+   "en": "I need you to accept a small quest first as a test. Are you up to it? There is of course a reasonable reward for finishing.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1633,
+   "en": "I neither have the skills nor the warriors I need to take on this quest. Give me more time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1634,
+   "en": "I regret we can't be of any help to you.;Here, at least take this present. I hope, the next time we meet, a great warrior stands before my eyes.;Enjoy your time out there.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1635,
+   "en": "I respect your decision to go on this journey.;Allow me to teach you a few simple but essential things you need to know before your adventure in MU begins.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1636,
+   "en": "I see you've now mastered hunting. When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1637,
+   "en": "I see you've successfully completed your first hunt! Did you find it difficult? Hunting monsters will earn you EXP points, drop items, and Zens.;You can pick up items dropped by defeated monsters using the mouse or automatically by pressing the space bar.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1638,
+   "en": "I see.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1639,
+   "en": "I see. How do I enter?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1640,
+   "en": "I simply can't go on anymore. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1641,
+   "en": "I think I have enough courage already. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1642,
+   "en": "I think a quest involving the Dungeon, which is a headache for Lorencia, should be suitable for you. I want you to wipe out the monsters in the Dungeon, one by one. Will you accept this quest? (Level 91-100)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1643,
+   "en": "I trust you are quite used to Devil Square by now. However, obtaining an invitation to Devil Square remains a difficult task. Luckily, I have a quest that will earn you an invitation. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1644,
+   "en": "I trust you are somewhat familiar with Blood Castle by now. You should now focus on building the bond between you and your comrades to the point where you can rely on each another unconditionally.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1645,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. However, it should still be difficult for you to acquire the necessary item. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1646,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. The event will now be even more challenging because you will face more powerful users and corrupt guardsmen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1647,
+   "en": "I trust you are somewhat familiar with Devil Square by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades execute coordinated attacks.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1648,
+   "en": "I trust you are somewhat familiar with Illusion Temple by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades learn to work together.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1649,
+   "en": "I understand well. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1650,
+   "en": "I understand.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1651,
+   "en": "I understand. I will do what I can.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1652,
+   "en": "I want to be an Elf who focuses on defense!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1653,
+   "en": "I want to be an Elf who focuses on wizardry!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1654,
+   "en": "I want to hear more. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1655,
+   "en": "I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1656,
+   "en": "I will give you the queen's gifts if you pass a test to see if there's anything else you need to know and if you have the basic knowledge to travel throughout the MU realm. How about it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1657,
+   "en": "I will guide you through MU game play.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1658,
+   "en": "I will help you. Tell me what to do. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1659,
+   "en": "I will inform you when a request of your level is delivered. Thank you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1660,
+   "en": "I will sign up. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1661,
+   "en": "I will teach you basic hunting and controls through a simple tutorial.;It's not that difficult, and I'm sure you'll finish it in no time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1662,
+   "en": "I will teach you hunting and control commands through a simple tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1663,
+   "en": "I will tell you then. Devildom's royal guards, who were summoned when Kundun succumbed to Secrarium, posed a great threat to the heaven world. To protect their base, the Twelve Saints formed a barrier around Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1664,
+   "en": "I'd rather you give me the gifts without the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1665,
+   "en": "I'll explain this in more detail. What else do you wish to know?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1666,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you… (The quest has been cancelled)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1667,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you… (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1668,
+   "en": "I'll head for Vulcanus immediately. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1669,
+   "en": "I'll just take the queen's gifts without taking the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1670,
+   "en": "I'll stay focused until the very end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1671,
+   "en": "I'll test you to see if you have the basic knowledge required for travel throughout the MU empire and give you the queen's gifts if you pass.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1672,
+   "en": "I'm always up for hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1673,
+   "en": "I'm busy now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1674,
+   "en": "I'm glad we can help. We aren't difficult to find.;Simply look for and talk to the Shadow Phantom Soldier in any of the towns.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1675,
+   "en": "I'm here for your request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1676,
+   "en": "I'm not ready yet. Please wait. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1677,
+   "en": "I'm sorry to hear that. There are many ways to become stronger, but they'll all take time. Remember that well.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1678,
+   "en": "I'm sorry to hear that. You can't repeat the first mission if you abandon the second mission. You must complete the second mission before you can repeat the first mission. Please return if you change your mind.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1679,
+   "en": "I'm sorry. I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1680,
+   "en": "I'm sorry. I don't have the time. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1681,
+   "en": "I'm sure you are well aware of Kundun. The weakest and most disorganized monsters of Kundun's army are frequently attacking and plundering civilians just outside of town. I wanted to ask you to eliminate these plundering monsters.... Will you accept this quest? (Level 15-25)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1682,
+   "en": "I'm sure you have a long trail of defeated monsters behind you. However, travelers widely vary in terms of their skills. If you're unsure of your own skills, proving yourself at Chaos Castle should give you some clarity. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1683,
+   "en": "I'm too busy to help right now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1701,
+   "en": "Ice Walkers are attacking and weakening the barrier that was formed to separate La Cleon and Devias from one another. Go to La Cleon and defeat 120 Ice Walkers. Come see me once that's done to receive a Devil's Invitation + 6 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1705,
+   "en": "If you are an Agility Elf, whose priority is defense, you can equip a weapon and use its skills. If you are an Energy Elf, whose priority is wizardry, you can purchase orbs to learn skills.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1706,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1707,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1708,
+   "en": "If you don't want to receive party requests while hunting, simply type in 'Party off' in the Chat window. To start receiving party requests again, type in 'Request on' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1709,
+   "en": "If you find yourself far away from a town or cornered while on a hunt, the Town Portal Scroll can come in really handy.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1710,
+   "en": "If you leave the gens, your contribution will be reset.;Do you still wish to leave?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1711,
+   "en": "If you want to find out when you can enter, simply move your mouse over the Armor of Guardsman. If you want to enter, simply right-click on the armor at a designated time. Come see me when you have time, and I will give you a quest that will earn you the item needed to enter the event.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1722,
+   "en": "Illusion Spells, the foundation of Illusion Sorcery, was discovered by an Archaeologist named Mirage. Mirage found the spells' power to be too dangerous and sealed it. His partner Lev, however, stole the spells to brainwash people and establish Illusion Sorcery. Illusion Sorcery gradually grew larger and brought chaos to the continent.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1723,
+   "en": "Illusion Temple Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1724,
+   "en": "Illusion Temple Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1725,
+   "en": "Illusion Temple Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1726,
+   "en": "Illusion Temple Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1727,
+   "en": "Illusion Temple Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1728,
+   "en": "Illusion Temple Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1730,
+   "en": "Illusion Temple is a place where you can acquire items and equipment for fast growth. If you wish to possess such items and equipment for yourself, inquire with the Shadow Phantom Soldier about Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1731,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1732,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1733,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 351-380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1734,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1735,
+   "en": "Illusion Temple...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1743,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest, but more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1744,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1745,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1746,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1747,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1748,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1749,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1750,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1751,
+   "en": "In MU, it's possible to combine different items to create new ones. In fact, trying out different combinations of items adds a whole new dimension to MU.;Whom should you seek out in order to combine items?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1752,
+   "en": "In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination. Discovering areas that are right for your level and hunting there can also be very fun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1857,
+   "en": "Inland Supply Route!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1879,
+   "en": "Iron Riders have been launching guerilla attacks against our forces stationed throughout Kanturu Ruins. Eliminate these Iron Riders and relieve the stress of our gens members.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1882,
+   "en": "Is it time for me to return to the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1883,
+   "en": "Is the bond of your Blood Castle party still strong? If not, I suggest you return to Blood Castle to strengthen it. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1884,
+   "en": "Is there anything I need to be cautious of?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1885,
+   "en": "Is there anything I should be aware of about Illusion Temple?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1886,
+   "en": "Is there anything I should know about Devil Square?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1887,
+   "en": "It all makes sense now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1888,
+   "en": "It doesn't matter with the travelers, but you have to be careful when you kill a corrupt guardsman. Corrupt guardsmen will explode and may even push you off the arena. If this happens, you will be disqualified.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1889,
+   "en": "It really is easy to enter. What does the event involve, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1890,
+   "en": "It seems Cursed Liches are tormenting the residents of Elveland with their dark spells and curses. Hunt down 40 of those Cursed Liches, and I'll give you a Devil's Invitation +1 as a reward. I suggest you work with others for faster results.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1891,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1892,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

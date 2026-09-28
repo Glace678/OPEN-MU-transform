@@ -1,0 +1,5543 @@
+{
+ "locale": "id",
+ "language": "Indonesian (Bahasa Indonesia)",
+ "chunk": "g1",
+ "strings": [
+  {
+   "id": 23,
+   "en": "'Shadow Phantom Soldier' is looking for an adventurer who will do the jobs for the Shadow Phantom unit. Go check with him.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 24,
+   "en": "'Shadow Phantom Soldier' is looking for an adventurer who will do the quests of the Shadow Phantom unit. Go check with him.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 27,
+   "en": "...A bonus gift if I answer all the questions right?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 28,
+   "en": "...Finally, the tutorial's finished!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 29,
+   "en": "...Finding a merchant is more difficult than I thought.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 30,
+   "en": "...Hmm. I didn't know such thing existed.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 31,
+   "en": "...How do I do it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 32,
+   "en": "...I see it pays to know a lot of NPCs.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 33,
+   "en": "...I wish to learn about...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 34,
+   "en": "...I'm moved that the queen has made such orders.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 35,
+   "en": "...Is that right? And then I'd like to learn about...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 36,
+   "en": "...Shadow Phantom?;Guardians of the queen?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 37,
+   "en": "...Skill attacks?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 38,
+   "en": "...That's fantastic!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 39,
+   "en": "...The icon next to the number 1, 2, 3, 4, and 5 slots....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 40,
+   "en": "...The queen is very thoughtful!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 41,
+   "en": "...There's nothing to it. But I would like to learn more....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 42,
+   "en": "...This is Elveland, the kingdom of Summoners! So this is where my adventure begins.;How exhilarating!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 43,
+   "en": "...This is Lorencia, the kingdom of Dark Wizards and Dark Knights! So this is where my adventure begins.;Excellent! My adventure begins!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 44,
+   "en": "...This is Noria, the kingdom of Elves! So this is where my adventure begins.;How exhilarating!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 45,
+   "en": "...Town Portal Scroll?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 46,
+   "en": "...Uniria?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 47,
+   "en": "...Whispers...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 48,
+   "en": "...trade...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 50,
+   "en": "1 million Zen for free mercenary registration and 500,000 Zen for deposit. Will you register as a free mercenary now? (Lv. 350 - Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 51,
+   "en": "10 clubs from the Burnt Murderers in Vulcanus will do. Please remember that the 'Heroes' in the Burnt Murderers don't drop the item. Come back to me with 10 Burnt Murderer's Clubs to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 74,
+   "en": "A band going after the sealed stone is using mechanical warriors to attack our forces in Kanturu Ruins. Please defeat Splinter Wolves, which are proving to be most troublesome.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 75,
+   "en": "A damage and defense increase buff? That sounds great!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 76,
+   "en": "A fighting spirit doesn't benefit a hero. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 77,
+   "en": "A group of monsters has appeared at Dungeon Levels 2 and 3 and is attacking our reconnaissance party. I'd like to ask you, traveler, to hunt down these monsters. Will you accept this quest? (Level 131-140)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 78,
+   "en": "A hero is only human in the end, the energy of insanity…",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 79,
+   "en": "A hero is relentless. I accept. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 80,
+   "en": "A hero without strong mind is little better than a corpse. Please continue challenging yourself until the end.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 81,
+   "en": "A moment of carelessness can spell disaster for even the most experienced warriors. I hope you'll remain committed to your training at all times. I'm charged with issuing invitations to Devil Square, an arena where you can undergo the most amount of training in the least amount of time. Would you like to hear more? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 83,
+   "en": "A rumor has it that a group of monsters is chasing after the sealed stone. The rumor also says these monsters are likely to be Ghost Napins, but no one has actually seen them in person. It may just be a rumor, but will you eliminate these Ghost Napins and protect the sealed stone?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 84,
+   "en": "A search party dispatched to Aida reports that the number of Death Trees is rapidly increasing. Go to Aida and eliminate 50 Death Trees.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 85,
+   "en": "A search party that has been dispatched to Aida reports that the number of Death Trees is rapidly increasing. Go to Aida and eliminate 50 Death Trees.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 86,
+   "en": "A taint of insanity",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 87,
+   "en": "A tutorial?;I look forward to it!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 88,
+   "en": "A wise decision. Chaos Castle is a battle field created by Lugard, the god of the heaven world, and Secrarium, the god of the underworld, for the balance of good and evil in this world. However, travelers started going to Chaos Castle and fighting on the side of Lugard, tipping the balance in disfavor of Secrarium.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 89,
+   "en": "A wise decision. Defeat 50 Cursed Liches in Elveland (Area 2) and 50 Yetis in Devias (Area 2). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 90,
+   "en": "A wise decision. Defeat 50 Totem Golems in Elveland (Area 3) and 50 Elite Yetis in Devias (Area 3). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 91,
+   "en": "A wise decision. Give me 1 million Zen and I will sign you up right away.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 92,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 2 and achieve 100 points. Do this, and I'll give you 200,000 Zens as a reward. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 93,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 3 and achieve 130 points. Do this successfully and I'll give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 94,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 4 and achieve 160 points. Do this successfully and I'll give you 1 Jewel of Chaos and 500,000 Zens as a reward. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 95,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 5 and achieve 190 points. Do this successfully and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 96,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 6 and achieve 210 points. Do this successfully and I'll give you 1 Jewel of Harmony as a reward. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 97,
+   "en": "A wise decision. The test I have in mind is for you to enter Devil Square Level 7 and achieve 240 points. Do this successfully and I'll give you 2 Jewels of Soul as a reward. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 98,
+   "en": "A wise decision. Try your hand at Blood Castle Level 1. Destroy the castle gate at least, and I'll give you 100,000 Zens as a reward. However, this applies only to Blood Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 99,
+   "en": "A wise decision. Try your hand at Blood Castle Level 2. Destroy the castle gate at least, and I'll give you 200,000 Zens as a reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 100,
+   "en": "A wise decision. Try your hand at Blood Castle Level 3. Destroy the castle gate at least, and I'll give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 101,
+   "en": "A wise decision. Try your hand at Blood Castle Level 4. Destroy the castle gate, and I'll give you 1 Jewel of Chaos and 500,000 Zens as a reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 102,
+   "en": "A wise decision. Try your hand at Blood Castle Level 5. Destroy the castle gate, and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 103,
+   "en": "A wise decision. Try your hand at Blood Castle Level 6. Destroy the castle gate at least, and I'll give you 1 Jewel of Harmony as a reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 104,
+   "en": "A wise decision. Try your hand at Blood Castle Level 7. Destroy the castle gate at least, and I'll give you 2 Jewels of Soul as a reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 105,
+   "en": "A wise decision. Try your hand at Blood Castle Level 8. Destroy the castle gate at least, and I'll give you 2 Jewels of Bless as a reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 106,
+   "en": "A wise decision. Watchers of Kundun say that they need the 'Lost Map' to enter the barrier of Kundun but it's getting harder to get the map. Please bring me 2 pages of 'Lost Map Lv. 4' and I will give you a quest with a handsome reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 107,
+   "en": "A wise decision. Watchers of Kundun say that they need the 'Lost Map' to enter the barrier of Kundun but it's getting harder to get the map. Please bring me 3 pages of 'Lost Map Lv. 3' and I will give you a quest with a handsome reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 108,
+   "en": "A wrong Letter of Request has been delivered to you. Please talk to Mercenary Guild Manager Tercia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 118,
+   "en": "Accept a gens quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 119,
+   "en": "Accept a quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 120,
+   "en": "Accept the quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 121,
+   "en": "According to our investigation, Necrons and Death Centurions absorb the energy of insanity while the sealed stone is taking rest. Please get rid of 30 Necrons and 20 Death Centurions to keep the energy of insanity from spreading. I'll prepare a reward when you finish this job. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 122,
+   "en": "According to the latest intelligence, Blood Assassins have been dispatched to assassinate key figures of the Gens. Eliminate 50 Blood Assassins and protect the key Gens figures.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 123,
+   "en": "Accumulate EXP points to level up. You can find out how many more points you need to reach the next level by checking your Character Stats window or the EXP bar located at the bottom of your screen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 130,
+   "en": "Advancement of the Reconnaissance Party (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 131,
+   "en": "Advancement of the Reconnaissance Party (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 132,
+   "en": "Advancement of the Reconnaissance Party (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 133,
+   "en": "Advancement of the reconnaissance party....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 134,
+   "en": "Advancing into the Floating Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 136,
+   "en": "After all, I do need new equipment. Should I give it a shot?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 137,
+   "en": "After learning a skill from a scroll, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 138,
+   "en": "After learning a skill from a scroll, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 139,
+   "en": "After learning a skill from an orb, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 140,
+   "en": "After learning a skill from an orb, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 141,
+   "en": "After receiving the buff, you will see an icon on the top left corner of the screen, a blue light effect surrounding the character, and have one hour of enhanced damage and defense.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 142,
+   "en": "Agility Elves, whose priority is defense, can learn skills by equipping weapons, and Energy Elves, whose priority is wizardry, by purchasing orbs.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 148,
+   "en": "Ah, I'll have to go far back in time to explain that.;Runedil, the former queen of Elves, was saddened by the loss of all the new warriors of the MU empire, who gave up their lives to constant warring.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 149,
+   "en": "Ah, you came at last. The task is to get me some equipment for the war supplies. There's no business more profitable than the war supplies delivery. It's not like the good old days, but enough for a stable income. Especially Tantalos's Armor and Burnt Murderer's Club are expensive ones. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 150,
+   "en": "Ah, you've answered incorrectly. Take the items, ingredients, and the money you need for combining to the Goblin in Noria to create a new item. Make sure to try it at least once. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 151,
+   "en": "Ah, you've answered incorrectly. To trade, press D and select Trade or face the character and type in '/trade' in the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 152,
+   "en": "Ah, you've answered incorrectly. Type in '/Request off' in the Chat window to turn down party requests. To start receiving party requests again, type in '/Request on' in the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 153,
+   "en": "Ah, you've answered incorrectly. Use M to find out and travel to accessible areas with ease. Discovering areas that are right for your level, and hunting there, can also be very fun.;On to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 154,
+   "en": "Ah, you've answered incorrectly. When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 155,
+   "en": "Ah, you've answered incorrectly.; You'll be able to repair your equipment with ease by using the Repair button from the Inventory window once you reach level 50. However, this is more costly than repairing through an NPC.;Let's move on to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 156,
+   "en": "Ah. So that's what happened....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 163,
+   "en": "All right, I'll take it. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 164,
+   "en": "All right. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 168,
+   "en": "Alquamoses are the most troublesome creatures in Icarus, the path that leads to the Floating Castle. Stardust used by Alquamoses is proving to be devastating to our reconnaissance party. Will you eliminate these Alquamoses to allow our reconnaissance party to advance? (Level 245-249)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 169,
+   "en": "Alright! Let's get started with the tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 170,
+   "en": "Alright. I'll go all out on this one.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 171,
+   "en": "Also, if you find yourself far away from a town or cornered while on a hunt, the Town Portal Scroll can come in really handy. Are you familiar with using it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 194,
+   "en": "Apples can be purchased from potion merchants. In Lorencia, look for Potion Girl Amy, who is located across the bridge (128,85). In Elveland, look for Silvia, who is in the 1 o'clock direction from the center of the square (45,227). In Noria, look for Elf Lala, who is slightly to the north from the town's center (172,124).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 199,
+   "en": "Are you familiar with a hidden training ground known as Devil Square? It's an opportune place to develop your skills. Why don't you listen to what I have to say and then decide? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 200,
+   "en": "Are you familiar with a hidden training ground known as Devil Square? It's an opportune place to develop your skills. Why don't you listen to what I have to say and then decide? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 212,
+   "en": "As the clan gets stronger, so do you. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 220,
+   "en": "Ask about Gens Duprian.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 221,
+   "en": "Ask about Gens Vanert.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 222,
+   "en": "Ask about the gens dispute.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 224,
+   "en": "Assault of Burning Lava Giants",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 225,
+   "en": "At Devias 2, you'll encounter Hommerds roaming around and shrieking out foul laughs. Defeat 30 Hommerds and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 226,
+   "en": "At Devias 2, you'll encounter Yetis covered in white fur. Defeat 30 Yetis and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 227,
+   "en": "At Devias 2, you'll encounter blade-wielding Assassins. Defeat 30 Assassins and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 228,
+   "en": "At Devias 2, you'll encounter semi-transparent Ice Monsters. Defeat 25 Ice Monsters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 229,
+   "en": "At Devias 2, you'll encounter semi-transparent Ice Monsters. Defeat 30 Ice Monsters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 230,
+   "en": "At Devias 4, you'll encounter shrieking ice creatures. Defeat 3 Ice Queens and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 231,
+   "en": "At Dungeon Level 1, you'll encounter Larvae harassing travelers near the entrance. Defeat 40 Larvae and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 232,
+   "en": "At Dungeon Level 1, you'll encounter one-eyed giants that carry axes known as Cyclopses. Defeat 40 Cyclopses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 233,
+   "en": "At Dungeon Level 1, you'll encounter one-eyed giants that carry axes known as Cyclopses. Defeat 50 Cyclopses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 234,
+   "en": "At Dungeon Level 2, you'll encounter Hell Hounds that use sharp magic. Defeat 50 Hell Spiders and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 235,
+   "en": "At Dungeon Level 2, you'll encounter Skeleton Archers that hide and fire arrows. Defeat 50 Skeleton Archers and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 236,
+   "en": "At Dungeon Level 2, you'll encounter Thunder Liches that use thunder magic. Defeat 50 Thunder Liches and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 237,
+   "en": "At Dungeon Level 2, you'll encounter poison-drooling Hell Hounds. Defeat 50 Hell Hounds and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 238,
+   "en": "At Dungeon Level 2, you'll encounter poison-drooling Poison Bull Fighters. Defeat 50 Poison Bull Fighters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 239,
+   "en": "At Dungeon Level 3, you'll encounter lead monsters known as Gorgons. Defeat 15 Gorgons and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 240,
+   "en": "At Dungeon Levels 2 and 3, you'll encounter Dark Knights casting darkness in their paths. Defeat 50 Dark Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 241,
+   "en": "At Elveland 2, you'll encounter Cursed Liches that carry around a burning staff. Defeat 50 Cursed Liches and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 242,
+   "en": "At Elveland 3 (179, 81), you'll encounter foul, furry creatures. Defeat 50 Grizzlies and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 243,
+   "en": "At Elveland 3 (203, 37), you'll encounter the captains of foul, furry creatures known as Grizzlies. Defeat 50 Captain Grizzlies and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 244,
+   "en": "At Elveland 3, you'll encounter Totem Golems born from totems. Defeat 50 Totem Golems and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 245,
+   "en": "At Icarus, you'll encounter Mega Crusts, which are even more fearsome than Alquamoses. Defeat 80 Mega Crusts and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 246,
+   "en": "At Icarus, you'll encounter Queen Rainiers, which disguise their deathly aura with beauty. Defeat 80 Queen Rainiers and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 247,
+   "en": "At Icarus, you'll encounter stardust-carrying Alquamoses. Defeat 80 Alquamoses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 248,
+   "en": "At Tarkan 1, you'll encounter Bloody Wolves and their scent of death. Defeat 60 Bloody Wolves and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 249,
+   "en": "At Tarkan 1, you'll encounter giant axe-wielding Mutants. Defeat 60 Mutants and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 252,
+   "en": "At the Lost Tower Level 1, you'll encounter Shadows, which are embodiments of evil intent. Defeat 50 Shadows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 253,
+   "en": "At the Lost Tower Level 7, you'll encounter Balrogs wielding huge scythes and guarding the entrance. Defeat 15 Balrogs and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 254,
+   "en": "At the Lost Tower Level 7, you'll encounter Death Gorgons that have become stronger through death. Defeat 60 Death Gorgons and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 255,
+   "en": "At the Lost Tower Levels 1 and 2, you'll encounter Poison Shadows, which are poison-spewing embodiments of evil intent. Defeat 50 Poison Shadows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 256,
+   "en": "At the Lost Tower Levels 2 and 3, you'll encounter corrupt beings known as Cursed Wizards. Defeat 50 Cursed Wizards and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 257,
+   "en": "At the Lost Tower Levels 3 and 4, you'll encounter Death Cows and their cloud of evil energy. Defeat 50 Death Cows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 258,
+   "en": "At the Lost Tower Levels 5 and 6, you'll encounter Death Knights that were begotten from evil. Defeat 50 Death Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 259,
+   "en": "At the Lost Tower Levels 5 and 6, you'll encounter Death Knights that were begotten from evil. Defeat 60 Death Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 273,
+   "en": "Attack on the Supply Corps!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 320,
+   "en": "Barriers that have been installed in regions where monsters frequently mobilize are under attack. We must teach these monsters a lesson by striking down their superiors. Will you accept this quest? (Level 198-201)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 324,
+   "en": "Be the last one standing in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 326,
+   "en": "Beam Knights seem to be up to something in Tarkan. Go to Tarkan level 2 and hunt down 100 Beam Knights. Come see me once that's done to receive a Devil's Invitation + 5 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 331,
+   "en": "Before attacking the supply warehouse, we plan to defeat the monsters guarding it first. Once those monsters have been dealt with, the reconnaissance party will handle the assault on the warehouse. Will you accept this quest? (Level 56-65)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 346,
+   "en": "Better grab a chance than to regret it. Well, come back later if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 370,
+   "en": "Blood Castle Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 371,
+   "en": "Blood Castle Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 372,
+   "en": "Blood Castle Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 373,
+   "en": "Blood Castle Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 374,
+   "en": "Blood Castle Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 375,
+   "en": "Blood Castle Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 376,
+   "en": "Blood Castle Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 377,
+   "en": "Blood Castle Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 379,
+   "en": "Blood Castle builds and tests the fellowship of you and your brothers in arms. However, it's not an easy place to reach. Go to the Shadow Phantom Soldier and accept a quest that will earn you an Invisibility Cloak, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 380,
+   "en": "Blood Castle builds and tests the fellowship of you and your brothers in arms. If you wish to find out the strength of your party's bond, inquire with the Shadow Phantom Soldier about Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 381,
+   "en": "Blood Castle is an excellent place to build your party's bond. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 382,
+   "en": "Blood Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 441,
+   "en": "Burning Lava Giants have infested the lava fields of Vulcanus and caused our gens members to disperse. Make haste and exterminate these Burning Lava Giants in Vulcanus.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 443,
+   "en": "By a 'simple quest', do you mean killing monsters?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 444,
+   "en": "Call from the Gens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 445,
+   "en": "Can you explain in more detail?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 478,
+   "en": "Change of the Underwater Temple",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 496,
+   "en": "Chaos Castle Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 497,
+   "en": "Chaos Castle Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 498,
+   "en": "Chaos Castle Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 499,
+   "en": "Chaos Castle Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 500,
+   "en": "Chaos Castle Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 501,
+   "en": "Chaos Castle Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 502,
+   "en": "Chaos Castle Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 503,
+   "en": "Chaos Castle Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 504,
+   "en": "Chaos Castle is a place where you can test your own limitations. If you want to find out your limitations, go inquire with a Shadow Phantom Soldier about the castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 505,
+   "en": "Chaos Castle will push you to your limits and shouldn't be taken lightly. Be sure to prepare yourself before going there. Go to the Shadow Phantom Soldier and accept a quest that will earn you the items you'll need at Chaos Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 506,
+   "en": "Chaos Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 518,
+   "en": "Character and Server Selection",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 522,
+   "en": "Check the location and client of the request from the Letter of Request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 523,
+   "en": "Check the request information. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 524,
+   "en": "Checking the Letter of Request",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 539,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 3,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 540,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 5,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 541,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 8,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 542,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 800,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 543,
+   "en": "Clearing a Path to Icarus",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 545,
+   "en": "Close the Quest window and click on me again. After that, select 'Receive damage and defense increase buff.'",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 546,
+   "en": "Close the Quest window and click on me again. After that, select 'Receive damage and defense increase buff.' This buff is available to anyone under level 220.;After receiving the buff, you will see an icon on the top left corner of the screen, a blue light effect surrounding the character, and have one hour of enhanced damage and defense.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 549,
+   "en": "Collect 20 units of Stardust from Queen Rainiers in Icarus and bring them to Zyro to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 553,
+   "en": "Come back and see me once you reach level 25. I will give you a Uniria as a reward for your achievement.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 554,
+   "en": "Come back once you've reached level 25.;I will then reward you with a Uniria as a gift.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 555,
+   "en": "Come back when you reach a certain level, and I will give you a Uniria as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 556,
+   "en": "Come back when you're ready and I'll give you a full briefing then. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 561,
+   "en": "Complete Archangel's quest in Blood Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 562,
+   "en": "Complete Archangel's quest in Blood Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 563,
+   "en": "Complete Archangel's quest in Blood Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 564,
+   "en": "Complete Archangel's quest in Blood Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 565,
+   "en": "Complete Archangel's quest in Blood Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 566,
+   "en": "Complete Archangel's quest in Blood Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 567,
+   "en": "Complete Archangel's quest in Blood Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 568,
+   "en": "Complete Archangel's quest in Blood Castle Level 8 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 570,
+   "en": "Completion of the request",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 575,
+   "en": "Congratulations on becoming a member of Gens Duprian.  Much will be asked of you in the name of our cause. Come see me whenever you require assistance concerning the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 576,
+   "en": "Congratulations on becoming a member of Gens Vanert. Much will be asked of you in the name of our cause. Come see me whenever you require assistance concerning the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 577,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Basic character: Level 240 - 270, Advanced character: Level 220 - 260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 578,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Basic character: Level 300 - 320, Advanced character: Level 271 - 320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 579,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 331 - 350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 580,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 351 - 380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 581,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 381 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 582,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Master level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 583,
+   "en": "Congratulations. You have contributed more to the cause of the gens than any other member. Duprian Winston rewards your accomplishments. I hope to see even greater achievements from you next month.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 584,
+   "en": "Congratulations. You've completed the tutorial. Take this Ring of Hero and this Ring of Warrior. They are gifts to you from the queen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 585,
+   "en": "Conquer the Dungeon! (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 586,
+   "en": "Conquer the Dungeon! (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 587,
+   "en": "Conquer the Dungeon! (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 588,
+   "en": "Conquer the Dungeon! (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 589,
+   "en": "Conquer the Dungeon! (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 590,
+   "en": "Conquer the Dungeon! (6)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 591,
+   "en": "Continue listening.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 592,
+   "en": "Continue the conversation.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 593,
+   "en": "Continuing Attacks on Barriers (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 594,
+   "en": "Continuing Attacks on Barriers (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 595,
+   "en": "Continuing Attacks on Barriers (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 596,
+   "en": "Continuing Requests for Help (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 597,
+   "en": "Continuing Requests for Help (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 598,
+   "en": "Continuing Requests for Help (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 599,
+   "en": "Continuing Requests for Help (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 603,
+   "en": "Courage is the most important trait for a hero. If you lack the proper courage, you can never be reborn as a hero.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 650,
+   "en": "Cutting down the enemy clan's force will be the best revenge. Teach them a lesson by eliminating 5 of them who infiltrated in Vulcanus. Kill the enemy clan member in Vulcanus and come back to me to get the reward. (Can proceed only in Vulcanus)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 680,
+   "en": "Dark Knights are unique in that they are powerful swordsmen who rely on both weapons and orbs. Let me give you a weapon to use so that you can understand better.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 681,
+   "en": "Dark Knights can learn additional skills by going to Lorencia and purchasing orbs from Pasi the Mage (119,112). After purchasing an orb, right-click on it to learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 682,
+   "en": "Dark Knights can learn additional skills by going to Lorencia and purchasing scrolls from Pasi the Mage (119,112). After purchasing a scroll, right-click on it to learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 726,
+   "en": "Dark Wizards are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 727,
+   "en": "Dark Wizards can learn additional skills by going to Lorencia and purchasing scrolls from Pasi the Mage (119,112) or weapons from Hanzo the Blacksmith (116,142).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 740,
+   "en": "Death Knights from the Lost Tower Levels 5 through 7 are causing great harm to travelers there. Go to the Lost Tower and defeat 80 Death Knights. Come see me when that's done to receive an Invisibility Cloak + 3 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 762,
+   "en": "Defeat 10 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 763,
+   "en": "Defeat 100 Queen Rainiers in Icarus and then go back to the Shadow Phantom Soldier to receive a choice between 10 Large SD Potions and 30 Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 764,
+   "en": "Defeat 15 Agons from near the south side (173, 222) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 765,
+   "en": "Defeat 15 Giants from near the Devias entrance (22, 45) on the east side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 766,
+   "en": "Defeat 15 Liches from near the Dungeon entrance (159, 205) on the southwest side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 767,
+   "en": "Defeat 15 Polluted Butterflies from near the tombstone (121, 156) on the north side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 768,
+   "en": "Defeat 20 Giants from near the Devias entrance (22, 45) on the east side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 769,
+   "en": "Defeat 20 Hideous Rabbits from near the face sculpture on the north side (151, 146) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 770,
+   "en": "Defeat 20 Skeleton Warriors from near the Dungeon entrance (123, 227) on the southwest side of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 771,
+   "en": "Defeat 20 Stone Golems from near the southwest side (30, 214) of town and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 772,
+   "en": "Defeat 20 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 773,
+   "en": "Defeat 30 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 774,
+   "en": "Defeat 40 Larvae from Dungeon Level 1 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 30 Healing Potions, 30 Mana Potions, and 4 Small SD Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 775,
+   "en": "Defeat 5 monsters in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 776,
+   "en": "Defeat 50 Cursed Liches in Elveland (Area 2) and 50 Yetis in Devias (Area 2). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 777,
+   "en": "Defeat 50 Totem Golems in Elveland (Area 3) and 50 Elite Yetis in Devias (Area 3). Do that, and you'll receive 60,000 EXP points, 1,500,000 Zens, and 1 Jewel of Chaos as a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 778,
+   "en": "Defeat 60 Hell Spiders from Dungeon Level 2 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 15 Large Healing Potions, 15 Large Mana Potions, and 8 Small SD Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 779,
+   "en": "Defeat 80 Dark Knights from Dungeon Level 3 and go back to the Shadow Phantom Soldier to receive a choice of two rewards from 30 Large Healing Potions, 30 Large Mana Potions, and 15 Small Complex Potions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 830,
+   "en": "Devil Square Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 831,
+   "en": "Devil Square Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 832,
+   "en": "Devil Square Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 833,
+   "en": "Devil Square Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 834,
+   "en": "Devil Square Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 835,
+   "en": "Devil Square Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 836,
+   "en": "Devil Square Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 837,
+   "en": "Devil Square Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 839,
+   "en": "Devil Square is a place where you can develop your abilities quickly. Prepare thoroughly before entering as this is not a place to be taken lightly. Go to the Shadow Phantom Soldier and accept the quest to earn a Devil's Invitation, which you'll need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 840,
+   "en": "Devil Square is a place where you can hone and develop your skills fast. If you want to get stronger quickly, inquire with the Shadow Phantom Soldier about Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 841,
+   "en": "Devil Square is the place where the Elf Tree once stood. The Elf Tree was created by the mother of all Elves, an underground Elf known as Aria. This tree had the ability to produce Elves regularly. Then Secrarium tricked Lugard and appeared in Noria, at the location of the Elf Tree.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 842,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 843,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: 330-400 Level, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 844,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 845,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 846,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 847,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. I have a little test that will tell me of your skills and experience. Would you like to take this test? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 848,
+   "en": "Devil Square provides an opportunity to train yourself and build your experience. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 849,
+   "en": "Devil Square...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 853,
+   "en": "Devils located on Levels 4 through 6 of the Lost Tower should suffice. Go to the Lost Tower and defeat 100 Devils. Come see me after that, and I will give you a choice between 15 SD Potions and 15 Complex Potions as your reward. When you claim your rewards, make sure you have at least 15 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 854,
+   "en": "Did you launch the Character Stats window?;That window contains the character's name and level, the name of the current server, and character statuses.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 855,
+   "en": "Did you say the space bar?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 860,
+   "en": "Dispose of the Plunderers' Leader!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 861,
+   "en": "Dispose of the Town Plunderers!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 872,
+   "en": "Doesn't sound too difficult....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 927,
+   "en": "Dreadfears in Kanturu Relics are causing great harm to travelers there. Go to Kanturu Relics and hunt down 100 Dreadfears. Come see me when that's done to receive an Invisibility Cloak + 8 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 928,
+   "en": "Due to Lev's illusion spells, however, the souls of the dead followers remained in this world to defend the temple. These souls believed Lev's return would allow them to reclaim their bodies and continued to safeguard the temple. Today, the temple is guarded by the alliance in case Lev does actually return and Illusion Sorcery uses ancient relics to lure in unsuspecting travelers to their cause.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 937,
+   "en": "Dungeon Sweep!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 947,
+   "en": "Dural, the first master of the guild was a legendary commander who led us to a great victory against Kundun's army. He had to seclude himself from the world since Gaion's rebellion and the order of exterminating 5 major clans. The newly formed mercenary guild severed whatever relations with Gaion, but 5 major clans still want the mercenary guild to get rid of Gaion.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 948,
+   "en": "EXP Points and Leveling Up",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 954,
+   "en": "Earn valuable equipment by completing simple quests?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 981,
+   "en": "Eliminate 1 Hero Zombie Fighter and 1 Hero Reborn Gladiator and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 982,
+   "en": "Eliminate 20 Bloody Slayer and 10 Vicious Bloody Slayer and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 983,
+   "en": "Eliminate 30 Aegis and 20 Rogue Centurions and go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 984,
+   "en": "Eliminate 30 Bloody Soldiers and 20 Death Angels in Kalima 6 and go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 985,
+   "en": "Eliminate 30 Necrons and 20 Death Centurions and then go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 986,
+   "en": "Eliminate 5 players of your enemy Gens and then go back to your Gens Steward to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 987,
+   "en": "Eliminate 50 Blood Assassins, and I will give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 988,
+   "en": "Eliminate 50 Burning Lava Giants and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 989,
+   "en": "Eliminate 50 Death Riders and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 990,
+   "en": "Eliminate 50 Death Trees and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 991,
+   "en": "Eliminate 50 Ghost Napins and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 992,
+   "en": "Eliminate 50 Iron Riders to put a stop to their guerilla attacks, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 993,
+   "en": "Eliminate 50 Sapi-Duos to stop the attacks against our gens members, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 994,
+   "en": "Eliminate 50 Silver Valkyries and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 995,
+   "en": "Eliminate 50 Splinter Wolves and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 996,
+   "en": "Eliminate Advisor Jerind and Gaion Kharein and then go back to Mercenary Guild Manager Tercia to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 997,
+   "en": "Eliminate Blood Assassins",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 998,
+   "en": "Eliminate Kundun and 10 Schrikers, the guard soldiers and then go back to Beina to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 999,
+   "en": "Eliminate Plundering Silver Valkyries",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1000,
+   "en": "Eliminate Raymond and Erkanne in Varka and then go back to Mercenary Guild Manager Tercia to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1001,
+   "en": "Eliminate Sapi-Duos",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1002,
+   "en": "Eliminate Splinter Wolves",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1024,
+   "en": "Elveland shouldn't be so difficult.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1030,
+   "en": "Elves can learn additional skills by going to Noria and purchasing orbs from Elf Lala (173,124) or weapons from Eo the Craftsman (195,123).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1036,
+   "en": "End the Spread of Death Trees",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1042,
+   "en": "Enter Devil Square Level 1, defeat the monsters that appear, and survive to the bitter end. Come back afterwards, and I'll give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1043,
+   "en": "Enter Devil Square Level 2, defeat the monsters that appear, and survive to the bitter end. Come back to me afterwards, and I'll give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1044,
+   "en": "Enter Devil Square Level 3, defeat the monsters that appear, and survive to the bitter end. Come back to me afterwards, and I'll give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1045,
+   "en": "Enter Devil Square Level 4, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Soul as a reward when you return. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1046,
+   "en": "Enter Devil Square Level 5, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Bless as a reward when you return. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1047,
+   "en": "Enter Devil Square Level 6, defeat the monsters that appear, and survive to the bitter end. I'll give you 1 Jewel of Life as a reward when you return. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1048,
+   "en": "Enter Devil Square Level 7, defeat the monsters that appear, and survive to the bitter end. I'll give you 2 Jewels of Bless as a reward when you return. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1049,
+   "en": "Enter into Aida 2 and you will find Witch Queens. They always carry 'Kalt Stone' on themselves so eliminate them and take the jewel from them. Bring me 10 Kalt Stones. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1095,
+   "en": "Evil energy has escaped from the Lost Tower and is now corrupting the souls of Devias residents, turning them into monsters. I'd like to ask you to purify their souls and give them eternal rest for us. Will you accept this quest? (Level 186-189)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1103,
+   "en": "Excellent! Bring on the test!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1104,
+   "en": "Excellent! I will be back in a flash.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1105,
+   "en": "Excellent! It's time for the next quest. Since you are now familiar with hunting, let's get you to go after a tougher monster.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1106,
+   "en": "Excellent! Let's get started with the tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1107,
+   "en": "Excellent! What is the name of the monster you want me to hunt down?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1108,
+   "en": "Expanding businesses",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1114,
+   "en": "Explain potions to me once more.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1122,
+   "en": "Fast growth...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1123,
+   "en": "Fastest Way to Train (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1124,
+   "en": "Fastest Way to Train (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1125,
+   "en": "Fastest Way to Train (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1126,
+   "en": "Fastest Way to Train (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1127,
+   "en": "Fastest Way to Train (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1130,
+   "en": "Final Test to become a Hero",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1131,
+   "en": "Finally, a quest! You want me to buy 5 apples from a merchant?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1132,
+   "en": "Find 2 pages of 'Lost Map Lv. 4' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1133,
+   "en": "Find 2 pages of 'Lost Map Lv. 5' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1134,
+   "en": "Find 3 pages of 'Lost Map Lv. 3' and return to 'Shadow Phantom Soldier'.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1135,
+   "en": "Find General Goods Merchant Zyro",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1136,
+   "en": "Find General Goods Merchant Zyro and check the details of his request to the mercenary guild.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1137,
+   "en": "Find General Goods Merchant Zyro who goes round Noria, Elveland, Lorencia and Devias and sell things.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1138,
+   "en": "Find Priestess Beina of the Underwater Temple in Kalima 6 and check the request information.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1139,
+   "en": "Find merchant Zyro, who goes round Noria, Elveland, Lorencia and Devias and sell things.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1141,
+   "en": "Find the guild office manager Tercia and pay 500,000 Zen as a deposit to receive Lv. 1 Letter of Request which contains the quest of the day.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1142,
+   "en": "Find your Gens Steward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1168,
+   "en": "First task is to collect the Stardust, which is the base material of the popular cosmetic product, Della. The ladies in a queue threaten me so I had to ask the mercenary guild. You can extract a small amount of Stardust from Queen Rainiers in the Icarus. Please bring me 20 units of Stardust. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1169,
+   "en": "First you need to eliminate Kundun's combatants who attack the temple entrance and then get rid of the enemies who cast spell on the sealed stone. I'll give you the 2nd goal when you finish 1st goal and come back to me. Here's the 1st goal; go to Kalima 6 and eliminate 30 Aegis and 20 Rogue Centurions, Kundun's combatants. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1188,
+   "en": "Free mercenary doesn't really belong to the mercenary guild; anybody can receive a request and get the reward only if he or she has certain sum of money for registration. We take the deposit for each request, but it's fully refundable as you finish the request. Don't you worry. We request you what you can handle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1191,
+   "en": "From the Chat window, use the Ctrl button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1192,
+   "en": "From the Chat window, use the Shift button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1193,
+   "en": "From the Chat window, use the Tab button.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1202,
+   "en": "Gain EXP points to level up.;You can find out how many more points you need to reach the next level by checking your Character Stats window or the EXP bar located at the bottom of your screen.;The bar is divided into ten segments, and filling them up will elevate you to the next level.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1218,
+   "en": "Gens Duprian is a guild of the greatest heroes in Arca and at its heart is the Duprian clan, the mightiest noble bloodline in MU. We are led by Duprian Winston, a knight who knows no equal in the whole of the MU empire.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1219,
+   "en": "Gens Ranking Reward",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1221,
+   "en": "Gens Vanert is a noble family led by Vanert Reicht, the greatest socialite in the whole of the MU empire. The master strives around the clock to put a stop to Duprian Winston and his dream of absolute rule over the empire.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1222,
+   "en": "Gens dispute…? Gens Vanert’s rebellion is more like it. The gens dispute started because of the greed of Vanert Reicht, the commanding knight of Gens Vanert. Exactly five years ago, a band of heroes who were searching in La Cleon for a stone with the power to seal away Kundun were slaughtered. At the time, we believed it was the work of Selupan, a giant spider and the ruler of La Cleon, but soon learned that it was actually Gens Vanert. It is the duty of our proud Gens Duprian champions to retaliate and fight.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1223,
+   "en": "Gens ranking rewards are given out in the first week of each month.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1224,
+   "en": "Get rid of Kundun and 10 Schrikers, the guard soldiers in the innermost depth of Kalima 6 and come back to me to get reward. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1243,
+   "en": "Give me a letter of request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1244,
+   "en": "Give me some time to prepare. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1252,
+   "en": "Glory to the Gens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1253,
+   "en": "Go ahead and learn the Fire Ball skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1254,
+   "en": "Go back.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1255,
+   "en": "Go beyond the walls of Elveland and hunt down 3 Strange Rabbits.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1256,
+   "en": "Go beyond the walls of Elveland and hunt down 3 Strange Rabbits.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1257,
+   "en": "Go beyond the walls of Elveland and hunt down 30 Polluted Butterflies.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1258,
+   "en": "Go beyond the walls of Elveland and hunt down 30 Polluted Butterflies. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1259,
+   "en": "Go beyond the walls of Lorencia and hunt down 3 Budge Dragons.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1260,
+   "en": "Go beyond the walls of Lorencia and hunt down 3 Budge Dragons.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1261,
+   "en": "Go beyond the walls of Lorencia and hunt down 30 Hounds.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1262,
+   "en": "Go beyond the walls of Lorencia and hunt down 30 Hounds. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1263,
+   "en": "Go beyond the walls of Noria and hunt down 3 Chain Scorpions.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1264,
+   "en": "Go beyond the walls of Noria and hunt down 3 Chain Scorpions.;If you find yourself in trouble, press the Q button to recover your HP. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1265,
+   "en": "Go beyond the walls of Noria and hunt down 30 Beetle Monsters.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1266,
+   "en": "Go beyond the walls of Noria and hunt down 30 Beetle Monsters. I'm sure this hunt is well within your abilities.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1267,
+   "en": "Go find the merchant in town and bring back 5 apples.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1268,
+   "en": "Go find the merchant in town and bring back 5 apples.;The NPC's name will be shown in light blue, and the point symbol will turn into a tooth symbol when you scroll over it with your mouse.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1269,
+   "en": "Go past the castle gate and defeat two Red Skulls who have hidden the Absolute Weapon. This will buy you some more time and reveal a casket containing the weapon. Destroy the casket, defeat more monsters, and return the Absolute Weapon to Archangel to successfully complete the Blood Castle quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1270,
+   "en": "Go see the potion merchant again and buy just 1 Town Portal Scroll.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1271,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1272,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. When you return, I'll give you Ancient Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1273,
+   "en": "Go to Devias 4 and defeat 5 Ice Queens. When you return, I'll give you Eclipse Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1274,
+   "en": "Go to Devil Square Level 1. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1275,
+   "en": "Go to Devil Square Level 2. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1276,
+   "en": "Go to Devil Square Level 3. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1277,
+   "en": "Go to Devil Square Level 4. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1278,
+   "en": "Go to Devil Square Level 5. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1279,
+   "en": "Go to Devil Square Level 6. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1280,
+   "en": "Go to Devil Square Level 7. Defeat the monsters that appear and survive to the bitter end to receive a reward from the Shadow Phantom Soldier. However, this applies only to Devil Square Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1281,
+   "en": "Go to Dungeon Level 2 and defeat 50 Chief Skeleton Warriors and 30 Thunder Liches. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1282,
+   "en": "Go to Dungeon Level 2 and defeat 50 Hell Hounds and 30 Hell Spiders. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1283,
+   "en": "Go to Dungeon Level 2 and defeat 50 Hell Spiders and 30 Chief Skeleton Warriors. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1284,
+   "en": "Go to Dungeon Level 2 and defeat 50 Poison Bull Fighters and 30 Dark Knights. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1285,
+   "en": "Go to Dungeon Level 2 and defeat 50 Skeleton Archers and 30 Hell Hounds. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1286,
+   "en": "Go to Dungeon Level 2. Defeat 40 Hell Hounds and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 1, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1287,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Dragon Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1288,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Guardian Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1289,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Legendary Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1290,
+   "en": "Go to Dungeon Level 2. Defeat 50 Chief Skeleton Warriors and 30 Thunder Liches, and I'll give you a Red Wing Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1291,
+   "en": "Go to Dungeon Level 2. Defeat 50 Cyclopses and 30 Ghosts, and I'll give you Legendary Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1292,
+   "en": "Go to Dungeon Level 2. Defeat 50 Cyclopses and 30 Ghosts, and I'll give you Red Wing Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1293,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you Dragon Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1294,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you Guardian Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1295,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you a Legendary Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1296,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Hounds and 30 Hell Spiders, and I'll give you a Red Wing Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1297,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Spiders and 30 Chief Skeleton Warriors, and I'll give you Legendary Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1298,
+   "en": "Go to Dungeon Level 2. Defeat 50 Hell Spiders and 30 Chief Skeleton Warriors, and I'll give you Red Wing Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1299,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Dragon Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1300,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Guardian Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1301,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Legendary Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1302,
+   "en": "Go to Dungeon Level 2. Defeat 50 Skeleton Archers and 30 Hell Hounds, and I'll give you Red Wing Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1303,
+   "en": "Go to Dungeon Level 3 and defeat 50 Dark Knights and 10 Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1304,
+   "en": "Go to Dungeon Level 3. Defeat 50 Dark Knights and 10 Gorgons, and I'll give you a Dragon Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1305,
+   "en": "Go to Dungeon Level 3. Defeat 50 Dark Knights and 10 Gorgons, and I'll give you a Guardian Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1306,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon, and I'll give you a Legendary Staff + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1307,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon, and I'll give you a Red Wing Stick + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1308,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons, and I'll give you a Bluewing Crossbow + 8 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1309,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons, and I'll give you two Double Blades + 8 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1310,
+   "en": "Go to Dungeon Level 3. Defeat 60 Gorgons and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 2, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1311,
+   "en": "Go to Dungeon Levels 1 and 2 and defeat 50 Cyclopses and 30 Ghosts. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1312,
+   "en": "Go to Dungeon Levels 1 and 2 and defeat 50 Skeleton Archers and 30 Hell Hounds. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1313,
+   "en": "Go to Dungeon Levels 2 and 3 and defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1314,
+   "en": "Go to Dungeon Levels 2 and 3 and defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1315,
+   "en": "Go to Dungeon Levels 2 and 3. Defeat 50 Poison Bull Fighters and 30 Dark Knights, and I'll give you Dragon Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1316,
+   "en": "Go to Dungeon Levels 2 and 3. Defeat 50 Poison Bull Fighters and 30 Dark Knights, and I'll give you Guardian Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1317,
+   "en": "Go to Elveland 2. Defeat 40 Cursed Liches and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 1, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1318,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. I'll give you an Ancient Helm + 7 and Ancient Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1319,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. I'll give you an Eclipse Helm + 7 and Eclipse Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1320,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1321,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. I'll give you Ancient Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1322,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. I'll give you Eclipse Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1323,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1324,
+   "en": "Go to Icarus, kill 20 Alquamoses and 10 Alpha Crusts and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1325,
+   "en": "Go to Icarus, kill 20 Alquamoses and 20 Drakans and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1326,
+   "en": "Go to Icarus, kill 20 Alquamoses and return to 'Shadow Phantom Soldier' with 1 Crystal Sword (Attack power +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1327,
+   "en": "Go to Icarus, kill 20 Alquamoses and return to 'Shadow Phantom Soldier' with 1 Sword of Destruction (Attack power +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1328,
+   "en": "Go to Icarus, kill 30 Queen Rainiers and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1329,
+   "en": "Go to Icarus. Defeat 100 Phantom Knights and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 6, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1330,
+   "en": "Go to Icarus. Defeat 130 Giant Drakans and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 5, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1331,
+   "en": "Go to Icarus. Defeat 80 Alquamoses and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 3, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1332,
+   "en": "Go to Icarus. Defeat 80 Mega Crusts and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 4, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1333,
+   "en": "Go to Icarus. Defeat 90 Drakans and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 3, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1334,
+   "en": "Go to Kanturu Relics. Defeat 100 Dreadfears and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 8, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1335,
+   "en": "Go to Kanturu Relics. Defeat 100 Twin Tails and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 7, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1336,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 10 Blade Hunters and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1337,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 20 Satyroses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1338,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 5 Kentauroses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1339,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and return to 'Shadow Phantom Soldier' with 1 Ancient Stick (Wizardry damage +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1340,
+   "en": "Go to Kanturu Ruins, kill 30 Iron Riders and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1341,
+   "en": "Go to La Cleon. Defeat 120 Ice Walkers and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 6, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1342,
+   "en": "Go to Lost Tower Level 4-6 and defeat 100 Devils. Go back to the Shadow Phantom Soldier to receive a choice between 15 SD Potions and 15 Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1343,
+   "en": "Go to Tarkan 2 and defeat 30 Zaikans. Go see the Shadow Phantom Soldier again to receive a choice between 20 Large SD Potions and 30 Large Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1344,
+   "en": "Go to Tarkan 2. Defeat 100 Beam Knights and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 5, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1345,
+   "en": "Go to Tarkan 2. Defeat 100 Tantaloses and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 5, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1346,
+   "en": "Go to Tarkan 2. Defeat 30 Death Beam Knights and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 4, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1347,
+   "en": "Go to Tarkan, kill 20 Mutants and 10 Beam Knights and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1348,
+   "en": "Go to Tarkan, kill 20 Mutants and 20 Tantaloses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1349,
+   "en": "Go to Tarkan, kill 20 Mutants and return to 'Shadow Phantom Soldier' with 1 Staff of Resurrection (Wizardry damage +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1350,
+   "en": "Go to Tarkan, kill 20 Mutants and return to 'Shadow Phantom Soldier' with 10 Unirias to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1351,
+   "en": "Go to Tarkan, kill 30 Iron Wheels and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1352,
+   "en": "Go to Tarkan. Defeat 100 Iron Wheels and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 4, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1353,
+   "en": "Go to Tarkan. Defeat 50 Bloody Wolves and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 1, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1354,
+   "en": "Go to Tarkan. Defeat 70 Iron Wheels and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 2, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1355,
+   "en": "Go to Varka and eliminate Advisor Jerind and Gaion Kharein. When you finish the job and come back to me, I'll give you the reward from the guild. Also, you can get the refund without the Lv. 1 Request Completion Certificate when you complete this task.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1356,
+   "en": "Go to Vulcanus and eliminate 50 Blood Assassins, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1357,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. I'll give you an Ancient Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1358,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. I'll give you an Eclipse Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1359,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1360,
+   "en": "Go to the Lost Tower Level 1 and defeat 50 Shadows and 50 Poison Shadows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1361,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 30 Poison Shadows, and I'll give you Ancient Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1362,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 30 Poison Shadows, and I'll give you Eclipse Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1363,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 50 Poison Shadows, and I'll give you Ashcrow Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1364,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 50 Poison Shadows, and I'll give you Iris Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1365,
+   "en": "Go to the Lost Tower Level 2 and defeat 50 Poison Shadows and 30 Cursed Wizards. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1366,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Ancient Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1367,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Ashcrow Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1368,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Eclipse Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1369,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Iris Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1370,
+   "en": "Go to the Lost Tower Level 3 and defeat 50 Cursed Wizards and 50 Death Cows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1371,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Ancient Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1372,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Ashcrow Helm + 7 and Ashcrow Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1373,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Eclipse Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1374,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Iris Helm + 7 and Iris Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1375,
+   "en": "Go to the Lost Tower Level 4 and defeat 50 Death Cows and 30 Devils. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1376,
+   "en": "Go to the Lost Tower Level 4. Defeat 50 Death Cows and 30 Devils, and I'll give you Ashcrow Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1377,
+   "en": "Go to the Lost Tower Level 4. Defeat 50 Death Cows and 30 Devils, and I'll give you Iris Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1378,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Gorgons and 10 Balrogs. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1379,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Knights and 50 Death Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1380,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1381,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Gorgons and 10 Balrogs, and I'll give you an Ashcrow Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1382,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Gorgons and 10 Balrogs, and I'll give you an Iris Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1383,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights and 30 Death Gorgons, and I'll give you Ashcrow Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1384,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights and 30 Death Gorgons, and I'll give you Iris Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1385,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs, and I'll give you a Crystal Sword + 7 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1386,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs, and I'll give you an Aquagold Crossbow + 7 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1387,
+   "en": "Go to the Lost Tower Levels 2 and 3. Defeat 60 Death Cows and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 2, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1388,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you Ancient Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1389,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you Eclipse Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1390,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you an Ashcrow Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1391,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you an Iris Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1392,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1393,
+   "en": "Go to the Lost Tower Levels 4 and 5 and defeat 100 Devils. I'll give you Ashcrow Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1394,
+   "en": "Go to the Lost Tower Levels 4 and 5 and defeat 100 Devils. I'll give you Iris Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1395,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. I'll give you an Ancient Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1396,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. I'll give you an Eclipse Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1397,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1398,
+   "en": "Go to the Lost Tower Levels 4 through 6, and you'll encounter Devils that use dark magic. Defeat 50 Devils and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1399,
+   "en": "Go to the Lost Tower Levels 4 through 6, and you'll encounter Devils that use dark magic. Defeat 60 Devils and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1400,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you a Legendary Staff + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1401,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you a Red Wing Stick + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1402,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you an Ashcrow Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1403,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you an Iris Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1404,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1405,
+   "en": "Go to the Lost Tower. Defeat 80 Death Knights and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 3, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1406,
+   "en": "Go to the Swamp of Peace and defeat 100 Shadow Pawns. Go see the Shadow Phantom Soldier again to receive a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1407,
+   "en": "Go to the Swamp of Peace. Defeat 140 Shadow Knights and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 7, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1408,
+   "en": "Go to the Swamp of Peace. Defeat 150 Shadow Looks and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 6, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1409,
+   "en": "Go to the area between Tarkan 1 and Tarkan 2, and you will see these assassins known as Iron Wheels. Defeat 60 Iron Wheels and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1439,
+   "en": "Good decision. The first mission for the second trial involves defeating 10 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Soul, a Jewel of Chaos, or a Jewel of Harmony.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1440,
+   "en": "Good decision. The first mission of the fifth trial involves surviving in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1441,
+   "en": "Good decision. The first mission of the fourth trial involves defeating 30 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1442,
+   "en": "Good decision. The first mission of the last trial involves surviving in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete this mission successfully and you may be reborn as hero. Your fame will echo across the whole continent of MU. You'll be rewarded with either a Jewel of Bless, two Jewels of Life, or two Jewels of Soul upon completion.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1443,
+   "en": "Good decision. This mission requires you to raise your worth by claiming victory in Illusion Temple. Complete the mission and you'll be rewarded with 800,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1444,
+   "en": "Good job. The energy of insanity is safely contained since Necrons and Death Centurions have been eliminated. But the portion they already absorbed has been transferred to Kundun so we need to directly attack him. Can you help us? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1445,
+   "en": "Good job. You made it easier for us to protect the temple entrance. The 2nd goal is to punish the enemies attacking the sealed stone. Etramu saved the empire by changing his body into a sealed stone, but his soul is getting engulfed with madness. Do you want to proceed? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1456,
+   "en": "Grand Wizard Etramu vowed to destroy Illusion Sorcery and formed an army to subjugate its followers. Under Etramu's command, the alliance engaged the followers of Illusion Sorcery with formidable force. Despite having been driven all the way back to Illusion Temple, the followers continued to resist. As battle raged on, Lev disappeared and left the followers of Illusion Sorcery in confusion. Ultimately, they all met their death at the hands of the alliance on the temple grounds.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1470,
+   "en": "Great! I finally get the chance to show off what I can do.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1471,
+   "en": "Great! I'll finish this tutorial in no time!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1511,
+   "en": "Have you been to Chaos Castle? If not, it'll be an excellent opportunity to prove your strength. Why don't you listen to what I have to say and then decide? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1512,
+   "en": "Have you cleared today's request? Show me Lv. 1 Request Completion Certificate then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1513,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join in the fight for the castle? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1514,
+   "en": "Have you ever heard of Blood Castle's barrier? Would you like to hear Archangel's request to help defend Blood Castle's barrier and join the fight for the castle? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1515,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 220-270)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1516,
+   "en": "Have you ever heard of Illusion Temple and the ancient relics hidden there? It's a place where travelers can find both wealth and fame. Why don't you listen to what I have to say and then decide? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1517,
+   "en": "Having set his eyes on the tree's power of birth, Secrarium corrupted the Elf Tree and transformed it into an Immoral Tree that gave birth to monsters.  The monsters horde grew to astronomical proportions, and the kingdoms of the MU continent combined their forces to entrap the immoral tree in a space of nothingness.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1518,
+   "en": "Having trustworthy comrades at your side makes all the difference when it comes to Blood Castle quests. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1528,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Blood Castle challenge. Successfully complete the Blood Castle quest to receive a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1529,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Chaos Castle challenge. If you survive Chaos Castle, you can claim a hefty reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1530,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Devil Square challenge. Training at Devil Square will earn you a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1531,
+   "en": "Hear what the Shadow Phantom Soldier has to say and take the Illusion Temple challenge. Win at Illusion Temple to claim a valuable reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1542,
+   "en": "Help the reconnaissance party....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1545,
+   "en": "Here is the Letter of Request for you. Right click on the letter to check the information. Please note that you cannot receive refund of 500,000 Zen deposit if you give up the quest. You also need to bring the 'Request Completion Certificate' to get the refund. Once again, you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Good bye, then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1546,
+   "en": "Here it is.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1547,
+   "en": "Here you go.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1548,
+   "en": "Here's your first question.;How do you trade with a character that's in front of you?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1550,
+   "en": "Heroic Courage",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1551,
+   "en": "Heroic Fighting Spirit",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1552,
+   "en": "Heroic Mentality",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1553,
+   "en": "Heroic Qualities",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1554,
+   "en": "Heroic Tenacity",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1555,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. The sealed stone got stronger thanks to your effort, but Kundun's army is also getting stronger now. We investigated the sealed stone and found that Kundun's army absorbs its energy while Etramu's soul is taking a rest. Please help us and confine the energy of insanity within the sealed stone. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1556,
+   "en": "Hi, I'm Priestess Beina, protector of this Underwater Temple. This temple is Kundun's first target since Etramu keeps his body in the sealed stone. We're always short of fighters so I request help to the mercenary guild. Would you check the request? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1557,
+   "en": "Hidden history of the rebellion",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1561,
+   "en": "High ranking monsters deep inside the Lost Tower have launched a surprise attack on our reconnaissance party. Under the captain's orders to retaliate, we are now forming a punishment force. Will you accept this quest? (Level 206-209)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1564,
+   "en": "Hmm, Letter of Request……",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1565,
+   "en": "Hmm, free mercenary……",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1566,
+   "en": "Hmm... that doesn't sound all that bad.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1567,
+   "en": "Hmm... you are a wise warrior. Go now and achieve great things in the name Gens Vanert, knowing that I will always be here to assist you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1568,
+   "en": "Hmm...First, press M and then...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1569,
+   "en": "Hmm...a test...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1570,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 260-289)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1571,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 290-319)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1572,
+   "en": "Hold on, I will find a quest suitable for you. Wait a moment please. (Level 320-349)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1580,
+   "en": "How can I turn him down...?;Alright, let's give it a try!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1581,
+   "en": "How do I check coordinates?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1582,
+   "en": "How do I get it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1583,
+   "en": "How do you do? I am Gregory, the Gens Duprian Steward. What is your business with our gens?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1584,
+   "en": "How have you been? On behalf of the master of our clan, I thank you for answering the call of the clan. I personally hate to let the wandering mercenaries do this job, so I requested to send someone of the clan. I hope this didn't offend you. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1585,
+   "en": "How much is the registration fee and the deposit?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1586,
+   "en": "How will you help, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1587,
+   "en": "However, journeys such as this are bound to be perilous.;If you wish, we can provide you with a simple tutorial. What do you say?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1588,
+   "en": "Hunt down 10 Spiders from around town, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1590,
+   "en": "Hunting down measly Spiders is beneath me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1591,
+   "en": "Hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1592,
+   "en": "Hunting monsters will earn you EXP points, drop items, and Zens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1600,
+   "en": "I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1601,
+   "en": "I accept your quest. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1602,
+   "en": "I already knew that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1603,
+   "en": "I already knew that. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1604,
+   "en": "I am not ready yet. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1605,
+   "en": "I can almost see the end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1606,
+   "en": "I can't pass up on this. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1607,
+   "en": "I didn't mean to pester you. But as the clan gets stronger, so do you. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1608,
+   "en": "I don't feel like doing it. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1609,
+   "en": "I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1610,
+   "en": "I don't have the time right now. I'll do it next time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1611,
+   "en": "I don't have the time. I'm sorry. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1612,
+   "en": "I don't have time right now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1613,
+   "en": "I don't know how this story can help me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1614,
+   "en": "I don't need to be judged like this! (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1615,
+   "en": "I don't think I have time for that right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1616,
+   "en": "I don't want to decide right now. Just describe them for me.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1617,
+   "en": "I give up. Going any further is beyond me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1618,
+   "en": "I got it!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1619,
+   "en": "I guess Lugard was tricked by Secrarium. How do I participate?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1620,
+   "en": "I have a monster hunt quest that will take you deeper into the Dungeon than before. Will you accept this quest? (Level 101-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1621,
+   "en": "I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1622,
+   "en": "I have a quest that will take you deep inside the Dungeon. It'll be harder than last time, but there's a better reward. Will you accept this quest? (Level 121-130)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1623,
+   "en": "I have a quest that will take you deep inside the Dungeon. There have been reports of monsters attempting to make their way above ground under the command of Gorgons. I want you to defeat these monsters. (Level 111-120)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1624,
+   "en": "I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1625,
+   "en": "I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1626,
+   "en": "I have no time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1627,
+   "en": "I have plenty of experience.;To each his own!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1628,
+   "en": "I hope you realize that a hero without a fighting spirit is merely a coward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1629,
+   "en": "I know it well. I hear you need a special item to go there....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1630,
+   "en": "I know it well. I hear you need an item to participate in the event....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1631,
+   "en": "I learned a skill!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1632,
+   "en": "I need you to accept a small quest first as a test. Are you up to it? There is of course a reasonable reward for finishing.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1633,
+   "en": "I neither have the skills nor the warriors I need to take on this quest. Give me more time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1634,
+   "en": "I regret we can't be of any help to you.;Here, at least take this present. I hope, the next time we meet, a great warrior stands before my eyes.;Enjoy your time out there.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1635,
+   "en": "I respect your decision to go on this journey.;Allow me to teach you a few simple but essential things you need to know before your adventure in MU begins.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1636,
+   "en": "I see you've now mastered hunting. When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1637,
+   "en": "I see you've successfully completed your first hunt! Did you find it difficult? Hunting monsters will earn you EXP points, drop items, and Zens.;You can pick up items dropped by defeated monsters using the mouse or automatically by pressing the space bar.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1638,
+   "en": "I see.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1639,
+   "en": "I see. How do I enter?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1640,
+   "en": "I simply can't go on anymore. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1641,
+   "en": "I think I have enough courage already. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1642,
+   "en": "I think a quest involving the Dungeon, which is a headache for Lorencia, should be suitable for you. I want you to wipe out the monsters in the Dungeon, one by one. Will you accept this quest? (Level 91-100)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1643,
+   "en": "I trust you are quite used to Devil Square by now. However, obtaining an invitation to Devil Square remains a difficult task. Luckily, I have a quest that will earn you an invitation. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1644,
+   "en": "I trust you are somewhat familiar with Blood Castle by now. You should now focus on building the bond between you and your comrades to the point where you can rely on each another unconditionally.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1645,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. However, it should still be difficult for you to acquire the necessary item. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 240-299, Advanced character: Level 220-279)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1646,
+   "en": "I trust you are somewhat familiar with Chaos Castle by now. The event will now be even more challenging because you will face more powerful users and corrupt guardsmen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1647,
+   "en": "I trust you are somewhat familiar with Devil Square by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades execute coordinated attacks.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1648,
+   "en": "I trust you are somewhat familiar with Illusion Temple by now. You'll now be moved to a place where even more powerful monsters spawn. There's no need to worry, however. You can expect rapid growth as long as you and your comrades learn to work together.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1649,
+   "en": "I understand well. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1650,
+   "en": "I understand.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1651,
+   "en": "I understand. I will do what I can.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1652,
+   "en": "I want to be an Elf who focuses on defense!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1653,
+   "en": "I want to be an Elf who focuses on wizardry!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1654,
+   "en": "I want to hear more. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1655,
+   "en": "I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 120-179, Advanced character: Level 100-159)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1656,
+   "en": "I will give you the queen's gifts if you pass a test to see if there's anything else you need to know and if you have the basic knowledge to travel throughout the MU realm. How about it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1657,
+   "en": "I will guide you through MU game play.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1658,
+   "en": "I will help you. Tell me what to do. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1659,
+   "en": "I will inform you when a request of your level is delivered. Thank you.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1660,
+   "en": "I will sign up. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1661,
+   "en": "I will teach you basic hunting and controls through a simple tutorial.;It's not that difficult, and I'm sure you'll finish it in no time.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1662,
+   "en": "I will teach you hunting and control commands through a simple tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1663,
+   "en": "I will tell you then. Devildom's royal guards, who were summoned when Kundun succumbed to Secrarium, posed a great threat to the heaven world. To protect their base, the Twelve Saints formed a barrier around Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1664,
+   "en": "I'd rather you give me the gifts without the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1665,
+   "en": "I'll explain this in more detail. What else do you wish to know?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1666,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you… (The quest has been cancelled)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1667,
+   "en": "I'll give you a full briefing when you're ready, then. May the grace of God be with you… (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1668,
+   "en": "I'll head for Vulcanus immediately. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1669,
+   "en": "I'll just take the queen's gifts without taking the test.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1670,
+   "en": "I'll stay focused until the very end! (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1671,
+   "en": "I'll test you to see if you have the basic knowledge required for travel throughout the MU empire and give you the queen's gifts if you pass.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1672,
+   "en": "I'm always up for hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1673,
+   "en": "I'm busy now. I'll come back later. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1674,
+   "en": "I'm glad we can help. We aren't difficult to find.;Simply look for and talk to the Shadow Phantom Soldier in any of the towns.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1675,
+   "en": "I'm here for your request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1676,
+   "en": "I'm not ready yet. Please wait. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1677,
+   "en": "I'm sorry to hear that. There are many ways to become stronger, but they'll all take time. Remember that well.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1678,
+   "en": "I'm sorry to hear that. You can't repeat the first mission if you abandon the second mission. You must complete the second mission before you can repeat the first mission. Please return if you change your mind.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1679,
+   "en": "I'm sorry. I don't have the time right now. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1680,
+   "en": "I'm sorry. I don't have the time. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1681,
+   "en": "I'm sure you are well aware of Kundun. The weakest and most disorganized monsters of Kundun's army are frequently attacking and plundering civilians just outside of town. I wanted to ask you to eliminate these plundering monsters.... Will you accept this quest? (Level 15-25)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1682,
+   "en": "I'm sure you have a long trail of defeated monsters behind you. However, travelers widely vary in terms of their skills. If you're unsure of your own skills, proving yourself at Chaos Castle should give you some clarity. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1683,
+   "en": "I'm too busy to help right now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1701,
+   "en": "Ice Walkers are attacking and weakening the barrier that was formed to separate La Cleon and Devias from one another. Go to La Cleon and defeat 120 Ice Walkers. Come see me once that's done to receive a Devil's Invitation + 6 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1705,
+   "en": "If you are an Agility Elf, whose priority is defense, you can equip a weapon and use its skills. If you are an Energy Elf, whose priority is wizardry, you can purchase orbs to learn skills.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1706,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1707,
+   "en": "If you are equipped with a weapon imbued with a skill, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1708,
+   "en": "If you don't want to receive party requests while hunting, simply type in 'Party off' in the Chat window. To start receiving party requests again, type in 'Request on' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1709,
+   "en": "If you find yourself far away from a town or cornered while on a hunt, the Town Portal Scroll can come in really handy.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1710,
+   "en": "If you leave the gens, your contribution will be reset.;Do you still wish to leave?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1711,
+   "en": "If you want to find out when you can enter, simply move your mouse over the Armor of Guardsman. If you want to enter, simply right-click on the armor at a designated time. Come see me when you have time, and I will give you a quest that will earn you the item needed to enter the event.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1722,
+   "en": "Illusion Spells, the foundation of Illusion Sorcery, was discovered by an Archaeologist named Mirage. Mirage found the spells' power to be too dangerous and sealed it. His partner Lev, however, stole the spells to brainwash people and establish Illusion Sorcery. Illusion Sorcery gradually grew larger and brought chaos to the continent.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1723,
+   "en": "Illusion Temple Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1724,
+   "en": "Illusion Temple Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1725,
+   "en": "Illusion Temple Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1726,
+   "en": "Illusion Temple Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1727,
+   "en": "Illusion Temple Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1728,
+   "en": "Illusion Temple Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1730,
+   "en": "Illusion Temple is a place where you can acquire items and equipment for fast growth. If you wish to possess such items and equipment for yourself, inquire with the Shadow Phantom Soldier about Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1731,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 271-320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1732,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 321-350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1733,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 351-380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1734,
+   "en": "Illusion Temple is a place where you can find both wealth and fame. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1735,
+   "en": "Illusion Temple...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1743,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest, but more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1744,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1745,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1746,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1747,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1748,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1749,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 331-400, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1750,
+   "en": "In Blood Castle, you'll be fighting against time. Good armor and weapons will, of course, help you complete your quest. But more than anything else, solidarity of your party is what will count there. Will you accept Archangel's quest? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1751,
+   "en": "In MU, it's possible to combine different items to create new ones. In fact, trying out different combinations of items adds a whole new dimension to MU.;Whom should you seek out in order to combine items?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1752,
+   "en": "In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination. Discovering areas that are right for your level and hunting there can also be very fun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1857,
+   "en": "Inland Supply Route!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1879,
+   "en": "Iron Riders have been launching guerilla attacks against our forces stationed throughout Kanturu Ruins. Eliminate these Iron Riders and relieve the stress of our gens members.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1882,
+   "en": "Is it time for me to return to the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1883,
+   "en": "Is the bond of your Blood Castle party still strong? If not, I suggest you return to Blood Castle to strengthen it. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1884,
+   "en": "Is there anything I need to be cautious of?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1885,
+   "en": "Is there anything I should be aware of about Illusion Temple?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1886,
+   "en": "Is there anything I should know about Devil Square?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1887,
+   "en": "It all makes sense now.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1888,
+   "en": "It doesn't matter with the travelers, but you have to be careful when you kill a corrupt guardsman. Corrupt guardsmen will explode and may even push you off the arena. If this happens, you will be disqualified.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1889,
+   "en": "It really is easy to enter. What does the event involve, exactly?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1890,
+   "en": "It seems Cursed Liches are tormenting the residents of Elveland with their dark spells and curses. Hunt down 40 of those Cursed Liches, and I'll give you a Devil's Invitation +1 as a reward. I suggest you work with others for faster results.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1891,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1892,
+   "en": "It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

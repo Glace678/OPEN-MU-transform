@@ -1,0 +1,21 @@
+{
+  "modelVersion": "5.0.0",
+  "dependencies": {
+    "json5": "2.2.3"
+  },
+  "execution": {
+    "analyzeEnabled": false,
+    "daemonEnable": true,
+    "incrementalEnabled": true,
+    "parallelEnabled": true,
+    "typeCheck": {
+      "enabled": false
+    }
+  },
+  "logging": {
+    "level": "info"
+  },
+  "debugging": {
+    "stacktrace": false
+  }
+}

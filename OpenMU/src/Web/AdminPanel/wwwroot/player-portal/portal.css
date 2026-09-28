@@ -1,0 +1,30 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101112; color: #e5e7e8; letter-spacing: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: #101112; position: relative; isolation: isolate; }
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; opacity: .12; background: url('./inventory_back.png') repeat; pointer-events: none; }
+header { min-height: 76px; max-width: 740px; margin: auto; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid #434647; }
+header strong { font: 700 26px Georgia, serif; color: #f1e8c5; }
+header select { min-width: 0; width: 175px; }
+main { max-width: 580px; padding: 24px; margin: auto; }
+nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; border-bottom: 1px solid #55595b; padding-bottom: 8px; }
+button, input, textarea, select { font: inherit; letter-spacing: 0; border-radius: 3px; }
+button { color: #eceeee; background: #303435; border: 1px solid #5a6264; padding: 12px 16px; cursor: pointer; min-height: 44px; white-space: normal; overflow-wrap: anywhere; }
+nav button { font-size: 14px; padding: 8px; background: transparent; border-color: transparent; }
+nav button[aria-selected='true'] { color: #fbf3d5; border-color: #958757; background: #252725; }
+button:hover { background: #414747; }
+button:disabled { opacity: .5; cursor: wait; }
+button:focus-visible, input:focus, textarea:focus, select:focus, summary:focus-visible { outline: 2px solid #d0bc71; outline-offset: 3px; }
+h1 { font-size: 22px; line-height: 1.35; margin: 28px 0 20px; }
+label { display: block; font-size: 14px; color: #d5d9da; margin: 16px 0 6px; }
+input, textarea { width: 100%; min-width: 0; background: #191b1c; border: 1px solid #626769; color: #f1f3f4; padding: 12px; min-height: 44px; }
+textarea { resize: vertical; overflow-wrap: anywhere; font-family: ui-monospace, monospace; font-size: 15px; }
+select { max-width: 175px; background: #222627; border: 1px solid #646a6c; padding: 10px 8px; min-height: 44px; }
+form > button { width: 100%; margin-top: 24px; border-color: #958757; background: #373a32; }
+details { margin-top: 28px; border-top: 1px solid #4b5254; padding-top: 20px; }
+summary { cursor: pointer; color: #d7d9d9; line-height: 1.5; }
+p { font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+#status { padding: 12px 16px; border-left: 3px solid #48af88; background: #162a23; }
+#status[data-error='true'] { border-color: #de766c; background: #30201f; }
+#result { padding-bottom: 18px; border-bottom: 1px solid #65726c; }
+[hidden] { display: none !important; }
+@media (max-width: 420px) { header { padding: 14px 16px; } main { padding: 20px 16px; } nav button { padding: 8px 4px; font-size: 13px; } }

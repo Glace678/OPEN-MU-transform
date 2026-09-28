@@ -1,0 +1,965 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 1201,
+   "en": "Gaia's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1205,
+   "en": "Gaion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1209,
+   "en": "Garuda's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1210,
+   "en": "Gate Open/Close Status",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1225,
+   "en": "Gets additional 1 Defense per %0.2f Command stat while equipping Scepter.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1226,
+   "en": "Gets additional 1 Physical attack power per %0.2f Defense.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1227,
+   "en": "Gets additional 1 Wizardry and Curse per %0.2f Defense.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1228,
+   "en": "Gets additional 1 Wizardry per %0.2f Defense.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1229,
+   "en": "Gets additional 1 attack power per %0.2f Defense.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1239,
+   "en": "Gigantic Storm skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1493,
+   "en": "Gywen's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1494,
+   "en": "HP increase +200",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1495,
+   "en": "HP is drained every second and transferred to the target.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1496,
+   "en": "HP is reduced every second.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1497,
+   "en": "HP is reduced for every second of fire damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1498,
+   "en": "HP is reduced for every second of frost damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1499,
+   "en": "HP is reduced for every second of poison damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1505,
+   "en": "Hades's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1524,
+   "en": "Healing increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1525,
+   "en": "Health Status +50",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1526,
+   "en": "Health increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1527,
+   "en": "Health stat increases to maximum.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1533,
+   "en": "Hegaton's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1541,
+   "en": "Hellfire skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1544,
+   "en": "Heras's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1559,
+   "en": "High Vitality",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1598,
+   "en": "Hyon's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1599,
+   "en": "Hyperion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1688,
+   "en": "Ice Arrow skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1698,
+   "en": "Ice Storm skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1702,
+   "en": "Ice resistance increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1703,
+   "en": "Ice skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1704,
+   "en": "Iced Arrow",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1714,
+   "en": "Ignore Enemy's Defense",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1715,
+   "en": "Ignore enemy's defense has a chance to decrease the enemy's defense success rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1716,
+   "en": "Ignore enemy's defense has a chance to increase your defense success rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1740,
+   "en": "Immobilized when you are frozen.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1753,
+   "en": "In the process of attacking the castle",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1756,
+   "en": "Increase Attack Power",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1761,
+   "en": "Increase Defense",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1762,
+   "en": "Increase Defense Rate",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1789,
+   "en": "Increases AG recovery rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1790,
+   "en": "Increases Attack Rate and Defense Rate'",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1793,
+   "en": "Increases Dragon Slasher attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1794,
+   "en": "Increases EXP by 20%% /Rare Item drop rate/can be used in Vulcanus only.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1795,
+   "en": "Increases HP recovery rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1796,
+   "en": "Increases HP stat by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1797,
+   "en": "Increases HP.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1798,
+   "en": "Increases Item Drop Rate to 150%%.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1799,
+   "en": "Increases SD recovery rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1800,
+   "en": "Increases agility stat by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1801,
+   "en": "Increases all stats by %d.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1802,
+   "en": "Increases attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1803,
+   "en": "Increases attack success rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1804,
+   "en": "Increases automatic mana recovery by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1805,
+   "en": "Increases beast uppercut attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1806,
+   "en": "Increases chain drive attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1808,
+   "en": "Increases chance to ignore enemy's defense and inflict damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1809,
+   "en": "Increases critical damage and critical damage rate,/ and also increases excellent damage rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1810,
+   "en": "Increases critical damage and critical damage rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1811,
+   "en": "Increases critical damage chance by %0.2%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1813,
+   "en": "Increases dark side attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1814,
+   "en": "Increases dark side skill damage area by 2. requires 10 points.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1815,
+   "en": "Increases defense rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1816,
+   "en": "Increases defense success rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1817,
+   "en": "Increases defense success rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1818,
+   "en": "Increases defense success rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1820,
+   "en": "Increases dragon roar attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1821,
+   "en": "Increases energy stat by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1823,
+   "en": "Increases health stat.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1824,
+   "en": "Increases ice resistance by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1825,
+   "en": "Increases killing blow attack power by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1826,
+   "en": "Increases lightning resistance by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1827,
+   "en": "Increases max life and Mana.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1828,
+   "en": "Increases max life, Mana, and AG.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1829,
+   "en": "Increases maximum AG by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1830,
+   "en": "Increases maximum HP by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1831,
+   "en": "Increases maximum SD by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1832,
+   "en": "Increases maximum attack by %0.2f",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1833,
+   "en": "Increases maximum defend rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1834,
+   "en": "Increases maximum defense and defense success rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1835,
+   "en": "Increases maximum mana by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1836,
+   "en": "Increases min Wizardry and max Wizardry.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1837,
+   "en": "Increases min Wizardry, max Wizardry,/ and critical damage rate.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1838,
+   "en": "Increases poison resistance by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1839,
+   "en": "Increases pvp attack success rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1840,
+   "en": "Increases pvp defense rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1841,
+   "en": "Increases strength stat by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1842,
+   "en": "Increases the blood howling skill's bleeding effect and chance rate by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1843,
+   "en": "Increases the chance of doing excellent damage by %0.2%%",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1844,
+   "en": "Increases the chance of ignoring Enemy DEF. If successful, enemy a chance to take a Penetrate Armor.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1846,
+   "en": "Increases your max AG.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1847,
+   "en": "Increases your max SD.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1848,
+   "en": "Increases your multishot skill damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1852,
+   "en": "Inferno skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1856,
+   "en": "Infinity Arrow damage increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1858,
+   "en": "Innovate",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1862,
+   "en": "Innovation skill's defense reduction increases by %0.2f and duration increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1865,
+   "en": "Invincibility",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1866,
+   "en": "Invincible",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1915,
+   "en": "Item durability increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1916,
+   "en": "Item gain increase at 150%%/Automatic Mana recovery at 5%%",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1949,
+   "en": "Kantata's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1958,
+   "en": "Karis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1964,
+   "en": "Keeps item durable",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 1994,
+   "en": "Learn 'blind'.#Blinds targets and reduces the success rate of target's attack. Cool Time-10 sec.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1995,
+   "en": "Learn 'blood howling'.#Gives a 10% chance to bleed targets for 10 sec. Cool Time-2 mins.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1996,
+   "en": "Learn 'blood storm'.#Damages targets within 3 tiles. Cool Time-10 sec#(Can use it with combo, Must equip a sword).",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1997,
+   "en": "Learn 'earth prison'.#Damages & stuns targets for 5 sec. Cool Time-10 sec.#Must equip a staff.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1998,
+   "en": "Learn the 'bless' skill. #This skill increases all of your target's stats.(By 1 for every 100 your energy)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 1999,
+   "en": "Learns 'Anger Explosion'.#Greatly increase Attack power and Wizardry with the bursting power of anger. Duration: 10 seconds. Cooldown: 1 minute",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2000,
+   "en": "Learns 'Aqua Blast'.#Inflicts damage on enemy target with a chance to make the victim immobile for 3 seconds. Cooldown: 5 seconds",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2001,
+   "en": "Learns 'Cure'.#Removes target's debuff. Cooldown: 20 seconds",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2002,
+   "en": "Learns 'Death Blow'.#Forcefully pierces the target to inflict double damage by consuming 30% of max HP.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2003,
+   "en": "Learns 'Illusion'.#Creates a reflection to absorb damage dealt to the caster. Cooldown: 1 minute",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2004,
+   "en": "Learns 'Iron Defense'.#Increases Defense and HP by 800 (max)#for 10 seconds. Cooldown: 1 minute",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2005,
+   "en": "Learns 'Party Healing'.#Additional 3 party members around the target gets healed. The amount healed decreases by 20% every time the target changes. Cooldown: 10 seconds",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2006,
+   "en": "Learns 'Poison Arrow'.#Inflicts damage and poisons the target. Poison effect lasts for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2007,
+   "en": "Learns 'Summon Satyros'.#Summons a Satyros to fight for the summoner.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2051,
+   "en": "Life auto increment increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  }
+ ]
+}

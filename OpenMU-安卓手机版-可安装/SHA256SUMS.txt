@@ -1,0 +1,2 @@
+bcdd0e4ca6248878897e10def6e9a30fd6fedf22b4b7e8c0d8d8fa68b2999ac2  OpenMU-Game-arm64.apk
+79dfe8795cdc40ed87365a9271f741468ffe6ca27033ee95f7a96a05688a67a5  OpenMU-GM.apk

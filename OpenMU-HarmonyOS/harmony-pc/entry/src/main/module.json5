@@ -1,0 +1,43 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": ["2in1", "default", "tablet"],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:ability_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:app_name",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_background",
+        "exported": true,
+        // Desktop / 2-in-1: free, resizable window. No orientation lock so the
+        // game runs in a normal HarmonyOS PC window with keyboard and mouse.
+        "supportWindowMode": ["fullscreen", "split", "floating"],
+        "minWindowWidth": 960,
+        "minWindowHeight": 600,
+        "skills": [
+          {
+            "entities": ["entity.system.home"],
+            "actions": ["action.system.home"]
+          }
+        ]
+      }
+    ],
+    "requestPermissions": [
+      { "name": "ohos.permission.INTERNET" },
+      {
+        "name": "ohos.permission.READ_MEDIA",
+        "reason": "$string:perm_media_reason",
+        "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" }
+      }
+    ]
+  }
+}

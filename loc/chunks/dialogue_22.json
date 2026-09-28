@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 3430,
+   "en": "The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 260-289)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3431,
+   "en": "The Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 320-349)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3432,
+   "en": "The Summon Goblin skill should now be one of the skills you can use. Try clicking the icon.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3433,
+   "en": "The Trainer NPC in Lorencia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3434,
+   "en": "The Triple Shot skill should now be one of the skills you can use. Try clicking the icon.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3435,
+   "en": "The answer is obvious!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3436,
+   "en": "The barrier at the Lost Tower is now somewhat stable and secure. However, there are still high-ranking monsters looking to take advantage of any chance they can get. Will you eliminate these monsters for us? (Level 210-219)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3438,
+   "en": "The biggest obstacle to entering Devil Square, a training arena for fast growth, is probably obtaining an invitation. I have a simple quest that will earn you an invitation to Devil Square. Will you accept this quest? (Basic character: 330-400 Level, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3440,
+   "en": "The bond between my comrades and I isn't strong enough yet.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3441,
+   "en": "The bond of fellowship.... Of course comrades should be trusted and valued.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3442,
+   "en": "The captain asked me to thank you for your contribution in the previous quest. The captain also said you've proved your worth and are ready for a more critical quest. Will you accept this quest? (Level 171-179)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3444,
+   "en": "The character's current coordinates are shown on the top left corner of the screen. Movement in the �� or �� direction changes the first number, and movement in the �� or �� direction the second.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3446,
+   "en": "The conflict between the genses over the sealed stone is growing fiercer. Cornered, the opposing gens forces are attacking our side using Sapi-Duos. Please eliminate these Sapi-Duos.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3447,
+   "en": "The dark energy Gorgons give off has weakened considerably, and the monsters seem to have calmed down quite a bit because of it. It's a good time to squeeze our grip on the Gorgons. Will you accept this quest? (Level 131-140)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3452,
+   "en": "The elder says Spiders are spinning webs on the outer walls of the town and has asked us to take care of them. Although the request was made to the Shadow Phantom Guardians, I believe the job is suitable for travelers who are just starting out on their journey. Will you accept this quest? (Level 1-14)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3453,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to train at Devil Square? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3454,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (All characters: Master Level)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3455,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: 330-400 Level, Advanced character: Level 311-400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3456,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3457,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 231-280, Advanced character: Level 211-260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3458,
+   "en": "The endless spawning of monsters in Devil Square will greatly help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3459,
+   "en": "The endless spawning of monsters in Devil Square will help your training. Launch combined attacks with your fellow party members for even better results. Would you like to try and clear Devil Square? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3466,
+   "en": "The final hurdle, eh? I accept the mission. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3467,
+   "en": "The gate that leads into Blood Castle is probably the greatest obstacle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3468,
+   "en": "The guild master cannot leave the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3469,
+   "en": "The guild master is not a member of the gens. The guild master must be a member of the gens in order for you to join that gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3470,
+   "en": "The higher the level, the more distance you get to travel. Using the M button, however, it's possible to travel to distant areas in a flash. What is the minimum level you need to be and the amount of Zen you need in order to enter the Dungeon?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3474,
+   "en": "The increasing number of Bloody Wolves in Tarkan is becoming worrisome. Hunt down 50 Bloody Wolves, and I'll give you a Scroll of Blood + 1 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3475,
+   "en": "The increasing number of Iron Wheels in Tarkan is becoming worrisome. Hunt down 70 Iron Wheels, and I'll give you a Scroll of Blood + 2 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3479,
+   "en": "The last ones to deal with are Bloody Soldiers and Death Angels casting spell on the sealed stone. Kill 30 Bloody Soldiers and 20 Death Angels and come back to me to get reward. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3480,
+   "en": "The losses caused by the scheming of Queen Rainiers are continuing to stack up. Will you help eliminate more of these Queen Rainiers? (Level 255-259)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3481,
+   "en": "The mercenary guild office has been newly founded in Devias. Please find the guild office manager Tercia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3483,
+   "en": "The monsters are behaving oddly. It seems Iron Wheels who rank higher than Bloody Wolves, are plotting something. I wish to ask for your help in eliminating these Iron Wheels. Will you accept? (Level 240-244)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3485,
+   "en": "The number of Alquamoses has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Alquamoses? (Level 245-249)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3486,
+   "en": "The number of Death Beam Knights in Tarkan 2 is increasing beyond control. Hunt down 30 Death Beam Knights, and I'll give you a Scroll of Blood + 4 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3487,
+   "en": "The number of Drakans in Icarus is increasing beyond control. Hunt down 90 Drakans, and I'll give you a Scroll of Blood + 3 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3488,
+   "en": "The number of Giant Drakans in Icarus is increasing beyond control. Hunt down 130 Giant Drakans, and I'll give you a Scroll of Blood + 5 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3489,
+   "en": "The number of Mega Crusts has not diminished, and our reconnaissance party continues to take on losses. Will you help eliminate more of these Mega Crusts? (Level 250-254)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3490,
+   "en": "The number of Shadow Looks in the Swamp of Peace is increasing beyond control. Hunt down 150 Shadow Looks, and I'll give you a Scroll of Blood + 6 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3491,
+   "en": "The objective now is to complete Archangel's quest in Blood Castle. Take the Shadow Phantom Soldier's test and then the Blood Castle challenge.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3492,
+   "en": "The objective should be defending this place, then.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3493,
+   "en": "The orb I gave you will teach you the Summon Goblin skill. Right-click on the item to learn the skill. Go ahead and learn the skill.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3494,
+   "en": "The queen's orders are to help those warriors starting out on their journey so that they can at least defend themselves against the forces of Kundun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3495,
+   "en": "The quest to eliminate Totem Golems and Cursed Liches in Elveland was actually set by the elder of Elveland. He says now a larger number of monsters have appeared and asks us to deal with them. Will you accept this quest? (Level 80-90)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3503,
+   "en": "The reconnaissance party has sent us a request. They say doing away with the higher ranking monsters that control the low-ranking ones will make their work much easier. Defeat these monsters. Will you accept this quest? (Level 166-170)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3504,
+   "en": "The reconnaissance party has successfully made their way into Tarkan, but are now forced to deal with Bloody Wolves. They are higher-ranking than monsters. I wish to ask for your help in eliminating these Bloody Wolves. Will you accept? (Level 235-239)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3505,
+   "en": "The reconnaissance party is advancing, but Mutants are starting to amass in greater numbers. Will you help eliminate more of the Mutants? (Level 230-234)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3506,
+   "en": "The reconnaissance party is struggling with surprise attacks against them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 180-189)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3507,
+   "en": "The reconnaissance party reports that the stolen supplies are being delivered to the Lost Tower by way of Devias. Severing the Kundun's supply route in Devias will be a devastating blow to the enemy. Will you accept this quest? (Level 36-45)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 3508,
+   "en": "The reconnaissance party reports the situation has much improved. I thank you on behalf of our captain. However, there are still monsters interfering with our scouting efforts. It seems these monsters are somewhat higher in rank than the ones before and are proving to be difficult to deal with. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 171-179)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

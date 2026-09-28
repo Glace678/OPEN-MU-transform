@@ -1,0 +1,974 @@
+{
+ "group": "text",
+ "items": [
+  {
+   "id": 808,
+   "en": "Delgado",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 816,
+   "en": "Destler",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 821,
+   "en": "Destructive ogre archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 822,
+   "en": "Destructive ogre soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 825,
+   "en": "Devias' Vault Coordinates: (218, 61)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 829,
+   "en": "Devil",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 873,
+   "en": "Donner",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 874,
+   "en": "Doorkeeper Titus",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 876,
+   "en": "Doppelganger",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 877,
+   "en": "Doppelganger Dark Lord",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 878,
+   "en": "Doppelganger Elf",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 879,
+   "en": "Doppelganger Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 880,
+   "en": "Doppelganger Magic Gladiator",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 881,
+   "en": "Doppelganger Summoner",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 882,
+   "en": "Doppelganger Wizard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 889,
+   "en": "Dragon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 924,
+   "en": "Drakan",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 926,
+   "en": "Dreadfear",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 930,
+   "en": "Dungeon Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 931,
+   "en": "Dungeon Level 1 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 932,
+   "en": "Dungeon Level 2 East Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 933,
+   "en": "Dungeon Level 2 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 934,
+   "en": "Dungeon Level 2 West Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 935,
+   "en": "Dungeon Level 3 East Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 936,
+   "en": "Dungeon Level 3 West Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 979,
+   "en": "Elf Lala",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 980,
+   "en": "Elf Lala in Noria who sells beginner's equipment is located at coordinate 173, 124.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1003,
+   "en": "Elite Bull Fighter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1004,
+   "en": "Elite Goblin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1007,
+   "en": "Elite Ogre",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1009,
+   "en": "Elite Skull Soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1010,
+   "en": "Elite Yeti",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1016,
+   "en": "Elpis",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1018,
+   "en": "Elveland has a Shadow Phantom soldier located at the coordinate (43,191), (57,232) and (73,220).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1019,
+   "en": "Elveland has a potion and arrow merchant named Silvia at the coordinate (44.229).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1020,
+   "en": "Elveland has a safety guardian at the coordinate (50,229).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1021,
+   "en": "Elveland has a summoner magician who sells parchments named Marce at the coordinate (36,219).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1022,
+   "en": "Elveland has a summoner weapon and defense tool seller named Rhea at the coordinate (29, 239).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1023,
+   "en": "Elveland has an admission aid for the Illusion Temple named Mirage at (55, 243).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1050,
+   "en": "Entrance to Aida",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1051,
+   "en": "Entrance to Atlans",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1052,
+   "en": "Entrance to Devias",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1053,
+   "en": "Entrance to Elveland",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1054,
+   "en": "Entrance to Icarus",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1055,
+   "en": "Entrance to Karutan",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1056,
+   "en": "Entrance to Karutan 1",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1057,
+   "en": "Entrance to Karutan 2",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1058,
+   "en": "Entrance to La Cleon",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1059,
+   "en": "Entrance to Lorencia",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1060,
+   "en": "Entrance to Noria",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1061,
+   "en": "Entrance to Safe Zone",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1062,
+   "en": "Entrance to Tarkan",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1063,
+   "en": "Entrance to Valley of Loren",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1064,
+   "en": "Entrance to the Hatchery",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1065,
+   "en": "Entrance to the Kanturu Relics",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1066,
+   "en": "Entrance to the Kanturu Ruins",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1067,
+   "en": "Entrance to the Lost Tower",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1068,
+   "en": "Entrance to the Valley of Loren",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1069,
+   "en": "Eo The Craftsman in Noria who sells elf equipment is at coordinates 196,124.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1070,
+   "en": "Eo the Craftsman",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1080,
+   "en": "Erkanne",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1081,
+   "en": "Erohim",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1097,
+   "en": "Excellent Damage (110% of max damage) is displayed in green.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1102,
+   "en": "Excellent type item names are displayed in green.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1129,
+   "en": "Final Reward Chest",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1151,
+   "en": "Fire Flame Ghost",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1152,
+   "en": "Fire Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1184,
+   "en": "Forest Monster",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1185,
+   "en": "Forest Orc",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1198,
+   "en": "Furious Slaughterer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1204,
+   "en": "Gaion Kharein",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1207,
+   "en": "Galia",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1208,
+   "en": "GameMaster",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1211,
+   "en": "Gatekeeper",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1212,
+   "en": "Gateway Machine",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1215,
+   "en": "Genocider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1216,
+   "en": "Genocider Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1217,
+   "en": "Gens Duprian Steward",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1220,
+   "en": "Gens Vanert Steward",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1230,
+   "en": "Ghost",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1231,
+   "en": "Ghost Napin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1232,
+   "en": "Giant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1233,
+   "en": "Giant Mammoth",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1234,
+   "en": "Giant Ogre",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1240,
+   "en": "Gigantis",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1241,
+   "en": "Gigantis Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1242,
+   "en": "Gigas Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1411,
+   "en": "Goblin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1414,
+   "en": "Golden Archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1416,
+   "en": "Golden Budge Dragon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1419,
+   "en": "Golden Crust",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1420,
+   "en": "Golden Dark Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1421,
+   "en": "Golden Derkon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1422,
+   "en": "Golden Devil",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1423,
+   "en": "Golden Goblin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1424,
+   "en": "Golden Iron Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1425,
+   "en": "Golden Lizard King",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1427,
+   "en": "Golden Napin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1429,
+   "en": "Golden Rabbit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1430,
+   "en": "Golden Satyros",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1431,
+   "en": "Golden Soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1432,
+   "en": "Golden Stone Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1433,
+   "en": "Golden Tantalos",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1434,
+   "en": "Golden Titan",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1435,
+   "en": "Golden Twin Tail",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1436,
+   "en": "Golden Vepar",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1437,
+   "en": "Golden Wheel",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1438,
+   "en": "Gollock",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1446,
+   "en": "Gorgon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1455,
+   "en": "Grand Wizard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1457,
+   "en": "Great Bahamut",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1463,
+   "en": "Great Drakan",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1464,
+   "en": "Great Golden Dragon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1476,
+   "en": "Grizzly",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1477,
+   "en": "Guard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1478,
+   "en": "Guardian",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1491,
+   "en": "Guardian Statue",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1492,
+   "en": "Guardsman",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 1507,
+   "en": "Hammer Scout",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 1509,
+   "en": "Hanzo the Blacksmith",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  }
+ ]
+}

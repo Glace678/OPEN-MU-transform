@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 2310,
+   "en": "One of the places our reconnaissance party hasn't been able to reach is the Tarkan desert. The reasons behind their failure include the harsh environment and most importantly the monsters known as Mutants. Will you eliminate these Mutants to allow our reconnaissance party to advance? (Level 230-234)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2339,
+   "en": "Our continued assault on the Dungeon has secured a somewhat secure entryway. However, there are still monsters hindering the efforts of our reconnaissance party. Will you accept this quest? (Level 141-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2340,
+   "en": "Our entry into the Floating Castle has been hampered mostly by Queen Rainiers. It appears Queen Rainiers are controlling Mega Crusts and Alquamoses from behind the scenes. I wish to ask for your help in eliminating these Queen Rainiers. Will you accept? (Level 255-259)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2341,
+   "en": "Our forces in Kanturu Ruins are under attack. Eliminate 50 Splinter Wolves and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2342,
+   "en": "Our reconnaissance party reports of severe resistance from monsters at Dungeon Level 2. I'd like to ask you to do away with these monsters. Will you accept this quest? (Level 111-120)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2343,
+   "en": "Our reconnaissance party reports that some low-ranking monsters are causing quite a headache for them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 161-165)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2344,
+   "en": "Our reconnaissance party reports that stolen supplies are being sent to Kundun's army. Please defeat the monsters controlling these plunderers while we ascertain the location of the supply route. Will you accept this quest? (Level 26-35)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2345,
+   "en": "Our reconnaissance party reports the Army of Darkness formed by Gorgons has lost much of its might. This is the moment you've carried out all these quests for. It's now time to strike the final blow against the Army of Darkness. Will you accept this quest? (Level 141-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2346,
+   "en": "Outside Devias, you'll encounter white monsters known as Worms. Defeat 25 Worms and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2356,
+   "en": "Packs of Iron Wheels often attack travelers in Tarkan. Go to Tarkan and hunt down 100 Iron Wheels. Come see me afterwards to receive a Devil's Invitation + 4 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2371,
+   "en": "Party request?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2398,
+   "en": "Phantom Knights in Icarus are causing great harm to travelers there. Go to Icarus and hunt down 100 Phantom Knights. Come see me when that's done to receive an Invisibility Cloak + 6 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2429,
+   "en": "Plunderers are too much for me to handle. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2430,
+   "en": "Plunderers...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2432,
+   "en": "Points and Status",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2433,
+   "en": "Points gained from leveling up can be used to enhance your strength, agility, stamina, and energy, and thereby affect your damage, defense, HP, and MP levels, respectively.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2462,
+   "en": "Press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2463,
+   "en": "Press D and select Trade or type in '/exchange' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2464,
+   "en": "Press D and select Trade or type in '/invite' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2465,
+   "en": "Press D and select Trade or type in '/trade' in the Chat window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2468,
+   "en": "Press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2469,
+   "en": "Press the Q button to use apples, potions, and other HP recovery items, and the W button to use MP recovery items.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2470,
+   "en": "Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2472,
+   "en": "Prevent the Vepars from interrupting with the expedition. Defeat 50 of them, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2474,
+   "en": "Progress of the business",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2475,
+   "en": "Proof of Fellowship (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2476,
+   "en": "Proof of Fellowship (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2477,
+   "en": "Proof of Fellowship (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2478,
+   "en": "Proof of Fellowship (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2479,
+   "en": "Proof of Fellowship (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2480,
+   "en": "Proof of Fellowship (6)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2482,
+   "en": "Proving One's Worth (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2483,
+   "en": "Proving One's Worth (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2484,
+   "en": "Proving One's Worth (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2485,
+   "en": "Proving One's Worth (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2486,
+   "en": "Proving One's Worth (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2489,
+   "en": "Purchase and bring back 1 Town Portal Scroll.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2490,
+   "en": "Purchase and bring back 5 apples from a merchant.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2493,
+   "en": "Put 500,000 Zen as deposit and I will offer you a Letter of Request came to the mercenary guild. Each request has its level and difficulty. Right click on the Letter of Request to check the information. Please note that you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Do you want to take a Letter of Request? (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2494,
+   "en": "Put a stop to the plundering by eliminating 50 Silver Valkyries. After that, return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2495,
+   "en": "Put the Lost Tower to Sleep! (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2496,
+   "en": "Put the Lost Tower to Sleep! (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2497,
+   "en": "Put the Lost Tower to Sleep! (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2498,
+   "en": "Put the Lost Tower to Sleep! (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2499,
+   "en": "Put the Lost Tower to Sleep! (5)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2500,
+   "en": "Put the Lost Tower to Sleep! (6)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2501,
+   "en": "Put the past behind",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2512,
+   "en": "Queen Rainiers in Icarus should suffice. Go to Icarus and defeat 100 Queen Rainiers. Come see me after that, and I will give you a choice between 10 Large SD Potions and 30 Complex Potions as your reward. When you claim you rewards, make sure you have at least 10 empty slots in your Inventory. Remember that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2513,
+   "en": "Quick, on to the next step!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2514,
+   "en": "Rage of Vepars",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+19|63|%d Rank, skill level %d/10
+20|63|%d Rank, skill level %d/20
+2522|63|Rank %d, Skill Level: %d/1
+2523|63|Rank %d, Skill Level: %d/10
+2524|63|Rank %d, Skill Level: %d/20
+3948|63|el 10

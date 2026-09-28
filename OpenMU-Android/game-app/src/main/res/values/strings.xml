@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">准备游戏资源</string>
+    <string name="preparing_detail">首次启动需要把游戏数据解压到手机内部存储。请保持应用在前台。</string>
+    <string name="ready">游戏已准备好</string>
+    <string name="start_game">进入游戏</string>
+    <string name="settings">设置</string>
+    <string name="gesture_help">手势说明</string>
+    <string name="retry">重试</string>
+    <string name="extract_failed">游戏资源准备失败</string>
+    <string name="save">保存</string>
+    <string name="back">返回</string>
+    <string name="display">画面</string>
+    <string name="controls">操作</string>
+    <string name="network">服务器</string>
+    <string name="fps">帧率</string>
+    <string name="render_scale">渲染比例</string>
+    <string name="effects">特效质量</string>
+    <string name="ui_scale">触控按钮大小</string>
+    <string name="safe_margin">边缘安全区</string>
+    <string name="touch_opacity">触控按钮透明度</string>
+    <string name="vibration">触控与战斗震动</string>
+    <string name="handedness">主要操作手</string>
+    <string name="server_address">服务器地址</string>
+    <string name="server_port">连接端口</string>
+    <string name="local_pairing">本地配对免登录（仅局域网）</string>
+    <string name="restart_note">画面和服务器设置将在下次进入游戏时生效。</string>
+    <string name="invalid_server">请输入服务器 IPv4 地址或域名，不要填写协议和端口。</string>
+    <string name="invalid_local_server">本地配对只支持本机或局域网 IPv4 地址，例如 192.168.1.20。云服务器请关闭本地配对。</string>
+    <string name="invalid_port">端口必须是 1 到 65535。</string>
+    <string name="saved">设置已保存</string>
+    <string name="tutorial_title">手机操作方式</string>
+    <string name="tutorial_body">菜单：单指点击选中或确认。\n角色选择：点选角色，再点右下进入按钮。\n\n普通背包：点击查看；原地按住半秒使用可用物品或学习技能。要移格，按住后直接拖动；拖出背包松手会放回原位。\n底部四个药水格：单击使用；长按不会连续使用。\n\n进入世界后：\n移动区单指拖动：移动\n技能区单击：选中；双击：释放当前技能\n双指左右滑：切换技能\n双指上下滑或捏合：调整镜头\n三指上滑：地图；三指下滑：设置\n\n底部药水栏和界面操作不会触发世界技能。</string>
+    <string name="understood">知道了，进入游戏</string>
+    <string name="help_close">关闭</string>
+    <string name="game_data_missing">APK 中缺少 game-data.zip；这不是完整游戏包。</string>
+    <string name="storage_low">手机内部存储空间不足，至少还需要 %1$s。</string>
+    <string name="current_display">当前屏幕：%1$d × %2$d</string>
+    <string name="max_refresh">本机最高刷新率：%1$d Hz，帧率可在 30～%1$d 之间拖动。</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">最高 %1$d Hz（跟随屏幕）</string>
+    <string name="game_settings">手机版设置</string>
+    <string name="open_settings">打开设置</string>
+    <string-array name="effect_labels">
+        <item>低（优先流畅）</item>
+        <item>中（推荐）</item>
+        <item>高（优先画质）</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>右手</item>
+        <item>左手</item>
+    </string-array>
+</resources>

@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 2194,
+   "en": "Mega Crusts who rank higher than Alquamoses, are planning something in Icarus. Whatever they are planning, it will likely harm our reconnaissance party. Will you help eliminate more of these Mega Crusts? (Level 250-254)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2195,
+   "en": "Members of our reconnaissance party continue to lose their lives to Iron Wheels. Will you help eliminate more of these Iron Wheels? (Level 240-244)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2196,
+   "en": "Members of our reconnaissance party continue to lose their lives to the slashes of Bloody Wolves. Will you help eliminate more of these Bloody Wolves? (Level 235-239)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2198,
+   "en": "Mercenary Guild Office?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2199,
+   "en": "Mercenary's request varies depending on the day of the week. Please check the location and task before you start. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2232,
+   "en": "Monster Supply Route in Devias!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2235,
+   "en": "Monster hunting is my specialty....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2237,
+   "en": "Monsters are continuing to hamper advancement into Icarus. Go meet with the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2238,
+   "en": "Monsters are posing a threat to the safe zone once again. Go meet with the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2239,
+   "en": "Monsters are still trying to mobilize and set a blockade on the path to Icarus. Will you help eliminate more of these monsters? (Level 220-229)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2240,
+   "en": "Monsters are taking over the Dungeon in Lorencia once again. Our reconnaissance party is too busy dealing with monsters and can't make prompt reports. I wish to ask for your help with this matter. Will you accept this quest? (Level 91-100)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2241,
+   "en": "Monsters have started attacking the soldiers again. Go meet with the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2242,
+   "en": "Monsters, however, continued to spawn at regular intervals from the spot where the tree once stood. After careful consideration, the queen of the Elves decided to make a training arena of this place for travelers.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2247,
+   "en": "Much of the evil energy from the Lost Tower has subsided, but the guardians at the tower are struggling to cope with a sudden increase in monsters. I have a quest that will help them. Will you accept this quest? (Level 190-193)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2254,
+   "en": "My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the Elf queen. I am happy to make your acquaintance.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2256,
+   "en": "NPC dialog script error!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2261,
+   "en": "New request for you hasn't been delivered yet. You can start a new request after 24 hours since a request has been cleared. Please come back after that.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2264,
+   "en": "No more. Going any further is beyond me. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2266,
+   "en": "No, I don't want to. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2267,
+   "en": "No, I need some rest first. (Refuse)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2268,
+   "en": "No. I will give it more thought.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2270,
+   "en": "Not at all. It's only natural to work for the clan. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2275,
+   "en": "Now that the defense of the supply route has weakened, it's time to stir up the enemy's command structure a bit more. I'd like to ask you to defeat the high-ranking monsters that control those in charge of the supply route. Will you accept this quest? (Level 46-55)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2276,
+   "en": "Now, press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2278,
+   "en": "Obtain 10 Clubs from Burnt Murderers in Vulcanus and bring them to Zyro to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2279,
+   "en": "Obtain 10 Kalt Stones from Witch Queens in Aida and bring them to Zyro to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2280,
+   "en": "Obtain 20 suits of Tantalos's Armor from Tantaloses in Tarkan 2 and then go back to Zyro to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2281,
+   "en": "Obtain rare jewels",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2283,
+   "en": "Of course I did.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2284,
+   "en": "Of course I know. What's the next quest?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2285,
+   "en": "Of course I'm up for hunting down monsters....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2286,
+   "en": "Of course. I gladly accept Archangel's quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2287,
+   "en": "Of course...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2289,
+   "en": "Oh! Thanks to your bravery, we were able to crush those good-for-nothing Duprians once again. This is a reward bestowed to you by Vanert Reicht himself for your contributions in battle. I hope to see you in action once again next month.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2290,
+   "en": "Oh! That will surely come in handy!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2291,
+   "en": "Oh! You wish to become a member of Gens Duprian? Share our virtues of honor and respect, and help in the fight to crush the greed of Gens Vanert and find the stone that will seal away Kundun.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2292,
+   "en": "Oh, I didn't recognize how strong you are and gave you a wrong request. Would you give me back the Lv. 1 Letter of Request?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2293,
+   "en": "Oh, I haven't introduced myself yet. My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the queen of Noria.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2294,
+   "en": "Oh, already gone...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2295,
+   "en": "Oh, there are different requests depending on the day of the week.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2296,
+   "en": "Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Crystal Sword (Attack power +12). I will reward you when you bring me the sword.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2297,
+   "en": "Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Sword of Destruction (Attack power +12). I will reward you when you bring me the sword.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2298,
+   "en": "Oh, this is a request from the Shadow Phantom unit in Kanturu Ruins asking for help repelling Splinter Wolves and finding the training material for recruits. Kill 20 Splinter Wolves and find 1 Ancient Stick (Wizardry damage +12). I will reward you when you bring me the stick.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2299,
+   "en": "Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 1 Staff of Resurrection (Wizardry damage +12). I will reward you when you bring me the staff.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2300,
+   "en": "Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 10 Unirias. I will reward you when you bring me the Unirias.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2301,
+   "en": "Ok, I will head for Aida at once. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2302,
+   "en": "Ok, I will take care of him right away. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2303,
+   "en": "Ok, I'll give it a try. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2304,
+   "en": "Ok, I'll try it. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 2305,
+   "en": "Ok, I'm ready. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

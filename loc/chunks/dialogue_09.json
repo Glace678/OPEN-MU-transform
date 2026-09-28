@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1353,
+   "en": "Go to Tarkan. Defeat 50 Bloody Wolves and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 1, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1354,
+   "en": "Go to Tarkan. Defeat 70 Iron Wheels and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 2, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1355,
+   "en": "Go to Varka and eliminate Advisor Jerind and Gaion Kharein. When you finish the job and come back to me, I'll give you the reward from the guild. Also, you can get the refund without the Lv. 1 Request Completion Certificate when you complete this task.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1356,
+   "en": "Go to Vulcanus and eliminate 50 Blood Assassins, and I'll give you a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1357,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. I'll give you an Ancient Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1358,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. I'll give you an Eclipse Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1359,
+   "en": "Go to the Lost Tower Level 1 and defeat 100 Shadows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1360,
+   "en": "Go to the Lost Tower Level 1 and defeat 50 Shadows and 50 Poison Shadows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1361,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 30 Poison Shadows, and I'll give you Ancient Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1362,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 30 Poison Shadows, and I'll give you Eclipse Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1363,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 50 Poison Shadows, and I'll give you Ashcrow Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1364,
+   "en": "Go to the Lost Tower Level 1. Defeat 50 Shadows and 50 Poison Shadows, and I'll give you Iris Gloves + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1365,
+   "en": "Go to the Lost Tower Level 2 and defeat 50 Poison Shadows and 30 Cursed Wizards. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1366,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Ancient Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1367,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Ashcrow Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1368,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Eclipse Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1369,
+   "en": "Go to the Lost Tower Level 2. Defeat 50 Poison Shadows and 30 Cursed Wizards, and I'll give you Iris Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1370,
+   "en": "Go to the Lost Tower Level 3 and defeat 50 Cursed Wizards and 50 Death Cows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1371,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Ancient Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1372,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Ashcrow Helm + 7 and Ashcrow Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1373,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Eclipse Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1374,
+   "en": "Go to the Lost Tower Level 3. Defeat 50 Cursed Wizards and 50 Death Cows, and I'll give you an Iris Helm + 7 and Iris Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1375,
+   "en": "Go to the Lost Tower Level 4 and defeat 50 Death Cows and 30 Devils. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1376,
+   "en": "Go to the Lost Tower Level 4. Defeat 50 Death Cows and 30 Devils, and I'll give you Ashcrow Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1377,
+   "en": "Go to the Lost Tower Level 4. Defeat 50 Death Cows and 30 Devils, and I'll give you Iris Gloves + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1378,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Gorgons and 10 Balrogs. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1379,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Knights and 50 Death Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1380,
+   "en": "Go to the Lost Tower Level 7 and defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1381,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Gorgons and 10 Balrogs, and I'll give you an Ashcrow Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1382,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Gorgons and 10 Balrogs, and I'll give you an Iris Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1383,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights and 30 Death Gorgons, and I'll give you Ashcrow Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1384,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights and 30 Death Gorgons, and I'll give you Iris Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1385,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs, and I'll give you a Crystal Sword + 7 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1386,
+   "en": "Go to the Lost Tower Level 7. Defeat 50 Death Knights, 30 Death Gorgons, and 20 Balrogs, and I'll give you an Aquagold Crossbow + 7 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1387,
+   "en": "Go to the Lost Tower Levels 2 and 3. Defeat 60 Death Cows and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 2, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1388,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you Ancient Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1389,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you Eclipse Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1390,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you an Ashcrow Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1391,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. I'll give you an Iris Armor + 7 and a Chaos Dragon Axe + 4 + Option as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1392,
+   "en": "Go to the Lost Tower Levels 3 and 4 and defeat 100 Death Cows. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1393,
+   "en": "Go to the Lost Tower Levels 4 and 5 and defeat 100 Devils. I'll give you Ashcrow Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1394,
+   "en": "Go to the Lost Tower Levels 4 and 5 and defeat 100 Devils. I'll give you Iris Boots + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1395,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. I'll give you an Ancient Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1396,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. I'll give you an Eclipse Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1397,
+   "en": "Go to the Lost Tower Levels 4 through 6 and defeat 100 Devils. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1398,
+   "en": "Go to the Lost Tower Levels 4 through 6, and you'll encounter Devils that use dark magic. Defeat 50 Devils and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1399,
+   "en": "Go to the Lost Tower Levels 4 through 6, and you'll encounter Devils that use dark magic. Defeat 60 Devils and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1400,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you a Legendary Staff + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1401,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you a Red Wing Stick + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1402,
+   "en": "Go to the Lost Tower Levels 5 through 7 and defeat 100 Death Knights. I'll give you an Ashcrow Helm + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

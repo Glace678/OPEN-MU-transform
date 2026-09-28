@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Save Items" xml:space="preserve">
+    <value>保存物品</value>
+  </data>
+  <data name="Save Skills" xml:space="preserve">
+    <value>保存技能</value>
+  </data>
+  <data name="Export as S6E3" xml:space="preserve">
+    <value>导出为 S6E3 格式</value>
+  </data>
+  <data name="Export as CSV" xml:space="preserve">
+    <value>导出为 CSV 格式</value>
+  </data>
+  <data name="Export Skills as CSV" xml:space="preserve">
+    <value>导出技能为 CSV 格式</value>
+  </data>
+  <data name="Columns" xml:space="preserve">
+    <value>字段设置</value>
+  </data>
+  <data name="Select All" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="Unselect All" xml:space="preserve">
+    <value>取消全选</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Save completed successfully!" xml:space="preserve">
+    <value>保存成功！</value>
+  </data>
+  <data name="Failed to save items!" xml:space="preserve">
+    <value>保存失败！</value>
+  </data>
+  <data name="Skills saved successfully!" xml:space="preserve">
+    <value>技能保存成功！</value>
+  </data>
+  <data name="Failed to save skills!" xml:space="preserve">
+    <value>技能保存失败！</value>
+  </data>
+  <data name="S6E3 export completed successfully!" xml:space="preserve">
+    <value>导出 S6E3 成功！</value>
+  </data>
+  <data name="Failed to export as S6E3 format!" xml:space="preserve">
+    <value>导出 S6E3 格式失败！</value>
+  </data>
+  <data name="CSV export completed successfully!" xml:space="preserve">
+    <value>导出 CSV 成功！</value>
+  </data>
+  <data name="Failed to export as CSV!" xml:space="preserve">
+    <value>导出 CSV 失败！</value>
+  </data>
+  <data name="Skills exported as CSV successfully!" xml:space="preserve">
+    <value>技能导出 CSV 成功！</value>
+  </data>
+  <data name="Failed to export skills as CSV!" xml:space="preserve">
+    <value>技能导出 CSV 失败！</value>
+  </data>
+  <data name="File not found: {0}" xml:space="preserve">
+    <value>找不到文件：{0}</value>
+  </data>
+  <data name="Invalid index: {0}" xml:space="preserve">
+    <value>无效索引：{0}</value>
+  </data>
+  <data name="Error: Index {0} already in use!" xml:space="preserve">
+    <value>错误：索引 {0} 已被使用！</value>
+  </data>
+  <data name="Search:" xml:space="preserve">
+    <value>搜索：</value>
+  </data>
+  <data name="Freeze Index/Name" xml:space="preserve">
+    <value>冻结索引/名称</value>
+  </data>
+  <data name="No columns selected. Click 'Columns' to show columns." xml:space="preserve">
+    <value>未选择任何字段。请点击“字段”以显示字段。</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>索引</value>
+  </data>
+  <data name="Toggle Column Visibility:" xml:space="preserve">
+    <value>切换字段显示状态：</value>
+  </data>
+  <data name="Items saved successfully!" xml:space="preserve">
+    <value>物品保存成功！</value>
+  </data>
+  <data name="Exported as legacy format successfully!" xml:space="preserve">
+    <value>导出旧版格式成功！</value>
+  </data>
+  <data name="Failed to export as legacy format!" xml:space="preserve">
+    <value>导出旧版格式失败！</value>
+  </data>
+  <data name="Items exported as CSV successfully!" xml:space="preserve">
+    <value>物品导出 CSV 成功！</value>
+  </data>
+  <data name="Failed to export item attributes as CSV!" xml:space="preserve">
+    <value>物品属性导出 CSV 失败！</value>
+  </data>
+  <data name="Failed to export skill attributes as CSV!" xml:space="preserve">
+    <value>技能属性导出 CSV 失败！</value>
+  </data>
+  <data name="Skill Editor" xml:space="preserve">
+    <value>技能编辑器</value>
+  </data>
+  <data name="Search Skills:" xml:space="preserve">
+    <value>搜索技能：</value>
+  </data>
+  <data name="Item Editor" xml:space="preserve">
+    <value>物品编辑器</value>
+  </data>
+  <data name="Dev Editor" xml:space="preserve">
+    <value>开发编辑器</value>
+  </data>
+  <data name="Scenes" xml:space="preserve">
+    <value>场景</value>
+  </data>
+  <data name="Graphics" xml:space="preserve">
+    <value>图形</value>
+  </data>
+  <data name="Login Scene" xml:space="preserve">
+    <value>登录场景</value>
+  </data>
+  <data name="Character Scene" xml:space="preserve">
+    <value>角色场景</value>
+  </data>
+  <data name="Game Scene" xml:space="preserve">
+    <value>游戏场景</value>
+  </data>
+  <data name="Debug" xml:space="preserve">
+    <value>调试</value>
+  </data>
+  <data name="Nothing here yet." xml:space="preserve">
+    <value>尚无内容。</value>
+  </data>
+  <data name="Switch to FreeFly" xml:space="preserve">
+    <value>切换至自由飞行</value>
+  </data>
+  <data name="Switch to Game Camera" xml:space="preserve">
+    <value>切换至游戏相机</value>
+  </data>
+  <data name="FreeFly" xml:space="preserve">
+    <value>自由飞行</value>
+  </data>
+  <data name="Spectating" xml:space="preserve">
+    <value>正在观察</value>
+  </data>
+  <data name="Snap to Spectated" xml:space="preserve">
+    <value>对齐至观察对象</value>
+  </data>
+  <data name="Arrows/PgUp/PgDn=Move  RMB=Look  Shift=Fast" xml:space="preserve">
+    <value>方向键/PgUp/PgDn=移动  右键=视角  Shift=加速</value>
+  </data>
+  <data name="Offset X" xml:space="preserve">
+    <value>偏移 X</value>
+  </data>
+  <data name="Offset Y" xml:space="preserve">
+    <value>偏移 Y</value>
+  </data>
+  <data name="Offset Z" xml:space="preserve">
+    <value>偏移 Z</value>
+  </data>
+  <data name="Pitch" xml:space="preserve">
+    <value>俯仰</value>
+  </data>
+  <data name="Yaw" xml:space="preserve">
+    <value>偏航</value>
+  </data>
+  <data name="Reset Offsets" xml:space="preserve">
+    <value>重置偏移</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="Restart" xml:space="preserve">
+    <value>重新开始</value>
+  </data>
+  <data name="Start Tour" xml:space="preserve">
+    <value>开始巡游</value>
+  </data>
+  <data name="Render Distances:" xml:space="preserve">
+    <value>绘制距离：</value>
+  </data>
+  <data name="Terrain ViewFar" xml:space="preserve">
+    <value>地形视野</value>
+  </data>
+  <data name="Object Distance" xml:space="preserve">
+    <value>对象距离</value>
+  </data>
+  <data name="Reset Distances" xml:space="preserve">
+    <value>重置距离</value>
+  </data>
+  <data name="Switch to (or spectate) Default or Orbital to edit overrides." xml:space="preserve">
+    <value>请切换至 (或观察) 默认或环绕相机以编辑覆盖设置。</value>
+  </data>
+  <data name="Override Default Camera Config" xml:space="preserve">
+    <value>覆盖默认相机设置</value>
+  </data>
+  <data name="Hero-relative camera with hardcoded 2D trapezoid culling." xml:space="preserve">
+    <value>以英雄为中心的相机，使用内置的 2D 梯形剔除。</value>
+  </data>
+  <data name="View Frustum" xml:space="preserve">
+    <value>视锥</value>
+  </data>
+  <data name="Far Plane" xml:space="preserve">
+    <value>远平面</value>
+  </data>
+  <data name="Camera Offset (world units, from hero)" xml:space="preserve">
+    <value>相机偏移 (世界单位，相对于英雄)</value>
+  </data>
+  <data name="2D Culling Trapezoid Width" xml:space="preserve">
+    <value>2D 剔除梯形宽度</value>
+  </data>
+  <data name="Bottom (near) x" xml:space="preserve">
+    <value>底部 (近) x</value>
+  </data>
+  <data name="Top (far) x" xml:space="preserve">
+    <value>顶部 (远) x</value>
+  </data>
+  <data name="Fog" xml:space="preserve">
+    <value>雾</value>
+  </data>
+  <data name="Override Fog" xml:space="preserve">
+    <value>覆盖雾</value>
+  </data>
+  <data name="Fog On" xml:space="preserve">
+    <value>雾开启</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>开</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>关</value>
+  </data>
+  <data name="Fog Start %" xml:space="preserve">
+    <value>雾起始 %</value>
+  </data>
+  <data name="Fog End %" xml:space="preserve">
+    <value>雾结束 %</value>
+  </data>
+  <data name="Reset to Camera Defaults" xml:space="preserve">
+    <value>重置为相机默认值</value>
+  </data>
+  <data name="Override Orbital Camera Config" xml:space="preserve">
+    <value>覆盖环绕相机设置</value>
+  </data>
+  <data name="Tunes the 2D terrain-cull hull; does not touch FOV / far clip." xml:space="preserve">
+    <value>调整 2D 地形剔除外壳，不影响 FOV / 远裁剪面。</value>
+  </data>
+  <data name="2D Culling Trapezoid (world units)" xml:space="preserve">
+    <value>2D 剔除梯形 (世界单位)</value>
+  </data>
+  <data name="Far distance" xml:space="preserve">
+    <value>远距离</value>
+  </data>
+  <data name="Top (far) width" xml:space="preserve">
+    <value>顶部 (远) 宽度</value>
+  </data>
+  <data name="Near distance" xml:space="preserve">
+    <value>近距离</value>
+  </data>
+  <data name="Bottom (near) width" xml:space="preserve">
+    <value>底部 (近) 宽度</value>
+  </data>
+  <data name="View-aligned: follows camera yaw + pitch (tracks what you look at)." xml:space="preserve">
+    <value>视角对齐：跟随相机的偏航与俯仰（追踪所视对象）。</value>
+  </data>
+  <data name="Reset to Natural Pyramid" xml:space="preserve">
+    <value>重置为自然视锥</value>
+  </data>
+  <data name="Debug Visualization:" xml:space="preserve">
+    <value>调试可视化：</value>
+  </data>
+  <data name="Character Pick Boxes" xml:space="preserve">
+    <value>角色拾取框</value>
+  </data>
+  <data name="Item Pick Boxes" xml:space="preserve">
+    <value>物品拾取框</value>
+  </data>
+  <data name="Item Cull Sphere" xml:space="preserve">
+    <value>物品剔除球体</value>
+  </data>
+  <data name="Tile Grid" xml:space="preserve">
+    <value>地块网格</value>
+  </data>
+  <data name="Item Cull Radius" xml:space="preserve">
+    <value>物品剔除半径</value>
+  </data>
+  <data name="Rendering:" xml:space="preserve">
+    <value>绘制：</value>
+  </data>
+  <data name="Terrain" xml:space="preserve">
+    <value>地形</value>
+  </data>
+  <data name="Static Objects" xml:space="preserve">
+    <value>静态对象</value>
+  </data>
+  <data name="Effects" xml:space="preserve">
+    <value>特效</value>
+  </data>
+  <data name="Dropped Items" xml:space="preserve">
+    <value>掉落物品</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>天气</value>
+  </data>
+  <data name="Item Labels" xml:space="preserve">
+    <value>物品标签</value>
+  </data>
+  <data name="All ON" xml:space="preserve">
+    <value>全部打开</value>
+  </data>
+  <data name="All OFF" xml:space="preserve">
+    <value>全部关闭</value>
+  </data>
+  <data name="TODO - Not Working:" xml:space="preserve">
+    <value>待办 - 暂不可用：</value>
+  </data>
+  <data name="Shaders" xml:space="preserve">
+    <value>着色器</value>
+  </data>
+  <data name="Skill Effects" xml:space="preserve">
+    <value>技能特效</value>
+  </data>
+  <data name="Equipped Items" xml:space="preserve">
+    <value>已装备物品</value>
+  </data>
+  <data name="UI" xml:space="preserve">
+    <value>界面</value>
+  </data>
+  <data name="TODO - Not Implemented:" xml:space="preserve">
+    <value>待办 - 尚未实现：</value>
+  </data>
+  <data name="Hero" xml:space="preserve">
+    <value>英雄</value>
+  </data>
+  <data name="NPCs" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="Monsters" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="Graphics Debug Info" xml:space="preserve">
+    <value>图形调试信息</value>
+  </data>
+  <data name="WARNING: Window size mismatch detected!" xml:space="preserve">
+    <value>警告：检测到窗口尺寸不一致！</value>
+  </data>
+  <data name="Copy Debug Info to Clipboard" xml:space="preserve">
+    <value>复制调试信息至剪贴板</value>
+  </data>
+  <data name="(Paste in Discord/notepad)" xml:space="preserve">
+    <value>(贴至 Discord/记事本)</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="Orbital" xml:space="preserve">
+    <value>环绕</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="Pos" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Tile" xml:space="preserve">
+    <value>地块</value>
+  </data>
+  <data name="Tour" xml:space="preserve">
+    <value>巡游</value>
+  </data>
+  <data name="ACTIVE" xml:space="preserve">
+    <value>激活中</value>
+  </data>
+  <data name="INACTIVE" xml:space="preserve">
+    <value>未激活</value>
+  </data>
+  <data name=" (PAUSED)" xml:space="preserve">
+    <value> (已暂停)</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>近</value>
+  </data>
+  <data name="Far" xml:space="preserve">
+    <value>远</value>
+  </data>
+  <data name="ViewFar" xml:space="preserve">
+    <value>视野远</value>
+  </data>
+  <data name="ProjFar" xml:space="preserve">
+    <value>投影远</value>
+  </data>
+  <data name="Zoom" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="Orbital Target" xml:space="preserve">
+    <value>环绕目标</value>
+  </data>
+  <data name="Current Resolution" xml:space="preserve">
+    <value>当前分辨率</value>
+  </data>
+  <data name="OpenGL Viewport" xml:space="preserve">
+    <value>OpenGL 视口</value>
+  </data>
+  <data name="Screen Rate" xml:space="preserve">
+    <value>屏幕比率</value>
+  </data>
+  <data name="Window Mode" xml:space="preserve">
+    <value>窗口模式</value>
+  </data>
+  <data name="Windowed" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="Fullscreen" xml:space="preserve">
+    <value>全屏</value>
+  </data>
+  <data name="Actual Window Client" xml:space="preserve">
+    <value>实际窗口客户区</value>
+  </data>
+  <data name="Calculated Scale from Client" xml:space="preserve">
+    <value>从客户区计算的缩放</value>
+  </data>
+  <data name="Debug info copied to clipboard" xml:space="preserve">
+    <value>调试信息已复制至剪贴板</value>
+  </data>
+</root>

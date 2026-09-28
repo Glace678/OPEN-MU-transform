@@ -1,0 +1,971 @@
+{
+ "group": "text",
+ "items": [
+  {
+   "id": 68,
+   "en": "5 stat points are rewarded each time you level up.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 82,
+   "en": "A new event zone, Illusion Temple Update! We invite all MU lovers into the zone. Please feel free to refer to the official website",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 135,
+   "en": "Aegis",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 147,
+   "en": "Agon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 162,
+   "en": "Alex in Lorencia who sells mid level items is at coordinate 63, 130.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 165,
+   "en": "Alliance Sacred Item Storage",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 166,
+   "en": "Alpha Crust",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 167,
+   "en": "Alquamos",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 186,
+   "en": "Angela the Supplier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 192,
+   "en": "Apostle Devin",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 197,
+   "en": "Archangel",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 198,
+   "en": "Archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 202,
+   "en": "Arena Guard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 214,
+   "en": "Ash Slaughterer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 223,
+   "en": "Assassin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 250,
+   "en": "At level 100, you can become a guild master.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 251,
+   "en": "At level 50, you will be able to use the '/warp' command or the hotkey 'M' to teleport to another region.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 311,
+   "en": "Ax Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 312,
+   "en": "Axl Hero",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 313,
+   "en": "Bahamut",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 314,
+   "en": "Balgass",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 315,
+   "en": "Bali",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 316,
+   "en": "Balram",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 317,
+   "en": "Balram (Trainee Soldier)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 318,
+   "en": "Balrog",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 325,
+   "en": "Beam Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 330,
+   "en": "Beetle Monster",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 338,
+   "en": "Berserker Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 354,
+   "en": "Blade Hunter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 356,
+   "en": "Blaze Napin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 365,
+   "en": "Blitzen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 367,
+   "en": "Blood Assassin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 386,
+   "en": "Blood Soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 390,
+   "en": "Bloody Death Rider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 391,
+   "en": "Bloody Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 392,
+   "en": "Bloody Orc",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 393,
+   "en": "Bloody Witch Queen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 394,
+   "en": "Bloody wolf",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 396,
+   "en": "Blue Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 398,
+   "en": "Bodyguard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 406,
+   "en": "Bone Scorpion",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 413,
+   "en": "Bow Scout",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 438,
+   "en": "Budge Dragon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 439,
+   "en": "Bull Fighter",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 440,
+   "en": "Burning Lava Giant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 448,
+   "en": "Canon Tower",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 449,
+   "en": "Canon Trap",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 454,
+   "en": "Captain Grizzly",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 455,
+   "en": "Caren the Barmaid",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 457,
+   "en": "Castle Gate",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 458,
+   "en": "Castle Gate 1",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 459,
+   "en": "Castle Gate 2",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 460,
+   "en": "Castle Gate 3",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 461,
+   "en": "Castle Gate 4",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 462,
+   "en": "Castle Gate Switch",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 464,
+   "en": "Cavalry Captain",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 475,
+   "en": "Chain Scorpion",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 482,
+   "en": "Chaos Card Master",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 484,
+   "en": "Chaos Castle 1",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 485,
+   "en": "Chaos Castle 10",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 486,
+   "en": "Chaos Castle 11",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 487,
+   "en": "Chaos Castle 12",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 488,
+   "en": "Chaos Castle 2",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 489,
+   "en": "Chaos Castle 3",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 490,
+   "en": "Chaos Castle 4",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 491,
+   "en": "Chaos Castle 5",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 492,
+   "en": "Chaos Castle 6",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 493,
+   "en": "Chaos Castle 7",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 494,
+   "en": "Chaos Castle 8",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 495,
+   "en": "Chaos Castle 9",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 507,
+   "en": "Chaos Castle13",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 508,
+   "en": "Chaos Castle14",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 510,
+   "en": "Chaos Goblin",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 519,
+   "en": "Characters over level 10 will lose a certain percentage of their experience points and zen when they die.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 521,
+   "en": "Charon",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 528,
+   "en": "Cherry Blossom Spirit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 529,
+   "en": "Cherry Blossom Tree",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 531,
+   "en": "Chief Skeleton Archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 532,
+   "en": "Chief Skeleton Warrior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 534,
+   "en": "Christine the General Goods Merchant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 544,
+   "en": "Click shortcut key T to check the quest information.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 550,
+   "en": "Combat Instructor",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 574,
+   "en": "Condra",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 602,
+   "en": "Coolutin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 610,
+   "en": "Critical Damage (max damage) is displayed in light blue.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 625,
+   "en": "Crown",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 627,
+   "en": "Crown Switch1",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 628,
+   "en": "Crown Switch2",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 629,
+   "en": "Cruel Blood Assassin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 632,
+   "en": "Crypos",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 633,
+   "en": "Crypta",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 640,
+   "en": "Cupid",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 645,
+   "en": "Cursed Goblin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 646,
+   "en": "Cursed Lich",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 647,
+   "en": "Cursed Santa",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 648,
+   "en": "Cursed Wizard",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 649,
+   "en": "Cursed king",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 654,
+   "en": "Cyclops",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 672,
+   "en": "Dark Coolutin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 673,
+   "en": "Dark Elf",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 674,
+   "en": "Dark Elf (Trainee Soldier)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 675,
+   "en": "Dark Giant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 678,
+   "en": "Dark Iron Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 679,
+   "en": "Dark Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 683,
+   "en": "Dark Mammoth",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 702,
+   "en": "Dark Skull Soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 728,
+   "en": "Dasher",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 729,
+   "en": "David",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 732,
+   "en": "Death Angel",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 733,
+   "en": "Death Beam Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 734,
+   "en": "Death Bone",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 735,
+   "en": "Death Centurion",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 736,
+   "en": "Death Cow",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 737,
+   "en": "Death Gorgon",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 738,
+   "en": "Death King",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 739,
+   "en": "Death Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 741,
+   "en": "Death Rider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 742,
+   "en": "Death Spirit (Trainee Soldier)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 747,
+   "en": "Death Tree",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 748,
+   "en": "Death spirit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  }
+ ]
+}

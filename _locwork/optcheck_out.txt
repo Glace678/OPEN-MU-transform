@@ -1,0 +1,39 @@
+AverageFrameRate                 [AverageFrameRate                        ] tl:=en
+DefaultFont                      [DefaultFont                             ] id:=en tl:=en
+Font                             [Font                                    ] id:=en tl:=en
+FrameLimitFrameLimiter           [FrameLimitFrameLimiter                  ] tl:=en
+FrameLimitVerticalSync           [FrameLimitVerticalSync                  ] tl:=en
+Gamepad                          [Gamepad                                 ] de:=en id:=en tl:=en
+GamepadActionMenu                [GamepadActionMenu                       ] tl:=en
+GamepadActionQuickItem1          [GamepadActionQuickItem1                 ] tl:=en
+GamepadActionQuickItem2          [GamepadActionQuickItem2                 ] tl:=en
+GamepadActionQuickItem3          [GamepadActionQuickItem3                 ] tl:=en
+GamepadActionQuickItem4          [GamepadActionQuickItem4                 ] tl:=en
+Haptics                          [Haptics                                 ] de:=en tl:=en
+OnePercentLow                    [OnePercentLow                           ] ja:=en zh-CN:=en
+SlideHelp                        [Slide Help                              ] tl:=en
+VerticalSync                     [VerticalSync                            ] tl:=en
+WindowedMode                     [Windowed mode                           ] tl:=en
+
+70 option ids across 12 locales; 22 problem cells
+
+--- Japanese values for visible Options labels ---
+AutomaticAttack            = 自動攻撃
+BeepSoundForWhispering     = ささやき通知音
+EffectLimitation           = +效果制限
+Font                       = フォント
+FrameRate                  = フレームレート
+Gamepad                    = ゲームパッド
+GamepadEnabled             = ゲームパッドを有効にする
+Haptics                    = 振動
+Language                   = 言語
+MusicVolume                = 音楽音量
+PointerSpeed               = ポインター速度
+RenderFullEffects          = フルエフェクト表示
+Resolution                 = 解像度
+RestartLanguageMessage     = ゲーム内の表記（NPC名、クエスト、アイテム、スキルなど）はゲームを再起動するまで反映されません。今すぐ再起動しますか？
+RestartRequiredTitle       = 言語を変更しました
+SlideHelp                  = スライドガイド
+SoundVolume                = サウンド音量
+VerticalSync               = 垂直同期
+WindowedMode               = ウィンドウモード

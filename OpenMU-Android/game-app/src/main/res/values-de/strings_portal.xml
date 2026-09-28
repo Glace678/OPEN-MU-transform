@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Konto</string>
+    <string name="account_portal_address">Portaladresse</string>
+    <string name="account_portal_language">Portalsprache</string>
+    <string name="account_register">Registrieren</string>
+    <string name="account_change_password">Passwort ändern</string>
+    <string name="account_reset_password">Passwort vergessen?</string>
+    <string name="account_portal_settings">Kontoeinstellungen</string>
+    <string name="account_portal_not_configured">Trage in den Einstellungen eine gültige Kontoportaladresse ein.</string>
+    <string name="account_portal_invalid">Gib einen HTTPS-Ursprung ein. HTTP ist nur für direkte Loopback-Adressen oder vertrauenswürdige lokale Kopplung erlaubt. Zugangsdaten, Pfade, Abfragen und Fragmente sind nicht erlaubt.</string>
+    <string name="account_portal_no_browser">Kein Browser zum Öffnen des Kontoportals verfügbar.</string>
+</resources>

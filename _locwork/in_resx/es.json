@@ -1,0 +1,582 @@
+{
+ "locale": "es",
+ "language": "Spanish",
+ "items": [
+  {
+   "group": "Game",
+   "key": "LoginRememberUsername",
+   "en": "Remember Username",
+   "comment": "Login screen: remember-username checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginRememberPassword",
+   "en": "Remember Password",
+   "comment": "Login screen: remember-password checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginTrustWarning",
+   "en": "Only save the password on a PC you trust.",
+   "comment": "Login screen: warning under the remember-password checkbox."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningTitle",
+   "en": "WARNING!!!",
+   "comment": "Remember-password confirmation dialog: header."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningBody",
+   "en": "Saving the password lets anyone using this computer log into your account. Only do this on a PC you trust. Save the password?",
+   "comment": "Remember-password confirmation dialog: body."
+  },
+  {
+   "group": "Game",
+   "key": "BasicAttackFallback",
+   "en": "Basic Attack Fallback",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Connection lost",
+   "en": "Connection lost",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Checking server availability",
+   "en": "Checking server availability",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Logging in",
+   "en": "Logging in",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Loading character list",
+   "en": "Loading character list",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Entering the game",
+   "en": "Entering the game",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Retrying in seconds",
+   "en": "Retrying in %d seconds...",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTitle",
+   "en": "Commands",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNotSupported",
+   "en": "This server does not offer a command list.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsExecute",
+   "en": "Execute",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "JToggleChatCommands",
+   "en": "J : Chat Commands On/Off",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SpecialCommands",
+   "en": "Special",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsBack",
+   "en": "Back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTemplates",
+   "en": "Templates",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNoTemplates",
+   "en": "No templates saved yet.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsSaveTemplate",
+   "en": "Save as template",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsAddFavourite",
+   "en": "Add to favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsRemoveFavourite",
+   "en": "Remove from favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsFillRequired",
+   "en": "Please enter the required values first.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsUnknownCommand",
+   "en": "This command is not available anymore.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameRate",
+   "en": "Frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FollowDisplay",
+   "en": "Follow display",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayNativeMaximum",
+   "en": "Display native maximum",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "VerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RequestedFrameRate",
+   "en": "Requested frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EffectiveFrameRate",
+   "en": "Effective frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayRefreshRate",
+   "en": "Display refresh rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ActualFrameRate",
+   "en": "Actual frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "AverageFrameRate",
+   "en": "Average FPS",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "OnePercentLow",
+   "en": "1% Low",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LimitReason",
+   "en": "Limit reason",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Gamepad",
+   "en": "Gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadEnabled",
+   "en": "Enable gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Haptics",
+   "en": "Vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HapticIntensity",
+   "en": "Vibration intensity",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CombatHaptics",
+   "en": "Combat vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "UIHaptics",
+   "en": "UI vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TransactionHaptics",
+   "en": "Transaction vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ShortRumbleTest",
+   "en": "Test short vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LongRumbleTest",
+   "en": "Test long vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RumbleUnsupported",
+   "en": "Vibration is not supported by this controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "StickDeadZone",
+   "en": "Stick dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PointerSpeed",
+   "en": "Pointer speed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitFrameLimiter",
+   "en": "Frame limiter",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitVerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitDisplayFallback",
+   "en": "Refresh rate unavailable, falling back to 60 Hz",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitBackground",
+   "en": "Background frame rate limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitUnevenVSync",
+   "en": "VSync uneven cadence",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitPerformanceOrExternal",
+   "en": "Performance/external limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ControllerMapping",
+   "en": "Controller mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GenericController",
+   "en": "Generic controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadAction",
+   "en": "Action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PhysicalControl",
+   "en": "Physical control",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TriggerDeadZone",
+   "en": "Trigger dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "InvertPointerY",
+   "en": "Invert pointer Y",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CurrentMapping",
+   "en": "Current mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestoreDefaultMapping",
+   "en": "Restore default mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionConfirm",
+   "en": "Confirm / interact",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionCancel",
+   "en": "Cancel / back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPrimaryAttack",
+   "en": "Primary attack",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionContext",
+   "en": "Context action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionUseSkill",
+   "en": "Use current skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionLockTarget",
+   "en": "Lock target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPreviousSkill",
+   "en": "Previous skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextSkill",
+   "en": "Next skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem1",
+   "en": "Quick item 1",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem2",
+   "en": "Quick item 2",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem3",
+   "en": "Quick item 3",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem4",
+   "en": "Quick item 4",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMap",
+   "en": "Map",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMenu",
+   "en": "System menu",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionHelper",
+   "en": "MU Helper",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextTarget",
+   "en": "Next target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplaySettingsConfirmation",
+   "en": "Keep these display settings? Reverting in %d seconds.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "KeepDisplaySettings",
+   "en": "Keep (A / Enter)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RevertDisplaySettings",
+   "en": "Revert (B / Esc)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopTitle",
+   "en": "Solo Shop",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopEquipment",
+   "en": "Equipment",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopMaterials",
+   "en": "Materials",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopSkills",
+   "en": "Skills",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopPets",
+   "en": "Pets / Tickets",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopConsumables",
+   "en": "Consumables",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchange",
+   "en": "Exchange 1,000 Zen for 100 WCoin(C)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchangeSucceeded",
+   "en": "1,000 Zen exchanged for 100 WCoin(C).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopOperationFailed",
+   "en": "Operation failed. Check gold, storage and connection.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceOpenedNotice",
+   "en": "%ls entrance is open and closes in %ls minute(s).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceClosedNotice",
+   "en": "%ls entrance closed.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourStartedNotice",
+   "en": "Happy Hour event has been started!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourEndedNotice",
+   "en": "Happy Hour event has ended!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartRequiredTitle",
+   "en": "Language changed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartLanguageMessage",
+   "en": "The game content language (NPC names, quests, items and skills) only changes after restarting the game. Restart now?",
+   "comment": null
+  }
+ ]
+}

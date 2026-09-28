@@ -1,0 +1,730 @@
+[
+ {
+  "id": 3784,
+  "en": "When a warrior who possesses them becomes a consummate expert in his or her art, these rings transform into unique items that will help their master attain greater heights.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3787,
+  "en": "When you first enter Blood Castle, you'll encounter an obstacle: the trust within your party. Go see the Shadow Phantom Soldier to test the trust within your party, and take the Blood Castle challenge.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3788,
+  "en": "When you hunt monsters, you can employ normal attacks by left-clicking or use skill attacks by right-clicking.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3792,
+  "en": "When you reach a certain level, you will be able to repair your equipment directly from the Inventory window. What level is that?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3793,
+  "en": "When you want to form a party with a character, face that character and enter '/party' in the Chat window. What do you do if you don't want to receive party requests?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3794,
+  "en": "When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3795,
+  "en": "Where can I find a merchant?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3796,
+  "en": "Where can I learn more skills?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3797,
+  "en": "Where can I learn skills?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3798,
+  "en": "Which button is used to send whispers from the Chat window?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3799,
+  "en": "While in a town, seek out the Shadow Phantom Soldier NPC.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3800,
+  "en": "Whispers are used to talk to friends who are far away or to pass on private messages. Which button is used to send whispers from the Chat window?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3803,
+  "en": "Who do you need to see to combine items?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3804,
+  "en": "Whoa! That's really convenient!",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3834,
+  "en": "Wipe Out the Elusive Iron Riders",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3836,
+  "en": "With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3856,
+  "en": "Would you bring me Tantalos's Armor first? I will reward you fairly when you come back with 20 suits of armor from Tantalos in Tarkan 2.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3857,
+  "en": "Would you like to visit Chaos Castle, the arena of the gods? There is no better place to prove your strength. Why don't you listen to what I have to say and then decide? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3858,
+  "en": "Yes, I'll take it. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3859,
+  "en": "Yes, please. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3860,
+  "en": "Yes, right away. (Accept)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3861,
+  "en": "Yes. I wish to join.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3862,
+  "en": "Yes. I wish to leave.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3863,
+  "en": "Yes. I'll take your test.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3865,
+  "en": "You are a member of a different gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3866,
+  "en": "You are back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 81-130, Advanced character: Level 61-110)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3867,
+  "en": "You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 220-270)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3868,
+  "en": "You are back sooner than I thought. I have a simple quest that will earn you a Scroll of Blood, which will grant you access to Illusion Temple. Will you accept? (All characters: Level 271-320)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3869,
+  "en": "You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3870,
+  "en": "You are back sooner than I thought. I have a simple quest that will earn you an invitation granting you access to Devil Square. Will you accept this quest? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3871,
+  "en": "You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 15-49, Advanced character: Level 15-29)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3872,
+  "en": "You are back sooner than I thought. I will give you a quest that will earn you the item you need to enter the event. Will you accept this quest? (Basic character: Level 50-119, Advanced character: Level 30-99)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3874,
+  "en": "You are full of zeal! Very well. Let's try adding an item to your inventory. Take the Zen I just gave you and purchase 5 apples from a merchant.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3876,
+  "en": "You can acquire excellent equipment at Illusion Temple. Prepare thoroughly before entering as this is not a place to be taken lightly. Go to the Shadow Phantom Soldier and accept a quest that will earn you an item that will grant you access to Illusion Temple.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3877,
+  "en": "You can find both wealth and fame at Illusion Temple. If you take the temple challenge, you might acquire something essential for your training. Would you like to take the challenge? (All characters: Level 220-270)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3879,
+  "en": "You can have your equipment repaired by Hanzo the Blacksmith (117,140) in Lorencia, Rhea (30, 235) in Elveland, or Eo the Craftsman (194, 123) in Noria. Solicit their services often.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3884,
+  "en": "You can register to the mercenary guild as a free mercenary with 1 million Zen. Tercia gives the registered free mercenaries 1 mission per day.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3885,
+  "en": "You cannot join a gens if you are a member of the guild alliance.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3886,
+  "en": "You cannot join a gens if you are a member of the guild alliance. Leave the guild alliance and try joining the gens again.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3887,
+  "en": "You cannot join a gens while in a party.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3888,
+  "en": "You cannot join the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3889,
+  "en": "You cannot leave the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3890,
+  "en": "You do not have enough space for the item. Please free up your Inventory and try again.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3895,
+  "en": "You have accepted the first trial. I want you to prove your combat prowess by defeating 5 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving till the end in Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Soul, or a Jewel of Chaos.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3896,
+  "en": "You have already joined the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3897,
+  "en": "You have completed the fifth trial to become a hero. The next mission I'm about to give you is the last one to see if you are worthy of being a hero. (Master level)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3898,
+  "en": "You have completed the first trial to become a hero. The next mission I'll give you is to see if you have the courage to be a hero. Will you accept this mission? (Basic character: Level 300 - 320, Advanced character: Level 271 - 320)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3899,
+  "en": "You have completed the tutorial. Take this Ring of Hero and Ring of Warrior. They are gifts to you from the queen.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3900,
+  "en": "You have left the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3901,
+  "en": "You have not joined the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3902,
+  "en": "You have not joined the gens. You must first be a member of the gens in order to leave it.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3903,
+  "en": "You have now completed the fourth trial to become a hero. The next mission I'm about to give you is to see if you have the tenacity to be a hero. Will you accept this mission? (Level 381 - 400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3904,
+  "en": "You have now completed the second trial to become a hero. The next mission I'll give you is to see if you have the fighting spirit to be a hero. Will you accept this mission? (Level 331 - 350)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3905,
+  "en": "You have now completed the third trial to become a hero. The next mission I'll give you is to see if you have the right mentality to be a hero. Will you accept this mission? (Level 351 - 380)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3906,
+  "en": "You have to be at least level 50 in order to join the gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3907,
+  "en": "You know well enough. I don't want to talk about it. (Refuse)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3908,
+  "en": "You left the gens. Your contribution has been reset to 0.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3910,
+  "en": "You might not find Blood Castle challenging anymore. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3913,
+  "en": "You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers and corrupt guardsmen will fight each other to the death in a no-holds-barred melee.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3914,
+  "en": "You will stand by for about a minute before actually entering. The event starts once this standby time passes. Once it does start, travelers are pitted against 50 corrupt guardsmen in a no-holds-barred melee to the death.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3915,
+  "en": "You will stand by for about a minute before actually entering. You'll enter Blood Castle after this standby time has elapsed. Once inside Blood Castle, you can buy some time by defeating 40 monsters summoned by a necromancer named Red Skull.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3916,
+  "en": "You'd be mistaken to think you've reached the peak. Testing yourself and your abilities at Chaos Castle isn't a bad idea. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 300-400, Advanced character: Level 280-400)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3917,
+  "en": "You'll be able to use the Ring of Hero at level 40 and the Ring of Warrior at level 80. Dropping the rings will break their seal and transform them into items.;Next time we meet, I sincerely hope to see a mightier warrior before me. Go now and build your experience and strength and free this world from Kundun's grasp!;(You've completed the tutorial.)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3918,
+  "en": "You'll face a steady stream of powerful monsters at Devil Square. Forming a party with other travelers before entering will give you a better chance of survival.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3919,
+  "en": "You'll need to regularly repair your equipments since their durability will diminish as you hunt monsters. When you reach a certain level, you will be able to repair your equipments directly from the Inventory window. What level is that?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3920,
+  "en": "You'll not be able to use certain skills like Teleport or Telekinesis while holding on to a relic. On the other hand, there are special skills that can only be used in Illusion Temple. Using these skills to your advantage will make it easier for your camp to win.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3921,
+  "en": "You'll now find it increasingly difficult to find suitable hunting ground. How about discovering hunting grounds by accepting quests from Shadow Phantom Soldiers? Come see me when you reach a new level to receive quests that will earn you prized equipment.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3922,
+  "en": "You'll now have to focus more on coordinated attacks with your comrades than on simply defeating monsters. There is no better place than Devil Square to train for this. Complete a simple mission that will earn you an invitation to Devil Square, and train there at the side of your comrades. Will you accept this quest? (Basic character: Level 281-330, Advanced character: Level 261-310)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3923,
+  "en": "You'll stand by for about a minute before actually entering. Once this standby time passes, monsters will start to appear. The monsters will continue to attack for ten minutes, and killing them will earn you points. If you score high enough, you might even receive a reward.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3924,
+  "en": "You're back sooner than I thought. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 15-80, Advanced character: Level 10-60)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3925,
+  "en": "You're well-informed. I will give you the item you need to access Chaos Castle. When you have time, come see me for an easy quest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3926,
+  "en": "You're well-informed. I'll give you the item you'll need to enter Devil Square. When you have time, come see me for an easy quest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3927,
+  "en": "You're well-informed. I'm in charge of distributing items that are necessary to enter Illusion Temple. When you have time, come see me for an easy quest that will earn you a ticket in.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3928,
+  "en": "You're well-informed. In order to penetrate the barrier surrounding Blood Castle, you will need an Invisibility Cloak. If you pass a simple test of mine, I will provide you with an Invisibility Cloak before you head to Blood Castle. When you have time, come see me for an easy quest.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3929,
+  "en": "You've done well. Let's see to one more thing before I ask you to face tougher monsters. Talk to me again and receive a damage and defense increase buff.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3930,
+  "en": "You've done well. The Falling Slash skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Falling Slash? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3931,
+  "en": "You've done well. The Fire Ball skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Fire Ball? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3932,
+  "en": "You've done well. The Summon Goblin skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Summon Goblin? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3933,
+  "en": "You've done well. The Triple Shot skill should now be one of the skills you can use. Click on the icon.;Did the skill icon on the right switch to Triple Shot? When you're hunting monsters, simply right-click on the mouse to use the assigned skill.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3934,
+  "en": "You've explained enough. Let's continue with the tutorial.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3935,
+  "en": "You've made a wise choice. The first mission for the third trial involves defeating 20 Guardsmen in Chaos Castle, delivering Archangel's weapon in Blood Castle, and surviving until the end of Devil Square. Complete the mission and you'll be rewarded with either a Jewel of Bless, a Jewel of Life, a Jewel of Harmony, or two Jewels of Soul.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3936,
+  "en": "You've reached the final stage of Blood Castle, but it should still be enjoyable if you have your comrades at your side. However, it will still be hard for you to obtain an Invisibility Cloak that's right for your level. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept? (All characters: Master Level)",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3937,
+  "en": "You've truly become a fine warrior. I'm sure the queen herself will be proud of you. Truth be told, she has arranged a few items for warriors such as you.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3938,
+  "en": "Your guild is part of a different gens.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3940,
+  "en": "Zaikans from Tarkan 2 should suffice. Go to Tarkan 2 and defeat 30 Zaikans. Come see me after that, and I will give you a choice between 20 Large SD Potions and 30 Large Complex Potions as your reward. When you claim your rewards, make sure you have at least 20 empty slots in your Inventory. Remember that.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3963,
+  "en": "���� He seems to be a miser����",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3964,
+  "en": "���� Hmm, for the clan����",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3965,
+  "en": "���� Something pestering seems to happen����",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3966,
+  "en": "���� That's what happened.",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3967,
+  "en": "����Both are fairly easy...",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ },
+ {
+  "id": 3968,
+  "en": "������... What's behind this story?",
+  "budget": 4096,
+  "kinds": [
+   "questwords"
+  ]
+ }
+]

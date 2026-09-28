@@ -1,0 +1,4914 @@
+{
+ "locale": "uk",
+ "language": "Ukrainian",
+ "chunk": "g5",
+ "strings": [
+  {
+   "id": 129,
+   "en": "Adds Command Stat",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 143,
+   "en": "Agility Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 195,
+   "en": "Aqua Beam",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 204,
+   "en": "Armor Set Bonus Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 267,
+   "en": "Attack Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 268,
+   "en": "Attack Increase Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 270,
+   "en": "Attack Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 271,
+   "en": "Attack Success Rate Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 302,
+   "en": "Automatic AG Recovery Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 304,
+   "en": "Automatic HP Recovery Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 307,
+   "en": "Automatic Mana Recovery Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 327,
+   "en": "Beast Uppercut",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 328,
+   "en": "Beast Uppercut Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 329,
+   "en": "Beast Uppercut Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 334,
+   "en": "Berserker Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 336,
+   "en": "Berserker Proficiency",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 337,
+   "en": "Berserker Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 355,
+   "en": "Blast Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 359,
+   "en": "Bless Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 364,
+   "en": "Blind Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 368,
+   "en": "Blood Attack Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 384,
+   "en": "Blood Howling",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 385,
+   "en": "Blood Howling Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 387,
+   "en": "Blood Storm",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 388,
+   "en": "Blood Storm Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 412,
+   "en": "Bow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 414,
+   "en": "Bow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 446,
+   "en": "Cancel Invisibility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 447,
+   "en": "Cancel Stun",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 456,
+   "en": "Cast Invincibility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 467,
+   "en": "Chain Drive",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 468,
+   "en": "Chain Drive Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 470,
+   "en": "Chain Drive Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 471,
+   "en": "Chain Lightning",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 473,
+   "en": "Chain Lightning Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 513,
+   "en": "Chaotic Diseier",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 514,
+   "en": "Chaotic Diseier Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 520,
+   "en": "Charge",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 551,
+   "en": "Combo Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 557,
+   "en": "Cometfall",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 559,
+   "en": "Command Attack Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 605,
+   "en": "Crescent Moon Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 607,
+   "en": "Critical DMG Increase PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 608,
+   "en": "Critical DMG Increase PowUp (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 609,
+   "en": "Critical DMG Increase PowUp (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 611,
+   "en": "Critical Damage Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 623,
+   "en": "Crossbow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 624,
+   "en": "Crossbow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 641,
+   "en": "Cure",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 651,
+   "en": "Cyclone",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 652,
+   "en": "Cyclone Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 677,
+   "en": "Dark Horse Strengthener (1)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 698,
+   "en": "Dark Side",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 699,
+   "en": "Dark Side Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 701,
+   "en": "Dark Side Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 708,
+   "en": "Dark Spirit Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 709,
+   "en": "Dark Spirit Strengthener (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 710,
+   "en": "Dark Spirit Strengthener (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 711,
+   "en": "Dark Spirit Strengthener (4)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 712,
+   "en": "Dark Spirit Strengthener (5)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 743,
+   "en": "Death Stab",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 744,
+   "en": "Death Stab Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 745,
+   "en": "Death Stab Proficiency",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 750,
+   "en": "Decay",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 751,
+   "en": "Decay Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 754,
+   "en": "Decrease Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 759,
+   "en": "Def Success Rate Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 760,
+   "en": "Def SuccessRate Increase PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 761,
+   "en": "DefSuccessRate Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 780,
+   "en": "Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 781,
+   "en": "Defense Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 782,
+   "en": "Defense Increase Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 783,
+   "en": "Defense Increase Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 785,
+   "en": "Defense Success Rate Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 786,
+   "en": "Defense Switch",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 856,
+   "en": "DimensionWings Absorb PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 857,
+   "en": "DimensionWings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 858,
+   "en": "DimensionWings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 875,
+   "en": "Doppeganger Self Explosion Skill",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 906,
+   "en": "Dragon Roar",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 907,
+   "en": "Dragon Roar Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 909,
+   "en": "Dragon Roar Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 911,
+   "en": "Dragon Slasher",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 912,
+   "en": "Dragon Slasher Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 914,
+   "en": "Dragon Slasher Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 918,
+   "en": "Drain Life",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 919,
+   "en": "Drain Life Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 921,
+   "en": "Drain Life Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 940,
+   "en": "Durability Reduction (1)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 941,
+   "en": "Durability Reduction (2)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 942,
+   "en": "Durability Reduction (3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 943,
+   "en": "Durability Reduction(3)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 956,
+   "en": "Earth Prison",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 957,
+   "en": "Earth Prison Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 958,
+   "en": "Earthshake",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 959,
+   "en": "Earthshake Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 960,
+   "en": "Earthshake Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 973,
+   "en": "Electric Spark Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 975,
+   "en": "Electric Spike",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1033,
+   "en": "Emperor Cape Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1034,
+   "en": "Emperor Cape Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1035,
+   "en": "Emperor Cape Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1037,
+   "en": "Energy Ball",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1038,
+   "en": "Energy Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1072,
+   "en": "Equipped Weapon Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1073,
+   "en": "Equipped Weapon Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1088,
+   "en": "Eternal Wings Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1089,
+   "en": "Eternal Wings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1090,
+   "en": "Eternal Wings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1092,
+   "en": "Evil Spirit",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1093,
+   "en": "Evil Spirit Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1110,
+   "en": "Expansion of Wizardry Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1111,
+   "en": "Expansion of Wizardry Strengthen",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1118,
+   "en": "Falling Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1119,
+   "en": "Falling Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1144,
+   "en": "Fire Ball",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1145,
+   "en": "Fire Blast",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1146,
+   "en": "Fire Breath",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1147,
+   "en": "Fire Burst",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1148,
+   "en": "Fire Burst Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1149,
+   "en": "Fire Burst Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1153,
+   "en": "Fire Scream",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1154,
+   "en": "Fire Scream Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1155,
+   "en": "Fire Scream Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1157,
+   "en": "Fire Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1158,
+   "en": "Fire Slash Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1162,
+   "en": "Fire Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1163,
+   "en": "Fire Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1171,
+   "en": "Flame",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1172,
+   "en": "Flame Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1174,
+   "en": "Flame Strike Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1175,
+   "en": "Flame Strike Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1177,
+   "en": "Flame of Evil (Monster)",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1180,
+   "en": "Force",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1181,
+   "en": "Force Wave",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1182,
+   "en": "Force Wave Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1238,
+   "en": "Gigantic Storm Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1472,
+   "en": "Greater Damage",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1473,
+   "en": "Greater Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1520,
+   "en": "Heal",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1521,
+   "en": "Heal Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1539,
+   "en": "Hellfire",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1540,
+   "en": "Hellfire Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1686,
+   "en": "Ice Arrow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1687,
+   "en": "Ice Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1690,
+   "en": "Ice Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1694,
+   "en": "Ice Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1695,
+   "en": "Ice Storm",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1696,
+   "en": "Ice Storm Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1697,
+   "en": "Ice Storm Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1699,
+   "en": "Ice Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1712,
+   "en": "Ignore Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1736,
+   "en": "Illusion Wings Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1737,
+   "en": "Illusion Wings Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1738,
+   "en": "Illusion Wings Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1742,
+   "en": "Impale",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1755,
+   "en": "Increase Agility",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1757,
+   "en": "Increase Attack Success Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1758,
+   "en": "Increase Block",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1760,
+   "en": "Increase Critical Damage",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1764,
+   "en": "Increase Double Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1765,
+   "en": "Increase Energy",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1766,
+   "en": "Increase Excellent Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1768,
+   "en": "Increase HP Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1771,
+   "en": "Increase Ice Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1772,
+   "en": "Increase Ignore Def Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1773,
+   "en": "Increase Lightning Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1774,
+   "en": "Increase Mana Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1775,
+   "en": "Increase Maximum AG",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1776,
+   "en": "Increase Maximum Attack Power",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1777,
+   "en": "Increase Maximum HP",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1778,
+   "en": "Increase Maximum Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1779,
+   "en": "Increase Maximum SD",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1780,
+   "en": "Increase Minimum Attack Power",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1781,
+   "en": "Increase Poison Resistance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1782,
+   "en": "Increase PvP Attack Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1783,
+   "en": "Increase PvP Defense Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1784,
+   "en": "Increase SD Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1785,
+   "en": "Increase Set Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1786,
+   "en": "Increase Strength",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1787,
+   "en": "Increase Triple Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1788,
+   "en": "Increases AG Recovery Rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1791,
+   "en": "Increases Critical Damage Chance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1792,
+   "en": "Increases Defense",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1807,
+   "en": "Increases chance of ignore Def",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1812,
+   "en": "Increases critical damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1819,
+   "en": "Increases double damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1822,
+   "en": "Increases excellent damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1845,
+   "en": "Increases triple damage rate",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1850,
+   "en": "Inferno",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1851,
+   "en": "Inferno Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1855,
+   "en": "Infinity Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1861,
+   "en": "Innovation Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1876,
+   "en": "Iron Defense Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1968,
+   "en": "Killing Blow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1969,
+   "en": "Killing Blow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 1970,
+   "en": "Killing Blow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2067,
+   "en": "Lightning",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2068,
+   "en": "Lightning Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2071,
+   "en": "Lightning Shock Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2073,
+   "en": "Lightning Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2074,
+   "en": "Lightning Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2075,
+   "en": "Lightning Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2114,
+   "en": "Lunge",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2115,
+   "en": "Lunge Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2124,
+   "en": "Mace Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2125,
+   "en": "Mace Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2126,
+   "en": "Magic Attack Immunity",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2129,
+   "en": "Magic Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2134,
+   "en": "Mana Rays",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2135,
+   "en": "Mana Reduction",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2165,
+   "en": "Maximum AG Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2167,
+   "en": "Maximum Attack Power Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2168,
+   "en": "Maximum Life Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2172,
+   "en": "Maximum Mana Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2176,
+   "en": "Maximum SD increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2177,
+   "en": "Maximum Wizardry Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2179,
+   "en": "Maximum Wizardry/Curse Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2202,
+   "en": "Meteor Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2203,
+   "en": "Meteor Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2212,
+   "en": "Minimum Attack Power Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2215,
+   "en": "Minimum Wizardry Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2218,
+   "en": "Minimum Wizardry/Curse Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2227,
+   "en": "Monster Attack Life Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2228,
+   "en": "Monster Attack Mana Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2229,
+   "en": "Monster Attack SD Increment",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2248,
+   "en": "Multi-Shot",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2249,
+   "en": "Multi-Shot Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2250,
+   "en": "Multi-Shot Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2271,
+   "en": "Nova",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2272,
+   "en": "Nova Cast Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2273,
+   "en": "Nova Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2311,
+   "en": "One-handed Staff Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2312,
+   "en": "One-handed Staff Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2313,
+   "en": "One-handed Sword Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2314,
+   "en": "One-handed Sword Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2337,
+   "en": "Other World Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2338,
+   "en": "Other World Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2369,
+   "en": "Party Healing",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2370,
+   "en": "Party Healing Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2382,
+   "en": "Penetration",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2383,
+   "en": "Penetration Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2386,
+   "en": "Pet Durability Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2400,
+   "en": "Phoenix Shot",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2407,
+   "en": "Physical Attack Immunity",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2419,
+   "en": "Plasma Storm",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2437,
+   "en": "Poison Arrow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2438,
+   "en": "Poison Arrow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2442,
+   "en": "Poison Resistance Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2444,
+   "en": "Poison Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2449,
+   "en": "Pollution",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2452,
+   "en": "Potion of Bless",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2456,
+   "en": "Power Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2457,
+   "en": "Power Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2459,
+   "en": "Power Wave",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2502,
+   "en": "PvP Defence Rate Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2516,
+   "en": "Rageful Blow",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2517,
+   "en": "Rageful Blow Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2518,
+   "en": "Rageful Blow Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2576,
+   "en": "Recover HP from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2577,
+   "en": "Recover Mana Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2578,
+   "en": "Recover Mana from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2579,
+   "en": "Recover SD from Monster Kills",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2580,
+   "en": "Recovers HP Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2582,
+   "en": "Recovers SD Fully",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2584,
+   "en": "Recovery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2614,
+   "en": "Reigning Cloak Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2615,
+   "en": "Reigning Cloak Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2616,
+   "en": "Reigning Cloak Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2827,
+   "en": "Restores all HP",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2828,
+   "en": "Restores all Mana",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2829,
+   "en": "Restores all SD",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2904,
+   "en": "SD Recovery Speed Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2943,
+   "en": "Scepter Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 2944,
+   "en": "Scepter Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3043,
+   "en": "Shied-Burn",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3046,
+   "en": "Shield Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3047,
+   "en": "Shield Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3087,
+   "en": "Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3088,
+   "en": "Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3093,
+   "en": "Sleep Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3124,
+   "en": "Soul Barrier Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3125,
+   "en": "Soul Barrier Proficiency",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3126,
+   "en": "Soul Barrier Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3130,
+   "en": "Spear Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3131,
+   "en": "Spear Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3134,
+   "en": "Spell of Pursuit",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3149,
+   "en": "Spiral Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3155,
+   "en": "Spirit Lord",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3164,
+   "en": "Stamina Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3165,
+   "en": "Stamina Increase Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3169,
+   "en": "Starfall",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3174,
+   "en": "Stick Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3175,
+   "en": "Stick Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3199,
+   "en": "Strength Increase",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3202,
+   "en": "Strike of Destruction",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3203,
+   "en": "Strike of Destruction Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3204,
+   "en": "Strike of Destruction Proficienc",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3205,
+   "en": "Strike of Destruction Strengthen",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3209,
+   "en": "Summon",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3210,
+   "en": "Summon Assassin",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3211,
+   "en": "Summon Bali",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3212,
+   "en": "Summon Dark Knight",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3213,
+   "en": "Summon Elite Yeti",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3214,
+   "en": "Summon Goblin",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3215,
+   "en": "Summon Monster",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3216,
+   "en": "Summon Satyros",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3217,
+   "en": "Summon Soldier",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3218,
+   "en": "Summon Stone Golem",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3219,
+   "en": "Summoned Monster Strengthener (1",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3220,
+   "en": "Summoned Monster Strengthener (2",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3221,
+   "en": "Summoned Monster Strengthener (3",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3265,
+   "en": "Swell Life Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3266,
+   "en": "Swell Life Proficiency",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3267,
+   "en": "Swell Life Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3322,
+   "en": "Teleport",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3323,
+   "en": "Teleport Ally",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3598,
+   "en": "Triple Shot",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3599,
+   "en": "Triple Shot Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3600,
+   "en": "Triple Shot Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3660,
+   "en": "Twister",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3661,
+   "en": "Twisting Slash",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3662,
+   "en": "Twisting Slash Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3663,
+   "en": "Twisting Slash Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3665,
+   "en": "Two-handed Staff Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3666,
+   "en": "Two-handed Staff Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3667,
+   "en": "Two-handed Sword Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3668,
+   "en": "Two-handed Sword Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3677,
+   "en": "Uppercut",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3679,
+   "en": "Use Scepter : Pet Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3697,
+   "en": "Vengeance",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3755,
+   "en": "Weakness Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3756,
+   "en": "Weapon Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3810,
+   "en": "Wind Tome Mastery",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3811,
+   "en": "Wind Tome Strengthener",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3820,
+   "en": "Wing of Ruin Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3821,
+   "en": "Wing of Ruin Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3822,
+   "en": "Wing of Ruin Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3824,
+   "en": "Wing of Storm Absorption PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3825,
+   "en": "Wing of Storm Attack PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 3826,
+   "en": "Wing of Storm Defense PowUp",
+   "budget": 31,
+   "kinds": [
+    "skill"
+   ]
+  },
+  {
+   "id": 68,
+   "en": "5 stat points are rewarded each time you level up.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 82,
+   "en": "A new event zone, Illusion Temple Update! We invite all MU lovers into the zone. Please feel free to refer to the official website",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 162,
+   "en": "Alex in Lorencia who sells mid level items is at coordinate 63, 130.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 250,
+   "en": "At level 100, you can become a guild master.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 251,
+   "en": "At level 50, you will be able to use the '/warp' command or the hotkey 'M' to teleport to another region.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 519,
+   "en": "Characters over level 10 will lose a certain percentage of their experience points and zen when they die.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 544,
+   "en": "Click shortcut key T to check the quest information.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 610,
+   "en": "Critical Damage (max damage) is displayed in light blue.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 825,
+   "en": "Devias' Vault Coordinates: (218, 61)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 980,
+   "en": "Elf Lala in Noria who sells beginner's equipment is located at coordinate 173, 124.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1018,
+   "en": "Elveland has a Shadow Phantom soldier located at the coordinate (43,191), (57,232) and (73,220).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1019,
+   "en": "Elveland has a potion and arrow merchant named Silvia at the coordinate (44.229).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1020,
+   "en": "Elveland has a safety guardian at the coordinate (50,229).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1021,
+   "en": "Elveland has a summoner magician who sells parchments named Marce at the coordinate (36,219).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1022,
+   "en": "Elveland has a summoner weapon and defense tool seller named Rhea at the coordinate (29, 239).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1023,
+   "en": "Elveland has an admission aid for the Illusion Temple named Mirage at (55, 243).",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1069,
+   "en": "Eo The Craftsman in Noria who sells elf equipment is at coordinates 196,124.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1097,
+   "en": "Excellent Damage (110% of max damage) is displayed in green.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1102,
+   "en": "Excellent type item names are displayed in green.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1510,
+   "en": "Hanzo the Blacksmith in Lorencia who sells knight equipment is located at coordinates 117, 140",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1917,
+   "en": "Item's performance level decreases when the durability decreases.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 1931,
+   "en": "Jewel of Chaos is used to combining items.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2088,
+   "en": "Lorencia's Vault Coordinates: (140, 110), (147, 144)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2089,
+   "en": "Lorencia's Vault Coordinates: (173, 95)",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2122,
+   "en": "MU operator admins do not ask for your account or password; please take precaution in informing others of your cliental identity.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2253,
+   "en": "My Friend function is accessible only from level 6.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2315,
+   "en": "Only the level above 10 can use the Chaos Goblin.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2316,
+   "en": "Only the level above 6 can use the personal store. The commands are '/personal store' and '/purchase', it can be created by shortcut key S.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2347,
+   "en": "PC cafe allows the Chaos Castle for free while the daily zone open hours are 1:00, 10:30, 12:00, 15:00, 18:00 and 22:00.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2373,
+   "en": "Pasi the Mage in Lorencia who sells wizard equipment is located at coordinates 119, 112.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2427,
+   "en": "Please notify any hacking/scam through the total notification page. We will try our best to minimize the fraud activities.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2428,
+   "en": "Please report hackers via our submit ticket tool on the http://muonline.webzen.com website",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2431,
+   "en": "Point the cursor on the skill button and press ctrl+number key to set hotkey.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2466,
+   "en": "Press Q, W, E to use the items such as healing potion, mana potion, antidote, alcohol or town portal scroll registered under those keys.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2467,
+   "en": "Press space bar to collect loot.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2471,
+   "en": "Pressing ctrl+E while keeping the cursor on the item (alcohol, antidote, and town portal scroll) will register a shortcut key for the item.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2879,
+   "en": "Right click on scrolls or orbs to master the noted skills.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3389,
+   "en": "The Chaos Goblin in Noria who combines items is at coordinates 180, 102.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3398,
+   "en": "The Guild Advocate NPC who registers guilds is in Devias at coordinate 215, 44.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3402,
+   "en": "The Peddler in Lorencia who sells beginner's equipment is at coordinates 183, 136.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3445,
+   "en": "The command (trade, party, whisper, etc.) system is accessible by pressing the 'D' key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3448,
+   "en": "The defense rate increases by 10% when your armor set is of the same type.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3460,
+   "en": "The entrance to Atlans is at coordinates 240, 242 in Noria.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3461,
+   "en": "The entrance to Devias in Lorencia is at coordinates: 7, 40",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3462,
+   "en": "The entrance to Lorencia in Noria is at coordinates 153, 5",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3463,
+   "en": "The entrance to Noria in Lorencia is at coordinates 214, 244.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3464,
+   "en": "The entrance to the Dungeon is at coordinates 122, 231 in Lorencia.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3477,
+   "en": "The item's level may decrease if the upgrade fails with the Jewel of Soul.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3511,
+   "en": "The success rate of the Jewel of Soul is 50%. The rate increases by 25% if the item has luck option attached.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3512,
+   "en": "The supplementary magic of the Elf can be used by clicking the name in the party window.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3519,
+   "en": "The weapon merchant in Devias who sells mid level equipment is at coordinate 188, 46.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3520,
+   "en": "The wizard in Devias who sells mid level wizard items is at coordinate 225, 50.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3529,
+   "en": "There are certain areas in the world map designated as Battle Zone where only Gens members can enter.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3547,
+   "en": "Thompson Kenel the Weapon Merchant in Devias who sells mid level items is at coordinates 9, 76.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3564,
+   "en": "To combat normally, left click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3568,
+   "en": "To fix your weapon or armor, go to the weapon merchants in town.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3570,
+   "en": "To invite someone to your party, type '/party' while keeping the cursor on the character.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3572,
+   "en": "To save a screenshot in your Mu folder, press the 'Print Screen' key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3573,
+   "en": "To send a message to guild members, type '@ message'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3574,
+   "en": "To send a message to party members, type '~ message'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3575,
+   "en": "To set macro for chatting, type '/number(1~10) <message>'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3577,
+   "en": "To trade items or zen with another character, type '/trade' while keeping the cursor on the opposite character.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3578,
+   "en": "To use skill during combat, right click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3579,
+   "en": "To use skills or magic, right click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3580,
+   "en": "To use the saved chatting macro, press Alt+number.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3678,
+   "en": "Use '/View store on' and '/View store off' to set the command for viewing/closing the personal store.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3681,
+   "en": "Use the lock function on your vault to protect it.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3684,
+   "en": "Using the 'town portal scroll' will transport you to the nearest town or safe area.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3694,
+   "en": "Vault usage fee increases as your character level increases.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3695,
+   "en": "Vault usage fee is deducted from your inventory according to your level.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3727,
+   "en": "Visit our forums at http://muonline.webzen.com/forum",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3760,
+   "en": "Wearing a level +5 or above boots allows you to run.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3785,
+   "en": "When poisoned, you can cure yourself by using the antidote.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3786,
+   "en": "When poisoned, your character becomes green and continues to receive damage for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3875,
+   "en": "You can access in-game shop with the shortcut key 'X' or the in-game shop button at the bottom right corner of the screen.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3878,
+   "en": "You can get various quests of your level from the Shadow Phantom Soldiers in every village.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3880,
+   "en": "You can join 'Gens Duprian' or 'Gens Vanert' when you become level 50.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3881,
+   "en": "You can open the World Map with Tab key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3882,
+   "en": "You can raise weapon/armor/wing level up to 6 by using the Jewel of Bless.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3883,
+   "en": "You can raise weapon/armor/wing level up to 9 by using the Jewel of Soul.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3911,
+   "en": "You must be at least level 15 to enter Devias",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3912,
+   "en": "You must be at least level 20 to enter the Dungeon.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 930,
+   "en": "Dungeon Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 931,
+   "en": "Dungeon Level 1 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 932,
+   "en": "Dungeon Level 2 East Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 933,
+   "en": "Dungeon Level 2 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 934,
+   "en": "Dungeon Level 2 West Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 935,
+   "en": "Dungeon Level 3 East Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 936,
+   "en": "Dungeon Level 3 West Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1050,
+   "en": "Entrance to Aida",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1051,
+   "en": "Entrance to Atlans",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1052,
+   "en": "Entrance to Devias",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1053,
+   "en": "Entrance to Elveland",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1054,
+   "en": "Entrance to Icarus",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1055,
+   "en": "Entrance to Karutan",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1056,
+   "en": "Entrance to Karutan 1",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1057,
+   "en": "Entrance to Karutan 2",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1058,
+   "en": "Entrance to La Cleon",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1059,
+   "en": "Entrance to Lorencia",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1060,
+   "en": "Entrance to Noria",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1061,
+   "en": "Entrance to Safe Zone",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1062,
+   "en": "Entrance to Tarkan",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1063,
+   "en": "Entrance to Valley of Loren",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1064,
+   "en": "Entrance to the Hatchery",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1065,
+   "en": "Entrance to the Kanturu Relics",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1066,
+   "en": "Entrance to the Kanturu Ruins",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1067,
+   "en": "Entrance to the Lost Tower",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 1068,
+   "en": "Entrance to the Valley of Loren",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2031,
+   "en": "Leina, the General Goods Merchant",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2091,
+   "en": "Lost Tower Level 2 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2092,
+   "en": "Lost Tower Level 3 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2093,
+   "en": "Lost Tower Level 4 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2094,
+   "en": "Lost Tower Level 5 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2095,
+   "en": "Lost Tower Level 6 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2096,
+   "en": "Lost Tower Level 7 Entrance",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2130,
+   "en": "Magic Shop Owner Marce",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 2451,
+   "en": "Potion Merchant Silvia",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3259,
+   "en": "Swamp of Peace Hunting Grounds Entrance (1)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3260,
+   "en": "Swamp of Peace Hunting Grounds Entrance (2)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3261,
+   "en": "Swamp of Peace Hunting Grounds Entrance (3)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3262,
+   "en": "Swamp of Peace Hunting Grounds Entrance (4)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3737,
+   "en": "Wandering Merchant Herald",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3758,
+   "en": "Weapons Merchant Rhea",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 146,
+   "en": "Agnis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 179,
+   "en": "Amis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 188,
+   "en": "Anonymous's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 190,
+   "en": "Anubis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 191,
+   "en": "Apollo's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 203,
+   "en": "Argo's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 211,
+   "en": "Aruan's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 319,
+   "en": "Barnake's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 342,
+   "en": "Berserker's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 436,
+   "en": "Broy's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 463,
+   "en": "Castol's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 466,
+   "en": "Ceto's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 476,
+   "en": "Chamer's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 537,
+   "en": "Chrono¡¯s",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 547,
+   "en": "Cloud's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 859,
+   "en": "Dione's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 925,
+   "en": "Drake's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1031,
+   "en": "Elvian's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1041,
+   "en": "Enis",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1071,
+   "en": "Eplete's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1096,
+   "en": "Evis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1121,
+   "en": "Fase's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1201,
+   "en": "Gaia's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1205,
+   "en": "Gaion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1209,
+   "en": "Garuda's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1493,
+   "en": "Gywen's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1505,
+   "en": "Hades's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1533,
+   "en": "Hegaton's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1544,
+   "en": "Heras's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1598,
+   "en": "Hyon's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1599,
+   "en": "Hyperion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1949,
+   "en": "Kantata's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 1958,
+   "en": "Karis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2206,
+   "en": "Meter's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2211,
+   "en": "Minet's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2222,
+   "en": "Mist's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2245,
+   "en": "Moros's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2251,
+   "en": "Muren's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2260,
+   "en": "Nemesis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2282,
+   "en": "Odin's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2321,
+   "en": "Ophion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2559,
+   "en": "Rave's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3018,
+   "en": "Semeden¡¯s",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3277,
+   "en": "Sylion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3320,
+   "en": "Taros's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3603,
+   "en": "Trite's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3696,
+   "en": "Vega's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3715,
+   "en": "Vicious's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3742,
+   "en": "Warrior's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 157,
+   "en": "Aida1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 158,
+   "en": "Aida2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 201,
+   "en": "Arena",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 260,
+   "en": "Atlans",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 265,
+   "en": "Atlans2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 266,
+   "en": "Atlans3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 824,
+   "en": "Devias",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 826,
+   "en": "Devias2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 827,
+   "en": "Devias3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 828,
+   "en": "Devias4",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 929,
+   "en": "Dungeon",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 938,
+   "en": "Dungeon2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 939,
+   "en": "Dungeon3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 970,
+   "en": "Elbeland",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 971,
+   "en": "Elbeland2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 972,
+   "en": "Elbeland3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1017,
+   "en": "Elveland",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1025,
+   "en": "Elveland2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1026,
+   "en": "Elveland3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1684,
+   "en": "Icarus",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1950,
+   "en": "KanturuRelics",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1951,
+   "en": "KanturuRuins1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1952,
+   "en": "KanturuRuins2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1953,
+   "en": "KanturuRuins3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1954,
+   "en": "Kanturu_Remain",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1955,
+   "en": "Kanturu_ruin1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1956,
+   "en": "Kanturu_ruin2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1957,
+   "en": "Kanturu_ruin_island",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1959,
+   "en": "Karutan1",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1960,
+   "en": "Karutan2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 1981,
+   "en": "LaCleon",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2087,
+   "en": "Lorencia",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2097,
+   "en": "LostTower",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2098,
+   "en": "LostTower2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2099,
+   "en": "LostTower3",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2100,
+   "en": "LostTower4",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2101,
+   "en": "LostTower5",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2102,
+   "en": "LostTower6",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2103,
+   "en": "LostTower7",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2269,
+   "en": "Noria",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2374,
+   "en": "PeaceSwamp",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 2520,
+   "en": "Raklion",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 3263,
+   "en": "Swamp_of_Calmness",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 3318,
+   "en": "Tarkan",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 3319,
+   "en": "Tarkan2",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 3734,
+   "en": "Vulcanus",
+   "budget": 31,
+   "kinds": [
+    "movereq"
+   ]
+  },
+  {
+   "id": 25,
+   "en": "(Level type)Attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 109,
+   "en": "AG cost decrease",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 113,
+   "en": "AG value increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 277,
+   "en": "Attack power increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 289,
+   "en": "Attack rating increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 291,
+   "en": "Attack speed increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 301,
+   "en": "Attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 306,
+   "en": "Automatic Life recovery increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 308,
+   "en": "Automatic Mana recovery increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 366,
+   "en": "Block rating increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 616,
+   "en": "Critical damage increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 619,
+   "en": "Critical damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 669,
+   "en": "Damage reduction",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 670,
+   "en": "Damage reflection",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 788,
+   "en": "Defense increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 887,
+   "en": "Double damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1098,
+   "en": "Excellent damage increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1100,
+   "en": "Excellent damage rate increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1526,
+   "en": "Health increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 1915,
+   "en": "Item durability increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2166,
+   "en": "Maximum AG increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2169,
+   "en": "Maximum Life increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2173,
+   "en": "Maximum Mana increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2180,
+   "en": "Maximum attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2219,
+   "en": "Minimum attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2233,
+   "en": "Monster destruction for the Life increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2234,
+   "en": "Monster destruction for the Mana increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2322,
+   "en": "Opponent defensibility ignorance attack",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 3048,
+   "en": "Shield protection increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 3083,
+   "en": "Skill attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 272,
+   "en": "Attack increase(Min,Max)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 298,
+   "en": "Attack success rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 300,
+   "en": "Attack sucess rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 666,
+   "en": "Damage decrement increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 801,
+   "en": "Defense success rate increase(PVP)",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2051,
+   "en": "Life auto increment increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2136,
+   "en": "Mana auto increment increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2159,
+   "en": "Max. AG increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2160,
+   "en": "Max. HP increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2163,
+   "en": "Max. attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2209,
+   "en": "Min. attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2636,
+   "en": "Required agility decrease",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2637,
+   "en": "Required strength decrease",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2905,
+   "en": "SD bypass rate increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2906,
+   "en": "SD decrement increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2907,
+   "en": "SD ratio increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 3840,
+   "en": "Wizardry increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 1091,
+   "en": "Evidence of Strength",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1140,
+   "en": "Find the 'Scroll of Emperor'!",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1203,
+   "en": "Gain'Hero status'!",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1853,
+   "en": "Infiltrate into Balgass Barrack",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 1864,
+   "en": "Into the 'Darkness' zone",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 2999,
+   "en": "Secret of'Dark Stone'",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  },
+  {
+   "id": 3549,
+   "en": "Three Treasures of Mu",
+   "budget": 31,
+   "kinds": [
+    "quest"
+   ]
+  }
+ ]
+}

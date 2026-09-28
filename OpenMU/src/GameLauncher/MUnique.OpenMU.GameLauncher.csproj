@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>OpenMU-Game</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PublishTrimmed>false</PublishTrimmed>
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DesktopLauncher/MUnique.OpenMU.DesktopLauncher.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 224,
+   "en": "Assault of Burning Lava Giants",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 225,
+   "en": "At Devias 2, you'll encounter Hommerds roaming around and shrieking out foul laughs. Defeat 30 Hommerds and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 226,
+   "en": "At Devias 2, you'll encounter Yetis covered in white fur. Defeat 30 Yetis and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 227,
+   "en": "At Devias 2, you'll encounter blade-wielding Assassins. Defeat 30 Assassins and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 228,
+   "en": "At Devias 2, you'll encounter semi-transparent Ice Monsters. Defeat 25 Ice Monsters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 229,
+   "en": "At Devias 2, you'll encounter semi-transparent Ice Monsters. Defeat 30 Ice Monsters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 230,
+   "en": "At Devias 4, you'll encounter shrieking ice creatures. Defeat 3 Ice Queens and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 231,
+   "en": "At Dungeon Level 1, you'll encounter Larvae harassing travelers near the entrance. Defeat 40 Larvae and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 232,
+   "en": "At Dungeon Level 1, you'll encounter one-eyed giants that carry axes known as Cyclopses. Defeat 40 Cyclopses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 233,
+   "en": "At Dungeon Level 1, you'll encounter one-eyed giants that carry axes known as Cyclopses. Defeat 50 Cyclopses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 234,
+   "en": "At Dungeon Level 2, you'll encounter Hell Hounds that use sharp magic. Defeat 50 Hell Spiders and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 235,
+   "en": "At Dungeon Level 2, you'll encounter Skeleton Archers that hide and fire arrows. Defeat 50 Skeleton Archers and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 236,
+   "en": "At Dungeon Level 2, you'll encounter Thunder Liches that use thunder magic. Defeat 50 Thunder Liches and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 237,
+   "en": "At Dungeon Level 2, you'll encounter poison-drooling Hell Hounds. Defeat 50 Hell Hounds and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 238,
+   "en": "At Dungeon Level 2, you'll encounter poison-drooling Poison Bull Fighters. Defeat 50 Poison Bull Fighters and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 239,
+   "en": "At Dungeon Level 3, you'll encounter lead monsters known as Gorgons. Defeat 15 Gorgons and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 240,
+   "en": "At Dungeon Levels 2 and 3, you'll encounter Dark Knights casting darkness in their paths. Defeat 50 Dark Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 241,
+   "en": "At Elveland 2, you'll encounter Cursed Liches that carry around a burning staff. Defeat 50 Cursed Liches and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 242,
+   "en": "At Elveland 3 (179, 81), you'll encounter foul, furry creatures. Defeat 50 Grizzlies and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 243,
+   "en": "At Elveland 3 (203, 37), you'll encounter the captains of foul, furry creatures known as Grizzlies. Defeat 50 Captain Grizzlies and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 244,
+   "en": "At Elveland 3, you'll encounter Totem Golems born from totems. Defeat 50 Totem Golems and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 245,
+   "en": "At Icarus, you'll encounter Mega Crusts, which are even more fearsome than Alquamoses. Defeat 80 Mega Crusts and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 246,
+   "en": "At Icarus, you'll encounter Queen Rainiers, which disguise their deathly aura with beauty. Defeat 80 Queen Rainiers and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 247,
+   "en": "At Icarus, you'll encounter stardust-carrying Alquamoses. Defeat 80 Alquamoses and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 248,
+   "en": "At Tarkan 1, you'll encounter Bloody Wolves and their scent of death. Defeat 60 Bloody Wolves and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 249,
+   "en": "At Tarkan 1, you'll encounter giant axe-wielding Mutants. Defeat 60 Mutants and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 252,
+   "en": "At the Lost Tower Level 1, you'll encounter Shadows, which are embodiments of evil intent. Defeat 50 Shadows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 253,
+   "en": "At the Lost Tower Level 7, you'll encounter Balrogs wielding huge scythes and guarding the entrance. Defeat 15 Balrogs and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 254,
+   "en": "At the Lost Tower Level 7, you'll encounter Death Gorgons that have become stronger through death. Defeat 60 Death Gorgons and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 255,
+   "en": "At the Lost Tower Levels 1 and 2, you'll encounter Poison Shadows, which are poison-spewing embodiments of evil intent. Defeat 50 Poison Shadows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 256,
+   "en": "At the Lost Tower Levels 2 and 3, you'll encounter corrupt beings known as Cursed Wizards. Defeat 50 Cursed Wizards and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 257,
+   "en": "At the Lost Tower Levels 3 and 4, you'll encounter Death Cows and their cloud of evil energy. Defeat 50 Death Cows and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 258,
+   "en": "At the Lost Tower Levels 5 and 6, you'll encounter Death Knights that were begotten from evil. Defeat 50 Death Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 259,
+   "en": "At the Lost Tower Levels 5 and 6, you'll encounter Death Knights that were begotten from evil. Defeat 60 Death Knights and return to me for a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 273,
+   "en": "Attack on the Supply Corps!",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 320,
+   "en": "Barriers that have been installed in regions where monsters frequently mobilize are under attack. We must teach these monsters a lesson by striking down their superiors. Will you accept this quest? (Level 198-201)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 324,
+   "en": "Be the last one standing in Chaos Castle, deliver a weapon to Archangel in Blood Castle, and survive until the end of Devil Square. Complete all three and return to the Phantom Soldier to receive your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 326,
+   "en": "Beam Knights seem to be up to something in Tarkan. Go to Tarkan level 2 and hunt down 100 Beam Knights. Come see me once that's done to receive a Devil's Invitation + 5 as a reward. They are strong foes, and you should hunt them with the help of others.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 331,
+   "en": "Before attacking the supply warehouse, we plan to defeat the monsters guarding it first. Once those monsters have been dealt with, the reconnaissance party will handle the assault on the warehouse. Will you accept this quest? (Level 56-65)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 346,
+   "en": "Better grab a chance than to regret it. Well, come back later if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 370,
+   "en": "Blood Castle Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 371,
+   "en": "Blood Castle Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 372,
+   "en": "Blood Castle Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 373,
+   "en": "Blood Castle Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 374,
+   "en": "Blood Castle Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 375,
+   "en": "Blood Castle Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 376,
+   "en": "Blood Castle Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 377,
+   "en": "Blood Castle Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 379,
+   "en": "Blood Castle builds and tests the fellowship of you and your brothers in arms. However, it's not an easy place to reach. Go to the Shadow Phantom Soldier and accept a quest that will earn you an Invisibility Cloak, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 380,
+   "en": "Blood Castle builds and tests the fellowship of you and your brothers in arms. If you wish to find out the strength of your party's bond, inquire with the Shadow Phantom Soldier about Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

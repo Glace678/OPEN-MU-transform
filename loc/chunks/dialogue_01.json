@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 99,
+   "en": "A wise decision. Try your hand at Blood Castle Level 2. Destroy the castle gate at least, and I'll give you 200,000 Zens as a reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 100,
+   "en": "A wise decision. Try your hand at Blood Castle Level 3. Destroy the castle gate at least, and I'll give you 800,000 EXP points and 500,000 Zens as a reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 101,
+   "en": "A wise decision. Try your hand at Blood Castle Level 4. Destroy the castle gate, and I'll give you 1 Jewel of Chaos and 500,000 Zens as a reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 102,
+   "en": "A wise decision. Try your hand at Blood Castle Level 5. Destroy the castle gate, and I'll give you 1 Jewel of Soul as a reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 103,
+   "en": "A wise decision. Try your hand at Blood Castle Level 6. Destroy the castle gate at least, and I'll give you 1 Jewel of Harmony as a reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 104,
+   "en": "A wise decision. Try your hand at Blood Castle Level 7. Destroy the castle gate at least, and I'll give you 2 Jewels of Soul as a reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 105,
+   "en": "A wise decision. Try your hand at Blood Castle Level 8. Destroy the castle gate at least, and I'll give you 2 Jewels of Bless as a reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 106,
+   "en": "A wise decision. Watchers of Kundun say that they need the 'Lost Map' to enter the barrier of Kundun but it's getting harder to get the map. Please bring me 2 pages of 'Lost Map Lv. 4' and I will give you a quest with a handsome reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 107,
+   "en": "A wise decision. Watchers of Kundun say that they need the 'Lost Map' to enter the barrier of Kundun but it's getting harder to get the map. Please bring me 3 pages of 'Lost Map Lv. 3' and I will give you a quest with a handsome reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 108,
+   "en": "A wrong Letter of Request has been delivered to you. Please talk to Mercenary Guild Manager Tercia.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 118,
+   "en": "Accept a gens quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 119,
+   "en": "Accept a quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 120,
+   "en": "Accept the quest.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 121,
+   "en": "According to our investigation, Necrons and Death Centurions absorb the energy of insanity while the sealed stone is taking rest. Please get rid of 30 Necrons and 20 Death Centurions to keep the energy of insanity from spreading. I'll prepare a reward when you finish this job. (Party Possible)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 122,
+   "en": "According to the latest intelligence, Blood Assassins have been dispatched to assassinate key figures of the Gens. Eliminate 50 Blood Assassins and protect the key Gens figures.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 123,
+   "en": "Accumulate EXP points to level up. You can find out how many more points you need to reach the next level by checking your Character Stats window or the EXP bar located at the bottom of your screen.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 130,
+   "en": "Advancement of the Reconnaissance Party (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 131,
+   "en": "Advancement of the Reconnaissance Party (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 132,
+   "en": "Advancement of the Reconnaissance Party (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 133,
+   "en": "Advancement of the reconnaissance party....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 134,
+   "en": "Advancing into the Floating Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 136,
+   "en": "After all, I do need new equipment. Should I give it a shot?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 137,
+   "en": "After learning a skill from a scroll, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 138,
+   "en": "After learning a skill from a scroll, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 139,
+   "en": "After learning a skill from an orb, you can activate that skill by assigning it to the Skill window.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 140,
+   "en": "After learning a skill from an orb, you can activate that skill by assigning it to the Skill window.;Can you see the numbered slots at the bottom center of the screen? Click on the icon outlined in green, to the right of the number five slot.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 141,
+   "en": "After receiving the buff, you will see an icon on the top left corner of the screen, a blue light effect surrounding the character, and have one hour of enhanced damage and defense.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 142,
+   "en": "Agility Elves, whose priority is defense, can learn skills by equipping weapons, and Energy Elves, whose priority is wizardry, by purchasing orbs.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 148,
+   "en": "Ah, I'll have to go far back in time to explain that.;Runedil, the former queen of Elves, was saddened by the loss of all the new warriors of the MU empire, who gave up their lives to constant warring.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 149,
+   "en": "Ah, you came at last. The task is to get me some equipment for the war supplies. There's no business more profitable than the war supplies delivery. It's not like the good old days, but enough for a stable income. Especially Tantalos's Armor and Burnt Murderer's Club are expensive ones. (Lv. 350 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 150,
+   "en": "Ah, you've answered incorrectly. Take the items, ingredients, and the money you need for combining to the Goblin in Noria to create a new item. Make sure to try it at least once. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 151,
+   "en": "Ah, you've answered incorrectly. To trade, press D and select Trade or face the character and type in '/trade' in the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 152,
+   "en": "Ah, you've answered incorrectly. Type in '/Request off' in the Chat window to turn down party requests. To start receiving party requests again, type in '/Request on' in the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 153,
+   "en": "Ah, you've answered incorrectly. Use M to find out and travel to accessible areas with ease. Discovering areas that are right for your level, and hunting there, can also be very fun.;On to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 154,
+   "en": "Ah, you've answered incorrectly. When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window. Let's skip to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 155,
+   "en": "Ah, you've answered incorrectly.; You'll be able to repair your equipment with ease by using the Repair button from the Inventory window once you reach level 50. However, this is more costly than repairing through an NPC.;Let's move on to the next question.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 156,
+   "en": "Ah. So that's what happened....",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 163,
+   "en": "All right, I'll take it. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 164,
+   "en": "All right. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 168,
+   "en": "Alquamoses are the most troublesome creatures in Icarus, the path that leads to the Floating Castle. Stardust used by Alquamoses is proving to be devastating to our reconnaissance party. Will you eliminate these Alquamoses to allow our reconnaissance party to advance? (Level 245-249)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 169,
+   "en": "Alright! Let's get started with the tutorial.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 170,
+   "en": "Alright. I'll go all out on this one.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 171,
+   "en": "Also, if you find yourself far away from a town or cornered while on a hunt, the Town Portal Scroll can come in really handy. Are you familiar with using it?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 194,
+   "en": "Apples can be purchased from potion merchants. In Lorencia, look for Potion Girl Amy, who is located across the bridge (128,85). In Elveland, look for Silvia, who is in the 1 o'clock direction from the center of the square (45,227). In Noria, look for Elf Lala, who is slightly to the north from the town's center (172,124).",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 199,
+   "en": "Are you familiar with a hidden training ground known as Devil Square? It's an opportune place to develop your skills. Why don't you listen to what I have to say and then decide? (Basic character: Level 131-180, Advanced character: Level 111-160)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 200,
+   "en": "Are you familiar with a hidden training ground known as Devil Square? It's an opportune place to develop your skills. Why don't you listen to what I have to say and then decide? (Basic character: Level 15-130, Advanced character: Level 10-110)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 212,
+   "en": "As the clan gets stronger, so do you. Please come back if you change your mind. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 220,
+   "en": "Ask about Gens Duprian.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 221,
+   "en": "Ask about Gens Vanert.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 222,
+   "en": "Ask about the gens dispute.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

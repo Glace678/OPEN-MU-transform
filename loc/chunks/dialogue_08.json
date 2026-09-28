@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 1303,
+   "en": "Go to Dungeon Level 3 and defeat 50 Dark Knights and 10 Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1304,
+   "en": "Go to Dungeon Level 3. Defeat 50 Dark Knights and 10 Gorgons, and I'll give you a Dragon Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1305,
+   "en": "Go to Dungeon Level 3. Defeat 50 Dark Knights and 10 Gorgons, and I'll give you a Guardian Armor + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1306,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon, and I'll give you a Legendary Staff + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1307,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon, and I'll give you a Red Wing Stick + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1308,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons, and I'll give you a Bluewing Crossbow + 8 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1309,
+   "en": "Go to Dungeon Level 3. Defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons, and I'll give you two Double Blades + 8 + Skill as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1310,
+   "en": "Go to Dungeon Level 3. Defeat 60 Gorgons and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 2, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1311,
+   "en": "Go to Dungeon Levels 1 and 2 and defeat 50 Cyclopses and 30 Ghosts. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1312,
+   "en": "Go to Dungeon Levels 1 and 2 and defeat 50 Skeleton Archers and 30 Hell Hounds. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1313,
+   "en": "Go to Dungeon Levels 2 and 3 and defeat 50 Poison Bull Fighters, 5 Dark Knights, and 1 Gorgon. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1314,
+   "en": "Go to Dungeon Levels 2 and 3 and defeat 50 Poison Bull Fighters, 50 Dark Knights, and 30 Gorgons. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1315,
+   "en": "Go to Dungeon Levels 2 and 3. Defeat 50 Poison Bull Fighters and 30 Dark Knights, and I'll give you Dragon Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1316,
+   "en": "Go to Dungeon Levels 2 and 3. Defeat 50 Poison Bull Fighters and 30 Dark Knights, and I'll give you Guardian Pants + 8 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1317,
+   "en": "Go to Elveland 2. Defeat 40 Cursed Liches and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 1, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1318,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. I'll give you an Ancient Helm + 7 and Ancient Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1319,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. I'll give you an Eclipse Helm + 7 and Eclipse Pants + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1320,
+   "en": "Go to Elveland 3 and defeat 100 Captain Grizzlies. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1321,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. I'll give you Ancient Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1322,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. I'll give you Eclipse Boots + 7 as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1323,
+   "en": "Go to Elveland 3 and defeat 100 Grizzlies. Once that's done, you'll be able to receive a reward from the Shadow Phantom Soldier.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1324,
+   "en": "Go to Icarus, kill 20 Alquamoses and 10 Alpha Crusts and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1325,
+   "en": "Go to Icarus, kill 20 Alquamoses and 20 Drakans and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1326,
+   "en": "Go to Icarus, kill 20 Alquamoses and return to 'Shadow Phantom Soldier' with 1 Crystal Sword (Attack power +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1327,
+   "en": "Go to Icarus, kill 20 Alquamoses and return to 'Shadow Phantom Soldier' with 1 Sword of Destruction (Attack power +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1328,
+   "en": "Go to Icarus, kill 30 Queen Rainiers and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1329,
+   "en": "Go to Icarus. Defeat 100 Phantom Knights and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 6, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1330,
+   "en": "Go to Icarus. Defeat 130 Giant Drakans and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 5, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1331,
+   "en": "Go to Icarus. Defeat 80 Alquamoses and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 3, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1332,
+   "en": "Go to Icarus. Defeat 80 Mega Crusts and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 4, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1333,
+   "en": "Go to Icarus. Defeat 90 Drakans and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 3, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1334,
+   "en": "Go to Kanturu Relics. Defeat 100 Dreadfears and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 8, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1335,
+   "en": "Go to Kanturu Relics. Defeat 100 Twin Tails and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 7, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1336,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 10 Blade Hunters and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1337,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 20 Satyroses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1338,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and 5 Kentauroses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1339,
+   "en": "Go to Kanturu Ruins, kill 20 Splinter Wolves and return to 'Shadow Phantom Soldier' with 1 Ancient Stick (Wizardry damage +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1340,
+   "en": "Go to Kanturu Ruins, kill 30 Iron Riders and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1341,
+   "en": "Go to La Cleon. Defeat 120 Ice Walkers and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 6, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1342,
+   "en": "Go to Lost Tower Level 4-6 and defeat 100 Devils. Go back to the Shadow Phantom Soldier to receive a choice between 15 SD Potions and 15 Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1343,
+   "en": "Go to Tarkan 2 and defeat 30 Zaikans. Go see the Shadow Phantom Soldier again to receive a choice between 20 Large SD Potions and 30 Large Complex Potions as your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1344,
+   "en": "Go to Tarkan 2. Defeat 100 Beam Knights and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 5, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1345,
+   "en": "Go to Tarkan 2. Defeat 100 Tantaloses and return to the Shadow Phantom Soldier to receive an Invisibility Cloak + 5, which you'll need to enter Blood Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1346,
+   "en": "Go to Tarkan 2. Defeat 30 Death Beam Knights and return to the Shadow Phantom Soldier to receive a Scroll of Blood + 4, which you will need to enter Illusion Temple.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1347,
+   "en": "Go to Tarkan, kill 20 Mutants and 10 Beam Knights and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1348,
+   "en": "Go to Tarkan, kill 20 Mutants and 20 Tantaloses and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1349,
+   "en": "Go to Tarkan, kill 20 Mutants and return to 'Shadow Phantom Soldier' with 1 Staff of Resurrection (Wizardry damage +12) to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1350,
+   "en": "Go to Tarkan, kill 20 Mutants and return to 'Shadow Phantom Soldier' with 10 Unirias to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1351,
+   "en": "Go to Tarkan, kill 30 Iron Wheels and return to 'Shadow Phantom Soldier' to claim your reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 1352,
+   "en": "Go to Tarkan. Defeat 100 Iron Wheels and return to the Shadow Phantom Soldier to receive a Devil's Invitation + 4, which you will need to enter Devil Square.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,5 @@
+2031|99|Leina, the General Goods Merchant
+2130|99|Magic Shop Owner Marce
+2451|99|Potion Merchant Silvia
+3737|99|Wandering Merchant Herald
+3758|99|Weapons Merchant Rhea

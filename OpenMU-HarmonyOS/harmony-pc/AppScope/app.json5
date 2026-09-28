@@ -1,0 +1,10 @@
+{
+  "app": {
+    "bundleName": "net.munique.openmu.game.harmony.pc",
+    "vendor": "OpenMU-Mobile",
+    "versionCode": 1,
+    "versionName": "1.0.0-pc",
+    "icon": "$media:app_icon",
+    "label": "$string:app_name"
+  }
+}

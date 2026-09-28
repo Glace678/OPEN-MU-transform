@@ -1,0 +1,130 @@
+name: OpenMU Unsigned Desktop
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Native platform to build
+        type: choice
+        default: all
+        options:
+          - all
+          - macos
+          - linux
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unsigned-desktop-${{ github.ref }}-${{ inputs.platform || 'all' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.runtime }}
+    timeout-minutes: 60
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(inputs.platform == 'macos' && '[{"runner":"macos-15","runtime":"osx-arm64"}]' || inputs.platform == 'linux' && '[{"runner":"ubuntu-24.04","runtime":"linux-x64"}]' || '[{"runner":"macos-15","runtime":"osx-arm64"},{"runner":"ubuntu-24.04","runtime":"linux-x64"}]') }}
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+      CMAKE_BUILD_PARALLEL_LEVEL: 3
+    steps:
+      - name: Checkout private build snapshot
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Read pinned upstream revisions
+        id: sources
+        shell: pwsh
+        run: |
+          $sources = Get-Content sources.json -Raw | ConvertFrom-Json
+          "client=$($sources.MuMain.revision)" >> $env:GITHUB_OUTPUT
+          "server=$($sources.OpenMU.revision)" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout pinned client
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: sven-n/MuMain
+          ref: ${{ steps.sources.outputs.client }}
+          path: source/MuMain
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Checkout pinned server
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: MUnique/OpenMU
+          ref: ${{ steps.sources.outputs.server }}
+          path: source/OpenMU
+          persist-credentials: false
+
+      - name: Apply verified local changes
+        shell: pwsh
+        run: |
+          $sources = Get-Content sources.json -Raw | ConvertFrom-Json
+          foreach ($name in @('MuMain', 'OpenMU')) {
+            $archive = "snapshots/$name.zip"
+            if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne $sources.$name.archiveSha256) {
+              throw "Snapshot hash mismatch: $name"
+            }
+            Expand-Archive -LiteralPath $archive -DestinationPath "source/$name" -Force
+            foreach ($entry in $sources.$name.files) {
+              if ((Get-FileHash "source/$name/$($entry.path)" -Algorithm SHA256).Hash -ne $entry.sha256) {
+                throw "Source hash mismatch: $name/$($entry.path)"
+              }
+            }
+          }
+
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build pkg-config clang bison flex \
+            zlib1g-dev libcurl4-openssl-dev libgl1-mesa-dev libglu1-mesa-dev libglew-dev \
+            libegl1-mesa-dev libturbojpeg0-dev librime-dev patchelf \
+            libx11-dev libxext-dev libxrandr-dev libxi-dev libxcursor-dev libxfixes-dev \
+            libxrender-dev libxss-dev libxtst-dev libxkbcommon-dev libdrm-dev libgbm-dev \
+            libwayland-dev libdecor-0-dev wayland-protocols libasound2-dev libpulse-dev \
+            libdbus-1-dev libudev-dev xvfb xauth
+
+      - name: Install macOS build dependencies
+        if: runner.os == 'macOS'
+        run: brew install cmake ninja glew jpeg-turbo librime bison
+
+      - name: Build and package native desktop applications
+        shell: pwsh
+        run: |
+          ./source/OpenMU/tools/cloud-build/Build-CloudDesktop.ps1 -Runtime '${{ matrix.runtime }}'
+
+      - name: Upload unsigned package and verification results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: OpenMU-Solo-${{ matrix.runtime }}-unsigned
+          path: |
+            dist/*.tar.gz
+            dist/*.sha256
+            dist/verification.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload build diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: build-diagnostics-${{ matrix.runtime }}
+          path: |
+            build-logs/
+            build-client/CMakeFiles/CMakeConfigureLog.yaml
+            build-client/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
+          retention-days: 7

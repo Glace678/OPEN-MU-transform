@@ -1,0 +1,61 @@
+{
+	auto_https disable_redirects
+	admin off
+}
+
+{$OPENMU_PORTAL_DOMAIN} {
+	tls {
+		issuer acme {
+			disable_http_challenge
+		}
+	}
+	header {
+		>Cache-Control "no-store"
+		Referrer-Policy "no-referrer"
+		X-Content-Type-Options "nosniff"
+		Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+	}
+	@accountPost {
+		method POST
+		path /api/registration/create /api/registration/change-password /api/registration/reset-password /api/registration/recovery-code
+	}
+	handle @accountPost {
+		request_body {
+			max_size 8KB
+		}
+		reverse_proxy openmu-startup:8080 {
+			header_up -Cookie
+			header_up -Authorization
+		}
+	}
+	@accountText {
+		method GET
+		path /api/registration/text
+	}
+	handle @accountText {
+		reverse_proxy openmu-startup:8080 {
+			header_up -Cookie
+			header_up -Authorization
+		}
+	}
+	@page {
+		method GET HEAD
+		path / /register /change-password /reset-password
+	}
+	handle @page {
+		root * /srv
+		rewrite * /index.html
+		file_server
+	}
+	@asset {
+		method GET HEAD
+		path /portal.css /portal.js /inventory_back.png
+	}
+	handle @asset {
+		root * /srv
+		file_server
+	}
+	handle {
+		respond "Not found" 404
+	}
+}

@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Create" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>重新加载</value>
+  </data>
+  <data name="AdminUsers" xml:space="preserve">
+    <value>管理员用户</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>修改密码</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="DuplicatedSuccessfully" xml:space="preserve">
+    <value>已成功复制“{0}”。</value>
+  </data>
+  <data name="CouldNotFindToDuplicate" xml:space="preserve">
+    <value>未找到要复制的“{0}”。</value>
+  </data>
+  <data name="TypeDoesNotSupportCloning" xml:space="preserve">
+    <value>类型“{0}”不支持复制。</value>
+  </data>
+  <data name="FailedToClone" xml:space="preserve">
+    <value>复制“{0}”失败。</value>
+  </data>
+  <data name="ErrorDuplicating" xml:space="preserve">
+    <value>复制“{0}”时出错：{1}</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>创建用户</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>正在加载...</value>
+  </data>
+  <data name="CreateConnectServer" xml:space="preserve">
+    <value>创建连接服务器</value>
+  </data>
+  <data name="CreateGameServer" xml:space="preserve">
+    <value>创建游戏服务器</value>
+  </data>
+  <data name="ServerWithIdAlreadyExists" xml:space="preserve">
+    <value>ID 为 {0} 的服务器已存在，请使用其他值。</value>
+  </data>
+  <data name="ServerWithPortAlreadyExists" xml:space="preserve">
+    <value>TCP 端口为 {0} 的服务器已存在，请使用其他端口。</value>
+  </data>
+  <data name="CreatingConfigurationInfo" xml:space="preserve">
+    <value>正在创建配置...</value>
+  </data>
+  <data name="SavingConfigurationInfo" xml:space="preserve">
+    <value>正在保存配置...</value>
+  </data>
+  <data name="ConnectionServerConfigurationSaved" xml:space="preserve">
+    <value>连接服务器配置已保存，正在初始化连接服务器...</value>
+  </data>
+  <data name="InitializingConnectServerInfo" xml:space="preserve">
+    <value>正在初始化连接服务器...</value>
+  </data>
+  <data name="NoChangesSaved" xml:space="preserve">
+    <value>没有保存任何更改。</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>发生意外错误：{0}。</value>
+  </data>
+  <data name="GameServerConfigurationSavedInfo" xml:space="preserve">
+    <value>游戏服务器配置已保存，正在初始化游戏服务器...</value>
+  </data>
+  <data name="InitializingGameServerInfo" xml:space="preserve">
+    <value>正在初始化游戏服务器...</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="SavedChanges" xml:space="preserve">
+    <value>更改已保存。</value>
+  </data>
+  <data name="NoChangesToSave" xml:space="preserve">
+    <value>没有需要保存的更改。</value>
+  </data>
+  <data name="FailedByUninitializedContext" xml:space="preserve">
+    <value>操作失败：上下文尚未初始化</value>
+  </data>
+  <data name="UnsavedChangesQuestion" xml:space="preserve">
+    <value>存在未保存的更改，确定要放弃吗？</value>
+  </data>
+  <data name="DownloadAsJson" xml:space="preserve">
+    <value>下载为 JSON</value>
+  </data>
+  <data name="LoadingErrorCheckLog" xml:space="preserve">
+    <value>无法加载数据，请查看日志了解详情。</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="MapEditor" xml:space="preserve">
+    <value>地图编辑器</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="CouldNotLoadMapDataCheckTheLogs" xml:space="preserve">
+    <value>无法加载地图数据，请查看日志了解详情。</value>
+  </data>
+  <data name="UnexpectedErrorCheckLogs" xml:space="preserve">
+    <value>发生意外错误：{0}。请查看日志了解详情。</value>
+  </data>
+  <data name="UnhandledErrorOccurred" xml:space="preserve">
+    <value>发生未处理的错误。</value>
+  </data>
+  <data name="DevelopmentEnvironmentWarning" xml:space="preserve">
+    <value>&lt;strong&gt;部署的应用程序不应启用 Development 环境。&lt;/strong&gt;
+    这可能会向最终用户显示异常中的敏感信息。
+    如需本地调试，请将 &lt;strong&gt;ASPNETCORE_ENVIRONMENT&lt;/strong&gt; 环境变量设置为 &lt;strong&gt;Development&lt;/strong&gt;，
+    然后重新启动应用程序。</value>
+  </data>
+  <data name="SwappingToDevForMoreInformation" xml:space="preserve">
+    <value>切换到 &lt;strong&gt;Development&lt;/strong&gt; 环境后会显示更详细的错误信息。</value>
+  </data>
+  <data name="AnErrorOccurredWhileProcessingYourRequest" xml:space="preserve">
+    <value>处理请求时发生错误</value>
+  </data>
+  <data name="DevelopmentMode" xml:space="preserve">
+    <value>开发模式</value>
+  </data>
+  <data name="GameServer" xml:space="preserve">
+    <value>游戏服务器</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>欢迎使用 OpenMU 管理后台。</value>
+  </data>
+  <data name="OpenMUAdminPanel" xml:space="preserve">
+    <value>OpenMU 管理后台</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>日志文件</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>日志</value>
+  </data>
+  <data name="Metrics" xml:space="preserve">
+    <value>指标</value>
+  </data>
+  <data name="Tracing" xml:space="preserve">
+    <value>追踪</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>文件名</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>最后更新</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="ServerID" xml:space="preserve">
+    <value>服务器 ID</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>断开连接</value>
+  </data>
+  <data name="LiveMap" xml:space="preserve">
+    <value>实时地图</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="Merchants" xml:space="preserve">
+    <value>商人</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>放弃更改</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>保存更改</value>
+  </data>
+  <data name="ExtensionPoint" xml:space="preserve">
+    <value>扩展点</value>
+  </data>
+  <data name="PluginName" xml:space="preserve">
+    <value>插件名称</value>
+  </data>
+  <data name="PluginType" xml:space="preserve">
+    <value>插件类型</value>
+  </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>插件</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>停用</value>
+  </data>
+  <data name="Activate" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Servers" xml:space="preserve">
+    <value>服务器</value>
+  </data>
+  <data name="ServerName" xml:space="preserve">
+    <value>服务器名称</value>
+  </data>
+  <data name="PlayerCount" xml:space="preserve">
+    <value>玩家数</value>
+  </data>
+  <data name="CurrentState" xml:space="preserve">
+    <value>当前状态</value>
+  </data>
+  <data name="ConnectServer" xml:space="preserve">
+    <value>连接服务器</value>
+  </data>
+  <data name="ReloadConfigurationAndRestartAllGameServers" xml:space="preserve">
+    <value>重新加载配置并重启所有游戏服务器</value>
+  </data>
+  <data name="DatabaseStatus" xml:space="preserve">
+    <value>数据库状态</value>
+  </data>
+  <data name="CantConnectToTheDatabaseProbablyNotCreatedYet" xml:space="preserve">
+    <value>无法连接数据库，数据库可能尚未创建。</value>
+  </data>
+  <data name="InitializedGameVersion" xml:space="preserve">
+    <value>已初始化的游戏版本</value>
+  </data>
+  <data name="NoInitializedDataFound" xml:space="preserve">
+    <value>未找到已初始化的数据！</value>
+  </data>
+  <data name="ReInstall" xml:space="preserve">
+    <value>重新安装</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>已是最新</value>
+  </data>
+  <data name="NotCreated" xml:space="preserve">
+    <value>尚未创建</value>
+  </data>
+  <data name="UpdateRequired" xml:space="preserve">
+    <value>需要更新</value>
+  </data>
+  <data name="Setup" xml:space="preserve">
+    <value>初始化</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Accounts" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="OnlineAccounts" xml:space="preserve">
+    <value>在线账号</value>
+  </data>
+  <data name="Updates" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="AvailableUpdates" xml:space="preserve">
+    <value>个可用更新</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>用户</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="GameClients" xml:space="preserve">
+    <value>游戏客户端</value>
+  </data>
+  <data name="Monsters" xml:space="preserve">
+    <value>怪物</value>
+  </data>
+  <data name="MerchantStores" xml:space="preserve">
+    <value>商店</value>
+  </data>
+  <data name="CharacterClasses" xml:space="preserve">
+    <value>职业</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>物品</value>
+  </data>
+  <data name="DropItemGroups" xml:space="preserve">
+    <value>物品掉落组</value>
+  </data>
+  <data name="GameMaps" xml:space="preserve">
+    <value>游戏地图</value>
+  </data>
+  <data name="MiniGames" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="WarpList" xml:space="preserve">
+    <value>移动列表</value>
+  </data>
+  <data name="JewelMixes" xml:space="preserve">
+    <value>宝石合成</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="FullConfiguration" xml:space="preserve">
+    <value>完整配置</value>
+  </data>
+  <data name="GameConfiguration" xml:space="preserve">
+    <value>游戏配置</value>
+  </data>
+  <data name="ReinstallConfirmation" xml:space="preserve">
+    <value>确定要继续吗？当前所有数据都将被删除并重新安装。</value>
+  </data>
+  <data name="PleaseFirstInstallTheDatabaseUpdatesOnTheSetupPage" xml:space="preserve">
+    <value>请先在初始化页面安装数据库更新。</value>
+  </data>
+  <data name="NoConfigurationDataUpdateAvailable" xml:space="preserve">
+    <value>没有可用的配置数据更新。</value>
+  </data>
+  <data name="NewConfigurationUpdatesAvailable" xml:space="preserve">
+    <value>有新的配置数据更新可用，你可以选择要应用的更新。</value>
+  </data>
+  <data name="MandatoryUpdatesAreAlwaysAppliedAndCannotBeDeselected" xml:space="preserve">
+    <value>强制更新始终会应用，无法取消选择。</value>
+  </data>
+  <data name="TheUpdatesRequireARestartOfTheServerProcessToTakeEffect" xml:space="preserve">
+    <value>更新需要重启服务器进程才能生效。</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>正在更新...</value>
+  </data>
+  <data name="ApplyingUpdates" xml:space="preserve">
+    <value>正在应用更新...</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>更新失败！</value>
+  </data>
+  <data name="ApplySelectedUpdates" xml:space="preserve">
+    <value>应用选中的更新</value>
+  </data>
+  <data name="PatchVersion" xml:space="preserve">
+    <value>补丁版本</value>
+  </data>
+  <data name="MajorVersion" xml:space="preserve">
+    <value>主版本</value>
+  </data>
+  <data name="PatchAddress" xml:space="preserve">
+    <value>补丁地址</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="MinorVersion" xml:space="preserve">
+    <value>次版本</value>
+  </data>
+  <data name="Patch" xml:space="preserve">
+    <value>补丁</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="InstallingPleaseWait" xml:space="preserve">
+    <value>正在安装，请稍候...</value>
+  </data>
+  <data name="PleaseRestartTheConnectAndGameServerContainers" xml:space="preserve">
+    <value>请重启连接服务器和游戏服务器容器。</value>
+  </data>
+  <data name="FinishedHaveFun" xml:space="preserve">
+    <value>安装完成，祝你游戏愉快！</value>
+  </data>
+  <data name="FirstCloseAllConnectionsToTheServer" xml:space="preserve">
+    <value>请先关闭与服务器的所有连接。</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="SelectTheGameVersion" xml:space="preserve">
+    <value>选择游戏版本</value>
+  </data>
+  <data name="HowManyGameServersQuestion" xml:space="preserve">
+    <value>要创建多少个游戏服务器？</value>
+  </data>
+  <data name="TestAccountsQuestion" xml:space="preserve">
+    <value>是否创建测试账号？</value>
+  </data>
+  <data name="YesCreateTestAccounts" xml:space="preserve">
+    <value>是，创建测试账号</value>
+  </data>
+  <data name="StartInstall" xml:space="preserve">
+    <value>开始安装</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="RemoveServer" xml:space="preserve">
+    <value>移除服务器</value>
+  </data>
+  <data name="ServerDeleteProceedQuestion" xml:space="preserve">
+    <value>该服务器将从数据库中删除，确定要继续吗？</value>
+  </data>
+  <data name="ServerControl" xml:space="preserve">
+    <value>服务器控制</value>
+  </data>
+  <data name="TotalPlayers" xml:space="preserve">
+    <value>玩家总数</value>
+  </data>
+  <data name="SocketNumber" xml:space="preserve">
+    <value>插槽 {0}</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="GameServerCount" xml:space="preserve">
+    <value>游戏服务器数量</value>
+  </data>
+  <data name="Character" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="StartedAt" xml:space="preserve">
+    <value>启动时间</value>
+  </data>
+  <data name="ActiveOfflinePlayer" xml:space="preserve">
+    <value>活动的离线玩家</value>
+  </data>
+  <data name="CouldNotFindToDelete" xml:space="preserve">
+    <value>未找到要删除的“{0}”。</value>
+  </data>
+  <data name="DeleteFailedReferenced" xml:space="preserve">
+    <value>无法删除“{0}”，该对象可能被其他对象引用。详情请查看日志。</value>
+  </data>
+  <data name="CreatedSuccessfully" xml:space="preserve">
+    <value>已成功创建新对象。</value>
+  </data>
+  <data name="ShowEntryForm" xml:space="preserve">
+    <value>显示录入表单</value>
+  </data>
+  <data name="HideEntryForm" xml:space="preserve">
+    <value>隐藏录入表单</value>
+  </data>
+  <data name="AllGameServers" xml:space="preserve">
+    <value>所有游戏服务器</value>
+  </data>
+  <data name="GlobalMessage" xml:space="preserve">
+    <value>全服消息</value>
+  </data>
+  <data name="GlobalMessageNoTarget" xml:space="preserve">
+    <value>没有正在运行的游戏服务器可以接收消息。</value>
+  </data>
+  <data name="GlobalMessageSendFailed" xml:space="preserve">
+    <value>向 {0} 发送消息失败：{1}</value>
+  </data>
+  <data name="GlobalMessageSent" xml:space="preserve">
+    <value>消息已发送。</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>输入消息...</value>
+  </data>
+  <data name="OnlineCount" xml:space="preserve">
+    <value>{0} 人在线</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="LogViewer" xml:space="preserve">
+    <value>日志查看器</value>
+  </data>
+  <data name="Live" xml:space="preserve">
+    <value>实时</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="FilterLogEntries" xml:space="preserve">
+    <value>筛选日志...</value>
+  </data>
+  <data name="NoLogEntriesFound" xml:space="preserve">
+    <value>未找到日志。</value>
+  </data>
+  <data name="NoLogEntriesMatchFilter" xml:space="preserve">
+    <value>没有符合筛选条件的日志。</value>
+  </data>
+  <data name="ShowingXOfYLines" xml:space="preserve">
+    <value>正在显示 {1} 行中的 {0} 行（已加载最后 {2} 行）。</value>
+  </data>
+  <data name="ScrollToBottom" xml:space="preserve">
+    <value>滚动到底部</value>
+  </data>
+  <data name="ReloadFileList" xml:space="preserve">
+    <value>重新加载文件列表</value>
+  </data>
+  <data name="DownloadFile" xml:space="preserve">
+    <value>下载文件</value>
+  </data>
+  <data name="ChatCommands" xml:space="preserve">
+    <value>聊天命令</value>
+  </data>
+  <data name="CommandColumn" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="CommandDescription" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="CommandUsage" xml:space="preserve">
+    <value>用法</value>
+  </data>
+  <data name="MinimumCharacterStatus" xml:space="preserve">
+    <value>所需角色状态</value>
+  </data>
+  <data name="NoParameters" xml:space="preserve">
+    <value>此命令没有参数。</value>
+  </data>
+  <data name="ParameterName" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ParameterShortName" xml:space="preserve">
+    <value>简称</value>
+  </data>
+  <data name="ParameterType" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="ParameterValidValues" xml:space="preserve">
+    <value>有效值</value>
+  </data>
+  <data name="ParametersOf" xml:space="preserve">
+    <value>{0} 的参数</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>必填</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>退出登录</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>登录名</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="SignedInAs" xml:space="preserve">
+    <value>当前登录用户</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>保持登录状态</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>登录名或密码错误。</value>
+  </data>
+  <data name="AccountLockedOut" xml:space="preserve">
+    <value>失败次数过多，请稍后重试。</value>
+  </data>
+  <data name="TwoFactorTitle" xml:space="preserve">
+    <value>双重身份验证</value>
+  </data>
+  <data name="TwoFactorPrompt" xml:space="preserve">
+    <value>请输入身份验证器应用中显示的验证码。</value>
+  </data>
+  <data name="AuthenticatorCode" xml:space="preserve">
+    <value>身份验证器验证码</value>
+  </data>
+  <data name="RecoveryCode" xml:space="preserve">
+    <value>恢复代码</value>
+  </data>
+  <data name="UseRecoveryCode" xml:space="preserve">
+    <value>改用恢复代码</value>
+  </data>
+  <data name="UseAuthenticatorCode" xml:space="preserve">
+    <value>改用身份验证器验证码</value>
+  </data>
+  <data name="InvalidTwoFactorCode" xml:space="preserve">
+    <value>验证码无效。</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>验证</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>拒绝访问</value>
+  </data>
+  <data name="AccessDeniedDescription" xml:space="preserve">
+    <value>你的账号无权打开此页面。</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>账号安全</value>
+  </data>
+  <data name="TwoFactorAuthentication" xml:space="preserve">
+    <value>双重身份验证</value>
+  </data>
+  <data name="TwoFactorEnabled" xml:space="preserve">
+    <value>已启用双重身份验证。</value>
+  </data>
+  <data name="TwoFactorDisabled" xml:space="preserve">
+    <value>尚未设置双重身份验证。</value>
+  </data>
+  <data name="SetUpAuthenticator" xml:space="preserve">
+    <value>设置身份验证器应用</value>
+  </data>
+  <data name="DisableTwoFactor" xml:space="preserve">
+    <value>禁用双重身份验证</value>
+  </data>
+  <data name="ScanQrCode" xml:space="preserve">
+    <value>请使用身份验证器应用扫描此二维码，例如 Microsoft Authenticator。</value>
+  </data>
+  <data name="ManualKeyHint" xml:space="preserve">
+    <value>无法扫描？请手动输入此密钥：</value>
+  </data>
+  <data name="ConfirmSetupHint" xml:space="preserve">
+    <value>请输入应用当前显示的验证码以完成设置。</value>
+  </data>
+  <data name="RecoveryCodes" xml:space="preserve">
+    <value>恢复代码</value>
+  </data>
+  <data name="RecoveryCodesHint" xml:space="preserve">
+    <value>请将这些代码妥善保存在安全位置。无法使用身份验证器应用时，每个代码可以登录一次。这些代码只显示一次。</value>
+  </data>
+  <data name="RemainingRecoveryCodes" xml:space="preserve">
+    <value>剩余恢复代码</value>
+  </data>
+  <data name="GenerateNewRecoveryCodes" xml:space="preserve">
+    <value>生成新的恢复代码</value>
+  </data>
+  <data name="TwoFactorRequiredTitle" xml:space="preserve">
+    <value>必须启用双重身份验证</value>
+  </data>
+  <data name="TwoFactorRequiredDescription" xml:space="preserve">
+    <value>服务器配置要求每位管理后台用户使用第二重验证。请设置身份验证器应用后继续。</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>角色权限</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>角色权限</value>
+  </data>
+  <data name="TwoFactor" xml:space="preserve">
+    <value>第二重验证</value>
+  </data>
+  <data name="LastLogin" xml:space="preserve">
+    <value>上次登录</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>已启用</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>已禁用</value>
+  </data>
+  <data name="NoAdminUserWarning" xml:space="preserve">
+    <value>尚未创建管理后台用户，因此当前无需登录即可访问。数据库初始化完成后，请尽快创建首位用户或配置引导用户。</value>
+  </data>
+  <data name="CreateFirstUser" xml:space="preserve">
+    <value>创建首位用户</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>用户已创建。</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>用户已删除。</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>密码已修改。</value>
+  </data>
+  <data name="TwoFactorResetForUser" xml:space="preserve">
+    <value>该用户的第二重验证已重置。</value>
+  </data>
+  <data name="ResetTwoFactor" xml:space="preserve">
+    <value>重置第二重验证</value>
+  </data>
+  <data name="CannotDeleteLastUser" xml:space="preserve">
+    <value>无法删除最后一位用户。</value>
+  </data>
+  <data name="CannotModifyBootstrapUser" xml:space="preserve">
+    <value>引导用户由配置定义，无法在此修改。</value>
+  </data>
+  <data name="ApiKeys" xml:space="preserve">
+    <value>API 密钥</value>
+  </data>
+  <data name="ApiKeysDescription" xml:space="preserve">
+    <value>游戏启动器或网站等外部应用通过这些密钥访问 /api 下的公共 API。请为每个应用分配独立密钥，以便单独撤销。</value>
+  </data>
+  <data name="ApiKeyName" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="ApiKeyPrefix" xml:space="preserve">
+    <value>密钥</value>
+  </data>
+  <data name="CreateApiKey" xml:space="preserve">
+    <value>创建 API 密钥</value>
+  </data>
+  <data name="DeleteApiKey" xml:space="preserve">
+    <value>删除 API 密钥</value>
+  </data>
+  <data name="DeleteApiKeyQuestion" xml:space="preserve">
+    <value>确定要删除“{0}”的 API 密钥吗？使用此密钥的应用将立即停止工作。</value>
+  </data>
+  <data name="ApiKeyCreated" xml:space="preserve">
+    <value>API 密钥已创建。</value>
+  </data>
+  <data name="ApiKeyDeleted" xml:space="preserve">
+    <value>API 密钥已删除。</value>
+  </data>
+  <data name="ApiKeyEnabled" xml:space="preserve">
+    <value>API 密钥已启用。</value>
+  </data>
+  <data name="ApiKeyDisabled" xml:space="preserve">
+    <value>API 密钥已禁用。</value>
+  </data>
+  <data name="ApiKeyShownOnce" xml:space="preserve">
+    <value>立即复制此密钥</value>
+  </data>
+  <data name="ApiKeyShownOnceDescription" xml:space="preserve">
+    <value>系统只保存密钥的哈希值，因此这是唯一一次显示。如果密钥丢失，请删除后重新创建。</value>
+  </data>
+  <data name="NoApiKeys" xml:space="preserve">
+    <value>尚未创建 API 密钥。</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>禁用</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="CopiedToClipboard" xml:space="preserve">
+    <value>API 密钥已复制到剪贴板。</value>
+  </data>
+  <data name="CopyToClipboardFailed" xml:space="preserve">
+    <value>无法复制 API 密钥，请手动选择并复制。</value>
+  </data>
+  <data name="NetworkAnalyzer" xml:space="preserve">
+    <value>网络分析器</value>
+  </data>
+  <data name="ChatServer" xml:space="preserve">
+    <value>聊天服务器</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="NoConnectionsFound" xml:space="preserve">
+    <value>未找到连接。</value>
+  </data>
+  <data name="SelectAConnection" xml:space="preserve">
+    <value>请选择一个连接以查看网络流量。</value>
+  </data>
+  <data name="NetworkAnalyzerNotAvailable" xml:space="preserve">
+    <value>网络分析器仅在一体化部署中可用，因为服务器必须运行在同一进程中。</value>
+  </data>
+  <data name="CapturedPackets" xml:space="preserve">
+    <value>已捕获的数据包</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
+  <data name="Direction" xml:space="preserve">
+    <value>方向</value>
+  </data>
+  <data name="PacketCode" xml:space="preserve">
+    <value>代码</value>
+  </data>
+  <data name="PacketMessage" xml:space="preserve">
+    <value>消息</value>
+  </data>
+  <data name="PacketDetails" xml:space="preserve">
+    <value>数据包详情</value>
+  </data>
+  <data name="ExtractedInformation" xml:space="preserve">
+    <value>提取的信息</value>
+  </data>
+  <data name="RawData" xml:space="preserve">
+    <value>原始数据</value>
+  </data>
+  <data name="ClearPackets" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="ToServer" xml:space="preserve">
+    <value>发往服务器</value>
+  </data>
+  <data name="ToClient" xml:space="preserve">
+    <value>发往客户端</value>
+  </data>
+  <data name="FilterPackets" xml:space="preserve">
+    <value>按代码或消息筛选</value>
+  </data>
+  <data name="NoPacketsCaptured" xml:space="preserve">
+    <value>尚未捕获数据包。</value>
+  </data>
+  <data name="SelectAPacket" xml:space="preserve">
+    <value>请选择一个数据包以查看内容。</value>
+  </data>
+  <data name="FollowNewPackets" xml:space="preserve">
+    <value>跟随</value>
+  </data>
+  <data name="FollowNewPacketsHint" xml:space="preserve">
+    <value>显示最新数据包并自动滚动。向上滚动时会自动关闭，以免视图跳回底部。</value>
+  </data>
+</root>

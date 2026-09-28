@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Account</string>
+    <string name="account_portal_address">Portal address</string>
+    <string name="account_portal_language">Portal language</string>
+    <string name="account_register">Register</string>
+    <string name="account_change_password">Change password</string>
+    <string name="account_reset_password">Forgot password?</string>
+    <string name="account_portal_settings">Account settings</string>
+    <string name="account_portal_not_configured">Set a valid account portal address in settings.</string>
+    <string name="account_portal_invalid">Enter an HTTPS origin. HTTP requires direct loopback or trusted local pairing. Credentials, paths, queries and fragments are not allowed.</string>
+    <string name="account_portal_no_browser">No browser is available to open the account portal.</string>
+</resources>

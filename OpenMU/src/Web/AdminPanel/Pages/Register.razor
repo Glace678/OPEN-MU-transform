@@ -1,0 +1,158 @@
+@page "/register"
+@layout MUnique.OpenMU.Web.AdminPanel.Components.Layout.LoginLayout
+@attribute [AllowAnonymous]
+@using Microsoft.Extensions.Localization
+@using MUnique.OpenMU.Web.AdminPanel.API
+@using MUnique.OpenMU.Web.AdminPanel.Properties
+@inject IStringLocalizer<SelfServiceResources> Text
+@inject IJSRuntime JsRuntime
+@implements IAsyncDisposable
+
+<PageTitle>OpenMU: @Text["GameRegistrationTitle"]</PageTitle>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="h5 card-title mb-3">@Text["GameRegistrationHeading"]</h2>
+        @if (!this._success)
+        {
+        <EditForm Model="@this._input" OnValidSubmit="@this.SubmitAsync" FormName="game-register">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger small" />
+            <div class="mb-3">
+                <label class="form-label" for="reg-name">@Text["AccountNameLabel"]</label>
+                <InputText id="reg-name" class="form-control" autocomplete="username" @bind-Value="@this._input.LoginName" />
+                <div class="form-text">@Text["AccountNameHelp"]</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="reg-password">@Text["PasswordLabel"]</label>
+                <InputText id="reg-password" type="password" class="form-control" autocomplete="new-password" @bind-Value="@this._input.Password" />
+                <div class="form-text">@Text["PasswordHelp"]</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="reg-confirm">@Text["ConfirmPasswordLabel"]</label>
+                <InputText id="reg-confirm" type="password" class="form-control" autocomplete="new-password" @bind-Value="@this._input.ConfirmPassword" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="reg-security">@Text["SecurityCodeLabel"]</label>
+                <InputText id="reg-security" type="password" class="form-control" autocomplete="off" @bind-Value="@this._input.SecurityCode" />
+                <div class="form-text">@Text["SecurityCodeHelp"]</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" disabled="@this._isBusy">@Text["RegisterButton"]</button>
+        </EditForm>
+        }
+        @if (this._message is { } message)
+        {
+            <div class="alert @(this._success ? "alert-success" : "alert-danger") mt-3 py-2" role="alert">@message</div>
+        }
+        @if (this._recoveryCode is { } recoveryCode)
+        {
+            <label class="form-label" for="registration-recovery-code">@Text["RecoveryCodeLabel"]</label>
+            <textarea id="registration-recovery-code" class="form-control font-monospace" readonly rows="3" autocomplete="off" spellcheck="false">@recoveryCode</textarea>
+            <p class="small text-warning mt-2">@Text["RecoveryCodeNotice"]</p>
+        }
+        else if (this._success)
+        {
+            <p class="small text-secondary">@Text["RecoveryUnavailable"]</p>
+        }
+        <div class="mt-3 d-flex justify-content-between">
+            <a class="small" href="login">@Text["BackToLoginLink"]</a>
+            <a class="small" href="change-password">@Text["ChangePasswordLink"]</a>
+            <a class="small" href="reset-password">@Text["ForgotPasswordLink"]</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    private InputModel _input = new();
+    private bool _isBusy;
+    private bool _success;
+    private string? _message;
+    private string? _recoveryCode;
+    private IJSObjectReference? _selfServiceModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this._selfServiceModule = await this.JsRuntime
+                .InvokeAsync<IJSObjectReference>("import", "./_content/MUnique.OpenMU.Web.AdminPanel/js/account-self-service.js")
+                .ConfigureAwait(true);
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        this._isBusy = true;
+        this._message = null;
+        try
+        {
+            if (this._selfServiceModule is null)
+            {
+                this._success = false;
+                this._message = this.Text["RegistrationPageNotReady"].Value;
+                return;
+            }
+
+            var result = await this._selfServiceModule.InvokeAsync<AccountRegistrationResponse>(
+                "postJson",
+                "api/registration/create",
+                new
+                {
+                    LoginName = this._input.LoginName?.Trim(),
+                    this._input.Password,
+                    ConfirmPassword = this._input.ConfirmPassword,
+                    this._input.SecurityCode,
+                }).ConfigureAwait(true);
+            this._success = result?.Success ?? false;
+            this._message = result?.Message ?? this.Text["RegistrationFailed"].Value;
+            this._recoveryCode = this._success ? result?.RecoveryCode : null;
+            if (this._success)
+            {
+                this._input = new InputModel();
+            }
+        }
+        catch (Exception)
+        {
+            this._success = false;
+            this._message = this.Text["CannotConnect"].Value;
+        }
+        finally
+        {
+            this._isBusy = false;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this._selfServiceModule is { } module)
+        {
+            this._selfServiceModule = null;
+            try
+            {
+                await module.DisposeAsync().ConfigureAwait(false);
+            }
+            catch (JSDisconnectedException)
+            {
+                // The browser circuit is already gone.
+            }
+        }
+
+        GC.SuppressFinalize(this);
+    }
+
+    private sealed class InputModel
+    {
+        [SelfServiceRequired("RequiredAccountName")]
+        public string? LoginName { get; set; }
+
+        [SelfServiceRequired("RequiredPassword")]
+        public string? Password { get; set; }
+
+        [SelfServiceRequired("RequiredConfirmPassword")]
+        public string? ConfirmPassword { get; set; }
+
+        [SelfServiceRequired("RequiredSecurityCode")]
+        public string? SecurityCode { get; set; }
+    }
+
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Tài khoản</string>
+    <string name="account_portal_address">Địa chỉ cổng tài khoản</string>
+    <string name="account_portal_language">Ngôn ngữ cổng tài khoản</string>
+    <string name="account_register">Đăng ký</string>
+    <string name="account_change_password">Đổi mật khẩu</string>
+    <string name="account_reset_password">Quên mật khẩu?</string>
+    <string name="account_portal_settings">Cài đặt tài khoản</string>
+    <string name="account_portal_not_configured">Nhập địa chỉ cổng tài khoản hợp lệ trong cài đặt.</string>
+    <string name="account_portal_invalid">Nhập địa chỉ gốc HTTPS. HTTP chỉ cho phép loopback trực tiếp hoặc ghép nối cục bộ đáng tin cậy. Không cho phép thông tin đăng nhập, đường dẫn, truy vấn hay đoạn URL.</string>
+    <string name="account_portal_no_browser">Không có trình duyệt để mở cổng tài khoản.</string>
+</resources>

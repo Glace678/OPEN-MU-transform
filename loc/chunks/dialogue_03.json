@@ -1,0 +1,405 @@
+{
+ "group": "dialogue",
+ "items": [
+  {
+   "id": 381,
+   "en": "Blood Castle is an excellent place to build your party's bond. I have a quest that will earn you an item you'll need to enter Blood Castle. Will you accept this quest? (Basic character: Level 181-230, Advanced character: Level 161-210)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 382,
+   "en": "Blood Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 441,
+   "en": "Burning Lava Giants have infested the lava fields of Vulcanus and caused our gens members to disperse. Make haste and exterminate these Burning Lava Giants in Vulcanus.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 443,
+   "en": "By a 'simple quest', do you mean killing monsters?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 444,
+   "en": "Call from the Gens",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 445,
+   "en": "Can you explain in more detail?",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 478,
+   "en": "Change of the Underwater Temple",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 496,
+   "en": "Chaos Castle Adaptation (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 497,
+   "en": "Chaos Castle Adaptation (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 498,
+   "en": "Chaos Castle Adaptation (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 499,
+   "en": "Chaos Castle Adaptation (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 500,
+   "en": "Chaos Castle Challenge (1)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 501,
+   "en": "Chaos Castle Challenge (2)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 502,
+   "en": "Chaos Castle Challenge (3)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 503,
+   "en": "Chaos Castle Challenge (4)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 504,
+   "en": "Chaos Castle is a place where you can test your own limitations. If you want to find out your limitations, go inquire with a Shadow Phantom Soldier about the castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 505,
+   "en": "Chaos Castle will push you to your limits and shouldn't be taken lightly. Be sure to prepare yourself before going there. Go to the Shadow Phantom Soldier and accept a quest that will earn you the items you'll need at Chaos Castle.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 506,
+   "en": "Chaos Castle...",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 518,
+   "en": "Character and Server Selection",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 522,
+   "en": "Check the location and client of the request from the Letter of Request.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 523,
+   "en": "Check the request information. (Accept)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 524,
+   "en": "Checking the Letter of Request",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 539,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 3,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 540,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 5,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 541,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 8,000,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 542,
+   "en": "Clear Illusion Temple and return to the Shadow Phantom Soldier to receive 800,000 Exp.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 543,
+   "en": "Clearing a Path to Icarus",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 545,
+   "en": "Close the Quest window and click on me again. After that, select 'Receive damage and defense increase buff.'",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 546,
+   "en": "Close the Quest window and click on me again. After that, select 'Receive damage and defense increase buff.' This buff is available to anyone under level 220.;After receiving the buff, you will see an icon on the top left corner of the screen, a blue light effect surrounding the character, and have one hour of enhanced damage and defense.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 549,
+   "en": "Collect 20 units of Stardust from Queen Rainiers in Icarus and bring them to Zyro to get the reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 553,
+   "en": "Come back and see me once you reach level 25. I will give you a Uniria as a reward for your achievement.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 554,
+   "en": "Come back once you've reached level 25.;I will then reward you with a Uniria as a gift.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 555,
+   "en": "Come back when you reach a certain level, and I will give you a Uniria as a reward.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 556,
+   "en": "Come back when you're ready and I'll give you a full briefing then. (The quest has been cancelled.)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 561,
+   "en": "Complete Archangel's quest in Blood Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 1.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 562,
+   "en": "Complete Archangel's quest in Blood Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 2.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 563,
+   "en": "Complete Archangel's quest in Blood Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 3.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 564,
+   "en": "Complete Archangel's quest in Blood Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 4.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 565,
+   "en": "Complete Archangel's quest in Blood Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 5.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 566,
+   "en": "Complete Archangel's quest in Blood Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 6.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 567,
+   "en": "Complete Archangel's quest in Blood Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 7.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 568,
+   "en": "Complete Archangel's quest in Blood Castle Level 8 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Blood Castle Level 8.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 570,
+   "en": "Completion of the request",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 575,
+   "en": "Congratulations on becoming a member of Gens Duprian.  Much will be asked of you in the name of our cause. Come see me whenever you require assistance concerning the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 576,
+   "en": "Congratulations on becoming a member of Gens Vanert. Much will be asked of you in the name of our cause. Come see me whenever you require assistance concerning the gens.",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 577,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Basic character: Level 240 - 270, Advanced character: Level 220 - 260)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 578,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Basic character: Level 300 - 320, Advanced character: Level 271 - 320)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 579,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 331 - 350)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 580,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 351 - 380)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  },
+  {
+   "id": 581,
+   "en": "Congratulations. You have completed the first mission. Then I will give you the second mission right away. Will you accept this mission? (Level 381 - 400)",
+   "budget": 4096,
+   "kinds": [
+    "questwords"
+   ]
+  }
+ ]
+}

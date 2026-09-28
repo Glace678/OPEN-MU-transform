@@ -1,0 +1,974 @@
+{
+ "group": "text",
+ "items": [
+  {
+   "id": 2467,
+   "en": "Press space bar to collect loot.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2471,
+   "en": "Pressing ctrl+E while keeping the cursor on the item (alcohol, antidote, and town portal scroll) will register a shortcut key for the item.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2473,
+   "en": "Priestess Veina",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2509,
+   "en": "Quartermaster",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2510,
+   "en": "Queen Bee",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2511,
+   "en": "Queen Rainier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2561,
+   "en": "Raymond",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2589,
+   "en": "Red Skeleton Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2830,
+   "en": "Resurrected Gladiator",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2878,
+   "en": "Rhea",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2879,
+   "en": "Right click on scrolls or orbs to master the noted skills.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 2891,
+   "en": "Rogue Centurion",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2895,
+   "en": "Royal Guard Captain Lorence",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2902,
+   "en": "Ruthless Lava Giant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2918,
+   "en": "Safety Guardian",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 2921,
+   "en": "Santa",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2922,
+   "en": "Santa Claus",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2929,
+   "en": "Sapi Queen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2930,
+   "en": "Sapi-Duo",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2931,
+   "en": "Sapi-Tres",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2932,
+   "en": "Sapi-Unus",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2935,
+   "en": "Satyros",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2941,
+   "en": "Scarecrow",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2945,
+   "en": "Schriker",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2946,
+   "en": "Scout(Hero)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2987,
+   "en": "Sea Worm",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 2997,
+   "en": "Sebina the Priest",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3008,
+   "en": "Seed Master",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3009,
+   "en": "Seed Researcher",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3017,
+   "en": "Selupan",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3019,
+   "en": "Senior",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3033,
+   "en": "Shadow",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3034,
+   "en": "Shadow Knight",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3035,
+   "en": "Shadow Look",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3036,
+   "en": "Shadow Master",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3037,
+   "en": "Shadow Pawn",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3039,
+   "en": "Shadow Phantom Soldier",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3044,
+   "en": "Shield",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3045,
+   "en": "Shield Bearer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3069,
+   "en": "Silver Valkyrie",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3071,
+   "en": "Silvia",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3080,
+   "en": "Skeleton",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3081,
+   "en": "Skeleton Archer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3090,
+   "en": "Slaughterer",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3095,
+   "en": "Slingshot attack",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3096,
+   "en": "Slingshot defense",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3108,
+   "en": "Snowman",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3117,
+   "en": "Soccer Ball",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3118,
+   "en": "Soldier",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3121,
+   "en": "Soram",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3122,
+   "en": "Soram (Trainee Soldier)",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3132,
+   "en": "Spearman",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3145,
+   "en": "Spider",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3146,
+   "en": "Spider Eggs",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3158,
+   "en": "Splinter Wolf",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3171,
+   "en": "Statue of Saint",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3176,
+   "en": "Stone Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3177,
+   "en": "Stone Statue",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3178,
+   "en": "Stone Statue 1",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3198,
+   "en": "Strange Rabbit",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3259,
+   "en": "Swamp of Peace Hunting Grounds Entrance (1)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3260,
+   "en": "Swamp of Peace Hunting Grounds Entrance (2)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3261,
+   "en": "Swamp of Peace Hunting Grounds Entrance (3)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3262,
+   "en": "Swamp of Peace Hunting Grounds Entrance (4)",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3314,
+   "en": "Tanker",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3315,
+   "en": "Tantalos",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3389,
+   "en": "The Chaos Goblin in Noria who combines items is at coordinates 180, 102.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3398,
+   "en": "The Guild Advocate NPC who registers guilds is in Devias at coordinate 215, 44.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3402,
+   "en": "The Peddler in Lorencia who sells beginner's equipment is at coordinates 183, 136.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3445,
+   "en": "The command (trade, party, whisper, etc.) system is accessible by pressing the 'D' key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3448,
+   "en": "The defense rate increases by 10% when your armor set is of the same type.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3460,
+   "en": "The entrance to Atlans is at coordinates 240, 242 in Noria.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3461,
+   "en": "The entrance to Devias in Lorencia is at coordinates: 7, 40",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3462,
+   "en": "The entrance to Lorencia in Noria is at coordinates 153, 5",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3463,
+   "en": "The entrance to Noria in Lorencia is at coordinates 214, 244.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3464,
+   "en": "The entrance to the Dungeon is at coordinates 122, 231 in Lorencia.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3477,
+   "en": "The item's level may decrease if the upgrade fails with the Jewel of Soul.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3511,
+   "en": "The success rate of the Jewel of Soul is 50%. The rate increases by 25% if the item has luck option attached.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3512,
+   "en": "The supplementary magic of the Elf can be used by clicking the name in the party window.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3519,
+   "en": "The weapon merchant in Devias who sells mid level equipment is at coordinate 188, 46.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3520,
+   "en": "The wizard in Devias who sells mid level wizard items is at coordinate 225, 50.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3529,
+   "en": "There are certain areas in the world map designated as Battle Zone where only Gens members can enter.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3546,
+   "en": "Thompson Kenel",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3547,
+   "en": "Thompson Kenel the Weapon Merchant in Devias who sells mid level items is at coordinates 9, 76.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3555,
+   "en": "Thunder Lich",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3556,
+   "en": "Thunder Napin",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3564,
+   "en": "To combat normally, left click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3568,
+   "en": "To fix your weapon or armor, go to the weapon merchants in town.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3570,
+   "en": "To invite someone to your party, type '/party' while keeping the cursor on the character.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3572,
+   "en": "To save a screenshot in your Mu folder, press the 'Print Screen' key.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3573,
+   "en": "To send a message to guild members, type '@ message'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3574,
+   "en": "To send a message to party members, type '~ message'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3575,
+   "en": "To set macro for chatting, type '/number(1~10) <message>'",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3577,
+   "en": "To trade items or zen with another character, type '/trade' while keeping the cursor on the opposite character.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3578,
+   "en": "To use skill during combat, right click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3579,
+   "en": "To use skills or magic, right click on monster.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3580,
+   "en": "To use the saved chatting macro, press Alt+number.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3585,
+   "en": "Totem Golem",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3589,
+   "en": "Trainer",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3592,
+   "en": "Transformed Panda",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3593,
+   "en": "Transformed Skeleton",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3594,
+   "en": "Transformed Snowman",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3596,
+   "en": "Trap",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3659,
+   "en": "Twin Tale",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3678,
+   "en": "Use '/View store on' and '/View store off' to set the command for viewing/closing the personal store.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3681,
+   "en": "Use the lock function on your vault to protect it.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3684,
+   "en": "Using the 'town portal scroll' will transport you to the nearest town or safe area.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3690,
+   "en": "Valkyrie",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3694,
+   "en": "Vault usage fee increases as your character level increases.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3695,
+   "en": "Vault usage fee is deducted from your inventory according to your level.",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3703,
+   "en": "Venomous Chain Scorpion",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3704,
+   "en": "Vepar",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3705,
+   "en": "Vermont",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3727,
+   "en": "Visit our forums at http://muonline.webzen.com/forum",
+   "budget": 255,
+   "kinds": [
+    "slide"
+   ]
+  },
+  {
+   "id": 3729,
+   "en": "Vixen",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3735,
+   "en": "Wandering Merchant",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  },
+  {
+   "id": 3736,
+   "en": "Wandering Merchant Alex",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3737,
+   "en": "Wandering Merchant Herald",
+   "budget": 99,
+   "kinds": [
+    "minimap"
+   ]
+  },
+  {
+   "id": 3738,
+   "en": "Wandering Merchant Martin",
+   "budget": 99,
+   "kinds": [
+    "minimap",
+    "npcname"
+   ]
+  },
+  {
+   "id": 3739,
+   "en": "Wandering Merchant Zyro",
+   "budget": 99,
+   "kinds": [
+    "npcname"
+   ]
+  }
+ ]
+}

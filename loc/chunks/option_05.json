@@ -1,0 +1,966 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 2754,
+   "en": "Requires Rank 5 'Fire Slash Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2755,
+   "en": "Requires Rank 5 'Hellfire Strengthener' of Lv. of Lv. 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2756,
+   "en": "Requires Rank 5 'Ice Strengthener' of Lv. of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2757,
+   "en": "Requires Rank 5 'Maximum Mana Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2758,
+   "en": "Requires Rank 5 'Minimum Attack Power Increase' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2759,
+   "en": "Requires Rank 5 'Minimum Wizardry Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2760,
+   "en": "Requires Rank 5 'Minimum Wizardry/Curse Increase' of Lv. 10 or h",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2761,
+   "en": "Requires Rank 5 'Soul Barrier Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2762,
+   "en": "Requires Rank 5 'Strike of Destruction Strengthener' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2763,
+   "en": "Requires Rank 5 'Swell Life Proficiency' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2764,
+   "en": "Requires Rank 5 'blind' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2765,
+   "en": "Requires Rank 5 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2766,
+   "en": "Requires Rank 6 'Aqua Beam Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2767,
+   "en": "Requires Rank 6 'Critical Damage Rate Increase' of Lv. 10 or hig",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2768,
+   "en": "Requires Rank 6 'Dark Spirit Strengthener (4)' of Lv. 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2769,
+   "en": "Requires Rank 6 'Death Stab Proficiency' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2770,
+   "en": "Requires Rank 6 'Flame Strike Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2771,
+   "en": "Requires Rank 6 'Ice Storm Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2772,
+   "en": "Requires Rank 6 'Innovation Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2773,
+   "en": "Requires Rank 6 'Multi-Shot Strengthener' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2774,
+   "en": "Requires Rank 6 'Set Defense Increase' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2775,
+   "en": "Requires Rank 6 'Strike of Destruction Proficiency' of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2776,
+   "en": "Requires Rank 6 'Weakness Strengthener' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2777,
+   "en": "Requires Rank 6 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2778,
+   "en": "Requires Rank 7 'Dark Spirit Strengthener (5)' of Lv. 10 or high",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2779,
+   "en": "Requires Rank 7 'Full HP Recovery' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2780,
+   "en": "Requires Rank 7 'Party Heal' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2781,
+   "en": "Requires Rank 7 'Summoned Monster Strengthener (3)' of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2782,
+   "en": "Requires Rank 7 'Twister Strengthener' skill of Lv. of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2783,
+   "en": "Requires Rank 7 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2784,
+   "en": "Requires Rank 8 'Bless' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2785,
+   "en": "Requires Rank 8 'Blood Storm' skill learned",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2786,
+   "en": "Requires Rank 8 'Cape of the Emperor Strengthener (1)' of Lv. 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2787,
+   "en": "Requires Rank 8 'Cape of the Emperor Strengthener (2)' of Lv. 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2788,
+   "en": "Requires Rank 8 'Double Damage Rate Increase' of Lv. 10 or highe",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2789,
+   "en": "Requires Rank 8 'Eternal Wings Defense Strengthener' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2790,
+   "en": "Requires Rank 8 'Fire Storm' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2791,
+   "en": "Requires Rank 8 'Freeze Earth' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2792,
+   "en": "Requires Rank 8 'Ignore Enemy Defense Rate Increase' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2793,
+   "en": "Requires Rank 8 'Poison Arrow' skill.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2794,
+   "en": "Requires Rank 8 'Wing of Dimension Defense Strengthener' of Lv.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2795,
+   "en": "Requires Rank 8 'Wing of Illusion Defense Strengthener' of Lv. 1",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2796,
+   "en": "Requires Rank 8 'Wing of Ruin Defense Strengthener' of Lv. 10 or",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2797,
+   "en": "Requires Rank 8 'Wing of Storm Defense Strengthener' of Lv. 10 o",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2798,
+   "en": "Requires Rank 8 'iron defense' of Lv. 10 or higher",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2799,
+   "en": "Requires Rank 8 skill of Lv. 10 or higher.",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2800,
+   "en": "Requires a level 10, rank 1 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2801,
+   "en": "Requires a level 10, rank 2 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2802,
+   "en": "Requires a level 10, rank 3 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2803,
+   "en": "Requires a level 10, rank 4 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2804,
+   "en": "Requires a level 10, rank 5 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2805,
+   "en": "Requires a level 10, rank 6 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2806,
+   "en": "Requires a level 10, rank 7 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2807,
+   "en": "Requires a level 10, rank 8 skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2808,
+   "en": "Requires the 'Dragon Slasher' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2809,
+   "en": "Requires the 'beast uppercut' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2810,
+   "en": "Requires the 'blind' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2811,
+   "en": "Requires the 'blood howling' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2812,
+   "en": "Requires the 'chain drive' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2813,
+   "en": "Requires the 'dark side' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2814,
+   "en": "Requires the 'dragon roar' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2815,
+   "en": "Requires the 'ignore enemy's defense' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2816,
+   "en": "Requires the 'increase HP' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2817,
+   "en": "Requires the 'increase defense success rate' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2818,
+   "en": "Requires the 'iron defense' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2819,
+   "en": "Requires the 'killing blow' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2820,
+   "en": "Requires the 'multishot' skill",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2826,
+   "en": "Restores HP by max HP/%0.2f when killing a monster.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2877,
+   "en": "Returns 1 incoming damage to the dealer#with %0.2f%% chance#when hit.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2905,
+   "en": "SD bypass rate increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2906,
+   "en": "SD decrement increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2907,
+   "en": "SD ratio increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2923,
+   "en": "Santa Defense",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2924,
+   "en": "Santa Fortune",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2925,
+   "en": "Santa Healing",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2926,
+   "en": "Santa Protection",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2927,
+   "en": "Santa Quickness",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2928,
+   "en": "Santa Strengthener",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3018,
+   "en": "Semeden¡¯s",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3032,
+   "en": "Set (helm, vest, pants, gloves, and boots) bonus: increases defense by %0.2.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3040,
+   "en": "Shadow Phantom effect",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3048,
+   "en": "Shield protection increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 3053,
+   "en": "Short period of nap",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3054,
+   "en": "Shortened view and the attack accuracy decreases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3058,
+   "en": "Significantly increases defense and HP.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3059,
+   "en": "Significantly increases defense rate and HP.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3083,
+   "en": "Skill attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony",
+    "socket"
+   ]
+  },
+  {
+   "id": 3084,
+   "en": "Skill duration increases by %0.2f second(s).",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3089,
+   "en": "Slash skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3094,
+   "en": "Sleep skill damage increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3127,
+   "en": "Soul Barrier skill increases max. Mana by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3166,
+   "en": "Stamina buff effect increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3167,
+   "en": "Stamina increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3200,
+   "en": "Strength Status +50",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3201,
+   "en": "Strength increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3206,
+   "en": "Strike of Destruction skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3222,
+   "en": "Summoned monster's Defense increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3223,
+   "en": "Summoned monster's HP increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3224,
+   "en": "Summoned monster's attack power increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3226,
+   "en": "Summoner Neil attack",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3227,
+   "en": "Summoner Shamut attack",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3268,
+   "en": "Swell Life additionally increases max. AG by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3269,
+   "en": "Swell Life skill increases Max Mana by additional %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3277,
+   "en": "Sylion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3320,
+   "en": "Taros's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 3324,
+   "en": "Temple - Spell of Quickness",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3325,
+   "en": "Temple - Spell of Sublimation",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 3437,
+   "en": "The beast uppercut skill has a chance of reducing the target's defense rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3439,
+   "en": "The blind skill has a %0.2f%% chance of stunning your targets for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3443,
+   "en": "The chain drive has a %0.2f%% chance of doing 100 frost damage per second for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3449,
+   "en": "The dragon roar has a %0.2f%% chance to of doing 100 fire damage per second for 10 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3450,
+   "en": "The dragon slasher skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3451,
+   "en": "The drain life skill has a 30%% chance of absorbing your target's HP by %0.2f for 5 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3465,
+   "en": "The explosive damage of Fire Scream skill increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3471,
+   "en": "The ice skill has a %0.2f%% chance of immobilzing your target for 3 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3472,
+   "en": "The increase HP skill increases 'STA' by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3473,
+   "en": "The increase defense success rate skill increases your defense rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3476,
+   "en": "The innovation skill reduces your target's defense rate by %0.2f. The duration of skill increases per level.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3478,
+   "en": "The killing blow skill has a chance of reducing your target's attack rate by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 3482,
+   "en": "The meteor skill has a %0.2f%% chance of stunning your target for 2 seconds.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  }
+ ]
+}

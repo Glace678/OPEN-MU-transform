@@ -1,0 +1,2568 @@
+{
+"locale": "de",
+"language": "German (Deutsch)",
+"chunk": "g5",
+"out": "D:\\openmu自用\\_locwork\\out_data\\de\\de_g5_p1.json",
+"strings": [
+{
+"id": 129,
+"en": "Adds Command Stat",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 143,
+"en": "Agility Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 195,
+"en": "Aqua Beam",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 204,
+"en": "Armor Set Bonus Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 267,
+"en": "Attack Increase Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 268,
+"en": "Attack Increase Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 270,
+"en": "Attack Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 271,
+"en": "Attack Success Rate Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 302,
+"en": "Automatic AG Recovery Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 304,
+"en": "Automatic HP Recovery Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 307,
+"en": "Automatic Mana Recovery Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 327,
+"en": "Beast Uppercut",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 328,
+"en": "Beast Uppercut Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 329,
+"en": "Beast Uppercut Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 334,
+"en": "Berserker Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 336,
+"en": "Berserker Proficiency",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 337,
+"en": "Berserker Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 355,
+"en": "Blast Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 359,
+"en": "Bless Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 364,
+"en": "Blind Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 368,
+"en": "Blood Attack Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 384,
+"en": "Blood Howling",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 385,
+"en": "Blood Howling Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 387,
+"en": "Blood Storm",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 388,
+"en": "Blood Storm Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 412,
+"en": "Bow Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 414,
+"en": "Bow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 446,
+"en": "Cancel Invisibility",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 447,
+"en": "Cancel Stun",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 456,
+"en": "Cast Invincibility",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 467,
+"en": "Chain Drive",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 468,
+"en": "Chain Drive Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 470,
+"en": "Chain Drive Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 471,
+"en": "Chain Lightning",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 473,
+"en": "Chain Lightning Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 513,
+"en": "Chaotic Diseier",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 514,
+"en": "Chaotic Diseier Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 520,
+"en": "Charge",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 551,
+"en": "Combo Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 557,
+"en": "Cometfall",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 559,
+"en": "Command Attack Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 605,
+"en": "Crescent Moon Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 607,
+"en": "Critical DMG Increase PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 608,
+"en": "Critical DMG Increase PowUp (2)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 609,
+"en": "Critical DMG Increase PowUp (3)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 611,
+"en": "Critical Damage Increase Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 623,
+"en": "Crossbow Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 624,
+"en": "Crossbow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 641,
+"en": "Cure",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 651,
+"en": "Cyclone",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 652,
+"en": "Cyclone Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 677,
+"en": "Dark Horse Strengthener (1)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 698,
+"en": "Dark Side",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 699,
+"en": "Dark Side Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 701,
+"en": "Dark Side Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 708,
+"en": "Dark Spirit Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 709,
+"en": "Dark Spirit Strengthener (2)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 710,
+"en": "Dark Spirit Strengthener (3)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 711,
+"en": "Dark Spirit Strengthener (4)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 712,
+"en": "Dark Spirit Strengthener (5)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 743,
+"en": "Death Stab",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 744,
+"en": "Death Stab Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 745,
+"en": "Death Stab Proficiency",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 750,
+"en": "Decay",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 751,
+"en": "Decay Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 754,
+"en": "Decrease Mana",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 759,
+"en": "Def Success Rate Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 760,
+"en": "Def SuccessRate Increase PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 761,
+"en": "DefSuccessRate Increase Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 780,
+"en": "Defense",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 781,
+"en": "Defense Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 782,
+"en": "Defense Increase Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 783,
+"en": "Defense Increase Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 785,
+"en": "Defense Success Rate Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 786,
+"en": "Defense Switch",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 856,
+"en": "DimensionWings Absorb PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 857,
+"en": "DimensionWings Attack PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 858,
+"en": "DimensionWings Defense PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 875,
+"en": "Doppeganger Self Explosion Skill",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 906,
+"en": "Dragon Roar",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 907,
+"en": "Dragon Roar Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 909,
+"en": "Dragon Roar Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 911,
+"en": "Dragon Slasher",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 912,
+"en": "Dragon Slasher Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 914,
+"en": "Dragon Slasher Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 918,
+"en": "Drain Life",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 919,
+"en": "Drain Life Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 921,
+"en": "Drain Life Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 940,
+"en": "Durability Reduction (1)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 941,
+"en": "Durability Reduction (2)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 942,
+"en": "Durability Reduction (3)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 943,
+"en": "Durability Reduction(3)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 956,
+"en": "Earth Prison",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 957,
+"en": "Earth Prison Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 958,
+"en": "Earthshake",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 959,
+"en": "Earthshake Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 960,
+"en": "Earthshake Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 973,
+"en": "Electric Spark Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 975,
+"en": "Electric Spike",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1033,
+"en": "Emperor Cape Absorption PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1034,
+"en": "Emperor Cape Attack PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1035,
+"en": "Emperor Cape Defense PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1037,
+"en": "Energy Ball",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1038,
+"en": "Energy Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1072,
+"en": "Equipped Weapon Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1073,
+"en": "Equipped Weapon Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1088,
+"en": "Eternal Wings Absorption PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1089,
+"en": "Eternal Wings Attack PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1090,
+"en": "Eternal Wings Defense PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1092,
+"en": "Evil Spirit",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1093,
+"en": "Evil Spirit Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1110,
+"en": "Expansion of Wizardry Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1111,
+"en": "Expansion of Wizardry Strengthen",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1118,
+"en": "Falling Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1119,
+"en": "Falling Slash Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1144,
+"en": "Fire Ball",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1145,
+"en": "Fire Blast",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1146,
+"en": "Fire Breath",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1147,
+"en": "Fire Burst",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1148,
+"en": "Fire Burst Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1149,
+"en": "Fire Burst Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1153,
+"en": "Fire Scream",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1154,
+"en": "Fire Scream Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1155,
+"en": "Fire Scream Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1157,
+"en": "Fire Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1158,
+"en": "Fire Slash Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1162,
+"en": "Fire Tome Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1163,
+"en": "Fire Tome Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1171,
+"en": "Flame",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1172,
+"en": "Flame Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1174,
+"en": "Flame Strike Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1175,
+"en": "Flame Strike Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1177,
+"en": "Flame of Evil (Monster)",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1180,
+"en": "Force",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1181,
+"en": "Force Wave",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1182,
+"en": "Force Wave Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1238,
+"en": "Gigantic Storm Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1472,
+"en": "Greater Damage",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1473,
+"en": "Greater Defense",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1520,
+"en": "Heal",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1521,
+"en": "Heal Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1539,
+"en": "Hellfire",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1540,
+"en": "Hellfire Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1686,
+"en": "Ice Arrow",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1687,
+"en": "Ice Arrow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1690,
+"en": "Ice Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1694,
+"en": "Ice Resistance Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1695,
+"en": "Ice Storm",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1696,
+"en": "Ice Storm Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1697,
+"en": "Ice Storm Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1699,
+"en": "Ice Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1712,
+"en": "Ignore Defense",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1736,
+"en": "Illusion Wings Absorption PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1737,
+"en": "Illusion Wings Attack PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1738,
+"en": "Illusion Wings Defense PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1742,
+"en": "Impale",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1755,
+"en": "Increase Agility",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1757,
+"en": "Increase Attack Success Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1758,
+"en": "Increase Block",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1760,
+"en": "Increase Critical Damage",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1764,
+"en": "Increase Double Damage Chance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1765,
+"en": "Increase Energy",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1766,
+"en": "Increase Excellent Damage Chance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1768,
+"en": "Increase HP Recovery Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1771,
+"en": "Increase Ice Resistance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1772,
+"en": "Increase Ignore Def Chance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1773,
+"en": "Increase Lightning Resistance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1774,
+"en": "Increase Mana Recovery Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1775,
+"en": "Increase Maximum AG",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1776,
+"en": "Increase Maximum Attack Power",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1777,
+"en": "Increase Maximum HP",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1778,
+"en": "Increase Maximum Mana",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1779,
+"en": "Increase Maximum SD",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1780,
+"en": "Increase Minimum Attack Power",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1781,
+"en": "Increase Poison Resistance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1782,
+"en": "Increase PvP Attack Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1783,
+"en": "Increase PvP Defense Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1784,
+"en": "Increase SD Recovery Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1785,
+"en": "Increase Set Defense",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1786,
+"en": "Increase Strength",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1787,
+"en": "Increase Triple Damage Chance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1788,
+"en": "Increases AG Recovery Rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1791,
+"en": "Increases Critical Damage Chance",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1792,
+"en": "Increases Defense",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1807,
+"en": "Increases chance of ignore Def",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1812,
+"en": "Increases critical damage rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1819,
+"en": "Increases double damage rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1822,
+"en": "Increases excellent damage rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1845,
+"en": "Increases triple damage rate",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1850,
+"en": "Inferno",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1851,
+"en": "Inferno Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1855,
+"en": "Infinity Arrow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1861,
+"en": "Innovation Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1876,
+"en": "Iron Defense Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1968,
+"en": "Killing Blow",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1969,
+"en": "Killing Blow Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 1970,
+"en": "Killing Blow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2067,
+"en": "Lightning",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2068,
+"en": "Lightning Resistance Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2071,
+"en": "Lightning Shock Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2073,
+"en": "Lightning Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2074,
+"en": "Lightning Tome Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2075,
+"en": "Lightning Tome Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2114,
+"en": "Lunge",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2115,
+"en": "Lunge Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2124,
+"en": "Mace Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2125,
+"en": "Mace Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2126,
+"en": "Magic Attack Immunity",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2129,
+"en": "Magic Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2134,
+"en": "Mana Rays",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2135,
+"en": "Mana Reduction",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2165,
+"en": "Maximum AG Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2167,
+"en": "Maximum Attack Power Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2168,
+"en": "Maximum Life Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2172,
+"en": "Maximum Mana Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2176,
+"en": "Maximum SD increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2177,
+"en": "Maximum Wizardry Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2179,
+"en": "Maximum Wizardry/Curse Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2202,
+"en": "Meteor Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2203,
+"en": "Meteor Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2212,
+"en": "Minimum Attack Power Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2215,
+"en": "Minimum Wizardry Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2218,
+"en": "Minimum Wizardry/Curse Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2227,
+"en": "Monster Attack Life Increment",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2228,
+"en": "Monster Attack Mana Increment",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2229,
+"en": "Monster Attack SD Increment",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2248,
+"en": "Multi-Shot",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2249,
+"en": "Multi-Shot Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2250,
+"en": "Multi-Shot Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2271,
+"en": "Nova",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2272,
+"en": "Nova Cast Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2273,
+"en": "Nova Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2311,
+"en": "One-handed Staff Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2312,
+"en": "One-handed Staff Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2313,
+"en": "One-handed Sword Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2314,
+"en": "One-handed Sword Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2337,
+"en": "Other World Tome Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2338,
+"en": "Other World Tome Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2369,
+"en": "Party Healing",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2370,
+"en": "Party Healing Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2382,
+"en": "Penetration",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2383,
+"en": "Penetration Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2386,
+"en": "Pet Durability Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2400,
+"en": "Phoenix Shot",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2407,
+"en": "Physical Attack Immunity",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2419,
+"en": "Plasma Storm",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2437,
+"en": "Poison Arrow",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2438,
+"en": "Poison Arrow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2442,
+"en": "Poison Resistance Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2444,
+"en": "Poison Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2449,
+"en": "Pollution",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2452,
+"en": "Potion of Bless",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2456,
+"en": "Power Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2457,
+"en": "Power Slash Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2459,
+"en": "Power Wave",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2502,
+"en": "PvP Defence Rate Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2516,
+"en": "Rageful Blow",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2517,
+"en": "Rageful Blow Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2518,
+"en": "Rageful Blow Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2576,
+"en": "Recover HP from Monster Kills",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2577,
+"en": "Recover Mana Fully",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2578,
+"en": "Recover Mana from Monster Kills",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2579,
+"en": "Recover SD from Monster Kills",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2580,
+"en": "Recovers HP Fully",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2582,
+"en": "Recovers SD Fully",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2584,
+"en": "Recovery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2614,
+"en": "Reigning Cloak Absorption PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2615,
+"en": "Reigning Cloak Attack PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2616,
+"en": "Reigning Cloak Defense PowUp",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2827,
+"en": "Restores all HP",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2828,
+"en": "Restores all Mana",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2829,
+"en": "Restores all SD",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2904,
+"en": "SD Recovery Speed Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2943,
+"en": "Scepter Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 2944,
+"en": "Scepter Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3043,
+"en": "Shied-Burn",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3046,
+"en": "Shield Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3047,
+"en": "Shield Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3087,
+"en": "Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3088,
+"en": "Slash Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3093,
+"en": "Sleep Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3124,
+"en": "Soul Barrier Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3125,
+"en": "Soul Barrier Proficiency",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3126,
+"en": "Soul Barrier Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3130,
+"en": "Spear Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3131,
+"en": "Spear Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3134,
+"en": "Spell of Pursuit",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3149,
+"en": "Spiral Slash",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3155,
+"en": "Spirit Lord",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3164,
+"en": "Stamina Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3165,
+"en": "Stamina Increase Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3169,
+"en": "Starfall",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3174,
+"en": "Stick Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3175,
+"en": "Stick Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3199,
+"en": "Strength Increase",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3202,
+"en": "Strike of Destruction",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3203,
+"en": "Strike of Destruction Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3204,
+"en": "Strike of Destruction Proficienc",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3205,
+"en": "Strike of Destruction Strengthen",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3209,
+"en": "Summon",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3210,
+"en": "Summon Assassin",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3211,
+"en": "Summon Bali",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3212,
+"en": "Summon Dark Knight",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3213,
+"en": "Summon Elite Yeti",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3214,
+"en": "Summon Goblin",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3215,
+"en": "Summon Monster",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3216,
+"en": "Summon Satyros",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3217,
+"en": "Summon Soldier",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3218,
+"en": "Summon Stone Golem",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3219,
+"en": "Summoned Monster Strengthener (1",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3220,
+"en": "Summoned Monster Strengthener (2",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3221,
+"en": "Summoned Monster Strengthener (3",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3265,
+"en": "Swell Life Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3266,
+"en": "Swell Life Proficiency",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3267,
+"en": "Swell Life Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3322,
+"en": "Teleport",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3323,
+"en": "Teleport Ally",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3598,
+"en": "Triple Shot",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3599,
+"en": "Triple Shot Mastery",
+"budget": 31,
+"kinds": [
+"skill"
+]
+},
+{
+"id": 3600,
+"en": "Triple Shot Strengthener",
+"budget": 31,
+"kinds": [
+"skill"
+]
+}
+]
+}

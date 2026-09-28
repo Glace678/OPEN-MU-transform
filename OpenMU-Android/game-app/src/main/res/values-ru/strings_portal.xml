@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_portal">Аккаунт</string>
+    <string name="account_portal_address">Адрес портала</string>
+    <string name="account_portal_language">Язык портала</string>
+    <string name="account_register">Зарегистрировать</string>
+    <string name="account_change_password">Изменить пароль</string>
+    <string name="account_reset_password">Забыли пароль?</string>
+    <string name="account_portal_settings">Настройки аккаунта</string>
+    <string name="account_portal_not_configured">Укажите действительный адрес портала аккаунтов в настройках.</string>
+    <string name="account_portal_invalid">Введите адрес HTTPS без пути. HTTP разрешён только для прямого loopback или доверенного локального сопряжения. Учётные данные, пути, запросы и фрагменты запрещены.</string>
+    <string name="account_portal_no_browser">Нет браузера для открытия портала аккаунтов.</string>
+</resources>

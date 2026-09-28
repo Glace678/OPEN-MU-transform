@@ -1,0 +1,8 @@
+services:
+  openmu-startup:
+    image: openmu-selfhosted:local
+    pull_policy: never
+    build:
+      context: ../../src
+      dockerfile: ../deploy/all-in-one/Dockerfile
+    command: ["-deamon", "-testaccounts:false"]

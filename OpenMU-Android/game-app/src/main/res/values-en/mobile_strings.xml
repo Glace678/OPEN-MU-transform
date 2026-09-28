@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Preparing game data</string>
+    <string name="preparing_detail">The first launch extracts game data to internal storage. Keep the app open.</string>
+    <string name="ready">Ready to play</string>
+    <string name="start_game">Play</string>
+    <string name="settings">Settings</string>
+    <string name="gesture_help">Gestures</string>
+    <string name="retry">Retry</string>
+    <string name="extract_failed">Could not prepare game data</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="display">Graphics</string>
+    <string name="controls">Controls</string>
+    <string name="network">Server</string>
+    <string name="fps">Frame rate</string>
+    <string name="render_scale">Render scale</string>
+    <string name="effects">Effect quality</string>
+    <string name="ui_scale">Touch button size</string>
+    <string name="safe_margin">Safe edge margin</string>
+    <string name="touch_opacity">Touch button opacity</string>
+    <string name="vibration">Touch and combat vibration</string>
+    <string name="handedness">Preferred hand</string>
+    <string name="server_address">Server address</string>
+    <string name="server_port">Connection port</string>
+    <string name="local_pairing">Local pairing without login (LAN only)</string>
+    <string name="restart_note">Graphics and server changes apply the next time you enter the game.</string>
+    <string name="invalid_server">Enter a server IPv4 address or hostname, without a protocol or port.</string>
+    <string name="invalid_local_server">Local pairing requires a loopback or LAN IPv4 address, such as 192.168.1.20. Turn it off for a cloud server.</string>
+    <string name="invalid_port">The port must be between 1 and 65535.</string>
+    <string name="saved">Settings saved</string>
+    <string name="tutorial_title">Mobile controls</string>
+    <string name="tutorial_body">Menus: tap with one finger to select or confirm.\nCharacter selection: tap a character, then the enter button at the bottom right.\n\nNormal inventory: tap to inspect; hold still for half a second to use a usable item or learn a skill. To move an item, press and drag immediately; releasing outside the inventory restores it.\nThe four bottom potion slots: tap to use; holding does not repeat.\n\nIn the game world:\nDrag one finger in the movement area to move.\nTap the skill area to select; double-tap to cast the current skill.\nSwipe two fingers left or right to change skills.\nSwipe two fingers up or down, or pinch, to adjust the camera.\nSwipe three fingers up for the map or down for settings.\n\nThe bottom potion bar and interface controls do not trigger world skills.</string>
+    <string name="understood">Got it, play</string>
+    <string name="help_close">Close</string>
+    <string name="game_data_missing">The APK is missing game-data.zip; this is not a complete game package.</string>
+    <string name="storage_low">Not enough internal storage. At least %1$s more is required.</string>
+    <string name="current_display">Current screen: %1$d × %2$d</string>
+    <string name="max_refresh">Maximum display refresh rate: %1$d Hz. Choose a frame rate from 30 to %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Up to %1$d Hz (follow display)</string>
+    <string name="game_settings">Mobile settings</string>
+    <string name="open_settings">Open settings</string>
+    <string-array name="effect_labels">
+        <item>Low (smoothest)</item>
+        <item>Medium (recommended)</item>
+        <item>High (best graphics)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Right hand</item>
+        <item>Left hand</item>
+    </string-array>
+</resources>

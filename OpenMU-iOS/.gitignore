@@ -1,0 +1,17 @@
+# Xcode/CMake 生成产物
+build/
+*.xcuserdata/
+*.xcworkspace/
+DerivedData/
+
+# 协议库构建产物（由 build-clientlibrary-ios.sh 重新生成）
+nativeaot-ios/build/
+nativeaot-ios/publish.log
+game-ios/native/
+
+# 游戏数据归档（~447MB，构建时放入，永不入库）
+game-ios/resources/game-data.zip
+
+# 签名材料
+*.p12
+*.mobileprovision

@@ -1,0 +1,4878 @@
+{
+ "locale": "ja",
+ "language": "Japanese",
+ "items": [
+  {
+   "group": "Game",
+   "key": "F9 - Toggle 3D Camera",
+   "en": "F9 - Toggle 3D Camera",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "F10 - Lock / Unlock Camera Zoom",
+   "en": "F10 - Lock / Unlock Camera Zoom",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "F11 - Reset Camera View",
+   "en": "F11 - Reset Camera View",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Home - Toggle MU Helper",
+   "en": "Home - Toggle MU Helper",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "/mu",
+   "en": "/mu",
+   "comment": "legacy_id=349"
+  },
+  {
+   "group": "Game",
+   "key": "Sound volume",
+   "en": "Sound volume",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Music volume",
+   "en": "Music volume",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Render full effects",
+   "en": "Render full effects",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Resolution",
+   "en": "Resolution",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Language",
+   "en": "Language",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Windowed mode",
+   "en": "Windowed mode",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LoginRememberUsername",
+   "en": "Remember Username",
+   "comment": "Login screen: remember-username checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginRememberPassword",
+   "en": "Remember Password",
+   "comment": "Login screen: remember-password checkbox label."
+  },
+  {
+   "group": "Game",
+   "key": "LoginTrustWarning",
+   "en": "Only save the password on a PC you trust.",
+   "comment": "Login screen: warning under the remember-password checkbox."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningTitle",
+   "en": "WARNING!!!",
+   "comment": "Remember-password confirmation dialog: header."
+  },
+  {
+   "group": "Game",
+   "key": "LoginSavePasswordWarningBody",
+   "en": "Saving the password lets anyone using this computer log into your account. Only do this on a PC you trust. Save the password?",
+   "comment": "Remember-password confirmation dialog: body."
+  },
+  {
+   "group": "Game",
+   "key": "Valhalla",
+   "en": "Valhalla",
+   "comment": "legacy_id=540"
+  },
+  {
+   "group": "Game",
+   "key": "Helheim",
+   "en": "Helheim",
+   "comment": "legacy_id=541"
+  },
+  {
+   "group": "Game",
+   "key": "Midgard",
+   "en": "Midgard",
+   "comment": "legacy_id=542"
+  },
+  {
+   "group": "Game",
+   "key": "Kara",
+   "en": "Kara",
+   "comment": "legacy_id=543"
+  },
+  {
+   "group": "Game",
+   "key": "Lamu",
+   "en": "Lamu",
+   "comment": "legacy_id=544"
+  },
+  {
+   "group": "Game",
+   "key": "Nacal",
+   "en": "Nacal",
+   "comment": "legacy_id=545"
+  },
+  {
+   "group": "Game",
+   "key": "Rasa",
+   "en": "Rasa",
+   "comment": "legacy_id=546"
+  },
+  {
+   "group": "Game",
+   "key": "Rance",
+   "en": "Rance",
+   "comment": "legacy_id=547"
+  },
+  {
+   "group": "Game",
+   "key": "Tarh",
+   "en": "Tarh",
+   "comment": "legacy_id=548"
+  },
+  {
+   "group": "Game",
+   "key": "Uz",
+   "en": "Uz",
+   "comment": "legacy_id=549"
+  },
+  {
+   "group": "Game",
+   "key": "Moz",
+   "en": "Moz",
+   "comment": "legacy_id=550"
+  },
+  {
+   "group": "Game",
+   "key": "Luga(Lamu2)",
+   "en": "Luga(Lamu2)",
+   "comment": "legacy_id=556"
+  },
+  {
+   "group": "Game",
+   "key": "Titan",
+   "en": "Titan",
+   "comment": "legacy_id=557"
+  },
+  {
+   "group": "Game",
+   "key": "Elca",
+   "en": "Elca",
+   "comment": "legacy_id=558"
+  },
+  {
+   "group": "Game",
+   "key": "test",
+   "en": "test",
+   "comment": "legacy_id=559"
+  },
+  {
+   "group": "Game",
+   "key": "June 7-8, 'MU Level UP 2003' event will be held in Coex Mall.",
+   "en": "June 7-8, 'MU Level UP 2003' event will be held in Coex Mall.",
+   "comment": "legacy_id=719"
+  },
+  {
+   "group": "Game",
+   "key": "Loren (New)",
+   "en": "Loren (New)",
+   "comment": "legacy_id=728"
+  },
+  {
+   "group": "Game",
+   "key": "LorenIsTheNameOfA",
+   "en": "Loren is the name of a kingdom of advanced sword masters and home to many renowned Dark Knights.",
+   "comment": "legacy_id=729"
+  },
+  {
+   "group": "Game",
+   "key": "ThisGameMayBeInappropriateFor",
+   "en": "This game may be inappropriate for the users below age 12, thus requires the guardian's direction and supervision.",
+   "comment": "legacy_id=1076"
+  },
+  {
+   "group": "Game",
+   "key": "ThisGameMayBeInappropriateFor1077",
+   "en": " This game may be inappropriate for the users below age 15, thus requires the guardian's direction and supervision.",
+   "comment": "legacy_id=1077"
+  },
+  {
+   "group": "Game",
+   "key": "ThisGameMayBeInappropriateFor1078",
+   "en": " This game may be inappropriate for the users below age 18, thus requires the guardian's direction and supervision.",
+   "comment": "legacy_id=1078"
+  },
+  {
+   "group": "Game",
+   "key": "You haven't paid the subscription.",
+   "en": "You haven't paid the subscription.",
+   "comment": "legacy_id=2227"
+  },
+  {
+   "group": "Game",
+   "key": "Before my parents died, they taught me how to make the portion.",
+   "en": "Before my parents died, they taught me how to make the portion.",
+   "comment": "legacy_id=2240"
+  },
+  {
+   "group": "Game",
+   "key": "Queen Ariel will bless you.",
+   "en": "Queen Ariel will bless you.",
+   "comment": "legacy_id=2241"
+  },
+  {
+   "group": "Game",
+   "key": "ToBeatAgainstKundunMoreOrganizational",
+   "en": "To beat against Kundun, more organizational action will be needed, which means the guild is essesntial.",
+   "comment": "legacy_id=2242"
+  },
+  {
+   "group": "Game",
+   "key": "<AM> <PM>",
+   "en": "<AM> <PM>",
+   "comment": "legacy_id=2421"
+  },
+  {
+   "group": "Game",
+   "key": "0:30 Blood Castle 12:30 Blood Castle",
+   "en": "0:30 Blood Castle 12:30 Blood Castle",
+   "comment": "legacy_id=2422"
+  },
+  {
+   "group": "Game",
+   "key": "1:00 Illusion Temple 13:00 Illusion Temple",
+   "en": "1:00 Illusion Temple 13:00 Illusion Temple",
+   "comment": "legacy_id=2423"
+  },
+  {
+   "group": "Game",
+   "key": "1:30 - 13:30 Chaos Castle(PC)",
+   "en": "1:30 - 13:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2424"
+  },
+  {
+   "group": "Game",
+   "key": "2:00 - 14:00 Chaos Castle",
+   "en": "2:00 - 14:00 Chaos Castle",
+   "comment": "legacy_id=2425"
+  },
+  {
+   "group": "Game",
+   "key": "2:30 Blood Castle 14:30 Blood Castle",
+   "en": "2:30 Blood Castle 14:30 Blood Castle",
+   "comment": "legacy_id=2426"
+  },
+  {
+   "group": "Game",
+   "key": "3:00 Devil's Square 15:00 Devil's Square",
+   "en": "3:00 Devil's Square 15:00 Devil's Square",
+   "comment": "legacy_id=2427"
+  },
+  {
+   "group": "Game",
+   "key": "3:30 - 15:30 Chaos Castle(PC)",
+   "en": "3:30 - 15:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2428"
+  },
+  {
+   "group": "Game",
+   "key": "4:00 - 16:00 Chaos Castle",
+   "en": "4:00 - 16:00 Chaos Castle",
+   "comment": "legacy_id=2429"
+  },
+  {
+   "group": "Game",
+   "key": "4:30 Blood Castle 16:30 Blood Castle",
+   "en": "4:30 Blood Castle 16:30 Blood Castle",
+   "comment": "legacy_id=2430"
+  },
+  {
+   "group": "Game",
+   "key": "5:00 Illusion Temple 17:00 Illusion Temple",
+   "en": "5:00 Illusion Temple 17:00 Illusion Temple",
+   "comment": "legacy_id=2431"
+  },
+  {
+   "group": "Game",
+   "key": "5:30 - 17:30 Chaos Castle(PC)",
+   "en": "5:30 - 17:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2432"
+  },
+  {
+   "group": "Game",
+   "key": "6:00 - 18:00 Chaos Castle",
+   "en": "6:00 - 18:00 Chaos Castle",
+   "comment": "legacy_id=2433"
+  },
+  {
+   "group": "Game",
+   "key": "6:30 Blood Castle 18:30 Blood Castle",
+   "en": "6:30 Blood Castle 18:30 Blood Castle",
+   "comment": "legacy_id=2434"
+  },
+  {
+   "group": "Game",
+   "key": "7:00 Devil's Square 19:00 Devil's Square",
+   "en": "7:00 Devil's Square 19:00 Devil's Square",
+   "comment": "legacy_id=2435"
+  },
+  {
+   "group": "Game",
+   "key": "7:30 - 19:30 Chaos Castle(PC)",
+   "en": "7:30 - 19:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2436"
+  },
+  {
+   "group": "Game",
+   "key": "8:00 - 20:00 Chaos Castle",
+   "en": "8:00 - 20:00 Chaos Castle",
+   "comment": "legacy_id=2437"
+  },
+  {
+   "group": "Game",
+   "key": "8:30 Blood Castle 20:30 Blood Castle",
+   "en": "8:30 Blood Castle 20:30 Blood Castle",
+   "comment": "legacy_id=2438"
+  },
+  {
+   "group": "Game",
+   "key": "9:00 Illusion Temple 21:00 Illusion Temple",
+   "en": "9:00 Illusion Temple 21:00 Illusion Temple",
+   "comment": "legacy_id=2439"
+  },
+  {
+   "group": "Game",
+   "key": "9:30 - 21:30 Chaos Castle(PC)",
+   "en": "9:30 - 21:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2440"
+  },
+  {
+   "group": "Game",
+   "key": "10:00 - 22:00 Chaos Castle",
+   "en": "10:00 - 22:00 Chaos Castle",
+   "comment": "legacy_id=2441"
+  },
+  {
+   "group": "Game",
+   "key": "10:30 Blood Castle 22:30 Blood Castle",
+   "en": "10:30 Blood Castle 22:30 Blood Castle",
+   "comment": "legacy_id=2442"
+  },
+  {
+   "group": "Game",
+   "key": "11:00 Devil's Square 23:00 Devil's Square",
+   "en": "11:00 Devil's Square 23:00 Devil's Square",
+   "comment": "legacy_id=2443"
+  },
+  {
+   "group": "Game",
+   "key": "11:30 - 23:30 Chaos Castle(PC)",
+   "en": "11:30 - 23:30 Chaos Castle(PC)",
+   "comment": "legacy_id=2444"
+  },
+  {
+   "group": "Game",
+   "key": "12:00 Chaos Castle 24:00 -",
+   "en": "12:00 Chaos Castle 24:00 -",
+   "comment": "legacy_id=2445"
+  },
+  {
+   "group": "Game",
+   "key": " << Chaos Castle >> << Devil's Square >>",
+   "en": " << Chaos Castle >> << Devil's Square >>",
+   "comment": "legacy_id=2446"
+  },
+  {
+   "group": "Game",
+   "key": " 2 50-119 30-99 2 131-180 111-160",
+   "en": " 2 50-119 30-99 2 131-180 111-160",
+   "comment": "legacy_id=2449"
+  },
+  {
+   "group": "Game",
+   "key": " 3 120-179 100-159 3 181-230 161-210",
+   "en": " 3 120-179 100-159 3 181-230 161-210",
+   "comment": "legacy_id=2450"
+  },
+  {
+   "group": "Game",
+   "key": " 4 180-239 160-219 4 231-280 211-260",
+   "en": " 4 180-239 160-219 4 231-280 211-260",
+   "comment": "legacy_id=2451"
+  },
+  {
+   "group": "Game",
+   "key": " 5 240-299 220-279 5 281-330 261-310",
+   "en": " 5 240-299 220-279 5 281-330 261-310",
+   "comment": "legacy_id=2452"
+  },
+  {
+   "group": "Game",
+   "key": " 6 300-400 280-400 6 331-400 311-400",
+   "en": " 6 300-400 280-400 6 331-400 311-400",
+   "comment": "legacy_id=2453"
+  },
+  {
+   "group": "Game",
+   "key": " 7 Master Master 7 Master Master",
+   "en": " 7 Master Master 7 Master Master",
+   "comment": "legacy_id=2454"
+  },
+  {
+   "group": "Game",
+   "key": " << Blood Castle >> << Illusion Temple >>",
+   "en": " << Blood Castle >> << Illusion Temple >>",
+   "comment": "legacy_id=2455"
+  },
+  {
+   "group": "Game",
+   "key": " 1 15-80 10-60 1 220-270",
+   "en": " 1 15-80 10-60 1 220-270",
+   "comment": "legacy_id=2457"
+  },
+  {
+   "group": "Game",
+   "key": " 2 81-130 61-110 2 271-320",
+   "en": " 2 81-130 61-110 2 271-320",
+   "comment": "legacy_id=2458"
+  },
+  {
+   "group": "Game",
+   "key": " 3 131-180 111-160 3 321-350",
+   "en": " 3 131-180 111-160 3 321-350",
+   "comment": "legacy_id=2459"
+  },
+  {
+   "group": "Game",
+   "key": " 6 281-330 261-310 6 Master",
+   "en": " 6 281-330 261-310 6 Master",
+   "comment": "legacy_id=2462"
+  },
+  {
+   "group": "Game",
+   "key": "Reward for Every 255 Pieces",
+   "en": "Reward for Every 255 Pieces",
+   "comment": "legacy_id=2564"
+  },
+  {
+   "group": "Game",
+   "key": "255 Golden Cherry Blossom Branches",
+   "en": "255 Golden Cherry Blossom Branches",
+   "comment": "legacy_id=2565"
+  },
+  {
+   "group": "Game",
+   "key": "CharacterNamesMustStartWithA",
+   "en": "Character names must start with a capital letter. Maximum length is 10 characters.",
+   "comment": "legacy_id=2614"
+  },
+  {
+   "group": "Game",
+   "key": "Fee: 5,000 Zens",
+   "en": "Fee: 5,000 Zens",
+   "comment": "legacy_id=2999"
+  },
+  {
+   "group": "Game",
+   "key": "TheElfQueenWhoBattledBy",
+   "en": "The Elf queen who battled by the side of Muren. She has long protected Noria from Secrarium and Kundun.",
+   "comment": "legacy_id=3023"
+  },
+  {
+   "group": "Game",
+   "key": "TheHeadOfTheEvilArmy",
+   "en": "The head of the Evil Army, who was summoned by Kundun after entering into an agreement with the queen of sorcery to capture Fortress of Crywolf.",
+   "comment": "legacy_id=3025"
+  },
+  {
+   "group": "Game",
+   "key": "Lemuria (New)",
+   "en": "Lemuria (New)",
+   "comment": "legacy_id=3026"
+  },
+  {
+   "group": "Game",
+   "key": "TheWizardWhoBroughtDownElve",
+   "en": "The wizard who brought down Elve. The wizard will seduce Antonias to resurrect Kundun and cause the second Demogorgon Wars.",
+   "comment": "legacy_id=3027"
+  },
+  {
+   "group": "Game",
+   "key": "Cannot be equipped while another Transformation Ring is equipped.",
+   "en": "Cannot be equipped while another Transformation Ring is equipped.",
+   "comment": "legacy_id=3089"
+  },
+  {
+   "group": "Game",
+   "key": "Dark Lord use only.",
+   "en": "Dark Lord use only.",
+   "comment": "legacy_id=3115"
+  },
+  {
+   "group": "Game",
+   "key": "You can enter to Gold Channel.",
+   "en": "You can enter to Gold Channel.",
+   "comment": "legacy_id=3116"
+  },
+  {
+   "group": "Game",
+   "key": "TheGameClientIsLoadedOnly",
+   "en": "The game client is loaded only through the offical Website. Closing the application please try again.",
+   "comment": "legacy_id=3117"
+  },
+  {
+   "group": "Game",
+   "key": "Please purchase 'gold channel ticket' to enter.",
+   "en": "Please purchase 'gold channel ticket' to enter.",
+   "comment": "legacy_id=3118"
+  },
+  {
+   "group": "Game",
+   "key": "Your gold channel ticket is valid for next %d minutes.",
+   "en": "Your gold channel ticket is valid for next %d minutes.",
+   "comment": "legacy_id=3119"
+  },
+  {
+   "group": "Game",
+   "key": "EXP gain 100%%",
+   "en": "EXP gain 100%%",
+   "comment": "legacy_id=3140"
+  },
+  {
+   "group": "Game",
+   "key": "Item Drop 100%%",
+   "en": "Item Drop 100%%",
+   "comment": "legacy_id=3141"
+  },
+  {
+   "group": "Game",
+   "key": "Stamina will not decrease temporarily.",
+   "en": "Stamina will not decrease temporarily.",
+   "comment": "legacy_id=3142"
+  },
+  {
+   "group": "Game",
+   "key": "Enemy Gens Member x %lu/%lu",
+   "en": "Enemy Gens Member x %lu/%lu",
+   "comment": "legacy_id=3278"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot accept any more quest.",
+   "en": "You cannot accept any more quest.",
+   "comment": "legacy_id=3279"
+  },
+  {
+   "group": "Game",
+   "key": "You can proceed maximum 10 quests",
+   "en": "You can proceed maximum 10 quests",
+   "comment": "legacy_id=3280"
+  },
+  {
+   "group": "Game",
+   "key": "at the same time.",
+   "en": "at the same time.",
+   "comment": "legacy_id=3281"
+  },
+  {
+   "group": "Game",
+   "key": "You need to clear at least 1 quest to",
+   "en": "You need to clear at least 1 quest to",
+   "comment": "legacy_id=3282"
+  },
+  {
+   "group": "Game",
+   "key": "accept this one.",
+   "en": "accept this one.",
+   "comment": "legacy_id=3283"
+  },
+  {
+   "group": "Game",
+   "key": "Gens Chat On/Off",
+   "en": "Gens Chat On/Off",
+   "comment": "legacy_id=3321"
+  },
+  {
+   "group": "Game",
+   "key": "Open Expanded Inventory (K)",
+   "en": "Open Expanded Inventory (K)",
+   "comment": "legacy_id=3322"
+  },
+  {
+   "group": "Game",
+   "key": "Expanded Inventory",
+   "en": "Expanded Inventory",
+   "comment": "legacy_id=3323,3451"
+  },
+  {
+   "group": "Game",
+   "key": "You lack %d points.",
+   "en": "You lack %d points.",
+   "comment": "legacy_id=3325"
+  },
+  {
+   "group": "Game",
+   "key": "You can't raise any more levels.",
+   "en": "You can't raise any more levels.",
+   "comment": "legacy_id=3326"
+  },
+  {
+   "group": "Game",
+   "key": "You must meet all skill requirements.",
+   "en": "You must meet all skill requirements.",
+   "comment": "legacy_id=3327"
+  },
+  {
+   "group": "Game",
+   "key": "# #Next Level:#",
+   "en": "# #Next Level:#",
+   "comment": "legacy_id=3328"
+  },
+  {
+   "group": "Game",
+   "key": "Requirements3329",
+   "en": "# #Requirements:#",
+   "comment": "legacy_id=3329"
+  },
+  {
+   "group": "Game",
+   "key": "Willpower: %d",
+   "en": "Willpower: %d",
+   "comment": "legacy_id=3330"
+  },
+  {
+   "group": "Game",
+   "key": "Destruction: %d",
+   "en": "Destruction: %d",
+   "comment": "legacy_id=3332"
+  },
+  {
+   "group": "Game",
+   "key": "Min & Max Wizardry Increase",
+   "en": "Min & Max Wizardry Increase",
+   "comment": "legacy_id=3333"
+  },
+  {
+   "group": "Game",
+   "key": "Min & Max Wizardry, Critical Damage Rate Increase",
+   "en": "Min & Max Wizardry, Critical Damage Rate Increase",
+   "comment": "legacy_id=3334"
+  },
+  {
+   "group": "Game",
+   "key": "EXP: %6.2f%%",
+   "en": "EXP: %6.2f%%",
+   "comment": "legacy_id=3335"
+  },
+  {
+   "group": "Game",
+   "key": "You need to wear the required equipment to level up this skill.",
+   "en": "You need to wear the required equipment to level up this skill.",
+   "comment": "legacy_id=3336"
+  },
+  {
+   "group": "Game",
+   "key": "Opening an Expanded Vault (H)",
+   "en": "Opening an Expanded Vault (H)",
+   "comment": "legacy_id=3338"
+  },
+  {
+   "group": "Game",
+   "key": "Expanded Vault",
+   "en": "Expanded Vault",
+   "comment": "legacy_id=3339"
+  },
+  {
+   "group": "Game",
+   "key": "Move to a closed channel?",
+   "en": "Move to a closed channel?",
+   "comment": "legacy_id=3340"
+  },
+  {
+   "group": "Game",
+   "key": "Insufficient space in the expanded inventory",
+   "en": "Insufficient space in the expanded inventory",
+   "comment": "legacy_id=3341"
+  },
+  {
+   "group": "Game",
+   "key": "Insufficient space in the expanded vault",
+   "en": "Insufficient space in the expanded vault",
+   "comment": "legacy_id=3342"
+  },
+  {
+   "group": "Game",
+   "key": "You can use it after expanding it.",
+   "en": "You can use it after expanding it.",
+   "comment": "legacy_id=3343"
+  },
+  {
+   "group": "Game",
+   "key": "Adding a $ in front of text: Chat to Gens members",
+   "en": "Adding a $ in front of text: Chat to Gens members",
+   "comment": "legacy_id=3344"
+  },
+  {
+   "group": "Game",
+   "key": "F6: Normal Chat On/Off",
+   "en": "F6: Normal Chat On/Off",
+   "comment": "legacy_id=3345"
+  },
+  {
+   "group": "Game",
+   "key": "F7: Party Chat On/Off",
+   "en": "F7: Party Chat On/Off",
+   "comment": "legacy_id=3346"
+  },
+  {
+   "group": "Game",
+   "key": "F8: Guild Chat On/Off",
+   "en": "F8: Guild Chat On/Off",
+   "comment": "legacy_id=3347"
+  },
+  {
+   "group": "Game",
+   "key": "F9: Gens Chat On/Off",
+   "en": "F9: Gens Chat On/Off",
+   "comment": "legacy_id=3348"
+  },
+  {
+   "group": "Game",
+   "key": "Please log in to game again to use the expanded inventory/vault.",
+   "en": "Please log in to game again to use the expanded inventory/vault.",
+   "comment": "legacy_id=3349"
+  },
+  {
+   "group": "Game",
+   "key": "Cannot be used any more.",
+   "en": "Cannot be used any more.",
+   "comment": "legacy_id=3350"
+  },
+  {
+   "group": "Game",
+   "key": "Use this to expand your vault.",
+   "en": "Use this to expand your vault.",
+   "comment": "legacy_id=3351"
+  },
+  {
+   "group": "Game",
+   "key": "Use this to expand your inventory.",
+   "en": "Use this to expand your inventory.",
+   "comment": "legacy_id=3352"
+  },
+  {
+   "group": "Game",
+   "key": "Use this and log in to game again to activate.",
+   "en": "Use this and log in to game again to activate.",
+   "comment": "legacy_id=3353"
+  },
+  {
+   "group": "Game",
+   "key": "TheNumberOfSkillPointsPossessed",
+   "en": "The number of skill points possessed does not conform to the number of points needed to reach the Master skill level. Please contact customer service.",
+   "comment": "legacy_id=3354"
+  },
+  {
+   "group": "Game",
+   "key": "Increases max HP by 6%%",
+   "en": "Increases max HP by 6%%",
+   "comment": "legacy_id=3355"
+  },
+  {
+   "group": "Game",
+   "key": "Decreases damage by 6%%",
+   "en": "Decreases damage by 6%%",
+   "comment": "legacy_id=3356"
+  },
+  {
+   "group": "Game",
+   "key": "Increases the amount of Zen received from killing monsters by 60%%",
+   "en": "Increases the amount of Zen received from killing monsters by 60%%",
+   "comment": "legacy_id=3357"
+  },
+  {
+   "group": "Game",
+   "key": "Increases the chance of causing Excellent Damage by 15%%",
+   "en": "Increases the chance of causing Excellent Damage by 15%%",
+   "comment": "legacy_id=3358"
+  },
+  {
+   "group": "Game",
+   "key": "Increases attack speed by 10d",
+   "en": "Increases attack speed by 10d",
+   "comment": "legacy_id=3359"
+  },
+  {
+   "group": "Game",
+   "key": "Increases max Mana by 6%%",
+   "en": "Increases max Mana by 6%%",
+   "comment": "legacy_id=3360"
+  },
+  {
+   "group": "Game",
+   "key": "You need a 5 person party to enter this area.",
+   "en": "You need a 5 person party to enter this area.",
+   "comment": "legacy_id=3361"
+  },
+  {
+   "group": "Game",
+   "key": "All party members must be of the same level for this area.",
+   "en": "All party members must be of the same level for this area.",
+   "comment": "legacy_id=3362"
+  },
+  {
+   "group": "Game",
+   "key": "Players with an Outlaw or Killer status cannot enter this area.",
+   "en": "Players with an Outlaw or Killer status cannot enter this area.",
+   "comment": "legacy_id=3363"
+  },
+  {
+   "group": "Game",
+   "key": " << Doppelganger entry level >>",
+   "en": " << Doppelganger entry level >>",
+   "comment": "legacy_id=3364"
+  },
+  {
+   "group": "Game",
+   "key": "Level#Basic#Advanced",
+   "en": "Level#Basic#Advanced",
+   "comment": "legacy_id=3365"
+  },
+  {
+   "group": "Game",
+   "key": "15#80#81#130#131#180#181#230#231#280#281#330#331#400",
+   "en": "15#80#81#130#131#180#181#230#231#280#281#330#331#400",
+   "comment": "legacy_id=3366"
+  },
+  {
+   "group": "Game",
+   "key": "10#60#61#110#111#160#161#210#211#260#261#310#311#400",
+   "en": "10#60#61#110#111#160#161#210#211#260#261#310#311#400",
+   "comment": "legacy_id=3367"
+  },
+  {
+   "group": "Game",
+   "key": "1#100#101#200",
+   "en": "1#100#101#200",
+   "comment": "legacy_id=3368"
+  },
+  {
+   "group": "Game",
+   "key": "DoppelgangerWillEndBecauseTheCompeting",
+   "en": "Doppelganger will end because the competing party has not entered the event.",
+   "comment": "legacy_id=3369"
+  },
+  {
+   "group": "Game",
+   "key": "WhatSGoingOnDoYou",
+   "en": "What's going on? Do you wish to go to Acheron? I have to risk my life to get there. You must have the right price in your mind, right?",
+   "comment": "legacy_id=3375"
+  },
+  {
+   "group": "Game",
+   "key": "What? You wanted to go to Acheron without a map?",
+   "en": "What? You wanted to go to Acheron without a map?",
+   "comment": "legacy_id=3376"
+  },
+  {
+   "group": "Game",
+   "key": "The ships are full. Let's wait until we can go.",
+   "en": "The ships are full. Let's wait until we can go.",
+   "comment": "legacy_id=3377"
+  },
+  {
+   "group": "Game",
+   "key": "Are you here to join the Arca War?",
+   "en": "Are you here to join the Arca War?",
+   "comment": "legacy_id=3378"
+  },
+  {
+   "group": "Game",
+   "key": "1. Ask about the Arca War.",
+   "en": "1. Ask about the Arca War.",
+   "comment": "legacy_id=3379"
+  },
+  {
+   "group": "Game",
+   "key": "2. Register for the Arca War (Guild master)",
+   "en": "2. Register for the Arca War (Guild master)",
+   "comment": "legacy_id=3380"
+  },
+  {
+   "group": "Game",
+   "key": "3. Register to participate in the Arca War (Guild member)",
+   "en": "3. Register to participate in the Arca War (Guild member)",
+   "comment": "legacy_id=3381"
+  },
+  {
+   "group": "Game",
+   "key": "4. Exchange Trophies of Battle",
+   "en": "4. Exchange Trophies of Battle",
+   "comment": "legacy_id=3382"
+  },
+  {
+   "group": "Game",
+   "key": "5. Enter the Arca War",
+   "en": "5. Enter the Arca War",
+   "comment": "legacy_id=3383"
+  },
+  {
+   "group": "Game",
+   "key": "TheArcaWarStartedInThe",
+   "en": "The Arca War started in the Acheron Conquest Alliance to save the spirits that fell because of Kundun's magic. However, it has grown into a fight in Arca when Duprian showed his evil intent to kill King Lax Milon the Great.",
+   "comment": "legacy_id=3384"
+  },
+  {
+   "group": "Game",
+   "key": "SuccessfullyRegisteredToParticipateInThe",
+   "en": "Successfully registered to participate in the Arca War. Please encourage your guild members to participate in the Arca War.",
+   "comment": "legacy_id=3385"
+  },
+  {
+   "group": "Game",
+   "key": "Successfully registered to participate in the Arca War. I wish you luck.",
+   "en": "Successfully registered to participate in the Arca War. I wish you luck.",
+   "comment": "legacy_id=3386"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotParticipateOnlyTheGuild",
+   "en": "You cannot participate. Only the guild master can register for the Arca War.",
+   "comment": "legacy_id=3387"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotParticipateOnlyGuildsWith",
+   "en": "You cannot participate. Only guilds with more than 10 members can participate in the Arca War.",
+   "comment": "legacy_id=3388"
+  },
+  {
+   "group": "Game",
+   "key": "IMSorryTheMaximumNumber",
+   "en": "I'm sorry. The maximum number of participants has been exceeded. We're no longer accepting registrations. Please try again next time.",
+   "comment": "legacy_id=3389"
+  },
+  {
+   "group": "Game",
+   "key": "You have already registered. Please get ready for the Arca War.",
+   "en": "You have already registered. Please get ready for the Arca War.",
+   "comment": "legacy_id=3390,3394"
+  },
+  {
+   "group": "Game",
+   "key": "I'm sorry. The registration period has ended. Please try again next time.",
+   "en": "I'm sorry. The registration period has ended. Please try again next time.",
+   "comment": "legacy_id=3391,3396"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotParticipateYouNeedA",
+   "en": "You cannot participate. You need a bundle of more than 10 Signs of Lord to participate in the Arca War.",
+   "comment": "legacy_id=3392"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotParticipateInTheArca",
+   "en": "You cannot participate in the Arca War. You're not a guild member of a registered guild.",
+   "comment": "legacy_id=3393"
+  },
+  {
+   "group": "Game",
+   "key": "IMSorryTheMaximumNumber3395",
+   "en": "I'm sorry. The maximum number of participants has been exceeded. We're no longer accepting registrations. The maximum number of participants per guild is 20.",
+   "comment": "legacy_id=3395"
+  },
+  {
+   "group": "Game",
+   "key": "YouHaveAlreadyRegisteredTheGuild",
+   "en": "You have already registered. The Guild master is automatically registered.",
+   "comment": "legacy_id=3397"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotParticipateInTheArca3398",
+   "en": "You cannot participate in the Arca War. Please register for the Arca War first.",
+   "comment": "legacy_id=3398"
+  },
+  {
+   "group": "Game",
+   "key": "The Arca War is not going on at the moment. Please enter during the Arca War.",
+   "en": "The Arca War is not going on at the moment. Please enter during the Arca War.",
+   "comment": "legacy_id=3399"
+  },
+  {
+   "group": "Game",
+   "key": "View Details",
+   "en": "View Details",
+   "comment": "legacy_id=3400"
+  },
+  {
+   "group": "Game",
+   "key": "My Quests",
+   "en": "My Quests",
+   "comment": "legacy_id=3401"
+  },
+  {
+   "group": "Game",
+   "key": "Life",
+   "en": "Life",
+   "comment": "legacy_id=3402"
+  },
+  {
+   "group": "Game",
+   "key": "Attack Power (Rate)",
+   "en": "Attack Power (Rate)",
+   "comment": "legacy_id=3403"
+  },
+  {
+   "group": "Game",
+   "key": "Attack Speed",
+   "en": "Attack Speed",
+   "comment": "legacy_id=3404"
+  },
+  {
+   "group": "Game",
+   "key": "Leadership available",
+   "en": "Leadership available",
+   "comment": "legacy_id=3405"
+  },
+  {
+   "group": "Game",
+   "key": "General",
+   "en": "General",
+   "comment": "legacy_id=3406"
+  },
+  {
+   "group": "Game",
+   "key": "System",
+   "en": "System",
+   "comment": "legacy_id=3407,3429"
+  },
+  {
+   "group": "Game",
+   "key": "Chatting",
+   "en": "Chatting",
+   "comment": "legacy_id=3408"
+  },
+  {
+   "group": "Game",
+   "key": "AMPM3409",
+   "en": "AM/PM",
+   "comment": "legacy_id=3409"
+  },
+  {
+   "group": "Game",
+   "key": "Rating",
+   "en": "Rating",
+   "comment": "legacy_id=3410"
+  },
+  {
+   "group": "Game",
+   "key": "2nd",
+   "en": "2nd",
+   "comment": "legacy_id=3411"
+  },
+  {
+   "group": "Game",
+   "key": "Event Entry Time",
+   "en": "Event Entry Time",
+   "comment": "legacy_id=3412"
+  },
+  {
+   "group": "Game",
+   "key": "Event Entry Level",
+   "en": "Event Entry Level",
+   "comment": "legacy_id=3413"
+  },
+  {
+   "group": "Game",
+   "key": "Chaos Castle (PC)",
+   "en": "Chaos Castle (PC)",
+   "comment": "legacy_id=3414"
+  },
+  {
+   "group": "Game",
+   "key": "Help",
+   "en": "Help",
+   "comment": "legacy_id=3415"
+  },
+  {
+   "group": "Game",
+   "key": "Hot Key",
+   "en": "Hot Key",
+   "comment": "legacy_id=3416"
+  },
+  {
+   "group": "Game",
+   "key": "Chatting Mode Hot Key",
+   "en": "Chatting Mode Hot Key",
+   "comment": "legacy_id=3417"
+  },
+  {
+   "group": "Game",
+   "key": "Feature",
+   "en": "Feature",
+   "comment": "legacy_id=3418"
+  },
+  {
+   "group": "Game",
+   "key": "X",
+   "en": "X",
+   "comment": "legacy_id=3420"
+  },
+  {
+   "group": "Game",
+   "key": "In-game Shop",
+   "en": "In-game Shop",
+   "comment": "legacy_id=3421"
+  },
+  {
+   "group": "Game",
+   "key": "C",
+   "en": "C",
+   "comment": "legacy_id=3422"
+  },
+  {
+   "group": "Game",
+   "key": "I",
+   "en": "I",
+   "comment": "legacy_id=3424"
+  },
+  {
+   "group": "Game",
+   "key": "T",
+   "en": "T",
+   "comment": "legacy_id=3426"
+  },
+  {
+   "group": "Game",
+   "key": "Community",
+   "en": "Community",
+   "comment": "legacy_id=3428"
+  },
+  {
+   "group": "Game",
+   "key": "View Map",
+   "en": "View Map",
+   "comment": "legacy_id=3430"
+  },
+  {
+   "group": "Game",
+   "key": "Etc.",
+   "en": "Etc.",
+   "comment": "legacy_id=3431"
+  },
+  {
+   "group": "Game",
+   "key": "Guild Mark",
+   "en": "Guild Mark",
+   "comment": "legacy_id=3432"
+  },
+  {
+   "group": "Game",
+   "key": "Choose color",
+   "en": "Choose color",
+   "comment": "legacy_id=3433"
+  },
+  {
+   "group": "Game",
+   "key": "Guild Score",
+   "en": "Guild Score",
+   "comment": "legacy_id=3434"
+  },
+  {
+   "group": "Game",
+   "key": "Guild Members",
+   "en": "Guild Members",
+   "comment": "legacy_id=3435"
+  },
+  {
+   "group": "Game",
+   "key": "Choose Hostility Guild",
+   "en": "Choose Hostility Guild",
+   "comment": "legacy_id=3436"
+  },
+  {
+   "group": "Game",
+   "key": "Score3438",
+   "en": "Score :",
+   "comment": "legacy_id=3438"
+  },
+  {
+   "group": "Game",
+   "key": "People",
+   "en": "People",
+   "comment": "legacy_id=3439"
+  },
+  {
+   "group": "Game",
+   "key": "Normal Guild Members",
+   "en": "Normal Guild Members",
+   "comment": "legacy_id=3440"
+  },
+  {
+   "group": "Game",
+   "key": "F1",
+   "en": "F1",
+   "comment": "legacy_id=3441"
+  },
+  {
+   "group": "Game",
+   "key": "M",
+   "en": "M",
+   "comment": "legacy_id=3442"
+  },
+  {
+   "group": "Game",
+   "key": "O",
+   "en": "O",
+   "comment": "legacy_id=3443"
+  },
+  {
+   "group": "Game",
+   "key": "U",
+   "en": "U",
+   "comment": "legacy_id=3444"
+  },
+  {
+   "group": "Game",
+   "key": "Move",
+   "en": "Move",
+   "comment": "legacy_id=3445"
+  },
+  {
+   "group": "Game",
+   "key": "F",
+   "en": "F",
+   "comment": "legacy_id=3446"
+  },
+  {
+   "group": "Game",
+   "key": "P",
+   "en": "P",
+   "comment": "legacy_id=3447"
+  },
+  {
+   "group": "Game",
+   "key": "G",
+   "en": "G",
+   "comment": "legacy_id=3448"
+  },
+  {
+   "group": "Game",
+   "key": "B",
+   "en": "B",
+   "comment": "legacy_id=3449"
+  },
+  {
+   "group": "Game",
+   "key": "System Menu",
+   "en": "System Menu",
+   "comment": "legacy_id=3450"
+  },
+  {
+   "group": "Game",
+   "key": "You must purchase Expanded Inventory first.",
+   "en": "You must purchase Expanded Inventory first.",
+   "comment": "legacy_id=3452"
+  },
+  {
+   "group": "Game",
+   "key": "Store Name",
+   "en": "Store Name",
+   "comment": "legacy_id=3454"
+  },
+  {
+   "group": "Game",
+   "key": "%sZen required",
+   "en": "%sZen required",
+   "comment": "legacy_id=3455"
+  },
+  {
+   "group": "Game",
+   "key": "%d pieces combined",
+   "en": "%d pieces combined",
+   "comment": "legacy_id=3456"
+  },
+  {
+   "group": "Game",
+   "key": "Entrance Fee",
+   "en": "Entrance Fee",
+   "comment": "legacy_id=3458"
+  },
+  {
+   "group": "Game",
+   "key": "NPC Quest",
+   "en": "NPC Quest",
+   "comment": "legacy_id=3460"
+  },
+  {
+   "group": "Game",
+   "key": "Register Guild",
+   "en": "Register Guild",
+   "comment": "legacy_id=3461"
+  },
+  {
+   "group": "Game",
+   "key": "Trade Target",
+   "en": "Trade Target",
+   "comment": "legacy_id=3462"
+  },
+  {
+   "group": "Game",
+   "key": "Price3464",
+   "en": "Price",
+   "comment": "legacy_id=3464"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot do this during the Arca War event.",
+   "en": "You cannot do this during the Arca War event.",
+   "comment": "legacy_id=3466"
+  },
+  {
+   "group": "Game",
+   "key": "Improper items for combination/refinement",
+   "en": "Improper items for combination/refinement",
+   "comment": "legacy_id=3467"
+  },
+  {
+   "group": "Game",
+   "key": "Exiting Game.",
+   "en": "Exiting Game.",
+   "comment": "legacy_id=3490"
+  },
+  {
+   "group": "Game",
+   "key": "Moving back to server selection window.",
+   "en": "Moving back to server selection window.",
+   "comment": "legacy_id=3491"
+  },
+  {
+   "group": "Game",
+   "key": "Moving to safety.",
+   "en": "Moving to safety.",
+   "comment": "legacy_id=3492"
+  },
+  {
+   "group": "Game",
+   "key": "Moving back to character selection window.",
+   "en": "Moving back to character selection window.",
+   "comment": "legacy_id=3493"
+  },
+  {
+   "group": "Game",
+   "key": "Moving to another area.",
+   "en": "Moving to another area.",
+   "comment": "legacy_id=3494"
+  },
+  {
+   "group": "Game",
+   "key": "Hunting",
+   "en": "Hunting",
+   "comment": "legacy_id=3500"
+  },
+  {
+   "group": "Game",
+   "key": "Obtaining",
+   "en": "Obtaining",
+   "comment": "legacy_id=3501"
+  },
+  {
+   "group": "Game",
+   "key": "Setting",
+   "en": "Setting",
+   "comment": "legacy_id=3502"
+  },
+  {
+   "group": "Game",
+   "key": "Save Setting",
+   "en": "Save Setting",
+   "comment": "legacy_id=3503"
+  },
+  {
+   "group": "Game",
+   "key": "Initialization",
+   "en": "Initialization",
+   "comment": "legacy_id=3504,3542"
+  },
+  {
+   "group": "Game",
+   "key": "Add",
+   "en": "Add",
+   "comment": "legacy_id=3505"
+  },
+  {
+   "group": "Game",
+   "key": "Potion",
+   "en": "Potion",
+   "comment": "legacy_id=3507"
+  },
+  {
+   "group": "Game",
+   "key": "Long-Distance Counter Attack",
+   "en": "Long-Distance Counter Attack",
+   "comment": "legacy_id=3508"
+  },
+  {
+   "group": "Game",
+   "key": "Original Position",
+   "en": "Original Position",
+   "comment": "legacy_id=3509"
+  },
+  {
+   "group": "Game",
+   "key": "Delay",
+   "en": "Delay",
+   "comment": "legacy_id=3510"
+  },
+  {
+   "group": "Game",
+   "key": "Con",
+   "en": "Con",
+   "comment": "legacy_id=3511"
+  },
+  {
+   "group": "Game",
+   "key": "Buff Duration",
+   "en": "Buff Duration",
+   "comment": "legacy_id=3513"
+  },
+  {
+   "group": "Game",
+   "key": "Use Dark Spirits",
+   "en": "Use Dark Spirits",
+   "comment": "legacy_id=3514"
+  },
+  {
+   "group": "Game",
+   "key": "Auto Heal",
+   "en": "Auto Heal",
+   "comment": "legacy_id=3516,3546"
+  },
+  {
+   "group": "Game",
+   "key": "Drain Life",
+   "en": "Drain Life",
+   "comment": "legacy_id=3517"
+  },
+  {
+   "group": "Game",
+   "key": "Repair Item",
+   "en": "Repair Item",
+   "comment": "legacy_id=3518"
+  },
+  {
+   "group": "Game",
+   "key": "Pick All Near Items",
+   "en": "Pick All Near Items",
+   "comment": "legacy_id=3519"
+  },
+  {
+   "group": "Game",
+   "key": "Pick Selected Items",
+   "en": "Pick Selected Items",
+   "comment": "legacy_id=3520"
+  },
+  {
+   "group": "Game",
+   "key": "Jewel/Gem",
+   "en": "Jewel/Gem",
+   "comment": "legacy_id=3521"
+  },
+  {
+   "group": "Game",
+   "key": "Set Item",
+   "en": "Set Item",
+   "comment": "legacy_id=3522"
+  },
+  {
+   "group": "Game",
+   "key": "Excellent Item",
+   "en": "Excellent Item",
+   "comment": "legacy_id=3524"
+  },
+  {
+   "group": "Game",
+   "key": "Add Extra Item",
+   "en": "Add Extra Item",
+   "comment": "legacy_id=3525"
+  },
+  {
+   "group": "Game",
+   "key": "Range",
+   "en": "Range",
+   "comment": "legacy_id=3526,3532"
+  },
+  {
+   "group": "Game",
+   "key": "Distance",
+   "en": "Distance",
+   "comment": "legacy_id=3527"
+  },
+  {
+   "group": "Game",
+   "key": "Min",
+   "en": "Min",
+   "comment": "legacy_id=3528"
+  },
+  {
+   "group": "Game",
+   "key": "Basic Skill",
+   "en": "Basic Skill",
+   "comment": "legacy_id=3529"
+  },
+  {
+   "group": "Game",
+   "key": "Activation Skill 1",
+   "en": "Activation Skill 1",
+   "comment": "legacy_id=3530"
+  },
+  {
+   "group": "Game",
+   "key": "Activation Skill 2",
+   "en": "Activation Skill 2",
+   "comment": "legacy_id=3531"
+  },
+  {
+   "group": "Game",
+   "key": "Cease Attack",
+   "en": "Cease Attack",
+   "comment": "legacy_id=3533"
+  },
+  {
+   "group": "Game",
+   "key": "Auto Attack",
+   "en": "Auto Attack",
+   "comment": "legacy_id=3534"
+  },
+  {
+   "group": "Game",
+   "key": "Attack Together",
+   "en": "Attack Together",
+   "comment": "legacy_id=3535"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper",
+   "en": "Official MU Helper",
+   "comment": "legacy_id=3536"
+  },
+  {
+   "group": "Game",
+   "key": "Used Extension function",
+   "en": "Used Extension function",
+   "comment": "legacy_id=3537"
+  },
+  {
+   "group": "Game",
+   "key": "No Extension Function Being Used",
+   "en": "No Extension Function Being Used",
+   "comment": "legacy_id=3538"
+  },
+  {
+   "group": "Game",
+   "key": "Preference of Party Heal",
+   "en": "Preference of Party Heal",
+   "comment": "legacy_id=3539"
+  },
+  {
+   "group": "Game",
+   "key": "Buff Duration for All Party Members",
+   "en": "Buff Duration for All Party Members",
+   "comment": "legacy_id=3540"
+  },
+  {
+   "group": "Game",
+   "key": "Save setup",
+   "en": "Save setup",
+   "comment": "legacy_id=3541"
+  },
+  {
+   "group": "Game",
+   "key": "Pre-con",
+   "en": "Pre-con",
+   "comment": "legacy_id=3543"
+  },
+  {
+   "group": "Game",
+   "key": "Sub-con",
+   "en": "Sub-con",
+   "comment": "legacy_id=3544"
+  },
+  {
+   "group": "Game",
+   "key": "Auto Potion",
+   "en": "Auto Potion",
+   "comment": "legacy_id=3545"
+  },
+  {
+   "group": "Game",
+   "key": "HP Status",
+   "en": "HP Status",
+   "comment": "legacy_id=3547"
+  },
+  {
+   "group": "Game",
+   "key": "Heal Support",
+   "en": "Heal Support",
+   "comment": "legacy_id=3548"
+  },
+  {
+   "group": "Game",
+   "key": "Buff Support",
+   "en": "Buff Support",
+   "comment": "legacy_id=3549"
+  },
+  {
+   "group": "Game",
+   "key": "HP Status of Party Members",
+   "en": "HP Status of Party Members",
+   "comment": "legacy_id=3550"
+  },
+  {
+   "group": "Game",
+   "key": "Time Space of Casting Buff",
+   "en": "Time Space of Casting Buff",
+   "comment": "legacy_id=3551"
+  },
+  {
+   "group": "Game",
+   "key": "Activation Skill",
+   "en": "Activation Skill",
+   "comment": "legacy_id=3552"
+  },
+  {
+   "group": "Game",
+   "key": "Auto Recovery",
+   "en": "Auto Recovery",
+   "comment": "legacy_id=3553"
+  },
+  {
+   "group": "Game",
+   "key": "Monster Within Hunting range",
+   "en": "Monster Within Hunting range",
+   "comment": "legacy_id=3555"
+  },
+  {
+   "group": "Game",
+   "key": "Monster Attacking Me",
+   "en": "Monster Attacking Me",
+   "comment": "legacy_id=3556"
+  },
+  {
+   "group": "Game",
+   "key": "More Than 2 Mobs",
+   "en": "More Than 2 Mobs",
+   "comment": "legacy_id=3557"
+  },
+  {
+   "group": "Game",
+   "key": "More Than 3 Mobs",
+   "en": "More Than 3 Mobs",
+   "comment": "legacy_id=3558"
+  },
+  {
+   "group": "Game",
+   "key": "More than 4 mobs",
+   "en": "More than 4 mobs",
+   "comment": "legacy_id=3559"
+  },
+  {
+   "group": "Game",
+   "key": "More than 5 mobs",
+   "en": "More than 5 mobs",
+   "comment": "legacy_id=3560"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper Setting",
+   "en": "Official MU Helper Setting",
+   "comment": "legacy_id=3561"
+  },
+  {
+   "group": "Game",
+   "key": "Start Official MU Helper",
+   "en": "Start Official MU Helper",
+   "comment": "legacy_id=3562"
+  },
+  {
+   "group": "Game",
+   "key": "Stop Official MU Helper",
+   "en": "Stop Official MU Helper",
+   "comment": "legacy_id=3563"
+  },
+  {
+   "group": "Game",
+   "key": "InTheCaseOfDeregisteringBasic",
+   "en": "In the case of deregistering Basic skill and activation skill 1&2, combo skill can't be used.",
+   "comment": "legacy_id=3564"
+  },
+  {
+   "group": "Game",
+   "key": "InOrderToUseComboSkill",
+   "en": "In order to use Combo Skill, Basic Skill and Activation Skill should be registered first",
+   "comment": "legacy_id=3565"
+  },
+  {
+   "group": "Game",
+   "key": "DelayAndConditionSettingMenusCan",
+   "en": "Delay and Condition Setting Menus Can't Be Available With Using Combo Skill.",
+   "comment": "legacy_id=3566"
+  },
+  {
+   "group": "Game",
+   "key": "Please Enter the Item Name for Addition",
+   "en": "Please Enter the Item Name for Addition",
+   "comment": "legacy_id=3567"
+  },
+  {
+   "group": "Game",
+   "key": "Same name of the item exists in the list",
+   "en": "Same name of the item exists in the list",
+   "comment": "legacy_id=3568"
+  },
+  {
+   "group": "Game",
+   "key": "ThisSkillWasAlreadyRegisteredRegistered",
+   "en": "This skill was already registered. Registered Skill can be deregistered by clicking the right mouse button.",
+   "comment": "legacy_id=3569"
+  },
+  {
+   "group": "Game",
+   "key": "Selected Item can be added to maximum %d piece(s)",
+   "en": "Selected Item can be added to maximum %d piece(s)",
+   "comment": "legacy_id=3570"
+  },
+  {
+   "group": "Game",
+   "key": "The list of Add Selected Items is emptied",
+   "en": "The list of Add Selected Items is emptied",
+   "comment": "legacy_id=3571"
+  },
+  {
+   "group": "Game",
+   "key": "There is no selected item",
+   "en": "There is no selected item",
+   "comment": "legacy_id=3572"
+  },
+  {
+   "group": "Game",
+   "key": "Any characters under level %d can't run Official MU Helper.",
+   "en": "Any characters under level %d can't run Official MU Helper.",
+   "comment": "legacy_id=3573"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper only runs in filed",
+   "en": "Official MU Helper only runs in filed",
+   "comment": "legacy_id=3574"
+  },
+  {
+   "group": "Game",
+   "key": "In order to run Official MU Helper, please close Inventory window",
+   "en": "In order to run Official MU Helper, please close Inventory window",
+   "comment": "legacy_id=3575"
+  },
+  {
+   "group": "Game",
+   "key": "In order to run Official MU Helper, please close MU Guide window",
+   "en": "In order to run Official MU Helper, please close MU Guide window",
+   "comment": "legacy_id=3576"
+  },
+  {
+   "group": "Game",
+   "key": "InOrderToRunOfficialMU",
+   "en": "In order to run Official MU Helper properly, please register skills (Except Fairy)",
+   "comment": "legacy_id=3577"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper is running.",
+   "en": "Official MU Helper is running.",
+   "comment": "legacy_id=3578"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper is closed",
+   "en": "Official MU Helper is closed",
+   "comment": "legacy_id=3579"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper Setting has been saved.",
+   "en": "Official MU Helper Setting has been saved.",
+   "comment": "legacy_id=3580"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper can't be implemented in this region.",
+   "en": "Official MU Helper can't be implemented in this region.",
+   "comment": "legacy_id=3581"
+  },
+  {
+   "group": "Game",
+   "key": "CertainAmountOfZenIsSpent",
+   "en": "Certain amount of zen is spent every 5 minutes in implementing Official MU Helper",
+   "comment": "legacy_id=3582"
+  },
+  {
+   "group": "Game",
+   "key": "Spent Time %d Minute(s)/",
+   "en": "Spent Time %d Minute(s)/",
+   "comment": "legacy_id=3583"
+  },
+  {
+   "group": "Game",
+   "key": "Spent Time %d Minute(s)/ Spent Zen? %d Stage / Cost %d zen(s)",
+   "en": "Spent Time %d Minute(s)/ Spent Zen? %d Stage / Cost %d zen(s)",
+   "comment": "legacy_id=3584"
+  },
+  {
+   "group": "Game",
+   "key": "Spent Time %d hour(s) %d Minute(s)/ Spent Zen  %d Stage / Cost %d zen(s)",
+   "en": "Spent Time %d hour(s) %d Minute(s)/ Spent Zen  %d Stage / Cost %d zen(s)",
+   "comment": "legacy_id=3585"
+  },
+  {
+   "group": "Game",
+   "key": "%d zen(s) have been spent in implementing Official MU Helper",
+   "en": "%d zen(s) have been spent in implementing Official MU Helper",
+   "comment": "legacy_id=3586"
+  },
+  {
+   "group": "Game",
+   "key": "Zen is not sufficient to run Official MU Helper",
+   "en": "Zen is not sufficient to run Official MU Helper",
+   "comment": "legacy_id=3587"
+  },
+  {
+   "group": "Game",
+   "key": "In order to run Official MU Helper, please install Add-on first",
+   "en": "In order to run Official MU Helper, please install Add-on first",
+   "comment": "legacy_id=3588"
+  },
+  {
+   "group": "Game",
+   "key": "Official MU Helper is closed due to the excess of %d hour(s)",
+   "en": "Official MU Helper is closed due to the excess of %d hour(s)",
+   "comment": "legacy_id=3589"
+  },
+  {
+   "group": "Game",
+   "key": "Other Settings",
+   "en": "Other Settings",
+   "comment": "legacy_id=3590"
+  },
+  {
+   "group": "Game",
+   "key": "Auto accept - Friend",
+   "en": "Auto accept - Friend",
+   "comment": "legacy_id=3591"
+  },
+  {
+   "group": "Game",
+   "key": "Auto accept - Guild Member",
+   "en": "Auto accept - Guild Member",
+   "comment": "legacy_id=3592"
+  },
+  {
+   "group": "Game",
+   "key": "PVP Counterattack",
+   "en": "PVP Counterattack",
+   "comment": "legacy_id=3593"
+  },
+  {
+   "group": "Game",
+   "key": "Use Elite Mana Potion",
+   "en": "Use Elite Mana Potion",
+   "comment": "legacy_id=3594"
+  },
+  {
+   "group": "Game",
+   "key": "Unable to use if you have not spent points on your master skill tree.",
+   "en": "Unable to use if you have not spent points on your master skill tree.",
+   "comment": "legacy_id=3595"
+  },
+  {
+   "group": "Game",
+   "key": "The master skill point will reset.",
+   "en": "The master skill point will reset.",
+   "comment": "legacy_id=3596"
+  },
+  {
+   "group": "Game",
+   "key": "Do you want to reset?",
+   "en": "Do you want to reset?",
+   "comment": "legacy_id=3597"
+  },
+  {
+   "group": "Game",
+   "key": "The first tree",
+   "en": "The first tree",
+   "comment": "legacy_id=3598"
+  },
+  {
+   "group": "Game",
+   "key": "ProtectionTranquilityBlessingDivineResilienceConviction",
+   "en": "<Protection, Tranquility, Blessing, Divine, Resilience, Conviction, Resolution>",
+   "comment": "legacy_id=3599"
+  },
+  {
+   "group": "Game",
+   "key": "The game will restart after reset!",
+   "en": "The game will restart after reset!",
+   "comment": "legacy_id=3600"
+  },
+  {
+   "group": "Game",
+   "key": "The second tree",
+   "en": "The second tree",
+   "comment": "legacy_id=3601"
+  },
+  {
+   "group": "Game",
+   "key": "<Valor, Wisdom, Salvation, Chaos, Determination, Justice, Volition>",
+   "en": "<Valor, Wisdom, Salvation, Chaos, Determination, Justice, Volition>",
+   "comment": "legacy_id=3602"
+  },
+  {
+   "group": "Game",
+   "key": "The third tree",
+   "en": "The third tree",
+   "comment": "legacy_id=3603"
+  },
+  {
+   "group": "Game",
+   "key": "<Rage, Transcendence, Storm, Honor, Ultimacy, Conquest, Destruction>",
+   "en": "<Rage, Transcendence, Storm, Honor, Ultimacy, Conquest, Destruction>",
+   "comment": "legacy_id=3604"
+  },
+  {
+   "group": "Game",
+   "key": "Reset all master skill trees",
+   "en": "Reset all master skill trees",
+   "comment": "legacy_id=3605"
+  },
+  {
+   "group": "Game",
+   "key": "Help is active",
+   "en": "Help is active",
+   "comment": "legacy_id=3606"
+  },
+  {
+   "group": "Game",
+   "key": "Spirit Map Combination",
+   "en": "Spirit Map Combination",
+   "comment": "legacy_id=3607"
+  },
+  {
+   "group": "Game",
+   "key": "Trophies of Battle Combination",
+   "en": "Trophies of Battle Combination",
+   "comment": "legacy_id=3608"
+  },
+  {
+   "group": "Game",
+   "key": "SD3610",
+   "en": "%s : %d%%",
+   "comment": "legacy_id=3610"
+  },
+  {
+   "group": "Game",
+   "key": "Combination Available",
+   "en": "Combination Available",
+   "comment": "legacy_id=3611"
+  },
+  {
+   "group": "Game",
+   "key": "[Combine] %d Level",
+   "en": "[Combine] %d Level",
+   "comment": "legacy_id=3612"
+  },
+  {
+   "group": "Game",
+   "key": "You need ( %d~%d ) number of Trophies of Battle",
+   "en": "You need ( %d~%d ) number of Trophies of Battle",
+   "comment": "legacy_id=3613"
+  },
+  {
+   "group": "Game",
+   "key": "Success rate of combination",
+   "en": "Success rate of combination",
+   "comment": "legacy_id=3614"
+  },
+  {
+   "group": "Game",
+   "key": "Success rate of combination: Minimum %d%%, Increase by %d%%",
+   "en": "Success rate of combination: Minimum %d%%, Increase by %d%%",
+   "comment": "legacy_id=3615"
+  },
+  {
+   "group": "Game",
+   "key": "Entering Acheron",
+   "en": "Entering Acheron",
+   "comment": "legacy_id=3616"
+  },
+  {
+   "group": "Game",
+   "key": "You can enter Acheron or combine Entrance Items.",
+   "en": "You can enter Acheron or combine Entrance Items.",
+   "comment": "legacy_id=3617"
+  },
+  {
+   "group": "Game",
+   "key": "Participating guild member status",
+   "en": "Participating guild member status",
+   "comment": "legacy_id=3618"
+  },
+  {
+   "group": "Game",
+   "key": "Currently, %d people are registered to participate.",
+   "en": "Currently, %d people are registered to participate.",
+   "comment": "legacy_id=3619"
+  },
+  {
+   "group": "Game",
+   "key": "You're not in a guild.",
+   "en": "You're not in a guild.",
+   "comment": "legacy_id=3620"
+  },
+  {
+   "group": "Game",
+   "key": "You can only participate in the Arca War if you're in a guild.",
+   "en": "You can only participate in the Arca War if you're in a guild.",
+   "comment": "legacy_id=3621"
+  },
+  {
+   "group": "Game",
+   "key": "Register to participate in the Arca War (Guild member)",
+   "en": "Register to participate in the Arca War (Guild member)",
+   "comment": "legacy_id=3622"
+  },
+  {
+   "group": "Game",
+   "key": "InOrderToProceedWithThe",
+   "en": "In order to proceed with the Arca War, the guild master must complete registration to the Arca War.",
+   "comment": "legacy_id=3623"
+  },
+  {
+   "group": "Game",
+   "key": "The Arca War is not going on at the moment.",
+   "en": "The Arca War is not going on at the moment.",
+   "comment": "legacy_id=3624"
+  },
+  {
+   "group": "Game",
+   "key": "Please wait until the next Arca War.",
+   "en": "Please wait until the next Arca War.",
+   "comment": "legacy_id=3625"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot enter because you don't have a Spirit Map.",
+   "en": "You cannot enter because you don't have a Spirit Map.",
+   "comment": "legacy_id=3626"
+  },
+  {
+   "group": "Game",
+   "key": "You need a Spirit Map to enter Acheron.",
+   "en": "You need a Spirit Map to enter Acheron.",
+   "comment": "legacy_id=3627"
+  },
+  {
+   "group": "Game",
+   "key": "Need more guild members to register for the Arca War.",
+   "en": "Need more guild members to register for the Arca War.",
+   "comment": "legacy_id=3628"
+  },
+  {
+   "group": "Game",
+   "key": "Minimum participants: %d, Participants: %d",
+   "en": "Minimum participants: %d, Participants: %d",
+   "comment": "legacy_id=3629"
+  },
+  {
+   "group": "Game",
+   "key": "Cancel participation in the Arca War.",
+   "en": "Cancel participation in the Arca War.",
+   "comment": "legacy_id=3630"
+  },
+  {
+   "group": "Game",
+   "key": "YouDonTHaveEnoughPeople",
+   "en": "You don't have enough people participating in the Arca War in your guild. Participation in the Arca War has been cancelled.",
+   "comment": "legacy_id=3631"
+  },
+  {
+   "group": "Game",
+   "key": "Acheron",
+   "en": "Acheron",
+   "comment": "legacy_id=3632"
+  },
+  {
+   "group": "Game",
+   "key": "Arca War",
+   "en": "Arca War",
+   "comment": "legacy_id=3633"
+  },
+  {
+   "group": "Game",
+   "key": "Arca War results",
+   "en": "Arca War results",
+   "comment": "legacy_id=3634"
+  },
+  {
+   "group": "Game",
+   "key": "Are you going to participate in the Arca War?",
+   "en": "Are you going to participate in the Arca War?",
+   "comment": "legacy_id=3635"
+  },
+  {
+   "group": "Game",
+   "key": "Congratulations. You have successfully conquered Obelisk.",
+   "en": "Congratulations. You have successfully conquered Obelisk.",
+   "comment": "legacy_id=3636"
+  },
+  {
+   "group": "Game",
+   "key": "Sorry! Please conquer Obelisk on your next try.",
+   "en": "Sorry! Please conquer Obelisk on your next try.",
+   "comment": "legacy_id=3637"
+  },
+  {
+   "group": "Game",
+   "key": "Fire Tower",
+   "en": "Fire Tower",
+   "comment": "legacy_id=3638"
+  },
+  {
+   "group": "Game",
+   "key": "Water Tower",
+   "en": "Water Tower",
+   "comment": "legacy_id=3639"
+  },
+  {
+   "group": "Game",
+   "key": "Earth Tower",
+   "en": "Earth Tower",
+   "comment": "legacy_id=3640"
+  },
+  {
+   "group": "Game",
+   "key": "Wind Tower",
+   "en": "Wind Tower",
+   "comment": "legacy_id=3641"
+  },
+  {
+   "group": "Game",
+   "key": "Darkness Tower",
+   "en": "Darkness Tower",
+   "comment": "legacy_id=3642"
+  },
+  {
+   "group": "Game",
+   "key": "Obtain Trophies of Battle",
+   "en": "Obtain Trophies of Battle",
+   "comment": "legacy_id=3645"
+  },
+  {
+   "group": "Game",
+   "key": "Rewarded EXP",
+   "en": "Rewarded EXP",
+   "comment": "legacy_id=3646"
+  },
+  {
+   "group": "Game",
+   "key": "No conquered guild",
+   "en": "No conquered guild",
+   "comment": "legacy_id=3647"
+  },
+  {
+   "group": "Game",
+   "key": "%s guild conquered",
+   "en": "%s guild conquered",
+   "comment": "legacy_id=3648"
+  },
+  {
+   "group": "Game",
+   "key": "%d points",
+   "en": "%d points",
+   "comment": "legacy_id=3649"
+  },
+  {
+   "group": "Game",
+   "key": "Pentagram item",
+   "en": "Pentagram item",
+   "comment": "legacy_id=3661"
+  },
+  {
+   "group": "Game",
+   "key": "Slot of Anger (1)",
+   "en": "Slot of Anger (1)",
+   "comment": "legacy_id=3662"
+  },
+  {
+   "group": "Game",
+   "key": "Slot of Blessing (2)",
+   "en": "Slot of Blessing (2)",
+   "comment": "legacy_id=3663"
+  },
+  {
+   "group": "Game",
+   "key": "Slot of Integrity (3)",
+   "en": "Slot of Integrity (3)",
+   "comment": "legacy_id=3664"
+  },
+  {
+   "group": "Game",
+   "key": "Slot of Divinity (4)",
+   "en": "Slot of Divinity (4)",
+   "comment": "legacy_id=3665"
+  },
+  {
+   "group": "Game",
+   "key": "Slot of Gale (5)",
+   "en": "Slot of Gale (5)",
+   "comment": "legacy_id=3666"
+  },
+  {
+   "group": "Game",
+   "key": "No information regarding Errtel. (DB:%d)",
+   "en": "No information regarding Errtel. (DB:%d)",
+   "comment": "legacy_id=3668"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel List does not exist. (DB:%d)",
+   "en": "Errtel List does not exist. (DB:%d)",
+   "comment": "legacy_id=3669"
+  },
+  {
+   "group": "Game",
+   "key": "%s-%d Rank",
+   "en": "%s-%d Rank",
+   "comment": "legacy_id=3670"
+  },
+  {
+   "group": "Game",
+   "key": "%d Rank Errtel",
+   "en": "%d Rank Errtel",
+   "comment": "legacy_id=3671"
+  },
+  {
+   "group": "Game",
+   "key": "%d Rank Option +%d",
+   "en": "%d Rank Option +%d",
+   "comment": "legacy_id=3672"
+  },
+  {
+   "group": "Game",
+   "key": "Option number (%d)",
+   "en": "Option number (%d)",
+   "comment": "legacy_id=3673"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel information does not exist or is incorrect. (%d)",
+   "en": "Errtel information does not exist or is incorrect. (%d)",
+   "comment": "legacy_id=3674"
+  },
+  {
+   "group": "Game",
+   "key": "Element Master Adniel",
+   "en": "Element Master Adniel",
+   "comment": "legacy_id=3675"
+  },
+  {
+   "group": "Game",
+   "key": "You can refine Pentagram items or upgrade Errtel.",
+   "en": "You can refine Pentagram items or upgrade Errtel.",
+   "comment": "legacy_id=3676"
+  },
+  {
+   "group": "Game",
+   "key": "Elemental items refinement/combination",
+   "en": "Elemental items refinement/combination",
+   "comment": "legacy_id=3677,3682,3697"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel Level up",
+   "en": "Errtel Level up",
+   "comment": "legacy_id=3678"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel Rank up",
+   "en": "Errtel Rank up",
+   "comment": "legacy_id=3679"
+  },
+  {
+   "group": "Game",
+   "key": "Pentagram Item %d",
+   "en": "Pentagram Item %d",
+   "comment": "legacy_id=3680"
+  },
+  {
+   "group": "Game",
+   "key": "SD3681",
+   "en": "%s %d",
+   "comment": "legacy_id=3681"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel Level Upgrade",
+   "en": "Errtel Level Upgrade",
+   "comment": "legacy_id=3683,3699"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel Rank Upgrade",
+   "en": "Errtel Rank Upgrade",
+   "comment": "legacy_id=3684,3701"
+  },
+  {
+   "group": "Game",
+   "key": "Refinement/Combination",
+   "en": "Refinement/Combination",
+   "comment": "legacy_id=3685"
+  },
+  {
+   "group": "Game",
+   "key": "Move the item in the inventory area and close the combination window.",
+   "en": "Move the item in the inventory area and close the combination window.",
+   "comment": "legacy_id=3688"
+  },
+  {
+   "group": "Game",
+   "key": "[Mithril Fragment Refinement]",
+   "en": "[Mithril Fragment Refinement]",
+   "comment": "legacy_id=3689"
+  },
+  {
+   "group": "Game",
+   "key": "[Elixir Fragment Refinement]",
+   "en": "[Elixir Fragment Refinement]",
+   "comment": "legacy_id=3690"
+  },
+  {
+   "group": "Game",
+   "key": "[Errtel Combination]",
+   "en": "[Errtel Combination]",
+   "comment": "legacy_id=3691"
+  },
+  {
+   "group": "Game",
+   "key": "[Pentagram item Combination]",
+   "en": "[Pentagram item Combination]",
+   "comment": "legacy_id=3692"
+  },
+  {
+   "group": "Game",
+   "key": "1 Errtel",
+   "en": "1 Errtel",
+   "comment": "legacy_id=3693"
+  },
+  {
+   "group": "Game",
+   "key": "1 Errtel (Active rank +7 or more)",
+   "en": "1 Errtel (Active rank +7 or more)",
+   "comment": "legacy_id=3694"
+  },
+  {
+   "group": "Game",
+   "key": "Set item +7 or more, additional options +4 or more. %d",
+   "en": "Set item +7 or more, additional options +4 or more. %d",
+   "comment": "legacy_id=3695"
+  },
+  {
+   "group": "Game",
+   "key": "Do you want to refine/combine items?",
+   "en": "Do you want to refine/combine items?",
+   "comment": "legacy_id=3696"
+  },
+  {
+   "group": "Game",
+   "key": "DoYouWantToUpgradeThe",
+   "en": "Do you want to upgrade the level for the following Errtel? (Warning : Items may disappear.)",
+   "comment": "legacy_id=3698"
+  },
+  {
+   "group": "Game",
+   "key": "DoYouWantToUpgradeThe3700",
+   "en": "Do you want to upgrade the rank for the following Errtel? (Warning : Items may disappear.)",
+   "comment": "legacy_id=3700"
+  },
+  {
+   "group": "Game",
+   "key": "There's not enough materials for item refinement/combination.",
+   "en": "There's not enough materials for item refinement/combination.",
+   "comment": "legacy_id=3702"
+  },
+  {
+   "group": "Game",
+   "key": "You don't have enough materials for an upgrade.",
+   "en": "You don't have enough materials for an upgrade.",
+   "comment": "legacy_id=3703"
+  },
+  {
+   "group": "Game",
+   "key": "Combination window is already open. [0x%02X]",
+   "en": "Combination window is already open. [0x%02X]",
+   "comment": "legacy_id=3704"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot combine while personal store is open. [0x%02X]",
+   "en": "You cannot combine while personal store is open. [0x%02X]",
+   "comment": "legacy_id=3705"
+  },
+  {
+   "group": "Game",
+   "key": "Combination script does not match. [0x%02X]",
+   "en": "Combination script does not match. [0x%02X]",
+   "comment": "legacy_id=3706"
+  },
+  {
+   "group": "Game",
+   "key": "The item properties do not match for combination. Cannot combine items.",
+   "en": "The item properties do not match for combination. Cannot combine items.",
+   "comment": "legacy_id=3707"
+  },
+  {
+   "group": "Game",
+   "key": "Not enough material items for combination.",
+   "en": "Not enough material items for combination.",
+   "comment": "legacy_id=3708"
+  },
+  {
+   "group": "Game",
+   "key": "NotEnoughZenToCombineItems3709",
+   "en": "Not enough Zen to combine items.",
+   "comment": "legacy_id=3709"
+  },
+  {
+   "group": "Game",
+   "key": "Combination failed. Item has disappeared.",
+   "en": "Combination failed. Item has disappeared.",
+   "comment": "legacy_id=3710"
+  },
+  {
+   "group": "Game",
+   "key": "Upgrade failed.",
+   "en": "Upgrade failed.",
+   "comment": "legacy_id=3711"
+  },
+  {
+   "group": "Game",
+   "key": "Refinement/Combination failed.",
+   "en": "Refinement/Combination failed.",
+   "comment": "legacy_id=3712"
+  },
+  {
+   "group": "Game",
+   "key": "(Fire element)",
+   "en": "(Fire element)",
+   "comment": "legacy_id=3713,3737"
+  },
+  {
+   "group": "Game",
+   "key": "(Water element)",
+   "en": "(Water element)",
+   "comment": "legacy_id=3714,3738"
+  },
+  {
+   "group": "Game",
+   "key": "(Earth element)",
+   "en": "(Earth element)",
+   "comment": "legacy_id=3715,3739"
+  },
+  {
+   "group": "Game",
+   "key": "(Wind element)",
+   "en": "(Wind element)",
+   "comment": "legacy_id=3716,3740"
+  },
+  {
+   "group": "Game",
+   "key": "(Darkness element)",
+   "en": "(Darkness element)",
+   "comment": "legacy_id=3717,3741"
+  },
+  {
+   "group": "Game",
+   "key": "Invalid elements. (%d)",
+   "en": "Invalid elements. (%d)",
+   "comment": "legacy_id=3718"
+  },
+  {
+   "group": "Game",
+   "key": "%d Rank",
+   "en": "%d Rank",
+   "comment": "legacy_id=3719"
+  },
+  {
+   "group": "Game",
+   "key": "Do you want to equip the selected Errtel on the Pentagram?",
+   "en": "Do you want to equip the selected Errtel on the Pentagram?",
+   "comment": "legacy_id=3720"
+  },
+  {
+   "group": "Game",
+   "key": "WhenYouTakeAnErrtelOut",
+   "en": "When you take an Errtel out of the Pentagram, it may disappear. Do you still want to take it out?",
+   "comment": "legacy_id=3721"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotEquipTheSelectedItem",
+   "en": "You cannot equip the selected item. Please equip the valid Errtel for the slot.",
+   "comment": "legacy_id=3722"
+  },
+  {
+   "group": "Game",
+   "key": "ThereAlreadyIsAnEquippedErrtel",
+   "en": "There already is an equipped Errtel. Please disassemble the equipped Errtel and try again.",
+   "comment": "legacy_id=3723"
+  },
+  {
+   "group": "Game",
+   "key": "CannotEquipTheErrtelThatYou",
+   "en": "Cannot equip. The Errtel that you want to equip and the Pentagram have different elements. Please equip the correct Errtel.",
+   "comment": "legacy_id=3724"
+  },
+  {
+   "group": "Game",
+   "key": "YouCanOnlyEquipOrTake",
+   "en": "You can only equip or take out Errtels in your inventory. Please move the Pentagram in your inventory and try again.",
+   "comment": "legacy_id=3725"
+  },
+  {
+   "group": "Game",
+   "key": "YourInventoryIsFullCannotTake",
+   "en": "Your inventory is full. Cannot take out the Errtel. Please empty your inventory and try again.",
+   "comment": "legacy_id=3726"
+  },
+  {
+   "group": "Game",
+   "key": "Pentagram item trade limits have been exceeded. Cannot trade.",
+   "en": "Pentagram item trade limits have been exceeded. Cannot trade.",
+   "comment": "legacy_id=3727"
+  },
+  {
+   "group": "Game",
+   "key": "You have more than 255 Errtels equipped on the Pentagram item you own.",
+   "en": "You have more than 255 Errtels equipped on the Pentagram item you own.",
+   "comment": "legacy_id=3728"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel has been successfully equipped.",
+   "en": "Errtel has been successfully equipped.",
+   "comment": "legacy_id=3729"
+  },
+  {
+   "group": "Game",
+   "key": "Unequip has failed. The Errtel was destroyed.",
+   "en": "Unequip has failed. The Errtel was destroyed.",
+   "comment": "legacy_id=3730"
+  },
+  {
+   "group": "Game",
+   "key": "Errtel has been successfully unequipped.",
+   "en": "Errtel has been successfully unequipped.",
+   "comment": "legacy_id=3731"
+  },
+  {
+   "group": "Game",
+   "key": "Confirm equipping of Errtel",
+   "en": "Confirm equipping of Errtel",
+   "comment": "legacy_id=3732"
+  },
+  {
+   "group": "Game",
+   "key": "Confirm unequipping of Errtel",
+   "en": "Confirm unequipping of Errtel",
+   "comment": "legacy_id=3733"
+  },
+  {
+   "group": "Game",
+   "key": "YouCannotUseTheElementalChaos",
+   "en": "You cannot use the Elemental Chaos Assembly Talisman  and the Elemental Talisman of Luck together.",
+   "comment": "legacy_id=3734"
+  },
+  {
+   "group": "Game",
+   "key": "Congratulations. Combination successful.",
+   "en": "Congratulations. Combination successful.",
+   "comment": "legacy_id=3735"
+  },
+  {
+   "group": "Game",
+   "key": "Congratulations. Upgrade successful.",
+   "en": "Congratulations. Upgrade successful.",
+   "comment": "legacy_id=3736"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot use the following feature in this area.",
+   "en": "You cannot use the following feature in this area.",
+   "comment": "legacy_id=3742"
+  },
+  {
+   "group": "Game",
+   "key": "An error has occurred in the following feature.",
+   "en": "An error has occurred in the following feature.",
+   "comment": "legacy_id=3743"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot combine while personal store is open.",
+   "en": "You cannot combine while personal store is open.",
+   "comment": "legacy_id=3744"
+  },
+  {
+   "group": "Game",
+   "key": "Warning3750",
+   "en": "Warning",
+   "comment": "legacy_id=3750"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot restore a deleted character!!",
+   "en": "You cannot restore a deleted character!!",
+   "comment": "legacy_id=3751"
+  },
+  {
+   "group": "Game",
+   "key": "(General items and cash items are not recoverable)",
+   "en": "(General items and cash items are not recoverable)",
+   "comment": "legacy_id=3752"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot use this while the same buff and seals last for 6 hours or more.",
+   "en": "You cannot use this while the same buff and seals last for 6 hours or more.",
+   "comment": "legacy_id=3753"
+  },
+  {
+   "group": "Game",
+   "key": "Client file has been corrupted. Please reinstall the client again.",
+   "en": "Client file has been corrupted. Please reinstall the client again.",
+   "comment": "legacy_id=3754"
+  },
+  {
+   "group": "Game",
+   "key": "Monster wings",
+   "en": "Monster wings",
+   "comment": "legacy_id=3755"
+  },
+  {
+   "group": "Game",
+   "key": "Monster wings ingredient",
+   "en": "Monster wings ingredient",
+   "comment": "legacy_id=3756"
+  },
+  {
+   "group": "Game",
+   "key": "Socket items",
+   "en": "Socket items",
+   "comment": "legacy_id=3757"
+  },
+  {
+   "group": "Game",
+   "key": "Item Refinement",
+   "en": "Item Refinement",
+   "comment": "legacy_id=3758"
+  },
+  {
+   "group": "Game",
+   "key": "Sub-materials %d",
+   "en": "Sub-materials %d",
+   "comment": "legacy_id=3759"
+  },
+  {
+   "group": "Game",
+   "key": "Parent-materials %d",
+   "en": "Parent-materials %d",
+   "comment": "legacy_id=3760"
+  },
+  {
+   "group": "Game",
+   "key": "ICanFeelThePowerOf",
+   "en": "I can feel the power of barrier. If you want to enter Idas Barrier area, click the enter button on the left. In order to repair the durability of a pick, you must use a jewel.",
+   "comment": "legacy_id=3761"
+  },
+  {
+   "group": "Game",
+   "key": "IfYouWantToRepairClick",
+   "en": "If you want to repair, click the cancel button on the right. Then, enhance it with various jewels. The jewels that can be repaired are Jewel of Bless, Jewel of Soul, Jewel of Creation, and Jewel of Chaos (including bunches).",
+   "comment": "legacy_id=3762"
+  },
+  {
+   "group": "Game",
+   "key": "Only Level 170 and above may enter.",
+   "en": "Only Level 170 and above may enter.",
+   "comment": "legacy_id=3763"
+  },
+  {
+   "group": "Game",
+   "key": "You cannot attack.",
+   "en": "You cannot attack.",
+   "comment": "legacy_id=3764"
+  },
+  {
+   "group": "Game",
+   "key": "Use skills closely",
+   "en": "Use skills closely",
+   "comment": "legacy_id=3765"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²",
+   "en": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²",
+   "comment": "legacy_id=3766"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§",
+   "en": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§",
+   "comment": "legacy_id=3767"
+  },
+  {
+   "group": "Game",
+   "key": "µî·Ï °³¼ö",
+   "en": "µî·Ï °³¼ö",
+   "comment": "legacy_id=3768"
+  },
+  {
+   "group": "Game",
+   "key": "¿ì¸® ±æµå ÇöÈ²",
+   "en": "¿ì¸® ±æµå ÇöÈ²",
+   "comment": "legacy_id=3769"
+  },
+  {
+   "group": "Game",
+   "key": "µÚ·Î°¡±â",
+   "en": "µÚ·Î°¡±â",
+   "comment": "legacy_id=3770"
+  },
+  {
+   "group": "Game",
+   "key": "µî·Ï °¡´É",
+   "en": "µî·Ï °¡´É",
+   "comment": "legacy_id=3771"
+  },
+  {
+   "group": "Game",
+   "key": "µî·Ï ºÒ°¡",
+   "en": "µî·Ï ºÒ°¡",
+   "comment": "legacy_id=3772"
+  },
+  {
+   "group": "Game",
+   "key": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³",
+   "en": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³",
+   "comment": "legacy_id=3773"
+  },
+  {
+   "group": "Game",
+   "key": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.",
+   "en": "µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.",
+   "comment": "legacy_id=3774"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+   "en": "¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.",
+   "comment": "legacy_id=3775"
+  },
+  {
+   "group": "Game",
+   "key": "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³",
+   "en": "µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³",
+   "comment": "legacy_id=3776"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï",
+   "en": "¼ºÁÖÀÇ Ç¥½Ä µî·Ï",
+   "comment": "legacy_id=3777"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?",
+   "en": "¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?",
+   "comment": "legacy_id=3778"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.",
+   "en": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.",
+   "comment": "legacy_id=3779"
+  },
+  {
+   "group": "Game",
+   "key": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.",
+   "en": "¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.",
+   "comment": "legacy_id=3780"
+  },
+  {
+   "group": "Game",
+   "key": "ｼﾓｼｺ",
+   "en": "ｼﾓｼｺ",
+   "comment": "legacy_id=3781"
+  },
+  {
+   "group": "Game",
+   "key": "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ",
+   "en": "ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ",
+   "comment": "legacy_id=3782"
+  },
+  {
+   "group": "Game",
+   "key": "ﾀ盂ﾝ",
+   "en": "ﾀ盂ﾝ",
+   "comment": "legacy_id=3783"
+  },
+  {
+   "group": "Game",
+   "key": "ﾇﾘﾁｦ",
+   "en": "ﾇﾘﾁｦ",
+   "comment": "legacy_id=3784"
+  },
+  {
+   "group": "Game",
+   "key": "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä",
+   "en": "Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä",
+   "comment": "legacy_id=3785"
+  },
+  {
+   "group": "Game",
+   "key": "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?",
+   "en": "±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?",
+   "comment": "legacy_id=3786"
+  },
+  {
+   "group": "Game",
+   "key": "¼­¹ö",
+   "en": "¼­¹ö",
+   "comment": "legacy_id=3787"
+  },
+  {
+   "group": "Game",
+   "key": "ESC",
+   "en": "ESC",
+   "comment": "legacy_id=3788"
+  },
+  {
+   "group": "Game",
+   "key": "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡",
+   "en": "20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡",
+   "comment": "legacy_id=3789"
+  },
+  {
+   "group": "Game",
+   "key": "ÀüÃ¼¼ö¸®ºñ¿ë",
+   "en": "ÀüÃ¼¼ö¸®ºñ¿ë",
+   "comment": "legacy_id=3790"
+  },
+  {
+   "group": "Game",
+   "key": "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù",
+   "en": "ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù",
+   "comment": "legacy_id=3791"
+  },
+  {
+   "group": "Game",
+   "key": "°Å·¡ ½ÂÀÎ ´ë±âÁß",
+   "en": "°Å·¡ ½ÂÀÎ ´ë±âÁß",
+   "comment": "legacy_id=3792"
+  },
+  {
+   "group": "Game",
+   "key": "You can purchase it after a while.",
+   "en": "You can purchase it after a while.",
+   "comment": "legacy_id=3808"
+  },
+  {
+   "group": "Game",
+   "key": "You can gift it after a while.",
+   "en": "You can gift it after a while.",
+   "comment": "legacy_id=3809"
+  },
+  {
+   "group": "Game",
+   "key": "Level: %u | Resets: %u",
+   "en": "Level: %u | Resets: %u",
+   "comment": "legacy_id=3810"
+  },
+  {
+   "group": "Game",
+   "key": "BasicAttackFallback",
+   "en": "Basic Attack Fallback",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Connection lost",
+   "en": "Connection lost",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Checking server availability",
+   "en": "Checking server availability",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Logging in",
+   "en": "Logging in",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Loading character list",
+   "en": "Loading character list",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Entering the game",
+   "en": "Entering the game",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Retrying in seconds",
+   "en": "Retrying in %d seconds...",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTitle",
+   "en": "Commands",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNotSupported",
+   "en": "This server does not offer a command list.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsExecute",
+   "en": "Execute",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "JToggleChatCommands",
+   "en": "J : Chat Commands On/Off",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SpecialCommands",
+   "en": "Special",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsBack",
+   "en": "Back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsTemplates",
+   "en": "Templates",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsNoTemplates",
+   "en": "No templates saved yet.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsSaveTemplate",
+   "en": "Save as template",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsAddFavourite",
+   "en": "Add to favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsRemoveFavourite",
+   "en": "Remove from favourites",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsFillRequired",
+   "en": "Please enter the required values first.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ChatCommandsUnknownCommand",
+   "en": "This command is not available anymore.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameRate",
+   "en": "Frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FollowDisplay",
+   "en": "Follow display",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayNativeMaximum",
+   "en": "Display native maximum",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "VerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RequestedFrameRate",
+   "en": "Requested frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EffectiveFrameRate",
+   "en": "Effective frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplayRefreshRate",
+   "en": "Display refresh rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ActualFrameRate",
+   "en": "Actual frame rate",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "AverageFrameRate",
+   "en": "Average FPS",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "OnePercentLow",
+   "en": "1% Low",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LimitReason",
+   "en": "Limit reason",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Gamepad",
+   "en": "Gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadEnabled",
+   "en": "Enable gamepad",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "Haptics",
+   "en": "Vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HapticIntensity",
+   "en": "Vibration intensity",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CombatHaptics",
+   "en": "Combat vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "UIHaptics",
+   "en": "UI vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TransactionHaptics",
+   "en": "Transaction vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ShortRumbleTest",
+   "en": "Test short vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "LongRumbleTest",
+   "en": "Test long vibration",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RumbleUnsupported",
+   "en": "Vibration is not supported by this controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "StickDeadZone",
+   "en": "Stick dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PointerSpeed",
+   "en": "Pointer speed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitFrameLimiter",
+   "en": "Frame limiter",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitVerticalSync",
+   "en": "Vertical sync",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitDisplayFallback",
+   "en": "Refresh rate unavailable, falling back to 60 Hz",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitBackground",
+   "en": "Background frame rate limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitUnevenVSync",
+   "en": "VSync uneven cadence",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "FrameLimitPerformanceOrExternal",
+   "en": "Performance/external limit",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "ControllerMapping",
+   "en": "Controller mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GenericController",
+   "en": "Generic controller",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadAction",
+   "en": "Action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "PhysicalControl",
+   "en": "Physical control",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "TriggerDeadZone",
+   "en": "Trigger dead zone",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "InvertPointerY",
+   "en": "Invert pointer Y",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "CurrentMapping",
+   "en": "Current mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestoreDefaultMapping",
+   "en": "Restore default mapping",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionConfirm",
+   "en": "Confirm / interact",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionCancel",
+   "en": "Cancel / back",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPrimaryAttack",
+   "en": "Primary attack",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionContext",
+   "en": "Context action",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionUseSkill",
+   "en": "Use current skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionLockTarget",
+   "en": "Lock target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionPreviousSkill",
+   "en": "Previous skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextSkill",
+   "en": "Next skill",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem1",
+   "en": "Quick item 1",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem2",
+   "en": "Quick item 2",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem3",
+   "en": "Quick item 3",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionQuickItem4",
+   "en": "Quick item 4",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMap",
+   "en": "Map",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionMenu",
+   "en": "System menu",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionHelper",
+   "en": "MU Helper",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "GamepadActionNextTarget",
+   "en": "Next target",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "DisplaySettingsConfirmation",
+   "en": "Keep these display settings? Reverting in %d seconds.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "KeepDisplaySettings",
+   "en": "Keep (A / Enter)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RevertDisplaySettings",
+   "en": "Revert (B / Esc)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopTitle",
+   "en": "Solo Shop",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopEquipment",
+   "en": "Equipment",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopMaterials",
+   "en": "Materials",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopSkills",
+   "en": "Skills",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopPets",
+   "en": "Pets / Tickets",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopConsumables",
+   "en": "Consumables",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchange",
+   "en": "Exchange 1,000 Zen for 100 WCoin(C)",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopExchangeSucceeded",
+   "en": "1,000 Zen exchanged for 100 WCoin(C).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "SoloShopOperationFailed",
+   "en": "Operation failed. Check gold, storage and connection.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceOpenedNotice",
+   "en": "%ls entrance is open and closes in %ls minute(s).",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "EventEntranceClosedNotice",
+   "en": "%ls entrance closed.",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourStartedNotice",
+   "en": "Happy Hour event has been started!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "HappyHourEndedNotice",
+   "en": "Happy Hour event has ended!",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartRequiredTitle",
+   "en": "Language changed",
+   "comment": null
+  },
+  {
+   "group": "Game",
+   "key": "RestartLanguageMessage",
+   "en": "The game content language (NPC names, quests, items and skills) only changes after restarting the game. Restart now?",
+   "comment": null
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_0",
+   "en": "Aye! Is there anything you need?",
+   "comment": "legacy_id=0"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_1",
+   "en": "Hello! I am Pasi the Mage. Hahaha! Hmmm... The movement of the stars doesn't seem quite right. Your future... Hmm... I can't see your future either... Why's that...?",
+   "comment": "legacy_id=1"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_2",
+   "en": "Hello! My name is Baz and I am the vault keeper. I can be of help to you wherever you go. Don't hesitate to leave your belongings with me.",
+   "comment": "legacy_id=2"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_3",
+   "en": "Many adventurers have told me that the sound of the harp soothes and wipes away their fatigue. Do you need my help?",
+   "comment": "legacy_id=3"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_4",
+   "en": "Hello! My name is Baz and I am the vault keeper. I can be of help to you wherever you go. Don't hesitate to leave your belongings with me.",
+   "comment": "legacy_id=4"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_5",
+   "en": "Have you brought enough money? Without it, I can't combine the items because I need money to continue with my research. Understood? Do you want to know how much money is needed?",
+   "comment": "legacy_id=5"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_6",
+   "en": "Welcome to MU! Press the F1 key if you need any assistance while traveling around the MU continent.",
+   "comment": "legacy_id=6"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_7",
+   "en": "Is it your first time in Lorencia? Go to the southeast exit in front of the fountain and try to hunt Budge Dragons or Spiders. The Skeletons in Northwest are too dangerous.",
+   "comment": "legacy_id=7"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_8",
+   "en": "Welcome to Noria. If it's your first time, pass through the vault guard and go to the south exit. Try to hunt low level monsters like Scorpions or Goblins.",
+   "comment": "legacy_id=8"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_9",
+   "en": "If you need a detailed guide of the MU continent check out http://muonline.webzen.net",
+   "comment": "legacy_id=9"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_50",
+   "en": "The 'Scroll of the Emperor', which speaks of Muren, the first emperor of MU, is said to have been seen around the Lost Tower, Atlans, and the Dungeon.",
+   "comment": "legacy_id=50"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_50_Slot_0",
+   "en": "I didn't know such a thing existed...",
+   "comment": "legacy_id=1500"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_51",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 1,000,000 Zen.",
+   "comment": "legacy_id=51"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_51_Slot_0",
+   "en": "I shall return with 1,000,000 Zen.",
+   "comment": "legacy_id=1510"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_52",
+   "en": "The 'Scroll of the Emperor', which speaks of Muren, the first emperor to unify MU, is said to have been seen around the Lost Tower, Atlans, and the Dungeon.",
+   "comment": "legacy_id=52"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_52_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1520"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_53",
+   "en": "The 'Scroll of the Emperor' is enwrapped in a powerful force. Anyone who reads it shall be blessed with that powerful force.",
+   "comment": "legacy_id=53"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_0",
+   "en": "Please repeat the story.",
+   "comment": "legacy_id=1530"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_1",
+   "en": "I will go find it.",
+   "comment": "legacy_id=1531"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_53_Slot_2",
+   "en": "I don't care.",
+   "comment": "legacy_id=1532"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_54",
+   "en": "Go find the 'Scroll of the Emperor'. You will be granted with great power upon reading it.",
+   "comment": "legacy_id=54"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_54_Slot_0",
+   "en": "I will go find it.",
+   "comment": "legacy_id=1540"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_55",
+   "en": "You've found the 'Scroll of the Emperor'! The commemoration of unification of the Mu Empire's first emperor Muren was recorded with the power of magic here, you see. The one who possesses the 'Scroll of the Emperor' is granted with great power.",
+   "comment": "legacy_id=55"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_55_Slot_0",
+   "en": "Tell me about the record.",
+   "comment": "legacy_id=1550"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_56",
+   "en": "A historical record of the first emperor Muren contains the commemoration of peace through the triumph of Muren over all warlords and by doing so, unified the continent into the Empire or MU.",
+   "comment": "legacy_id=56"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_56_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1560"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_57",
+   "en": "Muren was one of the three heroes that ended the chaos brought upon the people by Sekneum's invasion.",
+   "comment": "legacy_id=57"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_57_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1570"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_57_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1571"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_58",
+   "en": "Magical artifacts may be found and they are called the 'Broken Sword', 'Tear of Elf', and the 'Soul of Wizard'. The 'Broken Sword' was offered by the dark knights as a symbol of their bravery, loyalty and their wish for prosperity.",
+   "comment": "legacy_id=58"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_58_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1580"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_58_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1581"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_59",
+   "en": "The 'Soul of Wizard' was offered by the dark wizards as a symbol of their vow to use their power for the peace and freedom of the empire. Mu Year 10, an excerpt of the commemoration of peace record...",
+   "comment": "legacy_id=59"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_59_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1590"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_59_Slot_1",
+   "en": "That's what happened...",
+   "comment": "legacy_id=1591"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_60",
+   "en": "If you've read the 'Scroll of the Emperor', seek out the 'Broken Sword' that the ancient dark knights used at the commemoration of peace. From what I've heard, a few dark knights have found it in Atlans, the Lost Tower and Tarkan.",
+   "comment": "legacy_id=60"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_60_Slot_0",
+   "en": "I will find it.",
+   "comment": "legacy_id=1600"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_60_Slot_1",
+   "en": "I give up.",
+   "comment": "legacy_id=1601"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_61",
+   "en": "Danger lurks behind every corner in those places and the 'Broken Sword' is not easily spotted. But if you find it, new power will be bestowed upon you! Return to me once you find the 'Broken Sword'.",
+   "comment": "legacy_id=61"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_61_Slot_0",
+   "en": "I shall find and return with it.",
+   "comment": "legacy_id=1610"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_62",
+   "en": "Brave dark knight, you've found the 'Broken Sword'! After the unification of the Mu Continent, Muren, the first emperor, broke his sword 'Apocalypse' as a symbol of his wish that no war ever erupts again.",
+   "comment": "legacy_id=62"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_62_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1620"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_63",
+   "en": "After the War, dark knights who wished to become blade knights started seeking the ancient 'Broken Sword' in order to prove their bravery.",
+   "comment": "legacy_id=63"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_63_Slot_0",
+   "en": "That's what happened!",
+   "comment": "legacy_id=1630"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_64",
+   "en": "You've read the 'Scroll of the Emperor', haven't you. Then you must know about the 3 treasures recorded in the 'Scroll of the Emperor'. Go find the crystal 'Tear of Elf' made by the ancient elves with the strength of the spirit.",
+   "comment": "legacy_id=64"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_64_Slot_0",
+   "en": "Please tell me more.",
+   "comment": "legacy_id=1640"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_65",
+   "en": "That place is a very dangerous place and the 'Tear of Elf' is extremely hard to find. But if you find the 'Tear of Elf', new power will be bestowed upon you. Now, go find the 'Tear of Elf' and return to me.",
+   "comment": "legacy_id=65"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_65_Slot_0",
+   "en": " I will go find the 'Tear of Elf'!",
+   "comment": "legacy_id=1650"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_66",
+   "en": "You've found the 'Tear of Elf'! After the War, Lunedil, the elf queen, created the tear stone by casting magic on the spirit stone so that elves could invoke the goddess' power and build their power.",
+   "comment": "legacy_id=66"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_66_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1660"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_67",
+   "en": "You've read the 'Scroll of the Emperor', haven't you. Then you must know about the 3 treasures recorded in it.",
+   "comment": "legacy_id=67"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_67_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1670"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_68",
+   "en": "With your power, I am sure that you will find the 'Soul of Wizard'. Now go find the 'Soul of Wizard' and return to me once you've found it.",
+   "comment": "legacy_id=68"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_68_Slot_0",
+   "en": "I'm going to find the 'Soul of Wizard'.",
+   "comment": "legacy_id=1680"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_69",
+   "en": "I knew you'd find the 'Soul of Wizard'! Etramu, the greatest wizard of Arka, created a soul-protecting magic stone, worried that the weak dark knights might falter at the attack of Kundun.",
+   "comment": "legacy_id=69"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_69_Slot_0",
+   "en": "Please tell me more.",
+   "comment": "legacy_id=1690"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_70",
+   "en": "A dark wizard with this magic stone becomes a soul master.",
+   "comment": "legacy_id=70"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_70_Slot_0",
+   "en": "I am now a soul master!",
+   "comment": "legacy_id=1700"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_71",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 2,000,000 Zen.",
+   "comment": "legacy_id=71"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_71_Slot_0",
+   "en": "I shall return with 2,000,000 Zen.",
+   "comment": "legacy_id=1710"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_72",
+   "en": "New power has been bestowed upon you as a result of your strong will and strength. May the grace of Lugard be with you at all times.",
+   "comment": "legacy_id=72"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_72_Slot_0",
+   "en": "May the grace of God be with you...",
+   "comment": "legacy_id=1720"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_73",
+   "en": "You already possess great power. I do not have an oracle for you.",
+   "comment": "legacy_id=73"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_73_Slot_0",
+   "en": "I will return later.",
+   "comment": "legacy_id=1730"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_74",
+   "en": "Return after you've become stronger.",
+   "comment": "legacy_id=74"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_74_Slot_0",
+   "en": "I shall return when I'm stronger.",
+   "comment": "legacy_id=1740"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_75",
+   "en": "If you've developed into a strong warrior, you will be able to find it.",
+   "comment": "legacy_id=75"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_75_Slot_0",
+   "en": "Please continue.",
+   "comment": "legacy_id=1750"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_76",
+   "en": "From then on, a custom was born where dark knights who wished to become blade knights broke their swords as a symbol of their vow to never wield their swords unjustly.",
+   "comment": "legacy_id=76"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_76_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=1760"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_77",
+   "en": "Some of the adventurous elves have said that they were seen in the Lost Tower, Atlans and Tarkan.",
+   "comment": "legacy_id=77"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_77_Slot_0",
+   "en": "'I will go find it!",
+   "comment": "legacy_id=1770"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_77_Slot_1",
+   "en": "I do not wish to go to such a place.",
+   "comment": "legacy_id=1771"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_78",
+   "en": "This is called the 'Tear of Elf', and the elf that finds this stone becomes a muse elf, able to conjure the power of the elven Goddesses.",
+   "comment": "legacy_id=78"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_78_Slot_0",
+   "en": "I've become a muse elf!",
+   "comment": "legacy_id=1780"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_79",
+   "en": "Since you have found both the 'Scroll of the Emperor' and the 'Broken Sword', you will be called a blade knight from now on.",
+   "comment": "legacy_id=79"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_79_Slot_0",
+   "en": "I've become a Blade Knight!",
+   "comment": "legacy_id=1790"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_80",
+   "en": "After the empire was united, people swore loyalty to the emperor. Some of the treasures offered as a symbol of their loyalty are as follows.",
+   "comment": "legacy_id=80"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_80_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1800"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_80_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1801"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_81",
+   "en": "The 'Tear of Elf' was offered by the elves as a token of their vow to strengthen the power of elves and humans.",
+   "comment": "legacy_id=81"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_81_Slot_0",
+   "en": "Tell me the previous story.",
+   "comment": "legacy_id=1810"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_81_Slot_1",
+   "en": "Please continue.",
+   "comment": "legacy_id=1811"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_82",
+   "en": "Go find the 'Soul of Wizard'. According to the ancient dark wizards, it was last seen around the Lost Tower, Atlans and Tarkan.",
+   "comment": "legacy_id=82"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_82_Slot_0",
+   "en": "I will go find the it",
+   "comment": "legacy_id=1820"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_82_Slot_1",
+   "en": "I will return later.",
+   "comment": "legacy_id=1821"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_90",
+   "en": "You've finished reading the 'Decree of the Emperor'. But do you know about the confidential contract between Muren and Semeden the leader summoner? Muren was promised of one thing instead of transferring Elbe to be under the empire.",
+   "comment": "legacy_id=90"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_90_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=1900"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_91",
+   "en": "The Continent of MU had the gate of a dimension of the world under the supervision of the summoners. And Semeden had given the Abyss of Eye as a token of promise. Please go and bring back the Abyss of Eye.",
+   "comment": "legacy_id=91"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_91_Slot_0",
+   "en": "Accept the request",
+   "comment": "legacy_id=1910"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_91_Slot_1",
+   "en": "Deny the request",
+   "comment": "legacy_id=1911"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_92",
+   "en": "I've heard that the Abyss of Eye was found around Atlance, Lost Tower and Tarkan. Come back with the Abyss of Eye as soon as you find it.",
+   "comment": "legacy_id=92"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_92_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=1920"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_93",
+   "en": "You've found the Abyss of Eye. This has been known as an object composed of the element inexistent in the real world. It's contagious from the world prior to the present, which the memory returns along with it.",
+   "comment": "legacy_id=93"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_93_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=1930"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_94",
+   "en": "Abyss of Eye holds a special meaning for me as I supervise and communicate through the dimensions of this world. If you bring back the Abyss of Eye, I will give you the Blood Summoner title for Semeden the supervisor of your dimension.",
+   "comment": "legacy_id=94"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_94_Slot_0",
+   "en": "Imposition as the Blood Summoner",
+   "comment": "legacy_id=1940"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_100",
+   "en": "The legendary treasure called 'Ring of Glory' is needed to acquire the blessing and strength of Muren. It has manifested its presence once more within our lands. But you are not ready. Wait until you are more experienced.",
+   "comment": "legacy_id=100"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_100_Slot_0",
+   "en": "Then what do I need to do?",
+   "comment": "legacy_id=2000"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_101",
+   "en": "More experience is required to survive this Quest. Return when you have gained up too 220 levels according to the trials of the lost empire.",
+   "comment": "legacy_id=101"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_101_Slot_0",
+   "en": "I will return when my time has come.",
+   "comment": "legacy_id=2010"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_102",
+   "en": "The legendary treasure called 'Ring of Glory' is needed to acquire the blessing and strength of Muren. It has manifested its presence once more within our lands.",
+   "comment": "legacy_id=102"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_102_Slot_0",
+   "en": "I wish to hear more.",
+   "comment": "legacy_id=2020"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_103",
+   "en": "Whoever possesses the 'Ring of Glory' gains the blessing of Muren. It is said to be found in the deserts across the sea.",
+   "comment": "legacy_id=103"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_103_Slot_0",
+   "en": "Why is that?",
+   "comment": "legacy_id=2030"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_104",
+   "en": "The monsters there are quite powerful. They posses the ring.",
+   "comment": "legacy_id=104"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_0",
+   "en": "Please repeat the story.",
+   "comment": "legacy_id=2040"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_1",
+   "en": "I shall try.",
+   "comment": "legacy_id=2041"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_104_Slot_2",
+   "en": "I'm not ready yet.",
+   "comment": "legacy_id=2042"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_105",
+   "en": "The 'Ring of Glory' may be in a place closer than you think. When you acquire it, you will definitely feel a change in your power. But it won't be an easy task.",
+   "comment": "legacy_id=105"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_105_Slot_0",
+   "en": "I will return with it.",
+   "comment": "legacy_id=2050"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_108",
+   "en": "This is indeed the 'Ring of Glory.' It glows with a mystical aura, more so than I imagined. This ring possesses a legend that you cannot even fathom. It is a true blessing in your hands.",
+   "comment": "legacy_id=108"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_108_Slot_0",
+   "en": "I see.",
+   "comment": "legacy_id=2080"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_109",
+   "en": "This ring is said to revive life and grant perpetual youth. But it only works on heroes that possess the power to wield its strength.",
+   "comment": "legacy_id=109"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_109_Slot_0",
+   "en": "Why's that?",
+   "comment": "legacy_id=2090"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_110",
+   "en": "It's because Etramu, the Wizard of Arka, cast a spell in order to prevent the evil from taking advantage of it. But the ring says you are fit for it.",
+   "comment": "legacy_id=110"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_110_Slot_0",
+   "en": "Is that so?",
+   "comment": "legacy_id=2100"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_111",
+   "en": "The 'Ring of Glory' was created when the prophecy Secromicon was created with an imperishable metal. The two have been considered sacred, but the whereabouts became unknown when it was taken during the revolt of the deputy commander Gaion.",
+   "comment": "legacy_id=111"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_111_Slot_0",
+   "en": "Is that so?!",
+   "comment": "legacy_id=2110"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_112",
+   "en": "Now that the 'Ring of Glory' has been found, you will be able to grow even more as a warrior.",
+   "comment": "legacy_id=112"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_112_Slot_0",
+   "en": "I feel my ability increasing!",
+   "comment": "legacy_id=2120"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_113",
+   "en": "You will grow into a being far greater than before. Please use your power for the peace of our empire.",
+   "comment": "legacy_id=113"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_113_Slot_0",
+   "en": "I will.",
+   "comment": "legacy_id=2130"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_114",
+   "en": "You already possess the sacred power.",
+   "comment": "legacy_id=114"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_114_Slot_0",
+   "en": "I will return later.",
+   "comment": "legacy_id=2140"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_115",
+   "en": "The 'Dark Stone' that is said to give warriors new power was found on the continent of Mu. However, you are not ready to use that power. Wait till you are ready.",
+   "comment": "legacy_id=115"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_115_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2150"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_116",
+   "en": "In order to acquire the full power, you need to prepare yourself with the 'Scroll of the Emperor' which records the historical facts of Emperor Muren. Go to 'Sevina' in Devias.",
+   "comment": "legacy_id=116"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_116_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2160"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_117",
+   "en": "You have failed to become a Blade Knight. Return after you have acquired new power through the 'Ring of Glory.",
+   "comment": "legacy_id=117"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_117_Slot_0",
+   "en": "I will return when I am ready.",
+   "comment": "legacy_id=2170"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_118",
+   "en": "You must offer 3,000,000 zen to the Gods to sanctify this quest. Your zen is not enough",
+   "comment": "legacy_id=118"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_118_Slot_0",
+   "en": "I will return with 3,000,000 Zen.",
+   "comment": "legacy_id=2180"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_119",
+   "en": "Your offering to God isn't enough. I will tell you about the oracle if you make an offering of 2,000,000 Zen.",
+   "comment": "legacy_id=119"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_119_Slot_0",
+   "en": "I will return with 2,000,000 Zen",
+   "comment": "legacy_id=2190"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_130",
+   "en": "It indeed is the 'Ring of Glory'. Look at how it shines. This ring contains time and legend that you cannot even begin to fathom. It's a blessing that you have found it!.",
+   "comment": "legacy_id=130"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_130_Slot_0",
+   "en": "I'm surprised to hear that!",
+   "comment": "legacy_id=2300"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_131",
+   "en": "Yes, the ring is said to have the power to bring life to the dead and grant perpetual youth. It will only perform its best when it is in the hands of a true hero that can control the ring's power.",
+   "comment": "legacy_id=131"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_131_Slot_0",
+   "en": "Why is that so?",
+   "comment": "legacy_id=2310"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_132",
+   "en": "It is because Etramu, the Wizard of Arka, put a spell on it so that it doesn't fall into the hands of the wrong people. But it seems as though you are the right person!",
+   "comment": "legacy_id=132"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_132_Slot_0",
+   "en": "Is that so!",
+   "comment": "legacy_id=2320"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_133",
+   "en": "The 'Ring of Glory' was created when the prophecy Secromicon was created with an imperishable metal. The two have been considered sacred, but the whereabouts became unknown when it was taken during the revolt of the deputy commander Gaion.",
+   "comment": "legacy_id=133"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_133_Slot_0",
+   "en": "Is that so!",
+   "comment": "legacy_id=2330"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_134",
+   "en": "Now that the 'Ring of Glory' has been found, you will be able to grow even more as a warrior.",
+   "comment": "legacy_id=134"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_134_Slot_0",
+   "en": "I feel my ability increasing!",
+   "comment": "legacy_id=2340"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_135",
+   "en": "If you would like to acquire new power, listen to me carefully. The 'Dark Stone' that is said to give warriors new power was found on the continent of Mu.",
+   "comment": "legacy_id=135"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_135_Slot_0",
+   "en": "I would like to hear more.",
+   "comment": "legacy_id=2350"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_136",
+   "en": "With the 'Dark Stone', you can master a new ability. It won't be an easy task, but since you were able to acquire the 'Ring of Glory' it might be possible for you.",
+   "comment": "legacy_id=136"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_136_Slot_0",
+   "en": "What do I need to do?",
+   "comment": "legacy_id=2360"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_137",
+   "en": "Rumor has it that you can find the stone in Tarkan and Icarus. Be careful of the monsters. Those monsters that possess the stone will only react to those who have a special ability.",
+   "comment": "legacy_id=137"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_0",
+   "en": "Please repeat the story again.",
+   "comment": "legacy_id=2370"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_1",
+   "en": "Then I shall try!",
+   "comment": "legacy_id=2371"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_137_Slot_2",
+   "en": "I do not feel confident yet.",
+   "comment": "legacy_id=2372"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_138",
+   "en": "The 'Dark Stone' is calling on you right now. With it in hand, you will surely acquire power that you have never felt before, but many other warriors are desperately in search of the stone as well.",
+   "comment": "legacy_id=138"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_138_Slot_0",
+   "en": "I shall return with the 'Dark Stone'.",
+   "comment": "legacy_id=2380"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_139",
+   "en": "So you've found the 'Dark Stone. It is recorded that this stone is the dried up blood of the hero 'Benelope' who fought in the War of the Gods and Satan.",
+   "comment": "legacy_id=139"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_139_Slot_0",
+   "en": "Tell me more.",
+   "comment": "legacy_id=2390"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_140",
+   "en": "Benelope is of a knight descent. After his defeat in the War, he trained for new magic and fighting skills. These skills have been silently initiated to warriors with the blood of a knight in order to fight against the powerful force of Kundun.",
+   "comment": "legacy_id=140"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_140_Slot_0",
+   "en": "So...",
+   "comment": "legacy_id=2400"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_141",
+   "en": "Yes, the blood of a warrior runs through you. Thus, the power of Benelope will be granted to you through the Dark Stone.",
+   "comment": "legacy_id=141"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_141_Slot_0",
+   "en": "I have been granted new power!",
+   "comment": "legacy_id=2410"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_142",
+   "en": "You have acquired new power through the 'Ring of Glory'. But there is something that you don't know.",
+   "comment": "legacy_id=142"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_142_Slot_0",
+   "en": "What is that?",
+   "comment": "legacy_id=2420"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_143",
+   "en": "It is possible that you might be able to acquire new power. The legendary treasure called 'Dark Stone', which was considered sacred along with the 'Ring of Glory', is calling on you.",
+   "comment": "legacy_id=143"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_143_Slot_0",
+   "en": "That is hard to believe!",
+   "comment": "legacy_id=2430"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_144",
+   "en": "Lugard the God of Light has requested a favor of you. However, you're still not qualified. I suggest you come back when you've become stronger.",
+   "comment": "legacy_id=144"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_144_Slot_0",
+   "en": "I'll be back when I'm stronger.",
+   "comment": "legacy_id=2440"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_145",
+   "en": " Lugard the God of Light has requested a favor of you. However, you're still not qualified. Please come back when you've completed the previous quest.",
+   "comment": "legacy_id=145"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_145_Slot_0",
+   "en": "I'll come back when I've completed it.",
+   "comment": "legacy_id=2450"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_146",
+   "en": "You do not have enough Zen. You may apply for this mission by offering 5,000,000 Zen to Lugard.",
+   "comment": "legacy_id=146"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_146_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2460"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_147",
+   "en": " Lugard the God of Light has requested a favor of you.",
+   "comment": "legacy_id=147"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_147_Slot_0",
+   "en": "What is it?",
+   "comment": "legacy_id=2470"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_148",
+   "en": " Lugard has asked you to seek heroes to oppose Balgass' new threat to MU.",
+   "comment": "legacy_id=148"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_148_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2480"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_149",
+   "en": "We understand that Balgass' army's coming against the Continent of MU through the Cry Wolf Fortress, but there has not been an exact interpretation of the whole story.",
+   "comment": "legacy_id=149"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_149_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2490"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_150",
+   "en": "We're trying hard to understand the meaning of Lugar's trust towards us, but we still struggle to due to our inadequate ability.",
+   "comment": "legacy_id=150"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_150_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2500"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_151",
+   "en": "I believe you are the people to offer us help. Are you interested in working with us?",
+   "comment": "legacy_id=151"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2510"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2511"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_151_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2512"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_152",
+   "en": "In order for you to help us, you must oppose Balgass' army. Before you begin, I need to check if you're adequately powerful for the mission.",
+   "comment": "legacy_id=152"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_152_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2520"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_153",
+   "en": "Destroy Death Beam, Hellmaine and Dark Phoenix monsters which dominate over Tarkan, Aida and Icarus and bring back 3 pieces of evidence accordingly.",
+   "comment": "legacy_id=153"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_153_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2530"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_154",
+   "en": "Congratulations, you've completed the duty. Here's a small something for your hard work.",
+   "comment": "legacy_id=154"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_154_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2540"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_155",
+   "en": "Balgass is a great threat as he is since he's in cooperation with Eresia the Queen of Sorcery and has brought such danger into this world",
+   "comment": "legacy_id=155"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_155_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2550"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_156",
+   "en": "We predict that Balgass is attempting a new threat against the Continent of MU with his army of evil sorcery.",
+   "comment": "legacy_id=156"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_156_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2560"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_157",
+   "en": "You don't have enough fund. Please offer 7,000,000 Zen to Lugard to apply for this mission.",
+   "comment": "legacy_id=157"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_157_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2570"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_158",
+   "en": "Welcome, you are truly ready to help us now.",
+   "comment": "legacy_id=158"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_158_Slot_0",
+   "en": "What do you need help with?",
+   "comment": "legacy_id=2580"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_159",
+   "en": "Well, according to our information Balgass has formed a locations called the Barracks. The 12 apostles of Lugard believe that this is a new threat from Balgass.",
+   "comment": "legacy_id=159"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_159_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2590"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_160",
+   "en": "Exact information about the 'Barrack' drives one to enter the Barrack zone to diminish the threat of the further development of Balgass' army.",
+   "comment": "legacy_id=160"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_160_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2600"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_161",
+   "en": "Fortunately Lugar's guardianship could help find the way to enter Balgass' Barrack. Enter the zone, destroy the soldiers and gain accurate information. Will you bring back the proper data accordingly?",
+   "comment": "legacy_id=161"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2610"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2611"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_161_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2612"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_162",
+   "en": "Go to the northern graveyard of Cry Wolf zone and find the soldier refuge from Balgass' Barrack. Lugar's blessing has caused one to have intelligence. He calls himself, Werewolf Guardsman.",
+   "comment": "legacy_id=162"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_162_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2620"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_163",
+   "en": "He will lead you to Balgass' Barrack. Enter the zone and destroy minimum 10 monsters in the Barrack.",
+   "comment": "legacy_id=163"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_163_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2630"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_164",
+   "en": "You've safely completed the duty I appreciate your hard work and the strong will.",
+   "comment": "legacy_id=164"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_164_Slot_0",
+   "en": "Continue talking.",
+   "comment": "legacy_id=2640"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_165",
+   "en": "You have brought great help to build peace to the Continent of MU and Cry Wolf with the information and all the destroyed monsters.",
+   "comment": "legacy_id=165"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_165_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2650"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_166",
+   "en": "You are not qualified yet. Visit Security Guard Mallon, and come back when you are fully qualified for the mission.",
+   "comment": "legacy_id=166"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_166_Slot_0",
+   "en": "Finish the story.",
+   "comment": "legacy_id=2660"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_167",
+   "en": "You don't have enough fund. Please offer 10,000,000 Zen to Lugard to apply for this mission.",
+   "comment": "legacy_id=167"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_167_Slot_0",
+   "en": "I'll come back when I am ready.",
+   "comment": "legacy_id=2670"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_168",
+   "en": "Your initiative courage has shown a great hope to us all.",
+   "comment": "legacy_id=168"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_168_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2680"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_169",
+   "en": "Balgass has hidden himself in a separate place to restore himself from the tiresome body.",
+   "comment": "legacy_id=169"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_169_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2690"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_170",
+   "en": "In order to follow Lugar's entrusted mission, Balgass' exact location must be found and the army in training destroyed.",
+   "comment": "legacy_id=170"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_170_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2700"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_171",
+   "en": "The final mission to follow after Lugar's mission includes a huge and difficult test. Are you still interested?",
+   "comment": "legacy_id=171"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_0",
+   "en": "Listen again.",
+   "comment": "legacy_id=2710"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_1",
+   "en": "Accept the request",
+   "comment": "legacy_id=2711"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_171_Slot_2",
+   "en": "Deny the request",
+   "comment": "legacy_id=2712"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_172",
+   "en": "Enter inside through the door at the northern edge of Balgass' Barrack; We will have the place ready beforehand.",
+   "comment": "legacy_id=172"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_172_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2720"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_173",
+   "en": "Congratulations, you've passed Lugar's final test. And now his blessing will be with you wherever you go.",
+   "comment": "legacy_id=173"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_173_Slot_0",
+   "en": "Continue listening.",
+   "comment": "legacy_id=2730"
+  },
+  {
+   "group": "Dialog",
+   "key": "Text_174",
+   "en": "Your hard work has paid off to keep peace in the Continent of MU and Cry Wolf from Balgass' new threat. I deeply appreciate your help.",
+   "comment": "legacy_id=174"
+  },
+  {
+   "group": "Dialog",
+   "key": "Answer_174_Slot_0",
+   "en": "Finish telling the story",
+   "comment": "legacy_id=2740"
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Spieldaten vorbereiten</string>
+    <string name="preparing_detail">Beim ersten Start werden die Spieldaten in den internen Speicher entpackt. Lass die App geöffnet.</string>
+    <string name="ready">Spiel bereit</string>
+    <string name="start_game">Spielen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="gesture_help">Gesten</string>
+    <string name="retry">Erneut versuchen</string>
+    <string name="extract_failed">Spieldaten konnten nicht vorbereitet werden</string>
+    <string name="save">Speichern</string>
+    <string name="back">Zurück</string>
+    <string name="display">Grafik</string>
+    <string name="controls">Steuerung</string>
+    <string name="network">Server</string>
+    <string name="fps">Bildrate</string>
+    <string name="render_scale">Render-Skalierung</string>
+    <string name="effects">Effektqualität</string>
+    <string name="ui_scale">Größe der Touch-Tasten</string>
+    <string name="safe_margin">Sicherer Rand</string>
+    <string name="touch_opacity">Deckkraft der Touch-Tasten</string>
+    <string name="vibration">Touch- und Kampfvibration</string>
+    <string name="handedness">Bevorzugte Hand</string>
+    <string name="server_address">Serveradresse</string>
+    <string name="server_port">Verbindungsport</string>
+    <string name="local_pairing">Lokale Kopplung ohne Anmeldung (nur LAN)</string>
+    <string name="restart_note">Grafik- und Serveränderungen gelten beim nächsten Betreten des Spiels.</string>
+    <string name="invalid_server">Gib die IPv4-Adresse oder den Hostnamen des Servers ein, ohne Protokoll oder Port.</string>
+    <string name="invalid_local_server">Lokale Kopplung erfordert eine Loopback- oder LAN-IPv4-Adresse, etwa 192.168.1.20. Für Cloud-Server ausschalten.</string>
+    <string name="invalid_port">Der Port muss zwischen 1 und 65535 liegen.</string>
+    <string name="saved">Einstellungen gespeichert</string>
+    <string name="tutorial_title">Mobile Steuerung</string>
+    <string name="tutorial_body">Menüs: Mit einem Finger tippen zum Auswählen oder Bestätigen.\nCharakterwahl: Charakter antippen, dann die Eintrittstaste unten rechts.\n\nNormales Inventar: Antippen zeigt Details; eine halbe Sekunde ruhig halten, um einen nutzbaren Gegenstand zu verwenden oder eine Fertigkeit zu lernen. Zum Verschieben sofort ziehen; Loslassen außerhalb legt den Gegenstand zurück.\nDie vier Trankplätze unten: Antippen zum Verwenden; Halten wiederholt die Aktion nicht.\n\nIn der Spielwelt:\nMit einem Finger im Bewegungsbereich ziehen zum Bewegen.\nIm Fertigkeitsbereich tippen zum Auswählen; doppelt tippen für die aktuelle Fertigkeit.\nMit zwei Fingern nach links oder rechts wischen zum Fertigkeitswechsel.\nMit zwei Fingern nach oben oder unten wischen oder zusammenziehen, um die Kamera anzupassen.\nMit drei Fingern nach oben wischen für die Karte, nach unten für Einstellungen.\n\nDie Trankleiste unten und die Oberfläche lösen keine Welt-Fertigkeiten aus.</string>
+    <string name="understood">Verstanden, spielen</string>
+    <string name="help_close">Schließen</string>
+    <string name="game_data_missing">In der APK fehlt game-data.zip; dies ist kein vollständiges Spielpaket.</string>
+    <string name="storage_low">Nicht genug interner Speicher. Es fehlen mindestens %1$s.</string>
+    <string name="current_display">Aktueller Bildschirm: %1$d × %2$d</string>
+    <string name="max_refresh">Maximale Bildwiederholrate: %1$d Hz. Wähle eine Bildrate von 30 bis %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Bis %1$d Hz (wie Bildschirm)</string>
+    <string name="game_settings">Mobile Einstellungen</string>
+    <string name="open_settings">Einstellungen öffnen</string>
+    <string-array name="effect_labels">
+        <item>Niedrig (flüssiger)</item>
+        <item>Mittel (empfohlen)</item>
+        <item>Hoch (beste Grafik)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Rechte Hand</item>
+        <item>Linke Hand</item>
+    </string-array>
+</resources>

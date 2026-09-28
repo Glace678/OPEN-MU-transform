@@ -1,0 +1,6 @@
+Commoner => 布衣
+Outlaw Warning => 非法警告
+1st Stage Outlaw => 第一阶段亡命之徒
+2nd Stage Outlaw => 第二阶段 亡命之徒
+You cannot enter if you are a 1st Stage Outlaw. => 如果您是第一阶段亡命之徒，则无法进入。
+Players with an Outlaw or Killer status cannot enter this area. => 具有亡命之徒或杀手状态的玩家无法进入该区域。

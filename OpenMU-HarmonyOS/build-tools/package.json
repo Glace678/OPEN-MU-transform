@@ -1,0 +1,7 @@
+{
+  "name": "openmu-harmony-build-checks",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": { "test": "node --test tests/*.test.cjs" },
+  "dependencies": { "json5": "2.2.3" }
+}

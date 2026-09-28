@@ -1,0 +1,93 @@
+# -*- coding: utf-8 -*-
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+import config
+"""Replace 54 untranslated Korean CP949 records in QuestWords_chs.bmd with zh-CN.
+Non-target records stay byte-identical; new text NUL-padded to original length
+when shorter, otherwise grown (variable-length record format)."""
+import sys, os, shutil
+sys.path.insert(0, config.LOC)
+from bmd import read_questwords, write_questwords
+import formats
+
+ELL = '……'
+T = {
+    6006: ELL, 6012: ELL, 6018: ELL, 6024: ELL, 6030: '…', 6036: ELL,
+    6042: ELL, 6048: ELL, 6054: ELL, 6060: ELL, 6066: ELL, 6072: ELL,
+    7001: '仓库管理一直很重要。安全守护者的薪水、各村之间的空间传送，还有天文数字般多的闲置仓库……急需一座新仓库！所以我想出了一条妙计。',
+    7002: '什么办法？',
+    7003: '把古董卖给富翁们赚上一笔。在冒险家眼里不过是不起眼的碎石，在富翁看来却有艺术价值。富翁们就是这样……反正我靠这个赚钱。只要您愿意帮忙，我就允许您使用那座仓库。',
+    7004: '我该怎么帮您呢？',
+    7005: '我会从新仓库中分一个空间给您，请您把古代雕像带来给我，好吗？（50级以上角色）',
+    7006: ELL,
+    7007: '明白了。（接受）',
+    7008: '我现在太忙，没法帮您。（拒绝）',
+    7009: '真遗憾。如果您想扩建仓库，欢迎随时再来找我。（任务已取消）',
+    7010: '在失落之塔7层击败死亡骑士，就有机会获得古代雕像。把古代雕像带来，我就分您一座新仓库。仓库的使用权限将在重新连接后生效。',
+    7011: '您知道平时用的背包是什么做的吗？正是魔法布料。所以冒险家们携带再多沉重的装备也毫无问题。因为作为补给品人人都有，其实它非常珍贵。其实，我有一笔想和您做的交易……',
+    7012: '您说的是什么交易？',
+    7013: '只要有魔法布料，就能把更多物品装进魔法背包。您把魔法布料带来，我就用剩下的布料把您的背包也改大一些，让您能装入更多物品。',
+    7014: '…。',
+    7015: '所以，请您把魔法布料带来给我，好吗？（150级以上角色）',
+    7016: ELL,
+    7017: '明白了。（接受）',
+    7018: '我现在太忙，没法帮您。（拒绝）',
+    7019: '真遗憾。如果您有兴趣，请随时再来找我。（任务已取消）',
+    7020: '在亚特兰蒂斯3层击败银色女武神，就有机会获得魔法布料。虽然不容易获得，但只要魔法背包能够扩大，这番辛苦就值得。请把魔法布料带来。魔法背包将在重新连接后生效。',
+    7021: '您来有什么事？',
+    7022: '有办法让魔法背包变得更大吗？',
+    7023: '想让魔法背包更大吗？虽然不容易，但确实有办法。据说有位法师能用空间布料扩展那些被浪费的空间。',
+    7024: '…',
+    7025: '您愿意去寻找空间布料吗？（300级以上角色）',
+    7026: ELL,
+    7027: '明白了。（接受）',
+    7028: '我现在太忙，没法帮您。（拒绝）',
+    7029: '真遗憾。如果您想扩建仓库，欢迎随时再来找我。（任务已取消）',
+    7030: '在天空之城1层击败阿尔夸莫斯，就有机会获得空间布料。带来空间布料，我就把您的魔法背包再扩大一些。魔法背包的扩展将在重新连接后生效。',
+    7801: '如果您想要扩建仓库，请去找流浪商人齐罗。',
+    7802: '将在失落之塔7层出没的死亡骑士掉落的古代雕像交给流浪商人齐罗，即可获得扩建的仓库。',
+    7803: '如果您想要第1次扩展背包，请去找流浪商人齐罗。',
+    7804: '将在亚特兰蒂斯出没的银色女武神掉落的魔法布料交给流浪商人齐罗，即可获得第1次扩展背包。要确认扩展后的背包，请重新连接。',
+    7805: '如果您想要第2次扩展背包，请去找流浪商人齐罗。',
+    7806: '将在天空之城出没的阿尔夸莫斯掉落的空间布料交给流浪商人齐罗，即可获得第2次扩展背包。要确认扩展后的背包，请重新连接。',
+    7901: '商人公会交易扩建',
+    7902: '魔法布料',
+    7903: '空间布料',
+    20108: ELL,
+    20114: '…。',
+    20120: '…。',
+}
+
+path = os.path.join(formats.CHS, 'QuestWords_chs.bmd')
+recs, total = read_questwords(path)
+by = dict(recs)
+missing = [i for i in T if i not in by]
+assert not missing, f'missing ids: {missing}'
+
+new_recs = []
+changed = {}
+for idx, raw in recs:
+    if idx in T:
+        b = T[idx].encode('utf-8')
+        if len(b) < len(raw):
+            b = b + b'\x00' * (len(raw) - len(b))
+        changed[idx] = b
+        new_recs.append((idx, b))
+    else:
+        new_recs.append((idx, raw))
+
+bak = path + '.bak-zhproof'
+if not os.path.exists(bak):
+    shutil.copy2(path, bak)
+write_questwords(path, new_recs)
+
+# verify
+chk, _ = read_questwords(path)
+assert len(chk) == len(recs), (len(chk), len(recs))
+for (i1, b1), (i2, b2) in zip(recs, chk):
+    assert i1 == i2
+    if i1 in T:
+        assert b2.rstrip(b'\x00').decode('utf-8') == T[i1]
+    else:
+        assert b1 == b2, f'untouched record {i1} changed!'
+print(f'OK: {len(changed)} records translated, {len(recs)} total, others byte-identical')

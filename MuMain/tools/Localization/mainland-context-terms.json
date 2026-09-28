@@ -1,0 +1,200 @@
+{
+  "Rules": [
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)party",
+      "Replacements": {
+        "党员": "队员",
+        "派对": "队伍",
+        "聚会": "队伍",
+        "政党": "队伍",
+        "小队": "队伍",
+        "党战": "队伍战"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)guild",
+      "Replacements": {
+        "战盟会长": "战盟盟主",
+        "战盟大师": "战盟盟主",
+        "战盟长": "战盟盟主",
+        "助理会长": "副盟主",
+        "战盟联盟": "联合战盟",
+        "联盟战盟": "联合战盟",
+        "战盟会员": "战盟成员",
+        "战盟标记": "战盟标识",
+        "战盟评分": "战盟积分",
+        "战盟金库": "战盟仓库",
+        "行会": "战盟",
+        "公会": "战盟",
+        "城堡围攻": "攻城战"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)inventory",
+      "Replacements": {
+        "库存": "背包",
+        "存货": "背包",
+        "扩大背包": "扩展背包",
+        "扩充的背包": "扩展背包"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)vault",
+      "Replacements": {
+        "战盟金库": "战盟仓库",
+        "保管库": "仓库",
+        "保险库": "仓库",
+        "金库": "仓库",
+        "库日志": "仓库日志"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)(?<![A-Za-z])zen(?:s)?(?![A-Za-z])",
+      "Replacements": {
+        "禅宗": "金币",
+        "禅意": "金币",
+        "禅": "金币",
+        "Zen": "金币",
+        "zen(s)": "金币",
+        "zens": "金币",
+        "zen": "金币"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)(^rena|[^a-z]rena)",
+      "Replacements": {
+        "蕾娜": "瑞纳",
+        "瑞娜": "瑞纳",
+        "雷纳": "瑞纳",
+        "Rena": "瑞纳"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)item",
+      "Replacements": {
+        "项目": "道具"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)fruit",
+      "Replacements": {
+        "水果": "果实"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)warp",
+      "Replacements": {
+        "扭曲": "传送"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)gens",
+      "Replacements": {
+        "Gens": "家族",
+        "氏族": "家族",
+        "世代": "家族",
+        "联盟大师": "联合战盟盟主",
+        "会长": "战盟盟主"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)pentagram",
+      "Replacements": {
+        "五角星工程": "元素之魂",
+        "五角星计划": "元素之魂",
+        "五角星物品": "元素之魂",
+        "五角星": "元素之魂",
+        "Pentagram": "元素之魂",
+        "贸易": "交易"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)(maya|nightmare)",
+      "Replacements": {
+        "Nightmare": "咒怨魔王",
+        "Maya": "玛雅",
+        "梦魇": "咒怨魔王",
+        "玛雅人": "玛雅之手"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)(dynorant|dinorant)",
+      "Replacements": {
+        "Dynorant": "彩云兽",
+        "Dinorant": "彩云兽"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)secromicon",
+      "Replacements": {
+        "Complete Secromicon": "完整的西克罗米康",
+        "Secromicon": "西克罗米康"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)killcount",
+      "Replacements": {
+        "KillCount": "击杀数"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)acheron",
+      "Replacements": {
+        "Acheron": "阿卡伦",
+        "黄泉": "阿卡伦",
+        "精神地图": "精灵地图"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)errtel",
+      "Replacements": {
+        "Errtels": "艾尔特",
+        "Errtel": "艾尔特",
+        "艾尔泰尔": "艾尔特",
+        "艾尔特尔": "艾尔特",
+        "埃特尔": "艾尔特",
+        "清单": "列表",
+        "排名上升": "升阶",
+        "排名": "阶级",
+        "等级升级": "等级强化",
+        "组合": "合成"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)crywolf",
+      "Replacements": {
+        "Crywolf": "狼魂要塞",
+        "冷狼要塞": "狼魂要塞"
+      }
+    },
+    {
+      "Group": "Game",
+      "KeyPattern": "(?i)battle soccer",
+      "Replacements": {
+        "Mutizen 之战足球": "战盟足球赛",
+        "足球对战": "战盟足球赛",
+        "足球大战": "战盟足球赛",
+        "对战足球": "战盟足球赛",
+        "Battle Soccer for Mutizen": "战盟足球赛"
+      }
+    }
+  ]
+}

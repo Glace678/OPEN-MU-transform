@@ -1,0 +1,640 @@
+### 1893 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 15-80, Advanced character: Level 10-60)
+### 1894 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 181-230, Advanced character: Level 161-210)
+### 1895 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 231-280, Advanced character: Level 211-260)
+### 1896 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 281-330, Advanced character: Level 261-310)
+### 1897 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 331-400, Advanced character: Level 311-400)
+### 1898 | budget=4096 | questwords
+It seems you have mighty warriors who are willing to fight at your side. Facing the challenges of Blood Castle together will certainly strengthen your bond with your comrades. Will you return to Blood Castle and carry out another quest of Archangel? (Basic character: Level 81-130, Advanced character: Level 61-110)
+### 1899 | budget=4096 | questwords
+It shouldn't be too difficult for you to train in Chaos Castle. I have a quest for you. One through which you can earn the items you'll need in Chaos Castle.... Will you accept? (Basic character: Level 180-239, Advanced character: Level 160-219)
+### 1900 | budget=4096 | questwords
+It sounds like an easy job...
+### 1901 | budget=4096 | questwords
+It won't take up too much of your time. I'll simply explain basic controls and hunting techniques.;Are you sure you don't want our help?
+### 1902 | budget=4096 | questwords
+It wouldn't be easy to attack Gaion hiding in Varka. You'd better eliminate Raymond and Erkanne first to weaken his power. Without these two Gaion will not be as invincible. Go to Varka, kill Raymond and Erkanne and come back to me to get the reward from the guild.
+### 1903 | budget=4096 | questwords
+It's becoming more and more difficult. I accept the mission. (Accept)
+### 1904 | budget=4096 | questwords
+It's easier than anticipated.
+### 1905 | budget=4096 | questwords
+It's fighting spirit this time? I accept the mission. (Accept)
+### 1906 | budget=4096 | questwords
+It's nice to meet you.;May I ask who you are?
+### 1907 | budget=4096 | questwords
+It's possible to find out the location of myself and others using coordinates? Amazing!
+### 1908 | budget=4096 | questwords
+It's the quartermaster unit's job. (Refuse)
+### 1909 | budget=4096 | questwords
+It's time for you to test your limits at Chaos Castle. Go see the Shadow Phantom Soldier, test your limitations, and then take the Chaos Castle challenge.
+### 1910 | budget=4096 | questwords
+It's too late to pull out now....
+### 1911 | budget=4096 | questwords
+It's very easy to enter Blood Castle. The battle event takes place every two hours from 12:30am and on. To enter, take an Invisibility Cloak that's right for your level to the Messenger of Archangel in Devias, five minutes before a Blood Castle event commences and ask to join. The Messenger of Archangel will then send you to the castle.
+### 1912 | budget=4096 | questwords
+It's very easy to enter Chaos Castle. Simply right-click on your Armor of Guardsman at the appropriate times (12:00am, 14:00pm, 16:00pm, 18:00pm, 20:00pm, and 22:00pm) to enter. Players in designated locations, such as a PC cafe, will have more opportunities to enter.
+### 1913 | budget=4096 | questwords
+It's very easy to enter Devil Square. It can be entered every four hours from 3:00 a.m. and on (3:00 a.m., 7:00 a.m., 11:00 a.m., 3:00 p.m., 7:00 p.m., and 11:00 p.m.). To enter, take a Devil's Invitation that's right for your level to Charon in Noria five minutes before a scheduled entry time and ask to join. Charon will then send you to Devil Square.
+### 1914 | budget=4096 | questwords
+It's very easy to enter Illusion Temple. It can be entered every four hours from 01:00 a.m. and on: 01:00 a.m., 05:00 a.m., 09:00 a.m., 01:00 p.m., 05:00 p.m., and 09:00 p.m. To enter, take a Scroll of Blood that's right for your level to Mirage in Elveland five minutes before an Illusion Temple event commences and ask to join. Mirage will then send you to the temple.
+### 1944 | budget=4096 | questwords
+Join Gens Duprian.
+### 1945 | budget=4096 | questwords
+Join Gens Vanert.
+### 1946 | budget=4096 | questwords
+Just say the word!
+### 1963 | budget=4096 | questwords
+Keeping the peace of the hero
+### 1977 | budget=4096 | questwords
+Kundun's Royal Guards, however, continue to attack the barrier, and are weakening it. We need Archangel's weapon in order to prevent this weakening of the barrier, and that's why we are now seeking the help of travelers.
+### 1978 | budget=4096 | questwords
+Kundun, however, must've anticipated such a move. He hid beyond the range of the barrier and eliminated the Twelve Saints as soon as the barrier was formed. Luckily, Archangel evaded that peril and sacrificed himself for the barrier.
+### 1979 | budget=4096 | questwords
+Kundun… He's a hard target…
+### 1982 | budget=4096 | questwords
+Ladies' appetite for collecting
+### 2013 | budget=4096 | questwords
+Leave Gens Duprian.
+### 2014 | budget=4096 | questwords
+Leave Gens Vanert.
+### 2033 | budget=4096 | questwords
+Let me give it a go. (Accept)
+### 2034 | budget=4096 | questwords
+Let me give you a Dark Knight weapon to use so that you can understand better.
+### 2035 | budget=4096 | questwords
+Let me give you a Dark Wizard's scroll to use so that you can understand better.
+### 2036 | budget=4096 | questwords
+Let me give you a Summoner's scroll to use so that you can understand better.
+### 2037 | budget=4096 | questwords
+Let me give you an Agility Elf weapon to use so that you can understand how skills work better.
+### 2038 | budget=4096 | questwords
+Let me give you an Energy Elf's orb to use so that you can understand how skills work better.
+### 2039 | budget=4096 | questwords
+Let's get you some real combat experience.
+### 2040 | budget=4096 | questwords
+Let's hear it.
+### 2041 | budget=4096 | questwords
+Let's start with something simple.;Close your quest window and either press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.
+### 2043 | budget=4096 | questwords
+Level 10 and 2,000 Zens
+### 2044 | budget=4096 | questwords
+Level 30
+### 2045 | budget=4096 | questwords
+Level 30 and 3000 Zens
+### 2046 | budget=4096 | questwords
+Level 50
+### 2047 | budget=4096 | questwords
+Level 50 and 4000 Zens
+### 2048 | budget=4096 | questwords
+Level 75
+### 2049 | budget=4096 | questwords
+Leveling up will earn you points. These points can be used to enhance your strength, agility, stamina, and energy and thereby affect your damage, defense, HP, and MP levels, respectively.;Carefully use these points, for how you develop your character will determine its combat characteristics and the types of weapons and skills it can use.
+### 2085 | budget=4096 | questwords
+Look at the right side of your screen. Do you see the apples you just bought? Adding a potion to the Inventory will automatically register it.;Press the Q button to use apples, potions, and other HP recovery items and the W button to use MP recovery items.
+### 2104 | budget=4096 | questwords
+Loud and clear! Give me the next quest!
+### 2117 | budget=4096 | questwords
+Lurkers in the Dark
+### 2141 | budget=4096 | questwords
+Many of the monsters that attacked our barrier have been dealt with, but their superiors are now physically attacking the barrier. Will you eliminate these monsters for us? (Level 200-209)
+### 2142 | budget=4096 | questwords
+Many travelers are disappearing from the Swamp of Peace because of Shadow Knights. Go to the Swamp of Peace and defeat 140 Shadow Knights. Come see me once that's done to receive a Devil's Invitation + 7 as a reward. They are strong foes, and you should hunt them with the help of others.
+### 2181 | budget=4096 | questwords
+May I help you? My collection is much more diverse than the ordinary merchants. That's the secret of my success, haha.
+### 2182 | budget=4096 | questwords
+May the glory be with you… Good job. It must be the enemy clan who's controlling these Hero monsters. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)
+### 2183 | budget=4096 | questwords
+May the glory be with you… Good job. We found an evidence of the enemy clan from the investigation. We need to attack them in revenge immediately. Will you take this job? (Lv. 350 - 400)
+### 2184 | budget=4096 | questwords
+May the grace of Lugard be with you… This is the entrance to the Underwater Temple. Kundun's army is captivated in this temple by the sealed stone.
+### 2193 | budget=4096 | questwords
+Mega Crusts in Icarus are causing great harm to travelers. Go to Icarus and defeat 80 Mega Crusts. Come see me when that's done to receive an Invisibility Cloak + 4 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 2194 | budget=4096 | questwords
+Mega Crusts who rank higher than Alquamoses, are planning something in Icarus. Whatever they are planning, it will likely harm our reconnaissance party. Will you help eliminate more of these Mega Crusts? (Level 250-254)
+### 2195 | budget=4096 | questwords
+Members of our reconnaissance party continue to lose their lives to Iron Wheels. Will you help eliminate more of these Iron Wheels? (Level 240-244)
+### 2196 | budget=4096 | questwords
+Members of our reconnaissance party continue to lose their lives to the slashes of Bloody Wolves. Will you help eliminate more of these Bloody Wolves? (Level 235-239)
+### 2198 | budget=4096 | questwords
+Mercenary Guild Office?
+### 2199 | budget=4096 | questwords
+Mercenary's request varies depending on the day of the week. Please check the location and task before you start. (Lv. 350 - 400)
+### 2232 | budget=4096 | questwords
+Monster Supply Route in Devias!
+### 2235 | budget=4096 | questwords
+Monster hunting is my specialty....
+### 2237 | budget=4096 | questwords
+Monsters are continuing to hamper advancement into Icarus. Go meet with the Shadow Phantom Soldier.
+### 2238 | budget=4096 | questwords
+Monsters are posing a threat to the safe zone once again. Go meet with the Shadow Phantom Soldier.
+### 2239 | budget=4096 | questwords
+Monsters are still trying to mobilize and set a blockade on the path to Icarus. Will you help eliminate more of these monsters? (Level 220-229)
+### 2240 | budget=4096 | questwords
+Monsters are taking over the Dungeon in Lorencia once again. Our reconnaissance party is too busy dealing with monsters and can't make prompt reports. I wish to ask for your help with this matter. Will you accept this quest? (Level 91-100)
+### 2241 | budget=4096 | questwords
+Monsters have started attacking the soldiers again. Go meet with the Shadow Phantom Soldier.
+### 2242 | budget=4096 | questwords
+Monsters, however, continued to spawn at regular intervals from the spot where the tree once stood. After careful consideration, the queen of the Elves decided to make a training arena of this place for travelers.
+### 2247 | budget=4096 | questwords
+Much of the evil energy from the Lost Tower has subsided, but the guardians at the tower are struggling to cope with a sudden increase in monsters. I have a quest that will help them. Will you accept this quest? (Level 190-193)
+### 2254 | budget=4096 | questwords
+My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the Elf queen. I am happy to make your acquaintance.
+### 2256 | budget=4096 | questwords
+NPC dialog script error!
+### 2261 | budget=4096 | questwords
+New request for you hasn't been delivered yet. You can start a new request after 24 hours since a request has been cleared. Please come back after that.
+### 2264 | budget=4096 | questwords
+No more. Going any further is beyond me. (Refuse)
+### 2266 | budget=4096 | questwords
+No, I don't want to. (Refuse)
+### 2267 | budget=4096 | questwords
+No, I need some rest first. (Refuse)
+### 2268 | budget=4096 | questwords
+No. I will give it more thought.
+### 2270 | budget=4096 | questwords
+Not at all. It's only natural to work for the clan. (Accept)
+### 2275 | budget=4096 | questwords
+Now that the defense of the supply route has weakened, it's time to stir up the enemy's command structure a bit more. I'd like to ask you to defeat the high-ranking monsters that control those in charge of the supply route. Will you accept this quest? (Level 46-55)
+### 2276 | budget=4096 | questwords
+Now, press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.
+### 2278 | budget=4096 | questwords
+Obtain 10 Clubs from Burnt Murderers in Vulcanus and bring them to Zyro to get the reward.
+### 2279 | budget=4096 | questwords
+Obtain 10 Kalt Stones from Witch Queens in Aida and bring them to Zyro to get the reward.
+### 2280 | budget=4096 | questwords
+Obtain 20 suits of Tantalos's Armor from Tantaloses in Tarkan 2 and then go back to Zyro to get the reward.
+### 2281 | budget=4096 | questwords
+Obtain rare jewels
+### 2283 | budget=4096 | questwords
+Of course I did.
+### 2284 | budget=4096 | questwords
+Of course I know. What's the next quest?
+### 2285 | budget=4096 | questwords
+Of course I'm up for hunting down monsters....
+### 2286 | budget=4096 | questwords
+Of course. I gladly accept Archangel's quest.
+### 2287 | budget=4096 | questwords
+Of course...
+### 2289 | budget=4096 | questwords
+Oh! Thanks to your bravery, we were able to crush those good-for-nothing Duprians once again. This is a reward bestowed to you by Vanert Reicht himself for your contributions in battle. I hope to see you in action once again next month.
+### 2290 | budget=4096 | questwords
+Oh! That will surely come in handy!
+### 2291 | budget=4096 | questwords
+Oh! You wish to become a member of Gens Duprian? Share our virtues of honor and respect, and help in the fight to crush the greed of Gens Vanert and find the stone that will seal away Kundun.
+### 2292 | budget=4096 | questwords
+Oh, I didn't recognize how strong you are and gave you a wrong request. Would you give me back the Lv. 1 Letter of Request?
+### 2293 | budget=4096 | questwords
+Oh, I haven't introduced myself yet. My name is Olga. My fellow comrades from the Shadow Phantom Guardians and I serve Erin Gustiv, the queen of Noria.
+### 2294 | budget=4096 | questwords
+Oh, already gone...
+### 2295 | budget=4096 | questwords
+Oh, there are different requests depending on the day of the week.
+### 2296 | budget=4096 | questwords
+Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Crystal Sword (Attack power +12). I will reward you when you bring me the sword.
+### 2297 | budget=4096 | questwords
+Oh, this is a request from the Shadow Phantom unit in Icarus asking for help repelling Alquamoses and finding the training material for recruits. Go to Icarus, kill 20 Alquamoses and find 1 Sword of Destruction (Attack power +12). I will reward you when you bring me the sword.
+### 2298 | budget=4096 | questwords
+Oh, this is a request from the Shadow Phantom unit in Kanturu Ruins asking for help repelling Splinter Wolves and finding the training material for recruits. Kill 20 Splinter Wolves and find 1 Ancient Stick (Wizardry damage +12). I will reward you when you bring me the stick.
+### 2299 | budget=4096 | questwords
+Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 1 Staff of Resurrection (Wizardry damage +12). I will reward you when you bring me the staff.
+### 2300 | budget=4096 | questwords
+Oh, this is a request from the Shadow Phantom unit in Tarkan Desert asking for help repelling Mutants and finding the training material for recruits. Go to Tarkan, kill 20 Mutants and find 10 Unirias. I will reward you when you bring me the Unirias.
+### 2301 | budget=4096 | questwords
+Ok, I will head for Aida at once. (Accept)
+### 2302 | budget=4096 | questwords
+Ok, I will take care of him right away. (Accept)
+### 2303 | budget=4096 | questwords
+Ok, I'll give it a try. (Accept)
+### 2304 | budget=4096 | questwords
+Ok, I'll try it. (Accept)
+### 2305 | budget=4096 | questwords
+Ok, I'm ready. (Accept)
+### 2310 | budget=4096 | questwords
+One of the places our reconnaissance party hasn't been able to reach is the Tarkan desert. The reasons behind their failure include the harsh environment and most importantly the monsters known as Mutants. Will you eliminate these Mutants to allow our reconnaissance party to advance? (Level 230-234)
+### 2339 | budget=4096 | questwords
+Our continued assault on the Dungeon has secured a somewhat secure entryway. However, there are still monsters hindering the efforts of our reconnaissance party. Will you accept this quest? (Level 141-160)
+### 2340 | budget=4096 | questwords
+Our entry into the Floating Castle has been hampered mostly by Queen Rainiers. It appears Queen Rainiers are controlling Mega Crusts and Alquamoses from behind the scenes. I wish to ask for your help in eliminating these Queen Rainiers. Will you accept? (Level 255-259)
+### 2341 | budget=4096 | questwords
+Our forces in Kanturu Ruins are under attack. Eliminate 50 Splinter Wolves and return to me for a reward.
+### 2342 | budget=4096 | questwords
+Our reconnaissance party reports of severe resistance from monsters at Dungeon Level 2. I'd like to ask you to do away with these monsters. Will you accept this quest? (Level 111-120)
+### 2343 | budget=4096 | questwords
+Our reconnaissance party reports that some low-ranking monsters are causing quite a headache for them. I wish to ask for your help in eliminating these monsters. Will you accept this quest? (Level 161-165)
+### 2344 | budget=4096 | questwords
+Our reconnaissance party reports that stolen supplies are being sent to Kundun's army. Please defeat the monsters controlling these plunderers while we ascertain the location of the supply route. Will you accept this quest? (Level 26-35)
+### 2345 | budget=4096 | questwords
+Our reconnaissance party reports the Army of Darkness formed by Gorgons has lost much of its might. This is the moment you've carried out all these quests for. It's now time to strike the final blow against the Army of Darkness. Will you accept this quest? (Level 141-160)
+### 2346 | budget=4096 | questwords
+Outside Devias, you'll encounter white monsters known as Worms. Defeat 25 Worms and return to me for a reward.
+### 2356 | budget=4096 | questwords
+Packs of Iron Wheels often attack travelers in Tarkan. Go to Tarkan and hunt down 100 Iron Wheels. Come see me afterwards to receive a Devil's Invitation + 4 as a reward. They are strong foes, and you should hunt them with the help of others.
+### 2371 | budget=4096 | questwords
+Party request?
+### 2398 | budget=4096 | questwords
+Phantom Knights in Icarus are causing great harm to travelers there. Go to Icarus and hunt down 100 Phantom Knights. Come see me when that's done to receive an Invisibility Cloak + 6 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 2429 | budget=4096 | questwords
+Plunderers are too much for me to handle. (Refuse)
+### 2430 | budget=4096 | questwords
+Plunderers...
+### 2432 | budget=4096 | questwords
+Points and Status
+### 2433 | budget=4096 | questwords
+Points gained from leveling up can be used to enhance your strength, agility, stamina, and energy, and thereby affect your damage, defense, HP, and MP levels, respectively.
+### 2462 | budget=4096 | questwords
+Press C or click on the Character (C) button located on the bottom right of your screen to launch the Character Stats window.
+### 2463 | budget=4096 | questwords
+Press D and select Trade or type in '/exchange' in the Chat window.
+### 2464 | budget=4096 | questwords
+Press D and select Trade or type in '/invite' in the Chat window.
+### 2465 | budget=4096 | questwords
+Press D and select Trade or type in '/trade' in the Chat window.
+### 2468 | budget=4096 | questwords
+Press the I button or click on the Inventory (I/V) button located on the bottom right to open your Inventory window.
+### 2469 | budget=4096 | questwords
+Press the Q button to use apples, potions, and other HP recovery items, and the W button to use MP recovery items.
+### 2470 | budget=4096 | questwords
+Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.
+### 2472 | budget=4096 | questwords
+Prevent the Vepars from interrupting with the expedition. Defeat 50 of them, and I'll give you a reward.
+### 2474 | budget=4096 | questwords
+Progress of the business
+### 2475 | budget=4096 | questwords
+Proof of Fellowship (1)
+### 2476 | budget=4096 | questwords
+Proof of Fellowship (2)
+### 2477 | budget=4096 | questwords
+Proof of Fellowship (3)
+### 2478 | budget=4096 | questwords
+Proof of Fellowship (4)
+### 2479 | budget=4096 | questwords
+Proof of Fellowship (5)
+### 2480 | budget=4096 | questwords
+Proof of Fellowship (6)
+### 2482 | budget=4096 | questwords
+Proving One's Worth (1)
+### 2483 | budget=4096 | questwords
+Proving One's Worth (2)
+### 2484 | budget=4096 | questwords
+Proving One's Worth (3)
+### 2485 | budget=4096 | questwords
+Proving One's Worth (4)
+### 2486 | budget=4096 | questwords
+Proving One's Worth (5)
+### 2489 | budget=4096 | questwords
+Purchase and bring back 1 Town Portal Scroll.
+### 2490 | budget=4096 | questwords
+Purchase and bring back 5 apples from a merchant.
+### 2493 | budget=4096 | questwords
+Put 500,000 Zen as deposit and I will offer you a Letter of Request came to the mercenary guild. Each request has its level and difficulty. Right click on the Letter of Request to check the information. Please note that you need to press (T) and click 'Start Quest' button at the bottom to check the information again once you close the information window. Do you want to take a Letter of Request? (Lv. 350 - 400)
+### 2494 | budget=4096 | questwords
+Put a stop to the plundering by eliminating 50 Silver Valkyries. After that, return to me for a reward.
+### 2495 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (1)
+### 2496 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (2)
+### 2497 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (3)
+### 2498 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (4)
+### 2499 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (5)
+### 2500 | budget=4096 | questwords
+Put the Lost Tower to Sleep! (6)
+### 2501 | budget=4096 | questwords
+Put the past behind
+### 2512 | budget=4096 | questwords
+Queen Rainiers in Icarus should suffice. Go to Icarus and defeat 100 Queen Rainiers. Come see me after that, and I will give you a choice between 10 Large SD Potions and 30 Complex Potions as your reward. When you claim you rewards, make sure you have at least 10 empty slots in your Inventory. Remember that.
+### 2513 | budget=4096 | questwords
+Quick, on to the next step!
+### 2514 | budget=4096 | questwords
+Rage of Vepars
+### 2562 | budget=4096 | questwords
+Rebels of the Forest
+### 2563 | budget=4096 | questwords
+Receive damage and defense increase buff.
+### 2564 | budget=4096 | questwords
+Receiving Lv. 1 Letter of Request
+### 2565 | budget=4096 | questwords
+Recent report from the Shadow Phantom unit in Kanturu Ruins has it that Splinter Wolves and Blade Hunters are making surprise attack on them frequently. Go to Kanturu Ruins, kill 20 Splinter Wolves and 10 Blade Hunters. I will reward you when you come back and report me.
+### 2566 | budget=4096 | questwords
+Recent report from the Shadow Phantom unit in Tarkan Desert has it that Mutants and Tantaloses are creating mayhem there. Go to Tarkan and kill 20 Mutants and 20 Tataloses. I will reward you when you come back and report me.
+### 2567 | budget=4096 | questwords
+Recently the Shadow Phantom unit in Kanturu Ruins has been raided by Splinter Wolves and Satyroses. Go to Kanturu Ruins, kill 20 Splinter Wolves and 20 Satyroses. I will reward you when you come back and report me.
+### 2568 | budget=4096 | questwords
+Recently the Shadow Phantom unit in Kanturu Ruins is frequently raided by Splinter Wolves and Kentauroses. Go to Kanturu Ruins and kill 20 Splinter Wolves and 5 Kentauroses. I will reward you when you come back and report me.
+### 2569 | budget=4096 | questwords
+Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by Mutants and Beam Knights. Go to Tarkan and kill 20 Mutants and 10 Beam Knights. I will reward you when you come back and report me.
+### 2570 | budget=4096 | questwords
+Recently the Shadow Phantom unit in Tarkan Desert is frequently attacked by the Iron Wheels. Go to Tarkan and kill 30 Iron Wheels. I will reward you when you come back and report me.
+### 2571 | budget=4096 | questwords
+Recognition as a hero...
+### 2572 | budget=4096 | questwords
+Reconnaissance Party's Mission (1)
+### 2573 | budget=4096 | questwords
+Reconnaissance Party's Mission (2)
+### 2574 | budget=4096 | questwords
+Reconnaissance Party's Mission (3)
+### 2575 | budget=4096 | questwords
+Reconnaissance Party's Mission (4)
+### 2613 | budget=4096 | questwords
+Regrettably, you are not eligible for a reward. Please try harder next time.
+### 2619 | budget=4096 | questwords
+Request from Kalima; Location: Kalima 6; Task: Talk to Priestess Beina in the Underwater Temple; Reward: Random, Red Box; Note: Drop Lost Map +6 on the ground to enter Kalima
+### 2620 | budget=4096 | questwords
+Request from Merchant Zyro; Location: in every town; Task: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.
+### 2621 | budget=4096 | questwords
+Request from Merchant Zyro; Region: can be found in every town; Mission: Talk to General Goods Merchant Zyro; Reward: Random, Green Box; Note: General Goods Merchant Zyro goes round Noria, Elveland, Lorencia and Devias and sell things.
+### 2622 | budget=4096 | questwords
+Request from Shadow Phantom unit (1)
+### 2623 | budget=4096 | questwords
+Request from Shadow Phantom unit (2)
+### 2624 | budget=4096 | questwords
+Request from Shadow Phantom unit (3)
+### 2625 | budget=4096 | questwords
+Request from mercenary guild; Location: Devias mercenary guild; Task: Talk to Mercenary Guild Manager Tercia; Reward: Random, Red Box, Purple box; Note: The elders of the guild are real old fossils..
+### 2626 | budget=4096 | questwords
+Request from the Gens Steward; Location: Gens Duprian- Lorencia, Gens Banert- Noria; Task: Talk to the Gens Steward; Reward: Random, Purple Box; Note: If you haven't joined the Gens yet, choose one and join now to proceed.
+### 2627 | budget=4096 | questwords
+Request from the Underwater Temple
+### 2628 | budget=4096 | questwords
+Request from the mercenary guild
+### 2629 | budget=4096 | questwords
+Request from the mercenary guild. Find Tercia.
+### 2630 | budget=4096 | questwords
+Request from the merchant Zyro
+### 2631 | budget=4096 | questwords
+Request from the priestess
+### 2632 | budget=4096 | questwords
+Request information invalid; Location: none; Task: none; Reward: none; Note: Go back to Mercenary Guild Manager Tercia in Devias.
+### 2633 | budget=4096 | questwords
+Request of Elveland's Elder!
+### 2831 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 10 Spiders.
+### 2832 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Agons.
+### 2833 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Balrogs.
+### 2834 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Giants.
+### 2835 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Gorgons.
+### 2836 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Liches.
+### 2837 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 15 Polluted Butterflies.
+### 2838 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 20 Giants.
+### 2839 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 20 Polluted Butterflies.
+### 2840 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 20 Skeleton Warriors.
+### 2841 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 20 Stone Golems.
+### 2842 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 25 Ice Monsters.
+### 2843 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 25 Worms.
+### 2844 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 3 Ice Queens.
+### 2845 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 30 Assassins.
+### 2846 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 30 Hommerds.
+### 2847 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 30 Ice Monsters.
+### 2848 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 30 Yetis.
+### 2849 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 40 Cyclopses.
+### 2850 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 40 Larvae.
+### 2851 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Captain Grizzlies.
+### 2852 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Cursed Liches.
+### 2853 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Cursed Wizards.
+### 2854 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Cyclopses.
+### 2855 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Dark Knights.
+### 2856 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Death Cows.
+### 2857 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Death Knights.
+### 2858 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Devils.
+### 2859 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Grizzlies.
+### 2860 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Hell Hounds.
+### 2861 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Hell Spiders.
+### 2862 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Poison Bull Fighters.
+### 2863 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Poison Shadows.
+### 2864 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Shadows.
+### 2865 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Skeleton Archers.
+### 2866 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Thunder Liches.
+### 2867 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 50 Totem Golems.
+### 2868 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Bloody Wolves.
+### 2869 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Death Gorgons.
+### 2870 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Death Knights.
+### 2871 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Devils.
+### 2872 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Iron Wheels.
+### 2873 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 60 Mutants.
+### 2874 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 80 Alquamoses.
+### 2875 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 80 Mega Crusts.
+### 2876 | budget=4096 | questwords
+Return to the Shadow Phantom Soldier after defeating 80 Queen Rainiers.
+### 2883 | budget=4096 | questwords
+Ring of Hero? Ring of Warrior? What are they?
+### 2888 | budget=4096 | questwords
+Road to Floating Castle (1)
+### 2889 | budget=4096 | questwords
+Road to Floating Castle (2)
+### 2890 | budget=4096 | questwords
+Road to Floating Castle (3)
+### 2986 | budget=4096 | questwords
+Scrolls can be purchased from Pasi the Mage (119,112) in Lorencia and Marce (36,218) in Elveland.
+### 3000 | budget=4096 | questwords
+Secure war supplies (1)
+### 3001 | budget=4096 | questwords
+Secure war supplies (2)
+### 3016 | budget=4096 | questwords
+Select a quest.
+### 3038 | budget=4096 | questwords
+Shadow Pawns from the Swamp of Peace should suffice. Go to the Swamp of Peace and defeat 100 Shadow Pawns. Come see me after that, and I will give you a choice between 30 Large SD Potions and 45 Large Complex Potions as your reward. When you claim your reward, make sure you have at least 30 empty slots in your Inventory. Remember that.
+### 3041 | budget=4096 | questwords
+Shadow Phantom unit reported that the Watchers of Kundun are short of some important supplies. I'm giving a quest with a handsome reward to those who bring me the supply for the Watchers. Are you interested? (Level 290-319)
+### 3042 | budget=4096 | questwords
+Shadow of Evil
+### 3055 | budget=4096 | questwords
+Show Lv. 1 Request Completion Certificate to Mercenary Guild Manager Tercia.
+### 3070 | budget=4096 | questwords
+Silver Valkyries are regularly plundering supplies for our search party at Atlans. Would you mind getting rid of these Silver Valkyries for us?
+### 3072 | budget=4096 | questwords
+Since you now have potions, would you like to leave the safe zone and do some real hunting? Are you ready?
+### 3073 | budget=4096 | questwords
+Situation at the Dungeon (1)
+### 3074 | budget=4096 | questwords
+Situation at the Dungeon (2)
+### 3075 | budget=4096 | questwords
+Situation at the Dungeon (3)
+### 3076 | budget=4096 | questwords
+Situation at the Dungeon (4)
+### 3077 | budget=4096 | questwords
+Situation at the Dungeon (5)
+### 3078 | budget=4096 | questwords
+Situation at the Dungeon (6)
+### 3110 | budget=4096 | questwords
+So I need to get those two items. (Accept)
+### 3111 | budget=4096 | questwords
+So it's not just about equipment or level.
+### 3112 | budget=4096 | questwords
+So it's the real deal from now on. I understand.
+### 3113 | budget=4096 | questwords
+So she imbued rings with the power of the Elves and gave them to warriors in honor of Muren's practice of handing out warriors' rings bearing the emperor's crest.
+### 3114 | budget=4096 | questwords
+So you want me to take the With Queen's jewel.
+### 3115 | budget=4096 | questwords
+So you've decided to become an Agility Elf, a class for whom defense is crucial. Agility Elves are unique in that they employ splendid bow skills. Let me give you a weapon to use so that you can understand better.
+### 3116 | budget=4096 | questwords
+So you've decided to become an Energy Elf, a class for whom wizardry is crucial. Energy Elves are unique in that they employ a variety of summoning and magic spells. Let me give you an orb as a gift so that you can understand what I mean.
+### 3120 | budget=4096 | questwords
+Something strange is happening. Death Riders, who serve as Arca's Aida protectors, are frequently and indiscriminately attacking our gens members exploring the Aida region. Lemuria must be behind it all.  Please eliminate these Death Riders and protect our gens members.
+### 3147 | budget=4096 | questwords
+Spider Hunt!
+### 3179 | budget=4096 | questwords
+Stop the attacks on the gens members by eliminating 50 Burning Lava Giants, and I'll give you a reward.
+### 3194 | budget=4096 | questwords
+Strange Confrontation (1)
+### 3195 | budget=4096 | questwords
+Strange Confrontation (2)
+### 3196 | budget=4096 | questwords
+Strange Confrontation (3)
+### 3197 | budget=4096 | questwords
+Strange Confrontation (4)
+### 3228 | budget=4096 | questwords
+Summoners are unique in that they are capable of mastering various magic spells from scrolls and parchments. Let me give you a scroll as a gift so that you can understand what I mean.
+### 3229 | budget=4096 | questwords
+Summoners can learn additional skills by going to Elveland and purchasing scrolls from Marce (36,218). After purchasing a scroll, right-click on it to learn the skill.
+### 3235 | budget=4096 | questwords
+Supply route of the monsters...
+### 3236 | budget=4096 | questwords
+Sure! What's this simple mission about? (Accept)
+### 3237 | budget=4096 | questwords
+Survive through Chaos Castle Level 1 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 1.
+### 3238 | budget=4096 | questwords
+Survive through Chaos Castle Level 1. Come back to me after that, and I will give you 100,000 EXP points and 200,000 Zens as a reward. However, this applies only to Chaos Castle Level 1.
+### 3239 | budget=4096 | questwords
+Survive through Chaos Castle Level 2 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 2.
+### 3240 | budget=4096 | questwords
+Survive through Chaos Castle Level 2. Come back to me after that, and I will give you 400,000 EXP points and 300,000 Zens as a reward. However, this applies only to Chaos Castle Level 2.
+### 3241 | budget=4096 | questwords
+Survive through Chaos Castle Level 3 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 3.
+### 3242 | budget=4096 | questwords
+Survive through Chaos Castle Level 3. Come back to me after that, and I will give you 1,000,000 EXP points and 1 Jewel of Chaos as a reward. However, this applies only to Chaos Castle Level 3.
+### 3243 | budget=4096 | questwords
+Survive through Chaos Castle Level 4 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 4.
+### 3244 | budget=4096 | questwords
+Survive through Chaos Castle Level 4. I will give you 1 Jewel of Soul as a reward when you return. However, this applies only to Chaos Castle Level 4.
+### 3245 | budget=4096 | questwords
+Survive through Chaos Castle Level 5 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 5.
+### 3246 | budget=4096 | questwords
+Survive through Chaos Castle Level 5. I will give you 1 Jewel of Bless as a reward when you return. However, this applies only to Chaos Castle Level 5.
+### 3247 | budget=4096 | questwords
+Survive through Chaos Castle Level 6 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 6.
+### 3248 | budget=4096 | questwords
+Survive through Chaos Castle Level 6. I will give you 1 Jewel of Life as a reward when you return. However, this applies only to Chaos Castle Level 6.
+### 3249 | budget=4096 | questwords
+Survive through Chaos Castle Level 7 and then return to the Shadow Phantom Soldier to claim your reward. However, this applies only to Chaos Castle Level 7.
+### 3250 | budget=4096 | questwords
+Survive through Chaos Castle Level 7. I will give you 2 Jewels of Bless as a reward when you return. However, this applies only to Chaos Castle Level 7.
+### 3251 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)
+### 3252 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)
+### 3253 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)
+### 3254 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)
+### 3255 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)
+### 3256 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)
+### 3257 | budget=4096 | questwords
+Surviving Chaos Castle is proof of how well you've trained. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)
+### 3285 | budget=4096 | questwords
+Take the rings.
+### 3286 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (All characters: Master Level)
+### 3287 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 120-179, Advanced character: Level 100-159)
+### 3288 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 15-49, Advanced character: Level 15-29)
+### 3289 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 180-239, Advanced character: Level 160-219)
+### 3290 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 240-299, Advanced character: Level 220-279)
+### 3291 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 300-400, Advanced character: Level 280-400)
+### 3292 | budget=4096 | questwords
+Taking on the challenges of Chaos Castle is tantamount to testing one's own limitations. Will you go to Chaos Castle and see how far your training has taken you? (Basic character: Level 50-119, Advanced character: Level 30-99)
+### 3309 | budget=4096 | questwords
+Talk to General Goods Merchant Zyro and check the details of his request to the mercenary guild.
+### 3310 | budget=4096 | questwords
+Talk to Mercenary Guild Manager Tercia for the details of the request from the mercenary guild elders.
+### 3311 | budget=4096 | questwords
+Talk to Priestess Beina of the Underwater Temple and check the details of her request to the mercenary guild.
+### 3312 | budget=4096 | questwords
+Talk to me again and receive a damage and defense increase buff.
+### 3313 | budget=4096 | questwords
+Talk to your Gens Steward and check the details of his request to the mercenary guild.
+### 3317 | budget=4096 | questwords
+Tantaloses from Tarkan Level 2 are causing great harm to travelers there. Go to Tarkan Level 2 and hunt down 100 Tantaloses. Come see me when that's done to receive an Invisibility Cloak + 5 as a reward. At your current level, it'll be too dangerous for you to hunt the monsters alone. It'll be better if you hunt in a party.
+### 3326 | budget=4096 | questwords
+Tenacity is another trait that a hero can't do without. Please remember that you can't get stronger if you aren't tenacious enough.
+### 3327 | budget=4096 | questwords
+Thank you for helping with the barrier fortification mission. Having failed to attack the barriers, monsters are now launching frequent attacks against guardians stationed at Lost Tower. The number of monsters must be reduced at any cost. Will you accept this quest? (Level 202-205)
+### 3328 | budget=4096 | questwords
+Thank you!
+### 3329 | budget=4096 | questwords
+Thank you. Recently things get in the way of the clan's business. Especially things in Vulcanus are the worst. We did some investigation and our people got killed by the assassins. Please go to Vulcanus and eliminate 20 Bloody Slayers and 10 Vicious Bloody Slayers.
+### 3330 | budget=4096 | questwords
+Thank you. You saved me from the execution ground. Second task is to get me the rare jewel Witch Queens in Aida carry on them. It's so beautiful as to captivate Witch Queens with such brilliance. Naturally, it's extremely expensive in the market. (Lv. 350 - 400)
+### 3331 | budget=4096 | questwords
+Thanks to you, our reconnaissance party has stabilized a great deal. However, our reconnaissance party reports that a fearsome enemy has appeared and that they don't know what to do about it. I wish to ask you to assist the reconnaissance party. Will you accept this quest? (Level 180-185)
+### 3332 | budget=4096 | questwords
+Thanks to your help with previous party reconnaissance missions, all regions seem to be becoming more stable. Captain of the Shadow Phantom Guardians has noticed your achievements and asked you to help our corps members in each of the regions. Will you accept this quest? (Level 166-170)
+### 3333 | budget=4096 | questwords
+That custom all but disappeared when peace finally came. However, Kundun and the chaos he brought motivated Erin Gustiv, the reigning queen of the Elves, to reinstate it.
+### 3334 | budget=4096 | questwords
+That is correct! If you don't want to receive party requests while hunting, simply type in '/Request off' in the Chat window. To start receiving party requests again, type in '/Request on' in the Chat window.
+### 3335 | budget=4096 | questwords
+That is correct! In the MU world, you can use the M button to travel with ease, provided that your level is high enough and you have enough money for the destination.;Discovering areas that's right for your level, and hunting there, can also be very fun.
+### 3336 | budget=4096 | questwords
+That is correct! Pressing D will give you access to various commands, including Trade, Party, Buy, and Follow. Use these commands well.
+### 3337 | budget=4096 | questwords
+That is correct! When you want to talk to a friend and you know his or her ID, or if you want to pass on private messages, send whispers by using Tab from the Chat window.
+### 3338 | budget=4096 | questwords
+That is correct! With the help of NPCs in the towns, you can not only combine items, but also enhance your armor by adding jewels to it and much more. Make sure to visit them all.

@@ -1,0 +1,214 @@
+[Dialog] Text_6: ['说明->帮助']
+   欢迎来到奇迹大陆！旅途中需要帮助时，请按 F1 键查看说明。
+[Dialog] Text_56: ['建立->创建']
+   第一位皇帝穆伦击败各地军阀，结束战争、统一大陆并建立奇迹帝国。这本史书正是为了纪念他带来的和平。
+[Dialog] Text_159: ['建立->创建']
+   根据情报，巴卡斯建立了一处名为“巴卡斯兵营”的据点。陆迦德的十二使徒认为，这是巴卡斯带来的新威胁。
+[Editor] Game Scene: ['游戏->游戏']
+   游戏场景
+[Editor] Nothing here yet.: ['内容->属性']
+   尚无内容。
+[Editor] Switch to Game Camera: ['游戏->游戏']
+   切换至游戏相机
+[Editor] Equipped Items: ['装备->装备']
+   装备中物品
+[Game] Upgrade has failed. Please restart the game.: ['游戏->游戏']
+   升级失败。请重新启动游戏。
+[Game] Game will now restart in order to complete the upgrade.: ['游戏->游戏']
+   游戏现在将重新启动以完成升级。
+[Game] Cannot be equipped by %s: ['装备->装备']
+   %s无法装备
+[Game] Num: Use skill hot keys: ['热键->快捷键']
+   Num：使用技能热键
+[Game] Chatting Instructions: ['说明->帮助']
+   聊天说明
+[Game] enjoy the game: ['游戏->游戏']
+   享受游戏
+[Game] You will exit game in %d seconds.: ['游戏->游戏']
+   您将在 %d 秒后退出游戏。
+[Game] Exit Game: ['游戏->游戏']
+   退出游戏
+[Game] New version of game is required: ['游戏->游戏']
+   需要新版本的游戏
+[Game] game will be automatically closed: ['游戏->游戏']
+   游戏将自动关闭
+[Game] The user has left the game.: ['游戏->游戏']
+   用户已离开游戏。
+[Game] The opposing guild master is not in the game.: ['游戏->游戏']
+   对方的战盟盟主不在游戏中。
+[Game] Exit game after closing the Chaos interface.: ['游戏->游戏']
+   请先关闭玛雅合成界面，再退出游戏。
+[Game] EXP: ['经验值->经验值']
+   经验值
+[Game] Register the sign in game: ['游戏->游戏']
+   注册登录游戏
+[Game] Error21TryRunningTheGameAgain: ['游戏->游戏']
+   [error21] 尝试再次运行游戏。如果再次出现相同的错误，请重新安装游戏。
+[Game] [error22] Try running the game again.: ['游戏->游戏']
+   [error22] 尝试再次运行游戏。
+[Game] Error23TryRunningTheGameAgain: ['游戏->游戏']
+   [error23] 尝试再次运行游戏。如果再次出现相同的错误，请重新安装游戏。
+[Game] [error24] An error has occured. Please reinstall the game.: ['游戏->游戏']
+   [error24] 发生错误。请重新安装游戏。
+[Game] [error25] A hacking tool (%s) has been detected. The game will shut down.: ['游戏->游戏']
+   [error25] 检测到黑客工具（%s）。游戏将关闭。
+[Game] [error26] A hacking tool (%s) has been detected. The game will shut down.: ['游戏->游戏']
+   [error26] 检测到黑客工具（%s）。游戏将关闭。
+[Game] [error27] A file is missing. Please reinstall the game.: ['游戏->游戏']
+   [错误27] 游戏文件丢失，请重新安装游戏。
+[Game] [error28] An important file has been corrupted. Please reinstall the game.: ['游戏->游戏']
+   [错误28] 重要游戏文件已损坏，请重新安装游戏。
+[Game] [error29] An important file has been corrupted. Please reinstall the game.: ['游戏->游戏']
+   [error29] 重要文件已损坏。请重新安装游戏。
+[Game] [error30] A file is missing. Please reinstall the game.: ['游戏->游戏']
+   [错误30] 游戏文件丢失，请重新安装游戏。
+[Game] [error31] An error has occured. Please restart the game.: ['游戏->游戏']
+   [error31] 发生错误。请重新启动游戏。
+[Game] [error32] A game file has been corrupted.: ['游戏->游戏']
+   [error32] 游戏文件已损坏。
+[Game] [error1001] : Try restarting the game.: ['游戏->游戏']
+   [error1001]：尝试重新启动游戏。
+[Game] [error1002] : Can't connect to nProtect. Please restart the game.: ['游戏->游戏']
+   [错误1002]：无法连接到 nProtect。请重新启动游戏。
+[Game] [error1004] : A speed hack has been detected. The game will shut down.: ['游戏->游戏']
+   [error1004]：检测到速度黑客。游戏将关闭。
+[Game] [error1005] : Game hack (%d) detected. The game will shut down.: ['游戏->游戏']
+   [错误1005]：检测到游戏黑客（%d）。游戏将关闭。
+[Game] Error1006EitherYouHaveRunThe: ['游戏->游戏']
+   [error1006]：您已多次运行游戏或 GameGuard 已在运行。请关闭游戏并尝试重新启动。
+[Game] Error1007AnIllegalProgramHasBeen: ['游戏->游戏']
+   [error1007]：检测到非法程序。请关闭不必要的程序并重新启动游戏。
+[Game] [error1010] : The game or GameGuard has been altered.: ['游戏->游戏']
+   [error1010]：游戏或GameGuard已被更改。
+[Game] Stone Rush Mini Game is until the 21st: ['游戏->游戏']
+   Stone Rush 迷你游戏截止至 21 日
+[Game] ThisGameMayBeInappropriateFor: ['游戏->游戏']
+   本游戏可能不适合12岁以下的用户，因此需要监护人的指导和监督。
+[Game] ThisGameMayBeInappropriateFor1077: ['游戏->游戏']
+   本游戏可能不适合15岁以下的用户，因此需要监护人的指导和监督。
+[Game] ThisGameMayBeInappropriateFor1078: ['游戏->游戏']
+   本游戏可能不适合18岁以下的用户，因此需要监护人的指导和监督。
+[Game] Pet is not equipped.: ['装备->装备']
+   宠物未装备。
+[Game] If you need any assistance in game please find a GM...: ['游戏->游戏']
+   如果您在游戏中需要任何帮助，请找GM...
+[Game] Prevent equipment drop: ['装备->装备']
+   防止装备掉落
+[Game] Chaos combination Goblin tax rate %d%%: ['哥布尔->哥布林']
+   混沌组合哥布尔税率%d%%
+[Game] Chaos combination Goblin: %d(%d)%%: ['哥布尔->哥布林']
+   混沌组合哥布尔：%d(%d)%%
+[Game] Gameplay should be kept in moderation.: ['游戏->游戏']
+   游戏玩法应保持适度。
+[Game] Long gmae time may be harmful to your health: ['游戏->游戏']
+   长时间游戏可能有害健康
+[Game] Like studying, you need rest after a certain time of game play.: ['游戏->游戏']
+   就像学习一样，玩一定时间的游戏后也需要休息。
+[Game] The applied equipments cannot be reset.: ['装备->装备']
+   所申请的装备无法重置。
+[Game] Can summon the Fenrir when equipped.: ['装备->装备']
+   装备后可以召唤芬里尔。
+[Game] YouCanOnlyWarpRidingA: ['装备->装备']
+   只有骑乘彩云兽、黑王马或炎狼兽，或者装备翅膀、披风时才能传送。
+[Game] Unable to gain experience rate: ['经验值->经验值']
+   无法获得经验值
+[Game] Increases experience gained and item drop rate.: ['经验值->经验值']
+   增加获得的经验值和物品掉落率。
+[Game] Equipment item: ['装备->装备']
+   装备道具
+[Game] Master Level EXP cannot be achieved during the item usage.: ['经验值->经验值']
+   使用物品期间无法获得大师级经验值。
+[Game] Exp and item will be secured when character dies.: ['经验值->经验值']
+   当角色死亡时，经验值和物品将受到保护。
+[Game] YouHaveIncurredAFatigueLevel: ['游戏->游戏']
+   由于游戏时间过长，您受到了 1 级疲劳处罚。 EXP 增益已减少至 50%。物品掉落率已降低至 50%。
+[Game] YouHaveIncurredAFatigueLevel2870: ['游戏->游戏']
+   由于游戏时间过长，您受到了疲劳等级 2 的处罚。 EXP 增益已减少至 50%。物品掉落率已降至 0%。
+[Game] YouCanDoAGoblinCombination: ['哥布尔->哥布林']
+   您可以将哥布尔与密封金盒进行组合来创建金盒。
+[Game] YouCanDoAGoblinCombination2876: ['哥布尔->哥布林']
+   您可以将哥布尔与密封银盒进行组合来创建银盒。
+[Game] You can do a Goblin combination with a Gold Key to create a Golden Box.: ['哥布尔->哥布林']
+   您可以将哥布尔与密钥匙组合来创建金盒子。
+[Game] You can do a Goblin combination with a Silver Key to create a Silver Box.: ['哥布尔->哥布林']
+   您可以将哥布尔与银钥匙组合来创建银盒子。
+[Game] Goblin Points : %s: ['哥布尔->哥布林']
+   哥布尔点数：%s
+[Game] This item cannot be used in the game.#Please use the Mu Online website.: ['游戏->游戏']
+   该物品无法在游戏中使用。 #请使用Mu Online网站。
+[Game] The item cannot be found or you chose a wrong item. Please restart the game.: ['游戏->游戏']
+   找不到该道具或您选择了错误的道具。请重新启动游戏。
+[Game] MUItemShopInformationDownloadFailed: ['游戏->游戏']
+   MU物品商店信息下载失败！ ##请重新连接游戏。 #版本%d.%d.%d#%s
+[Game] Cannot open MU Item Shop.#Please reconnect to the game.: ['游戏->游戏']
+   无法打开MU物品商店。 #请重新连接游戏。
+[Game] EXP10IncreasePCCafeChaos: ['经验值->经验值']
+   经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布林点数增加
+[Game] EXP10IncreasePCCafeChaos3061: ['经验值->经验值']
+   经验值增加 10%% / 可从网吧进入赤色要塞 / 开放卡利玛 / 哥布林点数增加 / 可使用移动命令窗口 / 不适用体力系统
+[Game] Equip to transform into a Skeleton Warrior.: ['装备->装备']
+   装备后可以变身为骷髅战士。
+[Game] Equipping along with a Pet Skeleton: ['装备->装备']
+   与宠物骷髅一起装备
+[Game] and EXP by 30%%.: ['经验值->经验值']
+   经验值增加 30%%。
+[Game] Equipping along with a Skeleton Transformation Ring: ['装备->装备']
+   与骷髅变身戒指一起装备
+[Game] increases EXP by 30%%.: ['经验值->经验值']
+   经验值增加 30%%。
+[Game] Unable to Equip with a Different Transformation Ring: ['装备->装备']
+   无法装备不同的变身戒指
+[Game] Cannot be equipped while another Transformation Ring is equipped.: ['装备->装备']
+   装备有另一个变身戒指时无法装备。
+[Game] TheGameClientIsLoadedOnly: ['进程->进程', '游戏->游戏']
+   游戏客户端只能通过官方网站加载。关闭应用进程，请重试。
+[Game] Unequippble items cannot be combined.: ['装备->装备']
+   未装备的物品无法组合。
+[Game] You need to wear the required equipment to level up this skill.: ['装备->装备']
+   您需要穿戴所需的装备来升级此技能。
+[Game] Please log in to game again to use the expanded inventory/vault.: ['游戏->游戏']
+   请再次登录游戏以使用扩展背包/仓库。
+[Game] Use this and log in to game again to activate.: ['游戏->游戏']
+   使用此并再次登录游戏即可启动。
+[Game] Hot Key: ['热键->快捷键']
+   热键
+[Game] Chatting Mode Hot Key: ['热键->快捷键']
+   聊天模式热键
+[Game] In-game Shop: ['游戏->游戏']
+   游戏内商店
+[Game] Exiting Game.: ['游戏->游戏']
+   退出游戏。
+[Game] The game will restart after reset!: ['游戏->游戏']
+   重置后游戏将重新开始！
+[Game] YouCannotEquipTheSelectedItem: ['装备->装备']
+   您无法装备所选道具。请为该插槽配备有效的 艾尔特。
+[Game] Entering the game: ['游戏->游戏']
+   正在进入游戏
+[Game] ChatCommandsExecute: ['执行->运行']
+   执行
+[Game] GamepadAction: ['游戏->游戏']
+   游戏操作
+[Game] SoloShopEquipment: ['装备->装备']
+   装备
+[Metadata] Slot: ['装备->装备']
+   装备字段
+
+=== 未翻译(纯英文)条目 ===
+[Editor] NPCs: NPC
+[Game] /Battle Soccer: /Battle Soccer
+[Game] Guild254: /guild
+[Game] Party256: /party
+[Game] WEBZEN: WEBZEN
+[Game] [HACKSHIELD] (AHNHS_ENGINE_DETECT_GAME_HACK): [HACKSHIELD] (AHNHS_ENGINE_DETECT_GAME_HACK)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_SPEEDHACK): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_SPEEDHACK)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_KDTRACE): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_KDTRACE)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_AUTOMOUSE): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_AUTOMOUSE)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_DRIVERFAILED): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_DRIVERFAILED)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_HOOKFUNCTION): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_HOOKFUNCTION)
+[Game] [HACKSHIELD] (AHNHS_ACTAPC_DETECT_MESSAGEHOOK): [HACKSHIELD] (AHNHS_ACTAPC_DETECT_MESSAGEHOOK)
+[Game] NPC: %d(%d)%%: NPC：%d(%d)%%
+[Game] http://muonline.webzen.com/: http://muonline.webzen.com/
+[Game] Etc.: ETC。
+[Game] OnePercentLow: 1% Low
+[Metadata] ELF/ME: ELF/ME
+[Metadata] SUM/BS: SUM/BS

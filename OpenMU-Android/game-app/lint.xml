@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- SDL performs runtime/API guards that Android Lint cannot follow when
+         its Java sources are consumed directly. Keep these narrow suppressions
+         on the vendored SDL path so application code remains fully checked. -->
+    <issue id="MissingPermission">
+        <ignore regexp=".*[\\/]MuMain[\\/]src[\\/]ThirdParty[\\/]SDL[\\/]android-project[\\/].*" />
+    </issue>
+    <issue id="NewApi">
+        <ignore regexp=".*[\\/]MuMain[\\/]src[\\/]ThirdParty[\\/]SDL[\\/]android-project[\\/].*" />
+    </issue>
+    <issue id="UnspecifiedRegisterReceiverFlag">
+        <ignore regexp=".*[\\/]MuMain[\\/]src[\\/]ThirdParty[\\/]SDL[\\/]android-project[\\/].*" />
+    </issue>
+</lint>

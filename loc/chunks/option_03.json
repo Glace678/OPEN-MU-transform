@@ -1,0 +1,965 @@
+{
+ "group": "option",
+ "items": [
+  {
+   "id": 2072,
+   "en": "Lightning Shock skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2076,
+   "en": "Lightning Tome skill increases damage by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2077,
+   "en": "Lightning Tome skill pushes the victim 2 tiles backward with %0.2f%% chance.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2078,
+   "en": "Lightning resistance increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2079,
+   "en": "Lightning skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2105,
+   "en": "Low Vitality",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2116,
+   "en": "Lunge skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2128,
+   "en": "Magic Defense",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2136,
+   "en": "Mana auto increment increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2137,
+   "en": "Mana cost decreases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2138,
+   "en": "Mana increase +300",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2139,
+   "en": "Mana stat increases to maximum.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2140,
+   "en": "Manna absorbs the damage.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2154,
+   "en": "Max AG increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2155,
+   "en": "Max HP increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2156,
+   "en": "Max Mana increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2158,
+   "en": "Max SD increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2159,
+   "en": "Max. AG increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2160,
+   "en": "Max. HP increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2161,
+   "en": "Max. Physical attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2162,
+   "en": "Max. Wizardry increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2163,
+   "en": "Max. attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2164,
+   "en": "Max. attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2166,
+   "en": "Maximum AG increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2169,
+   "en": "Maximum Life increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2170,
+   "en": "Maximum Life increase +500",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2171,
+   "en": "Maximum Life increase +700",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2173,
+   "en": "Maximum Mana increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2174,
+   "en": "Maximum Mana increase +500",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2175,
+   "en": "Maximum Mana increase +700",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2178,
+   "en": "Maximum Wizardry and Curser increase by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2180,
+   "en": "Maximum attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2189,
+   "en": "Medium Vitality",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2204,
+   "en": "Meteor skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2206,
+   "en": "Meter's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2207,
+   "en": "Min. Physical attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2208,
+   "en": "Min. Wizardry increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2209,
+   "en": "Min. attack increase",
+   "budget": 59,
+   "kinds": [
+    "harmony"
+   ]
+  },
+  {
+   "id": 2210,
+   "en": "Min. attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2211,
+   "en": "Minet's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2213,
+   "en": "Minimum Vitality",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2216,
+   "en": "Minimum Wizardry and Curse increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2217,
+   "en": "Minimum Wizardry increases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2219,
+   "en": "Minimum attack/Wizardry increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2222,
+   "en": "Mist's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2223,
+   "en": "Mobility disabled",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2224,
+   "en": "Mobility enabled",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2225,
+   "en": "Mobility speed decreases.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2230,
+   "en": "Monster Chemistry Attack Resistance",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2231,
+   "en": "Monster Magic Attack Resistance",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2233,
+   "en": "Monster destruction for the Life increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2234,
+   "en": "Monster destruction for the Mana increase",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2245,
+   "en": "Moros's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2251,
+   "en": "Muren's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2260,
+   "en": "Nemesis's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2265,
+   "en": "No penalty for dying.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2274,
+   "en": "Nova skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2282,
+   "en": "Odin's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2309,
+   "en": "One more arrow will be fired with Triple Shot skill.#(Consumed at once by 10 points, you will learn this skill.)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2321,
+   "en": "Ophion's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2322,
+   "en": "Opponent defensibility ignorance attack",
+   "budget": 63,
+   "kinds": [
+    "socket"
+   ]
+  },
+  {
+   "id": 2348,
+   "en": "PK Penalty",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2365,
+   "en": "Partial damage reflected out.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2366,
+   "en": "Party EXP Bonus Item",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2368,
+   "en": "Party Heal amount increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2381,
+   "en": "Penetrate Armor",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2384,
+   "en": "Penetration skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2392,
+   "en": "Pet's life reduction speed decreases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2408,
+   "en": "Physical attack power increases by %0.2f while equipping Mace.#(When equipping 2 Maces, 50%% increment will be applied to each one.)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2409,
+   "en": "Physical attack power increases by %0.2f while equipping One-handed Sword.#(When equipping 2 swords, 50%% increment will be applied to each one.)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2410,
+   "en": "Physical attack power increases by %0.2f while equipping Spear.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2411,
+   "en": "Physical attack power increases by %0.2f while equipping Two-handed Sword.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2412,
+   "en": "Physical attack power increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2439,
+   "en": "Poison Arrow skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2445,
+   "en": "Poison resistance increases by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2446,
+   "en": "Poison skill increases poison damage over time by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2447,
+   "en": "Poisoned status of condition",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2453,
+   "en": "Potion of Blessing",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2458,
+   "en": "Power Slash skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2481,
+   "en": "Protection shield activates which absorbs#all incoming damage#with %0.2f%% chance when hit.#Duration: 5 seconds",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2488,
+   "en": "Punishment for Illicit Software Use",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2503,
+   "en": "PvP attack power increases by additional %0.2f while equipping Crossbow.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2504,
+   "en": "PvP attack power increases by additional %0.2f while equipping Scepter.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2505,
+   "en": "PvP attack power increases by additional %0.2f while equipping Stick.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2506,
+   "en": "PvP attack power increases by additional %0.2f while equipping Two-handed Staff.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2507,
+   "en": "PvP attack success rate increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2508,
+   "en": "PvP defense rate increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2519,
+   "en": "Rageful Blow skill damage increases by %0.2f.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2521,
+   "en": "Random defensibility decreases at 10%%.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2522,
+   "en": "Rank %d, Skill Level: %d/1",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2523,
+   "en": "Rank %d, Skill Level: %d/10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2524,
+   "en": "Rank %d, Skill Level: %d/20",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2525,
+   "en": "Rank 2 'Increase defense success rate strengthener' requires lev",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2526,
+   "en": "Rank 2 'Increases poison resistance' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2527,
+   "en": "Rank 2 'beast uppercut strengthener' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2528,
+   "en": "Rank 2 'killing blow strengthener' requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2529,
+   "en": "Rank 3 'Increase HP recovery rate' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2530,
+   "en": "Rank 3 'Increase lightning resistance' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2531,
+   "en": "Rank 3 'Reduce durability loss (2)' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2532,
+   "en": "Rank 4 'Increase maximum HP' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2533,
+   "en": "Rank 4 'Increases defense rate' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2534,
+   "en": "Rank 5 'Ignore additional enemy armor' requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2535,
+   "en": "Rank 5 'Increase maximum mana' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2536,
+   "en": "Rank 5 'Increases defense success rate' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2537,
+   "en": "Rank 5 'chain drive strengthener' requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2538,
+   "en": "Rank 5 'dark side strengthener' requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2539,
+   "en": "Rank 6 'Increase critical damage chance' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2540,
+   "en": "Rank 6 'Increases set defense rate' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2541,
+   "en": "Rank 6 'meteor strengthener' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2542,
+   "en": "Rank 7 'dragon slasher strengthener' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2543,
+   "en": "Rank 8 'Increase chance of ignoring enemy's cefense' skill requi",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2544,
+   "en": "Rank 8 'Increase double damage chance' skill requires level 10",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2545,
+   "en": "Rank 8 'blood howling' skill required",
+   "budget": 63,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2559,
+   "en": "Rave's",
+   "budget": 63,
+   "kinds": [
+    "setoption"
+   ]
+  },
+  {
+   "id": 2581,
+   "en": "Recovers Mana by max mana/%0.2f when killing a monster.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2583,
+   "en": "Recovers SD by max SD/%0.2f when killing a monster.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2607,
+   "en": "Reduce attack speed",
+   "budget": 49,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2608,
+   "en": "Reduces Attack speed.",
+   "budget": 99,
+   "kinds": [
+    "buff"
+   ]
+  },
+  {
+   "id": 2609,
+   "en": "Reduces mana cost for skills by %0.2f%%.",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  },
+  {
+   "id": 2610,
+   "en": "Reduces the speed of durability loss for accessories (necklaces, rings) by %0.2f%%.# (excludes cash items)",
+   "budget": 255,
+   "kinds": [
+    "mastertooltip"
+   ]
+  }
+ ]
+}

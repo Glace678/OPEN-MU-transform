@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenMU Mobile</string>
+    <string name="preparing_title">Menyiapkan data game</string>
+    <string name="preparing_detail">Saat pertama dibuka, data game diekstrak ke penyimpanan internal. Biarkan aplikasi tetap terbuka.</string>
+    <string name="ready">Siap bermain</string>
+    <string name="start_game">Main</string>
+    <string name="settings">Pengaturan</string>
+    <string name="gesture_help">Gestur</string>
+    <string name="retry">Coba lagi</string>
+    <string name="extract_failed">Data game gagal disiapkan</string>
+    <string name="save">Simpan</string>
+    <string name="back">Kembali</string>
+    <string name="display">Grafis</string>
+    <string name="controls">Kontrol</string>
+    <string name="network">Server</string>
+    <string name="fps">Laju bingkai</string>
+    <string name="render_scale">Skala render</string>
+    <string name="effects">Kualitas efek</string>
+    <string name="ui_scale">Ukuran tombol sentuh</string>
+    <string name="safe_margin">Margin aman tepi</string>
+    <string name="touch_opacity">Opasitas tombol sentuh</string>
+    <string name="vibration">Getaran sentuhan dan pertempuran</string>
+    <string name="handedness">Tangan utama</string>
+    <string name="server_address">Alamat server</string>
+    <string name="server_port">Port koneksi</string>
+    <string name="local_pairing">Pemasangan lokal tanpa login (khusus LAN)</string>
+    <string name="restart_note">Perubahan grafis dan server berlaku saat berikutnya masuk ke game.</string>
+    <string name="invalid_server">Masukkan alamat IPv4 atau nama host server, tanpa protokol atau port.</string>
+    <string name="invalid_local_server">Pemasangan lokal memerlukan alamat IPv4 loopback atau LAN, seperti 192.168.1.20. Nonaktifkan untuk server cloud.</string>
+    <string name="invalid_port">Port harus antara 1 dan 65535.</string>
+    <string name="saved">Pengaturan disimpan</string>
+    <string name="tutorial_title">Kontrol seluler</string>
+    <string name="tutorial_body">Menu: ketuk dengan satu jari untuk memilih atau mengonfirmasi.\nPilih karakter: ketuk karakter, lalu tombol masuk di kanan bawah.\n\nInventaris biasa: ketuk untuk melihat detail; tahan tanpa bergerak selama setengah detik untuk memakai item yang dapat digunakan atau mempelajari skill. Untuk memindahkan, langsung seret; melepas di luar inventaris mengembalikan item ke tempatnya.\nEmpat slot ramuan di bawah: ketuk untuk memakai; menahan tidak mengulang pemakaian.\n\nDi dunia game:\nSeret satu jari di area gerak untuk bergerak.\nKetuk area skill untuk memilih; ketuk dua kali untuk menggunakan skill saat ini.\nGeser dua jari ke kiri atau kanan untuk berganti skill.\nGeser dua jari ke atas atau bawah, atau cubit, untuk menyesuaikan kamera.\nGeser tiga jari ke atas untuk peta atau ke bawah untuk pengaturan.\n\nBar ramuan di bagian bawah dan kontrol antarmuka tidak memicu skill dunia.</string>
+    <string name="understood">Mengerti, main</string>
+    <string name="help_close">Tutup</string>
+    <string name="game_data_missing">APK tidak memiliki game-data.zip; ini bukan paket game lengkap.</string>
+    <string name="storage_low">Penyimpanan internal tidak cukup. Masih perlu setidaknya %1$s.</string>
+    <string name="current_display">Layar saat ini: %1$d × %2$d</string>
+    <string name="max_refresh">Laju penyegaran layar maksimum: %1$d Hz. Pilih laju bingkai antara 30 dan %1$d.</string>
+    <string name="fps_value">%1$d FPS</string>
+    <string name="fps_max">Hingga %1$d Hz (ikuti layar)</string>
+    <string name="game_settings">Pengaturan seluler</string>
+    <string name="open_settings">Buka pengaturan</string>
+    <string-array name="effect_labels">
+        <item>Rendah (lebih lancar)</item>
+        <item>Sedang (disarankan)</item>
+        <item>Tinggi (grafis terbaik)</item>
+    </string-array>
+    <string-array name="handedness_labels">
+        <item>Tangan kanan</item>
+        <item>Tangan kiri</item>
+    </string-array>
+</resources>
