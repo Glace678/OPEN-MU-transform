@@ -72,6 +72,7 @@ public sealed class LauncherWindow : Window
             var path = await this._manager.CreateBackupAsync(CancellationToken.None);
             this._status.Text = $"备份完成：{path}";
         });
+        this.AddAction("还原备份", this.RestoreAsync);
         this.AddAction("停止服务", () => this._manager.StopAsync(force: false, CancellationToken.None));
         content.Children.Add(this._actions);
         content.Children.Add(this._progress);
@@ -87,10 +88,27 @@ public sealed class LauncherWindow : Window
         this._actions.Children.Add(button);
     }
 
+    // Mirrors the "还原" action of the Windows WinForms launcher (LauncherForm):
+    // LocalStackManager takes a protective backup before it restores anything.
+    private async Task RestoreAsync()
+    {
+        var files = await this.StorageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
+        {
+            Title = "选择要还原的备份（还原前会自动停掉服务）",
+            AllowMultiple = false,
+        });
+        if (files.Count == 0)
+        {
+            return;
+        }
+
+        await this._manager.RestoreAsync(files[0].Path.LocalPath, CancellationToken.None);
+        this._status.Text = "备份已还原。";
+    }
+
     private async Task StartAsync()
     {
-        if (this._manager.RequiresProvisioning)
-        {
+        if (this._manager.RequiresProvisioning)        {
             if (!string.Equals(this._password.Text, this._confirmation.Text, StringComparison.Ordinal))
             {
                 throw new InvalidOperationException("两次密码输入不一致。");

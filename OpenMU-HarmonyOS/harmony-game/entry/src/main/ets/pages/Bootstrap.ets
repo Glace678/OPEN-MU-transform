@@ -7,6 +7,7 @@ import { MobileConfig, DEFAULT_SERVER_ADDRESS, GAME_DATA_VERSION } from '../mobi
 // setDataRoot before the data archive existed, so on a first run the chdir and
 // MU_CONFIG_FILE setup failed; we re-apply the data root here once it exists.
 import bridge from 'libopenmubridge.so';
+import { copyRawfileTo } from '../mobile/RawFileCopy';
 
 // Prepares the game data (extracting the bundled rawfile archive on first run),
 // mirrors the Android BootstrapActivity: no login screen — the game auto-logs
@@ -59,7 +60,7 @@ struct Bootstrap {
     try {
       fs.mkdirSync(root, true);
       const zipPath = context.filesDir + '/game-data.zip';
-      await this.copyRawfileTo(context, 'game-data.zip', zipPath);
+      await copyRawfileTo(context, 'game-data.zip', zipPath);
       await zlib.decompressFile(zipPath, root, { overwrite: true });
       try {
         fs.unlinkSync(zipPath);
@@ -79,18 +80,6 @@ struct Bootstrap {
       // If no archive was bundled, tell the user how to provide the data.
       this.detail = '未找到内置数据包。请把 game-data.zip 放入 entry/src/main/resources/rawfile/，'
         + '或用 hdc 把 Data 目录推送到 ' + root + '。';
-    }
-  }
-
-  // Copies a bundled rawfile into the sandbox. The game archive is large; the
-  // supported cross-SDK path is to read it via resourceManager and write once.
-  private async copyRawfileTo(context: Context, rawName: string, destPath: string): Promise<void> {
-    const bytes = await context.resourceManager.getRawFileContent(rawName);
-    const out = fs.openSync(destPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
-    try {
-      fs.writeSync(out.fd, bytes.buffer);
-    } finally {
-      fs.closeSync(out);
     }
   }
 

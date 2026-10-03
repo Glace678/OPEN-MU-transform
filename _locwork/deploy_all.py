@@ -21,15 +21,44 @@ BUILT = [d for d in sorted(os.listdir(BUILD))
          if os.path.isdir(os.path.join(BUILD, d))]
 
 def sha(p):
-    h=hashlib.sha256(); h.update(open(p,'rb').read()); return h.hexdigest().upper()
+    h=hashlib.sha256()
+    with open(p,'rb') as fh:
+        for chunk in iter(lambda: fh.read(1<<20), b''):
+            h.update(chunk)
+    return h.hexdigest().upper()
 
 def copy_tree(src, dst):
-    n=0
+    """Replace dst with src without leaving the game tree incomplete.
+
+    rmtree+copytree left a window in which the directory was missing (or half
+    copied); staging beside the target and swapping keeps either the old or the
+    new tree present at all times.
+    """
+    n = 0
+    for root, _, files in os.walk(src):
+        n += len(files)
+    if not APPLY:
+        return n
+
+    staging = dst + '.new'
+    if os.path.exists(staging):
+        shutil.rmtree(staging)
+    shutil.copytree(src, staging)
+
+    replaced = dst + '.old'
+    if os.path.exists(replaced):
+        shutil.rmtree(replaced)
     if os.path.exists(dst):
-        if APPLY: shutil.rmtree(dst)
-    if APPLY: shutil.copytree(src,dst)
-    for root,_,files in os.walk(src):
-        n+=len(files)
+        os.replace(dst, replaced)
+    try:
+        os.replace(staging, dst)
+    except Exception:
+        # Put the previous tree back rather than leaving the game without data.
+        if os.path.exists(replaced) and not os.path.exists(dst):
+            os.replace(replaced, dst)
+        raise
+    if os.path.exists(replaced):
+        shutil.rmtree(replaced, ignore_errors=True)
     return n
 
 plan=[]

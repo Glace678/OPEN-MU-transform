@@ -93,6 +93,7 @@ public class Startup
         services.AddScoped<AdminUserManagementService>();
         services.AddAdminPanelAuth(this.Configuration);
         services.AddSingleton<MobileGmService>();
+        services.AddAccountSelfServiceGuard();
     }
 
     /// <summary>
@@ -119,6 +120,7 @@ public class Startup
 
         app.UseRequestLocalization();
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseAdminPanelAuth();
 
         // The log files may contain sensitive information, so they are only served to authorized users.

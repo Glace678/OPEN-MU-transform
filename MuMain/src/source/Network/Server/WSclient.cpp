@@ -566,22 +566,6 @@ void ReceiveServerList(const BYTE* ReceiveBuffer)
         Offset += sizeof(PRECEIVE_SERVER_LIST);
     }
 
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (FILE* fp = ::fopen("debug_recv.txt", "w"))
-    {
-        ::fprintf(fp, "total=%d\n", g_ServerListManager->GetTotalServer());
-        for (const auto& entry : g_ServerListManager->m_mapServerGroup)
-        {
-            CServerGroup* g = entry.second;
-            ::fprintf(fp, "group seq=%d idx=%d name-len=%d servers=%d\n",
-                g->m_iSequence, g->m_iServerIndex,
-                int(wcslen(g->m_szName)), g->GetServerSize());
-        }
-        ::fclose(fp);
-    }
-#endif
-
     CUIMng& rUIMng = CUIMng::Instance();
     if (!rUIMng.m_CreditWin.IsShow())
     {
@@ -1310,6 +1294,16 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     GameLogic::Commands::Catalog().RequestOnce();
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x03 [ReceiveJoinMapServer]");
+
+    // First time entering the world on this install: run the onboarding once.
+    if (!GameConfig::GetInstance().HasCompletedTutorial())
+    {
+        if (auto* help = g_pNewUISystem->GetUI_NewHelpWindow())
+        {
+            help->StartTutorial();
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_HELP);
+        }
+    }
 
     return (TRUE);
 }

@@ -35,7 +35,7 @@ public sealed class LocalGameLogin
             var password = HMACSHA256.HashData(key, "OpenMU-Solo.LoginPassword.v1"u8);
             return new LocalGameLogin(
                 "solo" + Convert.ToHexString(name)[..6],
-                Convert.ToBase64String(password)[..20].Replace('+', '-').Replace('/', '_'));
+                Convert.ToBase64String(password).TrimEnd('=').Replace('+', '-').Replace('/', '_')[..20]);
         }
         finally
         {

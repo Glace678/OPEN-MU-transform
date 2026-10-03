@@ -55,22 +55,25 @@ class FixedFile:
         self.raw = open(path, 'rb').read()
         body = self.raw
         self.stored_checksum = None
+        expected = R * N
         if has_checksum:
-            if len(self.raw) == R*N + 4:
-                self.stored_checksum = struct.unpack_from('<I', self.raw, R*N)[0]
-                body = self.raw[:R*N]
-            elif len(self.raw) == R*N:
+            if len(self.raw) == expected + 4:
+                self.stored_checksum = struct.unpack_from('<I', self.raw, expected)[0]
+                body = self.raw[:expected]
+            elif len(self.raw) == expected:
                 body = self.raw
             else:
-                # try to detect
-                if len(self.raw) >= R*N:
-                    self.stored_checksum = struct.unpack_from('<I', self.raw, R*N)[0]
-                    body = self.raw[:R*N]
-                else:
-                    raise ValueError(f"size {len(self.raw)} < {R*N}")
+                # Any other length means the file is not what the format claims.
+                # Silently slicing to R*N would hide a corrupted or foreign file
+                # and let a later edit write a structurally wrong output.
+                raise ValueError(
+                    f"{path}: size {len(self.raw)} does not match "
+                    f"{expected} (body) or {expected + 4} (body+checksum)")
         else:
-            body = self.raw[:R*N]
-        assert len(body) == R*N, f"body {len(body)} != {R*N}"
+            if len(self.raw) < expected:
+                raise ValueError(f"size {len(self.raw)} < {expected}")
+            body = self.raw[:expected]
+        assert len(body) == expected, f"body {len(body)} != {expected}"
         # decrypt per record
         self.recs = []
         enc = bytearray(body)
@@ -94,6 +97,11 @@ class FixedFile:
         try:
             return raw.decode('utf-8')
         except UnicodeDecodeError:
+            # latin-1 never fails, so an unexpected byte would masquerade as a
+            # mojibake string; report where it came from instead.
+            print(f"warning: {self.path} record {i} offset {off}: "
+                  f"invalid UTF-8 {raw[:16].hex(' ')}..., decoded as latin-1",
+                  file=sys.stderr)
             return raw.decode('latin-1')
 
     def set_str(self, i, off, maxlen, text):

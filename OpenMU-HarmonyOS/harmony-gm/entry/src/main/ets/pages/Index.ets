@@ -42,10 +42,22 @@ struct Index {
   @State hasLuck: boolean = false;
   @State additionalLevel: number = 0;
   @State excellentChecked: boolean[] = [];
+  // Excellent option Numbers parallel to excellentChecked; the server may
+  // report sparse numbers, so masks are built from these, not the index.
+  @State excellentNumbers: number[] = [];
   @State excellentAll: boolean = false;
   @State grantBusy: boolean = false;
   @State resultText: string = '请先刷新角色并搜索物品。';
   @State zenAmount: string = '1000000';
+
+  // Pending idempotency keys. They must survive a failed attempt: the server
+  // caches results per requestId, so retrying with a fresh UUID would break
+  // idempotency and grant twice. A key is only minted when the form actually
+  // changes, and cleared after a success so the same form can be granted again.
+  private pendingGrantId: string = '';
+  private grantFormSignature: string = '';
+  private pendingZenId: string = '';
+  private zenFormSignature: string = '';
 
   private client(): MobileGmClient {
     return new MobileGmClient(this.serverUrl, MOBILE_PACKAGE_KEY);
@@ -111,7 +123,7 @@ struct Index {
   }
 
   private applySelectedItem(): void {
-    const item = this.selectedItemIndex >= 0 ? this.items[this.selectedItemIndex] : undefined;
+    const item = this.currentItem();
     if (!item) {
       this.maxLevel = 0;
       this.level = 0;
@@ -119,6 +131,7 @@ struct Index {
       this.hasLuck = false;
       this.additionalLevel = 0;
       this.excellentChecked = [];
+      this.excellentNumbers = [];
       this.excellentAll = false;
       return;
     }
@@ -133,7 +146,8 @@ struct Index {
     if (!item.canHaveAdditional) {
       this.additionalLevel = 0;
     }
-    this.excellentChecked = new Array<boolean>(Math.max(0, Math.min(item.excellentCount, 12))).fill(false);
+    this.excellentNumbers = item.excellentNumbers.slice(0, 12);
+    this.excellentChecked = new Array<boolean>(this.excellentNumbers.length).fill(false);
     this.excellentAll = false;
   }
 
@@ -141,10 +155,37 @@ struct Index {
     let mask = 0;
     for (let i = 0; i < this.excellentChecked.length; i++) {
       if (this.excellentChecked[i]) {
-        mask |= (1 << i);
+        mask |= (1 << (this.excellentNumbers[i] - 1));
       }
     }
     return mask;
+  }
+
+  // The item grant's idempotency key is bound to the current form state: the
+  // same form keeps the same key (so a failed attempt can be retried against
+  // the server's cached result), while any form change mints a new one.
+  private itemFormSignature(): string {
+    const additional = this.currentItem()?.canHaveAdditional ? this.additionalLevel : 0;
+    return `${this.selectedCharacterIndex}|${this.selectedItemIndex}|${this.level}|${this.quantity}`
+      + `|${this.hasSkill}|${this.hasLuck}|${additional}|${this.excellentMask()}`;
+  }
+
+  private itemGrantId(): string {
+    const signature = this.itemFormSignature();
+    if (!this.pendingGrantId || this.grantFormSignature !== signature) {
+      this.grantFormSignature = signature;
+      this.pendingGrantId = randomUuid();
+    }
+    return this.pendingGrantId;
+  }
+
+  private zenGrantId(): string {
+    const signature = `${this.selectedCharacterIndex}|${this.zenAmount.trim()}`;
+    if (!this.pendingZenId || this.zenFormSignature !== signature) {
+      this.zenFormSignature = signature;
+      this.pendingZenId = randomUuid();
+    }
+    return this.pendingZenId;
   }
 
   private selectedCharacter(): CharacterOption | undefined {
@@ -177,7 +218,7 @@ struct Index {
     this.resultText = '正在发放，请勿重复点击…';
     try {
       const message = await this.client().grantItem({
-        requestId: randomUuid(),
+        requestId: this.itemGrantId(),
         characterId: character.id,
         group: item.group,
         number: item.number,
@@ -189,6 +230,8 @@ struct Index {
         excellentMask: this.excellentMask()
       });
       this.resultText = message;
+      this.pendingGrantId = '';
+      this.grantFormSignature = '';
       promptAction.showToast({ message: '装备已发放' });
       await this.loadStatus();
     } catch (e) {
@@ -211,8 +254,14 @@ struct Index {
     this.grantBusy = true;
     this.resultText = '正在发放金币，请勿重复点击…';
     try {
-      const message = await this.client().grantZen({ requestId: randomUuid(), characterId: character.id, amount });
+      const message = await this.client().grantZen({
+        requestId: this.zenGrantId(),
+        characterId: character.id,
+        amount
+      });
       this.resultText = message;
+      this.pendingZenId = '';
+      this.zenFormSignature = '';
       promptAction.showToast({ message: '金币已发放' });
       await this.loadStatus();
     } catch (e) {
@@ -415,7 +464,7 @@ struct Index {
                 next[index] = on;
                 this.excellentChecked = next;
               })
-            Text(`卓越 ${index + 1}`).fontSize(16).margin({ left: 8 })
+            Text(`卓越 ${this.excellentNumbers[index]}`).fontSize(16).margin({ left: 8 })
           }.width('100%').height(44)
         }, (_: boolean, index: number) => `ex-${index}`)
       } else {

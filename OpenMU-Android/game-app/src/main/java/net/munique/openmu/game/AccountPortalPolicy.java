@@ -37,7 +37,7 @@ final class AccountPortalPolicy {
             if (!("https".equals(scheme) || "http".equals(scheme)) || host.isEmpty()
                 || uri.getRawUserInfo() != null || uri.getRawQuery() != null || uri.getRawFragment() != null
                 || !(path == null || path.isEmpty() || "/".equals(path)) || port == 0 || port > 65535
-                || (uri.getRawAuthority().endsWith(":"))) {
+                || java.util.Objects.toString(uri.getRawAuthority(), "").endsWith(":")) {
                 throw new IllegalArgumentException("Invalid account portal origin");
             }
             boolean ipv6 = host.startsWith("[") && host.endsWith("]") && host.indexOf(':') >= 0;

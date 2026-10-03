@@ -5,7 +5,6 @@
 namespace MUnique.OpenMU.Web.AdminPanel.API;
 
 using System.Globalization;
-using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +23,8 @@ using MUnique.OpenMU.Web.AdminPanel.Properties;
 /// registration, password change, recovery-code ownership and local maintenance resets.
 /// Registration is anonymous, password changes require the current password,
 /// and public recovery requires an independent one-time credential. Resets without
-/// an ownership credential are disabled by default.
+/// an ownership credential are disabled by default; when enabled they require the
+/// server's maintenance token instead of trusting the caller's network position.
 /// </summary>
 public static class PublicRegistrationEndpoints
 {
@@ -44,10 +44,18 @@ public static class PublicRegistrationEndpoints
             return await next(context).ConfigureAwait(false);
         });
 
-        group.MapPost("/create", CreateAccountAsync).DisableAntiforgery();
-        group.MapPost("/change-password", ChangePasswordAsync).DisableAntiforgery();
-        group.MapPost("/reset-password", ResetPasswordAsync).DisableAntiforgery();
-        group.MapPost("/recovery-code", IssueRecoveryCodeAsync).DisableAntiforgery();
+        group.MapPost("/create", CreateAccountAsync)
+            .RequireRateLimiting(AccountSelfServicePolicies.Registration)
+            .DisableAntiforgery();
+        group.MapPost("/change-password", ChangePasswordAsync)
+            .RequireRateLimiting(AccountSelfServicePolicies.CredentialVerification)
+            .DisableAntiforgery();
+        group.MapPost("/reset-password", ResetPasswordAsync)
+            .RequireRateLimiting(AccountSelfServicePolicies.CredentialVerification)
+            .DisableAntiforgery();
+        group.MapPost("/recovery-code", IssueRecoveryCodeAsync)
+            .RequireRateLimiting(AccountSelfServicePolicies.CredentialVerification)
+            .DisableAntiforgery();
         group.MapGet("/text", GetPublicText);
 
         return endpoints;
@@ -71,7 +79,9 @@ public static class PublicRegistrationEndpoints
     }
 
     private static async Task<IResult> CreateAccountAsync(
+        HttpContext httpContext,
         AccountRegistrationRequest? request,
+        AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
         ILoggerFactory loggerFactory,
         IStringLocalizer<SelfServiceResources> text)
@@ -123,6 +133,12 @@ public static class PublicRegistrationEndpoints
         {
             if (await context.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false) is not null)
             {
+                // Public deployments must not confirm the existence of an account.
+                if (guard.IsPublicMode)
+                {
+                    return Results.Ok(new AccountRegistrationResponse(false, "error", text["RegistrationFailed"].Value));
+                }
+
                 return Results.Ok(new AccountRegistrationResponse(false, "duplicate", text["DuplicateAccount"].Value));
             }
 
@@ -146,7 +162,7 @@ public static class PublicRegistrationEndpoints
 
             account.SecurityCode = securityCode;
             account.State = AccountState.Normal;
-            account.LanguageIsoCode = GetAccountLanguageIsoCode();
+            account.LanguageIsoCode = GetAccountLanguageIsoCode(request, httpContext);
             account.RegistrationDate = DateTime.UtcNow;
 
             if (!await context.SaveChangesAsync().ConfigureAwait(false))
@@ -160,6 +176,16 @@ public static class PublicRegistrationEndpoints
         catch (Exception ex)
         {
             logger.LogError(ex, "Self-registration for {LoginName} failed.", loginName);
+
+            // A concurrent insert of the same name surfaces as a unique constraint
+            // violation rather than as a duplicate lookup; treat it as one.
+            if (IsUniqueConstraintViolation(ex))
+            {
+                return guard.IsPublicMode
+                    ? Results.Ok(new AccountRegistrationResponse(false, "error", text["RegistrationFailed"].Value))
+                    : Results.Ok(new AccountRegistrationResponse(false, "duplicate", text["DuplicateAccount"].Value));
+            }
+
             if (account is not null)
             {
                 try
@@ -178,6 +204,7 @@ public static class PublicRegistrationEndpoints
 
     private static async Task<IResult> ChangePasswordAsync(
         PasswordChangeRequest? request,
+        AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
         ILoggerFactory loggerFactory,
         IStringLocalizer<SelfServiceResources> text)
@@ -208,6 +235,11 @@ public static class PublicRegistrationEndpoints
             return Results.Ok(new AccountRegistrationResponse(false, "password_mismatch", text["PasswordMismatch"].Value));
         }
 
+        if (guard.IsLockedOut(loginName))
+        {
+            return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
+        }
+
         using var configurationContext = persistenceContextProvider.CreateNewConfigurationContext();
         try
         {
@@ -215,6 +247,7 @@ public static class PublicRegistrationEndpoints
             var account = await context.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
             if (account is null || !BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash))
             {
+                guard.RegisterFailedAttempt(loginName);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 
@@ -224,6 +257,7 @@ public static class PublicRegistrationEndpoints
                 return Results.Ok(new AccountRegistrationResponse(false, "error", text["ServerBusy"].Value));
             }
 
+            guard.RegisterSuccessfulAttempt(loginName);
             logger.LogInformation("Password changed for account {LoginName}.", loginName);
             return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordChangeSuccess"].Value));
         }
@@ -237,6 +271,7 @@ public static class PublicRegistrationEndpoints
     private static async Task<IResult> ResetPasswordAsync(
         HttpContext httpContext,
         PasswordResetRequest? request,
+        AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
         ILoggerFactory loggerFactory,
         IStringLocalizer<SelfServiceResources> text,
@@ -246,8 +281,9 @@ public static class PublicRegistrationEndpoints
         var recoveryCode = request?.RecoveryCode ?? string.Empty;
         var hasRecoveryCode = !string.IsNullOrWhiteSpace(recoveryCode);
 
-        // A loopback peer is not proof of account ownership: local reverse proxies
-        // can represent remote callers. This legacy maintenance path must be opt-in.
+        // Ownership without a recovery code is proven by the server's maintenance
+        // token file. A loopback peer or a missing proxy header proves nothing:
+        // local reverse proxies and tunnels present remote callers as loopback.
         if (!hasRecoveryCode)
         {
             if (!bool.TryParse(configuration["AccountSelfService:AllowLocalPasswordReset"], out var allowLocalReset)
@@ -260,14 +296,9 @@ public static class PublicRegistrationEndpoints
                 return Results.Ok(new AccountRegistrationResponse(false, "reset_disabled", message));
             }
 
-            var remoteIp = httpContext.Connection.RemoteIpAddress;
-            if (remoteIp?.IsIPv4MappedToIPv6 == true)
+            if (!guard.IsMaintenanceTokenValid(request?.MaintenanceToken))
             {
-                remoteIp = remoteIp.MapToIPv4();
-            }
-
-            if (remoteIp is null || !IPAddress.IsLoopback(remoteIp) || HasProxyHeaders(httpContext.Request.Headers))
-            {
+                logger.LogWarning("Rejected a maintenance password reset from {RemoteIp} without a valid maintenance token.", httpContext.Connection.RemoteIpAddress);
                 return Results.Ok(new AccountRegistrationResponse(false, "forbidden", text["ResetForbidden"].Value));
             }
         }
@@ -295,6 +326,11 @@ public static class PublicRegistrationEndpoints
             return Results.Ok(new AccountRegistrationResponse(false, "password_mismatch", text["PasswordMismatch"].Value));
         }
 
+        if (hasRecoveryCode && guard.IsLockedOut(loginName))
+        {
+            return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
+        }
+
         using var configurationContext = persistenceContextProvider.CreateNewConfigurationContext();
         try
         {
@@ -309,9 +345,11 @@ public static class PublicRegistrationEndpoints
                 var replacement = await AccountRecoveryService.ResetAsync(credentials, loginName, recoveryCode, newPassword).ConfigureAwait(false);
                 if (replacement is null)
                 {
+                    guard.RegisterFailedAttempt(loginName);
                     return Results.Ok(new AccountRegistrationResponse(false, "invalid_recovery_code", text["InvalidRecoveryCode"].Value));
                 }
 
+                guard.RegisterSuccessfulAttempt(loginName);
                 logger.LogInformation("Password recovered with an owned one-time code for account {LoginName}.", loginName);
                 return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordResetSuccess"].Value, replacement));
             }
@@ -329,7 +367,7 @@ public static class PublicRegistrationEndpoints
                     return Results.Ok(new AccountRegistrationResponse(false, "error", text["ServerBusy"].Value));
                 }
 
-                logger.LogInformation("Password reset (explicit local maintenance) for account {LoginName}.", loginName);
+                logger.LogInformation("Password reset (maintenance token) for account {LoginName}.", loginName);
                 return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordResetSuccess"].Value));
             }
 
@@ -346,7 +384,7 @@ public static class PublicRegistrationEndpoints
                 return Results.Ok(new AccountRegistrationResponse(false, "error", text["ServerBusy"].Value));
             }
 
-            logger.LogInformation("Password reset (explicit local maintenance) for account {LoginName}.", loginName);
+            logger.LogInformation("Password reset (maintenance token) for account {LoginName}.", loginName);
             return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordResetSuccess"].Value));
         }
         catch (Exception ex)
@@ -358,6 +396,7 @@ public static class PublicRegistrationEndpoints
 
     private static async Task<IResult> IssueRecoveryCodeAsync(
         AccountRecoveryCodeRequest? request,
+        AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
         ILoggerFactory loggerFactory,
         IStringLocalizer<SelfServiceResources> text)
@@ -367,6 +406,11 @@ public static class PublicRegistrationEndpoints
         if (!ValidLoginName.IsMatch(loginName) || !IsValidPassword(currentPassword, out _))
         {
             return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
+        }
+
+        if (guard.IsLockedOut(loginName))
+        {
+            return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
         }
 
         var logger = loggerFactory.CreateLogger("MUnique.OpenMU.PublicRegistration");
@@ -382,9 +426,11 @@ public static class PublicRegistrationEndpoints
             var replacement = await AccountRecoveryService.IssueAsync(credentials, loginName, currentPassword).ConfigureAwait(false);
             if (replacement is null)
             {
+                guard.RegisterFailedAttempt(loginName);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 
+            guard.RegisterSuccessfulAttempt(loginName);
             logger.LogInformation("Recovery code issued after password verification for account {LoginName}.", loginName);
             return Results.Ok(new AccountRegistrationResponse(true, "ok", text["RecoveryIssueSuccess"].Value, replacement));
         }
@@ -395,19 +441,9 @@ public static class PublicRegistrationEndpoints
         }
     }
 
-    private static bool HasProxyHeaders(IHeaderDictionary headers) => headers.Keys.Any(name =>
-        name.StartsWith("X-Forwarded-", StringComparison.OrdinalIgnoreCase)
-        || name.StartsWith("X-Original-", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("Forwarded", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("X-Real-IP", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("X-Client-IP", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("True-Client-IP", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("CF-Connecting-IP", StringComparison.OrdinalIgnoreCase)
-        || name.Equals("Fastly-Client-IP", StringComparison.OrdinalIgnoreCase));
-
     private static bool IsValidPassword(string password, out string errorCode)
     {
-        if (password.Length is < 3 or > 20)
+        if (password.Length is < 8 or > 20)
         {
             errorCode = "invalid_password";
             return false;
@@ -427,10 +463,85 @@ public static class PublicRegistrationEndpoints
         securityCode.Length is >= 3 and <= 10
         && securityCode.All(c => c is >= '!' and <= '~');
 
-    private static string GetAccountLanguageIsoCode()
+    // Client-declared first: the server's UI culture says nothing about the player.
+    // Unknown values fall back to Accept-Language, then to English.
+    private static readonly string[] SupportedAccountCultures =
     {
-        var isoCode = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-        return isoCode is { Length: > 0 and <= 3 } ? isoCode : "en";
+        "en", "zh-CN", "zh-TW", "ja", "ko", "de", "es", "fr", "pt", "ru", "uk", "pl", "id", "vi", "tl",
+    };
+
+    private static string GetAccountLanguageIsoCode(AccountRegistrationRequest? request, HttpContext httpContext)
+    {
+        var requested = NormalizeCulture(request?.Culture) ?? NormalizeCulture(ReadAcceptLanguage(httpContext));
+        if (requested is not null)
+        {
+            return requested;
+        }
+
+        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName is { Length: > 0 and <= 3 } isoCode ? isoCode : "en";
+    }
+
+    private static string? ReadAcceptLanguage(HttpContext httpContext)
+    {
+        var header = httpContext.Request.Headers.AcceptLanguage.ToString();
+        if (string.IsNullOrWhiteSpace(header))
+        {
+            return null;
+        }
+
+        var preferred = header.Split(',')[0].Split(';')[0].Trim();
+        return preferred.Length > 0 ? preferred : null;
+    }
+
+    private static string? NormalizeCulture(string? value)
+    {
+        var candidate = value?.Trim();
+        if (string.IsNullOrEmpty(candidate))
+        {
+            return null;
+        }
+
+        foreach (var supported in SupportedAccountCultures)
+        {
+            if (string.Equals(candidate, supported, StringComparison.OrdinalIgnoreCase))
+            {
+                return supported;
+            }
+        }
+
+        // "zh-Hans-CN" and similar tags: accept them when their language part is supported.
+        var language = candidate.Split('-', '_')[0];
+        foreach (var supported in SupportedAccountCultures)
+        {
+            if (string.Equals(language, supported, StringComparison.OrdinalIgnoreCase))
+            {
+                return supported;
+            }
+        }
+
+        return null;
+    }
+
+    // A concurrent insert of the same login name surfaces as a unique constraint
+    // violation (PostgreSQL 23505) rather than as a duplicate lookup. The provider
+    // type is matched by name so this layer stays free of a database dependency.
+    private static bool IsUniqueConstraintViolation(Exception exception)
+    {
+        for (Exception? current = exception; current is not null; current = current.InnerException)
+        {
+            if (current.GetType().FullName != "Npgsql.PostgresException")
+            {
+                continue;
+            }
+
+            var state = current.GetType().GetProperty("SqlState")?.GetValue(current) as string;
+            if (state == "23505")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static string PasswordMessage(string errorCode, IStringLocalizer<SelfServiceResources> text) => errorCode switch

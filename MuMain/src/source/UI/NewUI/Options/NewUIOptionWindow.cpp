@@ -245,10 +245,12 @@ namespace
     constexpr int SLIDE_HELP_CHECK_Y_LOCAL = 155;
     constexpr int RENDER_ALL_EFFECTS_CHECK_Y_LOCAL = 217;
     constexpr int WINDOWED_MODE_CHECK_Y_LOCAL = 356;
-    constexpr int CLOSE_BUTTON_X_LOCAL = 71;
-    constexpr int CLOSE_BUTTON_Y_LOCAL = 384;
-    constexpr int CLOSE_BUTTON_WIDTH = 48;
-    constexpr int CLOSE_BUTTON_HEIGHT = 26;
+    constexpr int CLOSE_BUTTON_X_LOCAL = 72;
+    constexpr int CLOSE_BUTTON_Y_LOCAL = 385;
+    // The close sprite is 54x90 (three 54x30 frames). Keeping a 1.8:1 ratio
+    // (45x24) avoids squashing the frames; it stays small in the bottom bar.
+    constexpr int CLOSE_BUTTON_WIDTH = 45;
+    constexpr int CLOSE_BUTTON_HEIGHT = 24;
 
     // Render-level slider ("Effect limitation"). Drawn at ~half the legacy
     // 141x29 and horizontally centered: the window content centers on x+95, so a
@@ -1752,7 +1754,7 @@ void SEASON3B::CNewUIOptionWindow::RenderContents()
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 92, I18N::Game::SoundVolume);
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 120, I18N::Game::MusicVolume);
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 160, I18N::Game::SlideHelp);
-    g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 182, I18N::Game::EffectLimitation);
+    g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + RENDER_SLIDER_Y_LOCAL, I18N::Game::EffectLimitation);
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 221, I18N::Game::RenderFullEffects);
 
     y += 25.f;

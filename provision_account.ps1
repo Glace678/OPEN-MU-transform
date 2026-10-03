@@ -56,7 +56,7 @@ INSERT INTO data."Account"
   ("Id","LoginName","PasswordHash","SecurityCode","EMail","RegistrationDate","State","TimeZone","VaultPassword","IsVaultExtended","IsTemplate","LanguageIsoCode","IsBot")
 VALUES
   ('$id','$u','$h','','','$now',0,0,'',false,false,'zh',false)
-ON CONFLICT ("Id") DO NOTHING;
+ON CONFLICT ("LoginName") DO NOTHING;
 "@
 
 [System.IO.File]::WriteAllText($OutSql, $sql, [System.Text.Encoding]::ASCII)

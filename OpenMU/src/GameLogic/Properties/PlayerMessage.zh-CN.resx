@@ -213,6 +213,9 @@
   <data name="ItemLevelExceeded" xml:space="preserve">
     <value>物品等级不能超过 {0}。</value>
   </data>
+  <data name="ItemCannotBeSoldToNpc" xml:space="preserve">
+    <value>该物品不能出售给 NPC。</value>
+  </data>
   <data name="MonsterNotFoundById" xml:space="preserve">
     <value>未找到 ID 为 {0} 的怪物。</value>
   </data>

@@ -20,9 +20,14 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class BootstrapActivity extends Activity {
     private static final ExecutorService GAME_DATA_WORKER = Executors.newSingleThreadExecutor();
+
+    // Survives Activity recreation (rotation, theme change): without it every
+    // recreated instance queues another 2 GB extraction into the same worker.
+    private static final AtomicBoolean EXTRACTION_RUNNING = new AtomicBoolean(false);
 
     private final Handler main = new Handler(Looper.getMainLooper());
     private boolean preparing;
@@ -166,6 +171,11 @@ public final class BootstrapActivity extends Activity {
         if (preparing) {
             return;
         }
+        if (!EXTRACTION_RUNNING.compareAndSet(false, true)) {
+            // Another (recreated) instance is already extracting on the shared
+            // worker; its result updates this instance through isGameDataReady.
+            return;
+        }
         preparing = true;
         play.setEnabled(false);
         retry.setVisibility(View.GONE);
@@ -183,11 +193,13 @@ public final class BootstrapActivity extends Activity {
                 }));
                 postToUi(() -> {
                     preparing = false;
+                    EXTRACTION_RUNNING.set(false);
                     showReady();
                 });
             } catch (IOException error) {
                 postToUi(() -> {
                     preparing = false;
+                    EXTRACTION_RUNNING.set(false);
                     showFailure(error.getMessage());
                 });
             }

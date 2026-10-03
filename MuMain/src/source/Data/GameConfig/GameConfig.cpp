@@ -402,6 +402,8 @@ void GameConfig::Load()
 
     m_zoom = ReadInt(CfgSectionCamera, CfgKeyZoom, CfgDefaultZoom);
 
+    m_tutorialCompleted = ReadBool(CfgSectionUI, CfgKeyTutorialCompleted, CfgDefaultTutorialCompleted);
+
     // Strip keys/sections we used to write but no longer use, so user config
     // files don't accumulate orphans. Append one line per retired key — no
     // central registry of valid keys to keep in sync.
@@ -487,6 +489,8 @@ void GameConfig::Save()
     WriteString(CfgSectionUI, CfgKeyFont, m_fontSelection);
 
     WriteInt(CfgSectionCamera, CfgKeyZoom, m_zoom);
+
+    WriteBool(CfgSectionUI, CfgKeyTutorialCompleted, m_tutorialCompleted);
 }
 
 std::vector<std::wstring> GameConfig::ReadStringList(const wchar_t* section, const wchar_t* keyPrefix)
@@ -631,6 +635,12 @@ void GameConfig::SetServerPort(int port)
 void GameConfig::SetZoom(int zoom)
 {
     m_zoom = zoom;
+}
+
+void GameConfig::SetTutorialCompleted(bool completed)
+{
+    m_tutorialCompleted = completed;
+    Save();
 }
 
 // Helper function to convert binary data to hex string

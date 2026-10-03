@@ -66,7 +66,6 @@ public sealed class Checks(Rules rules, Simulation simulation)
             var old = rules.Monster(rank).Zen;
             foreach (var profile in D.Profiles)
             {
-                _ = rules.BaseExperience(rank) * profile.NormalXp;
                 Equal(rules.Monster(rank).Zen, old, "Profile XP must not affect Zen");
                 Equal(profile.NormalXp, profile.MasterXp, "Both progression phases use the same profile multiplier");
             }
@@ -175,7 +174,7 @@ public sealed class Checks(Rules rules, Simulation simulation)
         Check(rare.Equipment == "excellent" && rare.State.EligibleKillsWithoutExcellent == 0, "Natural rare resets pity");
         var low = rules.Drop(1, new LootState(200), 0, 0, 0);
         Equal(low.State.EligibleKillsWithoutExcellent, 200, "Low-level kills cannot farm pity credit");
-        var persisted = JsonSerializer.Deserialize<LootState>(JsonSerializer.Serialize(new LootState(249)))!;
+        var persisted = JsonSerializer.Deserialize<LootState>(JsonSerializer.Serialize(new LootState(D.Loot.ExcellentPityKills - 1)))!;
         Check(rules.Drop(400, persisted, 0, 0, 0).Equipment == "excellent", "Pity survives JSON roundtrip");
         var eq = rules.Drop(400, new LootState(), 0, D.Loot.MoneyChance, D.Loot.JewelChance);
         Check(!eq.Money && !eq.Jewel, "Probability boundary uses less-than, not less-than-or-equal");
@@ -260,8 +259,13 @@ public sealed class Checks(Rules rules, Simulation simulation)
         Check(!cooldown.Granted && cooldown.Reason == "boss-cooldown", "Boss token cooldown");
         var newDay = rewards.Claim(first.State, "event-new", "blood_castle", 12, time.AddDays(1), false);
         Check(newDay.Tokens == 12 && newDay.State.Balance == 14, "UTC daily cap resets earned amount, not balance");
-        var capped = rewards.Claim(newDay.State, "event-cap", "blood_castle", 2, time.AddDays(1).AddHours(1), false);
-        Check(capped.Tokens == 0 && capped.State.Balance == 14, "Daily token cap");
+        var capped = rewards.Claim(newDay.State, "event-cap", "blood_castle", 8, time.AddDays(1).AddHours(1), false);
+        // Earned was 12; a daily cap of 18 leaves six, so an eight-token request
+        // is trimmed to exactly the remaining budget and reaches the cap.
+        Check(capped.Tokens == D.Loot.EventTokenCapPerDay - 12 && capped.State.EarnedToday == D.Loot.EventTokenCapPerDay,
+            "Daily token cap");
+        var overCap = rewards.Claim(capped.State, "event-cap-2", "blood_castle", 2, time.AddDays(1).AddHours(2), false);
+        Check(overCap.Tokens == 0 && overCap.State.Balance == capped.State.Balance, "No tokens minted past the daily cap");
         var replay = rewards.Claim(capped.State, "event-cap", "blood_castle", 2, time.AddDays(2), false);
         Check(!replay.Granted, "Capped reward IDs cannot be replayed on a later day");
         Check(rewards.Purchase(100, 30, 3).Balance == 10, "Purchase exact debit");

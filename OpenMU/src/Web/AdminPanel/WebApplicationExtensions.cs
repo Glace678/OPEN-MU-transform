@@ -79,6 +79,7 @@ public static class WebApplicationExtensions
 
         services.AddAdminPanelAuth(builder.Configuration);
         services.AddSingleton<MobileGmService>();
+        services.AddAccountSelfServiceGuard();
 
         services.AddSingleton<IDataSource<GameConfiguration>, GameConfigurationDataSource>();
         services.AddSingleton<IDataSource<Account>, AccountDataSource>();
@@ -129,6 +130,7 @@ public static class WebApplicationExtensions
 
         app.UseRequestLocalization();
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseAdminPanelAuth();
 
         // The log files may contain sensitive information, so they are only served to authorized users.

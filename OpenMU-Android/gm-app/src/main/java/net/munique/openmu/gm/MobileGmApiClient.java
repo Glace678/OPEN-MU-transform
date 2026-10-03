@@ -111,9 +111,10 @@ final class MobileGmApiClient {
                     item.optBoolean("canHaveAdditional", false));
                 int excellentCount = Math.max(0, Math.min(31,
                     item.optInt("excellentOptionCount", item.optInt("excellentCount", 0))));
+                int[] excellentNumbers = parseExcellentNumbers(item, excellentCount);
                 if (!name.isEmpty()) {
                     items.add(new ItemOption(group, number, name, maxLevel, canHaveSkill,
-                        canHaveLuck, canHaveAdditional, excellentCount));
+                        canHaveLuck, canHaveAdditional, excellentCount, excellentNumbers));
                 }
             } catch (JSONException ignored) {
                 // Skip one malformed search result without hiding valid results.
@@ -300,6 +301,28 @@ final class MobileGmApiClient {
         }
     }
 
+    // The server reports the real option numbers because they are not
+    // necessarily 1..N; a fallback synthesizes 1..count for older servers.
+    private static int[] parseExcellentNumbers(JSONObject item, int excellentCount) {
+        JSONArray numbers = item.optJSONArray("excellentOptionNumbers");
+        if (numbers == null) {
+            int[] fallback = new int[excellentCount];
+            for (int index = 0; index < excellentCount; index++) {
+                fallback[index] = index + 1;
+            }
+            return fallback;
+        }
+        int[] parsed = new int[Math.min(numbers.length(), 31)];
+        int written = 0;
+        for (int index = 0; index < parsed.length; index++) {
+            int value = numbers.optInt(index, 0);
+            if (value >= 1 && value <= 31) {
+                parsed[written++] = value;
+            }
+        }
+        return written == parsed.length ? parsed : java.util.Arrays.copyOf(parsed, written);
+    }
+
     static final class ItemOption {
         final int group;
         final int number;
@@ -310,8 +333,12 @@ final class MobileGmApiClient {
         final boolean canHaveAdditional;
         final int excellentCount;
 
+        // The excellent option Numbers as reported by the server (may be sparse).
+        final int[] excellentNumbers;
+
         ItemOption(int group, int number, String name, int maxLevel, boolean canHaveSkill,
-                   boolean canHaveLuck, boolean canHaveAdditional, int excellentCount) {
+                   boolean canHaveLuck, boolean canHaveAdditional, int excellentCount,
+                   int[] excellentNumbers) {
             this.group = group;
             this.number = number;
             this.name = name;
@@ -320,6 +347,7 @@ final class MobileGmApiClient {
             this.canHaveLuck = canHaveLuck;
             this.canHaveAdditional = canHaveAdditional;
             this.excellentCount = excellentCount;
+            this.excellentNumbers = excellentNumbers;
         }
 
         @Override

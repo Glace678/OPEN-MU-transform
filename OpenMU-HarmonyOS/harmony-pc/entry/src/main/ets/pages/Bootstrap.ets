@@ -5,6 +5,7 @@ import { promptAction } from '@kit.ArkUI';
 import { MobileConfig, DEFAULT_SERVER_ADDRESS } from '../mobile/MobileConfig';
 // Re-apply the data root after first-run extraction (see harmony-game notes).
 import bridge from 'libopenmubridge.so';
+import { copyRawfileTo } from '../mobile/RawFileCopy';
 
 // HarmonyOS PC / 2-in-1 launcher: windowed, keyboard + mouse primary. No login
 // screen — the client auto-logs into the paired local account.
@@ -51,13 +52,7 @@ struct Bootstrap {
     try {
       fs.mkdirSync(root, true);
       const zipPath = context.filesDir + '/game-data.zip';
-      const bytes = await context.resourceManager.getRawFileContent('game-data.zip');
-      const out = fs.openSync(zipPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
-      try {
-        fs.writeSync(out.fd, bytes.buffer);
-      } finally {
-        fs.closeSync(out);
-      }
+      await copyRawfileTo(context, 'game-data.zip', zipPath);
       await zlib.decompressFile(zipPath, root, { overwrite: true });
       try {
         fs.unlinkSync(zipPath);

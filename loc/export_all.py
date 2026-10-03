@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import config
@@ -36,7 +36,7 @@ for kind in FIXED:
             add(kind, i, None, nm, t, ln-1)
 
 # minimap (20 files)
-for p in sorted(glob.glob(formats.CHS + r'\Minimap\*.bmd')):
+for p in sorted(glob.glob(os.path.join(formats.CHS, 'Minimap', '*.bmd'))):
     name = os.path.basename(p)
     f = formats.FixedRecs(p, 116, 100, key=0x2BC1, trailer=45)
     for i in range(100):
@@ -49,7 +49,10 @@ for (L, j, iNumber, off, txt) in formats.slide_slots(buf):
     add('slide', L, j, 'slot', txt, 255)
 
 # questwords (variable, whole-record dialogue; segments ';')
-qw, sz = read_questwords(formats.CHS + r'\QuestWords_chs.bmd')
+# The export budget is 4096 columns while write_questwords caps a record at
+# 65535 bytes; that mismatch only trims over-long source text, never writes a
+# record the engine would reject.
+qw, sz = read_questwords(os.path.join(formats.CHS, 'QuestWords_chs.bmd'))
 for idx, txt in qw:
     s = txt.decode('utf-8', 'replace').strip('\x00').strip()
     if s and re.search(r'[A-Za-z一-鿿]', s):
@@ -57,7 +60,7 @@ for idx, txt in qw:
 
 # npcname txt -> unique quoted names
 npc = {}
-npc_path = formats.CHS + r'\NpcName_Chs.txt'
+npc_path = os.path.join(formats.CHS, 'NpcName_Chs.txt')
 for line in open(npc_path, 'rb').read().decode('utf-8', 'replace').splitlines():
     m = re.search(r'^\s*(\d+)\s+\d+\s+"([^"]*)"', line)
     if m and m.group(2).strip() and re.search(r'[A-Za-z]', m.group(2)):

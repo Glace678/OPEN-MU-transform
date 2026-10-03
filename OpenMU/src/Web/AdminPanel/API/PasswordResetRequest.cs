@@ -9,11 +9,22 @@ namespace MUnique.OpenMU.Web.AdminPanel.API;
 /// </summary>
 /// <remarks>
 /// Public recovery requires possession of the independently generated recovery code.
-/// Omitting the code never permits a public reset. Legacy local maintenance resets
-/// remain disabled by default and reject proxy headers even when explicitly enabled.
+/// Omitting the code never permits a public reset: the legacy local maintenance path
+/// stays disabled by default and, when enabled, requires the maintenance token from the
+/// server's <c>Data/Keys/maintenance-token.txt</c> file instead of trusting the caller's
+/// network position (loopback or proxy headers cannot prove account ownership).
 /// </remarks>
 /// <param name="LoginName">The account login name.</param>
-/// <param name="NewPassword">The desired new password (3-20 characters, no spaces).</param>
+/// <param name="NewPassword">The desired new password (8-20 characters, no spaces).</param>
 /// <param name="ConfirmNewPassword">The repeated new password; must match <paramref name="NewPassword"/>.</param>
 /// <param name="RecoveryCode">The one-time recovery code. Older clients may omit it but cannot recover remotely.</param>
-public sealed record PasswordResetRequest(string? LoginName, string? NewPassword, string? ConfirmNewPassword, string? RecoveryCode = null);
+/// <param name="MaintenanceToken">
+/// The maintenance token required for a reset without a recovery code; must match the
+/// contents of <c>Data/Keys/maintenance-token.txt</c> on the server.
+/// </param>
+public sealed record PasswordResetRequest(
+    string? LoginName,
+    string? NewPassword,
+    string? ConfirmNewPassword,
+    string? RecoveryCode = null,
+    string? MaintenanceToken = null);

@@ -101,6 +101,10 @@ public:
     int GetZoom() const { return m_zoom; }
     void SetZoom(int zoom);
 
+    // Tutorial: whether the onboarding has been completed on this install.
+    bool HasCompletedTutorial() const { return m_tutorialCompleted; }
+    void SetTutorialCompleted(bool completed);
+
     // Helpers
     static std::wstring BinaryToHex(const BYTE* data, DWORD size);
     static std::vector<BYTE> HexToBinary(const std::wstring& hex);
@@ -147,6 +151,8 @@ private:
     std::wstring m_fontSelection;
 
     int m_zoom;
+
+    bool m_tutorialCompleted = false;
 
     int ReadInt(const wchar_t* section, const wchar_t* key, int defaultValue);
     void WriteInt(const wchar_t* section, const wchar_t* key, int value);

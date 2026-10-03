@@ -3,8 +3,10 @@
 // delivered to SDL and turned into gestures by the shared MobileGestureMapper.
 // This page only provides the surface, the safe-area overlay, and fold/resize
 // awareness (the native side reacts to surface size changes itself).
+import { common } from '@kit.AbilityKit';
 import router from '@ohos.router';
 import { display } from '@kit.ArkUI';
+import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -12,6 +14,21 @@ struct Game {
   @State screenWidth: number = 0;
   @State screenHeight: number = 0;
   @State showHelp: boolean = false;
+  @State showSettings: boolean = false;
+
+  // Kept as members so aboutToDisappear can unregister exactly these listeners
+  // instead of stripping every listener for the event name.
+  private foldCallback = (): void => {
+    const d = display.getDefaultDisplaySync();
+    this.screenWidth = d.width;
+    this.screenHeight = d.height;
+  };
+
+  private changeCallback = (): void => {
+    const d = display.getDefaultDisplaySync();
+    this.screenWidth = d.width;
+    this.screenHeight = d.height;
+  };
 
   aboutToAppear(): void {
     const main = display.getDefaultDisplaySync();
@@ -19,25 +36,31 @@ struct Game {
     this.screenHeight = main.height;
     // Foldable unfold/hover/fold and window resizes: the native renderer remaps
     // the surface itself; we keep the overlay inside the safe area.
-    display.on('foldStatusChange', () => {
-      const d = display.getDefaultDisplaySync();
-      this.screenWidth = d.width;
-      this.screenHeight = d.height;
-    });
-    display.on('change', () => {
-      const d = display.getDefaultDisplaySync();
-      this.screenWidth = d.width;
-      this.screenHeight = d.height;
-    });
+    display.on('foldStatusChange', this.foldCallback);
+    display.on('change', this.changeCallback);
   }
 
   aboutToDisappear(): void {
-    display.off('foldStatusChange');
-    display.off('change');
+    display.off('foldStatusChange', this.foldCallback);
+    display.off('change', this.changeCallback);
   }
 
-  private backToSettings(): void {
-    router.replaceUrl({ url: 'pages/Bootstrap' });
+  // Never navigate away from this page: replaceUrl destroys the XComponent
+  // while the SDL thread is still rendering on it (black screen / crash on the
+  // next visit). Settings live on the Bootstrap launcher page and only apply at
+  // game start, so the in-game button explains that and offers a clean exit
+  // (terminating the ability takes the whole session down with it, which is the
+  // same lifecycle as swiping the app away).
+  private openSettings(): void {
+    this.showSettings = true;
+  }
+
+  private leaveGame(): void {
+    this.showSettings = false;
+    const context = getContext(this) as common.UIAbilityContext;
+    context.terminateSelf().catch((e: Object) => {
+      promptAction.showToast({ message: '退出失败：' + JSON.stringify(e) });
+    });
   }
 
   build() {
@@ -56,15 +79,38 @@ struct Game {
           })
         Button('⚙')
           .width(44).height(44).fontSize(18).backgroundColor('rgba(16,20,24,0.55)')
-          .onClick(() => this.backToSettings())
+          .onClick(() => this.openSettings())
       }
       .position({ right: 12, top: 12 })
 
       if (this.showHelp) {
         this.helpDialog()
       }
+      if (this.showSettings) {
+        this.settingsDialog()
+      }
     }
     .width('100%').height('100%').backgroundColor(Color.Black)
+  }
+
+  @Builder
+  settingsDialog() {
+    Column() {
+      Text('游戏设置').fontSize(20).fontWeight(FontWeight.Bold).margin({ bottom: 12 })
+      Text('服务器地址、帧率、渲染比例与手势设置都在启动页的「设置」里，')
+        .fontSize(14).fontColor('#414750').margin({ bottom: 6 })
+      Text('修改后需要退出并重新进入游戏才会生效。游戏中切换页面会中断渲染，')
+        .fontSize(14).fontColor('#414750').margin({ bottom: 6 })
+      Text('所以这里只提供继续游戏或完整退出。')
+        .fontSize(14).fontColor('#414750')
+      Row({ space: 12 }) {
+        Button('继续游戏').backgroundColor('#313840')
+          .onClick(() => this.showSettings = false)
+        Button('退出游戏').backgroundColor('#BE3028')
+          .onClick(() => this.leaveGame())
+      }.margin({ top: 16 })
+    }
+    .width('78%').backgroundColor(Color.White).borderRadius(14).padding(20)
   }
 
   @Builder

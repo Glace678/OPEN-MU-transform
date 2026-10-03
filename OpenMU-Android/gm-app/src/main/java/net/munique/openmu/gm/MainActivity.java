@@ -61,11 +61,23 @@ public final class MainActivity extends Activity {
     private Spinner additionalSpinner;
     private LinearLayout excellentGroup;
     private final List<CheckBox> excellentChecks = new ArrayList<>();
+    // Option Numbers parallel to excellentChecks; the server may report sparse
+    // numbers, so the mask is built from these instead of the list index.
+    private final List<Integer> excellentNumbers = new ArrayList<>();
     private Button grantButton;
     private TextView resultText;
     private TextView zenBalance;
     private EditText zenAmountField;
     private Button grantZenButton;
+
+    // Pending idempotency keys. They must survive a failed attempt: the server
+    // caches results per requestId, so retrying with a fresh UUID would break
+    // idempotency and grant twice. A key is only minted when the form actually
+    // changes, and cleared after a success so the same form can be granted again.
+    private String pendingGrantId;
+    private String grantFormSignature;
+    private String pendingZenId;
+    private String zenFormSignature;
 
     @Override
     protected void onCreate(Bundle state) {
@@ -334,7 +346,7 @@ public final class MainActivity extends Activity {
         MobileGmApiClient.ItemOption item = items.get(itemIndex);
         int quantity = (Integer) quantitySpinner.getSelectedItem();
         MobileGmApiClient.GrantRequest request = new MobileGmApiClient.GrantRequest(
-            UUID.randomUUID().toString(), character.id, item.group, item.number,
+            grantId(), character.id, item.group, item.number,
             levelSeek.getProgress(), quantity,
             skillCheck.isEnabled() && skillCheck.isChecked(),
             luckCheck.isEnabled() && luckCheck.isChecked(),
@@ -353,6 +365,8 @@ public final class MainActivity extends Activity {
                     grantInFlight = false;
                     updateGrantAvailability();
                     resultText.setText(result.message);
+                    pendingGrantId = null;
+                    grantFormSignature = null;
                     loadStatus();
                 });
             } catch (MobileGmApiClient.ApiException error) {
@@ -382,7 +396,7 @@ public final class MainActivity extends Activity {
             return;
         }
         MobileGmApiClient.ZenRequest request = new MobileGmApiClient.ZenRequest(
-            UUID.randomUUID().toString(), character.id, amount);
+            zenId(), character.id, amount);
         final int generation = requestGeneration;
         grantInFlight = true;
         updateGrantAvailability();
@@ -396,6 +410,8 @@ public final class MainActivity extends Activity {
                     grantInFlight = false;
                     updateGrantAvailability();
                     resultText.setText(result.message);
+                    pendingZenId = null;
+                    zenFormSignature = null;
                     loadStatus();
                 });
             } catch (MobileGmApiClient.ApiException error) {
@@ -407,6 +423,41 @@ public final class MainActivity extends Activity {
                 });
             }
         });
+    }
+
+    // The item grant's idempotency key is bound to the current form state: the
+    // same form keeps the same key (so a failed attempt can be retried against
+    // the server's cached result), while any form change mints a new one.
+    private String grantId() {
+        String signature = itemFormSignature();
+        if (pendingGrantId == null || !signature.equals(grantFormSignature)) {
+            grantFormSignature = signature;
+            pendingGrantId = UUID.randomUUID().toString();
+        }
+        return pendingGrantId;
+    }
+
+    private String itemFormSignature() {
+        int characterIndex = characterSpinner.getSelectedItemPosition();
+        int itemIndex = itemSpinner.getSelectedItemPosition();
+        int quantityIndex = quantitySpinner.getSelectedItemPosition();
+        int additionalIndex = additionalSpinner.isEnabled() ? additionalSpinner.getSelectedItemPosition() : 0;
+        return characterIndex + "|" + itemIndex + "|" + levelSeek.getProgress()
+            + "|" + quantityIndex
+            + "|" + (skillCheck.isEnabled() && skillCheck.isChecked())
+            + "|" + (luckCheck.isEnabled() && luckCheck.isChecked())
+            + "|" + additionalIndex
+            + "|" + excellentMask();
+    }
+
+    private String zenId() {
+        int characterIndex = characterSpinner.getSelectedItemPosition();
+        String signature = characterIndex + "|" + zenAmountField.getText().toString().trim();
+        if (pendingZenId == null || !signature.equals(zenFormSignature)) {
+            zenFormSignature = signature;
+            pendingZenId = UUID.randomUUID().toString();
+        }
+        return pendingZenId;
     }
 
     private void showFailure(int generation, Exception error, boolean statusRequest) {
@@ -436,7 +487,7 @@ public final class MainActivity extends Activity {
             luckCheck.setEnabled(false);
             additionalSpinner.setSelection(0);
             additionalSpinner.setEnabled(false);
-            rebuildExcellentChecks(0);
+            rebuildExcellentChecks(new int[0]);
         } else {
             levelSeek.setMax(item.maxLevel);
             levelSeek.setProgress(Math.min(levelSeek.getProgress(), item.maxLevel));
@@ -446,30 +497,34 @@ public final class MainActivity extends Activity {
             if (!item.canHaveLuck) luckCheck.setChecked(false);
             additionalSpinner.setEnabled(item.canHaveAdditional);
             if (!item.canHaveAdditional) additionalSpinner.setSelection(0);
-            rebuildExcellentChecks(item.excellentCount);
+            rebuildExcellentChecks(item.excellentNumbers);
         }
         updateLevelText();
         updateGrantAvailability();
     }
 
-    private void rebuildExcellentChecks(int count) {
+    private void rebuildExcellentChecks(int[] numbers) {
         excellentGroup.removeAllViews();
         excellentChecks.clear();
-        if (count <= 0) {
+        excellentNumbers.clear();
+        int options = Math.min(numbers.length, 12);
+        if (options <= 0) {
             TextView none = bodyText(R.string.excellent_none);
             none.setTextColor(Color.rgb(140, 146, 154));
             none.setMinHeight(dp(40));
             excellentGroup.addView(none, matchWrap());
             return;
         }
-        int options = Math.min(count, 12);
+        for (int i = 0; i < options; i++) {
+            excellentNumbers.add(numbers[i]);
+        }
         CheckBox all = new CheckBox(this);
         all.setText(R.string.excellent_all);
         all.setTextSize(16);
         all.setMinimumHeight(dp(44));
         excellentGroup.addView(all, matchMinHeight(44));
-        for (int i = 1; i <= options; i++) {
-            final int optionNumber = i;
+        for (int i = 0; i < options; i++) {
+            final int optionNumber = numbers[i];
             CheckBox box = new CheckBox(this);
             box.setText(getString(R.string.excellent_option, optionNumber));
             box.setTextSize(16);
@@ -486,7 +541,7 @@ public final class MainActivity extends Activity {
         int mask = 0;
         for (int i = 0; i < excellentChecks.size(); i++) {
             if (excellentChecks.get(i).isChecked()) {
-                mask |= (1 << i);
+                mask |= (1 << (excellentNumbers.get(i) - 1));
             }
         }
         return mask;

@@ -635,6 +635,15 @@ namespace MUnique.OpenMU.GameLogic.Properties {
                 return ResourceManager.GetString("ItemLevelExceeded", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This item cannot be sold to an NPC..
+        /// </summary>
+        public static string ItemCannotBeSoldToNpc {
+            get {
+                return ResourceManager.GetString("ItemCannotBeSoldToNpc", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Item Unknown.

@@ -1,4 +1,4 @@
-// <copyright file="LocalStackManager.cs" company="MUnique">
+﻿// <copyright file="LocalStackManager.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -16,14 +16,6 @@ using System.Text.Json;
 public sealed class LocalStackManager : IDisposable
 {
     private const long MinimumFreeBytes = 2L * 1024 * 1024 * 1024;
-    private static readonly (int Port, string Component)[] DefaultServerPorts =
-    {
-        (44405, "1.04d 连接服务器"),
-        (44406, "2.04d 连接服务器"),
-        (55901, "1.04d 游戏服务器"),
-        (55902, "2.04d 游戏服务器"),
-        (55980, "聊天服务器"),
-    };
     private readonly SemaphoreSlim _lifecycleGate = new(1, 1);
     private readonly LocalPaths _paths;
     private readonly LocalStackSettingsStore _settingsStore;
@@ -135,7 +127,7 @@ public sealed class LocalStackManager : IDisposable
             }
 
             EnsurePortAvailable(this.Settings.AdminPanelPort, "管理后台");
-            foreach (var endpoint in DefaultServerPorts)
+            foreach (var endpoint in GameServerPorts.Defaults)
             {
                 EnsurePortAvailable(endpoint.Port, endpoint.Component);
             }
@@ -303,17 +295,21 @@ public sealed class LocalStackManager : IDisposable
         }
         finally
         {
-            try
+            if (restoreSourcePath is not null)
             {
-                if (restoreSourcePath is not null)
+                try
                 {
                     File.Delete(restoreSourcePath);
                 }
+                catch (Exception cleanupException)
+                {
+                    // A locked temporary file must never replace the original
+                    // exception that is already propagating.
+                    System.Diagnostics.Debug.WriteLine(cleanupException);
+                }
             }
-            finally
-            {
-                this._lifecycleGate.Release();
-            }
+
+            this._lifecycleGate.Release();
         }
     }
 
@@ -483,7 +479,7 @@ public sealed class LocalStackManager : IDisposable
         {
             // A missing control channel is not proof that the server using this database stopped.
             EnsurePortAvailable(this.Settings.AdminPanelPort, "管理后台");
-            foreach (var endpoint in DefaultServerPorts)
+            foreach (var endpoint in GameServerPorts.Defaults)
             {
                 EnsurePortAvailable(endpoint.Port, endpoint.Component);
             }

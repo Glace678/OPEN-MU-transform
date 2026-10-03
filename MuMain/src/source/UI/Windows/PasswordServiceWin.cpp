@@ -1,5 +1,8 @@
 //*****************************************************************************
 // File: PasswordServiceWin.cpp
+// Account password self-service dialog, shared by two flows:
+//   - change password: name + current password + new password twice
+//   - forgot password: name + new password twice (loopback reset only)
 //*****************************************************************************
 
 #include "stdafx.h"
@@ -16,21 +19,26 @@
 
 namespace
 {
-    constexpr int kPanelWidth = 300;
-    constexpr int kPanelHeight = 250;
+    // Same native login panel as the Connect window (login_back.tga).
+    constexpr int kPanelWidth = 329;
+    constexpr int kPanelHeight = 245;
 
-    constexpr int kFieldWidth = 190;
+    constexpr int kFieldWidth = 180;
     constexpr int kFieldHeight = 23;
-    constexpr int kFieldX = 84;
+    constexpr int kFieldX = 88;
 
-    // Rows differ per mode: change shows 4 rows, reset hides "current password".
-    constexpr int kRowYChange[4] = { 44, 74, 104, 134 };
-    constexpr int kRowYReset[4] = { 44, -1, 74, 104 };
+    // Change mode shows four rows; reset hides "current password" and uses
+    // three evenly spaced rows.
+    constexpr int kRowYChange[4] = { 48, 78, 108, 138 };
+    constexpr int kRowYReset[4] = { 60, -1, 92, 124 };
 
-    constexpr int kButtonY = 190;
-    constexpr int kStatusY = 224;
-    constexpr int kHint1Y = 152;
-    constexpr int kHint2Y = 166;
+    constexpr int kLabelX = 14;
+    constexpr int kLabelWidth = 66;
+
+    constexpr int kHintY1 = 164;
+    constexpr int kHintY2 = 178;
+    constexpr int kButtonY = 200;
+    constexpr int kStatusY = 229;
 
     constexpr int kNameLimit = 10;
     constexpr int kPasswordLimit = 20;
@@ -60,8 +68,8 @@ CPasswordServiceWin::~CPasswordServiceWin()
 
 void CPasswordServiceWin::Create()
 {
-    // -1 = translucent black panel (see CWin::Create).
-    CWin::Create(kPanelWidth, kPanelHeight, -1);
+    // Native login panel background (same art as the Connect window).
+    CWin::Create(kPanelWidth, kPanelHeight, BITMAP_LOG_IN + 7);
 
     for (int i = 0; i < FIELD_COUNT; ++i)
     {
@@ -78,17 +86,13 @@ void CPasswordServiceWin::Create()
         m_pBox[i]->SetState(UISTATE_HIDE);
     }
 
-    static const DWORD btnColors[4] =
-    {
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0
-    };
-
-    for (int i = 0; i < 2; ++i)
-    {
-        m_aBtn[i].Create(80, 26, BITMAP_LOG_IN + 1, 3, 2, 1);
-        m_aBtn[i].SetText(L"确定", const_cast<DWORD*>(btnColors));
-        CWin::RegisterButton(&m_aBtn[i]);
-    }
+    // Native golden pixel buttons, identical to the Connect window:
+    // message_ok_b_all (OK) and loding_cancel_b_all (Cancel). The wording
+    // is baked into the art, so no text overlay is needed.
+    m_aBtn[SB_OK].Create(54, 30, BITMAP_BUTTON, 3, 2, 1);
+    CWin::RegisterButton(&m_aBtn[SB_OK]);
+    m_aBtn[SB_CANCEL].Create(54, 30, BITMAP_BUTTON + 1, 3, 2, 1);
+    CWin::RegisterButton(&m_aBtn[SB_CANCEL]);
 }
 
 void CPasswordServiceWin::PreRelease()
@@ -126,8 +130,8 @@ void CPasswordServiceWin::LayoutChildren()
             int(m_fArtY + rows[i] + 6));
     }
 
-    m_aBtn[SB_OK].SetPositionArt(m_fArtX + 58, m_fArtY + kButtonY);
-    m_aBtn[SB_CANCEL].SetPositionArt(m_fArtX + 162, m_fArtY + kButtonY);
+    m_aBtn[SB_OK].SetPositionArt(m_fArtX + 160, m_fArtY + kButtonY);
+    m_aBtn[SB_CANCEL].SetPositionArt(m_fArtX + 220, m_fArtY + kButtonY);
 }
 
 void CPasswordServiceWin::Show(bool bShow)
@@ -177,14 +181,6 @@ void CPasswordServiceWin::Open(int mode, int opener, const wchar_t* prefillName)
 
     if (prefillName != nullptr)
         m_pBox[FIELD_NAME]->SetText(prefillName);
-
-    static const DWORD btnColors[4] =
-    {
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0
-    };
-    m_aBtn[SB_OK].SetText((m_mode == ModeChange)
-        ? L"修改"
-        : L"重置", const_cast<DWORD*>(btnColors));
 
     LayoutChildren();
 
@@ -325,9 +321,9 @@ void CPasswordServiceWin::Submit()
         return;
     }
 
-    if (newLength < 3 || newLength > kPasswordLimit)
+    if (newLength < 8 || newLength > kPasswordLimit)
     {
-        SetStatus(L"新密码需为 3-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+        SetStatus(L"新密码需为 8-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
         return;
     }
 
@@ -335,7 +331,7 @@ void CPasswordServiceWin::Submit()
     {
         if (newPass[i] < 0x21 || newPass[i] > 0x7e)
         {
-            SetStatus(L"新密码需为 3-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+            SetStatus(L"新密码需为 8-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
             return;
         }
     }
@@ -371,8 +367,8 @@ void CPasswordServiceWin::Submit()
         m_pBox[FIELD_NEW]->SetText(L"");
         m_pBox[FIELD_CONFIRM]->SetText(L"");
         SetStatus((m_mode == ModeChange)
-                ? L"密码修改成功！请点击取消返回。"
-                : L"密码已重置！请点击取消返回。",
+                ? L"密码修改成功！请点击 Cancel 返回。"
+                : L"密码已重置！请点击 Cancel 返回。",
             kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
         return;
     }
@@ -380,14 +376,14 @@ void CPasswordServiceWin::Submit()
     const std::string& code = result.code;
     if (code == "bad_credentials" || code == "invalid_old_password")
         SetStatus(L"账号名或当前密码不正确。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
-    else if (code == "forbidden")
+    else if (code == "forbidden" || code == "reset_disabled")
         SetStatus(L"忘记密码只能在运行服务器的电脑上重置，或联系管理员在后台重置。", kStatusYellow[0], kStatusYellow[1], kStatusYellow[2]);
     else if (code == "not_found")
         SetStatus(L"该账号名不存在。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (code == "invalid_name")
         SetStatus(L"账号需为 3-10 位字母或数字。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (code == "invalid_password" || code == "invalid_password_chars")
-        SetStatus(L"新密码需为 3-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+        SetStatus(L"新密码需为 8-20 位，且不能含空格。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (code == "password_mismatch")
         SetStatus(L"两次输入的新密码不一致。", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (code == "error")
@@ -418,38 +414,42 @@ void CPasswordServiceWin::RenderControls()
     const int* rows = (m_mode == ModeChange) ? kRowYChange : kRowYReset;
 
     // Title.
-    g_pRenderText->SetTextColor(255, 255, 220, 120);
+    g_pRenderText->SetTextColor(255, 220, 120, 255);
     g_pRenderText->RenderText(
-        baseX + 18,
-        baseY + 14,
+        baseX + 24,
+        baseY + 18,
         (m_mode == ModeChange)
             ? L"修改密码"
             : L"忘记密码");
     g_pRenderText->SetTextColor(CLRDW_WHITE);
 
-    // Row labels (aligned to the box center).
-    g_pRenderText->RenderText(baseX + 18, baseY + rows[FIELD_NAME] + 7, L"账号");
+    // Row labels (right-aligned in the left column).
+    g_pRenderText->RenderText(baseX + kLabelX, baseY + rows[FIELD_NAME] + 7,
+        L"账号", kLabelWidth, 14, RT3_SORT_RIGHT);
 
     if (m_mode == ModeChange)
-        g_pRenderText->RenderText(baseX + 18, baseY + rows[FIELD_OLD] + 7, L"旧密码");
+        g_pRenderText->RenderText(baseX + kLabelX, baseY + rows[FIELD_OLD] + 7,
+            L"当前密码", kLabelWidth, 14, RT3_SORT_RIGHT);
 
-    g_pRenderText->RenderText(baseX + 18, baseY + rows[FIELD_NEW] + 7, L"新密码");
-    g_pRenderText->RenderText(baseX + 4, baseY + rows[FIELD_CONFIRM] + 7, L"确认新密码");
+    g_pRenderText->RenderText(baseX + kLabelX, baseY + rows[FIELD_NEW] + 7,
+        L"新密码", kLabelWidth, 14, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(baseX + kLabelX, baseY + rows[FIELD_CONFIRM] + 7,
+        L"确认新密码", kLabelWidth, 14, RT3_SORT_RIGHT);
 
     // Hint lines.
     g_pRenderText->SetTextColor(200, 200, 200, 200);
     if (m_mode == ModeChange)
     {
-        g_pRenderText->RenderText(baseX + 18, baseY + kHint1Y,
+        g_pRenderText->RenderText(baseX + 24, baseY + kHintY1,
             L"使用当前密码验证身份。");
-        g_pRenderText->RenderText(baseX + 18, baseY + kHint2Y,
-            L"新密码：3-20 位，不能含空格");
+        g_pRenderText->RenderText(baseX + 24, baseY + kHintY2,
+            L"新密码 8-20 位，不能含空格。");
     }
     else
     {
-        g_pRenderText->RenderText(baseX + 18, baseY + kHint1Y,
+        g_pRenderText->RenderText(baseX + 24, baseY + kHintY1,
             L"只能在运行服务器的电脑上操作。");
-        g_pRenderText->RenderText(baseX + 18, baseY + kHint2Y,
+        g_pRenderText->RenderText(baseX + 24, baseY + kHintY2,
             L"远程设备请联系管理员重置。");
     }
 
@@ -460,7 +460,7 @@ void CPasswordServiceWin::RenderControls()
         g_pRenderText->RenderText(
             baseX + 14,
             baseY + kStatusY,
-            m_status, 272, 14);
+            m_status, 301, 15);
     }
 
     g_pRenderText->SetTextColor(CLRDW_WHITE);

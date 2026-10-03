@@ -26,37 +26,41 @@ public static class BalanceV1
     /// <summary>The encounter experience added for each extra nearby party member.</summary>
     public const double PartyExperiencePerExtraMember = 0.90;
 
-    private const double MoneyChance = 0.65;
-    private const double JewelChance = 0.035;
+    // Solo-fun (v2) runtime profile. Keep these constants in lockstep with
+    // OpenMU-数值重设计/design/balance.v2.json. The public helpers below are
+    // deliberately pure so the live combat path and the balance verifier can
+    // exercise exactly the same bounded formulas.
+    private const double MoneyChance = 0.75;
+    private const double JewelChance = 0.05;
     private const int RareEligibilityRank = 80;
     private const double MasterRankPerLevel = 0.35;
-    private const double ReferenceKillCycleSeconds = 7.5;
-    private const double OverlevelGraceRanks = 20;
-    private const double OverlevelDecayRanks = 80;
-    private const double OverlevelExperienceFloor = 0.10;
+    private const double ReferenceKillCycleSeconds = 5.5;
+    private const double OverlevelGraceRanks = 30;
+    private const double OverlevelDecayRanks = 100;
+    private const double OverlevelExperienceFloor = 0.15;
     private const double UnderlevelExperienceCap = 1.15;
 
     // Keep combat constants in this runtime class in lockstep with
-    // OpenMU-数值重设计/design/balance.v1.json.  The public helpers below
+    // OpenMU-数值重设计/design/balance.v2.json.  The public helpers below
     // are deliberately pure so the live combat path and the balance verifier
     // can exercise exactly the same bounded formulas.
     private const double HitBase = 0.92;
     private const double HitSlope = 0.08;
-    private const double HitMinimum = 0.60;
+    private const double HitMinimum = 0.70;
     private const double HitMaximum = 0.98;
-    private const double ArmorConstant = 80;
+    private const double ArmorConstant = 70;
     private const double ArmorPerRank = 2.4;
     private const double ArmorReductionCap = 0.60;
     private const double TotalReductionCap = 0.70;
 
     private static readonly (double Rank, double Seconds)[] NormalExperienceAnchors =
     [
-        (1, 25), (20, 80), (80, 190), (150, 330), (220, 450), (300, 600), (350, 720), (399, 900),
+        (1, 14), (20, 47), (80, 110), (150, 162), (220, 208), (300, 254), (350, 289), (399, 330),
     ];
 
     private static readonly (double Rank, double Seconds)[] MasterExperienceAnchors =
     [
-        (1, 720), (50, 900), (100, 1140), (150, 1380), (200, 1620),
+        (1, 326), (50, 455), (100, 583), (150, 712), (200, 840),
     ];
 
     private static readonly HashSet<short> BossMonsterNumbers = [38, 49, 77, 275, 412, 459];
@@ -64,9 +68,9 @@ public static class BalanceV1
 
     private static readonly PotionRule[] Potions =
     [
-        new(14, 1, PotionGroup.Health, 1, 0.28, 160, TimeSpan.FromSeconds(8)),
-        new(14, 2, PotionGroup.Health, 80, 0.28, 600, TimeSpan.FromSeconds(8)),
-        new(14, 3, PotionGroup.Health, 180, 0.28, 2200, TimeSpan.FromSeconds(8)),
+        new(14, 1, PotionGroup.Health, 1, 0.32, 180, TimeSpan.FromSeconds(8)),
+        new(14, 2, PotionGroup.Health, 80, 0.32, 700, TimeSpan.FromSeconds(8)),
+        new(14, 3, PotionGroup.Health, 180, 0.32, 3000, TimeSpan.FromSeconds(8)),
         new(14, 4, PotionGroup.Mana, 1, 0.40, 120, TimeSpan.FromSeconds(12)),
         new(14, 5, PotionGroup.Mana, 80, 0.40, 400, TimeSpan.FromSeconds(12)),
         new(14, 6, PotionGroup.Mana, 180, 0.40, 1600, TimeSpan.FromSeconds(12)),
@@ -79,9 +83,9 @@ public static class BalanceV1
     [
         new(1, 1.00, 1, 1), new(2, 1.00, 1, 1), new(3, 1.00, 1, 1),
         new(4, 1.00, 1, 1), new(5, 1.00, 1, 1), new(6, 1.00, 1, 1),
-        new(7, 0.85, 3, 1), new(8, 0.75, 4, 1), new(9, 0.65, 5, 2),
-        new(10, 0.55, 6, 2), new(11, 0.45, 7, 2), new(12, 0.35, 8, 3),
-        new(13, 0.28, 9, 3), new(14, 0.22, 10, 4), new(15, 0.18, 12, 4),
+        new(7, 0.90, 2, 1), new(8, 0.80, 3, 1), new(9, 0.70, 3, 2),
+        new(10, 0.60, 4, 2), new(11, 0.52, 4, 2), new(12, 0.44, 5, 2),
+        new(13, 0.38, 5, 2), new(14, 0.30, 6, 3), new(15, 0.24, 7, 3),
     ];
 
     /// <summary>The supported experience-rate variants of balance-v1.</summary>
@@ -241,7 +245,7 @@ public static class BalanceV1
     /// </remarks>
     /// <param name="accuracy">The attacker's accuracy/attack rate.</param>
     /// <param name="evasion">The defender's evasion/defense rate.</param>
-    /// <returns>A probability in the inclusive range [0.60, 0.98].</returns>
+    /// <returns>A probability in the inclusive range [0.70, 0.98].</returns>
     public static double CalculateHitChance(double accuracy, double evasion)
     {
         var safeAccuracy = Math.Max(1, double.IsFinite(accuracy) ? accuracy : 1);
@@ -310,8 +314,8 @@ public static class BalanceV1
             ? Math.Min(UnderlevelExperienceCap, 1 + (Math.Max(0, contentRank - safePlayerRank) / 200))
             : Math.Max(OverlevelExperienceFloor, Math.Exp(-excess / OverlevelDecayRanks));
         var tierMultiplier = BossMonsterNumbers.Contains(monsterNumber)
-            ? 30
-            : EliteMonsterNumbers.Contains(monsterNumber) ? 4 : 1;
+            ? 40
+            : EliteMonsterNumbers.Contains(monsterNumber) ? 5 : 1;
         return BaseExperience(contentRank) * tierMultiplier * levelMultiplier;
     }
 
@@ -372,9 +376,9 @@ public static class BalanceV1
     {
         var rank = Math.Max(1, contentRank);
         var rankMultiplier = BossMonsterNumbers.Contains(monsterNumber)
-            ? 30
-            : EliteMonsterNumbers.Contains(monsterNumber) ? 4 : 1;
-        var amount = Math.Round((8 + (1.1 * rank) + (0.004 * rank * rank)) * rankMultiplier);
+            ? 50
+            : EliteMonsterNumbers.Contains(monsterNumber) ? 6 : 1;
+        var amount = Math.Round((8 + (1.6 * rank) + (0.006 * rank * rank)) * rankMultiplier);
         return (uint)Math.Clamp(amount, 1, uint.MaxValue);
     }
 

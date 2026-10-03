@@ -75,6 +75,9 @@ namespace CfgKeys
     inline constexpr wchar_t CfgKeyHapticsCombat[] = L"Combat";
     inline constexpr wchar_t CfgKeyHapticsUI[] = L"UI";
     inline constexpr wchar_t CfgKeyHapticsTransaction[] = L"Transaction";
+
+    // Tutorial
+    inline constexpr wchar_t CfgKeyTutorialCompleted[] = L"TutorialCompleted";
 }
 
 namespace CfgDefaults
@@ -137,4 +140,7 @@ namespace CfgDefaults
     inline constexpr bool CfgDefaultHapticsCombat = true;
     inline constexpr bool CfgDefaultHapticsUI = true;
     inline constexpr bool CfgDefaultHapticsTransaction = true;
+
+    // First launch shows the tutorial until the player finishes it.
+    inline constexpr bool CfgDefaultTutorialCompleted = false;
 }

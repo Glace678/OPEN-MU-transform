@@ -13189,6 +13189,12 @@
   <data name="TutorialPaging" xml:space="preserve">
     <value>F1 或 A 下一页；PageUp/PageDown 或 LB/RB 翻页；Esc 或 B 关闭。</value>
   </data>
+  <data name="TutorialWelcome" xml:space="preserve">
+    <value>欢迎来到 MU 世界！本指南会用几页说明基础操作，随时可按 Esc 跳过。需要时可在菜单中重新查看。</value>
+  </data>
+  <data name="TutorialFinish" xml:space="preserve">
+    <value>准备好了！与 NPC 对话接取任务、出城击败怪物即可开始冒险。祝你玩得开心。</value>
+  </data>
   <data name="AccountRegister" xml:space="preserve">
     <value>注册</value>
   </data>

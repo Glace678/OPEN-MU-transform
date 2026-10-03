@@ -9,7 +9,7 @@
   <data name="AccountNameLabel" xml:space="preserve"><value>Account name</value></data>
   <data name="AccountNameHelp" xml:space="preserve"><value>3-10 ASCII letters or digits.</value></data>
   <data name="PasswordLabel" xml:space="preserve"><value>Password</value></data>
-  <data name="PasswordHelp" xml:space="preserve"><value>3-20 printable characters; spaces are not allowed.</value></data>
+  <data name="PasswordHelp" xml:space="preserve"><value>8-20 printable characters; spaces are not allowed.</value></data>
   <data name="ConfirmPasswordLabel" xml:space="preserve"><value>Confirm password</value></data>
   <data name="SecurityCodeLabel" xml:space="preserve"><value>Security code</value></data>
   <data name="SecurityCodeHelp" xml:space="preserve"><value>Used for character deletion and selected account actions. Use 3-10 printable characters; ask an administrator if it is lost.</value></data>
@@ -44,7 +44,7 @@
   <data name="RequiredNewPassword" xml:space="preserve"><value>Enter a new password.</value></data>
   <data name="RequiredNewConfirmPassword" xml:space="preserve"><value>Enter the new password again.</value></data>
   <data name="InvalidName" xml:space="preserve"><value>The account name must contain 3-10 letters or digits.</value></data>
-  <data name="InvalidPassword" xml:space="preserve"><value>The password must contain 3-20 characters and no spaces.</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>The password must contain 8-20 characters and no spaces.</value></data>
   <data name="InvalidPasswordChars" xml:space="preserve"><value>The password may use only ASCII letters, digits and common symbols; spaces are not allowed.</value></data>
   <data name="PasswordMismatch" xml:space="preserve"><value>The two passwords do not match.</value></data>
   <data name="InvalidSecurityCode" xml:space="preserve"><value>The security code must contain 3-10 letters, digits or common symbols.</value></data>
@@ -56,13 +56,14 @@
   <data name="BadCredentials" xml:space="preserve"><value>The account name or current password is incorrect.</value></data>
   <data name="PasswordChangeSuccess" xml:space="preserve"><value>Password changed. Use the new password next time you sign in.</value></data>
   <data name="PasswordChangeFailed" xml:space="preserve"><value>Password change failed. Check that the server is running.</value></data>
-  <data name="ResetForbidden" xml:space="preserve"><value>Password reset is available only on the computer running the server, or through an administrator in the admin panel.</value></data>
+  <data name="ResetForbidden" xml:space="preserve"><value>Password reset without a recovery code requires the maintenance token from the server's Data/Keys/maintenance-token.txt file. Recovery codes and the admin panel always work.</value></data>
   <data name="AccountNotFound" xml:space="preserve"><value>That account name does not exist.</value></data>
   <data name="PasswordResetSuccess" xml:space="preserve"><value>Password reset succeeded. You can sign in with the new password now.</value></data>
   <data name="PasswordResetFailed" xml:space="preserve"><value>Password reset failed. Check that the server is running.</value></data>
+  <data name="TooManyAttempts" xml:space="preserve"><value>Too many failed attempts. Please try again later.</value></data>
   <data name="InvalidResponse" xml:space="preserve"><value>The server did not return a valid response.</value></data>
   <data name="ResetDisabled" xml:space="preserve"><value>Recovery without an ownership credential is disabled. Use a recovery code or contact an administrator.</value></data>
-  <data name="LocalPasswordResetWarning" xml:space="preserve"><value>Local maintenance without ownership proof is enabled. Disable it before exposing account services to proxies or other devices.</value></data>
+  <data name="LocalPasswordResetWarning" xml:space="preserve"><value>Maintenance resets without an ownership credential are enabled, but they now require the token file (Data/Keys/maintenance-token.txt). Keep that file private and regenerate it if it leaks.</value></data>
   <data name="RecoveryCodeLabel" xml:space="preserve"><value>Recovery code</value></data>
   <data name="RecoveryCodeNotice" xml:space="preserve"><value>Keep this code private and safe. Recovery invalidates the old code; the replacement is displayed only in this result.</value></data>
   <data name="RequiredRecoveryCode" xml:space="preserve"><value>Enter your recovery code.</value></data>

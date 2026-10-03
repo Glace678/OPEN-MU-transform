@@ -46,6 +46,9 @@ public class AccountTextEndpointTests
         builder.Logging.ClearProviders();
         builder.Services.AddSingleton(persistence.Object);
         builder.Services.AddLocalization();
+        // The mapped group also contains the credential endpoints; they take the
+        // self-service guard, so it has to be resolvable when the endpoints build.
+        builder.Services.AddAccountSelfServiceGuard();
         await using var app = builder.Build();
         app.MapPublicRegistrationEndpoints();
         var endpoint = ((IEndpointRouteBuilder)app).DataSources.SelectMany(source => source.Endpoints)

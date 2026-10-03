@@ -1,4 +1,4 @@
-// <copyright file="LocalStackSettingsStore.cs" company="MUnique">
+﻿// <copyright file="LocalStackSettingsStore.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -58,7 +58,7 @@ public sealed class LocalStackSettingsStore
             throw new InvalidDataException("Unsupported solo profile or shop migration version.");
         }
 
-        var fixedServerPorts = new[] { 44405, 44406, 55901, 55902, 55980 };
+        var fixedServerPorts = GameServerPorts.Ports;
         foreach (var port in new[] { settings.DatabasePort, settings.AdminPanelPort, settings.ConnectServerPort })
         {
             if (port is < 1024 or > ushort.MaxValue)

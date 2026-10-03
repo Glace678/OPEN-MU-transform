@@ -14,12 +14,18 @@ using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.Web.AdminPanel.Auth;
 using Nito.AsyncEx;
+using System.Threading;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Performs the restricted, online-only operations exposed to the packaged mobile GM application.
 /// </summary>
 public sealed class MobileGmService
 {
+    // Remembered idempotency keys are evicted once they have been completed for
+    // this long, so long-lived servers cannot fill the cache permanently.
+    private static readonly TimeSpan CompletedOperationRetention = TimeSpan.FromHours(24);
+
     private const int MaximumRememberedGrantOperations = 4096;
 
     // The MU inventory money field is a signed 32-bit value; the classic cap is 2 billion Zen.
@@ -30,6 +36,10 @@ public sealed class MobileGmService
     private readonly Dictionary<Guid, GrantOperation> _grantOperations = new();
     private readonly Dictionary<Guid, ZenOperation> _zenOperations = new();
     private readonly object _grantOperationsLock = new();
+
+    // The item lookup is a pure function of the (immutable) game configuration;
+    // caching it keeps repeated searches from regrouping every definition.
+    private ItemCache? _itemCache;
 
     /// <summary>Initializes a new instance of the <see cref="MobileGmService"/> class.</summary>
     /// <param name="services">The application service provider.</param>
@@ -71,20 +81,16 @@ public sealed class MobileGmService
     public MobileGmItemsResponse SearchItems(string? query)
     {
         var normalizedQuery = query?.Trim() ?? string.Empty;
-        var items = GetStartedContexts(this.GetServers())
-            .SelectMany(context => context.Configuration.Items)
-            .Where(definition => !definition.IsQuestItem && !definition.IsBoundToCharacter)
-            .GroupBy(definition => (definition.Group, definition.Number))
-            .Select(group => group.First())
-            .Select(definition => CreateItemSummary(definition))
+        var items = GetCachedItems(GetStartedContexts(this.GetServers()));
+        var matches = items
             .Where(item => normalizedQuery.Length == 0
-                           || item.Name.Contains(normalizedQuery, StringComparison.CurrentCultureIgnoreCase)
+                           || item.Name.Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase)
                            || $"{item.Group}:{item.Number}".Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase))
             .OrderBy(item => item.Group)
             .ThenBy(item => item.Number)
             .Take(100)
             .ToArray();
-        return new MobileGmItemsResponse(items);
+        return new MobileGmItemsResponse(matches);
     }
 
     /// <summary>Grants an item to an eligible online character, idempotently per request identifier.</summary>
@@ -99,11 +105,12 @@ public sealed class MobileGmService
         }
 
         GrantOperation operation;
+        var isNewOperation = false;
         lock (this._grantOperationsLock)
         {
             if (!this._grantOperations.TryGetValue(requestId, out operation!))
             {
-                if (this._grantOperations.Count >= MaximumRememberedGrantOperations)
+                if (!this.TryEvictCompletedOperations())
                 {
                     return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
                 }
@@ -112,7 +119,13 @@ public sealed class MobileGmService
                     request,
                     new AsyncLazy<MobileGmGrantResponse>(() => this.GrantItemCoreAsync(request, characterId)));
                 this._grantOperations[requestId] = operation;
+                isNewOperation = true;
             }
+        }
+
+        if (isNewOperation)
+        {
+            this.MarkCompletion(operation);
         }
 
         return operation.Request == request
@@ -132,11 +145,12 @@ public sealed class MobileGmService
         }
 
         ZenOperation operation;
+        var isNewOperation = false;
         lock (this._grantOperationsLock)
         {
             if (!this._zenOperations.TryGetValue(requestId, out operation!))
             {
-                if (this._grantOperations.Count + this._zenOperations.Count >= MaximumRememberedGrantOperations)
+                if (!this.TryEvictCompletedOperations())
                 {
                     return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
                 }
@@ -145,7 +159,13 @@ public sealed class MobileGmService
                     request,
                     new AsyncLazy<MobileGmGrantResponse>(() => this.GrantZenCoreAsync(characterId, amount)));
                 this._zenOperations[requestId] = operation;
+                isNewOperation = true;
             }
+        }
+
+        if (isNewOperation)
+        {
+            this.MarkCompletion(operation);
         }
 
         return operation.Request == request
@@ -235,11 +255,100 @@ public sealed class MobileGmService
         return null;
     }
 
+    // Drops finished operations that outlived their retention window so the
+    // dictionaries cannot fill up and lock out every future grant. The caller
+    // must hold the lock; nothing here awaits.
+    private bool TryEvictCompletedOperations()
+    {
+        if (this._grantOperations.Count + this._zenOperations.Count < MaximumRememberedGrantOperations)
+        {
+            return true;
+        }
+
+        var now = DateTimeOffset.UtcNow;
+        PruneCompleted(this._grantOperations, now);
+        PruneCompleted(this._zenOperations, now);
+        return this._grantOperations.Count + this._zenOperations.Count < MaximumRememberedGrantOperations;
+    }
+
+    private static void PruneCompleted<T>(Dictionary<Guid, T> operations, DateTimeOffset now)
+        where T : RememberedOperation
+    {
+        if (operations.Count == 0)
+        {
+            return;
+        }
+
+        List<Guid>? expired = null;
+        foreach (var pair in operations)
+        {
+            if (pair.Value.CompletedAt is { } completedAt && now - completedAt > CompletedOperationRetention)
+            {
+                (expired ??= new List<Guid>()).Add(pair.Key);
+            }
+        }
+
+        if (expired is null)
+        {
+            return;
+        }
+
+        foreach (var requestId in expired)
+        {
+            operations.Remove(requestId);
+        }
+    }
+
+    // Stamps the completion time of a remembered operation so it becomes
+    // evictable after the retention window. Continuation, never awaited here.
+    private void MarkCompletion(RememberedOperation operation)
+    {
+        _ = operation.Result.Task.ContinueWith(
+            _ =>
+            {
+                lock (this._grantOperationsLock)
+                {
+                    operation.CompletedAt = DateTimeOffset.UtcNow;
+                }
+            },
+            CancellationToken.None,
+            TaskContinuationOptions.ExecuteSynchronously,
+            TaskScheduler.Default);
+    }
+
+    private MobileGmItem[] GetCachedItems(IEnumerable<IGameContext> contexts)
+    {
+        var materialized = contexts as IGameContext[] ?? contexts.ToArray();
+
+        // Only the common single-context case is cached: with several started
+        // servers the merged set is not attributable to one configuration.
+        if (materialized.Length == 1
+            && this._itemCache is { } cache
+            && ReferenceEquals(cache.Configuration, materialized[0].Configuration))
+        {
+            return cache.Items;
+        }
+
+        var items = materialized
+            .SelectMany(context => context.Configuration.Items)
+            .Where(definition => !definition.IsQuestItem && !definition.IsBoundToCharacter)
+            .GroupBy(definition => (definition.Group, definition.Number))
+            .Select(group => group.First())
+            .Select(CreateItemSummary)
+            .ToArray();
+
+        if (materialized.Length == 1)
+        {
+            this._itemCache = new ItemCache(materialized[0].Configuration, items);
+        }
+
+        return items;
+    }
+
     private static bool IsAccountPlayer(Player player, string accountName) =>
         player.IsConnected
         && player.Account is { } account
         && string.Equals(account.LoginName, accountName, StringComparison.OrdinalIgnoreCase);
-
     private static bool CanGrantToPlayer(Player player, string accountName, Guid characterId) =>
         IsAccountPlayer(player, accountName)
         && player.SelectedCharacter is { } character
@@ -253,8 +362,15 @@ public sealed class MobileGmService
             .OfType<IGameServerContextProvider>()
             .Select(provider => provider.Context);
 
-    private static MobileGmItem CreateItemSummary(ItemDefinition definition) =>
-        new(
+    private static MobileGmItem CreateItemSummary(ItemDefinition definition)
+    {
+        var excellentNumbers = OptionsOfType(definition, ItemOptionTypes.Excellent)
+            .Select(option => option.Number)
+            .Where(number => number is >= 1 and <= 31)
+            .Distinct()
+            .OrderBy(number => number)
+            .ToArray();
+        return new(
             definition.Group,
             definition.Number,
             definition.Name.ToString() ?? string.Empty,
@@ -262,7 +378,9 @@ public sealed class MobileGmService
             CanHaveSkill(definition),
             CanHaveLuck(definition),
             CanHaveAdditionalOption(definition),
-            CountExcellentOptions(definition));
+            excellentNumbers.Length,
+            excellentNumbers);
+    }
 
     private static bool CanHaveSkill(ItemDefinition definition) =>
         definition.ItemSlot is not null && definition.Skill is not null && definition.QualifiedCharacters.Any();
@@ -277,9 +395,6 @@ public sealed class MobileGmService
 
     private static bool CanHaveAdditionalOption(ItemDefinition definition) =>
         OptionsOfType(definition, ItemOptionTypes.Option).Any();
-
-    private static int CountExcellentOptions(ItemDefinition definition) =>
-        OptionsOfType(definition, ItemOptionTypes.Excellent).Count();
 
     /// <summary>Checks that every requested bit names an available excellent option.</summary>
     /// <param name="mask">The requested option mask.</param>
@@ -576,7 +691,40 @@ public sealed class MobileGmService
         return null;
     }
 
-    private sealed record GrantOperation(MobileGmGrantRequest Request, AsyncLazy<MobileGmGrantResponse> Result);
+    private abstract class RememberedOperation
+    {
+        protected RememberedOperation(AsyncLazy<MobileGmGrantResponse> result)
+        {
+            this.Result = result;
+        }
 
-    private sealed record ZenOperation(MobileGmZenRequest Request, AsyncLazy<MobileGmGrantResponse> Result);
+        public AsyncLazy<MobileGmGrantResponse> Result { get; }
+
+        /// <summary>When the remembered operation finished; <c>null</c> while it is still running.</summary>
+        public DateTimeOffset? CompletedAt { get; set; }
+    }
+
+    private sealed class GrantOperation : RememberedOperation
+    {
+        public GrantOperation(MobileGmGrantRequest request, AsyncLazy<MobileGmGrantResponse> result)
+            : base(result)
+        {
+            this.Request = request;
+        }
+
+        public MobileGmGrantRequest Request { get; }
+    }
+
+    private sealed class ZenOperation : RememberedOperation
+    {
+        public ZenOperation(MobileGmZenRequest request, AsyncLazy<MobileGmGrantResponse> result)
+            : base(result)
+        {
+            this.Request = request;
+        }
+
+        public MobileGmZenRequest Request { get; }
+    }
+
+    private sealed record ItemCache(object Configuration, MobileGmItem[] Items);
 }

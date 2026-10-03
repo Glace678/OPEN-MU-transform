@@ -3,7 +3,7 @@
 
 The pack is a chain of fixed-layout records laid out at the end of the exe:
 
-    [ offset:8 ][ size:8 ][ c:8 ][ type:1 ][ name-len:varint ][ name:bytes ]
+    [ offset:8 ][ size:8 ][ c:8 ][ type:1 ][ name-len:1 ][ name:bytes ]
 
 walked *backwards* from the file tail. There is no central directory or magic
 signature, so the only reliable entry point is the last record: the name field
@@ -71,7 +71,12 @@ def _read_header(data, pos):
     name = data[pos + 2 : pos + 2 + name_len]
     if not NAME_RE.match(name):
         return None
-    return type_, name.decode(), pos + 2 + name_len
+    decoded = name.decode()
+    # A pack name is always a plain relative path; any parent-directory
+    # segment is an attack (or corruption), not something to write out.
+    if any(segment == ".." for segment in decoded.split("/")):
+        return None
+    return type_, decoded, pos + 2 + name_len
 
 
 def parse(data):
@@ -188,12 +193,16 @@ def cmd_extract(args, data):
     wanted = [r for r in records if _want(r, only, exact, args.app_files)]
     print(f"extracting {len(wanted)} of {len(records)} files -> {args.outdir}")
     os.makedirs(args.outdir, exist_ok=True)
+    base = os.path.realpath(args.outdir)
     written = 0
     for r in wanted:
         if r.offset + r.size > len(data):
             print(f"  SKIP out-of-range {r.name} @{r.offset} size={r.size}", file=sys.stderr)
             continue
-        dest = os.path.join(args.outdir, r.name.replace("/", os.sep))
+        dest = os.path.realpath(os.path.join(args.outdir, r.name.replace("/", os.sep)))
+        if not dest.startswith(base + os.sep):
+            print(f"  SKIP unsafe path {r.name}", file=sys.stderr)
+            continue
         os.makedirs(os.path.dirname(dest) or args.outdir, exist_ok=True)
         with open(dest, "wb") as handle:
             handle.write(data[r.offset : r.end])

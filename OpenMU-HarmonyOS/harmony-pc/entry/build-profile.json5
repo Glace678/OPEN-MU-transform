@@ -3,8 +3,12 @@
   "buildOption": {
     "arkOptions": {
       "buildProfileFields": {
+        // Replace BOTH before building: MOBILE_PACKAGE_KEY must match the server
+        // and the GM app, and DEFAULT_SERVER_ADDRESS must be THIS machine's LAN
+        // IPv4 (localhost or a private address per RFC1918). The address below is
+        // only a neutral placeholder -- it is not a real host.
         "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        "DEFAULT_SERVER_ADDRESS": "192.168.215.56"
+        "DEFAULT_SERVER_ADDRESS": "192.168.0.2"
       }
     },
     "externalNativeOptions": {

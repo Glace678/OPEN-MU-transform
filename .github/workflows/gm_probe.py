@@ -2,12 +2,16 @@ import os, json, urllib.request, urllib.error
 
 tok = os.environ["GH_TOKEN"]
 
+# GitHub dates its REST API; a date that is too new is rejected with 415/410
+# instead of silently ignored, so surface that instead of hiding it in a header.
+API_VERSION = os.environ.get("GH_API_VERSION", "2026-03-10")
+
 
 def call(url, data=None):
     headers = {
         "Authorization": f"Bearer {tok}",
         "Accept": "application/json",
-        "X-GitHub-Api-Version": "2026-03-10",
+        "X-GitHub-Api-Version": API_VERSION,
     }
     body = None
     if data is not None:
@@ -18,7 +22,11 @@ def call(url, data=None):
         with urllib.request.urlopen(req, timeout=45) as r:
             return r.status, r.read().decode()
     except urllib.error.HTTPError as e:
-        return e.code, e.read().decode()
+        body = e.read().decode(errors="replace")
+        if e.code in (400, 410, 415) and "api-version" in body.lower():
+            print(f"hint: X-GitHub-Api-Version {API_VERSION} was rejected; "
+                  f"set GH_API_VERSION to a supported date", flush=True)
+        return e.code, body
     except Exception as e:
         return None, repr(e)
 

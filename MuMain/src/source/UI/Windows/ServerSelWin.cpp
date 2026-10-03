@@ -264,15 +264,6 @@ void CServerSelWin::UpdateDisplay()
 
     if (m_icntServerGroup < 1)
     {
-#if defined(_WIN32)
-        if (FILE* fp = ::fopen("debug_ssw.txt", "w"))
-        {
-            ::fprintf(fp, "ZERO GROUPS total=%d win pos=%d,%d size=%d,%d\n",
-                g_ServerListManager->GetTotalServer(),
-                m_ptPos.x, m_ptPos.y, m_Size.cx, m_Size.cy);
-            ::fclose(fp);
-        }
-#endif
         return;
     }
 
@@ -325,29 +316,6 @@ void CServerSelWin::UpdateDisplay()
 
     if (m_pSelectServerGroup == NULL)
     {
-#if defined(_WIN32)
-        if (FILE* fp = ::fopen("debug_ssw.txt", "w"))
-        {
-            ::fprintf(fp, "win pos=%d,%d size=%d,%d selected=-1 groups=%d\n",
-                m_ptPos.x, m_ptPos.y, m_Size.cx, m_Size.cy, m_icntServerGroup);
-            for (int d = 0; d < SSW_SERVER_G_MAX; ++d)
-            {
-                if (m_aServerGroupBtn[d].IsShow())
-                {
-                    ::fprintf(fp, "group[%d] x=%d y=%d w=%d h=%d\n", d,
-                        m_aServerGroupBtn[d].GetXPos(), m_aServerGroupBtn[d].GetYPos(),
-                        m_aServerGroupBtn[d].GetWidth(), m_aServerGroupBtn[d].GetHeight());
-                }
-            }
-            if (m_aBtnRegister.IsShow())
-            {
-                ::fprintf(fp, "register x=%d y=%d w=%d h=%d\n",
-                    m_aBtnRegister.GetXPos(), m_aBtnRegister.GetYPos(),
-                    m_aBtnRegister.GetWidth(), m_aBtnRegister.GetHeight());
-            }
-            ::fclose(fp);
-        }
-#endif
         return;
     }
 
@@ -374,41 +342,6 @@ void CServerSelWin::UpdateDisplay()
     SetServerBtnPosition();
     ShowArrowSprite();
     ShowServerBtns();
-
-#if defined(_WIN32)
-    // TEMP DEBUG: dump live button rects for UI navigation verification.
-    if (FILE* fp = nullptr; (fp = ::fopen("debug_ssw.txt", "w")) != nullptr)
-    {
-        ::fprintf(fp, "win pos=%d,%d size=%d,%d selected=%d groups=%d servers=%d\n",
-            m_ptPos.x, m_ptPos.y, m_Size.cx, m_Size.cy,
-            m_iSelectServerBtnIndex, m_icntServerGroup, m_icntServer);
-        for (int d = 0; d < SSW_SERVER_G_MAX; ++d)
-        {
-            if (m_aServerGroupBtn[d].IsShow())
-            {
-                ::fprintf(fp, "group[%d] x=%d y=%d w=%d h=%d\n", d,
-                    m_aServerGroupBtn[d].GetXPos(), m_aServerGroupBtn[d].GetYPos(),
-                    m_aServerGroupBtn[d].GetWidth(), m_aServerGroupBtn[d].GetHeight());
-            }
-        }
-        for (int d = 0; d < SSW_SERVER_MAX; ++d)
-        {
-            if (m_aServerBtn[d].IsShow())
-            {
-                ::fprintf(fp, "server[%d] x=%d y=%d w=%d h=%d\n", d,
-                    m_aServerBtn[d].GetXPos(), m_aServerBtn[d].GetYPos(),
-                    m_aServerBtn[d].GetWidth(), m_aServerBtn[d].GetHeight());
-            }
-        }
-        if (m_aBtnRegister.IsShow())
-        {
-            ::fprintf(fp, "register x=%d y=%d w=%d h=%d\n",
-                m_aBtnRegister.GetXPos(), m_aBtnRegister.GetYPos(),
-                m_aBtnRegister.GetWidth(), m_aBtnRegister.GetHeight());
-        }
-        ::fclose(fp);
-    }
-#endif
 }
 
 void CServerSelWin::Show(bool bShow)

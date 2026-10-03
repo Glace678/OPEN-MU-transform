@@ -260,30 +260,6 @@ void CLoginWin::Show(bool bShow)
     const int iState = bShow ? UISTATE_NORMAL : UISTATE_HIDE;
     if (m_pUsernameInputBox) m_pUsernameInputBox->SetState(iState);
     if (m_pPasswordInputBox) m_pPasswordInputBox->SetState(iState);
-
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (bShow)
-    {
-        FILE* fp = ::fopen("debug_login.txt", "w");
-        if (fp != nullptr)
-        {
-        const auto dumpBtn = [&fp](const char* tag, const CButton& b)
-        {
-            ::fprintf(fp, "%s x=%d y=%d w=%d h=%d show=%d\n", tag,
-                b.GetXPos(), b.GetYPos(), b.GetWidth(), b.GetHeight(), b.IsShow());
-        };
-        ::fprintf(fp, "win x=%d y=%d w=%d h=%d\n",
-            GetXPos(), GetYPos(), GetWidth(), GetHeight());
-        dumpBtn("ok", m_aBtn[LIW_OK]);
-        dumpBtn("cancel", m_aBtn[LIW_CANCEL]);
-        dumpBtn("register", m_aBtnRegister);
-        dumpBtn("changepw", m_aBtnChangePassword);
-        dumpBtn("reset", m_aBtnForgotPassword);
-            ::fclose(fp);
-        }
-    }
-#endif
 }
 
 bool CLoginWin::CursorInWin(int nArea)

@@ -20,6 +20,9 @@ export interface ItemOption {
   canHaveLuck: boolean;
   canHaveAdditional: boolean;
   excellentCount: number;
+  // The excellent option Numbers as reported by the server. They are not
+  // necessarily 1..N, so masks must be built from these values.
+  excellentNumbers: number[];
 }
 
 export interface StatusResult {
@@ -78,7 +81,9 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
   }
   const octets: number[] = [];
   for (const part of parts) {
-    if (!/^\d+$/.test(part)) {
+    // Reject leading zeros and oversized octets, matching LocalIpv4Address on
+    // Android and isPrivateAddress in build-tools: "010.1.1.1" must not pass.
+    if (!/^(0|[1-9]\d{0,2})$/.test(part)) {
       return false;
     }
     const octet = Number(part);
@@ -99,6 +104,29 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
 interface RawResponse {
   code: number;
   body: string;
+}
+
+// The server reports the real option numbers because they are not necessarily
+// 1..N; a fallback synthesizes 1..count for older servers.
+function parseExcellentNumbers(item: Record<string, Object>, excellentCount: number): number[] {
+  const raw = item['excellentOptionNumbers'];
+  if (!Array.isArray(raw)) {
+    const fallback: number[] = [];
+    for (let index = 1; index <= excellentCount; index++) {
+      fallback.push(index);
+    }
+    return fallback;
+  }
+  const numbers: number[] = [];
+  for (const entry of raw) {
+    const value = entry as number;
+    if (typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= 31
+      && !numbers.includes(value)) {
+      numbers.push(value);
+    }
+  }
+  numbers.sort((a: number, b: number) => a - b);
+  return numbers;
 }
 
 export class MobileGmClient {
@@ -250,7 +278,9 @@ export class MobileGmClient {
         canHaveAdditional: (item['canHaveAdditionalOption'] as boolean)
           ?? (item['canHaveAdditional'] as boolean) ?? false,
         excellentCount: Math.max(0, Math.min(31,
-          (item['excellentOptionCount'] as number) ?? (item['excellentCount'] as number) ?? 0))
+          (item['excellentOptionCount'] as number) ?? (item['excellentCount'] as number) ?? 0)),
+        excellentNumbers: parseExcellentNumbers(item, Math.max(0, Math.min(31,
+          (item['excellentOptionCount'] as number) ?? (item['excellentCount'] as number) ?? 0)))
       });
     }
     return items;

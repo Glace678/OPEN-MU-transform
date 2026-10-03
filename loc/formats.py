@@ -54,6 +54,14 @@ class FixedRecs:
             pos = 4
             self.N = self.count
         body_end = pos + R * self.N
+        # A truncated file would silently yield short records; set_field's slice
+        # assignment would then change the record length and encode() would emit
+        # a structurally corrupt file. Refuse to load it instead.
+        if len(raw) < body_end + self.trailer:
+            raise ValueError(
+                f'{path}: truncated fixed-record file: {len(raw)} bytes, '
+                f'expected at least {body_end + self.trailer} '
+                f'({self.N} records x {R} bytes + {self.trailer} trailer)')
         self.body = bytearray(raw[pos:body_end])
         self.trailer_bytes = bytearray(raw[body_end:])  # checksum and/or raw trailer
         # decrypt per record
@@ -109,15 +117,15 @@ FMT = {
 }
 
 FILES = {
-    'item':    f'{CHS}\\item_chs.bmd',
-    'skill':   f'{CHS}\\skill_chs.bmd',
-    'quest':   f'{CHS}\\Quest_chs.bmd',
-    'movereq': f'{CHS}\\MoveReq_chs.bmd',
-    'socket':  f'{CHS}\\socketitem_chs.bmd',
-    'setoption': f'{CHS}\\itemsetoption_chs.bmd',
-    'buff':    f'{CHS}\\BuffEffect_chs.bmd',
-    'harmony': f'{CHS}\\JewelOfHarmonyOption_chs.bmd',
-    'mastertooltip': f'{CHS}\\MasterSkillTooltip_chs.bmd',  # client now loads per-language (was hardcoded Eng)
+    'item':    os.path.join(CHS, 'item_chs.bmd'),
+    'skill':   os.path.join(CHS, 'skill_chs.bmd'),
+    'quest':   os.path.join(CHS, 'Quest_chs.bmd'),
+    'movereq': os.path.join(CHS, 'MoveReq_chs.bmd'),
+    'socket':  os.path.join(CHS, 'socketitem_chs.bmd'),
+    'setoption':os.path.join(CHS, 'itemsetoption_chs.bmd'),
+    'buff':    os.path.join(CHS, 'BuffEffect_chs.bmd'),
+    'harmony': os.path.join(CHS, 'JewelOfHarmonyOption_chs.bmd'),
+    'mastertooltip': os.path.join(CHS, 'MasterSkillTooltip_chs.bmd'),  # client now loads per-language (was hardcoded Eng)
     'minimap': None,  # 20 files, handled separately
 }
 
@@ -147,7 +155,8 @@ SLIDE_SIZE = 41008
 def slide_slot_offset(level, j):
     return 8 + level*8200 + 8 + j*256
 
-def open_slide(path=f'{CHS}\\slide_chs.bmd'):
+def open_slide(path=None):
+    path = path if path is not None else os.path.join(CHS, 'slide_chs.bmd')
     raw = open(path,'rb').read()
     buf = bytearray(raw); bux(buf)
     return raw, buf
@@ -175,7 +184,7 @@ if __name__ == '__main__':
         print(f'  {kind:14s} {"OK " if ok else "FAIL"} {a}=={b}')
     # minimap
     import glob
-    mm = sorted(glob.glob(f'{CHS}\\Minimap\\*.bmd'))
+    mm = sorted(glob.glob(os.path.join(CHS, 'Minimap', '*.bmd')))
     oks = all(roundtrip('minimap', p)[0] for p in mm)
     print(f'  {"minimap":14s} {"OK " if oks else "FAIL"} ({len(mm)} files)')
     # slide

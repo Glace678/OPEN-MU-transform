@@ -59,6 +59,13 @@ public partial class ItemDefinition
     public bool IsQuestItem { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether items of this kind may be sold to an NPC merchant.
+    /// The default is <c>true</c>; item data marks the ones that must never be sold
+    /// (for example quest items, which are not allowed to leave the character).
+    /// </summary>
+    public bool IsSellableToNpc { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets the storage limit per character which is checked on pick-up.
     /// A value of 0 means, that there is no limit.
     /// A value 'n' above 0 means, that the inventory of the character can store

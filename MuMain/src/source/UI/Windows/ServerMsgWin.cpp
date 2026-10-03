@@ -29,7 +29,7 @@ void CServerMsgWin::Create()
     };
     CWinEx::Create(aiiDescBg, 1, SMW_MSG_LINE_MAX * 5);
 
-    ::memset(m_aszMsg, 0, sizeof(char) * SMW_MSG_LINE_MAX * SMW_MSG_ROW_MAX);
+    ::memset(m_aszMsg, 0, sizeof(m_aszMsg));
     m_nMsgLine = 0;
 }
 

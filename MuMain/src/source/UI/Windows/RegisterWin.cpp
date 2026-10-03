@@ -16,18 +16,26 @@
 
 namespace
 {
-    constexpr int kPanelWidth = 300;
-    constexpr int kPanelHeight = 220;
+    // Same native login panel as the Connect window (login_back.tga).
+    constexpr int kPanelWidth = 329;
+    constexpr int kPanelHeight = 245;
 
-    constexpr int kFieldWidth = 190;
+    constexpr int kFieldWidth = 180;
     constexpr int kFieldHeight = 23;
-    constexpr int kFieldX = 84;
-    constexpr int kRowY[3] = { 44, 74, 104 };
+    constexpr int kFieldX = 88;
+    constexpr int kRowY[3] = { 52, 84, 116 };
+
+    constexpr int kLabelX = 14;
+    constexpr int kLabelWidth = 66;
+
+    constexpr int kHintY = 152;
+    constexpr int kButtonY = 190;
+    constexpr int kStatusY = 228;
 
     constexpr int kNameLimit = 10;
     constexpr int kPasswordLimit = 20;
 
-    // Status line colors (a, r, g, b).
+    // Status line colors (r, g, b).
     constexpr BYTE kStatusRed[3] = { 255, 96, 96 };
     constexpr BYTE kStatusGreen[3] = { 120, 230, 130 };
     constexpr BYTE kStatusYellow[3] = { 255, 210, 90 };
@@ -52,8 +60,8 @@ CRegisterWin::~CRegisterWin()
 
 void CRegisterWin::Create()
 {
-    // -1 = translucent black panel (see CWin::Create).
-    CWin::Create(kPanelWidth, kPanelHeight, -1);
+    // Native login panel background (same art as the Connect window).
+    CWin::Create(kPanelWidth, kPanelHeight, BITMAP_LOG_IN + 7);
 
     for (int i = 0; i < FIELD_COUNT; ++i)
     {
@@ -74,19 +82,13 @@ void CRegisterWin::Create()
     m_pBox[FIELD_PASSWORD]->SetTabTarget(m_pBox[FIELD_CONFIRM]);
     m_pBox[FIELD_CONFIRM]->SetTabTarget(m_pBox[FIELD_NAME]);
 
-    static const DWORD btnColors[4] =
-    {
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0
-    };
-
-    for (int i = 0; i < 2; ++i)
-    {
-        m_aBtn[i].Create(80, 26, BITMAP_LOG_IN + 1, 3, 2, 1);
-        m_aBtn[i].SetText((i == RB_OK)
-            ? L"\u6CE8\u518C"
-            : L"\u53D6\u6D88", const_cast<DWORD*>(btnColors));
-        CWin::RegisterButton(&m_aBtn[i]);
-    }
+    // Native golden pixel buttons, identical to the Connect window:
+    // message_ok_b_all (OK) and loding_cancel_b_all (Cancel). The wording
+    // is baked into the art, so no text overlay is needed.
+    m_aBtn[RB_OK].Create(54, 30, BITMAP_BUTTON, 3, 2, 1);
+    CWin::RegisterButton(&m_aBtn[RB_OK]);
+    m_aBtn[RB_CANCEL].Create(54, 30, BITMAP_BUTTON + 1, 3, 2, 1);
+    CWin::RegisterButton(&m_aBtn[RB_CANCEL]);
 }
 
 void CRegisterWin::PreRelease()
@@ -114,8 +116,8 @@ void CRegisterWin::SetPositionArt(float fArtX, float fArtY)
             int(fArtY + kRowY[i] + 6));
     }
 
-    m_aBtn[RB_OK].SetPositionArt(fArtX + 58, fArtY + 172);
-    m_aBtn[RB_CANCEL].SetPositionArt(fArtX + 162, fArtY + 172);
+    m_aBtn[RB_OK].SetPositionArt(fArtX + 160, fArtY + kButtonY);
+    m_aBtn[RB_CANCEL].SetPositionArt(fArtX + 220, fArtY + kButtonY);
 }
 
 void CRegisterWin::Show(bool bShow)
@@ -134,28 +136,6 @@ void CRegisterWin::Show(bool bShow)
 
     if (!bShow)
         CUITextInputBox::ReleaseFocus();
-
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (bShow)
-    {
-        FILE* fp = ::fopen("debug_regwin.txt", "w");
-        if (fp != nullptr)
-        {
-            ::fprintf(fp, "win x=%d y=%d w=%d h=%d\n",
-                GetXPos(), GetYPos(), GetWidth(), GetHeight());
-            for (int i = 0; i < FIELD_COUNT; ++i)
-                ::fprintf(fp, "field[%d] x=%d y=%d w=%d h=%d\n", i,
-                    m_asprInputBox[i].GetXPos(), m_asprInputBox[i].GetYPos(),
-                    m_asprInputBox[i].GetWidth(), m_asprInputBox[i].GetHeight());
-            for (int i = 0; i < 2; ++i)
-                ::fprintf(fp, "btn[%d] x=%d y=%d w=%d h=%d\n", i,
-                    m_aBtn[i].GetXPos(), m_aBtn[i].GetYPos(),
-                    m_aBtn[i].GetWidth(), m_aBtn[i].GetHeight());
-            ::fclose(fp);
-        }
-    }
-#endif
 }
 
 bool CRegisterWin::CursorInWin(int nArea)
@@ -187,16 +167,6 @@ void CRegisterWin::Open(int opener)
         : static_cast<CWin*>(&ui.m_ServerSelWin));
     ui.ShowWin(this);
     m_pBox[FIELD_NAME]->GiveFocus();
-
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (FILE* ofp = ::fopen("debug_open.txt", "w"))
-    {
-        ::fprintf(ofp, "Open opener=%d this-win x=%d y=%d\n",
-            m_opener, GetXPos(), GetYPos());
-        ::fclose(ofp);
-    }
-#endif
 }
 
 void CRegisterWin::Close()
@@ -264,16 +234,6 @@ void CRegisterWin::SubmitRegistration()
     m_pBox[FIELD_PASSWORD]->GetText(pass, _countof(pass));
     m_pBox[FIELD_CONFIRM]->GetText(confirm, _countof(confirm));
 
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (FILE* dfp = ::fopen("debug_submit.txt", "w"))
-    {
-        ::fprintf(dfp, "name='%ls'(%d) pass='%ls'(%d) confirm='%ls' host='%ls'\n",
-            name, int(wcslen(name)), pass, int(wcslen(pass)), confirm, szServerIpAddress);
-        ::fclose(dfp);
-    }
-#endif
-
     // Trim trailing spaces (the classic fields never need them).
     const auto trim = [](wchar_t* value)
     {
@@ -315,9 +275,9 @@ void CRegisterWin::SubmitRegistration()
         return;
     }
 
-    if (passLength < 3 || passLength > kPasswordLimit)
+    if (passLength < 8 || passLength > kPasswordLimit)
     {
-        SetStatus(L"\u5BC6\u7801\u9700\u4E3A 3-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+        SetStatus(L"\u5BC6\u7801\u9700\u4E3A 8-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
         return;
     }
 
@@ -325,7 +285,7 @@ void CRegisterWin::SubmitRegistration()
     {
         if (pass[i] < 0x21 || pass[i] > 0x7e)
         {
-            SetStatus(L"\u5BC6\u7801\u9700\u4E3A 3-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+            SetStatus(L"\u5BC6\u7801\u9700\u4E3A 8-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
             return;
         }
     }
@@ -337,16 +297,6 @@ void CRegisterWin::SubmitRegistration()
     }
 
     const auto result = Network::Login::PostAccountRegistration(szServerIpAddress, name, pass);
-
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (FILE* rfp = ::fopen("debug_submit.txt", "a"))
-    {
-        ::fprintf(rfp, "transport=%d success=%d code='%s'\n",
-            result.transportOk ? 1 : 0, result.success ? 1 : 0, result.code.c_str());
-        ::fclose(rfp);
-    }
-#endif
 
     if (!result.transportOk)
     {
@@ -361,7 +311,7 @@ void CRegisterWin::SubmitRegistration()
         wcsncpy_s(m_lastPass, pass, _TRUNCATE);
         m_pBox[FIELD_PASSWORD]->SetText(L"");
         m_pBox[FIELD_CONFIRM]->SetText(L"");
-        SetStatus(L"\u6CE8\u518C\u6210\u529F\uFF01\u8BF7\u70B9\u51FB\u53D6\u6D88\u8FD4\u56DE\u3002", kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
+        SetStatus(L"\u6CE8\u518C\u6210\u529F\uFF01\u8BF7\u70B9\u51FB Cancel \u8FD4\u56DE\u3002", kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
         return;
     }
 
@@ -370,7 +320,7 @@ void CRegisterWin::SubmitRegistration()
     else if (result.code == "invalid_name")
         SetStatus(L"\u8D26\u53F7\u9700\u4E3A 3-10 \u4F4D\u5B57\u6BCD\u6216\u6570\u5B57\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (result.code == "invalid_password")
-        SetStatus(L"\u5BC6\u7801\u9700\u4E3A 3-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
+        SetStatus(L"\u5BC6\u7801\u9700\u4E3A 8-20 \u4F4D\uFF0C\u4E14\u4E0D\u80FD\u542B\u7A7A\u683C\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (result.code == "password_mismatch")
         SetStatus(L"\u4E24\u6B21\u8F93\u5165\u7684\u5BC6\u7801\u4E0D\u4E00\u81F4\u3002", kStatusRed[0], kStatusRed[1], kStatusRed[2]);
     else if (result.code == "error")
@@ -399,37 +349,34 @@ void CRegisterWin::RenderControls()
     const int baseY = int(GetYPos() / rateY);
 
     // Title.
-    g_pRenderText->SetTextColor(255, 255, 220, 120);
+    g_pRenderText->SetTextColor(255, 220, 120, 255);
     g_pRenderText->RenderText(
-        baseX + 18,
-        baseY + 14,
+        baseX + 24,
+        baseY + 20,
         L"\u6CE8\u518C\u8D26\u53F7");
     g_pRenderText->SetTextColor(CLRDW_WHITE);
 
-    // Row labels (aligned to the box center).
+    // Row labels (right-aligned in the left column).
     g_pRenderText->RenderText(
-        baseX + 18,
+        baseX + kLabelX,
         baseY + kRowY[0] + 7,
-        L"\u8D26\u53F7");
+        L"\u8D26\u53F7", kLabelWidth, 14, RT3_SORT_RIGHT);
     g_pRenderText->RenderText(
-        baseX + 18,
+        baseX + kLabelX,
         baseY + kRowY[1] + 7,
-        L"\u5BC6\u7801");
+        L"\u5BC6\u7801", kLabelWidth, 14, RT3_SORT_RIGHT);
     g_pRenderText->RenderText(
-        baseX + 4,
+        baseX + kLabelX,
         baseY + kRowY[2] + 7,
-        L"\u786E\u8BA4\u5BC6\u7801");
+        L"\u786E\u8BA4\u5BC6\u7801", kLabelWidth, 14, RT3_SORT_RIGHT);
 
     // Rules hint.
     g_pRenderText->SetTextColor(200, 200, 200, 200);
     g_pRenderText->RenderText(
-        baseX + 18,
-        baseY + 138,
-        L"\u8D26\u53F7\uFF1A3-10 \u4F4D\u5B57\u6BCD\u6216\u6570\u5B57");
-    g_pRenderText->RenderText(
-        baseX + 18,
-        baseY + 154,
-        L"\u5BC6\u7801\uFF1A3-20 \u4F4D\uFF0C\u4E0D\u80FD\u542B\u7A7A\u683C");
+        baseX + 24,
+        baseY + kHintY,
+        L"\u8D26\u53F7 3-10 \u4F4D\u5B57\u6BCD\u6216\u6570\u5B57\uFF1B\u5BC6\u7801 8-20 \u4F4D\u4E14\u4E0D\u542B\u7A7A\u683C",
+        285, 26);
 
     // Status line.
     if (m_status[0] != L'\0')
@@ -437,8 +384,8 @@ void CRegisterWin::RenderControls()
         g_pRenderText->SetTextColor(255, m_statusColorRgb[0], m_statusColorRgb[1], m_statusColorRgb[2]);
         g_pRenderText->RenderText(
             baseX + 14,
-            baseY + 204,
-            m_status, 272, 14);
+            baseY + kStatusY,
+            m_status, 301, 15);
     }
 
     g_pRenderText->SetTextColor(CLRDW_WHITE);

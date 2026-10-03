@@ -1,4 +1,4 @@
-// <copyright file="PublicRegistrationSecurityTests.cs" company="MUnique">
+﻿// <copyright file="PublicRegistrationSecurityTests.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -30,9 +30,10 @@ using MUnique.OpenMU.Web.AdminPanel.Properties;
 public class PublicRegistrationSecurityTests
 {
     private const string SettingName = "AccountSelfService:AllowLocalPasswordReset";
+    private const string TokenFileSettingName = "AccountSelfService:MaintenanceTokenFile";
     private static readonly PasswordResetRequest ValidRequest = new("solotest", "new-test-password", "new-test-password");
 
-    /// <summary>Missing, false and invalid configuration fail closed, even for a direct loopback peer.</summary>
+    /// <summary>Missing, false and invalid configuration fail closed, whatever the peer is.</summary>
     [TestCase(null)]
     [TestCase("false")]
     [TestCase("")]
@@ -53,7 +54,7 @@ public class PublicRegistrationSecurityTests
         persistence.VerifyNoOtherCalls();
     }
 
-    /// <summary>Enabling local maintenance never permits remote or unknown peers.</summary>
+    /// <summary>Enabling maintenance never trusts the network position: without the token every peer is rejected.</summary>
     [TestCase(null)]
     [TestCase("0.0.0.0")]
     [TestCase("::")]
@@ -61,7 +62,9 @@ public class PublicRegistrationSecurityTests
     [TestCase("203.0.113.20")]
     [TestCase("2001:db8::1")]
     [TestCase("::ffff:203.0.113.20")]
-    public async Task NonLoopbackPeerRejectsWithoutStorageAsync(string? peer)
+    [TestCase("127.0.0.1")]
+    [TestCase("::1")]
+    public async Task PeerWithoutMaintenanceTokenRejectsWithoutStorageAsync(string? peer)
     {
         var persistence = new Mock<IPersistenceContextProvider>(MockBehavior.Strict);
 
@@ -72,76 +75,56 @@ public class PublicRegistrationSecurityTests
         persistence.VerifyNoOtherCalls();
     }
 
-    /// <summary>Proxy metadata cannot turn an anonymous remote reset into a local maintenance request.</summary>
-    [TestCase("Forwarded")]
-    [TestCase("fOrWaRdEd")]
-    [TestCase("X-Forwarded-For")]
-    [TestCase("X-Forwarded-Host")]
-    [TestCase("X-Forwarded-Proto")]
-    [TestCase("X-Forwarded-Port")]
-    [TestCase("X-Forwarded-Prefix")]
-    [TestCase("X-Forwarded-Server")]
-    [TestCase("X-Original-For")]
-    [TestCase("X-Original-Host")]
-    [TestCase("X-Original-Proto")]
-    [TestCase("X-Real-IP")]
-    [TestCase("X-Client-IP")]
-    [TestCase("True-Client-IP")]
-    [TestCase("CF-Connecting-IP")]
-    [TestCase("Fastly-Client-IP")]
-    public async Task ProxyHeadersRejectWithoutStorageAsync(string header)
-    {
-        var persistence = new Mock<IPersistenceContextProvider>(MockBehavior.Strict);
-
-        // The apparent peer and supplied address are both local; header presence
-        // alone must reject, without parsing or trusting any forwarded address.
-        var response = await InvokeResetAsync(persistence.Object, "true", "127.0.0.1", header, "127.0.0.1").ConfigureAwait(false);
-
-        Assert.That(response.Code, Is.EqualTo("forbidden"));
-        persistence.VerifyNoOtherCalls();
-    }
-
-    /// <summary>Even an empty proxy header is not accepted as a direct local request.</summary>
+    /// <summary>A wrong maintenance token is rejected even for a direct loopback peer.</summary>
     [Test]
-    public async Task EmptyProxyHeaderRejectsWithoutStorageAsync()
+    public async Task WrongMaintenanceTokenRejectsForLoopbackPeerAsync()
     {
         var persistence = new Mock<IPersistenceContextProvider>(MockBehavior.Strict);
 
-        var response = await InvokeResetAsync(persistence.Object, "true", "127.0.0.1", "X-Forwarded-For", string.Empty).ConfigureAwait(false);
+        var response = await InvokeResetAsync(persistence.Object, "true", "127.0.0.1", token: "not-the-token").ConfigureAwait(false);
 
         Assert.That(response.Code, Is.EqualTo("forbidden"));
         persistence.VerifyNoOtherCalls();
     }
 
-    /// <summary>Explicitly enabled direct loopback maintenance retains the existing password-hash behavior.</summary>
-    [TestCase("127.0.0.1")]
-    [TestCase("::1")]
-    [TestCase("::ffff:127.0.0.1")]
-    public async Task ExplicitDirectLoopbackMaintenanceCanResetAsync(string peer)
+    /// <summary>The correct maintenance token authorizes a maintenance reset regardless of headers.</summary>
+    [TestCase(null)]
+    [TestCase("Forwarded")]
+    [TestCase("X-Forwarded-For")]
+    [TestCase("X-Real-IP")]
+    [TestCase("CF-Connecting-IP")]
+    public async Task MaintenanceTokenAuthorizesResetRegardlessOfHeaders(string? header)
     {
-        var configuration = new GameConfiguration();
-        var configurationContext = new Mock<IConfigurationContext>();
-        configurationContext.Setup(context => context.GetAsync<GameConfiguration>(default))
-            .ReturnsAsync(new[] { configuration }.AsEnumerable());
         var account = new Account { LoginName = "solotest", PasswordHash = BCrypt.Net.BCrypt.HashPassword("previous-password"), RecoveryCodeHash = "previous-recovery" };
         var playerContext = new Mock<IPlayerContext>();
         playerContext.Setup(context => context.GetAccountByLoginNameAsync("solotest", default)).ReturnsAsync(account);
         playerContext.Setup(context => context.SaveChangesAsync(default)).ReturnsAsync(true);
-        var persistence = new Mock<IPersistenceContextProvider>(MockBehavior.Strict);
-        persistence.Setup(provider => provider.CreateNewConfigurationContext()).Returns(configurationContext.Object);
-        persistence.Setup(provider => provider.CreateNewPlayerContext(configuration)).Returns(playerContext.Object);
+        var persistence = CreateProvider(playerContext.Object);
 
-        var response = await InvokeResetAsync(persistence.Object, "true", peer).ConfigureAwait(false);
+        var response = await InvokeResetAsync(persistence, "true", "203.0.113.20", header, "203.0.113.20", token: "test-token").ConfigureAwait(false);
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.Success, Is.True);
-            Assert.That(response.Code, Is.EqualTo("ok"));
-            Assert.That(BCrypt.Net.BCrypt.Verify(ValidRequest.NewPassword, account.PasswordHash), Is.True);
-            Assert.That(BCrypt.Net.BCrypt.Verify("previous-password", account.PasswordHash), Is.False);
-            Assert.That(account.RecoveryCodeHash, Is.Null);
-        });
+        Assert.That(response.Success, Is.True);
+        Assert.That(response.Code, Is.EqualTo("ok"));
         playerContext.Verify(context => context.SaveChangesAsync(default), Times.Once);
+    }
+
+    /// <summary>Maintenance revocation is atomic even when the loaded tracked account would have a stale null hash.</summary>
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task MaintenanceUsesAtomicCredentialRevocationAsync(bool wins)
+    {
+        var snapshot = new AccountCredentialSnapshot("solotest", BCrypt.Net.BCrypt.HashPassword("previous-password"), null);
+        var player = new Mock<IPlayerContext>();
+        var credentials = player.As<IAccountCredentialContext>();
+        credentials.Setup(context => context.ReadCredentialsAsync("solotest", default)).ReturnsAsync(snapshot);
+        credentials.Setup(context => context.TryReplaceCredentialsAsync(snapshot, It.IsAny<string>(), null, default)).ReturnsAsync(wins);
+
+        var response = await InvokeResetAsync(CreateProvider(player.Object), "true", "127.0.0.1", token: "test-token").ConfigureAwait(false);
+
+        Assert.That(response.Success, Is.EqualTo(wins));
+        credentials.Verify(context => context.TryReplaceCredentialsAsync(snapshot, It.IsAny<string>(), null, default), Times.Once);
+        player.Verify(context => context.SaveChangesAsync(default), Times.Never);
+        player.Verify(context => context.GetAccountByLoginNameAsync(It.IsAny<string>(), default), Times.Never);
     }
 
     /// <summary>The page always requires ownership proof; local maintenance configuration does not remove it.</summary>
@@ -295,23 +278,29 @@ public class PublicRegistrationSecurityTests
         player.Verify(context => context.SaveChangesAsync(default), Times.Never);
     }
 
-    /// <summary>Maintenance revocation is atomic even when the loaded tracked account would have a stale null hash.</summary>
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task MaintenanceUsesAtomicCredentialRevocationAsync(bool wins)
+    /// <summary>Explicitly enabled direct loopback maintenance retains the existing password-hash behavior.</summary>
+    [TestCase("127.0.0.1")]
+    [TestCase("::1")]
+    [TestCase("::ffff:127.0.0.1")]
+    public async Task ExplicitDirectLoopbackMaintenanceCanResetAsync(string peer)
     {
-        var snapshot = new AccountCredentialSnapshot("solotest", BCrypt.Net.BCrypt.HashPassword("previous-password"), null);
-        var player = new Mock<IPlayerContext>();
-        var credentials = player.As<IAccountCredentialContext>();
-        credentials.Setup(context => context.ReadCredentialsAsync("solotest", default)).ReturnsAsync(snapshot);
-        credentials.Setup(context => context.TryReplaceCredentialsAsync(snapshot, It.IsAny<string>(), null, default)).ReturnsAsync(wins);
+        var account = new Account { LoginName = "solotest", PasswordHash = BCrypt.Net.BCrypt.HashPassword("previous-password"), RecoveryCodeHash = "previous-recovery" };
+        var playerContext = new Mock<IPlayerContext>();
+        playerContext.Setup(context => context.GetAccountByLoginNameAsync("solotest", default)).ReturnsAsync(account);
+        playerContext.Setup(context => context.SaveChangesAsync(default)).ReturnsAsync(true);
+        var persistence = CreateProvider(playerContext.Object);
 
-        var response = await InvokeResetAsync(CreateProvider(player.Object), "true", "127.0.0.1").ConfigureAwait(false);
+        var response = await InvokeResetAsync(persistence, "true", peer, token: "test-token").ConfigureAwait(false);
 
-        Assert.That(response.Success, Is.EqualTo(wins));
-        credentials.Verify(context => context.TryReplaceCredentialsAsync(snapshot, It.IsAny<string>(), null, default), Times.Once);
-        player.Verify(context => context.SaveChangesAsync(default), Times.Never);
-        player.Verify(context => context.GetAccountByLoginNameAsync(It.IsAny<string>(), default), Times.Never);
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.Success, Is.True);
+            Assert.That(response.Code, Is.EqualTo("ok"));
+            Assert.That(BCrypt.Net.BCrypt.Verify("new-test-password", account.PasswordHash), Is.True);
+            Assert.That(BCrypt.Net.BCrypt.Verify("previous-password", account.PasswordHash), Is.False);
+            Assert.That(account.RecoveryCodeHash, Is.Null);
+        });
+        playerContext.Verify(context => context.SaveChangesAsync(default), Times.Once);
     }
 
     private static IPersistenceContextProvider CreateProvider(IPlayerContext player)
@@ -326,8 +315,12 @@ public class PublicRegistrationSecurityTests
         return persistence.Object;
     }
 
-    private static IConfigurationRoot CreateConfiguration(string? setting) => new ConfigurationBuilder()
-        .AddInMemoryCollection(new Dictionary<string, string?> { [SettingName] = setting })
+    private static IConfigurationRoot CreateConfiguration(string? setting, string? maintenanceTokenFile = null) => new ConfigurationBuilder()
+        .AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            [SettingName] = setting,
+            [TokenFileSettingName] = maintenanceTokenFile,
+        })
         .Build();
 
     private static IStringLocalizer<SelfServiceResources> CreateLocalizer()
@@ -343,8 +336,9 @@ public class PublicRegistrationSecurityTests
         string? setting,
         string? peer,
         string? header = null,
-        string headerValue = "203.0.113.20")
-        => InvokeAccountEndpointAsync(persistence, "/reset-password", ValidRequest, setting, peer, header, headerValue);
+        string headerValue = "203.0.113.20",
+        string? token = null)
+        => InvokeAccountEndpointAsync(persistence, "/reset-password", ValidRequest, setting, peer, header, headerValue, token);
 
     private static async Task<AccountRegistrationResponse> InvokeAccountEndpointAsync(
         IPersistenceContextProvider persistence,
@@ -353,24 +347,48 @@ public class PublicRegistrationSecurityTests
         string? setting,
         string? peer,
         string? header = null,
-        string headerValue = "203.0.113.20")
+        string headerValue = "203.0.113.20",
+        string? maintenanceToken = null)
     {
+        // A per-test token file keeps the guard away from any real server data.
+        var tokenDirectory = Path.Combine(Path.GetTempPath(), "openmu-registration-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tokenDirectory);
+        var tokenFile = Path.Combine(tokenDirectory, "maintenance-token.txt");
+        File.WriteAllText(tokenFile, "test-token");
+
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
             EnvironmentName = "Testing",
             ContentRootPath = Path.GetTempPath(),
         });
         builder.Configuration.Sources.Clear();
-        builder.Configuration.AddConfiguration(CreateConfiguration(setting));
+        builder.Configuration.AddConfiguration(CreateConfiguration(setting, tokenFile));
         builder.Logging.ClearProviders();
         builder.Services.AddSingleton(persistence);
         builder.Services.AddSingleton(CreateLocalizer());
+        builder.Services.AddAccountSelfServiceGuard();
         await using var app = builder.Build();
         app.MapPublicRegistrationEndpoints();
         var endpoint = ((IEndpointRouteBuilder)app).DataSources.SelectMany(source => source.Endpoints)
             .OfType<RouteEndpoint>()
             .Single(endpoint => endpoint.RoutePattern.RawText == "/api/registration" + route);
-        var requestBytes = JsonSerializer.SerializeToUtf8Bytes(request);
+
+        object body = request;
+        if (maintenanceToken is not null)
+        {
+            // The guard compares the request token against the file, so the test
+            // can hand in either the right value or a wrong one.
+            var node = JsonSerializer.SerializeToNode(request, request.GetType())!.AsObject();
+            if (maintenanceToken != "test-token")
+            {
+                File.WriteAllText(tokenFile, "a-different-token");
+            }
+
+            node["maintenanceToken"] = maintenanceToken;
+            body = node;
+        }
+
+        var requestBytes = JsonSerializer.SerializeToUtf8Bytes(body);
         using var requestBody = new MemoryStream(requestBytes);
         using var responseBody = new MemoryStream();
         var context = new DefaultHttpContext { RequestServices = app.Services };

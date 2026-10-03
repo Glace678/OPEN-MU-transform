@@ -10,15 +10,21 @@ import os
 INPUT = os.path.join(W, 'in_data', 'de', 'g1.json')
 OUTPUT = os.path.join(W, 'out_data', 'de', 'g1.json')
 
-# Import both translation dictionaries
-sys.path.insert(0, W)
+# Import both translation dictionaries as modules instead of executing them:
+# exec() treats a data file as code, which silently runs anything it contains.
+import importlib.util
 
-# Load translations by executing the files
-T = {}
-exec(open(os.path.join(W, 'translations_part1.py'), encoding='utf-8').read())
-T1 = T.copy()
-exec(open(os.path.join(W, 'translations_part2.py'), encoding='utf-8').read())
-T2 = T.copy()
+def load_translations(name):
+    path = os.path.join(W, name)
+    spec = importlib.util.spec_from_file_location(name[:-3], path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f'cannot load {path}')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return dict(module.T)
+
+T1 = load_translations('translations_part1.py')
+T2 = load_translations('translations_part2.py')
 
 # Merge
 T = {**T1, **T2}

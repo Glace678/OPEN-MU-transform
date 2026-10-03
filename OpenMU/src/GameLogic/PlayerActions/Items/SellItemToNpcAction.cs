@@ -7,7 +7,6 @@ namespace MUnique.OpenMU.GameLogic.PlayerActions.Items;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.GameLogic.Views.Inventory;
-
 /// <summary>
 /// Action to sell an item to a npc merchant.
 /// </summary>
@@ -49,6 +48,16 @@ public class SellItemToNpcAction
 
         if (item.Definition is null || (item.Definition.IsBoundToCharacter && (item.Definition.Durability == 0 || item.Durability > 0)))
         {
+            await player.InvokeViewPlugInAsync<IItemSoldToNpcPlugIn>(p => p.ItemSoldToNpcAsync(false)).ConfigureAwait(false);
+            return false;
+        }
+
+        // Item data may forbid selling (quest items, for example). Refuse before any
+        // price is calculated so a modified client cannot trade these away for zen.
+        if (item.Definition is { IsSellableToNpc: false })
+        {
+            player.Logger.LogDebug("Player {0} requested to sell non-sellable item {1}.", player, item);
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ItemCannotBeSoldToNpc)).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IItemSoldToNpcPlugIn>(p => p.ItemSoldToNpcAsync(false)).ConfigureAwait(false);
             return false;
         }

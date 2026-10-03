@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import config
@@ -124,7 +124,7 @@ if WRITE:
         print(f'  wrote {kind:14s} {n:4d} fields -> {os.path.basename(path)}')
 
     # minimap (20 files)
-    for p in sorted(glob.glob(formats.CHS + r'\Minimap\*.bmd')):
+    for p in sorted(glob.glob(os.path.join(formats.CHS, 'Minimap', '*.bmd'))):
         f = formats.FixedRecs(p, 116, 100, key=0x2BC1, trailer=45)
         n=0
         for i in range(100):

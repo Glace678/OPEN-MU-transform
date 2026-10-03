@@ -1,12 +1,25 @@
 # -*- coding: utf-8 -*-
 import os as _os, sys as _sys
 import config
-import json, hashlib, os, sys
+import json, hashlib, os, shutil, sys
 
-MANIFEST = os.path.join(config.PUBLISH, 'Server', 'manifest.json')  # not used; patch the live one
-LIVE = config.SERVER.manifest
-ROOT = config.SERVER()
+try:
+    MANIFEST = os.path.join(config.PUBLISH, 'Server', 'manifest.json')  # not used; patch the live one
+    LIVE = config.SERVER.manifest
+    ROOT = config.SERVER()
+except FileNotFoundError as exc:
+    sys.exit(str(exc))
 TARGETS = ['App/Game/Main.exe', 'App/Game/MUnique.Client.Library.dll']
+_CHUNK = 1024 * 1024
+
+
+def sha256_of(path):
+    """Stream the file so multi-GB Main.exe never sits in memory at once."""
+    digest = hashlib.sha256()
+    with open(path, 'rb') as handle:
+        for block in iter(lambda: handle.read(_CHUNK), b''):
+            digest.update(block)
+    return digest.hexdigest()
 
 with open(LIVE, encoding='utf-8') as f:
     m = json.load(f)
@@ -25,16 +38,19 @@ def get_path(e):
     raise KeyError('no path key: ' + str(e))
 
 def norm(p):
-    return p.replace('\\', '/').lstrip('./')
+    p = p.replace('\\', '/')
+    return p[2:] if p.startswith('./') else p
 
 updated = []
 for e in files:
     p = norm(get_path(e))
     if p in TARGETS:
         full = os.path.join(ROOT, *p.split('/'))
-        data = open(full, 'rb').read()
-        size = len(data)
-        sha = hashlib.sha256(data).hexdigest()
+        if not os.path.isfile(full):
+            print('missing:', full, file=sys.stderr)
+            continue
+        size = os.path.getsize(full)
+        sha = sha256_of(full)
         old_size = e.get('size', e.get('Size'))
         old_sha = e.get('sha256', e.get('Sha256', e.get('hash', e.get('Hash'))))
         # set the keys present in the schema
@@ -47,6 +63,8 @@ for e in files:
         updated.append((p, old_size, size, old_sha, sha))
         print('updated:', p, old_size, '->', size)
 
+# Keep a copy of the previous manifest next to the live one before rewriting.
+shutil.copy2(LIVE, LIVE + '.bak')
 with open(LIVE, 'w', encoding='utf-8') as f:
     json.dump(m, f, ensure_ascii=False, indent=2)
 

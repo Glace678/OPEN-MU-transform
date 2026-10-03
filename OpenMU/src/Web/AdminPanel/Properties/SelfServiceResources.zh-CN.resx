@@ -9,7 +9,7 @@
   <data name="AccountNameLabel" xml:space="preserve"><value>账号名</value></data>
   <data name="AccountNameHelp" xml:space="preserve"><value>3-10 位英文字母或数字。</value></data>
   <data name="PasswordLabel" xml:space="preserve"><value>密码</value></data>
-  <data name="PasswordHelp" xml:space="preserve"><value>3-20 位可打印字符，不能包含空格。</value></data>
+  <data name="PasswordHelp" xml:space="preserve"><value>8-20 位可打印字符，不能包含空格。</value></data>
   <data name="ConfirmPasswordLabel" xml:space="preserve"><value>确认密码</value></data>
   <data name="SecurityCodeLabel" xml:space="preserve"><value>安全码</value></data>
   <data name="SecurityCodeHelp" xml:space="preserve"><value>用于删除角色和部分账号操作。请输入 3-10 位可打印字符；忘记后请联系管理员。</value></data>
@@ -44,7 +44,7 @@
   <data name="RequiredNewPassword" xml:space="preserve"><value>请输入新密码。</value></data>
   <data name="RequiredNewConfirmPassword" xml:space="preserve"><value>请再次输入新密码。</value></data>
   <data name="InvalidName" xml:space="preserve"><value>账号名需为 3-10 位字母或数字。</value></data>
-  <data name="InvalidPassword" xml:space="preserve"><value>密码需为 3-20 位，且不能包含空格。</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>密码需为 8-20 位，且不能包含空格。</value></data>
   <data name="InvalidPasswordChars" xml:space="preserve"><value>密码只能使用英文字母、数字和常见符号，不能包含空格。</value></data>
   <data name="PasswordMismatch" xml:space="preserve"><value>两次输入的密码不一致。</value></data>
   <data name="InvalidSecurityCode" xml:space="preserve"><value>安全码需为 3-10 位字母、数字或常见符号。</value></data>
@@ -56,13 +56,14 @@
   <data name="BadCredentials" xml:space="preserve"><value>账号名或当前密码不正确。</value></data>
   <data name="PasswordChangeSuccess" xml:space="preserve"><value>密码修改成功，下次登录请使用新密码。</value></data>
   <data name="PasswordChangeFailed" xml:space="preserve"><value>修改失败，请检查服务器是否已启动。</value></data>
-  <data name="ResetForbidden" xml:space="preserve"><value>忘记密码只能在运行服务器的电脑上重置，或联系管理员在后台重置。</value></data>
+  <data name="ResetForbidden" xml:space="preserve"><value>不带恢复码的重置需要服务器 Data/Keys/maintenance-token.txt 文件中的维护令牌。使用恢复码或管理员后台随时可以重置。</value></data>
   <data name="AccountNotFound" xml:space="preserve"><value>该账号名不存在。</value></data>
   <data name="PasswordResetSuccess" xml:space="preserve"><value>密码重置成功，现在可以使用新密码登录。</value></data>
   <data name="PasswordResetFailed" xml:space="preserve"><value>重置失败，请检查服务器是否已启动。</value></data>
+  <data name="TooManyAttempts" xml:space="preserve"><value>失败次数过多，请稍后再试。</value></data>
   <data name="InvalidResponse" xml:space="preserve"><value>服务器没有返回有效结果。</value></data>
   <data name="ResetDisabled" xml:space="preserve"><value>未提供所有权凭证的重置已禁用。请使用恢复码，或联系管理员。</value></data>
-  <data name="LocalPasswordResetWarning" xml:space="preserve"><value>无所有权验证的本机维护重置已开启。向代理或其他设备开放账号服务前，请关闭此选项。</value></data>
+  <data name="LocalPasswordResetWarning" xml:space="preserve"><value>无所有权凭证的维护重置已开启，但现在必须提供令牌文件（Data/Keys/maintenance-token.txt）。请妥善保管该文件，泄露后立即重新生成。</value></data>
   <data name="RecoveryCodeLabel" xml:space="preserve"><value>恢复码</value></data>
   <data name="RecoveryCodeNotice" xml:space="preserve"><value>请妥善保管恢复码，不要分享。找回密码后旧码失效，新码只在此次结果中显示。</value></data>
   <data name="RequiredRecoveryCode" xml:space="preserve"><value>请输入恢复码。</value></data>

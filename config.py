@@ -43,12 +43,16 @@ _SERVER_ROOT = None
 
 
 def server_root():
-    """Installed server/game root, honoring the MU_SERVER_ROOT override."""
+    """Installed server/game root, honoring the MU_SERVER_ROOT override.
+
+    Raises FileNotFoundError when the tree is missing; command-line entry
+    points are expected to catch it and turn it into a friendly exit code.
+    """
     global _SERVER_ROOT
     if _SERVER_ROOT is None:
         root = os.environ.get('MU_SERVER_ROOT') or DEFAULT_SERVER_ROOT
         if not os.path.isdir(root):
-            raise SystemExit(
+            raise FileNotFoundError(
                 f'server root not found: {root} '
                 '(set the MU_SERVER_ROOT environment variable to override)'
             )

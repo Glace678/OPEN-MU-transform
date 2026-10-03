@@ -57,6 +57,23 @@ public class LocalGameLoginTests
         });
     }
 
+    /// <summary>
+    /// A second shared vector: the Android and HarmonyOS clients derive the same
+    /// values from the same purposes, so both implementations can be checked against
+    /// these constants. The slice/replace order of the base64url formatting must not
+    /// matter, which this pins down as well.
+    /// </summary>
+    [Test]
+    public void MobilePackageKeyDerivesTheSharedVectorForOtherPlatforms()
+    {
+        var login = LocalGameLogin.FromMobilePackageKey(new('B', 43));
+        Assert.Multiple(() =>
+        {
+            Assert.That(login.Username, Is.EqualTo("mobED1C909"));
+            Assert.That(login.Password, Is.EqualTo("tAAPSCKkg8BENi99bLj7"));
+        });
+    }
+
     /// <summary>Only an exact unpadded 32-byte base64url key is accepted.</summary>
     [Test]
     public void InvalidMobilePackageKeyIsRejected()

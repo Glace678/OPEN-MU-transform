@@ -5,7 +5,9 @@ import * as JSON5 from 'json5';
 import { validateMobilePairing } from '../../build-tools/mobile-pairing.cjs';
 
 const profile = JSON5.parse(fs.readFileSync(path.resolve(__dirname, 'build-profile.json5'), 'utf8'));
-validateMobilePairing(profile, 'game', process.env.OPENMU_ALLOW_PLACEHOLDER_MOBILE_KEY === '1');
+// 'pc' uses the same private-IPv4 policy as the phone kind; it only exists so
+// error messages name the PC project instead of the phone one.
+validateMobilePairing(profile, 'pc', process.env.OPENMU_ALLOW_PLACEHOLDER_MOBILE_KEY === '1');
 
 export default {
   system: hapTasks,

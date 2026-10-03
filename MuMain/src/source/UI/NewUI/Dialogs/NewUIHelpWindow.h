@@ -33,6 +33,9 @@ namespace SEASON3B
         void OpenningProcess();
         void ClosingProcess();
 
+        // Opens the onboarding sequence at the welcome page.
+        void StartTutorial();
+
         void AutoUpdateIndex();
         void NextPage();
         void PreviousPage();
@@ -46,6 +49,7 @@ namespace SEASON3B
         POINT			m_Pos;
 
         int m_iIndex;
+        bool m_isOnboarding;
     };
 }
 

@@ -25,7 +25,9 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     windowStage.getMainWindow().then((win: window.Window) => {
       // Desktop: a normal resizable window, defaulting to a 4:3-ish play area.
-      win.setWindowKeepScreenOn(true);
+      win.setWindowKeepScreenOn(true).catch((e: Object) => {
+        hilog.warn(DOMAIN, 'OpenMU-PC', 'keep-screen-on failed: %{public}s', JSON.stringify(e));
+      });
       win.resize(1280, 800).catch((e: Object) => {
         hilog.warn(DOMAIN, 'OpenMU-PC', 'resize failed: %{public}s', JSON.stringify(e));
       });

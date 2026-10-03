@@ -5,6 +5,11 @@
 # hardcoded, so they can never drift from the provisioned database account.
 # They are still passed to the client via environment variables because the
 # client reads them from its environment block (see MU_LOCAL_GAME_*).
+#
+# Threat boundary: the derived password lives in the child process environment
+# block, which any process running as the SAME user can read (dumpenv.ps1
+# demonstrates it). That is accepted for a single-user, single-machine install;
+# do not run this under a shared or service account.
 param(
     # $env:MU_SERVER_ROOT overrides the installed location. The default is
     # evaluated before local-credentials.ps1 is dot-sourced, so it cannot call

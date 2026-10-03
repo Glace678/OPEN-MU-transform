@@ -318,6 +318,9 @@
   <data name="ItemLevelExceeded" xml:space="preserve">
     <value>Level cannot be greater than {0}.</value>
   </data>
+  <data name="ItemCannotBeSoldToNpc" xml:space="preserve">
+    <value>This item cannot be sold to an NPC.</value>
+  </data>
   <data name="MonsterNotFoundById" xml:space="preserve">
     <value>Monster with id {0} not found.</value>
   </data>

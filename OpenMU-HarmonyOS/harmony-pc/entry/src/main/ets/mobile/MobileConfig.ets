@@ -4,6 +4,7 @@ import { fileIo as fs } from '@kit.CoreFileKit';
 import { display } from '@kit.ArkUI';
 import BuildProfile from 'BuildProfile';
 import { deriveCredentials } from './MobileIdentity';
+import { writeTextSync } from './RawFileCopy';
 
 // BuildConfig-style constants injected by DevEco from entry/build-profile.json5
 // buildProfileFields (same values as the Android Gradle BuildConfig). The
@@ -27,14 +28,19 @@ export class MobileConfig {
     return preferences.getPreferences(context, PREFS);
   }
 
+  // Type-checked reads: a preference written by an older build (or by hand)
+  // can hold the wrong primitive, and an unchecked cast would surface as NaN
+  // or a bogus string deep inside the config writer. Fall back instead.
   static async getString(context: Context, key: string, fallback: string): Promise<string> {
     const store = await MobileConfig.store(context);
-    return (await store.get(key, fallback)) as string;
+    const value = await store.get(key, fallback);
+    return typeof value === 'string' ? value : fallback;
   }
 
   static async getNumber(context: Context, key: string, fallback: number): Promise<number> {
     const store = await MobileConfig.store(context);
-    return (await store.get(key, fallback)) as number;
+    const value = await store.get(key, fallback);
+    return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
   }
 
   static async setString(context: Context, key: string, value: string): Promise<void> {
@@ -99,7 +105,6 @@ export class MobileConfig {
     putIni(updates, 'Window', 'Windowed', '0');
     putIni(updates, 'CONNECTION SETTINGS', 'ServerIP', server);
     putIni(updates, 'CONNECTION SETTINGS', 'ServerPort', GAME_PORT.toString());
-    putIni(updates, 'UI', 'Locale', 'zh-CN');
     putIni(updates, 'UI', 'ScalePercent', uiScale.toString());
     putIni(updates, 'UI', 'SafeMarginPercent', safeMargin.toString());
     putIni(updates, 'Render', 'FrameRateMode', followDisplay ? 'FollowDisplay' : 'Fixed');
@@ -137,7 +142,7 @@ export class MobileConfig {
     const pendingPath = root + '/config.ini.pending';
     const out = fs.openSync(pendingPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
     try {
-      fs.writeSync(out.fd, merged);
+      writeTextSync(out.fd, merged);
     } finally {
       fs.closeSync(out);
     }
@@ -161,10 +166,12 @@ export class MobileConfig {
 }
 
 // Minimal config used when the data archive ships no config.ini yet. Mirrors
-// Android MobilePreferences.defaultConfig.
+// Android MobilePreferences.defaultConfig. The UI locale is NOT forced here (or
+// in the updates map): the player's saved Locale wins, exactly like Android.
 const DEFAULT_CONFIG_INI =
-  '[LOGIN]\nRememberMe=0\nSavePassword=0\nLanguage=Eng\n'
+  '[LOGIN]\nRememberMe=0\nSavePassword=0\nLanguage=Chs\n'
   + 'EncryptedUsername=\nEncryptedPassword=\n'
+  + '[UI]\nLocale=zh-CN\n'
   + '[Audio]\nSoundVolume=5\nMusicVolume=5\n';
 
 function putIni(updates: Map<string, Map<string, string>>, section: string,

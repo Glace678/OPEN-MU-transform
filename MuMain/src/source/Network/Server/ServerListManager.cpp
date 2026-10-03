@@ -86,20 +86,6 @@ void CServerListManager::LoadServerListScript()
     }
 
     ::fclose(fp);
-
-#if defined(_WIN32)
-    // TEMP DEBUG
-    if (FILE* df = ::fopen("debug_bmd.txt", "w"))
-    {
-        for (const auto& entry : m_mapServerListScript)
-        {
-            ::fprintf(df, "script idx=%d pos=%d seq=%d name-len=%d\n",
-                entry.first, int(entry.second.m_byPos), int(entry.second.m_bySequence),
-                int(wcslen(entry.second.m_szName)));
-        }
-        ::fclose(df);
-    }
-#endif
 }
 
 const SServerGroupInfo* CServerListManager::GetServerGroupInfoInScript(WORD wServerGroupIndex)

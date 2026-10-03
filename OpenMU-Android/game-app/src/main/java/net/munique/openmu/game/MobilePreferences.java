@@ -246,6 +246,15 @@ final class MobilePreferences {
             byte[] buffer = new byte[1024 * 1024];
             while ((entry = zip.getNextEntry()) != null) {
                 if (!entry.isDirectory()) {
+                    // APK entries carry their uncompressed size, so trust it and
+                    // skip the second full read of the archive; only stream the
+                    // rare entry that reports -1.
+                    long declared = entry.getSize();
+                    if (declared >= 0) {
+                        total += declared;
+                        zip.closeEntry();
+                        continue;
+                    }
                     int read;
                     while ((read = zip.read(buffer)) != -1) {
                         throwIfInterrupted();

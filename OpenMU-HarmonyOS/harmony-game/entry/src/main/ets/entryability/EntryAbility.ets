@@ -32,7 +32,9 @@ export default class EntryAbility extends UIAbility {
       win.setWindowLayoutFullScreen(true).catch((e: Object) => {
         hilog.warn(DOMAIN, 'OpenMU', 'fullscreen failed: %{public}s', JSON.stringify(e));
       });
-      win.setWindowKeepScreenOn(true);
+      win.setWindowKeepScreenOn(true).catch((e: Object) => {
+        hilog.warn(DOMAIN, 'OpenMU', 'keep-screen-on failed: %{public}s', JSON.stringify(e));
+      });
       win.setPreferredOrientation(window.Orientation.LANDSCAPE).catch((e: Object) => {
         hilog.warn(DOMAIN, 'OpenMU', 'orientation failed: %{public}s', JSON.stringify(e));
       });

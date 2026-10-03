@@ -9,6 +9,7 @@
 #include "Core/Haptics/Haptics.h"
 #include "Core/Input/GamepadService.h"
 #include "I18N/All.h"
+#include "Data/GameConfig/GameConfig.h"
 
 #include <SDL3/SDL.h>
 
@@ -19,8 +20,15 @@ using namespace SEASON3B;
 namespace
 {
     constexpr int FirstHelpPage = 0;
-    constexpr int LastHelpPage = 4;
-    constexpr int TutorialHelpPage = 4;
+
+    // Page order: reference pages 0..3, then the onboarding sequence:
+    // welcome, keyboard/mouse, touch, gamepad, and a closing page.
+    constexpr int TutorialWelcomePage = 4;
+    constexpr int TutorialDesktopPage = 5;
+    constexpr int TutorialTouchPage = 6;
+    constexpr int TutorialGamepadPage = 7;
+    constexpr int TutorialFinishPage = 8;
+    constexpr int LastHelpPage = TutorialFinishPage;
 
     void PublishHelpHaptic(Core::Haptics::HapticEvent event)
     {
@@ -30,12 +38,11 @@ namespace
 }
 
 SEASON3B::CNewUIHelpWindow::CNewUIHelpWindow()
+    : m_iIndex(0), m_isOnboarding(false)
 {
     m_pNewUIMng = NULL;
     m_Pos.x = 0;
     m_Pos.y = 0;
-
-    m_iIndex = 0;
 }
 
 SEASON3B::CNewUIHelpWindow::~CNewUIHelpWindow()
@@ -126,7 +133,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     int (&TextListColor)[50] = ::TextListColor;
     int (&TextBold)[50] = ::TextBold;
 
-    if (m_iIndex == TutorialHelpPage)
+    if (m_iIndex >= TutorialWelcomePage)
     {
         RenderTutorialPage();
     }
@@ -290,11 +297,19 @@ float SEASON3B::CNewUIHelpWindow::GetKeyEventOrder()
 
 void SEASON3B::CNewUIHelpWindow::OpenningProcess()
 {
+    // Manual Help always opens at the reference index and never marks onboarding.
+    m_isOnboarding = false;
     m_iIndex = 0;
 }
 
 void SEASON3B::CNewUIHelpWindow::ClosingProcess()
 {
+}
+
+void SEASON3B::CNewUIHelpWindow::StartTutorial()
+{
+    m_isOnboarding = true;
+    m_iIndex = TutorialWelcomePage;
 }
 
 void SEASON3B::CNewUIHelpWindow::AutoUpdateIndex()
@@ -335,7 +350,19 @@ void SEASON3B::CNewUIHelpWindow::Close()
 {
     g_pNewUISystem->Hide(SEASON3B::INTERFACE_HELP);
     PlayBuffer(SOUND_CLICK01);
-    PublishHelpHaptic(Core::Haptics::HapticEvent::Cancelled);
+
+    if (m_isOnboarding)
+    {
+        // Finishing (or skipping) the first-launch onboarding records it so it
+        // does not show again. Players can reopen the pages manually via Help.
+        m_isOnboarding = false;
+        GameConfig::GetInstance().SetTutorialCompleted(true);
+        PublishHelpHaptic(Core::Haptics::HapticEvent::Confirmed);
+    }
+    else
+    {
+        PublishHelpHaptic(Core::Haptics::HapticEvent::Cancelled);
+    }
 }
 
 bool SEASON3B::CNewUIHelpWindow::HandleGamepadInput()
@@ -376,33 +403,57 @@ void SEASON3B::CNewUIHelpWindow::RenderTutorialPage()
     constexpr int BodyColor = TEXT_COLOR_WHITE;
     int textNumber = 0;
 
-    mu_swprintf(textList[textNumber], L"\n");
-    ++textNumber;
-    wcscpy(textList[textNumber], I18N::Game::TutorialTitle);
-    textListColor[textNumber] = HeadingColor;
-    textBold[textNumber] = true;
-    ++textNumber;
-    mu_swprintf(textList[textNumber], L"\n");
-    ++textNumber;
-
-    const std::array<const wchar_t*, 7> lines = {
-        I18N::Game::TutorialDesktopControls,
-        I18N::Game::TutorialKeyboardControls,
-        I18N::Game::TutorialTouchControls,
-        I18N::Game::TutorialTouchGestures,
-        I18N::Game::TutorialGamepadControls,
-        I18N::Game::TutorialGamepadSettings,
-        I18N::Game::TutorialPaging,
-    };
-    for (const wchar_t* line : lines)
+    auto blank = [&]()
     {
-        wcsncpy_s(textList[textNumber], line, 99);
+        mu_swprintf(textList[textNumber], L"\n");
+        ++textNumber;
+    };
+    auto heading = [&](const wchar_t* text)
+    {
+        wcscpy(textList[textNumber], text);
+        textListColor[textNumber] = HeadingColor;
+        textBold[textNumber] = true;
+        ++textNumber;
+    };
+    auto body = [&](const wchar_t* text)
+    {
+        wcsncpy_s(textList[textNumber], text, 99);
         textListColor[textNumber] = BodyColor;
         textBold[textNumber] = false;
         ++textNumber;
+    };
+
+    blank();
+    heading(I18N::Game::TutorialTitle);
+    blank();
+
+    switch (m_iIndex)
+    {
+    case TutorialWelcomePage:
+        body(I18N::Game::TutorialWelcome);
+        break;
+    case TutorialDesktopPage:
+        body(I18N::Game::TutorialDesktopControls);
+        blank();
+        body(I18N::Game::TutorialKeyboardControls);
+        break;
+    case TutorialTouchPage:
+        body(I18N::Game::TutorialTouchControls);
+        blank();
+        body(I18N::Game::TutorialTouchGestures);
+        break;
+    case TutorialGamepadPage:
+        body(I18N::Game::TutorialGamepadControls);
+        blank();
+        body(I18N::Game::TutorialGamepadSettings);
+        break;
+    case TutorialFinishPage:
+        body(I18N::Game::TutorialFinish);
+        break;
     }
 
-    mu_swprintf(textList[textNumber], L"\n");
-    ++textNumber;
+    blank();
+    body(I18N::Game::TutorialPaging);
+
     RenderTipTextList(1, 1, textNumber, 0, RT3_SORT_CENTER);
 }

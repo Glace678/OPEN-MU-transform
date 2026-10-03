@@ -12,10 +12,21 @@ function isPrivateAddress(address) {
 }
 
 function validateServer(fields, kind) {
-  if (kind === 'game') {
+  if (kind === 'game' || kind === 'pc') {
     const address = fields.DEFAULT_SERVER_ADDRESS;
     if (typeof address !== 'string' || !isPrivateAddress(address)) {
-      throw new Error('DEFAULT_SERVER_ADDRESS must be localhost or a private IPv4 address.');
+      // Cloud-server builds opt in explicitly. The game channel is a plain TCP
+      // socket, so this is only acceptable behind a TLS-protected tunnel; the
+      // escape hatch exists so the decision is loud, never silent.
+      if (process.env.OPENMU_ALLOW_PUBLIC_SERVER === '1') {
+        console.warn(`[openmu] DEFAULT_SERVER_ADDRESS=${address} is not a private address; `
+          + 'OPENMU_ALLOW_PUBLIC_SERVER=1 is set. Ensure the game TCP channel is TLS-protected '
+          + 'and that the account pairing is device-level before distributing this build.');
+        return;
+      }
+      throw new Error(`DEFAULT_SERVER_ADDRESS must be localhost or a private IPv4 address `
+        + `(got "${address}"). For a cloud server build, set OPENMU_ALLOW_PUBLIC_SERVER=1 `
+        + 'and read the public-server notes in README-zh-CN.md first.');
     }
     return;
   }

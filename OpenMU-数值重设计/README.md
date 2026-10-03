@@ -57,6 +57,8 @@ dotnet run --project src\BalanceLab -- verify design\balance.v1.json artifacts
 
 完整脚本以非零退出码报告失败。不要只看“通过数量”，还要看 `acceptance.json`、`content-coverage.json` 和报告中的限制。
 
+关于断言数量：报告里的总数（约 30,000）包含循环展开后的逐项断言（例如 14 个职业 × 多个等级 × 多套装备的同一规则各算一次），并不代表 30,000 条不同的规则。规则的唯一清单见 `design/balance.v1.json` 与 `docs/数值设计.md`。
+
 ## 目录
 
 ```text

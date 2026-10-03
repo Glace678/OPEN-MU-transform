@@ -2107,6 +2107,9 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                     b.Property<bool>("IsQuestItem")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSellableToNpc")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid?>("ItemSlotId")
                         .HasColumnType("uuid");
 

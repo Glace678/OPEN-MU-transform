@@ -1,6 +1,10 @@
-// ArkTS port of Android's MobileIdentity.java (HMAC-SHA256 over the pairing
-// key). Identical computation to the phone build so auto-login targets the same
-// account.
+// ArkTS port of Android's MobileIdentity.java. Derives the same fixed local
+// account/username and password from the package pairing key using HMAC-SHA256,
+// so the HarmonyOS client auto-logs-into the identical account the server
+// derives from the same key. Uses a self-contained SHA-256/HMAC so the result
+// matches the Java implementation byte-for-byte without relying on a specific
+// cryptoFramework HMAC key-shape.
+
 const LOGIN_NAME_CONTEXT = 'OpenMU-Mobile.LoginName.v1';
 const LOGIN_PASSWORD_CONTEXT = 'OpenMU-Mobile.LoginPassword.v1';
 
@@ -10,9 +14,11 @@ export interface Credentials {
 }
 
 function utf8(text: string): Uint8Array {
+  // TextEncoder is available in the ArkTS runtime.
   return new TextEncoder().encode(text);
 }
 
+// --- SHA-256 (FIPS 180-4), operating on Uint8Array -------------------------
 const K: number[] = [
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
   0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -29,12 +35,18 @@ function rotr(x: number, n: number): number {
 }
 
 function sha256(message: Uint8Array): Uint8Array {
-  const h: number[] = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+  const h: number[] = [
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+  ];
+
+  // Pre-processing: pad message.
   const bitLen = message.length * 8;
   const paddedLen = (((message.length + 8) >> 6) + 1) * 64;
   const data = new Uint8Array(paddedLen);
   data.set(message);
   data[message.length] = 0x80;
+  // Append 64-bit big-endian length (we only need the low 32 bits for realistic sizes).
   const view = new DataView(data.buffer);
   view.setUint32(paddedLen - 4, bitLen >>> 0, false);
   view.setUint32(paddedLen - 8, Math.floor(bitLen / 0x100000000), false);
@@ -49,20 +61,37 @@ function sha256(message: Uint8Array): Uint8Array {
       const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
       w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
     }
+
     let a = h[0], b = h[1], c = h[2], d = h[3];
     let e = h[4], f = h[5], g = h[6], hh = h[7];
+
     for (let i = 0; i < 64; i++) {
       const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
       const ch = (e & f) ^ (~e & g);
-      const t1 = (hh + S1 + ch + K[i] + w[i]) | 0;
+      const temp1 = (hh + S1 + ch + K[i] + w[i]) | 0;
       const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
       const maj = (a & b) ^ (a & c) ^ (b & c);
-      const t2 = (S0 + maj) | 0;
-      hh = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      const temp2 = (S0 + maj) | 0;
+      hh = g;
+      g = f;
+      f = e;
+      e = (d + temp1) | 0;
+      d = c;
+      c = b;
+      b = a;
+      a = (temp1 + temp2) | 0;
     }
-    h[0] = (h[0] + a) | 0; h[1] = (h[1] + b) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
-    h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + hh) | 0;
+
+    h[0] = (h[0] + a) | 0;
+    h[1] = (h[1] + b) | 0;
+    h[2] = (h[2] + c) | 0;
+    h[3] = (h[3] + d) | 0;
+    h[4] = (h[4] + e) | 0;
+    h[5] = (h[5] + f) | 0;
+    h[6] = (h[6] + g) | 0;
+    h[7] = (h[7] + hh) | 0;
   }
+
   const out = new Uint8Array(32);
   const outView = new DataView(out.buffer);
   for (let i = 0; i < 8; i++) {
@@ -79,6 +108,7 @@ function hmacSha256(key: Uint8Array, message: Uint8Array): Uint8Array {
   }
   const padded = new Uint8Array(blockSize);
   padded.set(normKey);
+
   const ipad = new Uint8Array(blockSize + message.length);
   const opad = new Uint8Array(blockSize);
   for (let i = 0; i < blockSize; i++) {
@@ -86,6 +116,7 @@ function hmacSha256(key: Uint8Array, message: Uint8Array): Uint8Array {
     opad[i] = padded[i] ^ 0x5c;
   }
   ipad.set(message, blockSize);
+
   const inner = sha256(ipad);
   const outer = new Uint8Array(blockSize + inner.length);
   outer.set(opad, 0);
@@ -108,7 +139,8 @@ function toBase64UrlNoPad(bytes: Uint8Array): string {
   let i = 0;
   for (; i + 2 < bytes.length; i += 3) {
     const n = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
-    result += alphabet[(n >>> 18) & 0x3f] + alphabet[(n >>> 12) & 0x3f] + alphabet[(n >>> 6) & 0x3f] + alphabet[n & 0x3f];
+    result += alphabet[(n >>> 18) & 0x3f] + alphabet[(n >>> 12) & 0x3f]
+      + alphabet[(n >>> 6) & 0x3f] + alphabet[n & 0x3f];
   }
   const remaining = bytes.length - i;
   if (remaining === 1) {

@@ -681,30 +681,6 @@ void CUIMng::Update(double dDeltaTick)
         }
     }
 
-#if defined(_WIN32)
-    // TEMP DEBUG
-    {
-        static unsigned long s_next = 0;
-        if (unsigned long now = ::GetTickCount(); now >= s_next)
-        {
-            s_next = now + 200;
-            if (FILE* af = ::fopen("debug_active.txt", "w"))
-            {
-                ::fprintf(af, "winActive=%d count=%d\n", m_bWinActive ? 1 : 0, m_WinList.GetCount());
-                NODE* node = m_WinList.GetHeadPosition();
-                while (node != nullptr)
-                {
-                    CWin* w = (CWin*)m_WinList.GetNext(node);
-                    ::fprintf(af, "%p show=%d active=%d pos=%d,%d size=%d,%d\n",
-                        (void*)w, w->IsShow(), w->IsActive(),
-                        w->GetXPos(), w->GetYPos(), w->GetWidth(), w->GetHeight());
-                }
-                ::fclose(af);
-            }
-        }
-    }
-#endif
-
     CInput& rInput = CInput::Instance();
 
     // ESC toggles system menu in login/character scenes

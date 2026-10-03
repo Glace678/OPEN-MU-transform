@@ -1,4 +1,4 @@
-# OpenMU Transform
+﻿# OpenMU Transform
 
 **A deep, ongoing rewrite of MU Online — one engine, every screen.**
 
@@ -113,9 +113,9 @@ Measured on development hardware: **average FPS +4.4%, 1% low +28.0%, frame time
 
 | | |
 | --- | --- |
-| ![World](assets/desktop-gameplay.png) | ![Inventory](assets/desktop-inventory.png) |
+| ![World](assets/desktop-gameplay.jpg) | ![Inventory](assets/desktop-inventory.jpg) |
 | In-world gameplay | Inventory and equipment |
-| ![NPC shop](assets/npc-shop.png) | ![Title](assets/title-screen.png) |
+| ![NPC shop](assets/npc-shop.jpg) | ![Title](assets/title-screen.png) |
 | NPC shop with server-side validation | Title / loading screen |
 
 ---
@@ -183,6 +183,24 @@ dotnet build OpenMU/MUnique.OpenMU.sln
 Platform-specific notes: [`MuMain/docs/build/`](MuMain/docs/build/) ·
 [`OpenMU/QuickStart.md`](OpenMU/QuickStart.md) ·
 [`OpenMU-Android/Build-AndroidPackage.ps1`](OpenMU-Android/Build-AndroidPackage.ps1)
+
+### Maturity and packaging notes (read before you rely on a platform)
+
+| Platform | Code | Packaging / distribution |
+| --- | --- | --- |
+| Windows | ready | full: `packtool.py`, release bundle, PowerShell provisioning scripts |
+| Android | ready | full: Gradle + `Build-AndroidPackage.ps1` (arm64) |
+| HarmonyOS | ready | full: hvigor modules, `OpenMU-HarmonyOS/build-tools` |
+| macOS / Linux | builds and runs | **no release pipeline yet** — see below |
+| iOS | honest scaffold | shell/main file only; no app bundle or data extraction yet |
+
+* **Linux / macOS** compile and run, but there is no packaging script for them: the
+  release tooling (`packtool.py`, `Build-AndroidPackage.ps1`) only targets Windows, and
+  nothing provisions a PostgreSQL data directory with `bin/initdb` on Unix. Expect to lay
+  out the PostgreSQL binaries yourself before the launcher can start the database.
+* The operational scripts in the repository root (`provision_secrets.ps1`,
+  `provision_account.ps1`, `deploy_server_update.py`, …) are PowerShell; run them with
+  **pwsh 7+** if you are not on Windows. No bash equivalents exist yet.
 
 ---
 

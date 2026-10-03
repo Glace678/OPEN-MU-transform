@@ -13189,6 +13189,12 @@
   <data name="TutorialPaging" xml:space="preserve">
     <value>F1 or A continues; PageUp/PageDown or LB/RB changes page; Esc or B closes.</value>
   </data>
+  <data name="TutorialWelcome" xml:space="preserve">
+    <value>Welcome to the world of MU! This short guide covers the basics across a few pages. Press Esc to skip, or reopen it any time from the menu.</value>
+  </data>
+  <data name="TutorialFinish" xml:space="preserve">
+    <value>You are all set! Talk to NPCs for quests and leave town to fight monsters. Enjoy your adventure.</value>
+  </data>
   <data name="AccountRegister" xml:space="preserve">
     <value>Register</value>
   </data>
