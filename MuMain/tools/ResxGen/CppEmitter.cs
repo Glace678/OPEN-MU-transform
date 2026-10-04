@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 
 namespace MuMain.Tools.ResxGen;
 
@@ -23,12 +23,22 @@ internal static class CppEmitter
 {
     private static void WriteIfChanged(string path, string content)
     {
-        if (File.Exists(path) && string.Equals(File.ReadAllText(path), content, StringComparison.Ordinal))
+        // #38: preserve the existing file's UTF-8 BOM on rewrite (fall back
+        // to BOM-less UTF-8 for fresh output) and write via temp+move so a
+        // crash never leaves a half-written generated source.
+        Encoding enc = new UTF8Encoding(false);
+        if (File.Exists(path))
         {
-            return;
+            byte[] head = File.ReadAllBytes(path);
+            if (head.Length >= 3 && head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF)
+                enc = new UTF8Encoding(true);
+            if (string.Equals(File.ReadAllText(path), content, StringComparison.Ordinal))
+                return;
         }
 
-        File.WriteAllText(path, content);
+        var tmp = path + ".tmp";
+        File.WriteAllText(tmp, content, enc);
+        File.Move(tmp, path, overwrite: true);
     }
 
     /// Root C++ namespace for everything we emit.
@@ -456,6 +466,7 @@ internal static class CppEmitter
             sb.AppendLine($"    {Naming.EscapeCppString(locale)},");
         }
         sb.AppendLine("};");
+        sb.AppendLine($"constexpr int kLocaleCount = {locales.Count};");
         sb.AppendLine();
 
         sb.AppendLine("struct LanguageDisplayEntry { const char* code; const char* name; };");
@@ -538,6 +549,9 @@ internal static class CppEmitter
     {
         sb.AppendLine("void ApplyLocale(int localeIndex) noexcept");
         sb.AppendLine("{");
+        sb.AppendLine("    if (localeIndex < 0 || std::size(kSlots) == 0 || static_cast<size_t>(localeIndex) >= std::size(kSlots[0].values)) {");
+        sb.AppendLine("        return;");
+        sb.AppendLine("    }");
         sb.AppendLine("    for (const auto& slot : kSlots)");
         sb.AppendLine("    {");
         sb.AppendLine("        *slot.dest = slot.values[localeIndex];");

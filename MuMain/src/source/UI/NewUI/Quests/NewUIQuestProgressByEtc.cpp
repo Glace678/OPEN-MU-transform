@@ -279,7 +279,7 @@ void CNewUIQuestProgressByEtc::RenderText()
     g_pRenderText->SetBgColor(0);
 
     g_pRenderText->SetTextColor(230, 230, 230, 255);
-    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 12, L"Quest", QPE_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 12, I18N::Game::Quest, QPE_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetTextColor(36, 242, 252, 255);
     g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 27, g_QuestMng.GetSubject(m_dwCurQuestIndex), QPE_WIDTH, 0, RT3_SORT_CENTER);
 

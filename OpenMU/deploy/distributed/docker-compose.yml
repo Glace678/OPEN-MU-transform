@@ -6,13 +6,13 @@ volumes:
 
 services:
   nginx-80:
-    image: nginx:alpine
+    image: nginx:1.27-alpine
     container_name: nginx-80
     restart: always
     ports:
       - "80:80"
     volumes:
-      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - grafana
       - zipkin
@@ -22,8 +22,8 @@ services:
     image: grafana/grafana:9.5.14
     container_name: grafana
     volumes:
-      - ./grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana_datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml
+      - ./grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./grafana_datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml:ro
     depends_on:
       - loki
       - prometheus
@@ -35,7 +35,7 @@ services:
     ports:
       - 9090
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
 
@@ -47,13 +47,17 @@ services:
       - 3100
       - 7946
       - 9095
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY:?set a MinIO access key}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY:?set a MinIO secret key}
+      S3_LOKI_URL: http://minio:9000
     volumes:
-      - ./loki-config.yaml:/etc/loki/config.yaml
+      - ./loki-config.yaml:/etc/loki/config.yaml:ro
     depends_on:
       - minio
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
     entrypoint:
       - sh
       - -euc
@@ -62,9 +66,9 @@ services:
         mkdir -p /data/loki-ruler && \
         minio server /data
     environment:
-      - MINIO_ACCESS_KEY=loki
-      - MINIO_SECRET_KEY=supersecret
-      - MINIO_PROMETHEUS_AUTH_TYPE=public
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:?set a MinIO access key}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:?set a MinIO secret key}
+      - MINIO_PROMETHEUS_AUTH_TYPE=private
       - MINIO_UPDATE=off
     ports:
       - 9000
@@ -72,15 +76,14 @@ services:
       - minio-data:/data
 
   redis-state:
-    image: redis
+    image: redis:7.4-alpine
     restart: always
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:?set a Redis password}", "--appendonly", "yes"]
     ports:
       - 6379
-    environment:
-      ALLOW_EMPTY_PASSWORD: "yes"
 
   dapr-placement:
-    image: "daprio/dapr"
+    image: "daprio/dapr:1.14.4"
     container_name: dapr_placement
     command: ["./placement", "-port", "50006"]
     ports:
@@ -94,27 +97,27 @@ services:
       - "5672"
 
   database:
-    image: postgres
+    image: postgres:17-alpine
     container_name: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: openmu
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set a PostgreSQL password}
+      POSTGRES_DB: ${POSTGRES_DB:-openmu}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
     ports:
       - "5432"
     volumes:
       - dbdata:/var/lib/postgresql
 
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:3.4
     container_name: tracing_zipkin
     restart: always
     ports:
       - "9411:9411"
 
   connectServer:
-    image: munique/openmu-connect
+    image: munique/openmu-connect:0.9.10
     container_name: connectServer
     ports:
       - "50001"
@@ -129,7 +132,7 @@ services:
       - database
 
   connectServer-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: connectServer_dapr
     command: [ "./daprd", "-app-id", "connectServer", "-app-port", "8080",
                 "-components-path", "/components",
@@ -142,7 +145,7 @@ services:
       - "./dapr-components/:/components"
 
   loginServer:
-    image: munique/openmu-login
+    image: munique/openmu-login:0.9.10
     container_name: loginServer
     ports:
       - "50001"
@@ -154,7 +157,7 @@ services:
       - database
 
   loginServer-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: loginServer_dapr
     command: [ "./daprd", "-app-id", "loginServer", "-app-port", "8080",
                 "-components-path", "/components",
@@ -167,7 +170,7 @@ services:
       - "./dapr-components/:/components"
 
   friendServer:
-    image: munique/openmu-friend
+    image: munique/openmu-friend:0.9.10
     container_name: friendServer
     ports:
       - "50001"
@@ -180,7 +183,7 @@ services:
       - zipkin
 
   friendServer-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: friendServer_dapr
     command: [ "./daprd", "-app-id", "friendServer", "-app-port", "8080",
                 "-components-path", "/components",
@@ -193,7 +196,7 @@ services:
       - "./dapr-components/:/components"
   
   guildServer:
-    image: munique/openmu-guild
+    image: munique/openmu-guild:0.9.10
     container_name: guildServer
     ports:
       - "50001"
@@ -205,7 +208,7 @@ services:
       - zipkin
 
   guildServer-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: guildServer_dapr
     command: [ "./daprd", "-app-id", "guildServer", "-app-port", "8080",
                 "-components-path", "/components",
@@ -218,7 +221,7 @@ services:
       - "./dapr-components/:/components"
 
   chatServer:
-    image: munique/openmu-chat
+    image: munique/openmu-chat:0.9.10
     container_name: chatServer
     environment:
       APPID: chatServer
@@ -232,7 +235,7 @@ services:
       - zipkin
 
   chatServer-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: chatServer_dapr
     command: [ "./daprd", "-app-id", "chatServer", "-app-port", "8080",
                 "-components-path", "/components",
@@ -246,7 +249,7 @@ services:
 
 
   adminPanel:
-    image: munique/openmu-admin
+    image: munique/openmu-admin:0.9.10
     container_name: adminPanel
     depends_on:
       - database
@@ -267,7 +270,7 @@ services:
       - adminpanel-keys:/app/data-protection-keys
 
   adminPanel-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: adminPanel_dapr
     command: [ "./daprd", "-app-id", "adminPanel", "-app-port", "8080",
                 "-components-path", "/components",
@@ -281,7 +284,7 @@ services:
       - "./dapr-components/:/components"
 
   gameServer0:
-    image: munique/openmu-game
+    image: munique/openmu-game:0.9.10
     container_name: gameServer0
     build:
       context: ../../src
@@ -307,7 +310,7 @@ services:
       - loki
 
   gameServer0-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: gameserver0_dapr
     command: [ "./daprd", "-app-id", "gameServer0", "-app-port", "8080",
                 "-components-path", "/components",
@@ -320,7 +323,7 @@ services:
       - "./dapr-components/:/components"
   
   gameServer1:
-    image: munique/openmu-game
+    image: munique/openmu-game:0.9.10
     container_name: gameServer1
     build:
       context: ../../src
@@ -346,7 +349,7 @@ services:
       - loki
 
   gameServer1-dapr:
-    image: "daprio/daprd:latest"
+    image: "daprio/daprd:1.14.4"
     container_name: gameserver1_dapr
     command: [ "./daprd", "-app-id", "gameServer1", "-app-port", "8080",
                 "-components-path", "/components",

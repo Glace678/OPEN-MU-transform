@@ -43,7 +43,13 @@ void CErrorReport::Clear(void)
 
 void CErrorReport::Create(const wchar_t* lpszFileName)
 {
-    wcscpy(m_lpszFileName, lpszFileName);
+    if (lpszFileName == nullptr)
+    {
+        return;
+    }
+
+    wcsncpy(m_lpszFileName, lpszFileName, MAX_PATH - 1);
+    m_lpszFileName[MAX_PATH - 1] = L'\0';
 
     //DeleteFile( m_lpszFileName);
     m_iKey = 0;
@@ -91,7 +97,8 @@ char* CErrorReport::CheckHeadToCut(char* lpszBuffer, DWORD dwNumber)
     const char* lpszBegin = "###### Log Begin ######";
     int iLengthOfBegin = static_cast<int>(strlen(lpszBegin));
 
-    char* lpFoundList[128];
+    constexpr int MaximumFoundMarkers = 128;
+    char* lpFoundList[MaximumFoundMarkers];
     int iFoundCount = 0;
 
     for (char* lpFind = lpszBuffer; lpFind && *lpFind; )
@@ -101,7 +108,11 @@ char* CErrorReport::CheckHeadToCut(char* lpszBuffer, DWORD dwNumber)
         {
             if (0 == strncmp(lpFind, lpszBegin, iLengthOfBegin))
             {
-                lpFoundList[iFoundCount++] = lpFind;
+                if (iFoundCount < MaximumFoundMarkers)
+                {
+                    lpFoundList[iFoundCount++] = lpFind;
+                }
+
                 lpFind += iLengthOfBegin;
             }
             else

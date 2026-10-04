@@ -15,17 +15,25 @@ if (!modulePath || !configuration) {
 // <pkg>/data/config, so run from the assets dir and resolve bare config names
 // (e.g. "tw2sp") to their absolute config path. This makes the bridge work
 // regardless of the caller's cwd.
-const pkgRoot = modulePath;
+const pkgRoot = fs.realpathSync(modulePath);  // #29: canonicalize, resolve symlinks
 let configPath = configuration;
 if (!fs.existsSync(configPath)) {
   const candidate = path.join(pkgRoot, "data", "config", `${configuration}.json`);
   if (fs.existsSync(candidate)) configPath = candidate;
 }
+// #29: lock the configuration to the package root; reject a path that
+// escapes via ".." or a symlink outside the installed package.
+{ const resolvedConfig = fs.realpathSync(path.resolve(configPath));
+  if (!resolvedConfig.startsWith(pkgRoot + path.sep) && resolvedConfig !== pkgRoot) {
+    process.stderr.write("OpenCcBridge: configuration escapes package root\n");
+    process.exit(1);
+  }
+  configPath = resolvedConfig; }
 const assetsDir = path.join(pkgRoot, "prebuilds", "assets");
 if (fs.existsSync(assetsDir)) process.chdir(assetsDir);
 
 const require = createRequire(import.meta.url);
-const { OpenCC } = require(modulePath);
+const { OpenCC } = require(pkgRoot);
 const converter = new OpenCC(configPath);
 
 let input = "";

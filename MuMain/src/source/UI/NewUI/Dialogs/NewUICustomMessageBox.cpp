@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/NewUI/Dialogs/NewUICustomMessageBox.h"
 #include "Data/GameConfig/GameConfig.h"
 #include "Audio/DSPlaySound.h"
@@ -250,8 +250,10 @@ int SEASON3B::CNewUITextInputMsgBox::SeparateText(const type_string& strMsg, DWO
 
             if (TextExtentWidth > MSGBOX_TEXT_MAXWIDTH && cur_offset != 0)
             {
-                strCutText = type_string(strRemainText, 0, prev_offset/* size */);
-                strRemainText = type_string(strRemainText, prev_offset, strRemainText.size() - prev_offset/* size */);
+                size_t cutAt = prev_offset;  // #MG-22: if even the first glyph overflows, consume it to make progress
+                if (cutAt == 0) cutAt = (size_t)cur_offset;
+                strCutText = type_string(strRemainText, 0, cutAt);
+                strRemainText = type_string(strRemainText, cutAt, strRemainText.size() - cutAt);
 
                 auto* pMsg = new MSGBOX_TEXTDATA;
                 pMsg->strMsg = strCutText;
@@ -644,12 +646,12 @@ const wchar_t* SEASON3B::CNewUIKeyPadMsgBox::GetInputText()
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetCheckInputText(const wchar_t* strInput)
 {
-    memcpy(m_strCheckKeyPadInput, strInput, m_iInputLimit);
+    memcpy(m_strCheckKeyPadInput, strInput, m_iInputLimit * sizeof(wchar_t));  // #MG-21: compare by wide chars, not bytes
 }
 
 bool SEASON3B::CNewUIKeyPadMsgBox::IsCheckInput()
 {
-    return (0 == memcmp(m_strCheckKeyPadInput, m_strKeyPadInput, m_iInputLimit));
+    return (0 == memcmp(m_strCheckKeyPadInput, m_strKeyPadInput, m_iInputLimit * sizeof(wchar_t)));  // #MG-21
 }
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetStoragePassword(WORD wPassword)
@@ -3185,8 +3187,10 @@ int SEASON3B::CDialogMsgBox::SeparateText(const type_string& strMsg, DWORD dwCol
 
             if (TextExtentWidth > MSGBOX_TEXT_MAXWIDTH && cur_offset != 0)
             {
-                strCutText = type_string(strRemainText, 0, prev_offset/* size */);
-                strRemainText = type_string(strRemainText, prev_offset, strRemainText.size() - prev_offset/* size */);
+                size_t cutAt = prev_offset;  // #MG-22: if even the first glyph overflows, consume it to make progress
+                if (cutAt == 0) cutAt = (size_t)cur_offset;
+                strCutText = type_string(strRemainText, 0, cutAt);
+                strRemainText = type_string(strRemainText, cutAt, strRemainText.size() - cutAt);
 
                 auto* pMsg = new MSGBOX_TEXTDATA;
                 pMsg->strMsg = strCutText;
@@ -3343,6 +3347,13 @@ bool SEASON3B::CProgressMsgBox::Create(DWORD dwElapseTime, float fPriority)
 
 void SEASON3B::CProgressMsgBox::Release()
 {
+    // #MG-23: release MSGBOX_TEXTDATA nodes allocated in AddMsg (was empty).
+    auto vi = m_MsgDataList.begin();
+    for (; vi != m_MsgDataList.end(); vi++)
+    {
+        SAFE_DELETE(*vi);
+    }
+    m_MsgDataList.clear();
 }
 
 void SEASON3B::CProgressMsgBox::SetAddCallbackFunc()
@@ -3420,8 +3431,10 @@ int SEASON3B::CProgressMsgBox::SeparateText(const type_string& strMsg, DWORD dwC
 
             if (TextExtentWidth > MSGBOX_TEXT_MAXWIDTH && cur_offset != 0)
             {
-                strCutText = type_string(strRemainText, 0, prev_offset/* size */);
-                strRemainText = type_string(strRemainText, prev_offset, strRemainText.size() - prev_offset/* size */);
+                size_t cutAt = prev_offset;  // #MG-22: if even the first glyph overflows, consume it to make progress
+                if (cutAt == 0) cutAt = (size_t)cur_offset;
+                strCutText = type_string(strRemainText, 0, cutAt);
+                strRemainText = type_string(strRemainText, cutAt, strRemainText.size() - cutAt);
 
                 auto* pMsg = new MSGBOX_TEXTDATA;
                 pMsg->strMsg = strCutText;
@@ -3601,6 +3614,13 @@ bool SEASON3B::CCursedTempleProgressMsgBox::Create(DWORD dwElapseTime, float fPr
 
 void SEASON3B::CCursedTempleProgressMsgBox::Release()
 {
+    // #MG-23: release MSGBOX_TEXTDATA nodes allocated in AddMsg (was empty).
+    auto vi = m_MsgDataList.begin();
+    for (; vi != m_MsgDataList.end(); vi++)
+    {
+        SAFE_DELETE(*vi);
+    }
+    m_MsgDataList.clear();
 }
 
 void SEASON3B::CCursedTempleProgressMsgBox::SetAddCallbackFunc()
@@ -3672,8 +3692,10 @@ int SEASON3B::CCursedTempleProgressMsgBox::SeparateText(const type_string& strMs
 
             if (TextExtentWidth > MSGBOX_TEXT_MAXWIDTH && cur_offset != 0)
             {
-                strCutText = type_string(strRemainText, 0, prev_offset/* size */);
-                strRemainText = type_string(strRemainText, prev_offset, strRemainText.size() - prev_offset/* size */);
+                size_t cutAt = prev_offset;  // #MG-22: if even the first glyph overflows, consume it to make progress
+                if (cutAt == 0) cutAt = (size_t)cur_offset;
+                strCutText = type_string(strRemainText, 0, cutAt);
+                strRemainText = type_string(strRemainText, cutAt, strRemainText.size() - cutAt);
 
                 auto* pMsg = new MSGBOX_TEXTDATA;
                 pMsg->strMsg = strCutText;

@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include "Core/Platform/PlatformDetect.h"
 #include "UI/NewUI/Options/NewUIOptionWindow.h"
 #include "UI/NewUI/NewUISystem.h"
 #include "Render/Textures/ZzzTexture.h"
@@ -325,7 +326,7 @@ namespace
     // controller-mapping panel are hidden and inert. Phone-vibration
     // settings (haptics) in the same panel stay available.
     constexpr bool kGamepadPanelEnabled =
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         false;
 #else
         true;
@@ -2781,7 +2782,8 @@ void SEASON3B::CNewUIOptionWindow::AcceptRestartForLanguage()
     // arguments and the auto-login environment are inherited by the child),
     // then quit so all language-dependent BMD data reloads on the next start.
     wchar_t modulePath[MAX_PATH] = {};
-    if (GetModuleFileNameW(nullptr, modulePath, MAX_PATH) == 0)
+    DWORD modulePathLen = GetModuleFileNameW(nullptr, modulePath, MAX_PATH);
+    if (modulePathLen == 0 || modulePathLen >= MAX_PATH)  // #MG-28: detect truncation; do not launch a broken target
         return;
 
     std::wstring commandLine = GetCommandLineW();

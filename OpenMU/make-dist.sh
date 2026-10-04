@@ -31,6 +31,12 @@ cp -R -- "$SCRIPT_DIR/deploy/all-in-one" "$STAGE/deploy/all-in-one"
 cp -- "$SCRIPT_DIR/deploy/quick-start.sh" "$STAGE/deploy/quick-start.sh"
 chmod +x "$STAGE/deploy/quick-start.sh"
 
+# Stage the source build context so the default local-source build works on the
+# target server (docker-compose.local.yml builds from ../../src). (DELIVERY-03)
+log "Staging source build context..."
+cp -R -- "$SCRIPT_DIR/src" "$STAGE/src"
+find "$STAGE/src" -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} + 2>/dev/null || true
+
 # Drop build/test-only noise and any local secrets from the distributed copy.
 find "$STAGE" -type f \( -name '.env' -o -name '*.local' \) -delete 2>/dev/null || true
 rm -rf -- "$STAGE/deploy/all-in-one/.git" 2>/dev/null || true
@@ -67,6 +73,13 @@ EOF
 ARCHIVE="$OUT_DIR/openmu-server-$VERSION.tar.gz"
 log "Creating archive $ARCHIVE ..."
 tar -C "$OUT_DIR" -czf "$ARCHIVE" openmu-server
+
+CHECKSUM="$ARCHIVE.sha256"
+sha256sum "$ARCHIVE" > "$CHECKSUM"
+log "Checksum written to $CHECKSUM"
+
+log "Verifying the archive checksum..."
+sha256sum -c "$CHECKSUM" >/dev/null || fail "Checksum verification failed for $ARCHIVE"
 
 log "Done: $ARCHIVE"
 echo

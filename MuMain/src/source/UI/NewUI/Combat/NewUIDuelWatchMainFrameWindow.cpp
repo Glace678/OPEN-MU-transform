@@ -207,7 +207,7 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
         RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE, 142 + 154.f * (1.f - fSDRate), 450, 154.f * fSDRate, 4.f);
     }
 
-    iDamageGap = int(absf(m_fReceivedSDRate2 - g_DuelMgr.GetSD(DUEL_HERO)) * 5.0f) + 2;
+    iDamageGap = int(absf(m_fReceivedSDRate2 - g_DuelMgr.GetSD(DUEL_ENEMY)) * 5.0f) + 2;  // #23: enemy SD uses DUEL_ENEMY
     fSDRatePerPixel = 1.0f / 154.f * iDamageGap;
 
     fSDRate = g_DuelMgr.GetSD(DUEL_ENEMY);

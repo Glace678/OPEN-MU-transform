@@ -85,7 +85,8 @@ public class CloneableGenerator : IIncrementalGenerator
             }
 
             var generatedClass = GeneratePartialClass(classDeclaration, declaredClassSymbol);
-            context.AddSource($"{classDeclaration.Identifier}_Cloneable", SourceText.From(generatedClass.ToString(), Encoding.UTF8));
+            var hintName = declaredClassSymbol.ToDisplayString().Replace('.', '_').Replace('+', '_') + "_Cloneable";
+            context.AddSource(hintName, SourceText.From(generatedClass.ToString(), Encoding.UTF8));
         }
     }
 

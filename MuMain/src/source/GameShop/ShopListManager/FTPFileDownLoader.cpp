@@ -14,6 +14,21 @@
 
 #include <iterator>
 
+namespace {
+// #12: a script entry must be a bare basename. Reject path separators,
+// parent-directory traversal, drive letters and UNC roots so a hostile
+// server manifest cannot escape the versioned local/remote base dir.
+bool IsSafeScriptName(const std::wstring& name)
+{
+    if (name.empty()) return false;
+    if (name.find(L"..") != std::wstring::npos) return false;
+    if (name.find(L'/') != std::wstring::npos) return false;
+    if (name.find(L'\\') != std::wstring::npos) return false;
+    if (name.size() >= 2 && name[1] == L':') return false;  // drive letter X:
+    return true;
+}
+}  // namespace
+
 #ifndef _WIN32
 #include <string>
 
@@ -86,6 +101,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); ++it)
     {
+        if (!IsSafeScriptName(*it)) { continue; }
         const std::wstring localPath = localBase + (*it);
         const std::wstring url = BuildFtpUrl(strServerIP, PortNum, remoteBase + (*it));
 
@@ -127,6 +143,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); it++)
     {
+        if (!IsSafeScriptName(*it)) { continue; }
         std::wstring lPath = strlocalpath + (*it);
         std::wstring rPath = strRemotepath + (*it);
 

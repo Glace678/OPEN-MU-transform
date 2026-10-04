@@ -98,7 +98,16 @@ public static class ConnectionExtensions
         throw new NotImplementedException()
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>;
+    <xsl:text>;</xsl:text>
+    <xsl:if test="pd:HeaderType[starts-with(., 'C1')]">
+      <xsl:text>
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      </xsl:text>
+    </xsl:if>
+    <xsl:text>
             var packet = new </xsl:text>
     <xsl:apply-templates select="pd:Name" />
     <xsl:text>Ref(connection.Output.GetSpan(length)[..length]);</xsl:text>

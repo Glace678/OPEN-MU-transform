@@ -87,15 +87,17 @@ public class LiveConnectionListener : Listener
     private async ValueTask OnClientAcceptedAsync(ClientAcceptedEventArgs e)
     {
         var clientConnection = e.AcceptedConnection;
+        Socket? serverSocket = null;
+        IDisposable? socketConnection = null;
         try
         {
-            var serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             await serverSocket.ConnectAsync(this.TargetHost, this.TargetPort).ConfigureAwait(false);
-            var socketConnection = SocketConnection.Create(serverSocket);
+            socketConnection = SocketConnection.Create(serverSocket);
 
-            var decryptor = this.GetDecryptor(socketConnection.Input, DataDirection.ServerToClient);
-            var encryptor = this.GetEncryptor(socketConnection.Output, DataDirection.ClientToServer);
-            var serverConnection = new Connection(socketConnection, decryptor, encryptor, this._loggerFactory.CreateLogger<Connection>());
+            var decryptor = this.GetDecryptor(((SocketConnection)socketConnection).Input, DataDirection.ServerToClient);
+            var encryptor = this.GetEncryptor(((SocketConnection)socketConnection).Output, DataDirection.ClientToServer);
+            var serverConnection = new Connection((SocketConnection)socketConnection, decryptor, encryptor, this._loggerFactory.CreateLogger<Connection>());
             var proxy = new LiveConnection(clientConnection, serverConnection, this._invokeAction, this._loggerFactory);
 
             this.ClientConnected?.Invoke(this, new ClientConnectedEventArgs(proxy));
@@ -103,7 +105,14 @@ public class LiveConnectionListener : Listener
         catch (Exception exception)
         {
             this._logger.LogError(exception, "Error while connecting to the server. Disconnecting the client.");
+            socketConnection?.Dispose();
+            if (serverSocket is not null && socketConnection is null)
+            {
+                serverSocket.Dispose();
+            }
+
             await clientConnection.DisconnectAsync().ConfigureAwait(false);
+            clientConnection.Dispose();
         }
     }
 }

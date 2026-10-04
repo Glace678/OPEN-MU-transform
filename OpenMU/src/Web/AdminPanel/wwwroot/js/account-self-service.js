@@ -19,6 +19,7 @@ export async function postJson(url, payload) {
     return {
         success: result?.success === true,
         code: result?.code ?? (response.ok ? "error" : `http_${response.status}`),
-        message: result?.message ?? "The server did not return a valid response."
+        message: result?.message ?? "The server did not return a valid response.",
+        recoveryCode: result?.recoveryCode
     };
 }

@@ -37,7 +37,7 @@ public class AddExperiencePlugIn : IAddExperiencePlugIn
             damage = (ushort)Math.Min(obj.LastDeath?.FinalHit.HealthDamage ?? 0, ushort.MaxValue);
         }
 
-        var id = (ushort)(obj.GetId(this._player) | 0x8000);
+        var id = obj is null ? (ushort)0 : (ushort)(obj.GetId(this._player) | 0x8000);
         while (remainingExperience > 0)
         {
             // We send multiple exp packets if the value is bigger than ushort.MaxValue, because that's all what the packet can carry.

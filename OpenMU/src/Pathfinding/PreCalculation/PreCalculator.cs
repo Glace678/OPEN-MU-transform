@@ -54,21 +54,21 @@ public class PreCalculator
         byte toY = (byte)Math.Min(start.Y + maxDistance - 1, 0xFF);
         byte fromX = (byte)Math.Max(start.X - maxDistance, 0);
         byte fromY = (byte)Math.Max(start.Y - maxDistance, 0);
-        for (byte x = fromX; x <= toX; x++)
+        for (int x = fromX; x <= toX; x++)
         {
-            for (byte y = fromY; y <= toY; y++)
+            for (int y = fromY; y <= toY; y++)
             {
                 if (!map[x, y] || (x == start.X && y == start.Y))
                 {
                     continue;
                 }
 
-                var nodes = pathFinder.FindPath(new Point(x, y), start, aiGrid, false);
+                var nodes = pathFinder.FindPath(new Point((byte)x, (byte)y), start, aiGrid, false);
                 if (nodes is { Count: > 0 })
                 {
                     var firstNode = nodes[0];
 
-                    yield return new PathInfo(new PointCombination(new Point(start.X, start.Y), new Point(x, y)), new Point(firstNode.X, firstNode.Y));
+                    yield return new PathInfo(new PointCombination(new Point(start.X, start.Y), new Point((byte)x, (byte)y)), new Point(firstNode.X, firstNode.Y));
                 }
             }
         }

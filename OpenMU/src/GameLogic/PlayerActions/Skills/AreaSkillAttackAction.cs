@@ -128,6 +128,13 @@ public class AreaSkillAttackAction
 
     private static IEnumerable<IAttackable> GetTargetsInRange(Player player, Point targetAreaCenter, Skill skill, byte rotation)
     {
+        // GAP-FU-01: never trust the client-supplied area center; require it to be within
+        // the caster's cast range, matching the explicit-target path above.
+        if (!player.IsInRange(targetAreaCenter, skill.Range + 2))
+        {
+            return [];
+        }
+
         var range = skill.AreaSkillSettings?.EffectRange > 0 ? skill.AreaSkillSettings.EffectRange : skill.Range;
         var targetsInRange = player.CurrentMap?
                     .GetAttackablesInRange(targetAreaCenter, range)

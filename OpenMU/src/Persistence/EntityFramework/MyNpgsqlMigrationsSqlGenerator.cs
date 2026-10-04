@@ -89,29 +89,39 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
         if (DatabaseRoles.TryGetValue(schemaName, out var databaseRole))
         {
             var roleName = ConnectionConfigurator.GetRoleName(databaseRole);
+            var quotedRoleName = QuoteIdentifier(roleName);
+            var quotedSchemaName = QuoteIdentifier(schemaName);
+            var roleNameLiteral = QuoteStringLiteral(roleName);
+            var passwordLiteral = QuoteStringLiteral(ConnectionConfigurator.GetRolePassword(databaseRole));
 
             builder
                 .AppendLine($"""
                     DO
                     $do$
                     BEGIN
-                       IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '{roleName}') THEN 
-                          RAISE NOTICE 'Role "{roleName}" already exists. Skipping.';
+                       IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = {roleNameLiteral}) THEN
+                          RAISE NOTICE 'Role % already exists. Skipping.', {roleNameLiteral};
                        ELSE
-                          CREATE ROLE {roleName} WITH LOGIN PASSWORD '{ConnectionConfigurator.GetRolePassword(databaseRole)}';
+                          CREATE ROLE {quotedRoleName} WITH LOGIN PASSWORD {passwordLiteral};
                        END IF;
                     END
                     $do$;
                 """)
+                .EndCommand(suppressTransaction: true)
+                .AppendLine($"GRANT SELECT, UPDATE, INSERT, DELETE ON ALL TABLES IN SCHEMA {quotedSchemaName} TO {quotedRoleName};")
                 .EndCommand()
-                .AppendLine($"GRANT SELECT, UPDATE, INSERT, DELETE ON ALL TABLES IN SCHEMA {schemaName} TO GROUP {roleName};")
+                .AppendLine($"ALTER DEFAULT PRIVILEGES IN SCHEMA {quotedSchemaName} GRANT ALL ON TABLES TO {quotedRoleName};")
                 .EndCommand()
-                .AppendLine($"ALTER DEFAULT PRIVILEGES IN SCHEMA {schemaName} GRANT ALL ON TABLES TO {roleName};")
-                .EndCommand()
-                .AppendLine($"GRANT USAGE ON SCHEMA {schemaName} TO GROUP {roleName};")
+                .AppendLine($"GRANT USAGE ON SCHEMA {quotedSchemaName} TO {quotedRoleName};")
                 .EndCommand();
         }
     }
+
+    private static string QuoteStringLiteral(string value)
+        => $"'{value.Replace("'", "''", StringComparison.Ordinal)}'";
+
+    private static string QuoteIdentifier(string identifier)
+        => $"\"{identifier.Replace("\"", "\"\"", StringComparison.Ordinal)}\"";
 
     /// <summary>
     ///     Builds commands for the given <see cref="T:Microsoft.EntityFrameworkCore.Migrations.Operations.DropSchemaOperation" /> by making calls on the given
@@ -129,7 +139,7 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
             var roleName = ConnectionConfigurator.GetRoleName(databaseRole);
 
             builder
-                .AppendLine($"DROP ROLE IF EXISTS {roleName};")
+                .AppendLine($"DROP ROLE IF EXISTS {QuoteIdentifier(roleName)};")
                 .EndCommand();
         }
     }

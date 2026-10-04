@@ -3053,7 +3053,8 @@ void MoveJoint(JOINT* o, int iIndex)
         o->TargetPosition[2] += 130.f;
 
         Distance = sqrtf(dx * dx + dy * dy);
-        MoveHumming(o->Position, o->Angle, o->TargetPosition, 3000.f / Distance);
+        if (Distance > 0.0001f)
+            MoveHumming(o->Position, o->Angle, o->TargetPosition, 3000.f / Distance);
         //MoveHumming(o->Position,o->Angle,o->TargetPosition,10.f);
         //MoveHumming(o->Position,o->Angle,o->TargetPosition,0.f);
         if (!o->Collision && Distance <= o->Velocity * 2.f * FPS_ANIMATION_FACTOR)
@@ -4887,7 +4888,9 @@ void MoveJoint(JOINT* o, int iIndex)
                     if (j == 0)			// ????
                     {
                         OBJECT* pSourceObj = o->Target;
-                        CHARACTER* pTargetChar = &CharactersClient[FindCharacterIndex(o->m_sTargetIndex)];
+                        int targetIdx = FindCharacterIndex(o->m_sTargetIndex);
+                        if (targetIdx < 0 || targetIdx >= MAX_CHARACTERS_CLIENT) break;
+                        CHARACTER* pTargetChar = &CharactersClient[targetIdx];
                         OBJECT* pTargetObj = &pTargetChar->Object;
                         vec3_t vRelativePos, vPos, vAngle;
                         BMD* pModel = &Models[pSourceObj->Type];
@@ -6970,7 +6973,7 @@ void RenderJoints(BYTE bRenderOneMore)
     for (int i = 0; i < MAX_JOINTS; i++)
     {
         JOINT* o = &Joints[i];
-        if (o->Type == BITMAP_JOINT_ENERGY && o->SubType == 54 && o->Target->CurrentAction != MONSTER01_ATTACK1)
+        if (o->Type == BITMAP_JOINT_ENERGY && o->SubType == 54 && (o->Target == nullptr || o->Target->CurrentAction != MONSTER01_ATTACK1))
             continue;
         if (o->Live && o->NumTails > 0 && o->RenderFace != 0)
         {

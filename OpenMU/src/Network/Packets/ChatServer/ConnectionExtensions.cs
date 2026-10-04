@@ -48,6 +48,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = AuthenticateRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new AuthenticateRef(connection.Output.GetSpan(length)[..length]);
             packet.RoomId = @roomId;
             @token.Span.CopyTo(packet.Token);
@@ -78,6 +83,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatRoomClientJoinedRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatRoomClientJoinedRef(connection.Output.GetSpan(length)[..length]);
             packet.ClientIndex = @clientIndex;
             packet.Name = @name;
@@ -106,6 +116,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LeaveChatRoomRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LeaveChatRoomRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -133,6 +148,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatRoomClientLeftRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatRoomClientLeftRef(connection.Output.GetSpan(length)[..length]);
             packet.ClientIndex = @clientIndex;
             packet.Name = @name;
@@ -164,6 +184,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatMessageRef.GetRequiredSize(message.Length);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatMessageRef(connection.Output.GetSpan(length)[..length]);
             packet.SenderIndex = @senderIndex;
             packet.MessageLength = @messageLength;
@@ -193,6 +218,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = KeepAliveRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new KeepAliveRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }

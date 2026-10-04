@@ -5,9 +5,20 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $ServerDir,
     [Parameter(Mandatory = $true)]
-    [string] $AdminPassword
+    [System.Security.SecureString] $AdminPassword
 )
 Add-Type -AssemblyName System.Security
+
+$credential = New-Object System.Net.NetworkCredential('', $AdminPassword)
+$plainAdminPassword = $credential.Password
+try
+{
+    if ($plainAdminPassword.Length -lt 12)
+    {
+        Write-Error "The admin password must be at least 12 characters long."
+        exit 2
+    }
+
 
 $keysDir = Join-Path $ServerDir 'Data\Keys'
 New-Item -ItemType Directory -Force -Path $keysDir | Out-Null
@@ -25,7 +36,7 @@ $secrets = [ordered]@{
     AccountPassword       = (New-Secret)
     FriendPassword        = (New-Secret)
     GuildPassword         = (New-Secret)
-    AdminPanelPassword    = $AdminPassword
+    AdminPanelPassword    = $plainAdminPassword
 }
 
 $json    = ($secrets | ConvertTo-Json -Compress)
@@ -48,9 +59,11 @@ $gamePass = [Convert]::ToBase64String($h2).Substring(0, 20).Replace('+', '-').Re
 Write-Output ("SECRETS_FILE=" + $secretsPath)
 Write-Output ("FILE_SIZE=" + (Get-Item -LiteralPath $secretsPath).Length)
 Write-Output "GAME_USER=$gameUser"
-Write-Output "GAME_PASS=$gamePass"
 Write-Output "ADMIN_USER=localadmin"
-# Do not echo the admin password; the caller already knows what it passed in.
+# Do not echo the admin password or the derived game password: both are read back
+# from the DPAPI-protected local-secrets.dpapi by local-credentials.ps1 (and by
+# start_client.ps1), never from this stdout. Echoing the derived password would
+# leak it into the terminal, CI logs or a scheduled-task history.
 
 # Round-trip verification
 $check = [System.Security.Cryptography.ProtectedData]::Unprotect(
@@ -64,3 +77,11 @@ $ok = ($rt.DatabaseAdminPassword.Length -ge 32) -and
       ($rt.GuildPassword.Length -ge 32) -and
       ($rt.AdminPanelPassword.Length -ge 12)
 if ($ok) { Write-Output "ROUNDTRIP_OK" } else { Write-Output "ROUNDTRIP_FAIL"; exit 1 }
+}
+finally
+{
+    if ($plainAdminPassword)
+    {
+        $plainAdminPassword = $plainAdminPassword.Remove(0)
+    }
+}

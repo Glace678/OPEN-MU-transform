@@ -23,7 +23,7 @@ public static class CapturedConnectionExtensions
     /// <param name="path">The path.</param>
     public static void SaveToFile(this ICapturedConnection connection, string path)
     {
-        using var file = File.OpenWrite(path);
+        using var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
         using var writer = new StreamWriter(file);
         writer.WriteLine(connection.StartTimestamp);
         foreach (var packet in connection.PacketList)
@@ -82,20 +82,36 @@ public static class CapturedConnectionExtensions
         return TryParseArray(arrayString, 0, out data);
     }
 
+    private const int MaximumImportPacketSize = 65535;
+
     private static bool TryParseArray(string arrayString, int specifiedLength, out byte[] data)
     {
-        var bytesAsString = arrayString.Split(' ');
-        var arrayLength = specifiedLength == 0 ? bytesAsString.Length : specifiedLength;
-        data = new byte[arrayLength];
-
-        if (bytesAsString.Length != arrayLength)
+        data = Array.Empty<byte>();
+        if (specifiedLength is < 0 or > MaximumImportPacketSize)
         {
             return false;
         }
 
+        var bytesAsString = arrayString.Split(' ');
+        if (specifiedLength != 0 && bytesAsString.Length != specifiedLength)
+        {
+            return false;
+        }
+
+        var arrayLength = bytesAsString.Length;
+        if (arrayLength > MaximumImportPacketSize)
+        {
+            return false;
+        }
+
+        data = new byte[arrayLength];
+
         for (int i = 0; i < bytesAsString.Length; i++)
         {
-            data[i] = byte.Parse(bytesAsString[i], System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            if (!byte.TryParse(bytesAsString[i], System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out data[i]))
+            {
+                return false;
+            }
         }
 
         return true;

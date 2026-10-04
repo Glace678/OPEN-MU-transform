@@ -62,6 +62,18 @@ file(GLOB MU_PREBUILT_SO "${MU_OHOS_PREBUILT_DIR}/*.so")
 if(NOT MU_PREBUILT_SO)
   message(FATAL_ERROR "No .so files found in '${MU_OHOS_PREBUILT_DIR}'.")
 endif()
+# H-02/H-01: verify the mandatory protocol library for THIS ABI's slot, not just
+# "any .so". The packaging script (nativeaot-ohos) only produces arm64-v8a; an
+# x86_64 HarmonyOS PC needs its own linux-ohos-x64 build staged under
+# prebuilt/x86_64/. Until that symmetric build exists, selecting x86_64 must fail
+# here rather than silently packaging arm64 libraries into an x86_64 slot.
+set(MU_REQUIRED_SONAME "libMUnique.Client.Library.so")
+if(NOT EXISTS "${MU_OHOS_PREBUILT_DIR}/${MU_REQUIRED_SONAME}")
+  message(FATAL_ERROR "Required prebuilt '${MU_REQUIRED_SONAME}' not found in "
+    "'${MU_OHOS_PREBUILT_DIR}'. For OHOS_ARCH=${OHOS_ARCH}, build it with "
+    "../../../nativeaot-ohos/build-clientlibrary-ohos.sh (arm64-v8a) or the matching "
+    "x86_64 OHOS build, then stage it into prebuilt/${OHOS_ARCH}/.")
+endif()
 foreach(so ${MU_PREBUILT_SO})
   get_filename_component(so_name "${so}" NAME)
   configure_file("${so}" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${so_name}" COPYONLY)

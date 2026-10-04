@@ -23,7 +23,14 @@ public class BackupManagerTests
     [TearDown]
     public void TearDown()
     {
-        Directory.Delete(this._directory, recursive: true);
+        try
+        {
+            Directory.Delete(this._directory, recursive: true);
+        }
+        catch (IOException)
+        {
+            // Best-effort cleanup; never mask a failed assertion above. (#30)
+        }
     }
 
     /// <summary>Verifies retention removes only old automatic-stop backups.</summary>

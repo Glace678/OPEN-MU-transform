@@ -19,7 +19,7 @@ public class LetterReadRequestAction
     public async ValueTask ReadRequestAsync(Player player, ushort letterIndex)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
-        if (player.SelectedCharacter?.Letters.Count < letterIndex)
+        if (player.SelectedCharacter?.Letters.Count <= letterIndex)
         {
             player.Logger.LogWarning("Player {0} requested non-existing letter, id {1}", player.SelectedCharacter.Name, letterIndex);
             return;

@@ -21,10 +21,10 @@ public partial class ConnectServerConfiguration
     public EventCallback OnValidSubmit { get; set; }
 
     /// <summary>
-    /// Gets or sets the task which should be executed when the cancel button gets clicked. If null, no cancel button is shown.
+    /// Gets or sets the callback which gets invoked when the cancel button gets clicked.
     /// </summary>
     [Parameter]
-    public Task? OnCancel { get; set; }
+    public EventCallback OnCancel { get; set; }
 
     /// <summary>
     /// Gets or sets the model.

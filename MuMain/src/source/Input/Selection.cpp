@@ -344,7 +344,7 @@ void SelectObjects()
 
     if (g_pOption->IsAutoAttack() && gMapManager.WorldActive != WD_6STADIUM && gMapManager.InChaosCastle() == false)
     {
-        if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_CLIENT + 1)
+        if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_CLIENT)
         {
             SelectedCharacter = -1;
             Attacking = -1;

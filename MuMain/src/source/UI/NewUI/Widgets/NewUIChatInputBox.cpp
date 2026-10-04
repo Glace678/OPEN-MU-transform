@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/Chat/ChatInput.h"
 #include "UI/NewUI/Widgets/NewUIChatInputBox.h"
 #include "I18N/All.h"
@@ -207,12 +207,16 @@ void SEASON3B::CNewUIChatInputBox::AddChatHistory(const type_string& strText)
 void SEASON3B::CNewUIChatInputBox::RemoveChatHistory(int index)
 {
     if (index >= 0 && index < (int)m_vecChatHistory.size())
+    {
         m_vecChatHistory.erase(m_vecChatHistory.begin() + index);
+        if (m_iCurChatHistory >= (int)m_vecChatHistory.size()) m_iCurChatHistory = 0;
+    }
 }
 
 void SEASON3B::CNewUIChatInputBox::RemoveAllChatHIstory()
 {
     m_vecChatHistory.clear();
+    m_iCurChatHistory = 0;  // #15: reset cursor on clear
 }
 
 void SEASON3B::CNewUIChatInputBox::AddWhsprIDHistory(const type_string& strWhsprID)

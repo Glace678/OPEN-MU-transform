@@ -5617,7 +5617,10 @@ public unsafe partial class ConnectionManager
             {
                 var length = MuHelperSaveDataRequestRef.Length;
                 var packet = new MuHelperSaveDataRequestRef(pipeWriter.GetSpan(length)[..length]);
-                new Span<byte>(@helperData, (int)helperDataByteLength).CopyTo(packet.HelperData);
+                if (@helperData != null && helperDataByteLength <= (uint)packet.HelperData.Length)
+                {
+                    new Span<byte>(@helperData, (int)helperDataByteLength).CopyTo(packet.HelperData);
+                }
 
                 return length;
             });

@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // GM_Raklion.cpp: implementation of the CGM_Raklion class.
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
@@ -1886,10 +1886,10 @@ bool CGM_Raklion::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 1, o);
                 // 				CreateEffect( MODEL_SPEAR, Position, o->Angle, Light, 1, o);
 
-                if (c->TargetCharacter != -1)
+                if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* tc = &CharactersClient[c->TargetCharacter];
-                    if (c->TargetCharacter != -1)
+                    if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                     {
                         OBJECT* to = &tc->Object;
                         if (10 <= c->AttackTime && to->Live)
@@ -2138,10 +2138,10 @@ bool CGM_Raklion::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 1, o);
                 // 				CreateEffect( MODEL_SPEAR, Position, o->Angle, Light, 1, o);
 
-                if (c->TargetCharacter != -1)
+                if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* tc = &CharactersClient[c->TargetCharacter];
-                    if (c->TargetCharacter != -1)
+                    if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                     {
                         OBJECT* to = &tc->Object;
                         if (10 <= c->AttackTime && to->Live)

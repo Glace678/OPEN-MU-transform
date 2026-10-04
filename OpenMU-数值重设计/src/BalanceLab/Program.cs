@@ -11,7 +11,16 @@ if (args.Length < 2 || args[0] is not ("verify" or "report"))
     return 2;
 }
 var designPath = Path.GetFullPath(args[1]);
+var allowedRoot = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(designPath)!, "..", "artifacts"));
 var output = Path.GetFullPath(args.Length > 2 ? args[2] : Path.Combine(Path.GetDirectoryName(designPath)!, "..", "artifacts"));
+// B-04: only write inside the controlled artifacts root next to the design tree,
+// so a caller-supplied absolute path cannot overwrite fixed-name files elsewhere.
+if (!output.StartsWith(allowedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+    && !string.Equals(output, allowedRoot, StringComparison.OrdinalIgnoreCase))
+{
+    Console.Error.WriteLine($"Refusing to write outside the controlled artifacts root: {output} (allowed: {allowedRoot})");
+    return 2;
+}
 Directory.CreateDirectory(output);
 var design = Design.Load(designPath);
 var rules = new Rules(design);

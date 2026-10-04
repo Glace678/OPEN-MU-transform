@@ -1677,7 +1677,7 @@ void AttackEffect(CHARACTER* c)
     case MONSTER_QUEEN_RAINER:
         if (c->CheckAttackTime(5))
         {
-            if (c->TargetCharacter != -1)
+            if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                 OBJECT* to = &tc->Object;
@@ -2383,7 +2383,7 @@ void AttackEffect(CHARACTER* c)
             default:
                 if (rand_fps_check(1))
                 {
-                    if (b->NumBones < c->Weapon[0].LinkBone) break;
+                    if (c->Weapon[0].LinkBone < 0 || c->Weapon[0].LinkBone >= b->NumBones) break;
 
                     if (o->Type == MODEL_PLAYER)
                     {
@@ -5743,7 +5743,7 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                     CreateParticle(BITMAP_RAIN_CIRCLE + 1, Position, o->Angle, Light);
                 }
             }
-            if (o->CurrentAction == PLAYER_SKILL_HELL_BEGIN || o->CurrentAction == PLAYER_SKILL_HELL_START && rand_fps_check(1))
+            if ((o->CurrentAction == PLAYER_SKILL_HELL_BEGIN || o->CurrentAction == PLAYER_SKILL_HELL_START) && rand_fps_check(1))
             {
                 if (o->BoneTransform != NULL)
                 {
@@ -5751,7 +5751,7 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
 
                     for (int i = 0; i < 40; i += 2)
                     {
-                        if (!b->Bones[i].Dummy && i < b->NumBones)
+                        if (i < b->NumBones && !b->Bones[i].Dummy)
                         {
                             b->TransformPosition(o->BoneTransform[i], p, Position, true);
 
@@ -8007,6 +8007,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     case MODEL_STINGER_BOW:
     {
         vec3_t vZX03, vZx04;
+        VectorCopy(o->Position, vZX03);
+        VectorCopy(o->Position, vZx04);
         int iNumCreateFeather = rand() % 3;
 
         Vector(0.2f, 0.25f, 0.3f, Light);
@@ -10037,7 +10039,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         {
             if ((c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_1 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_1) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_2 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_2) ||
-                (c->MonsterIndex == MONSTER_GIANT_OGRE_3 && c->MonsterIndex == MONSTER_RED_SKELETON_KNIGHT_3 && c->MonsterIndex == MONSTER_MAGIC_SKELETON_3) ||
+                (c->MonsterIndex == MONSTER_GIANT_OGRE_3 || c->MonsterIndex == MONSTER_RED_SKELETON_KNIGHT_3 || c->MonsterIndex == MONSTER_MAGIC_SKELETON_3) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_4 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_4) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_5 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_5) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_6 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_6) ||
@@ -10714,7 +10716,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             {
                 Vector(1.0f, 0.1f, 0.2f, vLight);
             }
-            else if (iSkillType == AT_SKILL_ALICE_THORNS)
+            else if (iSkillType == AT_SKILL_ALICE_WEAKNESS)
             {
                 Vector(0.8f, 0.1f, 0.1f, vLight);
             }
@@ -10760,7 +10762,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             {
                 Vector(1.0f, 0.1f, 0.2f, vLight);
             }
-            else if (iSkillType == AT_SKILL_ALICE_THORNS)
+            else if (iSkillType == AT_SKILL_ALICE_WEAKNESS)
             {
                 Vector(0.8f, 0.1f, 0.1f, vLight);
             }

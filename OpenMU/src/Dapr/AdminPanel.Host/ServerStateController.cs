@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.AdminPanel.Host;
 
 using global::Dapr;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Dapr.Common;
@@ -36,15 +37,17 @@ public class ServerStateController
     /// <param name="data">The data.</param>
     [HttpPost(ManagableServerStatePublisher.TopicName)]
     [Topic("pubsub", ManagableServerStatePublisher.TopicName)]
-    public void ServerStateUpdate([FromBody] ServerStateData data)
+    public IActionResult ServerStateUpdate([FromBody] ServerStateData data)
     {
         try
         {
             this._registry.HandleUpdate(data);
+            return new EmptyResult();
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Error updating the ManagableServerRegistry");
+            return new ObjectResult(null) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }
 }

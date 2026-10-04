@@ -45,46 +45,49 @@ public class SecretStoreDatabaseConnectionSettingsProvider : IDatabaseConnection
             return Task.CompletedTask;
         }
 
-        this.Initialization = Task.Run(
-            async () =>
+        async Task InitializeCoreAsync()
+        {
+            while (!this._isInitialized)
             {
-                this._isInitialized = false;
-                while (!this._isInitialized && !cancellationToken.IsCancellationRequested)
+                cancellationToken.ThrowIfCancellationRequested();
+                try
                 {
-                    try
+                    Console.WriteLine("trying to get secrets ...");
+                    var secrets = await this._daprClient.GetBulkSecretAsync(SecretStoreName, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    foreach (var secret in secrets.Where(kvp => string.Equals(kvp.Key.Split(':')[0], "connectionStrings", StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        Console.WriteLine("trying to get secrets ...");
-                        var secrets = await this._daprClient.GetBulkSecretAsync(SecretStoreName, cancellationToken: cancellationToken).ConfigureAwait(false);
-                        foreach (var secret in secrets.Where(kvp => string.Equals(kvp.Key.Split(':')[0], "connectionStrings", StringComparison.InvariantCultureIgnoreCase)))
+                        var contextTypeName = secret.Value.Keys.First().Split(':').Last();
+                        var setting = new ConnectionSetting
                         {
-                            var contextTypeName = secret.Value.Keys.First().Split(':').Last();
-                            var setting = new ConnectionSetting
-                            {
-                                ContextTypeName = contextTypeName,
-                                ConnectionString = secret.Value.Values.First()!,
-                                DatabaseEngine = DatabaseEngine.Npgsql,
-                            };
+                            ContextTypeName = contextTypeName,
+                            ConnectionString = secret.Value.Values.First()!,
+                            DatabaseEngine = DatabaseEngine.Npgsql,
+                        };
 
-                            this._connectionSettings.Add(contextTypeName, setting);
-                        }
-
-                        Console.WriteLine("secrets retrieved :)");
-
-                        this._isInitialized = true;
+                        this._connectionSettings[contextTypeName] = setting;
                     }
-                    catch (DaprException ex)
-                    {
-                        // This should never happen - however, it may happen when we are using a Dapr secret store.
-                        // It may not be started yet, and the implementation to get it does retrieve it in the constructor already.
-                        this._logger.LogWarning(ex, "Error occurred when retrieving the connection strings from the secrets store. Trying again in 3 seconds...");
-                        Console.WriteLine("Error occurred when retrieving the connection strings from the secrets store. Trying again in 3 seconds...");
-                        await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
-                    }
+
+                    Console.WriteLine("secrets retrieved :)");
+
+                    this._isInitialized = true;
                 }
-            });
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (DaprException ex)
+                {
+                    this._logger.LogWarning(ex, "Error occurred when retrieving the connection strings from the secrets store. Trying again in 3 seconds...");
+                    Console.WriteLine("Error occurred when retrieving the connection strings from the secrets store. Trying again in 3 seconds...");
+                    await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+
+        this.Initialization = InitializeCoreAsync();
         ConnectionConfigurator.Initialize(this);
 
-        return Task.CompletedTask;
+        return this.Initialization;
     }
 
     /// <inheritdoc />

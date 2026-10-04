@@ -74,6 +74,13 @@ ensure_docker() {
       curl -fsSL "https://download.docker.com/linux/${ID}/gpg" \
         | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
       chmod a+r /etc/apt/keyrings/docker.gpg
+
+      # Verify the key fingerprint before trusting the repository.
+      expected_fingerprint="9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
+      actual_fingerprint="$(gpg --show-keys --with-colons /etc/apt/keyrings/docker.gpg \
+        | awk -F: '/^fpr:/ {print $10; exit}')"
+      [[ "$actual_fingerprint" == "$expected_fingerprint" ]] \
+        || fail "Docker GPG key fingerprint mismatch: $actual_fingerprint"
       # shellcheck disable=SC1091
       . /etc/os-release
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \

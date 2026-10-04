@@ -20,6 +20,10 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 # The container runs as a non-root user, but /app belongs to root. The data protection
 # key ring, which protects the admin panel sessions, needs a writable directory.
-RUN mkdir -p /app/data-protection-keys && chmod 777 /app/data-protection-keys
-USER $APP_UID
+ARG APP_UID=1000
+RUN mkdir -p /app/data-protection-keys \
+    && adduser -D -u ${APP_UID} appuser \
+    && chown appuser /app/data-protection-keys \
+    && chmod 700 /app/data-protection-keys
+USER appuser
 ENTRYPOINT ["dotnet", "MUnique.OpenMU.AdminPanel.Host.dll"]

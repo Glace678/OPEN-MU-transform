@@ -24,6 +24,8 @@ public sealed class PacketCaptureService : IPacketCaptureService
 
     private readonly ConcurrentDictionary<Guid, RunningCapture> _runningCaptures = new();
 
+    private readonly SemaphoreSlim _operationLock = new(1, 1);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PacketCaptureService"/> class.
     /// </summary>
@@ -67,43 +69,52 @@ public sealed class PacketCaptureService : IPacketCaptureService
     /// <inheritdoc />
     public async ValueTask<ILiveCapturedConnection?> StartCaptureAsync(Guid connectionId)
     {
-        if (this._runningCaptures.TryGetValue(connectionId, out var running))
+        await this._operationLock.WaitAsync().ConfigureAwait(false);
+        try
         {
-            running.AddInterestedParty();
-            return running.Capture;
-        }
+            if (this._runningCaptures.TryGetValue(connectionId, out var running))
+            {
+                running.AddInterestedParty();
+                return running.Capture;
+            }
 
-        if (await this.FindConnectionAsync(connectionId).ConfigureAwait(false) is not { } connectionInfo)
+            if (await this.FindConnectionAsync(connectionId).ConfigureAwait(false) is not { } connectionInfo)
+            {
+                return null;
+            }
+
+            var capture = new LiveCapturedConnection(connectionInfo, this._maximumPacketCount);
+            var newRunning = new RunningCapture(connectionInfo, capture);
+            connectionInfo.AddCaptureSink(capture);
+            this._runningCaptures[connectionId] = newRunning;
+            return capture;
+        }
+        finally
         {
-            return null;
+            this._operationLock.Release();
         }
-
-        var capture = new LiveCapturedConnection(connectionInfo, this._maximumPacketCount);
-        var newRunning = new RunningCapture(connectionInfo, capture);
-        var current = this._runningCaptures.GetOrAdd(connectionId, newRunning);
-        if (!ReferenceEquals(current, newRunning))
-        {
-            // Another caller was faster.
-            current.AddInterestedParty();
-            return current.Capture;
-        }
-
-        connectionInfo.AddCaptureSink(capture);
-        return capture;
     }
 
     /// <inheritdoc />
     public void StopCapture(Guid connectionId)
     {
-        if (!this._runningCaptures.TryGetValue(connectionId, out var running)
-            || running.RemoveInterestedParty() > 0)
+        this._operationLock.Wait();
+        try
         {
-            return;
-        }
+            if (!this._runningCaptures.TryGetValue(connectionId, out var running)
+                || running.RemoveInterestedParty() > 0)
+            {
+                return;
+            }
 
-        if (this._runningCaptures.TryRemove(connectionId, out _))
+            if (this._runningCaptures.TryRemove(connectionId, out _))
+            {
+                running.ConnectionInfo.RemoveCaptureSink(running.Capture);
+            }
+        }
+        finally
         {
-            running.ConnectionInfo.RemoveCaptureSink(running.Capture);
+            this._operationLock.Release();
         }
     }
 

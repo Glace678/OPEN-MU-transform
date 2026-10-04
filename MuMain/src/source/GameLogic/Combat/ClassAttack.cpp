@@ -1574,7 +1574,7 @@ void AttackWizard(CHARACTER* c, int Skill, float Distance)
         {
         case AT_SKILL_ALICE_THORNS:
         {
-            if (SelectedCharacter == -1 || CharactersClient[SelectedCharacter].Object.Kind != KIND_PLAYER)
+            if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_CLIENT || CharactersClient[SelectedCharacter].Object.Kind != KIND_PLAYER)
             {
                 LetHeroStop();
 

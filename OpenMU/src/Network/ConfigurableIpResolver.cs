@@ -1,4 +1,4 @@
-﻿// <copyright file="ConfigurableIpResolver.cs" company="MUnique">
+// <copyright file="ConfigurableIpResolver.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -88,9 +88,11 @@ public class ConfigurableIpResolver : IIpAddressResolver
                 return new LocalIpResolver();
             case IpResolverType.Loopback:
                 return new LoopbackIpResolver();
-            case IpResolverType.Custom when IPAddress.TryParse(this._parameter, out var ip):
+            case IpResolverType.Custom when IPAddress.TryParse(this._parameter, out var ip) && ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork:
                 return new CustomIpResolver(ip);
             case IpResolverType.Custom:
+                // The resolved address must be an IPv4 (see ResolveIPv4Async). An IPv6 literal is not a valid
+                // IPv4 endpoint, so resolve it as a host name instead (DNS + IPv4 filtering). (Code5#3)
                 return new HostNameIpResolver(this._parameter!);
 
             case IpResolverType.Auto when Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development":

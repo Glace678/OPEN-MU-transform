@@ -27,12 +27,12 @@ public class BalanceV1ExperienceTests
         Assert.Multiple(() =>
         {
             Assert.That(BalanceV1.CalculateKillExperience(100, 1, 100), Is.EqualTo(6725).Within(0.000001));
-            Assert.That(BalanceV1.CalculateKillExperience(100, 43, 100), Is.EqualTo(26900).Within(0.000001));
-            Assert.That(BalanceV1.CalculateKillExperience(100, 38, 100), Is.EqualTo(201750).Within(0.000001));
+            Assert.That(BalanceV1.CalculateKillExperience(100, 43, 100), Is.EqualTo(33625).Within(0.000001));
+            Assert.That(BalanceV1.CalculateKillExperience(100, 38, 100), Is.EqualTo(269000).Within(0.000001));
             Assert.That(BalanceV1.CalculateKillExperience(100, 1, 1), Is.EqualTo(6725 * 1.15).Within(0.000001));
             Assert.That(BalanceV1.CalculateKillExperience(100, 1, 120), Is.EqualTo(6725).Within(0.000001));
-            Assert.That(BalanceV1.CalculateKillExperience(100, 1, 200), Is.EqualTo(6725 * Math.Exp(-1)).Within(0.000001));
-            Assert.That(BalanceV1.CalculateKillExperience(100, 1, 1000), Is.EqualTo(672.5).Within(0.000001));
+            Assert.That(BalanceV1.CalculateKillExperience(100, 1, 200), Is.EqualTo(6725 * Math.Exp(-0.7)).Within(0.000001));
+            Assert.That(BalanceV1.CalculateKillExperience(100, 1, 1000), Is.EqualTo(1008.75).Within(0.000001));
             Assert.That(BalanceV1.CalculateKillExperience(0, 1, 100), Is.Zero);
             Assert.That(BalanceV1.CalculateKillExperience(double.NaN, 1, 100), Is.Zero);
         });
@@ -77,8 +77,8 @@ public class BalanceV1ExperienceTests
     /// <param name="monsterNumber">The monster definition number.</param>
     /// <param name="expected">The expected base reward.</param>
     [TestCase(1, 6725)]
-    [TestCase(43, 26900)]
-    [TestCase(38, 201750)]
+    [TestCase(43, 33625)]
+    [TestCase(38, 269000)]
     public async ValueTask NpcDefinitionSuppliesRewardTierAsync(short monsterNumber, int expected)
     {
         var context = CreateContext(true);

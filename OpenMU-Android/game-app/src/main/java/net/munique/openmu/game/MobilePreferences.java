@@ -85,8 +85,15 @@ final class MobilePreferences {
         }
         byte[] versionBytes = new byte[(int) Math.min(marker.length(), 256)];
         try (FileInputStream input = new FileInputStream(marker)) {
-            int length = input.read(versionBytes);
-            String value = new String(versionBytes, 0, Math.max(0, length), StandardCharsets.UTF_8);
+            int offset = 0;
+            while (offset < versionBytes.length) {
+                int read = input.read(versionBytes, offset, versionBytes.length - offset);
+                if (read < 0) {
+                    break;
+                }
+                offset += read;
+            }
+            String value = new String(versionBytes, 0, offset, StandardCharsets.UTF_8);
             return BuildConfig.GAME_DATA_VERSION.equals(value.trim());
         } catch (IOException ignored) {
             return false;
@@ -456,8 +463,9 @@ final class MobilePreferences {
     }
 
     static boolean usesLocalPairing(Context context) {
-        return get(context).getBoolean(KEY_LOCAL_PAIRING,
-            LocalIpv4Address.isTrusted(DEFAULT_SERVER));
+        // Default to the normal online-game flow (manual account/password login).
+        // Existing installs that explicitly enabled local pairing keep it.
+        return get(context).getBoolean(KEY_LOCAL_PAIRING, false);
     }
 
     static String accountPortalLocale(Context context) {

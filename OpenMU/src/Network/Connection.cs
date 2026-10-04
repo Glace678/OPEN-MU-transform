@@ -1,4 +1,4 @@
-﻿// <copyright file="Connection.cs" company="MUnique">
+// <copyright file="Connection.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -53,6 +53,7 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
 
     private IDuplexPipe? _duplexPipe;
     private bool _disconnected;
+    private int _disconnectSignaled;
     private ExtendedPipeWriter? _outputWriter;
 
     private ImmutableArray<IPacketCaptureSink> _captureSinks = ImmutableArray<IPacketCaptureSink>.Empty;
@@ -145,12 +146,13 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     public async ValueTask DisconnectAsync()
     {
         using var scope = this._logger.BeginScope(this._remoteEndPoint);
-        if (this._disconnected)
+        if (Interlocked.Exchange(ref this._disconnectSignaled, 1) == 1)
         {
             this._logger.LogDebug("Connection already disconnected.");
             return;
         }
 
+        this._disconnected = true;
         ConnectionCounter.Add(-1);
         this._logger.LogDebug("Disconnecting...");
         if (this._duplexPipe is not null)

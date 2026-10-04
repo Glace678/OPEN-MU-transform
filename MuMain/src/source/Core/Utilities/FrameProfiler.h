@@ -167,8 +167,10 @@ namespace FrameProfiler
     {
         int& depth = detail::PassStackDepth();
         if (depth < detail::kMaxPassDepth)
+        {
             detail::PassStack()[depth] = CurrentPass();
-        depth++;
+            depth++;
+        }
         CurrentPass() = p;
     }
 
@@ -177,8 +179,7 @@ namespace FrameProfiler
         int& depth = detail::PassStackDepth();
         if (depth <= 0) return;
         depth--;
-        if (depth < detail::kMaxPassDepth)
-            CurrentPass() = detail::PassStack()[depth];
+        CurrentPass() = detail::PassStack()[depth];
     }
 
     // Hook-site helper: a specific wrapped GL entry point was actually issued this frame --

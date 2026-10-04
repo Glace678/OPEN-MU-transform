@@ -47,9 +47,58 @@ set_target_properties(Main PROPERTIES
 
 # 游戏数据（Data/ + fonts/，约 447MB）不入库；打包时把上游 data 发布解出的
 # game-data.zip 放进 bundle 资源，首启动解包到 Documents/Data（对应
-# Platform/iOS/main.mm 的数据根约定）。此处仅声明资源目录约定：
-if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/resources/game-data.zip")
-  set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/resources/game-data.zip"
+# Platform/iOS/main.mm 的数据根约定）。
+#
+# I-02: previously the zip was silently skipped when absent, producing an
+# incomplete but successfully built .app that only failed at first launch. Treat
+# the data archive as mandatory; pass -DMU_IOS_ALLOW_EMPTY_DATA=ON only for an
+# explicitly non-runnable shell build.
+set(MU_GAME_DATA_ZIP "${CMAKE_CURRENT_LIST_DIR}/resources/game-data.zip")
+if(NOT EXISTS "${MU_GAME_DATA_ZIP}")
+  if(NOT MU_IOS_ALLOW_EMPTY_DATA)
+    message(FATAL_ERROR
+      "Missing '${MU_GAME_DATA_ZIP}'. Stage the pinned data release there before "
+      "building, or pass -DMU_IOS_ALLOW_EMPTY_DATA=ON for a non-runnable shell.")
+  endif()
+else()
+  # I-03: verify the archive against a committed/expected SHA-256 sidecar before
+  # bundling. game-data.zip.sha256 must contain the expected hex digest (optionally
+  # followed by the filename). Fail the configure if it is missing or mismatches.
+  set(MU_GAME_DATA_SIG "${MU_GAME_DATA_ZIP}.sha256")
+  if(NOT EXISTS "${MU_GAME_DATA_SIG}")
+    message(FATAL_ERROR
+      "Missing checksum sidecar '${MU_GAME_DATA_SIG}'. Pin the trusted game data "
+      "release SHA-256 there (I-03) instead of bundling an unchecked archive.")
+  endif()
+  file(SHA256 "${MU_GAME_DATA_ZIP}" MU_GAME_DATA_ACTUAL)
+  file(READ "${MU_GAME_DATA_SIG}" MU_GAME_DATA_EXPECTED_RAW)
+  string(STRIP "${MU_GAME_DATA_EXPECTED_RAW}" MU_GAME_DATA_EXPECTED)
+  string(SUBSTRING "${MU_GAME_DATA_EXPECTED}" 0 64 MU_GAME_DATA_EXPECTED)
+  if(NOT MU_GAME_DATA_ACTUAL STREQUAL MU_GAME_DATA_EXPECTED)
+    message(FATAL_ERROR
+      "game-data.zip SHA-256 mismatch:\n  expected: ${MU_GAME_DATA_EXPECTED}\n  "
+      "actual:   ${MU_GAME_DATA_ACTUAL}\nThe data archive failed integrity "
+      "verification; refusing to bundle it (I-03).")
+  endif()
+  set_source_files_properties("${MU_GAME_DATA_ZIP}"
     PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-  target_sources(Main PRIVATE "${CMAKE_CURRENT_LIST_DIR}/resources/game-data.zip")
+  target_sources(Main PRIVATE "${MU_GAME_DATA_ZIP}")
+endif()
+
+# I-01: the NativeAOT client dylib must be embedded in the app bundle's
+# Frameworks/ directory and code-signed, not left as a loose file next to the
+# sources. Declare it as a framework-located resource and set the rpath so the
+# main executable can load it at @executable_path/Frameworks.
+set(MU_IOS_AOT_DYLIB "${CMAKE_CURRENT_LIST_DIR}/native/libMUnique.Client.Library.dylib")
+if(EXISTS "${MU_IOS_AOT_DYLIB}")
+  set_source_files_properties("${MU_IOS_AOT_DYLIB}"
+    PROPERTIES MACOSX_PACKAGE_LOCATION Frameworks)
+  target_sources(Main PRIVATE "${MU_IOS_AOT_DYLIB}")
+  set_target_properties(Main PROPERTIES
+    XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks"
+    XCODE_ATTRIBUTE_EMBEDDED_CONTENT_CONTAINS_SWIFT NO)
+elseif(NOT MU_IOS_ALLOW_EMPTY_DATA)
+  message(FATAL_ERROR
+    "Missing NativeAOT dylib '${MU_IOS_AOT_DYLIB}'. Build it with "
+    "../nativeaot-ios/build-clientlibrary-ios.sh first (I-01).")
 endif()

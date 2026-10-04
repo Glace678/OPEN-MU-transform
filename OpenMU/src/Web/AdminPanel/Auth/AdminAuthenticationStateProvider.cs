@@ -24,8 +24,11 @@ using MUnique.OpenMU.Persistence.AdminAuth;
 /// </remarks>
 public class AdminAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider
 {
+    private const int MaximumConsecutiveRevalidationFailures = 4;
+
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<AdminAuthenticationStateProvider> _logger;
+    private int _consecutiveFailures;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AdminAuthenticationStateProvider"/> class.
@@ -95,15 +98,19 @@ public class AdminAuthenticationStateProvider : RevalidatingServerAuthentication
                 user = await repository.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
             }
 
-            return user is { IsDisabled: false }
-                   && string.Equals(user.SecurityStamp, securityStamp, StringComparison.Ordinal);
+            var isValid = user is { IsDisabled: false }
+                          && string.Equals(user.SecurityStamp, securityStamp, StringComparison.Ordinal);
+            this._consecutiveFailures = 0;
+            return isValid;
         }
         catch (Exception ex)
         {
-            this._logger.LogWarning(ex, "The authentication state of an admin panel user couldn't be revalidated.");
+            var failures = Interlocked.Increment(ref this._consecutiveFailures);
+            this._logger.LogWarning(ex, "The authentication state of an admin panel user couldn't be revalidated (failure {0}).", failures);
 
-            // Don't kick the user out just because the database hiccuped.
-            return true;
+            // Allow a bounded grace period for transient storage outages, but don't keep
+            // revoked identities valid indefinitely.
+            return failures < MaximumConsecutiveRevalidationFailures;
         }
     }
 }

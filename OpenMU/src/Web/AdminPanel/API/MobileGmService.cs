@@ -4,6 +4,8 @@
 
 namespace MUnique.OpenMU.Web.AdminPanel.API;
 
+using System.IO;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration.Items;
@@ -31,11 +33,19 @@ public sealed class MobileGmService
     // The MU inventory money field is a signed 32-bit value; the classic cap is 2 billion Zen.
     private const long MaximumMoney = 2_000_000_000L;
 
+    private static readonly string DefaultOperationLedgerPath = Path.Combine(
+        AppContext.BaseDirectory,
+        "Data",
+        "Keys",
+        "mobile-gm-operations.json");
+
     private readonly IServiceProvider _services;
     private readonly ILogger<MobileGmService> _logger;
     private readonly Dictionary<Guid, GrantOperation> _grantOperations = new();
     private readonly Dictionary<Guid, ZenOperation> _zenOperations = new();
     private readonly object _grantOperationsLock = new();
+    private readonly Dictionary<Guid, PersistedOperation> _persistedOperations;
+    private readonly string _operationLedgerPath;
 
     // The item lookup is a pure function of the (immutable) game configuration;
     // caching it keeps repeated searches from regrouping every definition.
@@ -44,10 +54,12 @@ public sealed class MobileGmService
     /// <summary>Initializes a new instance of the <see cref="MobileGmService"/> class.</summary>
     /// <param name="services">The application service provider.</param>
     /// <param name="logger">The logger.</param>
-    public MobileGmService(IServiceProvider services, ILogger<MobileGmService> logger)
+    public MobileGmService(IServiceProvider services, ILogger<MobileGmService> logger, string? operationLedgerPath = null)
     {
         this._services = services;
         this._logger = logger;
+        this._operationLedgerPath = operationLedgerPath ?? DefaultOperationLedgerPath;
+        this._persistedOperations = LoadOperationLedger(this._operationLedgerPath);
     }
 
     /// <summary>Gets the local account and its currently selected online characters.</summary>
@@ -104,33 +116,36 @@ public sealed class MobileGmService
             return Task.FromResult(new MobileGmGrantResponse(false, validationError));
         }
 
-        GrantOperation operation;
-        var isNewOperation = false;
         lock (this._grantOperationsLock)
         {
-            if (!this._grantOperations.TryGetValue(requestId, out operation!))
+            if (this._grantOperations.TryGetValue(requestId, out var existing))
             {
-                if (!this.TryEvictCompletedOperations())
-                {
-                    return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
-                }
-
-                operation = new GrantOperation(
-                    request,
-                    new AsyncLazy<MobileGmGrantResponse>(() => this.GrantItemCoreAsync(request, characterId)));
-                this._grantOperations[requestId] = operation;
-                isNewOperation = true;
+                return existing.Request == request
+                    ? existing.Task
+                    : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
             }
-        }
 
-        if (isNewOperation)
-        {
+            if (this._persistedOperations.TryGetValue(requestId, out var persisted))
+            {
+                return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
+            }
+
+            if (!this.TryEvictCompletedOperations())
+            {
+                return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
+            }
+
+            var task = Task.Run(async () =>
+            {
+                var result = await this.GrantItemCoreAsync(request, characterId).ConfigureAwait(false);
+                this.PersistOperation(requestId, result);
+                return result;
+            });
+            var operation = new GrantOperation(request, task);
+            this._grantOperations[requestId] = operation;
             this.MarkCompletion(operation);
+            return operation.Task;
         }
-
-        return operation.Request == request
-            ? operation.Result.Task
-            : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
     }
 
     /// <summary>Adds Zen (money) to an eligible online character, idempotently per request identifier.</summary>
@@ -144,33 +159,36 @@ public sealed class MobileGmService
             return Task.FromResult(new MobileGmGrantResponse(false, validationError));
         }
 
-        ZenOperation operation;
-        var isNewOperation = false;
         lock (this._grantOperationsLock)
         {
-            if (!this._zenOperations.TryGetValue(requestId, out operation!))
+            if (this._zenOperations.TryGetValue(requestId, out var existing))
             {
-                if (!this.TryEvictCompletedOperations())
-                {
-                    return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
-                }
-
-                operation = new ZenOperation(
-                    request,
-                    new AsyncLazy<MobileGmGrantResponse>(() => this.GrantZenCoreAsync(characterId, amount)));
-                this._zenOperations[requestId] = operation;
-                isNewOperation = true;
+                return existing.Request == request
+                    ? existing.Task
+                    : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
             }
-        }
 
-        if (isNewOperation)
-        {
+            if (this._persistedOperations.TryGetValue(requestId, out var persisted))
+            {
+                return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
+            }
+
+            if (!this.TryEvictCompletedOperations())
+            {
+                return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重启。"));
+            }
+
+            var task = Task.Run(async () =>
+            {
+                var result = await this.GrantZenCoreAsync(characterId, amount).ConfigureAwait(false);
+                this.PersistOperation(requestId, result);
+                return result;
+            });
+            var operation = new ZenOperation(request, task);
+            this._zenOperations[requestId] = operation;
             this.MarkCompletion(operation);
+            return operation.Task;
         }
-
-        return operation.Request == request
-            ? operation.Result.Task
-            : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
     }
 
     /// <summary>Validates the pure, context-independent portion of a grant request.</summary>
@@ -303,7 +321,7 @@ public sealed class MobileGmService
     // evictable after the retention window. Continuation, never awaited here.
     private void MarkCompletion(RememberedOperation operation)
     {
-        _ = operation.Result.Task.ContinueWith(
+        _ = operation.Task.ContinueWith(
             _ =>
             {
                 lock (this._grantOperationsLock)
@@ -482,6 +500,45 @@ public sealed class MobileGmService
             player.PersistenceContext.Detach(item);
         }
     }
+
+    private void PersistOperation(Guid requestId, MobileGmGrantResponse result)
+    {
+        lock (this._grantOperationsLock)
+        {
+            this._persistedOperations[requestId] = new PersistedOperation(result.Success, result.Message);
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(this._operationLedgerPath)!);
+                using var file = new FileStream(this._operationLedgerPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                JsonSerializer.Serialize(file, this._persistedOperations);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogWarning(ex, "Could not persist the mobile GM operation ledger for request {RequestId}.", requestId);
+            }
+        }
+    }
+
+    private static Dictionary<Guid, PersistedOperation> LoadOperationLedger(string ledgerPath)
+    {
+        try
+        {
+            if (!File.Exists(ledgerPath))
+            {
+                return new Dictionary<Guid, PersistedOperation>();
+            }
+
+            using var file = File.OpenRead(ledgerPath);
+            return JsonSerializer.Deserialize<Dictionary<Guid, PersistedOperation>>(file)
+                   ?? new Dictionary<Guid, PersistedOperation>();
+        }
+        catch
+        {
+            return new Dictionary<Guid, PersistedOperation>();
+        }
+    }
+
+    private sealed record PersistedOperation(bool Success, string Message);
 
     private string GetAccountName() =>
         Environment.GetEnvironmentVariable(MobileGmAuthenticationDefaults.AccountNameEnvironmentVariable) ?? string.Empty;
@@ -693,12 +750,12 @@ public sealed class MobileGmService
 
     private abstract class RememberedOperation
     {
-        protected RememberedOperation(AsyncLazy<MobileGmGrantResponse> result)
+        protected RememberedOperation(Task<MobileGmGrantResponse> task)
         {
-            this.Result = result;
+            this.Task = task;
         }
 
-        public AsyncLazy<MobileGmGrantResponse> Result { get; }
+        public Task<MobileGmGrantResponse> Task { get; }
 
         /// <summary>When the remembered operation finished; <c>null</c> while it is still running.</summary>
         public DateTimeOffset? CompletedAt { get; set; }
@@ -706,8 +763,8 @@ public sealed class MobileGmService
 
     private sealed class GrantOperation : RememberedOperation
     {
-        public GrantOperation(MobileGmGrantRequest request, AsyncLazy<MobileGmGrantResponse> result)
-            : base(result)
+        public GrantOperation(MobileGmGrantRequest request, Task<MobileGmGrantResponse> task)
+            : base(task)
         {
             this.Request = request;
         }
@@ -717,8 +774,8 @@ public sealed class MobileGmService
 
     private sealed class ZenOperation : RememberedOperation
     {
-        public ZenOperation(MobileGmZenRequest request, AsyncLazy<MobileGmGrantResponse> result)
-            : base(result)
+        public ZenOperation(MobileGmZenRequest request, Task<MobileGmGrantResponse> task)
+            : base(task)
         {
             this.Request = request;
         }

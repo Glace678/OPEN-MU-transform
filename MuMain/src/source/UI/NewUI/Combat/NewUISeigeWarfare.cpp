@@ -196,8 +196,9 @@ bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
     }break;
     case G_MASTER:
     {
-        if (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == 0
-            || wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == 0)
+        if (m_sGuildMarkIndex >= 0 && m_sGuildMarkIndex < MAX_MARKS &&  // #21: validate index
+            (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == 0
+            || wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == 0))
         {
             m_pSiegeWarUI = new CNewUISiegeWarCommander;	// Commander
             m_iCurSiegeWarType = SIEGEWAR_TYPE_COMMANDER;

@@ -48,19 +48,46 @@ public class FixChaosMixesPlugInSeason6 : FixChaosMixesPlugInBase
     /// <inheritdoc />
     protected override async ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
     {
-        // Dark horse spirit and raven spirit drop item groups id fix (do this first because it persists changes to DB)
-        if (gameConfiguration.Items.Single(id => id.Name == "Spirit") is { } spirit)
+        // Dark horse spirit and raven spirit drop item groups id fix.
+        if (gameConfiguration.Items.FirstOrDefault(id => id.Name == "Spirit") is { } spirit)
         {
             spirit.MaximumItemLevel = 1;
             var maps = gameConfiguration.Maps;
-            if (gameConfiguration.DropItemGroups.Single(dig => dig.Description == "Dark Horse Spirit") is { } oldHorseGroup
-                && gameConfiguration.DropItemGroups.Single(dig => dig.Description == "Dark Raven Spirit") is { } oldRavenGroup)
+
+            var oldHorseGroup = gameConfiguration.DropItemGroups
+                .FirstOrDefault(dig => dig.Description == "Dark Horse Spirit" && dig.GetId() != new Guid("00000000-0000-0000-0000-000000000000"));
+            var oldRavenGroup = gameConfiguration.DropItemGroups
+                .FirstOrDefault(dig => dig.Description == "Dark Raven Spirit" && dig.GetId() != new Guid("00000000-0000-0000-0000-000000000000"));
+
+            if (gameConfiguration.DropItemGroups.FirstOrDefault(IsReplacementHorseGroup) is null)
             {
-                await DeleteDropItemGroupAsync(oldHorseGroup).ConfigureAwait(false);
-                await DeleteDropItemGroupAsync(oldRavenGroup).ConfigureAwait(false);
+                if (oldHorseGroup is not null)
+                {
+                    await DeleteDropItemGroupAsync(oldHorseGroup).ConfigureAwait(false);
+                }
+
                 CreateDropItemGroup(0, "Dark Horse Spirit", 102);
+            }
+
+            if (gameConfiguration.DropItemGroups.FirstOrDefault(IsReplacementRavenGroup) is null)
+            {
+                if (oldRavenGroup is not null)
+                {
+                    await DeleteDropItemGroupAsync(oldRavenGroup).ConfigureAwait(false);
+                }
+
                 CreateDropItemGroup(1, "Dark Raven Spirit", 96);
             }
+
+            bool IsReplacementHorseGroup(DropItemGroup group)
+                => group.Description == "Dark Horse Spirit"
+                   && group.PossibleItems.Contains(spirit)
+                   && group.MinimumMonsterLevel == 102;
+
+            bool IsReplacementRavenGroup(DropItemGroup group)
+                => group.Description == "Dark Raven Spirit"
+                   && group.PossibleItems.Contains(spirit)
+                   && group.MinimumMonsterLevel == 96;
 
             async ValueTask DeleteDropItemGroupAsync(DropItemGroup group)
             {
@@ -97,8 +124,15 @@ public class FixChaosMixesPlugInSeason6 : FixChaosMixesPlugInBase
 
         await base.ApplyAsync(context, gameConfiguration).ConfigureAwait(false);
 
-        var goblinCraftings = gameConfiguration.Monsters.Single(m => m.NpcWindow == NpcWindow.ChaosMachine).ItemCraftings;
-        var petTrainercraftings = gameConfiguration.Monsters.Single(m => m.NpcWindow == NpcWindow.PetTrainer).ItemCraftings;
+        var chaosMachine = gameConfiguration.Monsters.FirstOrDefault(m => m.NpcWindow == NpcWindow.ChaosMachine);
+        var petTrainer = gameConfiguration.Monsters.FirstOrDefault(m => m.NpcWindow == NpcWindow.PetTrainer);
+        if (chaosMachine is null || petTrainer is null)
+        {
+            return;
+        }
+
+        var goblinCraftings = chaosMachine.ItemCraftings;
+        var petTrainercraftings = petTrainer.ItemCraftings;
         this.ApplyFirstWingsCraftingUpdate(goblinCraftings);
         this.ApplyDinorantCraftingUpdate(goblinCraftings);
         this.ApplyDinorantOptionsUpdate(gameConfiguration);

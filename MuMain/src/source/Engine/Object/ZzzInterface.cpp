@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -1274,7 +1274,7 @@ void Action(CHARACTER* c, OBJECT* o, bool Now)
         //    || ... )
         //       break;
 
-        if (ActionTarget <= -1)
+        if (ActionTarget < 0 || ActionTarget >= MAX_CHARACTERS_CLIENT)
             break;
 
         TargetX = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
@@ -1509,6 +1509,7 @@ void Action(CHARACTER* c, OBJECT* o, bool Now)
             MouseUpdateTimeMax = 6;
         }
 
+        if (ItemKey < 0 || ItemKey >= MAX_ITEMS) break;
         if (Items[ItemKey].Item.Type == ITEM_ZEN && SendGetItem == -1)
         {
             SendGetItem = ItemKey;
@@ -1919,7 +1920,8 @@ bool CheckMacroLimit(wchar_t* Text)
     wchar_t string[256];
     int  length;
 
-    memcpy(string, Text + 3, sizeof(char) * (256 - 2));
+    wcsncpy(string, Text + 3, 255);
+    string[255] = L'\0';
     length = wcslen(I18N::Game::Exchange);
     if (wcscmp(string, I18N::Game::Exchange) == 0 || wcscmp(string, I18N::Game::Trade259) == 0 || wcsicmp(string, L"/trade") == 0)
     {
@@ -3947,7 +3949,7 @@ void RenderPartyHP()
     {
         PARTY_t* p = &Party[j];
 
-        if (p->index <= -1) continue;
+        if (p->index < 0 || p->index >= MAX_CHARACTERS_CLIENT) continue;
 
         CHARACTER* c = &CharactersClient[p->index];
         OBJECT* o = &c->Object;
@@ -4266,7 +4268,8 @@ bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText)
     bool bMoveIcarus = false;
 
     wchar_t szChatTextUpperChars[256];
-    wcscpy(szChatTextUpperChars, szChatText);
+    wcsncpy(szChatTextUpperChars, szChatText, 255);
+    szChatTextUpperChars[255] = L'\0';
     _wcsupr(szChatTextUpperChars);
 
     short pEquipedRightRingType = (&CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT])->Type;
@@ -4300,7 +4303,8 @@ bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText)
         while (li != m_listMoveInfoData.end())
         {
             wchar_t cMapNameUpperChars[256];
-            wcscpy(cMapNameUpperChars, (*li)->_ReqInfo.szSubMapName);
+            wcsncpy(cMapNameUpperChars, (*li)->_ReqInfo.szSubMapName, 255);
+            cMapNameUpperChars[255] = L'\0';
             _wcsupr(cMapNameUpperChars);
 
             if (wcsstr(szChatText, ((*li)->_ReqInfo.szMainMapName)) != NULL ||

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Debug/sideload builds only: the bundled local server speaks plain HTTP on
+         a private LAN address. This file is NOT packaged into release builds, so
+         release APKs keep cleartext blocked (see main/res/xml/network_security_config.xml). -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

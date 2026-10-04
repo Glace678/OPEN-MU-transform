@@ -125,7 +125,7 @@ def launch_claude(interactive=True):
         "--resume", SESSION_ID,
         "--model", MODEL_NAME,
         "--effort", EFFORT_LEVEL,
-        "--dangerously-skip-permissions",
+        "--permission-mode", "acceptEdits",
         PROMPT
     ]
 
@@ -139,32 +139,16 @@ def launch_claude(interactive=True):
     env["ANTHROPIC_MODEL"] = MODEL_NAME
 
     if interactive:
-        # 在新的独立 PowerShell 窗口中运行，带 -NoExit，完成后保留窗口方便查看
-        escaped_prompt = PROMPT.replace('"', '`"').replace("'", "''")
-        ps_command = (
-            f"cd '{TARGET_DIR}'; "
-            f"$env:ANTHROPIC_MODEL='{MODEL_NAME}'; "
-            f"Write-Host '[*] 正在恢复 Claude Code 任务 (Model: {MODEL_NAME}, Effort: {EFFORT_LEVEL})...' -ForegroundColor Cyan; "
-            f"claude --resume {SESSION_ID} --model {MODEL_NAME} --effort {EFFORT_LEVEL} --dangerously-skip-permissions '{escaped_prompt}'"
-        )
-        
-        launch_args = [
-            "powershell.exe",
-            "-NoProfile",
-            "-NoExit",
-            "-ExecutionPolicy", "Bypass",
-            "-Command", ps_command
-        ]
-        
-        print("[*] 正在拉起前台交互式 PowerShell 窗口...")
-        # 启动独立控制台窗口
+        # Launch in a new console by passing the argv directly: avoid building a
+        # PowerShell command string so path/prompt quoting cannot inject commands.
+        print("[*] 正在拉起前台交互式控制台窗口...")
         subprocess.Popen(
-            launch_args,
+            cmd_args,
             cwd=TARGET_DIR,
             creationflags=subprocess.CREATE_NEW_CONSOLE,
             env=env
         )
-        print("[✓] 任务窗口已成功拉起并保持运行！你可以在明早直接在窗口中查看结果。")
+        print("[✓] 任务窗口已成功拉起并保持运行！")
     else:
         # 后台静默执行，输出写入日志
         print("[*] 正在后台启动任务并写入日志...")

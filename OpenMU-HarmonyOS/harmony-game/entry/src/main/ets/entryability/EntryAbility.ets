@@ -1,4 +1,4 @@
-import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+﻿import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { MobileConfig } from '../mobile/MobileConfig';
@@ -7,6 +7,10 @@ import { MobileConfig } from '../mobile/MobileConfig';
 import bridge from 'libopenmubridge.so';
 
 const DOMAIN = 0x4f50; // "OP"
+
+// H-05: surfaced when native bridge startup setup throws; Bootstrap refuses to
+// route into the game until this is null.
+export let nativeStartupError: string | null = null;
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -21,6 +25,10 @@ export default class EntryAbility extends UIAbility {
         bridge.setEnv(name, env[name]);
       });
     } catch (e) {
+      // H-05: record the failure instead of silently continuing. native_bridge
+      // now throws on bad args / failed setenv/chdir, and Bootstrap will refuse
+      // to start the game while nativeStartupError is set.
+      nativeStartupError = 'native bridge init failed: ' + JSON.stringify(e)
       hilog.error(DOMAIN, 'OpenMU', 'native bridge init failed: %{public}s', JSON.stringify(e));
     }
   }

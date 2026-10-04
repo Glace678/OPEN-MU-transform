@@ -65,13 +65,13 @@ public class BalanceV1RuntimeTests
         {
             Assert.That(normal, Has.Length.EqualTo(BalanceV1.NormalLevelCap + 1));
             Assert.That(normal[1], Is.Zero);
-            Assert.That(normal[2], Is.EqualTo(126));
-            Assert.That(normal[400], Is.EqualTo(1_049_799_678));
+            Assert.That(normal[2], Is.EqualTo(96));
+            Assert.That(normal[400], Is.EqualTo(589_450_800));
             Assert.That(normal.Zip(normal.Skip(1), (left, right) => right >= left), Is.All.True);
 
             Assert.That(master, Has.Length.EqualTo(BalanceV1.MasterLevelCap + 1));
-            Assert.That(master[1], Is.EqualTo(8_911_201));
-            Assert.That(master[200], Is.EqualTo(3_425_281_421));
+            Assert.That(master[1], Is.EqualTo(5_501_991));
+            Assert.That(master[200], Is.EqualTo(2_378_946_398));
             Assert.That(master.Zip(master.Skip(1), (left, right) => right > left), Is.All.True);
         });
     }
@@ -100,9 +100,9 @@ public class BalanceV1RuntimeTests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(BalanceV1.CalculateZen(100, 1), Is.EqualTo(158));
-            Assert.That(BalanceV1.CalculateZen(100, 43), Is.EqualTo(632));
-            Assert.That(BalanceV1.CalculateZen(100, 38), Is.EqualTo(4740));
+            Assert.That(BalanceV1.CalculateZen(100, 1), Is.EqualTo(228));
+            Assert.That(BalanceV1.CalculateZen(100, 43), Is.EqualTo(1368));
+            Assert.That(BalanceV1.CalculateZen(100, 38), Is.EqualTo(11400));
         });
     }
 
@@ -115,7 +115,7 @@ public class BalanceV1RuntimeTests
             Assert.That(BalanceV1.CalculateHitChance(100, 100), Is.EqualTo(0.92).Within(0.000001));
             Assert.That(BalanceV1.CalculateHitChance(200, 100), Is.EqualTo(0.98).Within(0.000001));
             Assert.That(BalanceV1.CalculateHitChance(100, 200), Is.EqualTo(0.84).Within(0.000001));
-            Assert.That(BalanceV1.CalculateHitChance(0, 1_000_000), Is.EqualTo(0.60).Within(0.000001));
+            Assert.That(BalanceV1.CalculateHitChance(0, 1_000_000), Is.EqualTo(0.70).Within(0.000001));
             Assert.That(BalanceV1.CalculateHitChance(double.NaN, double.PositiveInfinity), Is.EqualTo(0.92).Within(0.000001));
         });
     }
@@ -130,7 +130,7 @@ public class BalanceV1RuntimeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(baseline, Is.EqualTo(100d / 420d).Within(0.000001));
+            Assert.That(baseline, Is.EqualTo(100d / 410d).Within(0.000001));
             Assert.That(penetrated, Is.LessThan(baseline));
             Assert.That(capped, Is.EqualTo(0.60).Within(0.000001));
             Assert.That(BalanceV1.CalculateDamageReduction(100, 100, extraReduction: 1), Is.EqualTo(0.70).Within(0.000001));
@@ -159,7 +159,7 @@ public class BalanceV1RuntimeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(lowExperience.Money, Is.EqualTo(158));
+            Assert.That(lowExperience.Money, Is.EqualTo(228));
             Assert.That(highExperience.Money, Is.EqualTo(lowExperience.Money));
         });
     }
@@ -199,7 +199,7 @@ public class BalanceV1RuntimeTests
     public async ValueTask FailedLevelUpgradePreservesTargetLevelAsync()
     {
         var randomizer = new Mock<IRandomizer>();
-        randomizer.Setup(value => value.NextRandomBool(85)).Returns(false);
+        randomizer.Setup(value => value.NextRandomBool(90)).Returns(false);
         var handler = new SoulJewelConsumeHandlerPlugIn(randomizer.Object);
         var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
         var target = CreateUpgradeableItem(level: 6);
@@ -213,7 +213,7 @@ public class BalanceV1RuntimeTests
         {
             Assert.That(consumed, Is.True);
             Assert.That(target.Level, Is.EqualTo(6));
-            randomizer.Verify(value => value.NextRandomBool(85), Times.Once);
+            randomizer.Verify(value => value.NextRandomBool(90), Times.Once);
         });
     }
 

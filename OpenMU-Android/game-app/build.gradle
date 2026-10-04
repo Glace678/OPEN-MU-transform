@@ -2,15 +2,38 @@ plugins {
     id 'com.android.application'
 }
 
+// A-06: mirror the runtime LocalIpv4Address policy and Build-AndroidPackage.ps1:
+// the old regex [A-Za-z0-9.-]+ accepted ".", "-", leading/trailing hyphens and
+// leading-zero octets, so a hand build would succeed but bake an unusable default
+// address into the APK. Reject empty labels, leading/trailing hyphens and
+// leading-zero IPv4 octets.
+static boolean isValidServerAddress(String value) {
+    if (value == null || value.isEmpty()) return false
+    if (value ==~ /^\d{1,3}(\.\d{1,3}){3}$/) {
+        for (String octet : value.split('\\.')) {
+            if (octet.length() > 1 && octet.startsWith('0')) return false
+            int n = Integer.parseInt(octet)
+            if (n < 0 || n > 255) return false
+        }
+        return true
+    }
+    if (value.endsWith('.')) return false
+    for (String label : value.split('\\.')) {
+        if (label.isEmpty() || label.length() > 63) return false
+        if (!(label ==~ /[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?/)) return false
+    }
+    return true
+}
+
 // No default: a hardcoded LAN address here would silently bake one developer's
 // IP into any APK built by hand with `gradlew assembleDebug`. Fail instead,
 // the way the package key below does. Build-AndroidPackage.ps1 passes this with
 // -POPENMU_SERVER_ADDRESS=<ip or hostname>.
 def openMuServerAddress = providers.gradleProperty('OPENMU_SERVER_ADDRESS').getOrElse('')
-if (!(openMuServerAddress ==~ /[A-Za-z0-9.-]+/)) {
-    throw new GradleException('OPENMU_SERVER_ADDRESS must be an IPv4 address or ' +
-        'hostname (letters, digits, dots, hyphens only). Pass it with ' +
-        '-POPENMU_SERVER_ADDRESS=<address>.')
+if (!isValidServerAddress(openMuServerAddress)) {
+    throw new GradleException('OPENMU_SERVER_ADDRESS must be a valid IPv4 address or ' +
+        'hostname (no empty labels, no leading/trailing hyphens, no leading-zero ' +
+        'octets). Pass it with -POPENMU_SERVER_ADDRESS=<address>.')
 }
 def mobilePackageKey = providers.gradleProperty('OPENMU_MOBILE_PACKAGE_KEY').getOrElse('')
 if (!(mobilePackageKey ==~ /[A-Za-z0-9_-]{43}/)) {
@@ -74,6 +97,29 @@ android {
         }
     }
 
+    // A-03: release signing material is never checked in. Read it from a local
+    // keystore.properties (gitignored) or OPENMU_ANDROID_KEYSTORE_* env vars.
+    // Without it, assembleRelease fails loudly instead of silently producing an
+    // unsigned / debug-signed release APK.
+    signingConfigs {
+        release {
+            def ksFile = rootProject.file('keystore.properties')
+            if (ksFile.isFile()) {
+                def ksProps = new Properties()
+                ksFile.withInputStream { ksProps.load(it) }
+                storeFile file(ksProps['storeFile'])
+                storePassword ksProps['storePassword']
+                keyAlias ksProps['keyAlias']
+                keyPassword ksProps['keyPassword']
+            } else if (System.getenv('OPENMU_ANDROID_KEYSTORE_FILE')) {
+                storeFile file(System.getenv('OPENMU_ANDROID_KEYSTORE_FILE'))
+                storePassword System.getenv('OPENMU_ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('OPENMU_ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('OPENMU_ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
@@ -81,6 +127,7 @@ android {
         }
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 

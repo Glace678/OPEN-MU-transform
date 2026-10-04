@@ -170,7 +170,7 @@ void CNewUISystem::Release()
     SAFE_DELETE(m_pNewSystemLogWindow);
     SAFE_DELETE(m_pNewUI3DRenderMng);
 
-    m_pNewUIMng->RemoveAllUIObjs();
+    if (m_pNewUIMng) m_pNewUIMng->RemoveAllUIObjs();  // #MG-27: null-safe if Create failed
 
     SAFE_DELETE(m_pNewUIMng);
 }
@@ -561,6 +561,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SAFE_DELETE(m_pNewGuildMakeWindow);
     SAFE_DELETE(m_pNewGuildInfoWindow);
     SAFE_DELETE(m_pNewStorageInventory);
+    SAFE_DELETE(m_pNewStorageInventoryExt);  // #MG-26: was leaked on unload
     SAFE_DELETE(m_pNewMixInventory);
     SAFE_DELETE(m_pNewCastleWindow);
     SAFE_DELETE(m_pNewGuardWindow);

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/Legacy/UIWindows.h"
 #include "Render/Textures/ZzzOpenglUtil.h"
 #include "Render/Textures/ZzzTexture.h"
@@ -668,6 +668,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     {
         OpenMonsterModel(MONSTER_MODEL_DARK_SKULL_SOLDIER_5);
         c = CreateCharacter(Key, MODEL_DARK_SKULL_SOLDIER_5, PosX, PosY);
+        if (c == nullptr) break;  // #MG-38: CreateCharacter failed
         c->Object.Scale = 1.6f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
@@ -708,6 +709,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     {
         OpenMonsterModel(MONSTER_MODEL_MAYA_HAND_LEFT);
         c = CreateCharacter(Key, MODEL_MAYA_HAND_LEFT, PosX, PosY);
+        if (c == nullptr) break;  // #MG-38: CreateCharacter failed
         c->Object.Scale = 2.28f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
@@ -741,6 +743,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     {
         OpenMonsterModel(MONSTER_MODEL_MAYA_HAND_RIGHT);
         c = CreateCharacter(Key, MODEL_MAYA_HAND_RIGHT, PosX, PosY);
+        if (c == nullptr) break;  // #MG-38: CreateCharacter failed
         c->Object.Scale = 2.28f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
@@ -774,6 +777,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     {
         OpenMonsterModel(MONSTER_MODEL_BULL_FIGHTER); // shouldn't that be MONSTER_MODEL_MAYA?
         c = CreateCharacter(Key, MODEL_MAYA, PosX, PosY);
+        if (c == nullptr) break;  // #MG-38: CreateCharacter failed
         c->Object.Scale = 0.2f;
         c->Weapon[0].Type = -1;
         c->Weapon[1].Type = -1;
@@ -1702,7 +1706,7 @@ void M39Kanturu3rd::Kanturu3rdSuccess()
     fWidth = 372.0f;
     fHeight = 99.0f;
     fPosX = ((float)REFERENCE_WIDTH - fWidth) / 2.0f;
-    fPosY = ((float)REFERENCE_HEIGHT - fWidth) / 2.0f;
+    fPosY = ((float)REFERENCE_HEIGHT - fHeight) / 2.0f;
     tu = fWidth / 512.f;
     tv = fHeight / 128.f;
 
@@ -1725,7 +1729,7 @@ void M39Kanturu3rd::Kanturu3rdFailed()
     fWidth = 372.0f;
     fHeight = 99.0f;
     fPosX = ((float)REFERENCE_WIDTH - fWidth) / 2.0f;
-    fPosY = ((float)REFERENCE_HEIGHT - fWidth) / 2.0f;
+    fPosY = ((float)REFERENCE_HEIGHT - fHeight) / 2.0f;
     tu = fWidth / 512.f;
     tv = fHeight / 128.f;
 

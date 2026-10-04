@@ -28,6 +28,8 @@ public unsafe partial class ConnectionManager
     /// </summary>
     private static readonly Dictionary<int, ConnectionWrapper> Connections = new();
 
+    private static readonly object ConnectionsLock = new();
+
     /// <summary>
     /// The currently used maximum handle number.
     /// </summary>
@@ -73,27 +75,29 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_Send")]
     public static void Send(int handle, byte* data, int count)
     {
-        if (Connections.TryGetValue(handle, out var connection))
+        ConnectionWrapper? connection;
+        lock (ConnectionsLock)
         {
-            try
-            {
-                var bytes = new Span<byte>(data, count);
-                bytes.SetPacketSize();
-                connection.Send(bytes);
-                Debug.WriteLine("Sent {0} bytes with handle {1}", count, handle);
-            }
-            catch (Exception ex)
-            {
-                // A send failure means the connection is broken. Tear it down so
-                // the Disconnected event fires and the client can auto-reconnect,
-                // instead of silently swallowing the error and looking online.
-                Debug.WriteLine($"Error sending {count} bytes with handle {handle}: {ex}");
-                connection.DisconnectAndDispose();
-            }
+            Connections.TryGetValue(handle, out connection);
         }
-        else
+
+        if (connection is null)
         {
             Debug.WriteLine("Connection with handle {0} not found.", handle);
+            return;
+        }
+
+        try
+        {
+            var bytes = new Span<byte>(data, count);
+            bytes.SetPacketSize();
+            connection.Send(bytes);
+            Debug.WriteLine("Sent {0} bytes with handle {1}", count, handle);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error sending {count} bytes with handle {handle}: {ex}");
+            connection.DisconnectAndDispose();
         }
     }
 
@@ -104,10 +108,13 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_BeginReceive")]
     public static void BeginReceive(int connectionHandle)
     {
-        if (Connections.TryGetValue(connectionHandle, out var connection))
+        ConnectionWrapper? connection;
+        lock (ConnectionsLock)
         {
-            connection.BeginReceive();
+            Connections.TryGetValue(connectionHandle, out connection);
         }
+
+        connection?.BeginReceive();
     }
 
     /// <summary>
@@ -117,10 +124,13 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_Disconnect")]
     public static void Disconnect(int connectionHandle)
     {
-        if (Connections.TryGetValue(connectionHandle, out var connection))
+        ConnectionWrapper? connection;
+        lock (ConnectionsLock)
         {
-            connection.DisconnectAndDispose();
+            Connections.TryGetValue(connectionHandle, out connection);
         }
+
+        connection?.DisconnectAndDispose();
     }
 
     private static int ConnectInner(string host, int port, bool isEncrypted, delegate* unmanaged<int, int, byte*, void> onPacketReceived, delegate* unmanaged<int, void> onDisconnected)
@@ -135,13 +145,21 @@ public unsafe partial class ConnectionManager
         var decryptor = isEncrypted ? new PipelinedSimpleModulusDecryptor(socketConnection.Input, PipelinedSimpleModulusDecryptor.DefaultClientKey) : null;
         var connection = new Connection(socketConnection, decryptor, encryptor, new NullLogger<Connection>());
 
-        var handle = Interlocked.Increment(ref _maxHandle);
-        var wrapper = new ConnectionWrapper(handle, connection, onPacketReceived, onDisconnected);
-        Connections.Add(handle, wrapper);
+        int handle;
+        lock (ConnectionsLock)
+        {
+            handle = ++_maxHandle;
+            var wrapper = new ConnectionWrapper(handle, connection, onPacketReceived, onDisconnected);
+            Connections.Add(handle, wrapper);
+        }
 
         connection.Disconnected += () =>
         {
-            Connections.Remove(handle);
+            lock (ConnectionsLock)
+            {
+                Connections.Remove(handle);
+            }
+
             return ValueTask.CompletedTask;
         };
 

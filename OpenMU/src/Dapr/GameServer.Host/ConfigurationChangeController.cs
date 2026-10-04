@@ -43,7 +43,7 @@ public class ConfigurationChangeController : ControllerBase
     [Topic("pubsub", nameof(IConfigurationChangePublisher.ConfigurationAddedAsync))]
     public ValueTask ConfigurationAddedAsync([FromBody] ConfigurationChangeArguments arguments)
     {
-        return this._changeListener.ConfigurationAddedAsync(arguments.Type, arguments.Id, arguments.Configuration!, null, null);
+        return this._changeListener.ConfigurationAddedAsync(arguments.ResolveType(), arguments.Id, arguments.Configuration!, null, null);
     }
 
     /// <summary>
@@ -54,8 +54,9 @@ public class ConfigurationChangeController : ControllerBase
     [Topic("pubsub", nameof(IConfigurationChangePublisher.ConfigurationChangedAsync))]
     public ValueTask ConfigurationChangedAsync([FromBody] ConfigurationChangeArguments arguments)
     {
-        this._plugInManager.ApplyChangedConfiguration(arguments.Type, arguments.Id, arguments.Configuration);
-        return this._changeListener.ConfigurationChangedAsync(arguments.Type, arguments.Id, arguments.Configuration!, null);
+        var type = arguments.ResolveType();
+        this._plugInManager.ApplyChangedConfiguration(type, arguments.Id, arguments.Configuration);
+        return this._changeListener.ConfigurationChangedAsync(type, arguments.Id, arguments.Configuration!, null);
     }
 
     /// <summary>
@@ -66,7 +67,8 @@ public class ConfigurationChangeController : ControllerBase
     [Topic("pubsub", nameof(IConfigurationChangePublisher.ConfigurationRemovedAsync))]
     public ValueTask ConfigurationRemovedAsync([FromBody] ConfigurationChangeArguments arguments)
     {
-        this._plugInManager.ApplyRemovedConfiguration(arguments.Type, arguments.Id);
-        return this._changeListener.ConfigurationRemovedAsync(arguments.Type, arguments.Id, null, null);
+        var type = arguments.ResolveType();
+        this._plugInManager.ApplyRemovedConfiguration(type, arguments.Id);
+        return this._changeListener.ConfigurationRemovedAsync(type, arguments.Id, null, null);
     }
 }

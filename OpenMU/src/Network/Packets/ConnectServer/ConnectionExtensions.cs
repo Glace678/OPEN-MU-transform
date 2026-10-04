@@ -47,6 +47,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ConnectionInfoRequest075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ConnectionInfoRequest075Ref(connection.Output.GetSpan(length)[..length]);
             packet.ServerId = @serverId;
 
@@ -75,6 +80,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ConnectionInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ConnectionInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.ServerId = @serverId;
 
@@ -104,6 +114,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ConnectionInfoRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ConnectionInfoRef(connection.Output.GetSpan(length)[..length]);
             packet.IpAddress = @ipAddress;
             packet.Port = @port;
@@ -132,6 +147,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ServerListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ServerListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -157,6 +177,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ServerListRequestOldRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ServerListRequestOldRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -182,6 +207,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = HelloRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new HelloRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -210,6 +240,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PatchCheckRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PatchCheckRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.MajorVersion = @majorVersion;
             packet.MinorVersion = @minorVersion;
@@ -239,6 +274,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PatchVersionOkayRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PatchVersionOkayRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -266,6 +306,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ClientNeedsPatchRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ClientNeedsPatchRef(connection.Output.GetSpan(length)[..length]);
             packet.PatchVersion = @patchVersion;
             packet.PatchAddress = @patchAddress;

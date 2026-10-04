@@ -1,4 +1,4 @@
-﻿// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
+// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -1396,11 +1396,16 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
     m_AlliedPoint = data->btAlliedPoint;
     m_IllusionPoint = data->btIllusionPoint;
 
-    m_CursedTempleMyTeamCount = data->btPartyCount;
+    // #14: btPartyCount is attacker-controlled; reject a malformed packet
+    // whose declared entry count exceeds the fixed array capacity.
+    int partyCount = data->btPartyCount;
+    if (partyCount < 0 || partyCount > MAX_PARTYS)
+        return;
+    m_CursedTempleMyTeamCount = (WORD)partyCount;
 
     int Offset = sizeof(PMSG_CURSED_TAMPLE_STATE);
 
-    for (int i = 0; i < m_CursedTempleMyTeamCount; i++)
+    for (int i = 0; i < partyCount; i++)
     {
         auto data2 = (LPPMSG_CURSED_TAMPLE_PARTY_POS)(ReceiveBuffer + Offset);
 

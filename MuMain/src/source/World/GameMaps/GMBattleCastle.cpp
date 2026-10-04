@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //  GMBattleCastle.cpp
 //////////////////////////////////////////////////////////////////////////
 
@@ -101,6 +101,7 @@ namespace battleCastle
                 OpenTerrainAttribute(FileName);
 
                 mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+                OpenTerrainLight(FileName);  // #MG-31: actually reload normal light on battle end
             }
 
             g_iMp3PlayTime = 0;
@@ -315,7 +316,8 @@ namespace battleCastle
     void RenderBuildTimes(void)
     {
         BuildTime bt;
-        for (int i = 0; i < (int)g_qBuildTimeLocation.size(); ++i)
+        int iTotal = (int)g_qBuildTimeLocation.size();  // #MG-30: snapshot count before pops shrink the queue
+        for (int i = 0; i < iTotal; ++i)
         {
             bt = g_qBuildTimeLocation.front();
 
@@ -472,8 +474,8 @@ namespace battleCastle
     {
         if (gMapManager.InBattleCastle() == false)  return;
 
-        if (eBuff_CastleRegimentAttack1 != state || eBuff_CastleRegimentAttack2 != state
-            || eBuff_CastleRegimentAttack3 != state || eBuff_CastleRegimentDefense != state)
+        if (state != eBuff_CastleRegimentAttack1 && state != eBuff_CastleRegimentAttack2
+            && state != eBuff_CastleRegimentAttack3 && state != eBuff_CastleRegimentDefense)
         {
             return;
         }

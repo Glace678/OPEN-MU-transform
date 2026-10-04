@@ -1123,7 +1123,10 @@ public readonly struct CharacterData
     /// <summary>
     /// Gets the <see cref="EffectId"/> of the specified index.
     /// </summary>
-        public EffectId this[int index] => new (this._data.Slice(36 + index * EffectId.Length));
+        public EffectId this[int index] =>
+            (index < 0 || 36 + index * EffectId.Length + EffectId.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new EffectId(this._data.Slice(36 + index * EffectId.Length));
 
     /// <summary>
     /// Calculates the size of the packet for the specified count of <see cref="EffectId"/>.
@@ -1228,7 +1231,10 @@ public readonly struct AddCharactersToScope075
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(5 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 5 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(5 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddCharactersToScope075"/>.
@@ -1453,7 +1459,10 @@ public readonly struct AddCharactersToScope095
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(5 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 5 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(5 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddCharactersToScope095"/>.
@@ -1678,7 +1687,10 @@ public readonly struct AddNpcsToScope
     /// <summary>
     /// Gets the <see cref="NpcData"/> of the specified index.
     /// </summary>
-        public NpcData this[int index] => new (this._data.Slice(5 + index * NpcData.Length));
+        public NpcData this[int index] =>
+            (index < 0 || 5 + index * NpcData.Length + NpcData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new NpcData(this._data.Slice(5 + index * NpcData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddNpcsToScope"/>.
@@ -1859,7 +1871,10 @@ public readonly struct AddNpcsToScope075
     /// <summary>
     /// Gets the <see cref="NpcData"/> of the specified index.
     /// </summary>
-        public NpcData this[int index] => new (this._data.Slice(5 + index * NpcData.Length));
+        public NpcData this[int index] =>
+            (index < 0 || 5 + index * NpcData.Length + NpcData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new NpcData(this._data.Slice(5 + index * NpcData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddNpcsToScope075"/>.
@@ -2067,7 +2082,10 @@ public readonly struct AddNpcsToScope095
     /// <summary>
     /// Gets the <see cref="NpcData"/> of the specified index.
     /// </summary>
-        public NpcData this[int index] => new (this._data.Slice(5 + index * NpcData.Length));
+        public NpcData this[int index] =>
+            (index < 0 || 5 + index * NpcData.Length + NpcData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new NpcData(this._data.Slice(5 + index * NpcData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddNpcsToScope095"/>.
@@ -2395,7 +2413,10 @@ public readonly struct SummonedMonsterData
     /// <summary>
     /// Gets the <see cref="EffectId"/> of the specified index.
     /// </summary>
-        public EffectId this[int index] => new (this._data.Slice(20 + index * EffectId.Length));
+        public EffectId this[int index] =>
+            (index < 0 || 20 + index * EffectId.Length + EffectId.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new EffectId(this._data.Slice(20 + index * EffectId.Length));
 
     /// <summary>
     /// Calculates the size of the packet for the specified count of <see cref="EffectId"/>.
@@ -2500,7 +2521,10 @@ public readonly struct AddSummonedMonstersToScope075
     /// <summary>
     /// Gets the <see cref="SummonedMonsterData"/> of the specified index.
     /// </summary>
-        public SummonedMonsterData this[int index] => new (this._data.Slice(5 + index * SummonedMonsterData.Length));
+        public SummonedMonsterData this[int index] =>
+            (index < 0 || 5 + index * SummonedMonsterData.Length + SummonedMonsterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new SummonedMonsterData(this._data.Slice(5 + index * SummonedMonsterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddSummonedMonstersToScope075"/>.
@@ -2717,7 +2741,10 @@ public readonly struct AddSummonedMonstersToScope095
     /// <summary>
     /// Gets the <see cref="SummonedMonsterData"/> of the specified index.
     /// </summary>
-        public SummonedMonsterData this[int index] => new (this._data.Slice(5 + index * SummonedMonsterData.Length));
+        public SummonedMonsterData this[int index] =>
+            (index < 0 || 5 + index * SummonedMonsterData.Length + SummonedMonsterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new SummonedMonsterData(this._data.Slice(5 + index * SummonedMonsterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddSummonedMonstersToScope095"/>.
@@ -2934,7 +2961,10 @@ public readonly struct MapObjectOutOfScope
     /// <summary>
     /// Gets the <see cref="ObjectId"/> of the specified index.
     /// </summary>
-        public ObjectId this[int index] => new (this._data.Slice(4 + index * ObjectId.Length));
+        public ObjectId this[int index] =>
+            (index < 0 || 4 + index * ObjectId.Length + ObjectId.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ObjectId(this._data.Slice(4 + index * ObjectId.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="MapObjectOutOfScope"/>.
@@ -4187,7 +4217,10 @@ public readonly struct RageAttackRangeResponse
     /// <summary>
     /// Gets the <see cref="RageTarget"/> of the specified index.
     /// </summary>
-        public RageTarget this[int index] => new (this._data.Slice(6 + index * RageTarget.Length));
+        public RageTarget this[int index] =>
+            (index < 0 || 6 + index * RageTarget.Length + RageTarget.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new RageTarget(this._data.Slice(6 + index * RageTarget.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="RageAttackRangeResponse"/>.
@@ -4717,7 +4750,10 @@ public readonly struct PartyList
     /// <summary>
     /// Gets the <see cref="PartyMember"/> of the specified index.
     /// </summary>
-        public PartyMember this[int index] => new (this._data.Slice(5 + index * PartyMember.Length));
+        public PartyMember this[int index] =>
+            (index < 0 || 5 + index * PartyMember.Length + PartyMember.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PartyMember(this._data.Slice(5 + index * PartyMember.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="PartyList"/>.
@@ -4896,7 +4932,10 @@ public readonly struct PartyList075
     /// <summary>
     /// Gets the <see cref="PartyMember"/> of the specified index.
     /// </summary>
-        public PartyMember this[int index] => new (this._data.Slice(5 + index * PartyMember.Length));
+        public PartyMember this[int index] =>
+            (index < 0 || 5 + index * PartyMember.Length + PartyMember.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PartyMember(this._data.Slice(5 + index * PartyMember.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="PartyList075"/>.
@@ -5129,7 +5168,10 @@ public readonly struct PartyHealthUpdate
     /// <summary>
     /// Gets the <see cref="PartyMemberHealth"/> of the specified index.
     /// </summary>
-        public PartyMemberHealth this[int index] => new (this._data.Slice(4 + index * PartyMemberHealth.Length));
+        public PartyMemberHealth this[int index] =>
+            (index < 0 || 4 + index * PartyMemberHealth.Length + PartyMemberHealth.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PartyMemberHealth(this._data.Slice(4 + index * PartyMemberHealth.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="PartyHealthUpdate"/>.
@@ -8361,7 +8403,10 @@ public readonly struct ItemDropRemoved
     /// <summary>
     /// Gets the <see cref="DroppedItemId"/> of the specified index.
     /// </summary>
-        public DroppedItemId this[int index] => new (this._data.Slice(5 + index * DroppedItemId.Length));
+        public DroppedItemId this[int index] =>
+            (index < 0 || 5 + index * DroppedItemId.Length + DroppedItemId.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new DroppedItemId(this._data.Slice(5 + index * DroppedItemId.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ItemDropRemoved"/>.
@@ -11748,7 +11793,10 @@ public readonly struct PlayerShopItemList
     /// <summary>
     /// Gets the <see cref="PlayerShopItem"/> of the specified index.
     /// </summary>
-        public PlayerShopItem this[int index] => new (this._data.Slice(55 + index * PlayerShopItem.Length));
+        public PlayerShopItem this[int index] =>
+            (index < 0 || 55 + index * PlayerShopItem.Length + PlayerShopItem.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PlayerShopItem(this._data.Slice(55 + index * PlayerShopItem.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="PlayerShopItemList"/>.
@@ -12335,7 +12383,10 @@ public readonly struct PlayerShops
     /// <summary>
     /// Gets the <see cref="PlayerShop"/> of the specified index.
     /// </summary>
-        public PlayerShop this[int index] => new (this._data.Slice(6 + index * PlayerShop.Length));
+        public PlayerShop this[int index] =>
+            (index < 0 || 6 + index * PlayerShop.Length + PlayerShop.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PlayerShop(this._data.Slice(6 + index * PlayerShop.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="PlayerShops"/>.
@@ -12462,7 +12513,10 @@ public readonly struct AddTransformedCharactersToScope075
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(5 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 5 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(5 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AddTransformedCharactersToScope075"/>.
@@ -12825,7 +12879,10 @@ public readonly struct CharacterData
     /// <summary>
     /// Gets the <see cref="EffectId"/> of the specified index.
     /// </summary>
-        public EffectId this[int index] => new (this._data.Slice(38 + index * EffectId.Length));
+        public EffectId this[int index] =>
+            (index < 0 || 38 + index * EffectId.Length + EffectId.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new EffectId(this._data.Slice(38 + index * EffectId.Length));
 
     /// <summary>
     /// Calculates the size of the packet for the specified count of <see cref="EffectId"/>.
@@ -12989,7 +13046,10 @@ public readonly struct ChangeTerrainAttributes
     /// <summary>
     /// Gets the <see cref="TerrainArea"/> of the specified index.
     /// </summary>
-        public TerrainArea this[int index] => new (this._data.Slice(7 + index * TerrainArea.Length));
+        public TerrainArea this[int index] =>
+            (index < 0 || 7 + index * TerrainArea.Length + TerrainArea.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new TerrainArea(this._data.Slice(7 + index * TerrainArea.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ChangeTerrainAttributes"/>.
@@ -13277,7 +13337,10 @@ public readonly struct CharacterList
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(8 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 8 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(8 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CharacterList"/>.
@@ -13482,7 +13545,10 @@ public readonly struct CharacterListExtended
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(8 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 8 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(8 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CharacterListExtended"/>.
@@ -13746,7 +13812,10 @@ public readonly struct CharacterList075
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(5 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 5 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(5 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CharacterList075"/>.
@@ -13915,7 +13984,10 @@ public readonly struct CharacterList095
     /// <summary>
     /// Gets the <see cref="CharacterData"/> of the specified index.
     /// </summary>
-        public CharacterData this[int index] => new (this._data.Slice(5 + index * CharacterData.Length));
+        public CharacterData this[int index] =>
+            (index < 0 || 5 + index * CharacterData.Length + CharacterData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CharacterData(this._data.Slice(5 + index * CharacterData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CharacterList095"/>.
@@ -15358,7 +15430,10 @@ public readonly struct SkillListUpdate
     /// <summary>
     /// Gets the <see cref="SkillEntry"/> of the specified index.
     /// </summary>
-        public SkillEntry this[int index] => new (this._data.Slice(6 + index * SkillEntry.Length));
+        public SkillEntry this[int index] =>
+            (index < 0 || 6 + index * SkillEntry.Length + SkillEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new SkillEntry(this._data.Slice(6 + index * SkillEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="SkillListUpdate"/>.
@@ -15921,7 +15996,10 @@ public readonly struct SkillListUpdate075
     /// <summary>
     /// Gets the <see cref="SkillEntry"/> of the specified index.
     /// </summary>
-        public SkillEntry this[int index] => new (this._data.Slice(5 + index * SkillEntry.Length));
+        public SkillEntry this[int index] =>
+            (index < 0 || 5 + index * SkillEntry.Length + SkillEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new SkillEntry(this._data.Slice(5 + index * SkillEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="SkillListUpdate075"/>.
@@ -19751,7 +19829,10 @@ public readonly struct MasterSkillList
     /// <summary>
     /// Gets the <see cref="MasterSkillEntry"/> of the specified index.
     /// </summary>
-        public MasterSkillEntry this[int index] => new (this._data.Slice(12 + index * MasterSkillEntry.Length));
+        public MasterSkillEntry this[int index] =>
+            (index < 0 || 12 + index * MasterSkillEntry.Length + MasterSkillEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new MasterSkillEntry(this._data.Slice(12 + index * MasterSkillEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="MasterSkillList"/>.
@@ -20252,7 +20333,10 @@ public readonly struct GuildList
     /// <summary>
     /// Gets the <see cref="GuildMember"/> of the specified index.
     /// </summary>
-        public GuildMember this[int index] => new (this._data.Slice(24 + index * GuildMember.Length));
+        public GuildMember this[int index] =>
+            (index < 0 || 24 + index * GuildMember.Length + GuildMember.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new GuildMember(this._data.Slice(24 + index * GuildMember.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="GuildList"/>.
@@ -20424,7 +20508,10 @@ public readonly struct GuildList075
     /// <summary>
     /// Gets the <see cref="GuildMember"/> of the specified index.
     /// </summary>
-        public GuildMember this[int index] => new (this._data.Slice(13 + index * GuildMember.Length));
+        public GuildMember this[int index] =>
+            (index < 0 || 13 + index * GuildMember.Length + GuildMember.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new GuildMember(this._data.Slice(13 + index * GuildMember.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="GuildList075"/>.
@@ -21865,7 +21952,10 @@ public readonly struct AllianceList
     /// <summary>
     /// Gets the <see cref="AllianceGuildEntry"/> of the specified index.
     /// </summary>
-        public AllianceGuildEntry this[int index] => new (this._data.Slice(8 + index * AllianceGuildEntry.Length));
+        public AllianceGuildEntry this[int index] =>
+            (index < 0 || 8 + index * AllianceGuildEntry.Length + AllianceGuildEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new AllianceGuildEntry(this._data.Slice(8 + index * AllianceGuildEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AllianceList"/>.
@@ -22104,7 +22194,10 @@ public readonly struct AssignCharacterToGuild
     /// <summary>
     /// Gets the <see cref="GuildMemberRelation"/> of the specified index.
     /// </summary>
-        public GuildMemberRelation this[int index] => new (this._data.Slice(5 + index * GuildMemberRelation.Length));
+        public GuildMemberRelation this[int index] =>
+            (index < 0 || 5 + index * GuildMemberRelation.Length + GuildMemberRelation.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new GuildMemberRelation(this._data.Slice(5 + index * GuildMemberRelation.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AssignCharacterToGuild"/>.
@@ -22249,7 +22342,10 @@ public readonly struct AssignCharacterToGuild075
     /// <summary>
     /// Gets the <see cref="GuildMemberRelation"/> of the specified index.
     /// </summary>
-        public GuildMemberRelation this[int index] => new (this._data.Slice(5 + index * GuildMemberRelation.Length));
+        public GuildMemberRelation this[int index] =>
+            (index < 0 || 5 + index * GuildMemberRelation.Length + GuildMemberRelation.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new GuildMemberRelation(this._data.Slice(5 + index * GuildMemberRelation.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AssignCharacterToGuild075"/>.
@@ -22490,7 +22586,10 @@ public readonly struct GuildInformations075
     /// <summary>
     /// Gets the <see cref="GuildInfo"/> of the specified index.
     /// </summary>
-        public GuildInfo this[int index] => new (this._data.Slice(5 + index * GuildInfo.Length));
+        public GuildInfo this[int index] =>
+            (index < 0 || 5 + index * GuildInfo.Length + GuildInfo.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new GuildInfo(this._data.Slice(5 + index * GuildInfo.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="GuildInformations075"/>.
@@ -23713,7 +23812,10 @@ public readonly struct LegacyQuestMonsterKillInfo
     /// <summary>
     /// Gets the <see cref="MonsterKillInfo"/> of the specified index.
     /// </summary>
-        public MonsterKillInfo this[int index] => new (this._data.Slice(8 + index * MonsterKillInfo.Length));
+        public MonsterKillInfo this[int index] =>
+            (index < 0 || 8 + index * MonsterKillInfo.Length + MonsterKillInfo.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new MonsterKillInfo(this._data.Slice(8 + index * MonsterKillInfo.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="LegacyQuestMonsterKillInfo"/>.
@@ -24770,7 +24872,10 @@ public readonly struct DuelStatus
     /// <summary>
     /// Gets the <see cref="DuelRoomStatus"/> of the specified index.
     /// </summary>
-        public DuelRoomStatus this[int index] => new (this._data.Slice(4 + index * DuelRoomStatus.Length));
+        public DuelRoomStatus this[int index] =>
+            (index < 0 || 4 + index * DuelRoomStatus.Length + DuelRoomStatus.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new DuelRoomStatus(this._data.Slice(4 + index * DuelRoomStatus.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="DuelStatus"/>.
@@ -25300,7 +25405,10 @@ public readonly struct DuelSpectatorList
     /// <summary>
     /// Gets the <see cref="DuelSpectator"/> of the specified index.
     /// </summary>
-        public DuelSpectator this[int index] => new (this._data.Slice(5 + index * DuelSpectator.Length));
+        public DuelSpectator this[int index] =>
+            (index < 0 || 5 + index * DuelSpectator.Length + DuelSpectator.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new DuelSpectator(this._data.Slice(5 + index * DuelSpectator.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="DuelSpectatorList"/>.
@@ -25760,7 +25868,10 @@ public readonly struct IllusionTempleState
     /// <summary>
     /// Gets the <see cref="IllusionTemplePartyEntry"/> of the specified index.
     /// </summary>
-        public IllusionTemplePartyEntry this[int index] => new (this._data.Slice(12 + index * IllusionTemplePartyEntry.Length));
+        public IllusionTemplePartyEntry this[int index] =>
+            (index < 0 || 12 + index * IllusionTemplePartyEntry.Length + IllusionTemplePartyEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new IllusionTemplePartyEntry(this._data.Slice(12 + index * IllusionTemplePartyEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="IllusionTempleState"/>.
@@ -26174,7 +26285,10 @@ public readonly struct IllusionTempleResult
     /// <summary>
     /// Gets the <see cref="PlayerResult"/> of the specified index.
     /// </summary>
-        public PlayerResult this[int index] => new (this._data.Slice(10 + index * PlayerResult.Length));
+        public PlayerResult this[int index] =>
+            (index < 0 || 10 + index * PlayerResult.Length + PlayerResult.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new PlayerResult(this._data.Slice(10 + index * PlayerResult.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="IllusionTempleResult"/>.
@@ -26748,7 +26862,10 @@ public readonly struct ChainLightningHitInfo
     /// <summary>
     /// Gets the <see cref="ChainTarget"/> of the specified index.
     /// </summary>
-        public ChainTarget this[int index] => new (this._data.Slice(10 + index * ChainTarget.Length));
+        public ChainTarget this[int index] =>
+            (index < 0 || 10 + index * ChainTarget.Length + ChainTarget.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ChainTarget(this._data.Slice(10 + index * ChainTarget.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ChainLightningHitInfo"/>.
@@ -27066,7 +27183,10 @@ public readonly struct MessengerInitialization
     /// <summary>
     /// Gets the <see cref="Friend"/> of the specified index.
     /// </summary>
-        public Friend this[int index] => new (this._data.Slice(7 + index * Friend.Length));
+        public Friend this[int index] =>
+            (index < 0 || 7 + index * Friend.Length + Friend.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new Friend(this._data.Slice(7 + index * Friend.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="MessengerInitialization"/>.
@@ -28358,7 +28478,10 @@ public readonly struct QuestEventResponse
     /// <summary>
     /// Gets the <see cref="QuestIdentification"/> of the specified index.
     /// </summary>
-        public QuestIdentification this[int index] => new (this._data.Slice(4 + index * QuestIdentification.Length));
+        public QuestIdentification this[int index] =>
+            (index < 0 || 4 + index * QuestIdentification.Length + QuestIdentification.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new QuestIdentification(this._data.Slice(4 + index * QuestIdentification.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestEventResponse"/>.
@@ -28453,7 +28576,10 @@ public readonly struct AvailableQuests
     /// <summary>
     /// Gets the <see cref="QuestIdentification"/> of the specified index.
     /// </summary>
-        public QuestIdentification this[int index] => new (this._data.Slice(8 + index * QuestIdentification.Length));
+        public QuestIdentification this[int index] =>
+            (index < 0 || 8 + index * QuestIdentification.Length + QuestIdentification.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new QuestIdentification(this._data.Slice(8 + index * QuestIdentification.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AvailableQuests"/>.
@@ -29109,7 +29235,10 @@ public readonly struct QuestStateList
     /// <summary>
     /// Gets the <see cref="QuestIdentification"/> of the specified index.
     /// </summary>
-        public QuestIdentification this[int index] => new (this._data.Slice(5 + index * QuestIdentification.Length));
+        public QuestIdentification this[int index] =>
+            (index < 0 || 5 + index * QuestIdentification.Length + QuestIdentification.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new QuestIdentification(this._data.Slice(5 + index * QuestIdentification.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestStateList"/>.
@@ -29943,7 +30072,10 @@ public readonly struct MiniGameScoreTable
     /// <summary>
     /// Gets the <see cref="ResultItem"/> of the specified index.
     /// </summary>
-        public ResultItem this[int index] => new (this._data.Slice(5 + index * ResultItem.Length));
+        public ResultItem this[int index] =>
+            (index < 0 || 5 + index * ResultItem.Length + ResultItem.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ResultItem(this._data.Slice(5 + index * ResultItem.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="MiniGameScoreTable"/>.
@@ -30795,7 +30927,10 @@ public readonly struct AvailableChatCommand
     /// <summary>
     /// Gets the <see cref="ChatCommandParameter"/> of the specified index.
     /// </summary>
-        public ChatCommandParameter this[int index] => new (this._data.Slice(345 + index * ChatCommandParameter.Length));
+        public ChatCommandParameter this[int index] =>
+            (index < 0 || 345 + index * ChatCommandParameter.Length + ChatCommandParameter.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ChatCommandParameter(this._data.Slice(345 + index * ChatCommandParameter.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AvailableChatCommand"/>.
@@ -33849,7 +33984,10 @@ public readonly struct CastleSiegeNpcList
     /// <summary>
     /// Gets the <see cref="CastleSiegeNpcInfo"/> of the specified index.
     /// </summary>
-        public CastleSiegeNpcInfo this[int index] => new (this._data.Slice(9 + index * CastleSiegeNpcInfo.Length));
+        public CastleSiegeNpcInfo this[int index] =>
+            (index < 0 || 9 + index * CastleSiegeNpcInfo.Length + CastleSiegeNpcInfo.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CastleSiegeNpcInfo(this._data.Slice(9 + index * CastleSiegeNpcInfo.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CastleSiegeNpcList"/>.
@@ -34048,7 +34186,10 @@ public readonly struct CastleSiegeRegisteredGuildList
     /// <summary>
     /// Gets the <see cref="RegisteredGuildEntry"/> of the specified index.
     /// </summary>
-        public RegisteredGuildEntry this[int index] => new (this._data.Slice(9 + index * RegisteredGuildEntry.Length));
+        public RegisteredGuildEntry this[int index] =>
+            (index < 0 || 9 + index * RegisteredGuildEntry.Length + RegisteredGuildEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new RegisteredGuildEntry(this._data.Slice(9 + index * RegisteredGuildEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CastleSiegeRegisteredGuildList"/>.
@@ -34202,7 +34343,10 @@ public readonly struct CastleSiegeGuildList
     /// <summary>
     /// Gets the <see cref="CastleSiegeGuildEntry"/> of the specified index.
     /// </summary>
-        public CastleSiegeGuildEntry this[int index] => new (this._data.Slice(9 + index * CastleSiegeGuildEntry.Length));
+        public CastleSiegeGuildEntry this[int index] =>
+            (index < 0 || 9 + index * CastleSiegeGuildEntry.Length + CastleSiegeGuildEntry.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new CastleSiegeGuildEntry(this._data.Slice(9 + index * CastleSiegeGuildEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CastleSiegeGuildList"/>.
@@ -34347,7 +34491,10 @@ public readonly struct CastleSiegeMiniMapPlayerPositions
     /// <summary>
     /// Gets the <see cref="MiniMapPlayerPosition"/> of the specified index.
     /// </summary>
-        public MiniMapPlayerPosition this[int index] => new (this._data.Slice(8 + index * MiniMapPlayerPosition.Length));
+        public MiniMapPlayerPosition this[int index] =>
+            (index < 0 || 8 + index * MiniMapPlayerPosition.Length + MiniMapPlayerPosition.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new MiniMapPlayerPosition(this._data.Slice(8 + index * MiniMapPlayerPosition.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CastleSiegeMiniMapPlayerPositions"/>.
@@ -35192,7 +35339,10 @@ public readonly struct CastleSiegeMiniMapNpcPositions
     /// <summary>
     /// Gets the <see cref="MiniMapNpcPosition"/> of the specified index.
     /// </summary>
-        public MiniMapNpcPosition this[int index] => new (this._data.Slice(5 + index * MiniMapNpcPosition.Length));
+        public MiniMapNpcPosition this[int index] =>
+            (index < 0 || 5 + index * MiniMapNpcPosition.Length + MiniMapNpcPosition.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new MiniMapNpcPosition(this._data.Slice(5 + index * MiniMapNpcPosition.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="CastleSiegeMiniMapNpcPositions"/>.

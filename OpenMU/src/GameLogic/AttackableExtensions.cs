@@ -224,7 +224,9 @@ public static class AttackableExtensions
 
         if (!balanceV1Enabled && !isPvp && defender.Overrates(attacker))
         {
-            dmg = (int)(dmg * 0.3);
+            var overrateMultiplier = EarlyGameBalance.GetOverrateMultiplier(
+                EarlyGameBalance.GetAttackerLevel(attacker));
+            dmg = (int)(dmg * overrateMultiplier);
         }
 
         dmg -= (int)(dmg * defender.Attributes[Stats.ArmorDamageDecrease]);
@@ -758,13 +760,20 @@ public static class AttackableExtensions
             return (float)BalanceV1.CalculateHitChance(attackRate, defenseRate);
         }
 
-        float hitChance = 0.03f;
+        float legacyHitChance = 0.03f;
         if (defenseRate < attackRate)
         {
-            hitChance = 1.0f - (defenseRate / attackRate);
+            legacyHitChance = 1.0f - (defenseRate / attackRate);
         }
 
-        return hitChance;
+        var isPlayerVersusMonster = attacker is Player && defender is not Player;
+        if (!isPlayerVersusMonster)
+        {
+            return legacyHitChance;
+        }
+
+        var attackerLevel = EarlyGameBalance.GetAttackerLevel(attacker);
+        return EarlyGameBalance.AdjustHitChance(attackerLevel, legacyHitChance);
     }
 
     private static bool IsBalanceV1Enabled(IAttacker attacker, IAttackable defender)

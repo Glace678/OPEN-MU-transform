@@ -1,8 +1,10 @@
-﻿// <copyright file="DataUpdateService.cs" company="MUnique">
+// <copyright file="DataUpdateService.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.OpenMU.Persistence.Initialization.Updates;
+
+using System.Threading;
 
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.PlugIns;
@@ -14,6 +16,11 @@ public class DataUpdateService
 {
     private readonly IPersistenceContextProvider _contextProvider;
     private readonly PlugInManager _plugInManager;
+
+    /// <summary>
+    /// Serializes update application so two concurrent runs can't interleave DB changes. (#26)
+    /// </summary>
+    private readonly SemaphoreSlim _updateLock = new(1, 1);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataUpdateService"/> class.
@@ -70,6 +77,9 @@ public class DataUpdateService
     /// <param name="progress">The progress provider. Reports the progress back to the caller.</param>
     public async ValueTask ApplyUpdatesAsync(IReadOnlyList<IConfigurationUpdatePlugIn> updates, IProgress<(UpdateVersion CurrentUpdatingVersion, bool IsCompleted)> progress)
     {
+        await this._updateLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
         using var context = this._contextProvider.CreateNewContext();
         var updateStates = await context.GetAsync<ConfigurationUpdateState>().ConfigureAwait(false);
         var updateState = updateStates.FirstOrDefault() ?? context.CreateNew<ConfigurationUpdateState>();
@@ -88,6 +98,11 @@ public class DataUpdateService
 
         progress.Report((UpdateVersion.Undefined, true));
         this.UpdatesInstalled?.SafeInvokeAsync();
+        }
+        finally
+        {
+            this._updateLock.Release();
+        }
     }
 
     private async ValueTask<string> DetermineInitializationKeyAsync(IContext context)

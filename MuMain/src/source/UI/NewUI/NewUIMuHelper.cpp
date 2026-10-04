@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 
 #include <algorithm>
 #include <vector>
@@ -837,7 +837,7 @@ bool CNewUIMuHelper::UpdateMouseEvent()
     if (IsRelease(VK_RBUTTON))
     {
         int iSlotIndex = UpdateMouseIconList();
-        if (iSlotIndex != -1)
+        if (iSlotIndex >= 0 && iSlotIndex < 6)  // #MG-25: only real skill slots [0,5]; control IDs 6-9 must not index m_aiSelectedSkills
         {
             g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Clicked slot slot [%d]", iSlotIndex);
             m_aiSelectedSkills[iSlotIndex] = -1;

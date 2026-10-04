@@ -32,7 +32,8 @@ void CTimer::ResetTimer()
 void CTimer2::SetTimer(unsigned int delay)
 {
     m_delay = delay;
-    m_startTickCount = 0;
+    m_timerStarted = false;
+    m_timeReached = false;
 }
 
 unsigned int CTimer2::GetDelay() const
@@ -42,37 +43,35 @@ unsigned int CTimer2::GetDelay() const
 
 void CTimer2::ResetTimer()
 {
-    m_startTickCount = 0;
+    m_timerStarted = false;
+    m_timeReached = false;
 }
 
 void CTimer2::UpdateTime()
 {
     using SteadyClock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<SteadyClock>;
-
-    static TimePoint startTickTime;
 
     if (m_delay == 0)
     {
         m_timeReached = true;
+        return;
     }
-    else
+
+    m_timeReached = false;
+    auto now = SteadyClock::now();
+
+    if (!m_timerStarted)
     {
-        m_timeReached = false;
-        auto now = SteadyClock::now();
+        m_startTickTime = now;
+        m_timerStarted = true;
+        return;
+    }
 
-        if (m_startTickCount == 0)
-        {
-            startTickTime = now;
-            m_startTickCount = 1; // Mark initialization
-            return;
-        }
-
-        if (now - startTickTime > std::chrono::milliseconds(m_delay))
-        {
-            startTickTime = now;
-            m_timeReached = true;
-        }
+    const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_startTickTime);
+    if (elapsed.count() > static_cast<long long>(m_delay))
+    {
+        m_startTickTime = now;
+        m_timeReached = true;
     }
 }
 

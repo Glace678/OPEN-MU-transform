@@ -427,7 +427,10 @@ public readonly struct ServerListResponse
     /// <summary>
     /// Gets the <see cref="ServerLoadInfo"/> of the specified index.
     /// </summary>
-        public ServerLoadInfo this[int index] => new (this._data.Slice(7 + index * ServerLoadInfo.Length));
+        public ServerLoadInfo this[int index] =>
+            (index < 0 || 7 + index * ServerLoadInfo.Length + ServerLoadInfo.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ServerLoadInfo(this._data.Slice(7 + index * ServerLoadInfo.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ServerListResponse"/>.
@@ -638,7 +641,10 @@ public readonly struct ServerListResponseOld
     /// <summary>
     /// Gets the <see cref="ServerLoadInfo"/> of the specified index.
     /// </summary>
-        public ServerLoadInfo this[int index] => new (this._data.Slice(6 + index * ServerLoadInfo.Length));
+        public ServerLoadInfo this[int index] =>
+            (index < 0 || 6 + index * ServerLoadInfo.Length + ServerLoadInfo.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ServerLoadInfo(this._data.Slice(6 + index * ServerLoadInfo.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ServerListResponseOld"/>.

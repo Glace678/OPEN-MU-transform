@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -342,7 +342,7 @@ void PrintItem(wchar_t* FileName)
                     if (Excellent)
                     {
                         if (p->Level)
-                            DamageMax += p->DamageMin * 25 / p->Level + 5;
+                            DamageMax += p->DamageMax * 25 / p->Level + 5;
                     }
                     DamageMax += Level * 3;
                 }
@@ -2389,6 +2389,7 @@ void OpenMonsterScript(wchar_t* FileName)
         SMDToken token = GetToken();
         if (token == END) break;
         if (token == NAME && strcmp("end", TokenString) == 0) break;
+        if (EditMonsterNumber >= MAX_MONSTER) break;
         MONSTER_SCRIPT* m = &MonsterScript[EditMonsterNumber++];
         m->Type = static_cast<int>(TokenNumber);
         token = GetToken();

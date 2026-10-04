@@ -5,6 +5,7 @@
 namespace MUnique.Client.Library;
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using MUnique.OpenMU.Network;
@@ -74,7 +75,13 @@ public partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_SendChatMessageExt")]
     public static void SendChatMessageExt(int handle, byte @senderIndex, IntPtr @message)
     {
-        if (!Connections.TryGetValue(handle, out var connection))
+        ConnectionWrapper? connection;
+        lock (ConnectionsLock)
+        {
+            Connections.TryGetValue(handle, out connection);
+        }
+
+        if (connection is null)
         {
             return;
         }
@@ -83,8 +90,16 @@ public partial class ConnectionManager
         {
             connection.CreateAndSend(pipeWriter =>
             {
-                var messageString = NativeInterop.PtrToWideString(@message);
-                var messageLength = Encoding.UTF8.GetByteCount(messageString!);
+                var messageString = NativeInterop.PtrToWideString(@message) ?? string.Empty;
+                var messageLength = Encoding.UTF8.GetByteCount(messageString);
+
+                const int MaximumChatMessageBytes = 250;
+                if (messageLength is <= 0 or > MaximumChatMessageBytes)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(message),
+                        $"The chat message must contain 1 to {MaximumChatMessageBytes} UTF-8 bytes.");
+                }
 
                 var length = ChatMessageRef.GetRequiredSize(messageLength);
                 var packet = new ChatMessageRef(pipeWriter.GetSpan(length)[..length]);
@@ -96,9 +111,9 @@ public partial class ConnectionManager
                 return length;
             });
         }
-        catch
+        catch (Exception ex)
         {
-            // Log exception
+            Debug.WriteLine($"Failed to send chat message: {ex.Message}");
         }
     }
 }

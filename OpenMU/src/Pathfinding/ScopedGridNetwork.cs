@@ -60,7 +60,7 @@ public sealed class ScopedGridNetwork : BaseGridNetwork
     {
         var diffX = Math.Abs(end.X - start.X);
         var diffY = Math.Abs(end.Y - start.Y);
-        if (diffX > this._maximumSegmentSideLength || diffY > this._maximumSegmentSideLength)
+        if (diffX > this._maximumSegmentSideLength - 1 || diffY > this._maximumSegmentSideLength - 1)
         {
             return false;
         }

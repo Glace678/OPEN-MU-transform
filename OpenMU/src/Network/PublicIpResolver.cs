@@ -1,4 +1,4 @@
-﻿// <copyright file="PublicIpResolver.cs" company="MUnique">
+// <copyright file="PublicIpResolver.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Network;
 
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
@@ -17,6 +18,7 @@ public class PublicIpResolver : IIpAddressResolver
     private readonly TimeSpan _maximumCachedAddressLifetime = new(0, 5, 0);
     private IPAddress? _publicIPv4;
     private DateTime _lastRequest = DateTime.MinValue;
+    private readonly SemaphoreSlim _refreshLock = new(1, 1);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PublicIpResolver"/> class.
@@ -33,13 +35,27 @@ public class PublicIpResolver : IIpAddressResolver
     /// <returns>The public IPv4 address.</returns>
     public async ValueTask<IPAddress> ResolveIPv4Async()
     {
-        if (this._lastRequest + this._maximumCachedAddressLifetime < DateTime.Now)
+        if (this._publicIPv4 is not null && this._lastRequest + this._maximumCachedAddressLifetime >= DateTime.Now)
         {
-            this._publicIPv4 = await this.InternalGetIPv4Async().ConfigureAwait(false);
-            this._lastRequest = DateTime.Now;
+            return this._publicIPv4;
         }
 
-        return this._publicIPv4!;
+        // Coalesce concurrent refresh requests, so only one call hits the external API. (Code5#4)
+        await this._refreshLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (this._publicIPv4 is null || this._lastRequest + this._maximumCachedAddressLifetime < DateTime.Now)
+            {
+                this._publicIPv4 = await this.InternalGetIPv4Async().ConfigureAwait(false);
+                this._lastRequest = DateTime.Now;
+            }
+
+            return this._publicIPv4;
+        }
+        finally
+        {
+            this._refreshLock.Release();
+        }
     }
 
     private async ValueTask<IPAddress> InternalGetIPv4Async()

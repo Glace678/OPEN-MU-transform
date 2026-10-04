@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/Legacy/UIWindows.h"
 #include "Render/Textures/ZzzOpenglUtil.h"
 #include "Render/Textures/ZzzTexture.h"
@@ -2169,6 +2169,7 @@ void M34CryWolf1st::Check_AltarState(int Num, int State)
 {
     if (M34CryWolf1st::Get_State_Only_Elf() == false || M34CryWolf1st::IsCyrWolf1st() == false)
         return;
+    if (Num < 1 || Num > 5) return;  // #MG-32: m_AltarState[5]
     m_AltarState[Num - 1] = State;
 }
 
@@ -2176,6 +2177,8 @@ void M34CryWolf1st::Set_Message_Box(int Str, int Num, int Key, int ObjNum)
 {
     if (M34CryWolf1st::Get_State_Only_Elf() == false || M34CryWolf1st::IsCyrWolf1st() == false || LogOut)
         return;
+    if (Num < 0 || Num >= 2) return;  // #MG-32: Box_String[2][200]
+    if (ObjNum < 0 || ObjNum >= 5) return;  // #MG-32: m_AltarState[5]
 
     if (Str == 56)
     {
@@ -2653,7 +2656,7 @@ bool M34CryWolf1st::Render_Mvp_Interface()
             Deco_Insert -= 1.f;
     }
 
-    if (TimeStart = true)
+    if (TimeStart == true)
     {
         int nPastHour = m_iHour;
         int nPastMinute;
@@ -2734,6 +2737,7 @@ void M34CryWolf1st::Set_MyRank(BYTE MyRank, int GettingExp)
 
 void M34CryWolf1st::Set_WorldRank(BYTE Rank, CLASS_TYPE Class, int Score, wchar_t* szHeroName)
 {
+    if (Rank >= 5 || szHeroName == nullptr) return;  // #MG-33: HeroScore/HeroClass/HeroName[5]
     HeroScore[Rank] = Score;
     HeroClass[Rank] = Class;
     wcsncpy_s(HeroName[Rank], szHeroName, MAX_USERNAME_SIZE);

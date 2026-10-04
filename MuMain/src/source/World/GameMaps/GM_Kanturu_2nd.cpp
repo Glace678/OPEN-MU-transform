@@ -1,4 +1,4 @@
-﻿// GM_Kanturu_In.cpp: implementation of the GM_Kanturu_In class.
+// GM_Kanturu_In.cpp: implementation of the GM_Kanturu_In class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -286,7 +286,7 @@ bool M38Kanturu2nd::Move_Kanturu2nd_MonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
             && o->AnimationFrame <= 6.5f
             && rand_fps_check(1))
         {
-            CHARACTER* tc = &CharactersClient[c->TargetCharacter];
+            if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) return false; CHARACTER* tc = &CharactersClient[c->TargetCharacter];
             OBJECT* to = &tc->Object;
             vec3_t vLight;
 
@@ -1276,7 +1276,7 @@ void M38Kanturu2nd::Move_Kanturu2nd_BlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            CHARACTER* tc = &CharactersClient[c->TargetCharacter];
+            if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) return; CHARACTER* tc = &CharactersClient[c->TargetCharacter];
             OBJECT* to = &tc->Object;
 
             vec3_t vPos, vRelative;
@@ -1427,7 +1427,7 @@ void CTrapCanon::Render_AttackEffect(CHARACTER* c, OBJECT* o, BMD* b)
 {
     if (c->CheckAttackTime(1))
     {
-        CHARACTER* tc = &CharactersClient[c->TargetCharacter];
+        if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) return; CHARACTER* tc = &CharactersClient[c->TargetCharacter];
         OBJECT* to = &tc->Object;
         vec3_t vPos, vPos2;
         VectorCopy(o->Position, vPos);

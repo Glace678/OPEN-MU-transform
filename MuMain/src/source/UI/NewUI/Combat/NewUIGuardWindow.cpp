@@ -167,7 +167,7 @@ bool CNewUIGuardWindow::Render()
 
     RenderFrame();
 
-    static std::list<const wchar_t* const*> ltext;
+    std::list<const wchar_t* const*> ltext;
     if (m_eTimeType == CASTLESIEGE_STATE_REGSIEGE)
     {
         ltext.push_back(&I18N::Game::Status);

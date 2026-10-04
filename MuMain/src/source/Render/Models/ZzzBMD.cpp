@@ -1271,6 +1271,10 @@ int BMD::AddToCoinHeap(int coinIndex, int target_vertex_index)
         for (int k = 0; k < triangle->Polygon; k++)
         {
             const int source_vertex_index = triangle->VertexIndex[k];
+            // #MG-04: corrupted triangle indices must not index past the mesh
+            if (source_vertex_index < 0 || source_vertex_index >= m->NumVertices ||
+                triangle->TexCoordIndex[k] < 0 || triangle->TexCoordIndex[k] >= m->NumTexCoords ||
+                triangle->NormalIndex[k] < 0 || triangle->NormalIndex[k] >= m->NumNormals) continue;
             target_vertex_index++;
 
             VectorCopy(VertexTransform[meshIndex][source_vertex_index], vertices[target_vertex_index]);
@@ -1941,6 +1945,10 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
         for (int k = 0; k < triangle->Polygon; k++)
         {
             const int source_vertex_index = triangle->VertexIndex[k];
+            // #MG-04: corrupted triangle indices must not index past the mesh
+            if (source_vertex_index < 0 || source_vertex_index >= m->NumVertices ||
+                triangle->TexCoordIndex[k] < 0 || triangle->TexCoordIndex[k] >= m->NumTexCoords ||
+                triangle->NormalIndex[k] < 0 || triangle->NormalIndex[k] >= m->NumNormals) continue;
             target_vertex_index++;
 
             VectorCopy(VertexTransform[meshIndex][source_vertex_index], vertices[target_vertex_index]);
@@ -3088,14 +3096,19 @@ public:
 
     template <typename T>
     T Read() {
-        T value;
-        memcpy(&value, data + ptr, sizeof(T));
+        T value{};
+        // #MG-02: bounds-safe read; a truncated BMD must not memcpy past the buffer.
+        if (ptr + sizeof(T) <= size) memcpy(&value, data + ptr, sizeof(T));
         ptr += sizeof(T);
         return value;
     }
 
     void ReadBytes(void* dst, size_t count) {
-        memcpy(dst, data + ptr, count);
+        // #MG-02: bounds-safe read; clamp to available bytes, zero-fill the rest.
+        size_t avail = (ptr < size) ? (size - ptr) : 0;
+        size_t copy = (count < avail) ? count : avail;
+        if (copy > 0) memcpy(dst, data + ptr, copy);
+        if (copy < count) memset((unsigned char*)dst + copy, 0, count - copy);
         ptr += count;
     }
 
@@ -3350,9 +3363,9 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
 
 bool BMD::Save2(wchar_t* DirName, wchar_t* ModelFileName)
 {
-    wchar_t ModelName[64];
-    wcscpy(ModelName, DirName);
-    wcscat(ModelName, ModelFileName);
+    wchar_t ModelName[260] = {};  // #MG-03: was 64; bounded concat, no wcscpy/wcscat overflow
+    wcsncat(ModelName, DirName, std::size(ModelName) - 1);
+    wcsncat(ModelName, ModelFileName, std::size(ModelName) - 1 - wcslen(ModelName));
     FILE* fp = _wfopen(ModelName, L"wb");
     if (fp == nullptr) return false;
     putc('B', fp);

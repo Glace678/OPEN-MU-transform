@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      # Pinned to a reviewed full commit SHA (v4.1.1); update via controlled
+      # dependency review instead of following the moving v4 tag (G-02).
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Probe GitHub Models
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

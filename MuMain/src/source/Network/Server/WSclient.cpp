@@ -544,19 +544,37 @@ static bool TrySelectLocalServer()
     return false;
 }
 
-void ReceiveServerList(const BYTE* ReceiveBuffer)
+void ReceiveServerList(const BYTE* ReceiveBuffer, int32_t Size)
 {
     auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
     int Offset = sizeof(PHEADER_DEFAULT_SUBCODE_WORD);
+    if (Offset >= Size)
+    {
+        return;
+    }
 
     BYTE Value2 = *(ReceiveBuffer + Offset++);
 
     g_ServerListManager->Release();
 
-    g_ServerListManager->SetTotalServer(MAKEWORD(Value2, Data->Value));
-
-    for (int i = 0; i < g_ServerListManager->GetTotalServer(); i++)
+    const int totalServer = MAKEWORD(Value2, Data->Value);
+    constexpr int MaximumServerListEntries = 200;
+    if (totalServer > MaximumServerListEntries)
     {
+        g_ErrorReport.Write(L"Rejected server list with implausible count %d.\r\n", totalServer);
+        return;
+    }
+
+    g_ServerListManager->SetTotalServer(totalServer);
+
+    for (int i = 0; i < totalServer; i++)
+    {
+        if (Offset + static_cast<int>(sizeof(PRECEIVE_SERVER_LIST)) > Size)
+        {
+            g_ErrorReport.Write(L"Server list truncated at entry %d of %d.\r\n", i, totalServer);
+            break;
+        }
+
         auto Data2 = (LPPRECEIVE_SERVER_LIST)(ReceiveBuffer + Offset);
 
         g_ServerListManager->InsertServerGroup(Data2->Index, Data2->Percent);
@@ -768,24 +786,38 @@ void ReceiveChangePassword(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveCharacterListExtended(const BYTE* ReceiveBuffer)
+void ReceiveCharacterListExtended(const std::span<const BYTE> Packet)
 {
     InitGuildWar();
 
-    auto Data = (LPPHEADER_DEFAULT_CHARACTER_LIST)ReceiveBuffer;
+    auto Data = (LPPHEADER_DEFAULT_CHARACTER_LIST)Packet.data();
 
     int Offset = sizeof(PHEADER_DEFAULT_CHARACTER_LIST);
+    const int PacketSize = static_cast<int>(Packet.size());
+    const int CharacterCount = Data->CharacterCount;
+    constexpr int MaximumCharacterEntries = 10;
+    if (CharacterCount > MaximumCharacterEntries)
+    {
+        g_ErrorReport.Write(L"Rejected character list with implausible count %d.\r\n", CharacterCount);
+        return;
+    }
 
 #ifdef _DEBUG
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"[ReceiveList Count %d Max class %d]", Data->CharacterCount, Data->MaxClass);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"[ReceiveList Count %d Max class %d]", CharacterCount, Data->MaxClass);
 #else
-    g_ErrorReport.Write(L"[ReceiveList Count %d Max class %d]", Data->CharacterCount, Data->MaxClass);
+    g_ErrorReport.Write(L"[ReceiveList Count %d Max class %d]", CharacterCount, Data->MaxClass);
 #endif
 
     CharacterAttribute->IsVaultExtended = Data->IsVaultExtended;
-    for (int i = 0; i < Data->CharacterCount; i++)
+    for (int i = 0; i < CharacterCount; i++)
     {
-        auto Data2 = (LPPRECEIVE_CHARACTER_LIST_EXTENDED)(ReceiveBuffer + Offset);
+        if (Offset + static_cast<int>(sizeof(PRECEIVE_CHARACTER_LIST_EXTENDED)) > PacketSize)
+        {
+            g_ErrorReport.Write(L"Character list truncated at entry %d of %d.\r\n", i, CharacterCount);
+            break;
+        }
+
+        auto Data2 = (LPPRECEIVE_CHARACTER_LIST_EXTENDED)(Packet.data() + Offset);
 
         auto iClass = gCharacterManager.ChangeServerClassTypeToClientClassType(Data2->Class);
         float fPos[2], fAngle = 0.0f;
@@ -1959,20 +1991,33 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveChatWhisper(const BYTE* ReceiveBuffer)
+void ReceiveChatWhisper(const std::span<const BYTE> Packet)
 {
     if (g_pChatInputBox->IsBlockWhisper() == true)
     {
         return;
     }
 
-    auto Data = (LPPCHATING)ReceiveBuffer;
+    constexpr int MinimumWhisperPacketSize = sizeof(PCHATING);
+    if (Packet.size() < MinimumWhisperPacketSize)
+    {
+        g_ErrorReport.Write(L"Rejected whisper packet shorter than %d bytes.\r\n", MinimumWhisperPacketSize);
+        return;
+    }
+
+    auto Data = (LPPCHATING)Packet.data();
+
+    const int messageSize = static_cast<int>(Data->Header.Size) - MAX_USERNAME_SIZE - static_cast<int>(sizeof(PBMSG_HEADER));
+    if (messageSize <= 0 || messageSize > MAX_CHAT_SIZE)
+    {
+        g_ErrorReport.Write(L"Rejected whisper packet with invalid message size %d.\r\n", messageSize);
+        return;
+    }
 
     wchar_t ID[MAX_USERNAME_SIZE + 1] {};
     CMultiLanguage::ConvertFromUtf8(ID, Data->ID, MAX_USERNAME_SIZE);
     ID[MAX_USERNAME_SIZE] = L'\0';
 
-    const auto messageSize = Data->Header.Size - MAX_USERNAME_SIZE - sizeof(PBMSG_HEADER);
     wchar_t Text[MAX_CHAT_SIZE + 1] {};
     CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText, messageSize);
     Text[messageSize] = L'\0';
@@ -13369,6 +13414,14 @@ void ReceiveDarkside(const BYTE* ReceiveBuffer)
 
 static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 {
+    constexpr int MinimumC1PacketSize = 4;
+    constexpr int MinimumC2PacketSize = 4;
+    if (ReceiveBuffer == nullptr || Size < MinimumC1PacketSize)
+    {
+        g_ErrorReport.Write(L"Rejected a packet shorter than the minimum header size (%d bytes).\r\n", Size);
+        return;
+    }
+
     auto received_span = std::span<const BYTE>(ReceiveBuffer, Size);
     BYTE HeadCode = 0;
     BOOL bEncrypted = ReceiveBuffer[0] >= 0xC3;
@@ -13379,6 +13432,12 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     }
     else
     {
+        if (Size < MinimumC2PacketSize)
+        {
+            g_ErrorReport.Write(L"Rejected a C2 packet shorter than the minimum header size (%d bytes).\r\n", Size);
+            return;
+        }
+
         HeadCode = ReceiveBuffer[3];
     }
     switch (HeadCode)
@@ -13519,7 +13578,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         switch (subcode)
         {
         case 0x00: //receive characters list
-            ReceiveCharacterListExtended(ReceiveBuffer);
+            ReceiveCharacterListExtended(received_span);
             break;
         case 0x01: //receive create character
             ReceiveCreateCharacter(ReceiveBuffer);
@@ -13631,7 +13690,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         switch (subcode)
         {
         case 0x06:
-            ReceiveServerList(ReceiveBuffer);
+            ReceiveServerList(ReceiveBuffer, Size);
             break;
         case 0x03:
             ReceiveServerConnect(ReceiveBuffer);
@@ -13649,7 +13708,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveChatKey(ReceiveBuffer);
         break;
     case 0x02://chat whisper
-        ReceiveChatWhisper(ReceiveBuffer);
+        ReceiveChatWhisper(received_span);
         break;
     case 0x03:
         ReceiveCheckSumRequest(ReceiveBuffer);

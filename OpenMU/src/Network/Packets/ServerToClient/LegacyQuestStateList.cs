@@ -1,6 +1,8 @@
-﻿// <copyright file="LegacyQuestStateList.cs" company="MUnique">
+// <copyright file="LegacyQuestStateList.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
+
+using System.IO;
 
 namespace MUnique.OpenMU.Network.Packets.ServerToClient;
 
@@ -23,9 +25,17 @@ public readonly ref partial struct LegacyQuestStateListRef
     /// <returns>The <see cref="MUnique.OpenMU.Network.Packets.LegacyQuestState" /> at the specified index.</returns>
     public LegacyQuestState this[int index]
     {
-        get => (LegacyQuestState)this._data.Slice(this.GetArrayIndex(index)).GetByteValue(BitsPerState, this.GetShift(index));
+        get
+        {
+            this.ValidateIndex(index);
+            return (LegacyQuestState)this._data.Slice(this.GetArrayIndex(index)).GetByteValue(BitsPerState, this.GetShift(index));
+        }
 
-        set => this._data.Slice(this.GetArrayIndex(index)).SetByteValue((byte)value, BitsPerState, this.GetShift(index));
+        set
+        {
+            this.ValidateIndex(index);
+            this._data.Slice(this.GetArrayIndex(index)).SetByteValue((byte)value, BitsPerState, this.GetShift(index));
+        }
     }
 
     /// <summary>
@@ -35,6 +45,11 @@ public readonly ref partial struct LegacyQuestStateListRef
     /// <returns>The required size for the message with the specified state count.</returns>
     public static int GetRequiredSize(int stateCount)
     {
+        if (stateCount < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(stateCount), stateCount, "stateCount must not be negative.");
+        }
+
         var result = ArrayStartIndex;
         result += stateCount / StatesPerByte;
         if (stateCount % StatesPerByte > 0)
@@ -43,6 +58,20 @@ public readonly ref partial struct LegacyQuestStateListRef
         }
 
         return result;
+    }
+
+    private void ValidateIndex(int stateIndex)
+    {
+        if (stateIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(stateIndex), stateIndex, "stateIndex must not be negative.");
+        }
+
+        var arrayIndex = this.GetArrayIndex(stateIndex);
+        if (arrayIndex + 1 > this._data.Length)
+        {
+            throw new InvalidDataException($"Quest state index {stateIndex} is out of bounds (packet length {this._data.Length}).");
+        }
     }
 
     private int GetArrayIndex(int stateIndex) => ArrayStartIndex + (stateIndex / StatesPerByte);

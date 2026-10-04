@@ -88,7 +88,7 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
-        fread(&num, sizeof(WORD), 1, fp);
+        if (fread(&num, sizeof(WORD), 1, fp) != 1) num = 0;  // #20: reject unreadable header
 
         if (num > 100)
         {
@@ -98,8 +98,10 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
         {
             for (int i = 0; i < num; ++i)
             {
-                fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp);
-                fread(&days[i].date, sizeof(WORD), 1, fp);
+                if (fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
+                    fread(&days[i].date, sizeof(WORD), 1, fp) != 1)
+                    break;  // #20: truncated/corrupt record
+                days[i].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
 
                 if (!wcscmp(days[i].ID, Name))
                 {

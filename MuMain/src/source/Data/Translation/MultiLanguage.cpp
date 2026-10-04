@@ -129,13 +129,10 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         return 0;
     }
 
-    // If the source contained a null terminator within the range,
-    // MultiByteToWideChar copies it as well.
-    if (written < maxSourceLength)
-    {
-        target[written] = L'\0';
-    }
-
+    // The caller guarantees the target buffer holds the converted characters
+    // plus a terminator. Add it explicitly; when the source NUL was converted,
+    // 'written' already points at that slot.
+    target[written] = L'\0';
     return written;
 }
 

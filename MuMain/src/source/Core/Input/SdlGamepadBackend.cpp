@@ -1,4 +1,5 @@
 ﻿#include "Core/Input/SdlGamepadBackend.h"
+#include "Core/Platform/PlatformDetect.h"
 
 #ifdef MU_ENABLE_VIRTUAL_GAMEPAD_TESTS
 #ifdef _WIN32
@@ -19,7 +20,7 @@ namespace Core::Input
 {
     namespace
     {
-#if !defined(__ANDROID__) && !defined(__OHOS__)
+#if !MU_PLATFORM_MOBILE
         constexpr float AxisPositiveMaximum = 32767.0f;
         constexpr float AxisNegativeMaximum = 32768.0f;
         constexpr Sint16 ActivityAxisThreshold = 12000;
@@ -52,7 +53,7 @@ namespace Core::Input
     bool SdlGamepadBackend::Initialize()
     {
         if (m_initialized) return true;
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         // Phone/tablet builds are touch-only: the SDL gamepad subsystem is
         // never initialized and no controller is ever opened. The haptics
         // subsystem stays up so phone vibration (combat/UI/touch feedback)
@@ -109,7 +110,7 @@ namespace Core::Input
     void SdlGamepadBackend::Shutdown()
     {
         if (!m_initialized) return;
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         if (m_systemHaptic != nullptr)
         {
             SDL_StopHapticRumble(m_systemHaptic);
@@ -135,7 +136,7 @@ namespace Core::Input
 
     void SdlGamepadBackend::RefreshDevices()
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return; // touch-only build: controllers are never enumerated
 #else
         if (!m_initialized) return;
@@ -155,7 +156,7 @@ namespace Core::Input
 
     GamepadSnapshot SdlGamepadBackend::Poll()
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return GamepadSnapshot{}; // touch-only build never produces gamepad input
 #else
 #ifdef MU_ENABLE_VIRTUAL_GAMEPAD_TESTS
@@ -188,7 +189,7 @@ namespace Core::Input
 
     bool SdlGamepadBackend::IsConnected() const
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return false;
 #else
         return m_gamepad != nullptr && SDL_GamepadConnected(m_gamepad);
@@ -197,7 +198,7 @@ namespace Core::Input
 
     std::string SdlGamepadBackend::GetDeviceName() const
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return {};
 #else
         if (!m_gamepad) return {};
@@ -208,7 +209,7 @@ namespace Core::Input
 
     void SdlGamepadBackend::HandleEvent(const SDL_Event& event)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         (void)event; // touch-only build ignores controller events
         return;
 #else
@@ -243,7 +244,7 @@ namespace Core::Input
 
     GamepadIconFamily SdlGamepadBackend::GetIconFamily() const
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return GamepadIconFamily::Generic;
 #else
         if (!m_gamepad) return GamepadIconFamily::Generic;
@@ -273,7 +274,7 @@ namespace Core::Input
             SDL_GetGamepadProperties(m_gamepad),
             SDL_PROP_GAMEPAD_CAP_RUMBLE_BOOLEAN,
             false);
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return gamepadRumble || m_systemHaptic != nullptr;
 #else
         return gamepadRumble;
@@ -292,7 +293,7 @@ namespace Core::Input
             RecordVirtualRumble(lowFrequency, highFrequency, durationMs);
 #endif
         }
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         if (m_systemHaptic != nullptr)
         {
             const float strength = std::max(lowFrequency, highFrequency) / 65535.0f;
@@ -310,13 +311,13 @@ namespace Core::Input
             RecordVirtualRumble(0, 0, 0);
 #endif
         }
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         if (m_systemHaptic != nullptr)
             SDL_StopHapticRumble(m_systemHaptic);
 #endif
     }
 
-#if !defined(__ANDROID__) && !defined(__OHOS__)
+#if !MU_PLATFORM_MOBILE
     bool SdlGamepadBackend::OpenDevice(SDL_JoystickID deviceId)
     {
         if (deviceId == 0) return false;

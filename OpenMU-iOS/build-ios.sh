@@ -11,9 +11,22 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 BUILD_DIR="${SCRIPT_DIR}/build/ios"
 SYSROOT="iphoneos"
+# I-05: the previous version always passed CMAKE_OSX_ARCHITECTURES=arm64 even for
+# the simulator. On an Intel Mac the simulator is x86_64, so an arm64 simulator
+# slice cannot run. Pick the simulator arch from the host (Apple Silicon -> arm64,
+# Intel -> x86_64), overridable with MU_IOS_ARCH. Device builds stay arm64.
 if [[ "${MU_IOS_SIMULATOR:-0}" == "1" ]]; then
   SYSROOT="iphonesimulator"
+  HOST_ARCH="$(uname -m)"
+  case "${HOST_ARCH}" in
+    arm64|aarch64) MU_DEFAULT_ARCH="arm64" ;;
+    x86_64)        MU_DEFAULT_ARCH="x86_64" ;;
+    *)             MU_DEFAULT_ARCH="arm64" ;;
+  esac
+else
+  MU_DEFAULT_ARCH="arm64"
 fi
+MU_IOS_ARCH="${MU_IOS_ARCH:-${MU_DEFAULT_ARCH}}"
 
 TEAM_ARGS=()
 if [[ -n "${DEVELOPMENT_TEAM:-}" ]]; then
@@ -23,7 +36,7 @@ fi
 cmake -S "${SCRIPT_DIR}/game-ios" -B "${BUILD_DIR}" -G Xcode \
   -DCMAKE_SYSTEM_NAME=iOS \
   -DCMAKE_OSX_SYSROOT="${SYSROOT}" \
-  -DCMAKE_OSX_ARCHITECTURES=arm64 \
+  -DCMAKE_OSX_ARCHITECTURES="${MU_IOS_ARCH}" \
   -DCMAKE_OSX_DEPLOYMENT_TARGET="${MU_IOS_DEPLOYMENT_TARGET:-15.0}" \
   -DMU_IOS_PREVIEW=ON \
   -DENABLE_EDITOR=OFF \

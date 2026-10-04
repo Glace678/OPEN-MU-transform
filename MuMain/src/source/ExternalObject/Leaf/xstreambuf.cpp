@@ -39,10 +39,8 @@ void xstreambuf::seek(unsigned int n, XBUF_POS pos)
         m_offset = n;
     }
     else if (pos == XBUF_END) {
-        m_offset = size() - n;
+        m_offset = n < size() ? static_cast<unsigned int>(size() - n) : 0;
     }
-    if (m_offset < 0)
-        m_offset = 0;
     if (m_offset > size())
         m_offset = size();
 }
@@ -59,11 +57,19 @@ xstreambuf& xstreambuf::write(const void* src, unsigned int n)
 }
 xstreambuf& xstreambuf::read(void* dest, unsigned int n)
 {
-    if (size() < m_offset + n)
-        n = (size() - 1) - m_offset;
+    const unsigned int available = m_offset < size()
+        ? static_cast<unsigned int>(size() - m_offset)
+        : 0;
+    if (n > available)
+    {
+        n = available;
+    }
 
-    memcpy(dest, (const BYTE*)(m_pBuffer)+m_offset, n);
-    m_offset += n;
+    if (n > 0)
+    {
+        memcpy(dest, static_cast<const BYTE*>(m_pBuffer) + m_offset, n);
+        m_offset += n;
+    }
 
     return *this;
 }

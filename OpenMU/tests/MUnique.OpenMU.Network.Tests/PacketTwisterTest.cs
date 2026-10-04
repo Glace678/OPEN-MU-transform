@@ -30,6 +30,36 @@ public class PacketTwisterTest
         }
     }
 
+    /// <summary>
+    /// Verifies that <see cref="PacketTwisterOfGuildMasterResponse.Correct"/> is the true inverse of
+    /// <see cref="PacketTwisterOfGuildMasterResponse.Twist"/> across every length branch with random bytes.
+    /// </summary>
+    [Test]
+    public void GuildMasterResponseTwistAndCorrectAreMutualInverses()
+    {
+        var twister = new PacketTwisterOfGuildMasterResponse();
+        var random = new Random(42);
+        foreach (var length in new[] { 4, 5, 7, 8, 9, 15, 16, 17, 31, 32, 33, 64, 100 })
+        {
+            var original = new byte[length];
+            random.NextBytes(original);
+
+            var twisted = (byte[])original.Clone();
+            twister.Twist(twisted);
+
+            var restored = (byte[])twisted.Clone();
+            twister.Correct(restored);
+            Assert.That(restored, Is.EqualTo(original), $"Twist->Correct round-trip failed at length {length}");
+
+            // The reverse order must also restore the original.
+            var correctedFirst = (byte[])original.Clone();
+            twister.Correct(correctedFirst);
+            var twistedBack = (byte[])correctedFirst.Clone();
+            twister.Twist(twistedBack);
+            Assert.That(twistedBack, Is.EqualTo(original), $"Correct->Twist round-trip failed at length {length}");
+        }
+    }
+
     private static void CompareArrays(byte[] expected, byte[] actual)
     {
         Assert.That(actual.Length, Is.EqualTo(expected.Length));

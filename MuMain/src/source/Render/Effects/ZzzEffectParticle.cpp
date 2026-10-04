@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -3367,6 +3367,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                 o->Velocity[0] = (float)(rand() % 10 + 5) * 0.4f;
                 o->Velocity[1] = 0.f;
                 o->Velocity[2] = (float)(rand() % 10 + 5) * 0.2f;
+                break;
 
             case BITMAP_TRUE_FIRE:
             case BITMAP_TRUE_BLUE:
@@ -8839,6 +8840,7 @@ void MoveParticles()
                 Vector(o->TurningForce[0] * Luminosity, o->TurningForce[1] * Luminosity, o->TurningForce[2] * Luminosity, o->Light);
                 vec3_t Temp_Pos;
 
+                if (o->Target == nullptr) break;  // #MG-01: Owner-targeted particle requires a live target
                 BMD* b = &Models[o->Target->Type];
                 b->TransformByObjectBone(Temp_Pos, o->Target, 18);
 

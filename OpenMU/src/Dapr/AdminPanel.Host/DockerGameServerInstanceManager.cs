@@ -35,9 +35,11 @@ public class DockerGameServerInstanceManager : IGameServerInstanceManager
     }
 
     /// <inheritdoc />
-    public async ValueTask InitializeGameServerAsync(byte serverId)
+    public ValueTask InitializeGameServerAsync(byte serverId)
     {
-        // TODO: Implement this... by starting a new docker container
+        throw new NotSupportedException(
+            "Initializing a new GameServer container is not implemented in this host. " +
+            "Start the container manually or via an orchestration tool.");
     }
 
     /// <inheritdoc />

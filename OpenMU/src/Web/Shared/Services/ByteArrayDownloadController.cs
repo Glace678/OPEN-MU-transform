@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Web.Shared.Services;
 
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MUnique.OpenMU.Persistence;
 
@@ -12,6 +13,7 @@ using MUnique.OpenMU.Persistence;
 /// API-Controller which returns data of a byte array of an object.
 /// </summary>
 [Route("download/{typeString}/{id:guid}/{propertyName}")]
+[Authorize]
 public class ByteArrayDownloadController : Controller
 {
     private readonly IPersistenceContextProvider _persistenceContextProvider;

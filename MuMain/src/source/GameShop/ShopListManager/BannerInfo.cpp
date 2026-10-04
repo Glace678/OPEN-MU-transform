@@ -64,6 +64,14 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
     {
         std::wstring sub = url.substr(pos + 1, url.length() - pos - 1);
 
+        // #13: only a bare basename may be materialized under strDirPath;
+        // reject traversal/separator components from a hostile image URL.
+        if (sub.empty() || sub.find(L"..") != std::wstring::npos ||
+            sub.find(L'/') != std::wstring::npos || sub.find(L'\\') != std::wstring::npos)
+        {
+            return 1;
+        }
+
         StringCchPrintf(this->BannerImagePath, std::size(this->BannerImagePath), L"%ls%ls", strDirPath.c_str(), sub.c_str());
 
         if (bDonwLoad || GetFileAttributes(this->BannerImagePath) == INVALID_FILE_ATTRIBUTES)

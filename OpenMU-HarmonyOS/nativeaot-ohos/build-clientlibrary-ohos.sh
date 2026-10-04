@@ -1,87 +1,94 @@
 #!/usr/bin/env bash
-# Builds the .NET protocol library (MuMain/ClientLibrary) as a native
-# libMUnique.Client.Library.so for OpenHarmony / HarmonyOS (arm64), analogous to
-# nativeaot/build-clientlibrary-android.sh.
-#
-# .NET NativeAOT compiles managed code to a native shared library. Android uses
-# the linux-bionic-arm64 RID. HarmonyOS is musl-based; when the .NET toolchain in
-# use ships an OpenHarmony runtime pack use RID linux-ohos-arm64, otherwise use
-# linux-bionic-arm64 with the OHOS NDK sysroot as the crossrootfs (the symbols
-# overlap closely enough for the networking code the client uses).
-set -Eeuo pipefail
+set -euo pipefail
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-HARMONY_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
-PROJECT_FILE="$(cd -- "${SCRIPT_DIR}/../../MuMain/ClientLibrary" && pwd -P)/MUnique.Client.Library.csproj"
-BUILD_ROOT="${SCRIPT_DIR}/build"
-PUBLISH_DIR="${BUILD_ROOT}/publish"
-# Stage the arm64 library into both the phone project and the arm64 slot of the
-# PC project (most HarmonyOS PCs are arm64/Kunpeng). x86_64 HarmonyOS PCs need a
-# separate linux-ohos-x64 build and must be dropped in harmony-pc's prebuilt/x86_64/.
-FINAL_DIRS=(
-  "${HARMONY_ROOT}/harmony-game/entry/src/main/cpp/prebuilt/arm64-v8a"
-  "${HARMONY_ROOT}/harmony-pc/entry/src/main/cpp/prebuilt/arm64-v8a"
+# Build MUnique.Client.Library for OpenHarmony (aarch64-linux-ohos) and copy the
+# native library plus reference assemblies into harmony-game/entry/src/main/cpp/prebuilt.
+# Run this from WSL or a Linux machine that already has the .NET 8 SDK and the
+# android-ndk toolchain configured for NativeAOT (see OpenMU/docs).
+
+# H-07: restore and publish are separate steps. Restore uses the project's pinned
+# package sources / lock file; publish runs --no-restore so it cannot pull a new
+# graph at publish time.
+# NEW-HARMONY-01: the RID is mapped to the correct prebuilt ABI slot instead of
+# always copying into arm64-v8a. An unknown RID is rejected, and the produced ELF
+# architecture is verified with llvm-readelf before it is staged.
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+ROOT_DIR="$(cd -- "${SCRIPT_DIR}/../.." &>/dev/null && pwd)"
+SRC_DIR="${ROOT_DIR}/MuMain/src/MUnique/Server/Interfaces/ClientLibrary"
+GAME_ENTRY_DIR="${ROOT_DIR}/OpenMU-HarmonyOS/harmony-game/entry"
+PC_ENTRY_DIR="${ROOT_DIR}/OpenMU-HarmonyOS/harmony-pc/entry"
+
+# NEW-HARMONY-01: accept only RIDs we can place correctly, and map each to its
+# prebuilt ABI slot. linux-bionic-* is accepted as an alias for linux-ohos-*.
+case "${RID:-linux-ohos-arm64}" in
+  linux-ohos-arm64|linux-bionic-arm64)
+    TARGET_RID="linux-ohos-arm64"; TARGET_ABI="arm64-v8a"; EXPECTED_MACHINE="AArch64" ;;
+  linux-ohos-x64|linux-bionic-x64)
+    TARGET_RID="linux-ohos-x64";    TARGET_ABI="x86_64";    EXPECTED_MACHINE="X86-64" ;;
+  *)
+    echo "error: unsupported RID '${RID}'. Expected linux-ohos-arm64 or linux-ohos-x64." >&2
+    exit 2 ;;
+esac
+
+CONFIG="${CONFIG:-Release}"
+PUBLISH_DIR="${SCRIPT_DIR}/publish/${TARGET_RID}"
+
+command -v dotnet >/dev/null || { echo "dotnet SDK is required" >&2; exit 1; }
+command -v llvm-readelf >/dev/null || echo "warning: llvm-readelf not found; skipping ELF architecture check" >&2
+
+echo "Restoring ${TARGET_RID} (${CONFIG}) ..."
+# H-07: restore explicitly. If a packages.lock.json is checked in, the build can
+# additionally be run with --locked-mode in CI; here we keep restore separate and
+# deterministic, then publish without restoring.
+dotnet restore "${SRC_DIR}/MUnique.Client.Library.csproj" \
+  -r "${TARGET_RID}" \
+  -c "${CONFIG}"
+
+echo "Publishing ${TARGET_RID} (${CONFIG}) ..."
+dotnet publish "${SRC_DIR}/MUnique.Client.Library.csproj" \
+  -r "${TARGET_RID}" \
+  -c "${CONFIG}" \
+  --self-contained true \
+  -o "${PUBLISH_DIR}" \
+  --no-restore
+
+SOURCES=(
+  "${PUBLISH_DIR}/libMUnique.Client.Library.so"
 )
-FINAL_LIBRARY_NAME="libMUnique.Client.Library.so"
-
-# Choose the RID. Prefer the OpenHarmony runtime pack; fall back to bionic.
-RID="${OPENMU_OHOS_RID:-linux-ohos-arm64}"
-
-# The HarmonyOS NDK (command-line tools, or DevEco's native SDK) provides the
-# clang cross toolchain and the OHOS sysroot. Set OHOS_NDK_HOME to its root.
-OHOS_NDK_HOME="${OHOS_NDK_HOME:-/opt/ohos-sdk/native}"
-OHOS_LLVM_BIN="${OHOS_NDK_HOME}/llvm/bin"
-
-mkdir -p -- "${PUBLISH_DIR}" "${FINAL_DIRS[@]}"
-
-# When targeting bionic-compatible AOT against the OHOS sysroot, point the
-# linker/clang at the OHOS NDK. The NativeAOT publish uses these env vars.
-export PATH="${OHOS_LLVM_BIN}:${PATH}"
-# crossrootfs dir (sysroot) used by the runtime pack to resolve libc symbols:
-export CROSSROOTFS="${CROSSROOTFS:-${OHOS_NDK_HOME}/sysroot}"
-
-dotnet publish "${PROJECT_FILE}" \
-    --configuration Release \
-    --runtime "${RID}" \
-    --output "${PUBLISH_DIR}" \
-    -p:BaseIntermediateOutputPath="${BUILD_ROOT}/obj/" \
-    -p:BaseOutputPath="${BUILD_ROOT}/bin/" \
-    -p:EnableDefaultCompileItems=false \
-    -p:CustomBeforeMicrosoftCommonProps="${SCRIPT_DIR}/ClientLibrary.OhosAot.props" \
-    -p:DisableUnsupportedError=true \
-    -p:PublishAotUsingRuntimePack=true \
-    -p:NativeLib=Shared \
-    -p:DebugType=None \
-    -p:DebugSymbols=false \
-    -p:StripSymbols=false \
-    -p:ci=true \
-    2>&1 | tee "${SCRIPT_DIR}/publish.log" || {
-      echo
-      echo "Publish for ${RID} failed. If linux-ohos-arm64 is not available in"
-      echo "this .NET preview, retry with: OPENMU_OHOS_RID=linux-bionic-arm64 and"
-      echo "ensure gl4es/SDL were also built for OpenHarmony."
-      exit 1
-    }
-
-SOURCE_LIBRARY="${PUBLISH_DIR}/MUnique.Client.Library.so"
-[[ -f "${SOURCE_LIBRARY}" ]]
-
-for dest_dir in "${FINAL_DIRS[@]}"; do
-  cp -- "${SOURCE_LIBRARY}" "${dest_dir}/${FINAL_LIBRARY_NAME}"
+REFERENCE="$(cd "${PUBLISH_DIR}" && pwd)/ref/MUnique.Client.Library.dll"
+for SOURCE in "${SOURCES[@]}"; do
+  test -f "${SOURCE}" || { echo "Missing published library: ${SOURCE}" >&2; exit 1; }
 done
+test -f "${REFERENCE}" || { echo "Missing reference assembly: ${REFERENCE}" >&2; exit 1; }
 
-FINAL_LIBRARY="${FINAL_DIRS[0]}/${FINAL_LIBRARY_NAME}"
-if command -v llvm-readelf >/dev/null 2>&1; then
-  llvm-readelf --file-header "${FINAL_LIBRARY}" | grep -E 'Class|Machine'
-  llvm-readelf --dynamic "${FINAL_LIBRARY}" | grep -E 'SONAME|NEEDED'
+# NEW-HARMONY-01: verify the produced ELF machine matches the RID's ABI slot
+# before staging it. This prevents an arm64 .so from being copied into the x86_64
+# prebuilt slot (or vice versa).
+if command -v llvm-readelf >/dev/null; then
+  for SOURCE in "${SOURCES[@]}"; do
+    MACHINE="$(llvm-readelf -h "${SOURCE}" | awk '/Machine:/{print $2}')"
+    echo "  ${SOURCE}: ELF Machine=${MACHINE}"
+    if [[ "${MACHINE}" != *"${EXPECTED_MACHINE}"* ]]; then
+      echo "error: ${SOURCE} is ${MACHINE}, expected ${EXPECTED_MACHINE} for ${TARGET_RID}" >&2
+      exit 1
+    fi
+  done
 fi
 
-echo
-echo "OpenHarmony arm64 ClientLibrary staged into:"
-for dest_dir in "${FINAL_DIRS[@]}"; do
-  echo "  ${dest_dir}/${FINAL_LIBRARY_NAME}"
+# NEW-HARMONY-01: stage into the ABI slot that matches the RID (prebuilt/<ABI>/),
+# not a hardcoded arm64-v8a. The phone game only ships arm64; the PC slot gets the
+# matching arch.
+GAME_LIB_DIR="${GAME_ENTRY_DIR}/src/main/cpp/prebuilt/${TARGET_ABI}"
+PC_LIB_DIR="${PC_ENTRY_DIR}/src/main/cpp/prebuilt/${TARGET_ABI}"
+mkdir -p "${GAME_LIB_DIR}" "${PC_LIB_DIR}"
+
+for SOURCE in "${SOURCES[@]}"; do
+  install -m 0644 "${SOURCE}" "${GAME_LIB_DIR}/"
+  install -m 0644 "${SOURCE}" "${PC_LIB_DIR}/"
 done
-echo "Also place an OHOS-built libGL.so (gl4es) and libSDL3.so into the same"
-echo "prebuilt/arm64-v8a folders, or let MuMain's CMake build them from source."
-echo "For x86_64 HarmonyOS PCs, build linux-ohos-x64 and drop the library into"
-echo "harmony-pc/.../prebuilt/x86_64/."
+install -m 0644 "${REFERENCE}" "${PC_ENTRY_DIR}/src/main/cpp/"
+
+echo "Copied ${TARGET_ABI} library to:"
+echo "  ${GAME_LIB_DIR}"
+echo "  ${PC_LIB_DIR}"

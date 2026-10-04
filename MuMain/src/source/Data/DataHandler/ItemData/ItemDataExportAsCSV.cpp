@@ -51,17 +51,28 @@ bool ItemDataExportAsCSV::ExportToCsv(wchar_t* fileName)
             // Convert wide char name to UTF-8
             std::string utf8Name = StringUtils::WideToNarrow(ItemAttribute[i].Name);
 
-            // Escape quotes in name
             std::string escapedName;
+            escapedName.reserve(utf8Name.size() + 2);
             for (const char* p = utf8Name.c_str(); *p != '\0'; ++p)
             {
-                if (*p == '"')
+                const char c = *p;
+                if (c == '"')
                 {
                     escapedName += "\"\"";
                 }
+                else if (c == ',' || c == '\n' || c == '\r')
+                {
+                    // RFC 4180: fields containing these must be quoted; the
+                    // surrounding quotes are already added, but normalize line
+                    // endings to keep a single physical CSV record.
+                    if (c != '\r')
+                    {
+                        escapedName += c == ',' ? ',' : ' ';
+                    }
+                }
                 else
                 {
-                    escapedName += *p;
+                    escapedName += c;
                 }
             }
 

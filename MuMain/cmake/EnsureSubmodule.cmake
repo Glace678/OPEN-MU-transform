@@ -37,11 +37,6 @@ function(mu_ensure_submodule rel_path)
 
   message(STATUS "Initializing submodule ${rel_path}...")
 
-  if (EXISTS "${submodule_dir}")
-    message(STATUS "Removing incomplete ${rel_path} directory...")
-    file(REMOVE_RECURSE "${submodule_dir}")
-  endif()
-
   cmake_path(RELATIVE_PATH submodule_dir
     BASE_DIRECTORY "${REPO_ROOT}"
     OUTPUT_VARIABLE submodule_repo_rel)
@@ -53,11 +48,32 @@ function(mu_ensure_submodule rel_path)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
+  # A submodule gitlink starts with mode 160000. A regular tracked tree (mode
+  # 100644/040000) is a vendored directory, not a submodule: deleting it would
+  # destroy tracked sources, so fail clearly instead.
+  string(REGEX MATCH "^160000 " is_gitlink "${in_index}")
   if (in_index STREQUAL "")
     if (NOT MES_URL)
       message(FATAL_ERROR
         "Submodule ${rel_path} not registered in git index and no URL provided.")
     endif()
+  elseif(NOT is_gitlink)
+    message(FATAL_ERROR
+      "${rel_path} is a regular tracked directory (not a submodule gitlink), "
+      "and '${MES_INDICATOR}' is missing. Refusing to delete it; investigate "
+      "the vendored tree rather than running an automatic recovery.")
+  endif()
+
+  if (is_gitlink AND IS_DIRECTORY "${submodule_dir}")
+    file(GLOB remaining_files LIST_DIRECTORIES true
+      "${submodule_dir}/*")
+    list(LENGTH remaining_files file_count)
+    if (file_count EQUAL 0)
+      file(REMOVE_RECURSE "${submodule_dir}")
+    endif()
+  endif()
+
+  if (in_index STREQUAL "")
     message(STATUS "Submodule ${rel_path} not in index, adding ${MES_URL}...")
     execute_process(
       COMMAND ${GIT_EXECUTABLE} submodule add --force "${MES_URL}" "${submodule_repo_rel}"

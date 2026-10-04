@@ -55,7 +55,8 @@ namespace UI::Chat::Whisper
 
             if (noMatch)
             {
-                wcscpy(WhisperRegistID[WhisperID_Num], targetId);
+                wcsncpy(WhisperRegistID[WhisperID_Num], targetId, MAX_USERNAME_SIZE);
+                WhisperRegistID[WhisperID_Num][MAX_USERNAME_SIZE] = L'\0';  // #16: bounded copy + NUL
                 WhisperID_Num++;
 
                 if (WhisperID_Num >= WHISPER_ID_SLOTS)
@@ -68,7 +69,7 @@ namespace UI::Chat::Whisper
 
     void Clear()
     {
-        ZeroMemory(WhisperRegistID, sizeof(char) * (MAX_USERNAME_SIZE + 1) * WHISPER_ID_SLOTS);
+        ZeroMemory(WhisperRegistID, sizeof(wchar_t) * (MAX_USERNAME_SIZE + 1) * WHISPER_ID_SLOTS);  // #16: wchar_t not char
     }
 
     void RenderList()

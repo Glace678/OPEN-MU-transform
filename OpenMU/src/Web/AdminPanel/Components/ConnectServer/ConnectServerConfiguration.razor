@@ -70,9 +70,9 @@ else
     <ValidationSummary/>
     <div>
         <button type="submit" class="btn btn-primary">@Resources.Save</button>
-        @if (this.OnCancel != null)
+        @if (this.OnCancel.HasDelegate)
         {
-            <button type="button" onClick=@this.OnCancel>@Resources.Cancel</button>
+            <button type="button" @onclick="@this.OnCancel">@Resources.Cancel</button>
         }
     </div>
 

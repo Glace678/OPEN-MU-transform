@@ -126,7 +126,15 @@ void ParseTriangles(bool Flip)
         if (Token == NAME)
         {
             if (strcmp("end", TokenString) == 0) break;
-            strcpy(tg->TextureName[tg->TriangleNum], TokenString);
+            if (tg->TriangleNum < 0 || tg->TriangleNum >= TRIANGLE_MAX)
+            {
+                g_ErrorReport.Write(L"SMD triangle limit (%d) exceeded; ignoring remaining triangles.\r\n", TRIANGLE_MAX);
+                break;
+            }
+
+            constexpr int MaximumTextureNameLength = sizeof(tg->TextureName[0]);
+            strncpy(tg->TextureName[tg->TriangleNum], TokenString, MaximumTextureNameLength - 1);
+            tg->TextureName[tg->TriangleNum][MaximumTextureNameLength - 1] = '\0';
             if (!Flip)
             {
                 for (int i = 0; i < 3; i++)

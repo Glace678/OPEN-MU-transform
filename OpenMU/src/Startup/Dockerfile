@@ -48,9 +48,12 @@ COPY --from=publish /app/publish .
 # The container runs as a non-root user, but /app belongs to root. Directories the
 # application writes to have to be created and made writable beforehand - the data
 # protection key ring among them, which protects the admin panel sessions.
-RUN mkdir -p /app/logs /app/data-protection-keys && chmod 777 /app/logs /app/data-protection-keys
-
 ARG APP_UID=1000
-USER ${APP_UID}
+RUN mkdir -p /app/logs /app/data-protection-keys \
+    && adduser -D -u ${APP_UID} appuser \
+    && chown -R appuser /app/logs /app/data-protection-keys \
+    && chmod 700 /app/logs /app/data-protection-keys
+
+USER appuser
 
 ENTRYPOINT ["dotnet", "MUnique.OpenMU.Startup.dll", "-autostart"]

@@ -45,14 +45,23 @@ public static class Program
             return 2;
         }
 
-        var targetFolder = args[1];
-        var previouslyGeneratedFile = Directory.EnumerateFiles(targetFolder, ".Generated.cs");
-        foreach (var file in previouslyGeneratedFile)
+        var targetFolder = Path.GetFullPath(args[1]);
+
+        var sources = generator.GenerateSources().ToList();
+        var generatedNames = sources.Select(s => s.Name).ToHashSet();
+        foreach (var file in Directory.EnumerateFiles(targetFolder, "*.Generated.cs"))
         {
-            File.Delete(file);
+            var fileName = Path.GetFileName(file);
+            var suffixLength = ".Generated.cs".Length;
+            var objectName = fileName[..(fileName.Length - suffixLength)];
+            if (!generatedNames.Contains(objectName))
+            {
+                Console.WriteLine($"Deleting stale generated file {file}");
+                File.Delete(file);
+            }
         }
 
-        foreach (var (name, source) in generator.GenerateSources())
+        foreach (var (name, source) in sources)
         {
             var filePath = Path.Combine(targetFolder, name + ".Generated.cs");
             Console.WriteLine($"Writing {filePath}");

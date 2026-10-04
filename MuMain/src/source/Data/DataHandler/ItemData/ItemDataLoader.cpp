@@ -40,7 +40,16 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     const long expectedNewSize = NewSize * MAX_ITEM + sizeof(DWORD);
 
     bool isLegacyFormat = (fileSize == expectedLegacySize);
+    bool isNewFormat = (fileSize == expectedNewSize);
     bool success = false;
+
+    // #32: reject a file whose size matches neither known exact format; a
+    // truncated or oversized blob must not be parsed against MAX_ITEM.
+    if (!isLegacyFormat && !isNewFormat)
+    {
+        fclose(fp);
+        return false;
+    }
 
 #ifdef _EDITOR
     if (isLegacyFormat)

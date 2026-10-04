@@ -1,6 +1,8 @@
-﻿// <copyright file="AddSummonedMonstersToScope.cs" company="MUnique">
+// <copyright file="AddSummonedMonstersToScope.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
+
+using System.IO;
 
 namespace MUnique.OpenMU.Network.Packets.ServerToClient;
 
@@ -48,9 +50,19 @@ public readonly ref partial struct AddSummonedMonstersToScopeRef
         const int sizeWithoutEffects = 19;
         var currentIndex = monstersStartIndex;
         nextIndex = currentIndex;
+        if (characterIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(characterIndex), characterIndex, "index must not be negative.");
+        }
+
         for (int i = 0; i <= characterIndex; i++)
         {
             currentIndex = nextIndex;
+            if (currentIndex + sizeWithoutEffects > this._data.Length)
+            {
+                throw new InvalidDataException($"Variable record index {characterIndex} is out of bounds (packet length {this._data.Length}).");
+            }
+
             var currentEffectCount = this._data[currentIndex + sizeWithoutEffects - 1];
             nextIndex += sizeWithoutEffects + currentEffectCount;
         }

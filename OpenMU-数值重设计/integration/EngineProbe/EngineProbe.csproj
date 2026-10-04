@@ -8,6 +8,10 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <Reference Include="$(OpenMuAssemblyDir)\*.dll" />
+    <!-- B-01: reference only the product assemblies by an explicit prefix instead
+         of wildcarding every DLL in the Release dir, so an unrelated/mixed-in DLL
+         dropped into that folder is not loaded by the probe. The probe's transitive
+         closure is the MUnique.OpenMU.* set below. -->
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.*.dll" />
   </ItemGroup>
 </Project>

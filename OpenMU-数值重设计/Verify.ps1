@@ -18,9 +18,12 @@ try {
     $before = @{}
     foreach ($relative in $criticalFiles) {
         $candidate = Join-Path $engineRoot $relative
-        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
-            $before[$relative] = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash
+        if (-not (Test-Path -LiteralPath $candidate -PathType Leaf)) {
+            # B-02: a missing critical source file must fail verification instead of
+            # being silently skipped (an empty before-set would look like a pass).
+            throw "Critical OpenMU source file is missing or not a regular file: $candidate"
         }
+        $before[$relative] = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash
     }
     if (-not $SkipEngineProbe) {
         & $dotnet.Source run --project integration\EngineProbe -- artifacts

@@ -2573,7 +2573,7 @@ DWORD CUIRenderText::GetTextColor() const
 DWORD CUIRenderText::GetBgColor() const
 {
     if (m_pRenderText)
-        m_pRenderText->GetBgColor();
+        return m_pRenderText->GetBgColor();
     return 0;
 }
 
@@ -4592,6 +4592,7 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
     {
         m_iLevelCap[i] = SlideHelp.SlideHelp[i].iLevel;
         m_iTextNumber[i] = SlideHelp.SlideHelp[i].iNumber;
+        if (m_iTextNumber[i] < 0 || m_iTextNumber[i] >= 32) m_iTextNumber[i] = 0;  // #MG-09: clamp count to szSlideHelpText[32]
         for (int j = 0; j < m_iTextNumber[i]; ++j)
         {
             auto charText = SlideHelp.SlideHelp[i].szSlideHelpText[j];

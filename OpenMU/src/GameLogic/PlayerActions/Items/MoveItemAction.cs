@@ -385,6 +385,14 @@ public class MoveItemAction
             return false;
         }
 
+        // GAP-FU-03: while the personal store is open, the shop storage must not be
+        // moved around out of band; buyers and sellers serialize on StoreLock.
+        if (player.ShopStorage?.StoreOpen ?? false
+            && (fromStorage == Storages.PersonalStore || toStorage == Storages.PersonalStore))
+        {
+            return false;
+        }
+
         return this.IsStorageContextAllowed(player, fromStorage)
                && this.IsStorageContextAllowed(player, toStorage);
     }

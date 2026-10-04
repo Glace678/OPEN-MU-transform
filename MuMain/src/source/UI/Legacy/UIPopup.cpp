@@ -77,7 +77,8 @@ DWORD CUIPopup::SetPopup(const wchar_t* pszText, int nLineCount, int nBufferSize
     {
         if (pszText[i * nBufferSize])
         {
-            wcscpy(m_szPopupText[i], &pszText[i * nBufferSize]);
+            wcsncpy(m_szPopupText[i], &pszText[i * nBufferSize], MAX_POPUP_TEXTLENGTH - 1);
+            m_szPopupText[i][MAX_POPUP_TEXTLENGTH - 1] = L'\0';
             GetTextExtentPoint32(g_pRenderText->GetFontDC(), m_szPopupText[i], wcslen(m_szPopupText[i]), &sizeText);
             m_sizePopup.cy += sizeText.cy + 2;
         }

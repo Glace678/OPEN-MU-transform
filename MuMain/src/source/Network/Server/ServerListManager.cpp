@@ -72,8 +72,24 @@ void CServerListManager::LoadServerListScript()
     while (0 != ::fread(&sServerGroupScript, nSize, 1, fp))
     {
         BuxConvert((BYTE*)&sServerGroupScript, nSize);
-        ::fread(szDescript, sServerGroupScript.m_nDescriptLen, 1, fp);
-        BuxConvert((BYTE*)szDescript, sServerGroupScript.m_nDescriptLen);
+
+        const int descriptionLength = sServerGroupScript.m_nDescriptLen;
+        if (descriptionLength < 0 || descriptionLength > static_cast<int>(sizeof(szDescript)))
+        {
+            g_ErrorReport.Write(L"Rejected ServerList.bmd entry with invalid description length %d.\r\n", descriptionLength);
+            break;
+        }
+
+        if (descriptionLength > 0 && ::fread(szDescript, descriptionLength, 1, fp) != 1)
+        {
+            g_ErrorReport.Write(L"ServerList.bmd ended before the description could be read.\r\n");
+            break;
+        }
+
+        BuxConvert((BYTE*)szDescript, descriptionLength);
+        wchar_t wideDescription[1024] {};
+        CMultiLanguage::ConvertFromUtf8(wideDescription, szDescript, descriptionLength);
+        sServerGroupInfo.m_strDescript = wideDescription;
 
         CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName);
 

@@ -408,7 +408,7 @@ public:
     {
         int iResult = 0;
 
-        for (unsigned int i = 0; i < uiColumnNum; ++i)
+        for (unsigned int i = 0; i < (uiColumnNum < 4 ? uiColumnNum : 4); ++i)  // #MG-11: clamp to m_iColumnWidth[4]
         {
             iResult += m_iColumnWidth[i];
         }
@@ -462,7 +462,7 @@ public:
     int GetColumnPos_x(UINT uiColumnNum)
     {
         int iResult = 0;
-        for (unsigned int i = 0; i < uiColumnNum; ++i)
+        for (unsigned int i = 0; i < (uiColumnNum < 4 ? uiColumnNum : 4); ++i)  // #MG-11: clamp to m_iColumnWidth[4]
         {
             iResult += m_iColumnWidth[i];
         }

@@ -5,5 +5,8 @@
   "description": "Pinned OpenCC dependency used to regenerate Mainland Chinese resources.",
   "dependencies": {
     "opencc": "1.4.1"
+  },
+  "overrides": {
+    "undici": "6.29.0"
   }
 }

@@ -45,7 +45,7 @@ namespace SEASON3B
         bool Update();
         bool Render();
 
-        void ClearText() { m_vecText.clear(); m_sourceText.clear(); m_iCurLine = 0; }
+        void ClearText() { m_vecText.clear(); m_sourceText.clear(); m_iCurLine = 0; m_layoutDirty = true; }  // #24: invalidate layout cache on clear
         void AddText(wchar_t* strText);
         void AddText(const wchar_t* strText);
 

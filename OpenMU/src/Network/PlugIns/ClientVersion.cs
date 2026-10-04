@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientVersion.cs" company="MUnique">
+// <copyright file="ClientVersion.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -32,7 +32,7 @@ public record struct ClientVersion(byte Season, byte Episode, ClientLanguage Lan
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator >=(ClientVersion left, ClientVersion right) => Compare(left, right) > 0;
+    public static bool operator >=(ClientVersion left, ClientVersion right) => Compare(left, right) >= 0;
 
     /// <summary>
     /// Implements the operator &lt;.
@@ -52,7 +52,7 @@ public record struct ClientVersion(byte Season, byte Episode, ClientLanguage Lan
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator <=(ClientVersion left, ClientVersion right) => Compare(left, right) < 0;
+    public static bool operator <=(ClientVersion left, ClientVersion right) => Compare(left, right) <= 0;
 
     /// <inheritdoc />
     public int CompareTo(ClientVersion other)

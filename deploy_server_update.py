@@ -45,6 +45,8 @@ FILES = [
 # Values written only after every step below succeeded; used to roll back.
 previous_manifest_bytes = None
 backups = {}
+# Files that did not exist before this run; rollback must remove them again.
+new_files = set()
 
 
 def sha256_of(path: Path) -> str:
@@ -94,20 +96,42 @@ def wait_for_health():
 
 
 def rollback(step):
-    """Undo every completed write, best effort, then exit non-zero."""
+    """Undo every completed write, best effort, then restart with the old binaries."""
     print(f"deploy failed during {step}; rolling back", file=sys.stderr)
+
+    # A process started from the new binaries must be stopped before restoring;
+    # otherwise it keeps running from the rolled-back (possibly locked) files.
+    stack_was_started = step not in {"missing build output", "copying"}
+    if stack_was_started:
+        stop_server()
+
     for dst, backup in reversed(list(backups.items())):
         try:
             shutil.copy2(backup, dst)
             print("restored", dst)
         except Exception as error:
             print(f"could not restore {dst} from {backup}: {error}", file=sys.stderr)
+    # Remove files this run created where no prior file existed to restore.
+    for dst in reversed(list(new_files)):
+        try:
+            dst.unlink()
+            print("removed newly created", dst)
+        except Exception as error:
+            print(f"could not remove new file {dst}: {error}", file=sys.stderr)
     if previous_manifest_bytes is not None:
         try:
             MANIFEST.write_bytes(previous_manifest_bytes)
             print("restored", MANIFEST)
         except Exception as error:
             print(f"could not restore {MANIFEST}: {error}", file=sys.stderr)
+
+    if stack_was_started:
+        try:
+            os.startfile(str(LAUNCHER_EXE))
+            print("restarted the launcher with the previous binaries")
+        except Exception as error:
+            print(f"could not restart the previous launcher: {error}", file=sys.stderr)
+
     raise SystemExit(1)
 
 
@@ -126,6 +150,9 @@ for name in FILES:
         backup = dst.with_name(dst.name + f".bak-{stamp}")
         shutil.copy2(dst, backup)
         backups[dst] = backup
+    else:
+        # Brand-new target: rollback must delete it again (nothing to restore).
+        new_files.add(dst)
 
     try:
         shutil.copy2(src, dst)
@@ -148,16 +175,27 @@ try:
 except Exception:
     rollback("backing up manifest.json")
 
-entries = {f["path"]: f for f in manifest["files"]}
-for name in FILES:
-    rel = f"App/Server/{name}"
-    entry = entries.get(rel)
-    if entry is None:
-        rollback(f"manifest has no entry for {rel}")
-    target = SERVER / name
-    entry["size"] = target.stat().st_size
-    entry["sha256"] = sha256_of(target)
-    print("manifest updated:", rel, entry["size"])
+if not isinstance(manifest.get("files"), list):
+    rollback("invalid manifest.json: missing 'files' array")
+
+entries = {}
+for file_entry in manifest["files"]:
+    if not isinstance(file_entry, dict) or "path" not in file_entry:
+        rollback("invalid manifest.json: every file entry needs a 'path'")
+    entries[file_entry["path"]] = file_entry
+
+try:
+    for name in FILES:
+        rel = f"App/Server/{name}"
+        entry = entries.get(rel)
+        if entry is None:
+            rollback(f"manifest has no entry for {rel}")
+        target = SERVER / name
+        entry["size"] = target.stat().st_size
+        entry["sha256"] = sha256_of(target)
+        print("manifest updated:", rel, entry["size"])
+except Exception as error:
+    rollback(f"updating manifest entries: {error}")
 
 try:
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -166,7 +204,7 @@ except Exception:
 
 # 4. Restart the launcher and wait until it actually serves.
 try:
-    run(["powershell", "-NoProfile", "-Command", f"Start-Process '{LAUNCHER_EXE}'"])
+    os.startfile(str(LAUNCHER_EXE))
 except Exception:
     rollback("starting OpenMU-Local.exe")
 print("launcher started; waiting for the admin panel to answer...")

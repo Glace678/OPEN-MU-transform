@@ -88,14 +88,8 @@ public abstract class DataInitializationBase : IDataInitializationPlugIn
     public async Task CreateInitialDataAsync(byte numberOfGameServers, bool createTestAccounts)
     {
         BaseMapInitializer.ClearDefaultDropItemGroups();
-        using (var temporaryContext = this._persistenceContextProvider.CreateNewContext())
-        {
-            this.GameConfiguration = temporaryContext.CreateNew<GameConfiguration>();
-            this.GameConfiguration.SetGuid(1);
-            this.CreateSystemConfiguration(temporaryContext);
-            using var tempSuspension = temporaryContext.SuspendChangeNotifications();
-            await temporaryContext.SaveChangesAsync().ConfigureAwait(false);
-        }
+
+        await this.EnsureRootConfigurationAsync().ConfigureAwait(false);
 
         using var contextWithConfiguration = this._persistenceContextProvider.CreateNewContext(this.GameConfiguration);
         using var notificationSuspension = contextWithConfiguration.SuspendChangeNotifications();
@@ -178,6 +172,25 @@ public abstract class DataInitializationBase : IDataInitializationPlugIn
         this.AddAllUpdateEntries(plugInManager);
 
         await this.Context.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    private async ValueTask EnsureRootConfigurationAsync()
+    {
+        using var checkContext = this._persistenceContextProvider.CreateNewContext();
+        var existingConfiguration = await checkContext.GetByIdAsync<GameConfiguration>(new Guid("00000000-0000-0000-0000-000000000001")).ConfigureAwait(false);
+        var existingSystem = await checkContext.GetByIdAsync<SystemConfiguration>(new Guid("00000000-0000-0000-0000-000000000000")).ConfigureAwait(false);
+        if (existingConfiguration is not null && existingSystem is not null)
+        {
+            this.GameConfiguration = existingConfiguration;
+            return;
+        }
+
+        using var temporaryContext = this._persistenceContextProvider.CreateNewContext();
+        using var tempSuspension = temporaryContext.SuspendChangeNotifications();
+        this.GameConfiguration = temporaryContext.CreateNew<GameConfiguration>();
+        this.GameConfiguration.SetGuid(1);
+        this.CreateSystemConfiguration(temporaryContext);
+        await temporaryContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
     /// <summary>

@@ -838,17 +838,16 @@ void CDimension<T>::CheckDimensionSize(int nIndex)
     if (nIndex >= m_nSize)
     {
         int nNewSize = m_nSize;
-        for (; nNewSize <= nIndex; nNewSize *= 2)
+        while (nNewSize <= nIndex)
         {
+            nNewSize *= 2;
         }
 
-        T* pTempBuffer = new T[m_nSize];
-        memcpy(pTempBuffer, m_pData, m_nSize * sizeof(T));
+        T* pNewBuffer = new T[nNewSize]();
+        memcpy(pNewBuffer, m_pData, m_nSize * sizeof(T));
         delete[] m_pData;
-        m_pData = new T[nNewSize];
-        memcpy(m_pData, pTempBuffer, m_nSize * sizeof(T));
+        m_pData = pNewBuffer;
         m_nSize = nNewSize;
-        delete[] pTempBuffer;
     }
 }
 

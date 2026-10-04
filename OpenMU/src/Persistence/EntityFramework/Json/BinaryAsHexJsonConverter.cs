@@ -67,14 +67,24 @@ public class BinaryAsHexJsonConverter : JsonConverter<byte[]>
 
         if (reader.TokenType == JsonTokenType.String)
         {
-            var prefixSize = ByteArrayPrefix.Length + 1; // +1 for escaping
-            var hexData = reader.ValueSpan.Slice(prefixSize);
-            var data = new byte[(hexData.Length - prefixSize) / 2];
+            var raw = reader.ValueSpan;
+            if (raw.Length >= ByteArrayPrefix.Length &&
+                raw[0] == (byte)'\\' && raw[1] == (byte)'x')
+            {
+                raw = raw[ByteArrayPrefix.Length..];
+            }
+
+            if (raw.Length % 2 != 0)
+            {
+                throw new ArgumentException($"Hex string has an odd length ({raw.Length}).", nameof(reader));
+            }
+
+            var data = new byte[raw.Length / 2];
             for (var i = 0; i < data.Length; i++)
             {
                 var index = i * 2;
-                int highNibble = this.ParseCharacter(hexData[index]);
-                int lowNibble = this.ParseCharacter(hexData[index + 1]);
+                int highNibble = this.ParseCharacter(raw[index]);
+                int lowNibble = this.ParseCharacter(raw[index + 1]);
                 data[i] = (byte)((highNibble << 4) | lowNibble);
             }
 

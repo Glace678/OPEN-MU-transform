@@ -134,17 +134,40 @@ public class AdminUserManagementService
     /// </summary>
     /// <param name="user">The user.</param>
     /// <param name="role">The role.</param>
-    public async Task SetRoleAsync(AdminUser user, string role)
+    public async Task<bool> SetRoleAsync(AdminUser user, string role)
     {
         if (!this.EnsureIsEditable(user))
         {
-            return;
+            return false;
+        }
+
+        var currentRole = user.Roles;
+        if (string.Equals(currentRole, AdminRole.Administrator.ToString(), StringComparison.Ordinal)
+            && !string.Equals(role, AdminRole.Administrator.ToString(), StringComparison.Ordinal))
+        {
+            var otherAdmins = (await this._repository.GetAllAsync().ConfigureAwait(false))
+                .Where(u => !Equals(u, user)
+                            && u.IsDisabled is false
+                            && string.Equals(u.Roles, AdminRole.Administrator.ToString(), StringComparison.Ordinal));
+            if (!otherAdmins.Any())
+            {
+                this._toastService.ShowError("Cannot remove the last remaining Administrator.");
+                return false;
+            }
         }
 
         user.Roles = role;
 
         // The claims of running sessions carry the old role, so they have to be invalidated.
-        await this._userManager.UpdateSecurityStampAsync(user).ConfigureAwait(false);
+        var result = await this._userManager.UpdateSecurityStampAsync(user).ConfigureAwait(false);
+        if (!result.Succeeded)
+        {
+            user.Roles = currentRole;
+            this._toastService.ShowError(string.Join(' ', result.Errors.Select(e => e.Description)));
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -178,6 +201,19 @@ public class AdminUserManagementService
         {
             this._toastService.ShowError(Resources.CannotDeleteLastUser);
             return false;
+        }
+
+        if (string.Equals(user.Roles, AdminRole.Administrator.ToString(), StringComparison.Ordinal))
+        {
+            var otherAdmins = (await this._repository.GetAllAsync().ConfigureAwait(false))
+                .Where(u => !Equals(u, user)
+                            && u.IsDisabled is false
+                            && string.Equals(u.Roles, AdminRole.Administrator.ToString(), StringComparison.Ordinal));
+            if (!otherAdmins.Any())
+            {
+                this._toastService.ShowError("Cannot delete the last remaining Administrator.");
+                return false;
+            }
         }
 
         var identityResult = await this._userManager.DeleteAsync(user).ConfigureAwait(false);

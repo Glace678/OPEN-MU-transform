@@ -26,7 +26,7 @@ services:
 # So, when running the certbot the first time, we need to be able to access
 # the port 80 - and we solve this by separating the server configs.
   nginx-443:
-    image: nginx:alpine
+    image: nginx:1.27-alpine
     container_name: nginx-443
     restart: "unless-stopped"
     environment:
@@ -42,7 +42,7 @@ services:
       - openmu-startup
 
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot:2.11.0
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw

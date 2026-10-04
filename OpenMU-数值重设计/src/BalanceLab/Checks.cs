@@ -118,6 +118,29 @@ public sealed class Checks(Rules rules, Simulation simulation)
             if (!value) throw new InvalidDataException(message);
             Passed++;
         }
+        void RequireNotNull(object? value, string name) =>
+            Require(value is not null, $"Missing required design section: {name}");
+        // B-03: missing/null design sections become structured validation errors
+        // instead of a downstream NullReference / IndexOutOfRange on malformed JSON.
+        RequireNotNull(D.Combat, "combat");
+        RequireNotNull(D.Growth, "growth");
+        RequireNotNull(D.Profiles, "profiles");
+        RequireNotNull(D.Gear, "gear");
+        RequireNotNull(D.Classes, "classes");
+        RequireNotNull(D.Skills, "skills");
+        Require(D.Classes.Length > 0, "Design must define at least one class");
+        Require(D.Skills.Length > 0, "Design must define at least one skill");
+        RequireNotNull(D.Monsters, "monsters");
+        RequireNotNull(D.Monsters.Ranks, "monsters.ranks");
+        RequireNotNull(D.Loot, "loot");
+        RequireNotNull(D.Loot.Equipment, "loot.equipment");
+        RequireNotNull(D.Economy, "economy");
+        RequireNotNull(D.Economy.Potions, "economy.potions");
+        RequireNotNull(D.Enhancement, "enhancement");
+        RequireNotNull(D.Enhancement.Steps, "enhancement.steps");
+        RequireNotNull(D.Progression, "progression");
+        RequireNotNull(D.Progression.NormalSeconds, "progression.normalSeconds");
+        RequireNotNull(D.Progression.MasterSeconds, "progression.masterSeconds");
         Require(D.NormalCap == 400 && D.MasterCap == 200, "Unsupported S6 level dimensions");
         Require(D.Monsters.Ranks.Select(r => r.Id).Distinct().Count() == 3, "Unique normal/elite/boss definitions");
         foreach (var skill in D.Skills)

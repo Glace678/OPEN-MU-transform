@@ -3,6 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include <cstring>
 #include "Core/Time/FrameScaling.h"
 #include "LoginScene.h"
 #include "Camera/CameraUtility.h"
@@ -557,8 +558,10 @@ bool NewRenderLogInScene(HDC hDC)
         g_pRenderText->SetTextColor(255, 255, 255, promptAlpha);
         g_pRenderText->SetBgColor(0, 0, 0, static_cast<BYTE>(90 * pulse + 30));
 
+        const char* tapLocale = I18N::GetCurrentLocale();
+        const bool chinesePrompt = tapLocale != nullptr && strncmp(tapLocale, "zh", 2) == 0;
         g_pRenderText->RenderText(
-            0, MOBILE_TAP_PROMPT_Y, L"点击屏幕开始    Tap to Start",
+            0, MOBILE_TAP_PROMPT_Y, chinesePrompt ? L"点击屏幕开始" : L"Tap to Start",
             REFERENCE_WIDTH, 0, RT3_SORT_CENTER);
 
         g_pRenderText->SetTextColor(255, 255, 255, 255);

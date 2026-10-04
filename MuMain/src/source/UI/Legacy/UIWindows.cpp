@@ -3994,12 +3994,20 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
         ReceiveChatRoomUserStateChange(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x02:
+        {
+            // #MG-14: validate header + Count records against actual frame size.
+            if (Size < (int)sizeof(FS_CHAT_USERLIST_HEADER)) break;
+            auto ulHdr = (LPFS_CHAT_USERLIST_HEADER)ReceiveBuffer;
+            long ulNeed = (long)sizeof(FS_CHAT_USERLIST_HEADER) + (long)ulHdr->Count * (long)sizeof(FS_CHAT_USERLIST_DATA);
+            if (ulHdr->Count < 0 || ulNeed > Size) break;
+        }
         ReceiveChatRoomUserList(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x04:
         ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x0D:
+        if (Size < (int)sizeof(FS_CHAT_TEXT)) break;  // #MG-13: reject short notice frame before writing Msg[99]
         ReceiveChatRoomNoticeText(dwWindowUIID, ReceiveBuffer);
         break;
     default:
@@ -5138,7 +5146,11 @@ void CUITextInputWindow::ReturnText()
     wchar_t* pszReturnText = new wchar_t[MAX_TEXT_LENGTH + 1];
     m_TextInputBox.GetText(pszReturnText);
     m_TextInputBox.SetText(NULL);
-    if (pszReturnText[0] == '\0') return;
+    if (pszReturnText[0] == '\0')
+    {
+        delete[] pszReturnText;
+        return;
+    }
 
     g_pWindowMgr->SendUIMessageToWindow(m_dwReturnWindowUIID, UI_MESSAGE_TXTRETURN, GetUIID(), reinterpret_cast<LONG_PTR>(pszReturnText));
     g_pWindowMgr->SendUIMessage(UI_MESSAGE_CLOSE, GetUIID(), 0);
@@ -5423,6 +5435,7 @@ void CUIFriendMenu::DoMouseActionSub()
                 if (m_WindowListIter == m_WindowList.end()) break;
             }
             m_WindowListSelectIter = m_WindowListIter;
+            if (m_WindowListSelectIter == m_WindowList.end()) return;  // #MG-16: never dereference end
             if (MouseLButtonPop && GetState() == UISTATE_NORMAL)
             {
                 SetFocus(g_hWnd);

@@ -1,4 +1,5 @@
 ﻿#include "Core/Input/GamepadService.h"
+#include "Core/Platform/PlatformDetect.h"
 
 #include <algorithm>
 #include <cmath>
@@ -57,7 +58,7 @@ namespace Core::Input
         const GamepadSettings& gamepadSettings,
         const Core::Haptics::HapticSettings& hapticSettings)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         // Touch-only builds: controllers are disabled by construction. The
         // backend still initializes SDL haptics for phone vibration.
         (void)gamepadSettings;
@@ -87,7 +88,7 @@ namespace Core::Input
 
     void GamepadService::HandleEvent(const SDL_Event& event)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         (void)event; // touch-only build: no controller events are consumed
         return;
 #else
@@ -112,7 +113,7 @@ namespace Core::Input
         float pointerHeight,
         bool acceptInput)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         (void)context;
         (void)pointerWidth;
         (void)pointerHeight;
@@ -206,7 +207,7 @@ namespace Core::Input
 
     bool GamepadService::PublishHaptic(Core::Haptics::HapticEvent event, double nowMs)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         return m_focused && m_haptics.Publish(event, nowMs);
 #else
         return m_gamepadEnabled && m_focused && m_haptics.Publish(event, nowMs);
@@ -215,7 +216,7 @@ namespace Core::Input
 
     void GamepadService::SetGamepadSettings(const GamepadSettings& settings)
     {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         (void)settings; // controllers do not exist on touch-only builds
         return;
 #else

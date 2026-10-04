@@ -13,7 +13,7 @@ if (args.Length != 1)
     return 2;
 }
 
-var output = Path.GetFullPath(args[0]);
+var output = ResolveControlledOutput(args[0]);
 Directory.CreateDirectory(output);
 var provider = new InMemoryPersistenceContextProvider();
 using var context = provider.CreateNewConfigurationContext();
@@ -72,3 +72,20 @@ return 0;
 
 static float Read(MonsterDefinition monster, MUnique.OpenMU.AttributeSystem.AttributeDefinition stat) =>
     monster.Attributes.FirstOrDefault(a => a.AttributeDefinition == stat)?.Value ?? 0;
+
+// B-04: restrict writes to the controlled artifacts root (relative to the working
+// directory Verify.ps1 runs from). A caller-supplied absolute path outside it is
+// refused instead of overwriting a fixed-name file anywhere on disk.
+static string ResolveControlledOutput(string requested)
+{
+    var allowedRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "artifacts"));
+    var output = Path.GetFullPath(requested);
+    var within = output.StartsWith(allowedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                 || string.Equals(output, allowedRoot, StringComparison.OrdinalIgnoreCase);
+    if (!within)
+    {
+        Console.Error.WriteLine($"Refusing to write outside the controlled artifacts root: {output} (allowed: {allowedRoot})");
+        Environment.Exit(2);
+    }
+    return output;
+}

@@ -169,19 +169,45 @@ public class Listener
                 await clientAccepting.Invoke(cancel).ConfigureAwait(false);
             }
 
-            if (cancel is null || !cancel.Cancel)
+            if (cancel is not null && cancel.Cancel)
             {
-                socket.NoDelay = true; // todo: option?
-                var connection = this.CreateConnection(socket);
+                socket.Dispose();
+                return;
+            }
 
+            socket.NoDelay = true;
+            IConnection connection;
+            try
+            {
+                connection = this.CreateConnection(socket);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Error creating connection for accepted socket; cleaning up.");
+                socket.Dispose();
+                return;
+            }
+
+            try
+            {
                 if (this.ClientAccepted is { } clientAccepted)
                 {
                     await clientAccepted.Invoke(new ClientAcceptedEventArgs(connection)).ConfigureAwait(false);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                socket.Dispose();
+                this._logger.LogError(ex, "ClientAccepted callback failed; disconnecting the connection.");
+                try
+                {
+                    await connection.DisconnectAsync().ConfigureAwait(false);
+                }
+                catch (Exception inner)
+                {
+                    this._logger.LogError(inner, "Error while disconnecting failed connection.");
+                }
+
+                connection.Dispose();
             }
         }
         catch (Exception ex)

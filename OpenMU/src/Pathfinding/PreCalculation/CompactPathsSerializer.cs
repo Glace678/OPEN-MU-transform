@@ -16,22 +16,23 @@ internal class CompactPathsSerializer : IPathsSerializer
     /// <inheritdoc/>
     public IEnumerable<PathInfo> Deserialize(Stream source)
     {
-        const int elementSize = 6;
+        const int elementSize = 4;
+        const int CompactOffsetBias = 8;
 
-        while (source.Position + elementSize < source.Length)
+        while (source.Position + elementSize <= source.Length)
         {
             byte startX = (byte)source.ReadByte();
             byte startY = (byte)source.ReadByte();
             byte startEndDiff = (byte)source.ReadByte();
             byte startNextStepDiff = (byte)source.ReadByte();
             var start = new Point(startX, startY);
-            byte xOffset = (byte)(startEndDiff >> 4 & 0x0F);
-            byte yOffset = (byte)(startEndDiff & 0x0F);
-            var end = new Point((byte)(startX + xOffset), (byte)(startY + yOffset));
+            int xOffset = startEndDiff >> 4 & 0x0F;
+            int yOffset = startEndDiff & 0x0F;
+            var end = new Point((byte)(startX + xOffset - CompactOffsetBias), (byte)(startY + yOffset - CompactOffsetBias));
 
-            byte xOffsetNext = (byte)(startNextStepDiff >> 4 & 0x0F);
-            byte yOffsetNext = (byte)(startNextStepDiff & 0x0F);
-            var nextStep = new Point((byte)(startX + xOffsetNext), (byte)(startY + yOffsetNext));
+            int xOffsetNext = startNextStepDiff >> 4 & 0x0F;
+            int yOffsetNext = startNextStepDiff & 0x0F;
+            var nextStep = new Point((byte)(startX + xOffsetNext - CompactOffsetBias), (byte)(startY + yOffsetNext - CompactOffsetBias));
             yield return new PathInfo(new PointCombination(start, end), nextStep);
         }
     }

@@ -24,6 +24,14 @@ public class PartyKickAction
             return;
         }
 
+        if (index >= party.PartyList.Count)
+        {
+            player.Logger.LogWarning(
+                "Player {0} tried to kick party member at invalid index {1} (party size {2}).",
+                player, index, party.PartyList.Count);
+            return;
+        }
+
         if (!Equals(player, party.PartyList[0]) &&
             !Equals(player, party.PartyList[index]))
         {

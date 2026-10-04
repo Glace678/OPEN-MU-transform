@@ -171,11 +171,17 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         return false;
     }
 
-    fseek(compressedFile, 24, SEEK_SET);
-    const auto jpegSize = fileSize - 24;
+    constexpr long JpegHeaderSize = 24;
+    fseek(compressedFile, JpegHeaderSize, SEEK_SET);
+    const auto jpegSize = fileSize - JpegHeaderSize;
     std::vector<unsigned char> jpegBuf(static_cast<size_t>(jpegSize));
-    fread(jpegBuf.data(), 1, jpegBuf.size(), compressedFile);
+    const auto bytesRead = fread(jpegBuf.data(), 1, jpegBuf.size(), compressedFile);
     fclose(compressedFile);
+    if (bytesRead != static_cast<size_t>(jpegSize))
+    {
+        g_ErrorReport.Write(L"OZJ file '%ls' is truncated.\r\n", fileName.c_str());
+        return false;
+    }
 
     int jpegWidth = 0;
     int jpegHeight = 0;
@@ -195,7 +201,23 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         return false;
     }
 
-    const auto bufferSize = static_cast<size_t>(jpegWidth) * static_cast<size_t>(jpegHeight) * 3;
+    if (jpegWidth != TERRAIN_SIZE || jpegHeight != TERRAIN_SIZE)
+    {
+        g_ErrorReport.Write(
+            L"OZJ '%ls' has unsupported size %dx%d; expected %dx%d.\r\n",
+            fileName.c_str(),
+            jpegWidth,
+            jpegHeight,
+            TERRAIN_SIZE,
+            TERRAIN_SIZE);
+        tjDestroy(tjhandle);
+        return false;
+    }
+
+    const size_t channels = 3;
+    const size_t bufferSize = static_cast<size_t>(jpegWidth)
+        * static_cast<size_t>(jpegHeight)
+        * channels;
     std::vector<unsigned char> buffer(bufferSize);
     result = tjDecompress2(tjhandle, jpegBuf.data(), jpegBuf.size(), buffer.data(), jpegWidth, 0, jpegHeight, TJPF_RGB, TJFLAG_BOTTOMUP);
     tjDestroy(tjhandle);
@@ -222,16 +244,15 @@ bool LoadBitmap(const wchar_t* szFileName, GLuint uiTextureIndex, GLuint uiFilte
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (bFullPath == true)
     {
-        wcscpy(szFullPath, szFileName);
+        wcsncpy(szFullPath, szFileName, std::size(szFullPath) - 1);
+        szFullPath[std::size(szFullPath) - 1] = L'\0';
     }
     else
     {
-        wcscpy(szFullPath, L"Data\\");
-        wcscat(szFullPath, szFileName);
+        mu_swprintf(szFullPath, L"Data\\%ls", szFileName);
     }
 #else // KJH_ADD_INGAMESHOP_UI_SYSTEM
-    wcscpy(szFullPath, L"Data\\");
-    wcscat(szFullPath, szFileName);
+    mu_swprintf(szFullPath, L"Data\\%ls", szFileName);
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (bCheck)
     {
@@ -257,7 +278,8 @@ void DeleteBitmap(GLuint uiTextureIndex, bool bForce)
 void PopUpErrorCheckMsgBox(const wchar_t* szErrorMsg, bool bForceDestroy)
 {
     wchar_t szMsg[1024] = { 0, };
-    wcscpy(szMsg, szErrorMsg);
+    wcsncpy(szMsg, szErrorMsg, std::size(szMsg) - 1);
+    szMsg[std::size(szMsg) - 1] = L'\0';
 
     if (bForceDestroy)
     {

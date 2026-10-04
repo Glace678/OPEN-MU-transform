@@ -1,7 +1,11 @@
-$ErrorActionPreference = 'Stop'
+# param() MUST be the first statement in a PowerShell script; the previous
+# version set $ErrorActionPreference above it, which made the parser fail before
+# the firewall rule could ever be created (finding A-01).
 param(
     [switch]$Force
 )
+
+$ErrorActionPreference = 'Stop'
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = [Security.Principal.WindowsPrincipal]::new($identity)
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {

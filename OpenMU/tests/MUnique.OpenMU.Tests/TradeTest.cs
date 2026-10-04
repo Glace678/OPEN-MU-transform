@@ -139,6 +139,39 @@ public class TradeTest
     }
 
     /// <summary>
+    /// Tests that a trade settles both items and the zen balances in one operation (P2).
+    /// </summary>
+    [Test]
+    public async ValueTask TradeSettlesItemsAndZenAsync()
+    {
+        var trader1 = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        var trader2 = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        var tradeRequestAction = new TradeRequestAction();
+        var tradeResponseAction = new TradeAcceptAction();
+
+        trader1.Money = 1000;
+        trader2.Money = 200;
+
+        var item1 = this.GetItem();
+        await trader1.Inventory!.AddItemAsync(20, item1).ConfigureAwait(false);
+        await tradeRequestAction.RequestTradeAsync(trader1, trader2).ConfigureAwait(false);
+        await tradeResponseAction.HandleTradeAcceptAsync(trader2, true).ConfigureAwait(false);
+        var itemMoveAction = new MoveItemAction();
+        await itemMoveAction.MoveItemAsync(trader1, 20, Storages.Inventory, 0, Storages.Trade).ConfigureAwait(false);
+
+        trader1.TradingMoney = 500;
+        trader2.TradingMoney = 0;
+
+        var tradeButtonHandler = new TradeButtonAction();
+        await tradeButtonHandler.TradeButtonChangedAsync(trader1, TradeButtonState.Checked).ConfigureAwait(false);
+        await tradeButtonHandler.TradeButtonChangedAsync(trader2, TradeButtonState.Checked).ConfigureAwait(false);
+
+        Assert.That(trader2.Inventory!.ItemStorage.Items, Has.Some.Matches<Item>(i => i == item1));
+        Assert.That(trader1.Money, Is.EqualTo(1000));
+        Assert.That(trader2.Money, Is.EqualTo(700));
+    }
+
+    /// <summary>
     /// Tests a trade of items, when it failes due to missing inventory space.
     /// </summary>
     [Test]
@@ -244,6 +277,7 @@ public class TradeTest
         temporaryStorage.Setup(t => t.Items).Returns(new List<Item>());
         trader.Setup(t => t.TemporaryStorage).Returns(temporaryStorage.Object);
         trader.Setup(t => t.ViewPlugIns).Returns(new MockViewPlugInContainer());
+        trader.Setup(t => t.SaveProgressAsync(It.IsAny<System.Threading.CancellationToken>())).Returns(new ValueTask<bool>(true));
 
         var contextMock = new Mock<IPlayerContext>();
         trader.Setup(t => t.PersistenceContext).Returns(contextMock.Object);

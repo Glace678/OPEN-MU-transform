@@ -80,7 +80,7 @@ public class BalanceV1EarlyEconomyTests
         var after = player.Attributes[Stats.CurrentHealth];
         Assert.Multiple(() =>
         {
-            Assert.That(after, Is.EqualTo(Math.Min(160, player.Attributes[Stats.MaximumHealth] * .28)).Within(.001));
+            Assert.That(after, Is.EqualTo(Math.Min(160, player.Attributes[Stats.MaximumHealth] * .32)).Within(.001));
             Assert.That(player.Attributes[Stats.CurrentMana], Is.EqualTo(Math.Min(120, player.Attributes[Stats.MaximumMana] * .4)).Within(.001));
             Assert.That(health.Durability, Is.EqualTo(2));
             Assert.That(mana.Durability, Is.EqualTo(2));
@@ -252,14 +252,14 @@ public class BalanceV1EarlyEconomyTests
         random.Setup(value => value.NextDouble()).Returns(.5);
         var drops = await new DefaultDropGenerator(configuration, random.Object).GenerateItemDropsAsync(monster.Definition,
             await player.CalculateExpAfterKillAsync(monster).ConfigureAwait(false), player).ConfigureAwait(false);
-        Assert.That(drops.Money, Is.EqualTo(9));
+        Assert.That(drops.Money, Is.EqualTo(10));
         await using var money = new DroppedMoney(drops.Money!.Value, player.Position, map);
         Assert.That(await money.TryPickUpByAsync(player).ConfigureAwait(false), Is.True);
         Assert.That(await money.TryPickUpByAsync(player).ConfigureAwait(false), Is.False, "No duplicate pickup credit.");
         using var merchant = await OpenMerchantAsync(player, 253).ConfigureAwait(false);
         var offer = merchant.Definition.MerchantStore!.Items.Single(item => item.Definition!.Number == 4 && item.Level == 0 && item.Durability == 1);
         await new BuyNpcItemAction().BuyItemAsync(player, offer.ItemSlot).ConfigureAwait(false);
-        Assert.That(player.Money, Is.EqualTo(1));
+        Assert.That(player.Money, Is.EqualTo(2));
         Assert.That(player.Inventory!.Items.Any(item => item.Definition == offer.Definition && item.Durability == 1), Is.True);
         await map.RemoveAsync(monster).ConfigureAwait(false);
     }

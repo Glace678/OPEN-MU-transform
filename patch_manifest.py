@@ -63,6 +63,14 @@ for e in files:
         updated.append((p, old_size, size, old_sha, sha))
         print('updated:', p, old_size, '->', size)
 
+updated_paths = {u[0] for u in updated}
+missing_targets = [target for target in TARGETS if target not in updated_paths]
+if missing_targets:
+    # Refuse to rewrite the live manifest on a partial patch: otherwise the
+    # missing target keeps a stale size/sha256 while we still report success.
+    print('ERROR: required target(s) not patched:', ', '.join(missing_targets), file=sys.stderr)
+    sys.exit(1)
+
 # Keep a copy of the previous manifest next to the live one before rewriting.
 shutil.copy2(LIVE, LIVE + '.bak')
 with open(LIVE, 'w', encoding='utf-8') as f:

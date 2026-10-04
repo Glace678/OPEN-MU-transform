@@ -131,8 +131,15 @@ int main(int argc, char** argv)
     }
 
     RIME_STRUCT(RimeContext, context);
-    if (!api->get_context(session, &context) || context.menu.num_candidates <= 0)
+    if (!api->get_context(session, &context))
     {
+        api->destroy_session(session);
+        api->finalize();
+        return Fail("Rime get_context failed", 8);
+    }
+    if (context.menu.num_candidates <= 0)
+    {
+        api->free_context(&context);  // #36: release context even with no candidates
         api->destroy_session(session);
         api->finalize();
         return Fail("Rime returned no candidate for nihao", 8);

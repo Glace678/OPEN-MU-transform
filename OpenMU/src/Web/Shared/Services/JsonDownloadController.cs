@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Web.Shared.Services;
 
 using System.IO;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MUnique.OpenMU.Persistence;
@@ -19,6 +20,7 @@ using MUnique.OpenMU.Persistence.Json;
 /// <typeparam name="TSerializable">The type of the serializable.</typeparam>
 [Route("download/[controller]")]
 [GenericControllerName]
+[Authorize]
 public class JsonDownloadController<T, TSerializable> : ControllerBase
     where T : class
     where TSerializable : class

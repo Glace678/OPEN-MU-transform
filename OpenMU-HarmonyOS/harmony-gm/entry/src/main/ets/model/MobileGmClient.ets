@@ -1,4 +1,4 @@
-// ArkTS port of the Android GM API client. It talks to the same
+﻿// ArkTS port of the Android GM API client. It talks to the same
 // /api/mobile-gm/* endpoints on the local OpenMU server and carries the same
 // X-OpenMU-Mobile-Key pairing header, so the server-side account and grants
 // are identical across Android and HarmonyOS.
@@ -52,8 +52,10 @@ function clean(value: string | undefined | null): string {
   return (value ?? '').trim();
 }
 
-// Only allow loopback, RFC1918 private and link-local IPv4 over plain HTTP,
-// mirroring ServerAddressPolicy on Android. Public hosts must be HTTPS.
+// H-06: validate the GM base URL strictly. Reject userinfo, query, fragment,
+// empty host and abnormal authority for BOTH schemes (the previous https branch
+// accepted e.g. https://user:pass@evil.com). Public hosts must be HTTPS; plain
+// HTTP is only allowed to loopback / RFC1918 private / link-local addresses.
 // Parsed manually (no global URL dependency) for stable behaviour across SDKs.
 export function isAllowedServerUrl(rawUrl: string): boolean {
   const value = (rawUrl ?? '').trim();
@@ -62,16 +64,24 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
     return false;
   }
   const protocol = protocolMatch[1].toLowerCase();
-  if (protocol === 'https') {
-    return true;
-  }
-  if (protocol !== 'http') {
+  if (protocol !== 'https' && protocol !== 'http') {
     return false;
   }
   const rest = value.substring(protocolMatch[0].length);
-  const hostPart = rest.split('/')[0].split('?')[0].split('#')[0];
-  // Strip userinfo and port.
-  const host = hostPart.split('@').pop()!.split(':')[0];
+  const authority = rest.split('/')[0].split('?')[0].split('#')[0];
+  if (authority.length === 0) {
+    return false;
+  }
+  if (authority.includes('@')) {
+    return false;
+  }
+  const host = authority.split(':')[0];
+  if (host.length === 0) {
+    return false;
+  }
+  if (protocol === 'https') {
+    return true;
+  }
   if (host === 'localhost' || host === '127.0.0.1') {
     return true;
   }
@@ -81,8 +91,6 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
   }
   const octets: number[] = [];
   for (const part of parts) {
-    // Reject leading zeros and oversized octets, matching LocalIpv4Address on
-    // Android and isPrivateAddress in build-tools: "010.1.1.1" must not pass.
     if (!/^(0|[1-9]\d{0,2})$/.test(part)) {
       return false;
     }
@@ -94,7 +102,6 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
   }
   const a = octets[0];
   const b = octets[1];
-  // 10/8, 172.16/12, 192.168/16, 169.254/16 link-local.
   return a === 10
     || (a === 172 && b >= 16 && b <= 31)
     || (a === 192 && b === 168)
@@ -136,6 +143,16 @@ export class MobileGmClient {
   constructor(baseUrl: string, packageKey: string) {
     this.baseUrl = trimSlash(baseUrl);
     this.packageKey = packageKey;
+    // H-03: reject the committed 43-'A' build-profile placeholder so a build that
+    // forgot to inject the real MOBILE_PACKAGE_KEY cannot talk to the server.
+    if (/^A{43}$/.test(packageKey)) {
+      throw new ApiError('MOBILE_PACKAGE_KEY 仍是构建占位值，请注入真实密钥');
+    }
+    // H-06: fail fast on a misconfigured base URL instead of silently connecting
+    // to an attacker-controlled host embedded via userinfo.
+    if (!isAllowedServerUrl(this.baseUrl)) {
+      throw new ApiError('服务器地址不安全（仅允许 https 或局域网 http）');
+    }
   }
 
   private async send(method: string, path: string, body?: string): Promise<RawResponse> {

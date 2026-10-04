@@ -114,15 +114,15 @@ public sealed class AccountSelfServiceGuard
             this.PruneFailuresLocked();
             if (!this._failedAttempts.TryGetValue(loginName, out var attempts))
             {
-                attempts = new FailedAttempts(0, DateTimeOffset.MinValue);
-                this._failedAttempts[loginName] = attempts;
+                attempts = FailedAttempts.None;
             }
 
+            var now = DateTimeOffset.UtcNow;
             var failures = attempts.Failures + 1;
             var lockedUntil = failures >= MaximumFailedAttempts
-                ? DateTimeOffset.UtcNow.Add(LockoutDuration)
+                ? now.Add(LockoutDuration)
                 : attempts.LockedUntil;
-            this._failedAttempts[loginName] = new FailedAttempts(failures, lockedUntil);
+            this._failedAttempts[loginName] = new FailedAttempts(failures, lockedUntil, now);
         }
     }
 
@@ -198,7 +198,11 @@ public sealed class AccountSelfServiceGuard
         List<string>? stale = null;
         foreach (var pair in this._failedAttempts)
         {
-            if (pair.Value.LockedUntil < cutoff)
+            var attempts = pair.Value;
+            var lockoutExpired = attempts.LockedUntil != DateTimeOffset.MinValue
+                && attempts.LockedUntil <= DateTimeOffset.UtcNow;
+            if ((lockoutExpired || attempts.LockedUntil == DateTimeOffset.MinValue)
+                && attempts.LastFailure < cutoff)
             {
                 (stale ??= new List<string>()).Add(pair.Key);
             }
@@ -276,7 +280,10 @@ public sealed class AccountSelfServiceGuard
         }
     }
 
-    private sealed record FailedAttempts(int Failures, DateTimeOffset LockedUntil);
+    private sealed record FailedAttempts(int Failures, DateTimeOffset LockedUntil, DateTimeOffset LastFailure)
+    {
+        public static FailedAttempts None { get; } = new(0, DateTimeOffset.MinValue, DateTimeOffset.MinValue);
+    }
 }
 
 /// <summary>

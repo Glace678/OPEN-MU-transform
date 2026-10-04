@@ -76,7 +76,7 @@ bool CNewUIInventoryCtrl::CreatePickedItem(CNewUIInventoryCtrl* source, ITEM* it
 {
     ++effects.pickups;
     ms_pPickedItem = new CNewUIPickedItem;
-    if (failPickup) return false;
+    if (failPickup) { delete ms_pPickedItem; ms_pPickedItem = nullptr; return false; }  // #35: release on failed pickup
     return ms_pPickedItem->Create(nullptr, source, item);
 }
 void CNewUIInventoryCtrl::DeletePickedItem() { delete ms_pPickedItem; ms_pPickedItem = nullptr; }

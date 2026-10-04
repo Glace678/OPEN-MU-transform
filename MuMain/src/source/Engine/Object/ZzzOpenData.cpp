@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/Legacy/UIControls.h"
 #include "Render/Models/ZzzBMD.h"
 #include "Engine/Object/ZzzInfomation.h"
@@ -44,8 +44,8 @@ void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...)
 {
     wchar_t ModelName[100];
     wchar_t AnimationName[20][100];
-    wcscpy(ModelName, Dir);
-    wcscat(ModelName, ModelFileName);
+    wcsncpy(ModelName, Dir, 99); ModelName[99] = L'\0';
+    wcsncat(ModelName, ModelFileName, 99 - wcslen(ModelName)); ModelName[99] = L'\0';
 
     va_list Marker;
     va_start(Marker, ModelFileName);
@@ -59,8 +59,9 @@ void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...)
         }
         else
         {
-            wcscpy(AnimationName[AnimationCount], Dir);
-            wcscat(AnimationName[AnimationCount], Temp);
+            if (AnimationCount >= 20) break;
+            wcsncpy(AnimationName[AnimationCount], Dir, 99); AnimationName[AnimationCount][99] = L'\0';
+            wcsncat(AnimationName[AnimationCount], Temp, 99 - wcslen(AnimationName[AnimationCount])); AnimationName[AnimationCount][99] = L'\0';
             AnimationCount++;
         }
     }
@@ -2220,6 +2221,7 @@ void OpenNpc(int Type)
     case MODEL_TERSIA:
         gLoadData.AccessModel(MODEL_TERSIA, L"Data\\Npc\\", L"tersia");
         gLoadData.OpenTexture(MODEL_TERSIA, L"Npc\\");
+        break;
     case MODEL_BENA:
         gLoadData.AccessModel(MODEL_BENA, L"Data\\Npc\\", L"bena");
         gLoadData.OpenTexture(MODEL_BENA, L"Npc\\");
@@ -2257,6 +2259,7 @@ void OpenNpc(int Type)
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.3f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 1.2f;
         Models[Type].Actions[MONSTER01_WALK].PlaySpeed = 0.3f;
+        break;
     case MODEL_UNITEDMARKETPLACE_RAUL:
         Models[Type].Actions[MONSTER01_STOP1].PlaySpeed = 0.5f;
         Models[Type].Actions[MONSTER01_STOP2].PlaySpeed = 0.5f;
@@ -4215,7 +4218,7 @@ void OpenSkills()
     gLoadData.OpenTexture(MODEL_FENRIR_BLUE, L"Skill\\");
 
     gLoadData.AccessModel(MODEL_FENRIR_GOLD, L"Data\\Skill\\", L"fenril_gold");
-    gLoadData.OpenTexture(MODEL_FENRIR_BLUE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_FENRIR_GOLD, L"Skill\\");
 
     gLoadData.AccessModel(MODEL_PANDA, L"Data\\Item\\", L"panda");
     gLoadData.OpenTexture(MODEL_PANDA, L"Item\\");
@@ -4309,7 +4312,7 @@ void OpenSkills()
 
     for (int i = 0; i < 2; ++i)
     {
-        gLoadData.OpenTexture(MODEL_GATE + 1, L"Monster\\");
+        gLoadData.OpenTexture(MODEL_GATE + i, L"Monster\\");
         gLoadData.OpenTexture(MODEL_STONE_COFFIN + i, L"Monster\\");
     }
 

@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
 {
     using System.Text.Json;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MUnique.OpenMU.GameLogic;
     using MUnique.OpenMU.GameServer;
@@ -47,14 +48,18 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
         [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.Operator)]
         public async Task<IActionResult> SendGlobalMessageAsync(int id, [FromQuery(Name = "msg")] string msg)
         {
-            var server = (GameServer)this._gameServers.Values.ElementAt(id);
-            if (server is not null)
+            if (!this._gameServers.TryGetValue(id, out var gameServer))
             {
-                await server.Context.SendGlobalNotificationAsync(msg).ConfigureAwait(false);
-                return this.Ok("Done");
+                return this.NotFound($"Server with id {id} not found.");
             }
 
-            return this.Ok("Server not ready");
+            if (gameServer is not GameServer { ServerState: ServerState.Started } server)
+            {
+                return this.StatusCode(StatusCodes.Status503ServiceUnavailable, "Server not ready.");
+            }
+
+            await server.Context.SendGlobalNotificationAsync(msg).ConfigureAwait(false);
+            return this.Ok("Done");
         }
 
         /// <summary>
@@ -86,32 +91,26 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
         /// </summary>
         [HttpGet]
         [Route("status")]
-        public IActionResult ServerState()
+        public async Task<IActionResult> ServerStateAsync()
         {
             int sum = 0;
             var list = new List<string>();
-            this._gameServers.Values.ForEach(async item =>
+            foreach (var item in this._gameServers.Values.OfType<GameServer>())
             {
-                var server = item as GameServer;
-                if (server is not null)
+                await item.Context.ForEachPlayerAsync(player =>
                 {
-                    await server.Context.ForEachPlayerAsync(player =>
-                    {
-                        list.Add(player.GetName());
-                        return Task.CompletedTask;
-                    }).ConfigureAwait(false);
-                    sum = sum + server.Context.PlayerCount;
-                }
-            });
+                    list.Add(player.GetName());
+                    return Task.CompletedTask;
+                }).ConfigureAwait(false);
+                sum += item.Context.PlayerCount;
+            }
 
-            var item = new
+            return this.Ok(new
             {
                 state = "Online",
                 players = sum,
                 playersList = list,
-            };
-
-            return this.Ok(JsonSerializer.Serialize(item));
+            });
         }
     }
 }

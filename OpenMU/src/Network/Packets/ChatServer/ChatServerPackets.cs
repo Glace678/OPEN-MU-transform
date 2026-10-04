@@ -423,7 +423,10 @@ public readonly struct ChatRoomClients
     /// <summary>
     /// Gets the <see cref="ChatClient"/> of the specified index.
     /// </summary>
-        public ChatClient this[int index] => new (this._data.Slice(8 + index * ChatClient.Length));
+        public ChatClient this[int index] =>
+            (index < 0 || 8 + index * ChatClient.Length + ChatClient.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new ChatClient(this._data.Slice(8 + index * ChatClient.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="ChatRoomClients"/>.

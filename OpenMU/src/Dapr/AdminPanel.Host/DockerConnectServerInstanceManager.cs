@@ -23,9 +23,11 @@ public class DockerConnectServerInstanceManager : IConnectServerInstanceManager
     }
 
     /// <inheritdoc />
-    public async ValueTask InitializeConnectServerAsync(Guid connectServerDefinitionId)
+    public ValueTask InitializeConnectServerAsync(Guid connectServerDefinitionId)
     {
-        // TODO: Implement this... by starting a new docker container
+        throw new NotSupportedException(
+            "Initializing a new ConnectServer container is not implemented in this host. " +
+            "Start the container manually or via an orchestration tool.");
     }
 
     /// <inheritdoc />

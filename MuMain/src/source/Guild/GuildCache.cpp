@@ -25,7 +25,7 @@ void CGuildCache::Reset()
 
 int CGuildCache::GetGuildMarkIndex(int nGuildKey)
 {
-    for (int i = 0; i <= (int)m_dwCurrIndex; ++i)
+    for (int i = 0; i < static_cast<int>(m_dwCurrIndex); ++i)
     {
         if (GuildMark[i].Key == nGuildKey)
             return i;

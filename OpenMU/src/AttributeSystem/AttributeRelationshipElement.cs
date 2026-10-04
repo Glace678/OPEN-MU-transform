@@ -29,9 +29,10 @@ public class AttributeRelationshipElement : SimpleElement
     /// <param name="inputOperator">The input operator.</param>
     public AttributeRelationshipElement(IEnumerable<IElement> inputElements, IElement inputOperand, InputOperator inputOperator)
     {
+        ArgumentNullException.ThrowIfNull(inputOperand);
         this.InputElements = inputElements.ToArray();
-        this.InputOperand = inputOperand;
-        this.InputOperator = inputOperator;
+        this._inputOperand = inputOperand;
+        this._inputOperator = inputOperator;
         foreach (var element in this.InputElements)
         {
             element.ValueChanged += this.ElementChanged;
@@ -47,15 +48,48 @@ public class AttributeRelationshipElement : SimpleElement
     /// </summary>
     public IEnumerable<IElement> InputElements { get; }
 
+    private IElement _inputOperand = null!;
+
+    private InputOperator _inputOperator;
+
     /// <summary>
     /// Gets or sets the multiplier with which the sum of all input element values are multiplied.
     /// </summary>
-    public IElement InputOperand { get; set; }
+    public IElement InputOperand
+    {
+        get => this._inputOperand;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            if (ReferenceEquals(this._inputOperand, value))
+            {
+                return;
+            }
+
+            this._inputOperand.ValueChanged -= this.ElementChanged;
+            this._inputOperand = value;
+            this._inputOperand.ValueChanged += this.ElementChanged;
+            this.ElementChanged(value, EventArgs.Empty);
+        }
+    }
 
     /// <summary>
     /// Gets or sets the input operator.
     /// </summary>
-    public InputOperator InputOperator { get; set; }
+    public InputOperator InputOperator
+    {
+        get => this._inputOperator;
+        set
+        {
+            if (this._inputOperator == value)
+            {
+                return;
+            }
+
+            this._inputOperator = value;
+            this.ElementChanged(null, EventArgs.Empty);
+        }
+    }
 
     /// <summary>
     /// Gets the calculated value.

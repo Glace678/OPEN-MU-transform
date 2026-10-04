@@ -79,8 +79,18 @@ public sealed class PersistentLoginServer : ILoginServer
             }
 
             var success = await this._daprClient.TrySaveStateAsync(StoreName, accountName, serverId, eTag).ConfigureAwait(false);
-            await this.AddToIndexAsync(accountName, serverId).ConfigureAwait(false);
-            return success;
+            if (!success)
+            {
+                return false;
+            }
+
+            if (!await this.TryAddToIndexAsync(accountName, serverId).ConfigureAwait(false))
+            {
+                await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, eTag).ConfigureAwait(false);
+                return false;
+            }
+
+            return true;
         }
         catch (Exception ex)
         {
@@ -94,7 +104,23 @@ public sealed class PersistentLoginServer : ILoginServer
     {
         try
         {
-            await this.SetAccountOfflineAsync(accountName).ConfigureAwait(false);
+            var (currentServerId, eTag) = await this._daprClient.GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong).ConfigureAwait(false);
+            if (currentServerId != serverId)
+            {
+                this._logger.LogWarning(
+                    "LogOff for account {0} rejected: current server is {1}, requested by {2}.",
+                    accountName,
+                    currentServerId,
+                    serverId);
+                return;
+            }
+
+            if (!await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, eTag).ConfigureAwait(false))
+            {
+                this._logger.LogWarning("LogOff CAS failed for account {0} on server {1}; state changed concurrently.", accountName, serverId);
+                return;
+            }
+
             await this.RemoveFromIndexAsync(accountName, serverId).ConfigureAwait(false);
         }
         catch (Exception ex)
@@ -126,26 +152,36 @@ public sealed class PersistentLoginServer : ILoginServer
         return result;
     }
 
-    private async Task AddToIndexAsync(string accountName, byte serverId)
+    private async Task<bool> TryAddToIndexAsync(string accountName, byte serverId)
     {
-        var indexName = $"serverindex-{serverId}";
-        var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
-        if (serverIndex is null)
+        const int maxAttempts = 5;
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
-            serverIndex = new HashSet<string>();
-            serverIndex.Add(accountName);
-            await this._daprClient.SaveStateAsync(StoreName, indexName, serverIndex).ConfigureAwait(false);
-            return;
-        }
-
-        if (serverIndex.Add(accountName))
-        {
-            if (!await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            var indexName = $"serverindex-{serverId}";
+            var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
+            if (serverIndex is null)
             {
-                // try again, if it failed
-                await this.AddToIndexAsync(accountName, serverId).ConfigureAwait(false);
+                serverIndex = new HashSet<string> { accountName };
+                if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+                {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if (!serverIndex.Add(accountName))
+            {
+                return true;
+            }
+
+            if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            {
+                return true;
             }
         }
+
+        return false;
     }
 
     private async Task RemoveFromIndexAsync(string accountName, byte serverId)

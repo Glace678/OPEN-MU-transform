@@ -28,6 +28,7 @@ public class AdminUserAvailabilityService
 
     private DateTime _nextCheck = DateTime.MinValue;
     private bool _anyUserExists;
+    private bool _zeroUsersConfirmed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AdminUserAvailabilityService"/> class.
@@ -59,7 +60,7 @@ public class AdminUserAvailabilityService
 
         if (DateTime.UtcNow < this._nextCheck || !await this._semaphore.WaitAsync(0, cancellationToken).ConfigureAwait(false))
         {
-            return this._anyUserExists;
+            return false;
         }
 
         try
@@ -71,12 +72,15 @@ public class AdminUserAvailabilityService
 
             if (await this._repository.EnsureStorageAsync(cancellationToken).ConfigureAwait(false))
             {
-                this._anyUserExists = await this._repository.GetCountAsync(cancellationToken).ConfigureAwait(false) > 0;
+                var count = await this._repository.GetCountAsync(cancellationToken).ConfigureAwait(false);
+                this._anyUserExists = count > 0;
+                this._zeroUsersConfirmed = true;
+            }
+            else
+            {
+                this._zeroUsersConfirmed = false;
             }
 
-            // When the storage isn't available, we can't tell - the previous answer is kept, which
-            // is the initial setup mode on a fresh installation. The installation needs the database
-            // as well, so there is nothing to protect at that point anyway.
             this._nextCheck = DateTime.UtcNow.Add(CheckInterval);
             return this._anyUserExists;
         }
@@ -87,11 +91,24 @@ public class AdminUserAvailabilityService
     }
 
     /// <summary>
+    /// Gets a value indicating whether it has been positively confirmed that no admin user exists.
+    /// Returns <c>false</c> when the storage state is unknown (e.g. database unreachable).
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    public ValueTask<bool> IsConfirmedEmptyAsync(CancellationToken cancellationToken = default)
+    {
+        return this._zeroUsersConfirmed
+            ? ValueTask.FromResult(!this._anyUserExists)
+            : ValueTask.FromResult(false);
+    }
+
+    /// <summary>
     /// Invalidates the cached result, e.g. after a user has been created or deleted.
     /// </summary>
     public void Invalidate()
     {
         this._anyUserExists = false;
+        this._zeroUsersConfirmed = false;
         this._nextCheck = DateTime.MinValue;
     }
 }

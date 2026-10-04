@@ -36,7 +36,7 @@ public class AdminAccessRequirementHandler : AuthorizationHandler<AdminAccessReq
     /// <inheritdoc />
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminAccessRequirement requirement)
     {
-        if (!await this._userAvailability.AnyUserExistsAsync().ConfigureAwait(false))
+        if (await this._userAvailability.IsConfirmedEmptyAsync().ConfigureAwait(false))
         {
             context.Succeed(requirement);
             return;

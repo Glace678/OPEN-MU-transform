@@ -2,7 +2,7 @@
 //
 //  UIGateKeeper.h
 //
-//  ³»  ¿ë : ¹®Áö±â ÀÎÅÍÆäÀÌ½º
+//  ï¿½ï¿½  ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½
 //
 //////////////////////////////////////////////////////////////////////////
 
@@ -42,8 +42,8 @@ public:
         m_bPublic = bPublic;
         m_nEntranceFee = iEntranceFee;
         m_iViewEntranceFee = m_nEntranceFee;
-        m_iAddEntranceFee = iAddEntranceFee;
-        m_iMaxEnteranceFee = iMaxEntranceFee;
+        m_iAddEntranceFee = (iAddEntranceFee > 0 ? iAddEntranceFee : 0);  // #MG-12: sanitize hostile step
+        m_iMaxEnteranceFee = (iMaxEntranceFee > 0 ? iMaxEntranceFee : 0);
     }
     BYTE GetType() { return m_byType; }
     BOOL IsPublic() { return m_bPublic; }

@@ -2,7 +2,14 @@
     [string]$ServerAddress = '192.168.215.56',
     [switch]$RebuildGameData,
     [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\OpenMU-安卓手机版-可安装'),
-    [string]$NdkPath = ''
+    [string]$NdkPath = '',
+    # A-03: Debug (default, sideload preview, debug-signed) or Release. Release
+    # requires a keystore.properties / env signing material (see game-app and
+    # gm-app build.gradle) and runs assembleRelease instead of assembleDebug.
+    [ValidateSet('Debug','Release')][string]$BuildType = 'Debug',
+    # A-02: resolve apksigner/build-tools from an explicit SDK root instead of a
+    # hardcoded Program Files path. Falls back to ANDROID_SDK_ROOT / local.properties.
+    [string]$AndroidSdkRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,8 +40,33 @@ $outputRoot = [IO.Path]::GetFullPath($OutputDirectory)
 $outputStaging = $outputRoot + '.pending'
 $outputBackup = $outputRoot + '.backup'
 
-if ($ServerAddress -notmatch '^[A-Za-z0-9.-]+$') {
-    throw 'ServerAddress must be an IPv4 address or hostname.'
+# A-06: the old regex ^[A-Za-z0-9.-]+$ accepted "." alone, "-" alone, leading/
+# trailing hyphens and consecutive dots -- a build would succeed but bake an
+# unusable default address into the APK. Validate IPv4 strictly, else treat the
+# value as a hostname with proper label rules (no empty labels, no leading or
+# trailing hyphens). This mirrors the runtime LocalIpv4Address policy.
+function Test-ServerAddress([string]$value) {
+    $value = $value.Trim()
+    if ([string]::IsNullOrEmpty($value)) { return $false }
+    if ($value -match '^\d{1,3}(\.\d{1,3}){3}$') {
+        foreach ($octet in $value.Split('.')) {
+            if ($octet.Length -gt 1 -and $octet.StartsWith('0')) { return $false }
+            $n = 0
+            if (-not [int]::TryParse($octet, [ref]$n)) { return $false }
+            if ($n -lt 0 -or $n -gt 255) { return $false }
+        }
+        return $true
+    }
+    if ($value.EndsWith('.')) { return $false }
+    foreach ($label in $value.Split('.')) {
+        if ($label.Length -eq 0 -or $label.Length -gt 63) { return $false }
+        if ($label -notmatch '^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?$') { return $false }
+    }
+    return $true
+}
+if (-not (Test-ServerAddress $ServerAddress)) {
+    throw "ServerAddress '$ServerAddress' is not a valid IPv4 address or hostname " +
+        '(no empty labels, no leading/trailing hyphens, no leading-zero octets).'
 }
 if ($outputRoot -eq $workspaceRoot -or $outputRoot -eq $projectRoot `
     -or $outputRoot -eq [IO.Path]::GetPathRoot($outputRoot)) {
@@ -118,41 +150,76 @@ function New-GameDataArchive {
     Move-Item -LiteralPath $temporary -Destination $Destination -Force
 }
 
+# A-05: the previous guard only compared the newest source write time against the
+# archive. That catches edits but NOT deletions: if a Data/ or fonts/ source file
+# is removed and -RebuildGameData is not passed, no remaining file is newer than
+# the archive, so the stale archive (with the deleted file still inside) is reused
+# -- and gradle derives GAME_DATA_VERSION from the archive's own sha256, so the
+# on-device freshness check cannot detect it either. We now record the exact set
+# of source inputs (relative path -> length + mtime) in a sidecar manifest and
+# rebuild whenever the set changes, including when a file disappears.
+function Get-GameDataManifest {
+    $sourceRoot = Join-Path $muMainRoot 'src\bin'
+    $entries = @{}
+    foreach ($relativeRoot in @('Data', 'fonts')) {
+        $absoluteRoot = Join-Path $sourceRoot $relativeRoot
+        if (Test-Path -LiteralPath $absoluteRoot -PathType Container) {
+            $baseUri = New-Object System.Uri(($sourceRoot.TrimEnd('\') + '\'))
+            foreach ($file in [IO.Directory]::EnumerateFiles($absoluteRoot, '*', [IO.SearchOption]::AllDirectories)) {
+                $relative = [Uri]::UnescapeDataString($baseUri.MakeRelativeUri((New-Object System.Uri($file))).ToString()).Replace('\', '/')
+                $item = Get-Item -LiteralPath $file
+                $entries[$relative] = "$($item.Length):$($item.LastWriteTimeUtc.Ticks)"
+            }
+        }
+    }
+    $template = Join-Path $sourceRoot 'config.ini.template'
+    if (Test-Path -LiteralPath $template -PathType Leaf) {
+        $item = Get-Item -LiteralPath $template
+        $entries['config.ini.template'] = "$($item.Length):$($item.LastWriteTimeUtc.Ticks)"
+    }
+    return $entries
+}
+
 function Test-GameDataStale {
-    # The archive is rebuilt from MuMain\src\bin, but nothing recorded that fact:
-    # a developer who edited Data/ or fonts/ and forgot -RebuildGameData got a
-    # successful package embedding the older zip, and because gradle derives
-    # GAME_DATA_VERSION from the zip's own sha256 the stale archive is
-    # self-consistent, so the on-device freshness check cannot catch it either.
-    # Compare the newest source write time against the archive instead -- the
-    # same "make the input explicit" guard the build.ninja check below applies to
-    # libmain.so.
     param([string]$Archive)
 
+    $manifestPath = $Archive + '.sig'
     if (-not (Test-Path -LiteralPath $Archive -PathType Leaf)) {
         return $true
     }
-    $archiveTime = (Get-Item -LiteralPath $Archive).LastWriteTimeUtc
-    $sourceRoot = Join-Path $muMainRoot 'src\bin'
-    foreach ($relativeRoot in @('Data', 'fonts', 'config.ini.template')) {
-        $absoluteRoot = Join-Path $sourceRoot $relativeRoot
-        if (Test-Path -LiteralPath $absoluteRoot -PathType Leaf) {
-            if ((Get-Item -LiteralPath $absoluteRoot).LastWriteTimeUtc -gt $archiveTime) {
-                return $true
-            }
-        } elseif (Test-Path -LiteralPath $absoluteRoot -PathType Container) {
-            foreach ($file in [IO.Directory]::EnumerateFiles($absoluteRoot, '*', [IO.SearchOption]::AllDirectories)) {
-                if ((Get-Item -LiteralPath $file).LastWriteTimeUtc -gt $archiveTime) {
-                    return $true
-                }
-            }
+    $current = Get-GameDataManifest
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        return $true
+    }
+    try {
+        $saved = (Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json)
+    } catch {
+        return $true
+    }
+    $savedProps = @{}
+    foreach ($prop in $saved.PSObject.Properties) { $savedProps[$prop.Name] = [string]$prop.Value }
+    # Missing or extra files, or any changed length/mtime, all mean rebuild.
+    if ($savedProps.Count -ne $current.Count) { return $true }
+    foreach ($key in $current.Keys) {
+        if (-not $savedProps.ContainsKey($key) -or $savedProps[$key] -ne $current[$key]) {
+            return $true
         }
     }
     return $false
 }
 
+function Write-GameDataManifest {
+    param([string]$Archive)
+    $current = Get-GameDataManifest
+    $obj = [ordered]@{}
+    foreach ($key in ($current.Keys | Sort-Object)) { $obj[$key] = $current[$key] }
+    [IO.File]::WriteAllText($Archive + '.sig',
+        ($obj | ConvertTo-Json -Depth 3), [Text.UTF8Encoding]::new($false))
+}
+
 if ($RebuildGameData -or (Test-GameDataStale -Archive $assetArchive)) {
     New-GameDataArchive -Destination $assetArchive
+    Write-GameDataManifest -Archive $assetArchive
 }
 
 # Make the native client an explicit build input. This prevents a successful
@@ -229,13 +296,19 @@ foreach ($library in $requiredNativeLibraries) {
 if (-not (Test-Path -LiteralPath (Join-Path $serverPackage 'OpenMU-Local.exe') -PathType Leaf)) {
     throw "Missing packaged Windows server: $serverPackage"
 }
+# A-03: choose lint/assemble tasks from -BuildType instead of hardcoding Debug.
+# This delivery package talks to the bundled LAN server, so the GM client uses
+# cleartext HTTP only against the private LAN address (A-04: release defaults to
+# HTTPS; the scheme is a build property, not baked as http:// in the APK).
+$buildLower = $BuildType.ToLowerInvariant()
 Push-Location $projectRoot
 try {
     & (Join-Path $projectRoot 'gradlew.bat') `
-        ':game-app:lintDebug' ':gm-app:lintDebug' `
-        ':game-app:assembleDebug' ':gm-app:assembleDebug' `
+        ":game-app:lint$BuildType" ":gm-app:lint$BuildType" `
+        ":game-app:assemble$BuildType" ":gm-app:assemble$BuildType" `
         "-POPENMU_SERVER_ADDRESS=$ServerAddress" `
-        "-POPENMU_MOBILE_PACKAGE_KEY=$mobilePackageKey"
+        "-POPENMU_MOBILE_PACKAGE_KEY=$mobilePackageKey" `
+        "-POPENMU_SERVER_SCHEME=http"
 } finally {
     Pop-Location
 }
@@ -253,8 +326,14 @@ if (Test-Path -LiteralPath $outputStaging) {
     Remove-DeliveryTree -Path $outputStaging
 }
 [IO.Directory]::CreateDirectory($outputStaging) | Out-Null
-$gameApk = Join-Path $projectRoot 'game-app\build\outputs\apk\debug\game-app-debug.apk'
-$gmApk = Join-Path $projectRoot 'gm-app\build\outputs\apk\debug\gm-app-debug.apk'
+$gameApk = Join-Path $projectRoot "game-app\build\outputs\apk\$buildLower\game-app-$buildLower.apk"
+$gmApk = Join-Path $projectRoot "gm-app\build\outputs\apk\$buildLower\gm-app-$buildLower.apk"
+if (-not (Test-Path -LiteralPath $gameApk -PathType Leaf)) {
+    throw "Expected built APK not found: $gameApk"
+}
+if (-not (Test-Path -LiteralPath $gmApk -PathType Leaf)) {
+    throw "Expected built APK not found: $gmApk"
+}
 Copy-Item -LiteralPath $gameApk -Destination (Join-Path $outputStaging 'OpenMU-Game-arm64.apk') -Force
 Copy-Item -LiteralPath $gmApk -Destination (Join-Path $outputStaging 'OpenMU-GM.apk') -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'Install-APKs.ps1') -Destination $outputStaging -Force
@@ -270,9 +349,45 @@ $serverKeys = Join-Path $serverDestination 'Data\Keys'
 Copy-Item -LiteralPath $mobileServerSettings `
     -Destination (Join-Path $serverKeys 'local-settings.json') -Force
 
-$buildTools = Join-Path ${env:ProgramFiles(x86)} 'Android\android-sdk\build-tools\36.0.0\apksigner.bat'
+# A-02: the SDK root was hardcoded to a developer's Program Files path, so a
+# machine with a custom SDK location (or without build-tools 36.0.0 exactly)
+# failed signing verification and left the delivery half-built. Resolve the SDK
+# root from -AndroidSdkRoot, then ANDROID_SDK_ROOT/ANDROID_HOME, then the
+# project local.properties sdk.dir, and locate apksigner under build-tools.
+$androidSdkRoot = $AndroidSdkRoot
+if (-not $androidSdkRoot) {
+    foreach ($candidate in @($env:ANDROID_SDK_ROOT, $env:ANDROID_HOME)) {
+        if ($candidate -and (Test-Path -LiteralPath $candidate)) { $androidSdkRoot = $candidate; break }
+    }
+}
+if (-not $androidSdkRoot) {
+    $localProps = Join-Path $projectRoot 'local.properties'
+    if (Test-Path -LiteralPath $localProps -PathType Leaf) {
+        foreach ($line in (Get-Content -LiteralPath $localProps)) {
+            if ($line -match '^\s*sdk\.dir\s*=(.+)$') {
+                $candidate = ($Matches[1].Trim() -replace '\\\\','\')
+                if (Test-Path -LiteralPath $candidate) { $androidSdkRoot = $candidate; break }
+            }
+        }
+    }
+}
+if (-not $androidSdkRoot -or -not (Test-Path -LiteralPath $androidSdkRoot)) {
+    throw "Android SDK root not found. Pass -AndroidSdkRoot <sdk-root>, set ANDROID_SDK_ROOT, " +
+        "or set sdk.dir in local.properties."
+}
+$apksigner = Join-Path $androidSdkRoot 'build-tools\36.0.0\apksigner.bat'
+if (-not (Test-Path -LiteralPath $apksigner -PathType Leaf)) {
+    # Fall back to the newest installed build-tools version.
+    $btRoot = Join-Path $androidSdkRoot 'build-tools'
+    $newest = Get-ChildItem -LiteralPath $btRoot -Directory -ErrorAction SilentlyContinue |
+        Sort-Object Name -Descending | Select-Object -First 1
+    if ($newest) { $apksigner = Join-Path $newest.FullName 'apksigner.bat' }
+}
+if (-not (Test-Path -LiteralPath $apksigner -PathType Leaf)) {
+    throw "apksigner not found under '$androidSdkRoot\build-tools'. Install build-tools 36.0.0."
+}
 foreach ($apk in @('OpenMU-Game-arm64.apk', 'OpenMU-GM.apk')) {
-    & $buildTools verify --verbose (Join-Path $outputStaging $apk)
+    & $apksigner verify --verbose (Join-Path $outputStaging $apk)
     if ($LASTEXITCODE -ne 0) {
         throw "APK signature verification failed: $apk"
     }

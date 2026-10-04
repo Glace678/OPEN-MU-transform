@@ -15,8 +15,8 @@ internal class NormalPathsSerializer : IPathsSerializer
     /// <inheritdoc/>
     public IEnumerable<PathInfo> Deserialize(Stream source)
     {
-        const int elementSize = 8;
-        while (source.Position + elementSize < source.Length)
+        const int elementSize = 6;
+        while (source.Position + elementSize <= source.Length)
         {
             var start = new Point((byte)source.ReadByte(), (byte)source.ReadByte());
             var end = new Point((byte)source.ReadByte(), (byte)source.ReadByte());

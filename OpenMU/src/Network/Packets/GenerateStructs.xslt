@@ -445,27 +445,31 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
         <xsl:when test="$arrayOfVariableStruct">
           <xsl:text> this[int index, int </xsl:text>
           <xsl:value-of select="$typeLengthParamName"/>
-          <xsl:text>] => new </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text> this[int index] => new </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-
-      <xsl:text>(this._data.Slice(</xsl:text>
-      <xsl:value-of select="pd:Index"/>
-      <xsl:text> + index * </xsl:text>
-
-      <xsl:choose>
-        <xsl:when test="$arrayOfVariableStruct">
+          <xsl:text>] => new (this._data.Slice(</xsl:text>
+          <xsl:value-of select="pd:Index"/>
+          <xsl:text> + index * </xsl:text>
           <xsl:value-of select="$typeLengthParamName"/>
+          <xsl:text>));</xsl:text>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:text> this[int index] =>
+            (index &lt; 0 || </xsl:text>
+          <xsl:value-of select="pd:Index"/>
+          <xsl:text> + index * </xsl:text>
           <xsl:value-of select="pd:TypeName"/>
-          <xsl:text>.Length</xsl:text>
+          <xsl:text>.Length + </xsl:text>
+          <xsl:value-of select="pd:TypeName"/>
+          <xsl:text>.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new </xsl:text>
+          <xsl:value-of select="pd:TypeName"/>
+          <xsl:text>(this._data.Slice(</xsl:text>
+          <xsl:value-of select="pd:Index"/>
+          <xsl:text> + index * </xsl:text>
+          <xsl:value-of select="pd:TypeName"/>
+          <xsl:text>.Length));</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:text>));</xsl:text>
       
       <xsl:value-of select="$newline"/>
     </xsl:template>

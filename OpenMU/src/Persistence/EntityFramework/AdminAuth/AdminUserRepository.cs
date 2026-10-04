@@ -88,6 +88,10 @@ public class AdminUserRepository : IAdminUserRepository
                 this._isStorageReady = true;
             }
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             // This is an expected state before the database server is reachable or the database has been created.

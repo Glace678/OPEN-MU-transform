@@ -1,4 +1,4 @@
-﻿// GMEmpireGuardian1.cpp: implementation of the GMEmpireGuardian1 class.
+// GMEmpireGuardian1.cpp: implementation of the GMEmpireGuardian1 class.
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include "Render/Models/ZzzBMD.h"
@@ -638,6 +638,7 @@ bool GMEmpireGuardian1::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             float _fActSpdTemp = b->Actions[o->CurrentAction].PlaySpeed;
             if (o->AnimationFrame >= 4.5f && o->AnimationFrame < (4.5f + _fActSpdTemp))
             {
+                if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) break;  // #MG-35
                 CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                 OBJECT* to = &tc->Object;
 
@@ -953,6 +954,7 @@ bool GMEmpireGuardian1::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             Vector(0.5f, 0.5f, 0.5f, vLight);
             CreateSprite(BITMAP_FLARE_RED, vPos, 1.2f * fScale * o->AnimationFrame * 0.15f, vLight, o, -WorldTime * 0.1f);
 
+            if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) break;  // #MG-35
             CHARACTER* tc = &CharactersClient[c->TargetCharacter];
             OBJECT* to = &tc->Object;
 
@@ -982,6 +984,7 @@ bool GMEmpireGuardian1::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             //CreateSprite(BITMAP_FLARE_BLUE, vPos, 1.2f, vLight, o, -WorldTime*0.1f);
             CreateSprite(BITMAP_FLARE_BLUE, vPos, 1.2f * fScale * o->AnimationFrame * 0.15f, vLight, o, -WorldTime * 0.1f);
 
+            if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT) break;  // #MG-35
             CHARACTER* tc = &CharactersClient[c->TargetCharacter];
             OBJECT* to = &tc->Object;
 
@@ -2013,7 +2016,7 @@ bool GMEmpireGuardian1::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
     case MODEL_LUCAS:
     {
         vec3_t vRelative;
-        Vector(0.0f, 0.0f, 0.0f, vRelative)
+        Vector(0.0f, 0.0f, 0.0f, vRelative);
             float fLumi1 = (sinf(WorldTime * 0.004f) + 0.9f) * 0.25f;
 
         Vector(0.05f + fLumi1, 0.75f + fLumi1, 0.35f + fLumi1, vLight);

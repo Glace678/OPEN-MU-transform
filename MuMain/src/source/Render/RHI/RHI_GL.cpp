@@ -998,6 +998,7 @@ namespace {
 void BindVertexBuffer(BufferHandle handle, VertexLayout layout)
 {
     if (!handle.IsValid()) return;
+    if (IsUboReservation(handle)) return; // #MG-05: reject misrouted uniform-block handle
     const int idx = (int)layout;
     if (idx < 0 || idx >= kVertexLayoutCount) return;
 
@@ -1037,6 +1038,7 @@ void BindVertexBuffer(BufferHandle handle, VertexLayout layout)
 
 void BindIndexBuffer(BufferHandle handle)
 {
+    if (IsUboReservation(handle)) return; // #MG-05: reject misrouted uniform-block handle
     // GL_UNSIGNED_INT only, per the header contract -- the one indexed-draw caller in the tree
     // (GLP-16's terrain tile bucketing) uses no other type. Binding GL_ELEMENT_ARRAY_BUFFER here
     // is captured into whichever VAO is currently bound (core-profile VAO state includes the

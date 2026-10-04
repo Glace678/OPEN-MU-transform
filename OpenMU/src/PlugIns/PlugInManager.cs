@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.PlugIns;
 
 using System.Collections.Concurrent;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
@@ -415,6 +416,12 @@ public class PlugInManager
         return ActivatorUtilities.CreateInstance<TPlugInClass>(this._serviceContainer);
     }
 
+    private static bool IsWithinDirectory(string directory, string candidatePath)
+    {
+        var normalizedDirectory = directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        return candidatePath.StartsWith(normalizedDirectory, StringComparison.OrdinalIgnoreCase);
+    }
+
     private void ReadConfiguration(PlugInConfiguration configuration, HashSet<string> loadedAssemblies)
     {
         if (!this._knownPlugIns.ContainsKey(configuration.TypeId))
@@ -426,7 +433,17 @@ public class PlugInManager
 
                 try
                 {
-                    var assembly = Assembly.LoadFile("plugins\\" + configuration.ExternalAssemblyName);
+                    var pluginsRoot = Path.GetFullPath("plugins");
+                    var assemblyPath = Path.GetFullPath(Path.Combine(pluginsRoot, configuration.ExternalAssemblyName));
+                    if (!IsWithinDirectory(pluginsRoot, assemblyPath))
+                    {
+                        this._logger.LogError(
+                            "Rejected external plugin assembly '{ExternalAssemblyName}': it resolves outside the plugins directory.",
+                            configuration.ExternalAssemblyName);
+                        return;
+                    }
+
+                    var assembly = Assembly.LoadFile(assemblyPath);
                     this.DiscoverAndRegisterPlugIns(assembly);
                 }
                 catch (Exception e)

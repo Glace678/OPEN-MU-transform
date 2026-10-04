@@ -35,20 +35,22 @@ void CUIGateKeeper::SendEnteranceFee()
 
 void CUIGateKeeper::EnteranceFeeUp()
 {
-    m_iViewEntranceFee += m_iAddEntranceFee;
-    if (m_iViewEntranceFee > m_iMaxEnteranceFee)
-    {
+    // #MG-12: saturated add; avoid signed overflow on a hostile step.
+    if (m_iAddEntranceFee <= 0) return;
+    if (m_iViewEntranceFee > m_iMaxEnteranceFee - m_iAddEntranceFee)
         m_iViewEntranceFee = m_iMaxEnteranceFee;
-    }
+    else
+        m_iViewEntranceFee += m_iAddEntranceFee;
 }
 
 void CUIGateKeeper::EnteranceFeeDown()
 {
-    m_iViewEntranceFee -= m_iAddEntranceFee;
-    if (m_iViewEntranceFee < 0)
-    {
+    // #MG-12: saturated subtract; avoid signed underflow on a hostile step.
+    if (m_iAddEntranceFee <= 0) return;
+    if (m_iViewEntranceFee < m_iAddEntranceFee)
         m_iViewEntranceFee = 0;
-    }
+    else
+        m_iViewEntranceFee -= m_iAddEntranceFee;
 }
 
 void CUIGateKeeper::SendEnter()

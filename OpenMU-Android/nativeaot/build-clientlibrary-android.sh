@@ -35,20 +35,17 @@ find_unzip() {
         return
     fi
 
-    local local_unzip="${CACHE_BASE}/tools/root/usr/bin/unzip"
-    if [[ ! -x "${local_unzip}" ]]; then
-        mkdir -p -- "${CACHE_BASE}/tools"
-        (
-            cd -- "${CACHE_BASE}/tools"
-            apt-get download unzip
-            local package
-            package="$(find . -maxdepth 1 -type f -name 'unzip_*.deb' -print -quit)"
-            [[ -n "${package}" ]]
-            dpkg-deb --extract "${package}" root
-        )
-    fi
-
-    printf '%s\n' "${local_unzip}"
+    # NEW-ANDROID-01: this previously fell back to `apt-get download unzip` with
+    # no version pin and picked the first unzip_*.deb the apt index happened to
+    # contain, so the build toolchain changed with the host's apt sources/index
+    # and was not reproducible. Treat unzip as a controlled build prerequisite:
+    # install/pin it in the build image (e.g. `apt-get install unzip` and pin the
+    # image), instead of letting this script pull an arbitrary version at build
+    # time. Abort loudly rather than silently consuming an unpinned tool.
+    echo "error: required tool 'unzip' was not found on PATH." >&2
+    echo "Install/pin it as a build prerequisite (do not let this script fetch an" >&2
+    echo "unversioned apt package); see NEW-ANDROID-01." >&2
+    return 1
 }
 
 prepare_ndk() {

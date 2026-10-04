@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
+#include "Core/Platform/PlatformDetect.h"
 #include "Core/Input/FocusNavigator.h"
 #include "Core/Input/Input.h"
 #include "Core/Input/KeyState.h"
@@ -3119,7 +3120,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     SDL_WindowFlags windowFlags = SDL_WINDOW_OPENGL;
     if (g_bUseWindowMode != TRUE)
         windowFlags |= SDL_WINDOW_FULLSCREEN;
-#if !defined(__ANDROID__) && !defined(__OHOS__)
+#if !MU_PLATFORM_MOBILE
     // Desktop: let the player drag the window corner to resize. No-op while the
     // window is fullscreen; takes effect in windowed mode. Mobile is always
     // fullscreen and must keep its fixed surface.
@@ -3202,9 +3203,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     OpenglWindowWidth = WindowWidth;
     OpenglWindowHeight = WindowHeight;
 
-#if !defined(__ANDROID__) && !defined(__OHOS__)
+#if !MU_PLATFORM_MOBILE
     // Desktop: the configured Width/Height is only a *request*. In fullscreen SDL
-    // switches to the real display mode, and the window may come back at a
+    // switches to the real display mode, and a window may come back at a
     // different size before the first SDL_EVENT_WINDOW_RESIZED arrives. Sync to
     // the actual size now so fonts/UI scale correctly from the very first frame,
     // and clamp how small the player can drag a windowed corner.

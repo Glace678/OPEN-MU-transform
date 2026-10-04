@@ -117,8 +117,12 @@ public class LiveConnection : INotifyPropertyChanged, ICapturedConnection
     {
         var packet = new Packet(DateTime.UtcNow - this.StartTimestamp, data, true);
         this._logger.LogInformation(packet.ToString());
-        this._serverConnection.Output.Write(data);
-        await this._serverConnection.Output.FlushAsync().ConfigureAwait(false);
+        using (await this._serverConnection.OutputLock.LockAsync().ConfigureAwait(false))
+        {
+            this._serverConnection.Output.Write(data);
+            await this._serverConnection.Output.FlushAsync().ConfigureAwait(false);
+        }
+
         this._invokeAction((Action)(() => this.PacketList.Add(packet)));
     }
 
@@ -128,8 +132,12 @@ public class LiveConnection : INotifyPropertyChanged, ICapturedConnection
     /// <param name="data">The data.</param>
     public async ValueTask SendToClientAsync(byte[] data)
     {
-        this._clientConnection.Output.Write(data);
-        await this._clientConnection.Output.FlushAsync().ConfigureAwait(false);
+        using (await this._clientConnection.OutputLock.LockAsync().ConfigureAwait(false))
+        {
+            this._clientConnection.Output.Write(data);
+            await this._clientConnection.Output.FlushAsync().ConfigureAwait(false);
+        }
+
         var packet = new Packet(DateTime.UtcNow - this.StartTimestamp, data, false);
         this._logger.LogInformation(packet.ToString());
         this._invokeAction((Action)(() => this.PacketList.Add(packet)));

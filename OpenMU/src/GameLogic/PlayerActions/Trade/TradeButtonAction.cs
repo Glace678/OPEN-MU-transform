@@ -100,6 +100,16 @@ public class TradeButtonAction : BaseTradeAction
             this.AttachItemsToPersistenceContext(tradePartnerItems, trader.PersistenceContext);
             trader.Money += trader.TradingPartner.TradingMoney;
             trader.TradingPartner.Money += trader.TradingMoney;
+
+            // Durably settle both zen balances as part of the same operation as the
+            // item transfer persisted above, so a crash cannot leave items delivered
+            // without the corresponding money being persisted (P2).
+            if (!await trader.SaveProgressAsync().ConfigureAwait(false)
+                || !await tradingPartner.SaveProgressAsync().ConfigureAwait(false))
+            {
+                throw new InvalidOperationException("Persisting the traded zen balances failed.");
+            }
+
             await trader.TradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Checked)).ConfigureAwait(false);
             this.ResetTradeState(trader.TradingPartner);
             this.ResetTradeState(trader);

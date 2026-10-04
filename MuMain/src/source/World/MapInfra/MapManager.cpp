@@ -1751,7 +1751,7 @@ const wchar_t* CMapManager::GetMapName(int iMap)
         return I18N::Game::BalgassBarrack;
     else if (SEASON3A::CGM3rdChangeUp::Instance().IsBalgasRefugeMap())
         return I18N::Game::BalgassRestingPlace;
-    if (this->IsCursedTemple())
+    if (iMap >= WD_45CURSEDTEMPLE_LV1 && iMap <= WD_45CURSEDTEMPLE_LV6)  // #34: predicate on iMap, not current WorldActive
     {
         return (I18N::Game::IllusionTemple);
     }

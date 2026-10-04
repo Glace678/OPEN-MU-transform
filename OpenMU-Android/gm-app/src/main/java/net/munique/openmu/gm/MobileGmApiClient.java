@@ -29,6 +29,53 @@ final class MobileGmApiClient {
     MobileGmApiClient(String baseUrl, String packageKey) {
         this.baseUrl = trimTrailingSlash(baseUrl);
         this.packageKey = packageKey;
+        // A-04: never send the shared write key in cleartext to a public host.
+        // HTTPS is always allowed; plain HTTP is only permitted against loopback or
+        // RFC1918 private addresses (the bundled LAN sideload server).
+        assertSafeTransport(this.baseUrl);
+    }
+
+    private static void assertSafeTransport(String baseUrl) {
+        try {
+            URL url = new URL(baseUrl);
+            String protocol = url.getProtocol().toLowerCase();
+            if ("https".equals(protocol)) {
+                return;
+            }
+            if (!"http".equals(protocol)) {
+                throw new ApiException("不支持的服务器协议: " + protocol);
+            }
+            String host = url.getHost();
+            if (isPrivateOrLoopback(host)) {
+                return;
+            }
+            throw new ApiException("拒绝通过明文 HTTP 向公网地址发送 GM 密钥：" + host);
+        } catch (java.net.MalformedURLException error) {
+            throw new ApiException("服务器地址无效", error);
+        }
+    }
+
+    private static boolean isPrivateOrLoopback(String host) {
+        if (host == null) {
+            return false;
+        }
+        if ("localhost".equalsIgnoreCase(host) || host.startsWith("127.")) {
+            return true;
+        }
+        String[] parts = host.split("\\.");
+        if (parts.length != 4) {
+            return false;
+        }
+        try {
+            int a = Integer.parseInt(parts[0]);
+            int b = Integer.parseInt(parts[1]);
+            return a == 10
+                || (a == 172 && b >= 16 && b <= 31)
+                || (a == 192 && b == 168)
+                || (a == 169 && b == 254);
+        } catch (NumberFormatException notNumeric) {
+            return false;
+        }
     }
 
     Status loadStatus() throws ApiException {

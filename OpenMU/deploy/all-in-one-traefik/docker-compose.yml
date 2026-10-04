@@ -1,6 +1,6 @@
 services:
   openmu-startup:
-    image: munique/openmu
+    image: munique/openmu:0.9.10
     container_name: openmu-startup
     networks:
       - proxy
@@ -34,7 +34,7 @@ services:
       - "traefik.http.routers.openmu.rule=Host(`admin.docker.localhost`)"
 
   database:
-    image: postgres
+    image: postgres:17-alpine
     container_name: database
     environment:
       POSTGRES_PASSWORD: admin
@@ -48,7 +48,7 @@ services:
       - dbdata:/var/lib/postgresql #store data on volume
 
   traefik:
-    image: "traefik"
+    image: traefik:2.11
     container_name: "traefik"
     restart: always
     command:

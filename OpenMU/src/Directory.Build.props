@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
 
+    <!-- DEP-009: reproducible restore via NuGet lock file; CI builds are deterministic. -->
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <NuGetLockFilePath>packages.lock.json</NuGetLockFilePath>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
     <ItemGroup Label="commom configuration code style.">
         
         <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers">

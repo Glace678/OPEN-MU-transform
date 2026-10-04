@@ -310,6 +310,7 @@ int OpenTerrainMapping(wchar_t* FileName)
 bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
 {
     FILE* fp = _wfopen(FileName, L"wb");
+    if (!fp) return false;  // #MG-08: reject failed open before any fwrite
     BYTE Version = 0;
     fwrite(&Version, 1, 1, fp);
     fwrite(&iMapNumber, 1, 1, fp);
@@ -508,14 +509,16 @@ void CreateTerrainLight_Part(int xi, int yi)
 
 void OpenTerrainLight(wchar_t* FileName)
 {
-    OpenJpegBuffer(FileName, &TerrainLight[0][0]);
-    // Apply corrections to the loaded terrain light
+    const bool loaded = OpenJpegBuffer(FileName, &TerrainLight[0][0]);
+    if (!loaded)
+    {
+        g_ErrorReport.Write(L"Could not load terrain light '%ls'; initializing it to black.\r\n", FileName);
+        memset(TerrainLight, 0, sizeof(TerrainLight));
+    }
+
+    // Clamp channels to [0, 1]
     for (int i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++)
     {
-        TerrainLight[i][2] -= 0.f; // < - Add/Color
-        TerrainLight[i][1] -= 0.f;
-
-        // Clamp channels to [0, 1]
         for (int j = 0; j < 3; j++)
         {
             if (TerrainLight[i][j] < 0.f)

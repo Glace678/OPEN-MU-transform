@@ -9733,7 +9733,10 @@ public readonly struct AreaSkillHit
     /// <summary>
     /// Gets the <see cref="TargetData"/> of the specified index.
     /// </summary>
-        public TargetData this[int index] => new (this._data.Slice(9 + index * TargetData.Length));
+        public TargetData this[int index] =>
+            (index < 0 || 9 + index * TargetData.Length + TargetData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new TargetData(this._data.Slice(9 + index * TargetData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AreaSkillHit"/>.
@@ -9993,7 +9996,10 @@ public readonly struct AreaSkillHit075
     /// <summary>
     /// Gets the <see cref="TargetData"/> of the specified index.
     /// </summary>
-        public TargetData this[int index] => new (this._data.Slice(7 + index * TargetData.Length));
+        public TargetData this[int index] =>
+            (index < 0 || 7 + index * TargetData.Length + TargetData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new TargetData(this._data.Slice(7 + index * TargetData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AreaSkillHit075"/>.
@@ -10253,7 +10259,10 @@ public readonly struct AreaSkillHit095
     /// <summary>
     /// Gets the <see cref="TargetData"/> of the specified index.
     /// </summary>
-        public TargetData this[int index] => new (this._data.Slice(8 + index * TargetData.Length));
+        public TargetData this[int index] =>
+            (index < 0 || 8 + index * TargetData.Length + TargetData.Length > this._data.Length)
+                ? throw new ArgumentOutOfRangeException(nameof(index))
+                : new TargetData(this._data.Slice(8 + index * TargetData.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="AreaSkillHit095"/>.

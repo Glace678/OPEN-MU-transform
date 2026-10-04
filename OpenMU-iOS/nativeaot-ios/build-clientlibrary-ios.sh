@@ -21,6 +21,14 @@ FINAL_DIR="${SCRIPT_DIR}/../game-ios/native"
 FINAL_LIBRARY_NAME="libMUnique.Client.Library.dylib"
 
 RID="${OPENMU_IOS_RID:-ios-arm64}"
+# I-04: only ios-arm64 is a supported iOS NativeAOT target here. The final copy
+# and packaging assume an arm64 slice, so refuse any other RID instead of silently
+# staging it under a fixed arm64 file name.
+if [[ "${RID}" != "ios-arm64" ]]; then
+  echo "error: OPENMU_IOS_RID='${RID}' is not supported; expected 'ios-arm64'." >&2
+  echo "An arm64 host slice is required for OpenMU-Game.app/Frameworks (I-04)." >&2
+  exit 2
+fi
 
 mkdir -p -- "${PUBLISH_DIR}" "${FINAL_DIR}"
 
@@ -60,6 +68,16 @@ if [[ ! -f "${SOURCE_LIBRARY}" ]]; then
     SOURCE_LIBRARY="${PUBLISH_DIR}/MUnique.Client.Library.so"
   else
     echo "未在 ${PUBLISH_DIR} 找到协议库产物（.dylib/.so）。" >&2
+    exit 1
+  fi
+fi
+
+# I-04: verify the produced slice is arm64 before staging it as the arm64 dylib.
+if command -v lipo >/dev/null 2>&1; then
+  ARCHES="$(lipo -info "${SOURCE_LIBRARY}" 2>/dev/null || true)"
+  echo "  ${SOURCE_LIBRARY}: ${ARCHES}"
+  if [[ "${ARCHES}" != *arm64* ]]; then
+    echo "error: produced library is not arm64 (${ARCHES}); refusing to stage (I-04)." >&2
     exit 1
   fi
 fi

@@ -17,20 +17,31 @@
     [Parameter]
     public IList<IManageableServer> Servers { get; set; } = null!;
 
+    private readonly HashSet<IManageableServer> _subscribedServers = new();
+
     /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var server in this.Servers)
+        foreach (var server in this._subscribedServers)
         {
             server.PropertyChanged -= this.OnServerPropertyChanged;
         }
+
+        this._subscribedServers.Clear();
     }
 
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        foreach (var server in this.Servers)
+        var current = this.Servers.ToHashSet();
+        foreach (var server in this._subscribedServers.Where(s => !current.Contains(s)).ToList())
+        {
+            server.PropertyChanged -= this.OnServerPropertyChanged;
+            this._subscribedServers.Remove(server);
+        }
+
+        foreach (var server in current.Where(s => this._subscribedServers.Add(s)))
         {
             server.PropertyChanged += this.OnServerPropertyChanged;
         }

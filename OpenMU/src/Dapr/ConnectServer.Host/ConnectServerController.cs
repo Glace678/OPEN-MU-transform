@@ -37,15 +37,31 @@ public class ConnectServerController : ControllerBase
     /// <param name="data">The data.</param>
     [HttpPost("GameServerHeartbeat")]
     [Topic("pubsub", "GameServerHeartbeat")]
-    public async Task GameServerHeartbeatAsync([FromBody] GameServerHeartbeatArguments data)
+    public async Task<IActionResult> GameServerHeartbeatAsync([FromBody] GameServerHeartbeatArguments data)
     {
+        if (data?.ServerInfo is null || string.IsNullOrWhiteSpace(data.PublicEndPoint))
+        {
+            this._logger.LogWarning("Received invalid heartbeat: missing server info or endpoint.");
+            return this.BadRequest("ServerInfo and PublicEndPoint are required.");
+        }
+
+        if (!IPEndPoint.TryParse(data.PublicEndPoint, out var publicEndPoint) ||
+            publicEndPoint.Port is < 1 or > 65535 ||
+            publicEndPoint.Address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+        {
+            this._logger.LogWarning("Received heartbeat with invalid public endpoint '{0}'.", data.PublicEndPoint);
+            return this.BadRequest("PublicEndPoint is not a valid IPv4 endpoint.");
+        }
+
         try
         {
-            await this._registry.UpdateRegistrationAsync(data.ServerInfo, IPEndPoint.Parse(data.PublicEndPoint)).ConfigureAwait(false);
+            await this._registry.UpdateRegistrationAsync(data.ServerInfo, publicEndPoint).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Error updating the GameServerRegistry");
         }
+
+        return this.Ok();
     }
 }

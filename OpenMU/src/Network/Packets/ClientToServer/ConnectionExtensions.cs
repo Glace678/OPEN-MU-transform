@@ -106,6 +106,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PublicChatMessageRef.GetRequiredSize(message);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PublicChatMessageRef(connection.Output.GetSpan(length)[..length]);
             packet.Character = @character;
             packet.Message = @message;
@@ -136,6 +141,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WhisperMessageRef.GetRequiredSize(message);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WhisperMessageRef(connection.Output.GetSpan(length)[..length]);
             packet.ReceiverName = @receiverName;
             packet.Message = @message;
@@ -330,6 +340,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ResetCharacterPointRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ResetCharacterPointRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -559,6 +574,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PickupItemRequest075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PickupItemRequest075Ref(connection.Output.GetSpan(length)[..length]);
             packet.ItemId = @itemId;
 
@@ -722,6 +742,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ConsumeItemRequest075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ConsumeItemRequest075Ref(connection.Output.GetSpan(length)[..length]);
             packet.ItemSlot = @itemSlot;
             packet.TargetSlot = @targetSlot;
@@ -778,6 +803,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CloseNpcRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CloseNpcRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -861,6 +891,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RepairItemRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RepairItemRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.ItemSlot = @itemSlot;
             packet.IsSelfRepair = @isSelfRepair;
@@ -891,6 +926,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WarpCommandRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WarpCommandRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CommandKey = @commandKey;
             packet.WarpInfoIndex = @warpInfoIndex;
@@ -1059,6 +1099,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeStatusRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeStatusRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1084,6 +1129,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeRegistrationRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeRegistrationRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1110,6 +1160,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeUnregisterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeUnregisterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.IsGivingUp = @isGivingUp;
 
@@ -1137,6 +1192,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeRegistrationStateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeRegistrationStateRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1163,6 +1223,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeMarkRegistrationRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeMarkRegistrationRef(connection.Output.GetSpan(length)[..length]);
             packet.ItemIndex = @itemIndex;
 
@@ -1192,6 +1257,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeDefenseBuyRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeDefenseBuyRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.NpcNumber = @npcNumber;
             packet.NpcIndex = @npcIndex;
@@ -1222,6 +1292,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeDefenseRepairRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeDefenseRepairRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.NpcNumber = @npcNumber;
             packet.NpcIndex = @npcIndex;
@@ -1254,6 +1329,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeDefenseUpgradeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeDefenseUpgradeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.NpcNumber = @npcNumber;
             packet.NpcIndex = @npcIndex;
@@ -1284,6 +1364,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeTaxInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeTaxInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1311,6 +1396,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeTaxChangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeTaxChangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.TaxType = @taxType;
             packet.TaxValue = @taxValue;
@@ -1340,6 +1430,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeTaxMoneyWithdrawRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeTaxMoneyWithdrawRef(connection.Output.GetSpan(length)[..length]);
             packet.Amount = @amount;
 
@@ -1369,6 +1464,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ToggleCastleGateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ToggleCastleGateRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.IsOpen = @isOpen;
             packet.GateId = @gateId;
@@ -1401,6 +1501,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleGuildCommandRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleGuildCommandRef(connection.Output.GetSpan(length)[..length]);
             packet.Team = @team;
             packet.PositionX = @positionX;
@@ -1432,6 +1537,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeHuntingZoneEntranceSettingRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeHuntingZoneEntranceSettingRef(connection.Output.GetSpan(length)[..length]);
             packet.IsPublic = @isPublic;
 
@@ -1459,6 +1569,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeGateListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeGateListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1484,6 +1599,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeStatueListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeStatueListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1509,6 +1629,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeRegisteredGuildsListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeRegisteredGuildsListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1534,6 +1659,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleOwnerListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleOwnerListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1561,6 +1691,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FireCatapultRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FireCatapultRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CatapultId = @catapultId;
             packet.TargetAreaIndex = @targetAreaIndex;
@@ -1590,6 +1725,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WeaponExplosionRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WeaponExplosionRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CatapultId = @catapultId;
 
@@ -1617,6 +1757,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildLogoOfCastleOwnerRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildLogoOfCastleOwnerRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1643,6 +1788,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CastleSiegeHuntingZoneEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CastleSiegeHuntingZoneEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Money = @money;
 
@@ -1670,6 +1820,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CrywolfInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CrywolfInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1696,6 +1851,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CrywolfContractRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CrywolfContractRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.StatueId = @statueId;
 
@@ -1723,6 +1883,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CrywolfChaosRateBenefitRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CrywolfChaosRateBenefitRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1748,6 +1913,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WhiteAngelItemRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WhiteAngelItemRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1773,6 +1943,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EnterOnWerewolfRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EnterOnWerewolfRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1798,6 +1973,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EnterOnGatekeeperRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EnterOnGatekeeperRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1823,6 +2003,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LeoHelperItemRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LeoHelperItemRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1848,6 +2033,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MoveToDeviasBySnowmanRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MoveToDeviasBySnowmanRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1873,6 +2063,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SantaClausItemRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SantaClausItemRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1898,6 +2093,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = KanturuInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new KanturuInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1923,6 +2123,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = KanturuEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new KanturuEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1948,6 +2153,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RaklionStateInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RaklionStateInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1973,6 +2183,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopPointInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopPointInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -1999,6 +2214,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopOpenStateRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopOpenStateRef(connection.Output.GetSpan(length)[..length]);
             packet.IsClosed = @isClosed;
 
@@ -2032,6 +2252,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopItemBuyRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopItemBuyRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PackageMainIndex = @packageMainIndex;
             packet.Category = @category;
@@ -2072,6 +2297,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopItemGiftRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopItemGiftRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PackageMainIndex = @packageMainIndex;
             packet.Category = @category;
@@ -2108,6 +2338,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopStorageListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopStorageListRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PageIndex = @pageIndex;
             packet.InventoryType = @inventoryType;
@@ -2139,6 +2374,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopDeleteStorageItemRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopDeleteStorageItemRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.BaseItemCode = @baseItemCode;
             packet.MainItemCode = @mainItemCode;
@@ -2172,6 +2412,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopStorageItemConsumeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopStorageItemConsumeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.BaseItemCode = @baseItemCode;
             packet.MainItemCode = @mainItemCode;
@@ -2203,6 +2448,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CashShopEventItemListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CashShopEventItemListRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CategoryIndex = @categoryIndex;
 
@@ -2231,6 +2481,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = UnlockVaultRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new UnlockVaultRef(connection.Output.GetSpan(length)[..length]);
             packet.Pin = @pin;
 
@@ -2260,6 +2515,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SetVaultPinRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SetVaultPinRef(connection.Output.GetSpan(length)[..length]);
             packet.Pin = @pin;
             packet.Password = @password;
@@ -2289,6 +2549,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RemoveVaultPinRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RemoveVaultPinRef(connection.Output.GetSpan(length)[..length]);
             packet.Password = @password;
 
@@ -2316,6 +2581,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = VaultClosedRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new VaultClosedRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -2343,6 +2613,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = VaultMoveMoneyRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new VaultMoveMoneyRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Direction = @direction;
             packet.Amount = @amount;
@@ -2375,6 +2650,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LahapJewelMixRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LahapJewelMixRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Operation = @operation;
             packet.Item = @item;
@@ -2405,6 +2685,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PartyListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PartyListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -2431,6 +2716,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PartyPlayerKickRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PartyPlayerKickRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PlayerIndex = @playerIndex;
 
@@ -2459,6 +2749,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PartyInviteRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PartyInviteRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.TargetPlayerId = @targetPlayerId;
 
@@ -2488,6 +2783,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PartyInviteResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PartyInviteResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.Accepted = @accepted;
             packet.RequesterId = @requesterId;
@@ -2521,6 +2821,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WalkRequestRef.GetRequiredSize(directions.Length);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WalkRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.SourceX = @sourceX;
             packet.SourceY = @sourceY;
@@ -2557,6 +2862,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = WalkRequest075Ref.GetRequiredSize(directions.Length);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new WalkRequest075Ref(connection.Output.GetSpan(length)[..length]);
             packet.SourceX = @sourceX;
             packet.SourceY = @sourceY;
@@ -2590,6 +2900,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = InstantMoveRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new InstantMoveRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.TargetX = @targetX;
             packet.TargetY = @targetY;
@@ -2620,6 +2935,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = AnimationRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new AnimationRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Rotation = @rotation;
             packet.AnimationNumber = @animationNumber;
@@ -2649,6 +2969,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RequestCharacterListRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RequestCharacterListRef(connection.Output.GetSpan(length)[..length]);
             packet.Language = @language;
 
@@ -2678,6 +3003,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CreateCharacterRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CreateCharacterRef(connection.Output.GetSpan(length)[..length]);
             packet.Name = @name;
             packet.Class = @class;
@@ -2708,6 +3038,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = DeleteCharacterRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new DeleteCharacterRef(connection.Output.GetSpan(length)[..length]);
             packet.Name = @name;
             packet.SecurityCode = @securityCode;
@@ -2737,6 +3072,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SelectCharacterRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SelectCharacterRef(connection.Output.GetSpan(length)[..length]);
             packet.Name = @name;
 
@@ -2765,6 +3105,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FocusCharacterRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FocusCharacterRef(connection.Output.GetSpan(length)[..length]);
             packet.Name = @name;
 
@@ -2793,6 +3138,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = IncreaseCharacterStatPointRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new IncreaseCharacterStatPointRef(connection.Output.GetSpan(length)[..length]);
             packet.StatType = @statType;
 
@@ -2845,6 +3195,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ClientReadyAfterMapChangeRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ClientReadyAfterMapChangeRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -2871,6 +3226,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SaveKeyConfigurationRef.GetRequiredSize(configuration.Length);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SaveKeyConfigurationRef(connection.Output.GetSpan(length)[..length]);
             @configuration.Span.CopyTo(packet.Configuration);
 
@@ -2899,6 +3259,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = AddMasterSkillPointRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new AddMasterSkillPointRef(connection.Output.GetSpan(length)[..length]);
             packet.SkillId = @skillId;
 
@@ -2929,6 +3294,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = HitRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new HitRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.TargetId = @targetId;
             packet.AttackAnimation = @attackAnimation;
@@ -2990,6 +3360,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = TargetedSkill075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new TargetedSkill075Ref(connection.Output.GetSpan(length)[..length]);
             packet.SkillIndex = @skillIndex;
             packet.TargetId = @targetId;
@@ -3050,6 +3425,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MagicEffectCancelRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MagicEffectCancelRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.SkillId = @skillId;
             packet.PlayerId = @playerId;
@@ -3120,6 +3500,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = AreaSkill075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new AreaSkill075Ref(connection.Output.GetSpan(length)[..length]);
             packet.SkillIndex = @skillIndex;
             packet.TargetX = @targetX;
@@ -3216,6 +3601,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RageAttackRangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RageAttackRangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.SkillId = @skillId;
             packet.TargetId = @targetId;
@@ -3244,6 +3634,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = TradeCancelRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new TradeCancelRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -3270,6 +3665,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = TradeButtonStateChangeRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new TradeButtonStateChangeRef(connection.Output.GetSpan(length)[..length]);
             packet.NewState = @newState;
 
@@ -3326,6 +3726,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = TradeRequestResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new TradeRequestResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.TradeAccepted = @tradeAccepted;
 
@@ -3354,6 +3759,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SetTradeMoneyRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SetTradeMoneyRef(connection.Output.GetSpan(length)[..length]);
             packet.Amount = @amount;
 
@@ -3382,6 +3792,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LetterDeleteRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LetterDeleteRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.LetterIndex = @letterIndex;
 
@@ -3409,6 +3824,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LetterListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LetterListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -3475,6 +3895,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LetterReadRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LetterReadRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.LetterIndex = @letterIndex;
 
@@ -3504,6 +3929,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildKickPlayerRequestRef.GetRequiredSize(securityCode);
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildKickPlayerRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PlayerName = @playerName;
             packet.SecurityCode = @securityCode;
@@ -3533,6 +3963,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildJoinRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildJoinRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GuildMasterPlayerId = @guildMasterPlayerId;
 
@@ -3562,6 +3997,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildJoinResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildJoinResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.Accepted = @accepted;
             packet.RequesterId = @requesterId;
@@ -3590,6 +4030,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -3617,6 +4062,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildCreateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildCreateRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GuildName = @guildName;
             @guildEmblem.Span.CopyTo(packet.GuildEmblem);
@@ -3647,6 +4097,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildCreateRequest075Ref.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildCreateRequest075Ref(connection.Output.GetSpan(length)[..length]);
             packet.GuildName = @guildName;
             @guildEmblem.Span.CopyTo(packet.GuildEmblem);
@@ -3676,6 +4131,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildMasterAnswerRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildMasterAnswerRef(connection.Output.GetSpan(length)[..length]);
             packet.ShowCreationDialog = @showCreationDialog;
 
@@ -3703,6 +4163,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CancelGuildCreationRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CancelGuildCreationRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -3729,6 +4194,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildWarResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildWarResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.Accepted = @accepted;
 
@@ -3757,6 +4227,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GuildId = @guildId;
 
@@ -3787,6 +4262,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildRoleAssignRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildRoleAssignRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Type = @type;
             packet.Role = @role;
@@ -3817,6 +4297,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildTypeChangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildTypeChangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GuildType = @guildType;
 
@@ -3847,6 +4332,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildRelationshipChangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildRelationshipChangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.RelationshipType = @relationshipType;
             packet.RequestType = @requestType;
@@ -3880,6 +4370,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GuildRelationshipChangeResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GuildRelationshipChangeResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.RelationshipType = @relationshipType;
             packet.RequestType = @requestType;
@@ -3910,6 +4405,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RequestAllianceListRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RequestAllianceListRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -3936,6 +4436,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = RemoveAllianceGuildRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new RemoveAllianceGuildRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GuildName = @guildName;
 
@@ -3963,6 +4468,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PingResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PingResponseRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4018,6 +4528,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChaosMachineMixRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChaosMachineMixRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.MixType = @mixType;
             packet.SocketSlot = @socketSlot;
@@ -4046,6 +4561,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = CraftingDialogCloseRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new CraftingDialogCloseRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4071,6 +4591,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FriendListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FriendListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4097,6 +4622,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FriendAddRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FriendAddRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.FriendName = @friendName;
 
@@ -4125,6 +4655,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FriendDeleteRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FriendDeleteRef(connection.Output.GetSpan(length)[..length]);
             packet.FriendName = @friendName;
 
@@ -4153,6 +4688,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatRoomCreateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatRoomCreateRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.FriendName = @friendName;
 
@@ -4182,6 +4722,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = FriendAddResponseRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new FriendAddResponseRef(connection.Output.GetSpan(length)[..length]);
             packet.Accepted = @accepted;
             packet.FriendRequesterName = @friendRequesterName;
@@ -4211,6 +4756,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = SetFriendOnlineStateRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new SetFriendOnlineStateRef(connection.Output.GetSpan(length)[..length]);
             packet.OnlineState = @onlineState;
 
@@ -4241,6 +4791,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatRoomInvitationRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatRoomInvitationRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.FriendName = @friendName;
             packet.RoomId = @roomId;
@@ -4270,6 +4825,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LegacyQuestStateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LegacyQuestStateRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4297,6 +4857,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LegacyQuestStateSetRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LegacyQuestStateSetRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.NewState = @newState;
@@ -4328,6 +4893,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PetCommandRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PetCommandRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PetType = @petType;
             packet.CommandMode = @commandMode;
@@ -4360,6 +4930,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = PetInfoRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new PetInfoRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Pet = @pet;
             packet.Storage = @storage;
@@ -4391,6 +4966,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = IllusionTempleEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new IllusionTempleEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.MapNumber = @mapNumber;
             packet.ItemSlot = @itemSlot;
@@ -4422,6 +5002,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = IllusionTempleSkillRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new IllusionTempleSkillRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.SkillNumber = @skillNumber;
             packet.TargetObjectIndex = @targetObjectIndex;
@@ -4451,6 +5036,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = IllusionTempleRewardRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new IllusionTempleRewardRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4476,6 +5066,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LuckyCoinCountRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LuckyCoinCountRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4501,6 +5096,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LuckyCoinRegistrationRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LuckyCoinRegistrationRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4527,6 +5127,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LuckyCoinExchangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LuckyCoinExchangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CoinCount = @coinCount;
 
@@ -4555,6 +5160,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = DoppelgangerEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new DoppelgangerEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.TicketItemSlot = @ticketItemSlot;
 
@@ -4582,6 +5192,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EnterMarketPlaceRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EnterMarketPlaceRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4608,6 +5223,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MuHelperStatusChangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MuHelperStatusChangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.PauseStatus = @pauseStatus;
 
@@ -4666,6 +5286,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestSelectRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestSelectRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4698,6 +5323,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestProceedRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestProceedRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4729,6 +5359,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestCompletionRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestCompletionRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4759,6 +5394,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestCancelRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestCancelRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4789,6 +5429,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestClientActionRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestClientActionRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4817,6 +5462,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ActiveQuestListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ActiveQuestListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4844,6 +5494,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = QuestStateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new QuestStateRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.QuestNumber = @questNumber;
             packet.QuestGroup = @questGroup;
@@ -4872,6 +5527,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EventQuestStateListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EventQuestStateListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4897,6 +5557,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = AvailableQuestsRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new AvailableQuestsRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4922,6 +5587,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = NpcBuffRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new NpcBuffRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -4948,6 +5618,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EnterEmpireGuardianEventRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EnterEmpireGuardianEventRef(connection.Output.GetSpan(length)[..length]);
             packet.ItemSlot = @itemSlot;
 
@@ -4976,6 +5651,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GensJoinRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GensJoinRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GensType = @gensType;
 
@@ -5003,6 +5683,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GensLeaveRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GensLeaveRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -5029,6 +5714,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GensRewardRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GensRewardRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.GensType = @gensType;
 
@@ -5056,6 +5746,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = GensRankingRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new GensRankingRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -5083,6 +5778,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = DevilSquareEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new DevilSquareEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.SquareLevel = @squareLevel;
             packet.TicketItemInventoryIndex = @ticketItemInventoryIndex;
@@ -5113,6 +5813,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MiniGameOpeningStateRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MiniGameOpeningStateRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.EventType = @eventType;
             packet.EventLevel = @eventLevel;
@@ -5143,6 +5848,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EventChipRegistrationRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EventChipRegistrationRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Type = @type;
             packet.ItemIndex = @itemIndex;
@@ -5171,6 +5881,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MutoNumberRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MutoNumberRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -5196,6 +5911,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EventChipExitDialogRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EventChipExitDialogRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }
@@ -5222,6 +5942,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = EventChipExchangeRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new EventChipExchangeRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Type = @type;
 
@@ -5280,6 +6005,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = LuckyNumberRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new LuckyNumberRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.Serial1 = @serial1;
             packet.Serial2 = @serial2;
@@ -5311,6 +6041,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = BloodCastleEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new BloodCastleEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CastleLevel = @castleLevel;
             packet.TicketItemInventoryIndex = @ticketItemInventoryIndex;
@@ -5340,6 +6075,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = MiniGameEventCountRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new MiniGameEventCountRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.MiniGame = @miniGame;
 
@@ -5369,6 +6109,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChaosCastleEnterRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChaosCastleEnterRequestRef(connection.Output.GetSpan(length)[..length]);
             packet.CastleLevel = @castleLevel;
             packet.TicketItemInventoryIndex = @ticketItemInventoryIndex;
@@ -5399,6 +6144,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChaosCastlePositionSetRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChaosCastlePositionSetRef(connection.Output.GetSpan(length)[..length]);
             packet.PositionX = @positionX;
             packet.PositionY = @positionY;
@@ -5567,6 +6317,11 @@ public static class ConnectionExtensions
         int WritePacket()
         {
             var length = ChatCommandListRequestRef.Length;
+            if (length > byte.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      
             var packet = new ChatCommandListRequestRef(connection.Output.GetSpan(length)[..length]);
             return packet.Header.Length;
         }

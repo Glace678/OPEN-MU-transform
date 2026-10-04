@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- The development/local launcher currently serves HTTP on a user-selected LAN IP. -->
-    <base-config cleartextTrafficPermitted="true" />
+    <!-- A-04: production/release default is NO cleartext. The GM bearer key must
+         ride HTTPS. The bundled LAN sideload (plain HTTP to a private address)
+         overrides this only from the debug source set (src/debug/res/xml). -->
+    <base-config cleartextTrafficPermitted="false" />
 </network-security-config>

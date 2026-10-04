@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -1680,6 +1680,7 @@ WORD CalcMaxDurability(const ITEM* ip, ITEM_ATTRIBUTE* p, int Level)
 
 void GetItemName(int iType, int iLevel, wchar_t* Text)
 {
+    if (iType < 0 || iType >= MAX_ITEM) { Text[0] = L'\0'; return; }
     ITEM_ATTRIBUTE* p = &ItemAttribute[iType];
 
     if (iType >= ITEM_SCROLL_OF_EMPEROR_RING_OF_HONOR && iType <= ITEM_SOUL_SHARD_OF_WIZARD)
@@ -1711,7 +1712,7 @@ void GetItemName(int iType, int iLevel, wchar_t* Text)
         {
         case 0: mu_swprintf(Text, L"%ls", I18N::Game::Zen); break;
         case 1: mu_swprintf(Text, L"%ls", I18N::Game::Heart); break;
-        case 2: mu_swprintf(Text, L"%ls", ChaosEventName[p->Durability]); break;
+        case 2: if (p->Durability >= 0 && p->Durability < 10) mu_swprintf(Text, L"%ls", ChaosEventName[p->Durability]); break;
         }
     }
     else if (iType == ITEM_BOX_OF_LUCK)
@@ -1805,7 +1806,7 @@ void GetItemName(int iType, int iLevel, wchar_t* Text)
     }
     else if (iType == ITEM_ORB_OF_SUMMONING)
     {
-        mu_swprintf(Text, L"%ls %ls", SkillAttribute[30 + iLevel].Name, I18N::Game::Jewel);
+        if (iLevel >= 0 && (30 + iLevel) < MAX_SKILLS) mu_swprintf(Text, L"%ls %ls", SkillAttribute[30 + iLevel].Name, I18N::Game::Jewel);
     }
     else if (iType == ITEM_RED_RIBBON_BOX)
     {
@@ -1855,7 +1856,7 @@ void GetItemName(int iType, int iLevel, wchar_t* Text)
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {
-            if (SommonTable[iLevel] == MonsterScript[i].Type)
+            if (iLevel >= 0 && iLevel < 6 && SommonTable[iLevel] == MonsterScript[i].Type)
             {
                 mu_swprintf(Text, L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
             }
@@ -2659,11 +2660,11 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         wchar_t TextName[64];
         if (g_csItemOption.GetSetItemName(TextName, ip->Type, ip->AncientDiscriminator))
         {
-            wcscat(TextName, p->Name);
+            wcsncat(TextName, p->Name, 63 - wcslen(TextName)); TextName[63] = L'\0';
         }
         else
         {
-            wcscpy(TextName, p->Name);
+            wcsncpy(TextName, p->Name, 63); TextName[63] = L'\0';
         }
 
         if (ip->ExcellentFlags > 0)
@@ -7311,7 +7312,7 @@ int CompareItem(ITEM item1, ITEM item2)
                     {
                         equal = -1;
                     }
-                    else if (addOption1 != addOption2 && addOptionV1 != addOptionV2)
+                    else if (addOption1 > addOption2 || addOptionV1 > addOptionV2)
                     {
                         equal = 1;
                     }
@@ -7520,8 +7521,8 @@ bool IsPersonalShopBan(ITEM* pItem)
     }
 #endif // KJH_FIX_PERSONALSHOP_BAN_CASHITEM
 
-    if ((!pItem->bPeriodItem) &&
-        pItem->Type == ITEM_DEMON
+    if (!pItem->bPeriodItem &&
+        (pItem->Type == ITEM_DEMON
         || pItem->Type == ITEM_SPIRIT_OF_GUARDIAN
         || pItem->Type == ITEM_PET_PANDA
         || pItem->Type == ITEM_PANDA_TRANSFORMATION_RING
@@ -7531,7 +7532,7 @@ bool IsPersonalShopBan(ITEM* pItem)
         || (g_pMyInventory->IsInvenItem(pItem->Type) && pItem->Durability == 255)
 #endif //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
         || (pItem->Type == ITEM_WIZARDS_RING && pItem->Level == 0)
-        )
+        ))
     {
         return false;
     }
@@ -11041,7 +11042,7 @@ void ClosePersonalShop()
         {
             std::wstring title{};
             GetShopTitle(Hero, title);
-            wcscpy(g_szPersonalShopTitle, title.c_str());
+            wcsncpy(g_szPersonalShopTitle, title.c_str(), MAX_SHOPTITLE);
         }
         else
         {
@@ -11112,9 +11113,10 @@ void OpenPersonalShopMsgWnd(int iMsgType)
 }
 bool IsCorrectShopTitle(const wchar_t* szShopTitle)
 {
+    if (szShopTitle == nullptr) return false;
     int j = 0;
     wchar_t TmpText[2048];
-    for (int i = 0; i < (int)wcslen(szShopTitle); ++i)
+    for (int i = 0; i < (int)wcslen(szShopTitle) && j < 2047; ++i)
     {
         if (szShopTitle[i] != 32)
         {

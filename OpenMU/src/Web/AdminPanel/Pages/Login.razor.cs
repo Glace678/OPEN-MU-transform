@@ -221,15 +221,16 @@ public partial class Login : IAsyncDisposable
             return string.Empty;
         }
 
-        // An absolute or protocol relative url could send the user to a foreign site after login.
-        if (this.ReturnUrl.StartsWith('/')
-            || this.ReturnUrl.StartsWith('\\')
-            || this.ReturnUrl.Contains("://", StringComparison.Ordinal))
+        // Only in-app paths are allowed: root-relative paths are safe. Reject
+        // protocol-relative URLs, absolute URLs and any scheme (e.g. javascript:)
+        // to avoid navigation to another origin or script execution after login.
+        var normalized = this.ReturnUrl.TrimStart();
+        if (normalized.StartsWith('/') && !normalized.StartsWith("//", StringComparison.Ordinal))
         {
-            return string.Empty;
+            return normalized;
         }
 
-        return this.ReturnUrl;
+        return string.Empty;
     }
 
     private void ToggleRecoveryCode()

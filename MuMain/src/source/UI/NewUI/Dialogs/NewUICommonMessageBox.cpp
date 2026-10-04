@@ -1,4 +1,4 @@
-﻿// NewUICommonMessageBox.cpp: implementation of the NewUICommonMessageBox class.
+// NewUICommonMessageBox.cpp: implementation of the NewUICommonMessageBox class.
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include "UI/NewUI/Dialogs/NewUICommonMessageBox.h"
@@ -125,7 +125,7 @@ void SEASON3B::CNewUIMessageBoxButton::SetInfo(DWORD dwTexType, float x, float y
 
 void SEASON3B::CNewUIMessageBoxButton::SetText(const wchar_t* strText)
 {
-    if (wcslen(strText) > 0)
+    if (strText != nullptr && wcslen(strText) > 0)  // #MG-20: treat nullptr as empty, not crash
     {
         m_strText = strText;
     }
@@ -1324,7 +1324,10 @@ bool SEASON3B::CPartyMsgBoxLayout::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL))
         return false;
 
-    pMsgBox->AddMsg(CharactersClient[FindCharacterIndex(PartyKey)].ID);
+    int nPartyIdx = FindCharacterIndex(PartyKey);
+    if (nPartyIdx < 0 || nPartyIdx >= MAX_CHARACTERS_CLIENT)
+        return false;
+    pMsgBox->AddMsg(CharactersClient[nPartyIdx].ID);
     pMsgBox->AddMsg(I18N::Game::SomeoneRequestsYouToJoinTheirAParty);
     pMsgBox->AddCallbackFunc(CPartyMsgBoxLayout::OkBtnDown, MSGBOX_EVENT_USER_COMMON_OK);
     pMsgBox->AddCallbackFunc(CPartyMsgBoxLayout::CancelBtnDown, MSGBOX_EVENT_USER_COMMON_CANCEL);

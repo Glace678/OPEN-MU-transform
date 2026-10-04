@@ -284,7 +284,7 @@ void CNewUITrade::RenderText()
         mu_swprintf(szTemp, I18N::Game::AboutD, nLevel);
     }
     g_pRenderText->SetTextColor(dwColor);
-    g_pRenderText->RenderText(m_Pos.x + 134, m_Pos.y + 48, L"Lv.");
+    g_pRenderText->RenderText(m_Pos.x + 134, m_Pos.y + 48, I18N::Game::Level);
     g_pRenderText->RenderText(m_Pos.x + 148, m_Pos.y + 48, szTemp);
 
     ::ConvertGold(m_nYourTradeGold, szTemp);
@@ -583,7 +583,13 @@ void CNewUITrade::AlertTrade()
 
 void CNewUITrade::GetYourID(wchar_t* pszYourID)
 {
-    ::wcscpy(pszYourID, m_szYourID);
+    if (pszYourID == nullptr)
+    {
+        return;
+    }
+
+    wcsncpy(pszYourID, m_szYourID, MAX_USERNAME_SIZE);
+    pszYourID[MAX_USERNAME_SIZE] = L'\0';
 }
 
 void CNewUITrade::ProcessToReceiveTradeRequest(char* pbyYourID)
@@ -630,6 +636,7 @@ void CNewUITrade::ProcessToReceiveTradeResult(LPPTRADE pTradeData)
         m_bTradeAlert = false;
         m_nYourGuildType = pTradeData->GuildKey;
         wcsncpy(m_szYourID, szTempID, MAX_USERNAME_SIZE);
+        m_szYourID[MAX_USERNAME_SIZE] = L'\0';
         m_nYourLevel = pTradeData->Level;   //  상대방 레벨.
         break;
     }

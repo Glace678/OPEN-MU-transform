@@ -7,7 +7,13 @@ namespace Core::Time
 {
     inline float SanitizeFrameScale(float frameScale)
     {
-        return std::isfinite(frameScale) ? std::max(frameScale, 0.0f) : 0.0f;
+        constexpr float maximumFrameScale = 1.0e6f;
+        if (!std::isfinite(frameScale) || frameScale < 0.0f)
+        {
+            return 0.0f;
+        }
+
+        return std::min(frameScale, maximumFrameScale);
     }
 
     // Converts a value expressed "per 25 FPS reference frame" to the current

@@ -26,7 +26,7 @@ private:
 class CTimer2
 {
 public:
-    CTimer2() : m_startTickCount(0), m_delay(0), m_timeReached(false) {}
+    CTimer2() : m_delay(0), m_timeReached(false), m_timerStarted(false) {}
     ~CTimer2() = default;
 
     void SetTimer(unsigned int delay);
@@ -36,7 +36,11 @@ public:
     bool IsTime() const;
 
 private:
-    unsigned int m_startTickCount;
+    using SteadyClock = std::chrono::steady_clock;
+    using TimePoint = SteadyClock::time_point;
+
     unsigned int m_delay;
     bool m_timeReached;
+    bool m_timerStarted;
+    TimePoint m_startTickTime;
 };

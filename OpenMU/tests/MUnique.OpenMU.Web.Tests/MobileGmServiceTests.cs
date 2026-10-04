@@ -134,7 +134,7 @@ public class MobileGmServiceTests
     public async Task ZenRequestIsIdempotentAsync()
     {
         using var services = new ServiceCollection().BuildServiceProvider();
-        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance);
+        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance, System.IO.Path.Combine(System.IO.Path.GetTempPath(), "openmu-mgm-" + System.Guid.NewGuid().ToString("N") + ".json"));
         var request = CreateZenRequest();
 
         var first = service.GrantZenAsync(request);
@@ -151,7 +151,7 @@ public class MobileGmServiceTests
     public async Task GrantRequestIsIdempotentAsync()
     {
         using var services = new ServiceCollection().BuildServiceProvider();
-        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance);
+        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance, System.IO.Path.Combine(System.IO.Path.GetTempPath(), "openmu-mgm-" + System.Guid.NewGuid().ToString("N") + ".json"));
         var request = CreateRequest();
 
         var first = service.GrantItemAsync(request);

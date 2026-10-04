@@ -1,4 +1,4 @@
-﻿// <copyright file="SocketConnectionTest.cs" company="MUnique">
+// <copyright file="SocketConnectionTest.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -57,15 +57,11 @@ public class SocketConnectionTest
                     var socketConnection = SocketConnection.Create(clientSocket);
                     connection = new Connection(socketConnection, new PipelinedDecryptor(socketConnection.Input), new PipelinedEncryptor(socketConnection.Output), new NullLogger<Connection>());
                 }, null);
-
             using var client = new TcpClient("127.0.0.1", 5000);
-            while (connection == null)
-            {
-                Thread.Sleep(10);
-            }
+            WaitFor(() => connection != null);
 
 #pragma warning disable 4014
-            connection.BeginReceiveAsync();
+            connection!.BeginReceiveAsync();
 #pragma warning restore 4014
 
             var packet = new byte[22222];
@@ -73,7 +69,7 @@ public class SocketConnectionTest
             packet[1] = 0xAD;
             packet[2] = 0xBE;
             packet[3] = 0xAF;
-            await connection.Output.WriteAsync(packet).ConfigureAwait(false);
+            await connection!.Output.WriteAsync(packet).ConfigureAwait(false);
             await Task.Delay(1000).ConfigureAwait(false);
 
             Assert.That(connection.Connected, Is.False);
@@ -136,13 +132,10 @@ public class SocketConnectionTest
             }, null);
         using (var client = new TcpClient("127.0.0.1", 5000))
         {
-            while (connection == null)
-            {
-                Thread.Sleep(10);
-            }
+            WaitFor(() => connection != null);
 
             int packetCount = 0;
-            connection.PacketReceived += async p => Interlocked.Increment(ref packetCount);
+            connection!.PacketReceived += async p => Interlocked.Increment(ref packetCount);
             _ = connection.BeginReceiveAsync();
 
             var packet = new byte[] { 0xC1, 10, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -151,12 +144,27 @@ public class SocketConnectionTest
                 client.Client.BeginSend(packet, 0, packet.Length, SocketFlags.None, null, null);
             }
 
-            while (packetCount < maximumPacketCount)
-            {
-                Thread.Sleep(1);
-            }
+            WaitFor(() => Volatile.Read(ref packetCount) >= maximumPacketCount);
         }
 
         server.Stop();
+    }
+
+    /// <summary>
+    /// Waits up to <paramref name="timeoutMs"/> for <paramref name="condition"/> to become true,
+    /// failing the test instead of hanging forever. (#24)
+    /// </summary>
+    private static void WaitFor(Func<bool> condition, int timeoutMs = 10000)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while (!condition())
+        {
+            if (sw.ElapsedMilliseconds > timeoutMs)
+            {
+                Assert.Fail("Timed out waiting for condition.");
+            }
+
+            Thread.Sleep(10);
+        }
     }
 }

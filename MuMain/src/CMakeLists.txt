@@ -152,6 +152,11 @@ file(GLOB_RECURSE MU_CLIENT_SOURCES
 list(FILTER MU_CLIENT_SOURCES EXCLUDE REGEX "[/\\]Platform[/\\][^/\\]+[/\\][Ww]in[Mm]ain\\.[Cc]pp$")
 list(FILTER MU_CLIENT_SOURCES EXCLUDE REGEX "[/\\]Platform[/\\][^/\\]+[/\\]main\\.(cpp|mm)$")
 
+# #40: vendored third-party trees (ThirdParty/third_party/dependencies) build as
+# their own targets. GLOB_RECURSE must not sweep their .cpp into the client lib,
+# or a checked-out submodule gets compiled twice / breaks the build.
+list(FILTER MU_CLIENT_SOURCES EXCLUDE REGEX "[/\\](ThirdParty|third_party|dependencies)[/\\]")
+
 # The in-game shop's catalog downloader is a WinINet/urlmon HTTP+FTP stack on
 # Windows (FileDownloader/FTPConnecter/HTTPConnecter/DownloadInfo). Off Windows
 # it is replaced by a libcurl implementation (CurlFileDownloader, issue #462).
@@ -229,6 +234,22 @@ if(MSVC)
     "${CMAKE_CURRENT_SOURCE_DIR}/source/UI/Chat/ChatInput.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/source/UI/ControllerKeyboard/ControllerKeyboard.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/source/UI/Windows/PasswordServiceWin.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Object/ZzzInventory.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Object/ZzzInfomation.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Object/ZzzInterface.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Object/ZzzObject.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Object/ZzzOpenData.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Engine/Physics/PhysicsManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/GameLogic/Combat/ClassAttack.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Render/Effects/ZzzEffectParticle.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GMEmpireGuardian1.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GM_Raklion.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GMBattleCastle.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GMCrywolf1st.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GM_Kanturu_2nd.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/World/GameMaps/GM_Kanturu_3rd.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/UI/NewUI/Dialogs/NewUICommonMessageBox.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/UI/Legacy/UIControls.cpp"
   )
   set_property(SOURCE ${MU_UTF8_SOURCES}
     APPEND PROPERTY COMPILE_OPTIONS /utf-8)

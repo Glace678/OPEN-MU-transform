@@ -20,16 +20,29 @@ steps:
     filePath: 'set-projectVersion.ps1'
 - bash: |
     #!/bin/sh
-    echo 'tag is $TAG'
-    if (curl --silent -f -lSL https://hub.docker.com/v2/repositories/munique/openmu/tags/$TAG > /dev/null) then
-      echo '##vso[task.setvariable variable=tagExists]true'
-    else
-      echo '##vso[task.setvariable variable=tagExists]false'
-    fi
+    check_tag() {
+      repo="$1"
+      var="$2"
+      if curl --silent -f -lSL "https://hub.docker.com/v2/repositories/munique/${repo}/tags/$TAG" > /dev/null; then
+        value='true'
+      else
+        value='false'
+      fi
+      echo "##vso[task.setvariable variable=${var}]${value}"
+      echo "${repo} tag exists: ${value}"
+    }
+    check_tag openmu tagExists
+    check_tag openmu-admin adminTagExists
+    check_tag openmu-chat chatTagExists
+    check_tag openmu-connect connectTagExists
+    check_tag openmu-friend friendTagExists
+    check_tag openmu-game gameTagExists
+    check_tag openmu-guild guildTagExists
+    check_tag openmu-login loginTagExists
   env:
     TAG: $(projectVersion)
 - task: Docker@2
-  condition: eq(variables.tagExists, 'false')
+  condition: or(eq(variables.tagExists, 'false'), eq(variables.adminTagExists, 'false'), eq(variables.chatTagExists, 'false'), eq(variables.connectTagExists, 'false'), eq(variables.friendTagExists, 'false'), eq(variables.gameTagExists, 'false'), eq(variables.guildTagExists, 'false'), eq(variables.loginTagExists, 'false'))
   inputs:
    containerRegistry: 'munique docker hub'
    command: 'login'
@@ -48,7 +61,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push AdminPanel Image (openmu-admin)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.adminTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -61,7 +74,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push ChatServer Image"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.chatTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -74,7 +87,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push ConnectServer Image (openmu-connect)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.connectTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -87,7 +100,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push FriendServer Image (openmu-friend)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.friendTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -100,7 +113,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push GameServer Image (openmu-game)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.gameTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -113,7 +126,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push GuildServer Image (openmu-guild)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.guildTagExists, 'false')
   inputs:
     script: |
       cd src
@@ -126,7 +139,7 @@ steps:
         .
 - task: CmdLine@2
   displayName: "Build and Push LoginServer Image (openmu-login)"
-  condition: eq(variables.tagExists, 'false')
+  condition: eq(variables.loginTagExists, 'false')
   inputs:
     script: |
       cd src

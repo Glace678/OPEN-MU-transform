@@ -65,6 +65,16 @@ file(GLOB MU_PREBUILT_SO "${MU_OHOS_PREBUILT_DIR}/*.so")
 if(NOT MU_PREBUILT_SO)
   message(FATAL_ERROR "No .so files found in '${MU_OHOS_PREBUILT_DIR}'.")
 endif()
+# H-01: "at least one .so" is not enough -- a directory holding only an unrelated
+# .so would package cleanly and then dlopen the wrong (or missing) library at
+# launch. The .NET protocol library is mandatory for this ABI; verify its soname
+# explicitly instead of trusting the GLOB.
+set(MU_REQUIRED_SONAME "libMUnique.Client.Library.so")
+if(NOT EXISTS "${MU_OHOS_PREBUILT_DIR}/${MU_REQUIRED_SONAME}")
+  message(FATAL_ERROR "Required prebuilt '${MU_REQUIRED_SONAME}' not found in "
+    "'${MU_OHOS_PREBUILT_DIR}'. Build it for OHOS_ARCH=${OHOS_ARCH} with "
+    "../../../nativeaot-ohos/build-clientlibrary-ohos.sh and place it there.")
+endif()
 foreach(so ${MU_PREBUILT_SO})
   get_filename_component(so_name "${so}" NAME)
   configure_file("${so}" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${so_name}" COPYONLY)

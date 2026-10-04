@@ -1,4 +1,4 @@
-﻿// <copyright file="PipelinedXor32Encryptor.cs" company="MUnique">
+// <copyright file="PipelinedXor32Encryptor.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -40,7 +40,8 @@ public class PipelinedXor32Encryptor : PacketPipeReaderBase, IPipelinedEncryptor
 
         this.Source = this._pipe.Reader;
         this._target = target;
-        this._xor32Key = xor32Key;
+        // Clone the key so external mutation of the passed array (or the shared default) doesn't affect us. (Code5#14)
+        this._xor32Key = (byte[])xor32Key.Clone();
         _ = this.ReadSourceAsync().ConfigureAwait(false);
     }
 

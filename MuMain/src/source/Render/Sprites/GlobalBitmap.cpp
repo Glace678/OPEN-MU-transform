@@ -749,6 +749,11 @@ bool CGlobalBitmap::OpenTga(GLuint uiBitmapIndex, const std::wstring& filename, 
         return false;
     }
 
+    // #MG-06: verify the full 22-byte header and the exact pixel payload
+    // (nx*ny*4) actually exist before reading pixels.
+    if (pakBuffer.size() < static_cast<std::size_t>(index)) return false;
+    if (static_cast<std::size_t>(nx) * static_cast<std::size_t>(ny) * 4u > pakBuffer.size() - static_cast<std::size_t>(index)) return false;
+
     const int Width = NextPowerOfTwo(nx, MAX_WIDTH);
     const int Height = NextPowerOfTwo(ny, MAX_HEIGHT);
 

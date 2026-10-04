@@ -305,6 +305,11 @@ namespace MUHelper
         for (const int& iMonsterId : setTargets)
         {
             int iIndex = FindCharacterIndex(iMonsterId);
+            if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+            {
+                continue;
+            }
+
             CHARACTER* pTarget = &CharactersClient[iIndex];
 
             if (!IsMonster(pTarget))
@@ -338,6 +343,11 @@ namespace MUHelper
         for (const int& iMonsterId : setTargets)
         {
             int iIndex = FindCharacterIndex(iMonsterId);
+            if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+            {
+                continue;
+            }
+
             CHARACTER* pTarget = &CharactersClient[iIndex];
 
             if (!IsMonster(pTarget))

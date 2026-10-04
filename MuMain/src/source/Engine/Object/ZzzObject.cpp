@@ -4931,10 +4931,11 @@ void DeleteObjectTile(int x, int y)
             {
                 if (o != NULL && o != (OBJECT*)0xdddddddd)
                 {
+                    OBJECT* next = o->Next;
                     if (o->Live && (int)(o->Position[0] / TERRAIN_SCALE) == x && (int)(o->Position[1] / TERRAIN_SCALE) == y)
                         DeleteObject(o, ob);
-                    if (o->Next == NULL) break;
-                    o = o->Next;
+                    if (next == NULL) break;
+                    o = next;
                 }
                 else break;
             }
@@ -5023,6 +5024,7 @@ bool SaveObjects(wchar_t* FileName, int iMapNumber)
 void SaveTrapObjects(wchar_t* FileName)
 {
     FILE* fp = _wfopen(FileName, L"wt");
+    if (fp == nullptr) return;
     fwprintf(fp, L"0\n");
     for (int i = 0; i < 16; i++)
     {
@@ -8466,6 +8468,7 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         vec3_t Light;
         vec3_t vPos;
 
+        VectorCopy(o->Position, vPos);
         Vector(1.f, 0.6f, 0.2f, Light);
         if (rand_fps_check(100))
         {

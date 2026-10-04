@@ -1,6 +1,6 @@
 services:
   nginx-80:
-    image: nginx:alpine
+    image: nginx:1.27-alpine
     container_name: nginx-80
     restart: unless-stopped
     ports:
@@ -11,7 +11,7 @@ services:
       - openmu-startup
 
   openmu-startup:
-    image: munique/openmu
+    image: munique/openmu:0.9.10
     container_name: openmu-startup
     restart: unless-stopped
     ports:

@@ -16,8 +16,11 @@ public class CachedRepository<T> : IRepository<T>
 {
     private readonly IDictionary<Guid, T> _cache;
 
+    private readonly SemaphoreSlim _loadLock = new(1, 1);
+
     private bool _allLoaded;
-    private bool _loading;
+
+    private Task? _loadingTask;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CachedRepository{T}"/> class.
@@ -44,41 +47,63 @@ public class CachedRepository<T> : IRepository<T>
     /// <inheritdoc/>
     public async ValueTask<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        if (this._allLoaded)
-        {
-            return this._cache.Values;
-        }
-
-        if (this._loading)
-        {
-            while (this._loading)
-            {
-                await Task.Delay(10, cancellationToken).ConfigureAwait(false);
-            }
-
-            return this._cache.Values;
-        }
-
-        this._loading = true;
+        Task loadingTask;
+        await this._loadLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            IEnumerable<T> values = await this.BaseRepository.GetAllAsync(cancellationToken).ConfigureAwait(false);
-            foreach (var obj in values)
+            if (this._allLoaded)
             {
-                if (!this._cache.ContainsKey(obj.Id))
-                {
-                    this.AddToCache(obj.Id, obj);
-                }
+                return this._cache.Values;
             }
+
+            loadingTask = this._loadingTask ??= this.LoadAllAsync();
         }
         finally
         {
-            this._loading = false;
+            this._loadLock.Release();
         }
 
-        this._allLoaded = true;
-
+        await loadingTask.WaitAsync(cancellationToken).ConfigureAwait(false);
         return this._cache.Values;
+    }
+
+    private async Task LoadAllAsync()
+    {
+        try
+        {
+            IEnumerable<T> values = await this.BaseRepository.GetAllAsync(CancellationToken.None).ConfigureAwait(false);
+            await this._loadLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                foreach (var obj in values)
+                {
+                    if (!this._cache.ContainsKey(obj.Id))
+                    {
+                        this.AddToCache(obj.Id, obj);
+                    }
+                }
+
+                this._allLoaded = true;
+            }
+            finally
+            {
+                this._loadLock.Release();
+            }
+        }
+        catch
+        {
+            await this._loadLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                this._loadingTask = null;
+            }
+            finally
+            {
+                this._loadLock.Release();
+            }
+
+            throw;
+        }
     }
 
     /// <inheritdoc/>

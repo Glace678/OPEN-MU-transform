@@ -69,7 +69,7 @@ const SIZE& SEASON3B::CNewUIMessageBoxBase::GetSize()
 
 float SEASON3B::CNewUIMessageBoxBase::GetPriority() const
 {
-    return 8.f;
+    return m_fPriority;  // #MG-24: return saved priority, not a hardcoded 8.f
 }
 
 void SEASON3B::CNewUIMessageBoxBase::SetCanMove(bool bCanMove)

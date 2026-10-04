@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace MuMain.Tools.ResxGen;
@@ -38,6 +38,12 @@ internal static class ResxLoader
     private static readonly Regex LegacyIdRegex = new(
         @"legacy_id\s*=\s*([0-9]+(?:\s*,\s*[0-9]+)*)",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    /// #28: a resource group becomes a C++ namespace; accept only a bare
+    /// identifier so a hostile/typo filename cannot inject into the namespace.
+    private static readonly Regex ValidGroupIdentifier = new(
+        "^[A-Za-z_][A-Za-z0-9_]*$",
+        RegexOptions.Compiled);
 
     public static IReadOnlyList<ResourceGroup> LoadGroups(string inputDir)
     {
@@ -87,6 +93,7 @@ internal static class ResxLoader
         }
         group = name[..dot];
         locale = name[(dot + 1)..];
+        if (!ValidGroupIdentifier.IsMatch(group)) return false;  // #28: reject non-identifier group
         return true;
     }
 
