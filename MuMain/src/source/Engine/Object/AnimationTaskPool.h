@@ -11,7 +11,7 @@
 #include <array>
 #include <memory>
 
-struct CHARACTER;
+class CHARACTER;
 
 /**
  * @brief Industry-standard dynamic work-stealing task pool for skeletal animation.

@@ -55,7 +55,7 @@ CRegisterWin::CRegisterWin()
 CRegisterWin::~CRegisterWin()
 {
     for (int i = 0; i < FIELD_COUNT; ++i)
-        SAFE_DELETE(m_pBox[i]);
+        SafeDelete(m_pBox[i]);
 }
 
 void CRegisterWin::Create()
@@ -67,7 +67,7 @@ void CRegisterWin::Create()
     {
         m_asprInputBox[i].Create(kFieldWidth, kFieldHeight, BITMAP_LOG_IN + 8);
 
-        SAFE_DELETE(m_pBox[i]);
+        SafeDelete(m_pBox[i]);
         m_pBox[i] = new CUITextInputBox;
         m_pBox[i]->Init(g_hWnd, kFieldWidth - 12, 14,
             (i == FIELD_NAME) ? kNameLimit : kPasswordLimit,

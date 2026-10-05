@@ -61,7 +61,7 @@ bool SEASON3B::CNewUIMyShopInventory::Create(CNewUIManager* pNewUIMng, int x, in
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::MYSHOP, g_pNewUI3DRenderMng, g_pNewItemMng, this, m_Pos.x + 16, m_Pos.y + 90, 8, 4, MAX_MY_INVENTORY_EX_INDEX))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
@@ -99,9 +99,9 @@ bool SEASON3B::CNewUIMyShopInventory::Create(CNewUIManager* pNewUIMng, int x, in
 
 void SEASON3B::CNewUIMyShopInventory::Release()
 {
-    SAFE_DELETE(m_pNewInventoryCtrl);
-    SAFE_DELETE_ARRAY(m_Button);
-    SAFE_DELETE(m_EditBox);
+    SafeDelete(m_pNewInventoryCtrl);
+    SafeDeleteArray(m_Button);
+    SafeDelete(m_EditBox);
 
     if (m_pNewUIMng)
     {

@@ -185,7 +185,7 @@ void SEASON3B::CNewUIMessageBoxMng::Release()
     PopAllEvents();
     PopAllMessageBoxes();
 
-    SAFE_DELETE(m_pMsgBoxFactory);
+    SafeDelete(m_pMsgBoxFactory);
 
     if (m_pNewUIMng)
     {

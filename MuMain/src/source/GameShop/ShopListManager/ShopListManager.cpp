@@ -25,7 +25,7 @@ CShopListManager::CShopListManager() // OK
 
 CShopListManager::~CShopListManager() // OK
 {
-    SAFE_DELETE(m_ShopList);
+    SafeDelete(m_ShopList);
 }
 
 WZResult		CShopListManager::LoadScript(bool bDonwLoad) // OK

@@ -708,7 +708,7 @@ void SaveTerrainHeight(wchar_t* name)
 
     for (int i = 0; i < 256; i++) fwrite(Buffer + (255 - i) * 256, 256, 1, fp);
 
-    SAFE_DELETE_ARRAY(Buffer);
+    SafeDeleteArray(Buffer);
     fclose(fp);
 }
 
@@ -3210,7 +3210,7 @@ void DeleteAllFrustrum()
     for (; iter != g_FrustrumMap.end(); ++iter)
     {
         CFrustrum* pData = iter->second;
-        SAFE_DELETE(pData);
+        SafeDelete(pData);
     }
     g_FrustrumMap.clear();
 }

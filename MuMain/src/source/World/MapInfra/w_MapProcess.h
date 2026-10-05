@@ -7,8 +7,8 @@
 #include "World/MapInfra/w_BaseMap.h"
 #include "World/MapInfra/MapManager.h"
 
-SmartPointer(MapProcess);
-class MapProcess
+class MapProcess;
+using MapProcessPtr = std::shared_ptr<MapProcess>;class MapProcess
 {
 public:
     static MapProcessPtr Make();
@@ -40,7 +40,7 @@ public:
     bool ReceiveMapMessage(BYTE code, BYTE subcode, BYTE* ReceiveBuffer);
 
 public:
-    void Register(Smart_Ptr(BaseMap) pMap);
+    void Register(std::shared_ptr<BaseMap> pMap);
     void UnRegister(ENUM_WORLD type);
 
 public:
@@ -54,7 +54,7 @@ private:
     MapProcess();
 
 private:
-    typedef std::list< Smart_Ptr(BaseMap) >		MapList;
+    typedef std::list< std::shared_ptr<BaseMap> >		MapList;
 
 private:
     MapList				m_MapList;

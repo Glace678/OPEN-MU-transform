@@ -4,8 +4,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(GMUnitedMarketPlace);
-
+class GMUnitedMarketPlace;
+using GMUnitedMarketPlacePtr = std::shared_ptr<GMUnitedMarketPlace>;
 class GMUnitedMarketPlace : public BaseMap
 {
 public:

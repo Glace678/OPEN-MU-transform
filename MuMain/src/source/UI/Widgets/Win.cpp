@@ -51,7 +51,7 @@ void CWin::Release()
         pBtn->Release();
     }
 
-    SAFE_DELETE(m_psprBg);
+    SafeDelete(m_psprBg);
 }
 
 void CWin::SetSizeArt(float fWidth, float fHeight, CHANGE_PRAM eChangedPram)

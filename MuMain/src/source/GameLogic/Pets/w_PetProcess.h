@@ -16,8 +16,8 @@
 #define	UNICORN			6
 #define SKELETON		7
 
-SmartPointer(PetInfo);
-class PetInfo
+class PetInfo;
+using PetInfoPtr = std::shared_ptr<PetInfo>;class PetInfo
 {
 public:
     static PetInfoPtr Make();
@@ -53,24 +53,24 @@ private:
     int m_count;
 };
 
-SmartPointer(PetProcess);
-
+class PetProcess;
+using PetProcessPtr = std::shared_ptr<PetProcess>;
 class PetProcess
 {
 public:
-    typedef std::list< Smart_Ptr(PetObject) > PetList;
-    typedef std::map< int, Smart_Ptr(PetAction) > ActionMap;	//actionNum, actionClass
-    typedef std::map< int, Smart_Ptr(PetInfo) > InfoMap;		//PetType, PetInfo
+    typedef std::list< std::shared_ptr<PetObject> > PetList;
+    typedef std::map< int, std::shared_ptr<PetAction> > ActionMap;	//actionNum, actionClass
+    typedef std::map< int, std::shared_ptr<PetInfo> > InfoMap;		//PetType, PetInfo
 
 public:
     static PetProcessPtr Make();
     virtual ~PetProcess();
 
 private:
-    void Register(Smart_Ptr(PetObject) pPet);
+    void Register(std::shared_ptr<PetObject> pPet);
     void UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll = false);
 
-    Weak_Ptr(PetAction) Find(int key);
+    std::weak_ptr<PetAction> Find(int key);
 
     void Init();
     void Destroy();

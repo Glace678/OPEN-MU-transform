@@ -10,8 +10,8 @@ class BMD;
 
 namespace SEASON4A
 {
-    SmartPointer(CGM_Raklion);
-    class CGM_Raklion : public BaseMap
+    class CGM_Raklion;
+    using CGM_RaklionPtr = std::shared_ptr<CGM_Raklion>;    class CGM_Raklion : public BaseMap
     {
     public:
         enum RAKLION_STATE

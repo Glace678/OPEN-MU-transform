@@ -4881,7 +4881,7 @@ void DeleteObject(OBJECT* o, OBJECT_BLOCK* ob)
                 ob->Tail = NULL;
             }
         }
-        SAFE_DELETE(o);
+        SafeDelete(o);
     }
 }
 

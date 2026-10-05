@@ -16,8 +16,8 @@ CSlider::CSlider() : m_pGaugeBar(NULL), m_psprBack(NULL)
 
 CSlider::~CSlider()
 {
-    SAFE_DELETE(m_pGaugeBar);
-    SAFE_DELETE(m_psprBack);
+    SafeDelete(m_pGaugeBar);
+    SafeDelete(m_psprBack);
 }
 
 void CSlider::Create(SImgInfo* piiThumb, SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcGauge, bool bVertical)
@@ -54,8 +54,8 @@ void CSlider::Create(SImgInfo* piiThumb, SImgInfo* piiBack, SImgInfo* piiGauge, 
 
 void CSlider::CreateBackground(SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcGauge)
 {
-    SAFE_DELETE(m_pGaugeBar);
-    SAFE_DELETE(m_psprBack);
+    SafeDelete(m_pGaugeBar);
+    SafeDelete(m_psprBack);
 
     if (piiGauge)
     {
@@ -72,8 +72,8 @@ void CSlider::CreateBackground(SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcG
 void CSlider::Release()
 {
     m_btnThumb.Release();
-    SAFE_DELETE(m_pGaugeBar);
-    SAFE_DELETE(m_psprBack);
+    SafeDelete(m_pGaugeBar);
+    SafeDelete(m_psprBack);
 }
 
 void CSlider::UpdateGaugeValue()

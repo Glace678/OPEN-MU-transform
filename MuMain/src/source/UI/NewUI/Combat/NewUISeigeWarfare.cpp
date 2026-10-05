@@ -57,7 +57,7 @@ void SEASON3B::CNewUISiegeWarfare::Release()
     {
         m_pSiegeWarUI->UnLoadImages();
         m_pSiegeWarUI->Release();
-        SAFE_DELETE(m_pSiegeWarUI);
+        SafeDelete(m_pSiegeWarUI);
     }
 
     if (m_pNewUIMng)
@@ -251,7 +251,7 @@ void SEASON3B::CNewUISiegeWarfare::InitMiniMapUI()
     m_pSiegeWarUI->UnLoadImages();
     m_pSiegeWarUI->Release();
 
-    SAFE_DELETE(m_pSiegeWarUI);
+    SafeDelete(m_pSiegeWarUI);
 
     m_iCurSiegeWarType = SIEGEWAR_TYPE_NONE;
     m_byGuildStatus = G_NONE;

@@ -4,8 +4,8 @@
 #include "Render/Models/ZzzBMD.h"
 #include "Core/Time/Timer.h"
 
-SmartPointer(PetObject);
-class PetObject
+class PetObject;
+using PetObjectPtr = std::shared_ptr<PetObject>;class PetObject
 {
 public:
     enum ActionType {
@@ -26,7 +26,7 @@ public:
     OBJECT* GetObject() { return m_obj; }
     bool IsSameOwner(OBJECT* Owner);
     bool IsSameObject(OBJECT* Owner, int itemType);
-    void SetActions(ActionType type, Weak_Ptr(PetAction) action, float speed);
+    void SetActions(ActionType type, std::weak_ptr<PetAction> action, float speed);
     void SetCommand(int targetKey, ActionType cmdType);
 
     void SetScale(float scale = 0.0f);
@@ -50,7 +50,7 @@ private:
     PetObject();
 
 public:
-    typedef std::map< ActionType, Weak_Ptr(PetAction) > ActionMap;
+    typedef std::map< ActionType, std::weak_ptr<PetAction> > ActionMap;
     typedef std::map< ActionType, float > SpeedMap;
 
 private:

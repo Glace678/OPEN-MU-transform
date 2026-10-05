@@ -1,7 +1,7 @@
 #pragma once
 
-SmartPointer(Buff);
-
+class Buff;
+using BuffPtr = std::shared_ptr<Buff>;
 class Buff
 {
 public:

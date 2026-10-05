@@ -44,7 +44,7 @@ bool CNewUIStorageInventoryExt::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::VAULT, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 36, 8, 15, MAX_SHOP_INVENTORY))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
@@ -63,7 +63,7 @@ void CNewUIStorageInventoryExt::Release()
 {
     UnloadImages();
 
-    SAFE_DELETE(m_pNewInventoryCtrl);
+    SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUIMng)
     {

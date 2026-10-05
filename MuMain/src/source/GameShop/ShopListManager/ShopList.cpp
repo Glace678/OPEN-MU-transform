@@ -24,9 +24,9 @@ CShopList::CShopList() // OK
 
 CShopList::~CShopList() // OK
 {
-    SAFE_DELETE(m_CategoryListPtr);
-    SAFE_DELETE(m_PackageListPtr);
-    SAFE_DELETE(m_ProductListPtr);
+    SafeDelete(m_CategoryListPtr);
+    SafeDelete(m_PackageListPtr);
+    SafeDelete(m_ProductListPtr);
 }
 
 WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK

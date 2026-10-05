@@ -253,6 +253,18 @@ if(MSVC)
   )
   set_property(SOURCE ${MU_UTF8_SOURCES}
     APPEND PROPERTY COMPILE_OPTIONS /utf-8)
+
+  # P1: high warning level for the legacy client. Intentionally NOT promoted to
+  # errors (/WX): record the inventory and fix only uncontroversial categories
+  # without changing logic (see docs/refactoring-plan.md).
+  #   C4530 - the legacy client is compiled without C++ exception unwind
+  #           semantics by design; enabling /EHsc would change behavior, so the
+  #           standard-header catch handlers are expected.
+  #   C4201 - nonstandard nameless struct/union, used intentionally in many
+  #           math/interop types.
+  # C4828 (source charset) is NOT suppressed: it is cleared by the P1 source
+  # encoding normalization (CP949 -> UTF-8), not hidden.
+  target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201)
 endif()
 
 # The Android NDK does not ship libcurl. APK builds may inject an arm64-v8a

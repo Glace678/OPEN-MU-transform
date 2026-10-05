@@ -267,7 +267,7 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::LUCKYITEM_TRADE, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 110, 8, 4))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
     m_pNewInventoryCtrl->GetSquareColorNormal(m_fInvenClr);
@@ -301,7 +301,7 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
 void CNewUILuckyItemWnd::Release()
 {
 #ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
-    SAFE_DELETE(m_pNewInventoryCtrl);
+    SafeDelete(m_pNewInventoryCtrl);
 #endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     if (m_pNewUIMng)
     {

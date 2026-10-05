@@ -54,7 +54,7 @@ void SEASON3B::CNewUIFriendWindow::Reset()
 
 void SEASON3B::CNewUIFriendWindow::Release()
 {
-    SAFE_DELETE(m_pFriendWindowMgr);
+    SafeDelete(m_pFriendWindowMgr);
     if (m_pNewUIMng)
     {
         m_pNewUIMng->RemoveUIObj(this);

@@ -85,11 +85,11 @@ void SEASON3B::CNewUITextInputMsgBox::Release()
     auto vi = m_MsgTextList.begin();
     for (; vi != m_MsgTextList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgTextList.clear();
 
-    SAFE_DELETE(m_pInputBox);
+    SafeDelete(m_pInputBox);
 
     g_MessageBox->SetRelatedWnd(g_hWnd);
     SetFocus(g_hWnd);
@@ -538,7 +538,7 @@ void SEASON3B::CNewUIKeyPadMsgBox::Release()
     auto vi = m_MsgTextList.begin();
     for (; vi != m_MsgTextList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgTextList.clear();
 }
@@ -946,7 +946,7 @@ void SEASON3B::CUseFruitCheckMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -1203,7 +1203,7 @@ void SEASON3B::CGemIntegrationMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -1455,7 +1455,7 @@ void SEASON3B::CGemIntegrationUnityMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -1901,7 +1901,7 @@ void SEASON3B::CGemIntegrationDisjointMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -3072,7 +3072,7 @@ void SEASON3B::CDialogMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -3351,7 +3351,7 @@ void SEASON3B::CProgressMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -3618,7 +3618,7 @@ void SEASON3B::CCursedTempleProgressMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -7256,7 +7256,7 @@ void SEASON3B::CGuild_ToPerson_Position::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -7400,7 +7400,7 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 

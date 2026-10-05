@@ -70,10 +70,10 @@ CUIManager::CUIManager()
 
 CUIManager::~CUIManager()
 {
-    SAFE_DELETE(g_pItemAddOptioninfo);
-    SAFE_DELETE(g_pUIJewelHarmonyinfo);
-    SAFE_DELETE(g_pUIGateKeeper);
-    SAFE_DELETE(g_pUIPopup);
+    SafeDelete(g_pItemAddOptioninfo);
+    SafeDelete(g_pUIJewelHarmonyinfo);
+    SafeDelete(g_pUIGateKeeper);
+    SafeDelete(g_pUIPopup);
 }
 
 void CUIManager::Init()

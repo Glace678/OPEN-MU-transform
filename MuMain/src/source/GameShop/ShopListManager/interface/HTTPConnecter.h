@@ -1,7 +1,7 @@
 /*******************************************************************************
-*	ÀÛ ¼º ÀÚ : ÁøÇıÁø
-*	ÀÛ ¼º ÀÏ : 2009.07.07
-*	³»    ¿ë : HTTP Connecter
+*	ì‘ ì„± ì : ì§„í˜œì§„
+*	ì‘ ì„± ì¼ : 2009.07.07
+*	ë‚´    ìš© : HTTP Connecter
 *******************************************************************************/
 
 #pragma once
@@ -19,16 +19,16 @@ public:
 
     // abstract Function
 
-        //						¼¼¼Ç
+        //						ì„¸ì…˜
     virtual WZResult		CreateSession(HINTERNET& hSession);
-    //						Ä¿³¼Æ®
+    //						ì»¤ë‚µíŠ¸
     virtual WZResult		CreateConnection(HINTERNET& hSession,
         HINTERNET& hConnection);
-    //						´Ù¿î·Îµå ÆÄÀÏ ¿ÀÇÂ & »çÀÌÁî °¡Á®¿À±â
+    //						ë‹¤ìš´ë¡œë“œ íŒŒì¼ ì˜¤í”ˆ & ì‚¬ì´ì¦ˆ ê°€ì ¸ì˜¤ê¸°
     virtual WZResult		OpenRemoteFile(HINTERNET& hConnection,
         HINTERNET& hRemoteFile,
         ULONGLONG& nFileLength);
-    //						¸®¸ğÆ® ÆÄÀÏ ÀĞ±â
+    //						ë¦¬ëª¨íŠ¸ íŒŒì¼ ì½ê¸°
     virtual WZResult		ReadRemoteFile(HINTERNET& hRemoteFile,
         BYTE* byReadBuffer,
         DWORD* dwBytesRead);

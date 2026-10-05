@@ -4,8 +4,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(CGMDuelArena);
-class CGMDuelArena : public BaseMap
+class CGMDuelArena;
+using CGMDuelArenaPtr = std::shared_ptr<CGMDuelArena>;class CGMDuelArena : public BaseMap
 {
 public:
     static CGMDuelArenaPtr Make();

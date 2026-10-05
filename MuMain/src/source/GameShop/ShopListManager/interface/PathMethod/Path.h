@@ -1,7 +1,7 @@
 /*******************************************************************************
-*	ÀÛ ¼º ÀÚ : ÁøÇýÁø
-*	ÀÛ ¼º ÀÏ : 2009.06.10
-*	³»    ¿ë : ±âÅ¸ ¸Þ¼Òµå
+*	ìž‘ ì„± ìž : ì§„í˜œì§„
+*	ìž‘ ì„± ì¼ : 2009.06.10
+*	ë‚´    ìš© : ê¸°íƒ€ ë©”ì†Œë“œ
 *******************************************************************************/
 
 #pragma once
@@ -10,32 +10,32 @@ class Path
 {
 public:
 
-    //					¸ðµâ ÀüÃ¼ °æ·Î °¡Á®¿À±â
+    //					ëª¨ë“ˆ ì „ì²´ ê²½ë¡œ ê°€ì ¸ì˜¤ê¸°
     static TCHAR* GetCurrentFullPath(TCHAR* szPath);
-    //					¸ðµâ µð·ºÅä¸® °¡Á®¿À±â
+    //					ëª¨ë“ˆ ë””ë ‰í† ë¦¬ ê°€ì ¸ì˜¤ê¸°
     static TCHAR* GetCurrentDirectory(TCHAR* szPath);
-    //					¸ðµâ ÆÄÀÏ ÀÌ¸§ °¡Á®¿À±â
+    //					ëª¨ë“ˆ íŒŒì¼ ì´ë¦„ ê°€ì ¸ì˜¤ê¸°
     static TCHAR* GetCurrentFileName(TCHAR* szPath);
 
-    //					Æú´õ ¹®ÀÚ¿­ ¸¸µé±â : ¸Ç µÚ¿¡ "\\" ºÙ¿©ÁØ´Ù.
+    //					í´ë” ë¬¸ìžì—´ ë§Œë“¤ê¸° : ë§¨ ë’¤ì— "\\" ë¶™ì—¬ì¤€ë‹¤.
     static TCHAR* SetDirString(TCHAR* szPath);
-    //					Æú´õ ¹®ÀÚ¿­ ¸¸µé±â : ¸Ç µÚ¿¡ "\\" Á¦°Å
+    //					í´ë” ë¬¸ìžì—´ ë§Œë“¤ê¸° : ë§¨ ë’¤ì— "\\" ì œê±°
     static TCHAR* ClearDirString(TCHAR* szPath);
 
-    //					Æú´õ ¹®ÀÚ¿­ ¸¸µé±â : ÆÄÀÏ¸í Á¦°ÅÇÑ °æ·Î
+    //					í´ë” ë¬¸ìžì—´ ë§Œë“¤ê¸° : íŒŒì¼ëª… ì œê±°í•œ ê²½ë¡œ
     static TCHAR* GetDirectory(TCHAR* szPath);
-    //					ÆÄÀÏ ¹®ÀÚ¿­ ¸¸µé±â : ÆÐ½º Á¦°ÅÇÑ ÆÄÀÏ ¸í
+    //					íŒŒì¼ ë¬¸ìžì—´ ë§Œë“¤ê¸° : íŒ¨ìŠ¤ ì œê±°í•œ íŒŒì¼ ëª…
     static TCHAR* GetFileName(TCHAR* szPath);
 
-    //					/ => \\ ·Î º¯°æ
+    //					/ => \\ ë¡œ ë³€ê²½
     static TCHAR* ChangeSlashToBackSlash(TCHAR* szPath);
-    //					\\ => / ·Î º¯°æ
+    //					\\ => / ë¡œ ë³€ê²½
     static TCHAR* ChangeBackSlashToSlash(TCHAR* szPath);
 
-    //					ÆÄÀÏ¿¡¼­ ¸¶Áö¸· ÁÙ ÀÐ¾î¿À±â
+    //					íŒŒì¼ì—ì„œ ë§ˆì§€ë§‰ ì¤„ ì½ì–´ì˜¤ê¸°
     static BOOL			ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
-    //					»õ ÆÄÀÏ¿¡ ÇÑÁÙ ¾²±â
+    //					ìƒˆ íŒŒì¼ì— í•œì¤„ ì“°ê¸°
     static BOOL			WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
-    //					ÆÄÀÏ °æ·Î µð·ºÅä¸® »ý¼º
+    //					íŒŒì¼ ê²½ë¡œ ë””ë ‰í† ë¦¬ ìƒì„±
     static BOOL			CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
 };

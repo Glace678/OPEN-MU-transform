@@ -64,6 +64,20 @@ function(mu_add_test)
     doctest_discover_tests(${MAT_NAME})
 endfunction()
 
+# Architectural dependency guard (P2 baseline-lock, strict at P9). Locks the
+# current Core layering and fails only on new reverse dependencies.
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_Interpreter_FOUND)
+  add_test(NAME arch_core_includes
+           COMMAND Python3::Interpreter
+                   "${CMAKE_CURRENT_SOURCE_DIR}/arch/check_includes.py")
+else()
+  find_program(PYTHON_EXECUTABLE NAMES python python3)
+  add_test(NAME arch_core_includes
+           COMMAND "${PYTHON_EXECUTABLE}"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/arch/check_includes.py")
+endif()
+
 add_subdirectory(text)
 
 add_subdirectory(effects)

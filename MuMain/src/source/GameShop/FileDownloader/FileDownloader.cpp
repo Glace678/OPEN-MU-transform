@@ -102,7 +102,7 @@ void FileDownloader::Release() // OK
         this->m_hSession = 0;
     }
 
-    SAFE_DELETE(m_pConnecter);
+    SafeDelete(m_pConnecter);
 }
 
 IConnecter* FileDownloader::CreateConnecter() // OK

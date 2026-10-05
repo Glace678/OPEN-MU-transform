@@ -1125,7 +1125,7 @@ void CNewUIRadioGroupButton::UnRegisterRadioButton()
         ++iter;
         CNewUIRadioButton* button = (*curiter);
 
-        SAFE_DELETE(button);
+        SafeDelete(button);
     }
 
     m_RadioList.clear();

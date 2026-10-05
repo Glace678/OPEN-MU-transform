@@ -1,7 +1,7 @@
 #pragma once
 
-SmartPointer(BuffTimeControl);
-
+class BuffTimeControl;
+using BuffTimeControlPtr = std::shared_ptr<BuffTimeControl>;
 class BuffTimeControl
 {
 public:

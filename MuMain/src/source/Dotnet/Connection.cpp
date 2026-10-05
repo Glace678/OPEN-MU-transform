@@ -133,9 +133,9 @@ Connection::~Connection()
         dotnet_disconnect(_handle);
     }
 
-    SAFE_DELETE(_chatServer);
-    SAFE_DELETE(_connectServer);
-    SAFE_DELETE(_gameServer);
+    SafeDelete(_chatServer);
+    SafeDelete(_connectServer);
+    SafeDelete(_gameServer);
 }
 
 bool Connection::IsConnected()

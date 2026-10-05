@@ -297,7 +297,7 @@ namespace SEASON3B
 
     void CNewUIRegistrationLuckyCoin::ClosingProcess()
     {
-        SAFE_DELETE(m_CoinItem);
+        SafeDelete(m_CoinItem);
         g_pMyInventory->GetInventoryCtrl()->UnlockInventory();
         SocketClient->ToGameServer()->SendCraftingDialogCloseRequest();
     }

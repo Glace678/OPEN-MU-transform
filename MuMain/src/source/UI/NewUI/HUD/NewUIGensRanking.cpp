@@ -22,12 +22,12 @@ CNewUIGensRanking::~CNewUIGensRanking()
     if (m_pScrollBar)
         m_pScrollBar->Release();
 
-    SAFE_DELETE(m_pScrollBar);
+    SafeDelete(m_pScrollBar);
 
     if (m_pTextBox)
         m_pTextBox->Release();
 
-    SAFE_DELETE(m_pTextBox);
+    SafeDelete(m_pTextBox);
     Destroy();
 }
 

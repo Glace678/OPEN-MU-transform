@@ -9,8 +9,8 @@
 
 #pragma once
 
-SmartPointer(PetActionCollecterAdd);
-class PetActionCollecterAdd : public PetAction
+class PetActionCollecterAdd;
+using PetActionCollecterAddPtr = std::shared_ptr<PetActionCollecterAdd>;class PetActionCollecterAdd : public PetAction
 {
 public:
     static PetActionCollecterAddPtr Make();
@@ -60,8 +60,8 @@ protected:
 };
 #endif //PJH_ADD_PANDA_PET
 
-SmartPointer(PetActionCollecterSkeleton);
-class PetActionCollecterSkeleton : public PetActionCollecterAdd
+class PetActionCollecterSkeleton;
+using PetActionCollecterSkeletonPtr = std::shared_ptr<PetActionCollecterSkeleton>;class PetActionCollecterSkeleton : public PetActionCollecterAdd
 {
 public:
     static PetActionCollecterSkeletonPtr Make();

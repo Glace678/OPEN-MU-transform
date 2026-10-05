@@ -11,8 +11,8 @@
 #include "Core/Globals/_struct.h"
 
 class BMD;
-struct OBJECT;
-struct CHARACTER;
+class OBJECT;
+class CHARACTER;
 
 class CGM_PK_Field;
 using CGM_PK_FieldPtr = std::shared_ptr<CGM_PK_Field>;

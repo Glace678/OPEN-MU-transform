@@ -38,7 +38,7 @@ CSprite::~CSprite()
 void CSprite::Release()
 {
     m_pTexture = NULL;
-    SAFE_DELETE_ARRAY(m_aFrameTexCoord);
+    SafeDeleteArray(m_aFrameTexCoord);
 }
 
 void CSprite::RefreshAllResolutionScales()

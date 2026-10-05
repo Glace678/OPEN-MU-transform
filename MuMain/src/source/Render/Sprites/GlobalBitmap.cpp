@@ -114,7 +114,7 @@ bool CBitmapCache::Create()
 }
 void CBitmapCache::Release()
 {
-    SAFE_DELETE(m_pNullBitmap);
+    SafeDelete(m_pNullBitmap);
 
     RemoveAll();
     for (auto& cache : m_QuickCache)

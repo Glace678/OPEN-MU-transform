@@ -51,7 +51,7 @@ bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 50, 8, 15))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
@@ -75,7 +75,7 @@ void SEASON3B::CNewUINPCShop::Release()
 {
     UnloadImages();
 
-    SAFE_DELETE(m_pNewInventoryCtrl);
+    SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUIMng)
     {

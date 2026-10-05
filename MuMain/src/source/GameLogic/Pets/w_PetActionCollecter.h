@@ -16,8 +16,8 @@ typedef struct _RootingItem
     vec3_t position;
 }RootingItem;
 
-SmartPointer(PetActionCollecter);
-class PetActionCollecter : public PetAction
+class PetActionCollecter;
+using PetActionCollecterPtr = std::shared_ptr<PetActionCollecter>;class PetActionCollecter : public PetAction
 {
 public:
     static PetActionCollecterPtr Make();

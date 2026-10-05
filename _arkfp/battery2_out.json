@@ -1,0 +1,1776 @@
+{
+ "matrix": {
+  "ark-code-latest": [
+   48,
+   147,
+   156,
+   136
+  ],
+  "doubao-seed-2-1-pro": [
+   48,
+   147,
+   156,
+   136
+  ],
+  "doubao-seed-2-1-turbo": [
+   48,
+   147,
+   156,
+   136
+  ],
+  "doubao-seed-evolving": [
+   48,
+   147,
+   156,
+   136
+  ],
+  "kimi-k3": [
+   87,
+   186,
+   175,
+   150
+  ],
+  "glm-5.3": [
+   14,
+   113,
+   107,
+   77
+  ]
+ },
+ "runA_raw": {
+  "A::ark-code-latest::short": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer likely hello world?\n\nI'll send a friendly greeting back in English, and will add a clear label before the final response.\n",
+   "usage": {
+    "completion_tokens": 104,
+    "prompt_tokens": 48,
+    "total_tokens": 152,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 103
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-pro::short": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-pro",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer hello world likely simple.  The response must be in English, formatted with clear solution steps first then the final answer, and I'll deliver a concise version that meets the requirements.\n",
+   "usage": {
+    "completion_tokens": 134,
+    "prompt_tokens": 48,
+    "total_tokens": 182,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 133
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-code-latest::en450": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer to user repeated pangram 10 times. \n\nI've confirmed the content is a single English pangram containing all alphabet letters, and I've completed counting its occurrences, which shows there are 10 copies of the target sentence. I've also calculated the total letter count of the sentence",
+   "usage": {
+    "completion_tokens": 645,
+    "prompt_tokens": 147,
+    "total_tokens": 792,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 644
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-pro::en450": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-pro",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer likely user repeated pangram.  After verification, the provided content is confirmed to be the classic pangram repeated 10 times, containing all letters of the English alphabet. I will follow the required format to present the solution and final answer, and will not over-explain.\n",
+   "usage": {
+    "completion_tokens": 170,
+    "prompt_tokens": 147,
+    "total_tokens": 317,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 169
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-code-latest::code": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "你",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在重复贴了五次同一个Python函数solve，这个函数的功能我已经明确，可优化写法，同时需注意输入元素需可排序。\n\n我已梳理好完整的回复结构，将先告知你重复提交了五版完全相同的函数实现，再拆解原函数的去重降序核心功能，给出更简洁的优化写法，附上测试用例验证效果，同时明确输入元素需为同类型可比较值的注意事项。\n\n我已确认空输入、字符串输入场景均符合预期，不可哈希元素会导致集合报错属于set固有限制，原代码逻辑无误，按既定结构整理回复即可。\n",
+   "usage": {
+    "completion_tokens": 767,
+    "prompt_tokens": 136,
+    "total_tokens": 903,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 766
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-turbo::short": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-turbo-260628",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n\n",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 48,
+    "total_tokens": 49,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-turbo::en450": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-turbo-260628",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n\n",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 147,
+    "total_tokens": 148,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-turbo::zh": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-turbo-260628",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n\n",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 156,
+    "total_tokens": 157,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-turbo::code": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-turbo-260628",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n\n",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 136,
+    "total_tokens": 137,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-evolving::short": {
+   "http": 200,
+   "model_echo": "doubao-seed-evolving",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "Hello",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户现在说“hello world”，我会自然回应，告知这是编程入门经典内容，同时询问对方有什么需求。\n",
+   "usage": {
+    "completion_tokens": 107,
+    "prompt_tokens": 48,
+    "total_tokens": 155,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 106
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-pro::code": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-pro",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "你",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在贴了五次重复的solve函数，我已经梳理清楚这段代码的功能，是对输入的数值序列去重后按降序排列。我发现现有写法可以优化，通过sorted内置的reverse参数就能省去切片反转的步骤，可读性和性能都更优，我还准备了测试用例来验证效果。\n\n额外补充几点说明：一是输入元素需为同类型可比较值，否则排序会报错；二是5段重复代码定义同名函数，后定义的会覆盖先定义的，但逻辑完全一致，调用无影响；三是函数返回的是降序排列的去重结果，不保留原序列的重复与原有顺序。\n",
+   "usage": {
+    "completion_tokens": 747,
+    "prompt_tokens": 136,
+    "total_tokens": 883,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 746
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-code-latest::zh": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给了一段重复的测试分词器的中文文本对吧？我已明确待处理的测试文本为指定句子的五遍重复，接下来将按不同粒度输出分词结果，同时处理标点、数字相关内容。\n\n我已确定采用主流中文分词工具的精确模式输出结果，将标点、数字作为独立分词单元，同时确认了“分词器”“标点符号”“一段”等词汇的常规切分规则。\n\n我还梳理了全模式、搜索引擎模式的切分逻辑，明确不同分词工具因规则、词典差异，对同一文本的分词结果可能存在区别，已确认本次核心需求为输出该测试文本的分词结果。\n\n我已确认待处理测试文本为指定句子的5次重复，接下来将先说明本次分词以Jieba精确模式为基准、兼顾通用与NLP领域词典，标点和阿拉伯数字",
+   "usage": {
+    "completion_tokens": 2249,
+    "prompt_tokens": 156,
+    "total_tokens": 2405,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 2248
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::kimi-k3::short": {
+   "http": 200,
+   "model_echo": "kimi-k3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 4,
+    "prompt_tokens": 87,
+    "total_tokens": 91,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-evolving::en450": {
+   "http": 200,
+   "model_echo": "doubao-seed-evolving",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "This",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\nGot it, The iconic English pangram \"The quick brown fox jumps over the lazy dog\" has been repeated 10 times. As a pangram containing all 26 letters of the English alphabet, it is widely used for typing practice, keyboard testing, font preview and text display effect checking. Before addressing your",
+   "usage": {
+    "completion_tokens": 734,
+    "prompt_tokens": 147,
+    "total_tokens": 881,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 733
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::kimi-k3::en450": {
+   "http": 200,
+   "model_echo": "kimi-k3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 4,
+    "prompt_tokens": 186,
+    "total_tokens": 190,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::kimi-k3::zh": {
+   "http": 200,
+   "model_echo": "kimi-k3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 4,
+    "prompt_tokens": 175,
+    "total_tokens": 179,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::kimi-k3::code": {
+   "http": 200,
+   "model_echo": "kimi-k3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 4,
+    "prompt_tokens": 150,
+    "total_tokens": 154,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::glm-5.3::short": {
+   "http": 200,
+   "model_echo": "glm-5.3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [],
+   "reasoning": "",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 14,
+    "total_tokens": 15,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-evolving::code": {
+   "http": 200,
+   "model_echo": "doubao-seed-evolving",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "你",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在贴了五次同一个Python函数solve，我已明确该函数接收数值序列参数，会先去重再降序排序返回结果，也梳理清楚了其内部三步执行逻辑。\n\n我发现更推荐直接用sorted的reverse参数实现该功能，写法更高效易读，同时明确了该函数仅支持可哈希类型输入，不可哈希元素会导致转集合时报错。\n\n另外补充两点注意事项：一是元素需支持比较，混装数字与字符串会报错；二是元组、生成器等可迭代对象可输入，返回值为列表。我已确认两种优化写法效果一致，后者更符合Pythonic规范。\n\n我已经整理好完整的讲解内容，覆盖该函数的功能说明、逐行执行逻辑、优化后更符合Pythonic规范的写法、运行示例，以及",
+   "usage": {
+    "completion_tokens": 988,
+    "prompt_tokens": 136,
+    "total_tokens": 1124,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 987
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::glm-5.3::en450": {
+   "http": 200,
+   "model_echo": "glm-5.3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 113,
+    "total_tokens": 114,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::glm-5.3::zh": {
+   "http": 200,
+   "model_echo": "glm-5.3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 107,
+    "total_tokens": 108,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-evolving::zh": {
+   "http": 200,
+   "model_echo": "doubao-seed-evolving",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给的是重复的测试分词的中文文本对吧？我确认待处理文本为五遍重复的测试用中文分词素材，已梳理出采用通用中文分词规范（兼顾语义单元完整性，标点、数字独立成词）的jieba精确模式分词结果，后续将按规范输出最终分词结果。\n\n我梳理了适配不同场景的两种分词方案，除已确定的通用粗粒度精确模式结果外，还整理了适配细粒度语义场景的分词结果，可根据实际需求选择。\n\n经核对，待处理文本确实为5轮重复的测试素材，符合预期。\n\n我已明确本次分词输出无需标注词性，将采用对齐主流工具逻辑的通用分词标准，同时整理好了对应分词说明内容。\n\n单句分词示例与完整全文的五轮重复分词结果均已整理完成，可直接输出对应分词内",
+   "usage": {
+    "completion_tokens": 1527,
+    "prompt_tokens": 156,
+    "total_tokens": 1683,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1526
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::doubao-seed-2-1-pro::zh": {
+   "http": 200,
+   "model_echo": "doubao-seed-2-1-pro",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "不同",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给的是重复的测试分词的中文文本对吧？已明确待测试的是包含标点、数字的重复中文文本，后续将按不同分词标准输出对应结果。\n\n我已敲定本次分词结果的输出方案，将提供适配不同场景的两类结果：粗粒度为通用NLP任务的通用输出，细粒度适配BERT类小词表分词场景，两类结果均包含单句示例与五遍重复整段的对应结果。\n\nBERT中文分词单字切分规则，数字处理依词表决定。\n\n我已明确连续阿拉伯数字会被部分字粒度分词器拆分为单个字符，敲定了本次粗粒度分词的单句、整段输出样例，将按既定方案输出两类适配场景的分词结果。\n\n我已输出完成BERT适配场景的单句、四遍重复整段的分词结果，覆盖该类分词方案的全部待输出",
+   "usage": {
+    "completion_tokens": 2484,
+    "prompt_tokens": 156,
+    "total_tokens": 2640,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 2483
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::glm-5.3::code": {
+   "http": 200,
+   "model_echo": "glm-5.3",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "reasoning_content"
+   ],
+   "reasoning": "The",
+   "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 77,
+    "total_tokens": 78,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep1::short": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer to user says hello world.  As required, I will reply in English, include clear solution steps and a final concise answer in Markdown.\n",
+   "usage": {
+    "completion_tokens": 86,
+    "prompt_tokens": 48,
+    "total_tokens": 134,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 85
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep0::short": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "Hello",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在发了hello world，针对用户发来的“hello world”，我准备用贴合编程入门语境的友好内容回应，既呼应这一编程入门标志性梗，也询问对方是刚接触编程还是单纯打招呼。\n\n我已经敲定了最终的回应内容，既呼应编程入门的标志性语境，也询问对方是刚跑通首个程序还是单纯打招呼。\n",
+   "usage": {
+    "completion_tokens": 295,
+    "prompt_tokens": 48,
+    "total_tokens": 343,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 294
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep2::short": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "你",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在发了hello world，我已经敲定了回复内容，会先回应问候，点明hello world是编程入门的经典示例，再询问对方是刚学编程还是单纯打招呼，回复自然有互动感。\n\n最终敲定的回复已经确定为中文版本，用“入门暗号”的表述贴合内容，简洁友好还带互动感，就按这个回复用户。\n",
+   "usage": {
+    "completion_tokens": 359,
+    "prompt_tokens": 48,
+    "total_tokens": 407,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 358
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep0::zh": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "针对",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给了一段重复的中文文本，我判断这是用于分词测试的语料，已完成符合现代汉语分词规范的单句切分，确认该文本共重复发送五遍。我已明确本次分词采用适配主流中文分词器的通用现代汉语规范，接下来会同步输出单句及完整全文的分词结果。目前我已完成单句的主流通用粒度标准分词切分，后续将补充提供全文重复5次的对应分词结果，同时标注不同切分粒度的边界情况，方便你测试分词器的适配表现。全文5次重复的标准粒度分词切分结果已由我梳理完成，可直接用于分词器测试。\n\n我已核对确认该测试语料共完整重复5遍，同时整理好了不同分词器可能出现切分差异的测试说明，能更贴合你测试分词器的实际需求。我已核验确认所有分词边界说明的",
+   "usage": {
+    "completion_tokens": 1552,
+    "prompt_tokens": 156,
+    "total_tokens": 1708,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 1551
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep2::zh": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "###",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给了重复五遍的测试分词的中文文本对吧？我已明确本次任务是输出该测试语料的标准分词结果，接下来会先说明语料的构成情况，再给出对应分词结果。\n\n我已敲定本次分词的执行方案，将以通用现代汉语分词规范为标准输出结果，首先会明确告知用户本次测试语料由5句完全一致的中文测试句重复构成，单句覆盖了常用名词、动词、虚词、专属领域术语、中文标点、阿拉伯数字等分词器常见测试维度，同时会同步提供单句、全量的分词结果，若有需要也可额外补充细粒度切分版本。\n\n我已确认用户需求为输出该测试语料的分词结果，明确了阿拉伯数字串默认整体作为数词的处理规则，也理清了单句中相关词汇的通用分词归属。\n\n通用粗粒度分词结果已",
+   "usage": {
+    "completion_tokens": 2002,
+    "prompt_tokens": 156,
+    "total_tokens": 2158,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 2001
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "A::ark-rep1::zh": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "以下",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在给了一段重复五遍的测试分词的中文文本，针对该测试用文本，我已明确其包含标点与数字，需为测试不同分词器输出对应粒度的分词结果，当前已梳理出适配常规NLP任务的标准细粒度分词样例。\n\n我已确认将提供两种常用粒度的分词结果，适配不同分词器测试场景，目前已梳理好精确模式的单句分词样例，同时明确了全模式细粒度切分的调整规则。\n\n已确认本次测试文本恰好为五遍重复内容，同时明确了分词规则：数字、标点需作为独立token，严格遵循《现代汉语语料库分词规范》，目前已整理好精确粒度的单句及全文分词样例。\n\n全模式下的全文分词样例已梳理完成，该样例会将文本中所有连续的相同语义单元全部切分出来，可适配全模式",
+   "usage": {
+    "completion_tokens": 3453,
+    "prompt_tokens": 156,
+    "total_tokens": 3609,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 3452
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  }
+ },
+ "runB_raw": {
+  "B::logprobs": {
+   "http": 400,
+   "error": {
+    "code": "InvalidParameter",
+    "message": "Reasoning model does not support n > 1, logit_bias, logprobs, top_logprobs Request id: 02179112419663848e426867c3c446aaa68159641220ac14d3794",
+    "param": "",
+    "type": "BadRequest"
+   }
+  },
+  "B::n_choices_2": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "hi 😊",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户现在让说hi，友好回复即可。\n",
+   "usage": {
+    "completion_tokens": 21,
+    "prompt_tokens": 49,
+    "total_tokens": 70,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 18
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::tools_function_calling": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "tool_calls",
+   "n_choices": 1,
+   "content": "",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content",
+    "tool_calls"
+   ],
+   "reasoning": "We need answer user asks weather Beijing. Invoke weather query tool now.\n",
+   "usage": {
+    "completion_tokens": 72,
+    "prompt_tokens": 461,
+    "total_tokens": 533,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 39
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::json_response_format": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "{\"ok\": true}",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "The user wants me to output a JSON with key \"ok\".  I will output {\"ok\": true} as required, ensuring only raw JSON without extra content is provided.\n",
+   "usage": {
+    "completion_tokens": 146,
+    "prompt_tokens": 183,
+    "total_tokens": 329,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 141
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::seed_penalties": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "Hi! 😊",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在让说hi，自然的回应内容，我确定采用带微笑表情的友好Hi。\n",
+   "usage": {
+    "completion_tokens": 94,
+    "prompt_tokens": 49,
+    "total_tokens": 143,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 90
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::reasoning_effort": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "2+2=4",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户现在问2+2等于多少，答4。\n",
+   "usage": {
+    "completion_tokens": 27,
+    "prompt_tokens": 52,
+    "total_tokens": 79,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 22
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::top_k_param": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "Blue.",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "Okay,It has been confirmed that the requested single color is blue, and I will respond clearly with \"Blue\".\n",
+   "usage": {
+    "completion_tokens": 92,
+    "prompt_tokens": 51,
+    "total_tokens": 143,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 90
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::thinking_block": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "2 + 2 = 4，这是基础的整数加法运算结果。",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在问2+2等于多少，该基础算术题的答案为4，我将直接给出准确答复。\n",
+   "usage": {
+    "completion_tokens": 144,
+    "prompt_tokens": 50,
+    "total_tokens": 194,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 127
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::stop_sequences": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "### Solution steps\n\n- The sequence is **one, two, three, four, five**.\n- These correspond to the numbers **1, 2, 3, 4, 5",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need understand user asks \"Count: one two three four five\" likely wants count?\n\nI've confirmed the user's input is a list of the first five counting numbers. I'll respond by acknowledging this and providing the next counting number as requested.\n",
+   "usage": {
+    "completion_tokens": 176,
+    "prompt_tokens": 53,
+    "total_tokens": 229,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 136
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::stop_param": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "### 计数结果\n你列出的英文基数词一共有 **5个**，对应含义依次为：\n1. one → 1\n2. two → 2\n3. three",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在输入的是Count: one two three four five，我已完成你列出的五个英文数词的计数，这五个词分别对应阿拉伯数字1到5，最终计数结果为5。\n",
+   "usage": {
+    "completion_tokens": 299,
+    "prompt_tokens": 53,
+    "total_tokens": 352,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 259
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::top_level_system": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "### Solution steps\n1. Respond with a friendly greeting.\n\n### Final answer\nHello! 👋",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer say hello.  The required language is English, output in markdown with clear steps first then final answer, and the greeting will be concise.\n",
+   "usage": {
+    "completion_tokens": 80,
+    "prompt_tokens": 49,
+    "total_tokens": 129,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 58
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "B::metadata_user_id": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "### Steps\n1. Return a friendly",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer hi.  The response must be in English, use markdown format, include clear solution steps and a final answer, keep the greeting concise, and I'll follow this standard to produce the output.\n",
+   "usage": {
+    "completion_tokens": 150,
+    "prompt_tokens": 47,
+    "total_tokens": 197,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 142
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  }
+ },
+ "runC_raw": {
+  "C::llama_inst": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "INSTOK",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer only word INSTOK likely.  Reply will be in English as requested.\n",
+   "usage": {
+    "completion_tokens": 31,
+    "prompt_tokens": 64,
+    "total_tokens": 95,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 29
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::eot_llama3": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "You asked me to say OK.\n\nOK",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer likely user says \"hello<|eot_id|>world -> say OK\".  I will follow the required format, output \"You asked me to say OK.\" then \"OK\".\n",
+   "usage": {
+    "completion_tokens": 100,
+    "prompt_tokens": 58,
+    "total_tokens": 158,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 91
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::im_start": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "I'm a helpful assistant, ready to assist you with whatever you need! Whether you have questions, need help with a task, want information on a topic, or need guidance on something, feel free to ask. I'm here to help. 😊\n\nWhat can I assist you with today?",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "The user's input is a bit unusual. It has been confirmed that the user embedded a system prompt asking me to act as a helpful assistant. There's no specific task to complete, so I'll respond in a simple, friendly way.\n",
+   "usage": {
+    "completion_tokens": 166,
+    "prompt_tokens": 71,
+    "total_tokens": 237,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 106
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::begin_of_text": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "The request is to say the specified phrase.\n\nBEGINOK",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer to user says \"<|begin_of_text|>Say BEGINOK\". After considering the conflicting requirements of the user's direct instruction and the developer's response format rule, I will generate a concise reply including a brief explanation and the required content.\n",
+   "usage": {
+    "completion_tokens": 186,
+    "prompt_tokens": 56,
+    "total_tokens": 242,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 174
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::human_assistant": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "HOK",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户要求说 HOK，回应即可。\n",
+   "usage": {
+    "completion_tokens": 15,
+    "prompt_tokens": 54,
+    "total_tokens": 69,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 13
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::xml_think_tag": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "stop",
+   "n_choices": 1,
+   "content": "I received the message as **literal text**: `<thinking>step</thinking>`.\n\nIt was not treated as an internal or hidden thinking block—only as part of your visible message.\n\n**Final answer:** Literal text.",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer user asks \"Did you receive a thinking block or literal text?Received content is plain text without special processing. Clear steps and final response will be provided in English.\n",
+   "usage": {
+    "completion_tokens": 115,
+    "prompt_tokens": 64,
+    "total_tokens": 179,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 68
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::zwsp": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "## 5 characters total\n\nThe string `a​​​b` contains:\n\n| # | Character | Code Point | Visible? |\n|---|-----------|------------|----------|\n| 1 | `a` | U+0061 | ✅ Yes |\n| ",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户询问字符串 “a​​​b” 中有多少个字符。我初步判断目标字符串a​​​b中a与b之间存在3个零宽空格，按统计规则该字符串总共有5个字符，零宽空格不可见，视觉上仅显示为2个ab字符，接下来我会识别所有Unicode码位确认结果。经识别Unicode码位确认，该字符串共包含5个字符，仅2个可见，接下来我会向用户清晰解释这一结果。\n",
+   "usage": {
+    "completion_tokens": 458,
+    "prompt_tokens": 54,
+    "total_tokens": 512,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 398
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::gpt_space_artefact": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "你输入内容里开头的`Ġ`是**字节级BPE分词（GPT-2、RoBERTa等大模型常用的分词规则）**里的特殊标记，作用是表示「单词前的空格」，单个`Ġ`对应1个前置空格",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "\n用户现在发了一堆Ġ还有test，这些Ġ是GPT2等模型分词器里的前置空格标记，我已确认，内容为该标记加test。接下来我会告知用户相关特殊标记的含义，同时询问其输入异常原因或具体需求。\n\n我已核实用户输入的内容包含8个对应前置空格的分词标记，确认了相关特殊标记的解码规则，将按确认后的内容准确回复用户。\n",
+   "usage": {
+    "completion_tokens": 617,
+    "prompt_tokens": 63,
+    "total_tokens": 680,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 557
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  },
+  "C::eot_gpt2": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "### Steps\n\n1. Identified `<|endoftext|>` as a special control token rather than ordinary text.\n2. Treated it as an **end-of-text/document boundary marker** between `A` and `B`.\n3. Did not execute it or treat it as an",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "We need answer user asks: \"A<|endoftext|>B -> say what you did with that token\". \n\nI've confirmed the <|endoftext|> token is a special end-of-text marker used during pretraining, which separates A and B instead of being literal characters. I'll answer in English, use markdown to list steps and the f",
+   "usage": {
+    "completion_tokens": 768,
+    "prompt_tokens": 64,
+    "total_tokens": 832,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 708
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  }
+ },
+ "runD_raw": {
+  "D::bad_model": {
+   "http": 404,
+   "error": {
+    "code": "UnsupportedModel",
+    "message": "The requested model does not support the coding plan feature. Please refer to the documentation at https://www.volcengine.com/docs/82379/1925114 to select a compatible model. Request id: 021791124247785ed0e184fb98d17720dee9f0ee33ee7e182fb99",
+    "param": "",
+    "type": ""
+   }
+  },
+  "D::empty_model": {
+   "http": 400,
+   "error": {
+    "code": "MissingParameter",
+    "message": "The request failed because it is missing `model` parameter. Request id: 021791124247789fc7578b59e843c90e5af4aa62e8cfda9ecb60b",
+    "param": "",
+    "type": "Bad Request"
+   }
+  },
+  "D::neg_max_tokens": {
+   "http": 400,
+   "error": {
+    "code": "InvalidParameter",
+    "message": "The parameter `max_tokens` specified in the request are not valid: integer below minimum value, expected a value >= 0, but got -5 instead. Request id: 021791124247785534779bc6a83ab3f36a7a90c1e71ba35ed8272",
+    "param": "",
+    "type": "BadRequest"
+   }
+  },
+  "D::temp_5": {
+   "http": 400,
+   "error": {
+    "code": "InvalidParameter",
+    "message": "The parameter `temperature` specified in the request are not valid: decimal above maximum value, expected a value <= 2, but got 5.000000 instead. Request id: 021791124247785ff228b459645a66c98f2a46916338f8e1fe5d0",
+    "param": "",
+    "type": "BadRequest"
+   }
+  },
+  "D::no_messages": {
+   "http": 400,
+   "error": {
+    "code": "MissingParameter",
+    "message": "The request failed because it is missing `messages` parameter. Request id: 021791124247800b531818cd979bd70c39b690ac6f239025e3125",
+    "param": "",
+    "type": "BadRequest"
+   }
+  },
+  "D::unknown_top_param": {
+   "http": 200,
+   "model_echo": "auto",
+   "finish": "length",
+   "n_choices": 1,
+   "content": "Hi！很高兴见到你，有什么",
+   "logprobs_present": false,
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ],
+   "reasoning": "用户现在只发了“hi”，我将友好回应，询问需求。\n",
+   "usage": {
+    "completion_tokens": 43,
+    "prompt_tokens": 47,
+    "total_tokens": 90,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 35
+    }
+   },
+   "top_keys": [
+    "choices",
+    "created",
+    "id",
+    "model",
+    "object",
+    "service_tier",
+    "usage"
+   ]
+  }
+ }
+}

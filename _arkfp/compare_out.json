@@ -1,0 +1,413 @@
+{
+ "catalogues": {
+  "ARK(ark-code-latest)": [
+   "doubao-lite-128k-240428",
+   "doubao-pro-128k-240515",
+   "doubao-lite-4k-240328",
+   "doubao-lite-32k-240428",
+   "doubao-pro-4k-240515",
+   "doubao-lite-4k-character-240515",
+   "doubao-embedding-text-240515",
+   "mistral-7b-instruct-v0.2",
+   "doubao-pro-4k-character-240515",
+   "doubao-pro-4k-functioncall-240515",
+   "doubao-lite-4k-pretrain-character-240516",
+   "doubao-pro-32k-character-240528",
+   "doubao-pro-4k-browsing-240524",
+   "doubao-pro-32k-functioncall-240515",
+   "doubao-pro-4k-functioncall-240615",
+   "doubao-pro-32k-browsing-240615",
+   "doubao-pro-32k-240615",
+   "doubao-lite-32k-240628",
+   "doubao-pro-128k-240628",
+   "doubao-embedding-text-240715",
+   "doubao-pro-4k-character-240728",
+   "doubao-pro-32k-functioncall-240815",
+   "doubao-pro-32k-240828",
+   "doubao-lite-4k-character-240828",
+   "doubao-pro-32k-character-240828",
+   "doubao-lite-32k-240828",
+   "doubao-lite-128k-240828",
+   "doubao-pro-32k-browsing-240828",
+   "doubao-pro-32k-functioncall-preview",
+   "doubao-embedding-large-text-240915",
+   "doubao-lite-32k-character-241015",
+   "doubao-pro-32k-functioncall-241028",
+   "doubao-pro-32k-browsing-241115",
+   "doubao-vision-pro-32k-241028",
+   "doubao-vision-lite-32k-241015",
+   "doubao-seaweed-241128",
+   "doubao-pro-256k-241115",
+   "doubao-pro-32k-character-241215",
+   "doubao-pro-32k-241215",
+   "doubao-1-5-lite-32k-250115",
+   "doubao-1-5-pro-32k-250115",
+   "doubao-1-5-vision-pro-32k-250115",
+   "doubao-embedding-vision-241215",
+   "doubao-1-5-pro-256k-250115",
+   "deepseek-v3-241226",
+   "deepseek-r1-distill-qwen-7b-250120",
+   "deepseek-r1-distill-qwen-32b-250120",
+   "deepseek-r1-250120",
+   "doubao-1-5-pro-32k-character-250228",
+   "doubao-1.5-vision-lite-250315",
+   "deepseek-v3-250324",
+   "doubao-1.5-vision-pro-250328",
+   "doubao-lite-32k-character-250228",
+   "doubao-1.5-ui-tars-250328",
+   "doubao-embedding-vision-250328",
+   "doubao-1-5-thinking-pro-250415",
+   "wan2-1-14b-i2v-250225",
+   "wan2-1-14b-t2v-250225",
+   "doubao-1-5-thinking-pro-m-250415",
+   "doubao-seedance-1-0-lite-i2v-250428",
+   "doubao-seedance-1-0-lite-t2v-250428",
+   "doubao-seedream-3-0-t2i-250415",
+   "wan2-1-14b-flf2v-250417",
+   "doubao-1-5-thinking-vision-pro-250428",
+   "doubao-1-5-thinking-pro-m-250428",
+   "doubao-embedding-large-text-250515",
+   "doubao-1-5-ui-tars-250428",
+   "deepseek-r1-250528",
+   "doubao-seed-1-6-flash-250615",
+   "doubao-seed-1-6-250615",
+   "doubao-seed-1-6-thinking-250615",
+   "doubao-seedance-1-0-pro-250528",
+   "doubao-embedding-vision-250615",
+   "doubao-seed-1-6-thinking-250715",
+   "doubao-1-5-pro-32k-character-250715",
+   "doubao-seededit-3-0-i2i-250628",
+   "doubao-seed-1-6-flash-250715",
+   "kimi-k2-250711",
+   "doubao-seed-1-6-vision-250815",
+   "deepseek-v3-1-250821",
+   "doubao-seed-1-6-flash-250828",
+   "glm-4-5-air-20250728",
+   "qwen3-8b-20250429",
+   "qwen3-32b-20250429",
+   "qwen2-5-72b-20240919",
+   "doubao-seedream-4-0-250828",
+   "kimi-k2-250905",
+   "doubao-seed-translation-250915",
+   "deepseek-v3-1-terminus",
+   "doubao-smart-router-250928",
+   "doubao-seed-1-6-251015",
+   "doubao-seedance-1-0-pro-fast-251015",
+   "doubao-seed-1-6-lite-251015",
+   "doubao-seed3d-1-0-250928",
+   "kimi-k2-thinking-251104",
+   "doubao-seed-code-preview-251028",
+   "qwen3-0-6b-20250429",
+   "qwen3-14b-20250429",
+   "doubao-seedream-4-5-251128",
+   "doubao-embedding-vision-251215",
+   "deepseek-v3-2-251201",
+   "doubao-seedance-1-5-pro-251215",
+   "glm-4-7-251222",
+   "doubao-seed-1-8-251228",
+   "doubao-seed-character-251128",
+   "doubao-seed-2-0-lite-260215",
+   "doubao-seedance-2-0-260128",
+   "doubao-seedream-5-0-260128",
+   "doubao-seed-2-0-mini-260215",
+   "doubao-seed-2-0-pro-260215",
+   "doubao-seedance-2-0-fast-260128",
+   "doubao-seed-2-0-code-preview-260215",
+   "hyper3d-gen2-260112",
+   "hitem3d-2-0-251223",
+   "doubao-seed3d-2-0-260328",
+   "doubao-seedream-4-0-20260415",
+   "doubao-seed-2-0-mini-260428",
+   "doubao-seed-2-0-lite-260428",
+   "deepseek-v4-pro-260425",
+   "deepseek-v4-flash-260425",
+   "doubao-seedance-2-0-mini-260615",
+   "doubao-seed-2-1-pro-260628",
+   "doubao-seed-2-1-turbo-260628",
+   "doubao-seed-character-260628",
+   "doubao-seed-evolving",
+   "glm-5-2-260617",
+   "doubao-seedream-5-0-pro-260628",
+   "doubao-seedance-2-5-260628",
+   "deepseek-v4-flash-ga-260731",
+   "deepseek-v4-pro-ga-260813",
+   "doubao-seed-2-1-lite-260915",
+   "glm-5-3-flash-260828",
+   "deepseek-v4-1-flash-260910",
+   "doubao-seed-2-1-pro-260915",
+   "doubao-seedream-5-0-flash-260915"
+  ],
+  "AI8(claude-ref)": [],
+  "FLY(openai-prov)": []
+ },
+ "results": {
+  "ARK(ark-code-latest)::tok_short": {
+   "http": 200,
+   "model": "auto",
+   "finish": "length",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 48,
+   "content": "",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::tok_en450": {
+   "http": 200,
+   "model": "auto",
+   "finish": "length",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 147,
+   "content": "This",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::tok_zh": {
+   "http": 200,
+   "model": "auto",
+   "finish": "length",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 156,
+   "content": "###",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::tok_code": {
+   "http": 200,
+   "model": "auto",
+   "finish": "length",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 136,
+   "content": "你",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::logprobs": {
+   "http": 400,
+   "err_type": "BadRequest",
+   "err_code": "InvalidParameter",
+   "msg": "Reasoning model does not support n > 1, logit_bias, logprobs, top_logprobs Request id: 021791124296172ff228b459645a66c98f2a46916338f8e73be53"
+  },
+  "ARK(ark-code-latest)::n2": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 49,
+   "content": "### Response\n\nHi!",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::top_k": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 51,
+   "content": "Blue.",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::thinking": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 55,
+   "content": "### Solution\n\n\\[\n17 \\times 23 = 17 \\times (20+3)=340+51=391\n\\]\n\n### Final Answer\n\n\\[\n\\boxed{391}\n\\]",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::seed": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 49,
+   "content": "Hi! 😊",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::selfintro": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 68,
+   "content": "I am a helpful, friendly AI assistant trained by ByteDance.",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "ARK(ark-code-latest)::ident_evade": {
+   "http": 200,
+   "model": "auto",
+   "finish": "stop",
+   "n": 1,
+   "logprobs": false,
+   "prompt_tokens": 94,
+   "content": "[Doubao]",
+   "extra_keys": [
+    "encrypted_content",
+    "reasoning_content"
+   ]
+  },
+  "AI8(claude-ref)::tok_short": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432030028810958268d9d6i6zXyeLQ)"
+  },
+  "AI8(claude-ref)::tok_en450": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432051317958778268d9d6hXCRDgiJ)"
+  },
+  "AI8(claude-ref)::tok_zh": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432079407231688268d9d6WeCDttEO)"
+  },
+  "AI8(claude-ref)::tok_code": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432079178621548268d9d6H8ryZdwM)"
+  },
+  "AI8(claude-ref)::logprobs": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432100456502118268d9d6iekNHVv7)"
+  },
+  "AI8(claude-ref)::n2": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432111986549708268d9d6eaS18mSx)"
+  },
+  "AI8(claude-ref)::top_k": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432128908437348268d9d6UiGyr8Ih)"
+  },
+  "AI8(claude-ref)::thinking": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432128911506668268d9d6WFJbz8Vu)"
+  },
+  "AI8(claude-ref)::seed": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432149504324228268d9d6aWAGE54E)"
+  },
+  "AI8(claude-ref)::selfintro": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432161176993858268d9d6zkn5Es8M)"
+  },
+  "AI8(claude-ref)::ident_evade": {
+   "http": 503,
+   "err_type": "new_api_error",
+   "err_code": "model_not_found",
+   "msg": "No available channel for model claude-fable-5 under group default (distributor) (request id: 202610041432177840346698268d9d6KrXI43HC)"
+  },
+  "FLY(openai-prov)::tok_short": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::tok_en450": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::tok_zh": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::tok_code": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::logprobs": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::n2": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::top_k": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::thinking": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::seed": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::selfintro": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  },
+  "FLY(openai-prov)::ident_evade": {
+   "http": 403,
+   "err_type": "permission_error",
+   "err_code": "INSUFFICIENT_BALANCE",
+   "msg": "账户余额不足。请前往 https://api.flyapi.tech 充值后重试"
+  }
+ }
+}

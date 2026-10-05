@@ -21,7 +21,7 @@ CBannerListManager::CBannerListManager() // OK
 
 CBannerListManager::~CBannerListManager() // OK
 {
-    SAFE_DELETE(m_BannerInfoList);
+    SafeDelete(m_BannerInfoList);
 }
 
 WZResult			CBannerListManager::LoadScript(bool bDonwLoad) // OK

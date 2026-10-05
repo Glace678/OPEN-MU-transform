@@ -319,7 +319,7 @@ void SEASON3B::CNewUIItemMng::DeleteItem(ITEM* pItem)
         {
             if ((*li) == pItem)
             {
-                SAFE_DELETE(*li);
+                SafeDelete(*li);
                 m_listItem.erase(li);
                 break;
             }
@@ -343,7 +343,7 @@ void SEASON3B::CNewUIItemMng::DeleteAllItems()
     auto li = m_listItem.begin();
     for (; li != m_listItem.end(); li++)
     {
-        SAFE_DELETE(*li);
+        SafeDelete(*li);
     }
     m_listItem.clear();
 

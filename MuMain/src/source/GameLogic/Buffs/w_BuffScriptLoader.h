@@ -36,8 +36,8 @@ public:
     std::list<std::wstring> s_BuffDescriptlist;
 };
 
-SmartPointer(BuffScriptLoader);
-class BuffScriptLoader
+class BuffScriptLoader;
+using BuffScriptLoaderPtr = std::shared_ptr<BuffScriptLoader>;class BuffScriptLoader
 {
 public:
     static BuffScriptLoaderPtr Make();

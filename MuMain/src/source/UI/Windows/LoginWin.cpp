@@ -76,8 +76,8 @@ CLoginWin::CLoginWin()
 
 CLoginWin::~CLoginWin()
 {
-    SAFE_DELETE(m_pUsernameInputBox);
-    SAFE_DELETE(m_pPasswordInputBox);
+    SafeDelete(m_pUsernameInputBox);
+    SafeDelete(m_pPasswordInputBox);
 }
 
 void CLoginWin::Create()
@@ -117,7 +117,7 @@ void CLoginWin::Create()
 
     CreateAccountPortalButtons();
 
-    SAFE_DELETE(m_pUsernameInputBox);
+    SafeDelete(m_pUsernameInputBox);
 
     m_pUsernameInputBox = new CUITextInputBox;
     m_pUsernameInputBox->Init(g_hWnd, 140, 14, MAX_USERNAME_SIZE);
@@ -130,7 +130,7 @@ void CLoginWin::Create()
         m_aBtnRememberMe.SetCheck(true);
     }
 
-    SAFE_DELETE(m_pPasswordInputBox);
+    SafeDelete(m_pPasswordInputBox);
 
     m_pPasswordInputBox = new CUITextInputBox;
     m_pPasswordInputBox->Init(g_hWnd, 140, 14, MAX_PASSWORD_SIZE, TRUE);

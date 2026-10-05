@@ -42,7 +42,7 @@ bool CNewUIMixInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::CHAOS_MIX, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 110, 8, 4))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
@@ -65,7 +65,7 @@ void CNewUIMixInventory::Release()
 {
     UnloadImages();
 
-    SAFE_DELETE(m_pNewInventoryCtrl);
+    SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUIMng)
     {

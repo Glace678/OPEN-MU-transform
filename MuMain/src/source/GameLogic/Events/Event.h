@@ -6,8 +6,8 @@
 #include <chrono>
 #include <cstdint>
 
-struct CHARACTER;
-struct OBJECT;
+class CHARACTER;
+class OBJECT;
 struct BMD;
 
 constexpr std::chrono::milliseconds XMAS_EVENT_TIME{60000};

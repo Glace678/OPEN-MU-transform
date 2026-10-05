@@ -107,7 +107,7 @@ void CNewUIGroup::Release()
     for (; vi != m_vecUI.end(); vi++)
     {
         CNewUIObj* pUIObj = (*vi);
-        SAFE_DELETE(pUIObj);
+        SafeDelete(pUIObj);
     }
 
     int iCount = 0;

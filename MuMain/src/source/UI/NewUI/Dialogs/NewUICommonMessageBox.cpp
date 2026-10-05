@@ -305,7 +305,7 @@ SEASON3B::CNewUICommonMessageBox::~CNewUICommonMessageBox()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }
@@ -790,7 +790,7 @@ void SEASON3B::CNewUI3DItemCommonMsgBox::Release()
     auto vi = m_MsgDataList.begin();
     for (; vi != m_MsgDataList.end(); vi++)
     {
-        SAFE_DELETE(*vi);
+        SafeDelete(*vi);
     }
     m_MsgDataList.clear();
 }

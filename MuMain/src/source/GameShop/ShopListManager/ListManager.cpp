@@ -30,7 +30,7 @@ CListManager::CListManager() // OK
 
 CListManager::~CListManager() // OK
 {
-    SAFE_DELETE(m_pFTPDownLoader);
+    SafeDelete(m_pFTPDownLoader);
 }
 
 void			CListManager::SetListManagerInfo(DownloaderType type,
@@ -195,7 +195,7 @@ WZResult		CListManager::FileDownLoad() // OK
                 if (m_pFTPDownLoader->GetFileDownloader() != NULL)
                     m_pFTPDownLoader->GetFileDownloader()->Break();
 
-            SAFE_DELETE(m_pFTPDownLoader);
+            SafeDelete(m_pFTPDownLoader);
 
             CloseHandle(hHandle);
 
@@ -229,7 +229,7 @@ WZResult		CListManager::FileDownLoadImpl() // OK
 #endif
     }
 
-    SAFE_DELETE(m_pFTPDownLoader); // FIX THIS
+    SafeDelete(m_pFTPDownLoader); // FIX THIS
 
     this->m_pFTPDownLoader = new CFTPFileDownLoader;
 

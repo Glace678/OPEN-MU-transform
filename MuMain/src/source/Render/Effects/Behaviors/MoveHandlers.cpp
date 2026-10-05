@@ -365,8 +365,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
-        vec3_t p;
     {
         if (o->SubType == 0)
         {
@@ -560,8 +558,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Position;
-        float Height;
     {
         if (o->Kind > 0)
             o->Angle[2] += (rand() % 10) * FPS_ANIMATION_FACTOR;
@@ -617,7 +613,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Position;
         if (o->SubType == 4)
         {
             o->Direction[1] -= (o->Velocity) * FPS_ANIMATION_FACTOR;
@@ -702,10 +697,6 @@ namespace Render::Effects::Behaviors
     // MODEL__SPEAR
     bool Move_MODEL__SPEAR(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
-        vec3_t Position;
-        float Matrix[3][4];
-        vec3_t p;
     {
         vec3_t Angle, p, Position;
         Vector(0.f, 0.f, 0.f, Position);
@@ -1199,7 +1190,6 @@ namespace Render::Effects::Behaviors
     // MODEL_SUMMONER_SUMMON_SAHAMUTT
     bool Move_MODEL_SUMMONER_SUMMON_SAHAMUTT(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Position;
         float Matrix[3][4];
     {
         vec3_t vTempPosition;
@@ -1778,7 +1768,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        float Matrix[3][4];
     {
         float ScaleBk = 0.f;
         if (o->Scale < 2.f)
@@ -2244,7 +2233,6 @@ namespace Render::Effects::Behaviors
     // MODEL_ALICE_BUFFSKILL_EFFECT, MODEL_ALICE_BUFFSKILL_EFFECT2
     bool Move_MODEL_ALICE_BUFFSKILL_EFFECT(OBJECT* o, int index, float Luminosity)
     {
-        float Matrix[3][4];
     {
         if (o->SubType == 0 || o->SubType == 1 || o->SubType == 2)
         {
@@ -2417,8 +2405,6 @@ namespace Render::Effects::Behaviors
     // MODEL_LIGHTNING_SHOCK
     bool Move_MODEL_LIGHTNING_SHOCK(OBJECT* o, int index, float Luminosity)
     {
-        float Matrix[3][4];
-        float Height;
     {
         vec3_t vLight;
 
@@ -2584,7 +2570,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Position;
         float Height;
         Height = RequestTerrainHeight(o->Position[0], o->Position[1]);
         if (o->Position[2] < Height)
@@ -2894,7 +2879,6 @@ namespace Render::Effects::Behaviors
     bool Move_MODEL_SKILL_FISSURE(OBJECT* o, int index, float Luminosity)
     {
         vec3_t Angle;
-        vec3_t Position;
     {
         if ((int)o->LifeTime == 8)
         {
@@ -2974,10 +2958,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
-        vec3_t Position;
-        float Matrix[3][4];
-        vec3_t p;
     {
         vec3_t p, Position, Pos[5];
         vec3_t Angle;
@@ -3344,7 +3324,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
         vec3_t Position;
         float Matrix[3][4];
     {
@@ -3541,7 +3520,6 @@ namespace Render::Effects::Behaviors
         Vector(1.f, 1.f, 1.f, Light);
         vec3_t Angle;
         vec3_t Position;
-        float Matrix[3][4];
     {
         if (o->SubType == 0)
         {
@@ -3660,8 +3638,6 @@ namespace Render::Effects::Behaviors
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
         vec3_t Angle;
-        vec3_t Position;
-        float Height;
     {
         bool success = false;
 
@@ -3734,7 +3710,6 @@ namespace Render::Effects::Behaviors
     // MODEL_MAYASTONEFIRE
     bool Move_MODEL_MAYASTONEFIRE(OBJECT* o, int index, float Luminosity)
     {
-        float Height;
     {
         VectorCopy(o->HeadAngle, o->Angle);
 
@@ -3790,8 +3765,6 @@ namespace Render::Effects::Behaviors
     // MODEL_CIRCLE
     bool Move_MODEL_CIRCLE(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
-        vec3_t Position;
         o->BlendMeshLight = o->LifeTime * 0.1f;
         if (o->SubType == 1)
         {
@@ -3865,10 +3838,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
-        vec3_t Position;
-        float Matrix[3][4];
-        vec3_t p;
         if (o->SubType != 3 && o->SubType != 4)
         {
             int value = 4;
@@ -4088,7 +4057,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
         vec3_t Position;
         switch (o->SubType)
         {
@@ -4524,7 +4492,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        float Height;
         Vector(Luminosity * 0.8f, Luminosity * 0.5f, Luminosity * 0.2f, Light);
         AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
 
@@ -4717,7 +4684,6 @@ namespace Render::Effects::Behaviors
     // MODEL_CURSEDTEMPLE_PRODECTION_SKILL
     bool Move_MODEL_CURSEDTEMPLE_PRODECTION_SKILL(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Position;
     {
         if (!o->Owner->Live)
         {
@@ -4855,9 +4821,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
-        vec3_t Position;
-        float Matrix[3][4];
     {
         CheckClientArrow(o);
 
@@ -5570,9 +5533,6 @@ namespace Render::Effects::Behaviors
     // MODEL_DEATH_SPI_SKILL
     bool Move_MODEL_DEATH_SPI_SKILL(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Position;
-        float Matrix[3][4];
-        vec3_t p;
     {
         if (o->SubType == 0)
         {
@@ -5908,7 +5868,6 @@ namespace Render::Effects::Behaviors
     // MODEL_CUNDUN_DRAGON_HEAD
     bool Move_MODEL_CUNDUN_DRAGON_HEAD(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
         vec3_t Position;
         o->Angle[2] += (10 + rand() % 10) * FPS_ANIMATION_FACTOR;
 
@@ -5943,7 +5902,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
         vec3_t Position;
         if (o->Owner != NULL)
         {
@@ -5998,7 +5956,6 @@ namespace Render::Effects::Behaviors
     // MODEL_CUNDUN_SKILL
     bool Move_MODEL_CUNDUN_SKILL(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
         if (o->SubType == 0)
         {
             if ((int)o->LifeTime == 30)
@@ -6068,7 +6025,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        float Height;
     {
         float Height = RequestTerrainHeight(o->Position[0], o->Position[1]);
 
@@ -6135,7 +6091,6 @@ namespace Render::Effects::Behaviors
         Vector(1.f, 1.f, 1.f, Light);
         vec3_t Position;
         float Matrix[3][4];
-        float Height;
     {
         if (o->SubType == 2)
         {
@@ -6329,7 +6284,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        float Height;
     {
         if (o->SubType <= 1)
         {
@@ -7488,7 +7442,6 @@ namespace Render::Effects::Behaviors
     // MODEL_BLOW_OF_DESTRUCTION
     bool Move_MODEL_BLOW_OF_DESTRUCTION(OBJECT* o, int index, float Luminosity)
     {
-        float Matrix[3][4];
     {
         if (o->SubType == 0)
         {
@@ -7998,9 +7951,6 @@ namespace Render::Effects::Behaviors
     // MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_, MODEL_SWORDRIGHT01_EMPIREGUARDIAN_BOSS_GAION_, MODEL_SWORDLEFT02_EMPIREGUARDIAN_BOSS_GAION_, MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_, MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_, MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE
     bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
-        vec3_t Position;
-        float Matrix[3][4];
     {
         if (o->SubType == 0)
         {
@@ -8918,7 +8868,6 @@ namespace Render::Effects::Behaviors
     // MODEL_EMPIREGUARDIAN_BLOW_OF_DESTRUCTION
     bool Move_MODEL_EMPIREGUARDIAN_BLOW_OF_DESTRUCTION(OBJECT* o, int index, float Luminosity)
     {
-        float Matrix[3][4];
     {
         if (o->SubType == 0)
         {
@@ -9097,7 +9046,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
         vec3_t p;
     {
         if (o->SubType == 0)
@@ -9271,7 +9219,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
     {
         if (o->Owner->AnimationFrame > Models[o->Owner->Type].Actions[PLAYER_SKILL_GIANTSWING].NumAnimationKeys)
             o->Live = false;
@@ -9573,8 +9520,6 @@ namespace Render::Effects::Behaviors
     {
         vec3_t Light;
         Vector(1.f, 1.f, 1.f, Light);
-        vec3_t Angle;
-        vec3_t Position;
     {
         if (o->Owner != NULL && o->Owner->Live == true
             && (g_isCharacterBuff(o->Owner, eBuff_Hp_up_Ourforces)
@@ -9698,7 +9643,6 @@ namespace Render::Effects::Behaviors
     // MODEL_WOLF_HEAD_EFFECT2
     bool Move_MODEL_WOLF_HEAD_EFFECT2(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
     {
         if (o->SubType == 4 || o->SubType == 6)
         {
@@ -9883,8 +9827,6 @@ namespace Render::Effects::Behaviors
     // BITMAP_LAVA
     bool Move_BITMAP_LAVA(OBJECT* o, int index, float Luminosity)
     {
-        vec3_t Angle;
-        float Matrix[3][4];
     {
         if (o->Owner->AnimationFrame > Models[o->Owner->Type].Actions[PLAYER_SKILL_DRAGONLORE].NumAnimationKeys
             || o->Owner->CurrentAction != PLAYER_SKILL_DRAGONLORE)
@@ -10132,7 +10074,6 @@ namespace Render::Effects::Behaviors
     // MODEL_VOLCANO_STONE
     bool Move_MODEL_VOLCANO_STONE(OBJECT* o, int index, float Luminosity)
     {
-        float Height;
     {
         float Height;
         o->HeadAngle[2] -= (o->Gravity) * FPS_ANIMATION_FACTOR;

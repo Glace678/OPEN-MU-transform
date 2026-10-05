@@ -1,7 +1,7 @@
 #pragma once
 
-SmartPointer(BuffStateValueControl);
-
+class BuffStateValueControl;
+using BuffStateValueControlPtr = std::shared_ptr<BuffStateValueControl>;
 class BuffStateValueControl
 {
 private:

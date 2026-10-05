@@ -4,8 +4,8 @@
 #include "w_BuffTimeControl.h"
 #include "w_BuffScriptLoader.h"
 
-SmartPointer(BuffStateSystem);
-class BuffStateSystem
+class BuffStateSystem;
+using BuffStateSystemPtr = std::shared_ptr<BuffStateSystem>;class BuffStateSystem
 {
 public:
     static BuffStateSystemPtr Make();

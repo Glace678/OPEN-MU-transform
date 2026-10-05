@@ -5,8 +5,8 @@
 #include "w_PetAction.h"
 #include "Render/Models/ZzzBMD.h"
 
-SmartPointer(PetActionStand);
-
+class PetActionStand;
+using PetActionStandPtr = std::shared_ptr<PetActionStand>;
 class PetActionStand : public PetAction
 {
 public:

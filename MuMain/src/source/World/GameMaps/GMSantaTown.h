@@ -5,8 +5,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(CGMSantaTown);
-
+class CGMSantaTown;
+using CGMSantaTownPtr = std::shared_ptr<CGMSantaTown>;
 class CGMSantaTown : public BaseMap
 {
 public:

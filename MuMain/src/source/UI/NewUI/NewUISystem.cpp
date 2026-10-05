@@ -164,15 +164,15 @@ void CNewUISystem::Release()
 {
     UnloadMainSceneInterface();
 
-    SAFE_DELETE(m_pNewSlideWindow);
-    SAFE_DELETE(m_pNewOptionWindow);
-    SAFE_DELETE(m_pNewChatLogWindow);
-    SAFE_DELETE(m_pNewSystemLogWindow);
-    SAFE_DELETE(m_pNewUI3DRenderMng);
+    SafeDelete(m_pNewSlideWindow);
+    SafeDelete(m_pNewOptionWindow);
+    SafeDelete(m_pNewChatLogWindow);
+    SafeDelete(m_pNewSystemLogWindow);
+    SafeDelete(m_pNewUI3DRenderMng);
 
     if (m_pNewUIMng) m_pNewUIMng->RemoveAllUIObjs();  // #MG-27: null-safe if Create failed
 
-    SAFE_DELETE(m_pNewUIMng);
+    SafeDelete(m_pNewUIMng);
 }
 
 bool CNewUISystem::LoadMainSceneInterface()
@@ -542,84 +542,84 @@ void CNewUISystem::UnloadMainSceneInterface()
         g_pNewUIMng->ShowAllInterfaces(false);
     }
 
-    SAFE_DELETE(m_pNewHelpWindow);
-    SAFE_DELETE(m_pNewChatCommandWindow);
-    SAFE_DELETE(m_pNewItemExplanationWindow);
-    SAFE_DELETE(m_pNewSetItemExplanation);
-    SAFE_DELETE(m_pNewQuickCommandWindow);
-    SAFE_DELETE(m_pNewWindowMenu);
-    SAFE_DELETE(m_pNewBattleSoccerScore);
-    SAFE_DELETE(m_pNewCatapultWindow);
-    SAFE_DELETE(m_pNewKanturu2ndEnterNpc);
-    SAFE_DELETE(m_pNewKanturuInfoWindow);
-    SAFE_DELETE(m_pNewTrade);
-    SAFE_DELETE(m_pNewNPCQuest);
-    SAFE_DELETE(m_pNewMyQuestInfoWindow);
-    SAFE_DELETE(m_pNewCharacterInfoWindow);
-    SAFE_DELETE(m_pNewPurchaseShopInventory);
-    SAFE_DELETE(m_pNewMyShopInventory);
-    SAFE_DELETE(m_pNewGuildMakeWindow);
-    SAFE_DELETE(m_pNewGuildInfoWindow);
-    SAFE_DELETE(m_pNewStorageInventory);
-    SAFE_DELETE(m_pNewStorageInventoryExt);  // #MG-26: was leaked on unload
-    SAFE_DELETE(m_pNewMixInventory);
-    SAFE_DELETE(m_pNewCastleWindow);
-    SAFE_DELETE(m_pNewGuardWindow);
-    SAFE_DELETE(m_pNewGatemanWindow);
-    SAFE_DELETE(m_pNewGateSwitchWindow);
-    SAFE_DELETE(m_pNewNPCShop);
-    SAFE_DELETE(m_pNewPetInfoWindow);
-    SAFE_DELETE(m_pNewMyInventory);
-    SAFE_DELETE(m_pNewFriendWindow);
-    SAFE_DELETE(m_pNewChatInputBox);
-    SAFE_DELETE(m_pNewNameWindow);
-    SAFE_DELETE(m_pNewSkillList);
-    SAFE_DELETE(m_pNewMainFrameWindow);
-    SAFE_DELETE(m_pNewPartyInfoWindow);
-    SAFE_DELETE(m_pNewPartyListWindow);
-    SAFE_DELETE(m_pNewEnterBloodCastle);
-    SAFE_DELETE(m_pNewEnterDevilSquare);
-    SAFE_DELETE(m_pNewBloodCastle);
-    SAFE_DELETE(m_pNewChaosCastleTime);
-    SAFE_DELETE(m_pNewCommandWindow);
-    SAFE_DELETE(m_pNewHeroPositionInfo);
-    SAFE_DELETE(m_pNewMoveCommandWindow);
-    SAFE_DELETE(m_pNewUIHotKey);
-    SAFE_DELETE(m_pNewSiegeWarfare);
-    SAFE_DELETE(m_pNewItemEnduranceInfo);
-    SAFE_DELETE(m_pNewBuffWindow);
-    SAFE_DELETE(m_pNewCursedTempleResultWindow);
-    SAFE_DELETE(m_pNewCursedTempleWindow);
-    SAFE_DELETE(m_pNewCursedTempleEnterWindow);
-    SAFE_DELETE(m_pNewCryWolfInterface);
-    SAFE_DELETE(m_pNewMaster_Level_Interface);
-    SAFE_DELETE(m_pNewGoldBowman);
-    SAFE_DELETE(m_pNewGoldBowmanLena);
-    SAFE_DELETE(m_pNewLuckyCoinRegistration);
-    SAFE_DELETE(m_pNewExchangeLuckyCoinWindow);
-    SAFE_DELETE(m_pNewDuelWatchWindow);
-    SAFE_DELETE(m_pNewDuelWindow);
-    SAFE_DELETE(m_pNewDuelWatchMainFrameWindow);
-    SAFE_DELETE(m_pNewDuelWatchUserListWindow);
+    SafeDelete(m_pNewHelpWindow);
+    SafeDelete(m_pNewChatCommandWindow);
+    SafeDelete(m_pNewItemExplanationWindow);
+    SafeDelete(m_pNewSetItemExplanation);
+    SafeDelete(m_pNewQuickCommandWindow);
+    SafeDelete(m_pNewWindowMenu);
+    SafeDelete(m_pNewBattleSoccerScore);
+    SafeDelete(m_pNewCatapultWindow);
+    SafeDelete(m_pNewKanturu2ndEnterNpc);
+    SafeDelete(m_pNewKanturuInfoWindow);
+    SafeDelete(m_pNewTrade);
+    SafeDelete(m_pNewNPCQuest);
+    SafeDelete(m_pNewMyQuestInfoWindow);
+    SafeDelete(m_pNewCharacterInfoWindow);
+    SafeDelete(m_pNewPurchaseShopInventory);
+    SafeDelete(m_pNewMyShopInventory);
+    SafeDelete(m_pNewGuildMakeWindow);
+    SafeDelete(m_pNewGuildInfoWindow);
+    SafeDelete(m_pNewStorageInventory);
+    SafeDelete(m_pNewStorageInventoryExt);  // #MG-26: was leaked on unload
+    SafeDelete(m_pNewMixInventory);
+    SafeDelete(m_pNewCastleWindow);
+    SafeDelete(m_pNewGuardWindow);
+    SafeDelete(m_pNewGatemanWindow);
+    SafeDelete(m_pNewGateSwitchWindow);
+    SafeDelete(m_pNewNPCShop);
+    SafeDelete(m_pNewPetInfoWindow);
+    SafeDelete(m_pNewMyInventory);
+    SafeDelete(m_pNewFriendWindow);
+    SafeDelete(m_pNewChatInputBox);
+    SafeDelete(m_pNewNameWindow);
+    SafeDelete(m_pNewSkillList);
+    SafeDelete(m_pNewMainFrameWindow);
+    SafeDelete(m_pNewPartyInfoWindow);
+    SafeDelete(m_pNewPartyListWindow);
+    SafeDelete(m_pNewEnterBloodCastle);
+    SafeDelete(m_pNewEnterDevilSquare);
+    SafeDelete(m_pNewBloodCastle);
+    SafeDelete(m_pNewChaosCastleTime);
+    SafeDelete(m_pNewCommandWindow);
+    SafeDelete(m_pNewHeroPositionInfo);
+    SafeDelete(m_pNewMoveCommandWindow);
+    SafeDelete(m_pNewUIHotKey);
+    SafeDelete(m_pNewSiegeWarfare);
+    SafeDelete(m_pNewItemEnduranceInfo);
+    SafeDelete(m_pNewBuffWindow);
+    SafeDelete(m_pNewCursedTempleResultWindow);
+    SafeDelete(m_pNewCursedTempleWindow);
+    SafeDelete(m_pNewCursedTempleEnterWindow);
+    SafeDelete(m_pNewCryWolfInterface);
+    SafeDelete(m_pNewMaster_Level_Interface);
+    SafeDelete(m_pNewGoldBowman);
+    SafeDelete(m_pNewGoldBowmanLena);
+    SafeDelete(m_pNewLuckyCoinRegistration);
+    SafeDelete(m_pNewExchangeLuckyCoinWindow);
+    SafeDelete(m_pNewDuelWatchWindow);
+    SafeDelete(m_pNewDuelWindow);
+    SafeDelete(m_pNewDuelWatchMainFrameWindow);
+    SafeDelete(m_pNewDuelWatchUserListWindow);
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
-    SAFE_DELETE(m_pNewInGameShop);
+    SafeDelete(m_pNewInGameShop);
 #endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-    SAFE_DELETE(m_pNewDoppelGangerWindow);
-    SAFE_DELETE(m_pNewDoppelGangerFrame);
-    SAFE_DELETE(m_pNewNPCDialogue);
-    SAFE_DELETE(m_pNewQuestProgress);
-    SAFE_DELETE(m_pNewQuestProgressByEtc);
-    SAFE_DELETE(m_pNewEmpireGuardianNPC);
-    SAFE_DELETE(m_pNewEmpireGuardianTimer);
-    SAFE_DELETE(m_pNewMiniMap);
-    SAFE_DELETE(m_pNewItemMng);
+    SafeDelete(m_pNewDoppelGangerWindow);
+    SafeDelete(m_pNewDoppelGangerFrame);
+    SafeDelete(m_pNewNPCDialogue);
+    SafeDelete(m_pNewQuestProgress);
+    SafeDelete(m_pNewQuestProgressByEtc);
+    SafeDelete(m_pNewEmpireGuardianNPC);
+    SafeDelete(m_pNewEmpireGuardianTimer);
+    SafeDelete(m_pNewMiniMap);
+    SafeDelete(m_pNewItemMng);
 #ifdef PBG_MOD_STAMINA_UI
-    SAFE_DELETE(m_pNewUIStamina);
+    SafeDelete(m_pNewUIStamina);
 #endif //PBG_MOD_STAMINA_UI
-    SAFE_DELETE(m_pNewGensRanking);
-    SAFE_DELETE(m_pNewUnitedMarketPlaceWindow);
+    SafeDelete(m_pNewGensRanking);
+    SafeDelete(m_pNewUnitedMarketPlaceWindow);
 #ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
-    SAFE_DELETE(m_pNewUILuckyItemWnd);
+    SafeDelete(m_pNewUILuckyItemWnd);
 #endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
 
     ReleasePersonalItemTable();

@@ -1,7 +1,7 @@
 //*****************************************************************************
 // File: GMKarutan1.h
 //
-// Desc: Å³·çÅº1 ¸Ê, ¸ó½ºÅÍ.
+// Desc: Å³ï¿½ï¿½Åº1 ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½.
 //
 // producer: Ahn Sang-Kyu (10.08.03)
 //*****************************************************************************
@@ -15,8 +15,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(CGMKarutan1);
-
+class CGMKarutan1;
+using CGMKarutan1Ptr = std::shared_ptr<CGMKarutan1>;
 class CGMKarutan1 : public BaseMap
 {
 protected:
@@ -28,39 +28,39 @@ public:
     static CGMKarutan1Ptr Make();
 
     // Object
-        // ¿ÀºêÁ§Æ® »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual bool CreateObject(OBJECT* o);
-    // ¿ÀºêÁ§Æ® ÇÁ·Î¼¼¼­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½
     virtual bool MoveObject(OBJECT* o);
-    // ¿ÀºêÁ§Æ® ÀÌÆåÆ®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
-    // ¿ÀºêÁ§Æ® ·£´õ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
-    // ¸Ê °ü·Ã ¿ÀºêÁ§Æ® ÀÌÆåÆ®
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
 
 #ifdef ASG_ADD_KARUTAN_MONSTERS
     // Character
-        // ¸ó½ºÅÍ »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    // ¸ó½ºÅÍ(NPC) ÇÁ·Î¼¼¼­
+    // ï¿½ï¿½ï¿½ï¿½(NPC) ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½
     virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ½ºÅ³ ºí·¯ ÀÌÆåÆ®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ÀÌÆåÆ® ( ÀÏ¹Ý )
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ( ï¿½Ï¹ï¿½ )
     virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ÀÌÆåÆ® ( ½ºÅ³ )
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ( ï¿½ï¿½Å³ )
     virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    // ½ºÅ³ ¾Ö´Ï¸ÞÀÌ¼Ç °ü·Ã ÇÔ¼ö
+    // ï¿½ï¿½Å³ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
     // Sound
-        // ¸ó½ºÅÍ »ç¿îµå
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     virtual bool PlayMonsterSound(OBJECT* o);
 #endif	// ASG_ADD_KARUTAN_MONSTERS
-    // ¿ÀºêÁ§Æ® »ç¿îµå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual void PlayObjectSound(OBJECT* o);
-    // ¹è°æÀ½¾Ç
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     void PlayBGM();
 };
 

@@ -3,43 +3,43 @@
 #pragma once
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(CGMDoppelGanger3);
-class CGMDoppelGanger3 : public BaseMap
+class CGMDoppelGanger3;
+using CGMDoppelGanger3Ptr = std::shared_ptr<CGMDoppelGanger3>;class CGMDoppelGanger3 : public BaseMap
 {
 public:
     static CGMDoppelGanger3Ptr Make();
     virtual ~CGMDoppelGanger3();
 
 public:	// Object
-    // ¿ÀºêÁ§Æ® »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual bool CreateObject(OBJECT* o);
-    // ¿ÀºêÁ§Æ® ÇÁ·Î¼¼¼­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½
     virtual bool MoveObject(OBJECT* o);
-    // ¿ÀºêÁ§Æ® ÀÌÆåÆ®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
-    // ¿ÀºêÁ§Æ® ·£´õ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
-    // ¸Ê °ü·Ã ¿ÀºêÁ§Æ® ÀÌÆåÆ®
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
 
 public:	// Character
-    // ¸ó½ºÅÍ »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    // ¸ó½ºÅÍ(NPC) ÇÁ·Î¼¼¼­
+    // ï¿½ï¿½ï¿½ï¿½(NPC) ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½
     virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ½ºÅ³ ºí·¯ ÀÌÆåÆ®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ÀÌÆåÆ® ( ÀÏ¹Ý )
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ( ï¿½Ï¹ï¿½ )
     virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    // ¸ó½ºÅÍ ÀÌÆåÆ® ( ½ºÅ³ )
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ( ï¿½ï¿½Å³ )
     virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    // ½ºÅ³ ¾Ö´Ï¸ÞÀÌ¼Ç °ü·Ã ÇÔ¼ö
+    // ï¿½ï¿½Å³ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public: // Sound
-    // ¸ó½ºÅÍ »ç¿îµå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     virtual bool PlayMonsterSound(OBJECT* o);
-    // ¿ÀºêÁ§Æ® »ç¿îµå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     virtual void PlayObjectSound(OBJECT* o);
 
 public:

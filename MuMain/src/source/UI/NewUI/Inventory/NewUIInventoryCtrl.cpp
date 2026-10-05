@@ -394,7 +394,7 @@ void SEASON3B::CNewUIInventoryCtrl::Release()
     RemoveAllItems();
     UnloadImages();
 
-    SAFE_DELETE(m_pdwItemCheckBox);
+    SafeDelete(m_pdwItemCheckBox);
 
     if (m_pNew3DRenderMng)
         m_pNew3DRenderMng->Remove3DRenderObj(this);
@@ -1591,7 +1591,7 @@ void SEASON3B::CNewUIInventoryCtrl::DeletePickedItem()
         }
     }
 
-    SAFE_DELETE(ms_pPickedItem);
+    SafeDelete(ms_pPickedItem);
 }
 
 void SEASON3B::CNewUIInventoryCtrl::BackupPickedItem()

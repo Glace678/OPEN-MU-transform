@@ -202,8 +202,8 @@ bool CNewUIGuildMakeWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIGuildMakeWindow::Release()
 {
-    SAFE_DELETE_ARRAY(m_Button);
-    SAFE_DELETE(m_EditBox);
+    SafeDeleteArray(m_Button);
+    SafeDelete(m_EditBox);
 
     if (m_pNewUIMng)
     {

@@ -9,7 +9,8 @@
 #include <queue>
 #include <vector>
 
-#define SAFE_DELETE(pointer) do { delete (pointer); (pointer) = nullptr; } while (false)
+template <class T> inline void SafeDelete(T*& pointer) { if (pointer != nullptr) { delete pointer; pointer = nullptr; } }
+template <class T> inline void SafeDeleteArray(T*& pointer) { if (pointer != nullptr) { delete[] pointer; pointer = nullptr; } }
 
 using vec3_t = float[3];
 inline void Vector(float x, float y, float z, vec3_t value) { value[0] = x; value[1] = y; value[2] = z; }

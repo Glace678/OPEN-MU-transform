@@ -4231,7 +4231,7 @@ void OpenSkills()
 
     gLoadData.AccessModel(MODEL_WARCRAFT, L"Data\\Skill\\", L"HellGate");
     Models[MODEL_WARCRAFT].Actions[0].LockPositions = false;
-    SAFE_DELETE_ARRAY(Models[MODEL_WARCRAFT].Actions[0].Positions);
+    SafeDeleteArray(Models[MODEL_WARCRAFT].Actions[0].Positions);
     Models[MODEL_WARCRAFT].Actions[0].PlaySpeed = 0.15f;
 
     gLoadData.AccessModel(MODEL_ARROW, L"Data\\Skill\\", L"Arrow", 1);

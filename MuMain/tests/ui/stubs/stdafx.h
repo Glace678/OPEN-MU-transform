@@ -5,4 +5,5 @@
 #include <cstdlib>
 #include <cstring>
 
-#define SAFE_DELETE(pointer) do { delete (pointer); (pointer) = nullptr; } while (false)
+template <class T> inline void SafeDelete(T*& pointer) { if (pointer != nullptr) { delete pointer; pointer = nullptr; } }
+template <class T> inline void SafeDeleteArray(T*& pointer) { if (pointer != nullptr) { delete[] pointer; pointer = nullptr; } }

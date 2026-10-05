@@ -39,7 +39,7 @@ bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
     if (false == m_pYourInvenCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng,
         this, x + 16, y + 68, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
-        SAFE_DELETE(m_pYourInvenCtrl);
+        SafeDelete(m_pYourInvenCtrl);
         return false;
     }
 
@@ -47,7 +47,7 @@ bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
     if (false == m_pMyInvenCtrl->Create(STORAGE_TYPE::TRADE, g_pNewUI3DRenderMng, g_pNewItemMng,
         this, x + 16, y + 274, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
-        SAFE_DELETE(m_pMyInvenCtrl);
+        SafeDelete(m_pMyInvenCtrl);
         return false;
     }
 
@@ -94,8 +94,8 @@ void CNewUITrade::Release()
 {
     UnloadImages();
 
-    SAFE_DELETE(m_pMyInvenCtrl);
-    SAFE_DELETE(m_pYourInvenCtrl);
+    SafeDelete(m_pMyInvenCtrl);
+    SafeDelete(m_pYourInvenCtrl);
 
     if (m_pNewUIMng)
     {

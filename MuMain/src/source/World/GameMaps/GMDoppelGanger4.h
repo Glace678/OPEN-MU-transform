@@ -4,8 +4,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(CGMDoppelGanger4);
-class CGMDoppelGanger4 : public BaseMap
+class CGMDoppelGanger4;
+using CGMDoppelGanger4Ptr = std::shared_ptr<CGMDoppelGanger4>;class CGMDoppelGanger4 : public BaseMap
 {
 public:
     static CGMDoppelGanger4Ptr Make();

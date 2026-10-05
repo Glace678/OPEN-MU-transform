@@ -33,7 +33,7 @@ bool SEASON3B::CNewUISlideWindow::Create(CNewUIManager* pNewUIMng)
 
 void SEASON3B::CNewUISlideWindow::Release()
 {
-    SAFE_DELETE(m_pSlideMgr);
+    SafeDelete(m_pSlideMgr);
 
     if (m_pNewUIMng)
     {

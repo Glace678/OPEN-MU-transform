@@ -116,7 +116,7 @@ void LoadingScene(HDC hDC)
     UI::Reconnect::RenderDialog();
     PlatformSwapBuffers();
 
-    SAFE_DELETE(rUIMng.m_pLoadingScene);
+    SafeDelete(rUIMng.m_pLoadingScene);
 
     SceneFlag = MAIN_SCENE;
     for (int i = 0; i < 4; ++i)

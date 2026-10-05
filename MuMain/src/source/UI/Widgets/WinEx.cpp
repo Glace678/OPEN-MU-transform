@@ -59,7 +59,7 @@ void CWinEx::Release()
         pBtn->Release();
     }
 
-    SAFE_DELETE_ARRAY(CWin::m_psprBg);
+    SafeDeleteArray(CWin::m_psprBg);
 }
 
 void CWinEx::SetPosition(int nXCoord, int nYCoord)

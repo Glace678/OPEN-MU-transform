@@ -123,7 +123,7 @@ void SEASON3B::CNewUIGuildInfoWindow::Release()
 {
     UnloadImages();
 
-    SAFE_DELETE_ARRAY(m_Button);
+    SafeDeleteArray(m_Button);
 
     if (m_pNewUIMng)
     {

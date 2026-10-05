@@ -134,8 +134,8 @@ void CUIMng::CreateTitleSceneUI()
 
 void CUIMng::ReleaseTitleSceneUI()
 {
-    SAFE_DELETE_ARRAY(m_asprTitle);
-    SAFE_DELETE(m_pgbLoding);
+    SafeDeleteArray(m_asprTitle);
+    SafeDelete(m_pgbLoding);
 
     m_nScene = UIM_SCENE_NONE;
 }

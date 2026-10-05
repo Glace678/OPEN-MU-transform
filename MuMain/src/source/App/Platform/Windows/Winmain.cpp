@@ -651,11 +651,11 @@ void DestroyWindow()
 
     ReleaseCharacters();
 
-    SAFE_DELETE(GateAttribute);
+    SafeDelete(GateAttribute);
 
-    SAFE_DELETE(SkillAttribute);
+    SafeDelete(SkillAttribute);
 
-    SAFE_DELETE(CharacterMachine);
+    SafeDelete(CharacterMachine);
 
     DeleteWaterTerrain();
 
@@ -672,27 +672,27 @@ void DestroyWindow()
         Bitmaps.UnloadAllImages();
     }
 
-    SAFE_DELETE_ARRAY(CharacterMemoryDump);
-    SAFE_DELETE_ARRAY(ItemAttRibuteMemoryDump);
-    SAFE_DELETE_ARRAY(RendomMemoryDump);
-    SAFE_DELETE_ARRAY(ModelsDump);
+    SafeDeleteArray(CharacterMemoryDump);
+    SafeDeleteArray(ItemAttRibuteMemoryDump);
+    SafeDeleteArray(RendomMemoryDump);
+    SafeDeleteArray(ModelsDump);
 
 #ifdef DYNAMIC_FRUSTRUM
     DeleteAllFrustrum();
 #endif //DYNAMIC_FRUSTRUM
 
-    SAFE_DELETE(g_pMercenaryInputBox);
-    SAFE_DELETE(g_pSingleTextInputBox);
-    SAFE_DELETE(g_pSinglePasswdInputBox);
+    SafeDelete(g_pMercenaryInputBox);
+    SafeDelete(g_pSingleTextInputBox);
+    SafeDelete(g_pSinglePasswdInputBox);
 
-    SAFE_DELETE(g_pUIMapName);	// rozy
-    SAFE_DELETE(g_pTimer);
-    SAFE_DELETE(g_pUIManager);
+    SafeDelete(g_pUIMapName);	// rozy
+    SafeDelete(g_pTimer);
+    SafeDelete(g_pUIManager);
 
-    SAFE_DELETE(pMultiLanguage);
-    PtrReset(g_BuffSystem);
-    PtrReset(g_MapProcess);
-    PtrReset(g_petProcess);
+    SafeDelete(pMultiLanguage);
+    g_BuffSystem.reset();
+    g_MapProcess.reset();
+    g_petProcess.reset();
 
     g_ErrorReport.Write(L"Destroy");
 

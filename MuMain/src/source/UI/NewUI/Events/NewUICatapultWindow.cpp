@@ -27,12 +27,12 @@ SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::CCatapultGroupButton()
 
 SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::~CCatapultGroupButton()
 {
-    SAFE_DELETE_ARRAY(m_pButton);
+    SafeDeleteArray(m_pButton);
 }
 
 void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Initialize()
 {
-    SAFE_DELETE_ARRAY(m_pButton);
+    SafeDeleteArray(m_pButton);
 
     m_iType = 0;
     m_iIndex = -1;

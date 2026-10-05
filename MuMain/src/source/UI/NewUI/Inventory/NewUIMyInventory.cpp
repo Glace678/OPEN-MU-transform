@@ -74,7 +74,7 @@ bool CNewUIMyInventory::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNew
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
     if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::INVENTORY, m_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 200, 8, 8, MAX_EQUIPMENT))
     {
-        SAFE_DELETE(m_pNewInventoryCtrl);
+        SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
@@ -98,7 +98,7 @@ void CNewUIMyInventory::Release()
 
     UnloadImages();
 
-    SAFE_DELETE(m_pNewInventoryCtrl);
+    SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUI3DRenderMng)
     {

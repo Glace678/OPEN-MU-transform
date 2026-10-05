@@ -4,8 +4,8 @@
 
 #include "World/MapInfra/w_BaseMap.h"
 
-SmartPointer(GMEmpireGuardian2);
-
+class GMEmpireGuardian2;
+using GMEmpireGuardian2Ptr = std::shared_ptr<GMEmpireGuardian2>;
 class GMEmpireGuardian2 : public BaseMap
 {
 public:

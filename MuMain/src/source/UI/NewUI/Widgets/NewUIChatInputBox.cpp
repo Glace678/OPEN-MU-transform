@@ -140,8 +140,8 @@ void SEASON3B::CNewUIChatInputBox::Release()
     RemoveAllChatHIstory();
     RemoveAllWhsprIDHIstory();
 
-    SAFE_DELETE(m_pChatInputBox);
-    SAFE_DELETE(m_pWhsprIDInputBox);
+    SafeDelete(m_pChatInputBox);
+    SafeDelete(m_pWhsprIDInputBox);
 
     if (m_pNewUIMng)
     {

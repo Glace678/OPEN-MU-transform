@@ -72,7 +72,7 @@ CFTPFileDownLoader::~CFTPFileDownLoader() // OK
     // The WinInet FileDownloader is excluded off Windows (issue #462); the
     // pointer is always null there, and even a delete of a null pointer would
     // still link against the destructor symbol.
-    SAFE_DELETE(this->m_pFileDownloader);
+    SafeDelete(this->m_pFileDownloader);
 #endif
 }
 
@@ -153,7 +153,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
         result = this->m_pFileDownloader->DownloadFile();
 
-        SAFE_DELETE(this->m_pFileDownloader);
+        SafeDelete(this->m_pFileDownloader);
 
         if (this->m_Break != 0)
         {

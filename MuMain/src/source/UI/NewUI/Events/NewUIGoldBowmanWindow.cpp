@@ -86,7 +86,7 @@ void CNewUIGoldBowmanWindow::Release()
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
-    SAFE_DELETE(m_EditBox);
+    SafeDelete(m_EditBox);
 }
 
 void CNewUIGoldBowmanWindow::OpeningProcess()
