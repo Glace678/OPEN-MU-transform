@@ -1,7 +1,7 @@
 /*******************************************************************************
-*	작 성 자 : 진혜진
-*	작 성 일 : 2009.06.10
-*	내    용 : 기타 메소드
+*	Author : Jin Hyejin
+*	Date : 2009.06.10
+*	Contents : Miscellaneous methods
 *******************************************************************************/
 
 #pragma once
@@ -10,32 +10,32 @@ class Path
 {
 public:
 
-    //					모듈 전체 경로 가져오기
+    //					Get the module's full path
     static TCHAR* GetCurrentFullPath(TCHAR* szPath);
-    //					모듈 디렉토리 가져오기
+    //					Get the module's directory
     static TCHAR* GetCurrentDirectory(TCHAR* szPath);
-    //					모듈 파일 이름 가져오기
+    //					Get the module's file name
     static TCHAR* GetCurrentFileName(TCHAR* szPath);
 
-    //					폴더 문자열 만들기 : 맨 뒤에 "\\" 붙여준다.
+    //					Build a folder string: appends "\\" to the end.
     static TCHAR* SetDirString(TCHAR* szPath);
-    //					폴더 문자열 만들기 : 맨 뒤에 "\\" 제거
+    //					Build a folder string: removes the trailing "\\"
     static TCHAR* ClearDirString(TCHAR* szPath);
 
-    //					폴더 문자열 만들기 : 파일명 제거한 경로
+    //					Build a folder string: path with the file name removed
     static TCHAR* GetDirectory(TCHAR* szPath);
-    //					파일 문자열 만들기 : 패스 제거한 파일 명
+    //					Build a file string: file name with the path removed
     static TCHAR* GetFileName(TCHAR* szPath);
 
-    //					/ => \\ 로 변경
+    //					Change / to \\
     static TCHAR* ChangeSlashToBackSlash(TCHAR* szPath);
-    //					\\ => / 로 변경
+    //					Change \\ to /
     static TCHAR* ChangeBackSlashToSlash(TCHAR* szPath);
 
-    //					파일에서 마지막 줄 읽어오기
+    //					Read the last line from a file
     static BOOL			ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
-    //					새 파일에 한줄 쓰기
+    //					Write a line to a new file
     static BOOL			WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
-    //					파일 경로 디렉토리 생성
+    //					Create the directory for a file path
     static BOOL			CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
 };

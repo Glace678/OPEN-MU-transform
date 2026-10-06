@@ -44,6 +44,7 @@ namespace npcGateSwitch
         g_iNpcCharacterKey = Key;
 
         int        Index = FindCharacterIndex(Key);
+        if (Index == MAX_CHARACTERS_CLIENT) return;
         CHARACTER* c = &CharactersClient[Index];
         OBJECT* o = &c->Object;
 
@@ -60,9 +61,9 @@ namespace npcGateSwitch
         case 1:
         {
             int        Index = FindCharacterIndex(Key);
+            if (Index == MAX_CHARACTERS_CLIENT) return;
             CHARACTER* c = &CharactersClient[Index];
 
-            if (c == NULL) return;
             if (c->MonsterIndex != MONSTER_CASTLE_GATE1) return;
 
             OBJECT* o = &c->Object;

@@ -3,17 +3,17 @@
 
 //. soyaviper
 
-namespace M31HuntingGround {		//. 공성 사냥터
+namespace M31HuntingGround {		//. siege hunting ground
     bool IsInHuntingGround();
     bool IsInHuntingGroundSection2(const vec3_t Position);
 
-    //. 오브젝트
+    //. object
     bool CreateHuntingGroundObject(OBJECT* pObject);
     bool MoveHuntingGroundObject(OBJECT* pObject);
     bool RenderHuntingGroundObjectVisual(OBJECT* pObject, BMD* pModel);
     bool RenderHuntingGroundObjectMesh(OBJECT* pObject, BMD* pModel, bool ExtraMon = 0);
 
-    //. 몬스터
+    //. monster
     CHARACTER* CreateHuntingGroundMonster(int iType, int PosX, int PosY, int Key);
 
     bool MoveHuntingGroundMonsterVisual(OBJECT* pObject, BMD* pModel);
@@ -24,7 +24,7 @@ namespace M31HuntingGround {		//. 공성 사냥터
     bool AttackEffectHuntingGroundMonster(CHARACTER* pCharacter, OBJECT* pObject, BMD* pModel);
     bool SetCurrentActionHuntingGroundMonster(CHARACTER* pCharacter, OBJECT* pObject);
 
-    //. 화면 처리
+    //. screen processing
     bool CreateMist(PARTICLE* pParticleObj);
 }
 

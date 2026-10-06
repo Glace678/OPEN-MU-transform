@@ -42,10 +42,10 @@ CSubject::~CSubject()
 }
 
 //*****************************************************************************
-// 함수 이름 : Attach()
-// 함수 설명 : 옵져버 리스트에 추가.
-//			   (서브젝트 자식 클래스 생성시 호출하는 것이 적당.)
-// 매개 변수 : pObserver	: 옵져버 오브젝트의 포인터.
+// Function: Attach()
+// Description: Adds to the observer list.
+//			   (Best called when a subject child class is created.)
+// Parameter: pObserver	: Pointer to the observer object.
 //*****************************************************************************
 void CSubject::Attach(CObserver* pObserver)
 {
@@ -53,10 +53,10 @@ void CSubject::Attach(CObserver* pObserver)
 }
 
 //*****************************************************************************
-// 함수 이름 : Attach()
-// 함수 설명 : 옵져버 리스트에서 삭제.
-//			   (서브젝트 자식 클래스 릴리즈 전에 호출하는 것이 적당.)
-// 매개 변수 : pObserver	: 옵져버 오브젝트의 포인터.
+// Function: Detach()
+// Description: Removes from the observer list.
+//			   (Best called before releasing a subject child class.)
+// Parameter: pObserver	: Pointer to the observer object.
 //*****************************************************************************
 void CSubject::Detach(CObserver* pObserver)
 {
@@ -66,9 +66,9 @@ void CSubject::Detach(CObserver* pObserver)
 }
 
 //*****************************************************************************
-// 함수 이름 : Notify()
-// 함수 설명 : 리스트를 순회하며 옵저버의 UpdateData(this)호출.
-//			   (서브젝트 내용 변화가 있을 때 호출하면 됨.)
+// Function: Notify()
+// Description: Iterates the list and calls the observer's UpdateData(this).
+//			   (Call whenever the subject's contents change.)
 //*****************************************************************************
 void CSubject::Notify()
 {

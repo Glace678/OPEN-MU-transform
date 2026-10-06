@@ -1,16 +1,16 @@
 #ifndef _GMCRYWOLF1ST_H_
 #define _GMCRYWOLF1ST_H_
 
-namespace M34CryWolf1st {		//. 크라이울프 점령지
+namespace M34CryWolf1st {		//. Crywolf occupied zone
     bool IsCyrWolf1st();
 
-    //. 오브젝트
+    //. object
     bool CreateCryWolf1stObject(OBJECT* o);
     bool MoveCryWolf1stObject(OBJECT* o);
     bool RenderCryWolf1stObjectVisual(OBJECT* o, BMD* b);
     bool RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon);
 
-    //. 몬스터
+    //. monster
     CHARACTER* CreateCryWolf1stMonster(int iType, int PosX, int PosY, int Key);
 
     bool MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
@@ -22,7 +22,7 @@ namespace M34CryWolf1st {		//. 크라이울프 점령지
     bool CreateMist(PARTICLE* pParticleObj);
     void RenderBaseSmoke(void);
 
-    //. 크라이울프 레이드 관련 MVP
+    //. Crywolf raid-related MVP
     void ChangeBackGroundMusic(int World);
     void RenderNoticesCryWolf();
     void CryWolfMVPInit();

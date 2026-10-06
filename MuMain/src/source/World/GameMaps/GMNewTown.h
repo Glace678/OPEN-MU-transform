@@ -17,14 +17,14 @@ namespace SEASON3B
 
         static bool IsCurrentMap();
         static bool IsNewMap73_74();
-        //. 오브젝트
+        //. object
         static void CreateObject(OBJECT* pObject);
         static bool MoveObject(OBJECT* pObject);
         static bool RenderObjectVisual(OBJECT* pObject, BMD* pModel);
         static bool RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon = 0);
         static void RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bool ExtraMon = 0);
 
-        //. 몬스터
+        //. monster
         static CHARACTER* CreateNewTownMonster(int iType, int PosX, int PosY, int Key);
 
         static bool MoveMonsterVisual(OBJECT* pObject, BMD* pModel);

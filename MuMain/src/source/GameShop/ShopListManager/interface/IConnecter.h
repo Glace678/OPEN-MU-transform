@@ -1,7 +1,6 @@
 /*******************************************************************************
-*	�� �� �� : ������
-*	�� �� �� : 2009.07.07
-*	��    �� : Connecter Interface
+* : 2009.07.07
+* : Connecter Interface
 *******************************************************************************/
 
 #pragma once
@@ -23,16 +22,15 @@ public:
 
     // abstract Function
 
-        //						����
     virtual WZResult		CreateSession(HINTERNET& hSession) = 0;
-    //						Ŀ��Ʈ
+    // ĿƮ
     virtual WZResult		CreateConnection(HINTERNET& hSession,
         HINTERNET& hConnection) = 0;
-    //						�ٿ�ε� ���� ���� & ������ ��������
+    // ٿε & 
     virtual WZResult		OpenRemoteFile(HINTERNET& hConnection,
         HINTERNET& hRemoteFile,
         ULONGLONG& nFileLength) = 0;
-    //						����Ʈ ���� �б�
+    // Ʈ б
     virtual WZResult		ReadRemoteFile(HINTERNET& hRemoteFile,
         BYTE* byReadBuffer,
         DWORD* dwBytesRead) = 0;
@@ -40,10 +38,9 @@ public:
 protected:
     // Member Object
 
-        //						���..
     WZResult 				m_Result;
-    //						�ٿ�ε� ���� ���� ��ü
+    // ٿε ü
     DownloadServerInfo* m_pServerInfo;
-    //						�ٿ�ε� ���� ���� ��ü
+    // ٿε ü
     DownloadFileInfo* m_pFileInfo;
 };

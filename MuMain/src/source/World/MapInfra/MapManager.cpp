@@ -553,7 +553,7 @@ void CMapManager::Load() // OK
     case WD_41CHANGEUP3RD_1ST:
         LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
         LoadBitmap(L"Effect\\firered.jpg", BITMAP_FIRE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
-        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  불씨.
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  spark.
 
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE1, L"Data\\Sound\\w42\\cage01.wav", 1);
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE2, L"Data\\Sound\\w42\\cage02.wav", 1);
@@ -1133,6 +1133,7 @@ void CMapManager::Load() // OK
             gLoadData.OpenTexture(i, DirName);
         }
 
+        // Models[] indices below are per-map object slots loaded positionally above.
         if (this->WorldActive == WD_1DUNGEON)
         {
             Models[40].Actions[1].PlaySpeed = 0.4f;
@@ -1239,8 +1240,6 @@ void CMapManager::LoadWorld(int Map)
         mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -1302,8 +1301,6 @@ void CMapManager::LoadWorld(int Map)
         mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -1316,8 +1313,6 @@ void CMapManager::LoadWorld(int Map)
         mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 

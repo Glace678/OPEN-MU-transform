@@ -103,7 +103,7 @@ bool M33Aida::RenderAidaObjectVisual(OBJECT* pObject, BMD* pModel)
 
     switch (pObject->Type)
     {
-    case 30:  // 풀
+    case 30:  // grass
     {
         Vector(0.0f, -3.0f, 1.0f, p);
         pModel->TransformPosition(BoneTransform[6], p, Position, false);

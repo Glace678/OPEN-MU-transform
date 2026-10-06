@@ -429,7 +429,7 @@ namespace SEASON3B
         RadioButtonList				m_RadioList;
         DWORD						m_CurButtonIndex;
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
-        int							m_iButtonDistance;			// ��ư�� ��ư������ ����
+        int							m_iButtonDistance;			// ư ư 
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     };
 

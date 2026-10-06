@@ -16,7 +16,7 @@ var services = builder.Services;
 services.AddSingleton<ConnectServer>()
     .AddSingleton<GameServerRegistry>()
     .AddSingleton<IConnectServer>(s => s.GetService<ConnectServer>()!)
-    .AddPeristenceProvider()
+    .AddPersistenceProvider()
     .AddPersistentSingleton<IConnectServerSettings, ConnectServerDefinition>()
     .AddHostedService<ConnectServerHostedServiceWrapper>()
     .PublishManageableServer<IConnectServer>();

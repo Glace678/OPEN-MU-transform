@@ -44,10 +44,10 @@ namespace SEASON3B
 
         CNewUIButton m_BtnExit;
 
-        CNewUIButton m_BtnEnter;			// 입장 버튼
-        CNewUIButton m_BtnSet;				// 입장료 설정 버튼
-        CNewUIButton m_BtnFeeUp;			// 입장료 up
-        CNewUIButton m_BtnFeeDn;			// 입장료 down
+        CNewUIButton m_BtnEnter;			// Enter button
+        CNewUIButton m_BtnSet;				// Entry fee setting button
+        CNewUIButton m_BtnFeeUp;			// Entry fee up
+        CNewUIButton m_BtnFeeDn;			// Entry fee down
 
     public:
         CNewUIGatemanWindow();

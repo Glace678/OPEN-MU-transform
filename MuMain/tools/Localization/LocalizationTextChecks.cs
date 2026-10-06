@@ -4,7 +4,7 @@ namespace MuMain.Tools.Localization;
 
 internal static partial class LocalizationTextChecks
 {
-    private const string MojibakeCharacters = "¼½¾ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßµ¿±";
+    private const string MojibakeCharacters = "àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþßµÿ±";
 
     public static bool LooksCorruptedZhCn(string value)
     {

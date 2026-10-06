@@ -57,6 +57,8 @@ if(EXISTS "${RIME_TEST_DLL}")
             "${RIME_TEST_DLL}"
             "${CMAKE_SOURCE_DIR}/src/third_party/librime/share"
             "${CMAKE_CURRENT_BINARY_DIR}/rime-smoke-user")
+else()
+    message(STATUS "skipped rime_runtime_smoke: runtime dll absent: ${RIME_TEST_DLL}")
 endif()
 mu_add_test(
     NAME core_account_portal_tests

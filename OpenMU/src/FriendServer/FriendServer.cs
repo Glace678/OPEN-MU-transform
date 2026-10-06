@@ -266,8 +266,8 @@ public class FriendServer : IFriendServer
                 ServerId = serverId,
             };
 
-            observer = newObserver;
-            if (this.OnlineFriends.TryAdd(characterName, newObserver))
+            observer = this.OnlineFriends.GetOrAdd(characterName, newObserver);
+            if (ReferenceEquals(observer, newObserver))
             {
                 IFriendServerContext? newContext = null;
                 var context = usedContext ?? (newContext = this._persistenceContextProvider.CreateNewFriendServerContext());
@@ -280,13 +280,6 @@ public class FriendServer : IFriendServer
                 finally
                 {
                     newContext?.Dispose();
-                }
-            }
-            else
-            {
-                // A concurrent event already created an observer for this character.
-                while (!this.OnlineFriends.TryGetValue(characterName, out observer))
-                {
                 }
             }
         }

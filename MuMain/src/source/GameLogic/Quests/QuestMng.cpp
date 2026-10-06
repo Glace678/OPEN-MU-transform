@@ -195,11 +195,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
             sRequestReward.m_aRequest[i].m_dwType = pRequestPacket->m_dwType;
             sRequestReward.m_aRequest[i].m_wIndex = pRequestPacket->m_wIndex;
             sRequestReward.m_aRequest[i].m_dwValue = pRequestPacket->m_dwValue;
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            sRequestReward.m_aRequest[i].m_dwCurValue = pRequestPacket->m_dwCurValue;
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             sRequestReward.m_aRequest[i].m_wCurValue = pRequestPacket->m_wCurValue;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestPacket->m_dwType == QUEST_REQUEST_ITEM)
                 sRequestReward.m_aRequest[i].m_pItem
                 = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
@@ -481,55 +477,6 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             wcscpy(aDest[nLine].m_szText, I18N::Game::None);
             break;
 
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-        case QUEST_REQUEST_MONSTER:
-        case QUEST_REQUEST_ITEM:
-        case QUEST_REQUEST_LEVEL:
-        case QUEST_REQUEST_ZEN:
-        case QUEST_REQUEST_PVP_POINT:
-            if (pRequestInfo->m_dwCurValue < pRequestInfo->m_dwValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            switch (pRequestInfo->m_dwType)
-            {
-            case QUEST_REQUEST_MONSTER:
-                ::mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu",
-                    ::getMonsterName(int(pRequestInfo->m_wIndex)),
-                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
-                break;
-            case QUEST_REQUEST_ITEM:
-            {
-                wchar_t szItemName[32];
-                ::GetItemName((int)pRequestInfo->m_pItem->Type,
-                    (pRequestInfo->m_pItem->Level, szItemName);
-                ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu/%lu", szItemName,
-                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
-            }
-            break;
-            case QUEST_REQUEST_LEVEL:
-                ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls",
-                    pRequestInfo->m_dwValue, I18N::Game::Minimum);
-                break;
-            case QUEST_REQUEST_ZEN:
-                ::mu_swprintf(aDest[nLine].m_szText, L"Zen : %lu", pRequestInfo->m_dwValue);
-                break;
-            case QUEST_REQUEST_PVP_POINT:
-                mu_swprintf(aDest[nLine].m_szText, I18N::Game::EnemyGensMemberXLuLu,
-                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
-                break;
-            }
-            break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
-
-#ifndef ASG_ADD_TIME_LIMIT_QUEST
         case QUEST_REQUEST_MONSTER:
             if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
             {
@@ -549,14 +496,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
                     pRequestInfo->m_dwValue);
             }
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
 
         case QUEST_REQUEST_SKILL:
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            if (0 == pRequestInfo->m_dwCurValue)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             if (0 == pRequestInfo->m_wCurValue)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -568,7 +510,6 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
                 SkillAttribute[pRequestInfo->m_wIndex].Name);
             break;
 
-#ifndef ASG_ADD_TIME_LIMIT_QUEST
         case QUEST_REQUEST_ITEM:
             if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
             {
@@ -598,14 +539,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls",
                 pRequestInfo->m_dwValue, I18N::Game::Minimum);
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
 
         case QUEST_REQUEST_TUTORIAL:
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            if (pRequestInfo->m_dwCurValue == 1)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 1)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
             else
             {
@@ -626,11 +562,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
 
         case QUEST_REQUEST_BUFF:
         {
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            if (pRequestInfo->m_dwCurValue == 0)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 0)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -648,11 +580,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         case QUEST_REQUEST_EVENT_MAP_USER_KILL:
         case QUEST_REQUEST_EVENT_MAP_DEVIL_POINT:
         {
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            if (pRequestInfo->m_dwCurValue < pRequestInfo->m_dwValue)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -676,11 +604,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
                 nTextIndex = 3079;
                 break;
             }
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            DWORD curValue = MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue);
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             DWORD curValue = MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue);
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             mu_swprintf(aDest[nLine].m_szText, I18N::Game::Lookup(nTextIndex), pRequestInfo->m_wIndex,
                 curValue, pRequestInfo->m_dwValue);
         }
@@ -691,11 +615,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         case QUEST_REQUEST_EVENT_MAP_CLEAR_DEVIL:
         case QUEST_REQUEST_EVENT_MAP_CLEAR_ILLUSION:
         {
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-            if (pRequestInfo->m_dwCurValue == 0)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 0)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;

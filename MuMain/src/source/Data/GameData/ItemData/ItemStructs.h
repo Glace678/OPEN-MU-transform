@@ -3,18 +3,7 @@
 #include "Core/Platform/WinCompat.h"
 #include "Data/Translation/MultiLanguage.h"
 
-// Forward declarations for constants
-#ifndef MAX_CLASS
-#define MAX_CLASS 7
-#endif
-
-#ifndef MAX_RESISTANCE
-#define MAX_RESISTANCE 7
-#endif
-
-#ifndef MAX_ITEM_NAME
-#define MAX_ITEM_NAME 50
-#endif
+#include "GameLogic/SystemLimits.h"
 
 // Include X-macro field definitions (single source of truth)
 #include "ItemFieldDefs.h"

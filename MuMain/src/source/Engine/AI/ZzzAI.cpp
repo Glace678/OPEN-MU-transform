@@ -1,8 +1,8 @@
 ﻿///////////////////////////////////////////////////////////////////////////////
-// AI관련 함수
-// 타켓방향으로 방향 틀기, 길찾기, fps구하기 등등
+// AI-related functions
+// Turn toward the target, pathfinding, getting fps, etc.
 //
-// *** 함수 레벨: 2
+// *** Function level: 2
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -305,7 +305,7 @@ void SetAction_Fenrir_Damage(CHARACTER* c, OBJECT* o)
             SetAction(o, PLAYER_FENRIR_DAMAGE_ONE_LEFT);
         else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1 && c->Weapon[0].Type == MODEL_ARROWS)
             SetAction(o, PLAYER_FENRIR_DAMAGE_ONE_LEFT);
-        else	// 맨손
+        else	// bare hands
             SetAction(o, PLAYER_FENRIR_DAMAGE);
     }
 }

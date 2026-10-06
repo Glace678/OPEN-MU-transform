@@ -246,8 +246,6 @@ bool PetProcess::LoadData()
     {
         constexpr auto Message = L"Data\\Local\\pet.bmd is missing, truncated, or corrupt.";
         g_ErrorReport.Write(Message);
-        MessageBox(g_hWnd, Message, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 

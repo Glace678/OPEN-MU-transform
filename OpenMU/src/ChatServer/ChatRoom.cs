@@ -12,7 +12,7 @@ using Nito.AsyncEx.Synchronous;
 /// <summary>
 /// This class represents a Chat Room.
 /// </summary>
-internal sealed class ChatRoom : IDisposable
+internal sealed class ChatRoom : IDisposable, IAsyncDisposable
 {
     private readonly ILogger<ChatRoom> _logger;
 
@@ -114,6 +114,12 @@ internal sealed class ChatRoom : IDisposable
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "lockSlim", Justification = "Null-conditional confuses the code analysis.")]
     public void Dispose()
     {
+        Task.Run(() => this.DisposeAsync().AsTask()).WaitAndUnwrapException();
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
         var localLockSlim = this._lockSlim;
         if (this._isClosing || localLockSlim is null)
         {
@@ -124,27 +130,34 @@ internal sealed class ChatRoom : IDisposable
         this._lockSlim = null;
         this._logger.LogDebug("Disposing room {RoomId}...", this.RoomId);
         this._registeredClients.Clear();
+
+        List<IChatClient> connectedClients;
         localLockSlim.EnterWriteLock();
         try
         {
-            Task.Run(async () =>
-            {
-                foreach (var connectedClient in this._connectedClients)
-                {
-                    await connectedClient.LogOffAsync().ConfigureAwait(false);
-                }
-            }).WaitAndUnwrapException();
+            connectedClients = this._connectedClients.ToList();
             this._connectedClients.Clear();
-            this.RoomClosed?.Invoke(this, new ChatRoomClosedEventArgs(this));
-            this.RoomClosed = null;
         }
         finally
         {
             localLockSlim.ExitWriteLock();
         }
 
-        localLockSlim.Dispose();
-        this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
+        try
+        {
+            foreach (var connectedClient in connectedClients)
+            {
+                await connectedClient.LogOffAsync().ConfigureAwait(false);
+            }
+
+            this.RoomClosed?.Invoke(this, new ChatRoomClosedEventArgs(this));
+            this.RoomClosed = null;
+        }
+        finally
+        {
+            localLockSlim.Dispose();
+            this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
+        }
     }
 
     /// <summary>

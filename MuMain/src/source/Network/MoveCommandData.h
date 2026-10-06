@@ -4,6 +4,8 @@
 
 namespace SEASON3B
 {
+    constexpr int MAX_MOVE_COMMAND_COUNT = 1024;
+
     class CMoveCommandData
     {
     public:
@@ -28,7 +30,7 @@ namespace SEASON3B
             bool		_bStrife;
             bool		_bSelected;
 
-            bool operator==(const int& iIndex) const { int iTempIndex = iIndex; return _ReqInfo.index == iTempIndex; };
+            bool HasIndex(int index) const { return _ReqInfo.index == index; }
         } MOVEINFODATA;
     private:
         std::list<MOVEINFODATA*>	m_listMoveInfoData;

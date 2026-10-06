@@ -327,7 +327,7 @@ bool CMonkSystem::RageEquipmentWeapon(int _Index, short _ItemType)
 {
     int _OtherEquip = (_Index == EQUIPMENT_WEAPON_LEFT) ? EQUIPMENT_WEAPON_RIGHT : EQUIPMENT_WEAPON_LEFT;
     ITEM* pOtherHand = &CharacterMachine->Equipment[_OtherEquip];
-    //글러브형 무기는 글러브형무기하고만 착용가능
+    //Glove-type weapons can only be equipped with glove-type weapons
     if (g_CMonkSystem.IsSwordformGlovesItemType(_ItemType))
     {
         if (pOtherHand->Type == -1)
@@ -476,7 +476,7 @@ bool CMonkSystem::SendAttackPacket(CHARACTER* _pCha, int _nMoveTarget, int _nSki
 #endif
 
         VectorCopy(CharactersClient[_nMoveTarget].Object.Position, _pCha->TargetPosition);
-        //몬스터의 넉백효과의 의해 이펙트가 혼란스러움 방지
+        //Prevents effects from getting confused by monster knockback
         if (!(pObj->CurrentAction == PLAYER_SKILL_GIANTSWING && m_btAttState == FRAME_SECONDATT))
             pObj->Angle[2] = CreateAngle2D(pObj->Position, _pCha->TargetPosition);
 
@@ -946,7 +946,7 @@ void CMonkSystem::RenderRepeatedly(int _Key, OBJECT* pObj)
 
         switch (m_arrRepeatedly[_index].m_DamageType)
         {
-            //데미지타입에 따른컬러
+            //Color by damage type
         case 0:
             if (_Key == HeroKey)
             {
@@ -995,7 +995,7 @@ void CMonkSystem::RenderRepeatedly(int _Key, OBJECT* pObj)
 
         if (m_arrRepeatedly[_index].m_Double)
         {
-            // 더블데미지
+            // double damage
             Position[2] += 10.f;
             Vector(Light[0] - 0.2f, Light[1] - 0.2f, Light[2] - 0.2f, Light2);
             CreatePoint(Position, Damage, Light2, scale + 5.f, true);
@@ -1012,7 +1012,7 @@ bool CMonkSystem::IsRideNotUseSkill(int _nSkill, short _Type)
     if (_Type != MODEL_HORN_OF_FENRIR && _Type != MODEL_HORN_OF_UNIRIA && _Type != MODEL_HORN_OF_DINORANT)
         return false;
 
-    // 탈것타고 있을 경우 사용 불가능한 스킬
+    // Skills unavailable while riding a mount
     switch (_nSkill)
     {
     case AT_SKILL_KILLING_BLOW:
@@ -1036,7 +1036,7 @@ bool CMonkSystem::IsSwordformGlovesUseSkill(int _nSkill)
 {
     switch (_nSkill)
     {
-    case AT_SKILL_CHAIN_DRIVE: //여기 스킬들은 장갑형 무기를 착용시에만 사용가능
+    case AT_SKILL_CHAIN_DRIVE: //These skills are only usable when wearing glove-type weapons
     case AT_SKILL_DRAGON_ROAR:
     case AT_SKILL_DRAGON_ROAR_STR:
     case AT_SKILL_DRAGON_KICK:

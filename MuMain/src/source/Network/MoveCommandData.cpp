@@ -43,13 +43,22 @@ bool CMoveCommandData::Create(const std::wstring& filename)
     if (fp == NULL) return false;
 
     int count = 0;
-    fread(&count, sizeof(int), 1, fp);
+    if (fread(&count, sizeof(int), 1, fp) != 1 || count < 0 || count > MAX_MOVE_COMMAND_COUNT)
+    {
+        fclose(fp);
+        return false;
+    }
 
     for (int i = 0; i < count; i++)
     {
         auto* pMoveInfoData = new MOVEINFODATA;
         MOVEREQINFO_FILE moveReqInfo{};
-        fread(&moveReqInfo, sizeof moveReqInfo, 1, fp);
+        if (fread(&moveReqInfo, sizeof moveReqInfo, 1, fp) != 1)
+        {
+            delete pMoveInfoData;
+            fclose(fp);
+            return false;
+        }
 
         BuxConvert((BYTE*)&moveReqInfo, sizeof moveReqInfo);
         pMoveInfoData->_ReqInfo.index = moveReqInfo.index;

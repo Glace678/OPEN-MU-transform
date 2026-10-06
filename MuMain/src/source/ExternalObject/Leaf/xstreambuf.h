@@ -66,7 +66,7 @@ namespace leaf {
         {
             return read(sz, strlen((const char*)(m_pBuffer)+m_offset) + 1);
         }
-        xstreambuf& operator >> (std::string str)
+        xstreambuf& operator >> (std::string& str)
         {
             str = (const char*)(m_pBuffer)+m_offset;
             m_offset += str.length();

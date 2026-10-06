@@ -1,9 +1,9 @@
 /**************************************************************************************************
 
-전체 페키지 목록 객체
+Object holding the entire package list.
 
-iterator를 이용하여 순차적으로 페키지 객체를 가져올 수 있다.
-페키지 번호를 이용하여 패키지 객체를 가져올 수 있다.
+Package objects can be retrieved sequentially using an iterator.
+Package objects can be retrieved by package number.
 
 **************************************************************************************************/
 
@@ -23,11 +23,11 @@ public:
 
     virtual void Append(CShopPackage package);
 
-    void SetFirst();											// 패키지 목록에서 첫 번째 패키지를 가리키게 한다.
-    bool GetNext(CShopPackage& package);						// 현재 패키지 객체를 넘기고 다음 패키지 객체를 가리키게 한다.
+    void SetFirst();											// Points to the first package in the package list.
+    bool GetNext(CShopPackage& package);						// Returns the current package object and points to the next one.
 
-    bool GetValueByKey(int nKey, CShopPackage& package);		// 패키지 번호로 해당 패키지 객체 가져오기
-    bool GetValueByIndex(int nIndex, CShopPackage& package);	// 인덱스 번호로 해당 패키지 객체 가져오기
+    bool GetValueByKey(int nKey, CShopPackage& package);		// Retrieves the package object by package number.
+    bool GetValueByIndex(int nIndex, CShopPackage& package);	// Retrieves the package object by index number.
 
     bool SetPacketLeftCount(int PackageSeq, int nCount);
 

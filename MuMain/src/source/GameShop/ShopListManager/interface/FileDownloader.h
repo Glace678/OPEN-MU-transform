@@ -1,8 +1,7 @@
 /*******************************************************************************
-*	�� �� �� : ������
-*	�� �� �� : 2009.06.10
-*	��    �� : FileDownloader
-*				File ���� �ٿ�ε� ��� ����
+* : 2009.06.10
+* : FileDownloader
+* File ٿε 
 *******************************************************************************/
 
 #pragma once
@@ -22,67 +21,61 @@ public:
 
     // public Function
 
-        //					�ٿ�ε� ����
+        // ٿε 
     void				Break();
-    //					������ ���� �ٿ�ε� ���� : ����, Ŀ��Ʈ, ���� ���� ��� ó��
+    // ٿε : , ĿƮ, ó
     WZResult			DownloadFile();
 
 private:
     // private Function
 
-        //					���� ����
     BOOL				CanBeContinue();
-    //					������
     void				Release();
 
-    //					Ŀ���� ����
+    // Ŀ 
     IConnecter* CreateConnecter();
-    //					���� ó��
+    // ó
     WZResult 			CreateConnection();
     static unsigned int __stdcall RunConnectThread(LPVOID pParam);
     WZResult 			Connection();
 
-    //					���� ó��
+    // ó
     WZResult 			TransferRemoteFile();
 
-    //					���� ���� ����
     WZResult 			CreateLocalFile();
-    //					�ٿ�ε� ���� �б�
+    // ٿε б
     WZResult 			ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRead);
-    //					���� ���� ����
     WZResult 			WriteLocalFile(BYTE* byReadBuffer, DWORD dwBytesRead);
 
-    //					�ٿ�ε� ���� �̺�Ʈ ������
+    // ٿε ̺Ʈ 
     void				SendStartedDownloadFileEvent(ULONGLONG nFileLength);
-    //					�ٿ�ε� �Ϸ� �̺�Ʈ ������
+    // ٿε Ϸ ̺Ʈ 
     void				SendCompletedDownloadFileEvent(WZResult wzResult);
-    //					�ٿ�ε� ���� ��Ȳ �̺�Ʈ ������ : ��Ŷ ����
+    // ٿε Ȳ ̺Ʈ : Ŷ 
     void				SendProgressDownloadFileEvent(ULONGLONG nTotalBytesRead);
 
     // Member Object
 
-        //							�ٿ�ε� ���� �÷���
+        // ٿε ÷
     volatile BOOL				m_bBreak;
-    //							���..
     WZResult 					m_Result;
 
-    //							�ٿ�ε� ���� �̺�Ʈ ���� ��ü
+    // ٿε ̺Ʈ ü
     IDownloaderStateEvent* m_pStateEvent;
-    //							�ٿ�ε� ���� ���� ��ü
+    // ٿε ü
     DownloadServerInfo* m_pServerInfo;
-    //							�ٿ�ε� ���� ���� ��ü
+    // ٿε ü
     DownloadFileInfo* m_pFileInfo;
-    //							Ŀ����
+    // Ŀ
     IConnecter* m_pConnecter;
 
-    //							WinINet ���� �ڵ�
+    // WinINet ڵ
     HINTERNET					m_hSession;
-    //							WinINet Ŀ���� �ڵ�
+    // WinINet Ŀ ڵ
     HINTERNET					m_hConnection;
-    //							���� ���� �ڵ�
+    // ڵ
     HINTERNET					m_hRemoteFile;
-    //							���� ���� �ڵ�
+    // ڵ
     HANDLE						m_hLocalFile;
-    //							���� ������
     ULONGLONG					m_nFileLength;
 };

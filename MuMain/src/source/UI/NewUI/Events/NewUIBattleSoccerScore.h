@@ -2,7 +2,7 @@
 // File: NewUIBattleSoccerScore.h
 //
 // Desc: interface for the CNewUIBattleSoccerScore class.
-//		 전투축구 점수 UI 클래스.
+//		 Battle Soccer score UI class.
 //
 // producer: Ahn Sang-Kyu
 //*****************************************************************************
@@ -32,8 +32,8 @@ namespace SEASON3B
             BSS_HEIGHT = 70,
         };
 
-        CNewUIManager* m_pNewUIMng;			// UI 매니저.
-        POINT					m_Pos;					// 창의 위치.
+        CNewUIManager* m_pNewUIMng;			// UI manager.
+        POINT					m_Pos;					// Window position.
 
     public:
         CNewUIBattleSoccerScore();

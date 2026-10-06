@@ -1,7 +1,7 @@
 //*****************************************************************************
 // File: GMKarutan1.h
 //
-// Desc: ų��ź1 ��, ����.
+// Desc: ųź1 , .
 //
 // producer: Ahn Sang-Kyu (10.08.03)
 //*****************************************************************************
@@ -28,39 +28,36 @@ public:
     static CGMKarutan1Ptr Make();
 
     // Object
-        // ������Ʈ ����
+        // Ʈ 
     virtual bool CreateObject(OBJECT* o);
-    // ������Ʈ ���μ���
+    // Ʈ μ
     virtual bool MoveObject(OBJECT* o);
-    // ������Ʈ ����Ʈ
+    // Ʈ Ʈ
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
-    // ������Ʈ ����
+    // Ʈ 
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
-    // �� ���� ������Ʈ ����Ʈ
+    // Ʈ Ʈ
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
 
 #ifdef ASG_ADD_KARUTAN_MONSTERS
     // Character
-        // ���� ����
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    // ����(NPC) ���μ���
+    // (NPC) μ
     virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    // ���� ��ų ���� ����Ʈ
+    // ų Ʈ
     virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    // ���� ����Ʈ ( �Ϲ� )
+    // Ʈ ( Ϲ )
     virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    // ���� ����Ʈ ( ��ų )
+    // Ʈ ( ų )
     virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    // ��ų �ִϸ��̼� ���� �Լ�
+    // ų ִϸ̼ Լ
     virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
     // Sound
-        // ���� ����
     virtual bool PlayMonsterSound(OBJECT* o);
 #endif	// ASG_ADD_KARUTAN_MONSTERS
-    // ������Ʈ ����
+    // Ʈ 
     virtual void PlayObjectSound(OBJECT* o);
-    // �������
     void PlayBGM();
 };
 

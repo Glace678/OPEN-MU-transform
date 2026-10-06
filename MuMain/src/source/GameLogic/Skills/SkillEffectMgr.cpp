@@ -59,28 +59,6 @@ BOOL CSkillEffectMgr::IsSkillEffect(int Type, vec3_t Position, vec3_t Angle,
         if (SubType == 0) return TRUE;
         break;
 
-        //     case MODEL_ARROW_DOUBLE:
-        // 		if(SubType==1) return TRUE;
-        // 		break;
-        // 	case MODEL_ARROW:
-        // 		if( SubType!=3 && SubType!=4 ) return TRUE;
-        // 		break;
-        // 	case MODEL_ARROW_BEST_CROSSBOW :
-        // 	case MODEL_ARROW_STEEL:
-        // 	case MODEL_ARROW_THUNDER:
-        // 	case MODEL_ARROW_LASER:
-        // 	case MODEL_ARROW_V:
-        // 	case MODEL_ARROW_SAW:
-        // 	case MODEL_ARROW_NATURE:
-        // 	case MODEL_ARROW_WING:
-        //     case MODEL_LACEARROW:
-        // 	case MODEL_ARROW_SPARK:
-        // 	case MODEL_ARROW_RING:
-        // 	case MODEL_ARROW_BOMB:
-        // 	case MODEL_ARROW_DARKSTINGER:
-        // 	case MODEL_ARROW_GAMBLE:
-        // 	case MODEL_ARROW_DRILL:
-        // 		return TRUE;
     }
     return FALSE;
 }

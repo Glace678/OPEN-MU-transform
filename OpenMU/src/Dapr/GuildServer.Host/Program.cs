@@ -15,7 +15,7 @@ var builder = DaprService.CreateBuilder("GuildServer", args);
 var services = builder.Services;
 services.AddSingleton<IGuildServer, GuildServer>()
     .AddSingleton<IGuildChangePublisher, GuildChangePublisher>()
-    .AddPeristenceProvider();
+    .AddPersistenceProvider();
 
 var metricsRegistry = new MetricsRegistry();
 

@@ -33,6 +33,8 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
     /// </summary>
     private readonly IDictionary<GameConfiguration, IDictionary<Guid, T>> _cache = new ConcurrentDictionary<GameConfiguration, IDictionary<Guid, T>>();
 
+    private readonly object _cacheLock = new();
+
     private readonly ILogger _logger;
 
     /// <summary>
@@ -119,12 +121,8 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
     public void EnsureCacheForCurrentConfiguration()
     {
         var configuration = this.GetCurrentGameConfiguration();
-        if (this._cache.ContainsKey(configuration))
-        {
-            return;
-        }
 
-        lock (this._cache)
+        lock (this._cacheLock)
         {
             if (this._cache.ContainsKey(configuration))
             {

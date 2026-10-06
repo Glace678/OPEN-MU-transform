@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////
-//  - 싱글톤 -
+//  - Singleton -
 //
 //
 //////////////////////////////////////////////////////////////////////////
@@ -29,9 +29,9 @@ public:
     static T* GetSingletonPtr(void) { return (_Singleton); }
     static bool IsInitialized(void) { return _Singleton ? true : false; }
 
-    //여기 부분은 좀 생각을 해보자..
-    //new로 만들어서 넣으면...delete를 해줘야 하는데...
-    //할려면 boost로 만들어진 data만 넣도록 하자.
+    //Let's think about this part a bit more..
+    //If created with new and passed in...it must be deleted...
+    //To do that, let's only pass in data created with boost.
     //static void RegisterSingleton ( T* p ) { _Singleton = p; }
 };
 

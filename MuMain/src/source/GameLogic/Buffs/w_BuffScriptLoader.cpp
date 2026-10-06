@@ -51,8 +51,7 @@ namespace
         wchar_t text[256];
         mu_swprintf(text, L"%ls - %ls", fileName.c_str(), reason);
         g_ErrorReport.Write(text);
-        MessageBox(g_hWnd, text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        std::exit(EXIT_FAILURE);
     }
 }
 

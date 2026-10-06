@@ -155,7 +155,7 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
     dataChunk.ckid = mmioFOURCC('d', 'a', 't', 'a');
     if (mmioDescend(m_hmmio, &dataChunk, &riffChunk, MMIO_FINDCHUNK) != 0)
     {
-        MessageBoxW(nullptr, L"Bad Format in Wave file!", L"WaveLoad", MB_OK | MB_ICONSTOP);
+        ReportWaveWarning(L"Bad Format in Wave file", filename);
         CloseWaveFile();
         return false;
     }

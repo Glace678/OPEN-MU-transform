@@ -933,7 +933,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
         }
     }
 
-    //  성물 위치
+    //  Relic location
     if (m_HolyItemPlayerIndex != 0xffff && m_HolyItemPlayerIndex != Hero->Key)
     {
         float holypcX = MiniMapPos(m_HolyItemPlayerPosX, m_HolyItemPlayerPosY, m_Scale, AXIS_X);
@@ -947,7 +947,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    // 히어로
+    // Hero
     x = (Hero->PositionX);
     y = (Hero->PositionY);
     float hero_x = MiniMapPos(x, y, m_Scale, AXIS_X);
@@ -955,9 +955,9 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO,
         hero_x - 4, hero_y - 4, 11.0f, 11.0f, 0.f, 0.f, 11.f / 16.f, 11.f / 16.f);
 
-    // 알파 값
+    // Alpha value
     RenderNumber2D(517.f + 15.f, 246.f, static_cast<int>(m_Alph * 100), 8, 8);
-    // 점수
+    // Score
     RenderNumber2D(517.f + 66.f, 246.f, m_AlliedPoint, 8, 8);
     RenderNumber2D(517.f + 110.f, 246.f, m_IllusionPoint, 8, 8);
 
@@ -966,7 +966,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     DisableAlphaBlend();
 
 #ifdef _DEBUG
-    // 미니맵 좌표 수정 할때 필요 하니..놔 둘것...
+    // Needed when adjusting minimap coordinates..leave it...
 /*
     for ( int j = 0; j < 7; ++j )
     {
@@ -987,7 +987,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderScore()
     ::EnableAlphaTest();
     ::glColor4f(1.0f, 1.0f, 1.0f, m_ScoreEffectAlph);
 
-    // 뮤연합군 점수
+    // MU Allied Forces score
     if (m_AlliedPoint / 10 != 0)
     {
         RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint / 10),
@@ -1005,7 +1005,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderScore()
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS1 + (m_IllusionPoint / 10),
         310, 168.f, 20.0f, 45.0f, 0.f, 0.f, 20.f / 32.f, 45.f / 64.f);
 
-    // 환영교단 점수
+    // Illusion Order score
     if (m_IllusionPoint / 10 != 0)
     {
         RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint / 10),
@@ -1091,7 +1091,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
 
 bool SEASON3B::CNewUICursedTempleSystem::Render()
 {
-    // 환영사원 이벤트 도중 비정상적으로 맵 이동 됐을 경우를 위한 예외 처리
+    // Exception handling for abnormal map movement during the Illusion Temple event
     if (gMapManager.IsCursedTemple() == false)
     {
         if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CURSEDTEMPLE_GAMESYSTEM) == true)
@@ -1125,7 +1125,7 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
         return;
     }
 
-    // 스킬 사용 거리
+    // Skill use range
     int CursedTempleCurSkillType = c->m_CursedTempleCurSkill;
 
     int MaxKillCount = SkillAttribute[CursedTempleCurSkillType].KillCount;
@@ -1200,7 +1200,7 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
         Hero->m_CursedTempleCurSkillPacket = true;
         MouseRButtonPush = false;
 
-        //에니메이션 설정
+        //Animation setting
         switch (CursedTempleCurSkillType)
         {
         case AT_SKILL_CURSED_TEMPLE_PRODECTION:

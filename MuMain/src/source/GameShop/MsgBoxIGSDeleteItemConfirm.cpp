@@ -19,9 +19,9 @@ CMsgBoxIGSDeleteItemConfirm::CMsgBoxIGSDeleteItemConfirm()
 {
     m_iMiddleCount = 4;
 
-    m_iStorageSeq = 0;			// ������ ����
-    m_iStorageItemSeq = 0;		// ������ ��ǰ ����
-    m_szItemType = '\0';		// ��ǰ���� (C : ĳ��, P : ��ǰ)
+    m_iStorageSeq = 0;
+    m_iStorageItemSeq = 0;		// ǰ 
+    m_szItemType = '\0';		// ǰ (C : ĳ, P : ǰ)
 
     for (int i = 0; i < UIMAX_TEXT_LINE; i++)
     {
@@ -162,12 +162,12 @@ void CMsgBoxIGSDeleteItemConfirm::SetAddCallbackFunc()
 // SetButtonInfo
 void CMsgBoxIGSDeleteItemConfirm::SetButtonInfo()
 {
-    // Ȯ�� ��ư
+    // Ȯ ư
     m_BtnDelete.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_DEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
     m_BtnDelete.SetText(I18N::Game::Delete);
 
-    // ��� ��ư
+    // ư
     m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
     m_BtnCancel.SetText(I18N::Game::Cancel);
@@ -202,7 +202,7 @@ void CMsgBoxIGSDeleteItemConfirm::RenderTexts()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
 
-    // Title - "������ ����"
+    // Title - " "
     g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, I18N::Game::DeleteItem, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);

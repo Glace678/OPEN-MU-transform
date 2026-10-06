@@ -176,11 +176,12 @@ bool CUIManager::IsOpen(DWORD dwInterface)
 {
     if (dwInterface == 0)
     {
-        for (DWORD dwInterface = INTERFACE_FRIEND; dwInterface < INTERFACE_MAX_COUNT; ++dwInterface)
+        for (DWORD openInterface = INTERFACE_FRIEND; openInterface < INTERFACE_MAX_COUNT; ++openInterface)
         {
-            if (IsOpen(dwInterface))
+            if (IsOpen(openInterface))
                 return true;
         }
+        return false;
     }
 
     switch (dwInterface)
@@ -197,7 +198,6 @@ bool CUIManager::IsOpen(DWORD dwInterface)
     default:
         return false;
     }
-    return false;
 }
 
 bool CUIManager::IsCanOpen(DWORD dwInterfaceFlag)

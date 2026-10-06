@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.ConnectServer.PacketHandler;
 using MUnique.OpenMU.Network;
 using MUnique.OpenMU.Network.Packets.ConnectServer;
-using Nito.AsyncEx.Synchronous;
 
 /// <summary>
 /// The client which connected to the connect server.
@@ -105,19 +104,20 @@ internal sealed class Client : IDisposable
         return this.Connection.SendHelloAsync();
     }
 
-    private void OnOnlineTimerElapsed(object? state)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Timer callback. Catching all Exceptions.")]
+    private async void OnOnlineTimerElapsed(object? state)
     {
         try
         {
             if (this.Connection.Connected && DateTime.Now.Subtract(this._lastReceive) > this.Timeout)
             {
                 this._logger.LogDebug("Connection Timeout ({0}): Address {1}:{2} will be disconnected.", this.Timeout, this.Address, this.Port);
-                this.Connection.DisconnectAsync().AsTask().WaitAndUnwrapException();
+                await this.Connection.DisconnectAsync().ConfigureAwait(false);
             }
         }
         catch (Exception ex)
         {
-            this._logger.LogError(ex, "Error when disconnecting client.  Address {1}:{2}", this.Address, this.Port);
+            this._logger.LogError(ex, "Error when disconnecting client.  Address {0}:{1}", this.Address, this.Port);
         }
     }
 

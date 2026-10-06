@@ -107,8 +107,7 @@ void OpenPlayers()
     if (Models[MODEL_PLAYER].NumMeshs > 0)
     {
         g_ErrorReport.Write(L"Player.bmd file error.\r\n");
-        MessageBox(g_hWnd, L"Player.bmd file error!!!", NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
     }
 
     for (int i = 0; i < MAX_CLASS; ++i)
@@ -241,7 +240,7 @@ void OpenPlayers()
         gLoadData.AccessModel(MODEL_ASHCROW_BOOTS + i, L"Data\\Player\\", L"CW_BootMale", i + 1);
     }
 
-    //마검사는 제외하고 투구도 추가
+    // Add helms as well, excluding the Magic Knight
     gLoadData.AccessModel(MODEL_ASHCROW_HELM, L"Data\\Player\\", L"CW_HelmMale", 1);
     gLoadData.AccessModel(MODEL_ECLIPSE_HELM, L"Data\\Player\\", L"CW_HelmMale", 2);
     gLoadData.AccessModel(MODEL_IRIS_HELM, L"Data\\Player\\", L"CW_HelmMale", 3);
@@ -1117,7 +1116,7 @@ void OpenItems()
     gLoadData.AccessModel(MODEL_CRIMSONGLORY, L"Data\\Item\\", L"Shield_18");
     gLoadData.AccessModel(MODEL_SALAMANDER_SHIELD, L"Data\\Item\\", L"Shield_19");
     gLoadData.AccessModel(MODEL_FROST_BARRIER, L"Data\\Item\\", L"Shield_20");
-    gLoadData.AccessModel(MODEL_GUARDIAN_SHILED, L"Data\\Item\\", L"Shield_21");
+    gLoadData.AccessModel(MODEL_GUARDIAN_SHIELD, L"Data\\Item\\", L"Shield_21");
 
     gLoadData.AccessModel(MODEL_CROSS_SHIELD, L"Data\\Item\\", L"crosssheild");
 
@@ -1626,7 +1625,7 @@ void OpenItemTextures()
     gLoadData.OpenTexture(MODEL_CRIMSONGLORY, L"Item\\");
     gLoadData.OpenTexture(MODEL_SALAMANDER_SHIELD, L"Item\\");
     gLoadData.OpenTexture(MODEL_FROST_BARRIER, L"Item\\");
-    gLoadData.OpenTexture(MODEL_GUARDIAN_SHILED, L"Item\\");
+    gLoadData.OpenTexture(MODEL_GUARDIAN_SHIELD, L"Item\\");
 
     for (int i = 0; i < 6; ++i)
         gLoadData.OpenTexture(MODEL_SEED_FIRE + i, L"Effect\\");
@@ -1926,7 +1925,7 @@ void OpenNpc(int Type)
         gLoadData.OpenTexture(Type, L"Npc\\");
         break;
 
-        //  데비아스, 로랜시아 추가 상점 NPC
+        //  Devias, Lorencia added shop NPC
     case MODEL_DEVIAS_TRADER:
         gLoadData.AccessModel(MODEL_DEVIAS_TRADER, L"Data\\Npc\\", L"DeviasTrader", 1);
         gLoadData.OpenTexture(Type, L"Npc\\");
@@ -1938,12 +1937,12 @@ void OpenNpc(int Type)
         gLoadData.OpenTexture(MODEL_ANGEL, L"Npc\\");
         break;
 #endif	// _PVP_ATTACK_GUARD
-    case MODEL_NPC_BREEDER:    //  조련사 NPC.
+    case MODEL_NPC_BREEDER:    //  Breeder NPC.
         gLoadData.AccessModel(MODEL_NPC_BREEDER, L"Data\\Npc\\", L"Breeder");
         gLoadData.OpenTexture(MODEL_NPC_BREEDER, L"Npc\\");
         break;
 #ifdef _PVP_MURDERER_HERO_ITEM
-    case MODEL_HERO_SHOP:	// 영웅 상점
+    case MODEL_HERO_SHOP:	// Hero shop
         gLoadData.AccessModel(MODEL_HERO_SHOP, L"Data\\Npc\\", L"HeroNpc");
         gLoadData.OpenTexture(MODEL_HERO_SHOP, L"Npc\\");
         break;
@@ -2206,7 +2205,7 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_UNITEDMARKETPLACE_JULIA, L"Data\\Npc\\", L"UnitedMarkedPlace_julia");
         gLoadData.OpenTexture(MODEL_UNITEDMARKETPLACE_JULIA, L"Npc\\");
         break;
-    case MODEL_KARUTAN_NPC_REINA:	// 로랜시장 NPC 잡화상인 크리스틴과 동일.
+    case MODEL_KARUTAN_NPC_REINA:	// Same as the Lorencia market grocer NPC Christine.
         gLoadData.AccessModel(MODEL_KARUTAN_NPC_REINA, L"Data\\Npc\\", L"UnitedMarketPlace_christine");
         gLoadData.OpenTexture(MODEL_KARUTAN_NPC_REINA, L"Npc\\");
         break;
@@ -3651,7 +3650,7 @@ void OpenMonsterModel(EMonsterModelType Type)
         SetMonsterSound(static_cast<int>(MODEL_MONSTER01) + Type, 132, 133, 104, 104, 133);
         b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.5f;
         b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.5f;
-        b->BoneHead = 20;//인어
+        b->BoneHead = 20;//mermaid
         break;
     case MONSTER_MODEL_VALKYRIE:
         LoadWaveFile(SOUND_MONSTER_VALKYRIE1, L"Data\\Sound\\mValkyrie1.wav", Channel, Enable);
@@ -3997,7 +3996,7 @@ void OpenMonsterModel(EMonsterModelType Type)
         LoadWaveFile(SOUND_RAKLION_ICEGIANT_DEATH, L"Data\\Sound\\w58w59\\IceGiant_death.wav", 1);
         break;
     case MONSTER_MODEL_COOLUTIN:
-        // LoadWaveFile(SOUND_MONSTER_HELLSPIDERDIE, L"Data\\Sound\\m헬스파이더죽기.wav", 1);
+        // LoadWaveFile(SOUND_MONSTER_HELLSPIDERDIE, L"Data\\Sound\\mhellspiderdie.wav", 1);
         LoadWaveFile(SOUND_RAKLION_COOLERTIN_ATTACK, L"Data\\Sound\\w58w59\\Coolertin_attack.wav", 1);
         LoadWaveFile(SOUND_RAKLION_COOLERTIN_MOVE, L"Data\\Sound\\w58w59\\Coolertin_move.wav", 1);
         break;
@@ -4295,7 +4294,7 @@ void OpenSkills()
     gLoadData.AccessModel(MODEL_MAGIC_CIRCLE1, L"Data\\Skill\\", L"MagicCircle", 1);
     gLoadData.AccessModel(MODEL_ARROW_WING, L"Data\\Skill\\", L"ArrowWing", 1);
     gLoadData.AccessModel(MODEL_ARROW_BOMB, L"Data\\Skill\\", L"ArrowBomb", 1);
-    gLoadData.AccessModel(MODEL_BALL, L"Data\\Skill\\", L"Ball", 1);//공
+    gLoadData.AccessModel(MODEL_BALL, L"Data\\Skill\\", L"Ball", 1);//orb
     Models[MODEL_BALL].Actions[0].PlaySpeed = 0.5f;
     gLoadData.AccessModel(MODEL_SKILL_BLAST, L"Data\\Skill\\", L"Blast", 1);
     gLoadData.AccessModel(MODEL_SKILL_INFERNO, L"Data\\Skill\\", L"Inferno", 1);
@@ -4661,7 +4660,7 @@ void OpenSkills()
     gLoadData.OpenTexture(MODEL_SWORD_35_WING, L"Item\\");
 
 #ifdef ASG_ADD_KARUTAN_MONSTERS
-    // 콘드라 돌조각
+    // Condra stone statue
     gLoadData.AccessModel(MODEL_CONDRA_STONE, L"Data\\Monster\\", L"condra_7_stone");
     gLoadData.OpenTexture(MODEL_CONDRA_STONE, L"Monster\\");
     gLoadData.AccessModel(MODEL_CONDRA_STONE1, L"Data\\Monster\\", L"condra_7_stone_2");
@@ -4738,7 +4737,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_TOWER01, L"Data\\Sound\\aTower.wav", 1);
     LoadWaveFile(SOUND_WATER01, L"Data\\Sound\\aWater.wav", 1);
     LoadWaveFile(SOUND_DESERT01, L"Data\\Sound\\desert.wav", 1);
-    //LoadWaveFile(SOUND_BOSS01		    ,"Data\\Sound\\a쿤둔.wav",1);
+    //LoadWaveFile(SOUND_BOSS01		    ,"Data\\Sound\\akundun.wav",1);
     LoadWaveFile(SOUND_HUMAN_WALK_GROUND, L"Data\\Sound\\pWalk(Soil).wav", 2);
     LoadWaveFile(SOUND_HUMAN_WALK_GRASS, L"Data\\Sound\\pWalk(Grass).wav", 2);
     LoadWaveFile(SOUND_HUMAN_WALK_SNOW, L"Data\\Sound\\pWalk(Snow).wav", 2);
@@ -4781,7 +4780,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_DROP_GOLD01, L"Data\\Sound\\pDropMoney.wav", 1);
     LoadWaveFile(SOUND_JEWEL01, L"Data\\Sound\\eGem.wav", 1);
     LoadWaveFile(SOUND_GET_ITEM01, L"Data\\Sound\\pGetItem.wav", 1);
-    //LoadWaveFile(SOUND_SHOUT01    		,"Data\\Sound\\p기합.wav",1);
+    //LoadWaveFile(SOUND_SHOUT01    		,"Data\\Sound\\pshout.wav",1);
 
     //skill
     LoadWaveFile(SOUND_SKILL_DEFENSE, L"Data\\Sound\\sKnightDefense.wav", 1);
@@ -4797,13 +4796,13 @@ void OpenSounds()
     LoadWaveFile(SOUND_HELLFIRE, L"Data\\Sound\\sHellFire.wav", 2, Enable3DSound);
     LoadWaveFile(SOUND_ICE, L"Data\\Sound\\sIce.wav", 2, Enable3DSound);
     LoadWaveFile(SOUND_FLAME, L"Data\\Sound\\sFlame.wav", 2, Enable3DSound);
-    //LoadWaveFile(SOUND_FLASH            ,"Data\\Sound\\m히드라공격1.wav",2,Enable3DSound);
+    //LoadWaveFile(SOUND_FLASH            ,"Data\\Sound\\mhydraattack1.wav",2,Enable3DSound);
     LoadWaveFile(SOUND_FLASH, L"Data\\Sound\\sAquaFlash.wav", 2, Enable3DSound);
 
     LoadWaveFile(SOUND_BREAK01, L"Data\\Sound\\eBreak.wav", 1, Enable3DSound);
     LoadWaveFile(SOUND_EXPLOTION01, L"Data\\Sound\\eExplosion.wav", 1, Enable3DSound);
     LoadWaveFile(SOUND_METEORITE01, L"Data\\Sound\\eMeteorite.wav", 2, Enable3DSound);
-    //LoadWaveFile(SOUND_METEORITE02	    ,"Data\\Sound\\e유성.wav",2,Enable3DSound);
+    //LoadWaveFile(SOUND_METEORITE02	    ,"Data\\Sound\\emeteor.wav",2,Enable3DSound);
     LoadWaveFile(SOUND_THUNDER01, L"Data\\Sound\\eThunder.wav", 1, Enable3DSound);
 
     LoadWaveFile(SOUND_BONE1, L"Data\\Sound\\mBone1.wav", 2, Enable3DSound);

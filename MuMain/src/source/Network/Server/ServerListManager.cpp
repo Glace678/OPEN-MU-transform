@@ -147,8 +147,8 @@ bool CServerListManager::MakeServerGroup(IN int iServerGroupIndex, OUT CServerGr
     if (NULL == pServerGroupInfo)
         return false;
 
-    ::wcscpy(pServerGroup->m_szName, pServerGroupInfo->m_szName);
-    ::wcscpy(pServerGroup->m_szDescription, pServerGroupInfo->m_strDescript.c_str());
+    wcsncpy_s(pServerGroup->m_szName, pServerGroupInfo->m_szName, _TRUNCATE);
+    wcsncpy_s(pServerGroup->m_szDescription, _countof(pServerGroup->m_szDescription), pServerGroupInfo->m_strDescript.c_str(), _TRUNCATE);
     pServerGroup->m_iSequence = (int)pServerGroupInfo->m_bySequence;
     pServerGroup->m_iWidthPos = (int)pServerGroupInfo->m_byPos;
     pServerGroup->m_iServerIndex = iServerGroupIndex;
@@ -258,7 +258,7 @@ CServerGroup* CServerListManager::GetServerGroupByBtnPos(int iBtnPos)
 
 void CServerListManager::SetSelectServerInfo(wchar_t* pszName, int iIndex, BYTE byNonPvP)
 {
-    wcscpy(m_szSelectServerName, pszName);
+    wcsncpy_s(m_szSelectServerName, _countof(m_szSelectServerName), pszName, _TRUNCATE);
     m_iSelectServerIndex = iIndex;
     m_byNonPvP = byNonPvP;
 }

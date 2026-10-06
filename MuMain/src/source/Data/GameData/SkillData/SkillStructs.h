@@ -2,18 +2,7 @@
 
 #include "Core/Platform/WinCompat.h"
 
-// Forward declarations for constants
-#ifndef MAX_CLASS
-#define MAX_CLASS 7
-#endif
-
-#ifndef MAX_DUTY_CLASS
-#define MAX_DUTY_CLASS 3
-#endif
-
-#ifndef MAX_SKILL_NAME
-#define MAX_SKILL_NAME 50
-#endif
+#include "GameLogic/SystemLimits.h"
 
 // Include X-macro field definitions
 #include "SkillFieldDefs.h"

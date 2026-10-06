@@ -267,6 +267,12 @@ if(MSVC)
   target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201)
 endif()
 
+if(ANDROID OR OHOS)
+  set(_MU_REQUIRE_CURL_DEFAULT ON)
+else()
+  set(_MU_REQUIRE_CURL_DEFAULT OFF)
+endif()
+option(MU_REQUIRE_CURL "Fail configure when libcurl is not available" ${_MU_REQUIRE_CURL_DEFAULT})
 # The Android NDK does not ship libcurl. APK builds may inject an arm64-v8a
 # prebuilt; leaving both values empty keeps configuration usable while making
 # the missing compile dependency explicit in the warning below.
@@ -294,6 +300,12 @@ if(ANDROID)
     message(FATAL_ERROR
       "Set both MU_ANDROID_CURL_INCLUDE_DIR and MU_ANDROID_CURL_LIBRARY")
   else()
+    if(MU_REQUIRE_CURL)
+      message(FATAL_ERROR
+        "Android libcurl is not configured. Set MU_ANDROID_CURL_INCLUDE_DIR and "
+        "MU_ANDROID_CURL_LIBRARY, or re-run with -DMU_REQUIRE_CURL=OFF to build "
+        "without the in-game shop downloader.")
+    endif()
     add_library(mu_android_curl_missing INTERFACE)
     add_library(CURL::libcurl ALIAS mu_android_curl_missing)
     message(WARNING
@@ -332,6 +344,12 @@ elseif(OHOS)
     message(FATAL_ERROR
       "Set both MU_OHOS_CURL_INCLUDE_DIR and MU_OHOS_CURL_LIBRARY")
   else()
+    if(MU_REQUIRE_CURL)
+      message(FATAL_ERROR
+        "HarmonyOS libcurl is not configured. Set MU_OHOS_CURL_INCLUDE_DIR and "
+        "MU_OHOS_CURL_LIBRARY, or re-run with -DMU_REQUIRE_CURL=OFF to build "
+        "without the in-game shop downloader.")
+    endif()
     add_library(mu_ohos_curl_missing INTERFACE)
     add_library(CURL::libcurl ALIAS mu_ohos_curl_missing)
     message(WARNING

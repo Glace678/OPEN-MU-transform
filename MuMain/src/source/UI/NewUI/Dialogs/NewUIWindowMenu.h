@@ -28,7 +28,7 @@ namespace SEASON3B
 #ifdef PBG_ADD_GENSRANKING
         enum
         {
-            // �߰��ÿ� MENU_MAX_INDEX�ø��� ������ �ڵ� ����
+            // ߰ÿ MENU_MAX_INDEXø ڵ 
             MENU_MAX_INDEX = 6,
             STANDARD_POS_X = REFERENCE_WIDTH - 112,
             STANDARD_POS_Y = REFERENCE_HEIGHT - 156,

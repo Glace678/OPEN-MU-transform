@@ -47,7 +47,7 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber);
 int OpenTerrainAttribute(wchar_t* FileName);
 bool SaveTerrainAttribute(wchar_t* FileName, int iMapNumber);
 
-//  속성 변경.
+//  Property change.
 void AddTerrainAttribute(int x, int y, BYTE att);
 void SubTerrainAttribute(int x, int y, BYTE att);
 void AddTerrainAttributeRange(int x, int y, int dx, int dy, BYTE att, BYTE Add = 0);
@@ -134,7 +134,7 @@ public:
     CFrustrum() {}
     ~CFrustrum() {}
 
-    //3D프러스텀 캡슐화
+    //3D frustum encapsulation
     void Create(vec3_t vEye, float fFov, float fAspect, float fDist);
     bool Test(vec3_t vPos, float fRange);
     void Reset();
@@ -149,7 +149,7 @@ void ResetAllFrustrum();
 void DeleteAllFrustrum();
 CFrustrum* FindFrustrum(unsigned int iID);
 typedef std::map<unsigned int, CFrustrum* > FrustrumMap_t;
-extern FrustrumMap_t g_FrustrumMap; //전체 프러스텀과 별개로 아이디로 지정할 수 있는 프러스텀
+extern FrustrumMap_t g_FrustrumMap; //A frustum that can be set by ID separately from the whole frustum
 #endif //DYNAMIC_FRUSTRUM
 
 inline int MapFileEncrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)

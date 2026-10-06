@@ -18,7 +18,7 @@ CSocketItemMgr g_SocketItemMgr;
 CSocketItemMgr::CSocketItemMgr()
 {
     m_iNumEquitSetBonusOptions = 0;
-    memset(m_SocketOptionInfo, 0, sizeof(SOCKET_OPTION_INFO) * MAX_SOCKET_OPTION);
+    memset(m_SocketOptionInfo, 0, sizeof(m_SocketOptionInfo));
     memset(&m_StatusBonus, 0, sizeof(SOCKET_OPTION_STATUS_BONUS));
 }
 
@@ -52,14 +52,14 @@ BOOL CSocketItemMgr::IsSocketItem(int iItemType)
     case ITEM_CRIMSONGLORY:
     case ITEM_SALAMANDER_SHIELD:
     case ITEM_FROST_BARRIER:
-    case ITEM_GUARDIAN_SHILED:
+    case ITEM_GUARDIAN_SHIELD:
     case ITEM_TITAN_HELM: case ITEM_TITAN_ARMOR: case ITEM_TITAN_PANTS: case ITEM_TITAN_GLOVES: case ITEM_TITAN_BOOTS:
     case ITEM_BRAVE_HELM: case ITEM_BRAVE_ARMOR: case ITEM_BRAVE_PANTS: case ITEM_BRAVE_GLOVES: case ITEM_BRAVE_BOOTS:
-    case ITEM_HELM + 47: case ITEM_DESTORY_ARMOR: case ITEM_DESTORY_PANTS: case ITEM_DESTORY_GLOVES: case ITEM_DESTORY_BOOTS:
+    case ITEM_HELM + 47: case ITEM_DESTROY_ARMOR: case ITEM_DESTROY_PANTS: case ITEM_DESTROY_GLOVES: case ITEM_DESTROY_BOOTS:
     case ITEM_HELM + 48: case ITEM_PHANTOM_ARMOR: case ITEM_PHANTOM_PANTS: case ITEM_PHANTOM_GLOVES: case ITEM_PHANTOM_BOOTS:
     case ITEM_SERAPHIM_HELM: case ITEM_SERAPHIM_ARMOR: case ITEM_SERAPHIM_PANTS: case ITEM_SERAPHIM_GLOVES: case ITEM_SERAPHIM_BOOTS:
     case ITEM_FAITH_HELM: case ITEM_FAITH_ARMOR: case ITEM_FAITH_PANTS: case ITEM_FAITH_GLOVES: case ITEM_FAITH_BOOTS:
-    case ITEM_PAEWANG_MASK: case ITEM_PAEWANG_ARMOR: case ITEM_PAEWANG_PANTS: case ITEM_PAEWANG_GLOVES: case ITEM_PHAEWANG_BOOTS:
+    case ITEM_PAEWANG_MASK: case ITEM_PAEWANG_ARMOR: case ITEM_PAEWANG_PANTS: case ITEM_PAEWANG_GLOVES: case ITEM_PAEWANG_BOOTS:
     case ITEM_HADES_HELM: case ITEM_HADES_ARMOR: case ITEM_HADES_PANTS: case ITEM_HADES_GLOVES: case ITEM_HADES_BOOTS:
     case ITEM_HELM + 53: case ITEM_ARMOR + 53: case ITEM_PANTS + 53: case ITEM_GLOVES + 53: case ITEM_BOOTS + 53:
         return TRUE;
@@ -119,7 +119,7 @@ __int64 CSocketItemMgr::CalcSocketBonusItemValue(const ITEM* pItem, __int64 iOrg
     {
         iGoldResult += iOrgGold * (pItem->SocketCount * 0.8f);
 
-        ITEM TempSeedSphere;
+        ITEM TempSeedSphere{};
         for (int i = 0; i < pItem->SocketCount; ++i)
         {
             if (pItem->SocketSeedID[i] == SOCKET_EMPTY) continue;
@@ -577,8 +577,6 @@ void CSocketItemMgr::OpenSocketItemScript(const wchar_t* szFileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", szFileName);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 

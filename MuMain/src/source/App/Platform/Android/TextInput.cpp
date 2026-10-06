@@ -27,7 +27,6 @@ void SynchronizeArea(const SDL_Rect& area, bool password, bool multiline)
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Android text-input area synchronization failed");
     }
     if (activityClass != nullptr) environment->DeleteLocalRef(activityClass);
-    environment->DeleteLocalRef(activity);
 }
 }
 #endif

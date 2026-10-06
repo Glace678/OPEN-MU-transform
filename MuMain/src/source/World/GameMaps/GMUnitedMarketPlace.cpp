@@ -46,7 +46,7 @@ bool GMUnitedMarketPlace::CreateObject(OBJECT* o)
 {
     switch (o->Type)
     {
-    case 67:	// 기대기 박스
+    case 67:	// waiting box
     {
         CreateOperate(o);
         Vector(100.f, 100.f, 160.f, o->BoundingBoxMax);
@@ -68,7 +68,7 @@ CHARACTER* GMUnitedMarketPlace::CreateMonster(int iType, int PosX, int PosY, int
     // 		{
     // 			OpenMonsterModel(MONSTER_MODEL_AEGIS_3);
     // 			pCharacter = CreateCharacter(Key, MODEL_MONSTER01+185, PosX, PosY);
-    // 			wcscpy(pCharacter->ID, L"석상");
+    // 			wcscpy(pCharacter->ID, L"stone statue");
     // 			pCharacter->Object.m_bRenderShadow = false;
     // 			pCharacter->Object.Scale = 0.6f;
     // 			pCharacter->Object.LifeTime = 100;
@@ -90,12 +90,12 @@ bool GMUnitedMarketPlace::MoveObject(OBJECT* o)
 
     switch (o->Type)
     {
-    case 8:	// chofountain01 폭포물 표면의 Animation 속도 처리 약간더 빠르게.
+    case 8:	// chofountain01 waterfall surface Animation speed, slightly faster.
     {
         o->Velocity = 0.2f;
     }
     return true;
-    case 30:	// 가로등
+    case 30:	// street lamp
     {
         VectorCopy(o->Position, b->BodyOrigin);
         b->BodyScale = o->Scale;
@@ -112,7 +112,7 @@ bool GMUnitedMarketPlace::MoveObject(OBJECT* o)
         AddTerrainLight(vLightPosition[0], vLightPosition[1], vLightFire, 3, PrimaryTerrainLight);
     }
     return true;
-    case 35:	// 벽가로등
+    case 35:	// wall street lamp
     {
         VectorCopy(o->Position, b->BodyOrigin);
         b->BodyScale = o->Scale;
@@ -173,7 +173,7 @@ bool GMUnitedMarketPlace::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 
     // 	switch(o->Type)
     // 	{
-    // 	case MODEL_MONSTER01+168:	// 데슬러
+    // 	case MODEL_MONSTER01+168:	// Desler
     // 		{
     // 			switch( o->CurrentAction )
     // 			{

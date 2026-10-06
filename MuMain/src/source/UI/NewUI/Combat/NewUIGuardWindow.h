@@ -58,20 +58,20 @@ namespace SEASON3B
         POINT m_Pos;
 
         CNewUIRadioGroupButton	m_TabBtn;
-        int						m_iNumCurOpenTab;		// ���� �����ִ� �ǹ�ư��ȣ
+        int						m_iNumCurOpenTab;		// ִ ǹưȣ
 
         CNewUIButton m_BtnExit;
 
-        CNewUIButton m_BtnProclaim;			// ���� ���� ��ư
-        CNewUIButton m_BtnRegister;			// ǥ�� ��� ��ư
-        CNewUIButton m_BtnGiveUp;			// ���� ���� ��ư
+        CNewUIButton m_BtnProclaim;			// ư
+        CNewUIButton m_BtnRegister;			// ǥ ư
+        CNewUIButton m_BtnGiveUp;			// ư
 
-        // ������ ��� ����Ʈ
+        // Ʈ
         CUIBCDeclareGuildListBox	m_DeclareGuildListBox;
-        // Ȯ���� ��� ����Ʈ
+        // Ȯ Ʈ
         CUIBCGuildListBox			m_GuildListBox;
 
-        // UI ��� ��
+        // UI 
         CASTLESIEGE_STATE	m_eTimeType;
 
         wchar_t		m_szOwnerGuild[8 + 1];
@@ -116,7 +116,7 @@ namespace SEASON3B
 
         float GetLayerDepth();	//. 5.0f
 
-        void SetData(LPPMSG_ANS_CASTLESIEGESTATE Info);	// �������� �޾� ȭ�� ǥ�� ����
+        void SetData(LPPMSG_ANS_CASTLESIEGESTATE Info);	// ޾ ȭ ǥ 
 
         void AddDeclareGuildList(wchar_t* szGuildName, int nMarkCount, BYTE byIsGiveUP, BYTE bySeqNum);
         void ClearDeclareGuildList();

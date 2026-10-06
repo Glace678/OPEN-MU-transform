@@ -1,0 +1,18 @@
+{
+  "GameplayProfile": "balance-v1-standard",
+  "SoloBalanceVersion": 0,
+  "SoloCashShopVersion": 0,
+  "DatabasePort": 55432,
+  "AdminPanelPort": 5080,
+  "ConnectServerPort": 44406,
+  "MobileAccessEnabled": true,
+  "MobilePackageKey": "REPLACE_WITH_YOUR_MOBILE_PACKAGE_KEY",
+  "MobileAdvertisedAddress": "",
+  "StartGameWhenReady": false,
+  "AutomaticGameLogin": true,
+  "CloseToTray": true,
+  "StartWithWindows": false,
+  "BackupRetentionCount": 10,
+  "DatabaseStartupTimeoutSeconds": 60,
+  "ServerStartupTimeoutSeconds": 180
+}

@@ -340,8 +340,8 @@ void RenderTipText(int sx, int sy, const wchar_t* Text)
     int BackupAlphaBlendType = AlphaBlendType;
     EnableAlphaTest();
     glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-    RenderColor((float)sx - 2, (float)sy - 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);	// 위
-    RenderColor((float)sx - 2, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);	// 좌
+    RenderColor((float)sx - 2, (float)sy - 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);	// up
+    RenderColor((float)sx - 2, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);	// left
     RenderColor((float)sx - 2 + TextSize.cx / g_fScreenRate_x + 3, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);
     RenderColor((float)sx - 2, (float)sy - 3 + TextSize.cy / g_fScreenRate_y + 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);
 
@@ -643,7 +643,7 @@ bool CheckAttack_Fenrir(CHARACTER* c)
             }
         }
 
-        if (c->GuildRelationShip == GR_RIVAL || c->GuildRelationShip == GR_RIVALUNION)		//박종훈 표시
+        if (c->GuildRelationShip == GR_RIVAL || c->GuildRelationShip == GR_RIVALUNION)		//Park Jong-hoon display
         {
             return true;
         }
@@ -2098,7 +2098,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             }
             wchar_t szCmd[24];
             wchar_t szId[MAX_USERNAME_SIZE];
-            swscanf(Text, L"%ls %ls", szCmd, szId);
+            swscanf(Text, L"%23ls %9ls", szCmd, szId);
 
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {

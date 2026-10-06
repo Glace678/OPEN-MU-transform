@@ -375,7 +375,7 @@ void CNewUITrade::ConvertYourLevel(int& rnLevel, DWORD& rdwColor)
         rnLevel = 50;
         rdwColor = (255 << 24) + (0 << 16) + (150 << 8) + (255);
     }
-    else							//  빨간색.
+    else							//  Red.
     {
         rnLevel = 10;
         rdwColor = (255 << 24) + (0 << 16) + (0 << 8) + (255);
@@ -639,7 +639,7 @@ void CNewUITrade::ProcessToReceiveTradeResult(LPPTRADE pTradeData)
         m_nYourGuildType = pTradeData->GuildKey;
         wcsncpy(m_szYourID, szTempID, MAX_USERNAME_SIZE);
         m_szYourID[MAX_USERNAME_SIZE] = L'\0';
-        m_nYourLevel = pTradeData->Level;   //  상대방 레벨.
+        m_nYourLevel = pTradeData->Level;   //  Opponent level.
         break;
     }
 }

@@ -537,7 +537,7 @@ bool MoveMount(OBJECT* o, bool bForceRender)
                 || owner->CurrentAction == PLAYER_FLY_RIDE || owner->CurrentAction == PLAYER_FLY_RIDE_WEAPON
                 || owner->CurrentAction == PLAYER_RAGE_UNI_RUN || owner->CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT)
             {
-                //  페가수스.
+                //  Pegasus.
                 if (o->Type == MODEL_PEGASUS)
                 {
                     if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN || g_Direction.m_CKanturu.IsMayaScene())
@@ -1607,8 +1607,9 @@ void RenderBoids(bool bAfterCharacter)
                     else
                         glColor4f(0.f, 0.f, 0.f, 0.2f);
 
-                    if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR && o->Type == MODEL_MAP_TORNADO);
-                    else
+                    const bool isGroundTornado =
+                        gMapManager.WorldActive == WD_51HOME_6TH_CHAR && o->Type == MODEL_MAP_TORNADO;
+                    if (!isGroundTornado)
                     {
                         VectorCopy(o->Position, Position);
                         Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);

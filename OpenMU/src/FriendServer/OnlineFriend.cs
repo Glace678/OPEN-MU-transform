@@ -29,7 +29,7 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// </summary>
     private readonly List<Unsubscriber> _subscriptions;
 
-    private bool _isDisposed;
+    private int _isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OnlineFriend" /> class.
@@ -74,6 +74,11 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         this._readerWriterLock.EnterWriteLock();
         try
         {
+            if (Volatile.Read(ref this._isDisposed) != 0)
+            {
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
+
             this._subscribers.Add(observer);
         }
         finally
@@ -132,6 +137,11 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     {
         this.ServerId = serverId;
 
+        if (Volatile.Read(ref this._isDisposed) != 0)
+        {
+            return;
+        }
+
         // Notify every subscriber
         this._readerWriterLock.EnterReadLock();
         try
@@ -154,6 +164,11 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// <returns>True, if the specified player is a subscriber of this player.</returns>
     public bool HasSubscriber(OnlineFriend player)
     {
+        if (Volatile.Read(ref this._isDisposed) != 0)
+        {
+            return false;
+        }
+
         this._readerWriterLock.EnterReadLock();
         try
         {
@@ -181,16 +196,31 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (!this._isDisposed)
+        if (Interlocked.Exchange(ref this._isDisposed, 1) != 0)
         {
-            this._readerWriterLock.Dispose();
-            this._isDisposed = true;
+            return;
         }
+
+        List<Unsubscriber> subscriptions;
+        this._readerWriterLock.EnterWriteLock();
+        try
+        {
+            subscriptions = this._subscriptions.ToList();
+            this._subscriptions.Clear();
+            this._subscribers.Clear();
+        }
+        finally
+        {
+            this._readerWriterLock.ExitWriteLock();
+        }
+
+        subscriptions.ForEach(subscription => subscription.Dispose());
+        this._readerWriterLock.Dispose();
     }
 
     private void Unsubscribe(IObserver<OnlineFriend> observer)
     {
-        if (this._isDisposed)
+        if (Volatile.Read(ref this._isDisposed) != 0)
         {
             return;
         }
@@ -198,6 +228,11 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         this._readerWriterLock.EnterWriteLock();
         try
         {
+            if (Volatile.Read(ref this._isDisposed) != 0)
+            {
+                return;
+            }
+
             this._subscribers.Remove(observer);
         }
         finally

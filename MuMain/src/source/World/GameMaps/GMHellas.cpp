@@ -1576,7 +1576,7 @@ bool RenderHellasMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else
         {
-            // 눈
+            // eye
             Luminosity = (float)sin(WorldTime * 0.003f) * 0.2f + 0.8f;
             Vector(0, 0, 0, p);
             Vector(Luminosity * 1.0f, Luminosity * 0.0f, Luminosity * 0.0f, Light);

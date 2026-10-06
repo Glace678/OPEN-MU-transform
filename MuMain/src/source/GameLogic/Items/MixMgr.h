@@ -207,14 +207,14 @@ namespace SEASON3A
 #endif //LJH_MOD_CANNOT_USE_CHARMITEM_AND_CHAOSCHARMITEM_SIMULTANEOUSLY
 
     protected:
-        bool IsOptionItem(MIX_RECIPE_ITEM& rItem) { return (rItem.m_iCountMin == 0); }	// 옵션(안넣어도 되는) 아이템인가
+        bool IsOptionItem(MIX_RECIPE_ITEM& rItem) { return (rItem.m_iCountMin == 0); }	// Is it an optional item (can be left out)?
         BOOL CheckRecipeSub(std::vector<MIX_RECIPE*>::iterator iter, int iNumMixItems, CMixItem* pMixItems);
-        int CheckRecipeSimilaritySub(std::vector<MIX_RECIPE*>::iterator iter, int iNumMixItems, CMixItem* pMixItems);	// 유사도 비교
-        bool CheckItem(MIX_RECIPE_ITEM& rItem, CMixItem& rSource);	// 같은 아이템인지 비교
+        int CheckRecipeSimilaritySub(std::vector<MIX_RECIPE*>::iterator iter, int iNumMixItems, CMixItem* pMixItems);	// Similarity comparison
+        bool CheckItem(MIX_RECIPE_ITEM& rItem, CMixItem& rSource);	// Compare whether it's the same item
         void EvaluateMixItems(int iNumMixItems, CMixItem* pMixItems);
         void CalcMixRate(int iNumMixItems, CMixItem* pMixItems);
         void CalcMixReqZen(int iNumMixItems, CMixItem* pMixItems);
-        BOOL GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iNameLine, BOOL bSimilarRecipe);	// 주어진 조합법의 이름 얻기
+        BOOL GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iNameLine, BOOL bSimilarRecipe);	// Get the name of the given recipe
         BOOL IsChaosItem(CMixItem& rSource);
         BOOL IsChaosJewel(CMixItem& rSource);
         BOOL Is380AddedItem(CMixItem& rSource);

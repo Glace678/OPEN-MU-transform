@@ -20,17 +20,17 @@
 //////////////////////////////////////////////////////////////////////
 CMsgBoxIGSGiftStorageItemInfo::CMsgBoxIGSGiftStorageItemInfo()
 {
-    m_iStorageSeq = 0;		// ������ ����
-    m_iStorageItemSeq = 0;		// ������ ��ǰ ����
-    m_wItemCode = -1;		// ������ �ڵ�
+    m_iStorageSeq = 0;
+    m_iStorageItemSeq = 0;		// ǰ 
+    m_wItemCode = -1;		// ڵ
 
-    m_szName[0] = '\0';		// ������ �̸�
+    m_szName[0] = '\0';		// ̸
     m_szNum[0] = '\0';
     m_szPeriod[0] = '\0';
-    m_szItemType = '\0';		// ��ǰ���� (C : ĳ��, P : ��ǰ)
+    m_szItemType = '\0';		// ǰ (C : ĳ, P : ǰ)
 
-    m_szIDInfo[0] = '\0';		// �������� ĳ����ID
-    m_szMessage[0] = '\0';		// �������� �޼���
+    m_szIDInfo[0] = '\0';		// ĳID
+    m_szMessage[0] = '\0';		// ޼
 }
 
 CMsgBoxIGSGiftStorageItemInfo::~CMsgBoxIGSGiftStorageItemInfo()
@@ -58,7 +58,7 @@ bool CMsgBoxIGSGiftStorageItemInfo::Create(float fPriority)
 
     SetMsgBackOpacity();
 
-    // �޼��� Input Box
+    // ޼ Input Box
     m_MessageInputBox.SetMultiline(TRUE);
     m_MessageInputBox.Init(g_hWnd, IMAGE_IGS_FRAME_WIDTH - 30, 100, 50);
     m_MessageInputBox.SetPosition(GetPos().x + 22, GetPos().y + IGS_MESSAGE_INPUT_TEXT_POS_Y + 96);
@@ -95,13 +95,13 @@ void CMsgBoxIGSGiftStorageItemInfo::Initialize(int iStorageSeq, int iStorageItem
     wcscpy(m_szName, pszName);
 
     // Num
-    mu_swprintf(m_szNum, I18N::Game::QuantityS, pszNum);		// "���� : %ls"
+    mu_swprintf(m_szNum, I18N::Game::QuantityS, pszNum);		// " : %ls"
 
     // Period
-    mu_swprintf(m_szPeriod, I18N::Game::DurationS, pszPeriod);	// "�Ⱓ : %ls"
+    mu_swprintf(m_szPeriod, I18N::Game::DurationS, pszPeriod);	// "Ⱓ : %ls"
 
     // ID Info
-    // "\'%ls\' ���� ���� �����Դϴ�."
+    // "\'%ls\' Դϴ."
     mu_swprintf(m_szIDInfo, I18N::Game::ItSAGiftFromS, pszID);
 
     m_MessageInputBox.SetText(pszMessage);
@@ -198,7 +198,7 @@ CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::OKButtonDown(class CNewUIMessageB
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSGiftStorageItemInfo*>(pOwner);
 
-    // ����ϱ� Ȯ�� â
+    // ϱ Ȯ â
     CMsgBoxIGSUseItemConfirm* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseItemConfirmLayout), &pMsgBox);
     pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq,
@@ -224,13 +224,13 @@ CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::CancelButtonDown(class CNewUIMess
 // SetButtonInfo
 void CMsgBoxIGSGiftStorageItemInfo::SetButtonInfo()
 {
-    // Ȯ�� ��ư
+    // Ȯ ư
     m_BtnUse.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_OK_POS_X, GetPos().y + IGS_BTN_POS_Y + 102,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnUse.MoveTextPos(0, -1);
     m_BtnUse.SetText(I18N::Game::OK);
 
-    // ��� ��ư
+    // ư
     m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y + 102,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnCancel.MoveTextPos(0, -1);
@@ -252,7 +252,7 @@ void CMsgBoxIGSGiftStorageItemInfo::RenderTexts()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
 
-    // Title "���� ����â"
+    // Title " â"
     g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_POS_Y, I18N::Game::GiftInfoWindow, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
 
     // Item Name

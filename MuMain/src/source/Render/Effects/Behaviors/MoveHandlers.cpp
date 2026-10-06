@@ -1025,7 +1025,7 @@ namespace Render::Effects::Behaviors
         VectorAdd(vPos, pObject->Position, o->Position);
 
         if (pObject->Live)
-            o->LifeTime = 100.f; //무한
+            o->LifeTime = 100.f; //infinite
 
         BMD* b = &Models[o->Type];
         b->PlayAnimation(&o->AnimationFrame, &o->PriorAnimationFrame, &o->PriorAction, o->Velocity / 5.f, o->Position, o->Angle);
@@ -2484,7 +2484,7 @@ namespace Render::Effects::Behaviors
                 fScale = (float)(rand() % 80 + 32) * 0.01f * 1.0f;
                 Vector(o->Position[0] + (rand() % 70 - 35) * 1.0f, o->Position[1] + (rand() % 70 - 35) * 1.0f,
                     o->Position[2] + (rand() % 70 - 35) * 1.0f, vPos);
-                CreateParticleFpsChecked(BITMAP_LIGHTNING_MEGA1 + rand() % 3, vPos, pObject->Angle, vLight, 0, fScale);	// 전기
+                CreateParticleFpsChecked(BITMAP_LIGHTNING_MEGA1 + rand() % 3, vPos, pObject->Angle, vLight, 0, fScale);	// lightning
             }
 
             vec34_t Matrix;
@@ -2503,7 +2503,7 @@ namespace Render::Effects::Behaviors
                 VectorAdd(vPosition, o->Position, vPosition);
                 vPosition[2] = RequestTerrainHeight(vPosition[0], vPosition[1]) + 20;
 
-                CreateParticleFpsChecked(BITMAP_LIGHTNING_MEGA1 + rand() % 3, vPosition, pObject->Angle, vLight, 0, fScale);	// 전기
+                CreateParticleFpsChecked(BITMAP_LIGHTNING_MEGA1 + rand() % 3, vPosition, pObject->Angle, vLight, 0, fScale);	// lightning
             }
 
             VectorCopy(o->Position, vPosition);
@@ -4387,7 +4387,7 @@ namespace Render::Effects::Behaviors
         {
             Vector(1.f, 1.f, 1.f, Light);
 
-            CreateJointFpsChecked(BITMAP_JOINT_THUNDER, o->Position, o->Position, o->Angle, 3, NULL, 20.f, 7); //  전기
+            CreateJointFpsChecked(BITMAP_JOINT_THUNDER, o->Position, o->Position, o->Angle, 3, NULL, 20.f, 7); //  lightning
             CreateSprite(BITMAP_SHINY + 1, o->Position, (float)(rand() % 8 + 8) * 0.2f, Light, o, (float)(rand() % 360));
         }
 
@@ -7714,7 +7714,7 @@ namespace Render::Effects::Behaviors
         VectorCopy(o->Position, v3Pos);
 
         CreateParticleFpsChecked(BITMAP_WATERFALL_3, v3Pos, o->Angle, o->Light, 11, 0.6f);
-        // 연기
+        // smoke
         CreateParticleFpsChecked(BITMAP_SMOKE, v3Pos, o->Angle, o->Light, 52, 0.6f);
 
         if (15 == o->LifeTime)
@@ -8672,7 +8672,7 @@ namespace Render::Effects::Behaviors
                 o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
             }
 
-            // 13. APPEAR EFFECT들
+            // 13. APPEAR EFFECTs
             if (fCurrentRate >= 0.0f && fCurrentRate <= 0.5f)
             {
                 o->Visible = true;		// MoveEffect CreateEffect
@@ -8774,7 +8774,7 @@ namespace Render::Effects::Behaviors
                 o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
             }
 
-            // 3. APPEAR EFFECT들
+            // 3. APPEAR EFFECTs
             if (fCurrentRate >= 0.0f && fCurrentRate <= 0.6f)
             {
                 o->Visible = true;		// MoveEffect CreateEffect
@@ -9458,7 +9458,7 @@ namespace Render::Effects::Behaviors
                 CreateEffectFpsChecked(MODEL_WINDFOCE, o->Position, o->Angle, vLight, 3, o, -1, 0, 0, 0, 1.0f);
             }
         }
-        else if (o->SubType == 1)		//지속적인거
+        else if (o->SubType == 1)		//continuous
         {
             if (o->Owner != NULL && o->Owner->Live == true
                 && (g_isCharacterBuff(o->Owner, eBuff_Att_up_Ourforces)

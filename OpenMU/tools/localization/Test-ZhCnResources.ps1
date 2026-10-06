@@ -13,7 +13,7 @@ $bannedTerms = @(
     "侦测", "安装档", "储值", "水准", "混沌城堡", "冷狼要塞", "公会",
     "行会", "派对"
 )
-$mojibakeMarkers = @("�", "Ã", "Â", "â€", "ï¿½")
+$mojibakeMarkers = @([char]0xFFFD, [char]0x00C3, [char]0x00C2, [string]([char]0x00E2) + [char]0x20AC, [string]([char]0x00EF) + [char]0x00BF + [char]0x00BD)
 
 function Get-Placeholders([string]$value) {
     $indexed = [regex]::Matches($value, "(?<!\{)\{\d+(?:[^}]*)?\}(?!\})") | ForEach-Object Value

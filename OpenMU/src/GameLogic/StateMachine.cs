@@ -198,11 +198,11 @@ public class StateMachine
         /// Initializes a new instance of the <see cref="StateChangedEventArgs"/> class.
         /// </summary>
         /// <param name="previousState">State of the previous.</param>
-        /// <param name="currentStateState">State of the current state.</param>
-        public StateChangedEventArgs(State previousState, State currentStateState)
+        /// <param name="currentState">State of the current state.</param>
+        public StateChangedEventArgs(State previousState, State currentState)
         {
             this.PreviousState = previousState;
-            this.CurrentStateState = currentStateState;
+            this.CurrentState = currentState;
         }
 
         /// <summary>
@@ -213,6 +213,6 @@ public class StateMachine
         /// <summary>
         /// Gets the state of the current state.
         /// </summary>
-        public State CurrentStateState { get; }
+        public State CurrentState { get; }
     }
 }

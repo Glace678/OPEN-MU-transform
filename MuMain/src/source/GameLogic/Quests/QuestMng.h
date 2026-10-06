@@ -32,11 +32,7 @@ struct SQuestRequest
     DWORD	m_dwType;
     WORD	m_wIndex;
     DWORD	m_dwValue;
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-    DWORD	m_dwCurValue;
-#else	// ASG_ADD_TIME_LIMIT_QUEST
     WORD	m_wCurValue;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
     ITEM* m_pItem;
 };
 

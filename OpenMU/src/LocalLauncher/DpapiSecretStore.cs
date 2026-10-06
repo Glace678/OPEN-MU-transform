@@ -36,7 +36,7 @@ public sealed class DpapiSecretStore : ILocalSecretStore
     {
         if (string.IsNullOrWhiteSpace(adminPanelPassword) || adminPanelPassword.Length < 12)
         {
-            throw new ArgumentException("后台管理员密码必须至少包含 12 个字符。", nameof(adminPanelPassword));
+            throw new ArgumentException("The administrator password must be at least 12 characters.", nameof(adminPanelPassword));
         }
 
         return new LocalSecrets
@@ -61,7 +61,7 @@ public sealed class DpapiSecretStore : ILocalSecretStore
         try
         {
             var secrets = JsonSerializer.Deserialize<LocalSecrets>(clearBytes)
-                          ?? throw new InvalidDataException("本地密钥文件为空。");
+                          ?? throw new InvalidDataException("The local secret file is empty.");
             Validate(secrets);
             return secrets;
         }
@@ -112,7 +112,7 @@ public sealed class DpapiSecretStore : ILocalSecretStore
                 secrets.GuildPassword,
             }.Any(secret => string.IsNullOrWhiteSpace(secret) || secret.Length < 32))
         {
-            throw new InvalidDataException("本地密钥文件不完整或已损坏。");
+            throw new InvalidDataException("The local secret file is incomplete or corrupt.");
         }
     }
 }

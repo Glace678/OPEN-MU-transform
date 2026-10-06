@@ -25,9 +25,9 @@ void CCharInfoBalloonMng::Release()
 }
 
 //*****************************************************************************
-// 함수 이름 : Create()
-// 함수 설명 : 캐릭터 정보 풍선 매니저 생성.
-//			   (캐릭터 선택씬에서 쓰임. 풍선 5개 생성.)
+// Function : Create()
+// Description : Creates the character info balloon manager.
+//			   (Used in the character selection scene. Creates 5 balloons.)
 //*****************************************************************************
 void CCharInfoBalloonMng::Create()
 {
@@ -38,8 +38,8 @@ void CCharInfoBalloonMng::Create()
 }
 
 //*****************************************************************************
-// 함수 이름 : Render()
-// 함수 설명 : 캐릭터 정보 풍선들 렌더.
+// Function : Render()
+// Description : Renders the character info balloons.
 //*****************************************************************************
 void CCharInfoBalloonMng::Render()
 {
@@ -51,8 +51,8 @@ void CCharInfoBalloonMng::Render()
 }
 
 //*****************************************************************************
-// 함수 이름 : UpdateDisplay()
-// 함수 설명 : 캐릭터 정보를 업데이트.
+// Function : UpdateDisplay()
+// Description : Updates the character info.
 //*****************************************************************************
 void CCharInfoBalloonMng::UpdateDisplay()
 {

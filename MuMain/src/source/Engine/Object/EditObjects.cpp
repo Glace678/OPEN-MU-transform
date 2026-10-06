@@ -61,6 +61,8 @@ extern bool PickObjectLockHeight;
 
 namespace Editor
 {
+constexpr int kEditorPickHotspot = 100;
+
 void EditObjects()
 {
     if (EditFlag == EDIT_MONSTER)
@@ -103,7 +105,7 @@ void EditObjects()
             MouseLButtonPush = false;
             if (!PickObject)
             {
-                if (MouseX < 100 && MouseY < 100)
+                if (MouseX < kEditorPickHotspot && MouseY < kEditorPickHotspot)
                 {
                     PickObject = CreateObject(SelectModel, MouseTarget, PickObjectAngle);
                 }
@@ -148,7 +150,7 @@ void EditObjects()
                     PickObject->Scale += 0.02f * FPS_ANIMATION_FACTOR;
                 if (Core::Input::IsKeyDown('F'))
                     PickObject->Scale -= 0.02f * FPS_ANIMATION_FACTOR;
-                if (MouseX >= REFERENCE_WIDTH - 100 && MouseY < 100)
+                if (MouseX >= REFERENCE_WIDTH - kEditorPickHotspot && MouseY < kEditorPickHotspot)
                 {
                     DeleteObject(PickObject, &ObjectBlock[PickObject->Block]);
                     PickObject = NULL;

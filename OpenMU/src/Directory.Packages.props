@@ -60,7 +60,7 @@
     <PackageVersion Include="System.ComponentModel.Annotations" Version="6.0.0-preview.4.21253.7" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.2" />
     <PackageVersion Include="System.IO.Pipelines" Version="10.0.1" />
-    <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.7.1" />
+    <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.7.4" />
     <PackageVersion Include="System.Memory" Version="4.6.3" />
     <PackageVersion Include="System.Net.Sockets" Version="4.3.0" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.4" />

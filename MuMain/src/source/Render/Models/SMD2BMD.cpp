@@ -90,7 +90,7 @@ void FixupSMD()
         {
             MeshNum = mg->MeshNum;
             mg->Mesh[MeshNum].Texture = mg->MeshNum;
-            strcpy(mg->Texture[MeshNum].FileName, tg->TextureName[i]);
+            strncpy(mg->Texture[MeshNum].FileName, tg->TextureName[i], sizeof(mg->Texture[MeshNum].FileName) - 1); mg->Texture[MeshNum].FileName[sizeof(mg->Texture[MeshNum].FileName) - 1] = '\0';
             mg->MeshNum++;
         }
 

@@ -22,24 +22,24 @@ class CMsgBoxIGSStorageItemInfo : public CNewUIMessageBoxBase, public INewUI3DRe
 public:
     enum IMAGE_IGS_STORAGE_ITEM_INFO
     {
-        IMAGE_IGS_BUTTON = BITMAP_IGS_MSGBOX_BUTTON,				// 인게임샵 버튼
+        IMAGE_IGS_BUTTON = BITMAP_IGS_MSGBOX_BUTTON,				// In-game shop button
         IMAGE_IGS_FRAME = BITMAP_IGS_MSGBOX_STORAGE_ITEM,		// Main Frame
     };
 
     enum IMAGESIZE_IGS_STORAGE_ITEM_INFO
     {
-        IMAGE_IGS_WINDOW_WIDTH = 640,	// 인게임샵 배경 사이즈
+        IMAGE_IGS_WINDOW_WIDTH = 640,	// In-game shop background size
         IMAGE_IGS_WINDOW_HEIGHT = 429,
-        IMAGE_IGS_FRAME_WIDTH = 210,	// 메세지박스 Size
+        IMAGE_IGS_FRAME_WIDTH = 210,	// Message box Size
         IMAGE_IGS_FRAME_HEIGHT = 202,
-        IMAGE_IGS_BTN_WIDTH = 52,		// 버튼 Size
+        IMAGE_IGS_BTN_WIDTH = 52,		// Button Size
         IMAGE_IGS_BTN_HEIGHT = 26,
     };
 
-    // 메세지박스상의 상대좌표
+    // Relative coordinates on the message box
     enum IGS_STORAGE_ITEM_INFO_POS
     {
-        IGS_BTN_OK_POS_X = 43,	// 버튼
+        IGS_BTN_OK_POS_X = 43,	// Button
         IGS_BTN_CANCEL_POS_X = 115,
         IGS_BTN_POS_Y = 168,
         IGS_TEXT_TITLE_POS_Y = 10,	// Title
@@ -48,9 +48,9 @@ public:
         IGS_TEXT_ITEM_INFO_NUM_POS_Y = 124,
         IGS_TEXT_ITEM_INFO_PERIOD_POS_Y = 140,
         IGS_TEXT_ITEM_INFO_WIDTH = 150,
-        IGS_3DITEM_POS_X = 56,		// 3D 아이템 랜더 시작 위치(BOX 기준)
+        IGS_3DITEM_POS_X = 56,		// 3D item render start position (BOX reference)
         IGS_3DITEM_POS_Y = 34,
-        IGS_3DITEM_WIDTH = 97,		// 3D 아이템 랜더 공간설정
+        IGS_3DITEM_WIDTH = 97,		// 3D item render space setting
         IGS_3DITEM_HEIGHT = 60,
     };
 
@@ -90,14 +90,14 @@ private:
     CNewUIMessageBoxButton m_BtnUse;
     CNewUIMessageBoxButton m_BtnCancel;
 
-    int		m_iStorageSeq;			// 보관함 순번
-    int		m_iStorageItemSeq;		// 보관함 상품 순번
-    WORD	m_wItemCode;			// 아이템 코드
+    int		m_iStorageSeq;			// Storage sequence number
+    int		m_iStorageItemSeq;		// Storage product sequence number
+    WORD	m_wItemCode;			// Item code
 
-    wchar_t m_szName[MAX_TEXT_LENGTH];		// 아이템 이름
+    wchar_t m_szName[MAX_TEXT_LENGTH];		// Item name
     wchar_t m_szNum[MAX_TEXT_LENGTH];
     wchar_t m_szPeriod[MAX_TEXT_LENGTH];
-    char    m_szItemType;	// 상품구분 (C : 캐시, P : 상품)
+    char    m_szItemType;	// Product type (C : Cash, P : Product)
 };
 
 ////////////////////////////////////////////////////////////////////

@@ -55,7 +55,7 @@ void GMSwampOfQuiet::CreateObject(OBJECT* pObject)
 
     // 	switch(pObject->Type)
     // 	{
-    // 	case 103:	// 의자 설정
+    // 	case 103:	// chair setting
     // 		{
     // 			CreateOperate(pObject);
     // 		}
@@ -117,7 +117,7 @@ void GMSwampOfQuiet::PlayObjectSound(OBJECT* pObject)
 
     // 	switch(pObject->Type)
     // 	{
-    // 	case 2:		// 마을안 수로
+    // 	case 2:		// waterway inside town
     // 		if (!bSafeZone)
     // 			PlayBuffer(SOUND_ELBELAND_WATERSMALL01, pObject, false);
     // 		break;
@@ -272,7 +272,7 @@ void GMSwampOfQuiet::RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bo
     if (!IsCurrentMap())
         return;
 
-    // 	if(pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// 폭포물1,2, 수로, 회오리, 빛
+    // 	if(pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// waterfall1,2, waterway, whirlpool, light
     // 	{
     // 		pModel->RenderBody(RENDER_TEXTURE,pObject->Alpha,pObject->BlendMesh,pObject->BlendMeshLight,pObject->BlendMeshTexCoordU,pObject->BlendMeshTexCoordV,pObject->HiddenMesh);
     // 	}
@@ -718,7 +718,7 @@ void GMSwampOfQuiet::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD*
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
 
-                // 왼손
+                // left hand
                 pModel->TransformPosition(BoneTransform[42], StartRelative, StartPos, false);
 
                 pModel->TransformByBoneMatrix(EndPos, BoneTransform[34]);

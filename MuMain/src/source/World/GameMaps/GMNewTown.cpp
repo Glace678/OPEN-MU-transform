@@ -1,4 +1,4 @@
-﻿// GMNewTown.cpp: implementation of the GMNewTown class.
+// GMNewTown.cpp: implementation of the GMNewTown class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -730,7 +730,6 @@ bool GMNewTown::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
     if (IsNewMap73_74())
         return g_EmpireGuardian4.RenderObjectMesh(pObject, pModel, ExtraMon);
 
-    // ���
     if ((pObject->Type >= 5 && pObject->Type <= 14) || pObject->Type == 4 || pObject->Type == 129)
     {
         // DXP-20 inc4: flat IntensityTransform override -- must materialize before overwriting, or
@@ -821,7 +820,7 @@ void GMNewTown::RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bool Ex
         return;
     }
 
-    if (pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// ������1,2, ����, ȸ����, ��
+    if (pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// 1,2, , ȸ, 
     {
         pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
     }

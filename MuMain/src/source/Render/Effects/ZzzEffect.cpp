@@ -1818,7 +1818,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                 }
                 //. Create Effect
                 if (Type == MODEL_ARROW_NATURE && o->SubType == 1)
-                {	//. 녹색 띠 생성
+                {	//. green band created
                     CreateJoint(BITMAP_FLARE + 1, o->Position, o->Position, o->Angle, 13, o, 20.f, 40);
                     //					CreateJoint ( BITMAP_FLARE+1, o->Position, o->Position, o->Angle, 6, o, 20.f, 40 );
                     //					CheckTargetRange(o);
@@ -5454,7 +5454,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                     break;
                     case MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_:
                     {
-                        if (o->SubType == 1)	// 일반공격 Animation
+                        if (o->SubType == 1)	// normal attack Animation
                         {
                             //const int	TOTAL_LIFETIME = 24;
                             const int	TOTAL_LIFETIME = 30;
@@ -9517,7 +9517,7 @@ void RenderEffects(bool bRenderBlendMesh)
 
                         Vector(0.0f, 0.0f, 0.0f, vLight);
 
-                        // 2-2. 기본 Jewel Effect //
+                        // 2-2. Default Jewel Effect //
                         Vector(fLumi1 * 1.0f, fLumi1 * 0.4f, fLumi1 * 0.1f, vLight);
 
                         //			if( MODEL_MONSTER01+164 == o->Owner->Type )	// 2-3-1.
@@ -9525,7 +9525,7 @@ void RenderEffects(bool bRenderBlendMesh)
                             VectorCopy(arrEachBoneTranslations[iBoneIdx_SwordEffectMain01], vPos_SwordEffectRed01);
                             VectorCopy(arrEachBoneTranslations[iBoneIdx_SwordEffectMain02], vPos_SwordEffectRed02);
                         }
-                        // 			else // 2-3-1. Effect를 통한 렌더의 경우.
+                        // 			else // 2-3-1. Rendering via the Effect.
                         // 			{
                         // 				pBMDSwordModel->TransformByObjectBone(vPos_SwordEffectRed01, o, iBoneIdx_SwordEffectMain01, vRelative);
                         // 				pBMDSwordModel->TransformByObjectBone(vPos_SwordEffectRed02, o, iBoneIdx_SwordEffectMain02, vRelative);
@@ -9533,9 +9533,9 @@ void RenderEffects(bool bRenderBlendMesh)
 
                         CreateSprite(BITMAP_LIGHT_RED, vPos_SwordEffectRed01, 1.3f, vLight, o);
                         CreateSprite(BITMAP_LIGHT_RED, vPos_SwordEffectRed02, 1.3f, vLight, o);
-                        // 2-2. 기본 Jewel Effect //
+                        // 2-2. Default Jewel Effect //
 
-                        // 2-3. 기본 Edge Effect
+                        // 2-3. Default Edge Effect
                         {
                             VectorCopy(arrEachBoneTranslations[iBoneIdx_SwordEffectEdge01], vPos_SwordEffectEdge01);
                             VectorCopy(arrEachBoneTranslations[iBoneIdx_SwordEffectEdge02], vPos_SwordEffectEdge02);

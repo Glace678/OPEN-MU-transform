@@ -113,9 +113,4 @@ extern DWORD GetDesktopBitsPerPel();
 //#define ExecutionLog	{}
 //#endif //_DEBUG
 
-#define FAKE_CODE( pos)\
-	_asm { jmp pos };\
-	_asm { __emit 0xFF };\
-	_asm { __emit 0x15 }
-
 #endif

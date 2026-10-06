@@ -46,7 +46,7 @@ namespace SEASON3B
 
         enum
         {
-            ENTER_BTN_VAL = 33,					// 블러드캐슬 입장 버튼 사이의 간격
+            ENTER_BTN_VAL = 33,					// Spacing between Blood Castle entry buttons
 
             MAX_ENTER_GRADE = 8,
         };
@@ -61,7 +61,7 @@ namespace SEASON3B
         CNewUIButton				m_BtnEnter[MAX_ENTER_GRADE];			// Blood Castle Enter Button
 
         int							m_iBloodCastleLimitLevel[MAX_ENTER_GRADE * 2][2];
-        int							m_iNumActiveBtn;		// 활성화 되어있는 버튼
+        int							m_iNumActiveBtn;		// Active buttons
         DWORD						m_dwBtnTextColor[2];	// 0 - Disabled, 1 - Enable
 
     public:

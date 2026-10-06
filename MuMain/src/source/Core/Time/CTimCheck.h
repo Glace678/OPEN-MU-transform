@@ -5,9 +5,9 @@
 
 struct TimeCheck
 {
-    double		iBackupTime;	// �ð� ���� ���
-    int		iIndex;			// �ð� ���� ��ȣ
-    bool	bTimeCheck;		// �ð� ���� üũ
+    double		iBackupTime;	// backed-up time value
+    int		iIndex;			// timer index
+    bool	bTimeCheck;		// whether the timer is being checked
 };
 
 class CTimeCheck : public Singleton <CTimeCheck>

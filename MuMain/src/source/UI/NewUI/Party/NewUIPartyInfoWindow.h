@@ -39,7 +39,7 @@ namespace SEASON3B
             IMAGE_PARTY_HPBAR_BACK = BITMAP_PARTY_INFO_BEGIN,		// newui_party_lifebar01.jpg	(151, 8)
             IMAGE_PARTY_HPBAR,										// newui_party_lifebar02.jpg	(147, 4)
             IMAGE_PARTY_FLAG,										// newui_party_flag.tga			(10, 12)
-            IMAGE_PARTY_EXIT,										// newui_Party_x.tga			(13, 26)	// 임시
+            IMAGE_PARTY_EXIT,										// newui_Party_x.tga			(13, 26)	// Temporary
         };
 
     private:
@@ -54,10 +54,10 @@ namespace SEASON3B
         POINT						m_Pos;
 
         // Exit Button
-        CNewUIButton				m_BtnExit;							// 파티창 나가기버튼
-        CNewUIButton				m_BtnPartyExit[MAX_PARTYS];			// 파티탈퇴버튼
+        CNewUIButton				m_BtnExit;							// Party window exit button
+        CNewUIButton				m_BtnPartyExit[MAX_PARTYS];			// Party leave button
 
-        int							m_iSelectedCharID;		// Party List에서 캐릭터 ID를 선택 (default : -1)
+        int							m_iSelectedCharID;		// Select character ID in Party List (default : -1)
 
         bool						m_bParty;
 
@@ -82,7 +82,7 @@ namespace SEASON3B
         void OpenningProcess();
         void ClosingProcess();
 
-        bool LeaveParty(const int iIndex);	// 파티장이 상대방을 강퇴
+        bool LeaveParty(const int iIndex);	// Party leader kicks the target
 
         void SetParty(bool bParty);
 

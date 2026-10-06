@@ -77,7 +77,7 @@ public class Listener
         {
             this._clientListener.Start(backlog);
             this._isListening = true;
-            this._clientListener.BeginAcceptSocket(this.OnAccept, this._clientListener);
+            _ = this.AcceptClientsAsync(this._clientListener);
         }
         catch
         {
@@ -124,44 +124,46 @@ public class Listener
         return new Connection(socketConnection, this.CreateDecryptor(socketConnection.Input), this.CreateEncryptor(socketConnection.Output), this._loggerFactory.CreateLogger<Connection>());
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Exceptions are catched.")]
-    private async void OnAccept(IAsyncResult result)
+    private async Task AcceptClientsAsync(TcpListener listener)
     {
         try
         {
-            Socket socket;
-            try
+            while (this._isListening && ReferenceEquals(listener, this._clientListener))
             {
-                if (result.AsyncState is not TcpListener listener)
+                Socket socket;
+                try
                 {
+                    socket = await listener.AcceptSocketAsync().ConfigureAwait(false);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // this exception is expected when the clientListener got disposed. In this case we don't want to spam the log.
+                    return;
+                }
+                catch (SocketException ex) when (ex.SocketErrorCode == SocketError.OperationAborted)
+                {
+                    this._logger.LogDebug(ex, "The listener was stopped.");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogError(ex, "Error accepting the client socket");
                     return;
                 }
 
-                socket = listener.EndAcceptSocket(result);
+                _ = this.HandleClientAsync(socket);
             }
-            catch (ObjectDisposedException)
-            {
-                // this exception is expected when the clientListener got disposed. In this case we don't want to spam the log.
-                return;
-            }
-            catch (SocketException ex) when (ex.SocketErrorCode == SocketError.OperationAborted)
-            {
-                this._logger.LogDebug(ex, "The listener was stopped.");
-                return;
-            }
-            catch (Exception ex)
-            {
-                this._logger.LogError(ex, "Error accepting the client socket");
-                return;
-            }
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Unexpected error while accepting clients.");
+        }
+    }
 
-            // Accept the next client:
-            if (this._isListening && ReferenceEquals(result.AsyncState, this._clientListener))
-            {
-                // todo: refactor to use AcceptSocketAsync
-                ((TcpListener)result.AsyncState!).BeginAcceptSocket(this.OnAccept, result.AsyncState);
-            }
-
+    private async Task HandleClientAsync(Socket socket)
+    {
+        try
+        {
             ClientAcceptingEventArgs? cancel = null;
             if (this.ClientAccepting is { } clientAccepting)
             {
@@ -212,7 +214,7 @@ public class Listener
         }
         catch (Exception ex)
         {
-            this._logger.LogError(ex, "Unexpected error in OnAccept.");
+            this._logger.LogError(ex, "Unexpected error while handling an accepted client.");
         }
     }
 }

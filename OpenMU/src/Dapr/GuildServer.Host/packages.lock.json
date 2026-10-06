@@ -671,6 +671,7 @@
           "Serilog.Sinks.Grafana.Loki": "[8.3.1, )",
           "SharpAbp.Abp.OpenTelemetry.Exporter.Prometheus.AspNetCore": "[3.5.3, )",
           "Swashbuckle.AspNetCore": "[7.0.0, )",
+          "System.Linq.Dynamic.Core": "[1.7.4, )",
           "prometheus-net.AspNetCore.HealthChecks": "[8.2.1, )"
         }
       },
@@ -985,9 +986,9 @@
       },
       "System.Linq.Dynamic.Core": {
         "type": "CentralTransitive",
-        "requested": "[1.7.1, )",
-        "resolved": "1.3.5",
-        "contentHash": "G8aRAVHSQ/Jmt6dekX+z4K3L6ecX3CizaIYSQoDUolPRIPBYmBCabT+/pq5fMAFM57aOchFn8PUufuVfLjvEZQ=="
+        "requested": "[1.7.4, )",
+        "resolved": "1.7.4",
+        "contentHash": "2VJGKUdPjA59aqv/ehvBS+oVoFQqqsiVZlbcyDmuwypgy96Ss1/b8U13Yufk0TXtzveMWAPQAfnZzH+bs1r7Vw=="
       }
     }
   }

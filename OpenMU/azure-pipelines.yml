@@ -33,4 +33,4 @@ steps:
   inputs:
     command: test
     projects: 'tests/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --no-build'
+    arguments: '--configuration $(buildConfiguration)'

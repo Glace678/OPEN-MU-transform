@@ -1,7 +1,7 @@
 /*
-작성일: 2009-07-24
-작성자: 문상현
-요약: 샵리스트 관리를 위해 사용되는 객체
+Date: 2009-07-24
+Author: Moon Sanghyun
+Summary: Object used to manage the shop list
 */
 
 #pragma once

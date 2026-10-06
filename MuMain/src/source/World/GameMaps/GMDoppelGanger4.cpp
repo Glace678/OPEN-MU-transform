@@ -715,7 +715,7 @@ bool CGMDoppelGanger4::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
     return false;
 }
 
-// 몬스터 사운드
+// monster sound
 bool CGMDoppelGanger4::PlayMonsterSound(OBJECT* o)
 {
     if (IsDoppelGanger4() == false)

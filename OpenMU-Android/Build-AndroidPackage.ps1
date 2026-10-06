@@ -73,7 +73,7 @@ if ($outputRoot -eq $workspaceRoot -or $outputRoot -eq $projectRoot `
     throw "OutputDirectory is too broad: $outputRoot"
 }
 if (-not (Test-Path -LiteralPath $mobileServerSettings -PathType Leaf)) {
-    throw "Missing mobile server settings: $mobileServerSettings"
+    throw "Missing mobile server settings: $mobileServerSettings. Copy mobile-server-settings.example.json to mobile-server-settings.json and set MobilePackageKey."
 }
 
 try {

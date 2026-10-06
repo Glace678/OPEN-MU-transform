@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Terrain ���� �Լ�
+// Terrain Լ
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -156,8 +156,6 @@ int OpenTerrainAttribute(wchar_t* FileName)
         mu_swprintf(text, L"%ls could not be read.", FileName);
         g_ErrorReport.Write(text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return -1;
     }
 
@@ -211,8 +209,6 @@ bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
     const BYTE Version = 0;
@@ -626,8 +622,6 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -638,8 +632,6 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to seek in %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -652,8 +644,6 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, fileSize, RequiredSize);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -664,8 +654,6 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to rewind %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -680,8 +668,6 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %d bytes, got %zu).", FileName, Size, readBytes);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -764,8 +750,6 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -776,8 +760,6 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to seek in %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -794,8 +776,6 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, iBytes, RequiredSize);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -806,8 +786,6 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to rewind %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -821,8 +799,6 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %ld bytes, got %zu).", FileName, iBytes, readBytes);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 

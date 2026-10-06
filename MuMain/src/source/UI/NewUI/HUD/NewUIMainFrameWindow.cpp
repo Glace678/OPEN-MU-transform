@@ -2225,7 +2225,7 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         }
     }
 #ifdef PJH_FIX_SPRIT
-    /*박종훈*/
+    /*Park Jong-hoon*/
     if (bySkillType >= AT_PET_COMMAND_DEFAULT && bySkillType < AT_PET_COMMAND_END)
     {
         int iCharisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;

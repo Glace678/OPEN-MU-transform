@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "ReconnectManager.h"
 
 #include "Core/Platform/WinSock.h"  // GetAddrInfoW + BSD-socket shims for the reachability probe
@@ -116,10 +117,10 @@ void ReconnectManager::CacheCharacter(const wchar_t* characterName)
 void ReconnectManager::ClearSession()
 {
     m_hasSession = false;
-    m_serverIp[0] = L'\0';
-    m_username[0] = L'\0';
-    m_password[0] = L'\0';
-    m_characterName[0] = L'\0';
+    std::fill(std::begin(m_serverIp), std::end(m_serverIp), L'\0');
+    std::fill(std::begin(m_username), std::end(m_username), L'\0');
+    std::fill(std::begin(m_password), std::end(m_password), L'\0');
+    std::fill(std::begin(m_characterName), std::end(m_characterName), L'\0');
 }
 
 void ReconnectManager::RequestBegin()

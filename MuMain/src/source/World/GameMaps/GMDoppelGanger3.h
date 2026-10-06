@@ -11,35 +11,33 @@ public:
     virtual ~CGMDoppelGanger3();
 
 public:	// Object
-    // ������Ʈ ����
+    // Ʈ 
     virtual bool CreateObject(OBJECT* o);
-    // ������Ʈ ���μ���
+    // Ʈ μ
     virtual bool MoveObject(OBJECT* o);
-    // ������Ʈ ����Ʈ
+    // Ʈ Ʈ
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
-    // ������Ʈ ����
+    // Ʈ 
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
-    // �� ���� ������Ʈ ����Ʈ
+    // Ʈ Ʈ
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
 
 public:	// Character
-    // ���� ����
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    // ����(NPC) ���μ���
+    // (NPC) μ
     virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    // ���� ��ų ���� ����Ʈ
+    // ų Ʈ
     virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    // ���� ����Ʈ ( �Ϲ� )
+    // Ʈ ( Ϲ )
     virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    // ���� ����Ʈ ( ��ų )
+    // Ʈ ( ų )
     virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    // ��ų �ִϸ��̼� ���� �Լ�
+    // ų ִϸ̼ Լ
     virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public: // Sound
-    // ���� ����
     virtual bool PlayMonsterSound(OBJECT* o);
-    // ������Ʈ ����
+    // Ʈ 
     virtual void PlayObjectSound(OBJECT* o);
 
 public:

@@ -19,7 +19,7 @@ var plugInConfigurations = new List<PlugInConfiguration>();
 
 var services = builder.Services;
 
-services.AddPeristenceProvider(true)
+services.AddPersistenceProvider(true)
     .AddPlugInManager(plugInConfigurations)
     .AddManageableServerRegistry()
     .AddSingleton<ILoginServer, LoginServer>()

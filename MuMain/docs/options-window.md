@@ -55,7 +55,8 @@ preserved. The options window writes to these sections:
 - `[Window]` - width, height, windowed flag.
 - `[Graphics]` - render levels, vsync, fps limit.
 - `[Audio]` - volumes.
-- `[Login]` - language, and the remembered-credential keys (`RememberMe`,
+- `[UI]` - UI language (`Locale`).
+- `[Login]` - the remembered-credential keys (`RememberMe`,
   `SavePassword`, `EncryptedUsername`, `EncryptedPassword`); see
   "Remembering login credentials" below.
 - `[ConnectionSettings]`

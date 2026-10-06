@@ -196,7 +196,7 @@ public sealed class GameServer : IGameServer, IDisposable, IGameServerContextPro
         await playerList.Select(player => player.DisconnectAsync().AsTask()).WhenAll().ConfigureAwait(false);
 
         this.ServerState = ServerState.Stopped;
-        this._logger.LogInformation("Server shutted down.");
+        this._logger.LogInformation("Server has shut down.");
     }
 
     /// <inheritdoc/>

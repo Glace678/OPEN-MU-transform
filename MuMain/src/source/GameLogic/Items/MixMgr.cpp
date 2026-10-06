@@ -410,11 +410,13 @@ BOOL CMixRecipes::CheckRecipeSub(std::vector<MIX_RECIPE*>::iterator iter, int iN
     {
         if (pMixItems[i].m_iTestCount > 0)
         {
-            if (pMixItems[i].m_bIsCharmItem && (*iter)->m_bCharmOption == 'A');
-            else
-                if (pMixItems[i].m_bIsChaosCharmItem && (*iter)->m_bChaosCharmOption == 'A');
-                else
-                    return FALSE;
+            const bool matchesCharm =
+                (pMixItems[i].m_bIsCharmItem && (*iter)->m_bCharmOption == 'A') ||
+                (pMixItems[i].m_bIsChaosCharmItem && (*iter)->m_bChaosCharmOption == 'A');
+            if (!matchesCharm)
+            {
+                return FALSE;
+            }
         }
     }
     return TRUE;
@@ -499,11 +501,13 @@ int CMixRecipes::CheckRecipeSimilaritySub(std::vector<MIX_RECIPE*>::iterator ite
     {
         if (pMixItems[i].m_iTestCount > 0)
         {
-            if (pMixItems[i].m_bIsCharmItem && (*iter)->m_bCharmOption == 'A');
-            else
-                if (pMixItems[i].m_bIsChaosCharmItem && (*iter)->m_bChaosCharmOption == 'A');
-                else
-                    return 0;
+            const bool matchesCharm =
+                (pMixItems[i].m_bIsCharmItem && (*iter)->m_bCharmOption == 'A') ||
+                (pMixItems[i].m_bIsChaosCharmItem && (*iter)->m_bChaosCharmOption == 'A');
+            if (!matchesCharm)
+            {
+                return 0;
+            }
         }
     }
     return iFindTotalPoint;
@@ -594,7 +598,7 @@ BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iN
             }
             return FALSE;
         }
-        assert(optionTextlist.size() == 2 && L"옵션은 2개여야 함");
+        assert(optionTextlist.size() == 2 && L"there must be 2 options");
         if (iNameLine == 1)
         {
             wcscpy(pszNameOut, optionTextlist[0].c_str());
@@ -714,25 +718,33 @@ int CMixRecipes::GetSourceName(int iItemNum, wchar_t* pszNameOut, int iNumMixIte
         if (pMixRecipeItem->m_iDurabilityMin == pMixRecipeItem->m_iDurabilityMax)
             mu_swprintf(szTempName, L"%ls(%d)", szTempName, pMixRecipeItem->m_iDurabilityMin);
 
-        if (pMixRecipeItem->m_iLevelMin == 0 && pMixRecipeItem->m_iLevelMax == 255);
-        else if (pMixRecipeItem->m_iLevelMin == pMixRecipeItem->m_iLevelMax)
-            mu_swprintf(szTempName, L"%ls +%d", szTempName, pMixRecipeItem->m_iLevelMin);
-        else if (pMixRecipeItem->m_iLevelMin == 0)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMax, I18N::Game::Maximum);
-        else if (pMixRecipeItem->m_iLevelMax == 255)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMin, I18N::Game::Minimum);
-        else
-            mu_swprintf(szTempName, L"%ls +%d~%d", szTempName, pMixRecipeItem->m_iLevelMin, pMixRecipeItem->m_iLevelMax);
+        const bool hasNoLevelLimit =
+            pMixRecipeItem->m_iLevelMin == 0 && pMixRecipeItem->m_iLevelMax == 255;
+        if (!hasNoLevelLimit)
+        {
+            if (pMixRecipeItem->m_iLevelMin == pMixRecipeItem->m_iLevelMax)
+                mu_swprintf(szTempName, L"%ls +%d", szTempName, pMixRecipeItem->m_iLevelMin);
+            else if (pMixRecipeItem->m_iLevelMin == 0)
+                mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMax, I18N::Game::Maximum);
+            else if (pMixRecipeItem->m_iLevelMax == 255)
+                mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMin, I18N::Game::Minimum);
+            else
+                mu_swprintf(szTempName, L"%ls +%d~%d", szTempName, pMixRecipeItem->m_iLevelMin, pMixRecipeItem->m_iLevelMax);
+        }
 
-        if (pMixRecipeItem->m_iOptionMin == 0 && pMixRecipeItem->m_iOptionMax == 255);
-        else if (pMixRecipeItem->m_iOptionMin == pMixRecipeItem->m_iOptionMax)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385);
-        else if (pMixRecipeItem->m_iOptionMin == 0)
-            mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMax, I18N::Game::Option385, I18N::Game::Maximum);
-        else if (pMixRecipeItem->m_iOptionMax == 255)
-            mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385, I18N::Game::Minimum);
-        else
-            mu_swprintf(szTempName, L"%ls +%d~%d%ls", szTempName, pMixRecipeItem->m_iOptionMin, pMixRecipeItem->m_iOptionMax, I18N::Game::Option385);
+        const bool hasNoOptionLimit =
+            pMixRecipeItem->m_iOptionMin == 0 && pMixRecipeItem->m_iOptionMax == 255;
+        if (!hasNoOptionLimit)
+        {
+            if (pMixRecipeItem->m_iOptionMin == pMixRecipeItem->m_iOptionMax)
+                mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385);
+            else if (pMixRecipeItem->m_iOptionMin == 0)
+                mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMax, I18N::Game::Option385, I18N::Game::Maximum);
+            else if (pMixRecipeItem->m_iOptionMax == 255)
+                mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385, I18N::Game::Minimum);
+            else
+                mu_swprintf(szTempName, L"%ls +%d~%d%ls", szTempName, pMixRecipeItem->m_iOptionMin, pMixRecipeItem->m_iOptionMax, I18N::Game::Option385);
+        }
     }
 
     if (pMixRecipeItem->m_iCountMin == 0 && pMixRecipeItem->m_iCountMax == 255)
@@ -1119,8 +1131,6 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", szFileName);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         exit(0);
     }
 
@@ -1137,8 +1147,6 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - Version not matched.", szFileName);
             g_ErrorReport.Write(Text);
-            MessageBox(g_hWnd, Text, NULL, MB_OK);
-            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
             fclose(fp);
             exit(0);
         }

@@ -298,7 +298,7 @@ final class MobilePreferences {
 
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        manager.getDefaultDisplay().getRealMetrics(metrics);
+        MobileViewportMetrics.populateRealMetrics(manager, metrics);
         int width = Math.max(metrics.widthPixels, metrics.heightPixels);
         int height = Math.min(metrics.widthPixels, metrics.heightPixels);
 

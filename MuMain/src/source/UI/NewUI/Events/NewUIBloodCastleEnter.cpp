@@ -12,6 +12,12 @@
 
 using namespace SEASON3B;
 
+constexpr int kExitButtonOffsetX = 13;
+constexpr int kExitButtonOffsetY = 392;
+constexpr int kExitButtonWidth = 36;
+constexpr int kEnterButtonWidth = 180;
+constexpr int kButtonHeight = 29;
+
 CNewUIEnterBloodCastle::CNewUIEnterBloodCastle()
 {
     m_pNewUIMng = NULL;
@@ -63,7 +69,7 @@ bool CNewUIEnterBloodCastle::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_ENTERBC_BASE_WINDOW_BTN_EXIT, false);
-    m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
+    m_BtnExit.ChangeButtonInfo(m_Pos.x + kExitButtonOffsetX, m_Pos.y + kExitButtonOffsetY, kExitButtonWidth, kButtonHeight);
     m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);
 
     // Enter Button
@@ -72,7 +78,7 @@ bool CNewUIEnterBloodCastle::Create(CNewUIManager* pNewUIMng, int x, int y)
     {
         iVal = ENTER_BTN_VAL * i;
         m_BtnEnter[i].ChangeButtonImgState(true, IMAGE_ENTERBC_BASE_WINDOW_BTN_ENTER, true);
-        m_BtnEnter[i].ChangeButtonInfo(m_BtnEnterStartPos.x, m_BtnEnterStartPos.y + iVal, 180, 29);
+        m_BtnEnter[i].ChangeButtonInfo(m_BtnEnterStartPos.x, m_BtnEnterStartPos.y + iVal, kEnterButtonWidth, kButtonHeight);
     }
 
     Show(false);
@@ -104,12 +110,12 @@ void CNewUIEnterBloodCastle::SetPos(int x, int y)
 
     SetBtnPos(m_Pos.x + 6, m_Pos.y + 125);
 
-    m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
+    m_BtnExit.ChangeButtonInfo(m_Pos.x + kExitButtonOffsetX, m_Pos.y + kExitButtonOffsetY, kExitButtonWidth, kButtonHeight);
 
     for (int i = 0; i < MAX_ENTER_GRADE; i++)
     {
         int iVal = ENTER_BTN_VAL * i;
-        m_BtnEnter[i].ChangeButtonInfo(m_BtnEnterStartPos.x, m_BtnEnterStartPos.y + iVal, 180, 29);
+        m_BtnEnter[i].ChangeButtonInfo(m_BtnEnterStartPos.x, m_BtnEnterStartPos.y + iVal, kEnterButtonWidth, kButtonHeight);
     }
 }
 

@@ -4316,23 +4316,23 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type == ITEM_POTION + 160)
     {
-        // 연장의 보석
+        // Jewel of extension
         mu_swprintf(TextList[TextNum], I18N::Game::JewelUsedForRepairingALuckyItem);
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
     }
     else if (ip->Type == ITEM_POTION + 161)
     {
-        // 상승의 보석
+        // Jewel of ascend
         mu_swprintf(TextList[TextNum], I18N::Game::JewelForItemReinforcement);
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
     }
-    else if ((ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_WINGS_OF_DESPAIR) //날개
+    else if ((ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_WINGS_OF_DESPAIR) //wings
     {
-        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseDOfDamage, 32 + Level);  //  데미지 몇%증가.
+        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseDOfDamage, 32 + Level);  //  Damage increase X%.
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
-        mu_swprintf(TextList[TextNum], I18N::Game::AbsorbDOfDamage, 25 + Level * 2);  //  데미지 몇%흡수.
+        mu_swprintf(TextList[TextNum], I18N::Game::AbsorbDOfDamage, 25 + Level * 2);  //  Damage absorb X%.
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
-        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseSpeed);             //  이동 속도 향상.
+        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseSpeed);             //  Move speed boost.
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
     }
     else if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION
@@ -4574,11 +4574,11 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type == ITEM_CAPE_OF_FIGHTER || ip->Type == ITEM_CAPE_OF_LORD)
     {
-        // 망토 관련 옵션변경
-        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseDOfDamage, 20 + Level * 2);  //  데미지 몇%증가
+        // Cape-related option change
+        mu_swprintf(TextList[TextNum], I18N::Game::IncreaseDOfDamage, 20 + Level * 2);  //  Damage increase X%
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
         int _iDamage = (ip->Type == ITEM_CAPE_OF_FIGHTER) ? 10 + Level * 2 : 10 + Level;
-        mu_swprintf(TextList[TextNum], I18N::Game::AbsorbDOfDamage, _iDamage);  //  데미지 몇%흡수
+        mu_swprintf(TextList[TextNum], I18N::Game::AbsorbDOfDamage, _iDamage);  //  Damage absorb X%
         TextListColor[TextNum] = TEXT_COLOR_WHITE; TextBold[TextNum] = false; TextNum++;
     }
 
@@ -4945,7 +4945,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         }
     }
 
-    if (ip->RequireVitality && bRequireStat) //  요구체력.
+    if (ip->RequireVitality && bRequireStat) //  Required vitality.
     {
         mu_swprintf(TextList[TextNum], I18N::Game::StaminaRequirementD, ip->RequireVitality);
 
@@ -5109,10 +5109,8 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     //	}
     //#endif //PBG_MOD_NEWCHAR_MONK_WING
     //#endif //PBG_MOD_NEWCHAR_MONK_WING_2
-    if (g_SocketItemMgr.IsSocketItem(ip));
-    else
-        if (ip->Jewel_Of_Harmony_Option != 0)
-        {
+    if (!g_SocketItemMgr.IsSocketItem(ip) && ip->Jewel_Of_Harmony_Option != 0)
+    {
             StrengthenItem type = g_pUIJewelHarmonyinfo->GetItemType(static_cast<int>(ip->Type));
 
             if (type < SI_None)
@@ -5565,7 +5563,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
             TextBold[TextNum] = false;
             TextNum++;
             break;
-        case ITEM_HELPER + 133:	// 골든메이플참
+        case ITEM_HELPER + 133:	// Golden Maple charm
             mu_swprintf(TextList[TextNum], I18N::Game::MaximumMPIncreaseD, 150);
             TextListColor[TextNum] = TEXT_COLOR_BLUE;
             TextBold[TextNum] = false;
@@ -7669,7 +7667,7 @@ bool IsStoreBan(ITEM* pItem)
 sItemAct Set_ItemActOption(int _nIndex, int _nOption)
 {
     sItemAct	sItem;
-    // eITEM_PERSONALSHOP = 개인상점, eITEM_STORE = 창고, eITEM_TRADE = 거래, eITEM_DROP = 버리기, eITEM_SELL = 판매, eITEM_REPAIR = 수리
+    // eITEM_PERSONALSHOP = personal shop, eITEM_STORE = vault, eITEM_TRADE = trade, eITEM_DROP = drop, eITEM_SELL = sell, eITEM_REPAIR = repair
     int	nItemOption[][eITEM_END] = { 0, 1, 1, 0, 0, 0,
                                         0, 0, 0, 0, 1, 0,
         -1 };
@@ -7717,7 +7715,7 @@ bool Check_ItemAction(ITEM* _pItem, ITEMSETOPTION _eAction, bool _bType)
         }
     }
 
-    // 등록되지 않은 아이템은 무시.
+    // Ignore items that are not registered.
     return false;
 }
 
@@ -9889,33 +9887,33 @@ void RenderObjectScreen(int Type, int ItemLevel, int excellentFlags, int ancient
             Scale = 0.0013f;
         }
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
-        else if (Type == MODEL_HELPER + 128)		// 매조각상
+        else if (Type == MODEL_HELPER + 128)		// Falcon statue
         {
             Scale = 0.0035f;
         }
-        else if (Type == MODEL_HELPER + 129)		// 양조각상
+        else if (Type == MODEL_HELPER + 129)		// Sheep statue
         {
             Scale = 0.0035f;
         }
-        else if (Type == MODEL_HELPER + 134)		// 편자
+        else if (Type == MODEL_HELPER + 134)		// Horseshoe
         {
             Scale = 0.0033f;
         }
 #endif	//LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
-        else if (Type == MODEL_HELPER + 130)		// 오크참
+        else if (Type == MODEL_HELPER + 130)		// Oak charm
         {
             Scale = 0.0032f;
         }
-        else if (Type == MODEL_HELPER + 131)		// 메이플참
+        else if (Type == MODEL_HELPER + 131)		// Maple charm
         {
             Scale = 0.0033f;
         }
-        else if (Type == MODEL_HELPER + 132)		// 골든오크참
+        else if (Type == MODEL_HELPER + 132)		// Golden Oak charm
         {
             Scale = 0.0025f;
         }
-        else if (Type == MODEL_HELPER + 133)		// 골든메이플참
+        else if (Type == MODEL_HELPER + 133)		// Golden Maple charm
         {
             Scale = 0.0033f;
         }
@@ -10052,7 +10050,7 @@ void RenderObjectScreen(int Type, int ItemLevel, int excellentFlags, int ancient
             b->BodyHeight = -100.f;
             Scale = 0.0039f;
         }
-        // LEM_TSET  상승의 보석, 연장의 보석 스케일[lem_2010.9.7]
+        // LEM_TSET  Jewel of ascend, Jewel of extension scale[lem_2010.9.7]
         else if (Type >= MODEL_HELPER + 135 && Type <= MODEL_HELPER + 145)
         {
             Scale = 0.001f;
@@ -10461,7 +10459,7 @@ void RenderItem3D(float sx, float sy, float Width, float Height, int Type, int L
     vec3_t Position;
     CameraProjection::ScreenToWorldRay(g_Camera, (int)(sx), (int)(sy), Position, false);
     //RenderObjectScreen(Type+MODEL_ITEM,Level,Option1,Position,Success,PickUp);
-    if (Type == ITEM_BOX_OF_LUCK && Level == 1)	// 성탄의별
+    if (Type == ITEM_BOX_OF_LUCK && Level == 1)	// Christmas star
     {
         RenderObjectScreen(MODEL_EVENT + 4, Level, excellentFlags, ancientDiscriminator, Position, Success, PickUp);
     }
@@ -11284,17 +11282,17 @@ void CreateCastleMark(int Type, BYTE* buffer, bool blend)
         case 1:MarkColor[i] = (255 << 24) + (0 << 16) + (0 << 8) + (0); break;
         case 2:MarkColor[i] = (255 << 24) + (128 << 16) + (128 << 8) + (128); break;
         case 3:MarkColor[i] = (255 << 24) + (255 << 16) + (255 << 8) + (255); break;
-        case 4:MarkColor[i] = (255 << 24) + (0 << 16) + (0 << 8) + (255); break;//빨
+        case 4:MarkColor[i] = (255 << 24) + (0 << 16) + (0 << 8) + (255); break;//Red
         case 5:MarkColor[i] = (255 << 24) + (0 << 16) + (128 << 8) + (255); break;//
-        case 6:MarkColor[i] = (255 << 24) + (0 << 16) + (255 << 8) + (255); break;//노
+        case 6:MarkColor[i] = (255 << 24) + (0 << 16) + (255 << 8) + (255); break;//Yellow
         case 7:MarkColor[i] = (255 << 24) + (0 << 16) + (255 << 8) + (128); break;//
-        case 8:MarkColor[i] = (255 << 24) + (0 << 16) + (255 << 8) + (0); break;//초
+        case 8:MarkColor[i] = (255 << 24) + (0 << 16) + (255 << 8) + (0); break;//Green
         case 9:MarkColor[i] = (255 << 24) + (128 << 16) + (255 << 8) + (0); break;//
-        case 10:MarkColor[i] = (255 << 24) + (255 << 16) + (255 << 8) + (0); break;//청
+        case 10:MarkColor[i] = (255 << 24) + (255 << 16) + (255 << 8) + (0); break;//Blue
         case 11:MarkColor[i] = (255 << 24) + (255 << 16) + (128 << 8) + (0); break;//
-        case 12:MarkColor[i] = (255 << 24) + (255 << 16) + (0 << 8) + (0); break;//파
+        case 12:MarkColor[i] = (255 << 24) + (255 << 16) + (0 << 8) + (0); break;//Blue
         case 13:MarkColor[i] = (255 << 24) + (255 << 16) + (0 << 8) + (128); break;//
-        case 14:MarkColor[i] = (255 << 24) + (255 << 16) + (0 << 8) + (255); break;//보
+        case 14:MarkColor[i] = (255 << 24) + (255 << 16) + (0 << 8) + (255); break;//Purple
         case 15:MarkColor[i] = (255 << 24) + (128 << 16) + (0 << 8) + (255); break;//
         }
     }

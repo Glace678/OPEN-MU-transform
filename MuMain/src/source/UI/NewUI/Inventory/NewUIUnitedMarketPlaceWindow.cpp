@@ -127,7 +127,7 @@ bool CNewUIUnitedMarketPlaceWindow::Update()
         // 			else
         // 				m_bChannelEnable[i] = FALSE;
         //
-        // 			// ��ư ���
+        // // ư 
         // 			if (m_bChannelEnable[i] == TRUE && g_DuelMgr.IsDuelChannelJoinable(i))
         // 			{
         // 				m_BtnChannel[i].UnLock();

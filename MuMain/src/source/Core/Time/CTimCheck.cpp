@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "CTimCheck.h"
 
-static CTimeCheck CTime;
-
 CTimeCheck::CTimeCheck()
 {
 }

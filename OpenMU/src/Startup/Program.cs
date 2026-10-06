@@ -692,7 +692,7 @@ internal sealed class Program : IDisposable
                 else
                 {
                     Console.WriteLine("Cancelled the schema update process, can't start the server.");
-                    return null!;
+                    throw new InvalidOperationException("The database schema is not up to date and the required schema update was declined, so the server cannot be started.");
                 }
             }
         }

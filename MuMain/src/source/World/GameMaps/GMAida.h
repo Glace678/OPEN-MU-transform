@@ -5,13 +5,13 @@ namespace M33Aida {
     bool IsInAida();
     bool IsInAidaSection2(const vec3_t Position);
 
-    //. 오브젝트
+    //. object
     bool CreateAidaObject(OBJECT* pObject);
     bool MoveAidaObject(OBJECT* pObject);
     bool RenderAidaObjectVisual(OBJECT* pObject, BMD* pModel);
     bool RenderAidaObjectMesh(OBJECT* pObject, BMD* pModel, bool ExtraMon = 0);
 
-    //. 몬스터
+    //. monster
     CHARACTER* CreateAidaMonster(int iType, int PosX, int PosY, int Key);
 
     bool MoveAidaMonsterVisual(OBJECT* pObject, BMD* pModel);
@@ -22,7 +22,7 @@ namespace M33Aida {
     bool AttackEffectAidaMonster(CHARACTER* pCharacter, OBJECT* pObject, BMD* pModel);
     bool SetCurrentActionAidaMonster(CHARACTER* pCharacter, OBJECT* pObject);
 
-    //. 화면 처리
+    //. screen processing
     bool CreateMist(PARTICLE* pParticleObj);
 }
 

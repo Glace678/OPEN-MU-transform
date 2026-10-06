@@ -33,6 +33,7 @@ void CreatePointer(int Type, vec3_t Position, float Angle, vec3_t Light, float S
             o->Angle[2] = Angle;
             o->Alpha = 1.f;
             o->Scale = Scale;
+            o->LifeTime = 0;
             switch (Type)
             {
             case BITMAP_BLOOD:

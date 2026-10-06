@@ -17,7 +17,7 @@ var services = builder.Services;
 services.AddSingleton<IFriendServer, FriendServer>()
     .AddSingleton<IChatServer, ChatServer>()
     .AddSingleton<IFriendNotifier, FriendNotifier>()
-    .AddPeristenceProvider();
+    .AddPersistenceProvider();
 
 var metricsRegistry = new MetricsRegistry();
 

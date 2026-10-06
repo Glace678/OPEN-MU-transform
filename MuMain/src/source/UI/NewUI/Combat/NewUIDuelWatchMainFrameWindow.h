@@ -29,9 +29,9 @@ namespace SEASON3B
         CNewUIManager* m_pNewUIMng;
         CNewUI3DRenderMng* m_pNewUI3DRenderMng;
 
-        CNewUIButton m_BtnExit;			// 닫기 버튼
+        CNewUIButton m_BtnExit;			// Close button
 
-        BOOL m_bHasHPReceived;	// HP 초기상태인가
+        BOOL m_bHasHPReceived;	// Is HP in its initial state?
         float m_fPrevHPRate1;
         float m_fPrevHPRate2;
         float m_fPrevSDRate1;

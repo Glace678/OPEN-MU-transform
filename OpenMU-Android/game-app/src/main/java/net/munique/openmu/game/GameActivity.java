@@ -89,7 +89,7 @@ public final class GameActivity extends SDLActivity {
         int safePercent = preferences.getInt(MobilePreferences.KEY_SAFE_MARGIN,
             MobilePreferences.DEFAULT_SAFE_MARGIN);
         DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        MobileViewportMetrics.populateRealMetrics(getWindowManager(), metrics);
         viewportHorizontalMargin = Math.round(metrics.widthPixels * safePercent / 100.0f);
         viewportVerticalMargin = Math.round(metrics.heightPixels * safePercent / 100.0f);
         RelativeLayout.LayoutParams surfaceParams = new RelativeLayout.LayoutParams(
@@ -257,7 +257,7 @@ public final class GameActivity extends SDLActivity {
         int safePercent = MobilePreferences.get(this).getInt(MobilePreferences.KEY_SAFE_MARGIN,
             MobilePreferences.DEFAULT_SAFE_MARGIN);
         DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        MobileViewportMetrics.populateRealMetrics(getWindowManager(), metrics);
         int horizontalMargin = Math.round(metrics.widthPixels * safePercent / 100.0f);
         int verticalMargin = Math.round(metrics.heightPixels * safePercent / 100.0f);
         params.topMargin = Math.max(dp(6), verticalMargin);

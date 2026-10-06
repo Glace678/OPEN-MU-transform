@@ -16,7 +16,7 @@ var builder = DaprService.CreateBuilder("ChatServer", args);
 // Add services to the container.
 var services = builder.Services;
 services.AddSingleton<ChatServer>()
-    .AddPeristenceProvider() // todo: Config API instead of using persistence?
+    .AddPersistenceProvider() // todo: Config API instead of using persistence?
     .AddPlugInManager(plugInConfigurations)
     .AddIpResolver(args)
     .AddPersistentSingleton<ChatServerDefinition>();

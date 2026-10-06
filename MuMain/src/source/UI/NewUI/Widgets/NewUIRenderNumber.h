@@ -15,7 +15,7 @@ namespace SEASON3B
     {
     public:
         enum IMAGE_LIST
-        {	//. max: 1개
+        {	//. max: 1
             IMAGE_NUMBER1 = BITMAP_INTERFACE_NEW_NUMBER_BEGIN,	// newui_number1.tga
         };
 

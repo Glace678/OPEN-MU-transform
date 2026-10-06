@@ -74,7 +74,7 @@ bool CNewUIInGameShop::Create(CNewUIManager* pNewUIMng, int x, int y)
     SetPos(x, y);
     LoadImages();
     SetBtnInfo();
-    Show(false);	//visible()을 flase로
+    Show(false);	//Set visible() to false
 
     return true;
 }
@@ -478,14 +478,14 @@ bool CNewUIInGameShop::BtnProcess()
 
         IGS_StorageItem* pSelectItem = m_StorageItemListBox.GetSelectedText();
 
-        if (iStorageIndex == IGS_SAFEKEEPING_LISTBOX)					// 보관함
+        if (iStorageIndex == IGS_SAFEKEEPING_LISTBOX)					// Storage
         {
             CMsgBoxIGSStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSStorageItemInfoLayout), &pMsgBox);
             pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode, pSelectItem->m_szType,
                 pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
         }
-        else if (iStorageIndex == IGS_PRESENTBOX_LISTBOX)				// 선물 보관함
+        else if (iStorageIndex == IGS_PRESENTBOX_LISTBOX)				// Gift storage
         {
             CMsgBoxIGSGiftStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSGiftStorageItemInfoLayout), &pMsgBox);

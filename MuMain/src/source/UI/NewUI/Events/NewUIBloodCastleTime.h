@@ -42,11 +42,11 @@ namespace SEASON3B
         CNewUIManager* m_pNewUIMng;
         POINT						m_Pos;
 
-        wchar_t				m_szTime[256];		// 시간
-        int							m_iTime;			// 시간
-        int							m_iTimeState;		// 시간상태( 기본, 임박 )
-        int							m_iMaxKillMonster;	// 죽여야하는 몬스터숫자
-        int							m_iKilledMonster;	// 현재 죽인 몬스터숫자
+        wchar_t				m_szTime[256];		// Time
+        int							m_iTime;			// Time
+        int							m_iTimeState;		// Time state (default, imminent)
+        int							m_iMaxKillMonster;	// Number of monsters to kill
+        int							m_iKilledMonster;	// Monsters killed so far
 
     public:
         CNewUIBloodCastle();

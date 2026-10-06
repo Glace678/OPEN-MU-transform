@@ -48,8 +48,7 @@ void ReportFileIssue(const wchar_t* filename, const wchar_t* issue)
     wchar_t text[256]{};
     std::swprintf(text, std::size(text), L"%ls - %ls.", filename, issue);
     g_ErrorReport.Write(text);
-    MessageBox(g_hWnd, text, nullptr, MB_OK);
-    SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+    std::exit(EXIT_FAILURE);
 }
 }
 

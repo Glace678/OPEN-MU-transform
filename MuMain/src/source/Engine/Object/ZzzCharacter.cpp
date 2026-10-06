@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// 케릭터 관련 함수
-// 케릭터 랜더링, 움직임등을 처리
+// Character-related functions
+// Handles character rendering, movement, etc.
 //
-// *** 함수 레벨: 3
+// *** Function level: 3
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -241,7 +241,7 @@ void SetPlayerStop(CHARACTER* c)
     {
         if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
         {
-            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)//레이지파이터이면
+            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)//if it is a Rage Fighter
             {
                 if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)
                     SetAction(&c->Object, PLAYER_RAGE_FENRIR_STAND_TWO_SWORD);
@@ -254,13 +254,13 @@ void SetPlayerStop(CHARACTER* c)
             }
             else
             {
-                if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)	// 양손무기
+                if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)	// two-handed weapon
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_TWO_SWORD);
-                else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type == -1) // 오른손 무기
+                else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type == -1) // right-hand weapon
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_ONE_RIGHT);
-                else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1) // 왼손 무기
+                else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1) // left-hand weapon
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_ONE_LEFT);
-                else	// 맨손
+                else	// bare-handed
                     SetAction(&c->Object, PLAYER_FENRIR_STAND);
             }
         }
@@ -348,7 +348,7 @@ void SetPlayerStop(CHARACTER* c)
                         }
                         else
                         {
-                            //  칼 장착.
+                            //  Sword equipped.
                             if (c->Weapon[0].Type >= MODEL_SWORD && c->Weapon[0].Type < MODEL_MACE + MAX_ITEM_INDEX)
                             {
                                 if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
@@ -364,12 +364,12 @@ void SetPlayerStop(CHARACTER* c)
                                     SetAction(&c->Object, PLAYER_STOP_TWO_HAND_SWORD);
                                 }
                             }
-                            //  창 장착.
+                            //  Spear equipped.
                             else if (c->Weapon[0].Type == MODEL__SPEAR || c->Weapon[0].Type == MODEL_DRAGON_LANCE)
                             {
                                 SetAction(&c->Object, PLAYER_STOP_SPEAR);
                             }
-                            //  창 장착.
+                            //  Spear equipped.
                             else if (c->Weapon[0].Type >= MODEL_SPEAR && c->Weapon[0].Type < MODEL_SPEAR + MAX_ITEM_INDEX)
                             {
                                 if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
@@ -377,7 +377,7 @@ void SetPlayerStop(CHARACTER* c)
                                 else
                                     SetAction(&c->Object, PLAYER_STOP_SCYTHE);
                             }
-                            // 소환술사 스틱.
+                            // Summoner's wand.
                             else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK && c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
                             {
                                 ::SetAction(&c->Object, PLAYER_STOP_WAND);
@@ -416,7 +416,7 @@ void SetPlayerStop(CHARACTER* c)
     else
     {
         int Index = TERRAIN_INDEX_REPEAT((c->PositionX), (c->PositionY));
-        if (o->Type == MODEL_BALI && (TerrainWall[Index] & TW_SAFEZONE) == TW_SAFEZONE)//발리
+        if (o->Type == MODEL_BALI && (TerrainWall[Index] & TW_SAFEZONE) == TW_SAFEZONE)//Bali
             SetAction(&c->Object, MONSTER01_APEAR);
         else
             SetAction(&c->Object, MONSTER01_STOP1);
@@ -577,11 +577,11 @@ void SetPlayerWalk(CHARACTER* c)
                     SetAction(&c->Object, PLAYER_RUN_RIDE_WEAPON);
             }
         }
-        else if (c->Helper.Type == MODEL_HORN_OF_DINORANT && !c->SafeZone)   //  페가시아를 타고있음.
+        else if (c->Helper.Type == MODEL_HORN_OF_DINORANT && !c->SafeZone)   //  riding Pegasus.
         {
             if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN || g_Direction.m_CKanturu.IsMayaScene())
             {
-                // 애니메이션 튀는거때문에 아예 막아버림
+                // Blocked entirely because the animation glitches
 //                if(c->Weapon[0].Type==-1 && c->Weapon[1].Type==-1)
 //				    SetAction(&c->Object,PLAYER_FLY_RIDE);
 //			    else
@@ -679,7 +679,7 @@ void SetPlayerWalk(CHARACTER* c)
                         {
                             SetAction(&c->Object, PLAYER_WALK_BOW);
                         }
-                        // 석궁
+                        // crossbow
                         else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
                         {
                             SetAction(&c->Object, PLAYER_WALK_CROSSBOW);
@@ -1036,7 +1036,7 @@ void SetPlayerHighBowAttack(CHARACTER* c)
             {
                 SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW_UP);
             }
-            // 석궁
+            // crossbow
             else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
             {
                 SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW_UP);
@@ -1080,7 +1080,7 @@ void SetPlayerAttack(CHARACTER* c)
             }
             else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
             {
-                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW);	//석궁공격
+                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW);	//crossbow attack
             }
             else
             {
@@ -1272,10 +1272,8 @@ void SetPlayerAttack(CHARACTER* c)
             }
         }
     }
-    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE);
-    else
-        if (c->Object.AnimationFrame == 0.f)
-        {
+    if (gMapManager.WorldActive != WD_73NEW_LOGIN_SCENE && c->Object.AnimationFrame == 0.f)
+    {
             PlayMonsterSound(o);
 
             if (o->Type != MODEL_PLAYER || (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
@@ -1309,7 +1307,7 @@ void SetPlayerAttack(CHARACTER* c)
                 else if (c->Weapon[0].Type != -1 || c->Weapon[1].Type != -1)
                     PlayBuffer(static_cast<ESound>(SOUND_BRANDISH_SWORD01 + rand() % 2), o);
             }
-        }
+    }
     c->SwordCount++;
 }
 
@@ -1564,7 +1562,7 @@ void SetPlayerDie(CHARACTER* c)
                 }
 
                 if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
-                    PlayBuffer(SOUND_FENRIR_DEATH, o);	// 펜릴 죽는
+                    PlayBuffer(SOUND_FENRIR_DEATH, o);	// Fenrir death
             }
         }
         c->Object.AnimationFrame = 0.001f;
@@ -1987,7 +1985,7 @@ void AttackEffect(CHARACTER* c)
             }
         }
         break;
-    case MONSTER_METEORITE_TRAP://함정
+    case MONSTER_METEORITE_TRAP://trap
         if ((c->Skill) == AT_SKILL_BOSS && rand_fps_check(1))
         {
             Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2], Position);
@@ -1995,7 +1993,7 @@ void AttackEffect(CHARACTER* c)
             PlayBuffer(SOUND_METEORITE01);
         }
         break;
-    case MONSTER_BAHAMUT://물고기
+    case MONSTER_BAHAMUT://fish
         if (rand_fps_check(1))
         {
             for (int i = 0; i < 4; i++)
@@ -2020,7 +2018,7 @@ void AttackEffect(CHARACTER* c)
         {
             switch (c->MonsterIndex)
             {
-            case MONSTER_CHAOS_CASTLE_2:  //  카오스캐슬 궁수.
+            case MONSTER_CHAOS_CASTLE_2:  //  Chaos Castle archer.
             case MONSTER_CHAOS_CASTLE_4:
             case MONSTER_CHAOS_CASTLE_6:
             case MONSTER_CHAOS_CASTLE_8:
@@ -2064,7 +2062,7 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_MAGIC_SKELETON_1:   //  마법 해골.
+            case MONSTER_MAGIC_SKELETON_1:   //  Magic skeleton.
             case MONSTER_MAGIC_SKELETON_2:
             case MONSTER_MAGIC_SKELETON_3:
             case MONSTER_MAGIC_SKELETON_4:
@@ -2082,12 +2080,12 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_GIANT_OGRE_1:	//. 자이언트오거1
-            case MONSTER_GIANT_OGRE_2:	//. 자이언트오거2
-            case MONSTER_GIANT_OGRE_3:	//. 자이언트오거3
-            case MONSTER_GIANT_OGRE_4:	//. 자이언트오거4
-            case MONSTER_GIANT_OGRE_5:	//. 자이언트오거5
-            case MONSTER_GIANT_OGRE_6:	//. 자이언트오거6
+            case MONSTER_GIANT_OGRE_1:	//. Giant Ogre 1
+            case MONSTER_GIANT_OGRE_2:	//. Giant Ogre 2
+            case MONSTER_GIANT_OGRE_3:	//. Giant Ogre 3
+            case MONSTER_GIANT_OGRE_4:	//. Giant Ogre 4
+            case MONSTER_GIANT_OGRE_5:	//. Giant Ogre 5
+            case MONSTER_GIANT_OGRE_6:	//. Giant Ogre 6
             case MONSTER_GIANT_OGRE_7:
                 if (c->CheckAttackTime(13))
                 {
@@ -2101,7 +2099,7 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_DARK_PHOENIX://불사조공격
+            case MONSTER_DARK_PHOENIX://phoenix attack
                 if (c->CheckAttackTime(14))
                 {
                     Vector(0.f, 0.f, 0.f, p);
@@ -2152,7 +2150,7 @@ void AttackEffect(CHARACTER* c)
                     {
                         int Hand = 0;
                         if (i >= 3) Hand = 1;
-                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//에러
+                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//error
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
@@ -2248,7 +2246,7 @@ void AttackEffect(CHARACTER* c)
         {
             switch (c->MonsterIndex)
             {
-            case MONSTER_MAGIC_SKELETON_1:   //  마법 해골.
+            case MONSTER_MAGIC_SKELETON_1:   //  Magic skeleton.
             case MONSTER_MAGIC_SKELETON_2:
             case MONSTER_MAGIC_SKELETON_3:
             case MONSTER_MAGIC_SKELETON_4:
@@ -2276,7 +2274,7 @@ void AttackEffect(CHARACTER* c)
             }
             break;
 
-            case MONSTER_DARK_PHOENIX://불사조공격
+            case MONSTER_DARK_PHOENIX://phoenix attack
                 if (8 <= c->AttackTime && rand_fps_check(1))
                 {
                     Vector(0.f, 0.f, 0.f, p);
@@ -2288,7 +2286,7 @@ void AttackEffect(CHARACTER* c)
                     }
                 }
                 break;
-            case MONSTER_DEVIL://데빌
+            case MONSTER_DEVIL://devil
                 if (c->CheckAttackTime(1))
                 {
                     PlayBuffer(SOUND_EVIL);
@@ -2323,14 +2321,14 @@ void AttackEffect(CHARACTER* c)
                     }
                 }
                 break;
-            case MONSTER_LIZARD_KING://리자드킹
+            case MONSTER_LIZARD_KING://lizard king
                 if (rand_fps_check(1))
                 {
                     for (int i = 0; i < 6; i++)
                     {
                         int Hand = 0;
                         if (i >= 3) Hand = 1;
-                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//에러
+                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//error
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
@@ -2379,7 +2377,7 @@ void AttackEffect(CHARACTER* c)
                 }
             }
             break;
-            // 플레이어 이거나 기타 몬스터가 전기(번개)를 사용했을시
+            // When the player or other monsters use electricity (lightning)
             default:
                 if (rand_fps_check(1))
                 {
@@ -2610,7 +2608,7 @@ namespace
 
 bool AttackStage(CHARACTER* c, OBJECT* o)
 {
-    // 무기 위치 얻기
+    // Get weapon position
     int Hand = GetHandOfWeapon(o);
 
     int iSkill = (c->Skill);
@@ -2653,7 +2651,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
 
         if (c->AttackTime <= 8 && rand_fps_check(1))
-        {	// 기 모일 곳 위치
+        {	// Position where energy gathers
             vec3_t Position2 = { 0.0f, 0.0f, 0.0f };
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Position2, o->m_vPosSword, true);
 
@@ -2663,7 +2661,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
 
         if (6 <= c->AttackTime && c->AttackTime <= 12)
-        {	// 꼬깔 만들기
+        {	// Create cone
             if (rand_fps_check(2))
             {
                 vec3_t Position;
@@ -2702,7 +2700,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
     }
     break;
-    case AT_SKILL_IMPALE:	// 창찌르기
+    case AT_SKILL_IMPALE:	// spear thrust
     {
         BMD* b = &Models[o->Type];
 
@@ -2713,7 +2711,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->SetLastAttackEffectTime();
         }
         else if (c->CheckAttackTime(4))
-        {	// 준비동작
+        {	// preparatory motion
             vec3_t Light = { 1.0f, 1.0f, .5f };
             vec3_t Position2 = { 0.0f, 0.0f, 0.0f };
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Position2, p, true);
@@ -2722,7 +2720,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->SetLastAttackEffectTime();
         }
         else if (c->CheckAttackTime(8))
-        {	// 꼬깔 만들기
+        {	// Create cone
             vec3_t Position;
             memcpy(Position, o->Position, sizeof(vec3_t));
             Position[0] += 50.0f * sinf(o->Angle[2] * Q_PI / 180.0f);
@@ -2734,7 +2732,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->SetLastAttackEffectTime();
         }
         if (13 <= c->AttackTime && c->AttackTime <= 14 && rand_fps_check(1))
-        {	// 현란한 창술
+        {	// flashy spear technique
             for (int i = 0; i < 3; ++i)
             {
                 vec3_t Position;
@@ -2773,7 +2771,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             }
         }
 
-        if (c->CheckAttackTime(3))  //  氣 모으기.
+        if (c->CheckAttackTime(3))  //  Gathering energy.
         {
             CreateEffect(BITMAP_GATHERING, o->Position, o->Angle, o->Light, 0, o);
             PlayBuffer(SOUND_PIERCING, o);
@@ -4856,7 +4854,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW ||
                     o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW ||
                     o->CurrentAction == PLAYER_ATTACK_RIDE_BOW || o->CurrentAction == PLAYER_ATTACK_RIDE_CROSSBOW
-                    || o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW || o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW	//^ 펜릴 스킬 관련(요정 화살 나가게 하는 것)
+                    || o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW || o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW	//^ Fenrir skill related (makes the elf's arrows fire)
                     ))
             {
                 if (AT_SKILL_MULTI_SHOT != (c->Skill))
@@ -5473,7 +5471,7 @@ bool CheckFullSet(CHARACTER* c)
                 && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_HURRICANE_ARMOR
                 && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VOLCANO_ARMOR
                 && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VALIANT_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_DESTORY_ARMOR
+                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_DESTROY_ARMOR
                 && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_PHANTOM_ARMOR
                 )
             {
@@ -5530,7 +5528,7 @@ bool CheckFullSet(CHARACTER* c)
                 && c->BodyPart[BODYPART_ARMOR].Type != ITEM_HURRICANE_ARMOR
                 && c->BodyPart[BODYPART_ARMOR].Type != ITEM_VOLCANO_ARMOR
                 && c->BodyPart[BODYPART_ARMOR].Type != ITEM_VALIANT_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_DESTORY_ARMOR
+                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_DESTROY_ARMOR
                 && c->BodyPart[BODYPART_ARMOR].Type != ITEM_PHANTOM_ARMOR
                 )
             {
@@ -7839,7 +7837,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, fRendomScale, Light, o);
 
-        // 잔상 Zx01
+        // afterimage Zx01
         vec3_t vColor;
         VectorCopy(p, o->EyeLeft);
         Vector(0.f, 0.f, 0.9f, vColor);
@@ -7859,7 +7857,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, 0.4f, Light, o);
 
-        // 칼주변
+        // around the sword
         Vector(0.0f, 0.3f, 0.7f, Light);
         b->TransformPosition(BoneTransform[2], Position, p, true);		// rx01
         CreateSprite(BITMAP_LIGHTMARKS, p, 1.0f, Light, o);
@@ -7987,8 +7985,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         }
         // Object->m_iAnimation Random Texture
         int iRandomTexure1, iRandomTexure2;
-        iRandomTexure1 = (Object->m_iAnimation / 10) % 3;	// 3개
-        iRandomTexure2 = (Object->m_iAnimation) % 3;		// 3개
+        iRandomTexure1 = (Object->m_iAnimation / 10) % 3;	// 3 variants
+        iRandomTexure2 = (Object->m_iAnimation) % 3;		// 3 variants
 
         // Zx01
         fRandomScale = (float)(rand() % 10) / 10.0f + 1.0f;		//(1.0~2.0)
@@ -8101,7 +8099,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             //CreateEffect(MODEL_EFFECT_TRACE, p, o->Angle, vColor, 0, NULL, -1, 0, 0, 0, 30.f);
         }
 
-        // 잔상
+        // afterimage
         
         VectorCopy(p, o->EyeLeft);
 
@@ -8203,7 +8201,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             }
         }
     }break;
-    case MODEL_GUARDIAN_SHILED:
+    case MODEL_GUARDIAN_SHIELD:
     {
         Vector(0.f, 0.f, 0.f, Position);
         float fLumi = fabs(sinf(WorldTime * 0.001f)) + 0.1f;
@@ -8276,7 +8274,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         Vector(0.8f, 0.8f, 0.2f, vLight);
         CreateSprite(BITMAP_SHINY + 1, vPos, 1.0f, vLight, Object);
 
-        //작은 구슬
+        //small orb
         for (int i = 1; i < 8; i++)
         {
             b->TransformByObjectBone(vPos, Object, i);
@@ -8443,7 +8441,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == FALSE && !g_Direction.m_CKanturu.IsMayaScene()
         && !IsWingShadowDisabledDebug()) // DXP-23 diagnostic
     {
-        switch (Type)        // 날개인지 검사
+        switch (Type)        // check whether it is a wing
         {
         case MODEL_WINGS_OF_ELF:        // Wings of Elf
         case MODEL_WINGS_OF_HEAVEN:        // Wings of Heaven
@@ -9329,8 +9327,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             Vector(1.0f, 0.3f, 0.1f, c->Light);
         }
 
-        if (gMapManager.WorldActive == WD_65DOPPLEGANGER1);
-        else
+        if (gMapManager.WorldActive != WD_65DOPPLEGANGER1)
+        {
             if (o->CurrentAction != PLAYER_DIE1)
             {
                 // 			if (!g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
@@ -9361,13 +9359,13 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             }
         c->Object.BlendMesh = -1;
 
-        if (g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
-        {
-            // Frame-normalized hover rise so an idle ascended monster floats up at
-            // the same rate at any refresh rate (unscaled it rose ~6x faster at 144fps).
-            o->Position[2] += 2.0f * FPS_ANIMATION_FACTOR;
+            if (g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
+            {
+                // Frame-normalized hover rise so an idle ascended monster floats up at
+                // the same rate at any refresh rate (unscaled it rose ~6x faster at 144fps).
+                o->Position[2] += 2.0f * FPS_ANIMATION_FACTOR;
+            }
         }
-    }
 
     if (c == Hero)
     {
@@ -9749,87 +9747,79 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         {
             if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD)
             {
-                int numCloth = 4;
-                if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
-                {
-                    numCloth = 6;
-                }
-                else
-                {
-                    numCloth = 4;
-                }
+                constexpr int defaultClothCount = 4;
+                constexpr int emperorClothCount = 6;
+                const int allocatedClothCount =
+                    (c->Wing.Type == MODEL_CAPE_OF_EMPEROR) ? emperorClothCount : defaultClothCount;
 
-                auto* pCloth = new CPhysicsCloth[numCloth];
+                auto* pCloth = new CPhysicsCloth[allocatedClothCount];
 
-                pCloth[0].Create(o, 20, 0.0f, 0.0f, 20.0f, 6, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_LIGHT | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
-                pCloth[0].SetWindMinMax(10, 50);
-                pCloth[0].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
-                pCloth[0].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
+                int createdClothCount = 0;
+                pCloth[createdClothCount++].Create(o, 20, 0.0f, 0.0f, 20.0f, 6, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_LIGHT | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
+                pCloth[createdClothCount - 1].SetWindMinMax(10, 50);
+                pCloth[createdClothCount - 1].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
+                pCloth[createdClothCount - 1].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
 
-                pCloth[1].Create(o, 20, 0.0f, 5.0f, 18.0f, 5, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_BLEND | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
-                pCloth[1].SetWindMinMax(8, 40);
-                pCloth[1].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
-                pCloth[1].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
+                pCloth[createdClothCount++].Create(o, 20, 0.0f, 5.0f, 18.0f, 5, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_BLEND | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
+                pCloth[createdClothCount - 1].SetWindMinMax(8, 40);
+                pCloth[createdClothCount - 1].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
+                pCloth[createdClothCount - 1].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
 
                 if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
                 {
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 9, BITMAP_ROBE + 9, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 9, BITMAP_ROBE + 9, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
                 }
                 else if (c->Wing.Type == MODEL_WING + 130)
                 {
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 100.0f, 100.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 100.0f, 100.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
                 }
                 else
                 {
-                    //
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
-                    pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
-                    pCloth[2].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
+                    pCloth[createdClothCount].AddCollisionSphere(10.f, -10.0f, 20.0f, 27.0f, 17);
                 }
-
-                if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
-                {
-                    numCloth = 6;
-                }
-                else
-                {
-                    numCloth = 3;
-                }
+                ++createdClothCount;
 
                 if (c->BodyPart[BODYPART_ARMOR].Type == static_cast<int>(MODEL_BODY_ARMOR) + SKIN_CLASS_DARK_LORD)
                 {
-                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT, BITMAP_DARK_LOAD_SKIRT, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
-                    pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    pCloth[createdClothCount].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT, BITMAP_DARK_LOAD_SKIRT, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
+                    pCloth[createdClothCount].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    ++createdClothCount;
                 }
                 else if (c->BodyPart[BODYPART_ARMOR].Type == static_cast<int>(MODEL_BODY_ARMOR) + SKIN_CLASS_LORDEMPEROR)
                 {
-                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD, BITMAP_DARKLOAD_SKIRT_3RD, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
-                    pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    pCloth[createdClothCount].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD, BITMAP_DARKLOAD_SKIRT_3RD, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
+                    pCloth[createdClothCount].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    ++createdClothCount;
                 }
 
                 if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
                 {
-                    pCloth[4].Create(o, 19, 30.0f, 15.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
-                    pCloth[4].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
-                    pCloth[4].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
+                    pCloth[createdClothCount].Create(o, 19, 30.0f, 15.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
+                    pCloth[createdClothCount].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    pCloth[createdClothCount].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
+                    ++createdClothCount;
 
-                    pCloth[5].Create(o, 19, -30.0f, 20.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
-                    pCloth[5].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
-                    pCloth[5].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
+                    pCloth[createdClothCount].Create(o, 19, -30.0f, 20.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
+                    pCloth[createdClothCount].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                    pCloth[createdClothCount].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
+                    ++createdClothCount;
                 }
 
                 o->m_pCloth = (void*)pCloth;
-                o->m_byNumCloth = numCloth;
+                o->m_byNumCloth = static_cast<BYTE>(createdClothCount);
+            }
             }
             else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
             {
@@ -10051,7 +10041,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         VectorAdd(Light, o->Light, c->Light);
 
         int nCastle = BLOODCASTLE_NUM + (gMapManager.WorldActive - WD_11BLOODCASTLE_END);
-        if (nCastle > 0 && nCastle <= BLOODCASTLE_NUM)		//. 블러드 캐슬일경우
+        if (nCastle > 0 && nCastle <= BLOODCASTLE_NUM)		//. in the case of Blood Castle
         {
             if ((c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_1 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_1) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_2 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_2) ||
@@ -12608,8 +12598,8 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
 
     Type = (Equipment[4] >> 2) & 3;
 
-    //신규캐릭터 추가로 인한 날개 인덱스 확장 구조변경
-    if (Type == 1)			//1차 날개
+    //Structure changed to extend wing index due to new characters
+    if (Type == 1)			//1st-stage wings
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
@@ -12622,7 +12612,7 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
             break;
         }
     }
-    else if (Type == 2)		//2차 날개
+    else if (Type == 2)		//2nd-stage wings
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
@@ -12635,12 +12625,12 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
             break;
         }
     }
-    else if (Type == 3)		//3차 날개
+    else if (Type == 3)		//3rd-stage wings
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
         {
-        case 0:				//작은날개
+        case 0:				//small wings
         {
             Type = (Equipment[16] >> 5);
             c->Wing.Type = MODEL_SEED_SPHERE_EARTH_5 + Type;
@@ -13933,7 +13923,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c->Level = 1;
         break;
     case MONSTER_BALROG:
-    case MONSTER_METAL_BALROG:	//발록2
+    case MONSTER_METAL_BALROG:	//Balrog 2
         OpenMonsterModel(MONSTER_MODEL_BALROG);
         c = CreateCharacter(Key, MODEL_BALROG, PositionX, PositionY);
         wcscpy(c->ID, L"발록");
@@ -13955,7 +13945,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         break;
         /*OpenMonsterModel(MONSTER_MODEL_GIANT);
         c = CreateCharacter(Key,MODEL_MONSTER01+7,PositionX,PositionY);
-        wcscpy(c->ID,"블러드 고스트");
+        wcscpy(c->ID,"Blood Ghost");
         c->Object.AlphaTarget = 0.4f;
         c->MoveSpeed = 15;
         c->Blood = true;
@@ -13999,7 +13989,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         break;
         /*OpenMonsterModel(MONSTER_MODEL_HELL_HOUND);
         c = CreateCharacter(Key,MODEL_MONSTER01+5,PositionX,PositionY);
-        wcscpy(c->ID,"자이언트");
+        wcscpy(c->ID,"Giant");
         c->Weapon[0].Type = MODEL_AXE+2;
         c->Weapon[1].Type = MODEL_AXE+2;
         c->Object.Scale = 0.7f;
@@ -14465,7 +14455,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_REFINERY_NPC, PositionX, PositionY);
         o = &c->Object;
         break;
-    case MONSTER_JERRIDON://환원
+    case MONSTER_JERRIDON://recovery
         OpenNpc(MODEL_RECOVERY_NPC);
         c = CreateCharacter(Key, MODEL_RECOVERY_NPC, PositionX, PositionY);
         o = &c->Object;
@@ -14898,13 +14888,13 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
     }
     break;
     case MONSTER_DELGADO:
-        //델가도
+        //Delgado
         OpenNpc(MODEL_NPC_SERBIS);
         c = CreateCharacter(Key, MODEL_NPC_SERBIS, PositionX, PositionY);
         wcscpy(c->ID, L"Unknown");
         break;
     case MONSTER_GATEKEEPER_TITUS:
-        // 결투장 문지기 NPC 타이투스
+        // Duel arena gatekeeper NPC Titus
         OpenNpc(MODEL_DUEL_NPC_TITUS);
         c = CreateCharacter(Key, MODEL_DUEL_NPC_TITUS, PositionX, PositionY);
         wcscpy(c->ID, L"Unknown");
@@ -15499,7 +15489,7 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
                 }
             }
 
-            // 사탄
+            // Satan
             int iType = c->Helper.Type;
             int iLevel = c->Helper.Level;
             int iOption1 = 0;

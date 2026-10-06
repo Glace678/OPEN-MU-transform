@@ -37,6 +37,28 @@ internal static class CastleSiegeExtensions
         builder.HasOne(configuration => configuration.RawSignOfLordItemDefinition)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(configuration => configuration.RawGateDefenseUpgrades)
+            .WithOne()
+            .HasForeignKey("GateDefenseConfigurationId");
+        builder.HasMany(configuration => configuration.RawGateLifeUpgrades)
+            .WithOne()
+            .HasForeignKey("GateLifeConfigurationId");
+        builder.HasMany(configuration => configuration.RawStatueDefenseUpgrades)
+            .WithOne()
+            .HasForeignKey("StatueDefenseConfigurationId");
+        builder.HasMany(configuration => configuration.RawStatueLifeUpgrades)
+            .WithOne()
+            .HasForeignKey("StatueLifeConfigurationId");
+        builder.HasMany(configuration => configuration.RawStatueRegenUpgrades)
+            .WithOne()
+            .HasForeignKey("StatueRegenConfigurationId");
+        builder.HasMany(configuration => configuration.RawAttackMachineZones)
+            .WithOne()
+            .HasForeignKey("AttackMachineConfigurationId");
+        builder.HasMany(configuration => configuration.RawDefenseMachineZones)
+            .WithOne()
+            .HasForeignKey("DefenseMachineConfigurationId");
     }
 
     /// <summary>

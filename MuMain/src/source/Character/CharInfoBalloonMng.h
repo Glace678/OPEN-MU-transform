@@ -2,7 +2,7 @@
 // File: CharInfoBalloonMng.h
 //
 // Desc: interface for the CCharInfoBalloonMng class.
-//		 캐릭터 정보 풍선 관리 클래스.(캐릭터 선택씬에서 쓰임)
+//		 Character info balloon management class.(Used in the character selection scene)
 //
 // producer: Ahn Sang-Kyu
 //*****************************************************************************

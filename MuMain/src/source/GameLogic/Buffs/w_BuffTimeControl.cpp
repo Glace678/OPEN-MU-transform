@@ -158,8 +158,8 @@ void BuffTimeControl::GetBuffStringTime(DWORD type, std::wstring& timeText, bool
     if (iter != m_BuffTimeList.end())
     {
         BuffTimeInfo& bufftimeinfo = (*iter).second;
-        float fTime = bufftimeinfo.s_CurBuffTime * 0.001f;
-        GetStringTime(fTime, timeText, issecond);
+        const float fTime = bufftimeinfo.s_CurBuffTime * 0.001f;
+        GetStringTime(static_cast<DWORD>(fTime), timeText, issecond);
     }
 }
 

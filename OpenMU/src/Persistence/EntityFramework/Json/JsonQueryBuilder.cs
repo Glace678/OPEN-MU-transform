@@ -18,6 +18,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 /// </remarks>
 public class JsonQueryBuilder
 {
+    private const string MaxDepthAlias = "i";
+
     /// <summary>
     /// Builds the json query for the given entity type.
     /// </summary>
@@ -71,10 +73,9 @@ public class JsonQueryBuilder
     private void AddNavigationsToQuery(IEntityType entityType, StringBuilder stringBuilder, string parentAlias)
     {
         var navigationAlias = this.GetNextAlias(parentAlias);
-        if (navigationAlias == "i")
+        if (navigationAlias == MaxDepthAlias)
         {
-            // stopping circular reference
-            // Debug.Fail($"Stopping circular reference at entity type {entityType.Name}");
+            Debug.WriteLine("Stopping json graph traversal at {0}: max navigation depth reached", entityType.Name);
             return;
         }
 

@@ -75,7 +75,7 @@ CConsoleWindow::CConsoleWindow()
     m_bActiveCloseButton = false;
     m_started = false;
 
-    m_LimitTimer.SetTimer(12000);	//. 12��
+    m_LimitTimer.SetTimer(12000);	//. 12
 }
 CConsoleWindow::~CConsoleWindow() {}
 
@@ -89,9 +89,12 @@ bool CConsoleWindow::Open(const std::wstring& title)
     if (FALSE == ::AllocConsole())
         return false;
 
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
+    if (nullptr == freopen("CONIN$", "r", stdin))
+        ::OutputDebugStringW(L"[Console] freopen CONIN$ for stdin failed\n");
+    if (nullptr == freopen("CONOUT$", "w", stdout))
+        ::OutputDebugStringW(L"[Console] freopen CONOUT$ for stdout failed\n");
+    if (nullptr == freopen("CONOUT$", "w", stderr))
+        ::OutputDebugStringW(L"[Console] freopen CONOUT$ for stderr failed\n");
 
     ::SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
         ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
@@ -107,6 +110,9 @@ bool CConsoleWindow::Open(const std::wstring& title)
             break;
         ::Sleep(500);
     }
+
+    if (!GetWndHandle())
+        ::OutputDebugStringW(L"[Console] console window handle was not found within the time limit\n");
 
     m_bActiveCloseButton = true;
 

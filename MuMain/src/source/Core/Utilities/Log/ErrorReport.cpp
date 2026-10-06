@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include <vector>
 #ifdef _WIN32
 #include <ddraw.h>
 #include <dinput.h>
@@ -71,9 +72,13 @@ void CErrorReport::CutHead(void)
     // preserves ASCII bytes verbatim (no multi-byte sequence starts with a byte < 0x80),
     // so byte-level strchr/strncmp on '#' reliably locates the marker even if other lines
     // contain multi-byte sequences.
-    DWORD dwNumber;
-    char lpszBuffer[128 * 1024];
-    ReadFile(m_hFile, lpszBuffer, sizeof(lpszBuffer) - 1, &dwNumber, NULL);
+    DWORD dwNumber = 0;
+    std::vector<char> bufferStorage(128 * 1024);
+    char* lpszBuffer = bufferStorage.data();
+    if (!ReadFile(m_hFile, lpszBuffer, static_cast<DWORD>(bufferStorage.size()) - 1, &dwNumber, NULL))
+    {
+        dwNumber = 0;
+    }
     //m_iKey = Xor_ConvertBuffer( lpszBuffer, dwNumber);
     lpszBuffer[dwNumber] = '\0';
     char* lpCut = CheckHeadToCut(lpszBuffer, dwNumber);
@@ -239,7 +244,7 @@ void CErrorReport::WriteOpenGLInfo(void)
     Write(L"OpenGL version\t: %hs\r\n", (const char*)glGetString(GL_VERSION));
     GLint iResult[2];
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, iResult);
-    Write(L"Max Texture size\t: %d x %d\r\n", iResult[0], iResult[0]);
+    Write(L"Max Texture size\t: %d\r\n", iResult[0]);
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, iResult);
     Write(L"Max Viewport size\t: %d x %d\r\n", iResult[0], iResult[1]);
 

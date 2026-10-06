@@ -14,11 +14,15 @@ using MUnique.OpenMU.PlugIns;
 /// </summary>
 /// <typeparam name="TConfiguration">Configuration type.</typeparam>
 /// <typeparam name="TState">State type.</typeparam>
-public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodicTaskPlugIn, ISupportCustomConfiguration<TConfiguration>
+public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodicTaskPlugIn, ISupportCustomConfiguration<TConfiguration>, IDisposable
     where TConfiguration : PeriodicTaskConfiguration
     where TState : PeriodicTaskGameServerState
 {
     private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<IGameContext, TState>> States = new();
+
+    private readonly List<IGameContext> _handledContexts = [];
+
+    private readonly object _handledContextsLock = new();
 
     private bool _isStartForced = false;
 
@@ -126,6 +130,27 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
         }
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        List<IGameContext> contexts;
+        lock (this._handledContextsLock)
+        {
+            contexts = this._handledContexts.ToList();
+            this._handledContexts.Clear();
+        }
+
+        if (!States.TryGetValue(this.GetType(), out var statesPerType))
+        {
+            return;
+        }
+
+        foreach (var gameContext in contexts)
+        {
+            statesPerType.TryRemove(gameContext, out _);
+        }
+    }
+
     /// <summary>
     /// Gets a value indicating whether if it's the right time to start the task.
     /// </summary>
@@ -170,7 +195,17 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
 
         var statesPerType = States.GetOrAdd(type, newType => new());
 
-        return statesPerType.GetOrAdd(gameContext, _ => this.CreateState(gameContext));
+        var state = statesPerType.GetOrAdd(gameContext, _ => this.CreateState(gameContext));
+
+        lock (this._handledContextsLock)
+        {
+            if (!this._handledContexts.Contains(gameContext))
+            {
+                this._handledContexts.Add(gameContext);
+            }
+        }
+
+        return state;
     }
 
     /// <summary>

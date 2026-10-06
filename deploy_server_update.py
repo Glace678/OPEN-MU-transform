@@ -28,7 +28,12 @@ except FileNotFoundError:
     raise SystemExit(2)
 
 SERVER = ROOT / "App" / "Server"
-BUILD = Path(os.environ.get("OPENMU_BUILD_DIR", r"D:\openmu自用\OpenMU\bin\Debug"))
+DEFAULT_BUILD_DIR = Path(__file__).resolve().parent / "OpenMU" / "bin" / "Debug"
+BUILD = Path(os.environ.get("OPENMU_BUILD_DIR", str(DEFAULT_BUILD_DIR)))
+if not BUILD.is_dir():
+    print(f"build output directory not found: {BUILD}", file=sys.stderr)
+    print("build the server first or set OPENMU_BUILD_DIR to the output directory", file=sys.stderr)
+    raise SystemExit(2)
 LAUNCHER_EXE = ROOT / "OpenMU-Local.exe"
 HEALTH_URL = os.environ.get("OPENMU_HEALTH_URL", "http://127.0.0.1:5080/_health")
 SERVER_PROCESS_NAMES = ["OpenMU-Local", "MUnique.OpenMU.Startup"]

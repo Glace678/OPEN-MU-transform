@@ -30,7 +30,7 @@ void ParseNodes()
         if (Token == NUMBER)
         {
             Node_t* n = &ng->Node[ng->NodeNum];
-            Token = (*GetToken)(); strcpy(n->Name, TokenString);
+            Token = (*GetToken)(); strncpy(n->Name, TokenString, sizeof(n->Name) - 1); n->Name[sizeof(n->Name) - 1] = '\0';
             Token = (*GetToken)(); n->Parent = (short)TokenNumber;
         }
         ng->NodeNum++;

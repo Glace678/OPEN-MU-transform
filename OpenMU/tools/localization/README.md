@@ -4,8 +4,9 @@ The OpenMU admin panel keeps Simplified Chinese as the exact `zh-CN` BCP-47
 culture. Do not shorten it to `zh`; `zh-CN` and `zh-TW` must remain distinct in
 cookies, selectors, resource lookup, and serialized localized values.
 
-Run these commands from the repository root after changing an English source
-resource or a reviewed translation:
+Run these commands from the `OpenMU/` directory (the working directory the
+script paths and its `..\..` default repository root resolve against) after
+changing an English source resource or a reviewed translation:
 
 ```powershell
 tools/localization/Generate-ZhCnResources.ps1

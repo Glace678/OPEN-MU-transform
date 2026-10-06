@@ -27,10 +27,10 @@ CMsgBoxIGSUseItemConfirm::CMsgBoxIGSUseItemConfirm()
         m_szDescription[i][0] = '\0';
     }
 
-    m_iStorageSeq = 0;		// ������ ����
-    m_iStorageItemSeq = 0;		// ������ ��ǰ ����
-    m_wItemCode = -1;		// ������ �ڵ�
-    m_szItemType = '\0';		// ��ǰ���� (C : ĳ��, P : ��ǰ)
+    m_iStorageSeq = 0;
+    m_iStorageItemSeq = 0;		// ǰ 
+    m_wItemCode = -1;		// ڵ
+    m_szItemType = '\0';		// ǰ (C : ĳ, P : ǰ)
 }
 
 CMsgBoxIGSUseItemConfirm::~CMsgBoxIGSUseItemConfirm()
@@ -141,7 +141,7 @@ CALLBACK_RESULT CMsgBoxIGSUseItemConfirm::OKButtonDown(class CNewUIMessageBoxBas
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSUseItemConfirm*>(pOwner);
 
-    // ��������� ����Ϸ��� ����Ÿ���� ������ ��� �޼��� ó��
+    // Ϸ Ÿ ޼ ó
     BuffScriptLoader& pBuffInfo = TheBuffInfo();
     int iBuffType = pBuffInfo.GetBuffType(pOwnMsgBox->m_wItemCode);
     wchar_t szBuffName[MAX_TEXT_LENGTH] = { '\0', };
@@ -153,7 +153,7 @@ CALLBACK_RESULT CMsgBoxIGSUseItemConfirm::OKButtonDown(class CNewUIMessageBoxBas
 
     if (bEqualBuff)
     {
-        //  ���� ���â
+        // â
         CMsgBoxIGSUseBuffConfirm* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseBuffConfirmLayout), &pMsgBox);
         pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq,
@@ -194,13 +194,13 @@ void CMsgBoxIGSUseItemConfirm::SetAddCallbackFunc()
 // SetButtonInfo
 void CMsgBoxIGSUseItemConfirm::SetButtonInfo()
 {
-    // Ȯ�� ��ư
+    // Ȯ ư
     m_BtnOk.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_OK_POS_X, GetPos().y + IGS_BTN_POS_Y,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnOk.MoveTextPos(0, -1);
     m_BtnOk.SetText(I18N::Game::OK);
 
-    // ��� ��ư
+    // ư
     m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
         IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnCancel.MoveTextPos(0, -1);
@@ -237,7 +237,7 @@ void CMsgBoxIGSUseItemConfirm::RenderTexts()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
 
-    // Title - "��� Ȯ��"
+    // Title - " Ȯ"
     g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, I18N::Game::UseConfirmation, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);

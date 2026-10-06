@@ -19,9 +19,9 @@ bool TextureScriptParsing::parsingTScriptA(char* filename)
     char  str[] = "RHSN";
     char* strDest;
     char* strTokenFile;
-    char  strFileName[32];
+    char  strFileName[32] = {};
 
-    memcpy(strFileName, filename, 32);
+    strncpy(strFileName, filename, sizeof(strFileName) - 1);
     strTokenFile = strchr(strFileName, ch);
     if (strTokenFile != NULL)
     {

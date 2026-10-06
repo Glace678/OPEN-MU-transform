@@ -6,7 +6,7 @@
 #define MAX_MAGIC					64
 
 //----------------------------------------------------------------------------
-// ���׷� ��ȣ
+// ׷ ȣ
 #define RESISTANCE_COLD				0
 #define RESISTANCE_POISON			1
 #define RESISTANCE_THUNDER			2

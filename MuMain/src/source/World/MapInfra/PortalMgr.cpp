@@ -93,7 +93,7 @@ void CPortalMgr::GetPortalPositionText(wchar_t* pszOut)
 
     if (m_iPortalWorld == -1)
     {
-        assert(!"�̵� ��ġ�� �������� ���� ������");
+        assert(!"Portal destination world must be valid when reading portal text");
     }
     else
     {
@@ -107,7 +107,7 @@ void CPortalMgr::GetRevivePositionText(wchar_t* pszOut)
 
     if (m_iReviveWorld == -1)
     {
-        assert(!"�̵� ��ġ�� �������� ���� ������");
+        assert(!"Revive destination world must be valid when reading portal text");
     }
     else
     {

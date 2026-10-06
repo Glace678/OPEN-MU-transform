@@ -2,12 +2,11 @@
 
 // Character roster/attack-result/ability/control-code/PVP/regiment and
 // joint capacity constants, extracted from Core/Globals/_define.h (P2).
+#include "Engine/Pathing/PathConstants.h"
 
 #define MAX_CHARACTERS_CLIENT  400
 #define MAX_CHARACTERS_SERVER  10
 #define MAX_CHARACTERS_PER_ACCOUNT 5
-
-#define MAX_PATH_FIND 15
 
 #define ATTACK_FAIL    0
 #define ATTACK_SUCCESS 1

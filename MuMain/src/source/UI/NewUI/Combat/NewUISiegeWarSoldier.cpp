@@ -54,7 +54,7 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnRender()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    // 모든 캐릭터의 위치
+    // All characters' positions
     RenderCharPosInMiniMap();
 
     DisableAlphaBlend();
@@ -62,7 +62,7 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnRender()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, m_fMiniMapAlpha);
 
-    // 지도상의 명령 Icon
+    // Command icon on the map
     RenderCmdIconInMiniMap();
 
     DisableAlphaBlend();
@@ -78,12 +78,12 @@ void SEASON3B::CNewUISiegeWarSoldier::OnSetPos(int x, int y)
 
 //---------------------------------------------------------------------------------------------
 // RenderCharPosInMiniMap
-// 미니맵에 모든 캐릭터를 렌더
+// Render all characters on the minimap
 void SEASON3B::CNewUISiegeWarSoldier::RenderCharPosInMiniMap()
 {
     float fPosX, fPosY;
 
-    // 미니멥에 플레이어 렌더
+    // Render player on the minimap
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
         CHARACTER* c = &CharactersClient[i];

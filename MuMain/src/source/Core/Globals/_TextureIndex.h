@@ -17,7 +17,7 @@ enum
     BITMAP_CURSOR,
     BITMAP_CURSOR_END = BITMAP_CURSOR_BEGIN + 10,
 
-    //. World Texture	0x00FF ~ 0x02FE (511개)
+    //. World Texture	0x00FF ~ 0x02FE (511)
     BITMAP_MAPTILE_BEGIN = 30255,	// 255
 
     BITMAP_MAPTILE,

@@ -45,9 +45,9 @@ static  DWORD   g_dwWorldStateBack = 0;
 namespace
 {
     // Every data-file loader in this file ends a fatal error the same way:
-    // release the file/buffer, log "<file> - <reason>", show a message box and
-    // ask the window to close. Centralizing the sequence keeps the wording
-    // identical across loaders.
+    // release the file/buffer and log "<file> - <reason>". Centralizing the
+    // sequence keeps the wording identical across loaders; callers return
+    // immediately after invoking it.
     void AbortWithFileError(FILE* fp, const wchar_t* fileName, const wchar_t* reason, BYTE* buffer = nullptr)
     {
         delete[] buffer;
@@ -59,8 +59,6 @@ namespace
         wchar_t text[256];
         mu_swprintf(text, L"%ls - %ls", fileName, reason);
         g_ErrorReport.Write(text);
-        MessageBox(g_hWnd, text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
     }
 }
 
@@ -286,8 +284,6 @@ void OpenNpcScript(wchar_t* FileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", FileName);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
     SMDToken Token;
@@ -369,7 +365,7 @@ void PrintItem(wchar_t* FileName)
 {
     FILE* fp = _wfopen(FileName, L"wt");
     fwprintf(fp, L"                이름  최소공격력 최대공격력 방어력 방어율 필요힘 필요민첩 필요에너지\n");
-    //fwprintf(fp,"                이름    카오스성공확률\n");
+    //fwprintf(fp,"                name    chaos success probability\n");
     bool Excellent = true;
     for (int i = 0; i < 16 * MAX_ITEM_INDEX; i++)
     {
@@ -2027,7 +2023,7 @@ static int64_t BaseItemValue(ITEM* ip, int goldType)
 
                     || (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION)
                     || (ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE)
-                    )    //  날개.
+                    )    //  Wings.
                 {
                     int iOption = ip->SpecialValue[i];
                     if (AT_LIFE_REGENERATION == ip->Special[i])
@@ -2447,7 +2443,6 @@ void OpenMonsterScript(wchar_t* FileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", FileName);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
         return;
     }
 
@@ -2520,7 +2515,7 @@ void CreateClassAttributes()
     CreateClassAttribute(3, 30, 30, 30, 30, 120, 80, 1, 1, 2, 2);
     CreateClassAttribute(4, 30, 30, 30, 30, 120, 80, 1, 1, 2, 2);
     CreateClassAttribute(5, 50, 50, 50, 30, 110, 30, 110, 30, 6, 3);
-    CreateClassAttribute(6, 32, 27, 25, 20, 100, 40,	 /*사용안함 => */1, 3, 1, 1);
+    CreateClassAttribute(6, 32, 27, 25, 20, 100, 40,	 /*unused => */1, 3, 1, 1);
 }
 
 float CalcDurabilityPercent(BYTE dur, BYTE maxDur, int Level, int excellentFlags, int ancientDiscriminator)
@@ -2896,7 +2891,7 @@ void CHARACTER_MACHINE::CalculateDamage()
     Character.AttackDamageMaxRight += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMaxBonus;
     Character.AttackDamageMinLeft += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMinBonus;
     Character.AttackDamageMaxLeft += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMaxBonus;
-    if (g_isCharacterBuff((&Hero->Object), eBuff_BlessingOfXmax))	//크리스마스의 축복
+    if (g_isCharacterBuff((&Hero->Object), eBuff_BlessingOfXmax))	//Christmas blessing
     {
         int _Temp = 0;
         _Temp = Character.Level / 3 + 45;
@@ -2907,7 +2902,7 @@ void CHARACTER_MACHINE::CalculateDamage()
         Character.AttackDamageMaxLeft += _Temp;
     }
 
-    if (g_isCharacterBuff((&Hero->Object), eBuff_StrengthOfSanta))	//산타의 강화
+    if (g_isCharacterBuff((&Hero->Object), eBuff_StrengthOfSanta))	//Santa's boost
     {
         int _Temp = 30;
 
@@ -2947,7 +2942,7 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
     WORD    DamageMin = 0;
     WORD    DamageMax = 0;
 
-    // 날개
+    // Wings
     if (Equipment[EQUIPMENT_WING].Type != -1)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Equipment[EQUIPMENT_WING].Type];

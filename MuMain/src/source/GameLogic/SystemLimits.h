@@ -13,3 +13,6 @@
 #define MAX_SKILLS			650
 
 #define MAX_DUTY_CLASS		3
+
+#define MAX_ITEM_NAME		50
+#define MAX_SKILL_NAME		50

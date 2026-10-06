@@ -319,7 +319,7 @@ bool M34CryWolf1st::IsCyrWolf1st()
     return (gMapManager.WorldActive == WD_34CRYWOLF_1ST) ? true : false;
 }
 
-//. ������Ʈ
+//. Ʈ
 bool M34CryWolf1st::CreateCryWolf1stObject(OBJECT* o)
 {
     if (!IsCyrWolf1st())

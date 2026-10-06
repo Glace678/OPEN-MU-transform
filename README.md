@@ -177,7 +177,7 @@ cmake --build --preset windows-x64-release
 **Server** — requires the .NET 10 SDK.
 
 ```bash
-dotnet build OpenMU/MUnique.OpenMU.sln
+dotnet build OpenMU/src/MUnique.OpenMU.sln
 ```
 
 Platform-specific notes: [`MuMain/docs/build/`](MuMain/docs/build/) ·
@@ -192,7 +192,7 @@ Platform-specific notes: [`MuMain/docs/build/`](MuMain/docs/build/) ·
 | Android | ready | full: Gradle + `Build-AndroidPackage.ps1` (arm64) |
 | HarmonyOS | ready | full: hvigor modules, `OpenMU-HarmonyOS/build-tools` |
 | macOS / Linux | builds and runs | **no release pipeline yet** — see below |
-| iOS | honest scaffold | shell/main file only; no app bundle or data extraction yet |
+| iOS | builds | app bundle implemented in OpenMU-iOS; pairing-key injection and full packaging not yet complete |
 
 * **Linux / macOS** compile and run, but there is no packaging script for them: the
   release tooling (`packtool.py`, `Build-AndroidPackage.ps1`) only targets Windows, and

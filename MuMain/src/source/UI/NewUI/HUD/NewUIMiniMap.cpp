@@ -47,7 +47,7 @@ bool SEASON3B::CNewUIMiniMap::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_MINIMAP_INTERFACE + 6, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 610, 3, 85, 85);
-    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);	// 1002 "�ݱ�"
+    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);	// 1002 "ݱ"
 
     SetPos(x, y);
 
@@ -252,8 +252,6 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File truncated.", Fname);
             g_ErrorReport.Write(Text);
-            MessageBox(g_hWnd, Text, NULL, MB_OK);
-            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
             return;
         }
         fclose(fp);
@@ -263,8 +261,7 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File corrupted.", Fname);
             g_ErrorReport.Write(Text);
-            MessageBox(g_hWnd, Text, NULL, MB_OK);
-            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            return;
         }
         else
         {

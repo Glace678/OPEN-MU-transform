@@ -26,7 +26,7 @@ public:
     void MoveEffects();
 
 protected:
-    OBJECT m_SkillEffects[MAX_SKILL_EFFECTS];		// 스킬 판정에 사용하는 이펙트들 (블러드어택 등)
+    OBJECT m_SkillEffects[MAX_SKILL_EFFECTS];		// Effects used for skill determination (Blood Attack, etc.)
 };
 
 extern CSkillEffectMgr g_SkillEffects;

@@ -74,9 +74,9 @@ ${CMAKE_BINARY_DIR}/Generated/I18N/
 ```
 
 The custom command is wired up in `src/CMakeLists.txt` under the comment
-"ResxGen: .resx -> typed C++ accessors". `add_dependencies(Main ResxGen)`
+"ResxGen: .resx -> typed C++ accessors". `add_dependencies(MuClient ResxGen)`
 guarantees the generator runs before the client compiles, and the generated
-`.cpp` files are added to the `Main` target via `target_sources`. Adding,
+`.cpp` files are added to the `MuClient` target via `target_sources`. Adding,
 renaming, or removing a `.resx` re-runs the generator automatically because
 CMake reglobs with `CONFIGURE_DEPENDS`.
 

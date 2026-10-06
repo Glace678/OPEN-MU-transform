@@ -12,6 +12,7 @@ using System.Text;
 using BlazorInputFile;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
@@ -115,6 +116,9 @@ public partial class MapEditor : IAsyncDisposable
 
     [Inject]
     private LoadingOverlayService LoadingOverlay { get; set; } = null!;
+
+    [Inject]
+    private ILogger<MapEditor> Logger { get; set; } = null!;
 
     /// <summary>
     /// Gets the current zoom level expressed as a rounded percentage.
@@ -386,17 +390,22 @@ public partial class MapEditor : IAsyncDisposable
         return -1;
     }
 
-    [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
-    private async void OnPropertyChanged(object? sender, PropertyChangedEventArgs args)
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs args)
     {
+        _ = this.OnPropertyChangedAsync(sender, args);
+    }
+
+    private async Task OnPropertyChangedAsync(object? sender, PropertyChangedEventArgs args)
+    {
+        if (sender != this._focusedObject || this._isRendering)
+        {
+            return;
+        }
+
+        this._isRendering = true;
         try
         {
-            if (sender == this._focusedObject && !this._isRendering)
-            {
-                this._isRendering = true;
-                await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
-                this._isRendering = false;
-            }
+            await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
         }
         catch (ObjectDisposedException)
         {
@@ -405,6 +414,14 @@ public partial class MapEditor : IAsyncDisposable
         catch (JSDisconnectedException)
         {
             // Ignored, browser tab was closed or navigated away.
+        }
+        catch (Exception exception)
+        {
+            this.Logger.LogError(exception, "Unexpected exception while handling a property change in the map editor.");
+        }
+        finally
+        {
+            this._isRendering = false;
         }
     }
 

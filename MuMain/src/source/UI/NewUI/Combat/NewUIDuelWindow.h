@@ -46,8 +46,8 @@ namespace SEASON3B
         void RenderFrame();
         void RenderContents();
 
-        CNewUIManager* m_pNewUIMng;		// UI 매니저.
-        POINT m_Pos;					// 창의 위치.
+        CNewUIManager* m_pNewUIMng;		// UI manager.
+        POINT m_Pos;					// Window position.
     };
 }
 

@@ -1,7 +1,6 @@
 /*******************************************************************************
-*	�� �� �� : ������
-*	�� �� �� : 2009.07.07
-*	��    �� : FTP Connecter
+* : 2009.07.07
+* : FTP Connecter
 *******************************************************************************/
 
 #pragma once
@@ -19,16 +18,15 @@ public:
 
     // abstract Function
 
-        //						����
     virtual WZResult		CreateSession(HINTERNET& hSession);
-    //						Ŀ��Ʈ
+    // ĿƮ
     virtual WZResult		CreateConnection(HINTERNET& hSession,
         HINTERNET& hConnection);
-    //						�ٿ�ε� ���� ���� & ������ ��������
+    // ٿε & 
     virtual WZResult		OpenRemoteFile(HINTERNET& hConnection,
         HINTERNET& hRemoteFile,
         ULONGLONG& nFileLength);
-    //						����Ʈ ���� �б�
+    // Ʈ б
     virtual WZResult		ReadRemoteFile(HINTERNET& hRemoteFile,
         BYTE* byReadBuffer,
         DWORD* dwBytesRead);

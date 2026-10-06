@@ -158,8 +158,6 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         mu_swprintf(Text, L"%ls - File not exist.", fileName.c_str());
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 

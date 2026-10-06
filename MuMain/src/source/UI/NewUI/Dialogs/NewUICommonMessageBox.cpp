@@ -1978,7 +1978,7 @@ bool  SEASON3B::CLuckyItemMsgBoxLayout::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL))
         return false;
 
-    // 아이템 제목
+    // Item title
     int				nTextIndex[10] = { 0, };
     eLUCKYITEMTYPE	eAct = g_pLuckyItemWnd->GetAct();
 

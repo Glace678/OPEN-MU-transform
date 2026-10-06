@@ -1593,7 +1593,7 @@ void SEASON3B::CGemIntegrationUnityMsgBox::SetButtonInfo()
     for (int k = 0; k < (int)COMGEM::eCOMTYPE_END; k++)
     {
         cButton.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY, x + 50.0f, y + (height + 10.0f) * k, MSGBOX_BTN_EMPTY_WIDTH + 20, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY);
-        // 1808 "%d개 조합(%d젠 소요)"
+        // 1808 "%d items combined (%d zen cost)"
         const int fee = static_cast<int>(GameConfig::GetInstance().ScaleSoloPrice(500000 * (k + 1)));
         mu_swprintf(szTemp, I18N::Game::CombineDDZenIsRequired, 10 * (k + 1), fee);
         cButton.SetText(szTemp);
@@ -2488,7 +2488,7 @@ CALLBACK_RESULT SEASON3B::CSystemMenuMsgBox::ChooseCharacterBtnDown(class CNewUI
     g_ErrorReport.Write(L"> Menu - Join with another character. ");
     g_ErrorReport.WriteCurrentTime();
 
-    //  게임내에서 설정한 데이터 저장.
+    //  Save data set in-game.
     SaveOptions();
     SaveMacro(L"Data\\Macro.txt");
 
@@ -4411,7 +4411,7 @@ void CCherryBlossomMsgBox::SetButtonInfo()
     x = GetPos().x + msgboxhalfwidth - btnhalfwidth;
     y = GetPos().y + GetSize().cy - (MSGBOX_BTN_EMPTY_HEIGHT + MSGBOX_BTN_BOTTOM_BLANK);
     m_BtnExit.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_SMALL, x, y, width, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY_SMALL);
-    // 1002 "닫기"
+    // 1002 "Close"
     m_BtnExit.SetText(I18N::Game::Close388);
 }
 
@@ -6614,7 +6614,7 @@ void SEASON3B::CElpisMsgBox::RenderTexts()
     g_pRenderText->RenderText(fPos_x, fPos_y + 0 * 18, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 15;
-    g_pRenderText->SetTextColor(220, 183, 131, 255);	// 황금색
+    g_pRenderText->SetTextColor(220, 183, 131, 255);	// Gold
 
     switch (m_iMessageType)
     {
@@ -7076,7 +7076,7 @@ void SEASON3B::CResetCharacterPointMsgBox::SetButtonInfo()
     x = GetPos().x + msgboxhalfwidth - btnhalfwidth;
     y = GetPos().y + 105;
     m_ResetCharacterPointBtn.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY, x, y, width, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY);
-    m_ResetCharacterPointBtn.SetText(I18N::Game::StatReInitialization); // "스탯 초기화"
+    m_ResetCharacterPointBtn.SetText(I18N::Game::StatReInitialization); // "Reset stats"
 
     width = MSGBOX_BTN_EMPTY_SMALL_WIDTH;
     btnhalfwidth = width / 2.f;

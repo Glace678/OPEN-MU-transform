@@ -306,7 +306,7 @@ bool CGM_Raklion::MoveMonsterVisual(OBJECT* o, BMD* b)
                     v3Pos[0] = v3BasisPos[0] + ( v3Dir[0] * OFFSETLEN );
                     v3Pos[1] = v3BasisPos[1] + ( v3Dir[1] * OFFSETLEN );
                     v3Pos[2] = v3BasisPos[2] + ( v3Dir[2] * OFFSETLEN ); // POS_HEIGHT;
-                    v3Pos[2] = v3BasisPos[2] + POS_HEIGHT;				// Position 보정
+                    v3Pos[2] = v3BasisPos[2] + POS_HEIGHT;				// Position correction
                 */
 
                 VectorCopy(o->Angle, v3Ang_);
@@ -1213,13 +1213,13 @@ bool CGM_Raklion::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
             Vector(0, 0, 0, vRelativePos);
             Vector(1.f, 1.f, 1.f, vLight);
 
-            // 머리
+            // head
             b->TransformPosition(BoneTransform[5], vRelativePos, vWorldPos, false);
             CreateParticle(BITMAP_WATERFALL_3, vWorldPos, o->Angle, vLight, 8, 2.f);
 
             if (o->AnimationFrame <= 8)
             {
-                // 머리
+                // head
                 b->TransformPosition(BoneTransform[6], vRelativePos, vWorldPos, false);
                 CreateParticle(BITMAP_WATERFALL_3, vWorldPos, o->Angle, vLight, 8, 1.5f);
                 CreateParticle(BITMAP_WATERFALL_5, vWorldPos, o->Angle, vLight, 7, 0.1f);
@@ -1227,7 +1227,7 @@ bool CGM_Raklion::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
 
             if (o->AnimationFrame >= 12)
             {
-                // 입가
+                // near the mouth
                 b->TransformPosition(BoneTransform[6], vRelativePos, vWorldPos, false);
                 CreateParticle(BITMAP_WATERFALL_3, vWorldPos, o->Angle, vLight, 8, 2.f);
                 CreateParticle(BITMAP_WATERFALL_5, vWorldPos, o->Angle, vLight, 7, 0.1f);
@@ -1235,7 +1235,7 @@ bool CGM_Raklion::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
 
             if (o->AnimationFrame <= 15)
             {
-                // 날개
+                // wing
                 b->TransformPosition(BoneTransform[8], vRelativePos, vWorldPos, false);
                 CreateParticle(BITMAP_WATERFALL_3, vWorldPos, o->Angle, vLight, 9, 2.f);
                 CreateParticle(BITMAP_WATERFALL_5, vWorldPos, o->Angle, vLight, 7, 0.1f);
@@ -1262,7 +1262,7 @@ bool CGM_Raklion::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
     }
     else if (o->Type == 21)
     {
-        // 얼음 깨는 에니메이션 동작이고
+        // This is the ice-breaking animation
         if (o->CurrentAction == 0)
         {
             if (o->AnimationFrame >= 4 && o->AnimationFrame <= 8)
@@ -1270,14 +1270,14 @@ bool CGM_Raklion::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
                 vec3_t vRelativePos, vWorldPos, vLight;
                 Vector(0, 0, 0, vRelativePos);
                 Vector(1.f, 1.f, 1.f, vLight);
-                // 입앞 본
+                // bone in front of the mouth
                 b->TransformPosition(BoneTransform[7], vRelativePos, vWorldPos, false);
-                // 물 이펙트
+                // water effect
                 CreateParticle(BITMAP_WATERFALL_3, vWorldPos, o->Angle, vLight, 9, 0.5f);
                 CreateParticle(BITMAP_WATERFALL_5, vWorldPos, o->Angle, vLight, 7);
 
                 // 7, 16, 17, 21, 22
-                // 연기 이펙트
+                // smoke effect
                 b->TransformPosition(BoneTransform[7], vRelativePos, vWorldPos, false);
                 CreateParticle(BITMAP_WATERFALL_2, vWorldPos, o->Angle, vLight, 5, 1.f);
                 b->TransformPosition(BoneTransform[16], vRelativePos, vWorldPos, false);

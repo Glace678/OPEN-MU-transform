@@ -664,7 +664,7 @@ void GMEmpireGuardian3::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                             b->TransformPosition(BoneTransform[44], vRelative, vPosition, false);
                             CreateParticleFpsChecked(BITMAP_SMOKELINE2, vPosition, o->Angle, vLight__, 3);
                         }
-                    } // 검기
+                    } // sword wave
                 }
             }
         }

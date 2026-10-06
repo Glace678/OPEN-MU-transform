@@ -60,13 +60,13 @@ void BuffStateValueControl::SetValue(eBuffState bufftype, BuffStateValueInfo& va
 
         valueinfo.s_Value1 = Item_data.m_byValue1;
         valueinfo.s_Value2 = Item_data.m_byValue2;
-        valueinfo.s_Value2 = Item_data.m_Time;
+        valueinfo.s_Time = Item_data.m_Time;
     }
     else
     {
         valueinfo.s_Value1 = 0;
         valueinfo.s_Value2 = 0;
-        valueinfo.s_Value2 = 0;
+        valueinfo.s_Time = 0;
     }
 }
 

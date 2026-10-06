@@ -864,7 +864,7 @@ void CNewUICastleWindow::RenderCastleItem(int nPosX, int nPosY, LPPMSG_NPCDBLIST
     const int nDefenseBlockSize = 24 / (g_SenatusInfo.GetMaxDefenseLevel() + 1);
     const int nRecoverBlockSize = 24 / (g_SenatusInfo.GetMaxRecoverLevel() + 1);
 
-    if (g_SenatusInfo.IsGate(pInfo))	// ����
+    if (g_SenatusInfo.IsGate(pInfo))
     {
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 

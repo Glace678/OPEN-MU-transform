@@ -103,14 +103,14 @@ void SEASON3B::CNewUICursedTempleEnter::SetButtonInfo()
 
     m_Button[CURSEDTEMPLEENTER_OPEN].ChangeButtonInfo(x, m_Pos.y + 203, 54, 23);
 
-    // 2147 "입장하기"
+    // 2147 "Enter"
     m_Button[CURSEDTEMPLEENTER_OPEN].ChangeText(&I18N::Game::Enter);
 
     x = m_Pos.x + (CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) + (((CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) - MSGBOX_BTN_WIDTH) / 2);
     m_Button[CURSEDTEMPLEENTER_EXIT].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL, true);
 
     m_Button[CURSEDTEMPLEENTER_EXIT].ChangeButtonInfo(x, m_Pos.y + 203, 54, 23);
-    // 1002 "닫기"
+    // 1002 "Close"
     m_Button[CURSEDTEMPLEENTER_EXIT].ChangeText(&I18N::Game::Close388);
 }
 
@@ -334,7 +334,7 @@ void SEASON3B::CNewUICursedTempleEnter::RenderButtons()
 {
     for (int i = 0; i < CURSEDTEMPLEENTER_MAXBUTTONCOUNT; ++i)
     {
-        // 버튼 렌더링
+        // Button rendering
         m_Button[i].Render();
     }
 }

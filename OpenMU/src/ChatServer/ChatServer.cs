@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.ChatServer;
 
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -30,7 +31,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
 
     private readonly RandomNumberGenerator _randomNumberGenerator;
 
-    private readonly IList<IChatClient> _connectedClients = new List<IChatClient>();
+    private readonly ConcurrentDictionary<IChatClient, byte> _connectedClients = new();
 
     private readonly IList<ChatServerListener> _listeners = new List<ChatServerListener>();
 
@@ -99,7 +100,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     /// <inheritdoc />
     public ValueTask<IReadOnlyList<ICapturedConnectionInfo>> GetConnectionsAsync()
     {
-        IReadOnlyList<ICapturedConnectionInfo> result = this._connectedClients
+        IReadOnlyList<ICapturedConnectionInfo> result = this._connectedClients.Keys
             .OfType<ChatClient>()
             .Select(client => client.Connection is { } connection
                 ? new ChatClientConnectionInfo(client, connection, this.Id, this.Description)
@@ -214,7 +215,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         this._listeners.Clear();
 
         this._logger.LogDebug("Disconnecting all clients");
-        var clients = this._connectedClients.ToList();
+        var clients = this._connectedClients.Keys.ToList();
         foreach (var client in clients)
         {
             try
@@ -306,7 +307,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     private async ValueTask ChatClientAcceptedAsync(ClientAcceptedEventArgs e)
     {
         var chatClient = new ChatClient(e.AcceptedConnection, this._manager, this._loggerFactory.CreateLogger<ChatClient>());
-        this._connectedClients.Add(chatClient);
+        this._connectedClients.TryAdd(chatClient, 0);
         this.RaisePropertyChanged(nameof(this.CurrentConnections));
         chatClient.Disconnected += this.ChatClientDisconnected;
     }
@@ -315,7 +316,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     {
         if (sender is IChatClient client)
         {
-            this._connectedClients.Remove(client);
+            this._connectedClients.TryRemove(client, out _);
         }
 
         this.RaisePropertyChanged(nameof(this.CurrentConnections));
@@ -328,9 +329,8 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         {
             var bottomDateTimeMargin = DateTime.Now.Subtract(this.Settings.ClientTimeout);
 
-            for (int i = this._connectedClients.Count - 1; i >= 0; i--)
+            foreach (var client in this._connectedClients.Keys)
             {
-                var client = this._connectedClients[i];
                 if (client.LastActivity >= bottomDateTimeMargin)
                 {
                     continue;

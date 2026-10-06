@@ -784,7 +784,7 @@ bool GMEmpireGuardian1::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         b->TransformByObjectBone(vPos, o, 70);
         CreateSprite(BITMAP_LIGHTMARKS, vPos, 0.3f, Light, o);
 
-        // Action 정의
+        // Action definition
         float _fActSpdTemp = b->Actions[o->CurrentAction].PlaySpeed;
 
         switch (o->CurrentAction)
@@ -2600,27 +2600,27 @@ bool GMEmpireGuardian1::PlayMonsterSound(OBJECT* o)
         break;
         case MONSTER01_ATTACK1:
         {
-            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK01);	// 공격1 사운드
+            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK01);	// attack1 sound
         }
         break;
         case MONSTER01_ATTACK2:
         {
-            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK03);	// 공격2 사운드
+            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK03);	// attack2 sound
         }
         break;
         case MONSTER01_ATTACK3:
         {
-            PlayBuffer(SOUND_EMPIREGUARDIAN_ERCANNE_MONSTER_ATTACK03);	// 공격3 사운드
+            PlayBuffer(SOUND_EMPIREGUARDIAN_ERCANNE_MONSTER_ATTACK03);	// attack3 sound
         }
         break;
         case MONSTER01_APEAR:
         {
-            PlayBuffer(SOUND_EMPIREGUARDIAN_RAYMOND_MONSTER_RAGE);	// 광폭화 사운드
+            PlayBuffer(SOUND_EMPIREGUARDIAN_RAYMOND_MONSTER_RAGE);	// rage sound
         }
         break;
         case MONSTER01_DIE:
         {
-            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_DEATH);	// 죽음 사운드
+            PlayBuffer(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_DEATH);	// death sound
         }
         break;
         }

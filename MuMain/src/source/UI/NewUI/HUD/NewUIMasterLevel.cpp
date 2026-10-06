@@ -107,8 +107,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
     {
         mu_swprintf(Text, L"%ls - File not exist.", path);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -132,8 +130,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
         delete[] Buffer;
         mu_swprintf(Text, L"%ls - File truncated.", path);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -144,8 +140,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
         delete[] Buffer;
         mu_swprintf(Text, L"%ls - File corrupted.", path);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -174,8 +168,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", path);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
@@ -192,8 +184,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File truncated.", path);
         g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, nullptr, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
     fclose(fp);
@@ -559,9 +549,9 @@ void SEASON3B::CNewUIMasterLevel::RenderText() const
 
     if (Master_Level_Data.lNext_MasterLevel_Experince != 0)
     {
-        const __int64 iTotalLevel = Master_Level_Data.nMLevel + 400;				// 종합레벨 - 400렙이 만렙이기 때문에 더해준다.
-        const __int64 iTOverLevel = iTotalLevel - 255;		// 255레벨 이상 기준 레벨
-        __int64 iBaseExperience = 0;					// 레벨 초기 경험치
+        const __int64 iTotalLevel = Master_Level_Data.nMLevel + 400;				// Total level - added because level 400 is the max.
+        const __int64 iTOverLevel = iTotalLevel - 255;		// Base level above level 255
+        __int64 iBaseExperience = 0;					// Initial level experience
 
         const __int64 iData_Master =	// A
             (
@@ -584,10 +574,10 @@ void SEASON3B::CNewUIMasterLevel::RenderText() const
 
         iBaseExperience = (iData_Master - (__int64)3892250000) / (__int64)2;	// B
 
-        // 레벨업 경험치
+        // Level-up experience
         const double fNeedExp = (double)Master_Level_Data.lNext_MasterLevel_Experince - (double)iBaseExperience;
 
-        // 현재 획득한 경험치
+        // Experience currently gained
         const double fExp = (double)Master_Level_Data.lMasterLevel_Experince - (double)iBaseExperience;
 
         mu_swprintf(Buffer, I18N::Game::EXP62f, fExp / fNeedExp * 100.0);

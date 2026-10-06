@@ -39,9 +39,9 @@ namespace SEASON3B
     };
     struct sText
     {
-        int		s_nTextIndex;	// 글로벌 텍스트 인덱스
-        DWORD	s_dwColor;		// 텍스트 색깔
-        int		s_nLine;		// 텍스트 정렬
+        int		s_nTextIndex;	// Global text index
+        DWORD	s_dwColor;		// Text color
+        int		s_nLine;		// Text alignment
     };
 
     class CNewUILuckyItemWnd : public CNewUIObj

@@ -19,11 +19,11 @@ namespace SEASON3B
     public:
         enum IMAGE_LIST
         {
-            // 기타 이미지
+            // Other images
             IMAGE_PARTY_LIST_FLAG = CNewUIPartyInfoWindow::IMAGE_PARTY_FLAG,		// newui_party_flag.tga			(9, 10)
             IMAGE_PARTY_LIST_EXIT = CNewUIPartyInfoWindow::IMAGE_PARTY_EXIT,		// newui_party_x.tga			(11, 11)
 
-            // 파티미니창
+            // Party mini window
             IMAGE_PARTY_LIST_BACK = BITMAP_PARTY_MINILIST_BEGIN,					// newui_party_back.tga			(77, 23)
             IMAGE_PARTY_LIST_HPBAR,													// newui_party_hpbar.jpg		(69, 3)
         };
@@ -47,12 +47,12 @@ namespace SEASON3B
         CNewUIManager* m_pNewUIMng;
         POINT						m_Pos;
 
-        CNewUIButton				m_BtnPartyExit[MAX_PARTYS];				// 파티탈퇴 버튼
-        int							m_iPartyListBGColor[MAX_PARTYS];		// 파티리스트 배경칼라
-        bool						m_bPartyMemberoutofSight[MAX_PARTYS];	// 파티원이 내 캐릭터의 시야 밖에 있는가
+        CNewUIButton				m_BtnPartyExit[MAX_PARTYS];				// Party leave button
+        int							m_iPartyListBGColor[MAX_PARTYS];		// Party list background color
+        bool						m_bPartyMemberoutofSight[MAX_PARTYS];	// Whether a party member is outside my character's view
 
         bool						m_bActive;
-        int							m_iVal;		// 인덱스에 따른 편차(y의 위치)
+        int							m_iVal;		// Deviation by index (y position)
 
         int							m_iSelectedCharacter;
         int							m_iLimitUserIDHeight[2];

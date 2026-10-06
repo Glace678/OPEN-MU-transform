@@ -214,7 +214,7 @@ public static class CommandExtensions
             propertyInfo.SetValue(instance, Convert.ChangeType(stringValue, propertyInfo.PropertyType, CultureInfo.InvariantCulture));
             return true;
         }
-        catch
+        catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException)
         {
             if (player is not null)
             {

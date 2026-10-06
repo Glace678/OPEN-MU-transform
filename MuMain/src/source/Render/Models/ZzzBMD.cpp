@@ -2176,10 +2176,10 @@ void BMD::RenderMeshEffect(int i, int iType, int iSubType, vec3_t Angle, VOID* o
             case MODEL_GOLEM_STONE:
                 if (rand_fps_check(45) && iEffectCount < 20)
                 {
-                    if (iSubType == 0) {	//. 불골렘
+                    if (iSubType == 0) {	//. fire golem
                         CreateEffect(MODEL_GOLEM_STONE, VertexTransform[i][vi], angle, Light);
                     }
-                    else if (iSubType == 1) {	//. 독골렘
+                    else if (iSubType == 1) {	//. poison golem
                         CreateEffect(MODEL_BIG_STONE_PART1, VertexTransform[i][vi], angle, Light, 2);
                         CreateEffect(MODEL_BIG_STONE_PART2, VertexTransform[i][vi], angle, Light, 2);
                     }

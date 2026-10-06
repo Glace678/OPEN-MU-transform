@@ -878,7 +878,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
                 && (iType != ITEM_HURRICANE_ARMOR)
                 && (iType != ITEM_VOLCANO_ARMOR)
                 && (iType != ITEM_VALIANT_ARMOR)
-                && (iType != ITEM_DESTORY_ARMOR)
+                && (iType != ITEM_DESTROY_ARMOR)
                 && (iType != ITEM_PHANTOM_ARMOR)
                 )
             {
@@ -1162,7 +1162,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     if (iBaseClass == CLASS_RAGEFIGHTER)
     {
         iY += 13;
-        //물리공격력
+        //Physical attack power
         mu_swprintf(strVitality, I18N::Game::MeleeDamageD, 50 + (wVitality / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strVitality);
     }
@@ -1489,11 +1489,11 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
     if (iBaseClass == CLASS_RAGEFIGHTER)
     {
-        //마법공격력
+        //Magic attack power
         mu_swprintf(strEnergy, I18N::Game::DivineDamageRoarSlasherD, 50 + (wEnergy / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strEnergy);
         iY += 13;
-        //범위공격력
+        //AoE attack power
         mu_swprintf(strEnergy, I18N::Game::AOEDamageDarkSideD, 100 + (wDexterity / 8 + wEnergy / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strEnergy);
     }

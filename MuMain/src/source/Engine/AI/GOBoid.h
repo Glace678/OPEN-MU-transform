@@ -15,7 +15,7 @@ void RenderMount(void);
 void RenderDarkHorseSkill(OBJECT* o, BMD* b);
 void RenderSkillEarthQuake(CHARACTER* c, OBJECT* o, BMD* b, int iMaxSkill = 30);
 void DeleteMount(OBJECT* Owner);
-// �������� �� �������ΰ�?
+// ΰ?
 bool IsMount(ITEM* pItem);
 
 void MoveBoids(void);

@@ -200,7 +200,6 @@ inline int mu_swprintf_trunc(wchar_t (&buffer)[N], const wchar_t* format, Args..
 #include "Core/Globals/_struct.h"
 #include "Core/Utilities/_GlobalFunctions.h"
 #include "Core/Globals/_TextureIndex.h"
-#include "UI/Legacy/UIDefaultBase.h"
 #include "UI/NewUI/NewUICommon.h"
 #include "Core/Math/ZzzMathLib.h"
 

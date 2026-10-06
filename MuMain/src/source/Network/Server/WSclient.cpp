@@ -1365,8 +1365,9 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 
     CreateMyGensInfluenceGroundEffect();
 
-    if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
-    else
+    const bool isDoppelgangerWorld =
+        gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4;
+    if (!isDoppelgangerWorld)
     {
         wchar_t Text[256];
         mu_swprintf(Text, I18N::Game::WelcomeTo, gMapManager.GetMapName(gMapManager.WorldActive));
@@ -2457,8 +2458,9 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
                     o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 30.f;
             }
 
-            if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
-            else
+            const bool isDoppelgangerWorld =
+                gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4;
+            if (!isDoppelgangerWorld)
             {
                 wchar_t Text[256];
                 mu_swprintf(Text, I18N::Game::WelcomeTo, gMapManager.GetMapName(gMapManager.WorldActive));
@@ -4698,7 +4700,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         PlayBuffer(SOUND_SKILL_SWORD4);
         break;
 
-    case AT_SKILL_SLASH://베기
+    case AT_SKILL_SLASH://slash
     case AT_SKILL_SLASH_STR:
         if (sc->SwordCount % 2 == 0)
         {
@@ -4720,7 +4722,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         PlayBuffer(SOUND_SKILL_SWORD4);
         break;
 
-    case AT_SKILL_IMPALE:	// 창찌르기
+    case AT_SKILL_IMPALE:	// spear thrust
         if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
             SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
         else
@@ -6768,9 +6770,9 @@ BOOL ReceiveTalk(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_GOBLIN_NORMAL);
         g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
         //BYTE *pbyChaosRate = ( &Data->Value) + 1;
-        //int iDummyRate[6];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림
+        //int iDummyRate[6];	// odds received from the server but unused and discarded
         //for ( int i = 0; i < 6; ++i)
-        //	iDummyRate[i] = ( int)pbyChaosRate[i];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림(스크립트사용)
+        //	iDummyRate[i] = ( int)pbyChaosRate[i];	// odds received from the server but unused and discarded(script used)
         break;
 
     case 4:
@@ -7065,7 +7067,7 @@ void ReceiveMixExtended(std::span<const BYTE> ReceiveBuffer)
             g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
             break;
             // 			case SEASON3A::MIXTYPE_TRAINER:
-            // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// 부활 실패
+            // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// resurrection failed
             // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
             // 				break;
         case SEASON3A::MIXTYPE_OSBOURNE:
@@ -8268,7 +8270,7 @@ void ReceiveGuildInfo(const BYTE* ReceiveBuffer)
     int Index = g_GuildCache.SetGuildMark(Data->GuildKey, Data->UnionName, Data->GuildName, Data->Mark);
 }
 
-// 길드직책을 임명/변경/해제 결과
+// Guild rank appointment/change/release result
 void ReceiveGuildAssign(const BYTE* ReceiveBuffer)
 {
     wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildAssign";
@@ -10041,7 +10043,7 @@ void ReceiveFriendList(const BYTE* ReceiveBuffer, int Size)
     g_pFriendList->Sort(1);
     g_pWindowMgr->RefreshMainWndPalList();
 
-    // 채팅 서버 살아남
+    // Chat server alive
     g_pWindowMgr->SetServerEnable(TRUE);
     if (g_iChatInputType == 0)
     {
@@ -10181,14 +10183,9 @@ void ReceiveFriendStateChange(const BYTE* ReceiveBuffer)
     if (dwChatRoomUIID > 0)
     {
         auto* pWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwChatRoomUIID);
-        if (pWindow == nullptr);
-        else if (Data->Server >= 0xFD/* || Data->Server == 0xFB*/)
+        if (pWindow != nullptr)
         {
-            pWindow->Lock(TRUE);
-        }
-        else
-        {
-            pWindow->Lock(FALSE);
+            pWindow->Lock(Data->Server >= 0xFD/* || Data->Server == 0xFB*/);
         }
     }
 }

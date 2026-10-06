@@ -1,8 +1,8 @@
 /**************************************************************************************************
 
-스크립트 목록 최 상위 객체
+Top-level object for the script list.
 
-카테고리 목록, 패키지 목록, 상품(속성) 목록을 가지고 있다.
+Holds the category list, package list, and product (attribute) list.
 
 **************************************************************************************************/
 
@@ -25,9 +25,9 @@ public:
     WZResult LoadPackage(const wchar_t* szFilePath);
     WZResult LoadProduct(const wchar_t* szFilePath);
 
-    CShopCategoryList* GetCategoryListPtr() { return m_CategoryListPtr; };	// 카테고리 목록 가져온다.
-    CShopPackageList* GetPackageListPtr() { return m_PackageListPtr; };		// 패키지 목록 가져온다.
-    CShopProductList* GetProductListPtr() { return m_ProductListPtr; };		// 상품(속성) 목록 가져온다.
+    CShopCategoryList* GetCategoryListPtr() { return m_CategoryListPtr; };	// Gets the category list.
+    CShopPackageList* GetPackageListPtr() { return m_PackageListPtr; };		// Gets the package list.
+    CShopProductList* GetProductListPtr() { return m_ProductListPtr; };		// Gets the product (attribute) list.
 
     void SetCategoryListPtr(CShopCategoryList* CategoryListPtr);
     void SetPackageListPtr(CShopPackageList* PackagePtr);

@@ -45,8 +45,8 @@ void CLoadData::AccessModel(int Type, const wchar_t* Dir, const wchar_t* FileNam
     {
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls file does not exist.", Name);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
     }
 }
 

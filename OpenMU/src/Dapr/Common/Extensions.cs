@@ -38,7 +38,17 @@ public static class Extensions
     /// <param name="services">The service collection.</param>
     /// <param name="publishConfigChanges">If set to <c>true</c>, configuration changes are published to other Dapr services.</param>
     /// <returns>The modified service collection.</returns>
+    [Obsolete("Use AddPersistenceProvider")]
     public static IServiceCollection AddPeristenceProvider(this IServiceCollection services, bool publishConfigChanges = false)
+        => AddPersistenceProvider(services, publishConfigChanges);
+
+    /// <summary>
+    /// Adds the <see cref="PersistenceContextProvider"/>.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="publishConfigChanges">If set to <c>true</c>, configuration changes are published to other Dapr services.</param>
+    /// <returns>The modified service collection.</returns>
+    public static IServiceCollection AddPersistenceProvider(this IServiceCollection services, bool publishConfigChanges = false)
     {
         services.AddSingleton<IConfigurationChangeListener, ConfigurationChangeListener>();
         if (publishConfigChanges)

@@ -82,7 +82,7 @@ static const struct { const char* code; const wchar_t* label; const wchar_t* dat
     { "fr",    L"Fran\u00e7ais", L"Eng" },                                                  // Français
     { "id",    L"Bahasa Indonesia", L"Ind" },
     { "ja",    L"\u65E5\u672C\u8A9E", L"Jpn" },                                       // 日本語
-    { "ko",    L"\ud55c\uad6d\uc5b4", L"Eng" },                                      // 한국어 (Data/Local fallback)
+    { "ko",    L"\ud55c\uad6d\uc5b4", L"Eng" },                                      // Korean (Data/Local fallback)
     { "pl",    L"Polski", L"Pol" },
     { "pt",    L"Portugu\u00eas", L"Por" },                                                // Português
     { "ru",    L"\u0420\u0443\u0441\u0441\u043a\u0438\u0439", L"Rus" },                   // Русский
