@@ -1,5 +1,6 @@
 @echo off
-rem Locate Visual Studio and its bundled CMake via vswhere instead of a hardcoded path.setlocal
+rem Locate Visual Studio and its bundled CMake via vswhere instead of a hardcoded path.
+setlocal
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if not exist "%VSWHERE%" (
     echo error: vswhere not found at "%VSWHERE%" - install Visual Studio with the C++ workload. 1>&2
