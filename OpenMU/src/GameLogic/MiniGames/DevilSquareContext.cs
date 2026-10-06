@@ -57,9 +57,9 @@ public sealed class DevilSquareContext : MiniGameContext
     protected override async ValueTask GameEndedAsync(ICollection<Player> finishers)
     {
         var sortedFinishers = finishers
-            .Select(f => this._gameStates[f.Name])
+            .Select(f => this._gameStates.GetValueOrDefault(f.Name))
             .WhereNotNull()
-            .OrderBy(state => state.Score)
+            .OrderByDescending(state => state.Score)
             .ToList();
 
         var scoreList = new List<(string Name, int Score, int BonusMoney, int BonusExp)>();

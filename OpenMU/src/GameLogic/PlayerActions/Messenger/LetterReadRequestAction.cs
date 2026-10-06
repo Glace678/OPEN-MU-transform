@@ -19,13 +19,14 @@ public class LetterReadRequestAction
     public async ValueTask ReadRequestAsync(Player player, ushort letterIndex)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
-        if (player.SelectedCharacter?.Letters.Count <= letterIndex)
+        var letters = player.SelectedCharacter?.Letters;
+        if (letters is null || letters.Count <= letterIndex)
         {
-            player.Logger.LogWarning("Player {0} requested non-existing letter, id {1}", player.SelectedCharacter.Name, letterIndex);
+            player.Logger.LogWarning("Player {0} requested non-existing letter, id {1}", player.SelectedCharacter?.Name, letterIndex);
             return;
         }
 
-        var letter = player.SelectedCharacter?.Letters[letterIndex];
+        var letter = letters[letterIndex];
         if (letter != null)
         {
             var letterBody = await player.PersistenceContext.GetLetterBodyByHeaderIdAsync(letter.Id).ConfigureAwait(false);

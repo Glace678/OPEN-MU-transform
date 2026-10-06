@@ -137,7 +137,12 @@ void CMapManager::Load() // OK
                 mu_swprintf(FileName, L"wt0%d.jpg", i);
             else
                 mu_swprintf(FileName, L"wt%d.jpg", i);
-            wcscpy(Bitmaps[BITMAP_WATER + i].FileName, FileName);
+            // MEM-18: never write through GetTexture's miss placeholder;
+            // only rename when the water bitmap actually loaded above.
+            if (BITMAP_t* waterBitmap = Bitmaps.FindTexture(BITMAP_WATER + i))
+            {
+                wcscpy_s(waterBitmap->FileName, FileName);
+            }
         }
         break;
     case WD_8TARKAN:

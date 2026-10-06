@@ -713,7 +713,8 @@ void CNewUIInGameShop::InitBanner(wchar_t* pszFileName, wchar_t* pszBannerURL)
     {
         m_bLoadBanner = true;
 
-        wcscpy(m_szBannerURL, pszBannerURL);
+        // MEM-11: server-provided URL, copy bounded into the fixed member.
+        wcsncpy_s(m_szBannerURL, pszBannerURL ? pszBannerURL : L"", _TRUNCATE);
     }
 }
 
@@ -822,7 +823,8 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
     }
     else
     {
-        wcscpy(Item.m_szSendUserName, pszUserName);
+        // MEM-11: server-parsed user name, copy bounded into the fixed member.
+        wcsncpy_s(Item.m_szSendUserName, pszUserName, _TRUNCATE);
     }
 
     if (pszMessage == NULL)
@@ -831,7 +833,8 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
     }
     else
     {
-        wcscpy(Item.m_szMessage, pszMessage);
+        // MEM-11: server-parsed message, copy bounded into the fixed member.
+        wcsncpy_s(Item.m_szMessage, pszMessage, _TRUNCATE);
     }
 
     if (chItemType == 'C' || chItemType == 'c')

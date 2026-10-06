@@ -85,20 +85,40 @@ public class SetupService
     }
 
     /// <summary>
-    /// Gets a value indicating whether the data is initialized.
+    /// Describes the initialization state of the game data. XC-13: a boolean
+    /// could not distinguish a genuinely empty database from a database error,
+    /// so the setup UI showed install/reinstall entries when the database was
+    /// simply unreachable.
     /// </summary>
-    public async ValueTask<bool> IsDataInitializedAsync()
+    public enum DataInitializationState
+    {
+        /// <summary>The database could not be queried (unreachable or error).</summary>
+        Unknown,
+
+        /// <summary>The database is reachable but has no game configuration.</summary>
+        Empty,
+
+        /// <summary>The database is reachable and contains a game configuration.</summary>
+        Initialized,
+    }
+
+    /// <summary>
+    /// Gets the initialization state of the game data, distinguishing a
+    /// database error (<see cref="DataInitializationState.Unknown"/>) from a
+    /// genuinely empty database (<see cref="DataInitializationState.Empty"/>).
+    /// </summary>
+    public async ValueTask<DataInitializationState> GetDataInitializationStateAsync()
     {
         try
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
             using var context = this._contextProvider.CreateNewConfigurationContext();
             var id = await context.GetDefaultGameConfigurationIdAsync(cts.Token).ConfigureAwait(false);
-            return id is not null;
+            return id is null ? DataInitializationState.Empty : DataInitializationState.Initialized;
         }
         catch
         {
-            return false;
+            return DataInitializationState.Unknown;
         }
     }
 

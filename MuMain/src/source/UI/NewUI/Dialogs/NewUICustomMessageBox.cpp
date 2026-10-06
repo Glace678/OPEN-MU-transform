@@ -30,6 +30,17 @@ char AppointType;
 
 using namespace SEASON3B;
 
+namespace
+{
+    // The text-entry layouts only work with a text-input owner. Every such
+    // ProcessOk/ReturnDown starts with this cast and must bail out when the
+    // owner is another box type (UI-7).
+    CNewUITextInputMsgBox* AsTextInputBox(CNewUIMessageBoxBase* pOwner)
+    {
+        return dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    }
+}
+
 SEASON3B::CNewUITextInputMsgBox::CNewUITextInputMsgBox()
 {
     m_pInputBox = NULL;
@@ -138,7 +149,7 @@ void SEASON3B::CNewUITextInputMsgBox::SetButtonInfo()
 
 CALLBACK_RESULT SEASON3B::CNewUITextInputMsgBox::LButtonUp(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
     if (pMsgBox)
     {
         switch (pMsgBox->GetMsgBoxType())
@@ -490,7 +501,11 @@ SEASON3B::CNewUIKeyPadMsgBox::~CNewUIKeyPadMsgBox()
 
 bool SEASON3B::CNewUIKeyPadMsgBox::Create(DWORD dwType, int iInputLimit)
 {
-    m_iInputLimit = iInputLimit;
+    // UI-1/UI-6: every downstream use (SetCheckInputText's copy, IsAllSameNumber,
+    // KeyPadInput, the render width) trusts this value, and the check buffer only
+    // holds MAX_KEYPADINPUT characters. Clamp once here; 0/negative limits are
+    // meaningless, so floor at 1.
+    m_iInputLimit = std::clamp(iInputLimit, 1, MAX_KEYPADINPUT);
 
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::LButtonUp, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::KeyPadBtnDown, MSGBOX_EVENT_USER_CUSTOM_KEYPAD_INPUT);
@@ -646,7 +661,18 @@ const wchar_t* SEASON3B::CNewUIKeyPadMsgBox::GetInputText()
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetCheckInputText(const wchar_t* strInput)
 {
-    memcpy(m_strCheckKeyPadInput, strInput, m_iInputLimit * sizeof(wchar_t));  // #MG-21: compare by wide chars, not bytes
+    // UI-1: #MG-21 compared by wide chars but copied m_iInputLimit chars into a
+    // buffer of MAX_KEYPADINPUT+1 based on a limit the caller could set higher.
+    // Copy bounded by the destination capacity (m_iInputLimit is now clamped to
+    // it anyway), null-guard, and force termination so memcmp can't run off.
+    if (strInput == nullptr)
+    {
+        m_strCheckKeyPadInput[0] = L'\0';
+        return;
+    }
+
+    wcsncpy(m_strCheckKeyPadInput, strInput, MAX_KEYPADINPUT);  // #MG-21: wide-char copy
+    m_strCheckKeyPadInput[MAX_KEYPADINPUT] = L'\0';
 }
 
 bool SEASON3B::CNewUIKeyPadMsgBox::IsCheckInput()
@@ -679,6 +705,13 @@ bool SEASON3B::CNewUIKeyPadMsgBox::IsAllSameNumber()
 
 void SEASON3B::CNewUIKeyPadMsgBox::KeyPadInput(int iInput)
 {
+    // UI-6: never append past the declared limit (which also bounds the
+    // comparison window); this stops the wcscat overflowing the input buffer.
+    if (GetInputSize() >= m_iInputLimit)
+    {
+        return;
+    }
+
     wchar_t strInput[4] = { 0, };
     mu_swprintf(strInput, L"%d", iInput);
     wcscat(m_strKeyPadInput, strInput);
@@ -4451,7 +4484,12 @@ bool SEASON3B::CTradeZenMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CTradeZenMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4518,7 +4556,12 @@ CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::OkBtnDown(class CNewUIMessage
 
 CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4586,7 +4629,12 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::OkBtnDown(class CNewUIMessage
 
 CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4657,7 +4705,11 @@ bool SEASON3B::CPersonalShopItemValueMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CPersonalShopItemValueMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
 
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
 
@@ -4804,7 +4856,13 @@ bool SEASON3B::CPersonalShopNameMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CPersonalShopNameMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    // UI-7: guard the dynamic_cast before dereferencing.
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4814,7 +4872,10 @@ CALLBACK_RESULT SEASON3B::CPersonalShopNameMsgBoxLayout::ProcessOk(class CNewUIM
 
     if (IsCorrectShopTitle(strText))
     {
-        wcscpy(g_szPersonalShopTitle, strText);
+        // UI-2: the input box can hold MAX_TEXT_LENGTH chars; the global shop
+        // title only holds MAX_SHOPTITLE+1, so truncate and force termination.
+        wcsncpy(g_szPersonalShopTitle, strText, MAX_SHOPTITLE);
+        g_szPersonalShopTitle[MAX_SHOPTITLE] = L'\0';
     }
     else
     {
@@ -4869,7 +4930,12 @@ bool SEASON3B::CCastleWithdrawMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4893,7 +4959,12 @@ CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMe
 
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
+
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -5142,7 +5213,7 @@ CALLBACK_RESULT SEASON3B::CStorageLockMsgBoxLayout::ReturnDown(class CNewUIMessa
 
 CALLBACK_RESULT SEASON3B::CStorageLockMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
 
     if (pMsgBox == nullptr)
     {
@@ -5256,7 +5327,7 @@ bool SEASON3B::CStorageUnlockMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CStorageUnlockMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
 
     if (pMsgBox == nullptr)
     {
@@ -7182,7 +7253,7 @@ CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ReturnDown(class CNew
 
 CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = AsTextInputBox(pOwner);
 
     if (pMsgBox == nullptr)
     {

@@ -156,7 +156,8 @@ public class AccountService : IDataService<Account>, ISupportDataChangedNotifica
         var accountParameters = new AccountCreationParameters();
         var parameters = new ModalParameters();
         parameters.Add(nameof(ModalCreateNew<AccountCreationParameters>.Item), accountParameters);
-        parameters.Add(nameof(ModalCreateNew<AccountCreationParameters>.CreateAsync),
+        parameters.Add(
+            nameof(ModalCreateNew<AccountCreationParameters>.CreateAsync),
             new Func<AccountCreationParameters, Task<string?>>(this.TryCreateAccountAsync));
         var options = new ModalOptions
         {

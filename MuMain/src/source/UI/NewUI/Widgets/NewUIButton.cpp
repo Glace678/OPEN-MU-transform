@@ -1018,19 +1018,22 @@ void CNewUIRadioGroupButton::ChangeRadioText(std::list<std::wstring>& textlist)
 {
     auto textiter = textlist.begin();
 
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    // UI-4: same order as the pointer overload - check end BEFORE dereferencing.
+    // The old code dereferenced the iterator first and only afterwards checked
+    // for end, so fewer entries than radio buttons dereferenced end() (UB).
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); ++iter)
     {
-        auto curiter = iter;
-        ++iter;
-        CNewUIRadioButton* button = (*curiter);
+        if (textiter == textlist.end())
+        {
+            break;
+        }
 
-        auto curtextiter = textiter;
+        if (CNewUIRadioButton* button = *iter)
+        {
+            button->ChangeText(textiter->c_str());
+        }
+
         ++textiter;
-       std::wstring text = (*curtextiter);
-
-        button->ChangeText(text);
-
-        if (textiter == textlist.end()) break;
     }
 }
 

@@ -53,13 +53,8 @@ public class BuyRequestAction
             return;
         }
 
-        var itemPrice = item.StorePrice.Value;
-
-        if (player.Money < itemPrice)
-        {
-            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.LackOfMoney, null)).ConfigureAwait(false);
-            return;
-        }
+        // The authoritative price is read inside the store lock below. Reading it here and
+        // using it for the money deduction would race with the seller changing the price (TOCTOU).
 
         // Check Inv Space
         var freeslot = player.Inventory?.CheckInvSpace(item);
@@ -81,9 +76,16 @@ public class BuyRequestAction
             }
 
             item = requestedPlayer.ShopStorage.GetItem(slot);
-            if (item is null)
+            if (item?.StorePrice is not { } itemPrice)
             {
-                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.InvalidShopSlot, null)).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.NameMismatchOrPriceMissing, null)).ConfigureAwait(false);
+                return;
+            }
+
+            // Re-check the money against the price read inside the lock.
+            if (player.Money < itemPrice)
+            {
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.LackOfMoney, null)).ConfigureAwait(false);
                 return;
             }
 

@@ -26,6 +26,9 @@ using namespace RHI;
 namespace RHI_GL_Impl {
 
 namespace {
+    // XC-2 -- implemented where g_LayoutVAO is defined (further below).
+    void DestroyAllLayoutVAOs();
+
     int g_Width = 0;
     int g_Height = 0;
     bool g_Initialized = false;
@@ -156,8 +159,9 @@ bool Init(void* /*nativeWindowHandle*/, int width, int height)
 void Shutdown()
 {
     DestroyAllUboRings(); // GLP-09 -- release the persistent-mapped ring buffers, if any exist.
+    DestroyAllLayoutVAOs(); // XC-2 -- delete the lazily-created per-layout VAOs this backend owns.
     // GL context teardown stays in Winmain.cpp (SDL_GL_DeleteContext) until
-    // device ownership itself moves behind RHI -- nothing owned here to release.
+    // device ownership itself moves behind RHI.
     g_Initialized = false;
 }
 
@@ -977,6 +981,26 @@ namespace {
     constexpr int kVertexLayoutCount = 4; // PosUvColor, BMDMesh, Terrain, PosOnly
     GLuint   g_LayoutVAO[kVertexLayoutCount]           = {};
     uint32_t g_LayoutBoundBufferId[kVertexLayoutCount] = {};
+
+    void DestroyAllLayoutVAOs()
+    {
+        // VAOs are created lazily (and only when the VAO entry points loaded),
+        // so an entry point load failure means nothing was ever generated.
+        if (LoadVertexLayoutGLFunctions())
+        {
+            for (int i = 0; i < kVertexLayoutCount; ++i)
+            {
+                if (g_LayoutVAO[i] != 0)
+                {
+                    fn_glDeleteVertexArrays(1, &g_LayoutVAO[i]);
+                    g_LayoutVAO[i] = 0;
+                    g_LayoutBoundBufferId[i] = 0;
+                }
+            }
+        }
+
+        InvalidateVAOCache();
+    }
 
     void ConfigurePosUvColorVAO(GLuint vbo)
     {

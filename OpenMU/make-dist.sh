@@ -31,8 +31,8 @@ cp -R -- "$SCRIPT_DIR/deploy/all-in-one" "$STAGE/deploy/all-in-one"
 cp -- "$SCRIPT_DIR/deploy/quick-start.sh" "$STAGE/deploy/quick-start.sh"
 chmod +x "$STAGE/deploy/quick-start.sh"
 
-# Stage the source build context so the default local-source build works on the
-# target server (docker-compose.local.yml builds from ../../src). (DELIVERY-03)
+# DELIVERY-03: stage the source build context so the default local-source build
+# works on the target server (docker-compose.local.yml builds from ../../src).
 log "Staging source build context..."
 cp -R -- "$SCRIPT_DIR/src" "$STAGE/src"
 find "$STAGE/src" -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} + 2>/dev/null || true

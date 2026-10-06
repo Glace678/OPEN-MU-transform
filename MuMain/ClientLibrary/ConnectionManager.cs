@@ -90,6 +90,17 @@ public unsafe partial class ConnectionManager
         try
         {
             var bytes = new Span<byte>(data, count);
+
+            // PROTO-4: C1/C3 frames encode their length in one byte. SetPacketSize
+            // would silently write only the low 8 bits, desynchronizing the peer
+            // (declared size < actual bytes sent). Fail loudly instead.
+            if (count > byte.MaxValue && (bytes[0] is 0xC1 or 0xC3))
+            {
+                throw new ArgumentException(
+                    $"Cannot send a {bytes[0]:X2} packet of {count} bytes: one-byte length field is limited to {byte.MaxValue}.",
+                    nameof(count));
+            }
+
             bytes.SetPacketSize();
             connection.Send(bytes);
             Debug.WriteLine("Sent {0} bytes with handle {1}", count, handle);
@@ -135,9 +146,40 @@ public unsafe partial class ConnectionManager
 
     private static int ConnectInner(string host, int port, bool isEncrypted, delegate* unmanaged<int, int, byte*, void> onPacketReceived, delegate* unmanaged<int, void> onDisconnected)
     {
-        var tcpClient = new TcpClient(host, port);
+        var tcpClient = new TcpClient();
 
-        ConfigureKeepAlive(tcpClient.Client);
+        try
+        {
+            // PLAT-9: the old `new TcpClient(host, port)` performed synchronous
+            // DNS+TCP on the native main thread, freezing the game window for
+            // potentially tens of seconds. Cap the wait; the client's Connecting
+            // phase retries.
+            const int ConnectTimeoutSeconds = 5;
+            var connectTask = tcpClient.ConnectAsync(host, port);
+            if (!connectTask.Wait(TimeSpan.FromSeconds(ConnectTimeoutSeconds)))
+            {
+                throw new TimeoutException(
+                    $"Connection to {host}:{port} timed out after {ConnectTimeoutSeconds} s.");
+            }
+
+            if (!connectTask.IsCompletedSuccessfully)
+            {
+                throw connectTask.Exception?.GetBaseException()
+                    ?? new InvalidOperationException($"Connection to {host}:{port} failed.");
+            }
+
+            // After connect the socket is finalized (ConnectAsync may switch it
+            // for an IPv6 result), so configure keep-alive here as before.
+            ConfigureKeepAlive(tcpClient.Client);
+        }
+        catch
+        {
+            // PLAT-9: a failed connect previously returned -1 with the TcpClient
+            // undisposed, stacking handles during reconnect storms. Free it and
+            // let the outer Connect catch report the failure.
+            tcpClient.Dispose();
+            throw;
+        }
 
         var socketConnection = SocketConnection.Create(tcpClient.Client);
 

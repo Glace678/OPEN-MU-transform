@@ -10,6 +10,9 @@ using MUnique.OpenMU.DataModel.Entities;
 public static class SoloAccountInitializer
 {
     /// <summary>Creates the account once, or verifies that the existing account belongs to this installation.</summary>
+    /// <param name="context">The player context in which the account is created.</param>
+    /// <param name="username">The requested login name.</param>
+    /// <param name="password">The requested password.</param>
     public static async Task EnsureAsync(IPlayerContext context, string username, string password)
     {
         if (username.Length is < 3 or > 10 || password.Length is < 12 or > 20

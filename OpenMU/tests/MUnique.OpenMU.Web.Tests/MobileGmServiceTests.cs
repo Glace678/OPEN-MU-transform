@@ -163,6 +163,68 @@ public class MobileGmServiceTests
         Assert.That(conflict.Message, Does.Contain("requestId"));
     }
 
+    /// <summary>A corrupt ledger file is moved aside with a timestamp and the service rebuilds an empty ledger.</summary>
+    [Test]
+    public void CorruptLedgerIsBackedUpAndRebuilt()
+    {
+        var directory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "openmu-mgm-" + System.Guid.NewGuid().ToString("N"));
+        System.IO.Directory.CreateDirectory(directory);
+        var ledgerPath = System.IO.Path.Combine(directory, "ledger.json");
+        System.IO.File.WriteAllText(ledgerPath, "this is not json {{{");
+
+        using var services = new ServiceCollection().BuildServiceProvider();
+        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance, ledgerPath);
+
+        Assert.That(System.IO.File.Exists(ledgerPath), Is.False);
+        Assert.That(System.IO.Directory.GetFiles(directory, "ledger.json.corrupt-*"), Has.Length.EqualTo(1));
+
+        // Rebuilding again against the same (now missing) path succeeds empty.
+        Assert.DoesNotThrow(() =>
+            new MobileGmService(services, NullLogger<MobileGmService>.Instance, ledgerPath));
+    }
+
+    /// <summary>A completed grant is durably persisted to the ledger file.</summary>
+    [Test]
+    public async Task CompletedGrantIsPersistedToLedgerAsync()
+    {
+        var ledgerPath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "openmu-mgm-" + System.Guid.NewGuid().ToString("N") + ".json");
+
+        try
+        {
+            using var services = new ServiceCollection().BuildServiceProvider();
+            var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance, ledgerPath);
+
+            await service.GrantZenAsync(CreateZenRequest()).ConfigureAwait(false);
+
+            Assert.That(System.IO.File.Exists(ledgerPath), Is.True);
+        }
+        finally
+        {
+            System.IO.File.Delete(ledgerPath);
+        }
+    }
+
+    /// <summary>When the ledger cannot be atomically replaced, the response tells the operator not to replay the requestId.</summary>
+    [Test]
+    public async Task GrantWarnsWhenLedgerCannotBePersistedAsync()
+    {
+        // The ledger path itself is an existing directory: the temp-file move
+        // onto it always fails, deterministically exercising the catch branch.
+        var ledgerPath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "openmu-mgm-" + System.Guid.NewGuid().ToString("N"));
+        System.IO.Directory.CreateDirectory(ledgerPath);
+
+        using var services = new ServiceCollection().BuildServiceProvider();
+        var service = new MobileGmService(services, NullLogger<MobileGmService>.Instance, ledgerPath);
+
+        var response = await service.GrantZenAsync(CreateZenRequest()).ConfigureAwait(false);
+
+        Assert.That(response.Success, Is.False);
+        Assert.That(response.Message, Does.Contain("幂等记录无法写入磁盘"));
+        Assert.That(response.Message, Does.Contain("requestId"));
+    }
+
     private static MobileGmGrantRequest CreateRequest(int quantity = 1, int level = 0) =>
         new(
             "0dd5ac9b-8288-4ec1-a129-9b788d0a8a12",

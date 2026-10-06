@@ -12,6 +12,7 @@
 #include "Render/Models/ZzzBMD.h"
 #include "Engine/Object/ZzzObject.h"
 #include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/MonsterScriptValidation.h"
 #include "Scenes/SceneCore.h"
 #include "Engine/Object/ZzzInterface.h"
 #include "Core/Utilities/ReadScript.h"
@@ -41,9 +42,36 @@ static  int     g_iWorldStateTime = 0;
 static  DWORD   g_dwWorldStateBack = 0;
 #endif// STATE_LIMIT_TIME
 
+namespace
+{
+    // Every data-file loader in this file ends a fatal error the same way:
+    // release the file/buffer, log "<file> - <reason>", show a message box and
+    // ask the window to close. Centralizing the sequence keeps the wording
+    // identical across loaders.
+    void AbortWithFileError(FILE* fp, const wchar_t* fileName, const wchar_t* reason, BYTE* buffer = nullptr)
+    {
+        delete[] buffer;
+        if (fp != nullptr)
+        {
+            fclose(fp);
+        }
+
+        wchar_t text[256];
+        mu_swprintf(text, L"%ls - %ls", fileName, reason);
+        g_ErrorReport.Write(text);
+        MessageBox(g_hWnd, text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+    }
+}
+
 void SaveTextFile(wchar_t* FileName)
 {
     FILE* fp = _wfopen(FileName, L"wb");
+    if (fp == nullptr) // XC-3: nothing to write into; report instead of running fwrite on null.
+    {
+        g_ErrorReport.Write(L"[Infomation] SaveTextFile: cannot open '%ls' for writing.\r\n", FileName);
+        return;
+    }
 
     int Size = MAX_GLOBAL_TEXT_STRING;
     BYTE* Buffer = new BYTE[Size];
@@ -67,19 +95,27 @@ void OpenFilterFile(const wchar_t* FileName)
     FILE* fp = _wfopen(FileName, L"rb");
     if (fp == NULL)
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", FileName);
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        AbortWithFileError(fp, FileName, L"File not exist.");
         return;
     }
 
     int Size = 20;
     BYTE* Buffer = new BYTE[Size * MAX_FILTERS];
-    fread(Buffer, Size * MAX_FILTERS, 1, fp);
-    DWORD dwCheckSum;
-    fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+    if (fread(Buffer, Size * MAX_FILTERS, 1, fp) != 1)
+    {
+        // XC-12: truncated data section -- do not parse uninitialized memory.
+        AbortWithFileError(fp, FileName, L"File truncated (filter data).", Buffer);
+        return;
+    }
+
+    DWORD dwCheckSum = 0;
+    if (fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
+    {
+        // XC-12: missing checksum domain.
+        AbortWithFileError(fp, FileName, L"File truncated (checksum).", Buffer);
+        return;
+    }
+
     fclose(fp);
 
     {
@@ -105,28 +141,34 @@ void OpenNameFilterFile(const wchar_t* FileName)
     FILE* fp = _wfopen(FileName, L"rb");
     if (fp == NULL)
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", FileName);
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        AbortWithFileError(fp, FileName, L"File not exist.");
         return;
     }
     int Size = 20;
     BYTE* Buffer = new BYTE[Size * MAX_NAMEFILTERS];
 
-    fread(Buffer, Size * MAX_NAMEFILTERS, 1, fp);
+    if (fread(Buffer, Size * MAX_NAMEFILTERS, 1, fp) != 1)
+    {
+        // XC-12: short read -- the checksum below must not run against
+        // uninitialized data.
+        AbortWithFileError(fp, FileName, L"File truncated (name filter data).", Buffer);
+        return;
+    }
 
-    DWORD dwCheckSum;
-    fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+    DWORD dwCheckSum = 0;
+    if (fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
+    {
+        // XC-12: missing checksum domain.
+        AbortWithFileError(fp, FileName, L"File truncated (checksum).", Buffer);
+        return;
+    }
+
     fclose(fp);
     if (dwCheckSum != GenerateCheckSum2(Buffer, Size * MAX_NAMEFILTERS, 0x2BC1))
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File corrupted.", FileName);
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        // fp is already closed; the helper only has to free Buffer.
+        AbortWithFileError(nullptr, FileName, L"File corrupted.", Buffer);
+        return;
     }
     else
     {
@@ -168,11 +210,7 @@ void OpenGateScript(const wchar_t* FileName)
     }
     else
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", FileName);
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        AbortWithFileError(fp, FileName, L"File not exist.");
     }
 }
 
@@ -186,15 +224,48 @@ void OpenMonsterSkillScript(const wchar_t* FileName)
         int Size = (sizeof(Script_Skill) + sizeof(int));
         BYTE* Buffer = new BYTE[Size];
         int FileCount = 0;
-        fread(&FileCount, sizeof(int), 1, fp);
+        if (fread(&FileCount, sizeof(int), 1, fp) != 1)
+        {
+            // XC-12: count unreadable.
+            AbortWithFileError(fp, FileName, L"File truncated (record count).", Buffer);
+            return;
+        }
+
+        // XC-12: bound the file-supplied record count; at most one record per
+        // monster index. Rules live in MonsterScriptValidation.h so they can
+        // be unit tested.
+        if (!MonsterScriptValidation::IsValidRecordCount(FileCount, MODEL_MONSTER_END))
+        {
+            wchar_t reason[128];
+            mu_swprintf(reason, L"File corrupted (invalid record count: %d).", FileCount);
+            AbortWithFileError(fp, FileName, reason, Buffer);
+            return;
+        }
+
         for (int i = 0; i < FileCount; i++)
         {
-            fread(Buffer, Size, 1, fp);
+            if (fread(Buffer, Size, 1, fp) != 1)
+            {
+                // XC-12: truncated record.
+                wchar_t reason[128];
+                mu_swprintf(reason, L"File truncated (record %d).", i);
+                AbortWithFileError(fp, FileName, reason, Buffer);
+                return;
+            }
+
             BuxConvert(Buffer, Size);
             int dummy = -1;
             int Seek = 0;
             memcpy(&dummy, Buffer + Seek, sizeof(int));
             Seek += sizeof(int);
+
+            // Fail-closed: a record outside the monster table would index
+            // MonsterSkill[] out of bounds (dummy == -1 on a malformed record).
+            if (!MonsterScriptValidation::IsValidMonsterIndex(dummy, MODEL_MONSTER_END))
+            {
+                continue;
+            }
+
             memcpy(MonsterSkill[dummy].Skill_Num, Buffer + Seek, sizeof(int) * MAX_MONSTERSKILL_NUM);
             Seek += (sizeof(int) * MAX_MONSTERSKILL_NUM);
             memcpy(&MonsterSkill[dummy].Slot, Buffer + Seek, sizeof(int));
@@ -204,11 +275,7 @@ void OpenMonsterSkillScript(const wchar_t* FileName)
     }
     else
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", FileName);
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        AbortWithFileError(fp, FileName, L"File not exist.");
     }
 }
 

@@ -21,9 +21,17 @@ public class ChatMessageCommandProcessor : IChatMessageProcessor
             return;
         }
 
-        if (sender.SelectedCharacter!.CharacterStatus < commandHandler.MinCharacterStatusRequirement)
+        if (sender.SelectedCharacter!.CharacterStatus is CharacterStatus.Banned
+            || sender.SelectedCharacter.CharacterStatus < commandHandler.MinCharacterStatusRequirement)
         {
             sender.Logger.LogWarning($"{sender.Name} is trying to execute {commandKey} command without meeting the requirements");
+            return;
+        }
+
+        if (sender.Account?.ChatBanUntil is { } chatBanUntil && chatBanUntil > DateTime.UtcNow)
+        {
+            // A chat ban blocks the command channel as well, not only normal chat messages.
+            sender.Logger.LogWarning($"{sender.Name} is trying to execute {commandKey} command while being chat banned.");
             return;
         }
 

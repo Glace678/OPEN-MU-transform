@@ -2,13 +2,16 @@ name: .NET Core
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5
     - name: Setup .NET Core
       uses: actions/setup-dotnet@499789684c9a0d41c9b3f0d66a785ba17b1d51ab
       with:

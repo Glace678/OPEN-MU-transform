@@ -29,7 +29,11 @@ else if (this.SetupService.IsUpdateRequired)
 else
 {
     <p>@Resources.DatabaseStatus: <span class="badge bg-success">@Resources.UpToDate</span></p>
-    @if (!this._isDataInitialized)
+    @if (this.IsDataStateUnknown)
+    {
+        <p>@Resources.InitializedGameVersion: <span class="badge bg-danger">Database query failed</span></p>
+    }
+    else if (this.IsDataStateEmpty)
     {
         <p>@Resources.InitializedGameVersion: <span class="badge bg-warning text-dark">@Resources.NoInitializedDataFound</span></p>
     }

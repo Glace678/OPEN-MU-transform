@@ -30,7 +30,7 @@ except FileNotFoundError:
 SERVER = ROOT / "App" / "Server"
 BUILD = Path(os.environ.get("OPENMU_BUILD_DIR", r"D:\openmu自用\OpenMU\bin\Debug"))
 LAUNCHER_EXE = ROOT / "OpenMU-Local.exe"
-HEALTH_URL = os.environ.get("OPENMU_HEALTH_URL", "http://127.0.0.1:5080/")
+HEALTH_URL = os.environ.get("OPENMU_HEALTH_URL", "http://127.0.0.1:5080/_health")
 SERVER_PROCESS_NAMES = ["OpenMU-Local", "MUnique.OpenMU.Startup"]
 STOP_TIMEOUT_SECONDS = 30
 HEALTH_TIMEOUT_SECONDS = 180
@@ -82,14 +82,17 @@ def stop_server():
 
 
 def wait_for_health():
-    """Poll the admin panel until it answers, so we do not report a false success."""
+    """Poll the explicit health probe until it answers 200, so we do not report a false success."""
     deadline = time.monotonic() + HEALTH_TIMEOUT_SECONDS
     while time.monotonic() < deadline:
         try:
             with urllib.request.urlopen(HEALTH_URL, timeout=5) as response:
-                if response.status < 500:
+                # Only an explicit 200 from the probe counts as healthy: 401/403/404 (broken
+                # routing, static assets or proxy misplacement) must trigger the rollback.
+                if response.status == 200:
                     return True
         except (urllib.error.URLError, urllib.error.HTTPError, OSError):
+            # urlopen raises HTTPError on any non-2xx answer, so those are retried like a dead server.
             pass
         time.sleep(2)
     return False

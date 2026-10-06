@@ -207,7 +207,7 @@ public sealed class DuelRoom : AsyncDisposable
             }
         }
 
-        for (int j = this.Spectators.Count; j >= 0; --j)
+        for (int j = this.Spectators.Count - 1; j >= 0; --j)
         {
             var player = this.Spectators[j];
             await player.InvokeViewPlugInAsync<IDuelSpectatorRemovedPlugIn>(p => p.SpectatorRemovedAsync(spectator)).ConfigureAwait(false);

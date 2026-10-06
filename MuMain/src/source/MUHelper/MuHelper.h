@@ -96,6 +96,10 @@ namespace MUHelper
 		bool m_bTimerActivatedBuffOngoing;
 		bool m_bPetActivated;
 		int m_iTotalCost;
+
+		// XC-9: consecutive Work() failures; an auto-stop trigger threshold.
+		int m_iConsecutiveExceptions = 0;
+		static constexpr int MaximumConsecutiveExceptions = 5;
 	};
 
 	extern CMuHelper g_MuHelper;

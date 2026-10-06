@@ -124,20 +124,53 @@ public sealed class ConnectionWrapper : IDisposable
 
     private unsafe ValueTask OnPacketReceivedAsync(ReadOnlySequence<byte> args)
     {
-        using var memoryOwner = MemoryPool<byte>.Shared.Rent((int)args.Length);
-        var packet = memoryOwner.Memory.Slice(0, (int)args.Length);
-        args.CopyTo(packet.Span);
-
-        fixed (byte* packetPtr = &packet.Span.GetPinnableReference())
+        // PROTO-4: a callback buffer may contain multiple concatenated frames (or,
+        // for a corrupted pipe, trailing bytes). Hand the native side exactly the
+        // frames declared by their headers -- never a multi-packet blob, and never
+        // past a declared boundary. Each frame is copied to a pinned buffer so the
+        // native pointer stays valid for the synchronous callback only; it must
+        // not be retained by the callee (the pooled owner is disposed right after).
+        // Hoisted out of the loop (CA2014): overwritten in full on every iteration.
+        Span<byte> header = stackalloc byte[3];
+        var remaining = args;
+        while (remaining.Length >= 3)
         {
-            try
+            remaining.Slice(0, 3).CopyTo(header);
+            var declaredSize = header.GetPacketSize();
+
+            // Minimum valid frame: type + size (+ high size byte for C2/C4).
+            var minSize = header[0] is 0xC2 or 0xC4 ? 3 : 2;
+            if (declaredSize < minSize || declaredSize > remaining.Length)
             {
-                this._onPacketReceived(this._handle, packet.Length, packetPtr);
+                Debug.WriteLine(
+                    "Handle {0}: malformed frame header (type 0x{1:X2}, declared size {2}, {3} bytes buffered); dropping rest of the buffer.",
+                    this._handle, header[0], declaredSize, remaining.Length);
+                break;
             }
-            catch (Exception ex)
+
+            var frameSequence = remaining.Slice(0, declaredSize);
+            using var memoryOwner = MemoryPool<byte>.Shared.Rent(declaredSize);
+            var packet = memoryOwner.Memory.Slice(0, declaredSize);
+            frameSequence.CopyTo(packet.Span);
+
+            fixed (byte* packetPtr = packet.Span)
             {
-                Debug.WriteLine(ex);
+                try
+                {
+                    this._onPacketReceived(this._handle, packet.Length, packetPtr);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
+
+            remaining = remaining.Slice(declaredSize);
+        }
+
+        if (remaining.Length > 0)
+        {
+            Debug.WriteLine("Handle {0}: {1} trailing byte(s) after frame splitting discarded.", this._handle, remaining.Length);
         }
 
         return ValueTask.CompletedTask;

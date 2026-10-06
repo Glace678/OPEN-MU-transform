@@ -580,10 +580,10 @@ public class BalanceV1CombatProbeTests
                 (Stats.ManaRegeneration, BalanceV1.PotionGroup.Mana, mp, (RecoverConsumeHandlerPlugIn)manaHandler, 12) })
             {
                 if (player.Attributes![resource.Item1.CurrentAttribute] < player.Attributes[resource.Item1.MaximumAttribute] * 0.70
-                    && player.TryBeginBalanceV1PotionCooldown(resource.Item2, TimeSpan.FromSeconds(resource.Item5), start.AddSeconds(elapsed)))
+                    && player.BalanceV1PotionCooldowns.TryBegin(resource.Item2, TimeSpan.FromSeconds(resource.Item5), start.AddSeconds(elapsed)))
                 {
                     await resource.Item4.RecoverAsync(player, resource.Item3).ConfigureAwait(false);
-                    Assert.That(player.TryBeginBalanceV1PotionCooldown(resource.Item2, TimeSpan.FromSeconds(resource.Item5), start.AddSeconds(elapsed)), Is.False);
+                    Assert.That(player.BalanceV1PotionCooldowns.TryBegin(resource.Item2, TimeSpan.FromSeconds(resource.Item5), start.AddSeconds(elapsed)), Is.False);
                     if (resource.Item2 == BalanceV1.PotionGroup.Health)
                     {
                         potionHp++;

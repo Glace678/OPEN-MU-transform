@@ -5,6 +5,7 @@
 namespace MUnique.Client.Library;
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using MUnique.OpenMU.Network;
@@ -44,11 +45,31 @@ public unsafe partial class ConnectionManager
             var usernameStr = NativeInterop.PtrToWideString(@username);
             var passwordStr = NativeInterop.PtrToWideString(@password);
 
-            // todo: check if username or password is too long
+            if (usernameStr is null)
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
+
+            if (passwordStr is null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            // PLAT-4: the wire fields hold 10/20 UTF-8 bytes (not wchar counts),
+            // so a CJK/accented name or anything longer cannot be sent. The old
+            // code let GetBytes throw inside the CreateAndSend lambda and the
+            // empty catch swallowed it, so clicking Login did nothing at all.
+            // Validate up front (same pattern as SendChatMessageExt) and report.
+            const int MaximumUsernameBytes = 10;
+            const int MaximumPasswordBytes = 20;
+
+            ValidateLoginField(usernameStr, nameof(username), MaximumUsernameBytes);
+            ValidateLoginField(passwordStr, nameof(password), MaximumPasswordBytes);
+
             connection.CreateAndSend(pipeWriter =>
             {
-                Span<byte> usernameBytes = stackalloc byte[10];
-                Span<byte> passwordBytes = stackalloc byte[20];
+                Span<byte> usernameBytes = stackalloc byte[MaximumUsernameBytes];
+                Span<byte> passwordBytes = stackalloc byte[MaximumPasswordBytes];
                 Encoding.UTF8.GetBytes(usernameStr, usernameBytes);
                 Encoding.UTF8.GetBytes(passwordStr, passwordBytes);
                 Xor3Encryptor.Encrypt(usernameBytes);
@@ -65,9 +86,23 @@ public unsafe partial class ConnectionManager
                 return length;
             });
         }
-        catch
+        catch (Exception ex)
         {
-            // Log exception
+            // PLAT-4: at minimum record why the login packet never went out.
+            Debug.WriteLine($"Failed to send login request: {ex.Message}");
+        }
+
+        // The argument name doubles as the field label, so the exception message
+        // wording is identical for both callers.
+        static void ValidateLoginField(string value, string argumentName, int maximumBytes)
+        {
+            var byteCount = Encoding.UTF8.GetByteCount(value);
+            if (byteCount <= 0 || byteCount > maximumBytes)
+            {
+                throw new ArgumentOutOfRangeException(
+                    argumentName,
+                    $"The login {argumentName} must contain 1 to {maximumBytes} UTF-8 bytes.");
+            }
         }
     }
 }

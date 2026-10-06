@@ -17,10 +17,15 @@ public static class SoloCashShopCatalog
     /// <summary>Maximum catalog size supported by the solo client.</summary>
     public const int MaximumOffers = 2048;
 
+    /// <summary>Item codes encode group and number as group*<see cref="ItemCodesPerGroup"/>+number.</summary>
+    public const int ItemCodesPerGroup = 512;
+
     /// <summary>
     /// Builds offers from configured NPC supplies and implemented consumable effects.
     /// Stable identifiers include the item level, so event tickets never alias one another.
     /// </summary>
+    /// <param name="configuration">The active game configuration.</param>
+    /// <returns>The list of available shop offers.</returns>
     public static IReadOnlyList<Offer> GetOffers(GameConfiguration configuration)
     {
         var supplies = (configuration.Monsters ?? [])
@@ -54,7 +59,7 @@ public static class SoloCashShopCatalog
             _ => (byte)14,
         };
         var price = category switch { 13 => 10, 14 => 5, 15 => 2, 16 => 20, _ => 1 };
-        var code = checked((ushort)((definition.Group * 512) + definition.Number));
+        var code = checked((ushort)((definition.Group * ItemCodesPerGroup) + definition.Number));
         if (!double.IsFinite(durability))
         {
             throw new InvalidOperationException("Solo shop item durability is not finite.");

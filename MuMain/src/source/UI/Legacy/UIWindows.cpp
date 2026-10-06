@@ -4650,8 +4650,10 @@ BOOL CUILetterBoxTabWindow::HandleMessage()
         {
             if (m_LetterListBox.HaveCheckedLine() == TRUE)
             {
-                static std::deque<LETTERLIST_TEXT*> letterlist;
-                letterlist.clear();
+                // UI-5: local, not static - the pointers are borrowed from the
+                // list box (no ownership/deletes here), and a static deque could
+                // alias across window instances or re-entrant calls.
+                std::deque<LETTERLIST_TEXT*> letterlist;
                 if (m_LetterListBox.GetCheckedLines(&letterlist) == 0) break;
                 for (std::deque<LETTERLIST_TEXT*>::iterator iter = letterlist.begin(); iter != letterlist.end(); ++iter)
                 {

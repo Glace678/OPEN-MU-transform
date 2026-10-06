@@ -8,6 +8,7 @@
 
 #include "Network/Server/WSclient.h"   // SocketClient, CreateSocket, DeleteSocket,
                                        // ResetClientToLoginScene, protocol states
+#include "Network/IncomingPacketQueue.h" // drain stale frames after re-creating the socket
 #include "Scenes/SceneCore.h"          // SceneFlag, szServerIpAddress, g_ServerPort
 #include "Scenes/SceneCommon.h"        // SelectedHero, MAX_CHARACTERS_PER_ACCOUNT
 #include "Scenes/CharacterScene.h"     // StartGame
@@ -27,6 +28,40 @@ namespace
     constexpr int STEP_COUNT = 4;                   // progress-bar steps
 
     const uintptr_t NO_PROBE = static_cast<uintptr_t>(~0ull);  // == INVALID_SOCKET
+
+    // XC-5: balance this manager's one-time WSAStartup with WSACleanup at
+    // process exit instead of leaking the process-level Winsock reference.
+    // Winsock is reference-counted, so this only undoes our own startup call.
+    class WinsockLifetime
+    {
+    public:
+        void EnsureStarted()
+        {
+            if (!this->m_started)
+            {
+                WSADATA wsaData;
+                if (WSAStartup(MAKEWORD(2, 2), &wsaData) == 0)
+                {
+                    this->m_started = true;
+                }
+            }
+        }
+
+        bool IsStarted() const { return this->m_started; }
+
+        ~WinsockLifetime()
+        {
+            if (this->m_started)
+            {
+                WSACleanup();
+            }
+        }
+
+    private:
+        bool m_started = false;
+    };
+
+    WinsockLifetime g_winsockLifetime;
 }
 
 extern double WorldTime;
@@ -151,6 +186,12 @@ void ReconnectManager::Begin()
 
     if (IsSocketAlive())
     {
+        // PROTO-10: ResetClientToLoginScene() cleared the queue before the new
+        // socket existed; frames delivered through the old handle in that window
+        // would survive into the new session. Clear once more against the new
+        // socket so only the fresh handshake is processed.
+        Network::IncomingPacketQueue::Instance().Clear();
+
         g_bGameServerConnected = TRUE;
         EnterPhase(Phase::Connecting);
         return;
@@ -236,12 +277,11 @@ void ReconnectManager::UpdateProbing()
 
 void ReconnectManager::StartProbe()
 {
-    static bool s_wsaInitialised = false;
-    if (!s_wsaInitialised)
+    g_winsockLifetime.EnsureStarted();
+    if (!g_winsockLifetime.IsStarted())
     {
-        WSADATA wsaData;
-        WSAStartup(MAKEWORD(2, 2), &wsaData);
-        s_wsaInitialised = true;
+        EnterPhase(Phase::Probing);  // XC-5: Winsock unavailable; reset timer and retry
+        return;
     }
 
     const SOCKET probe = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -438,6 +478,17 @@ void ReconnectManager::UpdateRetrying()
         return;
     }
 
+    // PROTO-10: if the socket is in fact alive (the earlier dead-socket check
+    // raced or misreported), do NOT delete it and replay the join sequence -
+    // the server would see a duplicate login on a live connection. Let the
+    // existing connection continue through the normal handshake phases.
+    if (IsSocketAlive())
+    {
+        g_ErrorReport.Write(L"Reconnect retry: socket still alive; resuming handshake instead of reconnecting.\r\n");
+        EnterPhase(Phase::Connecting);
+        return;
+    }
+
     // Already torn down (Begin ran once); just re-open the socket and let the
     // Connecting phase re-drive the login. Reset the protocol state so the
     // server hello is treated as a fresh login rather than a map change.
@@ -445,6 +496,10 @@ void ReconnectManager::UpdateRetrying()
     CurrentProtocolState = REQUEST_JOIN_SERVER;
     DeleteSocket();
     CreateSocket(m_serverIp, m_serverPort);
+
+    // Same stale-frame window as in Begin(): drain anything queued against the
+    // old handle before the new connection starts processing.
+    Network::IncomingPacketQueue::Instance().Clear();
 
     if (IsSocketAlive())
     {

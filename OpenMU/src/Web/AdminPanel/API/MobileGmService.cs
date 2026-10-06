@@ -6,6 +6,8 @@ namespace MUnique.OpenMU.Web.AdminPanel.API;
 
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration.Items;
@@ -15,9 +17,6 @@ using MUnique.OpenMU.GameLogic.Views.Inventory;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.Web.AdminPanel.Auth;
-using Nito.AsyncEx;
-using System.Threading;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Performs the restricted, online-only operations exposed to the packaged mobile GM application.
@@ -32,6 +31,24 @@ public sealed class MobileGmService
 
     // The MU inventory money field is a signed 32-bit value; the classic cap is 2 billion Zen.
     private const long MaximumMoney = 2_000_000_000L;
+
+    private const int MaximumItemSearchResults = 100;
+
+    private const int MaximumGrantQuantity = 10;
+
+    private const int MaximumAdditionalOptionLevel = 4;
+
+    // Excellent options are addressed by their 1-based Number through a signed
+    // 32-bit mask, so only Numbers 1..31 have a corresponding bit.
+    private const int FirstExcellentOptionNumber = 1;
+
+    private const int LastExcellentOptionNumber = 31;
+
+    private const string TemporaryLedgerSuffix = ".tmp";
+
+    private const string CorruptLedgerSuffixPrefix = ".corrupt-";
+
+    private const string LedgerFullMessage = "幂等请求记录已满，请重启本地服务器后重试。";
 
     private static readonly string DefaultOperationLedgerPath = Path.Combine(
         AppContext.BaseDirectory,
@@ -54,12 +71,16 @@ public sealed class MobileGmService
     /// <summary>Initializes a new instance of the <see cref="MobileGmService"/> class.</summary>
     /// <param name="services">The application service provider.</param>
     /// <param name="logger">The logger.</param>
+    /// <param name="operationLedgerPath">
+    /// The path of the durable operation ledger; when <c>null</c>, a default path
+    /// below the application base directory is used.
+    /// </param>
     public MobileGmService(IServiceProvider services, ILogger<MobileGmService> logger, string? operationLedgerPath = null)
     {
         this._services = services;
         this._logger = logger;
         this._operationLedgerPath = operationLedgerPath ?? DefaultOperationLedgerPath;
-        this._persistedOperations = LoadOperationLedger(this._operationLedgerPath);
+        this._persistedOperations = LoadOperationLedger(this._operationLedgerPath, this._logger);
     }
 
     /// <summary>Gets the local account and its currently selected online characters.</summary>
@@ -89,7 +110,7 @@ public sealed class MobileGmService
 
     /// <summary>Searches safe item definitions of the running game configuration.</summary>
     /// <param name="query">The optional name or group/number query.</param>
-    /// <returns>The item search response, limited to 100 entries.</returns>
+    /// <returns>The item search response, limited to <see cref="MaximumItemSearchResults"/> entries.</returns>
     public MobileGmItemsResponse SearchItems(string? query)
     {
         var normalizedQuery = query?.Trim() ?? string.Empty;
@@ -100,7 +121,7 @@ public sealed class MobileGmService
                            || $"{item.Group}:{item.Number}".Contains(normalizedQuery, StringComparison.OrdinalIgnoreCase))
             .OrderBy(item => item.Group)
             .ThenBy(item => item.Number)
-            .Take(100)
+            .Take(MaximumItemSearchResults)
             .ToArray();
         return new MobileGmItemsResponse(matches);
     }
@@ -118,28 +139,23 @@ public sealed class MobileGmService
 
         lock (this._grantOperationsLock)
         {
-            if (this._grantOperations.TryGetValue(requestId, out var existing))
+            var replayed = this.FindReplayedOperation(this._grantOperations, requestId, request);
+            if (replayed is not null)
             {
-                return existing.Request == request
-                    ? existing.Task
-                    : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
-            }
-
-            if (this._persistedOperations.TryGetValue(requestId, out var persisted))
-            {
-                return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
+                return replayed;
             }
 
             if (!this.TryEvictCompletedOperations())
             {
-                return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重试。"));
+                return Task.FromResult(new MobileGmGrantResponse(false, LedgerFullMessage));
             }
 
             var task = Task.Run(async () =>
             {
                 var result = await this.GrantItemCoreAsync(request, characterId).ConfigureAwait(false);
-                this.PersistOperation(requestId, result);
-                return result;
+                return this.PersistOperation(requestId, result)
+                    ? result
+                    : BuildLedgerWriteFailureResponse(result);
             });
             var operation = new GrantOperation(request, task);
             this._grantOperations[requestId] = operation;
@@ -161,28 +177,23 @@ public sealed class MobileGmService
 
         lock (this._grantOperationsLock)
         {
-            if (this._zenOperations.TryGetValue(requestId, out var existing))
+            var replayed = this.FindReplayedOperation(this._zenOperations, requestId, request);
+            if (replayed is not null)
             {
-                return existing.Request == request
-                    ? existing.Task
-                    : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
-            }
-
-            if (this._persistedOperations.TryGetValue(requestId, out var persisted))
-            {
-                return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
+                return replayed;
             }
 
             if (!this.TryEvictCompletedOperations())
             {
-                return Task.FromResult(new MobileGmGrantResponse(false, "幂等请求记录已满，请重启本地服务器后重启。"));
+                return Task.FromResult(new MobileGmGrantResponse(false, LedgerFullMessage));
             }
 
             var task = Task.Run(async () =>
             {
                 var result = await this.GrantZenCoreAsync(characterId, amount).ConfigureAwait(false);
-                this.PersistOperation(requestId, result);
-                return result;
+                return this.PersistOperation(requestId, result)
+                    ? result
+                    : BuildLedgerWriteFailureResponse(result);
             });
             var operation = new ZenOperation(request, task);
             this._zenOperations[requestId] = operation;
@@ -225,9 +236,9 @@ public sealed class MobileGmService
             return "物品等级无效。";
         }
 
-        if (request.AdditionalOptionLevel is < 0 or > 4)
+        if (request.AdditionalOptionLevel is < 0 or > MaximumAdditionalOptionLevel)
         {
-            return "追加选项等级必须在 0 到 4 之间。";
+            return $"追加选项等级必须在 0 到 {MaximumAdditionalOptionLevel} 之间。";
         }
 
         if (request.ExcellentMask < 0)
@@ -235,7 +246,9 @@ public sealed class MobileGmService
             return "卓越属性掩码无效。";
         }
 
-        return request.Quantity is < 1 or > 10 ? "发放数量必须在 1 到 10 之间。" : null;
+        return request.Quantity is < 1 or > MaximumGrantQuantity
+            ? $"发放数量必须在 1 到 {MaximumGrantQuantity} 之间。"
+            : null;
     }
 
     /// <summary>Validates the pure, context-independent portion of a Zen grant request.</summary>
@@ -272,6 +285,37 @@ public sealed class MobileGmService
         amount = request.Amount;
         return null;
     }
+
+    // Returns the replay response for a requestId that is already known: the
+    // in-memory task when the same request comes back, an immediate rejection
+    // when the id was claimed by another request, or the result recorded in the
+    // durable ledger. Returns null for unknown ids. The caller must hold the lock.
+    private Task<MobileGmGrantResponse>? FindReplayedOperation<T>(
+        Dictionary<Guid, T> operations,
+        Guid requestId,
+        object request)
+        where T : RememberedOperation
+    {
+        if (operations.TryGetValue(requestId, out var existing))
+        {
+            return existing.RequestEquals(request)
+                ? existing.Task
+                : Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
+        }
+
+        if (this._persistedOperations.TryGetValue(requestId, out var persisted))
+        {
+            return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
+        }
+
+        return null;
+    }
+
+    // XC-11: builds the response for an operation that executed in-game but
+    // could not be recorded durably, telling the caller plainly not to replay
+    // the requestId (same-process replays remain blocked by the in-memory ledger).
+    private static MobileGmGrantResponse BuildLedgerWriteFailureResponse(MobileGmGrantResponse original) =>
+        new(false, $"操作已执行，但幂等记录无法写入磁盘，服务器重启前请勿重试该 requestId。原始结果：{original.Message}");
 
     // Drops finished operations that outlived their retention window so the
     // dictionaries cannot fill up and lock out every future grant. The caller
@@ -367,6 +411,7 @@ public sealed class MobileGmService
         player.IsConnected
         && player.Account is { } account
         && string.Equals(account.LoginName, accountName, StringComparison.OrdinalIgnoreCase);
+
     private static bool CanGrantToPlayer(Player player, string accountName, Guid characterId) =>
         IsAccountPlayer(player, accountName)
         && player.SelectedCharacter is { } character
@@ -384,7 +429,7 @@ public sealed class MobileGmService
     {
         var excellentNumbers = OptionsOfType(definition, ItemOptionTypes.Excellent)
             .Select(option => option.Number)
-            .Where(number => number is >= 1 and <= 31)
+            .Where(number => number is >= FirstExcellentOptionNumber and <= LastExcellentOptionNumber)
             .Distinct()
             .OrderBy(number => number)
             .ToArray();
@@ -430,14 +475,17 @@ public sealed class MobileGmService
         {
             // The request uses a nonnegative signed 32-bit mask. Invalid option
             // numbers must not wrap around C#'s masked shift count.
-            if (option.Number is >= 1 and <= 31)
+            if (option.Number is >= FirstExcellentOptionNumber and <= LastExcellentOptionNumber)
             {
-                allowedMask |= 1 << (option.Number - 1);
+                allowedMask |= 1 << (option.Number - FirstExcellentOptionNumber);
             }
         }
 
         return (mask & ~allowedMask) == 0;
     }
+
+    private static bool IsExcellentOptionRequested(IncreasableItemOption option, int mask) =>
+        ((1 << (option.Number - FirstExcellentOptionNumber)) & mask) > 0;
 
     private static void AddOptionLink(Player player, Item item, IncreasableItemOption option, int level)
     {
@@ -474,7 +522,7 @@ public sealed class MobileGmService
 
         foreach (var excellentOption in excellentOptions)
         {
-            if (((1 << (excellentOption.Number - 1)) & request.ExcellentMask) > 0)
+            if (IsExcellentOptionRequested(excellentOption, request.ExcellentMask))
             {
                 AddOptionLink(player, item, excellentOption, 0);
             }
@@ -501,25 +549,44 @@ public sealed class MobileGmService
         }
     }
 
-    private void PersistOperation(Guid requestId, MobileGmGrantResponse result)
+    private bool PersistOperation(Guid requestId, MobileGmGrantResponse result)
     {
         lock (this._grantOperationsLock)
         {
+            // Keep the in-memory entry regardless of disk outcome: it protects
+            // against same-process replays (XC-11).
             this._persistedOperations[requestId] = new PersistedOperation(result.Success, result.Message);
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(this._operationLedgerPath)!);
-                using var file = new FileStream(this._operationLedgerPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                JsonSerializer.Serialize(file, this._persistedOperations);
+
+                // Serialize into a temp file and atomically replace the ledger
+                // so a crash mid-write cannot leave a half-written JSON file.
+                var tempPath = this._operationLedgerPath + TemporaryLedgerSuffix;
+                using (var file = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    JsonSerializer.Serialize(file, this._persistedOperations);
+                }
+
+                File.Move(tempPath, this._operationLedgerPath, overwrite: true);
+                return true;
             }
             catch (Exception ex)
             {
-                this._logger.LogWarning(ex, "Could not persist the mobile GM operation ledger for request {RequestId}.", requestId);
+                // XC-11: this is a data-integrity event, not a warning: after a
+                // process restart the missing entry would let the same requestId
+                // be replayed and grant twice. The in-memory entry still covers
+                // replays until then.
+                this._logger.LogError(
+                    ex,
+                    "Could not persist the mobile GM operation ledger for request {RequestId}; idempotency protection is lost after a server restart.",
+                    requestId);
+                return false;
             }
         }
     }
 
-    private static Dictionary<Guid, PersistedOperation> LoadOperationLedger(string ledgerPath)
+    private static Dictionary<Guid, PersistedOperation> LoadOperationLedger(string ledgerPath, ILogger logger)
     {
         try
         {
@@ -532,8 +599,30 @@ public sealed class MobileGmService
             return JsonSerializer.Deserialize<Dictionary<Guid, PersistedOperation>>(file)
                    ?? new Dictionary<Guid, PersistedOperation>();
         }
-        catch
+        catch (Exception ex)
         {
+            // XC-11: silently returning an empty table would void all recorded
+            // idempotency keys. Back the corrupt file up (so it can be
+            // inspected), then rebuild with an alert rather than pretending it
+            // was never there.
+            try
+            {
+                var backupPath = $"{ledgerPath}{CorruptLedgerSuffixPrefix}{DateTime.UtcNow:yyyyMMddHHmmssfff}";
+                File.Move(ledgerPath, backupPath);
+                logger.LogError(
+                    ex,
+                    "The mobile GM operation ledger at {LedgerPath} was corrupt; it was backed up to {BackupPath} and the ledger was rebuilt empty. Idempotency history before the failure is lost.",
+                    ledgerPath,
+                    backupPath);
+            }
+            catch (Exception backupException)
+            {
+                logger.LogError(
+                    backupException,
+                    "The mobile GM operation ledger at {LedgerPath} was corrupt and backing it up also failed.",
+                    ledgerPath);
+            }
+
             return new Dictionary<Guid, PersistedOperation>();
         }
     }
@@ -759,6 +848,11 @@ public sealed class MobileGmService
 
         /// <summary>When the remembered operation finished; <c>null</c> while it is still running.</summary>
         public DateTimeOffset? CompletedAt { get; set; }
+
+        /// <summary>Determines whether this entry belongs to the supplied request.</summary>
+        /// <param name="request">The request to compare against.</param>
+        /// <returns><c>true</c> when it is the same request; otherwise, <c>false</c>.</returns>
+        public abstract bool RequestEquals(object request);
     }
 
     private sealed class GrantOperation : RememberedOperation
@@ -770,6 +864,10 @@ public sealed class MobileGmService
         }
 
         public MobileGmGrantRequest Request { get; }
+
+        /// <inheritdoc />
+        public override bool RequestEquals(object request) =>
+            request is MobileGmGrantRequest other && this.Request == other;
     }
 
     private sealed class ZenOperation : RememberedOperation
@@ -781,6 +879,10 @@ public sealed class MobileGmService
         }
 
         public MobileGmZenRequest Request { get; }
+
+        /// <inheritdoc />
+        public override bool RequestEquals(object request) =>
+            request is MobileGmZenRequest other && this.Request == other;
     }
 
     private sealed record ItemCache(object Configuration, MobileGmItem[] Items);

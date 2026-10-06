@@ -220,4 +220,100 @@ void MuApplyCursorVisibility()
     ApplyCursorVisibility();
 }
 
+// PLAT-7: cached process command line, rebuilt from argv at startup.
+namespace
+{
+    std::wstring g_processCommandLine;
+
+    void AppendUtf8Argument(std::wstring& target, const char* argument)
+    {
+        // Decode one UTF-8 argument into wchar_t (inverse of ToUtf8 above).
+        const auto* bytes = reinterpret_cast<const unsigned char*>(argument);
+        while (*bytes != '\0')
+        {
+            unsigned int codepoint = 0;
+            int expected = 0;
+            const unsigned char first = *bytes;
+
+            if (first < 0x80)
+            {
+                codepoint = first;
+                expected = 1;
+            }
+            else if ((first & 0xE0) == 0xC0)
+            {
+                codepoint = first & 0x1F;
+                expected = 2;
+            }
+            else if ((first & 0xF0) == 0xE0)
+            {
+                codepoint = first & 0x0F;
+                expected = 3;
+            }
+            else if ((first & 0xF8) == 0xF0)
+            {
+                codepoint = first & 0x07;
+                expected = 4;
+            }
+            else
+            {
+                // Stray continuation byte: one replacement char, one byte.
+                target.push_back(0xFFFD);
+                ++bytes;
+                continue;
+            }
+
+            // Incomplete or malformed continuation: replace the whole sequence.
+            bool valid = true;
+            for (int i = 1; i < expected; ++i)
+            {
+                if ((bytes[i] & 0xC0) != 0x80)
+                {
+                    valid = false;
+                    break;
+                }
+                codepoint = (codepoint << 6) | (bytes[i] & 0x3F);
+            }
+
+            if (valid)
+            {
+                target.push_back(static_cast<wchar_t>(codepoint));
+            }
+            else
+            {
+                target.push_back(0xFFFD);
+            }
+            bytes += expected;
+        }
+    }
+}
+
+void SetProcessCommandLine(int argc, char** argv)
+{
+    g_processCommandLine.clear();
+    if (argv == nullptr)
+    {
+        return;
+    }
+
+    // Join with single spaces, matching the Win32 GetCommandLine shape the
+    // parser (Util_CheckOption) expects. argv[0] is included; harmless.
+    for (int i = 0; i < argc; ++i)
+    {
+        if (i > 0)
+        {
+            g_processCommandLine.push_back(L' ');
+        }
+        if (argv[i] != nullptr)
+        {
+            AppendUtf8Argument(g_processCommandLine, argv[i]);
+        }
+    }
+}
+
+const wchar_t* GetCommandLineW()
+{
+    return g_processCommandLine.c_str();
+}
+
 #endif // !_WIN32

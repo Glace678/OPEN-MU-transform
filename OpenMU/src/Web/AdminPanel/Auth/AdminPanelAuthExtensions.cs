@@ -101,8 +101,9 @@ public static class AdminPanelAuthExtensions
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
 
-                // The panel is usually run behind a reverse proxy which terminates TLS.
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                // The panel is run behind a reverse proxy which terminates TLS; always emit
+                // the Secure flag (ForwardedHeaders makes the request appear as HTTPS).
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = authOptions.SessionTimeout;
                 options.SlidingExpiration = true;
                 options.LoginPath = AdminAuthenticationDefaults.LoginPath;

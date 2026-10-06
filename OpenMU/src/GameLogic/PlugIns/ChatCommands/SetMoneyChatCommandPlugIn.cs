@@ -56,7 +56,18 @@ public class SetMoneyChatCommandPlugIn : ChatCommandPlugInBase<SetMoneyChatComma
             return;
         }
 
-        targetPlayer.Money = checked(arguments.Amount);
+        // Apply the change through the unified money pipeline so that limits are respected.
+        var delta = arguments.Amount - targetPlayer.Money;
+        var success = delta >= 0
+            ? targetPlayer.TryAddMoney(delta)
+            : targetPlayer.TryRemoveMoney(-delta);
+        if (!success)
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InvalidMoneyAmount), maxMoney).ConfigureAwait(false);
+            return;
+        }
+
+        player.Logger.LogInformation("GM {0} set money of {1} to {2}.", player.Name, targetPlayer.Name, arguments.Amount);
         await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.SetMoneyResult), arguments.Amount).ConfigureAwait(false);
     }
 

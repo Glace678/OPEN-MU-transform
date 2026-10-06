@@ -3,9 +3,13 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+
+#include <limits>
+
 #include "Core/Utilities/ReadScript.h"
 #include "UI/Legacy/UIManager.h"
 #include "GameLogic/Items/ItemAddOptioninfo.h"
+#include "GameLogic/Buffs/BuffScriptValidation.h"
 #include "w_BuffScriptLoader.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -32,6 +36,23 @@ namespace
                 if (pcCuttoken[i] == 0) return;
             }
         }
+    }
+
+    // Fatal error exit shared by Load()'s guards: release buffer/file, log
+    // "<file> - <reason>", show a message box and ask the window to close.
+    void AbortLoad(FILE* fp, const std::wstring& fileName, const wchar_t* reason, BYTE* buffer = nullptr)
+    {
+        delete[] buffer;
+        if (fp != nullptr)
+        {
+            fclose(fp);
+        }
+
+        wchar_t text[256];
+        mu_swprintf(text, L"%ls - %ls", fileName.c_str(), reason);
+        g_ErrorReport.Write(text);
+        MessageBox(g_hWnd, text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
     }
 }
 
@@ -74,23 +95,49 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
     {
         DWORD structsize = sizeof(_BUFFINFO);
 
-        DWORD listsize;
-        fread(&listsize, sizeof(DWORD), 1, fp);
+        DWORD listsize = 0;
+        if (fread(&listsize, sizeof(DWORD), 1, fp) != 1)
+        {
+            // XC-12: record count unreadable -- do not allocate/parse garbage.
+            AbortLoad(fp, pchFileName, L"File truncated (record count unreadable).");
+            return true;
+        }
 
-        BYTE* Buffer = new BYTE[structsize * listsize];
-        fread(Buffer, structsize * listsize, 1, fp);
+        // XC-12: bound the caller-supplied record count BEFORE allocating and
+        // multiplying (overflow-safe), instead of trusting a file value.
+        // Rules live in BuffScriptValidation.h so they can be unit tested.
+        if (!BuffScriptValidation::IsValidRecordCount(listsize, structsize))
+        {
+            wchar_t reason[128];
+            mu_swprintf(reason, L"File corrupted (invalid record count: %u).", listsize);
+            AbortLoad(fp, pchFileName, reason);
+            return true;
+        }
 
-        DWORD dwCheckSum;
-        fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+        const DWORD bufferSize = structsize * listsize;
+        BYTE* Buffer = new BYTE[bufferSize];
+        if (fread(Buffer, bufferSize, 1, fp) != 1)
+        {
+            // XC-12: short read -- checksum on uninitialized tail would be
+            // meaningless.
+            AbortLoad(fp, pchFileName, L"File truncated (record data).", Buffer);
+            return true;
+        }
+
+        DWORD dwCheckSum = 0;
+        if (fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
+        {
+            // XC-12: checksum domain missing -- cannot validate the data.
+            AbortLoad(fp, pchFileName, L"File truncated (checksum).", Buffer);
+            return true;
+        }
 
         fclose(fp);
-        if (dwCheckSum != GenerateCheckSum2(Buffer, structsize * listsize, 0xE2F1))
+        if (dwCheckSum != GenerateCheckSum2(Buffer, bufferSize, 0xE2F1))
         {
-            wchar_t Text[256];
-            mu_swprintf(Text, L"%ls - File corrupted.", pchFileName.c_str());
-            g_ErrorReport.Write(Text);
-            MessageBox(g_hWnd, Text, NULL, MB_OK);
-            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            // fp is already closed; return so Buffer is not freed again below.
+            AbortLoad(nullptr, pchFileName, L"File corrupted.", Buffer);
+            return true;
         }
         else
         {
@@ -126,11 +173,7 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
     }
     else
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", pchFileName.c_str());
-        g_ErrorReport.Write(Text);
-        MessageBox(g_hWnd, Text, NULL, MB_OK);
-        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        AbortLoad(fp, pchFileName, L"File not exist.");
     }
 
     return true;

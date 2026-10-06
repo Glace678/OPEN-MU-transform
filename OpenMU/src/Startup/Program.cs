@@ -12,6 +12,7 @@ using System.Net;
 using System.Text.Json.Serialization;
 using System.Threading;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -698,6 +699,17 @@ internal sealed class Program : IDisposable
         else
         {
             // everything is fine and ready
+        }
+
+        if (this.IsAdminPanelEnabled(args))
+        {
+            // WEB-12: migrate the admin schema as part of the startup sequence, not lazily on the
+            // first authentication request. A failure is loud (and aborts startup) instead of the
+            // repository silently staying un-migrated and falling back to the bootstrap user.
+            this._logger.Information("Ensuring admin panel schema...");
+            await using var adminContext = new global::MUnique.OpenMU.Persistence.EntityFramework.AdminAuth.AdminPanelContext();
+            await adminContext.Database.MigrateAsync().ConfigureAwait(false);
+            this._logger.Information("Admin panel schema is up to date.");
         }
 
         return contextProvider;

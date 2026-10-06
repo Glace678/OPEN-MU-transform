@@ -31,4 +31,25 @@ public final class ServerAddressPolicyTest {
     public void permitsExplicitHttpsEndpoint() {
         assertTrue(ServerAddressPolicy.isAllowed("https://gm.example.com"));
     }
+
+    @Test
+    public void isLocalIdentifiesWhereTheKeyCanBeSentWithoutConfirmation() {
+        // Loopback/private hosts may receive the pairing key directly.
+        assertTrue(ServerAddressPolicy.isLocal("http://127.0.0.1:5080/x"));
+        assertTrue(ServerAddressPolicy.isLocal("http://10.1.2.3:5080"));
+        assertTrue(ServerAddressPolicy.isLocal("http://192.168.5.5"));
+        assertTrue(ServerAddressPolicy.isLocal("http://172.20.0.1"));
+        assertTrue(ServerAddressPolicy.isLocal("http://169.254.1.1"));
+        assertTrue(ServerAddressPolicy.isLocal("http://localhost:5080"));
+        assertTrue(ServerAddressPolicy.isLocal("http://[::1]:5080"));
+        assertTrue(ServerAddressPolicy.isLocal("http://[fc00::1]:5080"));
+        assertTrue(ServerAddressPolicy.isLocal("http://[fe80::1%25eth0]:5080"));
+
+        // Even a trusted-scheme public HTTPS endpoint is not "local": the caller
+        // must confirm before sending the write key to it.
+        assertFalse(ServerAddressPolicy.isLocal("https://gm.example.com"));
+        assertFalse(ServerAddressPolicy.isLocal("http://8.8.8.8:5080"));
+        assertFalse(ServerAddressPolicy.isLocal("http://example.com"));
+        assertFalse(ServerAddressPolicy.isLocal("not a url"));
+    }
 }

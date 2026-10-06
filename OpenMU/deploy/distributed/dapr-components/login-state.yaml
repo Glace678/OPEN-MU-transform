@@ -3,11 +3,16 @@ kind: Component
 metadata:
   name: login-state
 spec:
-  spec:
   type: state.redis
   version: v1
   metadata:
   - name: redisHost
     value: redis-state:6379
+  # XC-15: the upgraded deployment form requires a password-protected Redis.
+  # Dapr expands the ${{REDIS_PASSWORD}} placeholder from the process
+  # environment when the component loads (fails if unset/empty), so this is
+  # not silently usable against an unauthenticated Redis.
+  - name: redisPassword
+    value: ${{REDIS_PASSWORD}}
   #- name: ttlInSeconds
   #  value: <int> # Optional

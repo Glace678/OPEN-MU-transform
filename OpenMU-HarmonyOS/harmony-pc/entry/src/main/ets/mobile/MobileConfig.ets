@@ -69,6 +69,43 @@ export class MobileConfig {
     }
   }
 
+  // H-04: validate a server address as a real IPv4/hostname (no empty labels,
+  // no leading/trailing hyphens, no leading-zero octets). XC-19: kept
+  // byte-for-byte identical to harmony-game's MobileConfig.isValidServerAddress;
+  // the build-tools parity test fails if the two copies drift.
+  static isValidServerAddress(value: string): boolean {
+    const v = (value ?? '').trim();
+    if (v.length === 0) {
+      return false;
+    }
+    const m = v.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+    if (m) {
+      for (let i = 1; i <= 4; i++) {
+        const octet = m[i];
+        if (octet.length > 1 && octet.startsWith('0')) {
+          return false;
+        }
+        const n = Number(octet);
+        if (Number.isNaN(n) || n < 0 || n > 255) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (v.endsWith('.')) {
+      return false;
+    }
+    for (const label of v.split('.')) {
+      if (label.length === 0 || label.length > 63) {
+        return false;
+      }
+      if (!/^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?$/.test(label)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   // Writes the config.ini consumed by the native GameConfig parser. Mirrors
   // Android MobilePreferences.writeConfig: the same section/key names
   // ([CONNECTION SETTINGS]/ServerIP, [Render]/FrameRateMode, [Input]/Handedness,
@@ -79,7 +116,13 @@ export class MobileConfig {
     fs.mkdirSync(root, true);
 
     const server = (await MobileConfig.getString(context, KEY_SERVER, DEFAULT_SERVER_ADDRESS))
-      .replace(/[\r\n[\]=]/g, '');
+      .replace(/[\r\n[\]=]/g, '').trim();
+    // H-04: never bake an empty/malformed address into config.ini; fail loudly
+    // so the settings screen can prompt the user instead of silently shipping a
+    // broken client.
+    if (!MobileConfig.isValidServerAddress(server)) {
+      throw new Error('服务器地址无效：须为 IPv4 或主机名（空标签、首尾连字符、前导零不合法）');
+    }
     const renderScale = await MobileConfig.getNumber(context, KEY_RENDER_SCALE, 100);
     const uiScale = await MobileConfig.getNumber(context, KEY_UI_SCALE, 100);
     const safeMargin = await MobileConfig.getNumber(context, KEY_SAFE_MARGIN, 3);

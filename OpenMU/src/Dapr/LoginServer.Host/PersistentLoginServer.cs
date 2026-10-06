@@ -17,6 +17,10 @@ public sealed class PersistentLoginServer : ILoginServer
 
     private const int OfflineServerId = -1;
 
+    private const int MaxAttempts = 5;
+
+    private const int SnapshotBatchSize = 64;
+
     private readonly ILogger<PersistentLoginServer> _logger;
 
     private readonly DaprClient _daprClient;
@@ -39,24 +43,28 @@ public sealed class PersistentLoginServer : ILoginServer
     public async Task RemoveServerAsync(byte serverId)
     {
         var indexName = $"serverindex-{serverId}";
-        var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
-        if (serverIndex is null || serverIndex.Count == 0)
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
         {
-            return;
+            var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
+            if (serverIndex is null || serverIndex.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var accountName in serverIndex)
+            {
+                await this.SetAccountOfflineAsync(accountName).ConfigureAwait(false);
+            }
+
+            serverIndex.Clear();
+
+            if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            {
+                return;
+            }
         }
 
-        foreach (var accountName in serverIndex)
-        {
-            await this.SetAccountOfflineAsync(accountName).ConfigureAwait(false);
-        }
-
-        serverIndex.Clear();
-
-        if (!await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
-        {
-            // try again, if it failed
-            await this.RemoveServerAsync(serverId).ConfigureAwait(false);
-        }
+        this._logger.LogError("Failed to clear the index of server {0} after {1} attempts.", serverId, MaxAttempts);
     }
 
     /// <inheritdoc />
@@ -86,7 +94,9 @@ public sealed class PersistentLoginServer : ILoginServer
 
             if (!await this.TryAddToIndexAsync(accountName, serverId).ConfigureAwait(false))
             {
-                await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, eTag).ConfigureAwait(false);
+                // The state was just changed to serverId, so the original eTag is stale.
+                // Re-read the current state/eTag and roll the account back to offline.
+                await this.ResetAccountToOfflineAsync(accountName).ConfigureAwait(false);
                 return false;
             }
 
@@ -133,19 +143,31 @@ public sealed class PersistentLoginServer : ILoginServer
     public async ValueTask<Dictionary<string, byte>> GetSnapshotAsync()
     {
         var result = new Dictionary<string, byte>();
-        for (int i = 0; i < 20; i++)
+
+        // A server id is a byte (0..255), so iterate over all of them in batches instead
+        // of the former hard-coded limit of 20.
+        for (int batchStart = 0; batchStart <= byte.MaxValue; batchStart += SnapshotBatchSize)
         {
-            var indexName = $"serverindex-{i}";
-
-            var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
-            if (serverIndex is null)
+            var batchSize = Math.Min(SnapshotBatchSize, byte.MaxValue - batchStart + 1);
+            var entries = await Task.WhenAll(Enumerable.Range(batchStart, batchSize).Select(async i =>
             {
-                continue;
-            }
+                var (serverIndex, _) = await this._daprClient
+                    .GetStateAndETagAsync<HashSet<string>>(StoreName, $"serverindex-{i}", ConsistencyMode.Strong)
+                    .ConfigureAwait(false);
+                return (serverId: (byte)i, serverIndex);
+            })).ConfigureAwait(false);
 
-            foreach (var accountName in serverIndex)
+            foreach (var (serverId, serverIndex) in entries)
             {
-                result[accountName] = (byte)i;
+                if (serverIndex is null)
+                {
+                    continue;
+                }
+
+                foreach (var accountName in serverIndex)
+                {
+                    result[accountName] = serverId;
+                }
             }
         }
 
@@ -154,8 +176,7 @@ public sealed class PersistentLoginServer : ILoginServer
 
     private async Task<bool> TryAddToIndexAsync(string accountName, byte serverId)
     {
-        const int maxAttempts = 5;
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
         {
             var indexName = $"serverindex-{serverId}";
             var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
@@ -187,20 +208,46 @@ public sealed class PersistentLoginServer : ILoginServer
     private async Task RemoveFromIndexAsync(string accountName, byte serverId)
     {
         var indexName = $"serverindex-{serverId}";
-        var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
-        if (serverIndex is null)
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
         {
-            return;
-        }
-
-        if (serverIndex.Remove(accountName))
-        {
-            if (!await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            var (serverIndex, eTag) = await this._daprClient.GetStateAndETagAsync<HashSet<string>>(StoreName, indexName, ConsistencyMode.Strong).ConfigureAwait(false);
+            if (serverIndex is null || !serverIndex.Remove(accountName))
             {
-                // try again, if it failed
-                await this.RemoveFromIndexAsync(accountName, serverId).ConfigureAwait(false);
+                return;
+            }
+
+            if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            {
+                return;
             }
         }
+
+        this._logger.LogError("Failed to remove account {0} from the index of server {1} after {2} attempts.", accountName, serverId, MaxAttempts);
+    }
+
+    private async Task ResetAccountToOfflineAsync(string accountName)
+    {
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
+        {
+            var (currentServerId, currentETag) = await this._daprClient
+                .GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong)
+                .ConfigureAwait(false);
+
+            if (currentServerId is null || currentServerId < 0)
+            {
+                // Already offline or not logged in; nothing to roll back.
+                return;
+            }
+
+            if (await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, currentETag).ConfigureAwait(false))
+            {
+                return;
+            }
+        }
+
+        this._logger.LogError(
+            "Failed to roll back the login state of account {0}. It may stay marked as logged in and require manual correction.",
+            accountName);
     }
 
     private async Task SetAccountOfflineAsync(string accountName)

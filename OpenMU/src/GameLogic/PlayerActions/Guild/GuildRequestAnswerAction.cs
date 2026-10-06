@@ -49,6 +49,8 @@ public class GuildRequestAnswerAction
             || lastGuildRequester.PlayerState.CurrentState != PlayerState.EnteredWorld)
         {
             await lastGuildRequester.InvokeViewPlugInAsync<IGuildJoinResponsePlugIn>(p => p.ShowGuildJoinResponseAsync(GuildRequestAnswerResult.GuildMasterOrRequesterIsBusy)).ConfigureAwait(false);
+            player.LastGuildRequester = null;
+            return;
         }
 
         if (accept)

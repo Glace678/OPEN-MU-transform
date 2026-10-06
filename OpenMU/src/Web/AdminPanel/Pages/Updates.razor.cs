@@ -14,9 +14,12 @@ using MUnique.OpenMU.Web.AdminPanel.Services;
 /// </summary>
 public partial class Updates
 {
-    private bool _isDataInitialized;
+    private SetupService.DataInitializationState _dataInitializationState = SetupService.DataInitializationState.Unknown;
 
     private Exception? _exception;
+
+    private bool IsDataStateUnknown =>
+        this._dataInitializationState == SetupService.DataInitializationState.Unknown;
 
     private UpdateState _overallState;
 
@@ -59,8 +62,8 @@ public partial class Updates
 
     private async Task DetermineUpdatesAsync()
     {
-        this._isDataInitialized = await this.SetupService.IsDataInitializedAsync().ConfigureAwait(false);
-        if (this._isDataInitialized)
+        this._dataInitializationState = await this.SetupService.GetDataInitializationStateAsync().ConfigureAwait(false);
+        if (this._dataInitializationState == SetupService.DataInitializationState.Initialized)
         {
             var updates = await this.UpdateService.DetermineAvailableUpdatesAsync().ConfigureAwait(false);
             this._availableUpdates = updates.Select(up => new UpdateViewModel(up)).ToList();

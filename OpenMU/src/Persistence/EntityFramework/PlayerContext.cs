@@ -43,7 +43,8 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     {
         // Both values are predicates in one database statement. Concurrent recovery
         // cannot succeed twice, and ordinary gameplay saves do not acquire a new token.
-        var affected = await this.Context.Set<Account>()
+        var accounts = this.Context.Set<Account>();
+        var affected = await accounts
             .Where(account => account.LoginName == expected.LoginName
                 && account.PasswordHash == expected.PasswordHash
                 && account.RecoveryCodeHash == expected.RecoveryCodeHash)
@@ -51,6 +52,22 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
                 .SetProperty(account => account.PasswordHash, newPasswordHash)
                 .SetProperty(account => account.RecoveryCodeHash, newRecoveryCodeHash), cancellationToken)
             .ConfigureAwait(false);
+
+        if (affected == 1)
+        {
+            // ExecuteUpdate bypasses the change tracker (and the concurrency token). If this context
+            // tracks the account (e.g. during periodic player saves), it still holds the old
+            // credentials: a later SaveChanges could overwrite them ("password change lost") or
+            // fail the concurrency check. Reload it so the tracked instance matches the database.
+            var trackedAccount = this.Context.ChangeTracker.Entries<Account>()
+                .FirstOrDefault(entry => entry.State != EntityState.Added
+                    && entry.Entity.LoginName == expected.LoginName);
+            if (trackedAccount is { })
+            {
+                await trackedAccount.ReloadAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+
         return affected == 1;
     }
 

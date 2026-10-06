@@ -121,6 +121,7 @@ namespace MUHelper
         m_bPetActivated = false;
 
         m_iLoopCounter = 0;
+        m_iConsecutiveExceptions = 0;
 
         m_bActive = true;
         g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Started");
@@ -197,10 +198,36 @@ namespace MUHelper
             Attack();
 
             RepairEquipments();
+
+            // XC-9: a clean tick resets the failure streak.
+            m_iConsecutiveExceptions = 0;
+        }
+        catch (const std::bad_alloc& e)
+        {
+            // XC-9: classify rather than swallow everything. A bad_alloc can
+            // leave m_iCurrentTarget/m_iComboState desynced mid-Regroup/Attack.
+            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] bad_alloc: %hs", e.what());
+            if (++m_iConsecutiveExceptions >= MaximumConsecutiveExceptions)
+            {
+                g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] %d consecutive exceptions; stopping.", m_iConsecutiveExceptions);
+                TriggerStop();
+            }
+        }
+        catch (const std::exception& e)
+        {
+            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] Exception occurred: %hs", e.what());
+            if (++m_iConsecutiveExceptions >= MaximumConsecutiveExceptions)
+            {
+                g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] %d consecutive exceptions; stopping.", m_iConsecutiveExceptions);
+                TriggerStop();
+            }
         }
         catch (...)
         {
-            g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Exception occurred. Ignoring...");
+            // XC-9: unknown failure (SEH-derived etc.) -- do not keep looping
+            // with an unknown helper state; stop immediately.
+            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] Non-std exception occurred; stopping.");
+            TriggerStop();
         }
     }
 

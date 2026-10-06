@@ -27,7 +27,7 @@ public class SetVaultPinAction
 
         if (BCrypt.Net.BCrypt.Verify(accountPassword, player.Account.PasswordHash))
         {
-            player.Account.VaultPassword = newPin;
+            player.Account.VaultPassword = VaultPinSecurity.HashPin(newPin);
             await player.InvokeViewPlugInAsync<IShowVaultLockChangeResponse>(p => p.ShowResponseAsync(VaultLockChangeResult.Unlocked)).ConfigureAwait(false);
         }
         else

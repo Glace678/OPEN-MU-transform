@@ -45,6 +45,10 @@ app.MapAdminPanelAuthEndpoints();
 
 await app.WaitForDatabaseConnectionInitializationAsync().ConfigureAwait(false);
 
+// WEB-12: migrate the admin schema during startup. A failure is logged as an error and aborts,
+// instead of the lazy migration on the first request silently not completing.
+await app.Services.GetRequiredService<AdminUserRepository>().InitializeStorageAsync().ConfigureAwait(false);
+
 await app.Services.TryLoadPlugInConfigurationsAsync(plugInConfigurations).ConfigureAwait(false);
 
 app.Run();

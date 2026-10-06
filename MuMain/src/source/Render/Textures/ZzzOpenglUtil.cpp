@@ -24,6 +24,7 @@
 #include "Render/Core/BindState.h"
 #include "Render/Shaders/PassthroughShader.h"
 #include "Core/Utilities/Log/ErrorReport.h"
+#include "Render/Textures/DayHistoryValidation.h"
 
 #ifdef _EDITOR
 extern "C" bool DevEditor_IsCameraOverrideEnabled(const char* cameraName);
@@ -80,17 +81,23 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     }dayHistory;
 
     FILE* fp;
-    dayHistory days[100];
+    dayHistory days[100] = {};
     int   count = 0;
     WORD  num = 0;
     bool  sameName = false;
     bool  update = true;
+    bool  readError = false;
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
         if (fread(&num, sizeof(WORD), 1, fp) != 1) num = 0;  // #20: reject unreadable header
 
-        if (num > 100)
+        // XC-6: the table holds exactly MaximumHistoryEntries records
+        // (days[0..MaximumHistoryEntries-1]). A corrupt header
+        // (>MaximumHistoryEntries) resets; a full table is valid only for
+        // in-place updates, never for appending (the old "num > 100" guard let
+        // days[100] be written when a full file met a new ID).
+        if (!DayHistoryValidation::IsStoredCountValid(num))
         {
             num = 0;
         }
@@ -98,9 +105,15 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
         {
             for (int i = 0; i < num; ++i)
             {
-                if (fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
+                // XC-6: the ID field is wchar_t -- the record is
+                // (MAX_USERNAME_SIZE+1) wchars, not bytes. Old files written by
+                // the byte-sized version desync here and fall into readError.
+                if (fread(days[i].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
                     fread(&days[i].date, sizeof(WORD), 1, fp) != 1)
-                    break;  // #20: truncated/corrupt record
+                {
+                    readError = true;  // #20: truncated/corrupt record
+                    break;
+                }
                 days[i].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
 
                 if (!wcscmp(days[i].ID, Name))
@@ -115,6 +128,13 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
                 }
                 count++;
             }
+
+            if (readError)
+            {
+                // Drop the unreadable tail instead of writing it back as
+                // uninitialized records.
+                num = static_cast<WORD>(count);
+            }
         }
         fclose(fp);
     }
@@ -123,18 +143,38 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     {
         if (!sameName)
         {
-            memcpy(days[num].ID, Name, (MAX_USERNAME_SIZE + 1) * sizeof(char));
+            // XC-6: appending at num == MaximumHistoryEntries would write
+            // days[MaximumHistoryEntries] out of bounds; skip persistence and
+            // return the default result. Bound lives in DayHistoryValidation.h
+            // so it can be unit tested.
+            if (!DayHistoryValidation::IsAppendPositionValid(num))
+            {
+                g_ErrorReport.Write(L"[dconfig] history table is full (100 entries); '%ls' not recorded.\r\n", Name);
+                return update;
+            }
+
+            // XC-6: ID is a wchar field -- copy as wchars with a hard bound
+            // instead of a byte-sized memcpy (which left half the field
+            // uninitialized and leaked that memory when written to disk).
+            wcsncpy(days[num].ID, Name, MAX_USERNAME_SIZE);
+            days[num].ID[MAX_USERNAME_SIZE] = L'\0';
             days[num].date = day;
 
             num++;
         }
 
         fp = _wfopen(L"dconfig.ini", L"wb");
+        if (fp == nullptr) // XC-3: report the open failure; fwrite on null is undefined behavior.
+        {
+            g_ErrorReport.Write(L"[dconfig] cannot open dconfig.ini for writing.\r\n");
+            return update;
+        }
 
         fwrite(&num, sizeof(WORD), 1, fp);
         for (int i = 0; i < num; ++i)
         {
-            fwrite(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp);
+            // XC-6: write the full wchar record (matches the wchar-sized read).
+            fwrite(days[i].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp);
             fwrite(&days[i].date, sizeof(WORD), 1, fp);
         }
 

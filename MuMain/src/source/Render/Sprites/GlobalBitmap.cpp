@@ -499,13 +499,21 @@ BITMAP_t* CGlobalBitmap::GetTexture(GLuint uiBitmapIndex)
     }
     if (nullptr == pBitmap)
     {
-        // BITMAP_t holds a std::vector (BufferStorage); memset over it would
-        // destroy the vector's invariants. Value-initialize instead, which
-        // zeroes every scalar member and leaves the vector empty.
-        static BITMAP_t s_Error;
-        s_Error = BITMAP_t{};
-        wcscpy(s_Error.FileName, L"CGlobalBitmap::GetTexture Error!!!");
-        pBitmap = &s_Error;
+        // MEM-18: the miss placeholder is built ONCE and must be treated as
+        // read-only. The old code rebuilt it on every miss and handed out the
+        // same mutable object, so any caller that wrote through the result
+        // (Ref/FileName/Buffer...) silently corrupted every later miss in the
+        // frame. Mutating call sites must use FindTexture() and null-check.
+#ifdef _DEBUG
+        g_ErrorReport.Write(L"CGlobalBitmap::GetTexture(%u) miss - read-only placeholder returned.\r\n", uiBitmapIndex);
+        MU_DEBUG_BREAK();
+#endif // _DEBUG
+        static const BITMAP_t s_ErrorPlaceholder = [] {
+            BITMAP_t error{};
+            wcscpy_s(error.FileName, MAX_BITMAP_FILE_NAME, L"CGlobalBitmap::GetTexture Error!!!");
+            return error;
+        }();
+        pBitmap = const_cast<BITMAP_t*>(&s_ErrorPlaceholder);
     }
     return pBitmap;
 }

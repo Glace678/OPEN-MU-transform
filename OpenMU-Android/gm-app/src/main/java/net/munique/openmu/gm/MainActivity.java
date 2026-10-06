@@ -36,6 +36,15 @@ public final class MainActivity extends Activity {
     private static final String PREFS = "openmu-gm";
     private static final String KEY_SERVER_URL = "server-url";
 
+    // The server-side Zen cap (signed 32-bit money field).
+    private static final long MAX_ZEN = 2_000_000_000L;
+
+    private static final int MAX_GRANT_QUANTITY = 10;
+
+    // The form shows at most this many excellent options even though masks
+    // support 31 bits (the classic clients expose a dozen).
+    private static final int MAX_EXCELLENT_OPTIONS_DISPLAYED = 12;
+
     private final ExecutorService networkExecutor = Executors.newSingleThreadExecutor();
     private final List<MobileGmApiClient.CharacterOption> characters = new ArrayList<>();
     private final List<MobileGmApiClient.ItemOption> items = new ArrayList<>();
@@ -207,7 +216,7 @@ public final class MainActivity extends Activity {
         quantitySpinner = new Spinner(this);
         quantitySpinner.setMinimumHeight(dp(48));
         List<Integer> quantities = new ArrayList<>();
-        for (int value = 1; value <= 10; value++) {
+        for (int value = 1; value <= MAX_GRANT_QUANTITY; value++) {
             quantities.add(value);
         }
         ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<>(
@@ -269,7 +278,7 @@ public final class MainActivity extends Activity {
         addZenPreset(zenPresets, R.string.zen_preset_1m, 1_000_000L);
         addZenPreset(zenPresets, R.string.zen_preset_10m, 10_000_000L);
         addZenPreset(zenPresets, R.string.zen_preset_100m, 100_000_000L);
-        addZenPreset(zenPresets, R.string.zen_preset_max, 2_000_000_000L);
+        addZenPreset(zenPresets, R.string.zen_preset_max, MAX_ZEN);
         form.addView(zenPresets, topMargin(6));
         grantZenButton = commandButton(R.string.zen_grant_button, view -> grantZen());
         form.addView(grantZenButton, topMarginWithHeight(10, 52));
@@ -290,9 +299,9 @@ public final class MainActivity extends Activity {
         characters.clear();
         characterAdapter.notifyDataSetChanged();
         updateGrantAvailability();
-        MobileGmApiClient client = client();
         networkExecutor.execute(() -> {
             try {
+                MobileGmApiClient client = client();
                 MobileGmApiClient.Status status = client.loadStatus();
                 runOnUiThread(() -> {
                     if (!accept(generation)) return;
@@ -318,9 +327,9 @@ public final class MainActivity extends Activity {
         final String query = searchField.getText().toString();
         searchButton.setEnabled(false);
         resultText.setText(R.string.searching_items);
-        MobileGmApiClient client = client();
         networkExecutor.execute(() -> {
             try {
+                MobileGmApiClient client = client();
                 List<MobileGmApiClient.ItemOption> found = client.searchItems(query);
                 runOnUiThread(() -> {
                     if (!accept(generation)) return;
@@ -356,26 +365,13 @@ public final class MainActivity extends Activity {
         grantInFlight = true;
         updateGrantAvailability();
         resultText.setText(R.string.granting_item);
-        MobileGmApiClient client = client();
         networkExecutor.execute(() -> {
             try {
+                MobileGmApiClient client = client();
                 MobileGmApiClient.GrantResult result = client.grantItem(request);
-                runOnUiThread(() -> {
-                    if (!accept(generation)) return;
-                    grantInFlight = false;
-                    updateGrantAvailability();
-                    resultText.setText(result.message);
-                    pendingGrantId = null;
-                    grantFormSignature = null;
-                    loadStatus();
-                });
+                finishGrantSuccess(generation, result.message, false);
             } catch (MobileGmApiClient.ApiException error) {
-                runOnUiThread(() -> {
-                    if (!accept(generation)) return;
-                    grantInFlight = false;
-                    updateGrantAvailability();
-                    resultText.setText(getString(R.string.request_failed, error.getMessage()));
-                });
+                finishGrantFailure(generation, error);
             }
         });
     }
@@ -391,7 +387,7 @@ public final class MainActivity extends Activity {
             resultText.setText(R.string.zen_amount_invalid);
             return;
         }
-        if (amount <= 0 || amount > 2_000_000_000L) {
+        if (amount <= 0 || amount > MAX_ZEN) {
             resultText.setText(R.string.zen_amount_invalid);
             return;
         }
@@ -401,26 +397,13 @@ public final class MainActivity extends Activity {
         grantInFlight = true;
         updateGrantAvailability();
         resultText.setText(R.string.granting_zen);
-        MobileGmApiClient client = client();
         networkExecutor.execute(() -> {
             try {
+                MobileGmApiClient client = client();
                 MobileGmApiClient.GrantResult result = client.grantZen(request);
-                runOnUiThread(() -> {
-                    if (!accept(generation)) return;
-                    grantInFlight = false;
-                    updateGrantAvailability();
-                    resultText.setText(result.message);
-                    pendingZenId = null;
-                    zenFormSignature = null;
-                    loadStatus();
-                });
+                finishGrantSuccess(generation, result.message, true);
             } catch (MobileGmApiClient.ApiException error) {
-                runOnUiThread(() -> {
-                    if (!accept(generation)) return;
-                    grantInFlight = false;
-                    updateGrantAvailability();
-                    resultText.setText(getString(R.string.request_failed, error.getMessage()));
-                });
+                finishGrantFailure(generation, error);
             }
         });
     }
@@ -458,6 +441,37 @@ public final class MainActivity extends Activity {
             pendingZenId = UUID.randomUUID().toString();
         }
         return pendingZenId;
+    }
+
+    // Returns to the UI thread after a grant completed: clears the in-flight
+    // flag, shows the server message, drops the bound idempotency key (of the
+    // item or Zen form) and refreshes the status.
+    private void finishGrantSuccess(int generation, String message, boolean zenGrant) {
+        runOnUiThread(() -> {
+            if (!accept(generation)) return;
+            grantInFlight = false;
+            updateGrantAvailability();
+            resultText.setText(message);
+            if (zenGrant) {
+                pendingZenId = null;
+                zenFormSignature = null;
+            } else {
+                pendingGrantId = null;
+                grantFormSignature = null;
+            }
+            loadStatus();
+        });
+    }
+
+    // Returns to the UI thread after a grant failed before the server result:
+    // the same requestId stays bound to the form so it can be retried.
+    private void finishGrantFailure(int generation, MobileGmApiClient.ApiException error) {
+        runOnUiThread(() -> {
+            if (!accept(generation)) return;
+            grantInFlight = false;
+            updateGrantAvailability();
+            resultText.setText(getString(R.string.request_failed, error.getMessage()));
+        });
     }
 
     private void showFailure(int generation, Exception error, boolean statusRequest) {
@@ -507,7 +521,7 @@ public final class MainActivity extends Activity {
         excellentGroup.removeAllViews();
         excellentChecks.clear();
         excellentNumbers.clear();
-        int options = Math.min(numbers.length, 12);
+        int options = Math.min(numbers.length, MAX_EXCELLENT_OPTIONS_DISPLAYED);
         if (options <= 0) {
             TextView none = bodyText(R.string.excellent_none);
             none.setTextColor(Color.rgb(140, 146, 154));
@@ -584,7 +598,7 @@ public final class MainActivity extends Activity {
         refreshButton.setEnabled(!busy);
     }
 
-    private MobileGmApiClient client() {
+    private MobileGmApiClient client() throws MobileGmApiClient.ApiException {
         return new MobileGmApiClient(serverUrl, BuildConfig.MOBILE_PACKAGE_KEY);
     }
 

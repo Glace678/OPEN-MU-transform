@@ -437,7 +437,9 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
                     }
                     else
                     {
-                        wcscpy(g_szPersonalShopTitle, shopTitle);
+                        // UI-2: bounded copy into the MAX_SHOPTITLE+1 global.
+                        wcsncpy(g_szPersonalShopTitle, shopTitle, MAX_SHOPTITLE);
+                        g_szPersonalShopTitle[MAX_SHOPTITLE] = L'\0';
                         SocketClient->ToGameServer()->SendPlayerShopOpen(shopTitle);
 
                         g_pNewUISystem->Hide(SEASON3B::INTERFACE_MYSHOP_INVENTORY);

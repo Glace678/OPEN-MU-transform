@@ -273,7 +273,9 @@ bool CSQuest::OpenQuestScript(const wchar_t* filename)
         quest.shQuestConditionNum = current->shQuestConditionNum;
         quest.shQuestRequestNum = current->shQuestRequestNum;
         quest.wNpcType = current->wNpcType;
-        CMultiLanguage::ConvertFromUtf8(quest.strQuestName, current->strQuestName);
+        // PROTO-8: fixed char field, no NUL guarantee.
+        CMultiLanguage::ConvertFromUtf8(quest.strQuestName, current->strQuestName,
+            static_cast<int>(sizeof(current->strQuestName)));
 
         std::memcpy(quest.QuestAct, current->QuestAct, sizeof quest.QuestAct);
         std::memcpy(quest.QuestRequest, current->QuestRequest, sizeof quest.QuestRequest);

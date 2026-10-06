@@ -16,6 +16,19 @@ set_tests_properties(
     client_library_universal_macos_rejected
     PROPERTIES WILL_FAIL TRUE)
 
+# XC-18: host-side cross-validation of the iOS game-data integrity check
+# (OpenMU-iOS/game-ios/VerifyDataArchive.cmake). The checkout layout puts
+# OpenMU-iOS next to MuMain; skip silently on layouts without it.
+get_filename_component(MU_IOS_REPO_DIR
+    "${CMAKE_SOURCE_DIR}/../OpenMU-iOS" ABSOLUTE)
+if(EXISTS "${MU_IOS_REPO_DIR}/tests/VerifyDataArchiveTests.cmake")
+    add_test(
+        NAME ios_data_archive_verification
+        COMMAND "${CMAKE_COMMAND}"
+            "-DIOS_REPOSITORY_DIR=${MU_IOS_REPO_DIR}"
+            -P "${MU_IOS_REPO_DIR}/tests/VerifyDataArchiveTests.cmake")
+endif()
+
 # When cross-compiling Windows binaries on a non-Windows host (CI's Linux
 # runner, WSL/MinGW), wine has to launch the .exe. Setting this once makes
 # both add_test and doctest_discover_tests pick it up via the
@@ -86,3 +99,4 @@ add_subdirectory(terrain)
 add_subdirectory(editor)
 add_subdirectory(core)
 add_subdirectory(ui)
+add_subdirectory(gamelogic)

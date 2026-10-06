@@ -406,7 +406,7 @@ int GetFPSLimit()
     return static_cast<int>(std::lround(GetDisplayRefreshRate().hertz));
 }
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
 // High-refresh phones leave the fullscreen surface at their default refresh
 // (often 60 Hz) until an application asks for a faster display mode. Request the
 // closest fullscreen mode at the desired rate so the frame-rate slider's "max"
@@ -464,7 +464,7 @@ void ApplyFrameTimingConfiguration(bool foreground)
         ? -1.0
         : g_effectiveFramePolicy.effectiveFrameRate);
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     // Ask the OS for the high-refresh surface when running at the device's peak
     // rate (the "max" end of the frame-rate slider / default DisplayMaximum).
     if (settings.mode == Core::Time::FrameRateMode::DisplayMaximum)
@@ -909,7 +909,10 @@ BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstrin
 #include <tlhelp32.h>
 #endif
 
-wchar_t g_lpszCmdURL[50];
+constexpr int COMMAND_URL_MAX = 50;
+constexpr long MINIMUM_PORT = 1;
+constexpr long MAXIMUM_PORT = 65535;
+wchar_t g_lpszCmdURL[COMMAND_URL_MAX];
 BOOL GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort)
 {
     std::wstring lpszTemp = { 0, };
@@ -919,13 +922,51 @@ BOOL GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort)
         return FALSE;
     }
 
-    wcscpy(lpszURL, lpszTemp.c_str());
+    // PLAT-2: /u takes an arbitrary-length substring up to the next space; a
+    // value >= COMMAND_URL_MAX previously overflowed this global. Reject empty,
+    // too long, and only accept characters legal in an IPv4/IPv6 literal or a
+    // hostname; otherwise fall back to config.ini.
+    if (lpszTemp.empty() || static_cast<int>(lpszTemp.size()) >= COMMAND_URL_MAX)
+    {
+        return FALSE;
+    }
+
+    for (const wchar_t ch : lpszTemp)
+    {
+        const bool isAsciiAlphanumeric =
+            (ch >= L'a' && ch <= L'z') || (ch >= L'A' && ch <= L'Z') || (ch >= L'0' && ch <= L'9');
+        if (!isAsciiAlphanumeric && ch != L'.' && ch != L'-' && ch != L':' && ch != L'_')
+        {
+            return FALSE;
+        }
+    }
+
+    wcscpy_s(lpszURL, COMMAND_URL_MAX, lpszTemp.c_str());
+
     if (!Util_CheckOption(szCmdLine, L'p', lpszTemp))
     {
         return FALSE;
     }
 
-    *pwPort = static_cast<WORD>(std::stoi(lpszTemp));
+    // PLAT-3: std::stoi threw std::invalid_argument/out_of_range on bad input
+    // and escaped the GUI entry point -> terminate. Parse manually and reject
+    // anything not a number in [MINIMUM_PORT, MAXIMUM_PORT].
+    if (lpszTemp.empty())
+    {
+        return FALSE;
+    }
+
+    const wchar_t* parseStart = lpszTemp.c_str();
+    wchar_t* parseEnd = nullptr;
+    errno = 0;
+    const long parsedPort = wcstol(parseStart, &parseEnd, 10);
+    if (parseEnd == parseStart || *parseEnd != L'\0' || errno == ERANGE
+        || parsedPort < MINIMUM_PORT || parsedPort > MAXIMUM_PORT)
+    {
+        return FALSE;
+    }
+
+    *pwPort = static_cast<WORD>(parsedPort);
 
     return TRUE;
 }
@@ -1889,7 +1930,7 @@ namespace
             g_MessageBox->RecordPointerButton(e.button.button == SDL_BUTTON_LEFT, down, MouseX, MouseY);
     }
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     Core::Input::MobileGestureMapper g_mobileGestureMapper;
     bool g_touchLeftWasDown = false;
     bool g_touchRightWasDown = false;
@@ -2108,7 +2149,7 @@ namespace
         Core::Input::GamepadService::Instance().OnFocusChanged(active);
         if (!active)
         {
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
             UI::Items::Touch::CancelItemContact();
             UI::Items::Touch::FinishItemContactSequence();
             g_mobileGestureMapper.Reset();
@@ -2437,15 +2478,16 @@ MSG MainLoop()
                 Destroy = true;
                 break;
             case SDL_EVENT_MOUSE_MOTION:
-#if defined(__ANDROID__) || defined(__OHOS__)
-                // Mobile finger input is arbitrated by HandleMobileFinger.
+#if MU_PLATFORM_MOBILE
+                // PLAT-6: Mobile finger input is arbitrated by HandleMobileFinger
+                // (includes iOS, not just Android/OHOS).
                 if (event.motion.which == SDL_TOUCH_MOUSEID) break;
 #endif
                 HandleMouseMotion(event.motion.x, event.motion.y);
                 break;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
             case SDL_EVENT_MOUSE_BUTTON_UP:
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
                 if (event.button.which == SDL_TOUCH_MOUSEID) break;
 #endif
                 HandleMouseButton(event);
@@ -2456,7 +2498,9 @@ MSG MainLoop()
                     ? -static_cast<int>(event.wheel.y)
                     : static_cast<int>(event.wheel.y);
                 break;
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
+            // PLAT-6: finger events for every phone/tablet platform including
+            // iOS; the old Android/OHOS-only guard dropped all iOS input.
             case SDL_EVENT_FINGER_DOWN:
             case SDL_EVENT_FINGER_UP:
             case SDL_EVENT_FINGER_MOTION:
@@ -2508,7 +2552,7 @@ MSG MainLoop()
         }
 
         UpdateGamepadInput();
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         UpdateMobileMouseButtons();
 #endif
 
@@ -2524,7 +2568,7 @@ MSG MainLoop()
 
         // Fire any due timers. Replaces the Win32 SetTimer/WM_TIMER dispatch.
         Core::Time::FrameTimerScheduler::Instance().Tick();
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
         UI::Items::Touch::TickItemContact(static_cast<std::uint64_t>(SDL_GetTicks()));
 #endif
 
@@ -2979,7 +3023,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
 
     // Load game settings from INI file first
     GameConfig::GetInstance().Load();
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     g_mobileGestureMapper.SetLeftHanded(GameConfig::GetInstance().GetMobileLeftHanded());
 #endif
     InitRenderConfig();
@@ -3072,7 +3116,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
 
     g_hInst = hInstance;
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     // The gesture mapper owns mobile mouse edges. SDL's automatic conversion
     // also affects GetMouseState, bypassing captured inventory gestures.
     if (!SDL_SetHintWithPriority(SDL_HINT_TOUCH_MOUSE_EVENTS, "0", SDL_HINT_OVERRIDE))
@@ -3102,7 +3146,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     // every map/panel; compatibility (CoreProfile=0) remains available as a rollback.
     // Core additionally needs an explicit version request (compatibility takes the
     // driver's highest, and must keep doing so -- see the else branch below).
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
@@ -3244,7 +3288,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
         return FALSE;
     }
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     // These entry points are core in OpenGL ES 3.0 and are required by the
     // renderer's UBO, integer-attribute and VAO paths. Fail explicitly instead
     // of continuing into a device-specific black screen.
@@ -3318,7 +3362,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     BMDMeshShader::Instance().Create();
     TerrainShader::Instance().Create();
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
     if (!GlobalUBO::Instance().IsCreated()
         || !SceneUBO::Instance().IsCreated()
         || !PassthroughShader::Instance().IsCreated()
@@ -3449,8 +3493,15 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     GateAttribute = new GATE_ATTRIBUTE[MAX_GATES] { };
     SkillAttribute = new SKILL_ATTRIBUTE[MAX_SKILLS] { };
     ItemAttRibuteMemoryDump = new ITEM_ATTRIBUTE[MAX_ITEM + 1024] { };
+    // MEM-14: same random-offset masking as CharactersClient below; not a bounds check.
     ItemAttribute = ((ITEM_ATTRIBUTE*)ItemAttRibuteMemoryDump) + rand() % 1024;
     CharacterMemoryDump = new CHARACTER[MAX_CHARACTERS_CLIENT + 1 + 128] { };
+
+    // MEM-14: the live array starts at a random offset inside the larger dump, so the first
+    // 0..127 slots have (valid, but unrelated) backing memory instead of being at the allocation
+    // edge. This ASLR-like padding historically masked missing index checks: a bad index no longer
+    // crashes, it silently reads/writes the wrong object (see PROTO-1 sentinel handling). It is
+    // NOT a bounds check; every index into CharactersClient must be validated explicitly.
     CharactersClient = ((CHARACTER*)CharacterMemoryDump) + rand() % 128;
     CharacterMachine = new CHARACTER_MACHINE;
 

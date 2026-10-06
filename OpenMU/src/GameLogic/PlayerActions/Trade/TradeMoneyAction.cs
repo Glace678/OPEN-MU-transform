@@ -26,16 +26,34 @@ public class TradeMoneyAction
             return;
         }
 
-        // Check if the Player got enough Zen/Money
-        if (player.Money < moneyAmount)
+        if (moneyAmount > int.MaxValue)
         {
             return;
         }
 
-        // Add the Money to the Trade
-        player.TryAddMoney(player.TradingMoney);
-        player.TryAddMoney((int)(-1 * moneyAmount));
-        player.TradingMoney = (int)moneyAmount;
+        var newAmount = (int)moneyAmount;
+
+        // The previously locked trade money is still deducted, so it counts towards the
+        // money available for the new trade amount.
+        if ((long)player.Money + player.TradingMoney < newAmount)
+        {
+            return;
+        }
+
+        // First, refund the previous trade money, then deduct the new amount.
+        // If any step fails, roll back and reject the change.
+        if (!player.TryAddMoney(player.TradingMoney))
+        {
+            return;
+        }
+
+        if (!player.TryAddMoney(-newAmount))
+        {
+            player.TryAddMoney(-player.TradingMoney);
+            return;
+        }
+
+        player.TradingMoney = newAmount;
         await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
         await player.InvokeViewPlugInAsync<IRequestedTradeMoneyHasBeenSetPlugIn>(p => p.RequestedTradeMoneyHasBeenSetAsync()).ConfigureAwait(false);
 

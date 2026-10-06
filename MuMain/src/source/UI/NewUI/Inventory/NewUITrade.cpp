@@ -600,7 +600,9 @@ void CNewUITrade::ProcessToReceiveTradeRequest(char* pbyYourID)
         return;
     }
 
-    CMultiLanguage::ConvertFromUtf8(m_szYourID, pbyYourID);
+    // PROTO-14: the requester ID is the fixed char[MAX_USERNAME_SIZE] packet
+    // field (PCHATING.ID); never read past it looking for a terminator.
+    CMultiLanguage::ConvertFromUtf8(m_szYourID, pbyYourID, MAX_USERNAME_SIZE);
 
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeMsgBoxLayout));
 

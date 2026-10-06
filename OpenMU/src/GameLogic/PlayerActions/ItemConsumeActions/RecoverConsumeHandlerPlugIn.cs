@@ -34,7 +34,7 @@ public abstract class RecoverConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn, IS
         if (this.TryGetBalanceV1Rule(player, item, out var balanceRule))
         {
             if (!this.CheckPreconditions(player, item)
-                || !player.TryBeginBalanceV1PotionCooldown(balanceRule.CooldownGroup, balanceRule.Cooldown, DateTime.UtcNow))
+                || !player.BalanceV1PotionCooldowns.TryBegin(balanceRule.CooldownGroup, balanceRule.Cooldown, DateTime.UtcNow))
             {
                 return false;
             }

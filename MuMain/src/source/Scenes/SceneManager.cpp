@@ -1339,9 +1339,19 @@ void RenderScene(HDC hDC)
     }
     catch (const std::exception& e)
     {
-        // Log exception in RenderScene
+        // XC-8: twin of the MainScene DXP-16 handler. This used to be
+        // OutputDebugStringA-only, invisible without a debugger attached;
+        // RenderScene is the per-frame entry for the Loading/Login scenes
+        // too, so mirror it to g_ErrorReport as in MainScene.
         char errorMsg[256];
         sprintf_s(errorMsg, sizeof(errorMsg), "Exception in RenderScene: %s", e.what());
         OutputDebugStringA(errorMsg);
+        g_ErrorReport.Write(L"[RenderScene] std::exception: %hs\r\n", e.what());
+    }
+    catch (...)
+    {
+        // XC-8: pair with the std::exception catch above -- the twin MainScene
+        // handler already had this non-std (SEH/other) fallback.
+        g_ErrorReport.Write(L"[RenderScene] non-std exception (SEH/other)\r\n");
     }
 }

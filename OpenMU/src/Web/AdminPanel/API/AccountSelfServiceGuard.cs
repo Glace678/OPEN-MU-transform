@@ -41,6 +41,11 @@ public static class AccountSelfServicePolicies
 public sealed class AccountSelfServiceGuard
 {
     private const int MaximumFailedAttempts = 10;
+
+    private const int MaintenanceTokenEntropyBytes = 32;
+
+    private const string TemporaryTokenFileSuffix = ".tmp";
+
     private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(15);
     private static readonly TimeSpan FailureMemory = TimeSpan.FromHours(2);
 
@@ -162,7 +167,10 @@ public sealed class AccountSelfServiceGuard
         return FixedTimeEquals(suppliedToken.Trim(), expected);
     }
 
-    // The remote peer, never a forwarded header: those can be spoofed by the caller.
+    // The remote peer. We never read a forwarded header ourselves: they can be spoofed by the caller.
+    // Behind the trusted reverse proxy, the ForwardedHeaders middleware already validates
+    // X-Forwarded-For (KnownProxies/KnownNetworks) and rewrites RemoteIpAddress to the real client,
+    // so this is the actual client IP in both direct and portal deployments.
     internal static string PartitionKey(HttpContext context)
     {
         var address = context.Connection.RemoteIpAddress;
@@ -199,10 +207,10 @@ public sealed class AccountSelfServiceGuard
         foreach (var pair in this._failedAttempts)
         {
             var attempts = pair.Value;
-            var lockoutExpired = attempts.LockedUntil != DateTimeOffset.MinValue
-                && attempts.LockedUntil <= DateTimeOffset.UtcNow;
-            if ((lockoutExpired || attempts.LockedUntil == DateTimeOffset.MinValue)
-                && attempts.LastFailure < cutoff)
+
+            // Drop the entry only when no lockout is active (LockedUntil == MinValue
+            // means it was never locked out) and the last failure is older than the memory window.
+            if (attempts.LockedUntil <= DateTimeOffset.UtcNow && attempts.LastFailure < cutoff)
             {
                 (stale ??= new List<string>()).Add(pair.Key);
             }
@@ -255,8 +263,8 @@ public sealed class AccountSelfServiceGuard
                 Directory.CreateDirectory(directory);
             }
 
-            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-            var temporaryPath = path + ".tmp";
+            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(MaintenanceTokenEntropyBytes));
+            var temporaryPath = path + TemporaryTokenFileSuffix;
             File.WriteAllText(temporaryPath, token);
             if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
             {

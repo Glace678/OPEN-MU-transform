@@ -40,8 +40,11 @@ public static class BalanceV1NormalMonsterBudget
             || monster.SpawnArea.MaximumHealthOverride.HasValue
             || BossNumbers.Contains(monster.Definition.Number)
             || monster.CurrentMap.Definition is not PersistentIdentity mapIdentity
-            || !BalanceV1ContentRank.TryGetRank(mapIdentity.Id, monster.Definition.Number,
-                BalanceV1ContentRank.NormalDifficulty, out var rank)
+            || !BalanceV1ContentRank.TryGetRank(
+                mapIdentity.Id,
+                monster.Definition.Number,
+                BalanceV1ContentRank.NormalDifficulty,
+                out var rank)
             || rank < FirstAdjustedRank)
         {
             return;

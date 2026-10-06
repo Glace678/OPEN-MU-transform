@@ -162,7 +162,8 @@ bool CSItemOption::OpenItemSetOption(const wchar_t* filename)
         std::memcpy(&current, pSeek, entrySize);
         auto* target = &m_ItemSetOption[i];
 
-        CMultiLanguage::ConvertFromUtf8(target->strSetName, current.strSetName);
+        // PROTO-8: fixed char[MAX_ITEM_SET_NAME] file field, no NUL guarantee.
+        CMultiLanguage::ConvertFromUtf8(target->strSetName, current.strSetName, MAX_ITEM_SET_NAME);
         target->byOptionCount = current.byOptionCount;
         target->bySetItemCount = 0; // Is calculated below
         target->byStandardOption = current.byStandardOption;

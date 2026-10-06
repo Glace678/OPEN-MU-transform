@@ -75,6 +75,14 @@ public class DuelActions
             return;
         }
 
+        if (duelRoom.State is not DuelState.DuelRequested)
+        {
+            // A repeated response packet (e.g. duplicate "accept") must not deduct the entrance
+            // fee again or start a second duel loop.
+            player.Logger.LogWarning($"Player {player.Name} sent duel response in an invalid state {duelRoom.State}.");
+            return;
+        }
+
         if (!await CheckIfDuelCanBeStartedAsync(player, target).ConfigureAwait(false))
         {
             await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);

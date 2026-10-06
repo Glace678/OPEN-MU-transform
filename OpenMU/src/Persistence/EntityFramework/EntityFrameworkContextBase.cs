@@ -87,6 +87,17 @@ internal class EntityFrameworkContextBase : IContext
             catch (Exception ex) when (attempt < maxAttempts && IsTransientConcurrencyConflict(ex))
             {
                 this._logger.LogWarning(ex, "Transient concurrency conflict while saving (attempt {Attempt}/{MaxAttempts}); retrying.", attempt, maxAttempts);
+
+                if (ex is DbUpdateConcurrencyException concurrencyException)
+                {
+                    // Without refreshing, every retry fails against the same stale token.
+                    // Reload the conflicting entries from the database before trying again.
+                    foreach (var entry in concurrencyException.Entries)
+                    {
+                        await entry.ReloadAsync(cancellationToken).ConfigureAwait(false);
+                    }
+                }
+
                 await Task.Delay(attempt * 10, cancellationToken).ConfigureAwait(false);
             }
         }
@@ -268,20 +279,14 @@ internal class EntityFrameworkContextBase : IContext
     /// <returns><c>true</c> if the save should be retried.</returns>
     private static bool IsTransientConcurrencyConflict(Exception exception)
     {
-        // A concurrent entity mutation racing this save corrupts the change tracker mid-enumeration.
-        // Depending on exactly where change detection was, it surfaces as one of several types - a
-        // modified collection (InvalidOperationException), a transiently-null internal key
-        // (ArgumentNullException/NullReferenceException), or an out-of-range index. All are transient:
-        // the racing mutation is a single quick operation, so a bounded retry lands on a stable moment.
-        // A genuinely persistent error of the same type is not masked - it rethrows once the retries
-        // are exhausted. The deterministic serialization (per-player persistence lock) is the primary
-        // guard; this retry only needs to absorb the rare, bursty sources that lock isn't held for.
-        return exception is DbUpdateConcurrencyException
-            or InvalidOperationException
-            or ArgumentNullException
-            or NullReferenceException
-            or IndexOutOfRangeException
-            or KeyNotFoundException;
+        // A concurrent entity mutation racing this save can corrupt change detection while it
+        // enumerates a tracked collection ("Collection was modified" -> InvalidOperationException),
+        // or produce a stale optimistic concurrency token (DbUpdateConcurrencyException).
+        // Keep the set narrow on purpose: NullReference/ArgumentNull/Index/KeyNotFound exceptions
+        // are far more often deterministic bugs than transient races and must not be masked by a
+        // retry. A persistent InvalidOperationException still rethrows once retries are exhausted.
+        return exception is InvalidOperationException
+            or DbUpdateConcurrencyException;
     }
 
     private async ValueTask<bool> SaveChangesCoreAsync(CancellationToken cancellationToken)

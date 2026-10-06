@@ -60,7 +60,7 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
 
         if (operation == 0x02 && ((CashShopOpenState)packet).IsClosed)
         {
-            await SoloCashShopPackets.SendResultAsync(remote, operation, 0).ConfigureAwait(false);
+            await SoloCashShopPackets.SendResultAsync(remote, operation, SoloCashShopResult.Success).ConfigureAwait(false);
             return;
         }
 
@@ -68,8 +68,10 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
         {
             if (operation is 0x02 or 0x03 or 0x04 or 0x0A or 0x0B or 0xF3)
             {
-                await SoloCashShopPackets.SendResultAsync(remote, operation, operation == 0x02 ? (byte)0 : (byte)6).ConfigureAwait(false);
+                var result = operation == 0x02 ? SoloCashShopResult.Success : SoloCashShopResult.InvalidPlayerState;
+                await SoloCashShopPackets.SendResultAsync(remote, operation, result).ConfigureAwait(false);
             }
+
             return;
         }
 
@@ -82,7 +84,8 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
             player.Logger.LogError(exception, "Cash shop operation {Operation} failed.", operation);
             if (operation is 0x02 or 0x03 or 0x04 or 0x0A or 0x0B or 0xF3)
             {
-                await SoloCashShopPackets.SendResultAsync(remote, operation, operation == 0x02 ? (byte)0 : (byte)255).ConfigureAwait(false);
+                var result = operation == 0x02 ? SoloCashShopResult.Success : SoloCashShopResult.InternalError;
+                await SoloCashShopPackets.SendResultAsync(remote, operation, result).ConfigureAwait(false);
             }
         }
     }
@@ -92,7 +95,7 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
         switch (operation)
         {
             case 0x01:
-                if (await this._service.InitializeAsync(player).ConfigureAwait(false) == 0)
+                if (await this._service.InitializeAsync(player).ConfigureAwait(false) == SoloCashShopResult.Success)
                 {
                     await SoloCashShopPackets.SendPointsAsync(player).ConfigureAwait(false);
                 }
@@ -100,12 +103,17 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
                 break;
             case 0x02:
                 var initialized = await this._service.InitializeAsync(player).ConfigureAwait(false);
-                if (initialized == 0)
+                if (initialized == SoloCashShopResult.Success)
                 {
                     await SoloCashShopPackets.SendCatalogAsync(player).ConfigureAwait(false);
                 }
 
-                await SoloCashShopPackets.SendResultAsync(player, operation, initialized == 0 ? (byte)1 : (byte)0).ConfigureAwait(false);
+                // Protocol quirk: a failed/first initialization reports
+                // GenericFailure, success reports Success here.
+                var initResult = initialized == SoloCashShopResult.Success
+                    ? SoloCashShopResult.GenericFailure
+                    : SoloCashShopResult.Success;
+                await SoloCashShopPackets.SendResultAsync(player, operation, initResult).ConfigureAwait(false);
                 break;
             case 0x03:
                 CashShopItemBuyRequest buy = packet;
@@ -135,7 +143,7 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
             case 0xF3:
                 var exchanged = await this._service.ExchangeAsync(player).ConfigureAwait(false);
                 await SoloCashShopPackets.SendResultAsync(player, operation, exchanged).ConfigureAwait(false);
-                if (exchanged == 0)
+                if (exchanged == SoloCashShopResult.Success)
                 {
                     await SoloCashShopPackets.SendPointsAsync(player).ConfigureAwait(false);
                     await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
@@ -150,13 +158,28 @@ internal sealed class CashShopHandlerPlugIn : IPacketHandlerPlugIn
         CashShopItemGiftRequest gift = packet;
         if (string.IsNullOrWhiteSpace(gift.GiftReceiverName))
         {
-            await SoloCashShopPackets.SendResultAsync(player, 0x04, 3).ConfigureAwait(false);
+            await SoloCashShopPackets.SendResultAsync(player, 0x04, SoloCashShopResult.GiftRecipientNotFound).ConfigureAwait(false);
             return;
         }
+
         var result = await this._service.BuyAsync(
-            player, gift.PackageMainIndex, gift.Category, gift.ProductMainIndex,
-            gift.ItemIndex, gift.CoinIndex, gift.MileageFlag, gift.GiftReceiverName, gift.GiftText).ConfigureAwait(false);
-        result = result switch { 10 => 3, 9 => 10, 4 => 6, 6 => 7, _ => result };
+            player,
+            gift.PackageMainIndex,
+            gift.Category,
+            gift.ProductMainIndex,
+            gift.ItemIndex,
+            gift.CoinIndex,
+            gift.MileageFlag,
+            gift.GiftReceiverName,
+            gift.GiftText).ConfigureAwait(false);
+        result = result switch
+        {
+            SoloCashShopResult.UnknownRecipient => SoloCashShopResult.GiftRecipientNotFound,
+            SoloCashShopResult.WrongCurrency => SoloCashShopResult.GiftWrongCurrency,
+            SoloCashShopResult.OfferNotFound => SoloCashShopResult.GiftOfferNotFound,
+            SoloCashShopResult.InvalidPlayerState => SoloCashShopResult.GiftInvalidPlayerState,
+            _ => result,
+        };
         await SoloCashShopPackets.SendResultAsync(player, 0x04, result).ConfigureAwait(false);
     }
 }

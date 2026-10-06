@@ -121,10 +121,16 @@
 
 // Use inline template functions instead of macros to avoid issues with #ifdef in arguments
 #ifdef _MSC_VER
-  // MSVC: swprintf doesn't need buffer size
-  template<typename... Args>
-  inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args) {
-      return swprintf(buffer, format, args...);
+  // For an array the bound is its real size (MEM-4): use swprintf_s so an overlong result
+  // trips the invalid-parameter handler instead of overflowing the stack. A plain pointer
+  // (size unknowable) keeps the previous unbounded swprintf.
+  template<typename Buf, typename... Args>
+  inline int mu_swprintf(Buf&& buffer, const wchar_t* format, Args... args) {
+      using Array = std::remove_reference_t<Buf>;
+      if constexpr (std::is_array_v<Array>)
+          return swprintf_s(buffer, std::extent_v<Array>, format, args...);
+      else
+          return swprintf(buffer, format, args...);
   }
   // mu_swprintf_s with explicit size
   template<typename... Args>

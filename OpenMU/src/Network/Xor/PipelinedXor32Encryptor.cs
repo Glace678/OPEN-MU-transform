@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Network.Xor;
 
 using System.Buffers;
 using System.IO.Pipelines;
+using MUnique.OpenMU.Network;
 
 /// <summary>
 /// Pipelined encryptor which uses a 32 byte key for a xor encryption.
@@ -73,6 +74,13 @@ public class PipelinedXor32Encryptor : PacketPipeReaderBase, IPipelinedEncryptor
         packet.CopyTo(result);
 
         var headerSize = result.GetPacketHeaderSize();
+        if (headerSize <= 0 || result.Length <= headerSize)
+        {
+            // Refuse to encrypt data with an unknown prefix; it would break the receiver's state.
+            var headerBytes = result[..Math.Min(3, result.Length)].ToArray();
+            throw new InvalidPacketHeaderException(headerBytes, packet, packet.Start);
+        }
+
         for (int i = headerSize + 1; i < packet.Length; i++)
         {
             result[i] = (byte)(result[i] ^ result[i - 1] ^ this._xor32Key[i % 32]);

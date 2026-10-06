@@ -238,14 +238,27 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
     if (fp != NULL)
     {
         int Size = sizeof(MINI_MAP_FILE);
-        BYTE* Buffer = new BYTE[Size * MAX_MINI_MAP_DATA + 45];
-        fread(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 1, fp);
+        const size_t dataSize = (Size * MAX_MINI_MAP_DATA) + 45;
+        BYTE* Buffer = new BYTE[dataSize];
 
         DWORD dwCheckSum;
-        fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+        // UI-3: a short file would leave uninitialized heap bytes that later
+        // records would read and display (or checksum against). Fail closed.
+        if (fread(Buffer, dataSize, 1, fp) != 1
+            || fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
+        {
+            fclose(fp);
+            delete[] Buffer;
+            wchar_t Text[256];
+            mu_swprintf(Text, L"%ls - File truncated.", Fname);
+            g_ErrorReport.Write(Text);
+            MessageBox(g_hWnd, Text, NULL, MB_OK);
+            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            return;
+        }
         fclose(fp);
 
-        if (dwCheckSum != GenerateCheckSum2(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 0x2BC1))
+        if (dwCheckSum != GenerateCheckSum2(Buffer, dataSize, 0x2BC1))
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File corrupted.", Fname);
@@ -267,7 +280,8 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
                 memcpy(&current, pSeek, Size);
                 memcpy(target, pSeek, Size);
 
-                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name);
+                // PROTO-14: bounded by the fixed Name field in MINI_MAP_FILE.
+                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name, MAX_MINIMAP_NAME);
                 /*int wchars_num = MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, NULL, 0);
                 MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, target->Name, wchars_num);
                 target->Name[wchars_num] = L'\0';*/

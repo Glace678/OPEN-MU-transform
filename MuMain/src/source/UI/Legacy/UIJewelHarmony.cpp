@@ -103,7 +103,13 @@ const bool JewelHarmonyInfo::OpenJewelHarmonyInfoFile(const std::wstring& filena
 
         std::vector<BYTE> tempBuffer(nSize);
 
-        ::fread(tempBuffer.data(), nSize, 1, fp);
+        // MEM-16: a short read must not leave zeroed (silently "all empty") data in the state.
+        if (::fread(tempBuffer.data(), nSize, 1, fp) != 1)
+        {
+            ::fclose(fp);
+            return false;
+        }
+
         ::BuxConvert((BYTE*)tempBuffer.data(), nSize);
         ::fclose(fp);
 

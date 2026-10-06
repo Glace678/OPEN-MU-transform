@@ -14,7 +14,9 @@ namespace MUnique.OpenMU.Web.AdminPanel.API;
 /// <param name="CanHaveAdditionalOption">Whether the definition can carry the additional +defense/+attack option.</param>
 /// <param name="ExcellentOptionCount">The number of selectable excellent options.</param>
 /// <param name="ExcellentOptionNumbers">
-/// The <see cref="ItemOption.Number"/> values of the selectable excellent options, ascending.
+/// The <see cref="MUnique.OpenMU.DataModel.Configuration.Items.ItemOption.Number"/>
+/// values (inherited by <c>IncreasableItemOption</c>) of the selectable
+/// excellent options, ascending.
 /// The numbers are not necessarily contiguous, so clients must build their masks from
 /// this list instead of assuming 1..N.
 /// </param>

@@ -353,7 +353,15 @@ void SEASON3B::CNewUIQuickCommandWindow::CloseQuickCommand()
 
 void SEASON3B::CNewUIQuickCommandWindow::SetID(const wchar_t* strID)
 {
-    wcscpy(m_strID, strID);
+    // MEM-9: the source (character name) can be up to 65 chars but m_strID holds 32;
+    // copy bounded (truncating) and guard against a null pointer.
+    if (strID == nullptr)
+    {
+        m_strID[0] = L'\0';
+        return;
+    }
+
+    wcsncpy_s(m_strID, strID, _TRUNCATE);
 }
 
 void SEASON3B::CNewUIQuickCommandWindow::SetSelectedCharacterIndex(int iIndex)

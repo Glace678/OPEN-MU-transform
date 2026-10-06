@@ -120,6 +120,16 @@ public class PipelinedSimpleModulusDecryptor : PipelinedSimpleModulusBase, IPipe
         // we just want to work on a span with the exact size of the packet.
         var decrypted = span.Slice(0, maximumDecryptedSize);
         var decryptedContentSize = this.DecryptPacketContent(packet.Slice(headerSize), decrypted.Slice(headerSize - counterSize)); // if we have a counter, we trick a bit by passing in a bigger span
+        var maximumContentSize = decrypted.Length - headerSize + counterSize;
+        if (decryptedContentSize < 0 || decryptedContentSize > maximumContentSize)
+        {
+            // The decrypted size is taken from attacker-controlled ciphertext; it must fit
+            // into the remaining output buffer.
+            throw new ArgumentException(
+                $"The decrypted packet content has an unexpected size {decryptedContentSize}, maximum is {maximumContentSize}.",
+                nameof(packet));
+        }
+
         decrypted[0] = this.HeaderBuffer[0];
         decrypted = decrypted.Slice(0, decryptedContentSize + headerSize - counterSize);
         decrypted.SetPacketSize();
@@ -134,6 +144,11 @@ public class PipelinedSimpleModulusDecryptor : PipelinedSimpleModulusBase, IPipe
         do
         {
             rest.Slice(0, this.EncryptedBlockSize).CopyTo(this._inputBuffer);
+            if (sizeCounter + this.DecryptedBlockSize > output.Length)
+            {
+                throw new ArgumentException("The decrypted packet content is larger than the output buffer.");
+            }
+
             var outputBlock = output.Slice(sizeCounter, this.DecryptedBlockSize);
             var blockSize = this.DecryptBlock(outputBlock);
             if (this.Counter != null && sizeCounter == 0 && outputBlock[0] != this.Counter.Count)

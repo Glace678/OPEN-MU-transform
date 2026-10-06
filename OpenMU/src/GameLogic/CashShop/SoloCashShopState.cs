@@ -21,6 +21,15 @@ public sealed class SoloCashShopState
     /// <summary>Maximum wallet value.</summary>
     public const int MaximumCredit = 1000000;
 
+    /// <summary>The highest item level (+15) a purchased snapshot may carry.</summary>
+    public const int MaximumItemLevel = 15;
+
+    /// <summary>The exclusive upper bound of an item code (group*512+number; max 8191).</summary>
+    public const int MaximumItemCode = 8192;
+
+    /// <summary>The highest byte-sized durability a snapshot may carry.</summary>
+    public const double MaximumDurability = 255;
+
     /// <summary>Gets or sets the data format version.</summary>
     public int Version { get; set; } = 1;
 
@@ -34,6 +43,8 @@ public sealed class SoloCashShopState
     public List<Entry> Entries { get; set; } = [];
 
     /// <summary>Reads and validates a persisted ledger.</summary>
+    /// <param name="data">The serialized ledger, or null or empty for a fresh ledger.</param>
+    /// <returns>The validated shop state.</returns>
     public static SoloCashShopState Read(string data)
     {
         var state = string.IsNullOrEmpty(data) ? new SoloCashShopState()
@@ -42,7 +53,8 @@ public sealed class SoloCashShopState
             || state.NextId is 0 or > int.MaxValue || state.Entries is null
             || state.Entries.Count > StorageCapacity
             || state.Entries.Any(e => e is null || e.Id == 0 || e.Id >= state.NextId
-                || e.Level > 15 || e.ItemCode >= 8192 || !double.IsFinite(e.Durability) || e.Durability is <= 0 or > 255
+                || e.Level > MaximumItemLevel || e.ItemCode >= MaximumItemCode
+                || !double.IsFinite(e.Durability) || e.Durability is <= 0 or > MaximumDurability
                 || e.Price is < 0 or > MaximumCredit || e.Recipient is null || e.Message is null || e.Sender is null)
             || state.Entries.Select(e => e.Id).Distinct().Count() != state.Entries.Count)
         {

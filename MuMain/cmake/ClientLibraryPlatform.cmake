@@ -57,6 +57,21 @@ function(mu_resolve_client_library_platform)
     # the lib prefix also matches how DevEco packages libs/<abi>/*.so.
     set(library_name "libMUnique.Client.Library.so")
     set(extra_args "-p:ci=true;-p:NativeLib=Shared")
+  elseif(ARG_SYSTEM_NAME STREQUAL "iOS")
+    # PLAT-1: iOS preview builds ship the client library as a prebuilt dylib
+    # (see MU_IOS_PREVIEW / MU_CLIENT_LIBRARY_PREBUILT in src/CMakeLists.txt);
+    # resolving it must not FATAL at configure time. The values below only take
+    # effect if a host attempts an out-of-band publish.
+    if(NOT ARG_POINTER_SIZE EQUAL 8
+        OR NOT ARG_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
+      message(FATAL_ERROR
+        "The Native AOT client library supports iOS arm64 only")
+    endif()
+
+    set(library_name "libMUnique.Client.Library.dylib")
+    set(runtime_identifier "ios-arm64")
+    set(platform "arm64")
+    set(extra_args "-p:ci=true;-p:NativeLib=Shared")
   elseif(ARG_SYSTEM_NAME STREQUAL "Linux")
     if(NOT ARG_POINTER_SIZE EQUAL 8)
       message(FATAL_ERROR "The Native AOT client library supports Linux x64 only")

@@ -783,11 +783,13 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
             TextList[i][0] = 0;
         }
 
-        wchar_t skillname[100];
-        memset(&skillname, 0, sizeof(char));
+        wchar_t skillname[100] = { 0 };
 
         SKILL_ATTRIBUTE* p = &SkillAttribute[CursedTempleCurSkillType];
-        wcscpy(skillname, p->Name);
+        // UI-2: copy bounded by the local buffer; p->Name is a fixed field and
+        // must not be assumed to fit or be terminated within this window.
+        wcsncpy(skillname, p->Name, _countof(skillname) - 1);
+        skillname[_countof(skillname) - 1] = L'\0';
         mu_swprintf(TextList[TextNum], L"%ls", skillname);
         TextListColor[TextNum] = TEXT_COLOR_BLUE; TextNum++;
 

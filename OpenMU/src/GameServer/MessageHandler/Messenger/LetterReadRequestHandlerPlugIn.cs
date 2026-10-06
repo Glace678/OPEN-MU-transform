@@ -29,6 +29,11 @@ internal class LetterReadRequestHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < LetterReadRequest.Length)
+        {
+            return;
+        }
+
         LetterReadRequest message = packet;
         await this._readAction.ReadRequestAsync(player, message.LetterIndex).ConfigureAwait(false);
     }

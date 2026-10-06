@@ -3587,6 +3587,11 @@ void DeleteSocket();
 // in-game logout path). Used by the auto-reconnect flow before it replays login.
 void ResetClientToLoginScene();
 
+// PROTO-9: join-map request timeout support.
+void MarkJoinMapRequestSent();
+void CheckJoinMapRequestTimeout();
+void ReturnToCharacterSelection();
+
 void ReceiveMovePosition(const BYTE* ReceiveBuffer);
 
 struct PacketInfo

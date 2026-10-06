@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Dapr.Common;
 using System.Text.Json.Serialization;
 using System.Threading;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -237,6 +238,20 @@ public static class Extensions
         var pathBase = Environment.GetEnvironmentVariable("PATH_BASE");
         var useReverseProxy = !string.IsNullOrWhiteSpace(pathBase);
 
+        if (useReverseProxy)
+        {
+            // The reverse proxy runs in the private docker network, so trust the forwarded
+            // headers (scheme/proto) from private ranges instead of just from loopback.
+            builder.Services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+                    | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+            });
+        }
+
         var app = builder.Build();
 
         if (useReverseProxy)
@@ -264,6 +279,22 @@ public static class Extensions
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseRouting();
+
+        var appApiToken = Environment.GetEnvironmentVariable(DaprEndpointSecurity.TokenEnvironmentVariable);
+        app.Use(async (context, next) =>
+        {
+            if (DaprEndpointSecurity.IsControllerAction(context)
+                && HttpMethods.IsPost(context.Request.Method)
+                && !DaprEndpointSecurity.IsAuthorized(context, appApiToken))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return;
+            }
+
+            await next().ConfigureAwait(false);
+        });
 
         app.UseCloudEvents();
         app.MapControllers();

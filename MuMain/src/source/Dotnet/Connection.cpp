@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <map>
+#include <mutex>
 
 #include "Connection.h"
 
@@ -8,6 +9,13 @@
 #include "PacketBindings_ClientToServer.h"
 
 std::map<int32_t, Connection*> connections;
+
+// PROTO-12: the managed library invokes our static callbacks on network /
+// thread-pool threads, while the main thread inserts (constructor) and erases
+// (disconnect / shutdown). Every find/insert/erase on `connections` must run
+// under this mutex. The static callbacks additionally hold it across the whole
+// user callback so DeleteSocket's teardown cannot free a Connection mid-callback.
+std::mutex connectionsMutex;
 
 namespace DotNetBridge
 {
@@ -65,6 +73,17 @@ Send dotnet_send = LoadManagedSymbol<Send>("ConnectionManager_Send");
 
 void Connection::OnPacketReceivedS(const int32_t handle, const int32_t size, BYTE* data)
 {
+    // Held across the whole callback (see mutex comment above): teardown erases
+    // under the same lock and only deletes afterwards, so this Connection is
+    // alive until the callback returns.
+    //
+    // Lifetime contract: `data` points into a buffer the managed side rented
+    // from MemoryPool<byte>.Shared. It is valid ONLY during this synchronous
+    // call - it is returned to the pool as soon as this function returns. The
+    // handler must copy anything it needs (HandleIncomingPacket copies into the
+    // incoming queue) and must never retain the pointer.
+    std::lock_guard<std::mutex> lock(connectionsMutex);
+
     const auto it = connections.find(handle);
     if (it == connections.end())
     {
@@ -79,6 +98,9 @@ void Connection::OnPacketReceivedS(const int32_t handle, const int32_t size, BYT
 
 void Connection::OnDisconnectedS(const int32_t handle)
 {
+    // Same lock-across-callback rule as OnPacketReceivedS.
+    std::lock_guard<std::mutex> lock(connectionsMutex);
+
     const auto it = connections.find(handle);
     if (it == connections.end())
     {
@@ -97,40 +119,64 @@ Connection::Connection(const wchar_t* host, int32_t port, bool isEncrypted, void
     if (!dotnet_connect)
     {
         ReportDotNetError("ConnectionManager_Connect");
-        this->_handle = 0;
+        this->_handle.store(0);
         return;
     }
 
-    this->_handle = dotnet_connect(host, port, isEncrypted ? 1 : 0, &OnPacketReceivedS, &OnDisconnectedS);
+    const int32_t handle = dotnet_connect(host, port, isEncrypted ? 1 : 0, &OnPacketReceivedS, &OnDisconnectedS);
+    this->_handle.store(handle);
 
     if (IsConnected())
     {
-        connections[this->_handle] = this;
+        // Register before BeginReceive: the first managed callback can only
+        // fire once BeginReceive runs, at which point the map entry exists.
+        {
+            std::lock_guard<std::mutex> lock(connectionsMutex);
+            connections[handle] = this;
+        }
+
         if (dotnet_beginreceive)
         {
-            dotnet_beginreceive(this->_handle);
+            dotnet_beginreceive(handle);
         }
 
         _chatServer = new PacketFunctions_ChatServer();
         _connectServer = new PacketFunctions_ConnectServer();
         _gameServer = new PacketFunctions_ClientToServer();
 
-        _chatServer->SetHandle(this->_handle);
-        _connectServer->SetHandle(this->_handle);
-        _gameServer->SetHandle(this->_handle);
+        _chatServer->SetHandle(handle);
+        _connectServer->SetHandle(handle);
+        _gameServer->SetHandle(handle);
     }
 }
 
 Connection::~Connection()
 {
-    if (!IsConnected())
-    {
-        return;
-    }
+    // Robustness for direct deletes (e.g. failed CreateSocket). The normal
+    // path is DeleteSocket() -> SynchronousShutdown() -> delete.
+    SynchronousShutdown();
+}
 
-    if (dotnet_disconnect)
+void Connection::SynchronousShutdown()
+{
+    // PLAT-5, in the required order:
+    //   1. Tell the managed side to close the socket and stop dispatching.
+    //   2. Erase the map entry under the bridge lock. The lock waits out any
+    //      callback currently running, and callbacks arriving afterwards miss
+    //      in the map, so no callback can touch this object past this point.
+    //   3. Release the PacketFunctions. The caller may then delete this object.
+    // Idempotent: a handle already cleared means shutdown ran before.
+    const int32_t handle = this->_handle.exchange(0);
+
+    if (handle > 0)
     {
-        dotnet_disconnect(_handle);
+        if (dotnet_disconnect)
+        {
+            dotnet_disconnect(handle);
+        }
+
+        std::lock_guard<std::mutex> lock(connectionsMutex);
+        connections.erase(handle);
     }
 
     SafeDelete(_chatServer);
@@ -140,12 +186,13 @@ Connection::~Connection()
 
 bool Connection::IsConnected()
 {
-    return this->_handle > 0;
+    return this->_handle.load() > 0;
 }
 
 void Connection::Send(const BYTE* data, const int32_t size)
 {
-    if (!IsConnected())
+    const int32_t handle = this->_handle.load();
+    if (handle <= 0)
     {
         return;
     }
@@ -156,31 +203,35 @@ void Connection::Send(const BYTE* data, const int32_t size)
         return;
     }
 
-    dotnet_send(this->_handle, data, size);
+    dotnet_send(handle, data, size);
 }
 
 void Connection::Close()
 {
-    if (!IsConnected())
+    // Graceful close while the object stays registered: a later managed
+    // OnDisconnected callback erases the entry and zeroes the handle. Full
+    // unregister-and-free is SynchronousShutdown (used by DeleteSocket).
+    const int32_t handle = this->_handle.load();
+    if (handle <= 0)
     {
         return;
     }
 
     if (dotnet_disconnect)
     {
-        dotnet_disconnect(this->_handle);
+        dotnet_disconnect(handle);
     }
 }
 
 void Connection::OnDisconnected()
 {
-    if (!IsConnected())
+    // Called from OnDisconnectedS with connectionsMutex already held - do NOT
+    // lock it again here.
+    const int32_t handle = this->_handle.exchange(0);
+    if (handle > 0)
     {
-        return;
+        connections.erase(handle);
     }
-
-    connections.erase(this->_handle);
-    this->_handle = 0;
 }
 
 void Connection::OnPacketReceived(const BYTE* data, const int32_t size)

@@ -63,8 +63,7 @@ public static class PublicRegistrationEndpoints
 
     private static IResult GetPublicText(string? culture, IStringLocalizer<SelfServiceResources> text)
     {
-        var supported = new[] { "en", "zh-CN", "zh-TW", "ja", "ko", "de", "es", "fr", "pt", "ru", "uk", "pl", "id", "vi", "tl" };
-        var selected = supported.FirstOrDefault(value => value.Equals(culture, StringComparison.OrdinalIgnoreCase)) ?? "en";
+        var selected = SupportedAccountCultures.FirstOrDefault(value => value.Equals(culture, StringComparison.OrdinalIgnoreCase)) ?? "en";
         using var scope = CultureHelper.SetTemporaryCulture(CultureInfo.GetCultureInfo(selected));
         var keys = new[]
         {
@@ -94,9 +93,7 @@ public static class PublicRegistrationEndpoints
         // Keep the request backward-compatible: older clients do not send a security
         // code, and character actions already fall back to the account password when
         // the persisted field is empty.
-        var securityCode = string.IsNullOrEmpty(request?.SecurityCode)
-            ? string.Empty
-            : (request?.SecurityCode ?? string.Empty).Trim();
+        var securityCode = request?.SecurityCode?.Trim() ?? string.Empty;
 
         if (!ValidLoginName.IsMatch(loginName))
         {

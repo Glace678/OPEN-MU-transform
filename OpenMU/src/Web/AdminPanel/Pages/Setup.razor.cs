@@ -17,9 +17,15 @@ using MUnique.OpenMU.Web.AdminPanel.Services;
 /// </summary>
 public partial class Setup
 {
-    private bool _isDataInitialized;
+    private SetupService.DataInitializationState _dataInitializationState = SetupService.DataInitializationState.Unknown;
 
     private ClientVersion? _gameClientVersion;
+
+    private bool IsDataStateUnknown =>
+        this._dataInitializationState == SetupService.DataInitializationState.Unknown;
+
+    private bool IsDataStateEmpty =>
+        this._dataInitializationState == SetupService.DataInitializationState.Empty;
 
     /// <summary>
     /// Gets or sets a value indicating whether to show the <see cref="Install"/> component.
@@ -41,8 +47,8 @@ public partial class Setup
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        this._isDataInitialized = await this.SetupService.IsDataInitializedAsync().ConfigureAwait(false);
-        if (this._isDataInitialized)
+        this._dataInitializationState = await this.SetupService.GetDataInitializationStateAsync().ConfigureAwait(false);
+        if (this._dataInitializationState == SetupService.DataInitializationState.Initialized)
         {
             this._gameClientVersion = await this.SetupService.GetCurrentGameClientVersionAsync().ConfigureAwait(false);
         }

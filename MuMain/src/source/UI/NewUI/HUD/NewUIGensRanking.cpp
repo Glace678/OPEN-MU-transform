@@ -434,7 +434,10 @@ bool CNewUIGensRanking::SetGensTeamName(const wchar_t* _pTeamName)
 {
     if (_pTeamName)
     {
-        wcscpy(m_szGensTeam, _pTeamName);
+        // UI-2: destination holds TEAMNAME_LENTH characters; truncate instead
+        // of overflowing when the caller passes a longer team name.
+        wcsncpy(m_szGensTeam, _pTeamName, TEAMNAME_LENTH - 1);
+        m_szGensTeam[TEAMNAME_LENTH - 1] = L'\0';
         return true;
     }
     return false;

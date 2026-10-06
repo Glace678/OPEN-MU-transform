@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Persistence.EntityFramework;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MUnique.OpenMU.Persistence.EntityFramework.Json;
 using MUnique.OpenMU.Persistence.EntityFramework.Model;
 
@@ -65,18 +66,23 @@ internal class CachingGameConfigurationRepository : CachingGenericRepository<Gam
         {
             var configs = (await this._objectLoader.LoadAllObjectsAsync<GameConfiguration>(currentContext.Context, cancellationToken).ConfigureAwait(false)).ToList();
 
-            var oldConfig = ((EntityDataContext)currentContext.Context).CurrentGameConfiguration;
-            try
+            // Warm the caches without mutating the shared context's CurrentGameConfiguration:
+            // another thread could otherwise read a temporarily different configuration.
+            // Each configuration is warmed in its own context inside a context-stack scope.
+            foreach (var config in configs)
             {
-                configs.ForEach(config =>
+                using var warmingContext = new EntityDataContext();
+                warmingContext.CurrentGameConfiguration = config;
+                var cachingContext = new CachingEntityFrameworkContext(
+                    warmingContext,
+                    this.RepositoryProvider,
+                    false,
+                    null,
+                    NullLogger<CachingEntityFrameworkContext>.Instance);
+                using (this.RepositoryProvider.ContextStack.UseContext(cachingContext))
                 {
-                    ((EntityDataContext)currentContext.Context).CurrentGameConfiguration = config;
                     (this.RepositoryProvider as ICacheAwareRepositoryProvider)?.EnsureCachesForCurrentGameConfiguration();
-                });
-            }
-            finally
-            {
-                ((EntityDataContext)currentContext.Context).CurrentGameConfiguration = oldConfig;
+                }
             }
 
             return configs;

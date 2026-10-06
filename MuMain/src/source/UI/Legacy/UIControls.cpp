@@ -2732,38 +2732,48 @@ void CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)
     SIZE FontDCSize = { (int)(REFERENCE_WIDTH * g_fScreenRate_x), (int)(REFERENCE_HEIGHT * g_fScreenRate_y) };
     int iPitch = ((FontDCSize.cx * 24 + 31) & ~31) >> 3;
 
+    const int srcSize = iPitch * FontDCSize.cy;
+    const int dstSize = LIMIT_WIDTH * 4 * LIMIT_HEIGHT;
+
     for (int y = 0; y < iHeight; ++y)
     {
         int SrcIndex = y * iPitch + iOffset;
         int DstIndex = y * LIMIT_WIDTH * 4;
         for (int x = 0; x < iWidth; ++x)
         {
-            if ((SrcIndex > iPitch * FontDCSize.cy) || (DstIndex > LIMIT_WIDTH * 4 * LIMIT_HEIGHT))
+            // MEM-17: the pixel reads 3 source bytes (SrcIndex..SrcIndex+2) and writes 4 dest
+            // bytes; check the full ranges (>=, not >) instead of just the first byte of each.
+            if ((SrcIndex < 0) || (SrcIndex + 3 > srcSize) || (DstIndex < 0) || (DstIndex + 4 > dstSize))
             {
 #ifdef _DEBUG
                 MU_DEBUG_BREAK();
 #endif // _DEBUG
                 return;
             }
-            if (*(m_pFontBuffer + SrcIndex) == 255)	// we hit a white pixel, so here is Text
+
+            unsigned int outPixel;
+            if (m_pFontBuffer[SrcIndex] == 255)	// we hit a white pixel, so here is Text
             {
-                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = m_dwTextColor;
+                outPixel = m_dwTextColor;
             }
-            else if (*(m_pFontBuffer + SrcIndex) != 0) // we hit a semi transparent pixel, so anti aliasing hit here
+            else if (m_pFontBuffer[SrcIndex] != 0) // we hit a semi transparent pixel, so anti aliasing hit here
             {
                 // The alpha channel is the highest 8 bits.
-                DWORD alpha = *(m_pFontBuffer + SrcIndex);
-                alpha += *(m_pFontBuffer + SrcIndex + 1);
-                alpha += *(m_pFontBuffer + SrcIndex + 2);
+                DWORD alpha = m_pFontBuffer[SrcIndex];
+                alpha += m_pFontBuffer[SrcIndex + 1];
+                alpha += m_pFontBuffer[SrcIndex + 2];
                 alpha /= 3;
                 alpha <<= 24;
                 alpha |= 0x00FFFFFF;
-                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = m_dwTextColor & alpha;
+                outPixel = m_dwTextColor & alpha;
             }
             else // it's a black pixel, so there is no text
             {
-                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = 0; // Transparent
+                outPixel = 0; // Transparent
             }
+
+            // MEM-17: write via memcpy to avoid an unaligned unsigned int store / alias UB.
+            memcpy(pBitmapFont->Buffer + DstIndex, &outPixel, sizeof(outPixel));
 
             SrcIndex += 3; // RBG
             DstIndex += 4; // RGBA

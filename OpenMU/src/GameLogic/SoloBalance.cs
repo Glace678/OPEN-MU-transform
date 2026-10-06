@@ -39,14 +39,6 @@ public static class SoloBalance
                 .Sum(attribute => attribute.Value)
             : 0;
 
-    /// <summary>Excludes the legacy solo bonus which cannot be composed onto the character's mutable stat.</summary>
-    /// <param name="configuration">The active configuration.</param>
-    /// <returns>The base attributes usable by the character attribute system.</returns>
-    internal static IEnumerable<ConstValueAttribute> GetComposableBaseAttributes(GameConfiguration configuration) =>
-        IsEnabled(configuration)
-            ? configuration.GlobalBaseAttributeValues.Where(attribute => attribute.Definition != Stats.PointsPerLevelUp)
-            : configuration.GlobalBaseAttributeValues;
-
     /// <summary>Scales a transaction once, preserving zero and a minimum positive price of one Zen.</summary>
     /// <param name="price">The original final price.</param>
     /// <param name="configuration">The active configuration.</param>
@@ -58,4 +50,12 @@ public static class SoloBalance
     /// <param name="price">The original final price.</param>
     /// <returns>The converted price.</returns>
     public static long ScalePrice(long price) => price > 0 ? Math.Max(1, price / PriceDivisor) : price;
+
+    /// <summary>Excludes the legacy solo bonus which cannot be composed onto the character's mutable stat.</summary>
+    /// <param name="configuration">The active configuration.</param>
+    /// <returns>The base attributes usable by the character attribute system.</returns>
+    internal static IEnumerable<ConstValueAttribute> GetComposableBaseAttributes(GameConfiguration configuration) =>
+        IsEnabled(configuration)
+            ? configuration.GlobalBaseAttributeValues.Where(attribute => attribute.Definition != Stats.PointsPerLevelUp)
+            : configuration.GlobalBaseAttributeValues;
 }

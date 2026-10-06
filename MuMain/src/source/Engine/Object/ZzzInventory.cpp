@@ -11141,7 +11141,11 @@ bool IsCorrectShopTitle(const wchar_t* szShopTitle)
     {
         if (szShopTitle[i] == 0x20) {
             count++;
-            if (i == 1 && count >= 2) return false;
+            // UI-9: the old (i == 1 && count >= 2) test only rejected titles
+            // starting with TWO spaces; one leading space slipped through while
+            // repeated spaces elsewhere were already caught by the final
+            // count >= 2 check below. Reject any leading space instead.
+            if (i == 0) return false;
         }
         else {
             count = 0;

@@ -135,12 +135,20 @@ WZResult 			FileDownloader::CreateConnection()
         {
             if (WaitForSingleObject(hHandle, dwMilliseconds) == WAIT_TIMEOUT)
             {
-                InternetCloseHandle(this->m_hSession);
-                this->m_hSession = 0;
+                // XC-1: signal abort and wait for the connect thread to leave
+                // WinInet BEFORE closing the session handle it is blocked in.
+                // Closing first made the running worker reference a closed
+                // handle (or a reused handle number belonging to another
+                // object). The blocked InternetConnect returns on its own once
+                // the OS connect timeout expires, so the join is bounded.
+                this->Break();
 
                 WaitForSingleObject(hHandle, INFINITE);
 
                 CloseHandle(hHandle);
+
+                InternetCloseHandle(this->m_hSession);
+                this->m_hSession = 0;
 
                 this->m_Result.SetResult(DL_CONNECTION_TIMEOUT, 0, L"[FileDownloader::CreateConnection] Fail : WAIT_TIMEOUT, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
             }

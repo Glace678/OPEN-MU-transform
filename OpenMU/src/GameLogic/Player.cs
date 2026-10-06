@@ -20,6 +20,7 @@ using MUnique.OpenMU.GameLogic.PlayerActions.Trade;
 using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.GameLogic.Views;
 using MUnique.OpenMU.GameLogic.Views.Character;
+using MUnique.OpenMU.GameLogic.Views.Duel;
 using MUnique.OpenMU.GameLogic.Views.Guild;
 using MUnique.OpenMU.GameLogic.Views.Inventory;
 using MUnique.OpenMU.GameLogic.Views.MuHelper;
@@ -67,6 +68,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
     private readonly Lazy<MuHelper.MuHelper> _muHelperLazy;
 
+    private readonly PotionCooldownTracker _balanceV1PotionCooldownTracker = new();
+
     private CancellationTokenSource? _respawnAfterDeathCts;
 
     private Character? _selectedCharacter;
@@ -74,10 +77,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     private ICustomPlugInContainer<IViewPlugIn>? _viewPlugIns;
 
     private DateTime _lastRegenerate = DateTime.UtcNow;
-
-    private readonly object _balanceV1PotionCooldownLock = new();
-
-    private readonly Dictionary<BalanceV1.PotionGroup, DateTime> _balanceV1PotionCooldowns = new();
 
     private GameMap? _currentMap;
 
@@ -459,6 +458,17 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public bool IsVaultLocked { get; set; }
 
     /// <summary>
+    /// Gets or sets the number of consecutive failed vault unlock attempts since the last success/lockout.
+    /// Used to throttle brute-force attacks against the vault pin.
+    /// </summary>
+    public int VaultUnlockFailCount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the time until which further vault unlock attempts are rejected after too many failures.
+    /// </summary>
+    public DateTime? VaultLockoutUntil { get; set; }
+
+    /// <summary>
     /// Gets the shop storage.
     /// </summary>
     public IShopStorage? ShopStorage => this._storages.ShopStorage;
@@ -575,29 +585,13 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// </summary>
     public DateTime PotionCooldownUntil { get; set; } = DateTime.UtcNow;
 
-    /// <summary>Atomically starts a balance-v1 resource-specific potion cooldown.</summary>
-    /// <param name="group">The independently cooled-down potion resource.</param>
-    /// <param name="cooldown">The cooldown duration.</param>
-    /// <param name="now">The timestamp used for the decision.</param>
-    /// <returns><see langword="true"/> when the group was available and is now reserved.</returns>
-    internal bool TryBeginBalanceV1PotionCooldown(BalanceV1.PotionGroup group, TimeSpan cooldown, DateTime now)
-    {
-        lock (this._balanceV1PotionCooldownLock)
-        {
-            if (this._balanceV1PotionCooldowns.TryGetValue(group, out var cooldownUntil) && cooldownUntil > now)
-            {
-                return false;
-            }
-
-            this._balanceV1PotionCooldowns[group] = now.Add(cooldown);
-            return true;
-        }
-    }
-
     /// <summary>
     /// Gets or sets the timestamp of when the shield hiatus was last accrued.
     /// </summary>
     public DateTime LastShieldRecoveryHiatusAccrual { get; set; } = DateTime.UtcNow;
+
+    /// <summary>Gets the tracker for independently cooled-down balance-v1 potions.</summary>
+    internal PotionCooldownTracker BalanceV1PotionCooldowns => this._balanceV1PotionCooldownTracker;
 
     /// <summary>
     /// Gets a value indicating whether opening the player store after entering the game is supported by this instance.
@@ -633,12 +627,21 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             (this.SkillList as IDisposable)?.Dispose();
             this.SkillList = null;
 
-            if (this.DuelRoom is { State: DuelState.DuelStarted } duelRoom)
+            if (this.DuelRoom is { } duelRoom)
             {
-                await duelRoom.CancelDuelAsync().ConfigureAwait(false);
-                if (this.GameContext.Configuration.DuelConfiguration?.Exit is { } exit)
+                if (duelRoom.State is DuelState.DuelRequested or DuelState.DuelAccepted)
                 {
-                    await this._mapTransitions.PlaceAtGateAsync(exit).ConfigureAwait(false);
+                    // The other player did not respond (or the duel did not start yet); without this,
+                    // the room and the other player's duel state would leak until a server restart.
+                    await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
+                }
+                else if (duelRoom.State is DuelState.DuelStarted)
+                {
+                    await duelRoom.CancelDuelAsync().ConfigureAwait(false);
+                    if (this.GameContext.Configuration.DuelConfiguration?.Exit is { } exit)
+                    {
+                        await this._mapTransitions.PlaceAtGateAsync(exit).ConfigureAwait(false);
+                    }
                 }
             }
 

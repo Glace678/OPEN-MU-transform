@@ -19,7 +19,8 @@ public class UnlockVaultAction
     public async ValueTask UnlockVaultAsync(Player player, string pin)
     {
         VaultLockChangeResult result;
-        if (player.Account?.VaultPassword == pin)
+        var now = DateTime.UtcNow;
+        if (!VaultPinSecurity.IsLockedOut(player, now) && VaultPinSecurity.VerifyPin(player, pin, now))
         {
             player.IsVaultLocked = false;
             result = VaultLockChangeResult.Unlocked;

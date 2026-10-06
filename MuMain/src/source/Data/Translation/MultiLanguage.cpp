@@ -113,6 +113,13 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         return 0;
     }
 
+    // MEM-15: the convention at every call site is that the target holds one wchar per source
+    // byte window (both derived from the same fixed field). N ASCII bytes convert to N wchars,
+    // so writing the terminator would overflow by exactly one. Reserve that slot by converting
+    // at most (maxSourceLength - 1) characters. A NUL-terminated source (maxSourceLength <= 0)
+    // keeps the previous unbounded behavior.
+    int cchWideChar = maxSourceLength > 0 ? maxSourceLength - 1 : requiredChars;
+
     // Perform the conversion
     int written = MultiByteToWideChar(
         CP_UTF8,
@@ -120,7 +127,7 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         source,
         maxSourceLength,    // read at most this many bytes
         target,
-        requiredChars       // assume destination large enough
+        cchWideChar         // always leave room for the terminator
     );
 
     if (written <= 0)

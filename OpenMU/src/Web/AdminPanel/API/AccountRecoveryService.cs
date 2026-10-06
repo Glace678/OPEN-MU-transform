@@ -11,12 +11,21 @@ using MUnique.OpenMU.Persistence;
 /// <summary>Creates independent high-entropy recovery credentials and consumes them atomically.</summary>
 public static class AccountRecoveryService
 {
+    private const int RecoveryCodeEntropyBytes = 32;
+
+    private const int CodeGroupSize = 8;
+
+    private const int CanonicalCodeLength = 64;
+
+    // 8 groups of 8 hex digits joined by 7 dashes, plus slack for whitespace.
+    private const int MaximumCodeInputLength = 80;
+
     /// <summary>Generates a new recovery code. The returned value must not be logged or stored as plaintext.</summary>
-    /// <returns>A grouped hexadecimal code derived from 32 random bytes.</returns>
+    /// <returns>A grouped hexadecimal code derived from <see cref="RecoveryCodeEntropyBytes"/> random bytes.</returns>
     public static string GenerateCode()
     {
-        var code = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-        return string.Join("-", code.Chunk(8).Select(group => new string(group)));
+        var code = Convert.ToHexString(RandomNumberGenerator.GetBytes(RecoveryCodeEntropyBytes));
+        return string.Join("-", code.Chunk(CodeGroupSize).Select(group => new string(group)));
     }
 
     /// <summary>Validates and hashes a recovery code, accepting the displayed grouping and lowercase hex.</summary>
@@ -26,18 +35,18 @@ public static class AccountRecoveryService
     public static bool TryHashCode(string? code, out string hash)
     {
         hash = string.Empty;
-        if (code is null || code.Length > 80)
+        if (code is null || code.Length > MaximumCodeInputLength)
         {
             return false;
         }
 
         var canonical = code.Trim().Replace("-", string.Empty, StringComparison.Ordinal).ToUpperInvariant();
-        if (canonical.Length != 64 || canonical.Any(character => character is not (>= '0' and <= '9') and not (>= 'A' and <= 'F')))
+        if (canonical.Length != CanonicalCodeLength || !IsHexadecimal(canonical))
         {
             return false;
         }
 
-        hash = Convert.ToHexString(SHA256.HashData(Encoding.ASCII.GetBytes(canonical)));
+        hash = HashCanonicalCode(canonical);
         return true;
     }
 
@@ -61,7 +70,7 @@ public static class AccountRecoveryService
         }
 
         var replacement = GenerateCode();
-        _ = TryHashCode(replacement, out var newRecoveryHash);
+        var newRecoveryHash = HashCanonicalCode(replacement.Replace("-", string.Empty, StringComparison.Ordinal));
         var newPasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
         return await context.TryReplaceCredentialsAsync(expected, newPasswordHash, newRecoveryHash).ConfigureAwait(false)
             ? replacement
@@ -82,7 +91,7 @@ public static class AccountRecoveryService
         }
 
         var replacement = GenerateCode();
-        _ = TryHashCode(replacement, out var newRecoveryHash);
+        var newRecoveryHash = HashCanonicalCode(replacement.Replace("-", string.Empty, StringComparison.Ordinal));
         return await context.TryReplaceCredentialsAsync(expected, expected.PasswordHash, newRecoveryHash).ConfigureAwait(false)
             ? replacement
             : null;
@@ -90,7 +99,7 @@ public static class AccountRecoveryService
 
     private static bool HashesMatch(string suppliedHash, string? storedHash)
     {
-        if (storedHash is not { Length: 64 } || storedHash.Any(character => character is not (>= '0' and <= '9') and not (>= 'A' and <= 'F')))
+        if (storedHash is not { Length: CanonicalCodeLength } || !IsHexadecimal(storedHash))
         {
             return false;
         }
@@ -98,4 +107,10 @@ public static class AccountRecoveryService
         return CryptographicOperations.FixedTimeEquals(
             Convert.FromHexString(suppliedHash), Convert.FromHexString(storedHash));
     }
+
+    private static bool IsHexadecimal(string value) =>
+        value.All(character => character is >= '0' and <= '9' or >= 'A' and <= 'F');
+
+    private static string HashCanonicalCode(string canonicalCode) =>
+        Convert.ToHexString(SHA256.HashData(Encoding.ASCII.GetBytes(canonicalCode)));
 }

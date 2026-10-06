@@ -45,7 +45,14 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
     {
         int nSize = sizeof(ITEM_ADD_OPTION) * MAX_ITEM;
 
-        ::fread(m_ItemAddOption, nSize, 1, fp);
+        // XC-12: a short read would feed uninitialized table memory into the
+        // item option system; treat it like a missing/corrupt file.
+        if (::fread(m_ItemAddOption, nSize, 1, fp) != 1)
+        {
+            ::fclose(fp);
+            return false;
+        }
+
         ::BuxConvert((BYTE*)m_ItemAddOption, nSize);
         ::fclose(fp);
 

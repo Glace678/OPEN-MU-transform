@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Network.Xor;
 
 using System.Buffers;
 using System.IO.Pipelines;
+using MUnique.OpenMU.Network;
 
 /// <summary>
 /// Pipelined decryptor which uses a 32 byte key for a xor encryption.
@@ -76,6 +77,14 @@ public class PipelinedXor32Decryptor : PacketPipeReaderBase, IPipelinedDecryptor
         packet.CopyTo(target);
 
         var headerSize = target.GetPacketHeaderSize();
+        if (headerSize <= 0 || target.Length <= headerSize)
+        {
+            // Unknown packet prefix or a frame shorter than its header: decrypting it would
+            // corrupt the XOR chain. Fail the pipeline instead of silently producing garbage.
+            var headerBytes = target[..Math.Min(3, target.Length)].ToArray();
+            throw new InvalidPacketHeaderException(headerBytes, packet, packet.Start);
+        }
+
         for (var i = target.Length - 1; i > headerSize; i--)
         {
             target[i] = (byte)(target[i] ^ target[i - 1] ^ this._xor32Key[i % 32]);

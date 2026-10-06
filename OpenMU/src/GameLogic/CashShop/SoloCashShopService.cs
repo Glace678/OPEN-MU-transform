@@ -20,6 +20,8 @@ public sealed class SoloCashShopService
     public const int ExchangeCredit = 100;
 
     /// <summary>Checks whether a shop transaction is safe at the current player state.</summary>
+    /// <param name="player">The player attempting the transaction.</param>
+    /// <returns><c>true</c> when the player is allowed to use the shop; otherwise, <c>false</c>.</returns>
     public static bool CanUse(Player player) =>
         SoloBalance.IsEnabled(player.GameContext.Configuration)
         && player.Account is not null && !player.IsTemplatePlayer
@@ -27,77 +29,102 @@ public sealed class SoloCashShopService
         && player.IsAlive && player.PlayerState.CurrentState == PlayerState.EnteredWorld
         && player.IsAtSafezone();
 
-    /// <summary>Initializes the grant durably before reporting it to the client.</summary>
+    /// <summary>Initializes the shop data durably before reporting it to the client.</summary>
+    /// <param name="player">The player opening the shop.</param>
+    /// <returns>The shop result code.</returns>
     public ValueTask<byte> InitializeAsync(Player player) =>
         player.RunPersistenceExclusiveAsync(async () =>
         {
             if (!CanUse(player))
             {
-                return (byte)6;
+                return SoloCashShopResult.InvalidPlayerState;
             }
 
             var state = SoloCashShopState.Read(player.Account!.SoloCashShopData);
             return string.IsNullOrEmpty(player.Account.SoloCashShopData)
-                ? await CommitAsync(player, state).ConfigureAwait(false) : (byte)0;
+                ? await CommitAsync(player, state).ConfigureAwait(false) : SoloCashShopResult.Success;
         });
 
     /// <summary>Buys an exact, validated catalog offer into account storage.</summary>
+    /// <param name="player">The player making the purchase.</param>
+    /// <param name="offerId">The requested offer identifier.</param>
+    /// <param name="category">The requested offer category.</param>
+    /// <param name="priceId">The client price identifier; must be 0 or match <paramref name="offerId"/>.</param>
+    /// <param name="itemCode">The requested item code.</param>
+    /// <param name="coin">The currency the client claims to pay with.</param>
+    /// <param name="mileage">The mileage the client claims to spend.</param>
+    /// <param name="recipient">An optional character name on this account who receives the item.</param>
+    /// <param name="message">An optional gift message.</param>
+    /// <returns>The shop result code.</returns>
     public ValueTask<byte> BuyAsync(Player player, uint offerId, uint category, uint priceId, ushort itemCode, uint coin, byte mileage, string recipient = "", string message = "") =>
         player.RunPersistenceExclusiveAsync(async () =>
         {
             if (!CanUse(player))
             {
-                return (byte)6;
+                return SoloCashShopResult.InvalidPlayerState;
             }
 
             var offer = SoloCashShopCatalog.GetOffers(player.GameContext.Configuration).FirstOrDefault(o => o.Id == offerId);
-            if (offer is null || offer.Category != category || offer.ItemCode != itemCode || priceId != 0 && priceId != offer.Id)
+            if (offer is null
+                || offer.Category != category
+                || offer.ItemCode != itemCode
+                || (priceId != 0 && priceId != offer.Id))
             {
-                return (byte)4;
+                return SoloCashShopResult.OfferNotFound;
             }
 
             if (coin != SoloCashShopCatalog.CoinIndex || mileage != 0)
             {
-                return (byte)9;
+                return SoloCashShopResult.WrongCurrency;
             }
 
             // Single-player gifts stay within this account; never mutate another live player's context.
             if (recipient.Length > 0 && !(player.Account!.Characters ?? []).Any(c => string.Equals(c.Name, recipient, StringComparison.Ordinal)))
             {
-                return (byte)10;
+                return SoloCashShopResult.UnknownRecipient;
             }
 
             var state = SoloCashShopState.Read(player.Account!.SoloCashShopData);
             if (state.Credit < offer.Price)
             {
-                return (byte)1;
+                return SoloCashShopResult.GenericFailure;
             }
 
             if (state.Entries.Count >= SoloCashShopState.StorageCapacity || state.NextId == int.MaxValue)
             {
-                return (byte)2;
+                return SoloCashShopResult.StorageFull;
             }
 
             state.Credit -= offer.Price;
             state.Entries.Add(new SoloCashShopState.Entry(
-                state.NextId++, offer.Id, offer.ItemCode, offer.Level, offer.Durability, offer.Price,
-                recipient, recipient.Length == 0 ? "" : player.SelectedCharacter!.Name, message, offer.HasSkill));
+                state.NextId++,
+                offer.Id,
+                offer.ItemCode,
+                offer.Level,
+                offer.Durability,
+                offer.Price,
+                recipient,
+                recipient.Length == 0 ? string.Empty : player.SelectedCharacter!.Name,
+                message,
+                offer.HasSkill));
             return await CommitAsync(player, state).ConfigureAwait(false);
         });
 
     /// <summary>Exchanges earned gold for local credit, without a payment provider.</summary>
+    /// <param name="player">The player exchanging gold for credit.</param>
+    /// <returns>The shop result code.</returns>
     public ValueTask<byte> ExchangeAsync(Player player) =>
         player.RunPersistenceExclusiveAsync(async () =>
         {
             if (!CanUse(player))
             {
-                return (byte)6;
+                return SoloCashShopResult.InvalidPlayerState;
             }
 
             var state = SoloCashShopState.Read(player.Account!.SoloCashShopData);
             if (state.Credit > SoloCashShopState.MaximumCredit - ExchangeCredit || player.Money < ExchangeGold)
             {
-                return (byte)1;
+                return SoloCashShopResult.GenericFailure;
             }
 
             state.Credit += ExchangeCredit;
@@ -105,26 +132,37 @@ public sealed class SoloCashShopService
         });
 
     /// <summary>Delivers a stored item exactly once, or leaves it intact when the bag is full.</summary>
+    /// <param name="player">The player claiming the stored item.</param>
+    /// <param name="storageId">The stored-item identifier.</param>
+    /// <param name="itemId">The item identifier sent by the client; must match the stored entry.</param>
+    /// <param name="itemCode">The item code sent by the client.</param>
+    /// <param name="productType">The product type code sent by the client.</param>
+    /// <returns>The shop result code.</returns>
     public ValueTask<byte> ClaimAsync(Player player, uint storageId, uint itemId, ushort itemCode, byte productType) =>
         player.RunPersistenceExclusiveAsync(async () =>
         {
             if (!CanUse(player))
             {
-                return (byte)22;
+                return SoloCashShopResult.Unavailable;
             }
 
             var state = SoloCashShopState.Read(player.Account!.SoloCashShopData);
             var entry = FindOwnedEntry(player, state, storageId, itemId, productType);
             if (entry is null || entry.ItemCode != itemCode)
             {
-                return (byte)1;
+                return SoloCashShopResult.GenericFailure;
             }
 
-            var definition = player.GameContext.Configuration.Items.FirstOrDefault(d => d.Group == itemCode / 512 && d.Number == itemCode % 512);
-            if (definition is null || definition.IsQuestItem || definition.IsBoundToCharacter
-                || definition.StorageLimitPerCharacter > 0 && player.Inventory!.Items.Count(i => i.Definition == definition) >= definition.StorageLimitPerCharacter)
+            var definition = player.GameContext.Configuration.Items.FirstOrDefault(
+                d => d.Group == itemCode / SoloCashShopCatalog.ItemCodesPerGroup
+                     && d.Number == itemCode % SoloCashShopCatalog.ItemCodesPerGroup);
+            if (definition is null
+                || definition.IsQuestItem
+                || definition.IsBoundToCharacter
+                || (definition.StorageLimitPerCharacter > 0
+                    && player.Inventory!.Items.Count(i => i.Definition == definition) >= definition.StorageLimitPerCharacter))
             {
-                return (byte)22;
+                return SoloCashShopResult.Unavailable;
             }
 
             var item = player.PersistenceContext.CreateNew<Item>();
@@ -135,7 +173,7 @@ public sealed class SoloCashShopService
             if (!await player.Inventory!.AddItemAsync(item).ConfigureAwait(false))
             {
                 player.PersistenceContext.Detach(item);
-                return (byte)21;
+                return SoloCashShopResult.InventoryFull;
             }
 
             state.Entries.Remove(entry);
@@ -149,19 +187,24 @@ public sealed class SoloCashShopService
         });
 
     /// <summary>Deletes an owned unclaimed item, without refunding spent currency.</summary>
+    /// <param name="player">The player deleting the stored item.</param>
+    /// <param name="storageId">The stored-item identifier.</param>
+    /// <param name="itemId">The item identifier sent by the client.</param>
+    /// <param name="productType">The product type code sent by the client.</param>
+    /// <returns>The shop result code.</returns>
     public ValueTask<byte> DeleteAsync(Player player, uint storageId, uint itemId, byte productType) =>
         player.RunPersistenceExclusiveAsync(async () =>
         {
             if (!CanUse(player))
             {
-                return (byte)1;
+                return SoloCashShopResult.GenericFailure;
             }
 
             var state = SoloCashShopState.Read(player.Account!.SoloCashShopData);
             var entry = FindOwnedEntry(player, state, storageId, itemId, productType);
             if (entry is null)
             {
-                return (byte)1;
+                return SoloCashShopResult.GenericFailure;
             }
 
             state.Entries.Remove(entry);
@@ -178,13 +221,14 @@ public sealed class SoloCashShopService
         var previousData = player.Account!.SoloCashShopData;
         var previousGold = player.Money;
         player.Account.SoloCashShopData = state.Serialize();
+
         // Avoid publishing a new gold balance before the transaction is committed.
         player.SelectedCharacter!.Inventory!.Money -= goldCost;
         try
         {
             if (await player.SaveProgressAsync().ConfigureAwait(false))
             {
-                return 0;
+                return SoloCashShopResult.Success;
             }
         }
         catch (Exception exception)
@@ -200,6 +244,6 @@ public sealed class SoloCashShopService
             player.PersistenceContext.Detach(addedItem);
         }
 
-        return 255;
+        return SoloCashShopResult.InternalError;
     }
 }

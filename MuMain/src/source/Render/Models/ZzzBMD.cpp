@@ -3094,6 +3094,16 @@ public:
 
     void Skip(size_t bytes) { ptr += bytes; }
 
+    // MEM-5/6: fail-closed bounds checks. Callers must reject the file when these return false
+    // instead of silently reading zero-filled data.
+    bool CanRead(size_t bytes) const { return ptr + bytes <= size; }
+
+    bool Ensure(size_t bytes) {
+        if (!CanRead(bytes)) return false;
+        ptr += bytes;
+        return true;
+    }
+
     template <typename T>
     T Read() {
         T value{};
@@ -3143,10 +3153,19 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     }
 
     fseek(fp, 0, SEEK_END);
-    int dataSize = ftell(fp);
+    long dataSize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    std::unique_ptr<unsigned char[]> fileData(new(std::nothrow) unsigned char[dataSize]);
+    // MEM-5: smallest possible file: 3 "BMD" header bytes + version byte + 32-bit size field.
+    constexpr long MinimumBmdFileSize = 3 + 1 + 4;
+    if (dataSize < MinimumBmdFileSize)
+    {
+        fclose(fp);
+        m_bCompletedAlloc = false;
+        return false;
+    }
+
+    std::unique_ptr<unsigned char[]> fileData(new(std::nothrow) unsigned char[static_cast<size_t>(dataSize)]);
     if (!fileData)
     {
         fclose(fp);
@@ -3154,11 +3173,18 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
         return false;
     }
 
-    fread(fileData.get(), 1, dataSize, fp);
+    // MEM-5: a short read must not end up (partially uninitialized) in parsing/decryption.
+    if (static_cast<long>(fread(fileData.get(), 1, static_cast<size_t>(dataSize), fp)) != dataSize)
+    {
+        fclose(fp);
+        m_bCompletedAlloc = false;
+        return false;
+    }
+
     fclose(fp);
 
     // *** Check the "BMD" header ***
-    if (!(fileData[0] == 'B' && fileData[1] == 'M' && fileData[2] == 'D'))
+    if (memcmp(fileData.get(), "BMD", 3) != 0)
     {
         wprintf(L"[Open2] ERROR: Invalid file header (expected 'BMD') in file %.64s\n", ModelPath);
         m_bCompletedAlloc = false;
@@ -3167,22 +3193,36 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
 
     int ptr = 3;
     Version = fileData[ptr++];
-    
 
+    long decSize = 0;
     std::unique_ptr<unsigned char[]> decryptedData;
     if (Version == 0xC)
     {
         //// wprintf(L"[Open2] Version: %d\n", Version);
-        // The on-disk size field is 32-bit; `long` is 8 bytes on LP64 (Linux
-        // x64), which would read past the field and produce a garbage size.
-        std::int32_t encSize = *(std::int32_t*)(fileData.get() + ptr); ptr += sizeof(std::int32_t);
+        // MEM-5/19: read the 32-bit size via memcpy (alignment/alias safe), then validate it
+        // against the bytes actually left in the file before passing it to the decryption.
+        std::int32_t encSize;
+        memcpy(&encSize, fileData.get() + ptr, sizeof(std::int32_t));
+        ptr += sizeof(std::int32_t);
+        long available = dataSize - ptr;
+        if (encSize <= 0 || static_cast<long>(encSize) > available)
+        {
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
         unsigned char* encData = fileData.get() + ptr;
         //// wprintf(L"[Open2] Encrypted Size: %ld\n", encSize);
 
-        long decSize = MapFileDecrypt(nullptr, encData, encSize);
+        decSize = MapFileDecrypt(nullptr, encData, encSize);
         //// wprintf(L"[Open2] Decrypted Size: %ld\n", decSize);
+        if (decSize <= 0)
+        {
+            m_bCompletedAlloc = false;
+            return false;
+        }
 
-        decryptedData.reset(new(std::nothrow) unsigned char[decSize]);
+        decryptedData.reset(new(std::nothrow) unsigned char[static_cast<size_t>(decSize)]);
         if (!decryptedData)
         {
             m_bCompletedAlloc = false;
@@ -3195,8 +3235,11 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     else if (Version == 0xE)
     {
         wprintf(L"[Open2] Version: %d\n, not yet supported. File: %.64s\n", Version, ModelPath);
-        // FIXME FOR NEW MAPS 
+        // FIXME FOR NEW MAPS
         // DECRYPT KEY: webzen#@!01webzen#@!01webzen#@!0
+        // Do not fall through and parse the raw encrypted bytes as model data.
+        m_bCompletedAlloc = false;
+        return false;
     }
     else if (Version == 0xA)
     {
@@ -3212,8 +3255,19 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
 
 
     unsigned char* data = decryptedData ? decryptedData.get() : fileData.get();
+    const size_t bufferSize = decryptedData ? static_cast<size_t>(decSize) : static_cast<size_t>(dataSize);
 
-    memcpy(Name, data + ptr, 32); ptr += 32;
+    BMDReader reader(data, bufferSize);
+    reader.Skip(ptr);
+
+    if (!reader.Ensure(32))
+    {
+        m_bCompletedAlloc = false;
+        return false;
+    }
+
+    memcpy(Name, reader.GetPointer(), 32);
+    reader.Skip(32);
 
     const char* ext = strrchr(Name, '.');
     if (!ext || (_stricmp(ext, ".smd") != 0))
@@ -3221,11 +3275,25 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
         // wprintf(L"[Open2] WARNING: Invalid file extension: %.64hs in %.64s\n", Name, ModelPath);
     }
 
-    NumMeshs = *(short*)(data + ptr); ptr += sizeof(short);
-    NumBones = *(short*)(data + ptr); ptr += sizeof(short);
-    NumActions = *(short*)(data + ptr); ptr += sizeof(short);
+    if (!reader.Ensure(6))
+    {
+        m_bCompletedAlloc = false;
+        return false;
+    }
+
+    NumMeshs = reader.Read<short>();
+    NumBones = reader.Read<short>();
+    NumActions = reader.Read<short>();
 
     assert(NumBones <= MAX_BONES && "Bones 200");
+
+    // Runtime check (assert is compiled out in release): a crafted file with a count
+    // outside [0, MAX_BONES] would overflow the global BoundingMin/BoundingMax/BoneTransform
+    // arrays or drive loops/allocations with a negative size.
+    if (NumBones < 0 || NumBones > MAX_BONES || NumMeshs < 0 || NumActions < 0)
+    {
+        return false;
+    }
     //// wprintf(L"[Open2] Model: %.32hs | Meshes: %d | Bones: %d | Actions: %d\n", Name, NumMeshs, NumBones, NumActions);
 
     const int meshCount = NumMeshs > 0 ? NumMeshs : 1;
@@ -3248,31 +3316,71 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     for (int i = 0; i < NumMeshs; ++i)
     {
         Mesh_t& m = Meshs[i];
-        m.NumVertices = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumNormals = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumTexCoords = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumTriangles = *(short*)(data + ptr); ptr += sizeof(short);
-        m.Texture = *(short*)(data + ptr); ptr += sizeof(short);
+        if (!reader.Ensure(10))
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        m.NumVertices = reader.Read<short>();
+        m.NumNormals = reader.Read<short>();
+        m.NumTexCoords = reader.Read<short>();
+        m.NumTriangles = reader.Read<short>();
+        m.Texture = reader.Read<short>();
         m.NoneBlendMesh = false;
 
         //// wprintf(L"[Open2] Mesh[%d] V:%d N:%d T:%d Tri:%d Tex:%d\n", i, m.NumVertices, m.NumNormals, m.NumTexCoords, m.NumTriangles, m.Texture);
 
-        m.Vertices = new Vertex_t[m.NumVertices];
-        m.Normals = new Normal_t[m.NumNormals];
-        m.TexCoords = new TexCoord_t[m.NumTexCoords];
-        m.Triangles = new Triangle_t[m.NumTriangles];
+        // MEM-6: a negative count would become a huge allocation size; reject the file instead.
+        if (m.NumVertices < 0 || m.NumNormals < 0 || m.NumTexCoords < 0 || m.NumTriangles < 0)
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
 
-        memcpy(m.Vertices, data + ptr, m.NumVertices * sizeof(Vertex_t));  ptr += m.NumVertices * sizeof(Vertex_t);
-        memcpy(m.Normals, data + ptr, m.NumNormals * sizeof(Normal_t));   ptr += m.NumNormals * sizeof(Normal_t);
-        memcpy(m.TexCoords, data + ptr, m.NumTexCoords * sizeof(TexCoord_t)); ptr += m.NumTexCoords * sizeof(TexCoord_t);
+        const size_t vertexBytes = static_cast<size_t>(m.NumVertices) * sizeof(Vertex_t);
+        const size_t normalBytes = static_cast<size_t>(m.NumNormals) * sizeof(Normal_t);
+        const size_t texCoordBytes = static_cast<size_t>(m.NumTexCoords) * sizeof(TexCoord_t);
+        const size_t triangleReadBytes = static_cast<size_t>(m.NumTriangles) * sizeof(Triangle_t2);
+
+        // Triangles are stored as Triangle_t2 but copied into (smaller) Triangle_t slots;
+        // the stream still advances by the Triangle_t2 stride.
+        if (!reader.CanRead(vertexBytes + normalBytes + texCoordBytes + triangleReadBytes + 32))
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        m.Vertices = new(std::nothrow) Vertex_t[m.NumVertices]();
+        m.Normals = new(std::nothrow) Normal_t[m.NumNormals]();
+        m.TexCoords = new(std::nothrow) TexCoord_t[m.NumTexCoords]();
+        m.Triangles = new(std::nothrow) Triangle_t[m.NumTriangles]();
+
+        if (!m.Vertices || !m.Normals || !m.TexCoords || !m.Triangles)
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        memcpy(m.Vertices, reader.GetPointer(), vertexBytes);
+        reader.Skip(vertexBytes);
+        memcpy(m.Normals, reader.GetPointer(), normalBytes);
+        reader.Skip(normalBytes);
+        memcpy(m.TexCoords, reader.GetPointer(), texCoordBytes);
+        reader.Skip(texCoordBytes);
 
         for (int j = 0; j < m.NumTriangles; ++j)
         {
-            memcpy(&m.Triangles[j], data + ptr, sizeof(Triangle_t));
-            ptr += sizeof(Triangle_t2);
+            memcpy(&m.Triangles[j], reader.GetPointer(), sizeof(Triangle_t));
+            reader.Skip(sizeof(Triangle_t2));
         }
 
-        memcpy(Textures[i].FileName, data + ptr, 32); ptr += 32;
+        memcpy(Textures[i].FileName, reader.GetPointer(), 32);
+        reader.Skip(32);
 
         TextureScriptParsing script;
         if (script.parsingTScriptA(Textures[i].FileName))
@@ -3290,16 +3398,45 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     {
         Action_t& a = Actions[i];
         a.Loop = false;
-        a.NumAnimationKeys = *(short*)(data + ptr); ptr += sizeof(short);
-        a.LockPositions = *(bool*)(data + ptr);  ptr += sizeof(bool);
+        if (!reader.Ensure(3))
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        a.NumAnimationKeys = reader.Read<short>();
+        a.LockPositions = reader.Read<bool>();
 
         //// wprintf(L"[Open2] Action[%d] Keys: %d Lock: %d\n", i, a.NumAnimationKeys, a.LockPositions);
 
+        if (a.NumAnimationKeys < 0)
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        const size_t positionBytes = static_cast<size_t>(a.NumAnimationKeys) * sizeof(vec3_t);
         if (a.LockPositions && a.NumAnimationKeys > 0)
         {
-            a.Positions = new vec3_t[a.NumAnimationKeys];
-            memcpy(a.Positions, data + ptr, sizeof(vec3_t) * a.NumAnimationKeys);
-            ptr += sizeof(vec3_t) * a.NumAnimationKeys;
+            if (!reader.Ensure(positionBytes))
+            {
+                Release();
+                m_bCompletedAlloc = false;
+                return false;
+            }
+
+            a.Positions = new(std::nothrow) vec3_t[a.NumAnimationKeys]();
+            if (!a.Positions)
+            {
+                Release();
+                m_bCompletedAlloc = false;
+                return false;
+            }
+
+            memcpy(a.Positions, reader.GetPointer(), positionBytes);
+            reader.Skip(positionBytes);
         }
         else
         {
@@ -3310,16 +3447,37 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     for (int i = 0; i < NumBones; ++i)
     {
         Bone_t& b = Bones[i];
-        b.Dummy = *(char*)(data + ptr); ptr += sizeof(char);
+        if (!reader.Ensure(1))
+        {
+            Release();
+            m_bCompletedAlloc = false;
+            return false;
+        }
+
+        b.Dummy = reader.Read<char>();
 
         if (!b.Dummy)
         {
-            memcpy(b.Name, data + ptr, 32); ptr += 32;
-            b.Parent = *(short*)(data + ptr); ptr += sizeof(short);
+            if (!reader.Ensure(32 + 2))
+            {
+                Release();
+                m_bCompletedAlloc = false;
+                return false;
+            }
+
+            memcpy(b.Name, reader.GetPointer(), 32);
+            reader.Skip(32);
+            b.Parent = reader.Read<short>();
 
             //// wprintf(L"[Open2] Bone[%d] Name: %.32hs Parent: %d\n", i, b.Name, b.Parent);
 
-            b.BoneMatrixes = new BoneMatrix_t[NumActions]();
+            b.BoneMatrixes = new(std::nothrow) BoneMatrix_t[NumActions]();
+            if (!b.BoneMatrixes)
+            {
+                Release();
+                m_bCompletedAlloc = false;
+                return false;
+            }
 
             for (int j = 0; j < NumActions; ++j)
             {
@@ -3328,12 +3486,28 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
 
                 if (numKeys > 0)
                 {
-                    bm.Position = new vec3_t[numKeys];
-                    bm.Rotation = new vec3_t[numKeys];
-                    bm.Quaternion = new vec4_t[numKeys];
+                    const size_t matrixBytes = static_cast<size_t>(numKeys) * sizeof(vec3_t);
+                    if (!reader.Ensure(matrixBytes * 2))
+                    {
+                        Release();
+                        m_bCompletedAlloc = false;
+                        return false;
+                    }
 
-                    memcpy(bm.Position, data + ptr, sizeof(vec3_t) * numKeys); ptr += sizeof(vec3_t) * numKeys;
-                    memcpy(bm.Rotation, data + ptr, sizeof(vec3_t) * numKeys); ptr += sizeof(vec3_t) * numKeys;
+                    bm.Position = new(std::nothrow) vec3_t[numKeys]();
+                    bm.Rotation = new(std::nothrow) vec3_t[numKeys]();
+                    bm.Quaternion = new(std::nothrow) vec4_t[numKeys]();
+                    if (!bm.Position || !bm.Rotation || !bm.Quaternion)
+                    {
+                        Release();
+                        m_bCompletedAlloc = false;
+                        return false;
+                    }
+
+                    memcpy(bm.Position, reader.GetPointer(), matrixBytes);
+                    reader.Skip(matrixBytes);
+                    memcpy(bm.Rotation, reader.GetPointer(), matrixBytes);
+                    reader.Skip(matrixBytes);
 
                     for (int k = 0; k < numKeys; ++k)
                         AngleQuaternion(bm.Rotation[k], bm.Quaternion[k]);
@@ -3374,67 +3548,87 @@ bool BMD::Save2(wchar_t* DirName, wchar_t* ModelFileName)
     Version = 12;
     fwrite(&Version, 1, 1, fp);
 
-    auto* pbyBuffer = new BYTE[1024 * 1024];
-    BYTE* pbyCur = pbyBuffer;
-    memcpy(pbyCur, Name, 32); pbyCur += 32;
-    memcpy(pbyCur, &NumMeshs, 2); pbyCur += 2;
-    memcpy(pbyCur, &NumBones, 2); pbyCur += 2;
-    memcpy(pbyCur, &NumActions, 2); pbyCur += 2;
+    // MEM-8: dynamically growing export buffer; the old fixed 1 MB allocation could be
+    // overflowed by a model with many vertices/normals/keys.
+    std::vector<BYTE> pbyBuffer;
+    pbyBuffer.reserve(1024 * 1024);
+    auto AppendBytes = [&pbyBuffer](const void* source, size_t bytes)
+    {
+        const size_t oldSize = pbyBuffer.size();
+        pbyBuffer.resize(oldSize + bytes);
+        memcpy(pbyBuffer.data() + oldSize, source, bytes);
+    };
+
+    AppendBytes(Name, 32);
+    AppendBytes(&NumMeshs, 2);
+    AppendBytes(&NumBones, 2);
+    AppendBytes(&NumActions, 2);
 
     int i;
     for (i = 0; i < NumMeshs; i++)
     {
         Mesh_t* m = &Meshs[i];
-        memcpy(pbyCur, &m->NumVertices, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumNormals, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumTexCoords, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumTriangles, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->Texture, 2); pbyCur += 2;
-        memcpy(pbyCur, m->Vertices, m->NumVertices * sizeof(Vertex_t)); pbyCur += m->NumVertices * sizeof(Vertex_t);
-        memcpy(pbyCur, m->Normals, m->NumNormals * sizeof(Normal_t)); pbyCur += m->NumNormals * sizeof(Normal_t);
-        memcpy(pbyCur, m->TexCoords, m->NumTexCoords * sizeof(TexCoord_t)); pbyCur += m->NumTexCoords * sizeof(TexCoord_t);
+        AppendBytes(&m->NumVertices, 2);
+        AppendBytes(&m->NumNormals, 2);
+        AppendBytes(&m->NumTexCoords, 2);
+        AppendBytes(&m->NumTriangles, 2);
+        AppendBytes(&m->Texture, 2);
+        AppendBytes(m->Vertices, static_cast<size_t>(m->NumVertices) * sizeof(Vertex_t));
+        AppendBytes(m->Normals, static_cast<size_t>(m->NumNormals) * sizeof(Normal_t));
+        AppendBytes(m->TexCoords, static_cast<size_t>(m->NumTexCoords) * sizeof(TexCoord_t));
         for (int j = 0; j < m->NumTriangles; j++)
         {
-            memcpy(pbyCur, &m->Triangles[j], sizeof(Triangle_t2)); pbyCur += sizeof(Triangle_t2);
+            AppendBytes(&m->Triangles[j], sizeof(Triangle_t2));
         }
-        memcpy(pbyCur, Textures[i].FileName, 32); pbyCur += 32;
+        AppendBytes(Textures[i].FileName, 32);
     }
     for (i = 0; i < NumActions; i++)
     {
         Action_t* a = &Actions[i];
-        memcpy(pbyCur, &a->NumAnimationKeys, 2); pbyCur += 2;
-        memcpy(pbyCur, &a->LockPositions, 1); pbyCur += 1;
+        AppendBytes(&a->NumAnimationKeys, 2);
+        AppendBytes(&a->LockPositions, 1);
         if (a->LockPositions)
         {
-            memcpy(pbyCur, a->Positions, a->NumAnimationKeys * sizeof(vec3_t)); pbyCur += a->NumAnimationKeys * sizeof(vec3_t);
+            AppendBytes(a->Positions, static_cast<size_t>(a->NumAnimationKeys) * sizeof(vec3_t));
         }
     }
     for (i = 0; i < NumBones; i++)
     {
         Bone_t* b = &Bones[i];
-        memcpy(pbyCur, &b->Dummy, 1); pbyCur += 1;
+        AppendBytes(&b->Dummy, 1);
         if (!b->Dummy)
         {
-            memcpy(pbyCur, b->Name, 32); pbyCur += 32;
-            memcpy(pbyCur, &b->Parent, 2); pbyCur += 2;
+            AppendBytes(b->Name, 32);
+            AppendBytes(&b->Parent, 2);
             for (int j = 0; j < NumActions; j++)
             {
                 BoneMatrix_t* bm = &b->BoneMatrixes[j];
-                memcpy(pbyCur, bm->Position, Actions[j].NumAnimationKeys * sizeof(vec3_t)); pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
-                memcpy(pbyCur, bm->Rotation, Actions[j].NumAnimationKeys * sizeof(vec3_t)); pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
+                AppendBytes(bm->Position, static_cast<size_t>(Actions[j].NumAnimationKeys) * sizeof(vec3_t));
+                AppendBytes(bm->Rotation, static_cast<size_t>(Actions[j].NumAnimationKeys) * sizeof(vec3_t));
             }
         }
     }
-    auto lSize = (long)(pbyCur - pbyBuffer);
+    long lSize = static_cast<long>(pbyBuffer.size());
     // The on-disk size field is 32-bit; writing a `long` would emit 8 bytes on
     // LP64 (Linux x64) and corrupt the file.
-    auto lEncSize = (std::int32_t)MapFileEncrypt(nullptr, pbyBuffer, lSize);
-    auto* pbyEnc = new BYTE[lEncSize];
-    MapFileEncrypt(pbyEnc, pbyBuffer, lSize);
+    auto lEncSize = (std::int32_t)MapFileEncrypt(nullptr, pbyBuffer.data(), lSize);
+    if (lEncSize <= 0)
+    {
+        fclose(fp);
+        return false;
+    }
+
+    auto* pbyEnc = new(std::nothrow) BYTE[lEncSize];
+    if (!pbyEnc)
+    {
+        fclose(fp);
+        return false;
+    }
+
+    MapFileEncrypt(pbyEnc, pbyBuffer.data(), lSize);
     fwrite(&lEncSize, sizeof(std::int32_t), 1, fp);
-    fwrite(pbyEnc, lEncSize, 1, fp);
+    fwrite(pbyEnc, static_cast<size_t>(lEncSize), 1, fp);
     fclose(fp);
-    delete[] pbyBuffer;
     delete[] pbyEnc;
     return true;
 }
@@ -3461,6 +3655,13 @@ void BMD::Init(bool Dummy)
 
 void BMD::CreateBoundingBox()
 {
+    // Defense in depth: Open2 already rejects invalid bone counts, but never let a bad
+    // count overflow the global BoundingMin/BoundingMax/BoundingVertices arrays.
+    if (NumBones <= 0 || NumBones > MAX_BONES)
+    {
+        return;
+    }
+
     for (int i = 0; i < NumBones; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -3477,6 +3678,14 @@ void BMD::CreateBoundingBox()
         for (int j = 0; j < m->NumVertices; j++)
         {
             Vertex_t* v = &m->Vertices[j];
+
+            // The bone index comes from the file; an out-of-range value would index
+            // BoundingMin/BoundingMax/BoundingVertices at an attacker-controlled offset.
+            if (v->Node < 0 || v->Node >= NumBones)
+            {
+                continue;
+            }
+
             for (int k = 0; k < 3; k++)
             {
                 if (v->Position[k] < BoundingMin[v->Node][k]) BoundingMin[v->Node][k] = v->Position[k];

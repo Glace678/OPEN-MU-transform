@@ -18,6 +18,10 @@ internal static class SoloCashShopPackets
     private const int StoragePageSize = 9;
     private const int CatalogNameBytes = 96;
 
+    /// <summary>
+    /// Sends the catalog header followed by one packet per available offer.
+    /// </summary>
+    /// <param name="player">The player receiving the catalog.</param>
     internal static async ValueTask SendCatalogAsync(RemotePlayer player)
     {
         var offers = SoloCashShopCatalog.GetOffers(player.GameContext.Configuration);
@@ -42,6 +46,10 @@ internal static class SoloCashShopPackets
         await SendAsync(player, Create(0xF2, 4)).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Sends the player's current shop credit balance.
+    /// </summary>
+    /// <param name="player">The player whose balance is sent.</param>
     internal static ValueTask SendPointsAsync(RemotePlayer player)
     {
         var credit = SoloCashShopState.Read(player.Account!.SoloCashShopData).Credit;
@@ -51,6 +59,12 @@ internal static class SoloCashShopPackets
         return SendAsync(player, packet);
     }
 
+    /// <summary>
+    /// Sends the result code for the requested operation.
+    /// </summary>
+    /// <param name="player">The player receiving the result.</param>
+    /// <param name="operation">The operation code the result belongs to.</param>
+    /// <param name="result">The result code.</param>
     internal static ValueTask SendResultAsync(RemotePlayer player, byte operation, byte result)
     {
         var length = operation switch { 0x03 => 9, 0x04 => 17, _ => 5 };
@@ -64,11 +78,17 @@ internal static class SoloCashShopPackets
         return SendAsync(player, packet);
     }
 
+    /// <summary>
+    /// Sends one page of purchased storage items or incoming gifts.
+    /// </summary>
+    /// <param name="player">The player whose storage is sent.</param>
+    /// <param name="requestedPage">The 1-based page requested by the client.</param>
+    /// <param name="type">The storage type: <c>'S'</c> for own storage, <c>'G'</c> for gifts.</param>
     internal static async ValueTask SendStorageAsync(RemotePlayer player, uint requestedPage, byte type)
     {
         var entries = SoloCashShopState.Read(player.Account!.SoloCashShopData).Entries
-            .Where(e => type == (byte)'S' && e.Recipient.Length == 0
-                || type == (byte)'G' && e.Recipient == player.SelectedCharacter!.Name)
+            .Where(e => (type == (byte)'S' && e.Recipient.Length == 0)
+                || (type == (byte)'G' && e.Recipient == player.SelectedCharacter!.Name))
             .OrderBy(e => e.Id).ToArray();
         var pages = Math.Max(1, (entries.Length + StoragePageSize - 1) / StoragePageSize);
         var page = (int)Math.Clamp(requestedPage, 1u, (uint)pages);
@@ -99,6 +119,11 @@ internal static class SoloCashShopPackets
         }
     }
 
+    /// <summary>
+    /// Sends the empty event-item list expected by the client on shop entry.
+    /// </summary>
+    /// <param name="player">The player receiving the empty list.</param>
+    /// <returns>The send task.</returns>
     internal static ValueTask SendEmptyEventsAsync(RemotePlayer player) => SendAsync(player, Create(0x13, 6));
 
     private static byte[] Create(byte operation, int length)

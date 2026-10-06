@@ -37,6 +37,7 @@ internal class ServerInfoRequestHandler : IPacketHandler<Client>
         {
             this._logger.LogDebug($"Client {client.Address}:{client.Port} reached max ip requests.");
             await client.Connection.DisconnectAsync().ConfigureAwait(false);
+            return;
         }
 
         // First we look, if we can just use the IP address which the client connected to.

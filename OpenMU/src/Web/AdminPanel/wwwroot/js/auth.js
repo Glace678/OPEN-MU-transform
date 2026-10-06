@@ -12,8 +12,16 @@ export async function signIn(ticket) {
 
 // Removes the authentication cookie, without navigating away.
 export async function signOut() {
+    // The logout endpoint requires an antiforgery token; it is rendered as a hidden field by App.razor.
+    const tokenField = document.querySelector('input[name="__RequestVerificationToken"]');
+    const headers = {};
+    if (tokenField) {
+        headers['RequestVerificationToken'] = tokenField.value;
+    }
+
     const response = await fetch('/auth/logout', {
         method: 'POST',
+        headers: headers,
         credentials: 'same-origin',
         cache: 'no-store'
     });

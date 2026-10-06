@@ -56,10 +56,10 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
             }
             else
             {
-                rate += (byte)(requiredItem.AddPercentage * (itemCount - requiredItem.MinimumAmount));
+                rate += (int)(requiredItem.AddPercentage * (itemCount - requiredItem.MinimumAmount));
                 if (requiredItem.NpcPriceDivisor > 0)
                 {
-                    rate += (byte)(foundItems.Sum(item => this._priceCalculator.CalculateFinalBuyingPrice(item, player.GameContext.Configuration))
+                    rate += (int)(foundItems.Sum(item => this._priceCalculator.CalculateFinalBuyingPrice(item, player.GameContext.Configuration))
                         / requiredItem.NpcPriceDivisor);
                 }
 
@@ -68,30 +68,30 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
                     if (this._settings.SuccessPercentageAdditionForLuck != default
                         && item.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck))
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForLuck);
+                        rate += this._settings.SuccessPercentageAdditionForLuck;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForExcellentItem != default
                         && item.IsExcellent())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForExcellentItem);
+                        rate += this._settings.SuccessPercentageAdditionForExcellentItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForAncientItem != default
                         && item.IsAncient())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForAncientItem);
+                        rate += this._settings.SuccessPercentageAdditionForAncientItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForGuardianItem != default
                         && item.IsGuardian())
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForGuardianItem);
+                        rate += this._settings.SuccessPercentageAdditionForGuardianItem;
                     }
 
                     if (this._settings.SuccessPercentageAdditionForSocketItem != default && item.SocketCount > 0)
                     {
-                        rate = (byte)(rate + this._settings.SuccessPercentageAdditionForSocketItem);
+                        rate += this._settings.SuccessPercentageAdditionForSocketItem;
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
 
         if (totalCraftingPrice > 0)
         {
-            rate = (byte)(totalCraftingPrice / this._settings.NpcPriceDivisor);
+            rate = (int)(totalCraftingPrice / this._settings.NpcPriceDivisor);
         }
 
         if (this._settings.MaximumSuccessPercent > 0)

@@ -454,11 +454,6 @@ endif()
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Build as a Windows GUI application (no console window) and let CMake
   # add the default system libraries like kernel32, user32, gdi32, etc.
-  message(STATUS "=== DEBUG: CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "=== DEBUG: CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
-  message(STATUS "=== DEBUG: CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
-  message(STATUS "=== DEBUG: Executable will be at: $<TARGET_FILE:Main>")
-  message(STATUS "=== DEBUG: Executable directory: $<TARGET_FILE_DIR:Main>")
   set_target_properties(Main PROPERTIES
     WIN32_EXECUTABLE TRUE
   )
@@ -478,7 +473,22 @@ endif()
 # glob at build time so newly-added asset files are picked up without a
 # manual reconfigure.
 set(ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-message(STATUS "=== DEBUG: Assets directory: ${ASSETS_DIR}")
+
+# PLAT-8: src/bin is git-ignored (**/bin/**) but every build hard-depends on it
+# (CopyAssets, SeedConfig). A fresh checkout used to fail deep in a custom command
+# with an unclear error; fail at configure time with the action to take.
+if(NOT EXISTS "${ASSETS_DIR}")
+  message(FATAL_ERROR
+    "Game assets directory '${ASSETS_DIR}' is missing. It is excluded from git; "
+    "unpack/copy the released game data assets into 'src/bin' before building "
+    "(the directory must at least contain config.ini.template and Data/).")
+endif()
+if(NOT EXISTS "${ASSETS_DIR}/config.ini.template")
+  message(FATAL_ERROR
+    "'${ASSETS_DIR}/config.ini.template' is missing. Restore the released "
+    "assets into 'src/bin' before configuring.")
+endif()
+
 file(GLOB_RECURSE ASSET_FILES CONFIGURE_DEPENDS "${ASSETS_DIR}/*")
 # $<CONFIG> in the stamp name keeps multi-config generators (Visual
 # Studio, Xcode) honest: each configuration's output directory needs
@@ -487,7 +497,6 @@ file(GLOB_RECURSE ASSET_FILES CONFIGURE_DEPENDS "${ASSETS_DIR}/*")
 set(ASSETS_STAMP "${CMAKE_CURRENT_BINARY_DIR}/.assets_copied_$<CONFIG>.stamp")
 add_custom_command(
   OUTPUT "${ASSETS_STAMP}"
-  COMMAND ${CMAKE_COMMAND} -E echo "=== Copying assets from ${ASSETS_DIR} to $<TARGET_FILE_DIR:Main>"
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           "${ASSETS_DIR}"
           "$<TARGET_FILE_DIR:Main>"
@@ -543,7 +552,14 @@ if(WIN32)
   set(RIME_RUNTIME_NAME "rime.dll")
 else()
   find_library(MU_RIME_RUNTIME_LIBRARY NAMES rime)
-  set(RIME_RUNTIME_FILE "${MU_RIME_RUNTIME_LIBRARY}")
+  # PLAT-11: find_library leaves the "<var>-NOTFOUND" sentinel on failure; do
+  # not let that string flow into later operations. Distinguish "not found"
+  # explicitly.
+  if(MU_RIME_RUNTIME_LIBRARY STREQUAL "MU_RIME_RUNTIME_LIBRARY-NOTFOUND")
+    set(RIME_RUNTIME_FILE "")
+  else()
+    set(RIME_RUNTIME_FILE "${MU_RIME_RUNTIME_LIBRARY}")
+  endif()
   if(APPLE)
     set(RIME_RUNTIME_NAME "librime.dylib")
   else()
@@ -558,6 +574,17 @@ if(EXISTS "${RIME_RUNTIME_FILE}")
             "$<TARGET_FILE_DIR:Main>/${RIME_RUNTIME_NAME}"
     VERBATIM
   )
+  if(NOT WIN32)
+    # PLAT-11: also copy the library's non-system runtime dependencies so the
+    # staged librime can actually be dlopen'd at runtime.
+    add_custom_command(TARGET Main POST_BUILD
+      COMMAND "${CMAKE_COMMAND}"
+        "-DINPUT=${RIME_RUNTIME_FILE}"
+        "-DTARGET_DIR=$<TARGET_FILE_DIR:Main>"
+        "-P" "${REPO_ROOT}/cmake/BundleRimeDeps.cmake"
+      VERBATIM
+    )
+  endif()
 else()
   message(STATUS
     "Optional native librime runtime not installed; controller pinyin is unavailable. "
@@ -950,7 +977,6 @@ if (MSVC)
 
   # Copy required DLLs to build directory for MSVC builds
   add_custom_command(TARGET Main POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "=== DEBUG: Copying DLLs to: $<TARGET_FILE_DIR:Main>"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
       ${REQUIRED_DLLS}
       $<TARGET_FILE_DIR:Main>
@@ -1005,6 +1031,14 @@ if (DOTNET_EXECUTABLE)
   # step separately rather than clearing DOTNET_EXECUTABLE altogether.
   set(DOTNET_CAN_BUILD_CLIENT_LIBRARY TRUE)
   if(MU_CLIENT_LIBRARY_PREBUILT)
+    set(DOTNET_CAN_BUILD_CLIENT_LIBRARY FALSE)
+  elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    # PLAT-1: iOS previews consume a prebuilt dylib (built on macOS with the
+    # ios-arm64 runtime); a plain `dotnet publish` from the generated Xcode
+    # project is not the supported path.
+    message(WARNING "The iOS client library is packaged as a prebuilt. "
+      "libMUnique.Client.Library.dylib will NOT be built by this project; set "
+      "MU_CLIENT_LIBRARY_PREBUILT to a macOS-built ios-arm64 dylib.")
     set(DOTNET_CAN_BUILD_CLIENT_LIBRARY FALSE)
   elseif(OHOS)
     # The OpenHarmony Native AOT library needs the OHOS NDK sysroot and is built

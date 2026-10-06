@@ -134,7 +134,12 @@ inline BOOL  EnumDisplaySettingsW(LPCWSTR, DWORD, DEVMODE*) { return FALSE; }
 #ifndef EnumDisplaySettings
 #define EnumDisplaySettings EnumDisplaySettingsW
 #endif
-inline LPWSTR  GetCommandLineW()                                   { static wchar_t empty[1] = { 0 }; return empty; }
+// PLAT-7: off Windows the platform entry stores its argv here
+// (SetProcessCommandLine, called from Linux/macOS main), so the same command-
+// line parsing the Windows path performs (/u, /p, --enable-taskpool, --editor)
+// works on every platform instead of always seeing an empty string.
+const wchar_t* GetCommandLineW();
+void SetProcessCommandLine(int argc, char** argv);
 #ifndef GetCommandLine
 #define GetCommandLine GetCommandLineW
 #endif

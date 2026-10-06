@@ -91,7 +91,8 @@ void CServerListManager::LoadServerListScript()
         CMultiLanguage::ConvertFromUtf8(wideDescription, szDescript, descriptionLength);
         sServerGroupInfo.m_strDescript = wideDescription;
 
-        CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName);
+        // PROTO-8: fixed char[SLM_MAX_SERVER_NAME_LENGTH] file field.
+        CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName, SLM_MAX_SERVER_NAME_LENGTH);
 
         sServerGroupInfo.m_byPos = sServerGroupScript.m_byPos;
         sServerGroupInfo.m_bySequence = sServerGroupScript.m_bySequence;

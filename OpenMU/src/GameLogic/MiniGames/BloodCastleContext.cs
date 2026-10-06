@@ -212,7 +212,7 @@ public sealed class BloodCastleContext : MiniGameContext
         await this.UpdateStateForAllAsync(BloodCastleStatus.Ended).ConfigureAwait(false);
 
         var sortedFinishers = finishers
-            .Select(f => this._gameStates[f.Name])
+            .Select(f => this._gameStates.GetValueOrDefault(f.Name))
             .WhereNotNull()
             .OrderByDescending(state => state.Score)
             .ToList();

@@ -22,11 +22,19 @@ final class MobileGmApiClient {
     private static final int CONNECT_TIMEOUT_MS = 7000;
     private static final int READ_TIMEOUT_MS = 10000;
     private static final int MAX_RESPONSE_CHARS = 1024 * 1024;
+    private static final int READ_BUFFER_CHARS = 4096;
+    private static final int DEFAULT_MAX_ITEM_LEVEL = 15;
+    private static final int MAX_BYTE_VALUE = 255;
+    private static final int MAX_EXCELLENT_OPTIONS = 31;
+
+    private static final String API_BASE_PATH = "/api/mobile-gm";
+
+    private static final String MOBILE_KEY_HEADER = "X-OpenMU-Mobile-Key";
 
     private final String baseUrl;
     private final String packageKey;
 
-    MobileGmApiClient(String baseUrl, String packageKey) {
+    MobileGmApiClient(String baseUrl, String packageKey) throws ApiException {
         this.baseUrl = trimTrailingSlash(baseUrl);
         this.packageKey = packageKey;
         // A-04: never send the shared write key in cleartext to a public host.
@@ -35,7 +43,7 @@ final class MobileGmApiClient {
         assertSafeTransport(this.baseUrl);
     }
 
-    private static void assertSafeTransport(String baseUrl) {
+    private static void assertSafeTransport(String baseUrl) throws ApiException {
         try {
             URL url = new URL(baseUrl);
             String protocol = url.getProtocol().toLowerCase();
@@ -150,13 +158,13 @@ final class MobileGmApiClient {
                 int group = item.getInt("group");
                 int number = item.getInt("number");
                 String name = cleanString(item.optString("name", item.optString("displayName", "")));
-                int maxLevel = Math.max(0, Math.min(255,
-                    item.optInt("maxLevel", item.optInt("maximumLevel", 15))));
+                int maxLevel = Math.max(0, Math.min(MAX_BYTE_VALUE,
+                    item.optInt("maxLevel", item.optInt("maximumLevel", DEFAULT_MAX_ITEM_LEVEL))));
                 boolean canHaveSkill = item.optBoolean("hasSkill", item.optBoolean("canHaveSkill", true));
                 boolean canHaveLuck = item.optBoolean("canHaveLuck", false);
                 boolean canHaveAdditional = item.optBoolean("canHaveAdditionalOption",
                     item.optBoolean("canHaveAdditional", false));
-                int excellentCount = Math.max(0, Math.min(31,
+                int excellentCount = Math.max(0, Math.min(MAX_EXCELLENT_OPTIONS,
                     item.optInt("excellentOptionCount", item.optInt("excellentCount", 0))));
                 int[] excellentNumbers = parseExcellentNumbers(item, excellentCount);
                 if (!name.isEmpty()) {
@@ -187,18 +195,7 @@ final class MobileGmApiClient {
             throw new ApiException("无法生成发放请求", error);
         }
         Object root = request("POST", "/grant-item", body.toString());
-        String message = "物品已成功发放";
-        if (root instanceof JSONObject) {
-            JSONObject object = (JSONObject) root;
-            String returned = cleanString(object.optString("message", ""));
-            if (object.has("success") && !object.optBoolean("success", false)) {
-                throw new ApiException(returned.isEmpty() ? "服务器拒绝发放物品" : returned);
-            }
-            if (!returned.isEmpty()) {
-                message = returned;
-            }
-        }
-        return new GrantResult(message);
+        return this.readGrantResult(root, "物品已成功发放", "服务器拒绝发放物品");
     }
 
     GrantResult grantZen(ZenRequest request) throws ApiException {
@@ -211,29 +208,36 @@ final class MobileGmApiClient {
             throw new ApiException("无法生成金币发放请求", error);
         }
         Object root = request("POST", "/grant-zen", body.toString());
-        String message = "金币已成功发放";
+        return this.readGrantResult(root, "金币已成功发放", "服务器拒绝发放金币");
+    }
+
+    // Parses the shared grant response shape: throws on an explicit failure,
+    // uses the server message when present, and otherwise keeps the local
+    // success message.
+    private GrantResult readGrantResult(Object root, String successMessage, String rejectionMessage)
+        throws ApiException {
         if (root instanceof JSONObject) {
             JSONObject object = (JSONObject) root;
             String returned = cleanString(object.optString("message", ""));
             if (object.has("success") && !object.optBoolean("success", false)) {
-                throw new ApiException(returned.isEmpty() ? "服务器拒绝发放金币" : returned);
+                throw new ApiException(returned.isEmpty() ? rejectionMessage : returned);
             }
             if (!returned.isEmpty()) {
-                message = returned;
+                successMessage = returned;
             }
         }
-        return new GrantResult(message);
+        return new GrantResult(successMessage);
     }
 
     private Object request(String method, String path, String body) throws ApiException {
         HttpURLConnection connection = null;
         try {
-            connection = (HttpURLConnection) new URL(baseUrl + "/api/mobile-gm" + path).openConnection();
+            connection = (HttpURLConnection) new URL(baseUrl + API_BASE_PATH + path).openConnection();
             connection.setRequestMethod(method);
             connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
             connection.setReadTimeout(READ_TIMEOUT_MS);
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("X-OpenMU-Mobile-Key", packageKey);
+            connection.setRequestProperty(MOBILE_KEY_HEADER, packageKey);
             connection.setUseCaches(false);
             if (body != null) {
                 byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
@@ -278,7 +282,7 @@ final class MobileGmApiClient {
             return "";
         }
         StringBuilder response = new StringBuilder();
-        char[] buffer = new char[4096];
+        char[] buffer = new char[READ_BUFFER_CHARS];
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             int count;
             while ((count = reader.read(buffer)) >= 0) {
@@ -359,11 +363,11 @@ final class MobileGmApiClient {
             }
             return fallback;
         }
-        int[] parsed = new int[Math.min(numbers.length(), 31)];
+        int[] parsed = new int[Math.min(numbers.length(), MAX_EXCELLENT_OPTIONS)];
         int written = 0;
         for (int index = 0; index < parsed.length; index++) {
             int value = numbers.optInt(index, 0);
-            if (value >= 1 && value <= 31) {
+            if (value >= 1 && value <= MAX_EXCELLENT_OPTIONS) {
                 parsed[written++] = value;
             }
         }

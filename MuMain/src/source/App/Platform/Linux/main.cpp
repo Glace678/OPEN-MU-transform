@@ -8,7 +8,9 @@
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nCmdShow);
 
-int main(int /*argc*/, char* /*argv*/[])
+int main(int argc, char* argv[])
 {
+    // PLAT-7: expose argv to the shared command-line parser before bootstrap.
+    SetProcessCommandLine(argc, argv);
     return WinMain(nullptr, nullptr, nullptr, SW_SHOW);
 }

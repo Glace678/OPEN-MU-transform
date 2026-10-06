@@ -138,6 +138,7 @@ static void InitializeMainScene()
     g_ConsoleDebug->Write(MCD_SEND, L"SendRequestJoinMapServer");
 
     CurrentProtocolState = REQUEST_JOIN_MAP_SERVER;
+    MarkJoinMapRequestSent(); // PROTO-9
     SocketClient->ToGameServer()->SendSelectCharacter(CharactersClient[SelectedHero].ID);
 
     // Remember which character is in play so auto-reconnect can re-select it.
@@ -325,6 +326,10 @@ void MoveMainScene()
     {
         EnableMainRender = true;
     }
+
+    // PROTO-9: recover from an unanswered join-map request instead of sitting
+    // on the loading screen forever. Runs while the world is still disabled.
+    CheckJoinMapRequestTimeout();
 
     if (EnableMainRender == false)
     {

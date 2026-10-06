@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Persistence.EntityFramework;
 
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Threading;
 
 /// <summary>
@@ -14,7 +15,7 @@ using System.Threading;
 public class CachedRepository<T> : IRepository<T>
     where T : class, IIdentifiable
 {
-    private readonly IDictionary<Guid, T> _cache;
+    private readonly ConcurrentDictionary<Guid, T> _cache;
 
     private readonly SemaphoreSlim _loadLock = new(1, 1);
 
@@ -30,7 +31,7 @@ public class CachedRepository<T> : IRepository<T>
     {
         this.BaseRepository = baseRepository;
 
-        this._cache = new Dictionary<Guid, T>();
+        this._cache = new ConcurrentDictionary<Guid, T>();
     }
 
     /// <summary>
@@ -53,7 +54,9 @@ public class CachedRepository<T> : IRepository<T>
         {
             if (this._allLoaded)
             {
-                return this._cache.Values;
+                // Return a materialized snapshot instead of the live view, so a concurrent
+                // cache modification during enumeration can't throw.
+                return this._cache.Values.ToArray();
             }
 
             loadingTask = this._loadingTask ??= this.LoadAllAsync();
@@ -64,7 +67,7 @@ public class CachedRepository<T> : IRepository<T>
         }
 
         await loadingTask.WaitAsync(cancellationToken).ConfigureAwait(false);
-        return this._cache.Values;
+        return this._cache.Values.ToArray();
     }
 
     private async Task LoadAllAsync()
@@ -150,16 +153,24 @@ public class CachedRepository<T> : IRepository<T>
     /// <param name="obj">The object.</param>
     protected virtual void AddToCache(Guid id, T obj)
     {
-        if (this._cache.TryGetValue(id, out var value))
+        // Correct semantics: if the same instance is already cached, the call is idempotent;
+        // a *different* instance with the same id is the real conflict and must throw.
+        while (true)
         {
-            if (Equals(value, obj))
+            if (this._cache.TryGetValue(id, out var value))
             {
-                throw new ArgumentException("Other object with same id is already in cache.");
+                if (Equals(value, obj))
+                {
+                    return;
+                }
+
+                throw new ArgumentException("Another object with the same id is already in cache.");
             }
-        }
-        else
-        {
-            this._cache.Add(id, obj);
+
+            if (this._cache.TryAdd(id, obj))
+            {
+                return;
+            }
         }
     }
 
@@ -169,6 +180,6 @@ public class CachedRepository<T> : IRepository<T>
     /// <param name="id">The identifier.</param>
     protected virtual void RemoveFromCache(Guid id)
     {
-        this._cache.Remove(id);
+        this._cache.TryRemove(id, out _);
     }
 }

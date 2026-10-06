@@ -37,7 +37,9 @@ services:
     image: postgres:17-alpine
     container_name: database
     environment:
-      POSTGRES_PASSWORD: admin
+      # XC-15: no hardcoded password -- compose refuses to start when the
+      # variable is unset or empty.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required (set it in .env or the environment)}
       POSTGRES_DB: openmu
       POSTGRES_USER: postgres
     networks:
@@ -52,8 +54,7 @@ services:
     container_name: "traefik"
     restart: always
     command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
+      - "--log.level=INFO"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"

@@ -347,8 +347,22 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
         fseek(fp, 0, SEEK_END);
         int EncBytes = ftell(fp);
         fseek(fp, 0, SEEK_SET);
+        if (EncBytes <= 0)
+        {
+            // MEM-3: a missing/empty file must not end up (uninitialized) in the encryption.
+            fclose(fp);
+            return false;
+        }
+
         auto* EncData = new unsigned char[EncBytes];
-        fread(EncData, 1, EncBytes, fp);
+        if (fread(EncData, 1, EncBytes, fp) != static_cast<size_t>(EncBytes))
+        {
+            // Short read: avoid feeding uninitialized trailing bytes into MapFileEncrypt.
+            fclose(fp);
+            delete[] EncData;
+            return false;
+        }
+
         fclose(fp);
 
         int DataBytes = MapFileEncrypt(NULL, EncData, EncBytes);
@@ -357,8 +371,12 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
         delete[] EncData;
 
         fp = _wfopen(FileName, L"wb");
-        fwrite(Data, DataBytes, 1, fp);
-        fclose(fp);
+        if (fp != NULL)
+        {
+            fwrite(Data, DataBytes, 1, fp);
+            fclose(fp);
+        }
+
         delete[] Data;
     }
     return true;
@@ -587,7 +605,8 @@ bool OpenTerrainHeight(wchar_t* filename)
 
     wchar_t NewFileName[256];
 
-    for (int i = 0; i < (int)wcslen(filename); i++)
+    // MEM-2: bound the copy so NewFileName[256] can never be written.
+    for (int i = 0; i < (int)wcslen(filename) && i < 255; i++)
     {
         NewFileName[i] = filename[i];
         NewFileName[i + 1] = 0;
@@ -704,6 +723,13 @@ void SaveTerrainHeight(wchar_t* name)
         }
     }
     FILE* fp = _wfopen(name, L"wb");
+    if (fp == nullptr) // XC-3: fail-closed -- fwrite on a null FILE is undefined behavior.
+    {
+        g_ErrorReport.Write(L"[Terrain] SaveTerrainHeight: cannot open '%ls' for writing.\r\n", name);
+        delete[] Buffer;
+        return;
+    }
+
     fwrite(BMPHeader, 1080, 1, fp);
 
     for (int i = 0; i < 256; i++) fwrite(Buffer + (255 - i) * 256, 256, 1, fp);
@@ -717,7 +743,8 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
     wchar_t FileName[256];
     wchar_t NewFileName[256];
 
-    for (int i = 0; i < (int)wcslen(strFilename); ++i)
+    // MEM-2: bound the copy so NewFileName[256] can never be written.
+    for (int i = 0; i < (int)wcslen(strFilename) && i < 255; ++i)
     {
         NewFileName[i] = strFilename[i];
         NewFileName[i + 1] = 0;
@@ -726,15 +753,15 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
             break;
     }
 
-    wcscpy(FileName, L"Data\\");
-    wcscat(FileName, NewFileName);
-    wcscat(FileName, L"OZB");
+    wcscpy_s(FileName, L"Data\\");
+    wcscat_s(FileName, NewFileName);
+    wcscat_s(FileName, L"OZB");
 
     FILE* fp = _wfopen(FileName, L"rb");
     if (!fp)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file not found.", FileName);
+        mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
         MessageBox(g_hWnd, Text, NULL, MB_OK);
@@ -742,13 +769,62 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         return false;
     }
 
-    fseek(fp, 0, SEEK_END);
-    int iBytes = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
+    if (fseek(fp, 0, SEEK_END) != 0)
+    {
+        fclose(fp);
+        wchar_t Text[256];
+        mu_swprintf_s(Text, std::size(Text), L"Failed to seek in %ls.", FileName);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
+    }
+
+    long iBytes = ftell(fp);
+
+    // 4 prefix bytes + BITMAPFILEHEADER + BITMAPINFOHEADER + one 3-byte pixel per terrain cell.
+    const long RequiredSize = 4 + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (TERRAIN_SIZE * TERRAIN_SIZE * 3);
+
+    // MEM-1: reject a missing/negative size and truncated files before allocating/copying.
+    if (iBytes < 0 || iBytes < RequiredSize)
+    {
+        fclose(fp);
+        wchar_t Text[256];
+        mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, iBytes, RequiredSize);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
+    }
+
+    if (fseek(fp, 0, SEEK_SET) != 0)
+    {
+        fclose(fp);
+        wchar_t Text[256];
+        mu_swprintf_s(Text, std::size(Text), L"Failed to rewind %ls.", FileName);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
+    }
 
     BYTE* pbyData = new BYTE[iBytes];
-    fread(pbyData, 1, iBytes, fp);
+    size_t readBytes = fread(pbyData, 1, iBytes, fp);
     fclose(fp);
+    if (readBytes != static_cast<size_t>(iBytes))
+    {
+        delete[] pbyData;
+        wchar_t Text[256];
+        mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %ld bytes, got %zu).", FileName, iBytes, readBytes);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
+    }
 
     DWORD dwCurPos = 0;
     dwCurPos += 4;

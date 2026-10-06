@@ -43,6 +43,10 @@ services:
 
   certbot:
     image: certbot/certbot:2.11.0
+    entrypoint: /bin/sh
+    # Renew certificates continuously (twice a day as recommended by certbot).
+    # After a renewal, reload nginx, e.g. via: docker exec nginx-443 nginx -s reload
+    command: -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw

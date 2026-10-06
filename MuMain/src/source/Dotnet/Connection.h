@@ -8,6 +8,7 @@
 #include "PacketFunctions_ConnectServer.h"
 #include "PacketFunctions_ClientToServer.h"
 
+#include <atomic>
 #include <cwchar>
 
 #ifdef _WIN32
@@ -135,9 +136,12 @@ private:
     PacketFunctions_ConnectServer* _connectServer = { };
     PacketFunctions_ClientToServer* _gameServer = { };
 
-    int32_t _handle;
+    // PROTO-12: read on the main thread, written from managed callback threads
+    // (OnDisconnected), so it must be atomic.
+    std::atomic<int32_t> _handle{0};
     void(*_packetHandler)(int32_t, const BYTE*, int32_t);
 
+    // Called from the static managed callbacks with the bridge mutex held.
     void OnDisconnected();
     void OnPacketReceived(const BYTE* data, const int32_t length);
 
@@ -148,6 +152,11 @@ public:
     bool IsConnected();
     void Send(const BYTE* data, const int32_t length);
     void Close();
+
+    // PLAT-5: synchronous teardown - managed disconnect, erase the bridge map
+    // entry (waiting out any callback in flight), delete PacketFunctions.
+    // Idempotent. The object may be delete'd immediately after this returns.
+    void SynchronousShutdown();
 
     int32_t GetHandle() const { return _handle; }
 

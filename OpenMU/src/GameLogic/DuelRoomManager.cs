@@ -33,26 +33,55 @@ public class DuelRoomManager
     public int MaxRoomCount => this._configuration?.DuelAreas.Count ?? 0;
 
     /// <summary>
+    /// Gets the time after which a duel request without a response is considered expired.
+    /// </summary>
+    public static TimeSpan RequestTimeout => TimeSpan.FromSeconds(60);
+
+    /// <summary>
     /// Gets a <see cref="DuelRoom"/> for the two duelist players.
     /// </summary>
     /// <param name="player1">The first player.</param>
     /// <param name="player2">The second player.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> with a free <see cref="DuelRoom"/>.</returns>
+    /// <returns>The value task with a free <see cref="DuelRoom"/>.</returns>
     public async ValueTask<DuelRoom?> GetFreeDuelRoomAsync(Player player1, Player player2, CancellationToken cancellationToken = default)
     {
-        using var l = await this._lock.LockAsync(cancellationToken);
-        for (int i = 0; i < this._duelRooms.Length; i++)
+        DuelRoom? timedOutRoom = null;
+        var l = await this._lock.LockAsync(cancellationToken);
+        try
         {
-            if (this._duelRooms[i] is null)
+            for (int i = 0; i < this._duelRooms.Length; i++)
             {
-                var area = this._configuration.DuelAreas.First(a => a.Index == i);
+                var room = this._duelRooms[i];
+                if (room is null)
+                {
+                    var area = this._configuration.DuelAreas.First(a => a.Index == i);
 
-                return this._duelRooms[i] = new DuelRoom(area, player1, player2);
+                    return this._duelRooms[i] = new DuelRoom(area, player1, player2);
+                }
+
+                if (timedOutRoom is null
+                    && room.State is DuelState.DuelRequested
+                    && DateTime.UtcNow - room.CreatedAt > RequestTimeout)
+                {
+                    // Free the slot now; the room is disposed after the lock is released below.
+                    timedOutRoom = room;
+                    this._duelRooms[i] = null;
+                }
             }
         }
+        finally
+        {
+            l.Dispose();
+        }
 
-        return null;
+        if (timedOutRoom is null)
+        {
+            return null;
+        }
+
+        await timedOutRoom.ResetAndDisposeAsync(DuelStartResult.Refused).ConfigureAwait(false);
+        return await this.GetFreeDuelRoomAsync(player1, player2, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -63,7 +92,12 @@ public class DuelRoomManager
     public async ValueTask GiveBackDuelRoomAsync(DuelRoom duelRoom)
     {
         using var l = await this._lock.LockAsync();
-        this._duelRooms[duelRoom.Index] = null;
+        if (this._duelRooms[duelRoom.Index] == duelRoom)
+        {
+            // Only clear the slot if it still holds this room. A timed-out room may already
+            // have been removed and its slot could be reused by a newer room.
+            this._duelRooms[duelRoom.Index] = null;
+        }
     }
 
     /// <summary>

@@ -168,7 +168,9 @@ public class Storage : IStorage
     /// <inheritdoc/>
     public bool TryAddMoney(int value)
     {
-        if (this.ItemStorage.Money + value < 0)
+        // Negative amounts would silently reverse the operation (uint -> int cast at call sites);
+        // do the arithmetic in long to avoid integer overflow as well.
+        if (value < 0 || (long)this.ItemStorage.Money + value > int.MaxValue)
         {
             return false;
         }
@@ -180,7 +182,7 @@ public class Storage : IStorage
     /// <inheritdoc/>
     public bool TryRemoveMoney(int value)
     {
-        if (this.ItemStorage.Money - value < 0)
+        if (value < 0 || (long)this.ItemStorage.Money - value < 0)
         {
             return false;
         }

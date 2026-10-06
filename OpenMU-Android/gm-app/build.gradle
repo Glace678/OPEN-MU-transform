@@ -104,4 +104,7 @@ android {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
+    // XC-21: real JSON implementation for host-side JVM tests, instead of the
+    // Android SDK's throwing "not mocked" stub.
+    testImplementation 'org.json:json:20240303'
 }

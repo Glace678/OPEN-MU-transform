@@ -8,6 +8,11 @@
 <Breadcrumb IsFirstFromRoot="true" Caption="@typeof(ConfigurationUpdate).GetPluralizedTypeCaption()" />
 <h3>@typeof(ConfigurationUpdate).GetPluralizedTypeCaption()</h3>
 
+@if (this.IsDataStateUnknown)
+{
+    <div class="alert alert-danger" role="alert">The database could not be queried; please check that it is running instead of reinstalling.</div>
+    return;
+}
 @if (!this.SetupService.IsInstalled || this.SetupService.IsUpdateRequired)
 {
     <div class="alert alert-info" role="alert"><NavLink href="setup">@Resources.PleaseFirstInstallTheDatabaseUpdatesOnTheSetupPage</NavLink></div>

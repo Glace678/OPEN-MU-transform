@@ -116,7 +116,18 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// Gets the <see cref="ExtendedPipeWriter"/> of the <see cref="Output"/>, which is also
     /// the place where the outgoing data packets are captured.
     /// </summary>
-    private ExtendedPipeWriter OutputWriter => this.GetOrCreateOutputWriter(this._duplexPipe!);
+    private ExtendedPipeWriter OutputWriter
+    {
+        get
+        {
+            if (this._duplexPipe is not { } duplexPipe)
+            {
+                return this._outputWriter ?? throw new InvalidOperationException("Connection is already disconnected.");
+            }
+
+            return this.GetOrCreateOutputWriter(duplexPipe);
+        }
+    }
 
     /// <inheritdoc/>
     public override string ToString() => this._remoteEndPoint?.ToString() ?? $"{base.ToString()} {this.GetHashCode()}";
@@ -135,11 +146,11 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
         }
         catch (Exception ex)
         {
-            await this.OnCompleteAsync(ex).ConfigureAwait(false);
+            await this.TryOnCompleteAsync(ex).ConfigureAwait(false);
             return;
         }
 
-        await this.OnCompleteAsync(null).ConfigureAwait(false);
+        await this.TryOnCompleteAsync(null).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -189,10 +200,13 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <inheritdoc/>
     public void Dispose()
     {
-        this.DisconnectAsync().AsTask().WaitAndUnwrapException();
-        this.PacketReceived = null;
-        this.Disconnected = null;
+        // Detach the event handlers atomically before triggering the disconnect. A synchronous
+        // wait on DisconnectAsync here could deadlock when a Disconnected handler runs on
+        // the same synchronization context.
+        Interlocked.Exchange(ref this.PacketReceived, null);
+        Interlocked.Exchange(ref this.Disconnected, null);
         this.StopCapturing();
+        _ = this.DisconnectAsync();
     }
 
     /// <inheritdoc />

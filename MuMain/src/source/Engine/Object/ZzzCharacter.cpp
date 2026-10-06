@@ -8882,7 +8882,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         case MONSTER_DRAKAN:
             Vector(0.1f, 0.1f, 1.f, Light);
 
-            for (int i = 13; i < 27; ++i)
+            // MEM-13: never read past the bones the loaded model actually has.
+            for (int i = 13; i < 27 && i < Models[o->Type].NumBones; ++i)
             {
                 b->TransformPosition(o->BoneTransform[i], p, Position, true);
                 CreateSprite(BITMAP_LIGHT, Position, 0.8f, Light, o);
@@ -8895,7 +8896,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 VectorCopy(Position, pos1);
             }
 
-            for (int i = 52; i < 59; ++i)
+            // MEM-13: cap to the bones the loaded model actually has.
+            for (int i = 52; i < 59 && i < Models[o->Type].NumBones; ++i)
             {
                 b->TransformPosition(o->BoneTransform[i], p, Position, true);
                 CreateSprite(BITMAP_LIGHT, Position, 0.8f, Light, o);
@@ -8906,7 +8908,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
             if (rand_fps_check(1))
             {
-                for (int i = 18; i < 19; ++i)
+                // MEM-13: cap to the bones the loaded model actually has.
+                for (int i = 18; i < 19 && i < Models[o->Type].NumBones; ++i)
                 {
                     Vector(0.f, 0.f, 0.f, p);
                     b->TransformPosition(o->BoneTransform[i], p, Position, true);
@@ -8934,11 +8937,19 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         RenderObject(o, Translate, 2, 0);
         RenderObject(o, Translate, 3, 0);
         o->BlendMesh = -1;
-        memcpy(g_fBoneSave[2], o->BoneTransform[24], 3 * 4 * sizeof(float));
-        o->Type++;
-        RenderObject(o, Translate, Select, 0);
-        memcpy(g_fBoneSave[0], o->BoneTransform[23], 3 * 4 * sizeof(float));
-        memcpy(g_fBoneSave[1], o->BoneTransform[14], 3 * 4 * sizeof(float));
+
+        // MEM-13: the effect hardcodes bones 14/23/24; skip it (and the stale-data reads) when
+        // the loaded model was replaced/slimmed and does not have that many bones.
+        constexpr int BoneEffectRequiredBones = 25;  // highest bone index used is 24
+        const bool didBoneEffect = Models[o->Type].NumBones >= BoneEffectRequiredBones;
+        if (didBoneEffect)
+        {
+            memcpy(g_fBoneSave[2], o->BoneTransform[24], 3 * 4 * sizeof(float));
+            o->Type++;
+            RenderObject(o, Translate, Select, 0);
+            memcpy(g_fBoneSave[0], o->BoneTransform[23], 3 * 4 * sizeof(float));
+            memcpy(g_fBoneSave[1], o->BoneTransform[14], 3 * 4 * sizeof(float));
+        }
 
         if (!c->Object.m_pCloth)
         {
@@ -8957,7 +8968,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         {
             pCloth[0].Render();
         }
-        o->Type--;
+
+        // Undo the o->Type++ of the bone effect above (only done when the effect ran).
+        if (didBoneEffect)
+        {
+            o->Type--;
+        }
     }
 
     if (c->MonsterIndex == MONSTER_GOLDEN_TITAN || c->MonsterIndex == MONSTER_GOLDEN_SOLDIER)
@@ -15148,7 +15164,9 @@ CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, i
     wchar_t portalText[100];
     wchar_t name[sizeof portal->ID];
 
-    CMultiLanguage::ConvertFromUtf8(name, ID);
+    // PROTO-8: ID originates from the fixed char[MAX_USERNAME_SIZE] packet
+    // field with no NUL guarantee; bound the conversion.
+    CMultiLanguage::ConvertFromUtf8(name, ID, MAX_USERNAME_SIZE);
 
     mu_swprintf(portalText, portal->ID, name);
 

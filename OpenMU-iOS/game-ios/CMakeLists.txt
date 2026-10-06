@@ -65,21 +65,14 @@ else()
   # bundling. game-data.zip.sha256 must contain the expected hex digest (optionally
   # followed by the filename). Fail the configure if it is missing or mismatches.
   set(MU_GAME_DATA_SIG "${MU_GAME_DATA_ZIP}.sha256")
-  if(NOT EXISTS "${MU_GAME_DATA_SIG}")
-    message(FATAL_ERROR
-      "Missing checksum sidecar '${MU_GAME_DATA_SIG}'. Pin the trusted game data "
-      "release SHA-256 there (I-03) instead of bundling an unchecked archive.")
-  endif()
-  file(SHA256 "${MU_GAME_DATA_ZIP}" MU_GAME_DATA_ACTUAL)
-  file(READ "${MU_GAME_DATA_SIG}" MU_GAME_DATA_EXPECTED_RAW)
-  string(STRIP "${MU_GAME_DATA_EXPECTED_RAW}" MU_GAME_DATA_EXPECTED)
-  string(SUBSTRING "${MU_GAME_DATA_EXPECTED}" 0 64 MU_GAME_DATA_EXPECTED)
-  if(NOT MU_GAME_DATA_ACTUAL STREQUAL MU_GAME_DATA_EXPECTED)
-    message(FATAL_ERROR
-      "game-data.zip SHA-256 mismatch:\n  expected: ${MU_GAME_DATA_EXPECTED}\n  "
-      "actual:   ${MU_GAME_DATA_ACTUAL}\nThe data archive failed integrity "
-      "verification; refusing to bundle it (I-03).")
-  endif()
+
+  # I-03 verification lives in the standalone VerifyDataArchive.cmake so the
+  # same check is host-side testable (XC-18). FATALs at configure on a
+  # missing sidecar or mismatch.
+  set(ARCHIVE "${MU_GAME_DATA_ZIP}")
+  set(SIDECAR "${MU_GAME_DATA_SIG}")
+  include("${CMAKE_CURRENT_LIST_DIR}/VerifyDataArchive.cmake")
+
   set_source_files_properties("${MU_GAME_DATA_ZIP}"
     PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
   target_sources(Main PRIVATE "${MU_GAME_DATA_ZIP}")

@@ -71,8 +71,10 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
         cancellationToken.ThrowIfCancellationRequested();
         this.EnsureCacheForCurrentConfiguration();
 
-        var dictionary = this._cache[this.GetCurrentGameConfiguration()];
-        if (dictionary.TryGetValue(id, out var result))
+        // Use TryGetValue instead of the indexer: concurrent cache construction could otherwise
+        // raise KeyNotFoundException.
+        if (this._cache.TryGetValue(this.GetCurrentGameConfiguration(), out var dictionary)
+            && dictionary.TryGetValue(id, out var result))
         {
             return ValueTask.FromResult<T?>(result);
         }
@@ -147,15 +149,17 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
         {
             if (!cache.TryGetValue(changedInstance.GetId(), out var cachedInstance))
             {
-                this._logger.LogDebug("Cached instance '{cachedInstance}' couldn't be updated because it wasn't found.", cachedInstance);
-                return;
+                // This configuration doesn't cache the instance; continue with the others
+                // instead of aborting the whole invalidation.
+                this._logger.LogDebug("An instance with id {Id} wasn't found in a cached configuration; continuing.", changedInstance.GetId());
+                continue;
             }
 
             if (cachedInstance is not IAssignable<T> assignable)
             {
                 // todo: implement this for all types
                 this._logger.LogWarning("Cached instance '{cachedInstance}' couldn't be updated because it doesn't implement {IAssignable}.", cachedInstance, typeof(IAssignable<T>));
-                return;
+                continue;
             }
 
             assignable.AssignValuesOf((T)changedInstance, gameConfiguration);

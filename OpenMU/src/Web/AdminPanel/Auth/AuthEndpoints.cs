@@ -28,6 +28,10 @@ public static class AuthEndpoints
     /// <returns>The endpoint route builder.</returns>
     public static IEndpointRouteBuilder MapAdminPanelAuthEndpoints(this IEndpointRouteBuilder endpoints)
     {
+        // Explicit unauthenticated health probe for deployment scripts and orchestrators:
+        // a 200 here means the pipeline is fully up, while 401/404 must not count as healthy.
+        endpoints.MapGet("/_health", () => Results.Ok()).AllowAnonymous();
+
         endpoints.MapPost(
                 AdminAuthenticationDefaults.SignInEndpointPath,
                 async (SignInRequest request, HttpContext httpContext, SignInTicketService ticketService) =>
@@ -64,8 +68,9 @@ public static class AuthEndpoints
                     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
                     return Results.NoContent();
                 })
-            .AllowAnonymous()
-            .DisableAntiforgery();
+            // Require an authenticated session and an antiforgery token, so a third-party site
+            // can't force a logout (session destruction DoS) via a cross-site POST.
+            .RequireAuthorization();
 
         return endpoints;
     }

@@ -57,12 +57,14 @@ void CMsgBoxIGSSendGiftConfirm::Initialize(int iPackageSeq, int iDisplaySeq, int
     m_wItemCode = wItemCode;
     m_iCashType = iCashType;
 
-    wcscpy(m_szID, pszID);
-    wcscpy(m_szMessage, pszMessage);
+    // MEM-10: copy bounded into the fixed members; an overlong server-provided string
+    // must not overflow them.
+    wcsncpy_s(m_szID, pszID ? pszID : L"", _TRUNCATE);
+    wcsncpy_s(m_szMessage, pszMessage ? pszMessage : L"", _TRUNCATE);
 
-    wcscpy(m_szItemName, pszName);
-    wcscpy(m_szItemPrice, pszPrice);
-    wcscpy(m_szItemPeriod, pszPeriod);
+    wcsncpy_s(m_szItemName, pszName ? pszName : L"", _TRUNCATE);
+    wcsncpy_s(m_szItemPrice, pszPrice ? pszPrice : L"", _TRUNCATE);
+    wcsncpy_s(m_szItemPeriod, pszPeriod ? pszPeriod : L"", _TRUNCATE);
 
     m_iNumNoticeLine = ::DivideStringByPixel(&m_szNotice[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, I18N::Game::BoughtItemsUsedOrTakenOutOfStorageCannotBeReturned, IGS_TEXT_NOTICE_WIDTH);
 }

@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.FriendServer;
 
+using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Interfaces;
@@ -32,7 +33,7 @@ public class FriendServer : IFriendServer
         this._chatServer = chatServer;
         this._persistenceContextProvider = persistenceContextProvider;
         this._logger = logger;
-        this.OnlineFriends = new Dictionary<string, OnlineFriend>();
+        this.OnlineFriends = new ConcurrentDictionary<string, OnlineFriend>();
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ public class FriendServer : IFriendServer
     /// <summary>
     /// Gets the online friends dictionary. The key is the name of the character of the corresponding OnlineFriend object.
     /// </summary>
-    protected IDictionary<string, OnlineFriend> OnlineFriends { get; }
+    protected ConcurrentDictionary<string, OnlineFriend> OnlineFriends { get; }
 
     /// <inheritdoc/>
     public ValueTask ForwardLetterAsync(LetterHeader letter)
@@ -260,22 +261,33 @@ public class FriendServer : IFriendServer
                 return;
             }
 
-            observer = new OnlineFriend(this._friendNotifier, characterName)
+            var newObserver = new OnlineFriend(this._friendNotifier, characterName)
             {
                 ServerId = serverId,
             };
-            this.OnlineFriends.Add(characterName, observer);
-            IFriendServerContext? newContext = null;
-            var context = usedContext ?? (newContext = this._persistenceContextProvider.CreateNewFriendServerContext());
 
-            try
+            observer = newObserver;
+            if (this.OnlineFriends.TryAdd(characterName, newObserver))
             {
-                var friends = await context.GetFriendsAsync(characterId).ConfigureAwait(false);
-                this.AddSubscriptions(friends);
+                IFriendServerContext? newContext = null;
+                var context = usedContext ?? (newContext = this._persistenceContextProvider.CreateNewFriendServerContext());
+
+                try
+                {
+                    var friends = await context.GetFriendsAsync(characterId).ConfigureAwait(false);
+                    this.AddSubscriptions(friends);
+                }
+                finally
+                {
+                    newContext?.Dispose();
+                }
             }
-            finally
+            else
             {
-                newContext?.Dispose();
+                // A concurrent event already created an observer for this character.
+                while (!this.OnlineFriends.TryGetValue(characterName, out observer))
+                {
+                }
             }
         }
 
@@ -283,7 +295,7 @@ public class FriendServer : IFriendServer
 
         if (serverId == OfflineServerId)
         {
-            this.OnlineFriends.Remove(observer.PlayerName);
+            this.OnlineFriends.TryRemove(observer.PlayerName, out _);
             observer.OnCompleted();
         }
     }

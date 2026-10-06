@@ -38,7 +38,10 @@ namespace
             for (int i = 1; i < MAX_NOTICE; i++)
             {
                 s_notices[i - 1].Color = s_notices[i].Color;
-                wcscpy(s_notices[i - 1].Text, s_notices[i].Text);
+                // UI-2: same fixed-size fields on both sides; copy bounded to
+                // keep the pattern consistent with AppendLine.
+                wcsncpy(s_notices[i - 1].Text, s_notices[i].Text, NOTICE_TEXT_MAX - 1);
+                s_notices[i - 1].Text[NOTICE_TEXT_MAX - 1] = L'\0';
             }
         }
     }

@@ -356,6 +356,48 @@ public class PlugInManager
         }
     }
 
+    private static bool IsWithinDirectory(string directory, string candidatePath)
+    {
+        var normalizedDirectory = directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+        // XC-14: paths on Linux are case-sensitive -- OrdinalIgnoreCase there
+        // would treat a differently-cased external path as inside the plugins
+        // directory.
+        var comparison = OperatingSystem.IsWindows()
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+        return candidatePath.StartsWith(normalizedDirectory, comparison);
+    }
+
+    // XC-14: GetFullPath canonicalizes "."/".."/relative parts but does NOT
+    // resolve symlinks (Linux) or junctions/reparse points (Windows). A
+    // junction placed inside the plugins directory can therefore point at an
+    // assembly outside it while still passing the prefix check. Resolve to the
+    // final link target before comparing.
+    private static string ResolveFinalPath(string path)
+    {
+        try
+        {
+            var target = File.Exists(path)
+                ? File.ResolveLinkTarget(path, returnFinalTarget: true)
+                : Directory.Exists(path)
+                    ? Directory.ResolveLinkTarget(path, returnFinalTarget: true)
+                    : null;
+            if (target is not null)
+            {
+                return Path.GetFullPath(target.FullName);
+            }
+        }
+        catch
+        {
+            // Some reparse point variants make ResolveLinkTarget throw; fall
+            // back to the non-resolved full path -- the prefix check still
+            // applies.
+        }
+
+        return Path.GetFullPath(path);
+    }
+
     private void ValidateNoDuplicateGuids(IEnumerable<Type> plugIns)
     {
         var allPlugIns = plugIns.Concat(this._knownPlugIns.Values).Distinct();
@@ -416,12 +458,6 @@ public class PlugInManager
         return ActivatorUtilities.CreateInstance<TPlugInClass>(this._serviceContainer);
     }
 
-    private static bool IsWithinDirectory(string directory, string candidatePath)
-    {
-        var normalizedDirectory = directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
-        return candidatePath.StartsWith(normalizedDirectory, StringComparison.OrdinalIgnoreCase);
-    }
-
     private void ReadConfiguration(PlugInConfiguration configuration, HashSet<string> loadedAssemblies)
     {
         if (!this._knownPlugIns.ContainsKey(configuration.TypeId))
@@ -433,8 +469,11 @@ public class PlugInManager
 
                 try
                 {
-                    var pluginsRoot = Path.GetFullPath("plugins");
-                    var assemblyPath = Path.GetFullPath(Path.Combine(pluginsRoot, configuration.ExternalAssemblyName));
+                    var pluginsRoot = ResolveFinalPath(Path.GetFullPath("plugins"));
+
+                    // pluginsRoot is already absolute; ResolveFinalPath applies
+                    // GetFullPath to the combined path again.
+                    var assemblyPath = ResolveFinalPath(Path.Combine(pluginsRoot, configuration.ExternalAssemblyName));
                     if (!IsWithinDirectory(pluginsRoot, assemblyPath))
                     {
                         this._logger.LogError(

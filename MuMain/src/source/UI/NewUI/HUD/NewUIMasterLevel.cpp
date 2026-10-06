@@ -113,19 +113,35 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
     }
 
     constexpr int Size = sizeof(_MASTER_SKILLTREE_DATA);
+    constexpr int TreeDataSize = Size * MAX_MASTER_SKILL_DATA;
+    // UI-3: the checksum was computed over a hard-coded 12288 bytes that only
+    // matched by coincidence; pin the equivalence so a struct change forces the
+    // expression (used everywhere below) to be reviewed.
+    static_assert(TreeDataSize == 12288,
+        "Checksum window changed - update the BMD writer, not a magic constant.");
 
-    auto Buffer = new BYTE[Size * MAX_MASTER_SKILL_DATA];
-
-    fread(Buffer, Size * MAX_MASTER_SKILL_DATA, 1, fp);
+    auto Buffer = new BYTE[TreeDataSize];
 
     DWORD dwCheckSum;
 
-    fread(&dwCheckSum, sizeof(DWORD), 1u, fp);
+    // UI-3: reject truncated files instead of processing uninitialized tail.
+    if (fread(Buffer, TreeDataSize, 1, fp) != 1
+        || fread(&dwCheckSum, sizeof(DWORD), 1u, fp) != 1)
+    {
+        fclose(fp);
+        delete[] Buffer;
+        mu_swprintf(Text, L"%ls - File truncated.", path);
+        g_ErrorReport.Write(Text);
+        MessageBox(g_hWnd, Text, nullptr, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
+    }
 
     fclose(fp);
 
-    if (dwCheckSum != GenerateCheckSum2(Buffer, 12288, 0x2BC1))
+    if (dwCheckSum != GenerateCheckSum2(Buffer, TreeDataSize, 0x2BC1))
     {
+        delete[] Buffer;
         mu_swprintf(Text, L"%ls - File corrupted.", path);
         g_ErrorReport.Write(Text);
         MessageBox(g_hWnd, Text, nullptr, MB_OK);
@@ -142,11 +158,6 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
         memcpy(&m_stMasterSkillTreeData[i], pSeek, Size);
 
         pSeek += Size;
-
-        if (pSeek == nullptr)
-        {
-            break;
-        }
     }
 
     delete[] Buffer;
@@ -169,10 +180,22 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
     }
 
     constexpr int record_size = sizeof(_MASTER_SKILL_TOOLTIP_FILE);
-    auto file_buffer = new BYTE[record_size * MAX_MASTER_SKILL_DATA];
-    fread(file_buffer, record_size * MAX_MASTER_SKILL_DATA, 1, fp);
+    constexpr int tooltip_data_size = record_size * MAX_MASTER_SKILL_DATA;
+    auto file_buffer = new BYTE[tooltip_data_size];
     DWORD dwCheckSum;
-    fread(&dwCheckSum, sizeof(DWORD), 1u, fp);
+    // UI-3: same short-read rejection as the skill-tree data loader.
+    if (fread(file_buffer, tooltip_data_size, 1, fp) != 1
+        || fread(&dwCheckSum, sizeof(DWORD), 1u, fp) != 1)
+    {
+        fclose(fp);
+        delete[] file_buffer;
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls - File truncated.", path);
+        g_ErrorReport.Write(Text);
+        MessageBox(g_hWnd, Text, nullptr, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
+    }
     fclose(fp);
 
     BYTE* pSeek = file_buffer;
@@ -187,20 +210,18 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
         const auto target = &m_stMasterSkillTooltip[i];
         target->SkillNumber = static_cast<ActionSkillType>(current.SkillNumber);
         target->ClassCode = static_cast<MASTER_SKILL_TREE_CLASS>(current.ClassCode);
-        CMultiLanguage::ConvertFromUtf8(target->Info1, current.Info1);
-        CMultiLanguage::ConvertFromUtf8(target->Info2, current.Info2);
-        CMultiLanguage::ConvertFromUtf8(target->Info3, current.Info3);
-        CMultiLanguage::ConvertFromUtf8(target->Info4, current.Info4);
-        CMultiLanguage::ConvertFromUtf8(target->Info5, current.Info5);
-        CMultiLanguage::ConvertFromUtf8(target->Info6, current.Info6);
-        CMultiLanguage::ConvertFromUtf8(target->Info7, current.Info7);
+        // PROTO-14: bound each conversion to its own source field - an
+        // unterminated field in the BMD would otherwise spill into the next
+        // field's bytes. sizeof keeps the bound in sync with the struct.
+        CMultiLanguage::ConvertFromUtf8(target->Info1, current.Info1, static_cast<int>(sizeof(current.Info1)));
+        CMultiLanguage::ConvertFromUtf8(target->Info2, current.Info2, static_cast<int>(sizeof(current.Info2)));
+        CMultiLanguage::ConvertFromUtf8(target->Info3, current.Info3, static_cast<int>(sizeof(current.Info3)));
+        CMultiLanguage::ConvertFromUtf8(target->Info4, current.Info4, static_cast<int>(sizeof(current.Info4)));
+        CMultiLanguage::ConvertFromUtf8(target->Info5, current.Info5, static_cast<int>(sizeof(current.Info5)));
+        CMultiLanguage::ConvertFromUtf8(target->Info6, current.Info6, static_cast<int>(sizeof(current.Info6)));
+        CMultiLanguage::ConvertFromUtf8(target->Info7, current.Info7, static_cast<int>(sizeof(current.Info7)));
 
         pSeek += record_size;
-
-        if (pSeek == nullptr)
-        {
-            break;
-        }
     }
 
     delete[] file_buffer;

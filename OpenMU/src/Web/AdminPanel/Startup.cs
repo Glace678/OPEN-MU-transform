@@ -4,8 +4,10 @@
 
 namespace MUnique.OpenMU.Web.AdminPanel;
 
+using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -94,6 +96,17 @@ public class Startup
         services.AddAdminPanelAuth(this.Configuration);
         services.AddSingleton<MobileGmService>();
         services.AddAccountSelfServiceGuard();
+
+        // In the all-in-one deployment the app runs behind a reverse proxy (nginx/traefik)
+        // in the private docker network which terminates TLS. Trust the forwarded headers
+        // from private ranges so that the request (and the Secure auth cookie) is seen as HTTPS.
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+        });
     }
 
     /// <summary>
@@ -103,6 +116,9 @@ public class Startup
     /// <param name="env">The web host environment.</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // Must run before everything else, so subsequent middleware sees the original scheme.
+        app.UseForwardedHeaders();
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

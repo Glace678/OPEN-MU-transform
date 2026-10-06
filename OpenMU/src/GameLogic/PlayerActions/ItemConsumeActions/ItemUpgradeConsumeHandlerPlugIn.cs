@@ -55,6 +55,7 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
     {
         var configuration = player.GameContext.Configuration;
         var successChance = SoloBalance.IsEnabled(configuration) ? 1 : this.Configuration.SuccessChance;
+        successChance = this.GetBoostedSuccessChance(item, successChance);
         return this.ModifyItem(
             item,
             player.PersistenceContext,
@@ -64,7 +65,26 @@ public abstract class ItemUpgradeConsumeHandlerPlugIn : ItemModifyConsumeHandler
 
     /// <inheritdoc/>
     protected override bool ModifyItem(Item item, IContext persistenceContext) =>
-        this.ModifyItem(item, persistenceContext, this.Configuration.SuccessChance, preserveOnFailure: false);
+        this.ModifyItem(item, persistenceContext, this.GetBoostedSuccessChance(item, this.Configuration.SuccessChance), preserveOnFailure: false);
+
+    /// <summary>
+    /// Adds the configured success chance boost if the target item has an option of the configured
+    /// <see cref="ItemUpgradeConfiguration.BoostOptionType"/> (e.g. the luck option adding 25 per cent).
+    /// </summary>
+    private double GetBoostedSuccessChance(Item item, double successChance)
+    {
+        if (this.Configuration.BoostOptionType is { } boostOptionType
+            && item.ItemOptions.Any(o => o.ItemOption?.OptionType == boostOptionType))
+        {
+            successChance += this.Configuration.SuccessChanceBoost;
+            if (successChance > 1.0)
+            {
+                successChance = 1.0;
+            }
+        }
+
+        return successChance;
+    }
 
     private bool ModifyItem(Item item, IContext persistenceContext, double successChance, bool preserveOnFailure)
     {

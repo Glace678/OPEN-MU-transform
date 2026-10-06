@@ -1,5 +1,5 @@
 // <copyright file="EarlyGameBalance.cs" company="MUnique">
-// Licensed under the MIT License. See LICENSE file in the repository root for full license information.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.OpenMU.GameLogic;
@@ -12,7 +12,7 @@ using MUnique.OpenMU.GameLogic.Attributes;
 /// </summary>
 /// <remarks>
 /// The legacy hit formula (<c>1 - defenseRate/attackRate</c>) collapses toward a
-/// 3&thinsp;% floor whenever a monster's evasion exceeds a fresh character's
+/// 3% floor whenever a monster's evasion exceeds a fresh character's
 /// accuracy, and the legacy "overrate" branch then multiplies any damage by
 /// 0.3. Together these make a brand-new character feel unable to kill even the
 /// weakest monster, regardless of which experience profile is installed.

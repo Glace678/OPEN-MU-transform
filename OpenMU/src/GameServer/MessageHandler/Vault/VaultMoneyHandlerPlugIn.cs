@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.GameServer.MessageHandler.Vault;
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.Views.Vault;
 using MUnique.OpenMU.Network.Packets.ClientToServer;
@@ -28,19 +29,44 @@ internal class VaultMoneyHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        // Validate the fixed-length packet before reading its fields: a truncated packet would
+        // read the amount out of bounds.
+        if (packet.Length < VaultMoveMoneyRequest.Length)
+        {
+            return;
+        }
+
         VaultMoveMoneyRequest request = packet;
+
+        // The amount is a uint on the wire; zero or values that don't fit into a positive int
+        // would reverse the money comparisons after cast.
+        if (request.Amount is 0 or > int.MaxValue)
+        {
+            await player.InvokeViewPlugInAsync<IUpdateVaultMoneyPlugIn>(p => p.UpdateVaultMoneyAsync(false)).ConfigureAwait(false);
+            return;
+        }
+
+        // Money movements respect the pin lock and require the vault storage window to be open.
+        if (player.IsVaultLocked || player.OpenedNpc?.Definition?.NpcWindow != NpcWindow.VaultStorage)
+        {
+            await player.InvokeViewPlugInAsync<IUpdateVaultMoneyPlugIn>(p => p.UpdateVaultMoneyAsync(false)).ConfigureAwait(false);
+            return;
+        }
+
+        int amount = (int)request.Amount;
+        bool success;
         switch (request.Direction)
         {
             case VaultMoveMoneyRequest.VaultMoneyMoveDirection.InventoryToVault:
-                player.TryDepositVaultMoney((int)request.Amount);
+                success = player.TryDepositVaultMoney(amount);
                 break;
             case VaultMoveMoneyRequest.VaultMoneyMoveDirection.VaultToInventory:
-                player.TryTakeVaultMoney((int)request.Amount);
+                success = player.TryTakeVaultMoney(amount);
                 break;
             default:
                 throw new InvalidEnumArgumentException($"The direction {request.Direction} is not a valid value.");
         }
 
-        await player.InvokeViewPlugInAsync<IUpdateVaultMoneyPlugIn>(p => p.UpdateVaultMoneyAsync(true)).ConfigureAwait(false);
+        await player.InvokeViewPlugInAsync<IUpdateVaultMoneyPlugIn>(p => p.UpdateVaultMoneyAsync(success)).ConfigureAwait(false);
     }
 }

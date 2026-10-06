@@ -23,7 +23,9 @@ import re
 import sys
 from pathlib import Path
 
-ROOTS = ["src/source", "src/MuEditor", "tests"]
+# Anchored to this file so the tool works regardless of the caller's cwd.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+ROOTS = [REPO_ROOT / "src" / "source", REPO_ROOT / "src" / "MuEditor", REPO_ROOT / "tests"]
 EXTENSIONS = {".h", ".cpp", ".hpp"}
 SKIP_PARTS = {"ThirdParty", "third_party", "node_modules", ".cache", "build", "out"}
 
@@ -54,8 +56,7 @@ def transform(text: str) -> str:
 
 def iter_files() -> list[Path]:
     files: list[Path] = []
-    for raw in ROOTS:
-        root = Path(raw)
+    for root in ROOTS:
         if not root.exists():
             continue
         for path in root.rglob("*"):
@@ -76,6 +77,10 @@ def main() -> int:
     for path in iter_files():
         original = path.read_text(encoding="utf-8", errors="replace")
         updated = transform(original)
+        # The macro definitions themselves are expected leftovers (they are
+        # removed by hand from _define.h in the follow-up edit). A file that
+        # still contains those #defines is exempt from the leftover report -
+        # the inner loop already skips #define lines anyway.
         if REMAINING.search(updated) and "#define Smart" not in updated:
             for number, line in enumerate(updated.splitlines(), 1):
                 if REMAINING.search(line) and not line.lstrip().startswith("#define"):

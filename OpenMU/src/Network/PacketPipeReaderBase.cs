@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Network;
 
 using System.Buffers;
 using System.IO.Pipelines;
+using System.Threading;
 using Pipelines.Sockets.Unofficial;
 
 /// <summary>
@@ -19,6 +20,7 @@ using Pipelines.Sockets.Unofficial;
 public abstract class PacketPipeReaderBase
 {
     private readonly byte[] _headerBuffer = new byte[3];
+    private int _completed;
 
     /// <summary>
     /// Gets or sets the <see cref="PipeReader"/> from which the packets can be read from at <see cref="ReadSourceAsync"/>.
@@ -37,6 +39,19 @@ public abstract class PacketPipeReaderBase
     /// </summary>
     /// <param name="exception">The exception, if any occurred; Otherwise, <c>null</c>.</param>
     protected abstract ValueTask OnCompleteAsync(Exception? exception);
+
+    /// <summary>
+    /// Calls <see cref="OnCompleteAsync"/> only once, even if multiple exit paths of the
+    /// read loop trigger it.
+    /// </summary>
+    /// <param name="exception">The exception, if any occurred; Otherwise, <c>null</c>.</param>
+    /// <returns>The value task.</returns>
+    protected ValueTask TryOnCompleteAsync(Exception? exception)
+    {
+        return Interlocked.Exchange(ref this._completed, 1) == 1
+            ? default
+            : this.OnCompleteAsync(exception);
+    }
 
     /// <summary>
     /// Reads from the <see cref="Source"/> until it's completed or cancelled.
@@ -68,11 +83,11 @@ public abstract class PacketPipeReaderBase
         }
         catch (Exception e)
         {
-            await this.OnCompleteAsync(e).ConfigureAwait(false);
+            await this.TryOnCompleteAsync(e).ConfigureAwait(false);
             return;
         }
 
-        await this.OnCompleteAsync(null).ConfigureAwait(false);
+        await this.TryOnCompleteAsync(null).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -115,7 +130,7 @@ public abstract class PacketPipeReaderBase
                     // Notify our source, that we don't intend to read anymore.
                     await this.Source.CompleteAsync(exception).ConfigureAwait(false);
 
-                    await this.OnCompleteAsync(exception).ConfigureAwait(false);
+                    await this.TryOnCompleteAsync(exception).ConfigureAwait(false);
                     throw exception;
                 }
             }
@@ -143,7 +158,7 @@ public abstract class PacketPipeReaderBase
         if (result.IsCanceled || result.IsCompleted)
         {
             // Not possible to advance any further, e.g. because of a disconnected network connection.
-            await this.OnCompleteAsync(null).ConfigureAwait(false);
+            await this.TryOnCompleteAsync(null).ConfigureAwait(false);
         }
         else
         {

@@ -13,12 +13,29 @@ using MUnique.OpenMU.Network.PlugIns;
 /// <summary>Exact, versioned NPC prices bound to the serialized inventory which follows this packet.</summary>
 internal static class MerchantPriceQuotePacket
 {
+    /// <summary>The packet type code.</summary>
     internal const byte Code = 0xFA;
+
+    /// <summary>The fixed header size in bytes.</summary>
     internal const int HeaderSize = 9;
+
+    /// <summary>The per-entry bytes added on top of the serialized item.</summary>
     internal const int EntryOverhead = 10;
+
+    /// <summary>The maximum number of quoted items (the NPC shop grid).</summary>
     internal const int MaximumItems = 120;
+
+    /// <summary>The maximum serialized size of one item.</summary>
     internal const int MaximumItemBytes = 32;
 
+    /// <summary>
+    /// Builds a price-quotation packet for the listed merchant items.
+    /// </summary>
+    /// <param name="items">The merchant items offered for sale.</param>
+    /// <param name="serializer">The item serializer used for the item bytes.</param>
+    /// <param name="configuration">The active game configuration.</param>
+    /// <param name="taxRate">The purchase tax rate in percent (0..3).</param>
+    /// <returns>The serialized packet bytes.</returns>
     internal static byte[] Create(ICollection<Item> items, IItemSerializer serializer, GameConfiguration configuration, int taxRate)
     {
         ArgumentOutOfRangeException.ThrowIfGreaterThan(items.Count, MaximumItems);
@@ -54,6 +71,7 @@ internal static class MerchantPriceQuotePacket
 
             buffer[offset + 1] = checked((byte)length);
             var price = calculator.CalculateFinalBuyingPrice(item, configuration);
+
             // Match TryPayStoreCostAsync's int32 wallet bound before applying its percentage tax.
             var payable = price is >= 0 and <= int.MaxValue;
             var total = payable ? price + ((price * taxRate) / 100) : 0;
