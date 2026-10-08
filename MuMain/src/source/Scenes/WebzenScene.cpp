@@ -124,7 +124,10 @@ void WebzenScene(HDC hDC)
     ::EnableAlphaTest();
     OpenBasicData(hDC);
 
-    g_pNewUISystem->LoadMainSceneInterface();
+    if (!g_pNewUISystem->LoadMainSceneInterface())
+    {
+        g_ErrorReport.Write(L"> Failed to load the main scene interface; continuing without it.\r\n");
+    }
 
     CUIMng::Instance().RenderTitleSceneUI(hDC, 11, 11);
 

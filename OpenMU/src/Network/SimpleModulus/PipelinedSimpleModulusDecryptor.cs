@@ -83,6 +83,13 @@ public class PipelinedSimpleModulusDecryptor : PipelinedSimpleModulusBase, IPipe
     /// <returns><see langword="true" />, if the flush was successful or not required.<see langword="false" />, if the pipe reader is completed and no longer reading data.</returns>
     protected override async ValueTask<bool> ReadPacketAsync(ReadOnlySequence<byte> packet)
     {
+        // The packet must at least contain the 3-byte encrypted header; a shorter packet is invalid
+        // and Slice(0, 3) would throw an ArgumentOutOfRangeException (reachable DoS).
+        if (packet.Length < 3)
+        {
+            throw new ArgumentException($"The packet is too short ({packet.Length} bytes, at least 3 are required).", nameof(packet));
+        }
+
         // The next line is getting a span from the writer which is at least as big as the packet.
         // As I found out, it's initially about 2 kb in size and gets smaller within further
         // usage. If the previous span was used up, a new piece of memory is getting provided for us.
@@ -114,6 +121,15 @@ public class PipelinedSimpleModulusDecryptor : PipelinedSimpleModulusBase, IPipe
         var maximumDecryptedSize = this.GetMaximumDecryptedSize(this.HeaderBuffer);
         var headerSize = this.HeaderBuffer.GetPacketHeaderSize();
         var counterSize = this.Counter is null ? 0 : 1;
+
+        if (packet.Length < headerSize)
+        {
+            // The declared encrypted packet is shorter than its own header, so slicing off the
+            // header below would throw. Reject it instead.
+            throw new ArgumentException(
+                $"The packet is shorter than its {headerSize}-byte header ({packet.Length} bytes).",
+                nameof(packet));
+        }
 
         var span = this.Pipe.Writer.GetSpan(maximumDecryptedSize);
 

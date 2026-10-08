@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Dapr.Common;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
@@ -42,6 +43,19 @@ internal static class DaprEndpointSecurity
     public static bool IsControllerAction(HttpContext context)
     {
         return context.GetEndpoint()?.Metadata.GetMetadata<ControllerActionDescriptor>() is { };
+    }
+
+    /// <summary>
+    /// Determines whether the selected controller action requires authorization. An action (or its
+    /// controller) can opt out by carrying <see cref="AllowAnonymousAttribute"/>, which is only
+    /// appropriate for intentionally public endpoints (e.g. the public server info).
+    /// </summary>
+    /// <param name="context">The HTTP context.</param>
+    /// <returns><c>true</c> if the request must be authorized; otherwise, <c>false</c>.</returns>
+    public static bool RequiresAuthorization(HttpContext context)
+    {
+        var endpoint = context.GetEndpoint();
+        return endpoint?.Metadata.GetMetadata<IAllowAnonymous>() is null;
     }
 
     /// <summary>

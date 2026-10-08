@@ -497,6 +497,19 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
 {
     _ASSERT(0 <= nIndexCount && nIndexCount <= ND_QUEST_INDEX_MAX_COUNT);
 
+    // The count comes from a server packet (WORD, up to 65535), but the destination array is a
+    // fixed 20-DWORD buffer. Clamp in Release as well (the assert above is compiled out there).
+    if (nIndexCount < 0)
+    {
+        nIndexCount = 0;
+    }
+    else if (nIndexCount > ND_QUEST_INDEX_MAX_COUNT)
+    {
+        g_ErrorReport.Write(L"SetQuestListText: quest count %d exceeds %d; clamping.\r\n",
+                            nIndexCount, ND_QUEST_INDEX_MAX_COUNT);
+        nIndexCount = ND_QUEST_INDEX_MAX_COUNT;
+    }
+
     ::memset(m_adwQuestIndex, 0, sizeof(DWORD) * ND_QUEST_INDEX_MAX_COUNT);
     ::memcpy(m_adwQuestIndex, adwSrcQuestIndex, sizeof(DWORD) * nIndexCount);
 

@@ -80,7 +80,7 @@ public static class ConnectionConfigurator
     {
         Provider.Initialization?.WaitWithoutException();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
-        return Regex.Match(settings.ConnectionString!, "User Id=([^;]+?);").Groups[1].Value;
+        return new Npgsql.NpgsqlConnectionStringBuilder(settings.ConnectionString).Username ?? string.Empty;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public static class ConnectionConfigurator
     {
         Provider.Initialization?.WaitWithoutException();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
-        return Regex.Match(settings.ConnectionString!, "Password=([^;]+?);").Groups[1].Value;
+        return new Npgsql.NpgsqlConnectionStringBuilder(settings.ConnectionString).Password ?? string.Empty;
     }
 
     /// <summary>

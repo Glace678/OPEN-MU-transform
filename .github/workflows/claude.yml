@@ -33,7 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
       pull-requests: write
       issues: write
       actions: read

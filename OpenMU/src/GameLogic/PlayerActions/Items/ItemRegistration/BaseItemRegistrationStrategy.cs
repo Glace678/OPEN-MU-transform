@@ -119,7 +119,14 @@ public abstract class BaseItemRegistrationStrategy : IItemRegistrationStrategy
             int zenReward = rule.RewardZen;
             if (zenReward > 0)
             {
-                player.TryAddMoney(zenReward);
+                if (!player.TryAddMoney(zenReward))
+                {
+                    player.Logger.LogWarning(
+                        "Could not credit registration reward of {Reward} zen to {Player} (money cap reached); the registration still completed.",
+                        zenReward,
+                        player.Name);
+                }
+
                 await player.InvokeViewPlugInAsync<Views.Inventory.IUpdateMoneyPlugIn>(
                     p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             }

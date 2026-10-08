@@ -206,7 +206,23 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
         Interlocked.Exchange(ref this.PacketReceived, null);
         Interlocked.Exchange(ref this.Disconnected, null);
         this.StopCapturing();
-        _ = this.DisconnectAsync();
+
+        // Fire and forget is required to avoid a sync-context deadlock, but observe failures
+        // instead of letting an unobserved exception tear down the process.
+        _ = DisconnectAndObserveAsync(this);
+
+        static async Task DisconnectAndObserveAsync(Connection connection)
+        {
+            try
+            {
+                await connection.DisconnectAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                // Disconnect is best-effort; a static logger would risk a circular dependency here.
+                System.Diagnostics.Debug.WriteLine("DisconnectAsync during Dispose failed: " + ex);
+            }
+        }
     }
 
     /// <inheritdoc />

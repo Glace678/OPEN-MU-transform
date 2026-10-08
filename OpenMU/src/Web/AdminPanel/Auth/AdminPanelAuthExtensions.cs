@@ -58,6 +58,7 @@ public static class AdminPanelAuthExtensions
             options.MaxFailedAccessAttempts = authOptions.MaxFailedAccessAttempts;
             options.LockoutDuration = authOptions.LockoutDuration;
             options.BootstrapUser = authOptions.BootstrapUser;
+            options.AnonymousSetupWindow = authOptions.AnonymousSetupWindow;
         });
 
         services.AddSingleton<ApiKeyRegistry>();
@@ -74,7 +75,10 @@ public static class AdminPanelAuthExtensions
         services.AddSingleton<IPasswordHasher<AdminUser>, BCryptPasswordHasher>();
         services.AddSingleton<BootstrapAdminUserProvider>();
         services.AddSingleton<SignInTicketService>();
-        services.AddSingleton<AdminUserAvailabilityService>();
+        services.AddSingleton(sp => new AdminUserAvailabilityService(
+            sp.GetRequiredService<IAdminUserRepository>(),
+            sp.GetRequiredService<BootstrapAdminUserProvider>(),
+            sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<AdminPanelAuthOptions>>().Value.AnonymousSetupWindow));
         services.AddScoped<IUserStore<AdminUser>, AdminUserStore>();
         services.AddScoped<AdminLoginService>();
         services.AddScoped<AuthenticatorSetupService>();
@@ -83,11 +87,12 @@ public static class AdminPanelAuthExtensions
         services.AddIdentityCore<AdminUser>(options =>
             {
                 options.User.RequireUniqueEmail = false;
+                // Strong admin passwords: at least 12 characters containing all four classes.
                 options.Password.RequiredLength = 12;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.MaxFailedAccessAttempts = authOptions.MaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = authOptions.LockoutDuration;

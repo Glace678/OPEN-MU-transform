@@ -46,9 +46,16 @@ public class PlayerLosesMoneyAfterDeathPlugIn : IAttackableGotKilledPlugIn, ISup
         var vaultLoss = (int)((player.Account?.Vault?.Money ?? 0) * losses.VaultLoss / 100.0);
 
         inventoryLoss = Math.Min(inventoryLoss, player.Money);
-        vaultLoss = Math.Min(vaultLoss, player.Account?.Vault?.Money ?? 0);
         player.TryRemoveMoney(inventoryLoss);
-        player.TryTakeVaultMoney(vaultLoss);
+
+        // The vault share is a sink (it must be destroyed), not a transfer into the inventory.
+        // Operate directly on the account vault storage; player.Vault is only populated while the
+        // vault NPC dialog is open and is null during combat/death.
+        if (vaultLoss > 0 && player.Account?.Vault is { } vaultStorage)
+        {
+            var currentVaultMoney = vaultStorage.Money;
+            vaultStorage.Money = Math.Max(0, currentVaultMoney - vaultLoss);
+        }
     }
 
     /// <inheritdoc/>

@@ -22,6 +22,18 @@ public class HitAction
     /// <param name="lookingDirection">The looking direction.</param>
     public async ValueTask HitAsync(Player player, IAttackable target, byte attackAnimation, Direction lookingDirection)
     {
+        // A dead player must not be able to attack (otherwise a crafted packet keeps the DPS/kill
+        // score running after death), and an already dead target must not take more damage.
+        if (!player.IsAlive)
+        {
+            return;
+        }
+
+        if (!target.IsAlive)
+        {
+            return;
+        }
+
         if (player.Attributes is not { } attributes)
         {
             return;

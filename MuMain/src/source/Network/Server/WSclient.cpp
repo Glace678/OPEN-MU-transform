@@ -1590,32 +1590,68 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x04 [ReceiveRevival]");
 }
 
-void ReceiveMagicList(const BYTE* ReceiveBuffer)
+void ReceiveMagicList(const BYTE* ReceiveBuffer, int Size)
 {
     int Master_Skill_Bool = -1;
     int Skill_Bool = -1;
 
     auto Data = (LPPHEADER_MAGIC_LIST_COUNT)ReceiveBuffer;
     int Offset = sizeof(PHEADER_MAGIC_LIST_COUNT);
-    if (Data->Value == 0xFF)
+
+    // Bounds for the per-record body: each record is sizeof(PRECEIVE_MAGIC_LIST) bytes.
+    const int RecordSize = sizeof(PRECEIVE_MAGIC_LIST);
+    auto RecordFits = [&](int recordIndex) -> bool
     {
-        auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-        CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
-        CharacterAttribute->SkillLevel[Data2->Index] = 0;
-    }
-    else if (Data->Value == 0xFE)
+        const long End = static_cast<long>(Offset) + (static_cast<long>(recordIndex) + 1) * RecordSize;
+        return End <= static_cast<long>(Size);
+    };
+
+    if (Data->Value == 0xFF || Data->Value == 0xFE)
     {
+        if (!RecordFits(0))
+        {
+            g_ErrorReport.Write(L"ReceiveMagicList: single-skill packet too short (%d bytes).\r\n", Size);
+            return;
+        }
+
         auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-        CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
-        CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
+        if (Data2->Index >= MAX_SKILLS || Data2->Type >= MAX_SKILLS)
+        {
+            g_ErrorReport.Write(L"ReceiveMagicList: out-of-range skill index=%u type=%u.\r\n",
+                                static_cast<unsigned>(Data2->Index), static_cast<unsigned>(Data2->Type));
+            return;
+        }
+
+        if (Data->Value == 0xFF)
+        {
+            CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+            CharacterAttribute->SkillLevel[Data2->Index] = 0;
+        }
+        else
+        {
+            CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+            CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
+        }
     }
     else if (Data->ListType == 0x02)
     {
         for (int i = 0; i < Data->Value; ++i)
         {
+            if (!RecordFits(i))
+            {
+                g_ErrorReport.Write(L"ReceiveMagicList: list-remove packet truncated at record %d/%u (size %d).\r\n",
+                                    i, static_cast<unsigned>(Data->Value), Size);
+                break;
+            }
+
             auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
-            CharacterAttribute->SkillLevel[Data2->Index] = 0;
+            if (Data2->Index < MAX_SKILLS)
+            {
+                CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+                CharacterAttribute->SkillLevel[Data2->Index] = 0;
+            }
+
+            Offset += RecordSize;
         }
     }
     else
@@ -1627,10 +1663,26 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer)
         }
         for (int i = 0; i < Data->Value; i++)
         {
+            if (!RecordFits(i))
+            {
+                g_ErrorReport.Write(L"ReceiveMagicList: list packet truncated at record %d/%u (size %d).\r\n",
+                                    i, static_cast<unsigned>(Data->Value), Size);
+                break;
+            }
+
             auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
-            CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
-            Offset += sizeof(PRECEIVE_MAGIC_LIST);
+            if (Data2->Index < MAX_SKILLS && Data2->Type < MAX_SKILLS)
+            {
+                CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+                CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
+            }
+            else
+            {
+                g_ErrorReport.Write(L"ReceiveMagicList: out-of-range index=%u type=%u.\r\n",
+                                    static_cast<unsigned>(Data2->Index), static_cast<unsigned>(Data2->Type));
+            }
+
+            Offset += RecordSize;
         }
 
         if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD)
@@ -1652,10 +1704,13 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer)
         if (SkillType != 0)
         {
             CharacterAttribute->SkillNumber++;
-            BYTE SkillUseType = SkillAttribute[SkillType].SkillUseType;
-            if (SkillUseType == SKILL_USE_TYPE_MASTER)
+            if (SkillType >= 0 && SkillType < MAX_SKILLS)
             {
-                CharacterAttribute->SkillMasterNumber++;
+                BYTE SkillUseType = SkillAttribute[SkillType].SkillUseType;
+                if (SkillUseType == SKILL_USE_TYPE_MASTER)
+                {
+                    CharacterAttribute->SkillMasterNumber++;
+                }
             }
         }
     }
@@ -3885,14 +3940,19 @@ void ReceiveAction(const BYTE* ReceiveBuffer, int Size)
     auto Data = (LPPRECEIVE_ACTION)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
-    int Index = FindCharacterIndex(Key);
+    int Index = FindCharacterIndexSafe(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+    {
+        return;
+    }
+
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
 
     int iTargetKey, iTargetIndex;
 
     iTargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
-    iTargetIndex = FindCharacterIndex(iTargetKey);
+    iTargetIndex = FindCharacterIndexSafe(iTargetKey);
 
     if (!c->SafeZone && c->Helper.Type == MODEL_DARK_HORSE_ITEM)
     {
@@ -7585,6 +7645,15 @@ void ReceiveDurability(const BYTE* ReceiveBuffer)
 BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
     auto Data = (LPPRECEIVE_HELPER_ITEM)ReceiveBuffer;
+
+    // Data->Index is attacker-controlled; AbilityTime has only 3 slots, so validate before writing.
+    if (Data->Index > 2)
+    {
+        g_ErrorReport.Write(L"ReceiveHelperItem: invalid ability index %u (must be 0..2).\r\n",
+                            static_cast<unsigned>(Data->Index));
+        return FALSE;
+    }
+
     CharacterAttribute->AbilityTime[Data->Index] = Data->Time * REFERENCE_FPS;
     switch (Data->Index)
     {
@@ -8497,11 +8566,27 @@ void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer)
     {
         auto pData2 = (LPPMSG_UNION_VIEWPORT_NOTIFY)(ReceiveBuffer + Offset);
         int nGuildMarkIndex = g_GuildCache.GetGuildMarkIndex(pData2->nGuildKey);
+        if (nGuildMarkIndex == GuildConstants::INVALID_MARK_INDEX)
+        {
+            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: unknown guild key %u (no cached mark); skipping record.\r\n",
+                                static_cast<unsigned>(pData2->nGuildKey));
+            Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
+            continue;
+        }
+
         CMultiLanguage::ConvertFromUtf8(GuildMark[nGuildMarkIndex].UnionName, pData2->szUnionName, MAX_GUILDNAME);
 
         int nCharKey = MAKEWORD(pData2->byKeyL, pData2->byKeyH);
 
         int nCharIndex = FindCharacterIndex(nCharKey);
+        if (nCharIndex < 0 || nCharIndex >= MAX_CHARACTERS_CLIENT)
+        {
+            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: unknown character key %u; skipping record.\r\n",
+                                static_cast<unsigned>(nCharKey));
+            Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
+            continue;
+        }
+
         CharactersClient[nCharIndex].GuildRelationShip = pData2->byGuildRelationShip;
 
         Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
@@ -14066,7 +14151,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceivePK(ReceiveBuffer);
             break;
         case 0x11:
-            ReceiveMagicList(ReceiveBuffer);
+            ReceiveMagicList(ReceiveBuffer, Size);
             break;
         case 0x13:
             // not really in use in OpenMU

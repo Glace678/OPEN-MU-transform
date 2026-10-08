@@ -63,16 +63,42 @@ public class BalanceV1RuntimeTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(normal, Has.Length.EqualTo(BalanceV1.NormalLevelCap + 1));
+            // Length is cap + 2 because consumers index with [attainedLevel + 1],
+            // including the level after the cap (see PlayerExperience and the
+            // UpdateCharacterStats view plugins).
+            Assert.That(normal, Has.Length.EqualTo(BalanceV1.NormalLevelCap + 2));
             Assert.That(normal[1], Is.Zero);
             Assert.That(normal[2], Is.EqualTo(96));
             Assert.That(normal[400], Is.EqualTo(589_450_800));
             Assert.That(normal.Zip(normal.Skip(1), (left, right) => right >= left), Is.All.True);
 
-            Assert.That(master, Has.Length.EqualTo(BalanceV1.MasterLevelCap + 1));
+            Assert.That(master, Has.Length.EqualTo(BalanceV1.MasterLevelCap + 2));
             Assert.That(master[1], Is.EqualTo(5_501_991));
             Assert.That(master[200], Is.EqualTo(2_378_946_398));
             Assert.That(master.Zip(master.Skip(1), (left, right) => right > left), Is.All.True);
+        });
+    }
+
+    /// <summary>
+    /// Contract (not implementation mirror): the table must support the [Level + 1]
+    /// index used by PlayerExperience.cs:174,226 and the UpdateCharacterStats plugins,
+    /// even at the level cap. A max-level character logging in must not throw.
+    /// </summary>
+    [Test]
+    public void ExperienceTableSupportsNextLevelIndexAtCap()
+    {
+        var normal = BalanceV1.CreateExperienceTable(master: false);
+        var master = BalanceV1.CreateExperienceTable(master: true);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(normal.Length, Is.GreaterThan(BalanceV1.NormalLevelCap + 1), "Normal table must be indexable at [NormalLevelCap + 1].");
+            Assert.DoesNotThrow(() => _ = normal[BalanceV1.NormalLevelCap + 1]);
+            Assert.That(normal[BalanceV1.NormalLevelCap + 1], Is.GreaterThanOrEqualTo(normal[BalanceV1.NormalLevelCap]));
+
+            Assert.That(master.Length, Is.GreaterThan(BalanceV1.MasterLevelCap + 1), "Master table must be indexable at [MasterLevelCap + 1].");
+            Assert.DoesNotThrow(() => _ = master[BalanceV1.MasterLevelCap + 1]);
+            Assert.That(master[BalanceV1.MasterLevelCap + 1], Is.GreaterThanOrEqualTo(master[BalanceV1.MasterLevelCap]));
         });
     }
 

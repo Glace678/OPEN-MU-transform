@@ -57,7 +57,13 @@ public sealed class MapApp : IHostedService, IDisposable
         // Unfortunately, using builder.WebHost.UseUrls(...) will be overwritten by environment variables when calling builder.Build().
         // Because we use the MapApp as an addition to another WebApplication, we want our own port.
         // Maybe, when we got some time, we could integrate the page route within the normal DaprService.
-        app.Configuration["urls"] = $"http://*:{port}";
+        //
+        // Bind loopback by default: the live map carries real-time server/player information and has
+        // no authentication of its own, so it must not listen on all network interfaces. It stays
+        // reachable from the local host and from a reverse proxy on the same machine. An explicit
+        // bind address can be configured with OPENMU_MAP_BIND_ADDRESS if another setup requires it.
+        var bindAddress = Environment.GetEnvironmentVariable("OPENMU_MAP_BIND_ADDRESS") ?? "127.0.0.1";
+        app.Configuration["urls"] = $"http://{bindAddress}:{port}";
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

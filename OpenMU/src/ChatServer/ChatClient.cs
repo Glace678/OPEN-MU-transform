@@ -270,7 +270,7 @@ internal class ChatClient : IChatClient
         var tokenAsString = packet.Span.ExtractString(TokenOffset, 10, Encoding.UTF8);
         if (!uint.TryParse(tokenAsString, out uint _))
         {
-            this._logger.LogError("Token '{TokenAsString}' is not a parseable integer.", tokenAsString);
+            this._logger.LogError("The supplied authentication token is not a parseable integer.");
             await this.LogOffAsync().ConfigureAwait(false);
             return;
         }

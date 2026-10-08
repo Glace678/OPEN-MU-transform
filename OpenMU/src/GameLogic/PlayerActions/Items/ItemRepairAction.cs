@@ -105,6 +105,12 @@ public class ItemRepairAction
         var priceCalculator = new ItemPriceCalculator();
         var price = priceCalculator.CalculateRepairPrice(item, player.OpenedNpc != null, player.GameContext.Configuration);
         price = SoloBalance.ScalePrice(price, player.GameContext.Configuration);
+        if (price < 0 || price > int.MaxValue)
+        {
+            player.Logger.LogWarning("Repair price for item {Item} is out of range ({Price}); rejecting the repair.", item, price);
+            return false;
+        }
+
         return player.TryRemoveMoney((int)price);
     }
 }

@@ -763,7 +763,18 @@ internal sealed class Program : IDisposable
             throw new ArgumentOutOfRangeException(nameof(args), gameServerCount, "The game server count must be between 1 and 255.");
         }
 
-        var createTestAccounts = this.DetermineBoolean("testaccounts", args ?? Array.Empty<string>(), true);
+        // Test accounts include GameMaster accounts whose password equals the login name
+        // (e.g. testgm/testgm), so they must never be created by default. They stay available
+        // in -demo mode (ephemeral in-memory database, local testing only) and can be opted
+        // into explicitly via -testaccounts:true.
+        var demoMode = (args ?? Array.Empty<string>()).Contains("-demo");
+        var createTestAccounts = this.DetermineBoolean("testaccounts", args ?? Array.Empty<string>(), demoMode);
+        if (createTestAccounts && !demoMode)
+        {
+            loggerFactory.CreateLogger<Program>().LogWarning(
+                "Creating test accounts as requested by -testaccounts:true. These include GameMaster accounts with publicly known default passwords and must never be used outside local development.");
+        }
+
         await initialization.CreateInitialDataAsync((byte)gameServerCount, createTestAccounts).ConfigureAwait(false);
     }
 

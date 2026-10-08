@@ -42,7 +42,10 @@ namespace
 
 CNewUISystem::CNewUISystem()
 {
+    // All interface pointers must start null so Release()/SafeDelete never deletes
+    // an uninitialized pointer when Create() fails partway through or before it runs.
     m_pNewUIMng = nullptr;
+    m_pNewUI3DRenderMng = nullptr;
     m_pNewUIHotKey = nullptr;
     m_pNewChatLogWindow = nullptr;
     m_pNewSystemLogWindow = nullptr;
@@ -66,7 +69,9 @@ CNewUISystem::CNewUISystem()
     m_pNewStorageInventoryExt = nullptr;
     m_pNewGuildInfoWindow = nullptr;
     m_pNewMyShopInventory = nullptr;
+    m_pNewPurchaseShopInventory = nullptr;
     m_pNewCharacterInfoWindow = nullptr;
+    m_pNewMyQuestInfoWindow = nullptr;
     m_pNewPartyInfoWindow = nullptr;
     m_pNewPartyListWindow = nullptr;
     m_pNewNPCQuest = nullptr;
@@ -101,6 +106,8 @@ CNewUISystem::CNewUISystem()
     m_pNewLuckyCoinRegistration = nullptr;
     m_pNewExchangeLuckyCoinWindow = nullptr;
     m_pNewDuelWatchWindow = nullptr;
+    m_pNewDuelWatchMainFrameWindow = nullptr;
+    m_pNewUIMuHelperSkillList = nullptr;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = nullptr;
 #endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME

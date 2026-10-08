@@ -58,6 +58,8 @@ public class GameContext : AsyncDisposable, IGameContext
 
     private readonly IDisposable _configChangeHandlerRegistration;
 
+    private int _periodicTasksStopped;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="GameContext" /> class.
     /// </summary>
@@ -186,6 +188,36 @@ public class GameContext : AsyncDisposable, IGameContext
     /// Gets the name of the meter of this class.
     /// </summary>
     internal static string MeterName => typeof(GameContext).FullName ?? nameof(GameContext);
+
+    /// <summary>
+    /// Gets a value indicating whether the periodic tasks of this context have been stopped,
+    /// e.g. because the hosting server is shutting down. Once stopped, <see cref="ExecutePeriodicTasks"/>
+    /// no longer runs any periodic plug-ins.
+    /// </summary>
+    public bool ArePeriodicTasksStopped => Volatile.Read(ref this._periodicTasksStopped) != 0;
+
+    /// <summary>
+    /// Gets a value indicating whether a periodic task pass should run. It must not run while the
+    /// context is being (or has been) disposed or its periodic tasks have been stopped, e.g. because
+    /// the hosting server is shutting down and a pass would race the shutdown's disconnect loop.
+    /// </summary>
+    internal bool ShouldExecutePeriodicTasks => !this.IsDisposed && !this.IsDisposing && !this.ArePeriodicTasksStopped;
+
+    /// <summary>
+    /// Stops the periodic tasks of this context (the per-second plug-in tasks and the recovery
+    /// timer), so that no periodic plug-in runs concurrently with a subsequent teardown, such as
+    /// the player disconnect loop of a shutting-down game server. The timers are also stopped on
+    /// disposal; calling this earlier only closes the race window between the shutdown start and
+    /// the disposal.
+    /// </summary>
+    public void StopPeriodicTasks()
+    {
+        if (Interlocked.Exchange(ref this._periodicTasksStopped, 1) == 0)
+        {
+            this._tasksTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            this._recoverTimer.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+    }
 
     /// <summary>
     /// Gets the initialized maps which are hosted on this context.
@@ -475,18 +507,19 @@ public class GameContext : AsyncDisposable, IGameContext
     /// <inheritdoc/>
     protected override async ValueTask DisposeAsyncCore()
     {
+        // Stop both timers (and wait for any in-flight callback) before the base teardown, so a
+        // periodic or recovery pass can't race the shutdown's player disconnect loop or observe
+        // a disposed context.
+        this.StopPeriodicTasks();
+
         this._configChangeHandlerRegistration.Dispose();
         await this._recoverTimer.DisposeAsync().ConfigureAwait(false);
-
-        // Dispose the task timer (and wait for any in-flight callback) before
-        // disposing the periodic plugins, so a callback can't observe a disposed
-        // plugin or recreate its state while we are cleaning up.
         await this._tasksTimer.DisposeAsync().ConfigureAwait(false);
 
-        foreach (var plugin in this.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>())
-        {
-            (plugin as IDisposable)?.Dispose();
-        }
+        // Note: the periodic plug-in instances are owned by the shared PlugInManager singleton,
+        // which passes the same instances to every game context. They must not be disposed here,
+        // otherwise tearing down one context would kill the periodic tasks of every other
+        // context running on the same process (PlugInManager owns their lifecycle).
 
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
@@ -523,6 +556,11 @@ public class GameContext : AsyncDisposable, IGameContext
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void ExecutePeriodicTasks(object? state)
     {
+        if (!this.ShouldExecutePeriodicTasks)
+        {
+            return;
+        }
+
         try
         {
             if (this.PlugInManager.GetPlugInPoint<IPeriodicTaskPlugIn>() is { } plugInPoint)

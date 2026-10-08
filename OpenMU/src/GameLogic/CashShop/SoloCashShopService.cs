@@ -236,6 +236,14 @@ public sealed class SoloCashShopService
         {
             if (await player.SaveProgressAsync().ConfigureAwait(false))
             {
+                // The deduction wrote Inventory.Money directly (it bypasses Player.Money setter,
+                // which is what publishes the balance), so refresh the client view explicitly.
+                if (goldCost > 0)
+                {
+                    await player.InvokeViewPlugInAsync<MUnique.OpenMU.GameLogic.Views.Inventory.IUpdateMoneyPlugIn>(
+                        p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+
                 return SoloCashShopResult.Success;
             }
         }

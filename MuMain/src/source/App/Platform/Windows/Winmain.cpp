@@ -526,9 +526,16 @@ WORD DecryptCheckSumKey(WORD wSource)
 
 DWORD GenerateCheckSum(BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
 {
+    if (pbyBuffer == nullptr || dwSize < 4)
+    {
+        // dwSize - 4 would underflow into a huge value for a short buffer, and the first
+        // memcpy would read out of bounds. There is nothing to checksum in that case.
+        return 0;
+    }
+
     auto dwKey = (DWORD)wKey;
     DWORD dwResult = dwKey << 9;
-    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
+    for (DWORD dwChecked = 0; dwChecked + 4 <= dwSize; dwChecked += 4)
     {
         DWORD dwTemp;
         memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));

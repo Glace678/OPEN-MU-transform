@@ -298,6 +298,7 @@ public class BalanceV1CombatProbeTests
         await player.SetSelectedCharacterAsync(character).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
         Assert.That(player.PlayerState.CurrentState, Is.EqualTo(PlayerState.EnteredWorld));
+        player.IsAlive = true; // a player that entered the world is alive (production sets this on map entry)
         return player;
     }
 

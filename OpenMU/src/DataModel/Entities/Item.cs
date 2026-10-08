@@ -69,6 +69,14 @@ public partial class Item
     public int PetExperience { get; set; }
 
     /// <summary>
+    /// Gets or sets the number of consecutive failed jewel level upgrades of this item under
+    /// balance-v1 rules. It backs the designed pity guarantee (<c>UpgradeStep.PityAttempts</c>):
+    /// once it reaches the configured threshold, the next upgrade succeeds. It is reset to 0 on
+    /// a successful upgrade.
+    /// </summary>
+    public int JewelUpgradeFailures { get; set; }
+
+    /// <summary>
     /// Assigns the values of another item to this item.
     /// </summary>
     /// <param name="otherItem">The other item.</param>
@@ -80,6 +88,7 @@ public partial class Item
         this.HasSkill = otherItem.HasSkill;
         this.SocketCount = otherItem.SocketCount;
         this.PetExperience = otherItem.PetExperience;
+        this.JewelUpgradeFailures = otherItem.JewelUpgradeFailures;
         if (otherItem.ItemOptions != null && otherItem.ItemOptions.Any())
         {
             this.ItemOptions.Clear();

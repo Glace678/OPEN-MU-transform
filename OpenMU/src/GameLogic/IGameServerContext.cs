@@ -52,6 +52,12 @@ public interface IGameServerContext : IGameContext
     GameServerConfiguration ServerConfiguration { get; }
 
     /// <summary>
+    /// Stops the periodic tasks (and recovery timer) of this context, so they don't run
+    /// concurrently with a subsequent teardown such as the shutdown's player disconnect loop.
+    /// </summary>
+    void StopPeriodicTasks();
+
+    /// <summary>
     /// Refreshes the guild information.
     /// </summary>
     /// <param name="guildId">The guild identifier.</param>

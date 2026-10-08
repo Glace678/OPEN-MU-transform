@@ -124,7 +124,7 @@ bool ParseSkeleton()
     return true;
 }
 
-void ParseTriangles(bool Flip)
+bool ParseTriangles(bool Flip)
 {
     SMDToken Token;
     while (true)
@@ -145,8 +145,8 @@ void ParseTriangles(bool Flip)
             if (strcmp("end", TokenString) == 0) break;
             if (tg->TriangleNum < 0 || tg->TriangleNum >= TRIANGLE_MAX)
             {
-                g_ErrorReport.Write(L"SMD triangle limit (%d) exceeded; ignoring remaining triangles.\r\n", TRIANGLE_MAX);
-                break;
+                g_ErrorReport.Write(L"SMD triangle limit (%d) exceeded; rejecting the model.\r\n", TRIANGLE_MAX);
+                return false;
             }
 
             constexpr int MaximumTextureNameLength = sizeof(tg->TextureName[0]);
@@ -187,6 +187,8 @@ void ParseTriangles(bool Flip)
             tg->TriangleNum++;
         }
     }
+
+    return true;
 }
 
 bool OpenSMDFile(wchar_t* FileName, int Type, bool Flip)
@@ -211,7 +213,7 @@ bool OpenSMDFile(wchar_t* FileName, int Type, bool Flip)
     if (Type == REFERENCE_FRAME)
     {
         parsed = ParseNodes();
-        if (parsed) ParseTriangles(Flip);
+        if (parsed) parsed = ParseTriangles(Flip);
     }
     if (Type == SKELETAL_ANIMATION)
     {

@@ -262,7 +262,9 @@ public class PublicRegistrationSecurityTests
         Assert.That(AccountRecoveryService.TryHashCode(response.RecoveryCode, out var hash), Is.True);
         Assert.That(account.RecoveryCodeHash, Is.EqualTo(hash));
         Assert.That(account.RecoveryCodeHash, Is.Not.EqualTo(response.RecoveryCode));
-        Assert.That(account.SecurityCode, Is.EqualTo("123456"));
+        // The security code is stored as a BCrypt hash, not in plain text.
+        Assert.That(account.SecurityCode, Is.Not.EqualTo("123456"));
+        Assert.That(BCrypt.Net.BCrypt.Verify("123456", account.SecurityCode), Is.True);
         Assert.That(BCrypt.Net.BCrypt.Verify("old-password", account.PasswordHash), Is.True);
     }
 

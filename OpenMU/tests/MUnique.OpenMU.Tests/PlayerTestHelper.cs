@@ -47,6 +47,10 @@ public static class PlayerTestHelper
         map.Setup(m => m.ExitGates).Returns(new List<ExitGate>());
         map.Object.TerrainData = new byte[ushort.MaxValue + 3];
         gameConfig.Object.RecoveryInterval = int.MaxValue;
+        // Match the values set by GameConfigurationInitializerBase, so money cap checks
+        // (e.g. trade settlement) behave like a real configuration instead of an unset 0.
+        gameConfig.Object.MaximumInventoryMoney = int.MaxValue;
+        gameConfig.Object.MaximumVaultMoney = int.MaxValue;
         gameConfig.Object.Maps.Add(map.Object);
 
         var mapInitializer = new MapInitializer(gameConfig.Object, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
@@ -135,6 +139,9 @@ public static class PlayerTestHelper
         accountMock.Setup(mock => mock.Attributes).Returns(new List<StatAttribute>());
         accountMock.Setup(mock => mock.UnlockedCharacterClasses).Returns(new List<CharacterClass>());
         var player = new TestPlayer(gameContext) { Account = accountMock.Object };
+        // A character that has entered the world is alive; production code sets this during map
+        // entry. Tests that construct a player directly start from the alive state.
+        player.IsAlive = true;
         await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);

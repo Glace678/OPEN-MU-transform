@@ -20,6 +20,11 @@ internal static class AccountExtensions
     public static void Apply(this EntityTypeBuilder<Account> builder)
     {
         builder.Property(account => account.LoginName).HasMaxLength(10).IsRequired();
+
+        // Case-insensitive uniqueness ("Admin"/"admin" must be the same account) is enforced by a
+        // functional index on lower(\"LoginName\") created by the CaseInsensitiveLoginName migration,
+        // because PostgreSQL's default text comparison is case sensitive and EF cannot express a
+        // lower() index in a provider-agnostic configuration.
         builder.HasIndex(account => account.LoginName).IsUnique();
 
         builder.Property(account => account.RecoveryCodeHash).HasMaxLength(64).IsRequired(false);

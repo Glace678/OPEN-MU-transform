@@ -203,7 +203,7 @@ void CSBaseMatch::SetPosition(int ix, int iy)
 
 void CSDevilSquareMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult, const int Success)
 {
-    if (iNumDevilRank >= 200)
+    if (iNumDevilRank < 0 || iNumDevilRank > 11)
     {
         return;
     }

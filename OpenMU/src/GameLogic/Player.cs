@@ -1825,7 +1825,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     {
         try
         {
-            var value = Math.Max((byte)this.Attributes![Stats.AmmunitionAmount], (byte)0);
+            // Clamp to the byte range instead of casting, which would wrap an amount > 255.
+            var rawAmount = this.Attributes![Stats.AmmunitionAmount];
+            var value = (int)Math.Clamp(rawAmount, byte.MinValue, byte.MaxValue);
             if (this.Inventory?.EquippedAmmunitionItem is { } ammoItem
                 && (int)ammoItem.Durability != value)
             {

@@ -1,4 +1,4 @@
-﻿// <copyright file="MagicEffectsList.cs" company="MUnique">
+// <copyright file="MagicEffectsList.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -26,18 +26,36 @@ public class MagicEffectsList : AsyncDisposable
     public MagicEffectsList(IAttackable owner)
     {
         this._owner = owner;
-        this.ActiveEffects = new SortedList<short, MagicEffect>(6);
+        this._activeEffects = new SortedList<short, MagicEffect>(6);
+        this.ActiveEffects = this._activeEffects;
     }
 
+    private SortedList<short, MagicEffect> _activeEffects;
+
     /// <summary>
-    /// Gets the active effects.
+    /// Gets the active effects as a read-only view. Mutations must go through the methods of this
+    /// class so they stay synchronized with the effect bookkeeping and the internal lock.
     /// </summary>
-    public IDictionary<short, MagicEffect> ActiveEffects { get; }
+    public IReadOnlyDictionary<short, MagicEffect> ActiveEffects { get; }
+
+    /// <summary>
+    /// Gets the active effect with the specified effect number, taking the internal lock so the
+    /// read can't observe a concurrent add/remove.
+    /// </summary>
+    /// <param name="effectNumber">The effect number (key).</param>
+    /// <returns>The active effect, or <c>null</c> if no such effect is active.</returns>
+    public async ValueTask<MagicEffect?> TryGetEffectAsync(short effectNumber)
+    {
+        using (await this._addLock.LockAsync().ConfigureAwait(false))
+        {
+            return this._activeEffects.TryGetValue(effectNumber, out var effect) ? effect : null;
+        }
+    }
 
     /// <summary>
     /// Gets the active visible effect ids.
     /// </summary>
-    public IList<MagicEffect> VisibleEffects => this.ActiveEffects.Values.Where(me => me.Definition.InformObservers).ToList();
+    public IList<MagicEffect> VisibleEffects => this._activeEffects.Values.Where(me => me.Definition.InformObservers).ToList();
 
     /// <summary>
     /// Adds the effect and applies the power ups.
@@ -55,7 +73,7 @@ public class MagicEffectsList : AsyncDisposable
             else
             {
                 added = true;
-                this.ActiveEffects.Add(effect.Id, effect);
+                this._activeEffects.Add(effect.Id, effect);
                 this._contains[effect.Id] = true;
                 foreach (var powerUp in effect.PowerUpElements)
                 {
@@ -88,9 +106,9 @@ public class MagicEffectsList : AsyncDisposable
     /// </summary>
     public async ValueTask ClearAllEffectsAsync()
     {
-        while (this.ActiveEffects.Any())
+        while (this._activeEffects.Any())
         {
-            await this.ActiveEffects.Values.First().DisposeAsync().ConfigureAwait(false);
+            await this._activeEffects.Values.First().DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -100,7 +118,7 @@ public class MagicEffectsList : AsyncDisposable
     /// <param name="stat">The stat produced by effect.</param>
     public async ValueTask ClearAllEffectsProducingSpecificStatAsync(AttributeDefinition stat)
     {
-        var effects = this.ActiveEffects.Values.ToArray();
+        var effects = this._activeEffects.Values.ToArray();
 
         foreach (var effect in effects)
         {
@@ -116,7 +134,7 @@ public class MagicEffectsList : AsyncDisposable
     /// </summary>
     public async ValueTask ClearEffectsAfterDeathAsync()
     {
-        var effectsToRemove = this.ActiveEffects.Values.Where(effect => effect.Definition.StopByDeath).ToList();
+        var effectsToRemove = this._activeEffects.Values.Where(effect => effect.Definition.StopByDeath).ToList();
         foreach (var effect in effectsToRemove)
         {
             await effect.DisposeAsync().ConfigureAwait(false);
@@ -131,7 +149,7 @@ public class MagicEffectsList : AsyncDisposable
     public async ValueTask<MagicEffect?> TryGetActiveEffectOfSubTypeAsync(byte subType)
     {
         using var l = await this._addLock.LockAsync();
-        return this.ActiveEffects.Values.FirstOrDefault(e => e.Definition.SubType == subType);
+        return this._activeEffects.Values.FirstOrDefault(e => e.Definition.SubType == subType);
     }
 
     /// <summary>
@@ -141,7 +159,7 @@ public class MagicEffectsList : AsyncDisposable
     public async ValueTask<IReadOnlyList<MagicEffect>> GetActiveEffectsSnapshotAsync()
     {
         using var l = await this._addLock.LockAsync();
-        return this.ActiveEffects.Values.ToList();
+        return this._activeEffects.Values.ToList();
     }
 
     /// <inheritdoc />
@@ -155,7 +173,7 @@ public class MagicEffectsList : AsyncDisposable
     {
         using (await this._addLock.LockAsync())
         {
-            this.ActiveEffects.Remove(effect.Id);
+            this._activeEffects.Remove(effect.Id);
             this._contains[effect.Id] = false;
         }
 
@@ -182,7 +200,7 @@ public class MagicEffectsList : AsyncDisposable
     /// <param name="effect">The effect.</param>
     private void UpdateEffect(MagicEffect effect)
     {
-        MagicEffect magicEffect = this.ActiveEffects[effect.Id];
+        MagicEffect magicEffect = this._activeEffects[effect.Id];
         if (magicEffect.Value > effect.Value)
         {
             // no de-buffing allowed

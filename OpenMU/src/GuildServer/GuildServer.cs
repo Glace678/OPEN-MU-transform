@@ -170,7 +170,9 @@ public class GuildServer : IGuildServer
         {
             if (this._guildDictionary.TryGetValue(guildId, out var guild))
             {
-                if (guild.Members.ContainsKey(characterId))
+                // Atomically claim the membership so two concurrent registrations for the same
+                // player can't both pass the check and add the member twice.
+                if (!guild.Members.TryAdd(characterId, new GuildListEntry { PlayerName = characterName, PlayerPosition = role, ServerId = serverId }))
                 {
                     this._logger.LogWarning("Guildmember already exists: {0}", characterName);
                     return;
@@ -183,7 +185,6 @@ public class GuildServer : IGuildServer
                 guild.Guild.Members.Add(guildMember);
 
                 await guild.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-                guild.Members.Add(characterId, new GuildListEntry { PlayerName = characterName, PlayerPosition = guildMember.Status, ServerId = serverId });
                 await this._changePublisher.AssignGuildToPlayerAsync(serverId, characterName, new GuildMemberStatus(guildId, guildMember.Status)).ConfigureAwait(false);
             }
         }

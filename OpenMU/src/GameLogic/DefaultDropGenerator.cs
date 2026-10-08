@@ -6,7 +6,6 @@ namespace MUnique.OpenMU.GameLogic;
 
 using MUnique.OpenMU.DataModel.Configuration.Items;
 using MUnique.OpenMU.GameLogic.Attributes;
-using Nito.AsyncEx;
 
 /// <summary>
 /// The default drop generator.
@@ -24,13 +23,6 @@ public class DefaultDropGenerator : IDropGenerator
     private const byte MinItemOptionLevelDrop = 1;
     private const byte MaxItemOptionLevelDrop = 4;
 
-    /// <summary>
-    /// A re-usable list of drop item groups.
-    /// </summary>
-    private readonly List<DropItemGroup> _chanceDropGroups = new(64);
-    private readonly List<DropItemGroup> _guaranteedDropGroups = new(16);
-
-    private readonly AsyncLock _lock = new();
     private readonly IRandomizer _randomizer;
     private readonly IList<ItemDefinition> _ancientItems;
     private readonly IList<ItemDefinition> _droppableItems;
@@ -73,36 +65,31 @@ public class DefaultDropGenerator : IDropGenerator
             return ([], null);
         }
 
-        using var l = await this._lock.LockAsync();
+        // The drop groups are local to this call: previously they were shared instance fields
+        // guarded by a global lock held across awaits (incl. the party quest-group fetch), which
+        // serialized all drops on the whole server. Local lists need no lock and can't be
+        // corrupted by concurrent kills.
+        var guaranteedDropGroups = new List<DropItemGroup>(16);
+        var chanceDropGroups = new List<DropItemGroup>(64);
+
         if (this._balanceV1Enabled && monster.ObjectKind == NpcObjectKind.Monster)
         {
             return await this.GenerateBalanceV1DropsAsync(monster, player, map).ConfigureAwait(false);
         }
 
-        this._guaranteedDropGroups.Clear();
-        this._chanceDropGroups.Clear();
-
         if (monster.ObjectKind == NpcObjectKind.Destructible)
         {
-            this.PartitionDropGroups(monster.DropItemGroups ?? []);
+            this.PartitionDropGroups(guaranteedDropGroups, chanceDropGroups, monster.DropItemGroups ?? []);
         }
         else
         {
-            this.PartitionDropGroups(monster.DropItemGroups ?? []);
-            this.PartitionDropGroups(character.DropItemGroups ?? [], monster);
-            this.PartitionDropGroups(map.DropItemGroups ?? [], monster);
-            this.PartitionDropGroups(await GetQuestItemGroupsAsync(player).ConfigureAwait(false) ?? [], monster);
+            this.PartitionDropGroups(guaranteedDropGroups, chanceDropGroups, monster.DropItemGroups ?? []);
+            this.PartitionDropGroups(guaranteedDropGroups, chanceDropGroups, character.DropItemGroups ?? [], monster);
+            this.PartitionDropGroups(guaranteedDropGroups, chanceDropGroups, map.DropItemGroups ?? [], monster);
+            this.PartitionDropGroups(guaranteedDropGroups, chanceDropGroups, await GetQuestItemGroupsAsync(player).ConfigureAwait(false) ?? [], monster);
         }
 
-        uint money = 0;
-        var (droppedItems, moneyResult) = this.GenerateDrops(monster, gainedExperience);
-        if (moneyResult > 0)
-        {
-            money = moneyResult;
-        }
-
-        this._guaranteedDropGroups.Clear();
-        this._chanceDropGroups.Clear();
+        var (droppedItems, money) = this.GenerateDrops(monster, gainedExperience, guaranteedDropGroups, chanceDropGroups);
         return (droppedItems ?? Enumerable.Empty<Item>(), money > 0 ? money : null);
     }
 
@@ -288,9 +275,9 @@ public class DefaultDropGenerator : IDropGenerator
         // Content ranks reach 400; original item-tier caches are indexed by the original monster level.
         var originalDropLevel = (int)monster[Stats.Level];
 
-        // NOTE: the designed "excellent item guaranteed after 250 eligible kills (rank >= 80)" pity is
-        // not implemented here - RollLoot is an independent per-kill roll. Honouring it needs a persisted
-        // per-character eligible-kill counter (a save-format change to validate against existing characters).
+        // The designed "excellent item guaranteed after 250 eligible kills (rank >= 80)" pity is a
+        // separate kill counter; jewel upgrade pity is honoured via Item.JewelUpgradeFailures in
+        // UpgradeItemLevelJewelConsumeHandlerPlugIn.
         var roll = BalanceV1.RollLoot(
             contentRank,
             this._randomizer.NextDouble(),
@@ -381,14 +368,18 @@ public class DefaultDropGenerator : IDropGenerator
         return groups[^1];
     }
 
-    private (IList<Item>? Items, uint Money) GenerateDrops(MonsterDefinition monster, int gainedExperience)
+    private (IList<Item>? Items, uint Money) GenerateDrops(
+        MonsterDefinition monster,
+        int gainedExperience,
+        IList<DropItemGroup> guaranteedDropGroups,
+        IList<DropItemGroup> chanceDropGroups)
     {
         uint money = 0;
         List<Item>? droppedItems = null;
         var remainingDrops = monster.NumberOfMaximumItemDrops;
 
         // Guaranteed groups.
-        foreach (var group in this._guaranteedDropGroups)
+        foreach (var group in guaranteedDropGroups)
         {
             if (remainingDrops <= 0)
             {
@@ -411,17 +402,17 @@ public class DefaultDropGenerator : IDropGenerator
         }
 
         // Chance based groups.
-        if (remainingDrops > 0 && this._chanceDropGroups.Count > 0)
+        if (remainingDrops > 0 && chanceDropGroups.Count > 0)
         {
             double totalChance = 0;
-            foreach (var group in this._chanceDropGroups)
+            foreach (var group in chanceDropGroups)
             {
                 totalChance += group.Chance;
             }
 
             for (int i = 0; i < remainingDrops; i++)
             {
-                var group = this.SelectRandomGroup(this._chanceDropGroups, totalChance);
+                var group = this.SelectRandomGroup(chanceDropGroups, totalChance);
                 if (group is null)
                 {
                     continue;
@@ -444,7 +435,11 @@ public class DefaultDropGenerator : IDropGenerator
         return (droppedItems, money);
     }
 
-    private void PartitionDropGroups(IEnumerable<DropItemGroup> groups, MonsterDefinition? monster = null)
+    private void PartitionDropGroups(
+        IList<DropItemGroup> guaranteedDropGroups,
+        IList<DropItemGroup> chanceDropGroups,
+        IEnumerable<DropItemGroup> groups,
+        MonsterDefinition? monster = null)
     {
         foreach (var group in groups)
         {
@@ -455,11 +450,11 @@ public class DefaultDropGenerator : IDropGenerator
 
             if (group.Chance >= 1.0)
             {
-                this._guaranteedDropGroups.Add(group);
+                guaranteedDropGroups.Add(group);
             }
             else
             {
-                this._chanceDropGroups.Add(group);
+                chanceDropGroups.Add(group);
             }
         }
     }

@@ -202,7 +202,7 @@ public class AccountService : IDataService<Account>, ISupportDataChangedNotifica
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(parameters.Password);
             account.EMail = parameters.EMail;
             account.State = parameters.State;
-            account.SecurityCode = parameters.SecurityCode;
+            account.SecurityCode = GameLogic.SecurityCodeSecurity.HashCode(parameters.SecurityCode);
             account.RegistrationDate = DateTime.UtcNow;
             if (!await context.SaveChangesAsync().ConfigureAwait(false))
             {

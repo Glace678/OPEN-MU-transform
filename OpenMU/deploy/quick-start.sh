@@ -204,7 +204,20 @@ else
           od -An -N24 -tx1 /dev/urandom | tr -d ' \n'
         fi
       }
-      set_value OPENMU_ADMIN_PASSWORD "$(new_secret)"
+      # The admin password must satisfy the panel policy (>=12 chars with upper, lower,
+      # digit and a non-alphanumeric char). Build it from the base64url alphabet (-/_ are
+      # the symbols) and guarantee one of each class.
+      new_admin_secret() {
+        local upper lower digit symbol rest
+        upper=$(head -c1 /dev/urandom | od -An -tu1 | awk '{printf "%c", 65+($1%26)}')
+        lower=$(head -c1 /dev/urandom | od -An -tu1 | awk '{printf "%c", 97+($1%26)}')
+        digit=$(head -c1 /dev/urandom | od -An -tu1 | awk '{printf "%c", 48+($1%10)}')
+        symbol='-'
+        rest="$(new_secret | head -c 28)"
+        printf '%s%s%s%s%s\n' "$rest" "$upper" "$lower" "$digit" "$symbol" | fold -w1 | shuf | tr -d '\n'
+        printf '\n'
+      }
+      set_value OPENMU_ADMIN_PASSWORD "$(new_admin_secret)"
       set_value DB_ADMIN_PW "$(new_secret)"
     fi
     umask 077

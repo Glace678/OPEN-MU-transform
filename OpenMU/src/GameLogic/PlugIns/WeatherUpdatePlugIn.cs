@@ -5,8 +5,8 @@
 namespace MUnique.OpenMU.GameLogic.PlugIns;
 
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.GameLogic.Views.World;
 using MUnique.OpenMU.PlugIns;
 
@@ -46,7 +46,10 @@ public class WeatherUpdatePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn
         }
         catch (Exception ex)
         {
-            Debug.Fail(ex.Message, ex.StackTrace);
+            // Debug.Fail is compiled out in Release, which would swallow the error silently. Log it
+            // through the game context logger so a failing weather update is observable.
+            gameContext.LoggerFactory.CreateLogger(this.GetType().Name)
+                .LogError(ex, "Error while updating the weather.");
         }
         finally
         {

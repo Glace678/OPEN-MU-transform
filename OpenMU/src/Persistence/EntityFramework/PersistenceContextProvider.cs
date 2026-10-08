@@ -180,12 +180,19 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
 
             await this.ApplyAllPendingUpdatesAsync().ConfigureAwait(false);
 
+            // The configuration reference cache holds objects of the previous database; drop it
+            // after the schema is (re)created so no stale references survive a recreation.
+            Json.ConfigurationIdReferenceResolver.Instance.Clear();
+
             // We create a new repository provider so that the previously loaded data is not effective anymore.
             this.ResetCache();
         }
         catch
         {
+            // Restore the change listener, but surface the failure: swallowing it made the caller
+            // believe the database was recreated successfully when it actually was not.
             this._changeListener = changePublisher;
+            throw;
         }
 
         return new Disposable(() =>

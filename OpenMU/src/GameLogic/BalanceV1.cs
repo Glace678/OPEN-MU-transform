@@ -164,14 +164,8 @@ public static class BalanceV1
     /// <summary>A level enhancement step from the candidate design.</summary>
     /// <param name="TargetLevel">The resulting item level.</param>
     /// <param name="Chance">The success chance in the range zero to one.</param>
-    /// <param name="PityAttempts">The attempt on which success is guaranteed.</param>
+    /// <param name="PityAttempts">The attempt on which success is guaranteed (per item, persisted via <c>Item.JewelUpgradeFailures</c>). <c>0</c> means no pity guarantee.</param>
     /// <param name="Jewels">The material-jewel budget.</param>
-    /// <remarks>
-    /// <see cref="PityAttempts"/> is part of the designed profile but is intentionally NOT wired up
-    /// yet: honouring it requires a persisted per-item failed-attempt counter (a wire/save-format change
-    /// that must be validated against the client and existing characters). Today only <see cref="Chance"/>
-    /// is consumed, so the pity guarantee must not be assumed to take effect.
-    /// </remarks>
     public readonly record struct UpgradeStep(int TargetLevel, double Chance, int PityAttempts, int Jewels);
 
     /// <summary>Returns whether the configuration has a completed balance-v1 marker.</summary>
@@ -336,8 +330,14 @@ public static class BalanceV1
     public static long[] CreateExperienceTable(bool master)
     {
         var cap = master ? MasterLevelCap : NormalLevelCap;
-        var table = new long[cap + 1];
-        for (var attained = master ? 1 : 2; attained <= cap; attained++)
+
+        // Consumers index the table with [attainedLevel + 1] (see PlayerExperience and
+        // the UpdateCharacterStats view plugins), so the table must hold an entry for the
+        // level after the cap as well (matching upstream's maximumLevel + 2).
+        // The extra entry extends the cumulative-threshold recurrence; Curve clamps at the
+        // last anchor, so it stays finite and monotonic.
+        var table = new long[cap + 2];
+        for (var attained = master ? 1 : 2; attained <= cap + 1; attained++)
         {
             var source = master ? attained : attained - 1;
             var rank = master ? NormalLevelCap + ((attained - 1) * MasterRankPerLevel) : source;

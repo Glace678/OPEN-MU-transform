@@ -29,6 +29,7 @@ public class ExDbClient
     private readonly byte[] _packetBuffer = new byte[0xFF];
 
     private IConnection? _connection;
+    private volatile bool _stopped;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExDbClient" /> class.
@@ -54,6 +55,9 @@ public class ExDbClient
     /// </summary>
     public async ValueTask DisconnectAsync()
     {
+        // Mark shutdown first, so the Disconnected handler does not start a reconnect loop which
+        // would keep the chat server shutdown alive forever.
+        this._stopped = true;
         if (this._connection is { } connection)
         {
             await connection.DisconnectAsync().ConfigureAwait(false);
@@ -62,9 +66,14 @@ public class ExDbClient
 
     private async ValueTask ConnectAsync()
     {
+        if (this._stopped)
+        {
+            return;
+        }
+
         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        while (!socket.Connected)
+        while (!this._stopped && !socket.Connected)
         {
             try
             {
@@ -72,9 +81,26 @@ public class ExDbClient
             }
             catch
             {
+                if (this._stopped)
+                {
+                    socket.Dispose();
+                    return;
+                }
+
                 this._logger.LogWarning($"Connection to ExDB-Server ({this._host}:{this._port}) failed, trying again in 10 Seconds...");
                 await Task.Delay(10000).ConfigureAwait(false);
+                if (this._stopped)
+                {
+                    socket.Dispose();
+                    return;
+                }
             }
+        }
+
+        if (this._stopped)
+        {
+            socket.Dispose();
+            return;
         }
 
         this._logger.LogInformation("Connection to ExDB-Server established");
@@ -237,7 +263,7 @@ public class ExDbClient
     /// <param name="type">The type. Usually 0 for the player who requested the chat and 1 for the other player.</param>
     private async ValueTask SendAuthenticationAsync(ChatServerAuthenticationInfo authenticationInfo, ChatServerAuthenticationInfo? friendAuthenticationInfo, ushort clientId, ushort serverId, byte type)
     {
-        this._logger.LogDebug($"Registered client {authenticationInfo.ClientName} with index {authenticationInfo.Index} and token {authenticationInfo.AuthenticationToken}");
+        this._logger.LogDebug("Registered client {ClientName} with index {Index}.", authenticationInfo.ClientName, authenticationInfo.Index);
         var token = uint.Parse(authenticationInfo.AuthenticationToken);
         uint friendToken = 0;
         if (friendAuthenticationInfo != null)

@@ -157,7 +157,7 @@ public static class PublicRegistrationEndpoints
                 account.RecoveryCodeHash = recoveryHash;
             }
 
-            account.SecurityCode = securityCode;
+            account.SecurityCode = GameLogic.SecurityCodeSecurity.HashCode(securityCode);
             account.State = AccountState.Normal;
             account.LanguageIsoCode = GetAccountLanguageIsoCode(request, httpContext);
             account.RegistrationDate = DateTime.UtcNow;

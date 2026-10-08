@@ -22,6 +22,12 @@ public class AreaSkillAttackAction
     private const int UndefinedTarget = 0xFFFF;
     private const short ElectricSpikeSkillId = 65;
 
+    /// <summary>
+    /// Upper bound for the number of deferred (delayed) skill-hit tasks a single cast may schedule,
+    /// so a large area hit cannot spawn an unbounded number of pending timers.
+    /// </summary>
+    private const int MaximumDeferredSkillHits = 64;
+
     private static readonly ConcurrentDictionary<AreaSkillSettings, FrustumBasedTargetFilter> FrustumFilters = new();
 
     /// <summary>
@@ -35,6 +41,12 @@ public class AreaSkillAttackAction
     /// <param name="hitImplicitlyForExplicitSkill">If set to <c>true</c>, hit implicitly for <see cref="SkillType.AreaSkillExplicitHits"/>.</param>
     public async ValueTask AttackAsync(Player player, ushort extraTargetId, ushort skillId, Point targetAreaCenter, byte rotation, bool hitImplicitlyForExplicitSkill = false)
     {
+        // A dead player must not keep attacking/casting after death (DPS, kill score, state changes).
+        if (!player.IsAlive)
+        {
+            return;
+        }
+
         var skillEntry = player.SkillList?.GetSkill(skillId);
         if (skillEntry?.Skill is not { } skill || skill.SkillType == SkillType.PassiveBoost)
         {
@@ -344,13 +356,20 @@ public class AreaSkillAttackAction
                     else
                     {
                         // The most pragmatic approach is just spawning a Task for each hit.
-                        // We have to see, how this works out in terms of performance.
+                        // Bound the fan-out per cast to avoid an unbounded number of pending timers,
+                        // and re-validate the target (alive, present, not safezone) right before hitting.
+                        if (attackCount > MaximumDeferredSkillHits)
+                        {
+                            continue;
+                        }
+
+                        var deferredTarget = target;
                         _ = Task.Run(async () =>
                         {
                             await Task.Delay(attackDelay).ConfigureAwait(false);
-                            if (!target.IsAtSafezone() && target.IsActive())
+                            if (!deferredTarget.IsAtSafezone() && deferredTarget.IsActive() && deferredTarget.IsAlive)
                             {
-                                await this.ApplySkillAsync(player, skillEntry, target, targetAreaCenter, isCombo).ConfigureAwait(false);
+                                await this.ApplySkillAsync(player, skillEntry, deferredTarget, targetAreaCenter, isCombo).ConfigureAwait(false);
                             }
                         });
                     }

@@ -1837,6 +1837,9 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                     b.Property<byte>("Level")
                         .HasColumnType("smallint");
 
+                    b.Property<int>("JewelUpgradeFailures")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PetExperience")
                         .HasColumnType("integer");
 

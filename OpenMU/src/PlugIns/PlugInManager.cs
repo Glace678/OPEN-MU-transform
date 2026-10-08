@@ -471,10 +471,21 @@ public class PlugInManager
         string? expectedHash = TryReadSidecarHash(assemblyPath) ?? TryReadHashesEntry(pluginsRoot, assemblyPath);
         if (expectedHash is null)
         {
-            this._logger.LogWarning(
-                "Loading external plugin assembly '{Assembly}' without a SHA-256 integrity pin. Provide a .sha256 sidecar or a plugins/hashes.txt entry to enforce verification.",
+            // Fail closed by default: external plugin assemblies run with full server privileges,
+            // so an unpinned DLL must not be loaded. Operators who deliberately want to load an
+            // unverified plugin may opt in by setting OPENMU_ALLOW_UNPINNED_PLUGINS=true.
+            if (string.Equals(Environment.GetEnvironmentVariable("OPENMU_ALLOW_UNPINNED_PLUGINS"), "true", StringComparison.OrdinalIgnoreCase))
+            {
+                this._logger.LogWarning(
+                    "Loading external plugin assembly '{Assembly}' without a SHA-256 integrity pin because OPENMU_ALLOW_UNPINNED_PLUGINS=true. Provide a .sha256 sidecar or a plugins/hashes.txt entry.",
+                    Path.GetFileName(assemblyPath));
+                return true;
+            }
+
+            this._logger.LogError(
+                "Rejected external plugin assembly '{Assembly}': no SHA-256 integrity pin (.sha256 sidecar or plugins/hashes.txt entry). Add a pin or set OPENMU_ALLOW_UNPINNED_PLUGINS=true to override.",
                 Path.GetFileName(assemblyPath));
-            return true;
+            return false;
         }
 
         try

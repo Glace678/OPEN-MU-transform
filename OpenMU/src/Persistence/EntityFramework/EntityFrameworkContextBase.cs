@@ -84,20 +84,53 @@ internal class EntityFrameworkContextBase : IContext
             {
                 return await this.SaveChangesCoreAsync(cancellationToken).ConfigureAwait(false);
             }
-            catch (Exception ex) when (attempt < maxAttempts && IsTransientConcurrencyConflict(ex))
+            catch (DbUpdateConcurrencyException ex) when (attempt < maxAttempts)
             {
-                this._logger.LogWarning(ex, "Transient concurrency conflict while saving (attempt {Attempt}/{MaxAttempts}); retrying.", attempt, maxAttempts);
+                this._logger.LogWarning(ex, "Optimistic concurrency conflict while saving (attempt {Attempt}/{MaxAttempts}); merging and retrying.", attempt, maxAttempts);
 
-                if (ex is DbUpdateConcurrencyException concurrencyException)
+                // ReloadAsync overwrites the tracked entity with the database values, which would
+                // silently discard exactly the changes this save was supposed to persist. Snapshot
+                // the caller's pending modifications first and re-apply them after the refresh, so
+                // the retry still saves the player's change on top of the current database row.
+                var pendingChanges = new Dictionary<EntityEntry, Dictionary<string, object?>>();
+                foreach (var entry in this.Context.ChangeTracker.Entries())
                 {
-                    // Without refreshing, every retry fails against the same stale token.
-                    // Reload the conflicting entries from the database before trying again.
-                    foreach (var entry in concurrencyException.Entries)
+                    var modifiedProperties = entry.Properties.Where(p => p.IsModified).ToList();
+                    if (modifiedProperties.Count > 0)
+                    {
+                        pendingChanges[entry] = modifiedProperties.ToDictionary(p => p.Metadata.Name, p => p.CurrentValue);
+                    }
+                }
+
+                var conflictingEntities = new HashSet<object>(ex.Entries.Select(entry => entry.Entity));
+                foreach (var entry in this.Context.ChangeTracker.Entries())
+                {
+                    if (conflictingEntities.Contains(entry.Entity))
                     {
                         await entry.ReloadAsync(cancellationToken).ConfigureAwait(false);
                     }
                 }
 
+                foreach (var (entry, values) in pendingChanges)
+                {
+                    foreach (var (propertyName, value) in values)
+                    {
+                        var property = entry.Property(propertyName);
+                        property.CurrentValue = value;
+                        property.IsModified = true;
+                    }
+                }
+
+                await Task.Delay(attempt * 10, cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidOperationException ex) when (attempt < maxAttempts && IsConcurrentEnumerationConflict(ex))
+            {
+                // A player's entities can be mutated by game logic on a non-serialized flow (e.g.
+                // item destruction on an attacker's combat thread), so change detection can fail
+                // while enumerating a tracked collection. Nothing is stale or conflicting here, so
+                // the correct handling is a plain retry on a stable moment. We must NOT Reload:
+                // that would discard the caller's pending changes and silently lose the save.
+                this._logger.LogWarning(ex, "Concurrent collection change while saving (attempt {Attempt}/{MaxAttempts}); retrying without reloading.", attempt, maxAttempts);
                 await Task.Delay(attempt * 10, cancellationToken).ConfigureAwait(false);
             }
         }
@@ -272,21 +305,17 @@ internal class EntityFrameworkContextBase : IContext
     }
 
     /// <summary>
-    /// Determines whether the exception is a transient conflict caused by a concurrent entity mutation
-    /// racing this save, and is therefore worth retrying.
+    /// Determines whether the exception is the specific "collection modified while enumerating"
+    /// race which can happen when change detection enumerates a tracked collection while another
+    /// thread mutates the player's entities. Other InvalidOperationExceptions are deterministic
+    /// bugs and must not be retried.
     /// </summary>
     /// <param name="exception">The exception thrown by the save.</param>
-    /// <returns><c>true</c> if the save should be retried.</returns>
-    private static bool IsTransientConcurrencyConflict(Exception exception)
+    /// <returns><c>true</c> if the save can safely be retried without reloading anything.</returns>
+    private static bool IsConcurrentEnumerationConflict(Exception exception)
     {
-        // A concurrent entity mutation racing this save can corrupt change detection while it
-        // enumerates a tracked collection ("Collection was modified" -> InvalidOperationException),
-        // or produce a stale optimistic concurrency token (DbUpdateConcurrencyException).
-        // Keep the set narrow on purpose: NullReference/ArgumentNull/Index/KeyNotFound exceptions
-        // are far more often deterministic bugs than transient races and must not be masked by a
-        // retry. A persistent InvalidOperationException still rethrows once retries are exhausted.
         return exception is InvalidOperationException
-            or DbUpdateConcurrencyException;
+            && exception.Message.Contains("Collection was modified", StringComparison.Ordinal);
     }
 
     private async ValueTask<bool> SaveChangesCoreAsync(CancellationToken cancellationToken)

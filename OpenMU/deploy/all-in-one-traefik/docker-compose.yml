@@ -15,10 +15,10 @@ services:
       - "55980:55980"
     environment:
       DB_HOST: database
-      # Optional bootstrap admin panel user. Without it, the admin panel is reachable
-      # without a login until the first user has been created within the panel itself.
-      OPENMU_ADMIN_USER: ${OPENMU_ADMIN_USER:-}
-      OPENMU_ADMIN_PASSWORD: ${OPENMU_ADMIN_PASSWORD:-}
+      # Bootstrap admin panel user. Compose refuses to start when it is unset or empty,
+      # so the panel can never be reachable without a login (run deploy/quick-start first).
+      OPENMU_ADMIN_USER: ${OPENMU_ADMIN_USER:?Run deploy/quick-start to create an admin user}
+      OPENMU_ADMIN_PASSWORD: ${OPENMU_ADMIN_PASSWORD:?Run deploy/quick-start to create an admin user}
       # Optional base32 TOTP secret, if the bootstrap user should require a second factor.
       OPENMU_ADMIN_TOTP_SECRET: ${OPENMU_ADMIN_TOTP_SECRET:-}
       # website authenticates itself at the public API under /api.
@@ -45,9 +45,34 @@ services:
     networks:
       - proxy
     ports:
-      - "5432:5432"
+      # Never expose PostgreSQL to the public internet; keep it loopback-only.
+      - "127.0.0.1:5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql #store data on volume
+
+  socket-proxy:
+    # Traefik needs read access to the container API for its docker provider. Mounting
+    # /var/run/docker.sock directly into traefik grants root-equivalent API access; the
+    # proxy exposes only the read-only endpoints Traefik actually uses.
+    image: tecnativa/docker-socket-proxy:0.3.0
+    container_name: "socket-proxy"
+    restart: always
+    environment:
+      CONTAINERS: "1"
+      SERVICES: "1"
+      NETWORKS: "1"
+      TASKS: "1"
+      VERSION: "1"
+      POST: "0"
+      EXEC: "0"
+      IMAGES: "0"
+      VOLUMES: "0"
+      SECRETS: "0"
+      SYSTEM: "0"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - proxy
 
   traefik:
     image: traefik:2.11
@@ -56,12 +81,13 @@ services:
     command:
       - "--log.level=INFO"
       - "--providers.docker=true"
+      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    depends_on:
+      - socket-proxy
     networks:
       - proxy
 

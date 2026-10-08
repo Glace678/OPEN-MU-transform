@@ -288,6 +288,14 @@ public class Storage : IStorage
         if (this.ContainsSlot(item.ItemSlot))
         {
             var slot = item.ItemSlot - this._slotOffset;
+
+            // Verify slot identity before clearing it: otherwise an item whose ItemSlot points at a
+            // different object's slot would clear the wrong slot (only the slot number was checked).
+            if (!ReferenceEquals(this.ItemArray[slot], item))
+            {
+                return;
+            }
+
             this.ItemArray[slot] = null;
             if (slot >= this._boxOffset)
             {

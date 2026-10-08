@@ -41,7 +41,13 @@ internal class MagicEffectCancelHandlerPlugIn : IPacketHandlerPlugIn
         }
 
         var magicEffect = player.SkillList.GetSkill(message.SkillId)?.Skill?.MagicEffectDef;
-        if (magicEffect is null || !player.MagicEffectList.ActiveEffects.TryGetValue(magicEffect.Number, out var effect))
+        if (magicEffect is null)
+        {
+            return;
+        }
+
+        var effect = await player.MagicEffectList.TryGetEffectAsync(magicEffect.Number).ConfigureAwait(false);
+        if (effect is null)
         {
             return;
         }

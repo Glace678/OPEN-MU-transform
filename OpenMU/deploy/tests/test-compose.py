@@ -118,5 +118,83 @@ class ComposeContractTests(unittest.TestCase):
         self.assertNotIn("/login", config)
 
 
+class DistributedVariantTests(unittest.TestCase):
+    """Contract tests for the distributed (nginx) deployment variant."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.variant = DEPLOY / "distributed"
+        cls.base = yaml.safe_load((cls.variant / "docker-compose.yml").read_text(encoding="utf-8"))
+
+    def test_admin_credentials_are_required_not_optional(self):
+        environment = self.base["services"]["adminPanel"]["environment"]
+        self.assertIn(":?", environment["OPENMU_ADMIN_USER"])
+        self.assertIn(":?", environment["OPENMU_ADMIN_PASSWORD"])
+        self.assertNotIn(":-", environment["OPENMU_ADMIN_USER"])
+        self.assertNotIn(":-", environment["OPENMU_ADMIN_PASSWORD"])
+
+    def test_admin_panel_has_no_direct_public_port(self):
+        for mapping in self.base["services"]["adminPanel"]["ports"]:
+            self.assertTrue(mapping.startswith("127.0.0.1:"), mapping)
+
+    def test_nginx_dev_admin_location_is_ip_restricted_and_keeps_websocket_headers(self):
+        text = (self.variant / "nginx.dev.conf").read_text(encoding="utf-8")
+        admin_block = text[text.index("location ~ (/admin)"):text.index("# Public API")]
+        self.assertIn("deny all", admin_block)
+        self.assertIn("allow 10.0.0.0/8", admin_block)
+        # A location-level proxy_set_header disables server-level inheritance, so the
+        # WebSocket pair must be repeated inside the location.
+        self.assertIn("proxy_set_header Upgrade", admin_block)
+        self.assertIn("proxy_set_header Connection", admin_block)
+
+    def test_nginx_prod_admin_location_keeps_websocket_headers(self):
+        text = (self.variant / "nginx.prod443.conf").read_text(encoding="utf-8")
+        admin_block = text[text.index("location ~ (/admin)"):text.index("# Public API")]
+        self.assertIn("deny all", admin_block)
+        self.assertIn("proxy_set_header Upgrade", admin_block)
+        self.assertIn("proxy_set_header Connection", admin_block)
+
+    def test_gameserver_location_blocks_non_get(self):
+        text = (self.variant / "nginx.dev.conf").read_text(encoding="utf-8")
+        self.assertIn("limit_except GET HEAD", text)
+
+
+class TraefikVariantTests(unittest.TestCase):
+    """Contract tests for the all-in-one-traefik deployment variant."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.variant = DEPLOY / "all-in-one-traefik"
+        cls.base = yaml.safe_load((cls.variant / "docker-compose.yml").read_text(encoding="utf-8"))
+        cls.prod = yaml.safe_load((cls.variant / "docker-compose.prod.yml").read_text(encoding="utf-8"))
+
+    def test_admin_credentials_are_required_not_optional(self):
+        environment = self.base["services"]["openmu-startup"]["environment"]
+        self.assertIn(":?", environment["OPENMU_ADMIN_USER"])
+        self.assertIn(":?", environment["OPENMU_ADMIN_PASSWORD"])
+        self.assertNotIn(":-", environment["OPENMU_ADMIN_USER"])
+        self.assertNotIn(":-", environment["OPENMU_ADMIN_PASSWORD"])
+
+    def test_postgres_is_not_public(self):
+        for mapping in self.base["services"]["database"].get("ports", []):
+            self.assertTrue(mapping.startswith("127.0.0.1:"), mapping)
+        for mapping in self.prod["services"]["database"].get("ports", []):
+            self.assertTrue(mapping.startswith("127.0.0.1:"), mapping)
+
+    def test_docker_socket_is_not_mounted_directly(self):
+        for name in ("traefik",):
+            for volume in self.base["services"][name].get("volumes", []):
+                self.assertNotIn("docker.sock", volume)
+            for volume in self.prod["services"][name].get("volumes", []):
+                self.assertNotIn("docker.sock", volume)
+
+    def test_socket_proxy_service_exists_and_traefik_uses_it(self):
+        self.assertIn("socket-proxy", self.base["services"])
+        command = self.base["services"]["traefik"]["command"]
+        self.assertTrue(any("socket-proxy:2375" in item for item in command), command)
+        proxy_volumes = self.base["services"]["socket-proxy"]["volumes"]
+        self.assertTrue(any("docker.sock" in item for item in proxy_volumes))
+
+
 if __name__ == "__main__":
     unittest.main()

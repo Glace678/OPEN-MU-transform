@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MUnique.OpenMU.Dapr.Common.HealthChecks;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Network;
@@ -64,7 +65,8 @@ public static class Extensions
             .AddSingleton<IMigratableDatabaseContextProvider, PersistenceContextProvider>()
             .AddSingleton(s => (PersistenceContextProvider)s.GetService<IMigratableDatabaseContextProvider>()!)
             .AddSingleton(s => (IPersistenceContextProvider)s.GetService<IMigratableDatabaseContextProvider>()!)
-            .AddSingleton(s => new Lazy<IPersistenceContextProvider>(s.GetRequiredService<IPersistenceContextProvider>));
+            .AddSingleton(s => new Lazy<IPersistenceContextProvider>(s.GetRequiredService<IPersistenceContextProvider>))
+            .AddDatabaseHealthCheck();
     }
 
     /// <summary>
@@ -81,11 +83,26 @@ public static class Extensions
             .AddTransient<ReferenceHandler, ByDataSourceReferenceHandler>(provider =>
             {
                 var persistenceContextProvider = provider.GetService<IPersistenceContextProvider>();
-                var dataSource = new GameConfigurationDataSource(
-                    provider.GetService<ILogger<GameConfigurationDataSource>>()!,
-                    persistenceContextProvider!);
-                var configId = persistenceContextProvider!.CreateNewConfigurationContext().GetDefaultGameConfigurationIdAsync(default).AsTask().WaitAndUnwrapException();
-                dataSource.GetOwnerAsync(configId!.Value).AsTask().WaitAndUnwrapException();
+                var logger = provider.GetService<ILogger<GameConfigurationDataSource>>()!;
+                var dataSource = new GameConfigurationDataSource(logger, persistenceContextProvider!);
+
+                // Before the installation through the admin panel, the database (or even its users)
+                // and the game configuration may not exist yet. As the handler is transient,
+                // the data source is loaded as soon as the configuration exists.
+                try
+                {
+                    using var configurationContext = persistenceContextProvider!.CreateNewConfigurationContext();
+                    var configId = configurationContext.GetDefaultGameConfigurationIdAsync(default).AsTask().WaitAndUnwrapException();
+                    if (configId is { } gameConfigurationId)
+                    {
+                        dataSource.GetOwnerAsync(gameConfigurationId).AsTask().WaitAndUnwrapException();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogDebug(ex, "The game configuration couldn't be loaded, probably because the database isn't installed yet.");
+                }
+
                 var referenceHandler = new ByDataSourceReferenceHandler(dataSource);
                 return referenceHandler;
             });
@@ -233,6 +250,7 @@ public static class Extensions
                 x.AddOtlpExporter();
             });
         builder.Services.AddHealthChecks().ForwardToPrometheus();
+        builder.Services.AddDaprServiceHealthChecks();
 
         return builder;
     }
@@ -296,8 +314,12 @@ public static class Extensions
         var appApiToken = Environment.GetEnvironmentVariable(DaprEndpointSecurity.TokenEnvironmentVariable);
         app.Use(async (context, next) =>
         {
+            // Every controller action requires either a loopback caller (the local Dapr sidecar)
+            // or a valid app API token, regardless of the HTTP method. GET endpoints are not
+            // automatically public: endpoints which must be reachable through the reverse proxy
+            // (e.g. public server info) are explicitly marked with [AllowAnonymous].
             if (DaprEndpointSecurity.IsControllerAction(context)
-                && HttpMethods.IsPost(context.Request.Method)
+                && DaprEndpointSecurity.RequiresAuthorization(context)
                 && !DaprEndpointSecurity.IsAuthorized(context, appApiToken))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -310,6 +332,7 @@ public static class Extensions
         app.UseCloudEvents();
         app.MapControllers();
         app.MapSubscribeHandler();
+        app.MapDaprServiceHealthChecks();
 
         return app;
     }

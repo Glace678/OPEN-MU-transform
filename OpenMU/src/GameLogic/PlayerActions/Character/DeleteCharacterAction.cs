@@ -51,7 +51,7 @@ public class DeleteCharacterAction
             return CharacterDeleteResult.WrongSecurityCode;
         }
 
-        if (!checkAsPassword && player.Account.SecurityCode != securityCode)
+        if (!checkAsPassword && !SecurityCodeSecurity.VerifyCode(player.Account, securityCode))
         {
             return CharacterDeleteResult.WrongSecurityCode;
         }

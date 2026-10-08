@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic;
 
 using System.ComponentModel;
+using System.Threading;
 using MUnique.OpenMU.PlugIns;
 using Nito.AsyncEx;
 
@@ -13,10 +14,24 @@ using Nito.AsyncEx;
 /// </summary>
 public class StateMachine
 {
+    private static long _nextInstanceId;
+
     /// <summary>
     /// The lock object for state transitions.
     /// </summary>
     private readonly AsyncLock _asyncLock = new();
+
+    /// <summary>
+    /// A process-wide unique, monotonic identifier used to establish a canonical lock order
+    /// when several state machines must be locked together (e.g. trade settlement), so that
+    /// concurrent operations cannot acquire them in opposite orders and deadlock (AB/BA).
+    /// </summary>
+    private readonly long _instanceId = Interlocked.Increment(ref _nextInstanceId);
+
+    /// <summary>
+    /// Gets the process-wide unique ordering identifier of this state machine.
+    /// </summary>
+    internal long InstanceId => this._instanceId;
 
     /// <summary>
     /// A cancel event args object, which is getting reused.

@@ -11644,7 +11644,18 @@ int FindCharacterIndex(int Key)
             return i;
         }
     }
+
+    // Legacy sentinel (points one past the last usable client slot). New code should use
+    // FindCharacterIndexSafe, which returns -1 and is safe to use unchecked.
     return MAX_CHARACTERS_CLIENT;
+}
+
+// Safe variant: returns -1 when the key is not found, so an out-of-range index cannot index
+// CharactersClient. Callers check `if (idx < 0 || idx >= MAX_CHARACTERS_CLIENT)`.
+int FindCharacterIndexSafe(int Key)
+{
+    int index = FindCharacterIndex(Key);
+    return (index >= 0 && index < MAX_CHARACTERS_CLIENT) ? index : -1;
 }
 
 int FindCharacterIndexByMonsterIndex(int Type)

@@ -99,8 +99,17 @@ public class TradeButtonAction : BaseTradeAction
 
     private async ValueTask<TradeResult> InternalFinishTradeAsync(ITrader trader, ITrader tradingPartner)
     {
-        await using var context = await trader.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
-        await using var partnerContext = await tradingPartner.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+        // Both traders can press "confirm" concurrently. If each invocation locked its own
+        // player's state first and the partner's second, the two concurrent calls would hold
+        // the locks in opposite order (AB/BA) and deadlock, freezing both accounts. Always
+        // acquire the two state-machine locks in the same canonical (instance id) order.
+        var first = trader.PlayerState.InstanceId <= tradingPartner.PlayerState.InstanceId ? trader : tradingPartner;
+        var second = ReferenceEquals(first, trader) ? tradingPartner : trader;
+        await using var firstContext = await first.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+        await using var secondContext = await second.PlayerState.TryBeginAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+
+        var context = ReferenceEquals(first, trader) ? firstContext : secondContext;
+        var partnerContext = ReferenceEquals(first, trader) ? secondContext : firstContext;
         if (!context.Allowed || !partnerContext.Allowed)
         {
             context.Allowed = false;
@@ -133,23 +142,38 @@ public class TradeButtonAction : BaseTradeAction
             return TradeResult.Cancelled;
         }
 
+        var itemTransferCommitted = false;
         try
         {
             this.DetachItemsFromPersistenceContext(traderItems, trader.PersistenceContext);
             this.DetachItemsFromPersistenceContext(tradePartnerItems, trader.TradingPartner!.PersistenceContext);
             await itemContext.SaveChangesAsync().ConfigureAwait(false);
+
+            // The item ownership transfer is now durably committed. From this point on the in-memory
+            // state must not be rolled back from the trade backups, otherwise memory would disagree
+            // with the database and the committed items could be duplicated (see 25-01).
+            itemTransferCommitted = true;
             this.AttachItemsToPersistenceContext(traderItems, trader.TradingPartner.PersistenceContext);
             this.AttachItemsToPersistenceContext(tradePartnerItems, trader.PersistenceContext);
             CreditTradeMoney(trader, traderIncoming);
             CreditTradeMoney(tradingPartner, partnerIncoming);
 
-            // Durably settle both zen balances as part of the same operation as the
-            // item transfer persisted above, so a crash cannot leave items delivered
-            // without the corresponding money being persisted (P2).
-            if (!await trader.SaveProgressAsync().ConfigureAwait(false)
-                || !await tradingPartner.SaveProgressAsync().ConfigureAwait(false))
+            // Persist both zen balances. Retry transient failures a few times; the credited zen is
+            // already in memory and a later periodic save will persist it as well.
+            var moneyPersisted = false;
+            for (var attempt = 1; attempt <= 3 && !moneyPersisted; attempt++)
             {
-                throw new InvalidOperationException("Persisting the traded zen balances failed.");
+                moneyPersisted = await trader.SaveProgressAsync().ConfigureAwait(false)
+                                 && await tradingPartner.SaveProgressAsync().ConfigureAwait(false);
+                if (!moneyPersisted)
+                {
+                    await Task.Delay(attempt * 50).ConfigureAwait(false);
+                }
+            }
+
+            if (!moneyPersisted)
+            {
+                throw new InvalidOperationException("Persisting the traded zen balances failed after retries.");
             }
 
             await trader.TradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Checked)).ConfigureAwait(false);
@@ -162,6 +186,28 @@ public class TradeButtonAction : BaseTradeAction
         }
         catch (Exception exception)
         {
+            if (itemTransferCommitted)
+            {
+                // The item transfer already reached the database. Restoring the in-memory backups now
+                // would desync memory from the database and duplicate items, so we keep the settled
+                // result (the credited zen stays in memory and is persisted by a later periodic save)
+                // and only clear the trade UI state. This needs manual attention.
+                (trader as Player)?.Logger.LogCritical(
+                    exception,
+                    "Trade item transfer was committed but the settlement could not be fully completed for {trader} and {partner}; in-memory state is kept consistent with the committed items.",
+                    trader.Name,
+                    tradingPartner.Name);
+                await this.SendMessageAsync(trader, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
+                await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
+                this.ResetTradeState(tradingPartner);
+                this.ResetTradeState(trader);
+                context.Allowed = false;
+                partnerContext.Allowed = false;
+                FinishedTrades.Add(1);
+                return TradeResult.Success;
+            }
+
+            // Pre-commit failure: nothing was persisted yet, so cancelling and restoring backups is safe.
             await this.SendMessageAsync(trader, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
             await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
             context.Allowed = false;

@@ -35,6 +35,14 @@ public class AdminPanelAuthOptions
     public TimeSpan LockoutDuration { get; set; } = TimeSpan.FromMinutes(5);
 
     /// <summary>
+    /// Gets or sets the maximum time after process start during which the panel stays reachable
+    /// without any user while the database is confirmed empty (initial setup mode). After the
+    /// window elapses, the panel fails closed until a user is created or the process restarts.
+    /// Set to <see cref="TimeSpan.Zero"/> to disable anonymous setup completely.
+    /// </summary>
+    public TimeSpan AnonymousSetupWindow { get; set; } = TimeSpan.FromMinutes(30);
+
+    /// <summary>
     /// Gets or sets the bootstrap user which is available without a database.
     /// </summary>
     /// <remarks>

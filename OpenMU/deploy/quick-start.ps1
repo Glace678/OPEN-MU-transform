@@ -37,6 +37,31 @@ function New-Secret {
     return [Convert]::ToBase64String($buffer).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 }
 
+# Generates a 32-char admin password which satisfies the panel password policy:
+# at least one uppercase, lowercase, digit and non-alphanumeric character.
+function New-AdminSecret {
+    $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
+    try {
+        $rest = New-Secret
+        if ($rest.Length -gt 28) { $rest = $rest.Substring(0, 28) }
+        $b = New-Object byte[] 3
+        $generator.GetBytes($b)
+        $upper = [char](65 + ($b[0] % 26))
+        $lower = [char](97 + ($b[1] % 26))
+        $digit = [char](48 + ($b[2] % 10))
+        $chars = ($rest + $upper + $lower + $digit + '-').ToCharArray()
+        # Fisher-Yates shuffle.
+        for ($i = $chars.Length - 1; $i -gt 0; $i--) {
+            $j = $generator.GetInt32(0, $i + 1)
+            ($chars[$i], $chars[$j]) = ($chars[$j], $chars[$i])
+        }
+
+        return -join $chars
+    } finally {
+        $generator.Dispose()
+    }
+}
+
 function Invoke-Compose([string[]]$Arguments) {
     # Compose otherwise lets inherited shell variables override the saved .env file.
     $savedEnvironment = @{}
@@ -232,7 +257,7 @@ Invoke-Compose @('version')
 
 if (-not $Down) {
     if (-not $envExists) {
-        $values['OPENMU_ADMIN_PASSWORD'] = $(if ($AdminPassword) { $AdminPassword } else { New-Secret })
+        $values['OPENMU_ADMIN_PASSWORD'] = $(if ($AdminPassword) { $AdminPassword } else { New-AdminSecret })
         $values['DB_ADMIN_PW'] = New-Secret
     }
     $outputLines = [Collections.Generic.List[string]]::new()

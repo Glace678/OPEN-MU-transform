@@ -25,6 +25,8 @@ public class AdminUserAvailabilityService
     private readonly IAdminUserRepository _repository;
     private readonly BootstrapAdminUserProvider _bootstrapUserProvider;
     private readonly SemaphoreSlim _semaphore = new(1, 1);
+    private readonly TimeSpan _anonymousSetupWindow;
+    private readonly DateTime _startedUtc = DateTime.UtcNow;
 
     private DateTime _nextCheck = DateTime.MinValue;
     private bool _anyUserExists;
@@ -35,10 +37,19 @@ public class AdminUserAvailabilityService
     /// </summary>
     /// <param name="repository">The repository of the stored users.</param>
     /// <param name="bootstrapUserProvider">The provider of the bootstrap user.</param>
-    public AdminUserAvailabilityService(IAdminUserRepository repository, BootstrapAdminUserProvider bootstrapUserProvider)
+    /// <param name="anonymousSetupWindow">
+    /// The maximum time after process start in which the confirmed-empty state may open the
+    /// unauthenticated initial setup mode. <see cref="TimeSpan.Zero"/> disables it completely.
+    /// Defaults to 30 minutes.
+    /// </param>
+    public AdminUserAvailabilityService(
+        IAdminUserRepository repository,
+        BootstrapAdminUserProvider bootstrapUserProvider,
+        TimeSpan? anonymousSetupWindow = null)
     {
         this._repository = repository;
         this._bootstrapUserProvider = bootstrapUserProvider;
+        this._anonymousSetupWindow = anonymousSetupWindow ?? TimeSpan.FromMinutes(30);
     }
 
     /// <summary>
@@ -91,15 +102,26 @@ public class AdminUserAvailabilityService
     }
 
     /// <summary>
-    /// Gets a value indicating whether it has been positively confirmed that no admin user exists.
-    /// Returns <c>false</c> when the storage state is unknown (e.g. database unreachable).
+    /// Gets a value indicating whether it has been positively confirmed that no admin user exists
+    /// and the anonymous initial setup window is still open.
+    /// Returns <c>false</c> when the storage state is unknown (e.g. database unreachable) or the
+    /// bounded setup window has elapsed (fail closed; configure a bootstrap user or restart the
+    /// process to get a fresh window).
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     public ValueTask<bool> IsConfirmedEmptyAsync(CancellationToken cancellationToken = default)
     {
-        return this._zeroUsersConfirmed
-            ? ValueTask.FromResult(!this._anyUserExists)
-            : ValueTask.FromResult(false);
+        if (!this._zeroUsersConfirmed || this._anyUserExists)
+        {
+            return ValueTask.FromResult(false);
+        }
+
+        if (this._anonymousSetupWindow == TimeSpan.Zero)
+        {
+            return ValueTask.FromResult(false);
+        }
+
+        return ValueTask.FromResult(DateTime.UtcNow - this._startedUtc < this._anonymousSetupWindow);
     }
 
     /// <summary>

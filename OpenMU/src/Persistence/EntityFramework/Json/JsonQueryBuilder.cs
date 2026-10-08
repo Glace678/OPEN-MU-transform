@@ -75,11 +75,15 @@ public class JsonQueryBuilder
         var navigationAlias = this.GetNextAlias(parentAlias);
         if (navigationAlias == MaxDepthAlias)
         {
-            throw new InvalidOperationException(
-                $"Maximum navigation depth ('{MaxDepthAlias}') reached while traversing {entityType.Name}; the object graph is deeper than the query builder supports.");
+            // Stop traversal here to break circular references / bound the graph depth.
+            // Throwing would make loading any deeper-than-supported configuration graph fail;
+            // the remaining reference is simply not embedded (matches upstream behavior).
+            return;
         }
 
-        var navigations = this.GetNavigations(entityType);
+        // The order of the navigations differs between a model which is built at runtime and a
+        // compiled model, so sort them to build the same query for both.
+        var navigations = this.GetNavigations(entityType).OrderBy(navigation => navigation.Name, StringComparer.Ordinal);
 
         foreach (var navigation in navigations)
         {
@@ -172,7 +176,7 @@ public class JsonQueryBuilder
         var navigationAlias = this.GetNextAlias(parentAlias);
 
         stringBuilder.AppendLine(", (")
-            .Append("select array_to_json(array_agg(row_to_json(").Append(navigationAlias).AppendLine("))) from (");
+            .Append("select coalesce(array_to_json(array_agg(row_to_json(").Append(navigationAlias).AppendLine("))), '[]'::json) from (");
 
         if (navigation.IsMemberOfAggregate())
         {
@@ -213,7 +217,7 @@ public class JsonQueryBuilder
             ?? throw new InvalidOperationException("No reference column available.");
 
         stringBuilder.AppendLine(", (")
-            .Append("select array_to_json(array_agg(row_to_json(").Append(navigationAlias).AppendLine("))) from (");
+            .Append("select coalesce(array_to_json(array_agg(row_to_json(").Append(navigationAlias).AppendLine("))), '[]'::json) from (");
 
         stringBuilder.Append("select \"").Append(referenceColumnToOtherEntity).AppendLine("\" as \"$ref\"")
             .Append("from ").Append(navigationType.GetSchema()).Append(".\"").Append(navigationType.GetTableName()).AppendLine("\" ")

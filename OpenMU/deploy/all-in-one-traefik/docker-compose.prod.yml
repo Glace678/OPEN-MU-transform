@@ -36,7 +36,8 @@ services:
     networks:
       - proxy
     ports:
-      - "5432"
+      # Never expose PostgreSQL to the public internet; keep it loopback-only.
+      - "127.0.0.1:5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql #store data on volume
 
@@ -51,7 +52,8 @@ services:
       - 443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Docker access goes through the read-only socket-proxy service from the base
+      # compose file; never mount /var/run/docker.sock directly (root-equivalent API).
       - ./data-traefik/traefik.yml:/traefik.yml:ro
       - ./data-traefik/acme.json:/acme.json
       - ./data-traefik/configurations:/configurations:ro

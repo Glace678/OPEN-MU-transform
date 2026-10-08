@@ -321,15 +321,17 @@ public static class AccountSelfServiceExtensions
                         QueueLimit = 0,
                     }));
 
-            // BCrypt verification is deliberately expensive, so credential endpoints
-            // get a tighter budget than registration.
+            // BCrypt verification is deliberately expensive, so credential endpoints get a tight
+            // per-IP budget. The budget stays below the account lockout threshold (10 failures),
+            // so a single source can mistype freely but can never deliberately lock an arbitrary
+            // existing account; locking still requires failures from several distinct IPs.
             options.AddPolicy(AccountSelfServicePolicies.CredentialVerification, context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     AccountSelfServiceGuard.PartitionKey(context),
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 10,
-                        Window = TimeSpan.FromMinutes(1),
+                        PermitLimit = 6,
+                        Window = TimeSpan.FromMinutes(15),
                         QueueLimit = 0,
                     }));
 

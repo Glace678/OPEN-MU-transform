@@ -4,12 +4,19 @@
 
 namespace MUnique.OpenMU.ConnectServer.Host;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// API Controller which provides information about the connection and game servers.
 /// </summary>
+/// <remarks>
+/// This information is intentionally public (the game client fetches it through the reverse proxy),
+/// so the controller opts out of the Dapr endpoint authorization with <see cref="AllowAnonymousAttribute"/>.
+/// It exposes only connection metadata and aggregated load, never account data.
+/// </remarks>
 [ApiController]
+[AllowAnonymous]
 [Route("[controller]")]
 public class ServerInfoController : ControllerBase
 {

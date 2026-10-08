@@ -88,11 +88,15 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
         }
 
         int percent;
+        var upgradeStep = useBalanceV1Rules
+            ? BalanceV1.GetUpgradeStep(item.Level + levelAmount)
+            : default;
         if (useBalanceV1Rules)
         {
-            // NOTE: only Chance is applied; the designed UpgradeStep.PityAttempts guarantee is
-            // not yet honoured (no persisted per-item failed-attempt counter). See BalanceV1.
-            percent = checked((int)Math.Round(BalanceV1.GetUpgradeStep(item.Level + levelAmount).Chance * 100));
+            // The designed pity guarantee is honoured via the persisted per-item failure counter:
+            // after PityAttempts-1 failures (0 means no guarantee is defined), the next upgrade
+            // succeeds deterministically.
+            percent = checked((int)Math.Round(upgradeStep.Chance * 100));
         }
         else
         {
@@ -103,15 +107,22 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
             }
         }
 
-        if (this._randomizer.NextRandomBool(percent))
+        var pityReached = useBalanceV1Rules
+            && upgradeStep.PityAttempts > 0
+            && item.JewelUpgradeFailures + 1 >= upgradeStep.PityAttempts;
+
+        if (pityReached || this._randomizer.NextRandomBool(percent))
         {
             item.Level += (byte)levelAmount;
             item.Durability = item.GetMaximumDurabilityOfOnePiece();
+            item.JewelUpgradeFailures = 0;
             return true; // true doesn't mean that it was successful, just that the consumption happened.
         }
 
         if (useBalanceV1Rules)
         {
+            // Balance-v1 failures don't downgrade the item, but count toward the pity guarantee.
+            item.JewelUpgradeFailures++;
             return true;
         }
 

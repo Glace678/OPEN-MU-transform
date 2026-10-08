@@ -45,8 +45,17 @@ public class SetItemPriceAction
             var item = player.ShopStorage?.GetItem(slot);
             if (item is { })
             {
-                item.StorePrice = price > 0 ? price : (int?)null;
-                result = price >= 0 ? ItemPriceResult.Success : ItemPriceResult.PriceNegative;
+                if (price < 0)
+                {
+                    // Validate before mutating: a negative price must not clear the existing price.
+                    result = ItemPriceResult.PriceNegative;
+                }
+                else
+                {
+                    // A price of 0 (or null) clears the price and removes the item from sale.
+                    item.StorePrice = price > 0 ? price : (int?)null;
+                    result = ItemPriceResult.Success;
+                }
             }
         }
 

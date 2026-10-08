@@ -21,6 +21,12 @@ using MUnique.OpenMU.Interfaces;
 public class TalkNpcAction
 {
     /// <summary>
+    /// The maximum Euclidean distance in tiles at which a player may interact with an NPC.
+    /// Matches the range the client and the bot navigator use to talk to merchants.
+    /// </summary>
+    private const double MaximumNpcInteractionDistance = 3.0;
+
+    /// <summary>
     /// Talks to the specified Monster.
     /// </summary>
     /// <param name="player">The player.</param>
@@ -28,6 +34,20 @@ public class TalkNpcAction
     public async ValueTask TalkToNpcAsync(Player player, NonPlayerCharacter npc)
     {
         var npcStats = npc.Definition;
+
+        // The client only sends the NPC id, so without a distance check a crafted packet could
+        // open vaults/shops/quest dialogs of NPCs from anywhere on the map (remote cheat).
+        if (player.GetDistanceTo(npc) > MaximumNpcInteractionDistance)
+        {
+            player.Logger.LogWarning(
+                "Player {Player} tried to talk to NPC {Npc} ({Number}) from {Distance:0.##} tiles away (more than {Maximum}).",
+                player.Name,
+                npcStats.Designation,
+                npcStats.Number,
+                player.GetDistanceTo(npc),
+                MaximumNpcInteractionDistance);
+            return;
+        }
 
         if (this.AdvancePlayerState(npc))
         {

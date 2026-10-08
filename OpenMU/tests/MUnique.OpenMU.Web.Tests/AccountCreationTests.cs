@@ -88,7 +88,9 @@ public class AccountCreationTests
         {
             Assert.That(account.LoginName, Is.EqualTo("solotest"));
             Assert.That(BCrypt.Net.BCrypt.Verify("test-only", account.PasswordHash), Is.True);
-            Assert.That(account.SecurityCode, Is.EqualTo("123456"));
+            // Security codes are stored as BCrypt hashes, not in plain text.
+            Assert.That(account.SecurityCode, Is.Not.EqualTo("123456"));
+            Assert.That(BCrypt.Net.BCrypt.Verify("123456", account.SecurityCode), Is.True);
             Assert.That(changed, Is.EqualTo(1));
         });
     }

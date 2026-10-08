@@ -4,6 +4,8 @@
 
 namespace MUnique.OpenMU.Persistence;
 
+using System.Threading;
+
 /// <summary>
 /// The base repository provider.
 /// </summary>
@@ -123,10 +125,23 @@ public class BaseRepositoryProvider : IRepositoryProvider
 
     private void EnsureInitialized()
     {
-        if (!this._isInitialized)
+        // Double-checked locking: repositories are read concurrently from many flows, and a
+        // racy initialization would call Initialize() more than once / observe a half-populated
+        // dictionary. Volatile.Read/Write make the flag visible after initialization completed.
+        if (Volatile.Read(ref this._isInitialized))
         {
-            this.Initialize();
-            this._isInitialized = true;
+            return;
+        }
+
+        lock (this._initializationLock)
+        {
+            if (!this._isInitialized)
+            {
+                this.Initialize();
+                Volatile.Write(ref this._isInitialized, true);
+            }
         }
     }
+
+    private readonly object _initializationLock = new();
 }

@@ -177,7 +177,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             throw new ObjectDisposedException("Chat room is already disposed.");
         }
 
-        this._logger.LogDebug("Client {ChatClientIndex} is trying to join the room {RoomId} with token '{AuthenticationToken}'", chatClient.Index, this.RoomId, chatClient.AuthenticationToken);
+        this._logger.LogDebug("Client {ChatClientIndex} is trying to join the room {RoomId}.", chatClient.Index, this.RoomId);
 
         // Capture a stable reference: DisposeAsync nulls the field while an
         // in-flight operation holds the lock, so releasing via the field would
@@ -202,10 +202,9 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
                 if (authenticationInformation.AuthenticationRequiredUntil < DateTime.Now)
                 {
                     this._logger.LogInformation(
-                        "Client {ChatClientIndex} has tried to join the room {RoomId} with token '{AuthenticationToken}', but was too late. It was valid until {AuthenticationRequiredUntil}.",
+                        "Client {ChatClientIndex} has tried to join the room {RoomId} with an expired token (valid until {AuthenticationRequiredUntil}).",
                         chatClient.Index,
                         this.RoomId,
-                        chatClient.AuthenticationToken,
                         authenticationInformation.AuthenticationRequiredUntil);
                 }
                 else
@@ -221,7 +220,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             }
             else
             {
-                this._logger.LogInformation("Client {ChatClientIndex} has tried to join the room {RoomId} with token '{AuthenticationToken}', but was not registered.", chatClient.Index, this.RoomId, chatClient.AuthenticationToken);
+                this._logger.LogInformation("Client {ChatClientIndex} has tried to join the room {RoomId} with an unregistered token.", chatClient.Index, this.RoomId);
             }
         }
         finally

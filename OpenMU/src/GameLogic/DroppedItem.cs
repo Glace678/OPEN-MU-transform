@@ -176,7 +176,23 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
         var player = this._dropper;
         try
         {
-            await this.DisposeAsync().ConfigureAwait(false);
+            // Serialize expiry with pickup through the same lock: a pickup that is already in
+            // progress sets _availableToPick=false, in which case the expired row must not be
+            // deleted (otherwise the picked-up item would vanish from the database).
+            using (await this._pickupLock.LockAsync().ConfigureAwait(false))
+            {
+                if (!this._availableToPick)
+                {
+                    // Already picked up: only make sure the one-shot timer is disposed.
+                    this._removeTimer?.Dispose();
+                    this._removeTimer = null;
+                    return;
+                }
+
+                this._availableToPick = false;
+                await this.DisposeAsync().ConfigureAwait(false);
+            }
+
             if (player != null)
             {
                 await this.DeleteItemAsync(player).ConfigureAwait(false);
@@ -208,6 +224,10 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return false;
             }
 
+            // Claim before any persistence work so a concurrent expiry timer cannot delete the
+            // row we are about to attach/save.
+            this._availableToPick = false;
+
             if (!itemWasTemporary)
             {
                 // We already attach it here so that the next changes are in the context.
@@ -223,6 +243,8 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                     player.PersistenceContext.Detach(this.Item);
                 }
 
+                // Release the claim so the item can still expire or be picked by another player.
+                this._availableToPick = true;
                 return false;
             }
 
@@ -233,8 +255,6 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 // If it's not temporary, this step is not required because the inventory already set the ItemSlot in the same instance we're holding here.
                 this.Item.ItemSlot = (byte)slot;
             }
-
-            this._availableToPick = false;
         }
 
         player.Logger.LogDebug("Item '{0}' was picked up by player '{1}' and added to his inventory.", this, player);

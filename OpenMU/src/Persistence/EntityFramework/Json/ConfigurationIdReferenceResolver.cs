@@ -86,4 +86,13 @@ internal class ConfigurationIdReferenceResolver : ReferenceResolver
     {
         this._cache.TryRemove(key, out _);
     }
+
+    /// <summary>
+    /// Clears the whole cache. It must be called when the database is recreated, otherwise the
+    /// resolver would hand out references to configuration objects of the dropped database.
+    /// </summary>
+    public void Clear()
+    {
+        this._cache.Clear();
+    }
 }

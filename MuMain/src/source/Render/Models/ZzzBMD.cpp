@@ -411,11 +411,10 @@ void BMD::SkinVertex(int mesh, int vertexIndex, float(*BoneMatrix)[3][4], bool T
 {
     const Vertex_t* v = &Meshs[mesh].Vertices[vertexIndex];
 
-    // DXP-20 inc4: reads the BoneScale snapshotted at TransformCheap() time, not the live global --
-    // this makes SkinVertex()/SkinVertices() safe to call from a deferred EnsureCpuVertices(), where
-    // the global may already have been reset/reused by a later object. Behavior-identical for the
-    // pre-inc4 callers (coin heap, skin-shell effect), which always run immediately after
-    // TransformCheap() -- the stash and the global agree at that point.
+    // A corrupted/hostile model can carry a bone node index outside [0, NumBones), which would
+    // index BoneMatrix out of bounds. Fall back to the identity (node 0) in that case.
+    const int safeNode = (v->Node >= 0 && v->Node < NumBones) ? v->Node : 0;
+
     if (m_LastBoneScale == 1.f)
     {
         if (_Scale)
@@ -423,19 +422,19 @@ void BMD::SkinVertex(int mesh, int vertexIndex, float(*BoneMatrix)[3][4], bool T
             vec3_t Position;
             VectorCopy(v->Position, Position);
             VectorScale(Position, _Scale, Position);
-            VectorTransform(Position, BoneMatrix[v->Node], out);
+            VectorTransform(Position, BoneMatrix[safeNode], out);
         }
         else
-            VectorTransform(v->Position, BoneMatrix[v->Node], out);
+            VectorTransform(v->Position, BoneMatrix[safeNode], out);
         if (Translate)
             VectorScale(out, BodyScale, out);
     }
     else
     {
-        VectorRotate(v->Position, BoneMatrix[v->Node], out);
-        out[0] = out[0] * m_LastBoneScale + BoneMatrix[v->Node][0][3];
-        out[1] = out[1] * m_LastBoneScale + BoneMatrix[v->Node][1][3];
-        out[2] = out[2] * m_LastBoneScale + BoneMatrix[v->Node][2][3];
+        VectorRotate(v->Position, BoneMatrix[safeNode], out);
+        out[0] = out[0] * m_LastBoneScale + BoneMatrix[safeNode][0][3];
+        out[1] = out[1] * m_LastBoneScale + BoneMatrix[safeNode][1][3];
+        out[2] = out[2] * m_LastBoneScale + BoneMatrix[safeNode][2][3];
         if (Translate)
             VectorScale(out, BodyScale, out);
     }

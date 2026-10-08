@@ -44,6 +44,8 @@ void ClearCharacters(int Key = -1);
 void DeleteCharacter(int Key);
 void DeleteCharacter(CHARACTER* c, OBJECT* o);
 int FindCharacterIndex(int Key);
+// Returns -1 when the character key is not present, otherwise its 0-based slot.
+int FindCharacterIndexSafe(int Key);
 CHARACTER* FindCharacterByKey(int Key);
 int FindCharacterIndexByMonsterIndex(int Type);
 

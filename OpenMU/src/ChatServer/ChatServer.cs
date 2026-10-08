@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.ChatServer;
 
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Globalization;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -284,14 +285,21 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     /// <param name="clientIndex">Index of the client.</param>
     /// <returns>The random authentication token as a string.</returns>
     /// <remarks>
-    ///  This is the original way of generating the token - not especially secure, but to keep it simple, I leave it that way.
+    /// The token is sent in a 10-digit decimal field of the MU protocol and must also encode the
+    /// client index in the top byte (see ExDbClient), so it cannot be enlarged to 128 bits without
+    /// breaking the wire format. We therefore fill the whole remaining 24 bits cryptographically
+    /// and format it as exactly 10 digits, which is the maximum entropy this protocol slot allows.
     /// </remarks>
     private string GetRandomAuthenticationToken(byte clientIndex)
     {
-        var authenticationToken = new byte[] { clientIndex, 0, 0, 0 };
-        this._randomNumberGenerator.GetBytes(authenticationToken, 2, 2);
-        var tokenAsString = authenticationToken.MakeDwordBigEndian(0).ToString();
-        return tokenAsString;
+        var authenticationToken = new byte[4];
+        this._randomNumberGenerator.GetBytes(authenticationToken, 1, 3);
+        authenticationToken[0] = clientIndex;
+        var tokenValue = authenticationToken.MakeDwordBigEndian(0);
+
+        // The wire field holds 10 ASCII digits. uint.MaxValue (4294967295) already has 10 digits,
+        // so no padding is needed; the value range covers the full 10-digit-capable uint space.
+        return tokenValue.ToString(CultureInfo.InvariantCulture);
     }
 
     private async ValueTask ChatClientAcceptingAsync(CancelEventArgs e)

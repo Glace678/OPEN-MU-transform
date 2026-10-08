@@ -23,7 +23,7 @@ users.
 | `-reinit` | Recreates and reinitializes the database. Has no effect when `-demo` is used. |
 | `-version:[season6\|0.75\|0.95d]` | Defines the version of the game client. Only has an effect with `-reinit` or `-demo` and affects the initial data creation. Default: `season6` |
 | `-gameservers:[1..255]` | Defines how many game server definitions are created during initial data creation. It does not change an existing database. Default: `3` |
-| `-testaccounts:[true\|false]` | Defines whether the version-specific test accounts are created during initial data creation. It does not change an existing database. Default: `true` |
+| `-testaccounts:[true\|false]` | Defines whether the version-specific test accounts are created during initial data creation. It does not change an existing database. Default: `false` (the `-demo` mode defaults to `true` for local testing). Test accounts include GameMaster accounts with publicly known default passwords, so never enable this in production |
 | `-demo` | Instead of an external database, in-memory repositories are used and the data is initialized at each start. Only for testing, not for production — player progress is **not saved**. |
 | `-deamon` | Deactivates handling of console inputs |
 | `-adminpanel:[enabled\|disabled]` | Defines whether the admin panel is available. If disabled, `-autostart` is applied automatically. Default: `enabled` |

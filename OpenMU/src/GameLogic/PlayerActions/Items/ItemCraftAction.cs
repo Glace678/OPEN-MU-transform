@@ -42,8 +42,15 @@ public class ItemCraftAction
         {
             result = await craftingHandler.DoMixAsync(player, socketSlot).ConfigureAwait(false);
         }
-        catch
+        catch (Exception exception)
         {
+            // The fee and some materials may already have been consumed, so report the real error.
+            // Reporting "missing materials" here both misleads the player and hides data loss.
+            player.Logger.LogError(
+                exception,
+                "Chaos machine crafting {Crafting} failed after partial consumption for player {Player}.",
+                crafting,
+                player.Name);
             result = (CraftingResult.LackingMixItems, null);
         }
 

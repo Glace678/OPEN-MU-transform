@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.DataModel.Entities;
 
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.DataModel.Configuration;
 
@@ -59,6 +60,7 @@ public class Account
     /// <summary>
     /// Gets or sets the hash of the password, preferrably of BCrypt.
     /// </summary>
+    [JsonIgnore]
     public string PasswordHash { get; set; } = string.Empty;
 
     /// <summary>
@@ -67,11 +69,14 @@ public class Account
     /// Credential changes use compare-and-swap rather than the gameplay save path.
     /// </summary>
     [HiddenAtCreation]
+    [JsonIgnore]
     public string? RecoveryCodeHash { get; set; }
 
     /// <summary>
-    /// Gets or sets the security code which is used to confirm character deletion and guild kicks.
+    /// Gets or sets the BCrypt hash of the security code which is used to confirm character
+    /// deletion and guild kicks. Legacy plaintext codes are upgraded to a hash on first use.
     /// </summary>
+    [JsonIgnore]
     public string SecurityCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -115,9 +120,10 @@ public class Account
     public short TimeZone { get; set; }
 
     /// <summary>
-    /// Gets or sets the vault password.
+    /// Gets or sets the BCrypt hash of the vault password (pin).
     /// </summary>
     [HiddenAtCreation]
+    [JsonIgnore]
     public string VaultPassword { get; set; } = string.Empty;
 
     /// <summary>
