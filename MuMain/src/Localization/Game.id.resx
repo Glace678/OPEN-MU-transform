@@ -6462,7 +6462,7 @@
     <comment>legacy_id=1729</comment>
   </data>
   <data name="ItSAnAcronymOfAncient" xml:space="preserve">
-    <value>鈥業tu adalah akronim dari bahasa kuno 鈥楾aruta De Rasa鈥?yang berarti 鈥榤anusia paling cerdas di bawah langit鈥?dan digunakan untuk memanggil penyihir terhebat Arikara.</value>
+    <value>‘Itu adalah akronim dari bahasa kuno ‘Taruta De Rasa’ yang berarti ‘manusia paling cerdas di bawah langit’ dan digunakan untuk memanggil penyihir terhebat Arikara.</value>
     <comment>legacy_id=1730</comment>
   </data>
   <data name="NakalEpitaphWasDiscoveredByThe" xml:space="preserve">
@@ -12761,112 +12761,112 @@
     <value>Gunakan keterampilan dengan cermat</value>
     <comment>legacy_id=3765</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛 碌卯路脧 脟枚脠虏" xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛 碌卯路脧 脟枚脠虏</value>
+  <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
     <comment>legacy_id=3766</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛 碌卯路脧 录酶脌搂" xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛 碌卯路脧 录酶脌搂</value>
+  <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
     <comment>legacy_id=3767</comment>
   </data>
-  <data name="碌卯路脧 掳鲁录枚" xml:space="preserve">
-    <value>碌卯路脧 掳鲁录枚</value>
+  <data name="µî·Ï °³¼ö" xml:space="preserve">
+    <value>µî·Ï °³¼ö</value>
     <comment>legacy_id=3768</comment>
   </data>
-  <data name="驴矛赂庐 卤忙碌氓 脟枚脠虏" xml:space="preserve">
-    <value>驴矛赂庐 卤忙碌氓 脟枚脠虏</value>
+  <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
+    <value>¿ì¸® ±æµå ÇöÈ²</value>
     <comment>legacy_id=3769</comment>
   </data>
-  <data name="碌脷路脦掳隆卤芒" xml:space="preserve">
-    <value>碌脷路脦掳隆卤芒</value>
+  <data name="µÚ·Î°¡±â" xml:space="preserve">
+    <value>µÚ·Î°¡±â</value>
     <comment>legacy_id=3770</comment>
   </data>
-  <data name="碌卯路脧 掳隆麓脡" xml:space="preserve">
-    <value>碌卯路脧 掳隆麓脡</value>
+  <data name="µî·Ï °¡´É" xml:space="preserve">
+    <value>µî·Ï °¡´É</value>
     <comment>legacy_id=3771</comment>
   </data>
-  <data name="碌卯路脧 潞脪掳隆" xml:space="preserve">
-    <value>碌卯路脧 潞脪掳隆</value>
+  <data name="µî·Ï ºÒ°¡" xml:space="preserve">
+    <value>µî·Ï ºÒ°¡</value>
     <comment>legacy_id=3772</comment>
   </data>
-  <data name="碌卯路脧脟脪 录潞脕脰脌脟 脟楼陆脛 掳鲁录枚 : %d掳鲁" xml:space="preserve">
-    <value>碌卯路脧脟脪 录潞脕脰脌脟 脟楼陆脛 掳鲁录枚 : %d掳鲁</value>
+  <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
+    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
     <comment>legacy_id=3773</comment>
   </data>
-  <data name="碌卯路脧脟脪 录潞脕脰脌脟 脟楼陆脛脌禄 脕露脟脮脙垄驴隆 驴脙路脕脕脰录录驴盲." xml:space="preserve">
-    <value>碌卯路脧脟脪 录潞脕脰脌脟 脟楼陆脛脌禄 脕露脟脮脙垄驴隆 驴脙路脕脕脰录录驴盲.</value>
+  <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
+    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
     <comment>legacy_id=3774</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛脌潞 脟脩鹿酶驴隆 脙脰麓毛 225掳鲁卤卯脕枚 碌卯路脧脟脪 录枚 脌脰陆脌麓脧麓脵." xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛脌潞 脟脩鹿酶驴隆 脙脰麓毛 225掳鲁卤卯脕枚 碌卯路脧脟脪 录枚 脌脰陆脌麓脧麓脵.</value>
+  <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
     <comment>legacy_id=3775</comment>
   </data>
-  <data name="碌卯路脧碌脠 录潞脕脰脌脟 脟楼陆脛 掳鲁录枚: %d掳鲁" xml:space="preserve">
-    <value>碌卯路脧碌脠 录潞脕脰脌脟 脟楼陆脛 掳鲁录枚: %d掳鲁</value>
+  <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
+    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
     <comment>legacy_id=3776</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛 碌卯路脧" xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛 碌卯路脧</value>
+  <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
     <comment>legacy_id=3777</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛脌禄 碌卯路脧脟脧陆脙掳脷陆脌麓脧卤卯?" xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛脌禄 碌卯路脧脟脧陆脙掳脷陆脌麓脧卤卯?</value>
+  <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
     <comment>legacy_id=3778</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛 碌卯路脧脌脤 驴脧路谩碌脟戮煤陆脌麓脧麓脵." xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛 碌卯路脧脌脤 驴脧路谩碌脟戮煤陆脌麓脧麓脵.</value>
+  <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
     <comment>legacy_id=3779</comment>
   </data>
-  <data name="录潞脕脰脌脟 脟楼陆脛 碌卯路脧脌脤 陆脟脝脨脟脧驴麓陆脌麓脧麓脵." xml:space="preserve">
-    <value>录潞脕脰脌脟 脟楼陆脛 碌卯路脧脌脤 陆脟脝脨脟脧驴麓陆脌麓脧麓脵.</value>
+  <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
+    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
     <comment>legacy_id=3780</comment>
   </data>
-  <data name="锝硷緭锝硷胶" xml:space="preserve">
-    <value>锝硷緭锝硷胶</value>
+  <data name="ｼﾓｼｺ" xml:space="preserve">
+    <value>ｼﾓｼｺ</value>
     <comment>legacy_id=3781</comment>
   </data>
-  <data name="锞嗭緡锞咃礁锝憋緱锝凤渐 锞侊饯锝猴礁" xml:space="preserve">
-    <value>锞嗭緡锞咃礁锝憋緱锝凤渐 锞侊饯锝猴礁</value>
+  <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
+    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
     <comment>legacy_id=3782</comment>
   </data>
-  <data name="锞€鐩傦緷" xml:space="preserve">
-    <value>锞€鐩傦緷</value>
+  <data name="ﾀ盂ﾝ" xml:space="preserve">
+    <value>ﾀ盂ﾝ</value>
     <comment>legacy_id=3783</comment>
   </data>
-  <data name="锞囷緲锞侊溅" xml:space="preserve">
-    <value>锞囷緲锞侊溅</value>
+  <data name="ﾇﾘﾁｦ" xml:space="preserve">
+    <value>ﾇﾘﾁｦ</value>
     <comment>legacy_id=3784</comment>
   </data>
-  <data name="脌没麓毛卤忙碌氓赂娄 脟脴脕娄脟脪 卤忙碌氓赂铆脌禄 录卤脜脙脟脴 脕脰录录驴盲" xml:space="preserve">
-    <value>脌没麓毛卤忙碌氓赂娄 脟脴脕娄脟脪 卤忙碌氓赂铆脌禄 录卤脜脙脟脴 脕脰录录驴盲</value>
+  <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
+    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="卤忙碌氓赂娄 脌没麓毛卤忙碌氓驴隆录颅 脟脴脕娄脟脧陆脙掳脷陆脌麓脧卤卯?" xml:space="preserve">
-    <value>卤忙碌氓赂娄 脌没麓毛卤忙碌氓驴隆录 脟脴脕娄脟脧陆脙掳脷陆脌麓脧卤卯?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="录颅鹿枚" xml:space="preserve">
-    <value>录鹿枚</value>
+  <data name="¼­¹ö" xml:space="preserve">
+    <value>¼¹ö</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
     <value>ESC</value>
     <comment>legacy_id=3788</comment>
   </data>
-  <data name="20戮茂脕篓 脌脤禄贸 脙芒卤脻 潞脪掳隆" xml:space="preserve">
-    <value>20戮茂脕篓 脌脤禄贸 脙芒卤脻 潞脪掳隆</value>
+  <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
+    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
     <comment>legacy_id=3789</comment>
   </data>
-  <data name="脌眉脙录录枚赂庐潞帽驴毛" xml:space="preserve">
-    <value>脌眉脙录录枚赂庐潞帽驴毛</value>
+  <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
+    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
     <comment>legacy_id=3790</comment>
   </data>
-  <data name="脟脴麓莽 卤忙碌氓掳隆 脕赂脌莽脟脧脕枚 戮脢陆脌麓脧麓脵" xml:space="preserve">
-    <value>脟脴麓莽 卤忙碌氓掳隆 脕赂脌莽脟脧脕枚 戮脢陆脌麓脧麓脵</value>
+  <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
+    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
     <comment>legacy_id=3791</comment>
   </data>
-  <data name="掳脜路隆 陆脗脌脦 麓毛卤芒脕脽" xml:space="preserve">
-    <value>掳脜路隆 陆脗脌脦 麓毛卤芒脕脽</value>
+  <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
+    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">

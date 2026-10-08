@@ -47,6 +47,12 @@ $protected = [System.Security.Cryptography.ProtectedData]::Protect(
 $secretsPath = Join-Path $keysDir 'local-secrets.dpapi'
 [System.IO.File]::WriteAllBytes($secretsPath, $protected)
 
+# Zero the secrets JSON buffer we control. The transient managed String from
+# NetworkCredential.Password cannot be deterministically erased (immutable,
+# GC-managed); the authoritative secret stays in the SecureString parameter,
+# which is disposed in finally.
+[Array]::Clear($bytes, 0, $bytes.Length)
+
 # Derive the solo game login (same algorithm as LocalGameLogin.FromSecrets)
 $key = [System.Text.Encoding]::UTF8.GetBytes($secrets.AccountPassword)
 $hmac1 = New-Object System.Security.Cryptography.HMACSHA256(, $key)
@@ -80,8 +86,16 @@ if ($ok) { Write-Output "ROUNDTRIP_OK" } else { Write-Output "ROUNDTRIP_FAIL"; e
 }
 finally
 {
-    if ($plainAdminPassword)
+    # Dispose the sensitive objects we own. Do NOT rely on String.Remove(0): a
+    # .NET String is immutable, so that call only rebound this local and left
+    # the admin password alive on the managed heap.
+    if ($null -ne $key) { [Array]::Clear($key, 0, $key.Length) }
+    if ($null -ne $hmac1) { $hmac1.Dispose() }
+    if ($null -ne $hmac2) { $hmac2.Dispose() }
+    if ($null -ne $rng) { $rng.Dispose() }
+    $credential = $null
+    if ($null -ne $AdminPassword)
     {
-        $plainAdminPassword = $plainAdminPassword.Remove(0)
+        $AdminPassword.Dispose()
     }
 }

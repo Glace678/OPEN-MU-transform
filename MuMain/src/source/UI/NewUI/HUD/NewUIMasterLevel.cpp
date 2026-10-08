@@ -188,6 +188,17 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
     }
     fclose(fp);
 
+    // The checksum covers the encoded bytes exactly as stored, i.e. before the
+    // per-record BuxConvert below (same seed/layout as the skill-tree loader).
+    if (dwCheckSum != GenerateCheckSum2(file_buffer, tooltip_data_size, 0x2BC1))
+    {
+        delete[] file_buffer;
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls - File corrupted.", path);
+        g_ErrorReport.Write(Text);
+        return;
+    }
+
     BYTE* pSeek = file_buffer;
 
     for (int i = 0; i < MAX_MASTER_SKILL_DATA; i++)

@@ -49,6 +49,11 @@ bool CMoveCommandData::Create(const std::wstring& filename)
         return false;
     }
 
+    // Parse every record into a local list first. A short read on the Nth
+    // record must not leave the previously parsed N-1 records visible in
+    // m_listMoveInfoData (callers may ignore the false return), so the member
+    // list is replaced only once the whole file has been read successfully.
+    std::list<MOVEINFODATA*> pending;
     for (int i = 0; i < count; i++)
     {
         auto* pMoveInfoData = new MOVEINFODATA;
@@ -56,6 +61,8 @@ bool CMoveCommandData::Create(const std::wstring& filename)
         if (fread(&moveReqInfo, sizeof moveReqInfo, 1, fp) != 1)
         {
             delete pMoveInfoData;
+            for (auto* p : pending)
+                delete p;
             fclose(fp);
             return false;
         }
@@ -69,9 +76,12 @@ bool CMoveCommandData::Create(const std::wstring& filename)
         CMultiLanguage::ConvertFromUtf8(pMoveInfoData->_ReqInfo.szMainMapName, moveReqInfo.szMainMapName, sizeof moveReqInfo.szMainMapName);
         CMultiLanguage::ConvertFromUtf8(pMoveInfoData->_ReqInfo.szSubMapName, moveReqInfo.szSubMapName, sizeof moveReqInfo.szSubMapName);
 
-        m_listMoveInfoData.push_back(pMoveInfoData);
+        pending.push_back(pMoveInfoData);
     }
     fclose(fp);
+
+    Release();
+    m_listMoveInfoData.swap(pending);
 
     return true;
 }

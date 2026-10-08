@@ -11,6 +11,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-mingw:
     name: build-mingw-${{ matrix.arch }} (editor-${{ matrix.editor }})
@@ -89,6 +92,16 @@ jobs:
             cmake --install _deps/build-turbo
           fi
           test -f "${prefix}/lib/libturbojpeg.a"
+
+      - name: Prepare game assets
+        # src/bin is git-ignored and holds the released game data, which is not
+        # available on a clean runner. Configure only requires the directory and
+        # config.ini.template; create an empty Data/ and seed the template from
+        # the tracked src/config copy so the cross-build and wine unit tests run.
+        run: |
+          cmake -DASSETS_DIR="${GITHUB_WORKSPACE}/MuMain/src/bin" \
+                -DTEMPLATE_DIR="${GITHUB_WORKSPACE}/MuMain/src/config" \
+                -P "${GITHUB_WORKSPACE}/MuMain/cmake/PrepareAssets.cmake"
 
       - name: Configure CMake
         run: |

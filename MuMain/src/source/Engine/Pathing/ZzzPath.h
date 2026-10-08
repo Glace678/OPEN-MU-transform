@@ -52,6 +52,7 @@ public:
     bool FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance = 0.0f);
 
 private:
+    bool FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, float fDistance);
     void SetEndNodes(bool bErrorCheck, int iWall, int xEnd, int yEnd, float fDistance);
     int CalculateCostToStartAddition(int xDir, int yDir);
     int EstimateCostToGoal(int xStart, int yStart, int xNew, int yNew);
@@ -116,6 +117,10 @@ inline void PATH::SetMapDimensions(int iWidth, int iHeight, WORD* pbyMap)
     m_pxPrev = new int[m_iSize];
     m_pyPrev = new int[m_iSize];
     ZeroMemory(m_pbyClosed, m_iSize * sizeof(BYTE));
+    // The parent arrays are read by GeneratePath's backtrace, so give them a
+    // deterministic (in-bounds, self/zero) state from the moment they exist.
+    ZeroMemory(m_pxPrev, m_iSize * sizeof(int));
+    ZeroMemory(m_pyPrev, m_iSize * sizeof(int));
 }
 
 inline bool PATH::AddClearPos(int iIndex)
@@ -164,6 +169,44 @@ inline int PATH::GetNewNodeToTest(void)
 
 inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance)
 {
+    // The open list must be empty before control returns so a failed search
+    // (which can return early below) cannot leak stale nodes into the next call.
+    // When Value is set the destination attribute is temporarily cleared so the
+    // search can finish on an occupied tile; restore it unconditionally so the
+    // terrain attribute is never permanently rewritten to 0 (MU-E-5).
+    bool mutatedEnd = false;
+    int iEndIndexForValue = -1;
+    if (Value && 0.0f == fDistance)
+    {
+        const int iEndIndex = GetIndex(xEnd, yEnd);
+        if (iEndIndex >= 0 && iEndIndex < m_iSize)
+        {
+            iEndIndexForValue = iEndIndex;
+            mutatedEnd = true;
+        }
+    }
+
+    bool found = false;
+    WORD savedAttribute = 0;
+    if (mutatedEnd)
+    {
+        savedAttribute = m_pbyMap[iEndIndexForValue];
+        m_pbyMap[iEndIndexForValue] = 0;
+    }
+
+    found = FindPathImpl(xStart, yStart, xEnd, yEnd, bErrorCheck, iWall, fDistance);
+
+    if (mutatedEnd)
+    {
+        m_pbyMap[iEndIndexForValue] = savedAttribute;
+    }
+
+    m_btOpenNodes.RemoveAll();
+    return found;
+}
+
+inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, float fDistance)
+{
     Init();
 
     if (xStart == 0 || yStart == 0)
@@ -177,11 +220,6 @@ inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErr
         if (iEndIndex < 0 || iEndIndex >= m_iSize)
         {
             return false;
-        }
-
-        if (Value == true)
-        {
-            m_pbyMap[iEndIndex] = 0;
         }
 
         if (bErrorCheck && (iWall <= m_pbyMap[iEndIndex] && (m_pbyMap[GetIndex(xEnd, yEnd)] & TW_ACTION) != TW_ACTION))

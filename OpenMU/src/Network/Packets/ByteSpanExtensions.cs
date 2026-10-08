@@ -109,6 +109,14 @@ public static class ByteSpanExtensions
     /// <remarks>This is not optimal yet, since it creates a new byte array. We might wait until encoding works on spans.</remarks>
     public static string ExtractString(this Span<byte> span, int startIndex, int maximumBytes, Encoding encoding)
     {
+        // startIndex often comes from `_data.Length - N`; on a short packet it is
+        // negative, which would slice backwards or throw. Treat an out-of-range
+        // start as an empty string instead of reading the wrong memory.
+        if (startIndex < 0 || startIndex >= span.Length || maximumBytes <= 0)
+        {
+            return string.Empty;
+        }
+
         var content = span.Slice(startIndex, Math.Min(span.Length - startIndex, maximumBytes)).ToArray();
         int count = 0;
         for (int i = 0; i < content.Length; i++)

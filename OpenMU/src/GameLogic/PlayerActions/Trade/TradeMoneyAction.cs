@@ -47,9 +47,10 @@ public class TradeMoneyAction
             return;
         }
 
-        if (!player.TryAddMoney(-newAmount))
+        if (!player.TryRemoveMoney(newAmount))
         {
-            player.TryAddMoney(-player.TradingMoney);
+            // Re-lock the previous trade money that we just refunded.
+            player.TryRemoveMoney(player.TradingMoney);
             return;
         }
 

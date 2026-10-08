@@ -1179,7 +1179,7 @@ void CMapManager::Load() // OK
     }
 }
 
-void CMapManager::LoadWorld(int Map)
+bool CMapManager::LoadWorld(int Map)
 {
     if (Map == 32 && this->WorldActive == 32)
     {
@@ -1234,13 +1234,16 @@ void CMapManager::LoadWorld(int Map)
 
     int iResult = OpenTerrainMapping(FileName);
 
-    if (iMapWorld != iResult && -1 != iResult)
+    // -1 means the file is missing/unreadable (F06); any mismatch with the
+    // expected world number means corrupt data. Both must abort the map load
+    // instead of continuing on stale/empty terrain layers.
+    if (iResult != iMapWorld)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return;
+        return false;
     }
 
     if (this->WorldActive == WD_73NEW_LOGIN_SCENE)
@@ -1295,35 +1298,40 @@ void CMapManager::LoadWorld(int Map)
             mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
         }
     iResult = OpenTerrainAttribute(FileName);
-    if (iMapWorld != iResult && -1 != iResult)
+    if (iResult != iMapWorld)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return;
+        return false;
     }
 
     mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.obj", WorldName, iMapWorld);
 
     iResult = OpenObjectsEnc(FileName);
-    if (iMapWorld != iResult && -1 != iResult)
+    if (iResult != iMapWorld)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return;
+        return false;
     }
 
     mu_swprintf(FileName, L"%ls\\TerrainHeight.bmp", WorldName);
+    bool terrainLoaded;
     if (IsTerrainHeightExtMap(this->WorldActive) == true)
     {
-        CreateTerrain(FileName, true);
+        terrainLoaded = CreateTerrain(FileName, true);
     }
     else
     {
-        CreateTerrain(FileName);
+        terrainLoaded = CreateTerrain(FileName);
+    }
+    if (!terrainLoaded)
+    {
+        return false;
     }
 
     if (gMapManager.InBattleCastle())
@@ -1508,6 +1516,7 @@ void CMapManager::LoadWorld(int Map)
     }
 
     CreateTerrainVBO();
+    return true;
 }
 
 void CMapManager::DeleteObjects()
@@ -1815,5 +1824,9 @@ const wchar_t* CMapManager::GetMapName(int iMap)
     {
         return (I18N::Game::Karutan);
     }
-    return (I18N::Game::Lookup(30 + iMap));
+    // iMap is server/network-driven. Bound it to the world-id range so an out of
+    // range value (incl. negative) cannot drive the legacy-id lookup; unknown
+    // ids resolve to Lookup's built-in fallback instead.
+    const int legacyId = (iMap >= 0 && iMap < NUM_WD) ? (30 + iMap) : -1;
+    return (I18N::Game::Lookup(legacyId));
 }

@@ -287,6 +287,10 @@ public class DefaultDropGenerator : IDropGenerator
 
         // Content ranks reach 400; original item-tier caches are indexed by the original monster level.
         var originalDropLevel = (int)monster[Stats.Level];
+
+        // NOTE: the designed "excellent item guaranteed after 250 eligible kills (rank >= 80)" pity is
+        // not implemented here - RollLoot is an independent per-kill roll. Honouring it needs a persisted
+        // per-character eligible-kill counter (a save-format change to validate against existing characters).
         var roll = BalanceV1.RollLoot(
             contentRank,
             this._randomizer.NextDouble(),

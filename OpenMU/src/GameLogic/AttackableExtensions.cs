@@ -325,6 +325,11 @@ public static class AttackableExtensions
             }
         }
 
+        // Clamp before the unsigned cast. A negative result (e.g. heavy reduction
+        // or combo adjustment) would otherwise wrap unchecked into a huge uint and
+        // apply massive damage; mana toll must not be negative either.
+        dmg = Math.Max(0, dmg);
+        manaToll = Math.Max(0, manaToll);
         return defender.GetHitInfo((uint)dmg, attributes, attacker, (uint)manaToll);
     }
 

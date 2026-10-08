@@ -113,7 +113,10 @@ void PetProcess::Init()
     PetActionCollecterSkeletonPtr actionCollecter_Skeleton = PetActionCollecterSkeleton::Make();
     m_petsAction.insert(make_pair(SKELETON, actionCollecter_Skeleton));
 
-    LoadData();
+    if (!LoadData())
+    {
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void PetProcess::Destroy()

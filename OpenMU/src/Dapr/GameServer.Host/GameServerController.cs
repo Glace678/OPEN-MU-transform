@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.GameServer.Host;
 
 using global::Dapr;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.ServerClients;
 
@@ -17,14 +18,17 @@ using MUnique.OpenMU.ServerClients;
 public class GameServerController : ControllerBase
 {
     private readonly IGameServer _gameServer;
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GameServerController"/> class.
     /// </summary>
     /// <param name="gameServer">The game server.</param>
-    public GameServerController(GameServer gameServer)
+    /// <param name="hostApplicationLifetime">The host application lifetime, used to stop the process gracefully.</param>
+    public GameServerController(GameServer gameServer, IHostApplicationLifetime hostApplicationLifetime)
     {
         this._gameServer = gameServer;
+        this._hostApplicationLifetime = hostApplicationLifetime;
     }
 
     /// <summary>
@@ -34,7 +38,11 @@ public class GameServerController : ControllerBase
     public async ValueTask ShutdownAsync()
     {
         await this._gameServer.ShutdownAsync().ConfigureAwait(false);
-        Environment.Exit(0);
+
+        // Stop the host cooperatively instead of Environment.Exit(0): an HTTP-reachable
+        // action must not hard-kill the process. The endpoint is internal (app token /
+        // loopback) and is used by the orchestrator to recycle the game server container.
+        this._hostApplicationLifetime.StopApplication();
     }
 
     /// <summary>
@@ -168,7 +176,7 @@ public class GameServerController : ControllerBase
     /// </summary>
     /// <param name="accountName">Name of the account.</param>
     /// <returns>True, if the player has been disconnected; False, otherwise.</returns>
-    [HttpPost(nameof(IGameServer.DisconnectPlayerAsync))]
+    [HttpPost(nameof(IGameServer.DisconnectAccountAsync))]
     public ValueTask<bool> DisconnectAccountAsync([FromBody] string accountName)
     {
         return this._gameServer.DisconnectAccountAsync(accountName);

@@ -332,7 +332,9 @@ bool Calc_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
             }
             else
             {
-                BoneScale = 1.f + (0.1f / o->Scale);
+                // o->Scale can be 0 on a not-yet-scaled object; guard the divide.
+                const float safeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
+                BoneScale = 1.f + (0.1f / safeScale);
             }
             if (o->m_fEdgeScale != 1.2f)
             {
@@ -357,7 +359,8 @@ bool Calc_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
             }
             else
             {
-                BoneScale = 1.f + (0.04f / o->Scale);
+                const float safeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
+                BoneScale = 1.f + (0.04f / safeScale);
             }
             if (o->m_fEdgeScale != 1.2f)
             {
@@ -2747,9 +2750,10 @@ void RenderCharacter_AfterImage(CHARACTER* pCha, PART_t* pPart, bool Translate, 
     VectorCopy(pObj->Position, vPos);
     VectorCopy(pObj->StartPosition, vStartPos);
     VectorSubtract(vPos, vStartPos, vPos);
-    float fDis = fAni1 / Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
+    const int numAnimationKeys = Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
+    float fDis = (numAnimationKeys > 0) ? fAni1 / static_cast<float>(numAnimationKeys) : 0.0f;
 
-    if (fAni1 > 0.0f)
+    if (fAni1 > 0.0f && numAnimationKeys > 0)
     {
         pObj->Alpha = 0.3f;
         pObj->AnimationFrame = fAni1;
@@ -2763,9 +2767,9 @@ void RenderCharacter_AfterImage(CHARACTER* pCha, PART_t* pPart, bool Translate, 
     VectorCopy(vOrgPos, vPos);
     VectorCopy(pObj->StartPosition, vStartPos);
     VectorSubtract(vPos, vStartPos, vPos);
-    if (fAni2 > 0.0f)
+    if (fAni2 > 0.0f && numAnimationKeys > 0)
     {
-        fDis = fAni2 / Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
+        fDis = fAni2 / static_cast<float>(numAnimationKeys);
         pObj->Alpha = 0.5f;
         pObj->AnimationFrame = fAni2;
         VectorScale(vPos, fDis, vPos);
@@ -4646,7 +4650,7 @@ OBJECT* CreateObject(int Type, vec3_t Position, vec3_t Angle, float Scale)
             //case MODEL_TREE01+10:
             Vector(-150.f, -150.f, 0.f, o->BoundingBoxMin);
             Vector(150.f, 150.f, 500.f, o->BoundingBoxMax);
-            o->Velocity = 1.f / o->Scale * 0.4f;
+            o->Velocity = 1.f / ((o->Scale != 0.f) ? o->Scale : 1.f) * 0.4f;
             //o->AlphaEnable = true;
             break;
         case MODEL_STREET_LIGHT:
@@ -10696,7 +10700,8 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
         if (gMapManager.InChaosCastle())
         {
             Vector(0.1f, 0.01f, 0.f, b->BodyLight);
-            Scale = 1.f + 0.1f / o->Scale;
+            const float edgeSafeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
+            Scale = 1.f + 0.1f / edgeSafeScale;
         }
 
         RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale);
@@ -10712,7 +10717,8 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
         if (gMapManager.InChaosCastle())
         {
             Vector(0.7f, 0.07f, 0.f, b->BodyLight);
-            Scale = 1.f + 0.04f / o->Scale + 0.02f;
+            const float edgeSafeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
+            Scale = 1.f + 0.04f / edgeSafeScale + 0.02f;
         }
         RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale - 0.02f);
     }

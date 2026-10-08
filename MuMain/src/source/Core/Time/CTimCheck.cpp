@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "CTimCheck.h"
 
+namespace
+{
+    CTimeCheck g_timeCheckInstance;
+}
+
 CTimeCheck::CTimeCheck()
 {
 }

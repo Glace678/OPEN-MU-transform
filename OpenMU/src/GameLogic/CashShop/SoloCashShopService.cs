@@ -218,6 +218,14 @@ public sealed class SoloCashShopService
 
     private static async ValueTask<byte> CommitAsync(Player player, SoloCashShopState state, Item? addedItem = null, int goldCost = 0)
     {
+        // The deduction below is a raw subtraction inside an explicit rollback.
+        // Guard affordability first so an underfunded purchase can't drive Money
+        // negative (which TryRemoveMoney would otherwise have rejected).
+        if (goldCost > 0 && player.Money < goldCost)
+        {
+            return SoloCashShopResult.GenericFailure;
+        }
+
         var previousData = player.Account!.SoloCashShopData;
         var previousGold = player.Money;
         player.Account.SoloCashShopData = state.Serialize();

@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.Persistence.EntityFramework.Json;
 
+using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
 using MUnique.OpenMU.Persistence.EntityFramework.Model;
 
@@ -19,7 +20,9 @@ internal class ConfigurationIdReferenceResolver : ReferenceResolver
     /// </summary>
     private static readonly ConfigurationIdReferenceResolver InstanceValue = new();
 
-    private readonly IDictionary<Guid, IIdentifiable> _cache = new Dictionary<Guid, IIdentifiable>();
+    // Configuration JSON can be deserialized on multiple threads; the static
+    // singleton's cache must tolerate concurrent reads and writes.
+    private readonly ConcurrentDictionary<Guid, IIdentifiable> _cache = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ConfigurationIdReferenceResolver"/> class.
@@ -81,6 +84,6 @@ internal class ConfigurationIdReferenceResolver : ReferenceResolver
     /// <param name="key">The key.</param>
     public void RemoveReference(Guid key)
     {
-        this._cache.Remove(key);
+        this._cache.TryRemove(key, out _);
     }
 }

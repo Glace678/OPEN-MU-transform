@@ -83,7 +83,7 @@ is a hanging build — no published page and no game server is exposed to it.
 
 ## CI
 
-[`.github/workflows/docs-website.yml`](../.github/workflows/docs-website.yml)
+[`.github/workflows/openmu-docs-website.yml`](../../.github/workflows/openmu-docs-website.yml)
 builds the site on every pull request which touches this folder, so broken links
 fail before the merge and not after it.
 

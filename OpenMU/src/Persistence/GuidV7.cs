@@ -27,21 +27,30 @@ public static class GuidV7
     /// <returns>The new guid.</returns>
     public static Guid NewGuid(DateTimeOffset dateTimeOffset)
     {
-        // We create a buffer which is two bytes bigger than the Guid,
-        // because we don't need the first two bytes of the timestamp.
-        Span<byte> buffer = stackalloc byte[18];
-        var uuidAsBytes = buffer[2..];
+        // UUIDv7 (RFC 9562): bytes 0..5 hold the 48-bit unix millisecond timestamp
+        // in big-endian order, byte 6 carries version 7 and byte 8 the RFC 4122
+        // variant. The previous implementation wrote the timestamp as a little
+        // endian long while the Guid was constructed in big-endian mode, which
+        // scrambled the prefix and destroyed the time ordering.
+        Span<byte> uuidAsBytes = stackalloc byte[16];
         var currentTimestamp = dateTimeOffset.ToUnixTimeMilliseconds();
 
-        if (!BitConverter.TryWriteBytes(buffer, currentTimestamp))
-        {
-            throw new InvalidOperationException("Could not convert the timestamp to bytes.");
-        }
+        uuidAsBytes[0] = (byte)(currentTimestamp >> 40);
+        uuidAsBytes[1] = (byte)(currentTimestamp >> 32);
+        uuidAsBytes[2] = (byte)(currentTimestamp >> 24);
+        uuidAsBytes[3] = (byte)(currentTimestamp >> 16);
+        uuidAsBytes[4] = (byte)(currentTimestamp >> 8);
+        uuidAsBytes[5] = (byte)currentTimestamp;
 
         RandomNumberGenerator.Fill(uuidAsBytes[6..]);
 
+        // Version 7.
         uuidAsBytes[6] &= 0x0F;
         uuidAsBytes[6] |= 0x70;
+
+        // RFC 4122 variant (10xx xxxx).
+        uuidAsBytes[8] &= 0x3F;
+        uuidAsBytes[8] |= 0x80;
 
         return new Guid(uuidAsBytes, true);
     }

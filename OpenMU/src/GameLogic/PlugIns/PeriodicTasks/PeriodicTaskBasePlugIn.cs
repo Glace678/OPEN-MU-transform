@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.PlugIns.PeriodicTasks;
 
 using System.Collections.Concurrent;
+using System.Threading;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.PlugIns;
@@ -23,6 +24,8 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
     private readonly List<IGameContext> _handledContexts = [];
 
     private readonly object _handledContextsLock = new();
+
+    private int _isDisposed;
 
     private bool _isStartForced = false;
 
@@ -133,6 +136,11 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
     /// <inheritdoc />
     public void Dispose()
     {
+        if (Interlocked.Exchange(ref this._isDisposed, 1) != 0)
+        {
+            return;
+        }
+
         List<IGameContext> contexts;
         lock (this._handledContextsLock)
         {
@@ -191,6 +199,11 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
     /// <param name="gameContext">GameContext.</param>
     protected TState GetStateByGameContext(IGameContext gameContext)
     {
+        if (Volatile.Read(ref this._isDisposed) != 0)
+        {
+            throw new ObjectDisposedException(this.GetType().Name);
+        }
+
         var type = this.GetType();
 
         var statesPerType = States.GetOrAdd(type, newType => new());

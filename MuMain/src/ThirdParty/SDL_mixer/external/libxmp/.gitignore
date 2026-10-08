@@ -26,6 +26,7 @@ test-dev/xmpchk
 /.vs
 *.exp
 *.lib
+!COPYING.LIB
 *.suo
 *.ncb
 Makefile.vc.tmp

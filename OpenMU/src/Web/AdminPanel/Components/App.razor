@@ -8,6 +8,23 @@
 
     private string CurrentTheme =>
         ThemeController.NormalizeTheme(this.HttpContext?.Request.Cookies[ThemeController.CookieName]);
+
+    // Use the request's path base so the panel works both at the root and behind a
+    // reverse-proxy sub path (e.g. PATH_BASE=/admin/). A hard-coded "/" makes Blazor
+    // request its assets and endpoints at the root, which 404s under /admin.
+    private string BaseHref
+    {
+        get
+        {
+            var pathBase = this.HttpContext?.Request.PathBase.Value;
+            if (string.IsNullOrEmpty(pathBase))
+            {
+                return "/";
+            }
+
+            return pathBase.EndsWith('/') ? pathBase : pathBase + "/";
+        }
+    }
 }
 
 <!DOCTYPE html>
@@ -16,7 +33,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OpenMU AdminPanel</title>
-    <base href="/" />
+    <base href="@this.BaseHref" />
     <ResourcePreloader />
     <link href="@Assets["MUnique.OpenMU.Startup.styles.css"]" rel="stylesheet" />
     <link href="@Assets["_content/MUnique.OpenMU.Web.AdminPanel/MUnique.OpenMU.Web.AdminPanel.styles.css"]" rel="stylesheet" />

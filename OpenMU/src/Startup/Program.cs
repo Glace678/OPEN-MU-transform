@@ -325,7 +325,6 @@ internal sealed class Program : IDisposable
             .AddSingleton<IDataSource<GameConfiguration>, GameConfigurationDataSource>()
             .AddHostedService<ChatServerContainer>()
             .AddHostedService<GameServerContainer>()
-            .AddHostedService(provider => provider.GetService<GameServerContainer>()!)
             .AddHostedService(provider => provider.GetService<ConnectServerContainer>()!)
             .AddControllers().AddApplicationPart(typeof(ServerController).Assembly);
 

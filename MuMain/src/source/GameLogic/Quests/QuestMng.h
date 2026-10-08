@@ -32,7 +32,10 @@ struct SQuestRequest
     DWORD	m_dwType;
     WORD	m_wIndex;
     DWORD	m_dwValue;
-    WORD	m_wCurValue;
+    // The server sends the current progress as a DWORD (NPC_QUESTEXP_REQUEST_INFO::
+    // m_wCurValue); a WORD here wrapped values above 65535 (e.g. 70000 -> 4464),
+    // corrupting progress comparisons and text, so keep the full width.
+    DWORD	m_wCurValue;
     ITEM* m_pItem;
 };
 

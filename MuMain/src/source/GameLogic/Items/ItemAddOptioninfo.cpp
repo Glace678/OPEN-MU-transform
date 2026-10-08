@@ -69,7 +69,10 @@ void ItemAddOptioninfo::GetItemAddOtioninfoText(std::vector<std::wstring>& outte
     for (int i = 0; i < 2; ++i)
     {
         std::wstring text;
-        wchar_t TempText[100];
+        // Zero-init: optiontype outside 1..8 hits no switch branch, leaving the
+        // buffer uninitialized before text = TempText (M-44). Empty/zero keeps
+        // it a valid NUL-terminated string instead of reading garbage.
+        wchar_t TempText[100] = {};
 
         if (i == 0)
         {

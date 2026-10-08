@@ -1,29 +1,29 @@
 services:
   database:
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
   loki:
     ports:
-      - "3100:3100"
+      - "127.0.0.1:3100:3100"
   prometheus:
     ports:
-      - "9000:9090"
+      - "127.0.0.1:9000:9090"
       
   redis-state:
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
   
   gameServer0:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     ports:
-      - "81:8080"
+      - "127.0.0.1:81:8080"
 
   gameServer1:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     ports:
-      - "82:8080"
+      - "127.0.0.1:82:8080"
 
   connectServer:
     build:
@@ -67,4 +67,4 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     ports:
-      - "88:8080"
+      - "127.0.0.1:88:8080"

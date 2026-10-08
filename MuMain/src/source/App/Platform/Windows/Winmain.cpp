@@ -634,6 +634,12 @@ void DestroyWindow()
     g_MuEditorConfig.Save();
 #endif
 
+    // UI objects own timers, SDL_ttf text and renderer-facing resources; release
+    // them explicitly instead of waiting for static-singleton destruction after
+    // SDL_Quit (matches upstream teardown). Release() is idempotent.
+    g_pNewUISystem->Release();
+    g_pRenderText->Release();
+
     CUIMng::Instance().Release();
 
     //. release font handle
@@ -662,10 +668,15 @@ void DestroyWindow()
     {
         gMapManager.DeleteObjects();
 
-        // Object.
-        for (int i = MODEL_LOGO; i < MAX_MODELS; i++)
+        // Object. Models is a raw offset into the ModelsDump heap block set up
+        // by OpenPlayers(); guard early-failure teardowns that reach here before
+        // data load (it is a zero-init null pointer on that path).
+        if (Models != nullptr)
         {
-            Models[i].Release();
+            for (int i = MODEL_LOGO; i < MAX_MODELS; i++)
+            {
+                Models[i].Release();
+            }
         }
 
         // Bitmap
@@ -3464,7 +3475,12 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     CInput::Instance().Create(g_hWnd, WindowWidth, WindowHeight);
 
     // Android enters here after its data directory and SDL JNI are ready.
-    g_MixRecipeMgr.LoadRecipes();
+    // Missing/corrupt Mix.bmd is fatal: leave the process with a failure code
+    // rather than running with no combination recipes (error already logged).
+    if (!g_MixRecipeMgr.LoadRecipes())
+    {
+        return EXIT_FAILURE;
+    }
     g_pNewUISystem->Create();
 
     // Always initialize audio system so music can be enabled at runtime

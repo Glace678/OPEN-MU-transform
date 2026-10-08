@@ -75,8 +75,8 @@ public class JsonQueryBuilder
         var navigationAlias = this.GetNextAlias(parentAlias);
         if (navigationAlias == MaxDepthAlias)
         {
-            Debug.WriteLine("Stopping json graph traversal at {0}: max navigation depth reached", entityType.Name);
-            return;
+            throw new InvalidOperationException(
+                $"Maximum navigation depth ('{MaxDepthAlias}') reached while traversing {entityType.Name}; the object graph is deeper than the query builder supports.");
         }
 
         var navigations = this.GetNavigations(entityType);

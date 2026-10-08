@@ -9366,6 +9366,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 o->Position[2] += 2.0f * FPS_ANIMATION_FACTOR;
             }
         }
+    }
 
     if (c == Hero)
     {
@@ -9819,7 +9820,6 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 o->m_pCloth = (void*)pCloth;
                 o->m_byNumCloth = static_cast<BYTE>(createdClothCount);
-            }
             }
             else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
             {
@@ -12533,7 +12533,11 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
 {
     CHARACTER* c;
     if (pCharacter == NULL)
+    {
+        if (Key < 0 || Key >= MAX_CHARACTERS_CLIENT)
+            return;
         c = &CharactersClient[Key];
+    }
     else
         c = pCharacter;
 
@@ -12886,7 +12890,11 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
 {
     CHARACTER* c;
     if (pCharacter == NULL)
+    {
+        if (Key < 0 || Key >= MAX_CHARACTERS_CLIENT)
+            return;
         c = &CharactersClient[Key];
+    }
     else
         c = pCharacter;
 

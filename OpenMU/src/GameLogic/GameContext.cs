@@ -477,7 +477,17 @@ public class GameContext : AsyncDisposable, IGameContext
     {
         this._configChangeHandlerRegistration.Dispose();
         await this._recoverTimer.DisposeAsync().ConfigureAwait(false);
+
+        // Dispose the task timer (and wait for any in-flight callback) before
+        // disposing the periodic plugins, so a callback can't observe a disposed
+        // plugin or recreate its state while we are cleaning up.
         await this._tasksTimer.DisposeAsync().ConfigureAwait(false);
+
+        foreach (var plugin in this.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>())
+        {
+            (plugin as IDisposable)?.Dispose();
+        }
+
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 

@@ -39,16 +39,16 @@ namespace npcGateSwitch
         PlayBuffer(SOUND_BC_GATE_OPEN);
     }
 
-    void DoInterfaceOpen(int Key)
+    bool DoInterfaceOpen(int Key)
     {
-        g_iNpcCharacterKey = Key;
-
-        int        Index = FindCharacterIndex(Key);
-        if (Index == MAX_CHARACTERS_CLIENT) return;
+        int Index = FindCharacterIndex(Key);
+        if (Index == MAX_CHARACTERS_CLIENT) return false;
         CHARACTER* c = &CharactersClient[Index];
         OBJECT* o = &c->Object;
 
+        g_iNpcCharacterKey = Key;
         g_isCurrentGateopen = g_isCharacterBuff(o, eBuff_CastleGateIsOpen);
+        return true;
     }
 
     void ProcessState(int Key, BYTE GateOnOff, BYTE State)

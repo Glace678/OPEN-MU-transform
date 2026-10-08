@@ -137,7 +137,7 @@ internal class ServerList
             return result;
         }
 
-        this._lock.EnterReadLock();
+        this._lock.EnterUpgradeableReadLock();
         try
         {
             result = this.Cache;
@@ -149,6 +149,11 @@ internal class ServerList
             byte[] packet;
             if (this._clientVersion.Season == 0)
             {
+                // Pre-season-1 layout: 6-byte header, 2 bytes per server (id, load).
+                const int headerSize = 6;
+                const int blockSize = 2;
+                const int loadOffsetInBlock = 1;
+
                 packet = new byte[ServerListResponseOld.GetRequiredSize(this._servers.Count)];
                 var response = new ServerListResponseOld(packet)
                 {
@@ -160,11 +165,20 @@ internal class ServerList
                     var serverBlock = response[i];
                     serverBlock.ServerId = (byte)server.ServerId;
                     serverBlock.LoadPercentage = server.ServerLoadPercentage;
+
+                    // Record the absolute offset of this server's load byte in the cached
+                    // packet so ServerListItem can keep it fresh without rebuilding the cache.
+                    server.LoadIndex = headerSize + (i * blockSize) + loadOffsetInBlock;
                     i++;
                 }
             }
             else
             {
+                // Season-1+ layout: 7-byte header, 4 bytes per server (ushort id, byte load, byte padding).
+                const int headerSize = 7;
+                const int blockSize = 4;
+                const int loadOffsetInBlock = 2;
+
                 packet = new byte[ServerListResponse.GetRequiredSize(this._servers.Count)];
                 var response = new ServerListResponse(packet)
                 {
@@ -176,16 +190,26 @@ internal class ServerList
                     var serverBlock = response[i];
                     serverBlock.ServerId = server.ServerId;
                     serverBlock.LoadPercentage = server.ServerLoadPercentage;
+                    server.LoadIndex = headerSize + (i * blockSize) + loadOffsetInBlock;
                     i++;
                 }
             }
 
-            this.Cache = packet;
+            this._lock.EnterWriteLock();
+            try
+            {
+                this.Cache = packet;
+            }
+            finally
+            {
+                this._lock.ExitWriteLock();
+            }
+
             return packet;
         }
         finally
         {
-            this._lock.ExitReadLock();
+            this._lock.ExitUpgradeableReadLock();
         }
     }
 

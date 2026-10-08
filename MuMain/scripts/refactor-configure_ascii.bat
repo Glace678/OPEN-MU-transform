@@ -1,6 +1,7 @@
 @echo off
 rem Configure the windows-x86 build tree with local classic-mode vcpkg deps.
-rem Pure ASCII on purpose (GBK-safe invocation from git-bash).setlocal
+rem Pure ASCII on purpose (GBK-safe invocation from git-bash).
+setlocal
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if not exist "%VSWHERE%" (
     echo error: vswhere not found at "%VSWHERE%" - install Visual Studio with the C++ workload. 1>&2
@@ -18,9 +19,14 @@ if not exist "%VCVARS%" (
     exit /b 9009
 )
 if not exist "%CMAKE%" (
-    echo error: bundled cmake.exe not found at "%CMAKE%". 1>&2
-    exit /b 9009
-)cd /d "%~dp0\.."
+    where cmake >nul 2>&1
+    if errorlevel 1 (
+        echo error: no cmake found: neither "%CMAKE%" nor a cmake on PATH. Install the Visual Studio CMake component or add cmake to PATH. 1>&2
+        exit /b 9009
+    )
+    set "CMAKE=cmake"
+)
+cd /d "%~dp0\.."
 call "%VCVARS%" >nul 2>&1
 if errorlevel 1 (
     echo error: vcvars32.bat failed to initialize the MSVC environment. 1>&2

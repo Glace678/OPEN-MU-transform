@@ -23,6 +23,10 @@
 *.mp3
 build/bin/x86/Global Debug/Main.exe
 !/CMakeLists.txt
+# Vendored third-party trees (ThirdParty/*) ship their own build files and
+# licenses; whitelist those despite the broad *.txt rule above.
+!ThirdParty/**/CMakeLists.txt
+!ThirdParty/**/LICENSE.txt
 
 #MuEditor
 bin/MuEditor/

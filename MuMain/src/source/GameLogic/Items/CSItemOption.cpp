@@ -36,6 +36,14 @@ namespace
 {
 constexpr std::uint8_t EMPTY_OPTION = 0xFF;
 
+// Saturating add for the 16-bit stat accumulators: widens to 64-bit and clamps
+// to the uint16 range so repeated bonuses can never silently wrap around.
+void AddStatClamped(std::uint16_t& stat, std::int64_t add)
+{
+    const std::int64_t value = static_cast<std::int64_t>(stat) + add;
+    stat = static_cast<std::uint16_t>(std::clamp(value, static_cast<std::int64_t>(0), static_cast<std::int64_t>(65535)));
+}
+
 using FilePtr = std::unique_ptr<FILE, decltype(&std::fclose)>;
 
 FilePtr OpenBinaryFile(const wchar_t* filename)
@@ -245,9 +253,17 @@ void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType,
         return;
     }
 
+    const ITEM_SET_TYPE& itemSetType = m_ItemSetType[iType];
+
+    // byOption is a fixed-size array; bound the discriminator before indexing
+    // so an out-of-range value can't read past the std::array.
+    if (ancientDiscriminator - 1 >= static_cast<int>(itemSetType.byOption.size()))
+    {
+        return;
+    }
+
     const auto setTypeIndex = static_cast<std::uint8_t>(ancientDiscriminator - 1);
 
-    const ITEM_SET_TYPE& itemSetType = m_ItemSetType[iType];
     const auto itemSetNumber = itemSetType.byOption[setTypeIndex];
     
     if (itemSetNumber != 255 && itemSetNumber != 0)
@@ -303,6 +319,13 @@ void CSItemOption::TryAddSetOption(std::uint8_t option, int value, int optionInd
         || value == 0
         || (option >= MASTERY_OPTION 
             && (setOptions.byRequireClass[firstClass] && secondClass >= setOptions.byRequireClass[firstClass] - 1)))
+    {
+        return;
+    }
+
+    // Cap the count before taking the element address and incrementing,
+    // otherwise SetOption[] could be indexed/outgrown past its fixed size.
+    if (set.SetOptionCount < 0 || set.SetOptionCount >= MAX_OPTIONS_PER_ITEM_SET)
     {
         return;
     }
@@ -678,19 +701,19 @@ void CSItemOption::getAllAddState(std::uint16_t* Strength, std::uint16_t* Dexter
         switch (GetDefaultOptionValue(item, &Result))
         {
         case SET_OPTION_STRENGTH:
-            *Strength += Result * 5;
+            AddStatClamped(*Strength, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_DEXTERITY:
-            *Dexterity += Result * 5;
+            AddStatClamped(*Dexterity, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_ENERGY:
-            *Energy += Result * 5;
+            AddStatClamped(*Energy, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_VITALITY:
-            *Vitality += Result * 5;
+            AddStatClamped(*Vitality, static_cast<std::int64_t>(Result) * 5);
             break;
         }
     }
@@ -714,23 +737,23 @@ void    CSItemOption::AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_
             switch (option.OptionNumber)
             {
             case AT_SET_OPTION_IMPROVE_STRENGTH:
-                *Strength += option.Value;
+                AddStatClamped(*Strength, option.Value);
                 break;
 
             case AT_SET_OPTION_IMPROVE_DEXTERITY:
-                *Dexterity += option.Value;
+                AddStatClamped(*Dexterity, option.Value);
                 break;
 
             case AT_SET_OPTION_IMPROVE_ENERGY:
-                *Energy += option.Value;
+                AddStatClamped(*Energy, option.Value);
                 break;
 
             case AT_SET_OPTION_IMPROVE_VITALITY:
-                *Vitality += option.Value;
+                AddStatClamped(*Vitality, option.Value);
                 break;
 
             case AT_SET_OPTION_IMPROVE_CHARISMA:
-                *Charisma += option.Value;
+                AddStatClamped(*Charisma, option.Value);
                 break;
             default:
                 // other options are not handled here.
@@ -768,19 +791,19 @@ void CSItemOption::getAllAddOptionStatesbyCompare(std::uint16_t* Strength, std::
         switch (GetDefaultOptionValue(item, &Result))
         {
         case SET_OPTION_STRENGTH:
-            *Strength += Result * 5;
+            AddStatClamped(*Strength, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_DEXTERITY:
-            *Dexterity += Result * 5;
+            AddStatClamped(*Dexterity, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_ENERGY:
-            *Energy += Result * 5;
+            AddStatClamped(*Energy, static_cast<std::int64_t>(Result) * 5);
             break;
 
         case SET_OPTION_VITALITY:
-            *Vitality += Result * 5;
+            AddStatClamped(*Vitality, static_cast<std::int64_t>(Result) * 5);
             break;
         }
     }

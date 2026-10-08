@@ -54,6 +54,10 @@ internal class FriendServerContext : CachingEntityFrameworkContext, IFriendServe
         return await (from friend in this.Context.Set<Model.Friend>()
                       join friendCharacter in this.Context.Set<CharacterName>() on friend.FriendId equals friendCharacter.Id
                       join character in this.Context.Set<CharacterName>() on friend.CharacterId equals character.Id
+                      // SECURITY: restrict to the requesting character's own rows;
+                      // without this predicate every player received the whole
+                      // server's friend list.
+                      where friend.CharacterId == characterId
                       select new FriendViewItem(character.Name, friendCharacter.Name)
                       {
                           Id = friend.Id,

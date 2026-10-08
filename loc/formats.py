@@ -18,7 +18,7 @@ Translatable inventory (Chs language folder), formats derived from the C++ loade
   setoption       R=110 N=64   cs=A2F1   name@0:64
   buff            [count=158] R=158 cs=E2F1  name@5:50 desc@58:100 ('/'-sep)
   harmony         R=180 N=30   no cs     name@4:60   (whole-XOR == per-record)
-  mastertooltip   R=616 N=512  +4(unverified)  Info1..7 (hardcoded Eng path)
+  mastertooltip   R=616 N=512  cs=2BC1  Info1..7 (hardcoded Eng path)
   minimap         R=116 N=100  +45 trailer cs=2BC1  name@16:100
   slide           single 41008 struct, whole-XOR, slots len256
   questwords      variable records [int index][short len][utf8]  (NPC dialogue)
@@ -110,7 +110,7 @@ FMT = {
     'buff':    dict(R=158, N=None, key=0xE2F1, count_prefix=True,
                     fields=[('name',5,50),('desc',58,100)]),
     'harmony': dict(R=180, N=30,   key=None,   fields=[('name',4,60)]),
-    'mastertooltip': dict(R=616, N=512, key='KEEP',  # header: int SkillNumber + WORD ClassCode = 6 bytes
+    'mastertooltip': dict(R=616, N=512, key=0x2BC1,  # client verifies; header: int SkillNumber + WORD ClassCode = 6 bytes
                     fields=[('i1',6,64),('i2',70,256),('i3',326,32),
                             ('i4',358,64),('i5',422,64),('i6',486,64),('i7',550,64)]),
     'minimap': dict(R=116, N=100,  key=0x2BC1, trailer=45, fields=[('name',16,100)]),

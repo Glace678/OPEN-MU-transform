@@ -76,7 +76,7 @@ public:
     CMapManager();
     virtual ~CMapManager();
     void Load();
-    void LoadWorld(int Map);
+    bool LoadWorld(int Map); 
     void DeleteObjects();
     bool InChaosCastle(int iMap = -1);
     bool InBloodCastle(int iMap = -1);

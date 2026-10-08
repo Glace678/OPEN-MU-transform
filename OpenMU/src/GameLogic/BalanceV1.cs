@@ -63,6 +63,11 @@ public static class BalanceV1
         (1, 326), (50, 455), (100, 583), (150, 712), (200, 840),
     ];
 
+    // Curated encounter lists keyed by monster number. Membership is checked with HashSet.Contains,
+    // so unknown/out-of-range monsters safely fall back to the normal (1x) tier - there is no positional
+    // indexing that could go out of range. Not config-driven yet: a boss/elite absent from these lists
+    // intentionally receives normal rewards. Promoting this to a configuration field is a gameplay-balance
+    // change and is therefore deferred (see balance-v2 design notes).
     private static readonly HashSet<short> BossMonsterNumbers = [38, 49, 77, 275, 412, 459];
     private static readonly HashSet<short> EliteMonsterNumbers = [43, 44, 78, 79, 80, 81, 82, 83];
 
@@ -161,6 +166,12 @@ public static class BalanceV1
     /// <param name="Chance">The success chance in the range zero to one.</param>
     /// <param name="PityAttempts">The attempt on which success is guaranteed.</param>
     /// <param name="Jewels">The material-jewel budget.</param>
+    /// <remarks>
+    /// <see cref="PityAttempts"/> is part of the designed profile but is intentionally NOT wired up
+    /// yet: honouring it requires a persisted per-item failed-attempt counter (a wire/save-format change
+    /// that must be validated against the client and existing characters). Today only <see cref="Chance"/>
+    /// is consumed, so the pity guarantee must not be assumed to take effect.
+    /// </remarks>
     public readonly record struct UpgradeStep(int TargetLevel, double Chance, int PityAttempts, int Jewels);
 
     /// <summary>Returns whether the configuration has a completed balance-v1 marker.</summary>

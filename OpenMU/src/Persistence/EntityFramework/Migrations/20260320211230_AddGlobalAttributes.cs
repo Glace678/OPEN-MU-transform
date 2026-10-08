@@ -104,6 +104,10 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                 schema: "config",
                 table: "AttributeRelationship");
 
+            // Backfill NULLs introduced while the column was nullable before
+            // re-applying NOT NULL; otherwise the alteration fails on PostgreSQL.
+            migrationBuilder.Sql("""UPDATE config."ConstValueAttribute" SET "CharacterClassId" = '00000000-0000-0000-0000-000000000000' WHERE "CharacterClassId" IS NULL;""");
+
             migrationBuilder.AlterColumn<Guid>(
                 name: "CharacterClassId",
                 schema: "config",

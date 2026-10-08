@@ -206,7 +206,7 @@ void TerrainShader::CreateGL()
     if (!LoadGLShaderFunctions()) return;
 
     GLint success = 0;
-    char infoLog[512];
+    char infoLog[512] = {};
 
     m_VertShader = fn_glCreateShader(GL_VERTEX_SHADER);
     fn_glShaderSource(m_VertShader, 1, &g_szTerrainVert, nullptr);

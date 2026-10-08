@@ -420,12 +420,19 @@ public final class MainActivity extends Activity {
         return pendingGrantId;
     }
 
+    // Identifies the business object being granted rather than the spinner slot.
+    // Spinner positions are reused after a character refresh or item search, so a
+    // position-based key could send a retried grant to a different character/item.
     private String itemFormSignature() {
         int characterIndex = characterSpinner.getSelectedItemPosition();
         int itemIndex = itemSpinner.getSelectedItemPosition();
         int quantityIndex = quantitySpinner.getSelectedItemPosition();
         int additionalIndex = additionalSpinner.isEnabled() ? additionalSpinner.getSelectedItemPosition() : 0;
-        return characterIndex + "|" + itemIndex + "|" + levelSeek.getProgress()
+        String characterId = (characterIndex >= 0 && characterIndex < characters.size())
+            ? characters.get(characterIndex).id : ("idx" + characterIndex);
+        String itemId = (itemIndex >= 0 && itemIndex < items.size())
+            ? (items.get(itemIndex).group + ":" + items.get(itemIndex).number) : ("idx" + itemIndex);
+        return characterId + "|" + itemId + "|" + levelSeek.getProgress()
             + "|" + quantityIndex
             + "|" + (skillCheck.isEnabled() && skillCheck.isChecked())
             + "|" + (luckCheck.isEnabled() && luckCheck.isChecked())
@@ -435,7 +442,9 @@ public final class MainActivity extends Activity {
 
     private String zenId() {
         int characterIndex = characterSpinner.getSelectedItemPosition();
-        String signature = characterIndex + "|" + zenAmountField.getText().toString().trim();
+        String characterId = (characterIndex >= 0 && characterIndex < characters.size())
+            ? characters.get(characterIndex).id : ("idx" + characterIndex);
+        String signature = characterId + "|" + zenAmountField.getText().toString().trim();
         if (pendingZenId == null || !signature.equals(zenFormSignature)) {
             zenFormSignature = signature;
             pendingZenId = UUID.randomUUID().toString();

@@ -6,6 +6,7 @@
 
 namespace MUnique.OpenMU.GuildServer;
 
+using System.Collections.Concurrent;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
 
@@ -26,7 +27,10 @@ internal class GuildContainer
         this.DatabaseContext = databaseContext;
         this.Guild = guild;
         this.Id = id;
-        this.Members = new SortedList<Guid, GuildListEntry>();
+        // Members is read (enumerated) and mutated concurrently by the guild server
+        // (online-state updates while listings are built). A SortedList throws on
+        // concurrent enumeration; Guid key order carries no business meaning.
+        this.Members = new ConcurrentDictionary<Guid, GuildListEntry>();
         foreach (var member in this.Guild.Members)
         {
             // The player names are loaded separately, if required.

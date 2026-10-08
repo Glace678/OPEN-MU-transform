@@ -145,6 +145,14 @@ public class Listener
                     this._logger.LogDebug(ex, "The listener was stopped.");
                     return;
                 }
+                catch (SocketException ex) when (ex.SocketErrorCode is SocketError.ConnectionReset or SocketError.ConnectionAborted)
+                {
+                    // A single pending connection got reset/aborted before it was accepted:
+                    // the listener itself is still alive, so keep accepting instead of
+                    // permanently tearing down the whole accept loop.
+                    this._logger.LogDebug(ex, "A pending connection was reset before it was accepted; continuing to accept.");
+                    continue;
+                }
                 catch (Exception ex)
                 {
                     this._logger.LogError(ex, "Error accepting the client socket");
@@ -168,7 +176,19 @@ public class Listener
             if (this.ClientAccepting is { } clientAccepting)
             {
                 cancel = new ClientAcceptingEventArgs(socket);
-                await clientAccepting.Invoke(cancel).ConfigureAwait(false);
+                try
+                {
+                    await clientAccepting.Invoke(cancel).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    // The accepted socket has not been handed to a connection
+                    // yet (CreateConnection runs below), so ownership is still
+                    // ours: dispose it instead of leaking the open socket.
+                    this._logger.LogError(ex, "ClientAccepting callback failed; closing accepted socket.");
+                    socket.Dispose();
+                    return;
+                }
             }
 
             if (cancel is not null && cancel.Cancel)

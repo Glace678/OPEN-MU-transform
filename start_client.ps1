@@ -53,11 +53,14 @@ try
     # this environment block, so the derived password never sits in the child
     # process env block.
     $p = [System.Diagnostics.Process]::Start($psi)
-
-    Register-ObjectEvent -InputObject $p -EventName Exited -Action {
-        Remove-Item -LiteralPath $using:credentialPath -Force -ErrorAction SilentlyContinue
-    } | Out-Null
     $p.EnableRaisingEvents = $true
+
+    # Register-ObjectEvent -Action does not support $using:; pass the path via
+    # -MessageData and read it back through $Event.MessageData so the sidecar
+    # credential file is actually deleted when the game process exits.
+    Register-ObjectEvent -InputObject $p -EventName Exited -MessageData $credentialPath -Action {
+        Remove-Item -LiteralPath $Event.MessageData -Force -ErrorAction SilentlyContinue
+    } | Out-Null
 
     Write-Output ("CLIENT_STARTED pid=" + $p.Id)
 }

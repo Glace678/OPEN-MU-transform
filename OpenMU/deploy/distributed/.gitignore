@@ -1,0 +1,10 @@
+# Local environment files holding deployment secrets
+# (REDIS_PASSWORD, POSTGRES_PASSWORD, MINIO_ACCESS_KEY/SECRET_KEY, OPENMU_ADMIN_*).
+.env
+.env.*
+!.env.example
+
+# Locally provisioned secret files.
+# The tracked dapr-components/secrets.json is a redacted template (****** placeholders);
+# never commit a file with real connection strings.
+secrets.local.json

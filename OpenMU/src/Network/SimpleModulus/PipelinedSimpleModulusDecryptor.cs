@@ -143,6 +143,14 @@ public class PipelinedSimpleModulusDecryptor : PipelinedSimpleModulusBase, IPipe
         var rest = input;
         do
         {
+            // The first iteration is reached even when the declared content size is
+            // 0 or the ciphertext was truncated. Require a full encrypted block
+            // before slicing it (EncryptedBlockSize is 11 for C4).
+            if (rest.Length < this.EncryptedBlockSize)
+            {
+                throw new ArgumentException("Truncated encrypted packet block.");
+            }
+
             rest.Slice(0, this.EncryptedBlockSize).CopyTo(this._inputBuffer);
             if (sizeCounter + this.DecryptedBlockSize > output.Length)
             {

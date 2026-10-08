@@ -52,6 +52,14 @@ internal class AreaSkillHitHandlerPlugIn : IPacketHandlerPlugIn
 
         var increaseCounterAfterLoop = false;
         var targetCount = message.TargetCount;
+
+        // The target count is client-supplied; it must not exceed what the actual
+        // packet carries (the indexer would otherwise read past the packet).
+        if (packet.Length < AreaSkillHit.GetRequiredSize(targetCount))
+        {
+            return;
+        }
+
         try
         {
             for (int i = 0; i < targetCount; i++)

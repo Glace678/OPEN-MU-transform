@@ -13,20 +13,46 @@ permissions:
 
 jobs:
   claude:
+    # ROOT-01: issue_comment payloads expose the PR only as
+    # github.event.issue.pull_request (an API URL object), so the fork flag is
+    # verified by the "Verify pull request source" step below for that event.
+    # pull_request_review(_comment) payloads carry the pull_request object, so
+    # head.repo.fork can be checked directly here.
     if: |
-      github.event.pull_request.head.repo.fork == false &&
       github.actor == 'sven-n' && (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+        (github.event_name == 'issue_comment'
+          && github.event.issue.pull_request
+          && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment'
+          && github.event.pull_request.head.repo.fork == false
+          && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review'
+          && github.event.pull_request.head.repo.fork == false
+          && contains(github.event.review.body, '@claude'))
       )
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      id-token: write
       pull-requests: write
       issues: write
       actions: read
     steps:
+      - name: Verify pull request source (issue comments)
+        # An issue_comment on a PR cannot report fork status in the event
+        # payload; resolve the associated PR via API and refuse forked heads.
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          api_url="${{ github.event.issue.pull_request.url }}"
+          fork="$(gh api "$api_url" --jq '.head.repo.fork')"
+          if [ "$fork" != "false" ]; then
+            echo "Refusing to run: associated pull request comes from a fork."
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:

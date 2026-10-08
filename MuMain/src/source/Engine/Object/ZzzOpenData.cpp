@@ -107,7 +107,7 @@ void OpenPlayers()
     if (Models[MODEL_PLAYER].NumMeshs > 0)
     {
         g_ErrorReport.Write(L"Player.bmd file error.\r\n");
-        return;
+        std::exit(EXIT_FAILURE);
     }
 
     for (int i = 0; i < MAX_CLASS; ++i)
@@ -4687,22 +4687,24 @@ void OpenSkills()
 
 #include "Core/Utilities/ReadScript.h"
 
-void SaveWorld(int World)
+bool SaveWorld(int World)
 {
     wchar_t WorldName[32];
     wchar_t FileName[64];
     mu_swprintf(WorldName, L"World%d", World);
 
+    bool success = true;
     mu_swprintf(FileName, L"Data2\\%ls\\TerrainLight.jpg", WorldName);
     SaveTerrainLight(FileName);
     mu_swprintf(FileName, L"Data2\\%ls\\TerrainHeight.bmp", WorldName);
     SaveTerrainHeight(FileName);
     mu_swprintf(FileName, L"Data\\%ls\\Terrain.map", WorldName);
-    SaveTerrainMapping(FileName, World);
+    success &= SaveTerrainMapping(FileName, World);
     mu_swprintf(FileName, L"Data\\%ls\\Terrain.att", WorldName);
-    SaveTerrainAttribute(FileName, World);
+    success &= SaveTerrainAttribute(FileName, World);
     mu_swprintf(FileName, L"Data\\%ls\\Terrain.obj", WorldName);
-    SaveObjects(FileName, World);
+    success &= SaveObjects(FileName, World);
+    return success;
 }
 
 void OpenImages()

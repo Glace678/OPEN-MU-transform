@@ -214,5 +214,12 @@ public class StateMachine
         /// Gets the state of the current state.
         /// </summary>
         public State CurrentState { get; }
+
+        /// <summary>
+        /// Gets the state of the current state.
+        /// </summary>
+        /// <remarks>Compatibility alias for the previously public name; use <see cref="CurrentState"/>.</remarks>
+        [Obsolete("Use CurrentState. Scheduled for removal.")]
+        public State CurrentStateState => this.CurrentState;
     }
 }

@@ -166,6 +166,17 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     DWORD dwQuestIndex = pRequestRewardPacket->m_dwQuestIndex;
     int i;
 
+    // The wire record (NPC_QUESTEXP_INFO) and the local SQuestRequestReward each
+    // hold exactly 5 request and 5 reward slots. A larger BYTE count would index
+    // past both arrays (and past the fixed-size packet), so reject the whole
+    // packet before mutating any existing quest state.
+    if (pRequestRewardPacket->m_byRequestCount > 5 || pRequestRewardPacket->m_byRewardCount > 5)
+    {
+        g_ErrorReport.Write(L"Quest %u: illegal request/reward count (%u/%u); dropping packet.\r\n",
+            dwQuestIndex, pRequestRewardPacket->m_byRequestCount, pRequestRewardPacket->m_byRewardCount);
+        return;
+    }
+
     const SQuestRequestReward* pOldRequestReward = GetRequestReward(dwQuestIndex);
     if (pOldRequestReward)
     {

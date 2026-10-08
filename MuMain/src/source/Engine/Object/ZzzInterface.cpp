@@ -505,20 +505,32 @@ bool CheckTile(CHARACTER* c, OBJECT* o, float Range)
 
 bool CheckWall(int sx1, int sy1, int sx2, int sy2)
 {
-    int Index = TERRAIN_INDEX_REPEAT(sx1, sy1);
-
-    int nx1, ny1, d1, d2, len1, len2;
+    int nx1, ny1;
     int px1 = sx2 - sx1;
     int py1 = sy2 - sy1;
     if (px1 < 0) { px1 = -px1; nx1 = -1; }
     else nx1 = 1;
-    if (py1 < 0) { py1 = -py1; ny1 = -TERRAIN_SIZE; }
-    else ny1 = TERRAIN_SIZE;
-    if (px1 > py1) { len1 = px1; len2 = py1; d1 = ny1; d2 = nx1; }
-    else { len1 = py1; len2 = px1; d1 = nx1; d2 = ny1; }
+    if (py1 < 0) { py1 = -py1; ny1 = -1; }
+    else ny1 = 1;
 
+    // Trace the Bresenham walk as explicit (x,y) coordinates. Each sampled
+    // cell is clamped to the terrain bounds so an out-of-range endpoint can no
+    // longer drive TerrainWall out of bounds (MU-E-7). For in-range segments
+    // the produced index is identical to the previous raw Index arithmetic.
+    const bool xMajor = px1 > py1;
+    const int len1 = xMajor ? px1 : py1;
+    const int len2 = xMajor ? py1 : px1;
+
+    int curX = sx1;
+    int curY = sy1;
     int error = 0, count = 0;
     do {
+        int cx = curX;
+        if (cx < 0) cx = 0; else if (cx > TERRAIN_SIZE_MASK) cx = TERRAIN_SIZE_MASK;
+        int cy = curY;
+        if (cy < 0) cy = 0; else if (cy > TERRAIN_SIZE_MASK) cy = TERRAIN_SIZE_MASK;
+        int Index = cy * TERRAIN_SIZE + cx;
+
         int _type = (SelectedCharacter >= 0 ? CharactersClient[SelectedCharacter].Object.Type : 0);
         if ((_type != MODEL_EVIL_GATE && _type != MODEL_LION_GATE && _type != MODEL_STAR_GATE && _type != MODEL_RUSH_GATE)
             && (TerrainWall[Index] >= TW_NOMOVE && (TerrainWall[Index] & TW_ACTION) != TW_ACTION && (TerrainWall[Index] & TW_HEIGHT) != TW_HEIGHT && (TerrainWall[Index] & TW_CAMERA_UP) != TW_CAMERA_UP))
@@ -528,10 +540,12 @@ bool CheckWall(int sx1, int sy1, int sx2, int sy2)
         error += len2;
         if (error > len1 / 2)
         {
-            Index += d1;
+            if (xMajor) curY += ny1;
+            else curX += nx1;
             error -= len1;
         }
-        Index += d2;
+        if (xMajor) curX += nx1;
+        else curY += ny1;
     } while (++count <= len1);
     return true;
 }

@@ -6,6 +6,7 @@ import {
   ItemOption,
   MobileGmClient,
   isAllowedServerUrl,
+  isLocalServerUrl,
   randomUuid
 } from '../model/MobileGmClient';
 
@@ -80,6 +81,20 @@ struct Index {
     const store = await preferences.getPreferences(getContext(this), PREFS_NAME);
     await store.put(KEY_SERVER_URL, url);
     await store.flush();
+  }
+
+  // Explicit confirmation before pairing with a public (non-local) host.
+  // Returns true only when the user chooses to continue.
+  private async confirmPublicServer(): Promise<boolean> {
+    const result = await promptAction.showDialog({
+      title: '确认连接到公网服务器？',
+      message: '该地址不是本机或局域网地址。继续将把 GM 配对密钥发送到 ' + this.serverUrl + '。请确认你信任该主机。',
+      buttons: [
+        { text: '取消', color: '#6E7780' },
+        { text: '仍要连接', color: '#C0392B' }
+      ]
+    });
+    return result.index === 1;
   }
 
   async loadStatus(): Promise<void> {
@@ -370,6 +385,13 @@ struct Index {
             .onClick(async () => {
               if (!isAllowedServerUrl(this.serverUrl)) {
                 this.resultText = 'HTTP 仅允许本机或局域网 IP；公网必须用 HTTPS';
+                return;
+              }
+              // A public HTTPS host passes the URL policy, but pairing sends the
+              // X-OpenMU-Mobile-Key on every request. Require an explicit
+              // confirmation before trusting a non-local host (parity with
+              // Android MainActivity.confirmPublicServer).
+              if (!isLocalServerUrl(this.serverUrl) && !(await this.confirmPublicServer())) {
                 return;
               }
               await this.saveServerUrl(this.serverUrl);

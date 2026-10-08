@@ -19,6 +19,14 @@ public static class ArrayExtensions
     /// <returns>The resulting string.</returns>
     public static string ExtractString(this byte[] array, int startIndex, int maximumBytes, Encoding encoding)
     {
+        // Guard a negative/out-of-range startIndex (short packet => _data.Length - N
+        // can be negative) and a non-positive maximum.
+        if (startIndex < 0 || startIndex >= array.Length || maximumBytes <= 0)
+        {
+            return string.Empty;
+        }
+
+        maximumBytes = Math.Min(maximumBytes, array.Length - startIndex);
         int count = array.Skip(startIndex).Take(maximumBytes).TakeWhile(b => b != 0).Count();
         return encoding.GetString(array, startIndex, count);
     }

@@ -38,7 +38,7 @@ void CreateTerrainLight();
 void CreateTerrainNormal_Part(int xi, int yi);
 void CreateTerrainLight_Part(int xi, int yi);
 
-void CreateTerrain(wchar_t* FileName, bool bNew = false);
+bool CreateTerrain(wchar_t* FileName, bool bNew = false);
 
 bool IsTerrainHeightExtMap(int iWorld);
 

@@ -5,13 +5,27 @@
 namespace MUnique.OpenMU.Network.SimpleModulus;
 
 using System.IO.Pipelines;
+using System.Security.Cryptography;
 
 /// <summary>
 /// A key generator which is able to generate a new pair of encryption/decryption keys.
 /// </summary>
 public class SimpleModulusKeyGenerator
 {
-    private readonly Random _randomizer = new();
+    // Encryption keys must come from a cryptographically secure RNG (a plain
+    // System.Random is predictable). One instance is enough; GetBytes is thread-safe.
+    private readonly RandomNumberGenerator _randomizer = RandomNumberGenerator.Create();
+
+    private uint NextRandom(uint minValue, uint maxExclusive)
+    {
+        if (maxExclusive <= minValue)
+        {
+            return minValue;
+        }
+
+        uint range = maxExclusive - minValue;
+        return minValue + (uint)RandomNumberGenerator.GetInt32((int)range);
+    }
 
     /// <summary>
     /// Generates a new pair of keys.
@@ -89,12 +103,14 @@ public class SimpleModulusKeyGenerator
         {
             if (count % ushort.MaxValue == 0)
             {
-                // we try other keys
-                xorKey = (uint)this._randomizer.Next(0, ushort.MaxValue) + 1;
-                modulusKey = (uint)this._randomizer.Next(0, 0x30000);
+                // we try other keys. The modulus must be at least 3 because a key
+                // is sampled from [2, modulus) below; the old Random.Next(2, modulus)
+                // call threw when modulus was 0..2.
+                xorKey = this.NextRandom(1, ushort.MaxValue + 1u);
+                modulusKey = this.NextRandom(3, 0x30000);
             }
 
-            var randomKey = (uint)this._randomizer.Next(2, (int)modulusKey);
+            var randomKey = this.NextRandom(2, modulusKey);
 
             if (this.NumbersAreCoPrime(modulusKey, randomKey) && this.TryFindKey(modulusKey, randomKey, out uint tempDecryptKey))
             {

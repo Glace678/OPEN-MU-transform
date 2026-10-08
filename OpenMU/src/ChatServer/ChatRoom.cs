@@ -179,9 +179,23 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
 
         this._logger.LogDebug("Client {ChatClientIndex} is trying to join the room {RoomId} with token '{AuthenticationToken}'", chatClient.Index, this.RoomId, chatClient.AuthenticationToken);
 
-        this._lockSlim?.EnterWriteLock();
+        // Capture a stable reference: DisposeAsync nulls the field while an
+        // in-flight operation holds the lock, so releasing via the field would
+        // skip ExitWriteLock and deadlock disposal's EnterWriteLock forever.
+        var lockSlim = this._lockSlim;
+        if (lockSlim is null)
+        {
+            throw new ObjectDisposedException("Chat room is already disposed.");
+        }
+
+        lockSlim.EnterWriteLock();
         try
         {
+            if (this._isClosing)
+            {
+                throw new ObjectDisposedException("Chat room is already disposed.");
+            }
+
             var authenticationInformation = this._registeredClients.FirstOrDefault(info => string.Equals(info.AuthenticationToken, chatClient.AuthenticationToken));
             if (authenticationInformation != null)
             {
@@ -212,7 +226,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            this._lockSlim?.ExitWriteLock();
+            lockSlim.ExitWriteLock();
         }
 
         return false;
@@ -231,18 +245,24 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
 
         this._logger.LogDebug($"Chat client ({chatClient}) is leaving.");
-        this._lockSlim?.EnterWriteLock();
+        var lockSlim = this._lockSlim;
+        if (lockSlim is null)
+        {
+            return;
+        }
+
+        lockSlim.EnterWriteLock();
         try
         {
             this._connectedClients.Remove(chatClient);
         }
         finally
         {
-            this._lockSlim?.ExitWriteLock();
+            lockSlim.ExitWriteLock();
         }
 
         bool roomIsEmpty;
-        this._lockSlim?.EnterReadLock();
+        lockSlim.EnterReadLock();
         try
         {
             roomIsEmpty = this._connectedClients.Count < 1;
@@ -253,7 +273,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            this._lockSlim?.ExitReadLock();
+            lockSlim.ExitReadLock();
         }
 
         if (roomIsEmpty)
@@ -274,7 +294,13 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             return;
         }
 
-        this._lockSlim?.EnterReadLock();
+        var lockSlim = this._lockSlim;
+        if (lockSlim is null)
+        {
+            return;
+        }
+
+        lockSlim.EnterReadLock();
         try
         {
             foreach (var connectedClient in this._connectedClients)
@@ -284,7 +310,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            this._lockSlim?.ExitReadLock();
+            lockSlim.ExitReadLock();
         }
     }
 

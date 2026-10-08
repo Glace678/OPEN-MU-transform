@@ -242,7 +242,15 @@ public static class PublicRegistrationEndpoints
         {
             using var context = await CreatePlayerContextAsync(configurationContext, persistenceContextProvider).ConfigureAwait(false);
             var account = await context.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
-            if (account is null || !BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash))
+            if (account is null)
+            {
+                // Do not count failures for non-existent accounts, otherwise anyone could
+                // lock an arbitrary username for 15 minutes. The response stays identical
+                // so account names cannot be enumerated.
+                return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash))
             {
                 guard.RegisterFailedAttempt(loginName);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
@@ -342,7 +350,13 @@ public static class PublicRegistrationEndpoints
                 var replacement = await AccountRecoveryService.ResetAsync(credentials, loginName, recoveryCode, newPassword).ConfigureAwait(false);
                 if (replacement is null)
                 {
-                    guard.RegisterFailedAttempt(loginName);
+                    // Only count it against an existing account; a non-existent account must
+                    // not be lockable by name. The response is identical to avoid enumeration.
+                    if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
+                    {
+                        guard.RegisterFailedAttempt(loginName);
+                    }
+
                     return Results.Ok(new AccountRegistrationResponse(false, "invalid_recovery_code", text["InvalidRecoveryCode"].Value));
                 }
 
@@ -423,7 +437,13 @@ public static class PublicRegistrationEndpoints
             var replacement = await AccountRecoveryService.IssueAsync(credentials, loginName, currentPassword).ConfigureAwait(false);
             if (replacement is null)
             {
-                guard.RegisterFailedAttempt(loginName);
+                // Only count it against an existing account; a non-existent account must
+                // not be lockable by name. The response is identical to avoid enumeration.
+                if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
+                {
+                    guard.RegisterFailedAttempt(loginName);
+                }
+
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 

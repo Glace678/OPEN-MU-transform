@@ -23,7 +23,7 @@ namespace   npcGateSwitch
     //////////////////////////////////////////////////////////////////////////
     void    GateOpen(CHARACTER* c, OBJECT* o);
     void    GateClose(CHARACTER* c, OBJECT* o);
-    void    DoInterfaceOpen(int Key);
+    bool    DoInterfaceOpen(int Key);
     void    ProcessState(int Key, BYTE GateOnOff, BYTE State);
 
     void	SendToggleGate();	// Send gate close/open packet

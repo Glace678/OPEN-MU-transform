@@ -12,7 +12,7 @@ struct
     vec3_t WorldOrg;
 } BoneFixup[NODE_MAX];
 
-void FixupSMD()
+bool FixupSMD()
 {
     Skeleton_t* s = &NodeGroup.Skeleton;
     NodeGroup_t* ng = &NodeGroup;
@@ -76,7 +76,11 @@ void FixupSMD()
 
     for (int i = 0; i < tg->TriangleNum; i++)
     {
-        int MeshNum = 0;
+        // MeshNum 0 is a valid existing mesh, so a "not found" state must be
+        // distinct (sentinel -1); starting the search at 0 previously made a
+        // match on mesh 0 look like "new mesh", duplicating it once per
+        // triangle and overrunning Mesh[MESH_MAX] on the 101st distinct write.
+        int MeshNum = -1;
         for (int k = 0; k < mg->MeshNum; k++)
         {
             if (strcmp(tg->TextureName[i], mg->Texture[k].FileName) == 0)
@@ -86,8 +90,13 @@ void FixupSMD()
             }
         }
 
-        if (MeshNum == 0)
+        if (MeshNum < 0)
         {
+            if (mg->MeshNum >= MESH_MAX)
+            {
+                g_ErrorReport.Write(L"SMD mesh limit (%d) exceeded; aborting conversion.\r\n", MESH_MAX);
+                return false;
+            }
             MeshNum = mg->MeshNum;
             mg->Mesh[MeshNum].Texture = mg->MeshNum;
             strncpy(mg->Texture[MeshNum].FileName, tg->TextureName[i], sizeof(mg->Texture[MeshNum].FileName) - 1); mg->Texture[MeshNum].FileName[sizeof(mg->Texture[MeshNum].FileName) - 1] = '\0';
@@ -176,6 +185,8 @@ void FixupSMD()
         m->Polygon[m->TriangleNum] = 3;
         m->TriangleNum++;
     }
+
+    return true;
 }
 
 void Triangle2Strip()

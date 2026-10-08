@@ -1277,7 +1277,7 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     CharacterMachine->Gold = Data->Gold;
 
     gMapManager.WorldActive = Data->Map;
-    gMapManager.LoadWorld(gMapManager.WorldActive);
+    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return FALSE;
 
     if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
     {
@@ -1530,7 +1530,7 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         int OldWorld = gMapManager.WorldActive;
 
         gMapManager.WorldActive = Data->Map;
-        gMapManager.LoadWorld(gMapManager.WorldActive);
+        if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
 
         if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive)
             || gMapManager.InChaosCastle() == true)
@@ -2167,6 +2167,9 @@ void ReceiveChatKey(const BYTE* ReceiveBuffer)
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
 
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
+
     if (Hero->GuildStatus == G_MASTER && wcscmp(CharactersClient[Index].ID, L"길드 마스터") == 0)
     {
         g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCGUILDMASTER);
@@ -2411,7 +2414,7 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
             int OldWorld = gMapManager.WorldActive;
 
             gMapManager.WorldActive = Data->Map;
-            gMapManager.LoadWorld(gMapManager.WorldActive);
+            if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return FALSE;
 
             if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
             {
@@ -2945,9 +2948,12 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
         wchar_t characterName[MAX_USERNAME_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(characterName, Data2->ID, MAX_USERNAME_SIZE);
 
-        CHARACTER* pCha;
+        CHARACTER* pCha = nullptr;
         int iIndex = FindCharacterIndex(Key);
-        pCha = &CharactersClient[iIndex];
+        if (iIndex >= 0 && iIndex < MAX_CHARACTERS_CLIENT)
+        {
+            pCha = &CharactersClient[iIndex];
+        }
 
         short sBackUpGuildMarkIndex = -1;
         BYTE byBackUpGuildStatus = 0;
@@ -2957,7 +2963,7 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
         BYTE byEtcPart = 0;
         BYTE byBackupCtlcode = 0;
 
-        if (iIndex != MAX_CHARACTERS_CLIENT)
+        if (pCha != nullptr)
         {
             sBackUpGuildMarkIndex = pCha->GuildMarkIndex;
             byBackUpGuildStatus = pCha->GuildStatus;
@@ -3419,12 +3425,21 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer, int Size)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x1F [ReceiveCreateSummonViewport(%d)]", Data->Value);
 }
 
-void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
+void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PHEADER_DEFAULT))
+    {
+        return;
+    }
+
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     int Offset = sizeof(PHEADER_DEFAULT);
     for (int i = 0; i < Data->Value; i++)
     {
+        if (Offset + (int)sizeof(PDELETE_CHARACTER) > Size)
+        {
+            break;
+        }
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
 
         if (Switch_Info != nullptr)
@@ -3456,13 +3471,16 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
         }
 
         iIndex = FindCharacterIndex(Key);
-        CHARACTER* pCha = &CharactersClient[iIndex];
-
-        int buffSize = g_CharacterBuffSize((&pCha->Object));
-
-        for (int k = 0; k < buffSize; k++)
+        if (iIndex >= 0 && iIndex < MAX_CHARACTERS_CLIENT)
         {
-            UnRegisterBuff(g_CharacterBuff((&pCha->Object), k), &pCha->Object);
+            CHARACTER* pCha = &CharactersClient[iIndex];
+
+            int buffSize = g_CharacterBuffSize((&pCha->Object));
+
+            for (int k = 0; k < buffSize; k++)
+            {
+                UnRegisterBuff(g_CharacterBuff((&pCha->Object), k), &pCha->Object);
+            }
         }
 
         DeleteCharacter(Key);
@@ -3488,7 +3506,7 @@ void ReceiveDamage(const BYTE* ReceiveBuffer)
 
     int ShieldDamage = ((int)(Data->ShieldDamageH) << 8) + Data->ShieldDamageL;
     if (CharacterAttribute->Shield >= ShieldDamage)
-        CharacterAttribute->Shield = ShieldDamage;
+        CharacterAttribute->Shield -= ShieldDamage;
     else
         CharacterAttribute->Shield = 0;
 
@@ -3786,6 +3804,8 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
     Key &= 0x7FFF;
 
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
     
@@ -3827,7 +3847,7 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
     }
     else
     {
-        c->ShieldStatus = static_cast<float>(Data->HealthStatus) / 250.f;
+        c->ShieldStatus = static_cast<float>(Data->ShieldStatus) / 250.f;
     }
 
     if (gMapManager.InChaosCastle())
@@ -5889,8 +5909,13 @@ BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 }
 
 // ChainLightning
-void ReceiveChainMagic(const BYTE* ReceiveBuffer)
+void ReceiveChainMagic(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PRECEIVE_CHAIN_MAGIC))
+    {
+        return;
+    }
+
     auto pPacketData = (LPPRECEIVE_CHAIN_MAGIC)ReceiveBuffer;
 
     CHARACTER* pSourceChar = FindCharacterByKey(pPacketData->wUserIndex); // PROTO-1
@@ -5926,6 +5951,10 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
     int iOffset = sizeof(PRECEIVE_CHAIN_MAGIC);
     for (int i = 0; i < (int)(pPacketData->byCount); i++)
     {
+        if (iOffset + (int)sizeof(PRECEIVE_CHAIN_MAGIC_OBJECT) > Size)
+        {
+            break;
+        }
         auto pPacketData2 = (LPPRECEIVE_CHAIN_MAGIC_OBJECT)(ReceiveBuffer + iOffset);
         CHARACTER* pTargetChar = FindCharacterByKey(pPacketData2->wTargetIndex); // PROTO-1
         if (pTargetChar == nullptr)
@@ -5956,6 +5985,11 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
 
 void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PRECEIVE_MAGIC_POSITIONS))
+    {
+        return;
+    }
+
     auto Data = (LPPRECEIVE_MAGIC_POSITIONS)ReceiveBuffer;
     int SourceKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
@@ -5977,6 +6011,10 @@ void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
     int Offset = sizeof(PRECEIVE_MAGIC_POSITIONS);
     for (int i = 0; i < Data->Count; i++)
     {
+        if (Offset + (int)sizeof(PRECEIVE_MAGIC_POSITION) > Size)
+        {
+            break;
+        }
         auto Data2 = (LPPRECEIVE_MAGIC_POSITION)(ReceiveBuffer + Offset);
         int TargetKey = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
         CHARACTER* tc = FindCharacterByKey(TargetKey); // PROTO-1
@@ -6396,18 +6434,31 @@ void ReceiveCreateItemViewportExtended(std::span<const BYTE> ReceiveBuffer)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x20 [ReceiveCreateItemViewport]");
 }
 
-void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer)
+void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PWHEADER_DEFAULT_WORD))
+    {
+        return;
+    }
+
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
+        if (Offset + (int)sizeof(PDELETE_CHARACTER) > Size)
+        {
+            break;
+        }
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
         int Key = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
-        if (Key < 0 || Key >= MAX_ITEMS)
-            Key = 0;
-        Items[Key].Object.Live = false;
         Offset += sizeof(PDELETE_CHARACTER);
+
+        // A malformed/out-of-range key must not delete item slot 0; skip it.
+        if (Key < 0 || Key >= MAX_ITEMS)
+        {
+            continue;
+        }
+        Items[Key].Object.Live = false;
 
         MUHelper::g_MuHelper.DeleteItem(Key);
     }
@@ -6456,7 +6507,7 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
 
             wchar_t szMessage[128];
             int backupGold = CharacterMachine->Gold;
-            CharacterMachine->Gold = (Data2->Money[0] << 24) + (Data2->Money[1] << 16) + (Data2->Money[2] << 8) + (Data2->Money[3]);
+            CharacterMachine->Gold = (((DWORD)Data2->Money[0]) << 24) + (((DWORD)Data2->Money[1]) << 16) + (((DWORD)Data2->Money[2]) << 8) + ((DWORD)Data2->Money[3]);
 
             int getGold = CharacterMachine->Gold - backupGold;
 
@@ -11791,8 +11842,12 @@ void ReceiveGateState(const BYTE* ReceiveBuffer)
         break;
 
     case 1:
-        npcGateSwitch::DoInterfaceOpen(Key);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
+        // Only open the gate window when the Key resolved to a valid client
+        // character; DoInterfaceOpen leaves the global Key untouched otherwise.
+        if (npcGateSwitch::DoInterfaceOpen(Key))
+        {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
+        }
         break;
 
     case 2:
@@ -14138,7 +14193,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     case 0x14: //delete characters & monsters
         //AddDebugText(ReceiveBuffer,Size);
-        ReceiveDeleteCharacterViewport(ReceiveBuffer);
+        ReceiveDeleteCharacterViewport(ReceiveBuffer, Size);
         break;
     case 0x20: //create item
         ReceiveCreateItemViewportExtended(received_span);
@@ -14147,7 +14202,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveCreateMoney(received_span);
         break;
     case 0x21://delete item
-        ReceiveDeleteItemViewport(ReceiveBuffer);
+        ReceiveDeleteItemViewport(ReceiveBuffer, Size);
         break;
     case 0x22://get item
         ReceiveGetItem(received_span);
@@ -15183,7 +15238,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceiveCursedTempleState(ReceiveBuffer);
             break;
         case 0x0a:
-            ReceiveChainMagic(ReceiveBuffer);
+            ReceiveChainMagic(ReceiveBuffer, Size);
             break;
         case 0x0B:
             ReceiveRegistedLuckyCoin(ReceiveBuffer);

@@ -435,7 +435,7 @@ void BMDMeshShader::CreateGL()
     GLint compiled = 0;
     fn_glGetShaderiv(m_VertShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled) {
-        char infoLog[512];
+        char infoLog[512] = {};
         if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Vertex compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
@@ -450,7 +450,7 @@ void BMDMeshShader::CreateGL()
 
     fn_glGetShaderiv(m_FragShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled) {
-        char infoLog[512];
+        char infoLog[512] = {};
         if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Fragment compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
@@ -468,7 +468,7 @@ void BMDMeshShader::CreateGL()
     GLint linked = 0;
     fn_glGetProgramiv(m_Program, GL_LINK_STATUS, &linked);
     if (!linked) {
-        char infoLog[512];
+        char infoLog[512] = {};
         if (fn_glGetProgramInfoLog) fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Program link error: %s", infoLog);
         fn_glDeleteProgram(m_Program);

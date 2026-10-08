@@ -14,6 +14,15 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Backfill existing NULL rows before enforcing NOT NULL; otherwise the
+            // column alteration fails on databases that already contain NULL values.
+            migrationBuilder.Sql("""UPDATE config."MiniGameSpawnWave" SET "Message" = '' WHERE "Message" IS NULL;""");
+            migrationBuilder.Sql("""UPDATE config."MiniGameSpawnWave" SET "Description" = '' WHERE "Description" IS NULL;""");
+            migrationBuilder.Sql("""UPDATE config."MiniGameChangeEvent" SET "Message" = '' WHERE "Message" IS NULL;""");
+            migrationBuilder.Sql("""UPDATE config."MiniGameChangeEvent" SET "Description" = '' WHERE "Description" IS NULL;""");
+            migrationBuilder.Sql("""UPDATE config."ConfigurationUpdate" SET "Name" = '' WHERE "Name" IS NULL;""");
+            migrationBuilder.Sql("""UPDATE config."ConfigurationUpdate" SET "Description" = '' WHERE "Description" IS NULL;""");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Message",
                 schema: "config",

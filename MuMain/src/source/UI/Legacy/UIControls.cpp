@@ -4613,8 +4613,20 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
         return;
     }
 
-    SLIDEHELP SlideHelp;
-    fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp);
+    // Value-initialise so a short/truncated read cannot leave fields or the
+    // fixed-size text arrays with indeterminate bytes (the conversion below
+    // relies on NUL termination via the -1 length).
+    SLIDEHELP SlideHelp{};
+    if (fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp) != 1)
+    {
+        fclose(fp);
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls - Failed to read slide help data.", szFileName);
+        g_ErrorReport.Write(Text);
+        // Any previously loaded slides were cleared above; stay in that safe
+        // empty state rather than applying values from a partial record.
+        return;
+    }
     BuxConvert((BYTE*)&SlideHelp, sizeof(SLIDEHELP));
     fclose(fp);
 
@@ -4629,6 +4641,7 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
         for (int j = 0; j < m_iTextNumber[i]; ++j)
         {
             auto charText = SlideHelp.SlideHelp[i].szSlideHelpText[j];
+            charText[255] = '\0';  // guarantee NUL termination for the -1-length conversion
             int iLength = MultiByteToWideChar(CP_UTF8, 0, charText, -1, 0, 0);
             auto pszText = new wchar_t[iLength + 1];
             MultiByteToWideChar(CP_UTF8, 0, charText, -1, pszText, iLength);

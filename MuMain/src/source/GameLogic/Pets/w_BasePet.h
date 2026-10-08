@@ -62,7 +62,7 @@ private:
     int m_targetKey;
     int m_itemType;
 
-    CTimer* m_timer;
+    CTimer* m_timer = nullptr;
 
     ActionType m_moveType;
     ActionType m_oldMoveType;

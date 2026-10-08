@@ -570,6 +570,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewNPCShop);
     SafeDelete(m_pNewPetInfoWindow);
     SafeDelete(m_pNewMyInventory);
+    SafeDelete(m_pNewMyInventoryExt);  // was leaked on unload (matches the storage-extension fix)
     SafeDelete(m_pNewFriendWindow);
     SafeDelete(m_pNewChatInputBox);
     SafeDelete(m_pNewNameWindow);
@@ -618,6 +619,10 @@ void CNewUISystem::UnloadMainSceneInterface()
 #endif //PBG_MOD_STAMINA_UI
     SafeDelete(m_pNewGensRanking);
     SafeDelete(m_pNewUnitedMarketPlaceWindow);
+    // MuHelper trio were allocated in LoadMainSceneInterface but never released.
+    SafeDelete(m_pNewUIMuHelperSkillList);
+    SafeDelete(m_pNewUIMuHelperExt);
+    SafeDelete(m_pNewUIMuHelper);
 #ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     SafeDelete(m_pNewUILuckyItemWnd);
 #endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE

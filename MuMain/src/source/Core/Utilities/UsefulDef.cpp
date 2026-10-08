@@ -71,8 +71,10 @@ int DivideString(LPTSTR alpszDst, int nDstRow, int nDstColumn, LPCTSTR lpszSrc)
 
     while (TRUE)
     {
-        if (0x80 & lpszSrc[nSrcPos])
+        if (nSrcPos + 1 < nSrcLen && (0x80 & lpszSrc[nSrcPos]))
         {
+            // Consume the DBCS trail byte, but never advance past the terminator
+            // (a lone high-bit byte at the end must not read lpszSrc[nSrcLen]).
             ++nSrcPos;
             ++nDstLen;
         }
@@ -88,6 +90,12 @@ int DivideString(LPTSTR alpszDst, int nDstRow, int nDstColumn, LPCTSTR lpszSrc)
         {
             nSrcPos -= 2;
             nDstLen -= 2;
+            // Near the start of the buffer the -2 backup can go negative and read
+            // before the source string; clamp to the current line start.
+            if (nSrcPos < nDstStart)
+                nSrcPos = nDstStart;
+            if (nDstLen < 0)
+                nDstLen = 0;
             ::wcsncpy(alpszDst + nLineCount * nDstColumn, lpszSrc + nDstStart, nDstLen);
             ++nLineCount;
             nDstStart = nSrcPos + 1;

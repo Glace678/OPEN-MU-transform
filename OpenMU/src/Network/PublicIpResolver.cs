@@ -58,19 +58,27 @@ public class PublicIpResolver : IIpAddressResolver
         }
     }
 
+    // Reuse one HttpClient (creating one per call leaks sockets) and bound the time
+    // an unresponsive external service can stall a connection setup.
+    private static readonly System.Net.Http.HttpClient HttpClient = CreateHttpClient();
+
+    private static System.Net.Http.HttpClient CreateHttpClient()
+    {
+        return new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+    }
+
     private async ValueTask<IPAddress> InternalGetIPv4Async()
     {
         const string url = "https://api.ipify.org/?format=text";
         this._logger.LogDebug("Start Requesting public ip from {url}", url);
-        using var client = new System.Net.Http.HttpClient();
-        var response = await client.GetStringAsync(url).ConfigureAwait(false);
+        var response = await HttpClient.GetStringAsync(url).ConfigureAwait(false);
 
         var match = Regex.Match(response, @".*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*");
-        if (match.Success)
+        if (match.Success && IPAddress.TryParse(match.Groups[1].Value, out var address))
         {
-            var ipString = match.Groups[1].Value;
+            var ipString = address.ToString();
             this._logger.LogDebug("Request of public ip answered with: {ipString}", ipString);
-            return IPAddress.Parse(ipString);
+            return address;
         }
 
         this._logger.LogDebug("Request of public ip answered with unknown format: {response}", response);

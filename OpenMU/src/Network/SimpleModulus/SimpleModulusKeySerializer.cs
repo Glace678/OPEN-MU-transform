@@ -40,7 +40,9 @@ public class SimpleModulusKeySerializer
     /// <param name="xorKey">The xor key.</param>
     public void Serialize(string fileName, uint[] modKey, uint[] key, uint[] xorKey)
     {
-        using var fileStream = File.OpenWrite(fileName);
+        // File.Create truncates any previously existing (possibly longer) file;
+        // OpenWrite would leave trailing bytes of the old key file in place.
+        using var fileStream = File.Create(fileName);
         var length = (uint)(modKey.Length * sizeof(uint) * 3);
         fileStream.Write(this._headerOneKey, 0, this._headerOneKey.Length);
         var intBuffer = new byte[4];
@@ -91,18 +93,31 @@ public class SimpleModulusKeySerializer
         using var fileStream = File.OpenRead(fileName);
         var first = fileStream.ReadByte();
         var second = fileStream.ReadByte();
-        if (first != 0x12 && second != 0x11)
+        if (first != 0x12 || second != 0x11)
         {
             return false;
         }
 
         var length = fileStream.ReadInteger();
-        if (length > fileStream.Length + fileStream.Position)
+        var remaining = fileStream.Length - fileStream.Position;
+        // The previous check had the sign inverted (Length + Position), so a
+        // truncated file was accepted. Require the declared payload to fit and to
+        // be an exact multiple of the 3-key record size.
+        if (length > remaining || length == 0 || length % (sizeof(uint) * 3) != 0)
         {
             return false;
         }
 
-        var keyCount = length / (sizeof(uint) * 3);
+        var keyCount = (int)(length / (sizeof(uint) * 3));
+
+        // The XOR key table only holds 16 entries; a larger file-driven count
+        // would both index out of bounds and allow a huge allocation.
+        const int maximumKeyCount = 16;
+        if (keyCount > maximumKeyCount)
+        {
+            return false;
+        }
+
         modulusKey = new uint[keyCount];
         key = new uint[keyCount];
         xorKey = new uint[keyCount];

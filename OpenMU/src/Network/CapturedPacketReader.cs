@@ -48,9 +48,17 @@ internal sealed class CapturedPacketReader : PacketPipeReaderBase
         this._completed = completed;
         this._logger = logger;
 
-        // The capturing must never slow down or block the connection itself, so the writer is
-        // never paused. The reader just forwards the packets to the sinks, so it keeps up.
-        this._pipe = new Pipe(new PipeOptions(useSynchronizationContext: false, pauseWriterThreshold: 0, resumeWriterThreshold: 0));
+        // A threshold of 0 makes the pipe unbounded: attaching a capture on a slow
+        // or hostile connection would let the captured buffer grow without limit.
+        // Cap the backlog so backpressure applies (or the capture is dropped by the
+        // caller) instead of exhausting process memory. Capture is a diagnostic,
+        // opt-in feature; it must not be able to consume unbounded memory.
+        const long pauseWriterThreshold = 16 * 1024 * 1024;
+        const long resumeWriterThreshold = 8 * 1024 * 1024;
+        this._pipe = new Pipe(new PipeOptions(
+            useSynchronizationContext: false,
+            pauseWriterThreshold: pauseWriterThreshold,
+            resumeWriterThreshold: resumeWriterThreshold));
         this.Source = this._pipe.Reader;
     }
 

@@ -90,6 +90,8 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
         int percent;
         if (useBalanceV1Rules)
         {
+            // NOTE: only Chance is applied; the designed UpgradeStep.PityAttempts guarantee is
+            // not yet honoured (no persisted per-item failed-attempt counter). See BalanceV1.
             percent = checked((int)Math.Round(BalanceV1.GetUpgradeStep(item.Level + levelAmount).Chance * 100));
         }
         else

@@ -64,12 +64,41 @@ namespace leaf {
 
         xstreambuf& operator >> (char* sz)
         {
-            return read(sz, strlen((const char*)(m_pBuffer)+m_offset) + 1);
+            // F30: bound the NUL scan to the bytes still stored in the buffer;
+            // a corrupt stream without a terminator must never scan past m_size.
+            unsigned int available = m_offset < m_size
+                ? static_cast<unsigned int>(m_size - m_offset)
+                : 0;
+            unsigned int len = 0;
+            const char* source = static_cast<const char*>(m_pBuffer);
+            while (len < available && source[m_offset + len] != '\0')
+                ++len;
+            // Include the NUL when it was found; without one, copy only the
+            // bounded remainder instead of walking off the allocation.
+            return read(sz, len < available ? len + 1 : len);
         }
         xstreambuf& operator >> (std::string& str)
         {
-            str = (const char*)(m_pBuffer)+m_offset;
-            m_offset += str.length();
+            unsigned int available = m_offset < m_size
+                ? static_cast<unsigned int>(m_size - m_offset)
+                : 0;
+            unsigned int len = 0;
+            const char* source = static_cast<const char*>(m_pBuffer);
+            if (source != nullptr)
+            {
+                while (len < available && source[m_offset + len] != '\0')
+                    ++len;
+                str.assign(source + m_offset, len);
+            }
+            else
+            {
+                str.clear();
+            }
+            // Skip the terminating NUL the matching operator<< wrote
+            // (write(..., str.size() + 1)); otherwise the next string read
+            // starts on the NUL and comes back empty (F22). With no NUL
+            // (corrupt/truncated stream) consume only the bounded bytes.
+            m_offset += len < available ? len + 1 : len;
             return *this;
         }
 

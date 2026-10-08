@@ -261,6 +261,7 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File corrupted.", Fname);
             g_ErrorReport.Write(Text);
+            delete[] Buffer;
             return;
         }
         else

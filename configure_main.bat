@@ -18,12 +18,18 @@ if not exist "%VCVARS%" (
     exit /b 9009
 )
 if not exist "%CMAKE%" (
-    echo error: bundled cmake.exe not found at "%CMAKE%". 1>&2
-    exit /b 9009
-)cd /d "%~dp0MuMain"
+    where cmake >nul 2>&1
+    if errorlevel 1 (
+        echo error: no cmake found: neither "%CMAKE%" nor a cmake on PATH. Install the Visual Studio CMake component or add cmake to PATH. 1>&2
+        exit /b 9009
+    )
+    set "CMAKE=cmake"
+)
+cd /d "%~dp0MuMain"
 call "%VCVARS%" >nul 2>&1
 if errorlevel 1 (
     echo error: vcvars32.bat failed to initialize the MSVC environment. 1>&2
     exit /b %errorlevel%
-)"%CMAKE%" --preset windows-x86 > "%~dp0configure_log.txt" 2>&1
+)
+"%CMAKE%" --preset windows-x86 > "%~dp0configure_log.txt" 2>&1
 exit /b %ERRORLEVEL%

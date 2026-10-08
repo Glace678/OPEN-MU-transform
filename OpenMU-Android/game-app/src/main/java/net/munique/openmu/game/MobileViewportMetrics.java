@@ -27,11 +27,24 @@ final class MobileViewportMetrics {
     @SuppressWarnings("deprecation")
     static void populateRealMetrics(WindowManager windowManager, DisplayMetrics outMetrics) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Rect bounds = windowManager.getCurrentWindowMetrics().getBounds();
-            outMetrics.widthPixels = bounds.width();
-            outMetrics.heightPixels = bounds.height();
-        } else {
+            try {
+                // The persisted resolution must describe the full display, not the current
+                // window: getCurrentWindowMetrics() reports the (possibly smaller) split/freeform
+                // window and is unreliable on an Application context. getMaximumWindowMetrics() is
+                // well-defined for the Application context and yields the full-screen bounds.
+                Rect bounds = windowManager.getMaximumWindowMetrics().getBounds();
+                outMetrics.widthPixels = bounds.width();
+                outMetrics.heightPixels = bounds.height();
+                return;
+            } catch (RuntimeException ignored) {
+                // Fall back to the Display API below on OEM/API quirks.
+            }
+        }
+
+        try {
             windowManager.getDefaultDisplay().getRealMetrics(outMetrics);
+        } catch (RuntimeException ignored) {
+            // Keep the caller-supplied defaults; callers already clamp dimensions with Math.max.
         }
     }
 }

@@ -34,7 +34,8 @@ services:
       prometheus:
         condition: service_healthy
     ports:
-      - 3000
+      # Public access goes through nginx /grafana with basic auth; do not expose it directly.
+      - "127.0.0.1::3000"
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
       interval: 10s
@@ -44,7 +45,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.53.4
     ports:
-      - 9090
+      - "127.0.0.1::9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
@@ -60,9 +61,9 @@ services:
     container_name: loki
     command: "-config.file=/etc/loki/config.yaml -target=all"
     ports:
-      - 3100
-      - 7946
-      - 9095
+      - "127.0.0.1::3100"
+      - "127.0.0.1::7946"
+      - "127.0.0.1::9095"
     environment:
       AWS_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY:?set a MinIO access key}
       AWS_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY:?set a MinIO secret key}
@@ -93,7 +94,7 @@ services:
       - MINIO_PROMETHEUS_AUTH_TYPE=private
       - MINIO_UPDATE=off
     ports:
-      - 9000
+      - "127.0.0.1::9000"
     volumes:
       - minio-data:/data
     healthcheck:
@@ -109,7 +110,7 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     command: ["sh", "-c", "redis-server --requirepass \"$${REDIS_PASSWORD}\" --appendonly yes"]
     ports:
-      - 6379
+      - "127.0.0.1::6379"
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
       interval: 10s
@@ -121,14 +122,14 @@ services:
     container_name: dapr_placement
     command: ["./placement", "-port", "50006"]
     ports:
-      - "50006"
+      - "127.0.0.1::50006"
 
   rabbit:
     image: rabbitmq:3.13-management-alpine
     container_name: pubsub_rabbitmq
     restart: always
     ports:
-      - "5672"
+      - "127.0.0.1::5672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 15s
@@ -144,7 +145,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-openmu}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
     ports:
-      - "5432"
+      - "127.0.0.1::5432"
     volumes:
       - dbdata:/var/lib/postgresql
     healthcheck:
@@ -170,9 +171,11 @@ services:
     image: munique/openmu-connect:0.9.10
     container_name: connectServer
     ports:
-      - "50001"
+      # 44405 is the public game-client connect port; inter-server (50001) and
+      # metrics (9464) stay on loopback and are reached over the docker network.
+      - "127.0.0.1::50001"
       - "44405:44405"
-      - "9464" # Prometheus
+      - "127.0.0.1::9464" # Prometheus
     environment:
       APPID: connectServer
       ASPNETCORE_URLS: http://+:8080
@@ -191,6 +194,10 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      # Expanded by daprd for the ${{REDIS_PASSWORD}} placeholder in the
+      # login-state component (the stack fails fast when it is not provided).
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       connectServer:
         condition: service_started
@@ -202,8 +209,8 @@ services:
     image: munique/openmu-login:0.9.10
     container_name: loginServer
     ports:
-      - "50001"
-      - "9464" # Prometheus
+      - "127.0.0.1::50001"
+      - "127.0.0.1::9464" # Prometheus
     environment:
       ASPNETCORE_URLS: http://+:8080
     depends_on:
@@ -219,6 +226,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       loginServer:
         condition: service_started
@@ -230,8 +239,8 @@ services:
     image: munique/openmu-friend:0.9.10
     container_name: friendServer
     ports:
-      - "50001"
-      - "9464" # Prometheus
+      - "127.0.0.1::50001"
+      - "127.0.0.1::9464" # Prometheus
     environment:
       ASPNETCORE_URLS: http://+:8080
     depends_on:
@@ -249,6 +258,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       friendServer:
         condition: service_started
@@ -260,8 +271,8 @@ services:
     image: munique/openmu-guild:0.9.10
     container_name: guildServer
     ports:
-      - "50001"
-      - "9464" # Prometheus
+      - "127.0.0.1::50001"
+      - "127.0.0.1::9464" # Prometheus
     environment:
       ASPNETCORE_URLS: http://+:8080
     depends_on:
@@ -277,6 +288,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       guildServer:
         condition: service_started
@@ -292,8 +305,8 @@ services:
       ASPNETCORE_URLS: http://+:8080
     ports:
       - "55980:55980"
-      - "50001"
-      - "9464" # Prometheus
+      - "127.0.0.1::50001"
+      - "127.0.0.1::9464" # Prometheus
     depends_on:
       database:
         condition: service_healthy
@@ -307,6 +320,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       chatServer:
         condition: service_started
@@ -322,8 +337,10 @@ services:
       database:
         condition: service_healthy
     ports:
-      - "8080"
-      - "9464" # Prometheus
+      # The panel must only be reachable through nginx (/admin, IP allowlist);
+      # do not publish it directly. Metrics stay loopback-only as well.
+      - "127.0.0.1::8080"
+      - "127.0.0.1::9464" # Prometheus
     environment:
       ASPNETCORE_URLS: http://+:8080
       PATH_BASE: /admin/
@@ -345,6 +362,8 @@ services:
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
 
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       adminPanel:
         condition: service_started
@@ -359,11 +378,11 @@ services:
       context: ../../src
       dockerfile: Dapr/GameServer.Host/Dockerfile
     ports:
-      - "8080"
-      - "50001"
+      - "127.0.0.1::8080"
+      - "127.0.0.1::50001"
       - "55901:55901"
       - "55902:55902"
-      - "9464" # Prometheus
+      - "127.0.0.1::9464" # Prometheus
     environment:
       GS_ID: 0
       APPID: gameServer0
@@ -392,6 +411,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       gameServer0:
         condition: service_started
@@ -406,11 +427,11 @@ services:
       context: ../../src
       dockerfile: Dapr/GameServer.Host/Dockerfile
     ports:
-      - "8080"
-      - "50001"
+      - "127.0.0.1::8080"
+      - "127.0.0.1::50001"
       - "55903:55903"
       - "55904:55904"
-      - "9464" # Prometheus
+      - "127.0.0.1::9464" # Prometheus
     environment:
       GS_ID: 1
       APPID: gameServer1
@@ -439,6 +460,8 @@ services:
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
                 "-placement-host-address", "dapr-placement:50006"  ]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
     depends_on:
       gameServer1:
         condition: service_started

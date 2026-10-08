@@ -354,6 +354,14 @@ public class Storage : IStorage
     {
         item.ThrowNotInitializedProperty(item.Definition is null, nameof(item.Definition));
 
+        // slot is a storage-relative index (caller subtracted _slotOffset); a
+        // derived storage could pass an out-of-range value, so bound it before
+        // indexing the fixed-size array.
+        if (slot >= this.ItemArray.Length)
+        {
+            return false;
+        }
+
         if (this.ItemArray[slot] != null)
         {
             return false;

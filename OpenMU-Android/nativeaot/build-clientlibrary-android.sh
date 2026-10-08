@@ -19,14 +19,33 @@ NDK_ARCHIVE="${CACHE_BASE}/${NDK_ARCHIVE_NAME}"
 NDK_ROOT="${ANDROID_NDK_ROOT:-${CACHE_BASE}/android-ndk-${NDK_REVISION}}"
 NDK_BIN="${NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin"
 
+verify_ndk() {
+    [[ -f "${NDK_ARCHIVE}" ]] \
+        && printf '%s  %s\n' "${NDK_SHA1}" "${NDK_ARCHIVE}" | sha1sum --check --status
+}
+
 download_ndk() {
     mkdir -p -- "${CACHE_BASE}"
-    if [[ ! -f "${NDK_ARCHIVE}" ]]; then
-        curl --fail --location --retry 5 --retry-delay 2 \
-            --output "${NDK_ARCHIVE}" "${NDK_URL}"
-    fi
 
-    printf '%s  %s\n' "${NDK_SHA1}" "${NDK_ARCHIVE}" | sha1sum --check --status
+    # A previously downloaded archive may be truncated/corrupt (interrupted
+    # build). Verify it first; on mismatch drop it and re-download instead of
+    # failing forever under `set -e` merely because the file exists.
+    if verify_ndk; then
+        return
+    fi
+    rm -f -- "${NDK_ARCHIVE}"
+
+    # Download to a temp file, verify, then atomically move into place so a
+    # partial download can never masquerade as a valid cached archive.
+    local tmp_archive
+    tmp_archive="$(mktemp "${NDK_ARCHIVE}.tmp.XXXXXX")"
+    # shellcheck disable=SC2064 # expand target paths now for the trap cleanup
+    trap 'rm -f -- "${tmp_archive}"' RETURN
+    curl --fail --location --retry 5 --retry-delay 2 \
+        --output "${tmp_archive}" "${NDK_URL}"
+    printf '%s  %s\n' "${NDK_SHA1}" "${tmp_archive}" | sha1sum --check --status
+    mv -f -- "${tmp_archive}" "${NDK_ARCHIVE}"
+    trap - RETURN
 }
 
 find_unzip() {

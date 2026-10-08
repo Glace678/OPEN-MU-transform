@@ -267,15 +267,14 @@ if(MSVC)
   target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201)
 endif()
 
-if(ANDROID OR OHOS)
-  set(_MU_REQUIRE_CURL_DEFAULT ON)
-else()
-  set(_MU_REQUIRE_CURL_DEFAULT OFF)
-endif()
-option(MU_REQUIRE_CURL "Fail configure when libcurl is not available" ${_MU_REQUIRE_CURL_DEFAULT})
-# The Android NDK does not ship libcurl. APK builds may inject an arm64-v8a
-# prebuilt; leaving both values empty keeps configuration usable while making
-# the missing compile dependency explicit in the warning below.
+# libcurl is a hard dependency of every non-Windows build: the in-game shop
+# downloader (CurlFileDownloader.cpp, guarded by !_WIN32 &&
+# KJH_ADD_INGAMESHOP_UI_SYSTEM, which is always defined) includes curl/curl.h
+# and is referenced unconditionally by FTPFileDownLoader.cpp off Windows, so it
+# cannot be compiled out without a stub transport. Desktop Linux/macOS gets it
+# via find_package(CURL REQUIRED) below; the Android/OHOS NDKs ship no libcurl,
+# so those builds must inject a prebuilt via the cache variables below, and
+# configure fails immediately when they do not.
 if(ANDROID)
   set(MU_ANDROID_CURL_INCLUDE_DIR "" CACHE PATH
       "Directory containing curl/curl.h for Android")
@@ -300,27 +299,19 @@ if(ANDROID)
     message(FATAL_ERROR
       "Set both MU_ANDROID_CURL_INCLUDE_DIR and MU_ANDROID_CURL_LIBRARY")
   else()
-    if(MU_REQUIRE_CURL)
-      message(FATAL_ERROR
-        "Android libcurl is not configured. Set MU_ANDROID_CURL_INCLUDE_DIR and "
-        "MU_ANDROID_CURL_LIBRARY, or re-run with -DMU_REQUIRE_CURL=OFF to build "
-        "without the in-game shop downloader.")
-    endif()
-    add_library(mu_android_curl_missing INTERFACE)
-    add_library(CURL::libcurl ALIAS mu_android_curl_missing)
-    message(WARNING
-      "Android libcurl is not configured. CMake generation can continue, but "
-      "MuClient compilation requires MU_ANDROID_CURL_INCLUDE_DIR and "
-      "MU_ANDROID_CURL_LIBRARY.")
+    message(FATAL_ERROR
+      "Android libcurl is not configured. Set MU_ANDROID_CURL_INCLUDE_DIR and "
+      "MU_ANDROID_CURL_LIBRARY to a prebuilt arm64-v8a libcurl before "
+      "configuring: the non-Windows in-game shop downloader requires libcurl.")
   endif()
   target_link_libraries(MuClient PUBLIC CURL::libcurl)
 elseif(OHOS)
   # HarmonyOS / OpenHarmony. The OHOS NDK ships no libcurl and no FindCURL
-  # package config, so find_package(CURL) here would abort configure. Mirror
-  # the Android path: an OHOS-built libcurl may be injected via these cache
-  # variables; otherwise generation proceeds with a warning. The only consumer
-  # is the in-game shop catalog/FTP downloader (CurlFileDownloader.cpp, which
-  # replaces the WinINet stack off Windows), exactly as on Android.
+  # package config, so find_package(CURL) here would abort configure. As on
+  # Android, an OHOS-built libcurl must be injected via these cache variables;
+  # otherwise configure fails (libcurl is a required dependency). The only
+  # consumer is the in-game shop catalog/FTP downloader
+  # (CurlFileDownloader.cpp, which replaces the WinINet stack off Windows).
   set(MU_OHOS_CURL_INCLUDE_DIR "" CACHE PATH
       "Directory containing curl/curl.h for OpenHarmony")
   set(MU_OHOS_CURL_LIBRARY "" CACHE FILEPATH
@@ -344,18 +335,10 @@ elseif(OHOS)
     message(FATAL_ERROR
       "Set both MU_OHOS_CURL_INCLUDE_DIR and MU_OHOS_CURL_LIBRARY")
   else()
-    if(MU_REQUIRE_CURL)
-      message(FATAL_ERROR
-        "HarmonyOS libcurl is not configured. Set MU_OHOS_CURL_INCLUDE_DIR and "
-        "MU_OHOS_CURL_LIBRARY, or re-run with -DMU_REQUIRE_CURL=OFF to build "
-        "without the in-game shop downloader.")
-    endif()
-    add_library(mu_ohos_curl_missing INTERFACE)
-    add_library(CURL::libcurl ALIAS mu_ohos_curl_missing)
-    message(WARNING
-      "HarmonyOS libcurl is not configured. CMake generation can continue, but "
-      "the in-game shop catalog/FTP downloader (CurlFileDownloader) needs "
-      "MU_OHOS_CURL_INCLUDE_DIR and MU_OHOS_CURL_LIBRARY to link and run.")
+    message(FATAL_ERROR
+      "HarmonyOS libcurl is not configured. Set MU_OHOS_CURL_INCLUDE_DIR and "
+      "MU_OHOS_CURL_LIBRARY to a prebuilt arm64 libcurl before configuring: "
+      "the non-Windows in-game shop downloader requires libcurl.")
   endif()
   target_link_libraries(MuClient PUBLIC CURL::libcurl)
 elseif(NOT WIN32)
@@ -490,21 +473,37 @@ endif()
 # assets re-trigger it. CONFIGURE_DEPENDS makes CMake re-evaluate the
 # glob at build time so newly-added asset files are picked up without a
 # manual reconfigure.
+# PLAT-8: src/bin holds the released game data and is excluded from git. A
+# clean checkout only has the tracked template in src/config; seed bin/ from it
+# automatically so configure does not depend on the runner prep step alone.
 set(ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+set(TRACKED_CONFIG_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/config/config.ini.template")
 
-# PLAT-8: src/bin is git-ignored (**/bin/**) but every build hard-depends on it
-# (CopyAssets, SeedConfig). A fresh checkout used to fail deep in a custom command
-# with an unclear error; fail at configure time with the action to take.
+if(NOT EXISTS "${ASSETS_DIR}/config.ini.template"
+   AND EXISTS "${TRACKED_CONFIG_TEMPLATE}")
+  file(MAKE_DIRECTORY "${ASSETS_DIR}")
+  file(COPY_FILE "${TRACKED_CONFIG_TEMPLATE}" "${ASSETS_DIR}/config.ini.template")
+  message(STATUS
+    "Seeded ${ASSETS_DIR}/config.ini.template from the tracked src/config copy")
+endif()
+
+# PLAT-8: every build hard-depends on src/bin (CopyAssets, SeedConfig). A fresh
+# checkout used to fail deep in a custom command with an unclear error; fail at
+# configure time with the action to take. CI runs cmake/PrepareAssets.cmake
+# first; local builds must unpack the released game data.
 if(NOT EXISTS "${ASSETS_DIR}")
   message(FATAL_ERROR
     "Game assets directory '${ASSETS_DIR}' is missing. It is excluded from git; "
     "unpack/copy the released game data assets into 'src/bin' before building "
-    "(the directory must at least contain config.ini.template and Data/).")
+    "(the directory must at least contain config.ini.template and Data/), or run "
+    "'cmake -DASSETS_DIR=<src>/bin -DTEMPLATE_DIR=<src>/config -P "
+    "<repo>/MuMain/cmake/PrepareAssets.cmake' for a CI-style placeholder.")
 endif()
 if(NOT EXISTS "${ASSETS_DIR}/config.ini.template")
   message(FATAL_ERROR
-    "'${ASSETS_DIR}/config.ini.template' is missing. Restore the released "
-    "assets into 'src/bin' before configuring.")
+    "'${ASSETS_DIR}/config.ini.template' is missing and no tracked fallback exists "
+    "at '${TRACKED_CONFIG_TEMPLATE}'. Restore the released assets into 'src/bin' "
+    "before configuring.")
 endif()
 
 file(GLOB_RECURSE ASSET_FILES CONFIGURE_DEPENDS "${ASSETS_DIR}/*")

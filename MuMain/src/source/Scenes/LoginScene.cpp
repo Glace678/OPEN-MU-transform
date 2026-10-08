@@ -337,7 +337,7 @@ void CreateLogInScene()
     EnableMainRender = true;
     gMapManager.WorldActive = WD_73NEW_LOGIN_SCENE;
 
-    gMapManager.LoadWorld(gMapManager.WorldActive);
+    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
 
     OpenLogoSceneData();
 

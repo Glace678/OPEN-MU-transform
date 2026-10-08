@@ -37,6 +37,10 @@ constexpr float HALF_ROTATION_DEGREES = 180.f;
 constexpr float RAD_TO_DEG = 180.f / static_cast<float>(Q_PI);
 constexpr double MIN_FRAME_TIME_MS = 0.001;
 constexpr double MILLISECONDS_IN_SECOND = 1000.0;
+// FPS_ANIMATION_FACTOR is used as a divisor across the engine; it must never
+// collapse to 0. A tiny positive floor guards against future timing regressions
+// without altering factors produced at any realistic frame rate.
+constexpr float MIN_FPS_ANIMATION_FACTOR = 1e-6f;
 
 float NormalizeAngleDegrees(float angle)
 {
@@ -225,8 +229,13 @@ void MoveBoid(OBJECT* o, int i, OBJECT* Boids, int MAX)
                 xdist *= FPS_ANIMATION_FACTOR;
                 ydist *= FPS_ANIMATION_FACTOR;
                 float pdist = std::sqrt(xdist * xdist + ydist * ydist);
-                TargetX += xdist / pdist;
-                TargetY += ydist / pdist;
+                // Guard against a zero-length steering vector (coincident points),
+                // which would divide by zero and pollute the heading with NaN.
+                if (pdist > 0.0f)
+                {
+                    TargetX += xdist / pdist;
+                    TargetY += ydist / pdist;
+                }
                 NumBirds++;
             }
         }
@@ -732,7 +741,7 @@ void CalcFPS()
 
     // animate with no less than REFERENCE_FPS, otherwise some animations don't work correctly
     const double fpsRatio = (FPS <= 0.0) ? 0.0 : REFERENCE_FPS / FPS;
-    FPS_ANIMATION_FACTOR = std::clamp(static_cast<float>(fpsRatio), 0.f, 1.f);
+    FPS_ANIMATION_FACTOR = std::clamp(static_cast<float>(fpsRatio), MIN_FPS_ANIMATION_FACTOR, 1.f);
 
     // Calculate average fps every 2 seconds or 25 frames
     const double diffSinceStart = WorldTime - start;

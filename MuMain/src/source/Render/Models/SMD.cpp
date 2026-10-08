@@ -10,7 +10,7 @@ SkeletonGroup_t SkeletonGroup;
 TriangleGroup_t TriangleGroup;
 SMDMeshGroup_t  MeshGroup;
 
-void ParseNodes()
+bool ParseNodes()
 {
     SMDToken Token;
     NodeGroup_t* ng = &NodeGroup;
@@ -29,6 +29,11 @@ void ParseNodes()
         if (Token == NAME && strcmp("end", TokenString) == 0) break;
         if (Token == NUMBER)
         {
+            if (ng->NodeNum < 0 || ng->NodeNum >= NODE_MAX)
+            {
+                g_ErrorReport.Write(L"SMD node limit (%d) exceeded; aborting parse.\r\n", NODE_MAX);
+                return false;
+            }
             Node_t* n = &ng->Node[ng->NodeNum];
             Token = (*GetToken)(); strncpy(n->Name, TokenString, sizeof(n->Name) - 1); n->Name[sizeof(n->Name) - 1] = '\0';
             Token = (*GetToken)(); n->Parent = (short)TokenNumber;
@@ -65,9 +70,11 @@ void ParseNodes()
             }
         }
     }
+
+    return true;
 }
 
-void ParseSkeleton()
+bool ParseSkeleton()
 {
     SMDToken Token;
     while (true)
@@ -90,7 +97,15 @@ void ParseSkeleton()
             {
                 Token = (*GetToken)();
                 int TimeNum = (int)TokenNumber;
-                Skeleton_t* s = &sg->Skeleton[TimeNum];
+                if (TimeNum < 0 || TimeNum >= TIME_MAX || sg->TimeNum >= TIME_MAX)
+                {
+                    g_ErrorReport.Write(L"SMD skeleton time limit (%d) exceeded; aborting parse.\r\n", TIME_MAX);
+                    return false;
+                }
+                // Store keyframes compactly (SMD keyframes are contiguous from
+                // 0); indexing directly by the file's TimeNum could overrun
+                // Skeleton[TIME_MAX] for an out-of-range value.
+                Skeleton_t* s = &sg->Skeleton[sg->TimeNum];
                 for (int i = 0; i < NodeGroup.NodeNum; i++)
                 {
                     Token = (*GetToken)();
@@ -105,6 +120,8 @@ void ParseSkeleton()
             }
         }
     }
+
+    return true;
 }
 
 void ParseTriangles(bool Flip)
@@ -190,21 +207,22 @@ bool OpenSMDFile(wchar_t* FileName, int Type, bool Flip)
     (*GetToken)();
     (*GetToken)();
 
+    bool parsed = true;
     if (Type == REFERENCE_FRAME)
     {
-        ParseNodes();
-        ParseTriangles(Flip);
+        parsed = ParseNodes();
+        if (parsed) ParseTriangles(Flip);
     }
     if (Type == SKELETAL_ANIMATION)
     {
-        ParseSkeleton();
+        parsed = ParseSkeleton();
     }
 
     fclose(SMDFile);
-    return true;
+    return parsed;
 }
 
-void FixupSMD();
+bool FixupSMD();
 void Triangle2Strip();
 void SMD2BMDModel(int ID, int Actions);
 void SMD2BMDAnimation(int ID, bool LockPosition);
@@ -217,7 +235,10 @@ bool OpenSMDModel(int ID, wchar_t* FileName1, int Actions, bool Flip)
     {
         WideCharToMultiByte(CP_UTF8, 0, FileName1, wcslen(FileName1), Models[ID].Name, 32, 0, 0);
         Models[ID].Version = 10;
-        FixupSMD();
+        if (!FixupSMD())
+        {
+            return false;
+        }
         SMD2BMDModel(ID, Actions);
         return true;
     }

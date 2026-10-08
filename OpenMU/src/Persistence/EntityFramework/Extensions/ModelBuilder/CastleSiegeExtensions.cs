@@ -40,25 +40,25 @@ internal static class CastleSiegeExtensions
 
         builder.HasMany(configuration => configuration.RawGateDefenseUpgrades)
             .WithOne()
-            .HasForeignKey("GateDefenseConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId");
         builder.HasMany(configuration => configuration.RawGateLifeUpgrades)
             .WithOne()
-            .HasForeignKey("GateLifeConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId1");
         builder.HasMany(configuration => configuration.RawStatueDefenseUpgrades)
             .WithOne()
-            .HasForeignKey("StatueDefenseConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId2");
         builder.HasMany(configuration => configuration.RawStatueLifeUpgrades)
             .WithOne()
-            .HasForeignKey("StatueLifeConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId3");
         builder.HasMany(configuration => configuration.RawStatueRegenUpgrades)
             .WithOne()
-            .HasForeignKey("StatueRegenConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId4");
         builder.HasMany(configuration => configuration.RawAttackMachineZones)
             .WithOne()
-            .HasForeignKey("AttackMachineConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId");
         builder.HasMany(configuration => configuration.RawDefenseMachineZones)
             .WithOne()
-            .HasForeignKey("DefenseMachineConfigurationId");
+            .HasForeignKey("CastleSiegeConfigurationId1");
     }
 
     /// <summary>

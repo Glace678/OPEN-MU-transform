@@ -44,45 +44,12 @@ final class MobileGmApiClient {
     }
 
     private static void assertSafeTransport(String baseUrl) throws ApiException {
-        try {
-            URL url = new URL(baseUrl);
-            String protocol = url.getProtocol().toLowerCase();
-            if ("https".equals(protocol)) {
-                return;
-            }
-            if (!"http".equals(protocol)) {
-                throw new ApiException("不支持的服务器协议: " + protocol);
-            }
-            String host = url.getHost();
-            if (isPrivateOrLoopback(host)) {
-                return;
-            }
-            throw new ApiException("拒绝通过明文 HTTP 向公网地址发送 GM 密钥：" + host);
-        } catch (java.net.MalformedURLException error) {
-            throw new ApiException("服务器地址无效", error);
-        }
-    }
-
-    private static boolean isPrivateOrLoopback(String host) {
-        if (host == null) {
-            return false;
-        }
-        if ("localhost".equalsIgnoreCase(host) || host.startsWith("127.")) {
-            return true;
-        }
-        String[] parts = host.split("\\.");
-        if (parts.length != 4) {
-            return false;
-        }
-        try {
-            int a = Integer.parseInt(parts[0]);
-            int b = Integer.parseInt(parts[1]);
-            return a == 10
-                || (a == 172 && b >= 16 && b <= 31)
-                || (a == 192 && b == 168)
-                || (a == 169 && b == 254);
-        } catch (NumberFormatException notNumeric) {
-            return false;
+        // Reuse the shared policy so loopback/RFC1918 and local IPv6 (::1,
+        // fc00::/7 ULA, fe80::/10 link-local) are all accepted over plain HTTP;
+        // HTTPS is allowed to any host. This mirrors isLocalServerUrl() on the
+        // HarmonyOS client and keeps the two transports in sync.
+        if (!ServerAddressPolicy.isAllowed(baseUrl)) {
+            throw new ApiException("拒绝通过明文 HTTP 向公网地址发送 GM 密钥，或服务器地址无效：" + baseUrl);
         }
     }
 

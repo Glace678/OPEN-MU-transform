@@ -172,7 +172,11 @@ void CPersonalShopTitleImp::GetShopTitleSummary(CHARACTER* pPlayer, std::wstring
         (*mi).second->GetFullTitle(full_title);
         if (full_title.size() > 14) {
             int offset = 0;
-            for (; offset < 12; ) {
+            const int titleLen = static_cast<int>(full_title.size());
+            // Bound every index by the actual string length as well as the
+            // display cap (12), so the 2-step DBCS advance can never read past
+            // the title buffer regardless of its contents.
+            for (; offset < 12 && offset < titleLen; ) {
                 if (full_title[offset] & 0x80)
                     offset += 2;
                 else
@@ -377,17 +381,19 @@ void CPersonalShopTitleImp::CheckKeyIntegrity()
 
         if (pPlayer->Key != pDrawObj->GetKey())
         {
+            const auto serverKey = pDrawObj->GetKey();
             delete pDrawObj;
             mi = m_listShopTitleDrawObj.erase(mi);
             g_ErrorReport.Write(L"@ CheckKeyIntegrity - player key-value dismatch(id : %ls, server's key : %d, client array's key : %d) \n",
-                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
+                pPlayer->ID, serverKey, pPlayer->Key);
         }
         else if (pPlayer->Object.Kind != KIND_PLAYER)
         {
+            const auto serverKey = pDrawObj->GetKey();
             delete pDrawObj;
             mi = m_listShopTitleDrawObj.erase(mi);
             g_ErrorReport.Write(L"@ CheckKeyIntegrity - player type invalid(id : %ls, server's key : %d, client array's key : %d) \n",
-                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
+                pPlayer->ID, serverKey, pPlayer->Key);
         }
         else
         {

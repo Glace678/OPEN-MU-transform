@@ -1555,11 +1555,16 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
             case MODEL_BIG_METEO1:
             case MODEL_BIG_METEO2:
             case MODEL_BIG_METEO3:
+            {
                 o->LifeTime = 100;
                 o->Scale = (float)(rand() % 10 + 4) * 0.1f;
-                Vector(0.f, -15.f / o->Scale, -30.f / o->Scale, o->Direction);
+                // Scale is randomized to [0.4, 1.3] here, but guard against a
+                // zero/corrupt value so Direction never becomes +/-infinity or NaN.
+                const float meteorScale = (o->Scale != 0.0f) ? o->Scale : 1.0f;
+                Vector(0.f, -15.f / meteorScale, -30.f / meteorScale, o->Direction);
                 o->SubType = 1;
                 break;
+            }
             case MODEL_PIERCING:
                 o->LifeTime = 100;
                 o->BlendMesh = 0;

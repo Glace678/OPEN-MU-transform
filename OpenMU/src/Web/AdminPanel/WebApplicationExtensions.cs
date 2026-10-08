@@ -48,6 +48,20 @@ public static class WebApplicationExtensions
 
         var services = builder.Services;
 
+        // The panel runs behind a reverse proxy (nginx/traefik) in the private docker
+        // network which terminates TLS. Trust the forwarded headers (client IP, scheme
+        // and host) only from the standard private ranges so the request is seen as
+        // HTTPS and the Secure auth cookie is sent back (otherwise login silently fails).
+        services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+                | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+                | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost;
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+        });
+
         var supportedCultures = CultureHelper
             .GetAvailableCultures<Properties.Resources>()
             .Select(culture => culture.Name)
@@ -117,6 +131,10 @@ public static class WebApplicationExtensions
     /// <returns>The configured web application.</returns>
     public static WebApplication ConfigureAdminPanel(this WebApplication app)
     {
+        // Must run before any other middleware so scheme/host/client IP from the
+        // reverse proxy are visible to redirects, auth cookie policy, etc.
+        app.UseForwardedHeaders();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

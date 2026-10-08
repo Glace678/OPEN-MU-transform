@@ -266,7 +266,7 @@ namespace SEASON3A
         }
         virtual ~CMixRecipeMgr() {}
 
-        void LoadRecipes();
+        bool LoadRecipes();	// mix.bmd
         void SetMixType(int iMixType) { this->m_iMixType = iMixType; }
         int GetMixInventoryType();
         STORAGE_TYPE GetMixInventoryEquipmentIndex();
@@ -363,7 +363,7 @@ namespace SEASON3A
 #endif //LJH_MOD_CANNOT_USE_CHARMITEM_AND_CHAOSCHARMITEM_SIMULTANEOUSLY
 
     protected:
-        void OpenRecipeFile(const wchar_t* szFileName);	// mix.bmd
+        bool OpenRecipeFile(const wchar_t* szFileName);	// mix.bmd
 
     protected:
         CMixRecipes m_MixRecipe[MAX_MIX_TYPES];

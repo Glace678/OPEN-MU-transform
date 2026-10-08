@@ -57,7 +57,7 @@ public class LetterSendAction
             }
 
             await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.Success, letterId)).ConfigureAwait(false);
-            player.TryAddMoney(-sendPrice);
+            player.TryRemoveMoney(sendPrice);
         }
         catch (Exception ex)
         {

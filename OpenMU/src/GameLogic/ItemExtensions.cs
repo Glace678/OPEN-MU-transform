@@ -59,7 +59,10 @@ public static class ItemExtensions
             return 255;
         }
 
-        var result = item.Definition!.Durability + AdditionalDurabilityPerLevel[item.Level];
+        // The lookup table only covers levels 0..15; clamp a corrupted/over-leveled
+        // item instead of indexing past the end of the fixed array.
+        var durabilityLevel = Math.Clamp(item.Level, 0, AdditionalDurabilityPerLevel.Length - 1);
+        var result = item.Definition!.Durability + AdditionalDurabilityPerLevel[durabilityLevel];
         if (item.IsAncient())
         {
             result += 20;

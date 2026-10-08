@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "MixMgr.h"
 #include "Data/GameConfig/GameConfig.h"
 #include "I18N/All.h"
@@ -14,9 +14,9 @@ using namespace SEASON3A;
 
 CMixRecipeMgr g_MixRecipeMgr;
 
-void CMixRecipeMgr::LoadRecipes()
+bool CMixRecipeMgr::LoadRecipes()
 {
-    OpenRecipeFile(L"Data\\Local\\Mix.bmd");
+    return OpenRecipeFile(L"Data\\Local\\Mix.bmd");
 }
 
 void CMixItem::Reset()
@@ -1117,7 +1117,7 @@ BOOL CMixRecipes::IsJewelItem(CMixItem& rSource)
     return rSource.m_bIsJewelItem;
 }
 
-void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
+bool CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
 {
     int i, j;
     for (j = 0; j < MAX_MIX_TYPES; ++j)
@@ -1131,12 +1131,19 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", szFileName);
         g_ErrorReport.Write(Text);
-        exit(0);
+        return false;
     }
 
     int iNumMixRecipes[MAX_MIX_TYPES];
     int iSize = sizeof(int) * MAX_MIX_TYPES;
-    fread(iNumMixRecipes, iSize, 1, fp);
+    if (fread(iNumMixRecipes, iSize, 1, fp) != 1)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls - Version not matched.", szFileName);
+        g_ErrorReport.Write(Text);
+        fclose(fp);
+        return false;
+    }
     BuxConvert((BYTE*)iNumMixRecipes, iSize);
 
     iSize = sizeof(MIX_RECIPE);
@@ -1148,17 +1155,26 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
             mu_swprintf(Text, L"%ls - Version not matched.", szFileName);
             g_ErrorReport.Write(Text);
             fclose(fp);
-            exit(0);
+            return false;
         }
         for (i = 0; i < iNumMixRecipes[j]; ++i)
         {
             auto* pMixRecipe = new MIX_RECIPE;
-            fread(pMixRecipe, iSize, 1, fp);
+            if (fread(pMixRecipe, iSize, 1, fp) != 1)
+            {
+                delete pMixRecipe;
+                wchar_t Text[256];
+                mu_swprintf(Text, L"%ls - Version not matched.", szFileName);
+                g_ErrorReport.Write(Text);
+                fclose(fp);
+                return false;
+            }
             BuxConvert((BYTE*)pMixRecipe, iSize);
             m_MixRecipe[j].AddRecipe(pMixRecipe);
         }
     }
     fclose(fp);
+    return true;
 }
 
 int CMixRecipeMgr::GetMixInventoryType()

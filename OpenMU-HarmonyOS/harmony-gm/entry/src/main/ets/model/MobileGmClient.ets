@@ -68,7 +68,12 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
     return false;
   }
   const rest = value.substring(protocolMatch[0].length);
-  const authority = rest.split('/')[0].split('?')[0].split('#')[0];
+  // A server base URL may only contain scheme/host/optional port/path; reject any
+  // query string or fragment so they cannot be injected into the request path.
+  if (rest.includes('?') || rest.includes('#')) {
+    return false;
+  }
+  const authority = rest.split('/')[0];
   if (authority.length === 0) {
     return false;
   }
@@ -102,6 +107,34 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
   }
   const a = octets[0];
   const b = octets[1];
+  return a === 10
+    || (a === 172 && b >= 16 && b <= 31)
+    || (a === 192 && b === 168)
+    || (a === 169 && b === 254);
+}
+
+// True only when the URL targets the local device or a private/link-local
+// address. A public HTTPS host still passes isAllowedServerUrl(), but the
+// pairing key must not be sent there without an explicit user confirmation
+// (mirrors Android MainActivity.confirmPublicServer).
+export function isLocalServerUrl(rawUrl: string): boolean {
+  const value = (rawUrl ?? '').trim();
+  const protocolMatch = value.match(/^([a-zA-Z][a-zA-Z0-9+.-]*):\/\//);
+  if (!protocolMatch) {
+    return false;
+  }
+  const rest = value.substring(protocolMatch[0].length);
+  const authority = rest.split(/[/?#]/)[0];
+  const host = authority.split(':')[0].replace(/^\[|\]$/g, '');
+  if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]') {
+    return true;
+  }
+  const parts = host.split('.');
+  if (parts.length !== 4 || !parts.every((p: string) => /^(0|[1-9]\d{0,2})$/.test(p))) {
+    return false;
+  }
+  const a = Number(parts[0]);
+  const b = Number(parts[1]);
   return a === 10
     || (a === 172 && b >= 16 && b <= 31)
     || (a === 192 && b === 168)

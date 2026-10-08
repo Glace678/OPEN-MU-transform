@@ -31,6 +31,8 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
 
     private int _isDisposed;
 
+    private static readonly IDisposable EmptySubscription = new NullDisposable();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="OnlineFriend" /> class.
     /// </summary>
@@ -71,19 +73,27 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// <returns>The <see cref="IDisposable"/> to unsubscribe.</returns>
     public IDisposable Subscribe(IObserver<OnlineFriend> observer)
     {
-        this._readerWriterLock.EnterWriteLock();
+        if (Volatile.Read(ref this._isDisposed) != 0)
+        {
+            // Be consistent with the other members (ChangeServer/Unsubscribe/...):
+            // a subscription after disposal is a silent no-op instead of throwing.
+            return EmptySubscription;
+        }
+
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterWriteLock();
         try
         {
             if (Volatile.Read(ref this._isDisposed) != 0)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                return EmptySubscription;
             }
 
             this._subscribers.Add(observer);
         }
         finally
         {
-            this._readerWriterLock.ExitWriteLock();
+            readerWriterLock.ExitWriteLock();
         }
 
         return new Unsubscriber(() => this.Unsubscribe(observer));
@@ -143,7 +153,8 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         }
 
         // Notify every subscriber
-        this._readerWriterLock.EnterReadLock();
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterReadLock();
         try
         {
             foreach (var friend in this._subscribers)
@@ -153,7 +164,7 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         }
         finally
         {
-            this._readerWriterLock.ExitReadLock();
+            readerWriterLock.ExitReadLock();
         }
     }
 
@@ -169,14 +180,15 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
             return false;
         }
 
-        this._readerWriterLock.EnterReadLock();
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterReadLock();
         try
         {
             return this._subscribers.Contains(player);
         }
         finally
         {
-            this._readerWriterLock.ExitReadLock();
+            readerWriterLock.ExitReadLock();
         }
     }
 
@@ -194,6 +206,7 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     }
 
     /// <inheritdoc/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_readerWriterLock", Justification = "The lock is intentionally not disposed: a concurrent subscriber/unsubscriber may be blocked on EnterRead/WriteLock when this player is removed, and disposing it then throws ObjectDisposedException. The lock holds no unmanaged resource and is reclaimed by GC once this object is unreachable.")]
     public void Dispose()
     {
         if (Interlocked.Exchange(ref this._isDisposed, 1) != 0)
@@ -202,7 +215,8 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         }
 
         List<Unsubscriber> subscriptions;
-        this._readerWriterLock.EnterWriteLock();
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterWriteLock();
         try
         {
             subscriptions = this._subscriptions.ToList();
@@ -211,11 +225,10 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         }
         finally
         {
-            this._readerWriterLock.ExitWriteLock();
+            readerWriterLock.ExitWriteLock();
         }
 
         subscriptions.ForEach(subscription => subscription.Dispose());
-        this._readerWriterLock.Dispose();
     }
 
     private void Unsubscribe(IObserver<OnlineFriend> observer)
@@ -225,7 +238,8 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
             return;
         }
 
-        this._readerWriterLock.EnterWriteLock();
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterWriteLock();
         try
         {
             if (Volatile.Read(ref this._isDisposed) != 0)
@@ -237,7 +251,14 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
         }
         finally
         {
-            this._readerWriterLock.ExitWriteLock();
+            readerWriterLock.ExitWriteLock();
+        }
+    }
+
+    private sealed class NullDisposable : IDisposable
+    {
+        public void Dispose()
+        {
         }
     }
 

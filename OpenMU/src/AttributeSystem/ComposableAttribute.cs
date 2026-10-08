@@ -142,6 +142,20 @@ public class ComposableAttribute : BaseAttribute, IComposableAttribute
         var hasNonMultiplier = false;
         foreach (var element in elements)
         {
+            // A single NaN/Infinity source otherwise poisons every derived attribute:
+            // NaN propagates through + and *, survives Math.Min (Min(NaN, x) = NaN),
+            // and NaN comparisons in Maximum never replace the current max. Treat a
+            // non-finite value as the neutral element of its aggregate.
+            if (!float.IsFinite(element.Value))
+            {
+                if (element.AggregateType is AggregateType.AddRaw or AggregateType.AddFinal or AggregateType.Maximum)
+                {
+                    hasNonMultiplier = true;
+                }
+
+                continue;
+            }
+
             switch (element.AggregateType)
             {
                 case AggregateType.AddRaw:

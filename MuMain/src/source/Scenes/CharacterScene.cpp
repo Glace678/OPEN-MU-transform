@@ -92,7 +92,7 @@ void CreateCharacterScene()
 
     gMapManager.WorldActive = WD_74NEW_CHARACTER_SCENE;
 
-    gMapManager.LoadWorld(gMapManager.WorldActive);
+    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
     OpenCharacterSceneData();
 
     CreateCharacterPointer(&CharacterView, MODEL_FACE + 1, 0, 0);

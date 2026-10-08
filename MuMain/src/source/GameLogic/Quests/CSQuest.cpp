@@ -329,6 +329,15 @@ void CSQuest::setQuestLists(const std::uint8_t* byList, int num, CLASS_TYPE Clas
         }
     }
 
+    // The scan loops stop at the first unfinished quest; if every quest is
+    // already complete i == num, which can equal (or approach) MAX_QUESTS.
+    // The index addresses the fixed-size m_Quest array through GetQuest(), so
+    // clamp it below MAX_QUESTS instead of letting it run out of bounds.
+    if (i >= MAX_QUESTS)
+    {
+        i = MAX_QUESTS - 1;
+    }
+
     m_byCurrQuestIndex = i;
     m_byCurrQuestIndexWnd = i;
 

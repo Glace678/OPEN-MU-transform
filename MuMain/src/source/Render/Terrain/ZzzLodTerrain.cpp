@@ -571,19 +571,27 @@ void SaveTerrainLight(wchar_t* FileName)
     delete[] Buffer;
 }
 
-void CreateTerrain(wchar_t* FileName, bool bNew)
+bool CreateTerrain(wchar_t* FileName, bool bNew)
 {
     ActiveTerrain = true;
+    bool loaded;
     if (bNew)
     {
-        OpenTerrainHeightNew(FileName);
+        loaded = OpenTerrainHeightNew(FileName);
     }
     else
     {
-        OpenTerrainHeight(FileName);
+        loaded = OpenTerrainHeight(FileName);
+    }
+
+    if (!loaded)
+    {
+        ActiveTerrain = false;
+        return false;
     }
 
     CreateSun();
+    return true;
 }
 
 unsigned char BMPHeader[1080];

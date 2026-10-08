@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <limits>
 
 #include "GameLogic/Items/InventoryUtils.h"
 #include "Engine/Object/ZzzInventory.h"
@@ -53,12 +54,16 @@ namespace COMGEM
 
 void COMGEM::SendReqUnMix()
 {
-    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Unmix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(iUnMixLevel), iUnMixIndex);
+    // iUnMixLevel defaults to -1; clamp to the valid StackSize range instead of
+    // casting a negative value into a huge unsigned stack size.
+    const int stackLevel = std::clamp(iUnMixLevel, 0, static_cast<int>(StackSize::Thirty));
+    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Unmix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(stackLevel), iUnMixIndex);
 }
 
 void COMGEM::SendReqMix()
 {
-    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Mix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(m_cComType / 10 - 1), 0);
+    const int stackLevel = std::clamp(m_cComType / 10 - 1, 0, static_cast<int>(StackSize::Thirty));
+    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Mix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(stackLevel), 0);
 }
 
 void COMGEM::ProcessCSAction()
@@ -248,30 +253,48 @@ char COMGEM::CalcCompiledCount(const ITEM* p)
 int	COMGEM::CalcItemValue(const ITEM* p)
 {
     int Level = p->Level;
+
+    // Evaluate in 64-bit: constants such as 60,000,000 * (Level+1) * FIRST
+    // overflow 32-bit int at higher levels. Then saturate to the int range so
+    // the returned money value is finite instead of wrapping.
+    std::int64_t value = 0;
     switch (CheckOneItem(p))
     {
     case NOGEM:
         return 0;
     case eBLESS_C:
-        return 9000000 * (Level + 1) * FIRST;
+        value = 9000000LL * (Level + 1) * FIRST;
+        break;
     case eSOUL_C:
-        return 6000000 * (Level + 1) * FIRST;
+        value = 6000000LL * (Level + 1) * FIRST;
+        break;
     case eLIFE_C:
-        return 45000000 * (Level + 1) * FIRST;
+        value = 45000000LL * (Level + 1) * FIRST;
+        break;
     case eCREATE_C:
-        return 36000000 * (Level + 1) * FIRST;
+        value = 36000000LL * (Level + 1) * FIRST;
+        break;
     case ePROTECT_C:
-        return 60000000 * (Level + 1) * FIRST;
+        value = 60000000LL * (Level + 1) * FIRST;
+        break;
     case eCHAOS_C:
-        return 810000 * (Level + 1) * FIRST;
+        value = 810000LL * (Level + 1) * FIRST;
+        break;
     case eGEMSTONE_C:
     case eHARMONY_C:
     case eLOW_C:
     case eUPPER_C:
-        return 18600 * (Level + 1) * FIRST;
+        value = 18600LL * (Level + 1) * FIRST;
+        break;
     default:
         return 0;
     }
+
+    if (value > std::numeric_limits<int>::max())
+    {
+        value = std::numeric_limits<int>::max();
+    }
+    return static_cast<int>(value);
 }
 
 int COMGEM::CalcEmptyInv()

@@ -10,6 +10,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-linux:
     name: build-linux (editor-${{ matrix.editor }})
@@ -47,6 +50,17 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Prepare game assets
+        # src/bin is git-ignored and holds the released game data, which is not
+        # available on a clean runner. Configure only requires the directory and
+        # config.ini.template; create an empty Data/ and seed the template from
+        # the tracked src/config copy. The best-effort headless launch below
+        # still tolerates the absence of real game data.
+        run: |
+          cmake -DASSETS_DIR="${GITHUB_WORKSPACE}/MuMain/src/bin" \
+                -DTEMPLATE_DIR="${GITHUB_WORKSPACE}/MuMain/src/config" \
+                -P "${GITHUB_WORKSPACE}/MuMain/cmake/PrepareAssets.cmake"
+
       - name: Configure CMake
         run: |
           cmake -S MuMain -B MuMain/build-linux -G Ninja \
@@ -68,10 +82,14 @@ jobs:
 
       - name: Verify the client library was built and is loadable
         run: |
+          set -o pipefail
           so="MuMain/build-linux/src/MUnique.Client.Library.so"
           test -f "$so"
           file "$so" | grep -q "ELF 64-bit"
-          if ldd "$so" | grep -i "not found"; then
+          # Check ldd's own exit status explicitly; a pipe to grep must not mask
+          # a failing ldd (ROOT-02), and any unresolved dependency fails the job.
+          ldd_out="$(ldd "$so")" || { echo "$ldd_out"; exit 1; }
+          if echo "$ldd_out" | grep -i "not found"; then
             exit 1
           fi
 

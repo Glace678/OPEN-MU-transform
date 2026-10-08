@@ -68,7 +68,11 @@ public sealed class PersistentLoginServer : ILoginServer
     }
 
     /// <inheritdoc />
-    public async Task<bool> TryLoginAsync(string accountName, byte serverId)
+    public Task<bool> TryLoginAsync(string accountName, byte serverId) => this.TryLoginAsync(accountName, serverId, 0);
+
+    private const int MaximumFirstWriteRetries = 3;
+
+    private async Task<bool> TryLoginAsync(string accountName, byte serverId, int firstWriteAttempt)
     {
         try
         {
@@ -82,8 +86,14 @@ public sealed class PersistentLoginServer : ILoginServer
             {
                 // Never logged in, so first insert a fresh state and try again.
                 // We never want to have the same account logged in twice, because that may lead to game mechanic exploits.
+                if (firstWriteAttempt >= MaximumFirstWriteRetries)
+                {
+                    this._logger.LogError("Could not obtain an eTag for first login of account {0} after {1} attempts; aborting to avoid unbounded recursion.", accountName, MaximumFirstWriteRetries);
+                    return false;
+                }
+
                 await this._daprClient.SaveStateAsync<int?>(StoreName, accountName, OfflineServerId, new StateOptions { Concurrency = ConcurrencyMode.FirstWrite, Consistency = ConsistencyMode.Strong }).ConfigureAwait(false);
-                return await this.TryLoginAsync(accountName, serverId).ConfigureAwait(false);
+                return await this.TryLoginAsync(accountName, serverId, firstWriteAttempt + 1).ConfigureAwait(false);
             }
 
             var success = await this._daprClient.TrySaveStateAsync(StoreName, accountName, serverId, eTag).ConfigureAwait(false);

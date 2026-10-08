@@ -7,7 +7,7 @@ permissions:
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'OpenMU/docs-website/**'
       - '.github/workflows/openmu-docs-website.yml'

@@ -184,6 +184,8 @@ public final class BootstrapActivity extends Activity {
         status.setText(R.string.preparing_title);
         detail.setText(R.string.preparing_detail);
         GAME_DATA_WORKER.execute(() -> {
+            boolean[] succeeded = { false };
+            String[] errorMessage = { null };
             try {
                 MobilePreferences.extractGameData(getApplicationContext(), (percent, file) -> postToUi(() -> {
                     progress.setProgress(percent);
@@ -191,18 +193,27 @@ public final class BootstrapActivity extends Activity {
                         detail.setText(file);
                     }
                 }));
-                postToUi(() -> {
-                    preparing = false;
-                    EXTRACTION_RUNNING.set(false);
-                    showReady();
-                });
+                succeeded[0] = true;
             } catch (IOException error) {
-                postToUi(() -> {
-                    preparing = false;
-                    EXTRACTION_RUNNING.set(false);
-                    showFailure(error.getMessage());
-                });
+                errorMessage[0] = error.getMessage();
+            } finally {
+                // Release the shared worker lock unconditionally. If this Activity is
+                // destroyed while extracting, the UI runnable below is skipped, so
+                // releasing there would leave the lock stuck and a recreated Activity
+                // could never retry.
+                EXTRACTION_RUNNING.set(false);
             }
+
+            final boolean ok = succeeded[0];
+            final String message = errorMessage[0];
+            postToUi(() -> {
+                preparing = false;
+                if (ok) {
+                    showReady();
+                } else {
+                    showFailure(message);
+                }
+            });
         });
     }
 

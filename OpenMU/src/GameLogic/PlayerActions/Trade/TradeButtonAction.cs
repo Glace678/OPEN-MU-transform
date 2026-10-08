@@ -55,6 +55,38 @@ public class TradeButtonAction : BaseTradeAction
         }
     }
 
+    private static bool CanCreditTradeMoney(ITrader trader, int incomingMoney)
+    {
+        if (incomingMoney <= 0 || trader is not Player player)
+        {
+            return true;
+        }
+
+        var maximumMoney = player.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+        return (long)player.Money + incomingMoney <= maximumMoney;
+    }
+
+    private static void CreditTradeMoney(ITrader trader, int incomingMoney)
+    {
+        if (incomingMoney == 0)
+        {
+            return;
+        }
+
+        if (trader is Player player)
+        {
+            // Validated up-front; this also updates the money view through the Player.Money setter.
+            if (!player.TryAddMoney(incomingMoney))
+            {
+                throw new InvalidOperationException($"Could not credit {incomingMoney} zen to {player.Name}.");
+            }
+        }
+        else
+        {
+            trader.Money += incomingMoney;
+        }
+    }
+
     private static async ValueTask<bool> TryAddItemsOfTradingPartnerAsync(ITrader trader)
     {
         if (trader.TradingPartner?.TemporaryStorage?.Items.Any() ?? false)
@@ -91,6 +123,16 @@ public class TradeButtonAction : BaseTradeAction
             return TradeResult.FailedByFullInventory;
         }
 
+        // The offered zen of each trader is already deducted (held in escrow). Verify
+        // that crediting the partner's zen cannot exceed the money cap / overflow the
+        // int before we persist anything, instead of wrapping it with a raw "+=" later.
+        var traderIncoming = tradingPartner.TradingMoney;
+        var partnerIncoming = trader.TradingMoney;
+        if (!CanCreditTradeMoney(trader, traderIncoming) || !CanCreditTradeMoney(tradingPartner, partnerIncoming))
+        {
+            return TradeResult.Cancelled;
+        }
+
         try
         {
             this.DetachItemsFromPersistenceContext(traderItems, trader.PersistenceContext);
@@ -98,8 +140,8 @@ public class TradeButtonAction : BaseTradeAction
             await itemContext.SaveChangesAsync().ConfigureAwait(false);
             this.AttachItemsToPersistenceContext(traderItems, trader.TradingPartner.PersistenceContext);
             this.AttachItemsToPersistenceContext(tradePartnerItems, trader.PersistenceContext);
-            trader.Money += trader.TradingPartner.TradingMoney;
-            trader.TradingPartner.Money += trader.TradingMoney;
+            CreditTradeMoney(trader, traderIncoming);
+            CreditTradeMoney(tradingPartner, partnerIncoming);
 
             // Durably settle both zen balances as part of the same operation as the
             // item transfer persisted above, so a crash cannot leave items delivered

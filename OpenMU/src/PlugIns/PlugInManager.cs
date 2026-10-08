@@ -458,6 +458,81 @@ public class PlugInManager
         return ActivatorUtilities.CreateInstance<TPlugInClass>(this._serviceContainer);
     }
 
+    /// <summary>
+    /// Verifies the integrity of an external plugin assembly. An optional
+    /// sidecar file "<paramref name="assemblyPath"/>.sha256" (or a per-file entry in
+    /// an optional "plugins/hashes.txt": "&lt;hex-sha256&gt;  &lt;relative-file-name&gt;")
+    /// pins the expected hash. When a pin exists, a missing/mismatched assembly is
+    /// rejected. When no pin exists, the assembly is loaded but a warning is logged,
+    /// because external plugins execute with full server privileges.
+    /// </summary>
+    private bool VerifyExternalAssemblyIntegrity(string pluginsRoot, string assemblyPath)
+    {
+        string? expectedHash = TryReadSidecarHash(assemblyPath) ?? TryReadHashesEntry(pluginsRoot, assemblyPath);
+        if (expectedHash is null)
+        {
+            this._logger.LogWarning(
+                "Loading external plugin assembly '{Assembly}' without a SHA-256 integrity pin. Provide a .sha256 sidecar or a plugins/hashes.txt entry to enforce verification.",
+                Path.GetFileName(assemblyPath));
+            return true;
+        }
+
+        try
+        {
+            using var stream = File.OpenRead(assemblyPath);
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var actual = Convert.ToHexString(sha.ComputeHash(stream));
+            if (!string.Equals(actual, expectedHash, StringComparison.OrdinalIgnoreCase))
+            {
+                this._logger.LogError(
+                    "Rejected external plugin assembly '{Assembly}': SHA-256 mismatch (expected {Expected}, actual {Actual}).",
+                    Path.GetFileName(assemblyPath), expectedHash, actual);
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            this._logger.LogError(e, "Could not verify integrity of external plugin assembly '{Assembly}'.", assemblyPath);
+            return false;
+        }
+    }
+
+    private static string? TryReadSidecarHash(string assemblyPath)
+    {
+        var sidecar = assemblyPath + ".sha256";
+        if (!File.Exists(sidecar))
+        {
+            return null;
+        }
+
+        var text = File.ReadAllText(sidecar);
+        var hash = text.Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+        return string.IsNullOrWhiteSpace(hash) ? null : hash.Trim();
+    }
+
+    private static string? TryReadHashesEntry(string pluginsRoot, string assemblyPath)
+    {
+        var hashesFile = Path.Combine(pluginsRoot, "hashes.txt");
+        if (!File.Exists(hashesFile))
+        {
+            return null;
+        }
+
+        var relative = Path.GetRelativePath(pluginsRoot, assemblyPath).Replace('\\', '/');
+        foreach (var line in File.ReadAllLines(hashesFile))
+        {
+            var parts = line.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2 && parts[1].Replace('\\', '/').Equals(relative, StringComparison.OrdinalIgnoreCase))
+            {
+                return parts[0].Trim();
+            }
+        }
+
+        return null;
+    }
+
     private void ReadConfiguration(PlugInConfiguration configuration, HashSet<string> loadedAssemblies)
     {
         if (!this._knownPlugIns.ContainsKey(configuration.TypeId))
@@ -479,6 +554,11 @@ public class PlugInManager
                         this._logger.LogError(
                             "Rejected external plugin assembly '{ExternalAssemblyName}': it resolves outside the plugins directory.",
                             configuration.ExternalAssemblyName);
+                        return;
+                    }
+
+                    if (!this.VerifyExternalAssemblyIntegrity(pluginsRoot, assemblyPath))
+                    {
                         return;
                     }
 
