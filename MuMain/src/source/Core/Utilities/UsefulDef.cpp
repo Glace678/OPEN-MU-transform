@@ -81,7 +81,9 @@ int DivideString(LPTSTR alpszDst, int nDstRow, int nDstColumn, LPCTSTR lpszSrc)
 
         if ('/' == lpszSrc[nSrcPos])
         {
-            ::wcsncpy(alpszDst + nLineCount * nDstColumn, lpszSrc + nDstStart, nDstLen - 1);
+            const int rowOffset = nLineCount * nDstColumn;
+            ::wcsncpy(alpszDst + rowOffset, lpszSrc + nDstStart, nDstLen - 1);
+            alpszDst[rowOffset + nDstLen - 1] = L'\0'; // wcsncpy does not NUL-terminate
             ++nLineCount;
             nDstStart = nSrcPos + 1;
             nDstLen = 0;
@@ -96,19 +98,28 @@ int DivideString(LPTSTR alpszDst, int nDstRow, int nDstColumn, LPCTSTR lpszSrc)
                 nSrcPos = nDstStart;
             if (nDstLen < 0)
                 nDstLen = 0;
-            ::wcsncpy(alpszDst + nLineCount * nDstColumn, lpszSrc + nDstStart, nDstLen);
+            const int rowOffset = nLineCount * nDstColumn;
+            ::wcsncpy(alpszDst + rowOffset, lpszSrc + nDstStart, nDstLen);
+            alpszDst[rowOffset + nDstLen] = L'\0';
             ++nLineCount;
             nDstStart = nSrcPos + 1;
             nDstLen = 0;
         }
         else if (nSrcPos == nSrcLen - 1)
         {
-            ::wcsncpy(alpszDst + nLineCount * nDstColumn, lpszSrc + nDstStart, nDstLen);
+            const int rowOffset = nLineCount * nDstColumn;
+            ::wcsncpy(alpszDst + rowOffset, lpszSrc + nDstStart, nDstLen);
+            if (nDstLen < nDstColumn)
+                alpszDst[rowOffset + nDstLen] = L'\0';
+            else
+                alpszDst[rowOffset + nDstColumn - 1] = L'\0';
             break;
         }
         else if (nDstLen == nDstColumn - 1)
         {
-            ::wcsncpy(alpszDst + nLineCount * nDstColumn, lpszSrc + nDstStart, nDstLen);
+            const int rowOffset = nLineCount * nDstColumn;
+            ::wcsncpy(alpszDst + rowOffset, lpszSrc + nDstStart, nDstLen);
+            alpszDst[rowOffset + nDstLen] = L'\0';
             ++nLineCount;
             nDstStart = nSrcPos + 1;
             nDstLen = 0;

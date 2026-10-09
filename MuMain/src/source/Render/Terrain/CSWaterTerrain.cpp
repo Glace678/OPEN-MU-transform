@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //  CSWaterTerrain.cpp
 //////////////////////////////////////////////////////////////////////////
 
@@ -289,13 +289,13 @@ void    CSWaterTerrain::calcBaseWave(void)
         {
             offset = j + (i * WATER_TERRAIN_SIZE);
 
-            // ū ΰ
+            // alpha factor
             float alpha = 0.f;//TerrainMappingAlpha[(j/2)+(i/2)*WATER_TERRAIN_SIZE];
 
             MaxHeight = (int)(sin((WorldTime * 0.005f) + (i * 0.1f) + (j * 0.1f)) * 50 * (1 + alpha));
             m_iWaveHeight[2][offset] = (int)(MaxHeight - sin((WorldTime * 0.003f) + (j * 0.1f) + (i * 0.5f)) * 50 * (1 + alpha));
 
-            // ΰ
+            // alpha factor
             MaxHeight = (int)(sin((WorldTime * 0.001f) + (i * 0.5f) + (j * 0.5f)) * 25 * (1 + alpha));
             m_iWaveHeight[3][offset] = (int)(MaxHeight - sin((WorldTime * 0.002f) + (j * 1.f) + (i * 0.3f)) * 25 * (1 + alpha));
         }
