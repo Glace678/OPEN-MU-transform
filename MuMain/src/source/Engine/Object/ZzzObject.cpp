@@ -1275,9 +1275,13 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                                                         // here would trigger its materialization under the lazy gate.
                                                         b->EnsureCpuVertices(1);
                                                         auto* pSideHair = new CSideHair;
-                                                        pSideHair->Create(VertexTransform, b, o);
-                                                        pSideHair->Render(VertexTransform, LightTransform);
-                                                        pSideHair->Destroy();
+                                                        if (pSideHair != nullptr)
+                                                        {
+                                                            pSideHair->Create(VertexTransform, b, o);
+                                                            pSideHair->Render(VertexTransform, LightTransform);
+                                                            pSideHair->Destroy();
+                                                            delete pSideHair;
+                                                        }
                                                     }
                                                     else if (o->Type == MODEL_DRAKAN)
                                                     {
