@@ -9975,7 +9975,9 @@ namespace Render::Effects::Behaviors
         BMD* pModel = &Models[o->Owner->Type];
         vec3_t MonRanPos;
         VectorCopy(o->Owner->Position, MonRanPos);
-        int BoneIndex = rand() % (pModel->NumBones - 1);
+        // NumBones-1 is 0 for a single-bone model, which would divide by zero;
+        // fall back to bone 0 and clamp any negative/zero count.
+        int BoneIndex = pModel->NumBones > 1 ? rand() % (pModel->NumBones - 1) : 0;
         pModel->TransformByObjectBone(MonRanPos, o->Owner, BoneIndex);
 
         vec3_t vLight;
