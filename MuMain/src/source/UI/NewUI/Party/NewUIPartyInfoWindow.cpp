@@ -264,7 +264,11 @@ void CNewUIPartyInfoWindow::RenderMemberStatue(int iIndex, PARTY_t* pMember, boo
     mu_swprintf(szText, L"(%d,%d)", pMember->x, pMember->y);
     g_pRenderText->RenderText(iPosX + 85, iPosY + 26, szText, 60, 0, RT3_SORT_LEFT);
 
-    int iHP = (pMember->currHP * 147) / pMember->maxHP;
+    // Avoid a divide-by-zero (and a negative-width bar) when the party member has no max HP.
+    int iHP = (pMember->maxHP > 0 && pMember->currHP > 0)
+        ? (pMember->currHP * 147) / pMember->maxHP
+        : 0;
+    if (iHP < 0) iHP = 0;
     RenderImage(IMAGE_PARTY_HPBAR_BACK, iPosX + 8, iPosY + 39, 151, 8);
     RenderImage(IMAGE_PARTY_HPBAR, iPosX + 10, iPosY + 41, iHP, 4);
 

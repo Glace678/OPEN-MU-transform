@@ -745,7 +745,7 @@ void CNewUITrade::AlertYourTradeInven()
                 }
                 else
                 {
-                    if (0 == nCompareValue)
+                    if (0 == nCompareValue && nCount < 10)
                         nCompareItemType[nCount++] = m_aYourInvenBackUp[j].Type;
 
                     pYourItemObj->byColorState = ITEM_COLOR_NORMAL;

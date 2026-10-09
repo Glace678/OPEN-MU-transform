@@ -25,7 +25,7 @@ CSenatusInfo::CSenatusInfo()
     m_iCurrGate = 0;
     m_iCurrStatue = 0;
     memset(m_GateInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
-    memset(m_StatueInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
+    memset(m_StatueInfo, 0, sizeof(PMSG_NPCDBLIST) * 4);
 
     m_iChaosTaxRate = 0;
     m_iNormalTaxRate = 0;
