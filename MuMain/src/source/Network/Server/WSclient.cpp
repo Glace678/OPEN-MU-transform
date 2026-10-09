@@ -7853,7 +7853,7 @@ void ReceivePartyResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceivePartyList(const BYTE* ReceiveBuffer)
+void ReceivePartyList(const BYTE* ReceiveBuffer, int Size)
 {
     auto Data = (LPPRECEIVE_PARTY_LISTS)ReceiveBuffer;
     if (Data->Count > MAX_PARTYS)
@@ -7861,9 +7861,21 @@ void ReceivePartyList(const BYTE* ReceiveBuffer)
         Data->Count = MAX_PARTYS;
     }
     int Offset = sizeof(PRECEIVE_PARTY_LISTS);
+    const int RecordSize = sizeof(PRECEIVE_PARTY_LIST);
     PartyNumber = Data->Count;
     for (int i = 0; i < Data->Count; i++)
     {
+        if (Offset + RecordSize > Size)
+        {
+            // Remaining entries are cleared below and the count is corrected so the UI
+            // does not read uninitialized Party slots for the truncated members.
+            g_ErrorReport.Write(L"ReceivePartyList: packet truncated at member %d/%u (size %d).\r\n",
+                                 i, Data->Count, Size);
+            PartyNumber = static_cast<BYTE>(i);
+            Data->Count = static_cast<BYTE>(i);
+            break;
+        }
+
         auto Data2 = (LPPRECEIVE_PARTY_LIST)(ReceiveBuffer + Offset);
         PARTY_t* p = &Party[i];
         CMultiLanguage::ConvertFromUtf8(p->Name, Data2->ID, MAX_USERNAME_SIZE);
@@ -7874,7 +7886,7 @@ void ReceivePartyList(const BYTE* ReceiveBuffer)
         p->y = Data2->y;
         p->currHP = Data2->currHP;
         p->maxHP = Data2->maxHP;
-        Offset += sizeof(PRECEIVE_PARTY_LIST);
+        Offset += RecordSize;
     }
 
     for (int i = Data->Count; i < MAX_PARTYS; i++)
@@ -8571,12 +8583,20 @@ void ReceiveBanUnionGuildResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer)
+void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer, int Size)
 {
     auto pData = (LPPMSG_UNION_VIEWPORT_NOTIFY_COUNT)ReceiveBuffer;
     int Offset = sizeof(PMSG_UNION_VIEWPORT_NOTIFY_COUNT);
+    const int RecordSize = sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
     for (int i = 0; i < pData->byCount; ++i)
     {
+        if (Offset + RecordSize > Size)
+        {
+            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: packet truncated at record %d/%u (size %d).\r\n",
+                                i, pData->byCount, Size);
+            break;
+        }
+
         auto pData2 = (LPPMSG_UNION_VIEWPORT_NOTIFY)(ReceiveBuffer + Offset);
         int nGuildMarkIndex = g_GuildCache.GetGuildMarkIndex(pData2->nGuildKey);
         if (nGuildMarkIndex == GuildConstants::INVALID_MARK_INDEX)
@@ -8606,15 +8626,23 @@ void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveUnionList(const BYTE* ReceiveBuffer)
+void ReceiveUnionList(const BYTE* ReceiveBuffer, int Size)
 {
     auto pData = (LPPMSG_UNIONLIST_COUNT)ReceiveBuffer;
     g_pGuildInfoWindow->UnionGuildClear();
     if (pData->byResult == 1)
     {
         int Offset = sizeof(PMSG_UNIONLIST_COUNT);
+        const int RecordSize = sizeof(PMSG_UNIONLIST);
         for (int i = 0; i < pData->byCount; ++i)
         {
+            if (Offset + RecordSize > Size)
+            {
+                g_ErrorReport.Write(L"ReceiveUnionList: packet truncated at record %d/%u (size %d).\r\n",
+                                     i, pData->byCount, Size);
+                break;
+            }
+
             auto pData2 = (LPPMSG_UNIONLIST)(ReceiveBuffer + Offset);
 
             BYTE tmp[64];
@@ -8631,7 +8659,7 @@ void ReceiveUnionList(const BYTE* ReceiveBuffer)
 
             g_pGuildInfoWindow->AddUnionList(tmp, guildName, pData2->byMemberCount);
 
-            Offset += sizeof(PMSG_UNIONLIST);
+            Offset += RecordSize;
         }
     }
 }
@@ -12548,7 +12576,7 @@ void ReceiveGuildCommand(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer)
+void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer, int Size)
 {
     if (g_pSiegeWarfare->GetCurSiegeWarType() != TYPE_GUILD_COMMANDER)
         return;
@@ -12557,31 +12585,47 @@ void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer)
 
     auto pData = (LPPWHEADER_DEFAULT_WORD2)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD2);
+    const int RecordSize = sizeof(PRECEIVE_MEMBER_LOCATION);
 
     for (int i = 0; i < pData->Value; i++)
     {
+        if (Offset + RecordSize > Size)
+        {
+            g_ErrorReport.Write(L"ReceiveGuildMemberLocation: packet truncated at record %d/%u (size %d).\r\n",
+                                i, pData->Value, Size);
+            break;
+        }
+
         auto pData2 = (LPPRECEIVE_MEMBER_LOCATION)(ReceiveBuffer + Offset);
 
         g_pSiegeWarfare->SetGuildMemberLocation(0, pData2->m_byX, pData2->m_byY);
 
-        Offset += sizeof(PRECEIVE_MEMBER_LOCATION);
+        Offset += RecordSize;
     }
 }
 
-void ReceiveGuildNpcLocation(const BYTE* ReceiveBuffer)
+void ReceiveGuildNpcLocation(const BYTE* ReceiveBuffer, int Size)
 {
     if (g_pSiegeWarfare->GetCurSiegeWarType() != TYPE_GUILD_COMMANDER)
         return;
 
     auto pData = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    const int RecordSize = sizeof(PRECEIVE_NPC_LOCATION);
 
     for (int i = 0; i < pData->Value; i++)
     {
+        if (Offset + RecordSize > Size)
+        {
+            g_ErrorReport.Write(L"ReceiveGuildNpcLocation: packet truncated at record %d/%u (size %d).\r\n",
+                                i, pData->Value, Size);
+            break;
+        }
+
         auto pData2 = (LPPRECEIVE_NPC_LOCATION)(ReceiveBuffer + Offset);
         g_pSiegeWarfare->SetGuildMemberLocation(pData2->m_byType + 1, pData2->m_byX, pData2->m_byY);
 
-        Offset += sizeof(PRECEIVE_NPC_LOCATION);
+        Offset += RecordSize;
     }
 }
 
@@ -14486,7 +14530,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceivePartyResult(ReceiveBuffer);
         break;
     case 0x42:
-        ReceivePartyList(ReceiveBuffer);
+        ReceivePartyList(ReceiveBuffer, Size);
         break;
     case 0x43:
         ReceivePartyLeave(ReceiveBuffer);
@@ -14569,10 +14613,10 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     }
     break;
     case 0x67:
-        ReceiveUnionViewportNotify(ReceiveBuffer);
+        ReceiveUnionViewportNotify(ReceiveBuffer, Size);
         break;
     case 0xE9:
-        ReceiveUnionList(ReceiveBuffer);
+        ReceiveUnionList(ReceiveBuffer, Size);
         break;
     case 0xBC:
     {
@@ -15080,10 +15124,10 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveBCGuildList(ReceiveBuffer);
         break;
     case 0xB6:
-        ReceiveGuildMemberLocation(ReceiveBuffer);
+        ReceiveGuildMemberLocation(ReceiveBuffer, Size);
         break;
     case 0xBB:
-        ReceiveGuildNpcLocation(ReceiveBuffer);
+        ReceiveGuildNpcLocation(ReceiveBuffer, Size);
         break;
     case 0xB7:
     {
