@@ -630,9 +630,9 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewUIMuHelperSkillList);
     SafeDelete(m_pNewUIMuHelperExt);
     SafeDelete(m_pNewUIMuHelper);
-#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
+    // The lucky-item window is allocated in LoadMainSceneInterface; always release it
+    // (the LEM_FIX macro gating this was never defined, leaking the window).
     SafeDelete(m_pNewUILuckyItemWnd);
-#endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
 
     ReleasePersonalItemTable();
 }

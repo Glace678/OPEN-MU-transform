@@ -28,9 +28,9 @@ CNewUILuckyItemWnd::CNewUILuckyItemWnd()
 
 CNewUILuckyItemWnd::~CNewUILuckyItemWnd()
 {
-#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
+    // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE was never defined anywhere, so this cleanup
+    // was compiled out entirely. Always release to avoid leaking the inventory control.
     Release();
-#endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
 }
 
 void CNewUILuckyItemWnd::SetFrame(void)
@@ -300,9 +300,9 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUILuckyItemWnd::Release()
 {
-#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
+    // Always release the inventory control (the LEM_FIX macro was never defined,
+    // which had compiled this safe-delete out and left a dangling pointer).
     SafeDelete(m_pNewInventoryCtrl);
-#endif // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     if (m_pNewUIMng)
     {
         m_pNewUIMng->RemoveUIObj(this);
