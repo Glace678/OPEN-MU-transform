@@ -146,7 +146,7 @@ public static class PublicRegistrationEndpoints
 
             account = context.CreateNew<Account>();
             account.LoginName = loginName;
-            account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+            account.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(password)).ConfigureAwait(false);
 
             // Unsupported storage may still register legacy accounts, but must not
             // issue a recovery credential which it cannot consume atomically.
@@ -200,6 +200,7 @@ public static class PublicRegistrationEndpoints
     }
 
     private static async Task<IResult> ChangePasswordAsync(
+        HttpContext httpContext,
         PasswordChangeRequest? request,
         AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
@@ -208,6 +209,7 @@ public static class PublicRegistrationEndpoints
     {
         var logger = loggerFactory.CreateLogger("MUnique.OpenMU.PublicRegistration");
         var loginName = (request?.LoginName ?? string.Empty).Trim();
+        var partitionKey = AccountSelfServiceGuard.PartitionKey(httpContext);
         var oldPassword = request?.OldPassword ?? string.Empty;
         var newPassword = request?.NewPassword ?? string.Empty;
         var confirmedPassword = request?.ConfirmNewPassword ?? string.Empty;
@@ -232,7 +234,7 @@ public static class PublicRegistrationEndpoints
             return Results.Ok(new AccountRegistrationResponse(false, "password_mismatch", text["PasswordMismatch"].Value));
         }
 
-        if (guard.IsLockedOut(loginName))
+        if (guard.IsLockedOut(loginName, partitionKey))
         {
             return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
         }
@@ -250,19 +252,19 @@ public static class PublicRegistrationEndpoints
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash))
+            if (!await Task.Run(() => BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash)).ConfigureAwait(false))
             {
-                guard.RegisterFailedAttempt(loginName);
+                guard.RegisterFailedAttempt(loginName, partitionKey);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 
-            account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            account.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(newPassword)).ConfigureAwait(false);
             if (!await context.SaveChangesAsync().ConfigureAwait(false))
             {
                 return Results.Ok(new AccountRegistrationResponse(false, "error", text["ServerBusy"].Value));
             }
 
-            guard.RegisterSuccessfulAttempt(loginName);
+            guard.RegisterSuccessfulAttempt(loginName, partitionKey);
             logger.LogInformation("Password changed for account {LoginName}.", loginName);
             return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordChangeSuccess"].Value));
         }
@@ -313,6 +315,7 @@ public static class PublicRegistrationEndpoints
         }
 
         var loginName = (request?.LoginName ?? string.Empty).Trim();
+        var partitionKey = AccountSelfServiceGuard.PartitionKey(httpContext);
         var newPassword = request?.NewPassword ?? string.Empty;
         var confirmedPassword = request?.ConfirmNewPassword ?? string.Empty;
 
@@ -331,7 +334,7 @@ public static class PublicRegistrationEndpoints
             return Results.Ok(new AccountRegistrationResponse(false, "password_mismatch", text["PasswordMismatch"].Value));
         }
 
-        if (hasRecoveryCode && guard.IsLockedOut(loginName))
+        if (hasRecoveryCode && guard.IsLockedOut(loginName, partitionKey))
         {
             return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
         }
@@ -354,13 +357,13 @@ public static class PublicRegistrationEndpoints
                     // not be lockable by name. The response is identical to avoid enumeration.
                     if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
                     {
-                        guard.RegisterFailedAttempt(loginName);
+                        guard.RegisterFailedAttempt(loginName, partitionKey);
                     }
 
                     return Results.Ok(new AccountRegistrationResponse(false, "invalid_recovery_code", text["InvalidRecoveryCode"].Value));
                 }
 
-                guard.RegisterSuccessfulAttempt(loginName);
+                guard.RegisterSuccessfulAttempt(loginName, partitionKey);
                 logger.LogInformation("Password recovered with an owned one-time code for account {LoginName}.", loginName);
                 return Results.Ok(new AccountRegistrationResponse(true, "ok", text["PasswordResetSuccess"].Value, replacement));
             }
@@ -373,7 +376,8 @@ public static class PublicRegistrationEndpoints
                     return Results.Ok(new AccountRegistrationResponse(false, "not_found", text["AccountNotFound"].Value));
                 }
 
-                if (!await maintenanceCredentials.TryReplaceCredentialsAsync(snapshot, BCrypt.Net.BCrypt.HashPassword(newPassword), null).ConfigureAwait(false))
+                var newHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(newPassword)).ConfigureAwait(false);
+                if (!await maintenanceCredentials.TryReplaceCredentialsAsync(snapshot, newHash, null).ConfigureAwait(false))
                 {
                     return Results.Ok(new AccountRegistrationResponse(false, "error", text["ServerBusy"].Value));
                 }
@@ -388,7 +392,7 @@ public static class PublicRegistrationEndpoints
                 return Results.Ok(new AccountRegistrationResponse(false, "not_found", text["AccountNotFound"].Value));
             }
 
-            account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            account.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(newPassword)).ConfigureAwait(false);
             account.RecoveryCodeHash = null;
             if (!await context.SaveChangesAsync().ConfigureAwait(false))
             {
@@ -406,6 +410,7 @@ public static class PublicRegistrationEndpoints
     }
 
     private static async Task<IResult> IssueRecoveryCodeAsync(
+        HttpContext httpContext,
         AccountRecoveryCodeRequest? request,
         AccountSelfServiceGuard guard,
         IPersistenceContextProvider persistenceContextProvider,
@@ -413,13 +418,14 @@ public static class PublicRegistrationEndpoints
         IStringLocalizer<SelfServiceResources> text)
     {
         var loginName = (request?.LoginName ?? string.Empty).Trim();
+        var partitionKey = AccountSelfServiceGuard.PartitionKey(httpContext);
         var currentPassword = request?.CurrentPassword ?? string.Empty;
         if (!ValidLoginName.IsMatch(loginName) || !IsValidPassword(currentPassword, out _))
         {
             return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
         }
 
-        if (guard.IsLockedOut(loginName))
+        if (guard.IsLockedOut(loginName, partitionKey))
         {
             return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["TooManyAttempts"].Value));
         }
@@ -441,13 +447,13 @@ public static class PublicRegistrationEndpoints
                 // not be lockable by name. The response is identical to avoid enumeration.
                 if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
                 {
-                    guard.RegisterFailedAttempt(loginName);
+                    guard.RegisterFailedAttempt(loginName, partitionKey);
                 }
 
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 
-            guard.RegisterSuccessfulAttempt(loginName);
+            guard.RegisterSuccessfulAttempt(loginName, partitionKey);
             logger.LogInformation("Recovery code issued after password verification for account {LoginName}.", loginName);
             return Results.Ok(new AccountRegistrationResponse(true, "ok", text["RecoveryIssueSuccess"].Value, replacement));
         }

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "App/Platform/Windows/Winmain.h"
 #include "Render/Textures/ZzzTexture.h"
 #include "GameLogic/Items/CSItemOption.h"
@@ -335,6 +335,13 @@ void SEASON3B::CNewUIMasterLevel::SetMasterSkillTreeData()
             continue;
         }
 
+        // S8-M1: Group comes from BMD data; skip out-of-range rows so downstream
+        // CategoryPoint[3] / categoryPos[3] / skillPoint[3][10] indexing can never OOB.
+        if (m_stMasterSkillTreeData[i].Group >= MAX_MASTER_SKILL_CATEGORY) // BYTE (unsigned): a "<0" check is dead; the upper bound is the real guard
+        {
+            continue;
+        }
+
         if (!this->map_masterData.insert(std::pair<BYTE, _MASTER_SKILLTREE_DATA>(m_stMasterSkillTreeData[i].Index, m_stMasterSkillTreeData[i])).second)
         {
             break;
@@ -389,7 +396,7 @@ int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTi
         return TextNum;
     }
 
-    constexpr wchar_t alpszDst[10][256] = {};
+    wchar_t alpszDst[10][256] = {}; // S8-M1/P1: was constexpr (lands in read-only .rdata) but DivideStringByPixel writes through it
 
     int  nLine = 0;
 
@@ -1002,6 +1009,12 @@ bool SEASON3B::CNewUIMasterLevel::CheckParentSkill(const _MASTER_SKILLTREE_DATA&
 
 bool SEASON3B::CNewUIMasterLevel::CheckRankPoint(BYTE group, BYTE rank, BYTE skillLevel)
 {
+    // S8-M1: group/rank derive from BMD-driven UI state; guard the fixed
+    // skillPoint[MAX_MASTER_SKILL_CATEGORY][MAX_MASTER_TREE_RANK] storage against malformed data.
+    if (group >= MAX_MASTER_SKILL_CATEGORY || rank >= MAX_MASTER_TREE_RANK)
+    {
+        return false;
+    }
     if (this->skillPoint[group][rank] < skillLevel)
     {
         this->skillPoint[group][rank] = skillLevel;

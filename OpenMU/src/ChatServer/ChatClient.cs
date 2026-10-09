@@ -54,7 +54,7 @@ internal class ChatClient : IChatClient
         this._connection.PacketReceived += this.ReadPacketAsync;
         this._connection.Disconnected += this.LogOffAsync;
 
-        this.LastActivity = DateTime.Now;
+        this.LastActivity = DateTime.UtcNow;
         _ = this._connection.BeginReceiveAsync();
     }
 
@@ -211,7 +211,7 @@ internal class ChatClient : IChatClient
             return;
         }
 
-        this.LastActivity = DateTime.Now;
+        this.LastActivity = DateTime.UtcNow;
         switch (this._packetBuffer[2])
         {
             case 0:

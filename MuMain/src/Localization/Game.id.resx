@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[kesalahan2] Program pengecekan alat peretasan belum berhasil diunduh. Silakan coba sambungkan lagi sebentar lagi. \n\n Jika Anda terus mengalami masalah yang sama, jangan ragu untuk menghubungi pusat layanan pelanggan kami melalui website kami di http://muonline.webzen.com</value>
+    <value>[kesalahan2] Program pengecekan alat peretasan belum berhasil diunduh. Silakan coba sambungkan lagi sebentar lagi. 
+
+ Jika Anda terus mengalami masalah yang sama, jangan ragu untuk menghubungi pusat layanan pelanggan kami melalui website kami di http://muonline.webzen.com</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[error3] Kesalahan registrasi NPX.DLL, file yang diperlukan hilang untuk menjalankan nProtect. Silakan unduh np_setup.exe dari Muonline.\n\n Jika Anda terus mengalami masalah yang sama, silakan hubungi pusat layanan pelanggan kami melalui situs web kami di http://muonline.webzen.com.</value>
+    <value>[error3] Kesalahan registrasi NPX.DLL, file yang diperlukan hilang untuk menjalankan nProtect. Silakan unduh np_setup.exe dari Muonline.
+
+ Jika Anda terus mengalami masalah yang sama, silakan hubungi pusat layanan pelanggan kami melalui situs web kami di http://muonline.webzen.com.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] Telah terjadi kesalahan dalam program. \n\n Jika Anda terus mengalami masalah yang sama, silakan menghubungi pusat layanan pelanggan kami melalui website kami di http://muonline.webzen.com</value>
+    <value>[error4] Telah terjadi kesalahan dalam program. 
+
+ Jika Anda terus mengalami masalah yang sama, silakan menghubungi pusat layanan pelanggan kami melalui website kami di http://muonline.webzen.com</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -10174,7 +10180,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d mengirimi Anda hadiah.</value>
+    <value>%s mengirimi Anda hadiah.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10354,55 +10360,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 30 hari.\nHanya dapat digunakan dari situs MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 30 hari.
+Hanya dapat digunakan dari situs MU Online.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 90 hari.\nHanya dapat digunakan dari situs MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 90 hari.
+Hanya dapat digunakan dari situs MU Online.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 30 hari. Jika refund, Anda akan menerima jumlah di luar harga poin.\nHanya dapat digunakan dari website MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 30 hari. Jika refund, Anda akan menerima jumlah di luar harga poin.
+Hanya dapat digunakan dari website MU Online.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 90 hari. Jika refund, Anda akan menerima jumlah di luar harga poin.\nHanya dapat digunakan dari website MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 90 hari. Jika refund, Anda akan menerima jumlah di luar harga poin.
+Hanya dapat digunakan dari website MU Online.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 3 jam selama 60 hari setelah penggunaan penyimpanan.\nHanya dapat digunakan dari situs web MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 3 jam selama 60 hari setelah penggunaan penyimpanan.
+Hanya dapat digunakan dari situs web MU Online.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati MU selama 5 jam selama 60 hari setelah penggunaan penyimpanan.\nHanya dapat digunakan dari situs web MU Online.</value>
+    <value>Item yang memungkinkan Anda menikmati MU selama 5 jam selama 60 hari setelah penggunaan penyimpanan.
+Hanya dapat digunakan dari situs web MU Online.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>Item yang memungkinkan Anda menikmati Mu selama 10 jam selama 60 hari setelah penggunaan penyimpanan.\nHanya dapat digunakan dari situs web Mu Online.</value>
+    <value>Item yang memungkinkan Anda menikmati Mu selama 10 jam selama 60 hari setelah penggunaan penyimpanan.
+Hanya dapat digunakan dari situs web Mu Online.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Mereset seluruh Master Skill Tree satu kali. \n Hanya dapat digunakan dari website MU Online.</value>
+    <value>Mereset seluruh Master Skill Tree satu kali. 
+ Hanya dapat digunakan dari website MU Online.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Memungkinkan Anda menyesuaikan statistik karakter sebanyak 500 poin.\nHanya dapat digunakan dari situs MU Online.</value>
+    <value>Memungkinkan Anda menyesuaikan statistik karakter sebanyak 500 poin.
+Hanya dapat digunakan dari situs MU Online.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Memungkinkan Anda mentransfer karakter ke akun lain dalam server yang sama.\nHanya dapat digunakan dari situs MU Online.</value>
+    <value>Memungkinkan Anda mentransfer karakter ke akun lain dalam server yang sama.
+Hanya dapat digunakan dari situs MU Online.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Memungkinkan Anda mengganti nama karakter.\nHanya dapat digunakan dari website MU Online.</value>
+    <value>Memungkinkan Anda mengganti nama karakter.
+Hanya dapat digunakan dari website MU Online.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Memungkinkan Anda mentransfer karakter ke server lain dalam akun yang sama.\nHanya dapat digunakan dari situs MU Online.</value>
+    <value>Memungkinkan Anda mentransfer karakter ke server lain dalam akun yang sama.
+Hanya dapat digunakan dari situs MU Online.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Memungkinkan Anda meminta transfer karakter satu kali dan perubahan nama karakter satu kali.\nHanya dapat digunakan dari website MU Online.</value>
+    <value>Memungkinkan Anda meminta transfer karakter satu kali dan perubahan nama karakter satu kali.
+Hanya dapat digunakan dari website MU Online.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -11002,7 +11021,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Anda memerlukan lebih banyak %%s untuk membeli item ini.</value>
+    <value>Anda memerlukan lebih banyak %s untuk membeli item ini.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12762,91 +12781,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>Status pendaftaran Lambang Lord</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>Peringkat pendaftaran Lambang Lord</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Jumlah terdaftar</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Status guild kami</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Kembali</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Dapat mendaftar</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Tidak dapat mendaftar</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>Jumlah Lambang Lord untuk didaftarkan: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>Letakkan Lambang Lord yang akan didaftarkan di jendela kombinasi.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>Hingga 225 Lambang Lord dapat didaftarkan sekaligus.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>Jumlah Lambang Lord terdaftar: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>Daftarkan Lambang Lord</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>Daftarkan Lambang Lord?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>Pendaftaran Lambang Lord selesai.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>Pendaftaran Lambang Lord gagal.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Atribut</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Info Atribut Elemen</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>Kunci</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>Buka kunci</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>Pilih nama guild yang permusuhannya akan dilepas.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Lepas permusuhan dengan guild ini?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Server</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12854,19 +12873,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Tidak dapat menarik lebih dari 2 miliar zen</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>Biaya perbaikan total</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>Guild ini tidak ada.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>Menunggu konfirmasi perdagangan</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -13201,9 +13220,9 @@
     <value>Tidak dapat terhubung ke server. Pastikan server berjalan.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Selamat datang di dunia MU! Panduan singkat ini menjelaskan dasar-dasarnya dalam beberapa halaman. Tekan Esc untuk melewati, atau buka kembali dari menu kapan saja.</value>
+    <value>Selamat datang di dunia MU! Panduan singkat menjelaskan dasarnya. Tekan Esc untuk melewati.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
-    <value>Semua siap! Bicaralah dengan NPC untuk misi dan tinggalkan kota untuk melawan monster. Selamat berpetualang.</value>
+    <value>Siap! Bicaralah dengan NPC untuk misi dan tinggalkan kota melawan monster. Selamat berpetualang!</value>
   </data>
 </root>

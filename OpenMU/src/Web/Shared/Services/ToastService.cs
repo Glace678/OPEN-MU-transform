@@ -70,15 +70,26 @@ public sealed class ToastService : IToastService, IDisposable
     /// <inheritdoc />
     public void Clear()
     {
+        List<CancellationTokenSource> toCancel;
         lock (this._lock)
         {
-            foreach (var cts in this._cancellations)
+            toCancel = new List<CancellationTokenSource>(this._cancellations);
+            this._cancellations.Clear();
+            this._toasts.Clear();
+        }
+
+        foreach (var cts in toCancel)
+        {
+            try
             {
                 cts.Cancel();
             }
+            catch (Exception)
+            {
+                // Auto-close may already have finished; cancellation is best-effort.
+            }
 
-            this._cancellations.Clear();
-            this._toasts.Clear();
+            cts.Dispose();
         }
 
         this.StateChanged?.Invoke();
@@ -87,15 +98,27 @@ public sealed class ToastService : IToastService, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        List<CancellationTokenSource> toDispose;
         lock (this._lock)
         {
-            foreach (var cts in this._cancellations)
-            {
-                cts.Dispose();
-            }
-
+            toDispose = new List<CancellationTokenSource>(this._cancellations);
             this._cancellations.Clear();
             this._toasts.Clear();
+        }
+
+        foreach (var cts in toDispose)
+        {
+            try
+            {
+                // Cancel first so a pending Task.Delay observes cancellation instead of ObjectDisposedException.
+                cts.Cancel();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+
+            cts.Dispose();
         }
     }
 

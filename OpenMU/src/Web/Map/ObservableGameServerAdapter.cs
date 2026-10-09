@@ -14,6 +14,7 @@ using MUnique.OpenMU.GameLogic;
 public class ObservableGameServerAdapter : Disposable, IObservableGameServer
 {
     private readonly IGameServerContext _gameContext;
+    private readonly object _mapsLock = new();
     private readonly List<IGameMapInfo> _gameMapInfos = new();
 
     /// <summary>
@@ -32,7 +33,18 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
     public int Id => this._gameContext.Id;
 
     /// <inheritdoc/>
-    public IList<IGameMapInfo> Maps => this._gameMapInfos;
+    public IList<IGameMapInfo> Maps
+    {
+        get
+        {
+            lock (this._mapsLock)
+            {
+                // Return a snapshot: the list is mutated from background map lifecycle events
+                // while callers (UI) enumerate it, so a live reference risks a modified-collection crash.
+                return this._gameMapInfos.ToList();
+            }
+        }
+    }
 
     /// <summary>
     /// Initializes this instance.
@@ -42,7 +54,10 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
         foreach (var map in await this._gameContext.GetMapsAsync().ConfigureAwait(false))
         {
             var mapAdapter = await this.CreateMapAdapterAsync(map).ConfigureAwait(false);
-            this._gameMapInfos.Add(mapAdapter);
+            lock (this._mapsLock)
+            {
+                this._gameMapInfos.Add(mapAdapter);
+            }
         }
 
         this._gameContext.GameMapCreated += this.OnGameMapCreated;
@@ -101,12 +116,18 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
 
     private void OnGameMapRemoved(object? sender, GameMap gameMap)
     {
-        if (this._gameMapInfos.FirstOrDefault(i => i.Id == gameMap.Id) is not { } map)
+        IGameMapInfo? map;
+        lock (this._mapsLock)
         {
-            return;
+            map = this._gameMapInfos.FirstOrDefault(i => i.Id == gameMap.Id);
+            if (map is null)
+            {
+                return;
+            }
+
+            this._gameMapInfos.Remove(map);
         }
 
-        this._gameMapInfos.Remove(map);
         map.PropertyChanged -= this.OnMapPropertyChanged;
         (map as IDisposable)?.Dispose();
         this.RaisePropertyChanged(nameof(this.Maps));
@@ -117,14 +138,20 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
     {
         try
         {
-            if (this._gameMapInfos.FirstOrDefault(i => i.Id == gameMap.Id) is not null)
+            lock (this._mapsLock)
             {
-                // we already know this map - should never happen.
-                return;
+                if (this._gameMapInfos.FirstOrDefault(i => i.Id == gameMap.Id) is not null)
+                {
+                    // we already know this map - should never happen.
+                    return;
+                }
             }
 
             var map = await this.CreateMapAdapterAsync(gameMap).ConfigureAwait(false);
-            this._gameMapInfos.Add(map);
+            lock (this._mapsLock)
+            {
+                this._gameMapInfos.Add(map);
+            }
             this.RaisePropertyChanged(nameof(this.Maps));
         }
         catch

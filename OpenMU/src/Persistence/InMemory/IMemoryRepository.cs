@@ -1,4 +1,4 @@
-﻿// <copyright file="IMemoryRepository.cs" company="MUnique">
+// <copyright file="IMemoryRepository.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -20,7 +20,7 @@ public interface IMemoryRepository : IRepository
     /// Removes the object with the specified key.
     /// </summary>
     /// <param name="key">The key.</param>
-    ValueTask RemoveAsync(Guid key);
+    ValueTask<bool> RemoveAsync(Guid key);
 
     /// <summary>
     /// Called when the context saves the changes.

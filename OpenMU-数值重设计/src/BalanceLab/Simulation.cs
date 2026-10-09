@@ -18,7 +18,7 @@ public sealed class Simulation(Rules rules)
     public EncounterResult Fight(PlayerStats player, MonsterStats target, int count = 1, int? seed = null,
         double? dodgeChance = null, bool potions = true, double maxSeconds = 600)
     {
-        if (count < 1 || count > 30 || maxSeconds <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+        if (count < 1 || count > 30 || !double.IsFinite(maxSeconds) || maxSeconds <= 0) throw new ArgumentOutOfRangeException(nameof(count));
         var dodge = dodgeChance ?? D.Combat.TrainedDodgeChance;
         if (dodge < 0 || dodge > 1 || !double.IsFinite(dodge)) throw new ArgumentOutOfRangeException(nameof(dodgeChance));
         var random = seed.HasValue ? new Random(seed.Value) : null;

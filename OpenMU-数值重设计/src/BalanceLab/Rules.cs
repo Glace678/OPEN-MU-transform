@@ -215,6 +215,8 @@ public sealed class Rules(Design design)
     public UpgradeResult Upgrade(UpgradeState state, double itemRank, double roll)
     {
         RollGuard(roll);
+        if (!double.IsFinite(itemRank) || itemRank < 1 || itemRank > Design.NormalCap + Design.MasterCap * Design.MasterRankPerLevel)
+            throw new ArgumentOutOfRangeException(nameof(itemRank));
         if (state.Level < 0 || state.Level >= Design.Enhancement.MaxLevel)
             throw new ArgumentOutOfRangeException(nameof(state));
         var step = Design.Enhancement.Steps.Single(s => s.Level == state.Level + 1);

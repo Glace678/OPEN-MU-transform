@@ -196,6 +196,12 @@ public final class BootstrapActivity extends Activity {
                 succeeded[0] = true;
             } catch (IOException error) {
                 errorMessage[0] = error.getMessage();
+            } catch (Exception error) {
+                // A non-IOException failure (runtime error, OOM from the 2 GB zip, ...)
+                // must not kill the worker silently: record it so the UI shows the
+                // failure and a retry, instead of a stuck spinner. The finally below
+                // always releases the shared lock.
+                errorMessage[0] = error.getMessage();
             } finally {
                 // Release the shared worker lock unconditionally. If this Activity is
                 // destroyed while extracting, the UI runnable below is skipped, so

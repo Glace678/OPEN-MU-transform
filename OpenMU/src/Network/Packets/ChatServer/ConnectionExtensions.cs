@@ -53,7 +53,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new AuthenticateRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new AuthenticateRef(span);
             packet.RoomId = @roomId;
             @token.Span.CopyTo(packet.Token);
 
@@ -88,7 +90,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new ChatRoomClientJoinedRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new ChatRoomClientJoinedRef(span);
             packet.ClientIndex = @clientIndex;
             packet.Name = @name;
 
@@ -121,7 +125,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new LeaveChatRoomRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new LeaveChatRoomRef(span);
             return packet.Header.Length;
         }
 
@@ -153,7 +159,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new ChatRoomClientLeftRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new ChatRoomClientLeftRef(span);
             packet.ClientIndex = @clientIndex;
             packet.Name = @name;
 
@@ -189,7 +197,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new ChatMessageRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new ChatMessageRef(span);
             packet.SenderIndex = @senderIndex;
             packet.MessageLength = @messageLength;
             @message.Span.CopyTo(packet.Message);
@@ -223,7 +233,9 @@ public static class ConnectionExtensions
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
             }
       
-            var packet = new KeepAliveRef(connection.Output.GetSpan(length)[..length]);
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
+            var packet = new KeepAliveRef(span);
             return packet.Header.Length;
         }
 

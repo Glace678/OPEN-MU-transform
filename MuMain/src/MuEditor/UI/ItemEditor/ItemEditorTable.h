@@ -16,6 +16,9 @@ class CItemEditorTable
 public:
     CItemEditorTable();
     ~CItemEditorTable();
+    // Non-copyable (owns m_pColumns via raw new/delete).
+    CItemEditorTable(const CItemEditorTable&) = delete;
+    CItemEditorTable& operator=(const CItemEditorTable&) = delete;
 
     // Main render function
     void Render(const std::string& searchFilter,

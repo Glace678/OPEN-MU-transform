@@ -1,4 +1,4 @@
-﻿// <copyright file="GuildChangePublisher.cs" company="MUnique">
+// <copyright file="GuildChangePublisher.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -73,7 +73,7 @@ public class GuildChangePublisher : IGuildChangePublisher
     {
         try
         {
-            await this._daprClient.InvokeMethodAsync("pubsub", nameof(IGameServer.AllianceCreatedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceCreatedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -86,7 +86,7 @@ public class GuildChangePublisher : IGuildChangePublisher
     {
         try
         {
-            await this._daprClient.InvokeMethodAsync("pubsub", nameof(IGameServer.AllianceDisbandedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceDisbandedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

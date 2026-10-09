@@ -201,7 +201,7 @@
     <comment>legacy_id=65</comment>
   </data>
   <data name="Answer_65_Slot_0" xml:space="preserve">
-    <value> I will go find the 'Tear of Elf'!</value>
+    <value>I will go find the 'Tear of Elf'!</value>
     <comment>legacy_id=1650</comment>
   </data>
   <data name="Text_66" xml:space="preserve">
@@ -297,7 +297,7 @@
     <comment>legacy_id=77</comment>
   </data>
   <data name="Answer_77_Slot_0" xml:space="preserve">
-    <value>'I will go find it!</value>
+    <value>'I will go find it!'</value>
     <comment>legacy_id=1770</comment>
   </data>
   <data name="Answer_77_Slot_1" xml:space="preserve">
@@ -529,7 +529,7 @@
     <comment>legacy_id=2160</comment>
   </data>
   <data name="Text_117" xml:space="preserve">
-    <value>You have failed to become a Blade Knight. Return after you have acquired new power through the 'Ring of Glory.</value>
+    <value>You have failed to become a Blade Knight. Return after you have acquired new power through the 'Ring of Glory'.</value>
     <comment>legacy_id=117</comment>
   </data>
   <data name="Answer_117_Slot_0" xml:space="preserve">
@@ -537,7 +537,7 @@
     <comment>legacy_id=2170</comment>
   </data>
   <data name="Text_118" xml:space="preserve">
-    <value>You must offer 3,000,000 zen to the Gods to sanctify this quest. Your zen is not enough</value>
+    <value>You must offer 3,000,000 zen to the Gods to sanctify this quest. Your zen is not enough.</value>
     <comment>legacy_id=118</comment>
   </data>
   <data name="Answer_118_Slot_0" xml:space="preserve">
@@ -553,7 +553,7 @@
     <comment>legacy_id=2190</comment>
   </data>
   <data name="Text_130" xml:space="preserve">
-    <value>It indeed is the 'Ring of Glory'. Look at how it shines. This ring contains time and legend that you cannot even begin to fathom. It's a blessing that you have found it!.</value>
+    <value>It indeed is the 'Ring of Glory'. Look at how it shines. This ring contains time and legend that you cannot even begin to fathom. It's a blessing that you have found it!</value>
     <comment>legacy_id=130</comment>
   </data>
   <data name="Answer_130_Slot_0" xml:space="preserve">
@@ -633,7 +633,7 @@
     <comment>legacy_id=2380</comment>
   </data>
   <data name="Text_139" xml:space="preserve">
-    <value>So you've found the 'Dark Stone. It is recorded that this stone is the dried up blood of the hero 'Benelope' who fought in the War of the Gods and Satan.</value>
+    <value>So you've found the 'Dark Stone'. It is recorded that this stone is the dried up blood of the hero 'Benelope' who fought in the War of the Gods and Satan.</value>
     <comment>legacy_id=139</comment>
   </data>
   <data name="Answer_139_Slot_0" xml:space="preserve">
@@ -681,7 +681,7 @@
     <comment>legacy_id=2440</comment>
   </data>
   <data name="Text_145" xml:space="preserve">
-    <value> Lugard the God of Light has requested a favor of you. However, you're still not qualified. Please come back when you've completed the previous quest.</value>
+    <value>Lugard the God of Light has requested a favor of you. However, you're still not qualified. Please come back when you've completed the previous quest.</value>
     <comment>legacy_id=145</comment>
   </data>
   <data name="Answer_145_Slot_0" xml:space="preserve">
@@ -697,7 +697,7 @@
     <comment>legacy_id=2460</comment>
   </data>
   <data name="Text_147" xml:space="preserve">
-    <value> Lugard the God of Light has requested a favor of you.</value>
+    <value>Lugard the God of Light has requested a favor of you.</value>
     <comment>legacy_id=147</comment>
   </data>
   <data name="Answer_147_Slot_0" xml:space="preserve">
@@ -705,7 +705,7 @@
     <comment>legacy_id=2470</comment>
   </data>
   <data name="Text_148" xml:space="preserve">
-    <value> Lugard has asked you to seek heroes to oppose Balgass' new threat to MU.</value>
+    <value>Lugard has asked you to seek heroes to oppose Balgass' new threat to MU.</value>
     <comment>legacy_id=148</comment>
   </data>
   <data name="Answer_148_Slot_0" xml:space="preserve">
@@ -801,7 +801,7 @@
     <comment>legacy_id=2580</comment>
   </data>
   <data name="Text_159" xml:space="preserve">
-    <value>Well, according to our information Balgass has formed a locations called the Barracks. The 12 apostles of Lugard believe that this is a new threat from Balgass.</value>
+    <value>Well, according to our information Balgass has formed a location called the Barracks. The 12 apostles of Lugard believe that this is a new threat from Balgass.</value>
     <comment>legacy_id=159</comment>
   </data>
   <data name="Answer_159_Slot_0" xml:space="preserve">
@@ -849,7 +849,7 @@
     <comment>legacy_id=2630</comment>
   </data>
   <data name="Text_164" xml:space="preserve">
-    <value>You've safely completed the duty I appreciate your hard work and the strong will.</value>
+    <value>You've safely completed the duty. I appreciate your hard work and the strong will.</value>
     <comment>legacy_id=164</comment>
   </data>
   <data name="Answer_164_Slot_0" xml:space="preserve">

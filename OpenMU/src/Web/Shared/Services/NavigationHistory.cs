@@ -129,6 +129,11 @@ public sealed class NavigationHistory
     /// </summary>
     public void GoBackward()
     {
+        if (this._previousPages.Count == 0)
+        {
+            return;
+        }
+
         var previous = this._previousPages.Pop();
         if (this._current is not null)
         {
@@ -153,6 +158,11 @@ public sealed class NavigationHistory
     /// </summary>
     public void GoForward()
     {
+        if (this._nextPages.Count == 0)
+        {
+            return;
+        }
+
         var next = this._nextPages.Pop();
         if (this._current is not null)
         {

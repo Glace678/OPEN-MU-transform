@@ -1,4 +1,4 @@
-﻿// <copyright file="20260320211230_AddGlobalAttributes.cs" company="MUnique">
+// <copyright file="20260320211230_AddGlobalAttributes.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -104,9 +104,11 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                 schema: "config",
                 table: "AttributeRelationship");
 
-            // Backfill NULLs introduced while the column was nullable before
-            // re-applying NOT NULL; otherwise the alteration fails on PostgreSQL.
-            migrationBuilder.Sql("""UPDATE config."ConstValueAttribute" SET "CharacterClassId" = '00000000-0000-0000-0000-000000000000' WHERE "CharacterClassId" IS NULL;""");
+            // Remove the orphaned rows instead of backfilling them with an all-zero GUID: the rows
+            // below only existed because Up made CharacterClassId nullable (global attributes tied to
+            // GameConfiguration). An all-zero GUID either violates the FK to CharacterClass or points
+            // at a "ghost" class; deleting them is the semantically correct revert.
+            migrationBuilder.Sql("""DELETE FROM config."ConstValueAttribute" WHERE "CharacterClassId" IS NULL;""");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "CharacterClassId",
@@ -114,7 +116,6 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                 table: "ConstValueAttribute",
                 type: "uuid",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
                 oldNullable: true);

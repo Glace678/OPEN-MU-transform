@@ -170,7 +170,8 @@ public static class Extensions
                 throw new Exception($"{nameof(IPersistenceContextProvider)} not registered.");
             }
 
-            var objects = persistenceContextProvider.CreateNewConfigurationContext().GetAsync<TActual>().AsTask().WaitAndUnwrapException();
+            using var context = persistenceContextProvider.CreateNewConfigurationContext();
+            var objects = context.GetAsync<TActual>().AsTask().WaitAndUnwrapException();
             return (TTarget)objects.First(predicate ?? (_ => true))!;
         });
     }

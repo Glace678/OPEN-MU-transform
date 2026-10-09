@@ -1,4 +1,4 @@
-﻿// <copyright file="SkillHitValidator.cs" company="MUnique">
+// <copyright file="SkillHitValidator.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -65,6 +65,16 @@ public class SkillHitValidator
     /// <remarks>Basically, only skills with overlapping animations and hits send an animation counter greater than 0.</remarks>
     public bool TryRegisterAnimation(ushort skillId, byte animationCounter)
     {
+        // The _hits buffer is only indexed 0..MaximumCounterValue (inclusive). The counter value
+        // comes from the client as a raw byte (0..255) and on the first animation it is copied
+        // verbatim into _counter. A value above the maximum would throw IndexOutOfRangeException
+        // at the array access below, so reject it up front with a runtime branch (not a Debug.Assert,
+        // which is compiled out in Release).
+        if (animationCounter > MaximumCounterValue)
+        {
+            this._logger.LogWarning($"Animation counter out of range: {animationCounter} (max {MaximumCounterValue}); rejecting.");
+            return false;
+        }
         if (skillId == TwisterSkillId)
         {
             // Twister is a implemented wrong at the client side. It sends a counter of the animations here, but not in the hit packets.
@@ -131,6 +141,15 @@ public class SkillHitValidator
         {
             // Multishot is implemented wrong at the client side. It doesn't send an animation counter in hit packets.
             animationCounter = this._lastMultishotIndex;
+        }
+
+        // After the twister/multishot fallback above, animationCounter may still exceed the
+        // buffered range (it originated from an untrusted client byte). Guard the array access
+        // with a runtime check so a malicious counter can't trigger IndexOutOfRangeException.
+        if (animationCounter > MaximumCounterValue)
+        {
+            this._logger.LogWarning($"Hit animation counter out of range: {animationCounter} (max {MaximumCounterValue}).");
+            return (false, false);
         }
 
         if (this._hits[animationCounter] is { } animationEntry)

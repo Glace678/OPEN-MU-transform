@@ -71,6 +71,10 @@
                 await this.Modal.CloseAsync(ModalResult.Ok(this.Item));
             }
         }
+        catch (Exception ex)
+        {
+            this._error = $"The item could not be created: {ex.Message}";
+        }
         finally
         {
             this._isSaving = false;

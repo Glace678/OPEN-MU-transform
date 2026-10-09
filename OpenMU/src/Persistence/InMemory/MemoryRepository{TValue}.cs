@@ -1,4 +1,4 @@
-﻿// <copyright file="MemoryRepository{TValue}.cs" company="MUnique">
+// <copyright file="MemoryRepository{TValue}.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -42,10 +42,7 @@ public class MemoryRepository<TValue> : IRepository<TValue>, IMemoryRepository
     }
 
     /// <inheritdoc />
-    public async ValueTask RemoveAsync(Guid key)
-    {
-        await this.DeleteAsync(key).ConfigureAwait(false);
-    }
+    public ValueTask<bool> RemoveAsync(Guid key) => this.DeleteAsync(key);
 
     /// <inheritdoc/>
     public ValueTask<TValue?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

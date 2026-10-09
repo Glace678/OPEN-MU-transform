@@ -356,7 +356,11 @@ void CInGameShopSystem::PrePage()
 
 int CInGameShopSystem::GetTotalPages()
 {
-    return (m_plistSelectPackage->size() / INGAMESHOP_DISPLAY_ITEMLIST_SIZE) + 1;
+    // S8-M3: was (size/PER_PAGE)+1, which over-counted by one on exact multiples
+    // (e.g. 10 items showed 2 pages) and always reported >=1 page when empty. Use ceiling
+    // division so N items map to ceil(N/PER_PAGE) pages (0 pages when the list is empty).
+    const int total = (int)m_plistSelectPackage->size();
+    return (total + INGAMESHOP_DISPLAY_ITEMLIST_SIZE - 1) / INGAMESHOP_DISPLAY_ITEMLIST_SIZE;
 }
 
 int CInGameShopSystem::GetSelectPage()

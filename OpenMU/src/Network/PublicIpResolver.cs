@@ -35,7 +35,7 @@ public class PublicIpResolver : IIpAddressResolver
     /// <returns>The public IPv4 address.</returns>
     public async ValueTask<IPAddress> ResolveIPv4Async()
     {
-        if (this._publicIPv4 is not null && this._lastRequest + this._maximumCachedAddressLifetime >= DateTime.Now)
+        if (this._publicIPv4 is not null && this._lastRequest + this._maximumCachedAddressLifetime >= DateTime.UtcNow)
         {
             return this._publicIPv4;
         }
@@ -44,10 +44,10 @@ public class PublicIpResolver : IIpAddressResolver
         await this._refreshLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            if (this._publicIPv4 is null || this._lastRequest + this._maximumCachedAddressLifetime < DateTime.Now)
+            if (this._publicIPv4 is null || this._lastRequest + this._maximumCachedAddressLifetime < DateTime.UtcNow)
             {
                 this._publicIPv4 = await this.InternalGetIPv4Async().ConfigureAwait(false);
-                this._lastRequest = DateTime.Now;
+                this._lastRequest = DateTime.UtcNow;
             }
 
             return this._publicIPv4;

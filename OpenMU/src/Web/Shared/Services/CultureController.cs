@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.Web.Shared.Services;
 
+using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,15 +23,30 @@ public class CultureController : Controller
     /// <returns>
     /// An <see cref="IActionResult"/> that performs a local redirect to the specified <paramref name="redirectUri"/>.
     /// </returns>
-    public IActionResult Set(string? culture, string redirectUri)
+    public IActionResult Set(string? culture, string? redirectUri)
     {
         if (culture is not null)
         {
-            var requestCulture = new RequestCulture(culture, culture);
-            var cookieName = CookieRequestCultureProvider.DefaultCookieName;
-            var cookieValue = CookieRequestCultureProvider.MakeCookieValue(requestCulture);
+            try
+            {
+                // Validate the culture name; ignore unknown cultures instead of throwing.
+                var cultureInfo = CultureInfo.GetCultureInfo(culture);
+                var requestCulture = new RequestCulture(cultureInfo);
+                var cookieName = CookieRequestCultureProvider.DefaultCookieName;
+                var cookieValue = CookieRequestCultureProvider.MakeCookieValue(requestCulture);
 
-            this.HttpContext.Response.Cookies.Append(cookieName, cookieValue);
+                this.HttpContext.Response.Cookies.Append(cookieName, cookieValue);
+            }
+            catch (CultureNotFoundException)
+            {
+                // Unknown culture - keep the currently active one.
+            }
+        }
+
+        if (string.IsNullOrEmpty(redirectUri) || !this.Url.IsLocalUrl(redirectUri))
+        {
+            // Never redirect to null or to an external URL; fall back to the home page.
+            redirectUri = "/";
         }
 
         return this.LocalRedirect(redirectUri);

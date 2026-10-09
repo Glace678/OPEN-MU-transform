@@ -108,6 +108,8 @@ CNewUISystem::CNewUISystem()
     m_pNewDuelWatchWindow = nullptr;
     m_pNewDuelWatchMainFrameWindow = nullptr;
     m_pNewUIMuHelperSkillList = nullptr;
+    m_pNewUIMuHelper = nullptr;
+    m_pNewUIMuHelperExt = nullptr;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = nullptr;
 #endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
@@ -126,6 +128,11 @@ CNewUISystem::CNewUISystem()
     m_pNewGensRanking = nullptr;
 #endif //PBG_ADD_GENSRANKING
     m_pNewUnitedMarketPlaceWindow = nullptr;
+    m_pNewKanturuInfoWindow = nullptr;
+    m_pNewDuelWindow = nullptr;
+    m_pNewNameWindow = nullptr;
+    m_pNewDuelWatchUserListWindow = nullptr;
+    m_pNewUILuckyItemWnd = nullptr;
 }
 
 CNewUISystem::~CNewUISystem()

@@ -76,7 +76,11 @@ jobs:
             echo "Using cached libturbojpeg.a"
           else
             rm -rf _deps/libjpeg-turbo _deps/build-turbo
-            git clone --depth 1 --branch 3.1.3 https://github.com/libjpeg-turbo/libjpeg-turbo.git _deps/libjpeg-turbo
+            # Pin libjpeg-turbo to commit af9c1c2 (tag 3.1.3) instead of a moving tag.
+            git init _deps/libjpeg-turbo
+            git -C _deps/libjpeg-turbo remote add origin https://github.com/libjpeg-turbo/libjpeg-turbo.git
+            git -C _deps/libjpeg-turbo fetch --depth 1 origin af9c1c268520a29adf98cad5138dafe612b3d318
+            git -C _deps/libjpeg-turbo checkout FETCH_HEAD
             cmake -S _deps/libjpeg-turbo -B _deps/build-turbo \
               -DCMAKE_SYSTEM_NAME=Windows \
               -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }} \

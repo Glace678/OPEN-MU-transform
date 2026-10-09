@@ -1276,8 +1276,15 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     CharacterAttribute->MaxAttackSpeed = Data->MaxAttackSpeed;
     CharacterMachine->Gold = Data->Gold;
 
+    int OldWorld = gMapManager.WorldActive;
     gMapManager.WorldActive = Data->Map;
-    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return FALSE;
+    if (!gMapManager.LoadWorld(gMapManager.WorldActive))
+    {
+        // Roll back: a failed world load must not leave WorldActive pointing at a map
+        // whose terrain/obstacle data was never actually loaded.
+        gMapManager.WorldActive = OldWorld;
+        return FALSE;
+    }
 
     if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
     {
@@ -1530,7 +1537,11 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         int OldWorld = gMapManager.WorldActive;
 
         gMapManager.WorldActive = Data->Map;
-        if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
+        if (!gMapManager.LoadWorld(gMapManager.WorldActive))
+        {
+            gMapManager.WorldActive = OldWorld;
+            return;
+        }
 
         if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive)
             || gMapManager.InChaosCastle() == true)
@@ -2469,7 +2480,11 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
             int OldWorld = gMapManager.WorldActive;
 
             gMapManager.WorldActive = Data->Map;
-            if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return FALSE;
+            if (!gMapManager.LoadWorld(gMapManager.WorldActive))
+            {
+                gMapManager.WorldActive = OldWorld;
+                return FALSE;
+            }
 
             if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
             {
@@ -6054,7 +6069,7 @@ void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
     int SourceKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
     int Index = FindCharacterIndex(SourceKey);
-    if (Index >= MAX_CHARACTERS_CLIENT) // PROTO-1
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT) // PROTO-1
     {
         return;
     }
@@ -11064,26 +11079,42 @@ void ReceiveQuestLimitResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveQuestByItemUseEP(const BYTE* ReceiveBuffer)
+void ReceiveQuestByItemUseEP(const BYTE* ReceiveBuffer, int Size)
 {
+    // Need the quest-list header plus exactly one DWORD payload entry.
+    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST) + (int)sizeof(DWORD))
+        return;
     DWORD* pdwQuestIndex = (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST));
     SendQuestSelection(*pdwQuestIndex, 0);
 }
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
 
-void ReceiveQuestByEtcEPList(const BYTE* ReceiveBuffer)
+void ReceiveQuestByEtcEPList(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST))
+        return;
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
+    // Never read more DWORD entries than the packet actually carries.
+    int nIndexCount = (int)pData->m_wQuestCount;
+    int avail = ((int)Size - (int)sizeof(PMSG_NPCTALK_QUESTLIST)) / (int)sizeof(DWORD);
+    if (nIndexCount > avail)
+        nIndexCount = (avail > 0) ? avail : 0;
     g_QuestMng.SetQuestIndexByEtcList((DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)),
-        pData->m_wQuestCount);
+        nIndexCount);
 }
 
-void ReceiveQuestByNPCEPList(const BYTE* ReceiveBuffer)
+void ReceiveQuestByNPCEPList(const BYTE* ReceiveBuffer, int Size)
 {
+    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST))
+        return;
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
+    int nIndexCount = (int)pData->m_wQuestCount;
+    int avail = ((int)Size - (int)sizeof(PMSG_NPCTALK_QUESTLIST)) / (int)sizeof(DWORD);
+    if (nIndexCount > avail)
+        nIndexCount = (avail > 0) ? avail : 0;
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE))
         g_pNPCDialogue->ProcessQuestListReceive(
-            (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), pData->m_wQuestCount);
+            (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), nIndexCount);
 }
 
 void ReceiveQuestQSSelSentence(const BYTE* ReceiveBuffer)
@@ -12181,9 +12212,12 @@ void ReceiveCrownState(const BYTE* ReceiveBuffer)
 
         int Index = FindCharacterIndexByMonsterIndex(216);
 
-        OBJECT* o = &CharactersClient[Index].Object;
+        if (Index >= 0 && Index < MAX_CHARACTERS_CLIENT)
+        {
+            OBJECT* o = &CharactersClient[Index].Object;
 
-        g_CharacterRegisterBuff(o, eBuff_CastleCrown);
+            g_CharacterRegisterBuff(o, eBuff_CastleCrown);
+        }
     }
     break;
 
@@ -12193,9 +12227,12 @@ void ReceiveCrownState(const BYTE* ReceiveBuffer)
 
         int Index = FindCharacterIndexByMonsterIndex(216);
 
-        OBJECT* o = &CharactersClient[Index].Object;
+        if (Index >= 0 && Index < MAX_CHARACTERS_CLIENT)
+        {
+            OBJECT* o = &CharactersClient[Index].Object;
 
-        g_CharacterClearBuff(o);
+            g_CharacterClearBuff(o);
+        }
     }
     break;
 
@@ -14760,14 +14797,14 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             break;
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
         case 0x03:
-            ReceiveQuestByEtcEPList(ReceiveBuffer);
+            ReceiveQuestByEtcEPList(ReceiveBuffer, Size);
             break;
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
         case 0x04:
-            ReceiveQuestByItemUseEP(ReceiveBuffer);
+            ReceiveQuestByItemUseEP(ReceiveBuffer, Size);
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
         case 0x0A:
-            ReceiveQuestByNPCEPList(ReceiveBuffer);
+            ReceiveQuestByNPCEPList(ReceiveBuffer, Size);
             break;
         case 0x0B:
             ReceiveQuestQSSelSentence(ReceiveBuffer);

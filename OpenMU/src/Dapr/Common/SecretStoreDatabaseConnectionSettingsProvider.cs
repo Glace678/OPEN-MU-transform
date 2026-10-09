@@ -56,6 +56,12 @@ public class SecretStoreDatabaseConnectionSettingsProvider : IDatabaseConnection
                     var secrets = await this._daprClient.GetBulkSecretAsync(SecretStoreName, cancellationToken: cancellationToken).ConfigureAwait(false);
                     foreach (var secret in secrets.Where(kvp => string.Equals(kvp.Key.Split(':')[0], "connectionStrings", StringComparison.InvariantCultureIgnoreCase)))
                     {
+                        if (secret.Value is not { Count: > 0 })
+                        {
+                            this._logger.LogWarning("Skipping connection string secret '{0}' because it contains no values.", secret.Key);
+                            continue;
+                        }
+
                         var contextTypeName = secret.Value.Keys.First().Split(':').Last();
                         var setting = new ConnectionSetting
                         {

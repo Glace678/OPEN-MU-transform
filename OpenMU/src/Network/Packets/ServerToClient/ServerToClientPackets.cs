@@ -873,7 +873,15 @@ public readonly struct AddCharacterToScopeExtended
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[10..].GetByteValue(4, 0);
-        set => this._data.Span[10..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[10..].SetByteValue((byte)value, 4, 0);
+        }
     }
 
     /// <summary>
@@ -1108,7 +1116,15 @@ public readonly struct CharacterData
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[34..].GetByteValue(4, 0);
-        set => this._data.Span[34..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[34..].SetByteValue((byte)value, 4, 0);
+        }
     }
 
     /// <summary>
@@ -1392,7 +1408,15 @@ public readonly struct CharacterData
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[26..].GetByteValue(4, 0);
-        set => this._data.Span[26..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[26..].SetByteValue((byte)value, 4, 0);
+        }
     }
 }
 }
@@ -1620,7 +1644,15 @@ public readonly struct CharacterData
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[30..].GetByteValue(4, 0);
-        set => this._data.Span[30..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[30..].SetByteValue((byte)value, 4, 0);
+        }
     }
 }
 }
@@ -4241,7 +4273,7 @@ public readonly struct RageAttackRangeResponse
     /// </summary>
     /// <param name="targetsCount">The count of <see cref="RageTarget"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int targetsCount) => targetsCount * RageTarget.Length + 6;
+    public static int GetRequiredSize(int targetsCount) => Math.Max(targetsCount * RageTarget.Length + 6, Length);
 
 
 /// <summary>
@@ -6503,7 +6535,15 @@ public readonly struct ObjectHit
     public DamageKind Kind
     {
         get => (DamageKind)this._data.Span[7..].GetByteValue(4, 0);
-        set => this._data.Span[7..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[7..].SetByteValue((byte)value, 4, 0);
+        }
     }
 
     /// <summary>
@@ -6627,7 +6667,15 @@ public readonly struct ObjectHitExtended
     public DamageKind Kind
     {
         get => (DamageKind)this._data.Span[3..].GetByteValue(4, 0);
-        set => this._data.Span[3..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[3..].SetByteValue((byte)value, 4, 0);
+        }
     }
 
     /// <summary>
@@ -12675,7 +12723,15 @@ public readonly struct CharacterData
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[18..].GetByteValue(4, 0);
-        set => this._data.Span[18..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[18..].SetByteValue((byte)value, 4, 0);
+        }
     }
 }
 }
@@ -12856,7 +12912,15 @@ public readonly struct CharacterData
     public CharacterHeroState HeroState
     {
         get => (CharacterHeroState)this._data.Span[18..].GetByteValue(4, 0);
-        set => this._data.Span[18..].SetByteValue((byte)value, 4, 0);
+        set
+        {
+            if ((byte)value >= 1 << 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 4-bit bitfield.");
+            }
+
+            this._data.Span[18..].SetByteValue((byte)value, 4, 0);
+        }
     }
 
     /// <summary>
@@ -14231,7 +14295,7 @@ public readonly struct CharacterCreationSuccessful
     /// </summary>
     /// <param name="previewDataLength">The length in bytes of <see cref="PreviewData"/> on which the required size depends.</param>
         
-    public static int GetRequiredSize(int previewDataLength) => previewDataLength + 20;
+    public static int GetRequiredSize(int previewDataLength) => Math.Max(previewDataLength + 20, Length);
 }
 
 
@@ -23334,7 +23398,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState ScrollOfEmperorState
     {
         get => (LegacyQuestState)this._data.Span[4..].GetByteValue(2, 0);
-        set => this._data.Span[4..].SetByteValue((byte)value, 2, 0);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[4..].SetByteValue((byte)value, 2, 0);
+        }
     }
 
     /// <summary>
@@ -23343,7 +23415,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState ThreeTreasuresOfMuState
     {
         get => (LegacyQuestState)this._data.Span[4..].GetByteValue(2, 2);
-        set => this._data.Span[4..].SetByteValue((byte)value, 2, 2);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[4..].SetByteValue((byte)value, 2, 2);
+        }
     }
 
     /// <summary>
@@ -23352,7 +23432,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState GainHeroStatusState
     {
         get => (LegacyQuestState)this._data.Span[4..].GetByteValue(2, 4);
-        set => this._data.Span[4..].SetByteValue((byte)value, 2, 4);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[4..].SetByteValue((byte)value, 2, 4);
+        }
     }
 
     /// <summary>
@@ -23361,7 +23449,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState SecretOfDarkStoneState
     {
         get => (LegacyQuestState)this._data.Span[4..].GetByteValue(2, 6);
-        set => this._data.Span[4..].SetByteValue((byte)value, 2, 6);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[4..].SetByteValue((byte)value, 2, 6);
+        }
     }
 
     /// <summary>
@@ -23370,7 +23466,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState CertificateOfStrengthState
     {
         get => (LegacyQuestState)this._data.Span[5..].GetByteValue(2, 0);
-        set => this._data.Span[5..].SetByteValue((byte)value, 2, 0);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[5..].SetByteValue((byte)value, 2, 0);
+        }
     }
 
     /// <summary>
@@ -23379,7 +23483,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState InfiltrationOfBarrackState
     {
         get => (LegacyQuestState)this._data.Span[5..].GetByteValue(2, 2);
-        set => this._data.Span[5..].SetByteValue((byte)value, 2, 2);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[5..].SetByteValue((byte)value, 2, 2);
+        }
     }
 
     /// <summary>
@@ -23388,7 +23500,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState InfiltrationOfRefugeState
     {
         get => (LegacyQuestState)this._data.Span[5..].GetByteValue(2, 4);
-        set => this._data.Span[5..].SetByteValue((byte)value, 2, 4);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[5..].SetByteValue((byte)value, 2, 4);
+        }
     }
 
     /// <summary>
@@ -23397,7 +23517,15 @@ public readonly partial struct LegacyQuestStateList
     public LegacyQuestState UnusedQuestState
     {
         get => (LegacyQuestState)this._data.Span[5..].GetByteValue(2, 6);
-        set => this._data.Span[5..].SetByteValue((byte)value, 2, 6);
+        set
+        {
+            if ((byte)value >= 1 << 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 2-bit bitfield.");
+            }
+
+            this._data.Span[5..].SetByteValue((byte)value, 2, 6);
+        }
     }
 
     /// <summary>
@@ -26382,13 +26510,13 @@ public readonly struct PlayerResult
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="content">The content of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 0;
+    public static int GetRequiredSize(string content) => Math.Max(System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 0, Length);
 
     /// <summary>
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="contentLength">The content length in bytes of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 0;
+    public static int GetRequiredSize(int contentLength) => Math.Max(contentLength + 1 + 0, Length);
 }
 }
 
@@ -26671,13 +26799,13 @@ public readonly struct IllusionTempleHolyItemRelics
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="content">The content of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 6;
+    public static int GetRequiredSize(string content) => Math.Max(System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 6, Length);
 
     /// <summary>
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="contentLength">The content length in bytes of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 6;
+    public static int GetRequiredSize(int contentLength) => Math.Max(contentLength + 1 + 6, Length);
 }
 
 
@@ -28799,12 +28927,18 @@ public readonly struct QuestProgress
     /// <summary>
     /// Gets the <see cref="QuestCondition"/> of the specified index.
     /// </summary>
-    public QuestCondition GetQuestCondition(int index) => new (this._data.Slice(11 + index * QuestConditionRef.Length));
+    public QuestCondition GetQuestCondition(int index) =>
+        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(11 + index * QuestConditionRef.Length));
 
     /// <summary>
     /// Gets the <see cref="QuestReward"/> of the specified index.
     /// </summary>
-    public QuestReward GetQuestReward(int index) => new (this._data.Slice(141 + index * QuestRewardRef.Length));
+    public QuestReward GetQuestReward(int index) =>
+        (index < 0 || 141 + index * QuestRewardRef.Length + QuestRewardRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(141 + index * QuestRewardRef.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestProgress"/>.
@@ -28825,7 +28959,7 @@ public readonly struct QuestProgress
     /// </summary>
     /// <param name="conditionsCount">The count of <see cref="QuestCondition"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => conditionsCount * QuestCondition.Length + 11;
+    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestCondition.Length + 11, Length);
 }
 
 
@@ -28938,12 +29072,18 @@ public readonly struct QuestProgressExtended
     /// <summary>
     /// Gets the <see cref="QuestConditionExtended"/> of the specified index.
     /// </summary>
-    public QuestConditionExtended GetQuestConditionExtended(int index) => new (this._data.Slice(12 + index * QuestConditionExtendedRef.Length));
+    public QuestConditionExtended GetQuestConditionExtended(int index) =>
+        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(12 + index * QuestConditionExtendedRef.Length));
 
     /// <summary>
     /// Gets the <see cref="QuestRewardExtended"/> of the specified index.
     /// </summary>
-    public QuestRewardExtended GetQuestRewardExtended(int index) => new (this._data.Slice(152 + index * QuestRewardExtendedRef.Length));
+    public QuestRewardExtended GetQuestRewardExtended(int index) =>
+        (index < 0 || 152 + index * QuestRewardExtendedRef.Length + QuestRewardExtendedRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(152 + index * QuestRewardExtendedRef.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestProgressExtended"/>.
@@ -28964,7 +29104,7 @@ public readonly struct QuestProgressExtended
     /// </summary>
     /// <param name="conditionsCount">The count of <see cref="QuestConditionExtended"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => conditionsCount * QuestConditionExtended.Length + 12;
+    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionExtended.Length + 12, Length);
 }
 
 
@@ -29372,12 +29512,18 @@ public readonly struct QuestState
     /// <summary>
     /// Gets the <see cref="QuestCondition"/> of the specified index.
     /// </summary>
-    public QuestCondition GetQuestCondition(int index) => new (this._data.Slice(11 + index * QuestConditionRef.Length));
+    public QuestCondition GetQuestCondition(int index) =>
+        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(11 + index * QuestConditionRef.Length));
 
     /// <summary>
     /// Gets the <see cref="QuestReward"/> of the specified index.
     /// </summary>
-    public QuestReward GetQuestReward(int index) => new (this._data.Slice(141 + index * QuestRewardRef.Length));
+    public QuestReward GetQuestReward(int index) =>
+        (index < 0 || 141 + index * QuestRewardRef.Length + QuestRewardRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(141 + index * QuestRewardRef.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestState"/>.
@@ -29398,7 +29544,7 @@ public readonly struct QuestState
     /// </summary>
     /// <param name="conditionsCount">The count of <see cref="QuestCondition"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => conditionsCount * QuestCondition.Length + 11;
+    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestCondition.Length + 11, Length);
 }
 
 
@@ -29511,12 +29657,18 @@ public readonly struct QuestStateExtended
     /// <summary>
     /// Gets the <see cref="QuestConditionExtended"/> of the specified index.
     /// </summary>
-    public QuestConditionExtended GetQuestConditionExtended(int index) => new (this._data.Slice(12 + index * QuestConditionExtendedRef.Length));
+    public QuestConditionExtended GetQuestConditionExtended(int index) =>
+        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(12 + index * QuestConditionExtendedRef.Length));
 
     /// <summary>
     /// Gets the <see cref="QuestRewardExtended"/> of the specified index.
     /// </summary>
-    public QuestRewardExtended GetQuestRewardExtended(int index) => new (this._data.Slice(152 + index * QuestRewardExtendedRef.Length));
+    public QuestRewardExtended GetQuestRewardExtended(int index) =>
+        (index < 0 || 152 + index * QuestRewardExtendedRef.Length + QuestRewardExtendedRef.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(152 + index * QuestRewardExtendedRef.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="QuestStateExtended"/>.
@@ -29537,7 +29689,7 @@ public readonly struct QuestStateExtended
     /// </summary>
     /// <param name="conditionsCount">The count of <see cref="QuestConditionExtended"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => conditionsCount * QuestConditionExtended.Length + 12;
+    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionExtended.Length + 12, Length);
 }
 
 

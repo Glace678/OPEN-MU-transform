@@ -329,7 +329,7 @@
     <value>Todos DESL</value>
   </data>
   <data name="TODO - Not Working:" xml:space="preserve">
-    <value>TODO - Não Funciona:</value>
+    <value>Não Funciona:</value>
   </data>
   <data name="Shaders" xml:space="preserve">
     <value>Shaders</value>
@@ -344,7 +344,7 @@
     <value>Interface</value>
   </data>
   <data name="TODO - Not Implemented:" xml:space="preserve">
-    <value>TODO - Não Implementado:</value>
+    <value>Não Implementado:</value>
   </data>
   <data name="Hero" xml:space="preserve">
     <value>Herói</value>

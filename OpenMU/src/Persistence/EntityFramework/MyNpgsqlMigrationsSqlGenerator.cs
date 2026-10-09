@@ -162,7 +162,7 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
 
         if (DataTablesRequiredByConfigRole.Contains(operation.Name))
         {
-            var configRoleName = ConnectionConfigurator.GetRoleName(DatabaseRole.Configuration);
+            var configRoleName = QuoteIdentifier(ConnectionConfigurator.GetRoleName(DatabaseRole.Configuration));
             builder
                 .AppendLine($"GRANT SELECT ON TABLE data.\"{operation.Name}\" TO GROUP {configRoleName};")
                 .EndCommand()
@@ -172,7 +172,7 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
 
         if (DataTablesRequiredByGuildRole.Contains(operation.Name))
         {
-            var guildRoleName = ConnectionConfigurator.GetRoleName(DatabaseRole.Guild);
+            var guildRoleName = QuoteIdentifier(ConnectionConfigurator.GetRoleName(DatabaseRole.Guild));
             builder
                 .AppendLine($"GRANT SELECT ON TABLE data.\"{operation.Name}\" TO GROUP {guildRoleName};")
                 .EndCommand()
@@ -182,7 +182,7 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
 
         if (DataTablesRequiredByFriendRole.Contains(operation.Name))
         {
-            var friendRoleName = ConnectionConfigurator.GetRoleName(DatabaseRole.Friend);
+            var friendRoleName = QuoteIdentifier(ConnectionConfigurator.GetRoleName(DatabaseRole.Friend));
             builder
                 .AppendLine($"GRANT SELECT ON TABLE data.\"{operation.Name}\" TO GROUP {friendRoleName};")
                 .EndCommand()

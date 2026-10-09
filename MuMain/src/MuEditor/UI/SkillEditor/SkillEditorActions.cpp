@@ -33,7 +33,8 @@ std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& sk
     switch (desc.type)
     {
     case ESkillFieldType::Bool:
-        ss << (*reinterpret_cast<const bool*>(fieldPtr) ? 1 : 0);
+        // Read as BYTE (the on-disk field is Win32 BOOL/BYTE, not C++ bool) to avoid UB.
+        ss << (*reinterpret_cast<const BYTE*>(fieldPtr) ? 1 : 0);
         break;
 
     case ESkillFieldType::Byte:
@@ -54,7 +55,7 @@ std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& sk
 
     case ESkillFieldType::WCharArray:
     {
-        char buffer[256];
+        char buffer[256]{};
         ConvertSkillName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
         ss << buffer;
         break;

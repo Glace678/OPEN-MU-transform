@@ -60,6 +60,7 @@ public unsafe partial class ConnectionManager
                 var length = AuthenticateRef.Length;
                 var packet = new AuthenticateRef(pipeWriter.GetSpan(length)[..length]);
                 packet.RoomId = @roomId;
+                packet.Token.Clear();
                 new Span<byte>(@token, (int)tokenByteLength).CopyTo(packet.Token);
 
                 return length;
@@ -173,6 +174,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'ChatRoomClients' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="ChatMessage" /> to this connection.
@@ -202,6 +204,7 @@ public unsafe partial class ConnectionManager
                 var packet = new ChatMessageRef(pipeWriter.GetSpan(length)[..length]);
                 packet.SenderIndex = @senderIndex;
                 packet.MessageLength = @messageLength;
+                packet.Message.Clear();
                 new Span<byte>(@message, (int)messageByteLength).CopyTo(packet.Message);
 
                 return length;

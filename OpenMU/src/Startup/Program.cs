@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="MUnique">
+// <copyright file="Program.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -317,7 +317,8 @@ internal sealed class Program : IDisposable
                 var dataSource = new GameConfigurationDataSource(
                     provider.GetService<ILogger<GameConfigurationDataSource>>()!,
                     persistenceContextProvider!);
-                var configId = persistenceContextProvider!.CreateNewConfigurationContext().GetDefaultGameConfigurationIdAsync(default).AsTask().WaitAndUnwrapException();
+                using var configContext = persistenceContextProvider!.CreateNewConfigurationContext();
+                var configId = configContext.GetDefaultGameConfigurationIdAsync(default).AsTask().WaitAndUnwrapException();
                 dataSource.GetOwnerAsync(configId!.Value).AsTask().WaitAndUnwrapException();
                 var referenceHandler = new ByDataSourceReferenceHandler(dataSource);
                 return referenceHandler;

@@ -201,7 +201,7 @@
     <comment>legacy_id=65</comment>
   </data>
   <data name="Answer_65_Slot_0" xml:space="preserve">
-    <value> Я пойду искать «Слезу Эльфа»!</value>
+    <value>Я пойду искать «Слезу Эльфа»!</value>
     <comment>legacy_id=1650</comment>
   </data>
   <data name="Text_66" xml:space="preserve">
@@ -681,7 +681,7 @@
     <comment>legacy_id=2440</comment>
   </data>
   <data name="Text_145" xml:space="preserve">
-    <value> Лугард, Бог Света, попросил вас об услуге. Однако вы ещё не подходите. Пожалуйста, вернитесь, когда завершите предыдущий квест.</value>
+    <value>Лугард, Бог Света, попросил вас об услуге. Однако вы ещё не подходите. Пожалуйста, вернитесь, когда завершите предыдущий квест.</value>
     <comment>legacy_id=145</comment>
   </data>
   <data name="Answer_145_Slot_0" xml:space="preserve">
@@ -697,7 +697,7 @@
     <comment>legacy_id=2460</comment>
   </data>
   <data name="Text_147" xml:space="preserve">
-    <value> Лугард, Бог Света, попросил вас об услуге.</value>
+    <value>Лугард, Бог Света, попросил вас об услуге.</value>
     <comment>legacy_id=147</comment>
   </data>
   <data name="Answer_147_Slot_0" xml:space="preserve">
@@ -705,7 +705,7 @@
     <comment>legacy_id=2470</comment>
   </data>
   <data name="Text_148" xml:space="preserve">
-    <value> Лугард попросил вас найти героев, чтобы противостоять новой угрозе Балгасса для MU.</value>
+    <value>Лугард попросил вас найти героев, чтобы противостоять новой угрозе Балгасса для MU.</value>
     <comment>legacy_id=148</comment>
   </data>
   <data name="Answer_148_Slot_0" xml:space="preserve">

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
     xmlns:pd="http://www.munique.net/OpenMU/PacketDefinitions"
@@ -359,6 +359,9 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
         <xsl:text>, int structLength</xsl:text>
       </xsl:if>
       <xsl:text>) => </xsl:text>
+      <xsl:if test="$struct/pd:Length">
+        <xsl:text>Math.Max(</xsl:text>
+      </xsl:if>
       
       <xsl:choose>
         <xsl:when test="$variableField/pd:Type = 'String'">
@@ -383,6 +386,9 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
       </xsl:choose>
       <xsl:text> + </xsl:text>
       <xsl:value-of select="$variableField/pd:Index"/>
+      <xsl:if test="$struct/pd:Length">
+        <xsl:text>, Length)</xsl:text>
+      </xsl:if>
       <xsl:text>;</xsl:text>
       <xsl:value-of select="$newline"/>
       <xsl:if test="$variableField/pd:Type = 'String'">
@@ -396,8 +402,10 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
     public static int GetRequiredSize(int </xsl:text>
         <xsl:value-of select="$paramName"/>
         <xsl:text>Length) => </xsl:text>
+        <xsl:if test="$struct/pd:Length"><xsl:text>Math.Max(</xsl:text></xsl:if>
         <xsl:value-of select="$paramName"/><xsl:text>Length + 1 + </xsl:text>
         <xsl:value-of select="$variableField/pd:Index"/>
+        <xsl:if test="$struct/pd:Length"><xsl:text>, Length)</xsl:text></xsl:if>
         <xsl:text>;</xsl:text>
         <xsl:value-of select="$newline"/>
       </xsl:if>
@@ -486,12 +494,20 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
     <xsl:value-of select="pd:TypeName"/>
     <xsl:text> Get</xsl:text>
     <xsl:value-of select="pd:TypeName"/>
-    <xsl:text>(int index) => new (this._data.Slice(</xsl:text>
+    <xsl:text>(int index) =>
+        (index &lt; 0 || </xsl:text>
     <xsl:value-of select="pd:Index"/>
     <xsl:text> + index * </xsl:text>
     <xsl:value-of select="pd:TypeName"/>
-    <xsl:text>Ref.Length</xsl:text>
-    <xsl:text>));</xsl:text>
+    <xsl:text>Ref.Length + </xsl:text>
+    <xsl:value-of select="pd:TypeName"/>
+    <xsl:text>Ref.Length > this._data.Length)
+            ? throw new System.ArgumentOutOfRangeException(nameof(index))
+            : new (this._data.Slice(</xsl:text>
+    <xsl:value-of select="pd:Index"/>
+    <xsl:text> + index * </xsl:text>
+    <xsl:value-of select="pd:TypeName"/>
+    <xsl:text>Ref.Length));</xsl:text>
 
     <xsl:value-of select="$newline"/>
   </xsl:template>
@@ -638,6 +654,20 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
         <xsl:text>value</xsl:text>
       </xsl:variable>
       <xsl:value-of select="$newline"/>
+      <xsl:if test="pd:Type = 'Enum' and pd:Length and pd:LeftShifted">
+        <xsl:text>        set
+        {
+            if ((byte)value &gt;= 1 &lt;&lt; </xsl:text><xsl:value-of select="pd:Length"/><xsl:text>)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the </xsl:text><xsl:value-of select="pd:Length"/><xsl:text>-bit bitfield.");
+            }
+
+            </xsl:text>
+        <xsl:call-template name="SliceData"/>
+        <xsl:text>.SetByteValue((byte)value, </xsl:text><xsl:value-of select="pd:Length"/><xsl:text>, </xsl:text><xsl:value-of select="pd:LeftShifted"/><xsl:text>);
+        }</xsl:text>
+      </xsl:if>
+      <xsl:if test="not(pd:Type = 'Enum' and pd:Length and pd:LeftShifted)">
       <xsl:text>        set =&gt; </xsl:text>
       <xsl:if test="pd:Length or pd:LeftShifted">
         <xsl:call-template name="SliceData"/>
@@ -672,6 +702,7 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:text>;</xsl:text>
+      </xsl:if>
     </xsl:template>
 
   <xsl:template match="pd:Field[pd:Type = 'ShortLittleEndian']" mode="get">

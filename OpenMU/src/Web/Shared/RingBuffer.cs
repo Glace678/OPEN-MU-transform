@@ -1,4 +1,4 @@
-﻿// <copyright file="RingBuffer.cs" company="MUnique">
+// <copyright file="RingBuffer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -63,8 +63,8 @@ internal class RingBuffer<T>
     {
         lock (this._array)
         {
-            this._currentStartIndex = this._count >= this.Size ? (this._count - 1) % this.Size : 0;
             var nextIndex = this._count % this.Size;
+            this._currentStartIndex = this._count >= this.Size ? (nextIndex + 1) % this.Size : 0;
             this._array[nextIndex] = item;
             this._count++;
         }

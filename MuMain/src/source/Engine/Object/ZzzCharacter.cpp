@@ -11669,7 +11669,8 @@ int FindCharacterIndexByMonsterIndex(int Type)
             return i;
         }
     }
-    return MAX_CHARACTERS_CLIENT;
+    // Not found: return -1 (consistent with FindCharacterIndex); callers must guard.
+    return -1;
 }
 
 int HangerBloodCastleQuestItem(int Key)

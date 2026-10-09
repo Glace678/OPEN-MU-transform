@@ -329,7 +329,7 @@
     <value>All OFF</value>
   </data>
   <data name="TODO - Not Working:" xml:space="preserve">
-    <value>TODO - Not Working:</value>
+    <value>Not Working:</value>
   </data>
   <data name="Shaders" xml:space="preserve">
     <value>Shaders</value>
@@ -344,7 +344,7 @@
     <value>UI</value>
   </data>
   <data name="TODO - Not Implemented:" xml:space="preserve">
-    <value>TODO - Not Implemented:</value>
+    <value>Not Implemented:</value>
   </data>
   <data name="Hero" xml:space="preserve">
     <value>Hero</value>

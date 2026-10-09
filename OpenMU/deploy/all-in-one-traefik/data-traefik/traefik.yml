@@ -1,5 +1,5 @@
 api:
-  dashboard: true
+  dashboard: false
 
 entryPoints:
   web:

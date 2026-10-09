@@ -16,6 +16,9 @@ class CSkillEditorTable
 public:
     CSkillEditorTable();
     ~CSkillEditorTable();
+    // Non-copyable (owns m_pColumns via raw new/delete).
+    CSkillEditorTable(const CSkillEditorTable&) = delete;
+    CSkillEditorTable& operator=(const CSkillEditorTable&) = delete;
 
     // Main render function
     void Render(const std::string& searchFilter,

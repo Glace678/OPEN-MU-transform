@@ -66,10 +66,20 @@ public:
 
 inline PATH::PATH()
 {
+    // S7-M3: fully self-consistent init. Previously only the heap arrays were NULL-ed while
+    // m_iWidth/m_iHeight/m_iSize/m_pbyMap/m_iNumPath/m_iMinClosed/m_iMaxClosed stayed uninitialized;
+    // a FindPath before SetMapDimensions would read garbage bounds and dereference the NULL arrays.
+    m_iWidth = 0;
+    m_iHeight = 0;
+    m_iSize = 0;
+    m_pbyMap = NULL;
+    m_iNumPath = 0;
     m_pbyClosed = NULL;
     m_piCostToStart = NULL;
     m_pxPrev = NULL;
     m_pyPrev = NULL;
+    m_iMinClosed = MAX_INT_FORPATH;
+    m_iMaxClosed = -1;
 }
 
 inline PATH::~PATH()

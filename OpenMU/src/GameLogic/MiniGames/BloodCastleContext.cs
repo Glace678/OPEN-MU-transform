@@ -161,7 +161,7 @@ public sealed class BloodCastleContext : MiniGameContext
 
             if (destructible.Definition.Number == StatueOfSaintNumber)
             {
-                await this.ShowGoldenMessageAsync(nameof(PlayerMessage.BloodCastleCrystalStatusDestroyed), e.KillerName).ConfigureAwait(false);
+                await this.ShowGoldenMessageAsync(nameof(PlayerMessage.BloodCastleCrystalStatusDestroyed), e.KillerName ?? string.Empty).ConfigureAwait(false);
             }
             else if (destructible.Definition.Number == CastleGateNumber)
             {

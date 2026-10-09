@@ -8227,7 +8227,15 @@ public readonly ref struct CreateCharacterRef
     public CharacterClassNumber Class
     {
         get => (CharacterClassNumber)this._data[14..].GetByteValue(6, 2);
-        set => this._data[14..].SetByteValue((byte)value, 6, 2);
+        set
+        {
+            if ((byte)value >= 1 << 6)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"The enum value {value} does not fit into the 6-bit bitfield.");
+            }
+
+            this._data[14..].SetByteValue((byte)value, 6, 2);
+        }
     }
 
     /// <summary>
@@ -8343,13 +8351,13 @@ public readonly ref struct DeleteCharacterRef
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="content">The content of the variable 'SecurityCode' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 14;
+    public static int GetRequiredSize(string content) => Math.Max(System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 14, Length);
 
     /// <summary>
     /// Calculates the size of the packet for the specified field content.
     /// </summary>
     /// <param name="contentLength">The content length in bytes of the variable 'SecurityCode' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 14;
+    public static int GetRequiredSize(int contentLength) => Math.Max(contentLength + 1 + 14, Length);
 }
 
 
@@ -15586,8 +15594,8 @@ public readonly ref struct GensJoinRequestRef
     /// </summary>
     public GensType GensType
     {
-        get => (GensType)this._data[3];
-        set => this._data[3] = (byte)value;
+        get => (GensType)this._data[4];
+        set => this._data[4] = (byte)value;
     }
 
     /// <summary>
@@ -15749,8 +15757,8 @@ public readonly ref struct GensRewardRequestRef
     /// </summary>
     public GensType GensType
     {
-        get => (GensType)this._data[3];
-        set => this._data[3] = (byte)value;
+        get => (GensType)this._data[4];
+        set => this._data[4] = (byte)value;
     }
 
     /// <summary>

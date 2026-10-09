@@ -3,6 +3,7 @@ import zlib from '@ohos.zlib';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { promptAction } from '@kit.ArkUI';
 import { MobileConfig, DEFAULT_SERVER_ADDRESS, GAME_DATA_VERSION } from '../mobile/MobileConfig';
+import { nativeStartupError } from '../entryability/EntryAbility';
 // NAPI bridge (libopenmubridge.so). EntryAbility.onCreate already called
 // setDataRoot before the data archive existed, so on a first run the chdir and
 // MU_CONFIG_FILE setup failed; we re-apply the data root here once it exists.
@@ -84,13 +85,23 @@ struct Bootstrap {
   }
 
   private async startGame(): Promise<void> {
+    if (nativeStartupError !== null) {
+      promptAction.showToast({ message: '原生桥初始化失败，无法进入游戏：' + nativeStartupError });
+      return;
+    }
     const context = getContext(this);
     try {
       await MobileConfig.writeConfig(context);
       // The extracted data folder now definitely exists (writeConfig also
       // mkdirs it), so re-point the native process at it. onCreate's earlier
-      // setDataRoot ran before first-run extraction and could not chdir there.
+      // setDataRoot ran before first-run extraction and could not chdir there;
+      // when it threw, the auto-login setEnv calls were skipped, so re-apply
+      // both the data root AND the auto-login env here.
       bridge.setDataRoot(MobileConfig.dataRoot(context));
+      const env = MobileConfig.autoLoginEnv();
+      Object.keys(env).forEach((name: string) => {
+        bridge.setEnv(name, env[name]);
+      });
     } catch (e) {
       promptAction.showToast({ message: '写入配置失败：' + ((e as Error).message ?? e) });
       return;

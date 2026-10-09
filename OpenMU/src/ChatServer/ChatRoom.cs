@@ -44,7 +44,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         this._connectedClients = new List<IChatClient>(2);
         this._registeredClients = new List<ChatServerAuthenticationInfo>(2);
         this.RoomId = roomId;
-        this.AuthenticationRequiredUntil = DateTime.Now.AddSeconds(10);
+        this.AuthenticationRequiredUntil = DateTime.UtcNow.AddSeconds(10);
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             var authenticationInformation = this._registeredClients.FirstOrDefault(info => string.Equals(info.AuthenticationToken, chatClient.AuthenticationToken));
             if (authenticationInformation != null)
             {
-                if (authenticationInformation.AuthenticationRequiredUntil < DateTime.Now)
+                if (authenticationInformation.AuthenticationRequiredUntil < DateTime.UtcNow)
                 {
                     this._logger.LogInformation(
                         "Client {ChatClientIndex} has tried to join the room {RoomId} with an expired token (valid until {AuthenticationRequiredUntil}).",

@@ -167,6 +167,18 @@ public sealed class Checks(Rules rules, Simulation simulation)
         Require(Math.Abs(D.Loot.Equipment.Sum(x => x.Chance) - 1) < 1e-9, "Equipment table must sum to one");
         Require(D.Loot.Equipment.All(e => e.Chance >= 0 && e.Chance <= 1), "Illegal loot probability");
         Require(D.Combat.CritCap + D.Combat.ExcellentCap <= 1, "Mutually exclusive special hit probabilities");
+        // Probability and divide-by-zero guards: MoneyChance/JewelChance are compared
+        // against a [0,1) roll, SmartClassChance feeds a (1 - c) denominator, and
+        // ArmorConstant / OutOfCombatRegen are divisors in the reduction and recovery curves.
+        Require(D.Loot.MoneyChance is >= 0 and < 1, "MoneyChance must lie in [0, 1)");
+        Require(D.Loot.JewelChance is >= 0 and < 1, "JewelChance must lie in [0, 1)");
+        Require(D.Loot.SmartClassChance is > 0 and < 1, "SmartClassChance must lie in (0, 1)");
+        Require(D.Combat.ArmorConstant > 0, "ArmorConstant must be positive (reduction denominator)");
+        Require(D.Combat.OutOfCombatRegen > 0, "OutOfCombatRegen must be positive (recovery denominator)");
+        Require(D.Combat.InCombatRegen >= 0 && D.Combat.ManaRegen >= 0, "Regen rates must be non-negative");
+        // Monster ranks must be the three named kinds, not merely three distinct ids.
+        Require(D.Monsters.Ranks.Select(r => r.Id).OrderBy(x => x).SequenceEqual(new[] { "boss", "elite", "normal" }),
+            "Monster ranks must be normal/elite/boss");
         foreach (var curve in new[] { D.Progression.NormalSeconds, D.Progression.MasterSeconds })
         {
             Require(curve.All(a => a.Length == 2 && a[1] > 0), "Invalid progression anchor");

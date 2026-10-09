@@ -1,4 +1,4 @@
-﻿// <copyright file="ConnectionManager.ClientToServer.Custom.cs" company="MUnique">
+// <copyright file="ConnectionManager.ClientToServer.Custom.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -68,8 +68,14 @@ public unsafe partial class ConnectionManager
 
             connection.CreateAndSend(pipeWriter =>
             {
+                // PLAT-4 / credential hygiene: zero the fixed stack buffers before
+                // filling them. GetBytes writes exactly the UTF-8 bytes for the string
+                // and leaves the tail untouched; without Clear() the tail would carry
+                // stale stack bytes into the encrypted login packet.
                 Span<byte> usernameBytes = stackalloc byte[MaximumUsernameBytes];
                 Span<byte> passwordBytes = stackalloc byte[MaximumPasswordBytes];
+                usernameBytes.Clear();
+                passwordBytes.Clear();
                 Encoding.UTF8.GetBytes(usernameStr, usernameBytes);
                 Encoding.UTF8.GetBytes(passwordStr, passwordBytes);
                 Xor3Encryptor.Encrypt(usernameBytes);
@@ -80,7 +86,18 @@ public unsafe partial class ConnectionManager
                 usernameBytes.CopyTo(packet.Username);
                 passwordBytes.CopyTo(packet.Password);
                 packet.TickCount = @tickCount;
+
+                // clientVersion / clientSerial are raw native byte pointers. Guard the
+                // null pointer and the length: building a Span from a null pointer or a
+                // shorter-than-declared field would otherwise throw (and get swallowed).
+                if (@clientVersion == null || @clientSerial == null)
+                {
+                    throw new ArgumentNullException("clientVersion/clientSerial must not be null.");
+                }
+
+                packet.ClientVersion.Clear();
                 new Span<byte>(@clientVersion, packet.ClientVersion.Length).CopyTo(packet.ClientVersion);
+                packet.ClientSerial.Clear();
                 new Span<byte>(@clientSerial, packet.ClientSerial.Length).CopyTo(packet.ClientSerial);
 
                 return length;

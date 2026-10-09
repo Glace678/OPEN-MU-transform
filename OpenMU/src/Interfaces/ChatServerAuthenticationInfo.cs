@@ -26,7 +26,7 @@ public class ChatServerAuthenticationInfo
         this.ClientName = clientName;
         this.AuthenticationToken = authenticationToken;
         this.HostAddress = hostAddress;
-        this.AuthenticationRequiredUntil = DateTime.Now.AddSeconds(30);
+        this.AuthenticationRequiredUntil = DateTime.UtcNow.AddSeconds(30);
     }
 
     /// <summary>

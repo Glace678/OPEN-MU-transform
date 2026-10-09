@@ -1,4 +1,4 @@
-﻿// <copyright file="ItemViewModel.cs" company="MUnique">
+// <copyright file="ItemViewModel.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -11,7 +11,6 @@ using MUnique.OpenMU.DataModel.Configuration.Items;
 using MUnique.OpenMU.DataModel.Entities;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.Persistence;
-using Nito.AsyncEx.Synchronous;
 using Nito.Disposables.Internals;
 
 /// <summary>
@@ -181,7 +180,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 if (this.Item.ItemOptions.FirstOrDefault(io => io.ItemOption?.OptionType == ItemOptionTypes.Luck) is { } optionLink)
                 {
                     this.Item.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    this.DeleteOptionLink(optionLink);
                 }
             }
             else if (value && this.PossibleLuckOption is { } luckOption)
@@ -215,7 +214,7 @@ public class ItemViewModel : INotifyPropertyChanged
             foreach (var optionLink in this.Item.ItemOptions.Where(io => io.ItemOption?.OptionType == ItemOptionTypes.GuardianOption))
             {
                 this.Item.ItemOptions.Remove(optionLink);
-                this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                this.DeleteOptionLink(optionLink);
             }
 
             if (value && this.PossibleGuardianOption is { } guardianOption)
@@ -268,7 +267,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 if (this.NormalOptionLink is { } optionLink)
                 {
                     this.Item.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    this.DeleteOptionLink(optionLink);
                 }
             }
             else
@@ -308,7 +307,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 if (this.HarmonyOptionLink is { } optionLink)
                 {
                     this.Item.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    this.DeleteOptionLink(optionLink);
                 }
             }
             else
@@ -344,7 +343,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 if (this.SocketBonusOptionLink is { } optionLink)
                 {
                     this.Item.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    this.DeleteOptionLink(optionLink);
                 }
             }
             else
@@ -377,7 +376,7 @@ public class ItemViewModel : INotifyPropertyChanged
             foreach (var optionLink in this.FenrirOptionLinks.ToList())
             {
                 this.Item.ItemOptions.Remove(optionLink);
-                this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                this.DeleteOptionLink(optionLink);
             }
 
             foreach (var option in this.PossibleFenrirOptions.Where(o => o.OptionType == value))
@@ -503,7 +502,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 if (this.AncientBonus is { } optionLink)
                 {
                     this.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    this.DeleteOptionLink(optionLink);
                 }
             }
 
@@ -693,6 +692,28 @@ public class ItemViewModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Fire-and-forget deletion of an option link without blocking the UI thread.
+    /// The link is already removed from the item collection, so the UI state is
+    /// consistent; the persistence context will apply the delete on the next save.
+    /// </summary>
+    private void DeleteOptionLink(ItemOptionLink optionLink)
+    {
+        _ = this.DeleteOptionLinkAsync(optionLink);
+    }
+
+    private async Task DeleteOptionLinkAsync(ItemOptionLink optionLink)
+    {
+        try
+        {
+            await this._persistenceContext.DeleteAsync(optionLink).ConfigureAwait(false);
+        }
+        catch
+        {
+            // Best-effort: the option link is already detached from the item;
+            // the deletion will be retried when the context is saved.
+        }
+    }
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -719,11 +740,11 @@ public class ItemViewModel : INotifyPropertyChanged
         this.Durability = this.Item.GetMaximumDurabilityOfOnePiece();
 
         var possibleOptions = this.Definition.PossibleItemOptions.SelectMany(pio => pio.PossibleOptions).ToHashSet();
-        var impossibleOptions = this.ItemOptions.Where(iol => iol.ItemOption is null || possibleOptions.Contains(iol.ItemOption)).ToList();
+        var impossibleOptions = this.ItemOptions.Where(iol => iol.ItemOption is null || !possibleOptions.Contains(iol.ItemOption)).ToList();
         foreach (var optionLink in impossibleOptions)
         {
             this.Item.ItemOptions.Remove(optionLink);
-            this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+            this.DeleteOptionLink(optionLink);
         }
 
         this.SocketCount = Math.Min(this.SocketCount, this.Definition.MaximumSockets);

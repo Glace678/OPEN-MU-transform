@@ -34,7 +34,7 @@ public sealed class DevilSquareContext : MiniGameContext
     {
         base.OnMonsterDied(sender, e);
 
-        if (this._gameStates.TryGetValue(e.KillerName, out var state))
+        if (e.KillerName is not null && this._gameStates.TryGetValue(e.KillerName, out var state))
         {
             state.AddScore(this.Definition.GameLevel);
 

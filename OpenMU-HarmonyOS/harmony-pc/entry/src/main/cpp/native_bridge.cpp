@@ -11,6 +11,17 @@
 
 namespace
 {
+// H-05 (PC/2-in-1): the PC shell previously ignored napi_get_cb_info, setenv and
+// std::filesystem::current_path return codes and always returned nullptr, so ArkTS
+// could not distinguish "configured" from "failed" and proceeded to loadContent
+// even when the data root was unusable. Mirror the phone build: check every result
+// and throw a NAPI error so EntryAbility can intercept before routing to the game.
+napi_value ThrowNapiError(napi_env env, const char* message)
+{
+    napi_throw_error(env, nullptr, message);
+    return nullptr;
+}
+
 std::string Utf8FromValue(napi_env env, napi_value value)
 {
     size_t length = 0;
@@ -32,42 +43,62 @@ napi_value SetEnv(napi_env env, napi_callback_info info)
 {
     size_t argc = 2;
     napi_value argv[2] = {nullptr, nullptr};
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    if (argc < 2)
+    napi_status status = napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    if (status != napi_ok)
     {
-        return nullptr;
+        return ThrowNapiError(env, "SetEnv: failed to read arguments");
+    }
+    if (argc != 2)
+    {
+        return ThrowNapiError(env, "SetEnv expects exactly (name, value)");
     }
     const std::string name = Utf8FromValue(env, argv[0]);
     const std::string value = Utf8FromValue(env, argv[1]);
-    if (!name.empty())
+    if (name.empty())
     {
-        ::setenv(name.c_str(), value.c_str(), 1);
+        return ThrowNapiError(env, "SetEnv: environment name must not be empty");
     }
-    return nullptr;
+    if (::setenv(name.c_str(), value.c_str(), 1) != 0)
+    {
+        return ThrowNapiError(env, ("SetEnv: setenv failed for " + name).c_str());
+    }
+    napi_value result;
+    napi_get_undefined(env, &result);
+    return result;
 }
 
 napi_value SetDataRoot(napi_env env, napi_callback_info info)
 {
     size_t argc = 1;
     napi_value argv[1] = {nullptr};
-    napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
-    if (argc < 1)
+    napi_status status = napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+    if (status != napi_ok)
     {
-        return nullptr;
+        return ThrowNapiError(env, "SetDataRoot: failed to read arguments");
+    }
+    if (argc != 1)
+    {
+        return ThrowNapiError(env, "SetDataRoot expects exactly (root)");
     }
     const std::string root = Utf8FromValue(env, argv[0]);
     if (root.empty())
     {
-        return nullptr;
+        return ThrowNapiError(env, "SetDataRoot: root must not be empty");
     }
     std::error_code error;
     std::filesystem::current_path(std::filesystem::u8path(root), error);
-    if (!error)
+    if (error)
     {
-        const std::string configPath = (std::filesystem::u8path(root) / "config.ini").string();
-        ::setenv("MU_CONFIG_FILE", configPath.c_str(), 1);
+        return ThrowNapiError(env, ("SetDataRoot: chdir failed: " + root).c_str());
     }
-    return nullptr;
+    const std::string configPath = (std::filesystem::u8path(root) / "config.ini").string();
+    if (::setenv("MU_CONFIG_FILE", configPath.c_str(), 1) != 0)
+    {
+        return ThrowNapiError(env, "SetDataRoot: setenv MU_CONFIG_FILE failed");
+    }
+    napi_value result;
+    napi_get_undefined(env, &result);
+    return result;
 }
 
 napi_value Init(napi_env env, napi_value exports)

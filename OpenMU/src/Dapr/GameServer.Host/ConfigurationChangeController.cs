@@ -43,7 +43,13 @@ public class ConfigurationChangeController : ControllerBase
     [Topic("pubsub", nameof(IConfigurationChangePublisher.ConfigurationAddedAsync))]
     public ValueTask ConfigurationAddedAsync([FromBody] ConfigurationChangeArguments arguments)
     {
-        return this._changeListener.ConfigurationAddedAsync(arguments.ResolveType(), arguments.Id, arguments.Configuration!, null, null);
+        if (arguments.Configuration is null)
+        {
+            // A message without a configuration body cannot be applied; ignore it instead of dereferencing null.
+            return ValueTask.CompletedTask;
+        }
+
+        return this._changeListener.ConfigurationAddedAsync(arguments.ResolveType(), arguments.Id, arguments.Configuration, null, null);
     }
 
     /// <summary>
@@ -54,9 +60,15 @@ public class ConfigurationChangeController : ControllerBase
     [Topic("pubsub", nameof(IConfigurationChangePublisher.ConfigurationChangedAsync))]
     public ValueTask ConfigurationChangedAsync([FromBody] ConfigurationChangeArguments arguments)
     {
+        if (arguments.Configuration is null)
+        {
+            // A message without a configuration body cannot be applied; ignore it instead of dereferencing null.
+            return ValueTask.CompletedTask;
+        }
+
         var type = arguments.ResolveType();
         this._plugInManager.ApplyChangedConfiguration(type, arguments.Id, arguments.Configuration);
-        return this._changeListener.ConfigurationChangedAsync(type, arguments.Id, arguments.Configuration!, null);
+        return this._changeListener.ConfigurationChangedAsync(type, arguments.Id, arguments.Configuration, null);
     }
 
     /// <summary>

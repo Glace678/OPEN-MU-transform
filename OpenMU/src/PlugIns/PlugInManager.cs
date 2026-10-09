@@ -1,4 +1,4 @@
-﻿// <copyright file="PlugInManager.cs" company="MUnique">
+// <copyright file="PlugInManager.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -22,7 +22,7 @@ public class PlugInManager
 {
     private readonly ILogger<PlugInManager> _logger;
     private readonly ServiceContainer _serviceContainer;
-    private readonly IDictionary<Type, object> _plugInPoints = new Dictionary<Type, object>();
+    private readonly ConcurrentDictionary<Type, object> _plugInPoints = new();
     private readonly IDictionary<Guid, Type> _knownPlugIns = new ConcurrentDictionary<Guid, Type>();
     private readonly ConcurrentDictionary<Type, ISet<Type>> _knownPlugInsPerInterfaceType = new();
     private readonly ConcurrentDictionary<Guid, Type> _activePlugIns = new();
@@ -329,7 +329,7 @@ public class PlugInManager
         {
             var proxy = this.CreateProxy<TPlugInInterface>();
             proxy.AddPlugIn(instance, true);
-            this._plugInPoints.Add(typeof(TPlugInInterface), proxy);
+            this._plugInPoints.TryAdd(typeof(TPlugInInterface), proxy);
         }
         else if (point is IPlugInContainer<TPlugInInterface> proxy)
         {
@@ -425,9 +425,8 @@ public class PlugInManager
     private void RegisterPlugInType(Type plugInType)
     {
         var plugInTypeId = plugInType.GUID;
-        if (!this._knownPlugIns.ContainsKey(plugInTypeId))
+        if (this._knownPlugIns.TryAdd(plugInTypeId, plugInType))
         {
-            this._knownPlugIns.Add(plugInTypeId, plugInType);
             this._activePlugIns.TryAdd(plugInTypeId, plugInType); // registered plugins are by default active
             this._logger.LogDebug("Added known plugin {0}, {1}", plugInTypeId, plugInType);
         }
@@ -463,8 +462,9 @@ public class PlugInManager
     /// sidecar file "<paramref name="assemblyPath"/>.sha256" (or a per-file entry in
     /// an optional "plugins/hashes.txt": "&lt;hex-sha256&gt;  &lt;relative-file-name&gt;")
     /// pins the expected hash. When a pin exists, a missing/mismatched assembly is
-    /// rejected. When no pin exists, the assembly is loaded but a warning is logged,
-    /// because external plugins execute with full server privileges.
+    /// rejected. When no pin exists, the assembly is rejected by default (fail-closed);
+    /// set OPENMU_ALLOW_UNPINNED_PLUGINS=true to override, because external plugins
+    /// execute with full server privileges.
     /// </summary>
     private bool VerifyExternalAssemblyIntegrity(string pluginsRoot, string assemblyPath)
     {
@@ -549,9 +549,9 @@ public class PlugInManager
         if (!this._knownPlugIns.ContainsKey(configuration.TypeId))
         {
             if (!string.IsNullOrEmpty(configuration.ExternalAssemblyName)
-                && !loadedAssemblies.Contains(configuration.ExternalAssemblyName.ToLower()))
+                && !loadedAssemblies.Contains(configuration.ExternalAssemblyName.ToLowerInvariant()))
             {
-                loadedAssemblies.Add(configuration.ExternalAssemblyName.ToLower());
+                loadedAssemblies.Add(configuration.ExternalAssemblyName.ToLowerInvariant());
 
                 try
                 {

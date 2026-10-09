@@ -48,12 +48,16 @@ public class OfflineAccountService : IDataService<OfflineAccount>, ISupportDataC
     {
         var result = this._serverProvider.Servers
             .OfType<IGameServerContextProvider>()
-            .SelectMany(s => s.Context.OfflinePlayerManager
-                .OfflinePlayers
-                .Select(p => new OfflineAccount(
-                    p.AccountLoginName ?? string.Empty,
-                    (byte)((IManageableServer)s).Id,
-                    p.StartTimestamp)))
+            .SelectMany(s =>
+            {
+                var players = s.Context?.OfflinePlayerManager?.OfflinePlayers;
+                return players is null
+                    ? Enumerable.Empty<OfflineAccount>()
+                    : players.Select(p => new OfflineAccount(
+                        p.AccountLoginName ?? string.Empty,
+                        (byte)((IManageableServer)s).Id,
+                        p.StartTimestamp));
+            })
             .OrderBy(a => a.LoginName)
             .Skip(offset)
             .Take(count)

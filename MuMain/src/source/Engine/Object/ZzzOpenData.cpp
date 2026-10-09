@@ -107,7 +107,7 @@ void OpenPlayers()
     if (Models[MODEL_PLAYER].NumMeshs > 0)
     {
         g_ErrorReport.Write(L"Player.bmd file error.\r\n");
-        std::exit(EXIT_FAILURE);
+        return; // S7-H3: graceful abort of player-model load instead of std::exit (which skips all destructors/RAII teardown on an asset error).
     }
 
     for (int i = 0; i < MAX_CLASS; ++i)

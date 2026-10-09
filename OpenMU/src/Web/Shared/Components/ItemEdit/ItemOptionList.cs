@@ -1,4 +1,4 @@
-﻿// <copyright file="ItemOptionList.cs" company="MUnique">
+// <copyright file="ItemOptionList.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -8,7 +8,6 @@ using System.Collections;
 using MUnique.OpenMU.DataModel.Configuration.Items;
 using MUnique.OpenMU.DataModel.Entities;
 using MUnique.OpenMU.Persistence;
-using Nito.AsyncEx.Synchronous;
 
 /// <summary>
 /// A list of applied item options.
@@ -104,7 +103,7 @@ public class ItemOptionList : IList<IncreasableItemOption>
         if (this._item.ItemOptions.FirstOrDefault(o => o.ItemOption == item) is { } optionLink)
         {
             this._item.ItemOptions.Remove(optionLink);
-            this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+            _ = this._persistenceContext.DeleteAsync(optionLink);
             this.ListChanged?.Invoke(this, EventArgs.Empty);
             return true;
         }

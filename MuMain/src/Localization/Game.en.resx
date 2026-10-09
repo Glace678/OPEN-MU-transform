@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[error2] The hacking tool checking program has not been successfully downloaded. Please try connecting again in a moment. \n\n If you continue to experience the same problem, feel free to contact our customer service center through our website at http://muonline.webzen.com</value>
+    <value>[error2] The hacking tool checking program has not been successfully downloaded. Please try connecting again in a moment. 
+
+ If you continue to experience the same problem, feel free to contact our customer service center through our website at http://muonline.webzen.com</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[error3] NPX.DLL registration error, required files are missing for running nProtect. Please download np_setup.exe from Muonline.\n\n If you continue to experience the same problem, please contact our customer service center through our website at http://muonline.webzen.com.</value>
+    <value>[error3] NPX.DLL registration error, required files are missing for running nProtect. Please download np_setup.exe from Muonline.
+
+ If you continue to experience the same problem, please contact our customer service center through our website at http://muonline.webzen.com.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] An error has occurred in the program. \n\n If you continue to experience the same problem, please contact our customer service center through our website at http://muonline.webzen.com</value>
+    <value>[error4] An error has occurred in the program. 
+
+ If you continue to experience the same problem, please contact our customer service center through our website at http://muonline.webzen.com</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -8678,7 +8684,7 @@
     <comment>legacy_id=2409</comment>
   </data>
   <data name="Mouse wheel button ? change skill types, Shift + mouse right-click ? use" xml:space="preserve">
-    <value>Mouse wheel button ? change skill types, Shift + mouse right-click ? use</value>
+    <value>Mouse wheel button → change skill types, Shift + mouse right-click → use</value>
     <comment>legacy_id=2410</comment>
   </data>
   <data name="ThereAre4TypesOfSkills" xml:space="preserve">
@@ -10194,7 +10200,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d sent you a gift.</value>
+    <value>%s sent you a gift.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10374,55 +10380,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 30 days.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 30 days.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 90 days.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 90 days.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 30 days. If refunded, you will receive an amount that excludes the point price.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 30 days. If refunded, you will receive an amount that excludes the point price.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 90 days. If refunded, you will receive an amount that excludes the point price.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 90 days. If refunded, you will receive an amount that excludes the point price.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 3 hours over 60 days following storage use.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 3 hours over 60 days following storage use.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>An item that lets you enjoy MU for 5 hours over 60 days following storage use.\nCan only be used from the MU Online website.</value>
+    <value>An item that lets you enjoy MU for 5 hours over 60 days following storage use.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>An item that lets you enjoy Mu for 10 hours over 60 days following storage use.\nCan only be used from the Mu Online website.</value>
+    <value>An item that lets you enjoy Mu for 10 hours over 60 days following storage use.
+Can only be used from the Mu Online website.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Resets the entire Master Skill Tree once.\nCan only be used from the MU Online website.</value>
+    <value>Resets the entire Master Skill Tree once.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Lets you adjust the character's stats by 500 points.\nCan only be used from the MU Online website.</value>
+    <value>Lets you adjust the character's stats by 500 points.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Lets you transfer a character to another account within the same server.\nCan only be used from the MU Online website.</value>
+    <value>Lets you transfer a character to another account within the same server.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Lets you rename the character.\nCan only be used from the MU Online website.</value>
+    <value>Lets you rename the character.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Lets you transfer a character to another server within the same account.\nCan only be used from the MU Online website.</value>
+    <value>Lets you transfer a character to another server within the same account.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Allows you to request a character transfer once and character name change once.\nCan only be used from the MU Online website.</value>
+    <value>Allows you to request a character transfer once and character name change once.
+Can only be used from the MU Online website.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -11022,7 +11041,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>You need more %%s to purchase this item.</value>
+    <value>You need more %s to purchase this item.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12782,91 +12801,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>Lord Sign Registration Status</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>Lord Sign Registration Ranking</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Number Registered</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Our Guild Status</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Back</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Can Register</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Cannot Register</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>Number of Lord Signs to register: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>Please place the Lord Sign to register in the combination window.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>Up to 225 Lord Signs can be registered at once.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>Number of registered Lord Signs: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>Register Lord Sign</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>Register the Lord Sign?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>Lord Sign registration is complete.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>Lord Sign registration failed.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Attribute</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Element Attribute Info</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>Lock</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>Unlock</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>Select the guild name to lift hostility from.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Lift hostility with this guild?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼­¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Server</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12874,19 +12893,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Cannot withdraw over 2 billion zen</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>Total Repair Cost</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>This guild does not exist.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>Waiting for trade confirmation</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -12909,9 +12928,6 @@
   </data>
   <data name="Checking server availability" xml:space="preserve">
     <value>Checking server availability</value>
-  </data>
-  <data name="Connecting to the server" xml:space="preserve">
-    <value>Connecting to the server</value>
   </data>
   <data name="Logging in" xml:space="preserve">
     <value>Logging in</value>
@@ -13190,7 +13206,7 @@
     <value>F1 or A continues; PageUp/PageDown or LB/RB changes page; Esc or B closes.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Welcome to the world of MU! This short guide covers the basics across a few pages. Press Esc to skip, or reopen it any time from the menu.</value>
+    <value>Welcome to the world of MU! This guide covers the basics. Press Esc to skip or reopen from menu.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
     <value>You are all set! Talk to NPCs for quests and leave town to fight monsters. Enjoy your adventure.</value>

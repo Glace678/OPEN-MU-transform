@@ -27,6 +27,8 @@ build/bin/x86/Global Debug/Main.exe
 # licenses; whitelist those despite the broad *.txt rule above.
 !ThirdParty/**/CMakeLists.txt
 !ThirdParty/**/LICENSE.txt
+!ThirdParty/**/license.txt
+!ThirdParty/**/License.txt
 
 #MuEditor
 bin/MuEditor/

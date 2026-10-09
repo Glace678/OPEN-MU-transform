@@ -16,7 +16,7 @@ using SixLabors.ImageSharp.PixelFormats;
 /// <summary>
 /// Blazor component which allows to select an exit gate.
 /// </summary>
-public partial class ExitGatePicker
+public partial class ExitGatePicker : IDisposable
 {
     private const int SideLength = 256;
 
@@ -53,6 +53,8 @@ public partial class ExitGatePicker
             if (this._map != value)
             {
                 this._map = value;
+                this._terrainImage?.Dispose();
+                this._terrainImage = null!;
                 if (this._map is { })
                 {
                     this._terrainImage = new GameMapTerrain(this._map).ToImage();
@@ -121,5 +123,11 @@ public partial class ExitGatePicker
         {
             this.Map = await this.PersistenceContext.GetByIdAsync<GameMapDefinition>(mapId).ConfigureAwait(false);
         }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        this._terrainImage?.Dispose();
     }
 }

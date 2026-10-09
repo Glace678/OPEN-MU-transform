@@ -1,4 +1,4 @@
-﻿// <copyright file="InMemoryRepositoryAdapter.cs" company="MUnique">
+// <copyright file="InMemoryRepositoryAdapter.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -30,10 +30,7 @@ public class InMemoryRepositoryAdapter<T> : RepositoryAdapter<T>, IMemoryReposit
     }
 
     /// <inheritdoc />
-    public ValueTask RemoveAsync(Guid key)
-    {
-        return this._repository.RemoveAsync(key);
-    }
+    public ValueTask<bool> RemoveAsync(Guid key) => this._repository.RemoveAsync(key);
 
     /// <inheritdoc />
     public void OnSaveChanges()

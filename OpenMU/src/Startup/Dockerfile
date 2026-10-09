@@ -55,5 +55,8 @@ RUN mkdir -p /app/logs /app/data-protection-keys \
     && chmod 700 /app/logs /app/data-protection-keys
 
 USER appuser
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+  CMD nc -z localhost 8080 || exit 1
+
 
 ENTRYPOINT ["dotnet", "MUnique.OpenMU.Startup.dll", "-autostart"]

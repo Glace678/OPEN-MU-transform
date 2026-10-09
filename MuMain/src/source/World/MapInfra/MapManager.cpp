@@ -1298,6 +1298,16 @@ bool CMapManager::LoadWorld(int Map)
             mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
         }
     iResult = OpenTerrainAttribute(FileName);
+    if (iResult == -1)
+    {
+        // S7-H2: state-specific EncTerrain{base*10+N}.att variant files (CryWolf /
+        // Kanturu3rd / BattleCastle war-occupied states) are optional. If the variant file
+        // is absent/unreadable in this resource set (-1), fall back to the base
+        // EncTerrain{base}.att instead of aborting the whole map load (the strict check
+        // below must not reject a missing variant the way the old -1 exemption silently did).
+        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+        iResult = OpenTerrainAttribute(FileName);
+    }
     if (iResult != iMapWorld)
     {
         wchar_t Text[256];

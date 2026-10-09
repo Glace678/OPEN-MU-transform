@@ -60,6 +60,12 @@ public sealed class LoginStateCleanup : IHostedService
     /// </remarks>
     private async ValueTask OnNewGameServerAddedAsync(ushort serverId)
     {
+        if (serverId > byte.MaxValue)
+        {
+            this._logger.LogWarning("Game server id {0} exceeds the supported range (0-255); skipping login state cleanup.", serverId);
+            return;
+        }
+
         try
         {
             await this._loginServer.RemoveServerAsync((byte)serverId).ConfigureAwait(false);
@@ -72,6 +78,12 @@ public sealed class LoginStateCleanup : IHostedService
 
     private async ValueTask OnGameServerRemovedAsync(ushort serverId)
     {
+        if (serverId > byte.MaxValue)
+        {
+            this._logger.LogWarning("Game server id {0} exceeds the supported range (0-255); skipping login state cleanup.", serverId);
+            return;
+        }
+
         try
         {
             await this._loginServer.RemoveServerAsync((byte)serverId).ConfigureAwait(false);

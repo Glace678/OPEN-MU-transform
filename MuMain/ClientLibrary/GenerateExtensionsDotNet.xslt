@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
     xmlns:pd="http://www.munique.net/OpenMU/PacketDefinitions"
@@ -45,6 +45,22 @@ public unsafe partial class ConnectionManager
 {</xsl:text>
     <xsl:apply-templates select="pd:Packets/pd:Packet" mode="ext2" />
     <xsl:text>}</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="pd:Packet[pd:Fields/pd:Field/pd:Type = 'Structure[]']" mode="ext2">
+    <!-- Structure[] packets (e.g. AreaSkillHit) have no generated C# binding: emit a
+         non-fatal WARN to the build log AND a comment in the generated .cs so the gap
+         is visible in source, without failing the build. The C++ client handles these
+         packets natively; the C# interop binding is a recorded, intentional gap. -->
+    <xsl:message terminate="no">
+      <xsl:text>WARN: packet </xsl:text>
+      <xsl:value-of select="pd:Name"/>
+      <xsl:text> uses Structure[] fields and has no generated C# binding. Add a hand-written partial method or extend the generator.</xsl:text>
+    </xsl:message>
+    <xsl:value-of select="$newline" />
+    <xsl:text>    // WARN: Packet '</xsl:text>
+    <xsl:value-of select="pd:Name"/>
+    <xsl:text>' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.</xsl:text>
   </xsl:template>
 
   <xsl:template match="pd:Packet[not(pd:Fields/pd:Field/pd:Type = 'Structure[]')]" mode="ext2">
@@ -204,6 +220,10 @@ public unsafe partial class ConnectionManager
   <xsl:template match="pd:Field" mode="assignment">
     <xsl:choose>
       <xsl:when test="pd:Type='Binary'">
+        <xsl:text>                packet.</xsl:text>
+        <xsl:value-of select="pd:Name"/>
+        <xsl:text>.Clear();
+</xsl:text>
         <xsl:text>                new Span&lt;byte&gt;(@</xsl:text>
         <xsl:call-template name="LowerCaseName" />
         <xsl:text>, (int)</xsl:text>
@@ -226,15 +246,7 @@ public unsafe partial class ConnectionManager
         <xsl:call-template name="LowerCaseName" />
         <xsl:text>);</xsl:text>
       </xsl:when>
-      <xsl:when test="pd:Type='Binary'">
-        <xsl:text>                packet.</xsl:text>
-        <xsl:value-of select="pd:Name"/>
-        <xsl:text> = new Span&lt;byte&gt;(@</xsl:text>
-        <xsl:call-template name="LowerCaseName" />
-        <xsl:text>, (int)</xsl:text>
-        <xsl:call-template name="LowerCaseName" />
-        <xsl:text>ByteLength);</xsl:text>
-      </xsl:when>
+
       <xsl:otherwise>
         <xsl:text>                packet.</xsl:text>
         <xsl:value-of select="pd:Name"/>

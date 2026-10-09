@@ -52,6 +52,8 @@ void CItemEditorTable::Render(
     int& selectedRow,
     bool freezeColumns)
 {
+    if (!ItemAttribute) return;
+
     // Get metadata fields once at function scope
     const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
 
@@ -86,7 +88,7 @@ void CItemEditorTable::Render(
         m_filteredItems.clear();
         for (int i = 0; i < MAX_ITEM; i++)
         {
-            char nameBuffer[256];
+            char nameBuffer[256]{};
             WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
 
             if (nameBuffer[0] == '\0') continue;

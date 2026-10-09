@@ -1,4 +1,4 @@
-﻿// <copyright file="GenericRepositoryBase.cs" company="MUnique">
+// <copyright file="GenericRepositoryBase.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -59,7 +59,18 @@ internal abstract class GenericRepositoryBase<T> : IRepository<T>, ILoadByProper
     public async ValueTask<bool> DeleteAsync(object obj)
     {
         using var context = this.GetContext();
-        return context.Context.Remove(obj) is not null;
+        var entry = context.Context.Remove(obj);
+
+        // If this wrapper owns the underlying DbContext (no outer unit of work on the context stack),
+        // disposing it below would silently drop the deletion - EF never saves on dispose. Persist it
+        // here. When an outer context is borrowed (IsContextOwner == false), the outer unit of work is
+        // responsible for calling SaveChangesAsync, so we must not flush it prematurely.
+        if (context.IsContextOwner)
+        {
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        return entry is not null;
     }
 
     /// <inheritdoc/>

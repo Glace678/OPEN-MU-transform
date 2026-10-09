@@ -1,4 +1,4 @@
-﻿// <copyright file="FriendNotifier.cs" company="MUnique">
+// <copyright file="FriendNotifier.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -44,7 +44,7 @@ public class FriendNotifier : IFriendNotifier
     {
         try
         {
-            await this._daprClient.InvokeMethodAsync(this._appIds[serverId], nameof(IGameServer.FriendRequestAsync), new RequestArguments(requester, receiver)).ConfigureAwait(false);
+            if (this._appIds.TryGetValue(serverId, out var appId)) await this._daprClient.InvokeMethodAsync(appId, nameof(IGameServer.FriendRequestAsync), new RequestArguments(requester, receiver)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -88,7 +88,7 @@ public class FriendNotifier : IFriendNotifier
     {
         try
         {
-            await this._daprClient.InvokeMethodAsync(this._appIds[serverId], nameof(IGameServer.ChatRoomCreatedAsync), new ChatRoomCreationArguments(playerAuthenticationInfo, friendName)).ConfigureAwait(false);
+            if (this._appIds.TryGetValue(serverId, out var appId)) await this._daprClient.InvokeMethodAsync(appId, nameof(IGameServer.ChatRoomCreatedAsync), new ChatRoomCreationArguments(playerAuthenticationInfo, friendName)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

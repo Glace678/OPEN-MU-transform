@@ -1,4 +1,4 @@
-﻿// <copyright file="DevilSquare4.cs" company="MUnique">
+// <copyright file="DevilSquare4.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -62,7 +62,7 @@ internal class DevilSquare4 : BaseMapInitializer
         yield return this.CreateMonsterSpawn(3, this.NpcDictionary[60], x1, x2, y1, y2, quantity, Direction.Undefined, SpawnTrigger.AutomaticDuringWave, DevilSquareInitializer.SecondWaveNumber); // Bloody Wolf
         if (this.NpcDictionary.TryGetValue(294, out var axeWarrior))
         {
-            yield return this.CreateMonsterSpawn(4, this.NpcDictionary[294], x1, x2, y1, y2, quantity, Direction.Undefined, SpawnTrigger.AutomaticDuringWave, DevilSquareInitializer.SecondWaveNumber); // Axe Warrior
+            yield return this.CreateMonsterSpawn(4, axeWarrior, x1, x2, y1, y2, quantity, Direction.Undefined, SpawnTrigger.AutomaticDuringWave, DevilSquareInitializer.SecondWaveNumber); // Axe Warrior
         }
         else
         {

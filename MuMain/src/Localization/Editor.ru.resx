@@ -329,7 +329,7 @@
     <value>Все ВЫКЛ</value>
   </data>
   <data name="TODO - Not Working:" xml:space="preserve">
-    <value>TODO - Не работает:</value>
+    <value>Не работает:</value>
   </data>
   <data name="Shaders" xml:space="preserve">
     <value>Шейдеры</value>
@@ -344,7 +344,7 @@
     <value>Интерфейс</value>
   </data>
   <data name="TODO - Not Implemented:" xml:space="preserve">
-    <value>TODO - Не реализовано:</value>
+    <value>Не реализовано:</value>
   </data>
   <data name="Hero" xml:space="preserve">
     <value>Герой</value>

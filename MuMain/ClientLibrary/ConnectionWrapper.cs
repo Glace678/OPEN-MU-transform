@@ -1,4 +1,4 @@
-﻿// <copyright file="ConnectionWrapper.cs" company="MUnique">
+// <copyright file="ConnectionWrapper.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -8,6 +8,7 @@ using System;
 using System.Buffers;
 using System.Diagnostics;
 using System.IO.Pipelines;
+using System.Threading;
 using System.Threading.Tasks;
 using MUnique.OpenMU.Network;
 using Nito.AsyncEx.Synchronous;
@@ -68,12 +69,45 @@ public sealed class ConnectionWrapper : IDisposable
     public void BeginReceive()
     {
         // we never want it on the main thread, so we do a Task.Run.
-        _ = Task.Run(this._connection.BeginReceiveAsync);
+        // The receive loop must not be fire-and-forget: if it faults (socket reset,
+        // corrupt pipe) the exception would otherwise land in an unobserved task and
+        // the connection would stay registered as alive while no more bytes flow.
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await this._connection.BeginReceiveAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Receive loop failed on handle {this._handle}: {ex.Message}");
+                try
+                {
+                    this._connection.DisconnectAsync().AsTask().WaitAndUnwrapException();
+                }
+                catch (Exception innerEx)
+                {
+                    Debug.WriteLine($"Disconnect after receive failure also failed: {innerEx.Message}");
+                }
+            }
+        });
     }
+
+    private int _disposed;
 
     /// <inheritdoc />
     public void Dispose()
     {
+        // Guard against double-dispose (DisconnectAndDispose + OnDisconnectedAsync both
+        // reach here) and unhook the handlers so a disposed wrapper can no longer fire
+        // native callbacks or be re-collected while the native side still holds it.
+        if (Interlocked.Exchange(ref this._disposed, 1) != 0)
+        {
+            return;
+        }
+
+        this._connection.PacketReceived -= this.OnPacketReceivedAsync;
+        this._connection.Disconnected -= this.OnDisconnectedAsync;
         this._connection.Dispose();
     }
 
@@ -133,13 +167,25 @@ public sealed class ConnectionWrapper : IDisposable
         // Hoisted out of the loop (CA2014): overwritten in full on every iteration.
         Span<byte> header = stackalloc byte[3];
         var remaining = args;
-        while (remaining.Length >= 3)
+        while (remaining.Length >= 2)
         {
-            remaining.Slice(0, 3).CopyTo(header);
+            // C1/C3 headers are only 2 bytes (type + size); C2/C4 are 3 bytes.
+            // Peek the type byte first, then pull exactly the number of bytes the
+            // header needs -- otherwise a 2-byte short control frame left at the
+            // tail of a segment would never be consumed and would be dropped as
+            // "trailing bytes", stalling the protocol state machine.
+            remaining.Slice(0, 1).CopyTo(header);
+            int need = header[0] is 0xC2 or 0xC4 ? 3 : 2;
+            if (remaining.Length < need)
+            {
+                break;
+            }
+
+            remaining.Slice(0, need).CopyTo(header);
             var declaredSize = header.GetPacketSize();
 
             // Minimum valid frame: type + size (+ high size byte for C2/C4).
-            var minSize = header[0] is 0xC2 or 0xC4 ? 3 : 2;
+            var minSize = need;
             if (declaredSize < minSize || declaredSize > remaining.Length)
             {
                 Debug.WriteLine(

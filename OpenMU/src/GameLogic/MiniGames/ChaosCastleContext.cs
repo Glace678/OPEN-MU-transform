@@ -255,7 +255,7 @@ public sealed class ChaosCastleContext : MiniGameContext
     {
         base.OnPlayerDied(sender, e);
 
-        if (this._gameStates.TryGetValue(e.KillerName, out var playerState))
+        if (e.KillerName is not null && this._gameStates.TryGetValue(e.KillerName, out var playerState))
         {
             playerState.AddScore(PlayerKillPoints);
         }
@@ -277,7 +277,7 @@ public sealed class ChaosCastleContext : MiniGameContext
 
             this._monsters.Remove(monster, out _);
 
-            if (this._gameStates.TryGetValue(e.KillerName, out var playerState))
+            if (e.KillerName is not null && this._gameStates.TryGetValue(e.KillerName, out var playerState))
             {
                 playerState.AddScore(MonsterKillPoints);
             }

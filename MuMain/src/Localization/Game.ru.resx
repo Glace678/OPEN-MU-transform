@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[ошибка2] Не удалось загрузить программу проверки инструментов взлома. Пожалуйста, попробуйте подключиться снова через минуту. \n\n Если вы продолжаете испытывать ту же проблему, свяжитесь с нашим центром обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
+    <value>[ошибка2] Не удалось загрузить программу проверки инструментов взлома. Пожалуйста, попробуйте подключиться снова через минуту. 
+
+ Если вы продолжаете испытывать ту же проблему, свяжитесь с нашим центром обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[ошибка3] Ошибка регистрации NPX.DLL, отсутствуют необходимые файлы для запуска nProtect. Загрузите np_setup.exe с сайта Muonline.\n\n. Если вы продолжаете испытывать ту же проблему, обратитесь в наш центр обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
+    <value>[ошибка3] Ошибка регистрации NPX.DLL, отсутствуют необходимые файлы для запуска nProtect. Загрузите np_setup.exe с сайта Muonline.
+
+. Если вы продолжаете испытывать ту же проблему, обратитесь в наш центр обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] В программе произошла ошибка. \n\n Если вы продолжаете испытывать ту же проблему, обратитесь в наш центр обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
+    <value>[error4] В программе произошла ошибка. 
+
+ Если вы продолжаете испытывать ту же проблему, обратитесь в наш центр обслуживания клиентов через наш веб-сайт http://muonline.webzen.com.</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -3318,7 +3324,7 @@
     <comment>legacy_id=891</comment>
   </data>
   <data name="written on the 100%% winning card." xml:space="preserve">
-    <value>написано на 100% выигрышной карте.</value>
+    <value>написано на 100%% выигрышной карте.</value>
     <comment>legacy_id=892</comment>
   </data>
   <data name="Enter the lucky number" xml:space="preserve">
@@ -3366,11 +3372,11 @@
     <comment>legacy_id=903</comment>
   </data>
   <data name="Register the lucky number on the 100%% winning card." xml:space="preserve">
-    <value>Зарегистрируйте счастливый номер на 100% выигрышной карте.</value>
+    <value>Зарегистрируйте счастливый номер на 100%% выигрышной карте.</value>
     <comment>legacy_id=904</comment>
   </data>
   <data name="PleaseCheckOutTheAnnouncementOn" xml:space="preserve">
-    <value>Пожалуйста, ознакомьтесь с объявлением на официальном сайте о том, как получить 100% выигрышную карту.</value>
+    <value>Пожалуйста, ознакомьтесь с объявлением на официальном сайте о том, как получить 100%% выигрышную карту.</value>
     <comment>legacy_id=905</comment>
   </data>
   <data name="Ring of Honor" xml:space="preserve">
@@ -4426,7 +4432,7 @@
     <comment>legacy_id=1187</comment>
   </data>
   <data name="Increase %d possible attack distance" xml:space="preserve">
-    <value>Увеличьте возможную дистанцию ​​атаки %d.</value>
+    <value>Увеличьте возможную дистанцию атаки %d.</value>
     <comment>legacy_id=1188</comment>
   </data>
   <data name="Earth shake skill (mana:%d)" xml:space="preserve">
@@ -6930,7 +6936,7 @@
     <comment>legacy_id=1868</comment>
   </data>
   <data name="Added %d Attack" xml:space="preserve">
-    <value>Добавлена ​​атака %d.</value>
+    <value>Добавлена атака %d.</value>
     <comment>legacy_id=1869</comment>
   </data>
   <data name="Added %d Wizardry" xml:space="preserve">
@@ -7142,7 +7148,7 @@
     <comment>legacy_id=1926</comment>
   </data>
   <data name="one of the certain weapons to 50%%." xml:space="preserve">
-    <value>одно из определенных видов оружия до 50%.</value>
+    <value>одно из определенных видов оружия до 50%%.</value>
     <comment>legacy_id=1927</comment>
   </data>
   <data name="Plasma storm skill (Mana:%d)" xml:space="preserve">
@@ -8546,7 +8552,7 @@
     <comment>legacy_id=2381</comment>
   </data>
   <data name="Shield gage reduced of 50%%." xml:space="preserve">
-    <value>Толщина щита уменьшена на 50%.</value>
+    <value>Толщина щита уменьшена на 50%%.</value>
     <comment>legacy_id=2382</comment>
   </data>
   <data name="Entered the zone %s." xml:space="preserve">
@@ -8806,7 +8812,7 @@
     <comment>legacy_id=2447,2456</comment>
   </data>
   <data name=" 1 15-49 15-29 1 15-130 10-110" xml:space="preserve">
-    <value>1 15–49 15–29 1 ​​15–130 10–110</value>
+    <value>1 15–49 15–29 1 15–130 10–110</value>
     <comment>legacy_id=2448</comment>
   </data>
   <data name=" 2 50-119 30-99 2 131-180 111-160" xml:space="preserve">
@@ -9190,11 +9196,11 @@
     <comment>legacy_id=2595</comment>
   </data>
   <data name="Health has been recovered of 100%%." xml:space="preserve">
-    <value>Здоровье восстановлено на 100%.</value>
+    <value>Здоровье восстановлено на 100%%.</value>
     <comment>legacy_id=2596</comment>
   </data>
   <data name="Mana has been recovered of 100%%." xml:space="preserve">
-    <value>Мана восстановлена ​​на 100%.</value>
+    <value>Мана восстановлена на 100%%.</value>
     <comment>legacy_id=2597</comment>
   </data>
   <data name="Attack speed has increased of %d." xml:space="preserve">
@@ -10174,7 +10180,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d отправил вам подарок.</value>
+    <value>%s отправил вам подарок.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10354,55 +10360,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>Предмет, который позволит вам наслаждаться MU в течение 30 дней. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Предмет, который позволит вам наслаждаться MU в течение 30 дней. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>Предмет, который позволит вам наслаждаться MU в течение 90 дней. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Предмет, который позволит вам наслаждаться MU в течение 90 дней. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>Предмет, который позволит вам наслаждаться MU в течение 30 дней. В случае возврата вы получите сумму, исключающую цену балла. \nМожно использовать только на веб-сайте MU Online.</value>
+    <value>Предмет, который позволит вам наслаждаться MU в течение 30 дней. В случае возврата вы получите сумму, исключающую цену балла. 
+Можно использовать только на веб-сайте MU Online.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>Предмет, который позволит вам наслаждаться MU в течение 90 дней. В случае возврата вы получите сумму, исключающую цену балла. \nМожно использовать только на веб-сайте MU Online.</value>
+    <value>Предмет, который позволит вам наслаждаться MU в течение 90 дней. В случае возврата вы получите сумму, исключающую цену балла. 
+Можно использовать только на веб-сайте MU Online.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>Предмет, который позволяет вам наслаждаться MU в течение 3 часов в течение 60 дней после использования хранилища. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Предмет, который позволяет вам наслаждаться MU в течение 3 часов в течение 60 дней после использования хранилища. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>Предмет, который позволяет вам наслаждаться MU в течение 5 часов в течение 60 дней после использования хранилища. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Предмет, который позволяет вам наслаждаться MU в течение 5 часов в течение 60 дней после использования хранилища. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>Предмет, который позволяет вам наслаждаться Mu в течение 10 часов в течение 60 дней после использования хранилища. \nМожно использовать только с веб-сайта Mu Online.</value>
+    <value>Предмет, который позволяет вам наслаждаться Mu в течение 10 часов в течение 60 дней после использования хранилища. 
+Можно использовать только с веб-сайта Mu Online.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Один раз сбрасывает все дерево мастерских навыков. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Один раз сбрасывает все дерево мастерских навыков. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Позволяет корректировать характеристики персонажа на 500 очков. \nМожно использовать только на веб-сайте MU Online.</value>
+    <value>Позволяет корректировать характеристики персонажа на 500 очков. 
+Можно использовать только на веб-сайте MU Online.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Позволяет перенести персонажа в другую учетную запись на том же сервере. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Позволяет перенести персонажа в другую учетную запись на том же сервере. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Позволяет переименовать персонажа. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Позволяет переименовать персонажа. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Позволяет перенести персонажа на другой сервер в рамках той же учетной записи. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Позволяет перенести персонажа на другой сервер в рамках той же учетной записи. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Позволяет один раз запросить перенос персонажа и один раз изменить имя персонажа. \nМожно использовать только с веб-сайта MU Online.</value>
+    <value>Позволяет один раз запросить перенос персонажа и один раз изменить имя персонажа. 
+Можно использовать только с веб-сайта MU Online.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -10682,11 +10701,11 @@
     <comment>legacy_id=3059</comment>
   </data>
   <data name="EXP10IncreasePCCafeChaos" xml:space="preserve">
-    <value>10% опыта % Increase/ PC Cafe Доступ к замку Хаоса/ Открытый доступ к Калиме/ Увеличение очков гоблинов</value>
+    <value>10%% опыта Increase/ PC Cafe Доступ к замку Хаоса/ Открытый доступ к Калиме/ Увеличение очков гоблинов</value>
     <comment>legacy_id=3060</comment>
   </data>
   <data name="EXP10IncreasePCCafeChaos3061" xml:space="preserve">
-    <value>10% опыта % Increase/ PC Cafe Доступ к замку Хаоса / Открытый доступ к Калиме / Увеличение очков гоблинов / Использование окна команд Warp / Система выносливости не применяется</value>
+    <value>10%% опыта Increase/ PC Cafe Доступ к замку Хаоса / Открытый доступ к Калиме / Увеличение очков гоблинов / Использование окна команд Warp / Система выносливости не применяется</value>
     <comment>legacy_id=3061</comment>
   </data>
   <data name=" PC Cafe" xml:space="preserve">
@@ -11002,7 +11021,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Вам нужно больше %%s для покупки этого предмета.</value>
+    <value>Вам нужно больше %s для покупки этого предмета.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12762,91 +12781,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>Статус регистрации знака лорда</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>Рейтинг регистрации знака лорда</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Зарегистрировано</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Статус нашей гильдии</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Назад</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Можно зарегистрировать</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Нельзя зарегистрировать</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>Количество знаков лорда для регистрации: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÁÖ¼¼¿ä.</value>
+    <value>Поместите знак лорда для регистрации в окно сочетания.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇС¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>За один раз можно зарегистрировать до 225 знаков лорда.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>Количество зарегистрированных знаков лорда: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>Зарегистрировать знак лорда</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>Зарегистрировать знак лорда?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>Регистрация знака лорда завершена.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>Ошибка регистрации знака лорда.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Атрибут</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Инфо об атрибуте стихии</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>Блокировка</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>Разблокировка</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>Выберите название гильдии, для которой следует снять враждебность.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Снять враждебность с этой гильдии?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Сервер</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12854,19 +12873,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Нельзя снять более 2 миллиардов zen</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>Общая стоимость ремонта</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>Эта гильдия не существует.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>Ожидание подтверждения сделки</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -13201,9 +13220,9 @@
     <value>Не удаётся подключиться к серверу. Проверьте, запущен ли он.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Добро пожаловать в мир MU! Это короткое руководство на нескольких страницах объясняет основы. Нажмите Esc для пропуска или откройте его позже в меню.</value>
+    <value>Добро пожаловать в мир MU! Краткое руководство объясняет основы. Нажмите Esc, чтобы пропустить.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
-    <value>Всё готово! Поговорите с NPC для заданий и покиньте город, чтобы сражаться с монстрами. Приятного приключения.</value>
+    <value>Готово! Поговорите с NPC о заданиях и покиньте город сразиться с монстрами. Приятной игры!</value>
   </data>
 </root>

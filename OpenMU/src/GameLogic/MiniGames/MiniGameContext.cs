@@ -399,6 +399,18 @@ public class MiniGameContext : AsyncDisposable, IEventStateProvider
                 await plugInPoint.ObjectRemovedFromMapAsync(args.Map, args.Object).ConfigureAwait(false);
             }
 
+            // Defense in depth: also unsubscribe the Died handlers which were subscribed in OnObjectAddedToMapAsync.
+            // Previously only the Player path unsubscribed, leaving dangling references when a monster/destructible was despawned.
+            if (args.Object is Monster monster)
+            {
+                monster.Died -= this.OnMonsterDied;
+            }
+
+            if (args.Object is Destructible destructible)
+            {
+                destructible.Died -= this.OnDestructibleDied;
+            }
+
             if (args.Object is not Player player)
             {
                 return;

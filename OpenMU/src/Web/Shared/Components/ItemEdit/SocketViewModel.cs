@@ -1,4 +1,4 @@
-﻿// <copyright file="SocketViewModel.cs" company="MUnique">
+// <copyright file="SocketViewModel.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -8,7 +8,6 @@ using MUnique.OpenMU.DataModel.Configuration.Items;
 using MUnique.OpenMU.DataModel.Entities;
 using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.Web.Shared.Properties;
-using Nito.AsyncEx.Synchronous;
 
 /// <summary>
 /// A view model for a socket of an item.
@@ -90,7 +89,7 @@ public class SocketViewModel
                 if (this.OptionLink is { } optionLink)
                 {
                     this._item.ItemOptions.Remove(optionLink);
-                    this._persistenceContext.DeleteAsync(optionLink).AsTask().WaitAndUnwrapException();
+                    _ = this._persistenceContext.DeleteAsync(optionLink);
                 }
             }
             else

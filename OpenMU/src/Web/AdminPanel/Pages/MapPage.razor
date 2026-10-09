@@ -80,14 +80,21 @@
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        var gameServer = this.Servers.OfType<IGameServer>().First(gs => gs.Id == this.GameServerId);
+        var gameServer = this.Servers.OfType<IGameServer>().FirstOrDefault(gs => gs.Id == this.GameServerId)
+            ?? throw new InvalidOperationException($"Game server with id {this.GameServerId} not found.");
         var context = (gameServer as IGameServerContextProvider)?.Context ?? throw new InvalidOperationException("This map page just works in a All-In-One deployment.");
         var adapter = new ObservableGameServerAdapter(context);
         await adapter.InitializeAsync();
 
         this._gameContext = context;
         this._gameServer = adapter;
-        this._map = this._gameServer.Maps.First(m => m.Id == this.MapId);
+        this._map = this._gameServer.Maps.FirstOrDefault(m => m.Id == this.MapId);
+        if (this._map is null)
+        {
+            // The requested map does not exist on this server - leave to the (existing) game server page instead of crashing / hitting NotFound.
+            this.NavigationManager.NavigateTo($"gameServer/{this.GameServerId}/", forceLoad: false);
+            return;
+        }
 
         var uri = new Uri(this.NavigationManager.Uri);
         var query = QueryHelpers.ParseQuery(uri.Query);

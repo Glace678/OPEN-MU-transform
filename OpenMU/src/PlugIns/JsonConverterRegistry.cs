@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.PlugIns;
 
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,7 +17,7 @@ public static class JsonConverterRegistry
     /// <summary>
     /// Backing field which stores all registered <see cref="JsonConverter" /> instances.
     /// </summary>
-    private static readonly List<JsonConverter> _converters = new List<JsonConverter>();
+    private static readonly ConcurrentQueue<JsonConverter> _converters = new ConcurrentQueue<JsonConverter>();
 
     /// <summary>
     /// Gets an enumerable collection of all registered <see cref="JsonConverter" /> instances.
@@ -30,7 +31,7 @@ public static class JsonConverterRegistry
     /// <param name="converter">The JSON converter to register.</param>
     public static void RegisterConverter(JsonConverter converter)
     {
-        _converters.Add(converter);
+        _converters.Enqueue(converter);
     }
 
     /// <summary>

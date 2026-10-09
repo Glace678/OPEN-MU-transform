@@ -1,4 +1,4 @@
-﻿// <copyright file="TalkNpcAction.cs" company="MUnique">
+// <copyright file="TalkNpcAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -119,7 +119,8 @@ public class TalkNpcAction
             case NpcWindow.VaultStorage:
                 player.Account!.Vault ??= player.PersistenceContext.CreateNew<ItemStorage>();
                 var warehouseSize = player.Account.IsVaultExtended ? InventoryConstants.WarehouseSize * 2 : InventoryConstants.WarehouseSize;
-                player.Vault = new Storage(warehouseSize, player.Account.Vault);
+                // Enforce the vault money cap at the storage layer (not only in the transfer wrappers).
+                player.Vault = new Storage(warehouseSize, player.Account.Vault) { MaximumMoney = player.GameContext?.Configuration?.MaximumVaultMoney };
                 await player.InvokeViewPlugInAsync<IShowVaultPlugIn>(p => p.ShowVaultAsync()).ConfigureAwait(false);
                 break;
             case NpcWindow.GuildMaster:

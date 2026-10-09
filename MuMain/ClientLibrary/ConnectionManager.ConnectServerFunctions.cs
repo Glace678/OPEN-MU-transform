@@ -168,6 +168,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'ServerListResponse' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="ServerListRequestOld" /> to this connection.
@@ -199,6 +200,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'ServerListResponseOld' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="Hello" /> to this connection.

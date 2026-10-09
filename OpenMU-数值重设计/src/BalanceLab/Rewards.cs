@@ -14,14 +14,19 @@ public sealed class Rewards(Rules rules)
     {
         Rules.RollGuard(roll);
         if (!D.Classes.Any(c => c.Id == killerClass)) throw new ArgumentException("Unknown class.");
+        if (D.Loot.SmartClassChance is <= 0 or >= 1)
+            throw new ArgumentException("SmartClassChance must be strictly inside (0, 1).");
         if (roll < D.Loot.SmartClassChance) return killerClass;
         var others = D.Classes.Where(c => c.Id != killerClass).ToArray();
+        if (others.Length == 0) return killerClass;
         var index = (int)((roll - D.Loot.SmartClassChance) / (1 - D.Loot.SmartClassChance) * others.Length);
         return others[Math.Min(index, others.Length - 1)].Id;
     }
 
     public EventReward EventBudget(string eventId, double contentRank)
     {
+        if (!double.IsFinite(contentRank) || contentRank < 1 || contentRank > 470)
+            throw new ArgumentOutOfRangeException(nameof(contentRank));
         var spec = D.Events.Single(e => e.Id == eventId);
         // This is the entire instance budget: distributed kill XP plus completion XP, not two rewards.
         return new EventReward(rules.BaseExperience(contentRank) * spec.RewardKillEquivalents,

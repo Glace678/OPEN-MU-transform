@@ -93,8 +93,9 @@ public class AccountService : IDataService<Account>, ISupportDataChangedNotifica
 
             return results;
         }
-        catch
+        catch (Exception ex)
         {
+            this._logger.LogError(ex, "Error while loading the account list slice (offset={Offset}, count={Count}).", offset, count);
             return new List<Account>();
         }
     }
@@ -131,7 +132,7 @@ public class AccountService : IDataService<Account>, ISupportDataChangedNotifica
     public async ValueTask<string?> ResetPasswordAsync(Account account, string newPassword)
     {
         var context = await this._dataSource.GetContextAsync().ConfigureAwait(false);
-        var newHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        var newHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(newPassword)).ConfigureAwait(false);
         if (context is IAccountCredentialContext credentials)
         {
             var snapshot = await credentials.ReadCredentialsAsync(account.LoginName).ConfigureAwait(false);
@@ -199,7 +200,7 @@ public class AccountService : IDataService<Account>, ISupportDataChangedNotifica
 
             account = context.CreateNew<Account>();
             account.LoginName = parameters.LoginName;
-            account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(parameters.Password);
+            account.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(parameters.Password)).ConfigureAwait(false);
             account.EMail = parameters.EMail;
             account.State = parameters.State;
             account.SecurityCode = GameLogic.SecurityCodeSecurity.HashCode(parameters.SecurityCode);

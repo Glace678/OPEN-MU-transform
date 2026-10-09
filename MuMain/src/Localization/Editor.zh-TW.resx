@@ -329,7 +329,7 @@
     <value>全部關閉</value>
   </data>
   <data name="TODO - Not Working:" xml:space="preserve">
-    <value>待辦 - 尚未正常運作:</value>
+    <value>尚未正常運作:</value>
   </data>
   <data name="Shaders" xml:space="preserve">
     <value>著色器</value>
@@ -344,7 +344,7 @@
     <value>介面</value>
   </data>
   <data name="TODO - Not Implemented:" xml:space="preserve">
-    <value>待辦 - 尚未實作:</value>
+    <value>尚未實作:</value>
   </data>
   <data name="Hero" xml:space="preserve">
     <value>英雄</value>

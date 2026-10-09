@@ -52,7 +52,8 @@ internal class ServerInfoRequestHandler : IPacketHandler<Client>
         // Only if we can't use the cached data.
         if (isGameServerOnSameMachineAsConnectServer
             && !isRunningOnDocker
-            && isClientConnectedOnNonRegisteredAddress)
+            && isClientConnectedOnNonRegisteredAddress
+            && localIpEndPoint is not null)
         {
             int WritePacket()
             {

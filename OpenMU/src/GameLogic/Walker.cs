@@ -141,15 +141,16 @@ public sealed class Walker : IDisposable
     /// <returns>The number of written directions.</returns>
     public async ValueTask<int> GetDirectionsAsync(Memory<Direction> directions)
     {
-        var count = 0;
         using var readerLock = await this._walkLock.ReaderLockAsync();
-        foreach (var direction in this._currentWalkSteps[..this._currentWalkStepCount].Select(step => step.Direction))
+        var stepCount = Math.Min(this._currentWalkStepCount, directions.Length);
+        var written = 0;
+        foreach (var direction in this._currentWalkSteps[..stepCount].Select(step => step.Direction))
         {
-            directions.Span[count] = direction;
-            count++;
+            directions.Span[written] = direction;
+            written++;
         }
 
-        return count;
+        return written;
     }
 
     /// <summary>
@@ -159,15 +160,16 @@ public sealed class Walker : IDisposable
     /// <returns>The number of written steps.</returns>
     public async ValueTask<int> GetStepsAsync(Memory<WalkingStep> steps)
     {
-        var count = 0;
         using var readerLock = await this._walkLock.ReaderLockAsync();
-        foreach (var direction in this._currentWalkSteps[..this._currentWalkStepCount])
+        var stepCount = Math.Min(this._currentWalkStepCount, steps.Length);
+        var written = 0;
+        foreach (var direction in this._currentWalkSteps[..stepCount])
         {
-            steps.Span[count] = direction;
-            count++;
+            steps.Span[written] = direction;
+            written++;
         }
 
-        return count;
+        return written;
     }
 
     /// <summary>

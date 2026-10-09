@@ -128,6 +128,9 @@ services:
     image: rabbitmq:3.13-management-alpine
     container_name: pubsub_rabbitmq
     restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     ports:
       - "127.0.0.1::5672"
     healthcheck:
@@ -198,6 +201,8 @@ services:
       # Expanded by daprd for the ${{REDIS_PASSWORD}} placeholder in the
       # login-state component (the stack fails fast when it is not provided).
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       connectServer:
         condition: service_started
@@ -228,6 +233,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       loginServer:
         condition: service_started
@@ -260,6 +267,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       friendServer:
         condition: service_started
@@ -290,6 +299,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       guildServer:
         condition: service_started
@@ -322,6 +333,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       chatServer:
         condition: service_started
@@ -364,6 +377,8 @@ services:
 
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       adminPanel:
         condition: service_started
@@ -413,6 +428,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       gameServer0:
         condition: service_started
@@ -462,6 +479,8 @@ services:
                 "-placement-host-address", "dapr-placement:50006"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
+      RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set a RabbitMQ password}
     depends_on:
       gameServer1:
         condition: service_started

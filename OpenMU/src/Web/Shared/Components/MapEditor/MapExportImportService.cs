@@ -98,16 +98,16 @@ public sealed class MapExportImportService
             return;
         }
 
-        foreach (var spawn in map.MonsterSpawns.ToList())
-        {
-            map.MonsterSpawns.Remove(spawn);
-            await context.DeleteAsync(spawn).ConfigureAwait(false);
-        }
-
         var monsters = await context.GetAsync<MonsterDefinition>().ConfigureAwait(false);
         if (monsters is null || dto.Spawns is null)
         {
             return;
+        }
+
+        foreach (var spawn in map.MonsterSpawns.ToList())
+        {
+            map.MonsterSpawns.Remove(spawn);
+            await context.DeleteAsync(spawn).ConfigureAwait(false);
         }
 
         foreach (var spawnDto in dto.Spawns)

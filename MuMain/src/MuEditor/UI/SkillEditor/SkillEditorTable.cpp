@@ -53,6 +53,8 @@ void CSkillEditorTable::Render(
     bool freezeColumns,
     bool showHoverTooltip)
 {
+    if (!SkillAttribute) return;
+
     // Get metadata fields once at function scope
     const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
     const int fieldCount = GetSkillFieldCount();
@@ -88,7 +90,7 @@ void CSkillEditorTable::Render(
         m_filteredSkills.clear();
         for (int i = 0; i < MAX_SKILLS; i++)
         {
-            char nameBuffer[256];
+            char nameBuffer[256]{};
             WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
 
             if (nameBuffer[0] == '\0') continue;

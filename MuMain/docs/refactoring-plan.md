@@ -1,6 +1,6 @@
 # MuMain 全量代码改进 · 执行看板
 
-> 精简执行版。完整逐函数明细见《全量代码改进方案_总案.md》（合并定稿版 2026-10-05，20 份源报告整合）。
+> 精简执行版。完整逐函数明细见《全量代码改进方案_总案.md》（合并定稿版 2026-10-05，20 份源报告整合；该总案文档当前不在本仓库内，需要时向负责人索取）。
 > 本文件随每个文件/阶段完成勾选。行为保持型重构（behavior-preserving）：不改游戏行为、渲染结果、协议字节、数值公式、enum 数值。
 
 ## 铁律（红线）
@@ -26,7 +26,7 @@
   - [x] include 方向守卫 `tests/arch/check_includes.py`（CTest `arch_core_includes`，基线锁定，当前基线 23）。
   - [x] `_define.h` 分域：Scene 常量 → `Scenes/SceneConstants.h`；寻路常量 → `Engine/Pathing/PathConstants.h`。
   - [ ] 其余域（Camera/Models/BodyPart/Kinds/Guild/Inventory/Storage 等）继续抽出；消费者改为直接 include 后移除垫片、缩小基线。
-  - [ ] `_enum.h`(5,433) 分域；371 extern 收敛（`tools/list_globals.py`）。
+  - [ ] `_enum.h`(5,433) 分域；371 extern 收敛（统计脚本 `tools/list_globals.py` 待补；当前可临时用 `grep -Rc '^extern' src/source` 粗估）。
 - [ ] **P3 Network 拆分**（WSclient 按协议域切割）
 - [ ] **P4 Engine 拆分**（ZzzCharacter/ZzzObject/ZzzInventory）
 - [ ] **P5 Render/Effects 拆分**（三巨头 + MoveHandlers）

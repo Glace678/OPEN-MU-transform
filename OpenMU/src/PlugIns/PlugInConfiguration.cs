@@ -75,18 +75,19 @@ public class PlugInConfiguration : INotifyPropertyChanged
     /// <summary>
     /// Gets the (display) name of this plugin.
     /// </summary>
-    [JsonIgnore]
-    public string Name
-    {
-        get
-        {
-            var plugInType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(GetTypesSafely)
-                .FirstOrDefault(t => t.GUID == this.TypeId);
-            var plugInAttribute = plugInType?.GetCustomAttribute<DisplayAttribute>(inherit: false);
+    private string? _name;
 
-            return plugInAttribute?.GetName() ?? this.TypeId.ToString();
-        }
+    [JsonIgnore]
+    public string Name => this._name ??= this.ComputeName();
+
+    private string ComputeName()
+    {
+        var plugInType = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(GetTypesSafely)
+            .FirstOrDefault(t => t.GUID == this.TypeId);
+        var plugInAttribute = plugInType?.GetCustomAttribute<DisplayAttribute>(inherit: false);
+
+        return plugInAttribute?.GetName() ?? this.TypeId.ToString();
     }
 
     /// <inheritdoc/>

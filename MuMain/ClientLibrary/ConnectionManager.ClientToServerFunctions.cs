@@ -207,10 +207,14 @@ public unsafe partial class ConnectionManager
             {
                 var length = LoginLongPasswordRef.Length;
                 var packet = new LoginLongPasswordRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Username.Clear();
                 new Span<byte>(@username, (int)usernameByteLength).CopyTo(packet.Username);
+                packet.Password.Clear();
                 new Span<byte>(@password, (int)passwordByteLength).CopyTo(packet.Password);
                 packet.TickCount = @tickCount;
+                packet.ClientVersion.Clear();
                 new Span<byte>(@clientVersion, (int)clientVersionByteLength).CopyTo(packet.ClientVersion);
+                packet.ClientSerial.Clear();
                 new Span<byte>(@clientSerial, (int)clientSerialByteLength).CopyTo(packet.ClientSerial);
 
                 return length;
@@ -253,10 +257,14 @@ public unsafe partial class ConnectionManager
             {
                 var length = LoginShortPasswordRef.Length;
                 var packet = new LoginShortPasswordRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Username.Clear();
                 new Span<byte>(@username, (int)usernameByteLength).CopyTo(packet.Username);
+                packet.Password.Clear();
                 new Span<byte>(@password, (int)passwordByteLength).CopyTo(packet.Password);
                 packet.TickCount = @tickCount;
+                packet.ClientVersion.Clear();
                 new Span<byte>(@clientVersion, (int)clientVersionByteLength).CopyTo(packet.ClientVersion);
+                packet.ClientSerial.Clear();
                 new Span<byte>(@clientSerial, (int)clientSerialByteLength).CopyTo(packet.ClientSerial);
 
                 return length;
@@ -299,10 +307,14 @@ public unsafe partial class ConnectionManager
             {
                 var length = Login075Ref.Length;
                 var packet = new Login075Ref(pipeWriter.GetSpan(length)[..length]);
+                packet.Username.Clear();
                 new Span<byte>(@username, (int)usernameByteLength).CopyTo(packet.Username);
+                packet.Password.Clear();
                 new Span<byte>(@password, (int)passwordByteLength).CopyTo(packet.Password);
                 packet.TickCount = @tickCount;
+                packet.ClientVersion.Clear();
                 new Span<byte>(@clientVersion, (int)clientVersionByteLength).CopyTo(packet.ClientVersion);
+                packet.ClientSerial.Clear();
                 new Span<byte>(@clientSerial, (int)clientSerialByteLength).CopyTo(packet.ClientSerial);
 
                 return length;
@@ -762,6 +774,7 @@ public unsafe partial class ConnectionManager
                 var packet = new ItemMoveRequestRef(pipeWriter.GetSpan(length)[..length]);
                 packet.FromStorage = @fromStorage;
                 packet.FromSlot = @fromSlot;
+                packet.ItemData.Clear();
                 new Span<byte>(@itemData, (int)itemDataByteLength).CopyTo(packet.ItemData);
                 packet.ToStorage = @toStorage;
                 packet.ToSlot = @toSlot;
@@ -1243,14 +1256,18 @@ public unsafe partial class ConnectionManager
             {
                 var length = ServerChangeAuthenticationRef.Length;
                 var packet = new ServerChangeAuthenticationRef(pipeWriter.GetSpan(length)[..length]);
+                packet.AccountXor3.Clear();
                 new Span<byte>(@accountXor3, (int)accountXor3ByteLength).CopyTo(packet.AccountXor3);
+                packet.CharacterNameXor3.Clear();
                 new Span<byte>(@characterNameXor3, (int)characterNameXor3ByteLength).CopyTo(packet.CharacterNameXor3);
                 packet.AuthCode1 = @authCode1;
                 packet.AuthCode2 = @authCode2;
                 packet.AuthCode3 = @authCode3;
                 packet.AuthCode4 = @authCode4;
                 packet.TickCount = @tickCount;
+                packet.ClientVersion.Clear();
                 new Span<byte>(@clientVersion, (int)clientVersionByteLength).CopyTo(packet.ClientVersion);
+                packet.ClientSerial.Clear();
                 new Span<byte>(@clientSerial, (int)clientSerialByteLength).CopyTo(packet.ClientSerial);
 
                 return length;
@@ -3063,6 +3080,7 @@ public unsafe partial class ConnectionManager
                 packet.SourceY = @sourceY;
                 packet.StepCount = @stepCount;
                 packet.TargetRotation = @targetRotation;
+                packet.Directions.Clear();
                 new Span<byte>(@directions, (int)directionsByteLength).CopyTo(packet.Directions);
 
                 return length;
@@ -3106,6 +3124,7 @@ public unsafe partial class ConnectionManager
                 packet.SourceY = @sourceY;
                 packet.StepCount = @stepCount;
                 packet.TargetRotation = @targetRotation;
+                packet.Directions.Clear();
                 new Span<byte>(@directions, (int)directionsByteLength).CopyTo(packet.Directions);
 
                 return length;
@@ -3483,6 +3502,7 @@ public unsafe partial class ConnectionManager
             {
                 var length = SaveKeyConfigurationRef.GetRequiredSize((int)configurationByteLength);
                 var packet = new SaveKeyConfigurationRef(pipeWriter.GetSpan(length)[..length]);
+                packet.Configuration.Clear();
                 new Span<byte>(@configuration, (int)configurationByteLength).CopyTo(packet.Configuration);
 
                 return length;
@@ -3753,6 +3773,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'AreaSkillHit' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="AreaSkill075" /> to this connection.
@@ -3793,6 +3814,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'AreaSkillHit075' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="AreaSkill095" /> to this connection.
@@ -3833,6 +3855,7 @@ public unsafe partial class ConnectionManager
             Debug.WriteLine(ex);
         }
     }
+    // WARN: Packet 'AreaSkillHit095' uses Structure[] fields and has no generated binding. Add a hand-written partial method or extend the generator.
 
     /// <summary>
     /// Sends a <see cref="RageAttackRequest" /> to this connection.
@@ -4381,6 +4404,7 @@ public unsafe partial class ConnectionManager
                 var length = GuildCreateRequestRef.Length;
                 var packet = new GuildCreateRequestRef(pipeWriter.GetSpan(length)[..length]);
                 packet.GuildName = NativeInterop.PtrToWideString(@guildName);
+                packet.GuildEmblem.Clear();
                 new Span<byte>(@guildEmblem, (int)guildEmblemByteLength).CopyTo(packet.GuildEmblem);
 
                 return length;
@@ -4418,6 +4442,7 @@ public unsafe partial class ConnectionManager
                 var length = GuildCreateRequest075Ref.Length;
                 var packet = new GuildCreateRequest075Ref(pipeWriter.GetSpan(length)[..length]);
                 packet.GuildName = NativeInterop.PtrToWideString(@guildName);
+                packet.GuildEmblem.Clear();
                 new Span<byte>(@guildEmblem, (int)guildEmblemByteLength).CopyTo(packet.GuildEmblem);
 
                 return length;
@@ -5617,6 +5642,7 @@ public unsafe partial class ConnectionManager
             {
                 var length = MuHelperSaveDataRequestRef.Length;
                 var packet = new MuHelperSaveDataRequestRef(pipeWriter.GetSpan(length)[..length]);
+                packet.HelperData.Clear();
                 new Span<byte>(@helperData, (int)helperDataByteLength).CopyTo(packet.HelperData);
 
                 return length;

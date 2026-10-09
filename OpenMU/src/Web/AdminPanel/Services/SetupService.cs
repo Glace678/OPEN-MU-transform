@@ -56,7 +56,7 @@ public class SetupService
         get
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-            return this._contextProvider.CanConnectToDatabaseAsync(cts.Token).WaitAndUnwrapException();
+            return Task.Run(() => this._contextProvider.CanConnectToDatabaseAsync(cts.Token)).WaitAndUnwrapException();
         }
     }
 
@@ -68,7 +68,7 @@ public class SetupService
         get
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-            return this._contextProvider.DatabaseExistsAsync(cts.Token).WaitAndUnwrapException();
+            return Task.Run(() => this._contextProvider.DatabaseExistsAsync(cts.Token)).WaitAndUnwrapException();
         }
     }
 
@@ -80,7 +80,7 @@ public class SetupService
         get
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-            return !this._contextProvider.IsDatabaseUpToDateAsync(cts.Token).WaitAndUnwrapException();
+            return !Task.Run(() => this._contextProvider.IsDatabaseUpToDateAsync(cts.Token)).WaitAndUnwrapException();
         }
     }
 

@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.LocalLauncher;
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -413,7 +414,17 @@ public sealed class OpenMuServerManager
 
     private void EnsurePackagedServerProcess(Process process)
     {
-        var actualPath = process.MainModule?.FileName;
+        string? actualPath;
+        try
+        {
+            actualPath = process.MainModule?.FileName;
+        }
+        catch (Win32Exception)
+        {
+            // Accessing MainModule can fail for protected or already-exited processes; treat the process as unverified.
+            actualPath = null;
+        }
+
         if (string.IsNullOrWhiteSpace(actualPath)
             || !string.Equals(LocalPlatform.ResolveExecutablePath(actualPath), LocalPlatform.ResolveExecutablePath(this._paths.ServerExecutable), LocalPlatform.PathComparison))
         {

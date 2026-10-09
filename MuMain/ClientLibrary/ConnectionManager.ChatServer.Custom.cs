@@ -1,4 +1,4 @@
-﻿// <copyright file="ConnectionManager.ChatServer.Custom.cs" company="MUnique">
+// <copyright file="ConnectionManager.ChatServer.Custom.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -50,15 +50,18 @@ public partial class ConnectionManager
                 packet.RoomId = @roomId;
 
                 var tokenString = token.ToString();
+                // Token is fixed-width; clear pooled tail before the variable-length decimal
+                // write so a short token cannot leak stale buffer bytes (XOR-encrypted and sent).
+                packet.Token.Clear();
                 Encoding.UTF8.GetBytes(tokenString, packet.Token);
                 TokenEncryptor.Encrypt(packet);
 
                 return length;
             });
         }
-        catch
+        catch (Exception ex)
         {
-            // Log exception
+            Debug.WriteLine($"Failed to send authenticate request: {ex.Message}");
         }
     }
 

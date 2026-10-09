@@ -335,7 +335,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     {
         try
         {
-            var bottomDateTimeMargin = DateTime.Now.Subtract(this.Settings.ClientTimeout);
+            var bottomDateTimeMargin = DateTime.UtcNow.Subtract(this.Settings.ClientTimeout);
 
             foreach (var client in this._connectedClients.Keys)
             {
@@ -360,7 +360,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     {
         try
         {
-            var rooms = this._manager.OpenedRooms.Where(room => room.AuthenticationRequiredUntil < DateTime.Now && room.ConnectedClients.Count < 2).ToList();
+            var rooms = this._manager.OpenedRooms.Where(room => room.AuthenticationRequiredUntil < DateTime.UtcNow && room.ConnectedClients.Count < 2).ToList();
             foreach (var room in rooms)
             {
                 this._logger.LogInformation($"Cleaning up room {room.RoomId}");

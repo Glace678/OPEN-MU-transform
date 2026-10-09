@@ -162,7 +162,11 @@ void CDevEditorUI::RenderCameraModeControls()
         if (ImGui::Button(I18N::Editor::SwitchToFreeFly, ImVec2(250, 0)))
             camMgr.SetCameraMode(CameraMode::FreeFly);
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "%s", camMgr.GetActiveCamera()->GetName());
+        // MuEditor: GetActiveCamera() can be null before a camera is created; do not deref it.
+        if (ICamera* activeCamera = camMgr.GetActiveCamera())
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "%s", activeCamera->GetName());
+        else
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "%s", "(no active camera)");
         return;
     }
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #ifdef _EDITOR
 
@@ -17,7 +17,10 @@
 #include "../MuEditor/Core/MuEditorCore.h"
 
 // Mutex for thread-safe console access
-static std::mutex g_consoleMutex;
+// Recursive: ConsoleStreamBuf::overflow holds this and calls LogGame/LogEditor,
+// which lock the same mutex. A plain std::mutex would self-deadlock on that
+// re-entrant path (the console freezes on the first redirected newline).
+static std::recursive_mutex g_consoleMutex;
 
 // Replacement console output functions
 extern "C" {
@@ -30,7 +33,7 @@ extern "C" {
         va_end(args);
 
         // Send to ImGui console
-        char utf8Buffer[8192];
+        char utf8Buffer[8192]{};
         WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
 
         // Remove trailing newline
@@ -53,7 +56,7 @@ extern "C" {
         va_end(args);
 
         // Send to ImGui console
-        char utf8Buffer[8192];
+        char utf8Buffer[8192]{};
         WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
 
         // Remove trailing newline
@@ -91,7 +94,7 @@ std::streambuf::int_type ConsoleStreamBuf::overflow(int_type c)
         // If we hit a newline, flush the buffer
         if (c == '\n')
         {
-            std::lock_guard<std::mutex> lock(g_consoleMutex);
+            std::lock_guard<std::recursive_mutex> lock(g_consoleMutex);
 
             // Remove trailing newline for our buffer
             std::string line = m_buffer;
@@ -276,7 +279,7 @@ void CMuEditorConsoleUI::LogEditor(const std::string& message)
 
 void CMuEditorConsoleUI::LogGame(const std::string& message)
 {
-    std::lock_guard<std::mutex> lock(g_consoleMutex);
+    std::lock_guard<std::recursive_mutex> lock(g_consoleMutex);
 
     m_strGameConsole += message;
     m_strGameConsole += "\n";

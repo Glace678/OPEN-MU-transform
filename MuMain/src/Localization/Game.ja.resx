@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[エラー2]ハッキングツールの診断プログラムが正常にダウンロード出来ませんでした。しばらくたってから再接続するようお願いいたします。\n\n続いて問題が発生するようでしたら株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
+    <value>[エラー2]ハッキングツールの診断プログラムが正常にダウンロード出来ませんでした。しばらくたってから再接続するようお願いいたします。
+
+続いて問題が発生するようでしたら株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[エラー3] NPX.DLL登録エラー及び nProtect稼動に必要なファイルがありません。ミュー公式サイトのnp_setup.exeをダウンロードした後にインストールするようお願いいたします。\n\n続いて問題が発生するようでしたら、株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
+    <value>[エラー3] NPX.DLL登録エラー及び nProtect稼動に必要なファイルがありません。ミュー公式サイトのnp_setup.exeをダウンロードした後にインストールするようお願いいたします。
+
+続いて問題が発生するようでしたら、株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[エラー4]プログラムの実行中、エラーが発生しました。\n\n続いて問題が発生するようでしたら株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
+    <value>[エラー4]プログラムの実行中、エラーが発生しました。
+
+続いて問題が発生するようでしたら株式会社ゲームオン　ミュー運営チームまでお問い合わせくださるようお願いいたします。</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -3208,11 +3214,11 @@
     <comment>legacy_id=890</comment>
   </data>
   <data name="Enter the 12 digit lucky number" xml:space="preserve">
-    <value>公式サイトのマイメニュー「幸運番号確認」の</value>
+    <value>12桁の幸運番号を入力してください。</value>
     <comment>legacy_id=891</comment>
   </data>
   <data name="written on the 100%% winning card." xml:space="preserve">
-    <value>幸運の番号12桁を入力してください！</value>
+    <value>100%%当たりカードに記載。</value>
     <comment>legacy_id=892</comment>
   </data>
   <data name="Enter the lucky number" xml:space="preserve">
@@ -3232,7 +3238,7 @@
     <comment>legacy_id=896</comment>
   </data>
   <data name="Lucky number registration period" xml:space="preserve">
-    <value>幸運の番号の詳細については</value>
+    <value>幸運番号登録期間</value>
     <comment>legacy_id=897,3083</comment>
   </data>
   <data name="Oct. 28, 2003 ~ Nov. 30" xml:space="preserve">
@@ -3260,11 +3266,11 @@
     <comment>legacy_id=903</comment>
   </data>
   <data name="Register the lucky number on the 100%% winning card." xml:space="preserve">
-    <value>プレゼントを手に入れる為には、幸運番号を登録してください。</value>
+    <value>100%%当たりカードに幸運番号を登録してください。</value>
     <comment>legacy_id=904</comment>
   </data>
   <data name="PleaseCheckOutTheAnnouncementOn" xml:space="preserve">
-    <value>幸運番号の確認は、公式サイトのマイメニュー「幸運番号確認」より確認してください。</value>
+    <value>100%%当たりカードの受け取り方法は公式サイトのお知らせをご確認ください。</value>
     <comment>legacy_id=905</comment>
   </data>
   <data name="Ring of Honor" xml:space="preserve">
@@ -3484,7 +3490,7 @@
     <comment>legacy_id=964</comment>
   </data>
   <data name="Increase critical damage +%d" xml:space="preserve">
-    <value>クリティカルダメージ増加 +%d%%</value>
+    <value>クリティカルダメージ増加 +%d</value>
     <comment>legacy_id=965</comment>
   </data>
   <data name="Increase excellent damage rate %d%%" xml:space="preserve">
@@ -5752,11 +5758,11 @@
     <comment>legacy_id=1577</comment>
   </data>
   <data name="during Truce Period." xml:space="preserve">
-    <value>カオスゴブリン最大3%%、NPC最大3%%</value>
+    <value>休戦期間中。</value>
     <comment>legacy_id=1578</comment>
   </data>
   <data name="Maximum Tax rates: 3%%" xml:space="preserve">
-    <value>戦闘直後から次の戦闘前まで</value>
+    <value>最大税率：3%%</value>
     <comment>legacy_id=1579</comment>
   </data>
   <data name="NPCs include" xml:space="preserve">
@@ -9880,7 +9886,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d さんからのプレゼントです。</value>
+    <value>%s さんからのプレゼントです。</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10060,55 +10066,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>30日間MUを楽しめる商品です。\nウェブでのみ使用できます。</value>
+    <value>30日間MUを楽しめる商品です。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>90日間MUを楽しめる商品です。\nウェブでのみ使用できます。</value>
+    <value>90日間MUを楽しめる商品です。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>30日間MUを楽しめる商品です。払い戻し時、ポイント価格以外の金額のみ払い戻し処理されます。\nウェブでのみ使用できます。</value>
+    <value>30日間MUを楽しめる商品です。払い戻し時、ポイント価格以外の金額のみ払い戻し処理されます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>90日間MUを楽しめる商品です。払い戻し時、ポイント価格以外の金額のみ払い戻し処理されます。\nウェブでのみ使用できます。</value>
+    <value>90日間MUを楽しめる商品です。払い戻し時、ポイント価格以外の金額のみ払い戻し処理されます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>保管箱使用後、60日間3時間MUの利用ができる商品です。\nウェブでのみ使用できます。</value>
+    <value>保管箱使用後、60日間3時間MUの利用ができる商品です。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>保管箱使用後、60日間5時間MUの利用ができる商品です。\nウェブでのみ使用できます。</value>
+    <value>保管箱使用後、60日間5時間MUの利用ができる商品です。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>保管箱使用後、60日間10時間MUの利用ができる商品です。\nウェブでのみ使用できます。</value>
+    <value>保管箱使用後、60日間10時間MUの利用ができる商品です。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>1回全体のマスタースキルを初期化できます。\nウェブでのみ使用できます。</value>
+    <value>1回全体のマスタースキルを初期化できます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>キャラクターのステータスを500ポイント再調整できます。\nウェブでのみ使用できます。</value>
+    <value>キャラクターのステータスを500ポイント再調整できます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>同じサーバーの他のアカウントにキャラクターを移動できます。\nウェブでのみ使用できます。</value>
+    <value>同じサーバーの他のアカウントにキャラクターを移動できます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>キャラクター名を変更できます。\nウェブでのみ使用できます。</value>
+    <value>キャラクター名を変更できます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>同じアカウント内の他のサーバーにキャラクターを移動できます。\nウェブでのみ使用できます。</value>
+    <value>同じアカウント内の他のサーバーにキャラクターを移動できます。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>キャラクター移動申請1回、キャラクター名変更申請1回。\nウェブでのみ使用できます。</value>
+    <value>キャラクター移動申請1回、キャラクター名変更申請1回。
+ウェブでのみ使用できます。</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -10652,7 +10671,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>該当アイテムを購入するためには %%s チャージが必要です。</value>
+    <value>該当アイテムを購入するためには %s チャージが必要です。</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -13070,91 +13089,91 @@
     <comment>legacy_id=3681</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>城主の紋章登録状況</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>城主の紋章登録ランキング</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>登録数</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>自ギルドの状況</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>戻る</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>登録可能</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>登録不可</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>登録する城主の紋章の数：%d個</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>登録する城主の紋章を合成ウィンドウに置いてください。</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>城主の紋章は一度に最大225個まで登録できます。</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>登録済みの城主の紋章の数：%d個</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>城主の紋章を登録</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>城主の紋章を登録しますか？</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>城主の紋章の登録が完了しました。</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>城主の紋章の登録に失敗しました。</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>属性</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>元素属性情報</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>ロック</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>ロック解除</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>敵対関係を解除するギルド名を選択してください。</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>このギルドとの敵対関係を解除しますか？</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼­¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>サーバー</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -13162,19 +13181,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>20億ジェン以上は引き出せません</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>全修理費用</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>そのギルドは存在しません。</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>取引確認待ち</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="OnePercentLow" xml:space="preserve">

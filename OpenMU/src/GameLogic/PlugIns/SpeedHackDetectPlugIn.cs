@@ -154,6 +154,7 @@ public class SpeedHackDetectPlugIn : IFeaturePlugIn, ISupportCustomConfiguration
         var now = DateTime.UtcNow;
 
         var minIntervalMs = Math.Max(config.AttackSpeedMinIntervalMs, config.AttackSpeedBaseDelayMs - (attackSpeed * config.AttackSpeedScalingFactor));
+        minIntervalMs = Math.Max(minIntervalMs, 1.0); // guard against <=0 (would cause division by zero / infinite regen below)
         var state = this.GetState(player);
         bool shouldRecordViolation = false;
 

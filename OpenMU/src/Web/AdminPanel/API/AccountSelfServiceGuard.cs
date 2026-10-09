@@ -90,34 +90,38 @@ public sealed class AccountSelfServiceGuard
 
     /// <summary>Gets whether the account is currently locked out after repeated failures.</summary>
     /// <param name="loginName">The account login name.</param>
+    /// <param name="partitionKey">The client partition (e.g. remote IP) the attempt originated from.</param>
     /// <returns><c>true</c> when further attempts must be rejected without verification.</returns>
-    public bool IsLockedOut(string? loginName)
+    public bool IsLockedOut(string? loginName, string? partitionKey)
     {
         if (string.IsNullOrWhiteSpace(loginName))
         {
             return false;
         }
 
+        var key = MakeKey(loginName, partitionKey);
         lock (this._lock)
         {
-            return this._failedAttempts.TryGetValue(loginName, out var attempts)
+            return this._failedAttempts.TryGetValue(key, out var attempts)
                 && attempts.LockedUntil > DateTimeOffset.UtcNow;
         }
     }
 
     /// <summary>Counts one failed credential verification for the account.</summary>
     /// <param name="loginName">The account login name.</param>
-    public void RegisterFailedAttempt(string? loginName)
+    /// <param name="partitionKey">The client partition (e.g. remote IP) the attempt originated from.</param>
+    public void RegisterFailedAttempt(string? loginName, string? partitionKey)
     {
         if (string.IsNullOrWhiteSpace(loginName))
         {
             return;
         }
 
+        var key = MakeKey(loginName, partitionKey);
         lock (this._lock)
         {
             this.PruneFailuresLocked();
-            if (!this._failedAttempts.TryGetValue(loginName, out var attempts))
+            if (!this._failedAttempts.TryGetValue(key, out var attempts))
             {
                 attempts = FailedAttempts.None;
             }
@@ -127,24 +131,32 @@ public sealed class AccountSelfServiceGuard
             var lockedUntil = failures >= MaximumFailedAttempts
                 ? now.Add(LockoutDuration)
                 : attempts.LockedUntil;
-            this._failedAttempts[loginName] = new FailedAttempts(failures, lockedUntil, now);
+            this._failedAttempts[key] = new FailedAttempts(failures, lockedUntil, now);
         }
     }
 
     /// <summary>Clears the failure counter after a successful verification.</summary>
     /// <param name="loginName">The account login name.</param>
-    public void RegisterSuccessfulAttempt(string? loginName)
+    /// <param name="partitionKey">The client partition (e.g. remote IP) the attempt originated from.</param>
+    public void RegisterSuccessfulAttempt(string? loginName, string? partitionKey)
     {
         if (string.IsNullOrWhiteSpace(loginName))
         {
             return;
         }
 
+        var key = MakeKey(loginName, partitionKey);
         lock (this._lock)
         {
-            this._failedAttempts.Remove(loginName);
+            this._failedAttempts.Remove(key);
         }
     }
+
+    // The failure/lockout state is partitioned by both the account name and the client IP:
+    // this way a brute-forcing source cannot lock a victim account out for other legitimate
+    // clients, and one client's mistypes cannot be charged to unrelated clients/IPs.
+    private static string MakeKey(string loginName, string? partitionKey) =>
+        loginName + "|" + (string.IsNullOrWhiteSpace(partitionKey) ? "unknown" : partitionKey);
 
     /// <summary>
     /// Validates the supplied maintenance token against the server's token file.

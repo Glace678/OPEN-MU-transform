@@ -13,7 +13,7 @@ using MUnique.OpenMU.Persistence;
 /// API-Controller which returns data of a byte array of an object.
 /// </summary>
 [Route("download/{typeString}/{id:guid}/{propertyName}")]
-[Authorize]
+[Authorize(Policy = "OpenMU.Administrator")]
 public class ByteArrayDownloadController : Controller
 {
     private readonly IPersistenceContextProvider _persistenceContextProvider;

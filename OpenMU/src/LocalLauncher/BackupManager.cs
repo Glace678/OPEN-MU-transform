@@ -114,7 +114,7 @@ public sealed class BackupManager
         Directory.CreateDirectory(workDirectory);
         try
         {
-            ZipFile.ExtractToDirectory(fullArchivePath, workDirectory);
+            ExtractArchiveSafely(fullArchivePath, workDirectory);
             var dumpPath = Path.Combine(workDirectory, "openmu.dump");
             if (!File.Exists(dumpPath) || new FileInfo(dumpPath).Length == 0)
             {
@@ -208,6 +208,30 @@ public sealed class BackupManager
         }
     }
 
+    private static void ExtractArchiveSafely(string archivePath, string targetDirectory)
+    {
+        var normalizedTarget = Path.GetFullPath(targetDirectory)
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            + Path.DirectorySeparatorChar;
+
+        using var archive = ZipFile.OpenRead(archivePath);
+        foreach (var entry in archive.Entries)
+        {
+            var destinationPath = Path.GetFullPath(Path.Combine(normalizedTarget, entry.FullName));
+            if (!destinationPath.StartsWith(normalizedTarget, StringComparison.Ordinal))
+            {
+                throw new InvalidDataException($"压缩包包含路径穿越条目: {entry.FullName}");
+            }
+
+            var destinationDir = Path.GetDirectoryName(destinationPath);
+            if (!string.IsNullOrEmpty(destinationDir))
+            {
+                Directory.CreateDirectory(destinationDir);
+            }
+
+            entry.ExtractToFile(destinationPath, overwrite: true);
+        }
+    }
     private static void ValidateReason(string reason)
     {
         if (string.IsNullOrWhiteSpace(reason) || reason.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)

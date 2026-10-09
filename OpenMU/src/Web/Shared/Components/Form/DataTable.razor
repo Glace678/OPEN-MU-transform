@@ -1,4 +1,4 @@
-﻿@using MUnique.OpenMU.Web.Shared.Services;
+@using MUnique.OpenMU.Web.Shared.Services;
 
 @typeparam TItem where TItem : class
 
@@ -52,6 +52,8 @@
 
     private IReadOnlyList<TItem>? _items;
 
+    private ISupportDataChangedNotification? _dataChangedNotification;
+
     /// <summary>
     /// Gets or sets the table header column elements.
     /// </summary>
@@ -99,13 +101,34 @@
         await this.GetPageAsync(1);
         if (this.DataService is ISupportDataChangedNotification dataChangedNotification)
         {
-            dataChangedNotification.DataChanged += async (_, __) => await this.RefreshAsync();
+            this._dataChangedNotification = dataChangedNotification;
+            this._dataChangedNotification.DataChanged += this.OnDataChanged;
+        }
+    }
+
+    private async void OnDataChanged(object? sender, EventArgs e)
+    {
+        try
+        {
+            await this.RefreshAsync();
+        }
+        catch
+        {
+            // Data refresh errors must not crash the circuit
         }
     }
 
     private Task RefreshAsync()
     {
         return this.GetPageAsync(this.Page);
+    }
+
+    protected void Dispose()
+    {
+        if (this._dataChangedNotification is not null)
+        {
+            this._dataChangedNotification.DataChanged -= this.OnDataChanged;
+        }
     }
 
     private Task GetNextPageAsync()

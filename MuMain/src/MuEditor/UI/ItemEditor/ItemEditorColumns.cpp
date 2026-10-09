@@ -168,7 +168,7 @@ void CItemEditorColumns::RenderWCharArrayColumn(
     ImGui::PushID(itemIndex * 100000 + uniqueId);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    char editableBuffer[256];
+    char editableBuffer[256]{};
     WideCharToMultiByte(CP_UTF8, 0, value, -1, editableBuffer, sizeof(editableBuffer), NULL, NULL);
 
     if (ImGui::InputText("##input", editableBuffer, sizeof(editableBuffer)))
@@ -186,6 +186,7 @@ void CItemEditorColumns::RenderWCharArrayColumn(
 void CItemEditorColumns::RenderIndexColumn(int& colIdx, int itemIndex, bool& rowInteracted, bool isVisible)
 {
     if (!isVisible) return;
+    if (!ItemAttribute) return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(itemIndex * 100000 + 999999);
@@ -200,7 +201,7 @@ void CItemEditorColumns::RenderIndexColumn(int& colIdx, int itemIndex, bool& row
 
     if (wasDeactivated && newIndex >= 0 && newIndex < MAX_ITEM && newIndex != itemIndex)
     {
-        char targetName[128];
+        char targetName[128]{};
         WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[newIndex].Name, -1, targetName, sizeof(targetName), NULL, NULL);
 
         if (targetName[0] == '\0')

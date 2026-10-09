@@ -42,7 +42,12 @@ public sealed class Budgets(Rules rules)
 
     public ArenaStats Arena(string classId, string buildId)
     {
-        var gear = D.Gear.Where(g => g.Factor <= D.Pvp.GearFactorCap).OrderByDescending(g => g.Factor).First();
+        // First() throws InvalidOperationException when no gear entry satisfies the
+        // factor cap; surface a clear argument error instead of an empty-sequence crash.
+        var gear = D.Gear.Where(g => g.Factor <= D.Pvp.GearFactorCap)
+            .OrderByDescending(g => g.Factor).FirstOrDefault();
+        if (gear is null)
+            throw new ArgumentException("No gear entry satisfies the PvP gear factor cap.");
         var player = rules.Player(classId, buildId, D.Pvp.MatchLevel, D.Pvp.MatchMasterLevel, gear.Id);
         var weight = D.Pvp.AllocatedHealthWeight;
         player = player with { Health = D.Pvp.ReferenceHealth * (1 - weight) + player.Health * weight };

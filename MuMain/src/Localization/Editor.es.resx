@@ -329,7 +329,7 @@
     <value>Todo DESACTIVADO</value>
   </data>
   <data name="TODO - Not Working:" xml:space="preserve">
-    <value>TODO - No Funciona:</value>
+    <value>No Funciona:</value>
   </data>
   <data name="Shaders" xml:space="preserve">
     <value>Shaders</value>
@@ -344,7 +344,7 @@
     <value>Interfaz</value>
   </data>
   <data name="TODO - Not Implemented:" xml:space="preserve">
-    <value>TODO - No Implementado:</value>
+    <value>No Implementado:</value>
   </data>
   <data name="Hero" xml:space="preserve">
     <value>Héroe</value>

@@ -56,7 +56,7 @@ public partial class FlagsEnumField<TValue> : NotifyableInputBase<TValue>
         }
         else
         {
-            var result = flags.Select(f => Convert.ToInt32(f)).Aggregate((a, b) => a | b);
+            var result = flags.Select(f => Convert.ToInt64(f)).Aggregate((a, b) => a | b);
             this.CurrentValue = (TValue)Enum.ToObject(typeof(TValue), result);
         }
 
@@ -76,7 +76,8 @@ public partial class FlagsEnumField<TValue> : NotifyableInputBase<TValue>
             return Task.FromCanceled<IEnumerable<TValue>>(token);
         }
 
-        var results = this.UnassignedFlags.Where(f => FlagNames[f].Contains(text, StringComparison.OrdinalIgnoreCase));
+        var searchText = text ?? string.Empty;
+        var results = this.UnassignedFlags.Where(f => FlagNames[f].Contains(searchText, StringComparison.OrdinalIgnoreCase));
         return Task.FromResult(results);
     }
 }

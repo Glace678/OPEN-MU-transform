@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[错误2] 外挂工具检查程序未成功下载。请稍后再尝试连接。 \n\n 如果您仍然遇到相同的问题，请随时通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心</value>
+    <value>[错误2] 外挂工具检查程序未成功下载。请稍后再尝试连接。 
+
+ 如果您仍然遇到相同的问题，请随时通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[错误3] NPX.DLL 注册错误，缺少运行 nProtect 所需的文件。请从 Muonline.\n\n 下载 np_setup.exe 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心。</value>
+    <value>[错误3] NPX.DLL 注册错误，缺少运行 nProtect 所需的文件。请从 Muonline.
+
+ 下载 np_setup.exe 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心。</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[错误4] 程序中发生错误。 \n\n 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心</value>
+    <value>[错误4] 程序中发生错误。 
+
+ 如果您仍然遇到相同的问题，请通过我们的网站 http://muonline.webzen.com 联系我们的客户服务中心</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -285,7 +291,7 @@
     <comment>legacy_id=71</comment>
   </data>
   <data name="%s Resistance: %d" xml:space="preserve">
-    <value>%s 电阻：%d</value>
+    <value>%s 抗性：%d</value>
     <comment>legacy_id=72</comment>
   </data>
   <data name="Strength Requirement: %d" xml:space="preserve">
@@ -644,7 +650,7 @@
     <comment>legacy_id=157</comment>
   </data>
   <data name="%s Warp scroll" xml:space="preserve">
-    <value>%s 传送滚动条</value>
+    <value>%s 传送卷轴</value>
     <comment>legacy_id=158</comment>
   </data>
   <data name="Item option info" xml:space="preserve">
@@ -656,7 +662,7 @@
     <comment>legacy_id=160</comment>
   </data>
   <data name="LV" xml:space="preserve">
-    <value>左心室</value>
+    <value>等级</value>
     <comment>legacy_id=161</comment>
   </data>
   <data name="ATK Dmg" xml:space="preserve">
@@ -748,7 +754,7 @@
     <comment>legacy_id=183</comment>
   </data>
   <data name="the mouse, please draw." xml:space="preserve">
-    <value>老鼠，请画画。</value>
+    <value>用鼠标绘制。</value>
     <comment>legacy_id=184</comment>
   </data>
   <data name="Type /guild in front of" xml:space="preserve">
@@ -780,7 +786,7 @@
     <comment>legacy_id=191</comment>
   </data>
   <data name="the player you would like" xml:space="preserve">
-    <value>你想要的球员</value>
+    <value>你想要组队的玩家</value>
     <comment>legacy_id=192</comment>
   </data>
   <data name="to create a party with" xml:space="preserve">
@@ -816,7 +822,7 @@
     <comment>legacy_id=200,1774,2654</comment>
   </data>
   <data name="Exp : %u/%u" xml:space="preserve">
-    <value>过期 : %u/%u</value>
+    <value>经验 : %u/%u</value>
     <comment>legacy_id=201</comment>
   </data>
   <data name="Strength : %d" xml:space="preserve">
@@ -936,7 +942,7 @@
     <comment>legacy_id=232</comment>
   </data>
   <data name="Repair (L)" xml:space="preserve">
-    <value>修复（大）</value>
+    <value>修复（L）</value>
     <comment>legacy_id=233</comment>
   </data>
   <data name="Storage" xml:space="preserve">
@@ -944,7 +950,7 @@
     <comment>legacy_id=234,2888</comment>
   </data>
   <data name="Deposit" xml:space="preserve">
-    <value>订金</value>
+    <value>存入</value>
     <comment>legacy_id=235</comment>
   </data>
   <data name="Withdraw" xml:space="preserve">
@@ -1008,11 +1014,11 @@
     <comment>legacy_id=250</comment>
   </data>
   <data name="No more arrows" xml:space="preserve">
-    <value>没有更多的箭头</value>
+    <value>没有更多箭矢</value>
     <comment>legacy_id=251</comment>
   </data>
   <data name="Storage must be closed to warp" xml:space="preserve">
-    <value>存放时必须密闭以防变形</value>
+    <value>传送前必须先关闭仓库窗口。</value>
     <comment>legacy_id=252</comment>
   </data>
   <data name="Your level must be over %d to warp" xml:space="preserve">
@@ -1048,7 +1054,7 @@
     <comment>legacy_id=260</comment>
   </data>
   <data name="You cannot go to Atlans while riding a Unicorn" xml:space="preserve">
-    <value>你不能骑着独角兽去亚特兰斯</value>
+    <value>你不能骑着独角兽去亚特兰蒂斯</value>
     <comment>legacy_id=261</comment>
   </data>
   <data name="You can enter Altans only after joining a party." xml:space="preserve">
@@ -1060,11 +1066,11 @@
     <comment>legacy_id=263</comment>
   </data>
   <data name="/whisper off" xml:space="preserve">
-    <value>/低声说</value>
+    <value>/关闭耳语</value>
     <comment>legacy_id=264</comment>
   </data>
   <data name="/whisper on" xml:space="preserve">
-    <value>/窃窃私语</value>
+    <value>/开启耳语</value>
     <comment>legacy_id=265</comment>
   </data>
   <data name="Storage fee" xml:space="preserve">
@@ -1264,7 +1270,7 @@
     <comment>legacy_id=348</comment>
   </data>
   <data name="/mu" xml:space="preserve">
-    <value>/亩</value>
+    <value>/mu</value>
     <comment>legacy_id=349</comment>
   </data>
   <data name="Only characters over level %d can enter." xml:space="preserve">
@@ -1272,11 +1278,11 @@
     <comment>legacy_id=350</comment>
   </data>
   <data name="Arrows: %d (%d)" xml:space="preserve">
-    <value>箭头：%d (%d)</value>
+    <value>箭矢：%d (%d)</value>
     <comment>legacy_id=351</comment>
   </data>
   <data name="Bolts: %d (%d)" xml:space="preserve">
-    <value>螺栓：%d (%d)</value>
+    <value>弩箭：%d (%d)</value>
     <comment>legacy_id=352</comment>
   </data>
   <data name="Guardian Angel" xml:space="preserve">
@@ -1296,7 +1302,7 @@
     <comment>legacy_id=356</comment>
   </data>
   <data name="Exp: %d/%d" xml:space="preserve">
-    <value>到期：%d/%d</value>
+    <value>经验：%d/%d</value>
     <comment>legacy_id=357</comment>
   </data>
   <data name="Life: %d/%d" xml:space="preserve">
@@ -2174,19 +2180,19 @@
     <comment>legacy_id=574</comment>
   </data>
   <data name="Absorb 30%% of damage" xml:space="preserve">
-    <value>吸收30%% of伤害</value>
+    <value>吸收 30%% 伤害</value>
     <comment>legacy_id=575</comment>
   </data>
   <data name="Increase 30%% of attacking &amp; Wizardry Dmg" xml:space="preserve">
-    <value>攻击力和魔法伤害增加30%% of</value>
+    <value>攻击力和魔法伤害增加30%%</value>
     <comment>legacy_id=576</comment>
   </data>
   <data name="Increase %d%% of Damage" xml:space="preserve">
-    <value>增加 %d%% of 伤害</value>
+    <value>伤害提升 %d%%</value>
     <comment>legacy_id=577</comment>
   </data>
   <data name="Absorb %d%% of Damage" xml:space="preserve">
-    <value>吸收%d%% of伤害</value>
+    <value>吸收 %d%% 伤害</value>
     <comment>legacy_id=578</comment>
   </data>
   <data name="Increase speed" xml:space="preserve">
@@ -2350,7 +2356,7 @@
     <comment>legacy_id=619</comment>
   </data>
   <data name="Excellent" xml:space="preserve">
-    <value>出色的</value>
+    <value>卓越</value>
     <comment>legacy_id=620</comment>
   </data>
   <data name="Increases item option by 1 level" xml:space="preserve">
@@ -2382,7 +2388,7 @@
     <comment>legacy_id=627</comment>
   </data>
   <data name="Excellent Damage rate +10%%" xml:space="preserve">
-    <value>优 破损率+10%%</value>
+    <value>卓越伤害率+10%%</value>
     <comment>legacy_id=628</comment>
   </data>
   <data name="Increase Damage +level/20" xml:space="preserve">
@@ -2450,11 +2456,11 @@
     <comment>legacy_id=644</comment>
   </data>
   <data name="The %d Square (%d-%d level)" xml:space="preserve">
-    <value>%d方形（%d-%d等级）</value>
+    <value>%d 号场地（%d-%d 级）</value>
     <comment>legacy_id=645</comment>
   </data>
   <data name="The %d Square (Over %d level)" xml:space="preserve">
-    <value>%d 方形（超过 %d 级）</value>
+    <value>%d 号场地（超过 %d 级）</value>
     <comment>legacy_id=646</comment>
   </data>
   <data name="Congratulations!" xml:space="preserve">
@@ -2594,7 +2600,7 @@
     <comment>legacy_id=681,3423</comment>
   </data>
   <data name="point" xml:space="preserve">
-    <value>观点</value>
+    <value>点数</value>
     <comment>legacy_id=682</comment>
   </data>
   <data name="EXP" xml:space="preserve">
@@ -2610,11 +2616,11 @@
     <comment>legacy_id=685</comment>
   </data>
   <data name="You're underestimating yourself. Choose another square." xml:space="preserve">
-    <value>你太低估自己了。选择另一个正方形。</value>
+    <value>你太低估自己了。选择其他场地。</value>
     <comment>legacy_id=686</comment>
   </data>
   <data name="If you wish to stay alive, choose another square." xml:space="preserve">
-    <value>如果你想活命，就选择另一个方格。</value>
+    <value>如果你想活命，就选择其他场地。</value>
     <comment>legacy_id=687</comment>
   </data>
   <data name="Firecracker688" xml:space="preserve">
@@ -2842,7 +2848,7 @@
     <comment>legacy_id=743</comment>
   </data>
   <data name="Absorb %d%% additional damage" xml:space="preserve">
-    <value>吸收%d%% a额外伤害</value>
+    <value>吸收 %d%% 额外伤害</value>
     <comment>legacy_id=744</comment>
   </data>
   <data name="Raid Skill (Mana:%d)" xml:space="preserve">
@@ -2850,7 +2856,7 @@
     <comment>legacy_id=745</comment>
   </data>
   <data name="Parrying 10%% increased" xml:space="preserve">
-    <value>格挡增加10%% i</value>
+    <value>格挡率提升 10%%</value>
     <comment>legacy_id=746</comment>
   </data>
   <data name="You have exchanged Dinorants" xml:space="preserve">
@@ -3206,7 +3212,7 @@
     <comment>legacy_id=854</comment>
   </data>
   <data name="EvenIfYouDieOrUse" xml:space="preserve">
-    <value>即使您在任务期间死亡或使用“发送命令”或“城镇发送滚动条”，也不要断开连接，直到任务完成。如果断开连接，您将无法获得完成任务的任何奖励。</value>
+    <value>即使您在任务期间死亡或使用“传送命令”或“城镇传送卷轴”，也不要断开连接，直到任务完成。如果断开连接，您将无法获得完成任务的任何奖励。</value>
     <comment>legacy_id=855</comment>
   </data>
   <data name="TheWeaponHasBeenFoundThank" xml:space="preserve">
@@ -3614,11 +3620,11 @@
     <comment>legacy_id=965</comment>
   </data>
   <data name="Increase excellent damage rate %d%%" xml:space="preserve">
-    <value>增加优异伤害率%d%%</value>
+    <value>增加卓越伤害率%d%%</value>
     <comment>legacy_id=966</comment>
   </data>
   <data name="Increase excellent damage +%d" xml:space="preserve">
-    <value>增加优异伤害+%d</value>
+    <value>增加卓越伤害+%d</value>
     <comment>legacy_id=967</comment>
   </data>
   <data name="Increase skill attacking rate +%d" xml:space="preserve">
@@ -4386,7 +4392,7 @@
     <comment>legacy_id=1172</comment>
   </data>
   <data name="Increase 150%% attack in Dark Spirit class" xml:space="preserve">
-    <value>暗灵级攻击力增加150%% a</value>
+    <value>暗灵级攻击力增加150%%</value>
     <comment>legacy_id=1173</comment>
   </data>
   <data name="Increase 2 attack scope in Dark Spirit class" xml:space="preserve">
@@ -4478,7 +4484,7 @@
     <comment>legacy_id=1195</comment>
   </data>
   <data name="Teleport scroll can be used when the player is standing still" xml:space="preserve">
-    <value>当玩家站立不动时可以使用发送滚动条</value>
+    <value>当玩家站立不动时可以使用传送卷轴</value>
     <comment>legacy_id=1196</comment>
   </data>
   <data name="Of1197" xml:space="preserve">
@@ -4650,11 +4656,11 @@
     <comment>legacy_id=1239</comment>
   </data>
   <data name="The account has been teleported general character %d, Magic Gladiator %d" xml:space="preserve">
-    <value>此账号已发送普通角色%d、魔法角斗士%d</value>
+    <value>此账号已转移普通角色%d、魔剑士%d</value>
     <comment>legacy_id=1240</comment>
   </data>
   <data name="Teleport character" xml:space="preserve">
-    <value>发送角色</value>
+    <value>传送角色</value>
     <comment>legacy_id=1241</comment>
   </data>
   <data name="Magic Gladiator, Dark lord" xml:space="preserve">
@@ -4770,7 +4776,7 @@
     <comment>legacy_id=1273</comment>
   </data>
   <data name="OriginatesFromSilverHunterANickname" xml:space="preserve">
-    <value>源自“白银猎人”，这是整个大陆最伟大的射手奥斯瓦尔德的暱称。奥斯瓦尔德总是使用银色箭头来攻击敌人，在恶魔眼中，他是死亡的预兆。</value>
+    <value>源自“白银猎人”，这是整个大陆最伟大的射手奥斯瓦尔德的暱称。奥斯瓦尔德总是使用银色箭矢来攻击敌人，在恶魔眼中，他是死亡的预兆。</value>
     <comment>legacy_id=1274</comment>
   </data>
   <data name="OriginatesFromStormKnightANickname" xml:space="preserve">
@@ -4850,7 +4856,7 @@
     <comment>legacy_id=1299</comment>
   </data>
   <data name="Master" xml:space="preserve">
-    <value>掌握</value>
+    <value>盟主</value>
     <comment>legacy_id=1300,1745</comment>
   </data>
   <data name="Assist. M." xml:space="preserve">
@@ -5222,7 +5228,7 @@
     <comment>legacy_id=1394</comment>
   </data>
   <data name="Tie!" xml:space="preserve">
-    <value>领带！</value>
+    <value>平局！</value>
     <comment>legacy_id=1395</comment>
   </data>
   <data name="Lose" xml:space="preserve">
@@ -5294,11 +5300,11 @@
     <comment>legacy_id=1415</comment>
   </data>
   <data name="Scroll of Guardian" xml:space="preserve">
-    <value>守护者滚动条</value>
+    <value>守护者卷轴</value>
     <comment>legacy_id=1416</comment>
   </data>
   <data name="Damage +20%% increase effect" xml:space="preserve">
-    <value>伤害+20%% i效果增加</value>
+    <value>伤害+20%% 效果提升</value>
     <comment>legacy_id=1417</comment>
   </data>
   <data name="Duration 60 seconds" xml:space="preserve">
@@ -5706,7 +5712,7 @@
     <comment>legacy_id=1527</comment>
   </data>
   <data name="No. Reg." xml:space="preserve">
-    <value>否。注册。</value>
+    <value>登记编号</value>
     <comment>legacy_id=1528</comment>
   </data>
   <data name="Stat" xml:space="preserve">
@@ -6286,7 +6292,7 @@
     <comment>legacy_id=1679</comment>
   </data>
   <data name="Fenrir's Horn, Scroll of Blood, Condor's Feather" xml:space="preserve">
-    <value>芬里尔之角、鲜血滚动条、神鹰之羽</value>
+    <value>芬里尔之角、鲜血卷轴、神鹰之羽</value>
     <comment>legacy_id=1680</comment>
   </data>
   <data name="Regular chat" xml:space="preserve">
@@ -6442,7 +6448,7 @@
     <comment>legacy_id=1719</comment>
   </data>
   <data name="ItWasOriginatedFromTheSaint" xml:space="preserve">
-    <value>它起源於穆伦圣人拉克斯米隆，意思是「被爱的人」。</value>
+    <value>它起源于穆伦圣人拉克斯米隆，意思是「被爱的人」。</value>
     <comment>legacy_id=1720</comment>
   </data>
   <data name="ItWasOriginatedFromTheGreatest" xml:space="preserve">
@@ -6478,7 +6484,7 @@
     <comment>legacy_id=1728</comment>
   </data>
   <data name="AtlansIsAnUnderwaterCityCreated" xml:space="preserve">
-    <value>亚特兰斯是坎图尔人建造的水下城市，它有着比故乡坎图尔更辉煌的文明。</value>
+    <value>亚特兰蒂斯是坎图尔人建造的水下城市，它有着比故乡坎图尔更辉煌的文明。</value>
     <comment>legacy_id=1729</comment>
   </data>
   <data name="ItSAnAcronymOfAncient" xml:space="preserve">
@@ -6658,7 +6664,7 @@
     <comment>legacy_id=1775</comment>
   </data>
   <data name="%d%% increment" xml:space="preserve">
-    <value>%d%% i增量</value>
+    <value>%d%% 增量</value>
     <comment>legacy_id=1776</comment>
   </data>
   <data name="DIncrement1777" xml:space="preserve">
@@ -6706,7 +6712,7 @@
     <comment>legacy_id=1787</comment>
   </data>
   <data name="%d%% decrease" xml:space="preserve">
-    <value>%d%% d减少</value>
+    <value>%d%% 减少</value>
     <comment>legacy_id=1788</comment>
   </data>
   <data name="Pollution skill (Mana: %d)" xml:space="preserve">
@@ -6734,7 +6740,7 @@
     <comment>legacy_id=1804</comment>
   </data>
   <data name="and press the button for no. of jewels" xml:space="preserve">
-    <value>然后按“否”按钮。珠宝的</value>
+    <value>然后按下对应宝石数量的按钮。</value>
     <comment>legacy_id=1805</comment>
   </data>
   <data name="Jewel of Bless" xml:space="preserve">
@@ -7314,7 +7320,7 @@
     <comment>legacy_id=1972</comment>
   </data>
   <data name="Class" xml:space="preserve">
-    <value>班级</value>
+    <value>职业</value>
     <comment>legacy_id=1973</comment>
   </data>
   <data name="Feel the unusual forces around the Fortress of Crywolf." xml:space="preserve">
@@ -7426,7 +7432,7 @@
     <comment>legacy_id=2025</comment>
   </data>
   <data name="Arrow will not decrease during activation" xml:space="preserve">
-    <value>激活期间箭头不会减少</value>
+    <value>激活期间箭矢不会减少</value>
     <comment>legacy_id=2026,2040</comment>
   </data>
   <data name="You've been playing for %d hours." xml:space="preserve">
@@ -7446,7 +7452,7 @@
     <comment>legacy_id=2038</comment>
   </data>
   <data name="Infinity arrow activated" xml:space="preserve">
-    <value>无限箭头已激活</value>
+    <value>无限箭矢已激活</value>
     <comment>legacy_id=2039</comment>
   </data>
   <data name="Cheer" xml:space="preserve">
@@ -7714,15 +7720,15 @@
     <comment>legacy_id=2148</comment>
   </data>
   <data name="You may now proceed to the Refinery Tower." xml:space="preserve">
-    <value>您现在可以前往炼油塔。</value>
+    <value>您现在可以前往精炼之塔。</value>
     <comment>legacy_id=2149</comment>
   </data>
   <data name="Path to the Refinery Tower is now opened." xml:space="preserve">
-    <value>通往炼油塔的道路现已开放。</value>
+    <value>通往精炼之塔的道路现已开放。</value>
     <comment>legacy_id=2150</comment>
   </data>
   <data name="Path to the Refinery Tower will be closed in %d hours." xml:space="preserve">
-    <value>通往炼油塔的道路将在 %d 小时内关闭。</value>
+    <value>通往精炼之塔的道路将在 %d 小时内关闭。</value>
     <comment>legacy_id=2151</comment>
   </data>
   <data name="Battle with Maya is ongoing." xml:space="preserve">
@@ -7730,7 +7736,7 @@
     <comment>legacy_id=2152</comment>
   </data>
   <data name="DPlayersAreTryingToOpen" xml:space="preserve">
-    <value>%d 玩家正在尝试打开通往精炼塔的道路。你无法进入炼油厂，自动防御系统已启动。</value>
+    <value>%d 玩家正在尝试打开通往精炼之塔的道路。你无法进入精炼之塔，自动防御系统已启动。</value>
     <comment>legacy_id=2153</comment>
   </data>
   <data name="Currently %d players are in battle with Maya's lefe hand." xml:space="preserve">
@@ -7754,11 +7760,11 @@
     <comment>legacy_id=2158</comment>
   </data>
   <data name="ForceOfTheNightmareHasInvaded" xml:space="preserve">
-    <value>咒怨魔王的力量入侵了提炼之塔。塔内状态不稳定，入口将关闭 %d 分钟。</value>
+    <value>咒怨魔王的力量入侵了精炼之塔。塔内状态不稳定，入口将关闭 %d 分钟。</value>
     <comment>legacy_id=2159</comment>
   </data>
   <data name="DefeatTheNightmareThatControllingThe" xml:space="preserve">
-    <value>击败控制玛雅之手的咒怨魔王，进入提炼之塔。</value>
+    <value>击败控制玛雅之手的咒怨魔王，进入精炼之塔。</value>
     <comment>legacy_id=2160</comment>
   </data>
   <data name="EntranceIsRestrictedToEnsureThe" xml:space="preserve">
@@ -7814,7 +7820,7 @@
     <comment>legacy_id=2173</comment>
   </data>
   <data name="You can't warp to the Refinery Tower." xml:space="preserve">
-    <value>你无法发送到精炼塔。</value>
+    <value>你无法传送到精炼之塔。</value>
     <comment>legacy_id=2174</comment>
   </data>
   <data name="You can't warp wearing the Ring of Transformation." xml:space="preserve">
@@ -7834,7 +7840,7 @@
     <comment>legacy_id=2178</comment>
   </data>
   <data name="Refinery Tower" xml:space="preserve">
-    <value>炼油塔</value>
+    <value>精炼之塔</value>
     <comment>legacy_id=2179</comment>
   </data>
   <data name="Character: %d" xml:space="preserve">
@@ -7918,7 +7924,7 @@
     <comment>legacy_id=2200</comment>
   </data>
   <data name="About refinery" xml:space="preserve">
-    <value>关于炼油厂</value>
+    <value>关于精炼</value>
     <comment>legacy_id=2201</comment>
   </data>
   <data name="Jewel of Harmony" xml:space="preserve">
@@ -7942,7 +7948,7 @@
     <comment>legacy_id=2206</comment>
   </data>
   <data name="I.D. of Kantur Chief Scientist. You can enter the Refinery Tower." xml:space="preserve">
-    <value>ID。坎图尔首席科学家。您可以进入炼油塔。</value>
+    <value>ID。坎图尔首席科学家。您可以进入精炼之塔。</value>
     <comment>legacy_id=2207</comment>
   </data>
   <data name="Jewel with impurities" xml:space="preserve">
@@ -8006,7 +8012,7 @@
     <comment>legacy_id=2223</comment>
   </data>
   <data name="RefineryHasStartedRefineryIsA" xml:space="preserve">
-    <value>炼油厂已启动。精炼是将物品转化为强化石的过程的一部分。精炼的物品将会消失，请务必检查该物品。</value>
+    <value>精炼系统已启动。精炼是将物品转化为强化石以进行强化的过程的一部分。精炼后的物品将会消失，请务必检查该物品。</value>
     <comment>legacy_id=2224</comment>
   </data>
   <data name="VitalityD2225" xml:space="preserve">
@@ -8302,7 +8308,7 @@
     <comment>legacy_id=2299</comment>
   </data>
   <data name="Minute" xml:space="preserve">
-    <value>分分钟</value>
+    <value>分钟</value>
     <comment>legacy_id=2300</comment>
   </data>
   <data name="Second" xml:space="preserve">
@@ -8370,7 +8376,7 @@
     <comment>legacy_id=2322</comment>
   </data>
   <data name="GM has gifted this special box." xml:space="preserve">
-    <value>通用汽车赠送了这个特殊的盒子。</value>
+    <value>GM 赠送了这个特殊的礼盒。</value>
     <comment>legacy_id=2323</comment>
   </data>
   <data name="GM summon zone" xml:space="preserve">
@@ -8382,7 +8388,7 @@
     <comment>legacy_id=2325</comment>
   </data>
   <data name="Point2326" xml:space="preserve">
-    <value>观点</value>
+    <value>点数</value>
     <comment>legacy_id=2326</comment>
   </data>
   <data name="PC cafe point store allows you to only purchase the objects." xml:space="preserve">
@@ -8478,7 +8484,7 @@
     <comment>legacy_id=2359</comment>
   </data>
   <data name="The allies are advancing on. We are not far from the victory! Charge on!" xml:space="preserve">
-    <value>盟友们正在前进。我们离胜利不远了！充电吧！</value>
+    <value>盟友们正在前进。我们离胜利不远了！冲啊！</value>
     <comment>legacy_id=2360</comment>
   </data>
   <data name="AlthoughWeHaveLostThisBattle" xml:space="preserve">
@@ -8498,7 +8504,7 @@
     <comment>legacy_id=2364</comment>
   </data>
   <data name="You need the Scroll of Blood to enter the %s zone." xml:space="preserve">
-    <value>您需要鲜血滚动条才能进入 %s 区域。</value>
+    <value>您需要鲜血卷轴才能进入 %s 区域。</value>
     <comment>legacy_id=2365</comment>
   </data>
   <data name="You must be of the minimum level 220 to enter the zone." xml:space="preserve">
@@ -8506,7 +8512,7 @@
     <comment>legacy_id=2366</comment>
   </data>
   <data name="The admission and scroll levels do not match." xml:space="preserve">
-    <value>入场等级和滚动条等级不符。</value>
+    <value>入场等级和卷轴等级不符。</value>
     <comment>legacy_id=2367</comment>
   </data>
   <data name="You cannot enter the zone with the number of members exceeding the limit." xml:space="preserve">
@@ -8542,7 +8548,7 @@
     <comment>legacy_id=2375</comment>
   </data>
   <data name="Scroll of Blood +%d" xml:space="preserve">
-    <value>鲜血滚动条 +%d</value>
+    <value>鲜血卷轴 +%d</value>
     <comment>legacy_id=2376</comment>
   </data>
   <data name="Achieved Kill Point" xml:space="preserve">
@@ -8622,15 +8628,15 @@
     <comment>legacy_id=2395</comment>
   </data>
   <data name="Scroll of Blood" xml:space="preserve">
-    <value>血滚动条</value>
+    <value>鲜血卷轴</value>
     <comment>legacy_id=2396</comment>
   </data>
   <data name="AssembleTheScrollOfBloodWith" xml:space="preserve">
-    <value>用幻象魔法的契约组装血色滚动条。</value>
+    <value>用幻象魔法的契约组装鲜血卷轴。</value>
     <comment>legacy_id=2397</comment>
   </data>
   <data name="Assemble the Scroll of Blood with the old scrolls." xml:space="preserve">
-    <value>将血液滚动条与旧滚动条组装起来。</value>
+    <value>将鲜血卷轴与旧卷轴组装起来。</value>
     <comment>legacy_id=2398</comment>
   </data>
   <data name="This is a mark of Illusion Sorcery; this is required to enter the temple." xml:space="preserve">
@@ -8722,7 +8728,7 @@
     <comment>legacy_id=2421</comment>
   </data>
   <data name="0:30 Blood Castle 12:30 Blood Castle" xml:space="preserve">
-    <value>0:30 血腥城堡 12:30 血腥城堡</value>
+    <value>0:30 血色城堡 12:30 血色城堡</value>
     <comment>legacy_id=2422</comment>
   </data>
   <data name="1:00 Illusion Temple 13:00 Illusion Temple" xml:space="preserve">
@@ -8738,7 +8744,7 @@
     <comment>legacy_id=2425</comment>
   </data>
   <data name="2:30 Blood Castle 14:30 Blood Castle" xml:space="preserve">
-    <value>2:30 血腥城堡 14:30 血腥城堡</value>
+    <value>2:30 血色城堡 14:30 血色城堡</value>
     <comment>legacy_id=2426</comment>
   </data>
   <data name="3:00 Devil's Square 15:00 Devil's Square" xml:space="preserve">
@@ -8754,7 +8760,7 @@
     <comment>legacy_id=2429</comment>
   </data>
   <data name="4:30 Blood Castle 16:30 Blood Castle" xml:space="preserve">
-    <value>4:30 血腥城堡 16:30 血腥城堡</value>
+    <value>4:30 血色城堡 16:30 血色城堡</value>
     <comment>legacy_id=2430</comment>
   </data>
   <data name="5:00 Illusion Temple 17:00 Illusion Temple" xml:space="preserve">
@@ -8770,7 +8776,7 @@
     <comment>legacy_id=2433</comment>
   </data>
   <data name="6:30 Blood Castle 18:30 Blood Castle" xml:space="preserve">
-    <value>6:30 血腥城堡 18:30 血腥城堡</value>
+    <value>6:30 血色城堡 18:30 血色城堡</value>
     <comment>legacy_id=2434</comment>
   </data>
   <data name="7:00 Devil's Square 19:00 Devil's Square" xml:space="preserve">
@@ -8786,7 +8792,7 @@
     <comment>legacy_id=2437</comment>
   </data>
   <data name="8:30 Blood Castle 20:30 Blood Castle" xml:space="preserve">
-    <value>8:30 血腥城堡 20:30 血腥城堡</value>
+    <value>8:30 血色城堡 20:30 血色城堡</value>
     <comment>legacy_id=2438</comment>
   </data>
   <data name="9:00 Illusion Temple 21:00 Illusion Temple" xml:space="preserve">
@@ -8802,7 +8808,7 @@
     <comment>legacy_id=2441</comment>
   </data>
   <data name="10:30 Blood Castle 22:30 Blood Castle" xml:space="preserve">
-    <value>10:30 血腥城堡 22:30 血腥城堡</value>
+    <value>10:30 血色城堡 22:30 血色城堡</value>
     <comment>legacy_id=2442</comment>
   </data>
   <data name="11:00 Devil's Square 23:00 Devil's Square" xml:space="preserve">
@@ -8890,11 +8896,11 @@
     <comment>legacy_id=2464</comment>
   </data>
   <data name="Restores HP by 100%% immediately." xml:space="preserve">
-    <value>立即恢复HP 100%% i。</value>
+    <value>立即恢复 HP 100%%。</value>
     <comment>legacy_id=2500</comment>
   </data>
   <data name="Restores Mana by 100%% immediately." xml:space="preserve">
-    <value>立即恢复 100%% i 法力。</value>
+    <value>立即恢复 100%% 法力。</value>
     <comment>legacy_id=2501</comment>
   </data>
   <data name="You may continue to use the strengthener power." xml:space="preserve">
@@ -8914,7 +8920,7 @@
     <comment>legacy_id=2505</comment>
   </data>
   <data name="Increases Wizardry by %d" xml:space="preserve">
-    <value>增加巫术 %d</value>
+    <value>魔法伤害+%d</value>
     <comment>legacy_id=2506</comment>
   </data>
   <data name="Increases HP by %d" xml:space="preserve">
@@ -9062,7 +9068,7 @@
     <comment>legacy_id=2550</comment>
   </data>
   <data name="Restores HP by 65%% immediately." xml:space="preserve">
-    <value>立即恢复生命值65%% i。</value>
+    <value>立即恢复生命值 65%%。</value>
     <comment>legacy_id=2559</comment>
   </data>
   <data name="Cherry Blossoms branches assembly" xml:space="preserve">
@@ -9318,11 +9324,11 @@
     <comment>legacy_id=2646</comment>
   </data>
   <data name="Socket" xml:space="preserve">
-    <value>插座</value>
+    <value>插槽</value>
     <comment>legacy_id=2650</comment>
   </data>
   <data name="Socket option" xml:space="preserve">
-    <value>插座选项</value>
+    <value>插槽属性</value>
     <comment>legacy_id=2651</comment>
   </data>
   <data name="No item application" xml:space="preserve">
@@ -9334,15 +9340,15 @@
     <comment>legacy_id=2653</comment>
   </data>
   <data name="Socket %d: %s" xml:space="preserve">
-    <value>插座 %d：%s</value>
+    <value>插槽 %d：%s</value>
     <comment>legacy_id=2655</comment>
   </data>
   <data name="Bonus socket option" xml:space="preserve">
-    <value>额外插座选项</value>
+    <value>额外插槽属性</value>
     <comment>legacy_id=2656</comment>
   </data>
   <data name="Socket package option" xml:space="preserve">
-    <value>插座封装选项</value>
+    <value>插槽套装属性</value>
     <comment>legacy_id=2657</comment>
   </data>
   <data name="Extraction" xml:space="preserve">
@@ -9350,7 +9356,7 @@
     <comment>legacy_id=2660</comment>
   </data>
   <data name="Assembly" xml:space="preserve">
-    <value>集会</value>
+    <value>合成</value>
     <comment>legacy_id=2661</comment>
   </data>
   <data name="Application" xml:space="preserve">
@@ -9402,15 +9408,15 @@
     <comment>legacy_id=2673</comment>
   </data>
   <data name="Select applicable socket" xml:space="preserve">
-    <value>选择适用的插座</value>
+    <value>选择适用的插槽</value>
     <comment>legacy_id=2674</comment>
   </data>
   <data name="Select destructible socket" xml:space="preserve">
-    <value>选择可破坏的插座</value>
+    <value>选择可破坏的插槽</value>
     <comment>legacy_id=2675</comment>
   </data>
   <data name="You must select the socket." xml:space="preserve">
-    <value>您必须选择套接字。</value>
+    <value>您必须选择插槽。</value>
     <comment>legacy_id=2676</comment>
   </data>
   <data name="It's already applied on the character." xml:space="preserve">
@@ -9418,7 +9424,7 @@
     <comment>legacy_id=2677</comment>
   </data>
   <data name="You must select the destructible socket." xml:space="preserve">
-    <value>您必须选择可破坏的插座。</value>
+    <value>您必须选择可破坏的插槽。</value>
     <comment>legacy_id=2678</comment>
   </data>
   <data name="There are no destructible seed spheres." xml:space="preserve">
@@ -9430,7 +9436,7 @@
     <comment>legacy_id=2680</comment>
   </data>
   <data name="Sphere" xml:space="preserve">
-    <value>领域</value>
+    <value>球体</value>
     <comment>legacy_id=2681</comment>
   </data>
   <data name="Seed Sphere" xml:space="preserve">
@@ -9462,7 +9468,7 @@
     <comment>legacy_id=2688</comment>
   </data>
   <data name="Duel Finished. You will be warped back to the viallage in %d seconds." xml:space="preserve">
-    <value>决斗结束。您将在 %d 秒内被发送回村庄。</value>
+    <value>决斗结束。您将在 %d 秒内被传送回村庄。</value>
     <comment>legacy_id=2689</comment>
   </data>
   <data name="Duel Invite" xml:space="preserve">
@@ -9474,7 +9480,7 @@
     <comment>legacy_id=2691</comment>
   </data>
   <data name="Colosseum is occupied." xml:space="preserve">
-    <value>斗兽场已被占领。</value>
+    <value>决斗场已被占领。</value>
     <comment>legacy_id=2692</comment>
   </data>
   <data name="Try it again later" xml:space="preserve">
@@ -9498,19 +9504,19 @@
     <comment>legacy_id=2698</comment>
   </data>
   <data name="Select an Colosseum you'd like to watch." xml:space="preserve">
-    <value>选择您想观赏的罗马竞技场。</value>
+    <value>选择您想观战的决斗场。</value>
     <comment>legacy_id=2699</comment>
   </data>
   <data name="Colosseum # %d" xml:space="preserve">
-    <value>斗兽场#%d</value>
+    <value>决斗场#%d</value>
     <comment>legacy_id=2700</comment>
   </data>
   <data name="Watch" xml:space="preserve">
-    <value>手表</value>
+    <value>观战</value>
     <comment>legacy_id=2701</comment>
   </data>
   <data name="Colosseum" xml:space="preserve">
-    <value>斗兽场</value>
+    <value>决斗场</value>
     <comment>legacy_id=2703</comment>
   </data>
   <data name="Open only for level %d or higher." xml:space="preserve">
@@ -9526,7 +9532,7 @@
     <comment>legacy_id=2706</comment>
   </data>
   <data name="Too many people in the colossum." xml:space="preserve">
-    <value>巨像里的人太多了。</value>
+    <value>决斗场里的人太多了。</value>
     <comment>legacy_id=2707</comment>
   </data>
   <data name="+10~+15 When upgrading level item please put it in combination window." xml:space="preserve">
@@ -9670,7 +9676,7 @@
     <comment>legacy_id=2746</comment>
   </data>
   <data name="EXP rate 50%% increase" xml:space="preserve">
-    <value>EXP率50%% i增加</value>
+    <value>EXP 获得率提升 50%%</value>
     <comment>legacy_id=2747</comment>
   </data>
   <data name="Increase Defensive Skill +50" xml:space="preserve">
@@ -9706,7 +9712,7 @@
     <comment>legacy_id=2762,2799</comment>
   </data>
   <data name="3 monsters reaching the magic circle," xml:space="preserve">
-    <value>3只怪物到达魔法阵，</value>
+    <value>3 只怪物抵达光圈时，</value>
     <comment>legacy_id=2763</comment>
   </data>
   <data name="the character dying, the server disconnecting, or using the warp command" xml:space="preserve">
@@ -9726,7 +9732,7 @@
     <comment>legacy_id=2767</comment>
   </data>
   <data name="allowed them to reach the point line." xml:space="preserve">
-    <value>让他们到达了点线。</value>
+    <value>让他们抵达了终点线。</value>
     <comment>legacy_id=2768</comment>
   </data>
   <data name="You've successfully defended Doppelganger." xml:space="preserve">
@@ -9850,7 +9856,7 @@
     <comment>legacy_id=2804</comment>
   </data>
   <data name="Round %d (Zone %d)" xml:space="preserve">
-    <value>圆形 %d（%d 区）</value>
+    <value>第 %d 轮（%d 区）</value>
     <comment>legacy_id=2805</comment>
   </data>
   <data name="Varka" xml:space="preserve">
@@ -9890,7 +9896,7 @@
     <comment>legacy_id=2820</comment>
   </data>
   <data name="Change Class" xml:space="preserve">
-    <value>改变班级</value>
+    <value>转职</value>
     <comment>legacy_id=2821</comment>
   </data>
   <data name="Start Quest" xml:space="preserve">
@@ -10194,7 +10200,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d 送给您了一份礼物。</value>
+    <value>%s 送给您了一份礼物。</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10202,7 +10208,7 @@
     <comment>legacy_id=2922</comment>
   </data>
   <data name="DoYouWishToUseS" xml:space="preserve">
-    <value>您想使用%s吗？ ##*除印章和滚动条外，所有物品都将转移到您的库存中。 ##从保存或礼品库存中删除的物品无法恢复或退回。</value>
+    <value>您想使用%s吗？ ##*除印章和卷轴外，所有物品都将转移到您的库存中。 ##从保存或礼品库存中删除的物品无法恢复或退回。</value>
     <comment>legacy_id=2923</comment>
   </data>
   <data name="Item Used" xml:space="preserve">
@@ -10374,55 +10380,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>可让您享受30天MU的物品。 \n只能在MU Online网站上使用。</value>
+    <value>可让您享受30天MU的物品。 
+只能在MU Online网站上使用。</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>可以享受 MU 90 天的物品。 \n 只能在 MU Online 网站上使用。</value>
+    <value>可以享受 MU 90 天的物品。 
+ 只能在 MU Online 网站上使用。</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>可以让你享受30天MU的道具。如果退款，您将收到不包括积分价格的金额。 \n只能从MU Online网站使用。</value>
+    <value>可以让你享受30天MU的道具。如果退款，您将收到不包括积分价格的金额。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>可以让您享受 MU 90 天的道具。如果退款，您将收到不包括积分价格的金额。 \n只能从MU Online网站使用。</value>
+    <value>可以让您享受 MU 90 天的道具。如果退款，您将收到不包括积分价格的金额。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>使用保存后可在60天内享受3小时MU的道具。 \n只能在MU Online网站上使用。</value>
+    <value>使用保存后可在60天内享受3小时MU的道具。 
+只能在MU Online网站上使用。</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>使用保存后可在 60 天内享受 MU 5 小时的道具。 \n只能在 MU Online 网站上使用。</value>
+    <value>使用保存后可在 60 天内享受 MU 5 小时的道具。 
+只能在 MU Online 网站上使用。</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>使用保存后可在 60 天内享受 Mu 10 小时的道具。 \n只能在 Mu Online 网站上使用。</value>
+    <value>使用保存后可在 60 天内享受 Mu 10 小时的道具。 
+只能在 Mu Online 网站上使用。</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>重置整个大师技能树一次。 \n只能从MU Online网站使用。</value>
+    <value>重置整个大师技能树一次。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>让您将角色的统计数据调整 500 点。 \n只能从 MU Online 网站使用。</value>
+    <value>让您将角色的统计数据调整 500 点。 
+只能从 MU Online 网站使用。</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>允许您将角色转移到同一服务器内的另一个账号。 \n只能从MU Online网站使用。</value>
+    <value>允许您将角色转移到同一服务器内的另一个账号。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>允许您重命名角色。 \n只能从MU Online网站使用。</value>
+    <value>允许您重命名角色。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>允许您将角色转移到同一账号内的另一台服务器。 \n只能从 MU Online 网站使用。</value>
+    <value>允许您将角色转移到同一账号内的另一台服务器。 
+只能从 MU Online 网站使用。</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>允许您请求角色转移一次和角色名称变更一次。 \n只能从MU Online网站使用。</value>
+    <value>允许您请求角色转移一次和角色名称变更一次。 
+只能从MU Online网站使用。</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -10926,11 +10945,11 @@
     <comment>legacy_id=3121</comment>
   </data>
   <data name="Charm item" xml:space="preserve">
-    <value>魅力物品</value>
+    <value>护符道具</value>
     <comment>legacy_id=3122</comment>
   </data>
   <data name="Relic item" xml:space="preserve">
-    <value>遗物物品</value>
+    <value>圣物道具</value>
     <comment>legacy_id=3123</comment>
   </data>
   <data name="Right click on your inventory to use." xml:space="preserve">
@@ -11022,7 +11041,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>您需要更多 %%s 才能购买该商品。</value>
+    <value>您需要更多 %s 才能购买该商品。</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -11138,7 +11157,7 @@
     <comment>legacy_id=3266</comment>
   </data>
   <data name="Restores SD by 65%% immediately." xml:space="preserve">
-    <value>立即恢复 SD 65%% i。</value>
+    <value>立即恢复 SD 65%%。</value>
     <comment>legacy_id=3267</comment>
   </data>
   <data name="Click the item to see the quest information again." xml:space="preserve">
@@ -11250,7 +11269,7 @@
     <comment>legacy_id=3294</comment>
   </data>
   <data name="If you are a Dark Wizard, exclusive item" xml:space="preserve">
-    <value>如果你是黑巫师，专属物品</value>
+    <value>如果你是魔法师，专属物品</value>
     <comment>legacy_id=3295</comment>
   </data>
   <data name="for Dark Wizard will be created." xml:space="preserve">
@@ -11542,7 +11561,7 @@
     <comment>legacy_id=3375</comment>
   </data>
   <data name="What? You wanted to go to Acheron without a map?" xml:space="preserve">
-    <value>什么？没有精灵地图也想前往阿卡伦吗？</value>
+    <value>什么？没有灵图也想前往阿卡伦吗？</value>
     <comment>legacy_id=3376</comment>
   </data>
   <data name="The ships are full. Let's wait until we can go." xml:space="preserve">
@@ -11722,7 +11741,7 @@
     <comment>legacy_id=3424</comment>
   </data>
   <data name="T" xml:space="preserve">
-    <value>时间</value>
+    <value>T</value>
     <comment>legacy_id=3426</comment>
   </data>
   <data name="Community" xml:space="preserve">
@@ -11774,11 +11793,11 @@
     <comment>legacy_id=3441</comment>
   </data>
   <data name="M" xml:space="preserve">
-    <value>中号</value>
+    <value>M</value>
     <comment>legacy_id=3442</comment>
   </data>
   <data name="O" xml:space="preserve">
-    <value>氧</value>
+    <value>O</value>
     <comment>legacy_id=3443</comment>
   </data>
   <data name="U" xml:space="preserve">
@@ -11794,7 +11813,7 @@
     <comment>legacy_id=3446</comment>
   </data>
   <data name="P" xml:space="preserve">
-    <value>磷</value>
+    <value>P</value>
     <comment>legacy_id=3447</comment>
   </data>
   <data name="G" xml:space="preserve">
@@ -11802,7 +11821,7 @@
     <comment>legacy_id=3448</comment>
   </data>
   <data name="B" xml:space="preserve">
-    <value>乙</value>
+    <value>B</value>
     <comment>legacy_id=3449</comment>
   </data>
   <data name="System Menu" xml:space="preserve">
@@ -11950,7 +11969,7 @@
     <comment>legacy_id=3521</comment>
   </data>
   <data name="Set Item" xml:space="preserve">
-    <value>设置道具</value>
+    <value>套装道具</value>
     <comment>legacy_id=3522</comment>
   </data>
   <data name="Excellent Item" xml:space="preserve">
@@ -12234,7 +12253,7 @@
     <comment>legacy_id=3597</comment>
   </data>
   <data name="The first tree" xml:space="preserve">
-    <value>第一棵树</value>
+    <value>第一条技能树</value>
     <comment>legacy_id=3598</comment>
   </data>
   <data name="ProtectionTranquilityBlessingDivineResilienceConviction" xml:space="preserve">
@@ -12246,7 +12265,7 @@
     <comment>legacy_id=3600</comment>
   </data>
   <data name="The second tree" xml:space="preserve">
-    <value>第二棵树</value>
+    <value>第二条技能树</value>
     <comment>legacy_id=3601</comment>
   </data>
   <data name="&lt;Valor, Wisdom, Salvation, Chaos, Determination, Justice, Volition&gt;" xml:space="preserve">
@@ -12254,7 +12273,7 @@
     <comment>legacy_id=3602</comment>
   </data>
   <data name="The third tree" xml:space="preserve">
-    <value>第三棵树</value>
+    <value>第三条技能树</value>
     <comment>legacy_id=3603</comment>
   </data>
   <data name="&lt;Rage, Transcendence, Storm, Honor, Ultimacy, Conquest, Destruction&gt;" xml:space="preserve">
@@ -12346,7 +12365,7 @@
     <comment>legacy_id=3626</comment>
   </data>
   <data name="You need a Spirit Map to enter Acheron." xml:space="preserve">
-    <value>进入阿卡伦需要精灵地图。</value>
+    <value>进入阿卡伦需要灵图。</value>
     <comment>legacy_id=3627</comment>
   </data>
   <data name="Need more guild members to register for the Arca War." xml:space="preserve">
@@ -12390,7 +12409,7 @@
     <comment>legacy_id=3637</comment>
   </data>
   <data name="Fire Tower" xml:space="preserve">
-    <value>消防塔</value>
+    <value>火焰之塔</value>
     <comment>legacy_id=3638</comment>
   </data>
   <data name="Water Tower" xml:space="preserve">
@@ -12550,7 +12569,7 @@
     <comment>legacy_id=3694</comment>
   </data>
   <data name="Set item +7 or more, additional options +4 or more. %d" xml:space="preserve">
-    <value>设置道具+7以上，附加选项+4以上。 %d</value>
+    <value>套装道具+7以上，附加选项+4以上。 %d</value>
     <comment>legacy_id=3695</comment>
   </data>
   <data name="Do you want to refine/combine items?" xml:space="preserve">
@@ -12746,7 +12765,7 @@
     <comment>legacy_id=3756</comment>
   </data>
   <data name="Socket items" xml:space="preserve">
-    <value>插座道具</value>
+    <value>插槽道具</value>
     <comment>legacy_id=3757</comment>
   </data>
   <data name="Item Refinement" xml:space="preserve">
@@ -12861,11 +12880,11 @@
     <value>请选择要解除敌对关系的战盟名称。</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
     <value>是否解除与该战盟的敌对关系？</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
+  <data name="¼¹ö" xml:space="preserve">
     <value>服务器</value>
     <comment>legacy_id=3787</comment>
   </data>
@@ -12909,9 +12928,6 @@
   </data>
   <data name="Checking server availability" xml:space="preserve">
     <value>正在检查服务器状态</value>
-  </data>
-  <data name="Connecting to the server" xml:space="preserve">
-    <value>连接到服务器</value>
   </data>
   <data name="Logging in" xml:space="preserve">
     <value>正在登录</value>

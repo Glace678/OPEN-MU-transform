@@ -201,7 +201,7 @@
     <comment>legacy_id=65</comment>
   </data>
   <data name="Answer_65_Slot_0" xml:space="preserve">
-    <value> Я піду і знайду «Сльову Ельфа»!</value>
+    <value>Я піду і знайду «Сльову Ельфа»!</value>
     <comment>legacy_id=1650</comment>
   </data>
   <data name="Text_66" xml:space="preserve">
@@ -681,7 +681,7 @@
     <comment>legacy_id=2440</comment>
   </data>
   <data name="Text_145" xml:space="preserve">
-    <value> Лугард, Бог Світла, попросив вас про послугу. Однак ви ще не дійшли рівня. Будь ласка, поверніться, коли завершите попередній квест.</value>
+    <value>Лугард, Бог Світла, попросив вас про послугу. Однак ви ще не дійшли рівня. Будь ласка, поверніться, коли завершите попередній квест.</value>
     <comment>legacy_id=145</comment>
   </data>
   <data name="Answer_145_Slot_0" xml:space="preserve">
@@ -697,7 +697,7 @@
     <comment>legacy_id=2460</comment>
   </data>
   <data name="Text_147" xml:space="preserve">
-    <value> Лугард, Бог Світла, попросив вас про послугу.</value>
+    <value>Лугард, Бог Світла, попросив вас про послугу.</value>
     <comment>legacy_id=147</comment>
   </data>
   <data name="Answer_147_Slot_0" xml:space="preserve">
@@ -705,7 +705,7 @@
     <comment>legacy_id=2470</comment>
   </data>
   <data name="Text_148" xml:space="preserve">
-    <value> Лугард попросив вас шукати героїв, щоб протистояти новій загрозі Балгаса для MU.</value>
+    <value>Лугард попросив вас шукати героїв, щоб протистояти новій загрозі Балгаса для MU.</value>
     <comment>legacy_id=148</comment>
   </data>
   <data name="Answer_148_Slot_0" xml:space="preserve">

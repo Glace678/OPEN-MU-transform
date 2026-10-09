@@ -1,4 +1,4 @@
-﻿// <copyright file="InMemoryContext.cs" company="MUnique">
+// <copyright file="InMemoryContext.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -86,7 +86,15 @@ public class InMemoryContext : IContext
         if (item is IIdentifiable identifiable)
         {
             var repository = this.Provider.GetRepository(item.GetType()) as IMemoryRepository;
-            repository?.RemoveAsync(identifiable.Id).AsTask().WaitWithoutException();
+            if (repository is not null)
+            {
+                // Detach removes the (previously persisted) object from the in-memory repository.
+                // Return true when it was actually detached, matching the documented contract
+                // ("<c>true</c>, if the object was persisted.") instead of always reporting failure.
+                var removeTask = repository.RemoveAsync(identifiable.Id).AsTask();
+                removeTask.WaitWithoutException();
+                return removeTask.Status == TaskStatus.RanToCompletion && removeTask.Result;
+            }
         }
 
         return false;

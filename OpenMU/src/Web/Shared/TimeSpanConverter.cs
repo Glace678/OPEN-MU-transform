@@ -15,7 +15,9 @@ public class TimeSpanConverter : JsonConverter<TimeSpan>
     /// <inheritdoc />
     public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (TimeSpan.TryParse(reader.GetString(), out var result))
+        if (reader.TokenType == JsonTokenType.String
+            && reader.GetString() is { } text
+            && TimeSpan.TryParse(text, out var result))
         {
             return result;
         }

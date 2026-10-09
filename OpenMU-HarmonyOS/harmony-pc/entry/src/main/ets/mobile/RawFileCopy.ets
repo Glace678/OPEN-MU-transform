@@ -14,8 +14,11 @@ const COPY_CHUNK_BYTES = 8 * 1024 * 1024;
 // for a complete one.
 export async function copyRawfileTo(context: Context, rawName: string, destPath: string): Promise<void> {
   const source = await context.resourceManager.getRawFd(rawName);
-  const out = fs.openSync(destPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+  let out: number | undefined;
   try {
+    // Open the destination inside the try: if openSync throws (disk full, bad path)
+    // the source.fd obtained above must still be released by the finally below.
+    out = fs.openSync(destPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
     const buffer = new ArrayBuffer(COPY_CHUNK_BYTES);
     let copied = 0;
     while (copied < source.length) {
@@ -24,17 +27,22 @@ export async function copyRawfileTo(context: Context, rawName: string, destPath:
       if (read <= 0) {
         throw new Error('unexpected end of ' + rawName + ' after ' + copied + ' bytes');
       }
-      writeRange(out.fd, buffer, 0, read);
+      // writeRange's offset argument is the FILE position to write at: it must be the
+      // cumulative copied offset, not 0, otherwise every chunk overwrites the start of
+      // the destination and the archive is corrupted for any file larger than one chunk.
+      writeRange(out, buffer, copied, read);
       copied += read;
     }
     if (copied !== source.length) {
       throw new Error('copied ' + copied + ' of ' + source.length + ' bytes of ' + rawName);
     }
   } finally {
-    try {
-      fs.closeSync(out);
-    } catch (e) {
-      // Best effort.
+    if (out !== undefined) {
+      try {
+        fs.closeSync(out);
+      } catch (e) {
+        // Best effort.
+      }
     }
     try {
       fs.closeSync(source.fd);

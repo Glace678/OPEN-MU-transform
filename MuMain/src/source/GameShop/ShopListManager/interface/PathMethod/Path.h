@@ -27,9 +27,9 @@ public:
     //					Build a file string: file name with the path removed
     static TCHAR* GetFileName(TCHAR* szPath);
 
-    //					Change / to \\
+    //					Change slash to backslash
     static TCHAR* ChangeSlashToBackSlash(TCHAR* szPath);
-    //					Change \\ to /
+    //					Change backslash to slash
     static TCHAR* ChangeBackSlashToSlash(TCHAR* szPath);
 
     //					Read the last line from a file

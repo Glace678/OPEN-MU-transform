@@ -50,8 +50,8 @@
             }
 
             isFirst = false;
-            sb.Append($"'{scriptMapping.Key}': '")
-                .Append(scriptMapping.Path)
+            sb.Append($"'{SanitizeJsLiteral(scriptMapping.Key)}': '")
+                .Append(SanitizeJsLiteral(scriptMapping.Path))
                 .Append("'");
         }
         sb.AppendLine("    }")
@@ -65,3 +65,10 @@
     }
 </body>
 </html>
+
+@code {
+    // ScriptMappings are emitted verbatim into an inline <script> block via MarkupString.
+    // Sanitize both key and path against characters that could break out of the JS string literal.
+    private static string SanitizeJsLiteral(string value) =>
+        string.Concat((value ?? string.Empty).Where(c => c is not ('\'' or '\\' or '<' or '>' or '\r' or '\n')));
+}

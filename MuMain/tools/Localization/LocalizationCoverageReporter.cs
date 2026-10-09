@@ -177,10 +177,17 @@ internal static class LocalizationCoverageReporter
         string value,
         ICollection<LocalizationCoverageReport.Issue> issues)
     {
+        if (LocalizationTextChecks.IsMojibakeHardFail(value))
+        {
+            AddIssue(issues, group, locale, "mojibake_residue", key,
+                "Value contains U+FFFD, four or more consecutive question marks, or a Latin-1 Supplement mojibake run (e.g. Korean cp949/cp1252 residue).",
+                LocalizationCoverageReport.ErrorSeverity);
+        }
+
         if (LocalizationTextChecks.ContainsSuspiciousLegacyText(key) || LocalizationTextChecks.ContainsSuspiciousLegacyText(value))
         {
             AddIssue(issues, group, locale, "suspect_legacy_text", key,
-                "Review replacement characters, repeated question marks or half-width kana; inherited legacy text is not rejected automatically.",
+                "Review half-width kana; inherited legacy text is a review warning, not a failure.",
                 LocalizationCoverageReport.WarningSeverity);
         }
 

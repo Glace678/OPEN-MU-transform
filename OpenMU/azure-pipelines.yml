@@ -20,17 +20,14 @@ steps:
     performMultiLevelLookup: true
     includePreviewVersions: true # Required for preview versions
 
-- script: dotnet restore
+- script: dotnet restore MUnique.OpenMU.sln
   workingDirectory: src
   displayName: 'dotnet restore'
 
-- script: dotnet build --configuration $(buildConfiguration) -p:ci=true
+- script: dotnet build MUnique.OpenMU.sln --configuration $(buildConfiguration) -p:ci=true
   workingDirectory: src
   displayName: 'dotnet build $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
-  inputs:
-    command: test
-    projects: 'tests/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+- script: dotnet test MUnique.OpenMU.sln --configuration $(buildConfiguration) --no-build
+  workingDirectory: src
+  displayName: 'dotnet test $(buildConfiguration)'

@@ -11,8 +11,13 @@ WORKDIR /app
 RUN apk add --no-cache icu-libs tzdata
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 COPY --from=build /app/publish .
+ARG APP_UID=1000
 RUN mkdir -p /app/logs /app/data-protection-keys \
-    && chown -R $APP_UID:$APP_UID /app/logs /app/data-protection-keys
-USER $APP_UID
+    && adduser -D -u ${APP_UID} appuser \
+    && chown -R appuser /app/logs /app/data-protection-keys \
+    && chmod 700 /app/logs /app/data-protection-keys
+USER appuser
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+  CMD nc -z localhost 8080 || exit 1
 EXPOSE 8080 44405 44406 55901 55902 55903 55904 55905 55906 55980
 ENTRYPOINT ["dotnet", "MUnique.OpenMU.Startup.dll", "-autostart"]

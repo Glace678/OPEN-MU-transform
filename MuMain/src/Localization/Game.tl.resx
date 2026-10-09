@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[error2] Ang hacking tool checking program ay hindi matagumpay na nai-download. Pakisubukang kumonekta muli sa isang sandali. \n\n Kung patuloy kang nakakaranas ng parehong problema, huwag mag-atubiling makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com</value>
+    <value>[error2] Ang hacking tool checking program ay hindi matagumpay na nai-download. Pakisubukang kumonekta muli sa isang sandali. 
+
+ Kung patuloy kang nakakaranas ng parehong problema, huwag mag-atubiling makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[error3] Error sa pagpaparehistro ng NPX.DLL, nawawala ang mga kinakailangang file para sa pagpapatakbo ng nProtect. Mangyaring i-download ang np_setup.exe mula sa Muonline.\n\n Kung patuloy kang makaranas ng parehong problema, mangyaring makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com.</value>
+    <value>[error3] Error sa pagpaparehistro ng NPX.DLL, nawawala ang mga kinakailangang file para sa pagpapatakbo ng nProtect. Mangyaring i-download ang np_setup.exe mula sa Muonline.
+
+ Kung patuloy kang makaranas ng parehong problema, mangyaring makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] May naganap na error sa program. \n\n Kung patuloy kang nakakaranas ng parehong problema, mangyaring makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com</value>
+    <value>[error4] May naganap na error sa program. 
+
+ Kung patuloy kang nakakaranas ng parehong problema, mangyaring makipag-ugnayan sa aming customer service center sa pamamagitan ng aming website sa http://muonline.webzen.com</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -10174,7 +10180,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>Nagpadala sa iyo ng regalo ang %d.</value>
+    <value>Nagpadala sa iyo ng regalo ang %s.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10354,55 +10360,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 30 araw.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 30 araw.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 90 araw.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 90 araw.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 30 araw. Kung na-refund, makakatanggap ka ng halagang hindi kasama ang presyo ng punto.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 30 araw. Kung na-refund, makakatanggap ka ng halagang hindi kasama ang presyo ng punto.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 90 araw. Kung na-refund, makakatanggap ka ng halagang hindi kasama ang presyo ng punto.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 90 araw. Kung na-refund, makakatanggap ka ng halagang hindi kasama ang presyo ng punto.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 3 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 3 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 5 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa MU sa loob ng 5 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>Isang item na hinahayaan kang mag-enjoy sa Mu sa loob ng 10 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.\nMaaari lang gamitin mula sa website ng Mu Online.</value>
+    <value>Isang item na hinahayaan kang mag-enjoy sa Mu sa loob ng 10 oras sa loob ng 60 araw pagkatapos ng paggamit ng storage.
+Maaari lang gamitin mula sa website ng Mu Online.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Nire-reset ang buong Master Skill Tree nang isang beses.\nMaaari lang gamitin mula sa MU Online na website.</value>
+    <value>Nire-reset ang buong Master Skill Tree nang isang beses.
+Maaari lang gamitin mula sa MU Online na website.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Hinahayaan kang ayusin ang mga istatistika ng character ng 500 puntos.\nMaaari lang gamitin mula sa MU Online na website.</value>
+    <value>Hinahayaan kang ayusin ang mga istatistika ng character ng 500 puntos.
+Maaari lang gamitin mula sa MU Online na website.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Hinahayaan kang maglipat ng character sa isa pang account sa loob ng parehong server.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Hinahayaan kang maglipat ng character sa isa pang account sa loob ng parehong server.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Hinahayaan kang palitan ang pangalan ng character.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Hinahayaan kang palitan ang pangalan ng character.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Hinahayaan kang maglipat ng character sa ibang server sa loob ng parehong account.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Hinahayaan kang maglipat ng character sa ibang server sa loob ng parehong account.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Binibigyang-daan kang humiling ng paglipat ng character nang isang beses at pagpapalit ng pangalan ng character nang isang beses.\nMaaari lang gamitin mula sa MU Online website.</value>
+    <value>Binibigyang-daan kang humiling ng paglipat ng character nang isang beses at pagpapalit ng pangalan ng character nang isang beses.
+Maaari lang gamitin mula sa MU Online website.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -11002,7 +11021,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Kailangan mo ng higit pang %%s upang bilhin ang item na ito.</value>
+    <value>Kailangan mo ng higit pang %s upang bilhin ang item na ito.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12762,91 +12781,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>Katayuan ng Pagpaparehistro ng Marka ng Panginoon</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>Ranggo ng Pagpaparehistro ng Marka ng Panginoon</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Bilang ng Nakarehistro</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Katayuan ng aming Guild</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Bumalik</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Maaaring Magparehistro</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Hindi Maaaring Magparehistro</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>Bilang ng Marka ng Panginoon na ire-rehistro: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>Ilagay ang Marka ng Panginoon na ire-rehistro sa window ng kombinasyon.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>Hanggang 225 Marka ng Panginoon ang maaaring irehistro nang sabay-sabay.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>Bilang ng mga nakarehistrong Marka ng Panginoon: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>Irehistro ang Marka ng Panginoon</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>Irehistro ang Marka ng Panginoon?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>Tapos na ang pagpaparehistro ng Marka ng Panginoon.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>Nabigo ang pagpaparehistro ng Marka ng Panginoon.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Atributo</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Impormasyon ng Elementong Atributo</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>I-lock</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>I-unlock</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>Piliin ang pangalan ng guild na kung saan aalisin ang away.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Aalisin ang away sa guild na ito?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Server</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12854,19 +12873,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Hindi maaaring mag-withdraw ng higit sa 2 bilyong zen</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>Kabuuang Gastos sa Pagkukumpuni</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>Walang guild na ito.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>Naghihintay ng kumpirmasyon ng trade</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -13201,9 +13220,9 @@
     <value>Hindi makakonekta sa server. Tiyaking tumatakbo ito.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Maligayang pagdating sa mundo ng MU! Ipinaliliwanag ng maikling gabay na ito ang mga pangunahing kaalaman sa ilang pahina. Pindutin ang Esc upang laktawan, o buksan itong muli sa menu.</value>
+    <value>Maligayang pagdating sa mundo ng MU! Maikling gabay ang basics. Pindutin ang Esc para laktawan.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
-    <value>Handa ka na! Makipag-usap sa mga NPC para sa mga quest at lumabas ng bayan upang labanan ang mga halimaw. Mag-enjoy sa iyong pakikipagsapalaran.</value>
+    <value>Handa ka na! Makipag-usap sa mga NPC para sa quest at lumabas ng bayan para lumaban. Enjoy!</value>
   </data>
 </root>

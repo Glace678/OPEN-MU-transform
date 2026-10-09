@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[błąd2] Program sprawdzający narzędzie hakerskie nie został pomyślnie pobrany. Spróbuj połączyć się ponownie za chwilę. \n\n Jeśli nadal będziesz mieć ten sam problem, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej witryny internetowej pod adresem http://muonline.webzen.com</value>
+    <value>[błąd2] Program sprawdzający narzędzie hakerskie nie został pomyślnie pobrany. Spróbuj połączyć się ponownie za chwilę. 
+
+ Jeśli nadal będziesz mieć ten sam problem, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej witryny internetowej pod adresem http://muonline.webzen.com</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[błąd3] Błąd rejestracji NPX.DLL, brakuje plików wymaganych do uruchomienia nProtect. Proszę pobrać np_setup.exe z Muonline.\n\n. Jeśli ten sam problem będzie się powtarzał, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej strony internetowej pod adresem http://muonline.webzen.com.</value>
+    <value>[błąd3] Błąd rejestracji NPX.DLL, brakuje plików wymaganych do uruchomienia nProtect. Proszę pobrać np_setup.exe z Muonline.
+
+. Jeśli ten sam problem będzie się powtarzał, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej strony internetowej pod adresem http://muonline.webzen.com.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] Wystąpił błąd w programie. \n\n Jeśli problem będzie się powtarzał, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej witryny internetowej pod adresem http://muonline.webzen.com</value>
+    <value>[error4] Wystąpił błąd w programie. 
+
+ Jeśli problem będzie się powtarzał, skontaktuj się z naszym centrum obsługi klienta za pośrednictwem naszej witryny internetowej pod adresem http://muonline.webzen.com</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -1376,7 +1382,7 @@
     <comment>legacy_id=376</comment>
   </data>
   <data name="(%s) stat %d points have been generated." xml:space="preserve">
-    <value>Wygenerowano %d pkt statystyki (%s).</value>
+    <value>(%s) wygenerowano %d pkt statystyki.</value>
     <comment>legacy_id=377</comment>
   </data>
   <data name="stat creation failed from fruit combination." xml:space="preserve">
@@ -10174,7 +10180,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d wysłał Ci prezent.</value>
+    <value>%s wysłał Ci prezent.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10354,55 +10360,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 30 dni.\nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 30 dni.
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 90 dni.\nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 90 dni.
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 30 dni. W przypadku zwrotu otrzymasz kwotę nieuwzględnioną w cenie punktowej.\nMożna z niego skorzystać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 30 dni. W przypadku zwrotu otrzymasz kwotę nieuwzględnioną w cenie punktowej.
+Można z niego skorzystać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 90 dni. W przypadku zwrotu otrzymasz kwotę nieuwzględnioną w cenie punktowej.\nMożna z niego skorzystać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 90 dni. W przypadku zwrotu otrzymasz kwotę nieuwzględnioną w cenie punktowej.
+Można z niego skorzystać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 3 godziny w ciągu 60 dni po wykorzystaniu pamięci. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 3 godziny w ciągu 60 dni po wykorzystaniu pamięci. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się MU przez 5 godzin w ciągu 60 dni po wykorzystaniu pamięci. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się MU przez 5 godzin w ciągu 60 dni po wykorzystaniu pamięci. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>Przedmiot, który pozwala cieszyć się Mu przez 10 godzin w ciągu 60 dni po użyciu. \nMożna używać wyłącznie w witrynie Mu Online.</value>
+    <value>Przedmiot, który pozwala cieszyć się Mu przez 10 godzin w ciągu 60 dni po użyciu. 
+Można używać wyłącznie w witrynie Mu Online.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Jednorazowo resetuje całe główne drzewo umiejętności. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Jednorazowo resetuje całe główne drzewo umiejętności. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Umożliwia dostosowanie statystyk postaci o 500 punktów. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Umożliwia dostosowanie statystyk postaci o 500 punktów. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Umożliwia przeniesienie postaci na inne konto na tym samym serwerze. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Umożliwia przeniesienie postaci na inne konto na tym samym serwerze. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Umożliwia zmianę nazwy postaci. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Umożliwia zmianę nazwy postaci. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Umożliwia przeniesienie postaci na inny serwer w ramach tego samego konta. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Umożliwia przeniesienie postaci na inny serwer w ramach tego samego konta. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Umożliwia jednokrotne zażądanie przeniesienia postaci i jednorazowej zmiany nazwy postaci. \nMożna używać wyłącznie na stronie internetowej MU Online.</value>
+    <value>Umożliwia jednokrotne zażądanie przeniesienia postaci i jednorazowej zmiany nazwy postaci. 
+Można używać wyłącznie na stronie internetowej MU Online.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -11002,7 +11021,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Potrzebujesz więcej %%s, aby kupić ten przedmiot.</value>
+    <value>Potrzebujesz więcej %s, aby kupić ten przedmiot.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12762,91 +12781,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ę µî·Ï ÇöÈ²</value>
+    <value>Status rejestracji Znaku Lorda</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ę µî·Ï ¼øÀ§</value>
+    <value>Ranking rejestracji Znaku Lorda</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Zarejestrowana liczba</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Status naszej gildii</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Wstecz</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Można zarejestrować</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Nie można zarejestrować</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ę °³¼ö : %d°³</value>
+    <value>Liczba Znaków Lorda do rejestracji: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ĘÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>Umieść Znak Lorda do rejestracji w oknie kombinacji.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼°ÁÖÀÇ Ç¥½ĘÀ° ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À’Ï’Ù.</value>
+    <value>Naraz można zarejestrować do 225 Znaków Lorda.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ę °³¼ö: %d°³</value>
+    <value>Liczba zarejestrowanych Znaków Lorda: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ę µî·Ï</value>
+    <value>Zarejestruj Znak Lorda</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼°ÁÖÀÇ Ç¥½ĘÀ» µî·ÏÇÏ½Ã°Ú½À'Ï±î?</value>
+    <value>Zarejestrować Znak Lorda?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ę µî·ÏÀÌ ¿Ï·áµÇ¾ú½À’Ï’Ù.</value>
+    <value>Rejestracja Znaku Lorda zakończona.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ę µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À’Ï’Ù.</value>
+    <value>Rejestracja Znaku Lorda nie powiodła się.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Atrybut</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Info o atrybucie żywiołu</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>Zablokuj</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>Odblokuj</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇŘÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇŘ ÁÖ¼¼¿ä</value>
+    <value>Wybierz nazwę gildii, której chcesz zakończyć wrogość.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇŘÁ¦ÇÏ½Ã°Ú½À’Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Zakończyć wrogość z tą gildią?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Serwer</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12854,19 +12873,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Nie można wypłacić ponad 2 miliardy zen</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®šñ¿ë</value>
+    <value>Całkowity koszt naprawy</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇŘ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ę½À’Ï’Ù</value>
+    <value>Ta gildia nie istnieje.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ `ë±âÁß</value>
+    <value>Oczekiwanie na potwierdzenie handlu</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -13201,9 +13220,9 @@
     <value>Nie można połączyć się z serwerem. Sprawdź, czy działa.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Witaj w świecie MU! Ten krótki przewodnik na kilku stronach przedstawia podstawy. Naciśnij Esc, aby pominąć, albo otwórz go później z menu.</value>
+    <value>Witaj w świecie MU! Ten krótki przewodnik przedstawia podstawy. Naciśnij Esc, aby pominąć.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
-    <value>Wszystko gotowe! Porozmawiaj z NPC, aby wziąć zadania, i opuść miasto, by walczyć z potworami. Miłej przygody.</value>
+    <value>Gotowe! Porozmawiaj z NPC, by wziąć zadania, i opuść miasto walczyć z potworami. Miłej zabawy!</value>
   </data>
 </root>

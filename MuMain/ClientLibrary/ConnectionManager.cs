@@ -1,11 +1,11 @@
-﻿// <copyright file="ConnectionManager.cs" company="MUnique">
+// <copyright file="ConnectionManager.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.Client.Library;
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -26,8 +26,10 @@ public unsafe partial class ConnectionManager
     /// <summary>
     /// The currently active connections, with their handle as key.
     /// </summary>
-    private static readonly Dictionary<int, ConnectionWrapper> Connections = new();
+    private static readonly ConcurrentDictionary<int, ConnectionWrapper> Connections = new();
 
+    // Guards _maxHandle allocation only. Connections itself is a ConcurrentDictionary,
+    // so the ~213 native-callback TryGetValue read sites need no lock (fixes the rehash race).
     private static readonly object ConnectionsLock = new();
 
     /// <summary>
@@ -181,29 +183,39 @@ public unsafe partial class ConnectionManager
             throw;
         }
 
-        var socketConnection = SocketConnection.Create(tcpClient.Client);
+        // Build the socket/encryptor/decryptor/Connection first. If any of it throws
+        // (e.g. bad key material), dispose tcpClient instead of leaking the socket handle.
+        MUnique.OpenMU.Network.Connection connection;
+        try
+        {
+            var socketConnection = SocketConnection.Create(tcpClient.Client);
 
-        var encryptor = isEncrypted ? new PipelinedXor32Encryptor(new PipelinedSimpleModulusEncryptor(socketConnection.Output, PipelinedSimpleModulusEncryptor.DefaultClientKey).Writer) : null;
-        var decryptor = isEncrypted ? new PipelinedSimpleModulusDecryptor(socketConnection.Input, PipelinedSimpleModulusDecryptor.DefaultClientKey) : null;
-        var connection = new Connection(socketConnection, decryptor, encryptor, new NullLogger<Connection>());
+            var encryptor = isEncrypted ? new PipelinedXor32Encryptor(new PipelinedSimpleModulusEncryptor(socketConnection.Output, PipelinedSimpleModulusEncryptor.DefaultClientKey).Writer) : null;
+            var decryptor = isEncrypted ? new PipelinedSimpleModulusDecryptor(socketConnection.Input, PipelinedSimpleModulusDecryptor.DefaultClientKey) : null;
+            connection = new Connection(socketConnection, decryptor, encryptor, new NullLogger<Connection>());
+        }
+        catch
+        {
+            tcpClient.Dispose();
+            throw;
+        }
 
+        // Allocate the handle under the lock that guards _maxHandle, then hook the
+        // dictionary removal BEFORE publishing the handle. TryRemove is a no-op when the
+        // handle was never added, so a disconnect during this window leaks nothing.
         int handle;
         lock (ConnectionsLock)
         {
             handle = ++_maxHandle;
-            var wrapper = new ConnectionWrapper(handle, connection, onPacketReceived, onDisconnected);
-            Connections.Add(handle, wrapper);
         }
 
+        var wrapper = new ConnectionWrapper(handle, connection, onPacketReceived, onDisconnected);
         connection.Disconnected += () =>
         {
-            lock (ConnectionsLock)
-            {
-                Connections.Remove(handle);
-            }
-
+            Connections.TryRemove(handle, out _);
             return ValueTask.CompletedTask;
         };
+        Connections[handle] = wrapper;
 
         return handle;
     }

@@ -85,9 +85,25 @@ public partial class CreateConnectServerConfig : ComponentBase, IAsyncDisposable
     /// <inheritdoc />
     protected override async Task OnParametersSetAsync()
     {
+        var oldCts = this._disposeCts;
         var cts = new CancellationTokenSource();
         this._disposeCts = cts;
         this._loadTask = Task.Run(() => this.LoadDataAsync(cts.Token), cts.Token);
+
+        if (oldCts is not null)
+        {
+            try
+            {
+                await oldCts.CancelAsync().ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                // The previous load task already ended; cancellation is best-effort.
+            }
+
+            oldCts.Dispose();
+        }
+
         await base.OnParametersSetAsync().ConfigureAwait(true);
     }
 
@@ -108,6 +124,13 @@ public partial class CreateConnectServerConfig : ComponentBase, IAsyncDisposable
         {
             nextServerId = existingServerDefinitions.Max(s => s.ServerId) + 1;
             networkPort = existingServerDefinitions.Max(s => s.ClientListenerPort) + 1;
+        }
+
+        if (nextServerId > byte.MaxValue)
+        {
+            // ServerId is stored as byte; refuse to create another configuration instead of truncating the id.
+            this.ToastService.ShowError("The maximum number of connect server configurations (255) has been reached.");
+            return;
         }
 
         var unusedClient = clients.FirstOrDefault(c => !existingServerDefinitions.Any(s => object.Equals(s.Client, c)));

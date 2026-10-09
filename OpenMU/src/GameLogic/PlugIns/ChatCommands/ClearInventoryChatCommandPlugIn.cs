@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic.PlugIns.ChatCommands;
 
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.Interfaces;
@@ -21,7 +22,7 @@ public class ClearInventoryChatCommandPlugIn : ChatCommandPlugInBase<ClearInvent
     private const string Command = "/clearinv";
     private const CharacterStatus MinimumStatus = CharacterStatus.Normal;
     private const int ConfirmationTimeoutSeconds = 10;
-    private readonly Dictionary<Guid, DateTime> pendingConfirmations = new();
+    private readonly ConcurrentDictionary<Guid, DateTime> pendingConfirmations = new();
 
     /// <summary>
     /// Gets or sets the configuration.
@@ -83,7 +84,7 @@ public class ClearInventoryChatCommandPlugIn : ChatCommandPlugInBase<ClearInvent
                 return;
             }
 
-            this.pendingConfirmations.Remove(playerId);
+            this.pendingConfirmations.TryRemove(playerId, out _);
         }
 
         var itemsToRemove = targetPlayer.Inventory.Items

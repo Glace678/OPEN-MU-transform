@@ -1,4 +1,4 @@
-﻿// <copyright file="ServerListItem.cs" company="MUnique">
+// <copyright file="ServerListItem.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -101,7 +101,7 @@ internal class ServerListItem : IGameServerEntry
         set
         {
             this._currentConnections = value;
-            this.ServerLoadPercentage = (byte)(this._currentConnections * 100f / this.MaximumConnections);
+            this.ServerLoadPercentage = this.MaximumConnections > 0 ? (byte)(this._currentConnections * 100f / this.MaximumConnections) : (byte)0;
         }
     }
 

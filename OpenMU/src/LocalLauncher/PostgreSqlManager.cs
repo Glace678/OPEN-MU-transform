@@ -35,9 +35,22 @@ public sealed class PostgreSqlManager
         get
         {
             var pidFile = Path.Combine(this._paths.PostgreSqlDataDirectory, "postmaster.pid");
-            return File.Exists(pidFile) && int.TryParse(File.ReadLines(pidFile).FirstOrDefault(), out var processId)
-                ? processId
-                : null;
+            try
+            {
+                if (!File.Exists(pidFile))
+                {
+                    return null;
+                }
+
+                using var reader = new StreamReader(pidFile);
+                var firstLine = reader.ReadLine();
+                return int.TryParse(firstLine, out var processId) ? processId : null;
+            }
+            catch (IOException)
+            {
+                // The pid file may have been removed/truncated between the existence check and the read.
+                return null;
+            }
         }
     }
 
@@ -241,7 +254,17 @@ public sealed class PostgreSqlManager
     private void ValidateRunningEndpoint()
     {
         var pidFile = Path.Combine(this._paths.PostgreSqlDataDirectory, "postmaster.pid");
-        var lines = File.ReadAllLines(pidFile);
+        string[] lines;
+        try
+        {
+            lines = File.ReadAllLines(pidFile);
+        }
+        catch (IOException)
+        {
+            // The pid file may have been removed/truncated after the running check.
+            throw new InvalidDataException("受管理的 PostgreSQL postmaster.pid 无法读取。");
+        }
+
         if (lines.Length < 6
             || !int.TryParse(lines[3], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var port)
             || port != this._settings.DatabasePort

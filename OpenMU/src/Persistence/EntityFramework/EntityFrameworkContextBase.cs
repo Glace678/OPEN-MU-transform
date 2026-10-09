@@ -1,4 +1,4 @@
-﻿// <copyright file="EntityFrameworkContextBase.cs" company="MUnique">
+// <copyright file="EntityFrameworkContextBase.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -60,6 +60,13 @@ internal class EntityFrameworkContextBase : IContext
     /// Gets the entity framework context.
     /// </summary>
     internal DbContext Context { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether this instance owns the underlying <see cref="Context" />
+    /// (i.e. disposing this instance disposes the DbContext). When it does, standalone repository
+    /// operations (such as a delete) must be persisted by this instance before it is disposed.
+    /// </summary>
+    internal bool IsContextOwner => this._isOwner;
 
     /// <summary>
     /// Gets the repository provider.

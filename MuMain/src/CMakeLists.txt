@@ -267,9 +267,35 @@ if(MSVC)
   target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201)
 endif()
 
+# Explicit invariant check: KJH_ADD_INGAMESHOP_UI_SYSTEM must be defined in
+# Defined_Global.h. The curl dependency block below relies on it; if the macro
+# is ever removed, configure fails here rather than producing a broken build.
+include(CheckCXXSourceCompiles)
+set(_mu_req_inc_backup "${CMAKE_REQUIRED_INCLUDES}")
+set(CMAKE_REQUIRED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/source/Core/Globals")
+set(_mu_try_type_backup "${CMAKE_TRY_COMPILE_TARGET_TYPE}")
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+check_cxx_source_compiles("
+#include \"Defined_Global.h\"
+#ifndef KJH_ADD_INGAMESHOP_UI_SYSTEM
+#error KJH_ADD_INGAMESHOP_UI_SYSTEM must be defined
+#endif
+int main() { return 0; }
+" MU_INGAMESHOP_UI_DEFINED)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "${_mu_try_type_backup}")
+unset(_mu_try_type_backup)
+set(CMAKE_REQUIRED_INCLUDES "${_mu_req_inc_backup}")
+unset(_mu_req_inc_backup)
+if(NOT MU_INGAMESHOP_UI_DEFINED)
+  message(FATAL_ERROR
+    "KJH_ADD_INGAMESHOP_UI_SYSTEM is not defined in Defined_Global.h. "
+    "The non-Windows in-game shop downloader (CurlFileDownloader.cpp) requires "
+    "this macro; restore it or provide a stub transport before building.")
+endif()
+
 # libcurl is a hard dependency of every non-Windows build: the in-game shop
 # downloader (CurlFileDownloader.cpp, guarded by !_WIN32 &&
-# KJH_ADD_INGAMESHOP_UI_SYSTEM, which is always defined) includes curl/curl.h
+# KJH_ADD_INGAMESHOP_UI_SYSTEM -- verified by the check above) includes curl/curl.h
 # and is referenced unconditionally by FTPFileDownLoader.cpp off Windows, so it
 # cannot be compiled out without a stub transport. Desktop Linux/macOS gets it
 # via find_package(CURL REQUIRED) below; the Android/OHOS NDKs ship no libcurl,

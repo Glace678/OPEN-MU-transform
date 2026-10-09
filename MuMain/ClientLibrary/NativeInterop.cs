@@ -40,10 +40,14 @@ internal static class NativeInterop
         }
 
         // Unix wchar_t is 4 bytes (UTF-32). Find the null terminator (a 32-bit
-        // zero) and decode the preceding code units.
+        // zero) and decode the preceding code units. Cap the scan so a native
+        // buffer that is unexpectedly not NUL-terminated cannot run off the end
+        // of the allocation (AccessViolation). 4096 code units is far beyond any
+        // host/account/path string the protocol actually carries.
+        const int MaxChars = 4096;
         var p = (uint*)ptr;
         var count = 0;
-        while (p[count] != 0)
+        while (count < MaxChars && p[count] != 0)
         {
             count++;
         }

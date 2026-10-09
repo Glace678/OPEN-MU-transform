@@ -53,11 +53,24 @@ endfunction()
 
 # In script mode (-P) CMAKE_CURRENT_BINARY_DIR is empty, so anchor fixtures in
 # the OS temp directory rather than wherever the caller happens to stand.
-set(workDir "$ENV{TEMP}/ios_verify_fixtures")
-if(workDir STREQUAL "/ios_verify_fixtures")
-    set(workDir "/tmp/ios_verify_fixtures")
+# Anchor fixtures under a per-run directory we fully own. Never REMOVE_RECURSE a path
+# derived solely from $ENV{TEMP}: if TEMP is unset/empty the string would collapse to
+# a bare "/ios_verify_fixtures" and (on the host) could resolve somewhere surprising.
+# Use a PID-suffixed subdir so concurrent runs do not wipe each other, and skip the
+# recursive delete unless we are about to recreate it ourselves.
+set(_tmp_root "$ENV{TEMP}")
+if(NOT _tmp_root OR _tmp_root STREQUAL "")
+    if(DEFINED ENV{TMP})
+        set(_tmp_root "$ENV{TMP}")
+    else()
+        set(_tmp_root "/tmp")
+    endif()
 endif()
-file(REMOVE_RECURSE "${workDir}")
+get_filename_component(_tmp_root "${_tmp_root}" ABSOLUTE)
+set(workDir "${_tmp_root}/ios_verify_fixtures_${CMAKE_PROCESS_ID}")
+if(EXISTS "${workDir}")
+    file(REMOVE_RECURSE "${workDir}")
+endif()
 file(MAKE_DIRECTORY "${workDir}")
 
 set(archive "${workDir}/game-data.zip")

@@ -19,5 +19,10 @@ RUN dotnet publish "MUnique.OpenMU.ConnectServer.Host.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-USER $APP_UID
+ARG APP_UID=1000
+RUN adduser -D -u ${APP_UID} appuser `\
+    && chown -R appuser /app
+USER appuser
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+  CMD nc -z localhost 8080 || exit 1
 ENTRYPOINT ["dotnet", "MUnique.OpenMU.ConnectServer.Host.dll"]

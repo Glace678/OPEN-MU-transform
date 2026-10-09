@@ -108,9 +108,11 @@ public static class ConnectionExtensions
       </xsl:text>
     </xsl:if>
     <xsl:text>
+            var span = connection.Output.GetSpan(length)[..length];
+            span.Clear();
             var packet = new </xsl:text>
     <xsl:apply-templates select="pd:Name" />
-    <xsl:text>Ref(connection.Output.GetSpan(length)[..length]);</xsl:text>
+    <xsl:text>Ref(span);</xsl:text>
     <xsl:if test="pd:Fields/pd:Field">
       <xsl:value-of select="$newline"/>
       <xsl:apply-templates select="pd:Fields/pd:Field" mode="assignment" />

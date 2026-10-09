@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[error2] Das Programm zur Überprüfung des Hacking-Tools wurde nicht erfolgreich heruntergeladen. Bitte versuchen Sie in Kürze erneut, eine Verbindung herzustellen. \n\n Wenn Sie weiterhin das gleiche Problem haben, können Sie sich gerne über unsere Website unter http://muonline.webzen.com an unser Kundendienstzentrum wenden</value>
+    <value>[error2] Das Programm zur Überprüfung des Hacking-Tools wurde nicht erfolgreich heruntergeladen. Bitte versuchen Sie in Kürze erneut, eine Verbindung herzustellen. 
+
+ Wenn Sie weiterhin das gleiche Problem haben, können Sie sich gerne über unsere Website unter http://muonline.webzen.com an unser Kundendienstzentrum wenden</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[error3] NPX.DLL-Registrierungsfehler, erforderliche Dateien fehlen für die Ausführung von nProtect. Bitte laden Sie np_setup.exe von Muonline.\n\n herunter. Wenn Sie weiterhin das gleiche Problem haben, wenden Sie sich bitte über unsere Website unter http://muonline.webzen.com an unser Kundendienstzentrum.</value>
+    <value>[error3] NPX.DLL-Registrierungsfehler, erforderliche Dateien fehlen für die Ausführung von nProtect. Bitte laden Sie np_setup.exe von Muonline.
+
+ herunter. Wenn Sie weiterhin das gleiche Problem haben, wenden Sie sich bitte über unsere Website unter http://muonline.webzen.com an unser Kundendienstzentrum.</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] Im Programm ist ein Fehler aufgetreten. \n\n Wenn Sie weiterhin das gleiche Problem haben, kontaktieren Sie bitte unser Kundendienstzentrum über unsere Website unter http://muonline.webzen.com</value>
+    <value>[error4] Im Programm ist ein Fehler aufgetreten. 
+
+ Wenn Sie weiterhin das gleiche Problem haben, kontaktieren Sie bitte unser Kundendienstzentrum über unsere Website unter http://muonline.webzen.com</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -2339,11 +2345,11 @@
     <comment>legacy_id=621</comment>
   </data>
   <data name="Increase Max HP +4%%" xml:space="preserve">
-    <value>Erhöhen Sie die maximale HP um +4 %.</value>
+    <value>Erhöhen Sie die maximale HP um +4%%.</value>
     <comment>legacy_id=622</comment>
   </data>
   <data name="Increase Max Mana +4%%" xml:space="preserve">
-    <value>Erhöht das maximale Mana um +4 %</value>
+    <value>Erhöht das maximale Mana um +4%%</value>
     <comment>legacy_id=623</comment>
   </data>
   <data name="Damage Decrease +4%%" xml:space="preserve">
@@ -2351,7 +2357,7 @@
     <comment>legacy_id=624</comment>
   </data>
   <data name="Reflect Damage +5%%" xml:space="preserve">
-    <value>Schaden reflektieren +5 %</value>
+    <value>Schaden reflektieren +5%%</value>
     <comment>legacy_id=625</comment>
   </data>
   <data name="Defense success rate +10%%" xml:space="preserve">
@@ -2359,11 +2365,11 @@
     <comment>legacy_id=626</comment>
   </data>
   <data name="Increases acquisition rate of Zen after hunting monsters +30%%" xml:space="preserve">
-    <value>Erhöht die Erwerbsrate von Zen nach der Monsterjagd um +30 %.</value>
+    <value>Erhöht die Erwerbsrate von Zen nach der Monsterjagd um +30%%.</value>
     <comment>legacy_id=627</comment>
   </data>
   <data name="Excellent Damage rate +10%%" xml:space="preserve">
-    <value>Hervorragende Schadensrate +10 %</value>
+    <value>Hervorragende Schadensrate +10%%</value>
     <comment>legacy_id=628</comment>
   </data>
   <data name="Increase Damage +level/20" xml:space="preserve">
@@ -3047,11 +3053,11 @@
     <comment>legacy_id=819</comment>
   </data>
   <data name="Registered Stones (Accumulative)" xml:space="preserve">
-    <value>Registrierte Steine ​​(akkumulativ)</value>
+    <value>Registrierte Steine (akkumulativ)</value>
     <comment>legacy_id=820</comment>
   </data>
   <data name="Accumulated stones can be used" xml:space="preserve">
-    <value>Angesammelte Steine ​​können verwendet werden</value>
+    <value>Angesammelte Steine können verwendet werden</value>
     <comment>legacy_id=821</comment>
   </data>
   <data name="via the website from October 14th." xml:space="preserve">
@@ -3059,7 +3065,7 @@
     <comment>legacy_id=822</comment>
   </data>
   <data name="Collecting Stones. Please give me stones that you've acquired!" xml:space="preserve">
-    <value>Steine ​​sammeln. Bitte gib mir die Steine, die du erworben hast!</value>
+    <value>Steine sammeln. Bitte gib mir die Steine, die du erworben hast!</value>
     <comment>legacy_id=823</comment>
   </data>
   <data name="%s Closing (in %d seconds)" xml:space="preserve">
@@ -4083,7 +4089,7 @@
     <comment>legacy_id=1093</comment>
   </data>
   <data name="Register your Stones of Friendship" xml:space="preserve">
-    <value>Registrieren Sie Ihre Steine ​​der Freundschaft</value>
+    <value>Registrieren Sie Ihre Steine der Freundschaft</value>
     <comment>legacy_id=1094</comment>
   </data>
   <data name="You can register them from" xml:space="preserve">
@@ -6667,7 +6673,7 @@
     <comment>legacy_id=1782</comment>
   </data>
   <data name="Each level effects increment in 5%%" xml:space="preserve">
-    <value>Die Effekte jedes Levels erhöhen sich um 5 %.</value>
+    <value>Die Effekte jedes Levels erhöhen sich um 5%%.</value>
     <comment>legacy_id=1783</comment>
   </data>
   <data name="Damage increment for each strengthener level" xml:space="preserve">
@@ -6687,7 +6693,7 @@
     <comment>legacy_id=1787</comment>
   </data>
   <data name="%d%% decrease" xml:space="preserve">
-    <value>%d%% derhöhen</value>
+    <value>%d%% verringern</value>
     <comment>legacy_id=1788</comment>
   </data>
   <data name="Pollution skill (Mana: %d)" xml:space="preserve">
@@ -7271,7 +7277,7 @@
     <comment>legacy_id=1965</comment>
   </data>
   <data name="10%% monster strength decrease (maintain during the event)" xml:space="preserve">
-    <value>10 % Reduzierung der Monsterstärke (während des Events beibehalten)</value>
+    <value>10%% Reduzierung der Monsterstärke (während des Events beibehalten)</value>
     <comment>legacy_id=1966</comment>
   </data>
   <data name="5%% decrease in castle and arena invitation combine rate" xml:space="preserve">
@@ -7327,7 +7333,7 @@
     <comment>legacy_id=1982</comment>
   </data>
   <data name="Monster strength decreased 10%%." xml:space="preserve">
-    <value>Die Monsterstärke wurde um 10 % verringert.</value>
+    <value>Die Monsterstärke wurde um 10%% verringert.</value>
     <comment>legacy_id=2000</comment>
   </data>
   <data name="5%% increase in castle and arena invitation combine rate." xml:space="preserve">
@@ -7479,7 +7485,7 @@
     <comment>legacy_id=2053</comment>
   </data>
   <data name="Minimum Wizardry increment 20%%" xml:space="preserve">
-    <value>Mindestzuwachs an Zauberei: 20 %</value>
+    <value>Mindestzuwachs an Zauberei: 20%%</value>
     <comment>legacy_id=2054</comment>
   </data>
   <data name="It cannot be applied on another." xml:space="preserve">
@@ -8155,7 +8161,7 @@
     <comment>legacy_id=2265</comment>
   </data>
   <data name="Success Rate : 100%%" xml:space="preserve">
-    <value>Erfolgsquote: 100 % %</value>
+    <value>Erfolgsquote: 100%%</value>
     <comment>legacy_id=2266</comment>
   </data>
   <data name="Can't execute combination." xml:space="preserve">
@@ -8547,7 +8553,7 @@
     <comment>legacy_id=2381</comment>
   </data>
   <data name="Shield gage reduced of 50%%." xml:space="preserve">
-    <value>Schildstärke um 50 % reduziert.</value>
+    <value>Schildstärke um 50%% reduziert.</value>
     <comment>legacy_id=2382</comment>
   </data>
   <data name="Entered the zone %s." xml:space="preserve">
@@ -9107,7 +9113,7 @@
     <comment>legacy_id=2574</comment>
   </data>
   <data name="Increases Attack Power and Wizardry by 40%%" xml:space="preserve">
-    <value>Erhöht Angriffskraft und Zauberei um 40 %</value>
+    <value>Erhöht Angriffskraft und Zauberei um 40%%</value>
     <comment>legacy_id=2575</comment>
   </data>
   <data name="Increases Attack Speed by 10" xml:space="preserve">
@@ -9115,7 +9121,7 @@
     <comment>legacy_id=2576,3069</comment>
   </data>
   <data name="Alleviates monster's damage by 30%%" xml:space="preserve">
-    <value>Verringert den Schaden des Monsters um 30 %.</value>
+    <value>Verringert den Schaden des Monsters um 30%%.</value>
     <comment>legacy_id=2577</comment>
   </data>
   <data name="Increases Maximum Life by 50" xml:space="preserve">
@@ -9127,11 +9133,11 @@
     <comment>legacy_id=2579</comment>
   </data>
   <data name="Increases Critical Damage by 20%%" xml:space="preserve">
-    <value>Erhöht den kritischen Schaden um 20 %.</value>
+    <value>Erhöht den kritischen Schaden um 20%%.</value>
     <comment>legacy_id=2580</comment>
   </data>
   <data name="Increses Excellent Damage by 20%%" xml:space="preserve">
-    <value>Erhöht den hervorragenden Schaden um 20 %.</value>
+    <value>Erhöht den hervorragenden Schaden um 20%%.</value>
     <comment>legacy_id=2581</comment>
   </data>
   <data name="Carrier" xml:space="preserve">
@@ -9191,11 +9197,11 @@
     <comment>legacy_id=2595</comment>
   </data>
   <data name="Health has been recovered of 100%%." xml:space="preserve">
-    <value>Die Gesundheit wurde zu 100 % wiederhergestellt.</value>
+    <value>Die Gesundheit wurde zu 100%% wiederhergestellt.</value>
     <comment>legacy_id=2596</comment>
   </data>
   <data name="Mana has been recovered of 100%%." xml:space="preserve">
-    <value>Das Mana wurde zu 100 % wiederhergestellt.</value>
+    <value>Das Mana wurde zu 100%% wiederhergestellt.</value>
     <comment>legacy_id=2597</comment>
   </data>
   <data name="Attack speed has increased of %d." xml:space="preserve">
@@ -9639,7 +9645,7 @@
     <comment>legacy_id=2743</comment>
   </data>
   <data name="Zen increase 50%%" xml:space="preserve">
-    <value>Zen-Erhöhung 50 %</value>
+    <value>Zen-Erhöhung 50%%</value>
     <comment>legacy_id=2744</comment>
   </data>
   <data name="Damage/Wizardry/Curse +30" xml:space="preserve">
@@ -10175,7 +10181,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d hat Ihnen ein Geschenk geschickt.</value>
+    <value>%s hat Ihnen ein Geschenk geschickt.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10355,55 +10361,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU 30 Tage lang genießen können.\nKann nur über die MU-Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU 30 Tage lang genießen können.
+Kann nur über die MU-Online-Website verwendet werden.</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU 90 Tage lang genießen können.\nKann nur über die MU-Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU 90 Tage lang genießen können.
+Kann nur über die MU-Online-Website verwendet werden.</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU 30 Tage lang genießen können. Bei einer Rückerstattung erhalten Sie einen Betrag, der den Punktepreis nicht berücksichtigt.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU 30 Tage lang genießen können. Bei einer Rückerstattung erhalten Sie einen Betrag, der den Punktepreis nicht berücksichtigt.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU 90 Tage lang genießen können. Bei einer Rückerstattung erhalten Sie einen Betrag, der den Punktepreis nicht berücksichtigt.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU 90 Tage lang genießen können. Bei einer Rückerstattung erhalten Sie einen Betrag, der den Punktepreis nicht berücksichtigt.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU nach der Lagerung 3 Stunden lang über 60 Tage lang genießen können.\nKann nur über die MU-Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU nach der Lagerung 3 Stunden lang über 60 Tage lang genießen können.
+Kann nur über die MU-Online-Website verwendet werden.</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie MU nach der Speichernutzung 60 Tage lang 5 Stunden lang genießen können.\nKann nur über die MU-Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie MU nach der Speichernutzung 60 Tage lang 5 Stunden lang genießen können.
+Kann nur über die MU-Online-Website verwendet werden.</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>Ein Artikel, mit dem Sie Mu nach der Lagerung 60 Tage lang 10 Stunden lang genießen können.\nKann nur über die Mu Online-Website verwendet werden.</value>
+    <value>Ein Artikel, mit dem Sie Mu nach der Lagerung 60 Tage lang 10 Stunden lang genießen können.
+Kann nur über die Mu Online-Website verwendet werden.</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>Setzt den gesamten Master-Skill-Baum einmal zurück.\nKann nur auf der MU Online-Website verwendet werden.</value>
+    <value>Setzt den gesamten Master-Skill-Baum einmal zurück.
+Kann nur auf der MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>Ermöglicht Ihnen, die Statistiken des Charakters um 500 Punkte anzupassen.\nKann nur auf der MU Online-Website verwendet werden.</value>
+    <value>Ermöglicht Ihnen, die Statistiken des Charakters um 500 Punkte anzupassen.
+Kann nur auf der MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>Ermöglicht die Übertragung eines Charakters auf ein anderes Konto innerhalb desselben Servers.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ermöglicht die Übertragung eines Charakters auf ein anderes Konto innerhalb desselben Servers.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>Ermöglicht das Umbenennen des Charakters.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ermöglicht das Umbenennen des Charakters.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>Ermöglicht die Übertragung eines Charakters auf einen anderen Server innerhalb desselben Kontos.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ermöglicht die Übertragung eines Charakters auf einen anderen Server innerhalb desselben Kontos.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>Ermöglicht Ihnen, einmal einen Charaktertransfer und einmal eine Änderung des Charakternamens anzufordern.\nKann nur über die MU Online-Website verwendet werden.</value>
+    <value>Ermöglicht Ihnen, einmal einen Charaktertransfer und einmal eine Änderung des Charakternamens anzufordern.
+Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -10675,7 +10694,7 @@
     <comment>legacy_id=3057</comment>
   </data>
   <data name="Increases Max Mana 4%%" xml:space="preserve">
-    <value>Erhöht das maximale Mana um 4 %</value>
+    <value>Erhöht das maximale Mana um 4%%</value>
     <comment>legacy_id=3058</comment>
   </data>
   <data name="PC Cafe Bonus" xml:space="preserve">
@@ -10715,7 +10734,7 @@
     <comment>legacy_id=3067</comment>
   </data>
   <data name="increases Damage, Wizardry and Curse by 20%%" xml:space="preserve">
-    <value>erhöht Schaden, Zauberei und Fluch um 20 %</value>
+    <value>erhöht Schaden, Zauberei und Fluch um 20%%</value>
     <comment>legacy_id=3068</comment>
   </data>
   <data name="and EXP by 30%%." xml:space="preserve">
@@ -10727,7 +10746,7 @@
     <comment>legacy_id=3071</comment>
   </data>
   <data name="increases EXP by 30%%." xml:space="preserve">
-    <value>Erhöht EXP um 30 %.</value>
+    <value>Erhöht EXP um 30%%.</value>
     <comment>legacy_id=3072</comment>
   </data>
   <data name="Chaos Castle Lv.%lu Guardsman x %lu/%lu" xml:space="preserve">
@@ -10983,7 +11002,7 @@
     <comment>legacy_id=3140</comment>
   </data>
   <data name="Item Drop 100%%" xml:space="preserve">
-    <value>Item-Drop 100 % %</value>
+    <value>Item-Drop 100%%</value>
     <comment>legacy_id=3141</comment>
   </data>
   <data name="Stamina will not decrease temporarily." xml:space="preserve">
@@ -11003,7 +11022,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Sie benötigen mehr %%s, um diesen Artikel zu kaufen.</value>
+    <value>Sie benötigen mehr %s, um diesen Artikel zu kaufen.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -11459,19 +11478,19 @@
     <comment>legacy_id=3354</comment>
   </data>
   <data name="Increases max HP by 6%%" xml:space="preserve">
-    <value>Erhöht die maximale HP um 6 %</value>
+    <value>Erhöht die maximale HP um 6%%</value>
     <comment>legacy_id=3355</comment>
   </data>
   <data name="Decreases damage by 6%%" xml:space="preserve">
-    <value>Verringert den Schaden um 6 %</value>
+    <value>Verringert den Schaden um 6%%</value>
     <comment>legacy_id=3356</comment>
   </data>
   <data name="Increases the amount of Zen received from killing monsters by 60%%" xml:space="preserve">
-    <value>Erhöht die Menge an Zen, die man durch das Töten von Monstern erhält, um 60 %.</value>
+    <value>Erhöht die Menge an Zen, die man durch das Töten von Monstern erhält, um 60%%.</value>
     <comment>legacy_id=3357</comment>
   </data>
   <data name="Increases the chance of causing Excellent Damage by 15%%" xml:space="preserve">
-    <value>Erhöht die Chance, hervorragenden Schaden zu verursachen, um 15 %.</value>
+    <value>Erhöht die Chance, hervorragenden Schaden zu verursachen, um 15%%.</value>
     <comment>legacy_id=3358</comment>
   </data>
   <data name="Increases attack speed by 10d" xml:space="preserve">
@@ -11479,7 +11498,7 @@
     <comment>legacy_id=3359</comment>
   </data>
   <data name="Increases max Mana by 6%%" xml:space="preserve">
-    <value>Erhöht das maximale Mana um 6 %</value>
+    <value>Erhöht das maximale Mana um 6%%</value>
     <comment>legacy_id=3360</comment>
   </data>
   <data name="You need a 5 person party to enter this area." xml:space="preserve">
@@ -12763,91 +12782,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²</value>
+    <value>Registrierungsstatus des Burgzeichens</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§</value>
+    <value>Registrierungsrang des Burgzeichens</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³¼ö</value>
+    <value>Anzahl registriert</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ì¸® ±æµå ÇöÈ²</value>
+    <value>Unser Gildenstatus</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°¡±â</value>
+    <value>Zurück</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡´É</value>
+    <value>Kann registrieren</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>Kann nicht registrieren</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³</value>
+    <value>Anzahl der zu registrierenden Burgzeichen: %d</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä.</value>
+    <value>Bitte legen Sie das zu registrierende Burgzeichen in das Kombinationsfenster.</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.</value>
+    <value>Es können höchstens 225 Burgzeichen auf einmal registriert werden.</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³</value>
+    <value>Anzahl der registrierten Burgzeichen: %d</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·Ï</value>
+    <value>Burgzeichen registrieren</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?</value>
+    <value>Burgzeichen registrieren?</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.</value>
+    <value>Die Registrierung des Burgzeichens ist abgeschlossen.</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.</value>
+    <value>Die Registrierung des Burgzeichens ist fehlgeschlagen.</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>Attribut</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>Elementattribut-Info</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>Sperren</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>Entsperren</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä</value>
+    <value>Wählen Sie den Gildennamen, für den die Feindschaft aufgehoben werden soll.</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>Feindschaft mit dieser Gilde aufheben?</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>¼¹ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>Server</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12855,19 +12874,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡</value>
+    <value>Es können nicht mehr als 2 Milliarden Zen ausgezahlt werden</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>Àüü¼ö¸®ºñ¿ë</value>
+    <value>Reparaturkosten gesamt</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>Diese Gilde existiert nicht.</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>Warten auf Handelsbestätigung</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">
@@ -13202,9 +13221,9 @@
     <value>Keine Verbindung zum Server. Prüfe, ob er läuft.</value>
   </data>
   <data name="TutorialWelcome" xml:space="preserve">
-    <value>Willkommen in der Welt von MU! Dieser kurze Leitfaden erklärt die Grundlagen auf wenigen Seiten. Drücke Esc zum Überspringen oder öffne ihn später über das Menü.</value>
+    <value>Willkommen in der Welt von MU! Diese Anleitung erklärt die Grundlagen. Mit Esc überspringen.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
-    <value>Du bist bereit! Sprich mit NPCs für Quests und verlasse die Stadt, um Monster zu bekämpfen. Viel Spaß beim Abenteuer.</value>
+    <value>Bereit! Sprich mit NPCs für Quests und verlasse die Stadt, um Monster zu bekämpfen. Viel Spaß!</value>
   </data>
 </root>

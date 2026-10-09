@@ -30,6 +30,10 @@ internal static class Program
             ("duplicate entries use the last value", DuplicateKey),
             ("inherited half-width kana only warns", LegacyTextWarning),
             ("accented European text is not mojibake", AccentedText),
+            ("latin-1 mojibake residue is a hard failure", MojibakeResidueHardFail),
+            ("four question marks is a hard failure", RepeatedQuestionMarkHardFail),
+            ("replacement character is a hard failure", ReplacementCharHardFail),
+            ("accented umlaut/tilde text is not mojibake", AccentedEuropeanText),
             ("line break differences are review warnings", LineBreakWarning),
             ("logical line break counter is preserved", LogicalLineBreaks),
             ("unknown locale is rejected", UnknownLocale),
@@ -277,6 +281,51 @@ internal static class Program
         Equal(0, report.WarningCount);
     }
 
+    private static void MojibakeResidueHardFail()
+    {
+        using var fixture = new ResourceFixture();
+        fixture.Write("Game", "en", ("Value", "Hello"));
+        fixture.Write("Game", "es", ("Value", "\u00BC\u00BA\u00C1\u00D6\u00C0\u00C7 \u00C7\u00A5\u00BD\u00C4"));
+        var report = fixture.Report("es");
+        Equal(1, report.ErrorCount);
+        Equal("mojibake_residue", report.Issues.Single().Code);
+        Equal(LocalizationCoverageReport.ErrorSeverity, report.Issues.Single().Severity);
+    }
+
+    private static void RepeatedQuestionMarkHardFail()
+    {
+        using var fixture = new ResourceFixture();
+        fixture.Write("Game", "en", ("Value", "Hello"));
+        fixture.Write("Game", "es", ("Value", "Hola ????"));
+        var report = fixture.Report("es");
+        Equal(1, report.ErrorCount);
+        Equal("mojibake_residue", report.Issues.Single().Code);
+    }
+
+    private static void ReplacementCharHardFail()
+    {
+        using var fixture = new ResourceFixture();
+        fixture.Write("Game", "en", ("Value", "Hello"));
+        fixture.Write("Game", "es", ("Value", "Hola\uFFFD"));
+        var report = fixture.Report("es");
+        Equal(1, report.ErrorCount);
+        Equal("mojibake_residue", report.Issues.Single().Code);
+    }
+
+    private static void AccentedEuropeanText()
+    {
+        using var fixture = new ResourceFixture();
+        fixture.Write("Game", "en", ("Value", "Letters"));
+        fixture.Write("Game", "de", ("Value", "\u00C4\u00D6\u00DC\u00DF \u00E4\u00F6\u00FC"));
+        var deReport = fixture.Report("de");
+        Equal(0, deReport.ErrorCount);
+        Equal(0, deReport.WarningCount);
+        fixture.Write("Game", "pt", ("Value", "a\u00E7\u00E3o \u00E3 \u00E7 \u00E1"));
+        var ptReport = fixture.Report("pt");
+        Equal(0, ptReport.ErrorCount);
+        Equal(0, ptReport.WarningCount);
+    }
+
     private static void LineBreakWarning()
     {
         using var fixture = new ResourceFixture();
@@ -328,7 +377,7 @@ internal static class Program
     {
         var english = ResxDocument.Load(Path.Combine(resources, "Game.en.resx"));
         var tutorialKeys = english.Keys.Where(key => key.StartsWith("Tutorial", StringComparison.Ordinal)).ToArray();
-        Equal(8, tutorialKeys.Length);
+        Equal(10, tutorialKeys.Length);
         foreach (var locale in TutorialLocales)
         {
             var localized = ResxDocument.Load(Path.Combine(resources, $"Game.{locale}.resx"));
@@ -368,7 +417,7 @@ internal static class Program
 
         foreach (var locale in new[] { "fr", "ko", "vi" })
         {
-            Equal(0, report.Groups.Where(row => row.Locale == locale).Sum(row => row.PresentKeys));
+            Equal(4, report.Groups.Where(row => row.Locale == locale).Sum(row => row.PresentKeys));
         }
     }
 

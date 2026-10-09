@@ -91,6 +91,26 @@ public class CollectionAdapter<TClass, TEfCore> : ICollection<TClass>, INotifyCo
     /// <inheritdoc />
     public void CopyTo(TClass[] array, int arrayIndex)
     {
+        if (array is null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
+        if (array.Rank != 1)
+        {
+            throw new ArgumentException("The destination array must be single-dimensional.", nameof(array));
+        }
+
+        if (arrayIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(arrayIndex), "The array index must not be negative.");
+        }
+
+        if (array.Length - arrayIndex < this._rawCollection.Count)
+        {
+            throw new ArgumentException("The number of elements in the source collection is greater than the available space from arrayIndex to the end of the destination array.", nameof(array));
+        }
+
         int i = 0;
         foreach (var item in this._rawCollection)
         {

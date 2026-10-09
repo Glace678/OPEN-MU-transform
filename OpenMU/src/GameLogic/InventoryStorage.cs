@@ -1,4 +1,4 @@
-﻿// <copyright file="InventoryStorage.cs" company="MUnique">
+// <copyright file="InventoryStorage.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -34,6 +34,7 @@ public class InventoryStorage : Storage, IInventoryStorage
         this._player = player;
         this.EquippedItemsChanged += async eventArgs => await this.UpdateItemsOnChangeAsync(eventArgs.Item, eventArgs.IsEquipped).ConfigureAwait(false);
         this._gameContext = context;
+        this.MaximumMoney = context.Configuration?.MaximumInventoryMoney;
 
         if (player.SelectedCharacter.InventoryExtensions > 0)
         {

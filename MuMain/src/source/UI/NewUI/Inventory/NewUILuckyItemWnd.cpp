@@ -1,4 +1,4 @@
-﻿// NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
+// NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@
 using namespace SEASON3B;
 CNewUILuckyItemWnd::CNewUILuckyItemWnd()
 {
-    memset(m_szSubject, 0, 255);
+    memset(m_szSubject, 0, sizeof(m_szSubject)); // P4: was hardcoded 255 bytes but m_szSubject is wchar_t[255] = 510 bytes
     m_eType = eLuckyItemType_None;
     m_nMixEffectTimer = 0;
 }

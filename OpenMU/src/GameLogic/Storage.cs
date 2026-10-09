@@ -1,4 +1,4 @@
-﻿// <copyright file="Storage.cs" company="MUnique">
+// <copyright file="Storage.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -87,6 +87,12 @@ public class Storage : IStorage
     /// <inheritdoc/>
     public ItemStorage ItemStorage { get; }
 
+    /// <summary>
+    /// Gets or sets the optional maximum amount of money this storage may hold. When set,
+    /// <see cref="TryAddMoney"/> enforces the cap at the storage layer so every call path
+    /// (not just the transfer wrappers) respects it. <c>null</c> means only int.MaxValue applies.
+    /// </summary>
+    internal int? MaximumMoney { get; init; }
     /// <inheritdoc/>
     public IEnumerable<Item> Items
     {
@@ -170,7 +176,15 @@ public class Storage : IStorage
     {
         // Negative amounts would silently reverse the operation (uint -> int cast at call sites);
         // do the arithmetic in long to avoid integer overflow as well.
-        if (value < 0 || (long)this.ItemStorage.Money + value > int.MaxValue)
+        var newTotal = (long)this.ItemStorage.Money + value;
+        if (value < 0 || newTotal > int.MaxValue)
+        {
+            return false;
+        }
+
+        // Enforce the configured storage cap here (not only in the transfer wrappers) so money can't
+        // exceed MaximumInventoryMoney / MaximumVaultMoney through any other call path.
+        if (this.MaximumMoney is { } maxMoney && newTotal > maxMoney)
         {
             return false;
         }

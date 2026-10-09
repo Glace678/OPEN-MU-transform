@@ -59,7 +59,7 @@ preserved. The options window writes to these sections:
 - `[Login]` - the remembered-credential keys (`RememberMe`,
   `SavePassword`, `EncryptedUsername`, `EncryptedPassword`); see
   "Remembering login credentials" below.
-- `[ConnectionSettings]`
+- `[CONNECTION SETTINGS]` - ConnectServer address, port, `AccountPortalUrl` (section name is case-sensitive and contains a space).
 - `[Camera]` - orbital wheel-zoom radius (`Zoom`). **New in this PR**, the
   only key the camera rework added.
 

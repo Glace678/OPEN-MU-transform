@@ -203,7 +203,7 @@ The active locale is selected through the Option window's language dropdown
 (see `src/source/UI/NewUI/Options/NewUIOptionWindow.cpp`). It calls
 `I18N::SetLocale(code)` and persists the choice via `GameConfig.UILocale`
 (the single source of truth for the active locale; on startup
-`GameLogic/Config/GameConfig` re-applies it).
+`src/source/Data/GameConfig/GameConfig` re-applies it).
 
 `SetLocale` does three things:
 
@@ -284,7 +284,7 @@ for narrow groups. For wide groups, `%s` / `%ls` via the bounds-checked
 The client currently exposes fifteen UI locales: `en`, `de`, `es`, `fr`, `id`,
 `ja`, `ko`, `pl`, `pt`, `ru`, `tl`, `uk`, `vi`, `zh-CN`, and `zh-TW`. The
 `fr`, `ko`, and `vi` files are deliberate locale markers while their
-translations are being completed: they contain no entries, so every group and
+translations are being completed: the `Dialog`, `Editor`, and `Metadata` groups are empty shells, but `Game.fr`/`Game.ko`/`Game.vi` ship only the four account self-service strings (`AccountRegister`, `AccountChangePassword`, `AccountResetPassword`, `AccountPortalUnavailable`); every other group and
 key resolves to the English value through the normal ResxGen fallback. This
 keeps the selector and generated locale registry honest without presenting
 English placeholder text as a completed translation.

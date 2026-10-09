@@ -29,15 +29,21 @@
     <comment>legacy_id=5</comment>
   </data>
   <data name="Error2TheHackingToolCheckingProgram" xml:space="preserve">
-    <value>[error2] 駭客工具檢查程式未成功下載。請稍後再嘗試連線。 \n\n 如果您仍然遇到相同的問題，請隨時透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心</value>
+    <value>[error2] 駭客工具檢查程式未成功下載。請稍後再嘗試連線。 
+
+ 如果您仍然遇到相同的問題，請隨時透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心</value>
     <comment>legacy_id=6</comment>
   </data>
   <data name="Error3NPXDLLRegistrationErrorRequired" xml:space="preserve">
-    <value>[錯誤3] NPX.DLL 註冊錯誤，缺少執行 nProtect 所需的檔案。請從 Muonline.\n\n 下載 np_setup.exe 如果您仍然遇到相同的問題，請透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心。</value>
+    <value>[錯誤3] NPX.DLL 註冊錯誤，缺少執行 nProtect 所需的檔案。請從 Muonline.
+
+ 下載 np_setup.exe 如果您仍然遇到相同的問題，請透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心。</value>
     <comment>legacy_id=7</comment>
   </data>
   <data name="Error4AnErrorHasOccurredIn" xml:space="preserve">
-    <value>[error4] 程式中發生錯誤。 \n\n 如果您仍然遇到相同的問題，請透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心</value>
+    <value>[error4] 程式中發生錯誤。 
+
+ 如果您仍然遇到相同的問題，請透過我們的網站 http://muonline.webzen.com 聯絡我們的客戶服務中心</value>
     <comment>legacy_id=8</comment>
   </data>
   <data name="[error5] User has selected the exit button." xml:space="preserve">
@@ -3366,11 +3372,11 @@
     <comment>legacy_id=903</comment>
   </data>
   <data name="Register the lucky number on the 100%% winning card." xml:space="preserve">
-    <value>將幸運數字登記在100%中獎卡上。</value>
+    <value>將幸運數字登記在100%%中獎卡上。</value>
     <comment>legacy_id=904</comment>
   </data>
   <data name="PleaseCheckOutTheAnnouncementOn" xml:space="preserve">
-    <value>如何獲得100%中獎卡請查看官網公告。</value>
+    <value>如何獲得100%%中獎卡請查看官網公告。</value>
     <comment>legacy_id=905</comment>
   </data>
   <data name="Ring of Honor" xml:space="preserve">
@@ -10174,7 +10180,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%d 送給您了一份禮物。</value>
+    <value>%s 送給您了一份禮物。</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -10354,55 +10360,68 @@
     <comment>legacy_id=2972</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy" xml:space="preserve">
-    <value>可讓您享受30天MU的物品。 \n只能在MU Online網站上使用。</value>
+    <value>可讓您享受30天MU的物品。 
+只能在MU Online網站上使用。</value>
     <comment>legacy_id=2973</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2974" xml:space="preserve">
-    <value>可以享受 MU 90 天的物品。 \n 只能在 MU Online 網站上使用。</value>
+    <value>可以享受 MU 90 天的物品。 
+ 只能在 MU Online 網站上使用。</value>
     <comment>legacy_id=2974</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2975" xml:space="preserve">
-    <value>可以讓你享受30天MU的道具。如果退款，您將收到不包括積分價格的金額。 \n只能從MU Online網站使用。</value>
+    <value>可以讓你享受30天MU的道具。如果退款，您將收到不包括積分價格的金額。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2975</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2976" xml:space="preserve">
-    <value>可以讓您享受 MU 90 天的道具。如果退款，您將收到不包括積分價格的金額。 \n只能從MU Online網站使用。</value>
+    <value>可以讓您享受 MU 90 天的道具。如果退款，您將收到不包括積分價格的金額。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2976</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2977" xml:space="preserve">
-    <value>使用儲存後可在60天內享受3小時MU的專案。 \n只能在MU Online網站上使用。</value>
+    <value>使用儲存後可在60天內享受3小時MU的專案。 
+只能在MU Online網站上使用。</value>
     <comment>legacy_id=2977</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2978" xml:space="preserve">
-    <value>使用儲存後可在 60 天內享受 MU 5 小時的專案。 \n只能在 MU Online 網站上使用。</value>
+    <value>使用儲存後可在 60 天內享受 MU 5 小時的專案。 
+只能在 MU Online 網站上使用。</value>
     <comment>legacy_id=2978</comment>
   </data>
   <data name="AnItemThatLetsYouEnjoy2979" xml:space="preserve">
-    <value>使用儲存後可在 60 天內享受 Mu 10 小時的專案。 \n只能在 Mu Online 網站上使用。</value>
+    <value>使用儲存後可在 60 天內享受 Mu 10 小時的專案。 
+只能在 Mu Online 網站上使用。</value>
     <comment>legacy_id=2979</comment>
   </data>
   <data name="ResetsTheEntireMasterSkillTree" xml:space="preserve">
-    <value>重置整個大師技能樹一次。 \n只能從MU Online網站使用。</value>
+    <value>重置整個大師技能樹一次。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2980</comment>
   </data>
   <data name="LetsYouAdjustTheCharacterS" xml:space="preserve">
-    <value>讓您將角色的統計數據調整 500 點。 \n只能從 MU Online 網站使用。</value>
+    <value>讓您將角色的統計數據調整 500 點。 
+只能從 MU Online 網站使用。</value>
     <comment>legacy_id=2981</comment>
   </data>
   <data name="LetsYouTransferACharacterTo" xml:space="preserve">
-    <value>允許您將角色轉移到同一伺服器內的另一個帳戶。 \n只能從MU Online網站使用。</value>
+    <value>允許您將角色轉移到同一伺服器內的另一個帳戶。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2982</comment>
   </data>
   <data name="LetsYouRenameTheCharacterNCan" xml:space="preserve">
-    <value>允許您重命名角色。 \n只能從MU Online網站使用。</value>
+    <value>允許您重命名角色。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2983</comment>
   </data>
   <data name="LetsYouTransferACharacterTo2984" xml:space="preserve">
-    <value>允許您將角色轉移到同一帳戶內的另一台伺服器。 \n只能從 MU Online 網站使用。</value>
+    <value>允許您將角色轉移到同一帳戶內的另一台伺服器。 
+只能從 MU Online 網站使用。</value>
     <comment>legacy_id=2984</comment>
   </data>
   <data name="AllowsYouToRequestACharacter" xml:space="preserve">
-    <value>允許您請求角色轉移一次和角色名稱變更一次。 \n只能從MU Online網站使用。</value>
+    <value>允許您請求角色轉移一次和角色名稱變更一次。 
+只能從MU Online網站使用。</value>
     <comment>legacy_id=2985</comment>
   </data>
   <data name="Gain Contribution: %u" xml:space="preserve">
@@ -11002,7 +11021,7 @@
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>您需要更多 %%s 才能購買該商品。</value>
+    <value>您需要更多 %s 才能購買該商品。</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -12762,91 +12781,91 @@
     <comment>legacy_id=3765</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ÇöÈ²" xml:space="preserve">
-    <value>¡ °ÁÖÀÇ Ç¥½ä µî·Ï ÇöÈ²</value>
+    <value>城主標識登記狀況</value>
     <comment>legacy_id=3766</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï ¼øÀ§" xml:space="preserve">
-    <value>¡ °ÁÖÀÇ Ç¥½ä µî·Ï ¡ °À§</value>
+    <value>城主標識登記排名</value>
     <comment>legacy_id=3767</comment>
   </data>
   <data name="µî·Ï °³¼ö" xml:space="preserve">
-    <value>µî·Ï °³⁄ö</value>
+    <value>登記數量</value>
     <comment>legacy_id=3768</comment>
   </data>
   <data name="¿ì¸® ±æµå ÇöÈ²" xml:space="preserve">
-    <value>¿ ì¸® ±æµå ÇöÈ²</value>
+    <value>本戰盟狀況</value>
     <comment>legacy_id=3769</comment>
   </data>
   <data name="µÚ·Î°¡±â" xml:space="preserve">
-    <value>µÚ·Î°±â</value>
+    <value>返回</value>
     <comment>legacy_id=3770</comment>
   </data>
   <data name="µî·Ï °¡´É" xml:space="preserve">
-    <value>µî·Ï °¡ É</value>
+    <value>可以登記</value>
     <comment>legacy_id=3771</comment>
   </data>
   <data name="µî·Ï ºÒ°¡" xml:space="preserve">
-    <value>µî·Ï ºÒ°¡</value>
+    <value>無法登記</value>
     <comment>legacy_id=3772</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö : %d°³" xml:space="preserve">
-    <value>µî·ÏÇÒ ⁄ÁÁÖÀÇ Ç¥½ä °3⁄ö : %d°3</value>
+    <value>要登記的城主標識數量：%d個</value>
     <comment>legacy_id=3773</comment>
   </data>
   <data name="µî·ÏÇÒ ¼ºÁÖÀÇ Ç¥½ÄÀ» Á¶ÇÕÃ¢¿¡ ¿Ã·ÁÁÖ¼¼¿ä." xml:space="preserve">
-    <value>µî·ÏÇÒ ¼ÁÁÖÀÇ Ç¥½äÀ» Á¶ÇÕâ¿ ¡ ¿ çãÁÁÖ¡</value>
+    <value>請把要登記的城主標識放入合成視窗。</value>
     <comment>legacy_id=3774</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀº ÇÑ¹ø¿¡ ÃÖ´ë 225°³±îÁö µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù." xml:space="preserve">
-    <value>¡ ¡ ¡ ÀÇ Ç¥¡ ¡ Àº ¡ Ñ1ø¿ ¡ 225°³±îÁö µî·ÏÇÒ ¡ ÀÖ¡ À´Ï´Ù。</value>
+    <value>每次最多可登記 225 個城主標識。</value>
     <comment>legacy_id=3775</comment>
   </data>
   <data name="µî·ÏµÈ ¼ºÁÖÀÇ Ç¥½Ä °³¼ö: %d°³" xml:space="preserve">
-    <value>µî·ÏµÈ ¡ °ÁÖÀÇ Ç¥½ä °³¡ : %d°³</value>
+    <value>已登記的城主標識數量：%d個</value>
     <comment>legacy_id=3776</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·Ï" xml:space="preserve">
-    <value>¡ °ÁÖÀÇ Ç¥½ä µî·Ï</value>
+    <value>登記城主標識</value>
     <comment>legacy_id=3777</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½ÄÀ» µî·ÏÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>??????????????????????????????????????????????????????????????????????????????????????????????????</value>
+    <value>是否登記城主標識？</value>
     <comment>legacy_id=3778</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù." xml:space="preserve">
-    <value>???????????????????????????????????????????????????????????</value>
+    <value>城主標識登記完成。</value>
     <comment>legacy_id=3779</comment>
   </data>
   <data name="¼ºÁÖÀÇ Ç¥½Ä µî·ÏÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù." xml:space="preserve">
-    <value>???????????????????????????????????????????????????????????? ????????????????????????????????????????????????????????????</value>
+    <value>城主標識登記失敗。</value>
     <comment>legacy_id=3780</comment>
   </data>
   <data name="ｼﾓｼｺ" xml:space="preserve">
-    <value>ｼﾓｼｺ</value>
+    <value>屬性</value>
     <comment>legacy_id=3781</comment>
   </data>
   <data name="ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ" xml:space="preserve">
-    <value>ﾆﾇﾅｸｱﾗｷ･ ﾁ､ｺｸ</value>
+    <value>元素屬性資訊</value>
     <comment>legacy_id=3782</comment>
   </data>
   <data name="ﾀ盂ﾝ" xml:space="preserve">
-    <value>ﾀ盂ﾝ</value>
+    <value>鎖定</value>
     <comment>legacy_id=3783</comment>
   </data>
   <data name="ﾇﾘﾁｦ" xml:space="preserve">
-    <value>ﾇﾘﾁｦ</value>
+    <value>解鎖</value>
     <comment>legacy_id=3784</comment>
   </data>
   <data name="Àû´ë±æµå¸¦ ÇØÁ¦ÇÒ ±æµå¸íÀ» ¼±ÅÃÇØ ÁÖ¼¼¿ä" xml:space="preserve">
-    <value>Àû´ë±æµå¸п ÇØÁйÇÒ ±æµå¸íÀ» ⁄±ÅçØ ÁÖ⁄⁄¿</value>
+    <value>請選擇要解除敵對關係的戰盟名稱。</value>
     <comment>legacy_id=3785</comment>
   </data>
-  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼­ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
-    <value>±æµå¸п Àû´ë±æµå¿ ¡ ⁄ ÇØÁйÇÏ½ñ°Ú½À´Ï±î？</value>
+  <data name="±æµå¸¦ Àû´ë±æµå¿¡¼ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?" xml:space="preserve">
+    <value>是否解除與該戰盟的敵對關係？</value>
     <comment>legacy_id=3786</comment>
   </data>
-  <data name="¼­¹ö" xml:space="preserve">
-    <value>1/41ö</value>
+  <data name="¼¹ö" xml:space="preserve">
+    <value>伺服器</value>
     <comment>legacy_id=3787</comment>
   </data>
   <data name="ESC" xml:space="preserve">
@@ -12854,19 +12873,19 @@
     <comment>legacy_id=3788</comment>
   </data>
   <data name="20¾ïÁ¨ ÀÌ»ó Ãâ±Ý ºÒ°¡" xml:space="preserve">
-    <value>20、20、20、20、20、20、20</value>
+    <value>無法提取超過 20 億金幣</value>
     <comment>legacy_id=3789</comment>
   </data>
   <data name="ÀüÃ¼¼ö¸®ºñ¿ë" xml:space="preserve">
-    <value>ÀüÃ¼¼ö¸®ºñ¿ë</value>
+    <value>全部修理費用</value>
     <comment>legacy_id=3790</comment>
   </data>
   <data name="ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù" xml:space="preserve">
-    <value>ÇØ´ç ±æµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù</value>
+    <value>該戰盟不存在。</value>
     <comment>legacy_id=3791</comment>
   </data>
   <data name="°Å·¡ ½ÂÀÎ ´ë±âÁß" xml:space="preserve">
-    <value>°Å·¡ ½ÂÀÎ ´ë±âÁß</value>
+    <value>等待交易確認</value>
     <comment>legacy_id=3792</comment>
   </data>
   <data name="You can purchase it after a while." xml:space="preserve">

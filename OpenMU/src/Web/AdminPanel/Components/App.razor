@@ -25,6 +25,12 @@
             return pathBase.EndsWith('/') ? pathBase : pathBase + "/";
         }
     }
+
+    // ScriptMappings are emitted verbatim into an inline <script> block via MarkupString.
+    // Even though they originate from build-time exports, sanitize both key and path against
+    // characters that could break out of the JS string literal (quote, backslash, brackets).
+    private static string SanitizeJsLiteral(string value) =>
+        string.Concat((value ?? string.Empty).Where(c => c is not ('\'' or '\\' or '<' or '>' or '\r' or '\n')));
 }
 
 <!DOCTYPE html>
@@ -67,8 +73,8 @@
           }
 
           isFirst = false;
-          sb.Append($"'{scriptMapping.Key}': '")
-            .Append(scriptMapping.Path)
+          sb.Append($"'{SanitizeJsLiteral(scriptMapping.Key)}': '")
+            .Append(SanitizeJsLiteral(scriptMapping.Path))
             .Append("'");
         }
         sb.AppendLine("    }")

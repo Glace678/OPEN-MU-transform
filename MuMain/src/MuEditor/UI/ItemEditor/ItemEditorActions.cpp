@@ -32,7 +32,8 @@ std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item
     switch (desc.type)
     {
     case EItemFieldType::Bool:
-        ss << (*reinterpret_cast<const bool*>(fieldPtr) ? 1 : 0);
+        // Read as BYTE (the on-disk field is Win32 BOOL/BYTE, not C++ bool) to avoid UB.
+        ss << (*reinterpret_cast<const BYTE*>(fieldPtr) ? 1 : 0);
         break;
 
     case EItemFieldType::Byte:
@@ -49,7 +50,7 @@ std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item
 
     case EItemFieldType::WCharArray:
     {
-        char buffer[256];
+        char buffer[256]{};
         ConvertItemName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
         ss << buffer;
         break;

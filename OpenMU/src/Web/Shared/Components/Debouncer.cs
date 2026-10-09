@@ -77,9 +77,9 @@ public sealed class Debouncer : IDisposable
             await Task.Delay(this._delayMs, token).ConfigureAwait(false);
             await action().ConfigureAwait(false);
         }
-        catch (TaskCanceledException)
+        catch (OperationCanceledException)
         {
-            // Expected when a newer invocation cancels a pending debounce.
+            // Expected when a newer invocation cancels a pending debounce, or when the debouncer is disposed.
         }
     }
 
@@ -120,9 +120,9 @@ public sealed class Debouncer : IDisposable
             await Task.Delay(this._delayMs, token).ConfigureAwait(false);
             await action(token).ConfigureAwait(false);
         }
-        catch (TaskCanceledException)
+        catch (OperationCanceledException)
         {
-            // Expected when a newer invocation cancels a pending debounce.
+            // Expected when a newer invocation cancels a pending debounce, or when the debouncer is disposed.
         }
     }
 

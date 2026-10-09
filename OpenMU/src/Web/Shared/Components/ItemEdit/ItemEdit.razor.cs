@@ -85,7 +85,20 @@ public sealed partial class ItemEdit : IDisposable
     {
         if (this.ItemChanged.HasDelegate)
         {
-            _ = this.ItemChanged.InvokeAsync();
+            _ = this.InvokeItemChangedAsync();
+        }
+    }
+
+    private async Task InvokeItemChangedAsync()
+    {
+        try
+        {
+            await this.ItemChanged.InvokeAsync().ConfigureAwait(false);
+        }
+        catch (Exception)
+        {
+            // The associated circuit/component may already be gone; a property-change
+            // notification is best-effort and must not surface as an unobserved exception.
         }
     }
 }

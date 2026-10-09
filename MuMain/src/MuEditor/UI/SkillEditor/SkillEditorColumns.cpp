@@ -165,7 +165,7 @@ void CSkillEditorColumns::RenderWCharArrayColumn(
     ImGui::PushID(skillIndex * 100000 + uniqueId);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    char editableBuffer[256];
+    char editableBuffer[256]{};
     WideCharToMultiByte(CP_UTF8, 0, value, -1, editableBuffer, sizeof(editableBuffer), NULL, NULL);
 
     if (ImGui::InputText("##input", editableBuffer, sizeof(editableBuffer)))
@@ -183,6 +183,7 @@ void CSkillEditorColumns::RenderWCharArrayColumn(
 void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
 {
     if (!isVisible) return;
+    if (!SkillAttribute) return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + 999999);
@@ -197,7 +198,7 @@ void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& r
 
     if (wasDeactivated && newIndex >= 0 && newIndex < MAX_SKILLS && newIndex != skillIndex)
     {
-        char targetName[128];
+        char targetName[128]{};
         WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[newIndex].Name, -1, targetName, sizeof(targetName), NULL, NULL);
 
         if (targetName[0] == '\0')
