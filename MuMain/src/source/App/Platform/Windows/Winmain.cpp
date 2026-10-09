@@ -479,8 +479,13 @@ void ApplyFrameTimingConfiguration(bool foreground)
         Core::Time::ToString(g_effectiveFramePolicy.reason).data());
 }
 
-BOOL GetFileNameOfFilePath(wchar_t* lpszFile, wchar_t* lpszPath)
+BOOL GetFileNameOfFilePath(wchar_t* lpszFile, wchar_t* lpszPath, size_t cchFileSize)
 {
+    if (lpszFile == nullptr || lpszPath == nullptr || cchFileSize == 0)
+    {
+        return FALSE;
+    }
+
     auto iFind = (int)'\\';
     wchar_t* lpFound = lpszPath;
     wchar_t* lpOld = lpFound;
@@ -490,14 +495,10 @@ BOOL GetFileNameOfFilePath(wchar_t* lpszFile, wchar_t* lpszPath)
         lpFound = wcschr(lpFound + 1, iFind);
     }
 
-    if (wcschr(lpszPath, iFind))
-    {
-        wcscpy(lpszFile, lpOld + 1);
-    }
-    else
-    {
-        wcscpy(lpszFile, lpOld);
-    }
+    const wchar_t* lpName = wcschr(lpszPath, iFind) ? lpOld + 1 : lpOld;
+
+    // Bounded copy: the command line can be far longer than the destination (MAX_PATH).
+    wcsncpy_s(lpszFile, cchFileSize, lpName, _TRUNCATE);
 
     BOOL bCheck = TRUE;
     for (wchar_t* lpTemp = lpszFile; bCheck; ++lpTemp)
@@ -3008,7 +3009,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     wchar_t* lpszCommandLine = GetCommandLine();
     wchar_t lpszFile[MAX_PATH];
     WORD wVersion[4] = { 0, };
-    if (GetFileNameOfFilePath(lpszFile, lpszCommandLine))
+    if (GetFileNameOfFilePath(lpszFile, lpszCommandLine, _countof(lpszFile)))
     {
         if (GetFileVersion(lpszFile, wVersion))
         {
