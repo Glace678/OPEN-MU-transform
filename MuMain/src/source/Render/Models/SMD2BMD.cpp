@@ -126,6 +126,12 @@ bool FixupSMD()
             }
             if (k == -1)
             {
+                if (m->VertexNum >= VERTEX_MAX)
+                {
+                    g_ErrorReport.Write(L"SMD2BMD: vertex limit (%d) exceeded for a mesh; aborting conversion.\r\n", VERTEX_MAX);
+                    return false;
+                }
+
                 m->VertexList[m->TriangleNum][j] = m->VertexNum;
                 m->Vertex[m->VertexNum].Node = tg->Vertex[i][j].Node;
                 m->Vertex[m->VertexNum].Position[0] = tg->Vertex[i][j].Position[0];
@@ -151,6 +157,12 @@ bool FixupSMD()
             }
             if (k == -1)
             {
+                if (m->NormalNum >= VERTEX_MAX)
+                {
+                    g_ErrorReport.Write(L"SMD2BMD: normal limit (%d) exceeded for a mesh; aborting conversion.\r\n", VERTEX_MAX);
+                    return false;
+                }
+
                 m->NormalList[m->TriangleNum][j] = m->NormalNum;
                 m->Normal[m->NormalNum].Node = tg->Vertex[i][j].Node;
                 m->Normal[m->NormalNum].Normal[0] = tg->Vertex[i][j].Normal[0];
@@ -175,11 +187,23 @@ bool FixupSMD()
             }
             if (k == -1)
             {
+                if (m->TexCoordNum >= VERTEX_MAX)
+                {
+                    g_ErrorReport.Write(L"SMD2BMD: texcoord limit (%d) exceeded for a mesh; aborting conversion.\r\n", VERTEX_MAX);
+                    return false;
+                }
+
                 m->TexCoordList[m->TriangleNum][j] = m->TexCoordNum;
                 m->TexCoord[m->TexCoordNum].TexCoordU = tg->Vertex[i][j].TexCoordU;
                 m->TexCoord[m->TexCoordNum].TexCoordV = tg->Vertex[i][j].TexCoordV;
                 m->TexCoordNum++;
             }
+        }
+
+        if (m->TriangleNum >= TRIANGLE_MAX)
+        {
+            g_ErrorReport.Write(L"SMD2BMD: triangle limit (%d) exceeded for a mesh; aborting conversion.\r\n", TRIANGLE_MAX);
+            return false;
         }
 
         m->Polygon[m->TriangleNum] = 3;

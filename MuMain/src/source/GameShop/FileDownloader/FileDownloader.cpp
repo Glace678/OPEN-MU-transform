@@ -230,6 +230,14 @@ WZResult 			FileDownloader::TransferRemoteFile()
 
                 break;
             }
+
+            // Read the next chunk inside the loop. Without this a successful first read
+            // (>0 bytes, connection alive) never produced another read and spun forever.
+            ReadSize = 0;
+            this->m_Result = this->m_pConnecter->ReadRemoteFile(this->m_hRemoteFile, buffer, &ReadSize);
+
+            if (!this->CanBeContinue())
+                break;
         }
     }
 

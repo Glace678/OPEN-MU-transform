@@ -11645,17 +11645,18 @@ int FindCharacterIndex(int Key)
         }
     }
 
-    // Legacy sentinel (points one past the last usable client slot). New code should use
-    // FindCharacterIndexSafe, which returns -1 and is safe to use unchecked.
-    return MAX_CHARACTERS_CLIENT;
+    // Not found: return -1 (invalid index). Every caller must treat a result outside
+    // [0, MAX_CHARACTERS_CLIENT) as "character not present". The previous sentinel
+    // MAX_CHARACTERS_CLIENT (400) silently addressed the first uninitialized slot past the
+    // client array when used unchecked; -1 is rejected by all `idx < 0 || idx >= MAX` guards
+    // and by the CharacterExt reader helpers.
+    return -1;
 }
 
-// Safe variant: returns -1 when the key is not found, so an out-of-range index cannot index
-// CharactersClient. Callers check `if (idx < 0 || idx >= MAX_CHARACTERS_CLIENT)`.
+// Kept for source compatibility with callers that prefer an explicit safe-lookup name.
 int FindCharacterIndexSafe(int Key)
 {
-    int index = FindCharacterIndex(Key);
-    return (index >= 0 && index < MAX_CHARACTERS_CLIENT) ? index : -1;
+    return FindCharacterIndex(Key);
 }
 
 int FindCharacterIndexByMonsterIndex(int Type)
@@ -15169,9 +15170,18 @@ CHARACTER* CreateHero(int Index, CLASS_TYPE Class, int Skin, float x, float y, f
 CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, int CreateFlag)
 {
     CHARACTER* portal = CreateMonster(Index, x, y, Key);
+    if (portal == nullptr)
+    {
+        return nullptr;
+    }
+
     portal->Level = Index - 152 + 1;
-    wchar_t portalText[100];
-    wchar_t name[sizeof portal->ID];
+
+    // portal->ID is wchar_t[MAX_MONSTER_NAME+1] (130 bytes); size the wide buffers to it so the
+    // final copy cannot overflow (the previous 100-wchar source wrote 200 bytes into 130).
+    static_assert(sizeof(portal->ID) == (MAX_MONSTER_NAME + 1) * sizeof(wchar_t), "unexpected ID size");
+    wchar_t portalText[MAX_MONSTER_NAME + 1] = {};
+    wchar_t name[MAX_MONSTER_NAME + 1] = {};
 
     // PROTO-8: ID originates from the fixed char[MAX_USERNAME_SIZE] packet
     // field with no NUL guarantee; bound the conversion.
@@ -15182,7 +15192,7 @@ CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, i
     if (portal->Level == 7)
         portal->Object.SubType = 1;
 
-    memcpy(portal->ID, portalText, sizeof portalText);
+    memcpy(portal->ID, portalText, sizeof portal->ID);
 
     if (CreateFlag)
     {

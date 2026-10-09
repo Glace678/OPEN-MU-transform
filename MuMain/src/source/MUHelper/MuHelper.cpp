@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameLogic/Combat/SkillExecution.h"
 
 #include <thread>
@@ -405,7 +405,7 @@ namespace MUHelper
         for (const int& iMonsterId : setTargets)
         {
             int iIndex = FindCharacterIndex(iMonsterId);
-            if (iIndex == MAX_CHARACTERS_CLIENT)
+            if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
             {
                 DeleteTarget(iMonsterId);
                 continue;
@@ -957,7 +957,7 @@ namespace MUHelper
                 if (iTarget != -1)
                 {
                     const int iCharIndex = FindCharacterIndex(iTarget);
-                    if (iCharIndex != MAX_CHARACTERS_CLIENT)
+                    if (iCharIndex >= 0 && iCharIndex < MAX_CHARACTERS_CLIENT)
                     {
                         CHARACTER* pCurrentTarget = &CharactersClient[iCharIndex];
                         if (pCurrentTarget->Dead > 0 || !IsMonster(pCurrentTarget))
@@ -981,7 +981,7 @@ namespace MUHelper
                 }
 
                 const int iCharIndex = FindCharacterIndex(iTarget);
-                if (iCharIndex == MAX_CHARACTERS_CLIENT)
+                if (iCharIndex < 0 || iCharIndex >= MAX_CHARACTERS_CLIENT)
                 {
                     DeleteTarget(iTarget);
                     return 0;
@@ -1071,7 +1071,7 @@ namespace MUHelper
         }
 
         const int iCharIndex = FindCharacterIndex(iTarget);
-        if (iCharIndex == MAX_CHARACTERS_CLIENT)
+        if (iCharIndex < 0 || iCharIndex >= MAX_CHARACTERS_CLIENT)
         {
             DeleteTarget(iTarget);
             return 0;

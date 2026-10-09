@@ -63,9 +63,11 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
         MultiByteToWideChar(CP_UTF8, 0, pTexture->FileName, -1, textureFileName, wchars_num);
 
         wchar_t szFullPath[256] = { 0, };
-        wcscpy(szFullPath, L"Data\\");
-        wcscat(szFullPath, SubFolder);
-        wcscat(szFullPath, textureFileName);
+        // Bounded concatenation: a malicious/corrupted model texture name must not overflow
+        // the 256-wchar stack buffer.
+        wcscpy_s(szFullPath, _countof(szFullPath), L"Data\\");
+        wcscat_s(szFullPath, _countof(szFullPath), SubFolder);
+        wcscat_s(szFullPath, _countof(szFullPath), textureFileName);
 
         wchar_t __ext[_MAX_EXT] = { 0, };
         _wsplitpath(textureFileName, NULL, NULL, NULL, __ext);

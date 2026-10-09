@@ -2006,7 +2006,15 @@ namespace Render::Effects::Behaviors
         case 2:
         {
             OBJECT* pSourceObj = o->Owner;
-            CHARACTER* pTargetChar = &CharactersClient[FindCharacterIndex(o->m_sTargetIndex)];
+            int targetIdx = FindCharacterIndex(o->m_sTargetIndex);
+            if (targetIdx < 0 || targetIdx >= MAX_CHARACTERS_CLIENT)
+            {
+                o->LifeTime = 0;
+                o->Live = false;
+                break;
+            }
+
+            CHARACTER* pTargetChar = &CharactersClient[targetIdx];
             OBJECT* pTargetObj = &pTargetChar->Object;
 
             if (pSourceObj == NULL || pSourceObj->Live == false

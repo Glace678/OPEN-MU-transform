@@ -757,6 +757,10 @@ bool CQuestMng::IsQuestByEtc(DWORD dwQuestIndex)
 
 void CQuestMng::SetQuestIndexByEtcList(DWORD* adwSrcQuestIndex, int nIndexCount)
 {
+    // Bound the list: the count is a packet-controlled WORD; without a cap a crafted packet
+    // would allocate an unbounded vector. Mirrors the NPC dialogue's 20-entry quest list.
+    constexpr int MaxEtcQuestIndices = 20;
+
     m_listQuestIndexByEtc.clear();
 
     if (NULL == adwSrcQuestIndex)
@@ -764,7 +768,16 @@ void CQuestMng::SetQuestIndexByEtcList(DWORD* adwSrcQuestIndex, int nIndexCount)
 
     int i;
     for (i = 0; i < nIndexCount; ++i)
+    {
+        if (static_cast<int>(m_listQuestIndexByEtc.size()) >= MaxEtcQuestIndices)
+        {
+            g_ErrorReport.Write(L"SetQuestIndexByEtcList: quest count %d exceeds %d; truncating.\r\n",
+                                nIndexCount, MaxEtcQuestIndices);
+            break;
+        }
+
         m_listQuestIndexByEtc.push_back(adwSrcQuestIndex[i]);
+    }
 }
 
 bool CQuestMng::IsQuestIndexByEtcListEmpty()

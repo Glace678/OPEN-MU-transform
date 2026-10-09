@@ -541,7 +541,12 @@ void CMonkSystem::SetDarksideTargetIndex(WORD* _pTargetIndex, ActionSkillType sk
         m_DarksideIndex.push_back(_pTargetIndex[i]);
         if (_pTargetIndex[i] != DS_TARGET_NONE)
         {
-            m_DarkTargetIndex.push_back(FindCharacterIndex(_pTargetIndex[i]));
+            const int targetIndex = FindCharacterIndex(_pTargetIndex[i]);
+            if (targetIndex >= 0 && targetIndex < MAX_CHARACTERS_CLIENT)
+            {
+                m_DarkTargetIndex.push_back(targetIndex);
+            }
+
             m_nDarksideEffectTotal++;
             m_fDistanceFrame = 0;
             m_fDistanceNextFrame = 0;

@@ -4483,7 +4483,7 @@ BOOL ReceiveMonsterSkill(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (TargetIndex == MAX_CHARACTERS_CLIENT)
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT || TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
         return (TRUE);
     AttackPlayer = Index;
 
@@ -4540,7 +4540,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (TargetIndex == MAX_CHARACTERS_CLIENT)
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT || TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
         return (TRUE);
 
     AttackPlayer = Index;
@@ -6135,6 +6135,8 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     Key &= 0x7FFF;
 
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return FALSE;
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
     vec3_t Light;
@@ -6213,6 +6215,8 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     auto killerId = Data->KillerObjectId;
 
     int Index = FindCharacterIndex(killedId);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return FALSE;
     CHARACTER* killedObject = &CharactersClient[Index];
     OBJECT* o = &killedObject->Object;
     vec3_t Light;
@@ -6360,6 +6364,8 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -6405,12 +6411,15 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
         {
             int TKey = ((int)(Data->TKeyH) << 8) + Data->TKeyL;
             int TIndex = FindCharacterIndex(TKey);
-            CHARACTER* tc = &CharactersClient[TIndex];
-            OBJECT* to = &tc->Object;
+            if (TIndex >= 0 && TIndex < MAX_CHARACTERS_CLIENT)
+            {
+                CHARACTER* tc = &CharactersClient[TIndex];
+                OBJECT* to = &tc->Object;
 
-            o->Angle[2] = CreateAngle2D(o->Position, to->Position);
+                o->Angle[2] = CreateAngle2D(o->Position, to->Position);
 
-            VectorCopy(o->Angle, o->HeadAngle);
+                VectorCopy(o->Angle, o->HeadAngle);
+            }
         }
     }
 
@@ -7948,6 +7957,8 @@ void ReceivePartyGetItem(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_GETITEMINFO_FOR_PARTY)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
     CHARACTER* c = &CharactersClient[Index];
     if (Hero == c) return;
 
@@ -8119,6 +8130,8 @@ void ReceiveDeleteGuildViewport(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
     int Key = ((int)(Data->KeyH & 0x7f) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
     CHARACTER* c = &CharactersClient[Index];
 
     c->GuildStatus = -1;
@@ -9892,8 +9905,10 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
 
         int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
         int index = FindCharacterIndex(key);
-
-        g_pPurchaseShopInventory->ChangeShopCharacterIndex(index);
+        if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
+        {
+            g_pPurchaseShopInventory->ChangeShopCharacterIndex(index);
+        }
     }
     else
     {
@@ -10855,6 +10870,8 @@ void ReceiveQuestPrize(const BYTE* ReceiveBuffer)
     WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     Key &= 0x7FFF;
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
 
     switch (Data->m_byReparation)
     {
@@ -11162,6 +11179,8 @@ void ReceiveOtherPlayerGensInfluenceViewport(const BYTE* ReceiveBuffer)
         auto Data2 = (LPPMSG_GENS_MEMBER_VIEWPORT_INFO)(ReceiveBuffer + nOffset);
         int nKey = ((int)(Data2->m_byNumberH & 0x7f) << 8) + Data2->m_byNumberL;
         int nIndex = FindCharacterIndex(nKey);
+        if (nIndex < 0 || nIndex >= MAX_CHARACTERS_CLIENT)
+            continue;
         CHARACTER* c = &CharactersClient[nIndex];
 
         c->m_byGensInfluence = Data2->m_byInfluence;
@@ -11394,6 +11413,8 @@ void ReceivePetAttack(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_PET_ATTACK)ReceiveBuffer;
     WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     int  index = FindCharacterIndex(Key);
+    if (index < 0 || index >= MAX_CHARACTERS_CLIENT)
+        return;
     CHARACTER* sc = &CharactersClient[index];
 
     Key = ((WORD)(Data->m_byTKeyH) << 8) + Data->m_byTKeyL;
@@ -11959,6 +11980,8 @@ void ReceiveGateCurrentState(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_GATE_CURRENT_STATE)ReceiveBuffer;
     int Key = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -11983,6 +12006,10 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
 
     int iKey = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
     int iIndex = FindCharacterIndex(iKey);
+    if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+    {
+        return;
+    }
 
     CHARACTER* CrownSwitch = &CharactersClient[iIndex];
 
@@ -12021,6 +12048,10 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
     {
         int iKey = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
         int iIndex = FindCharacterIndex(iKey);
+        if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+        {
+            break;
+        }
         CHARACTER* pCha = &CharactersClient[iIndex];
         wchar_t strText[256];
 
@@ -12297,6 +12328,8 @@ void ReceiveBuildTime(const BYTE* ReceiveBuffer)
     auto pData = (LPPRECEIVE_MONSTER_BUILD_TIME)ReceiveBuffer;
     int Key = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
     int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -13862,8 +13895,17 @@ BOOL ReceiveStraightAttack(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
     TargetKey &= 0x7FFF;
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (TargetIndex == MAX_CHARACTERS_CLIENT && AttackNumber != AT_SKILL_DARKSIDE && AttackNumber != AT_SKILL_DARKSIDE_STR)
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
         return (TRUE);
+
+    if (TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
+    {
+        // A missing target is only tolerated for self-cast dark-side skills; they act on the caster.
+        if (AttackNumber != AT_SKILL_DARKSIDE && AttackNumber != AT_SKILL_DARKSIDE_STR)
+            return (TRUE);
+
+        TargetIndex = Index;
+    }
 
     AttackPlayer = Index;
     CHARACTER* sc = &CharactersClient[Index];

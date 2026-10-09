@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //  npcGateSwitch.cpp
 //////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
@@ -42,7 +42,7 @@ namespace npcGateSwitch
     bool DoInterfaceOpen(int Key)
     {
         int Index = FindCharacterIndex(Key);
-        if (Index == MAX_CHARACTERS_CLIENT) return false;
+        if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT) return false;
         CHARACTER* c = &CharactersClient[Index];
         OBJECT* o = &c->Object;
 
@@ -61,7 +61,7 @@ namespace npcGateSwitch
         case 1:
         {
             int        Index = FindCharacterIndex(Key);
-            if (Index == MAX_CHARACTERS_CLIENT) return;
+            if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT) return;
             CHARACTER* c = &CharactersClient[Index];
 
             if (c->MonsterIndex != MONSTER_CASTLE_GATE1) return;

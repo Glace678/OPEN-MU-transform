@@ -1,4 +1,4 @@
-// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
+﻿// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -491,9 +491,9 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckInventoryHolyItem(CHARACTER* c)
         if (m_HolyItemPlayerIndex == 0xffff)
             return false;
 
-        WORD holyitemcharacterindex = FindCharacterIndex(m_HolyItemPlayerIndex);
+        int holyitemcharacterindex = FindCharacterIndex(m_HolyItemPlayerIndex);
 
-        if (holyitemcharacterindex == MAX_CHARACTERS_CLIENT)
+        if (holyitemcharacterindex < 0 || holyitemcharacterindex >= MAX_CHARACTERS_CLIENT)
         {
             return false;
         }
@@ -1228,10 +1228,10 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
     WORD sourceobjkey = data->wSourceObjIndex;
     WORD targetobjkey = data->wTargetObjIndex;
 
-    WORD sourceobjindex = FindCharacterIndex(sourceobjkey);
-    WORD targetobjindex = FindCharacterIndex(targetobjkey);
+    int sourceobjindex = FindCharacterIndex(sourceobjkey);
+    int targetobjindex = FindCharacterIndex(targetobjkey);
 
-    if (sourceobjindex == MAX_CHARACTERS_CLIENT || targetobjindex == MAX_CHARACTERS_CLIENT)
+    if (sourceobjindex < 0 || targetobjindex < 0 || sourceobjindex >= MAX_CHARACTERS_CLIENT || targetobjindex >= MAX_CHARACTERS_CLIENT)
         return;
 
     CHARACTER* sc = &CharactersClient[sourceobjindex];
@@ -1312,9 +1312,9 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempUnRegisterSkill(const 
     WORD magNumber = ((WORD)(data->MagicH) << 8) + data->MagicL;
 
     WORD targetobjkey = data->wObjIndex;
-    WORD targetobjindex = FindCharacterIndex(targetobjkey);
+    int targetobjindex = FindCharacterIndex(targetobjkey);
 
-    if (targetobjindex == MAX_CHARACTERS_CLIENT)
+    if (targetobjindex < 0 || targetobjindex >= MAX_CHARACTERS_CLIENT)
         return;
 
     CHARACTER* tc = &CharactersClient[targetobjindex];

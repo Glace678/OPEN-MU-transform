@@ -1197,9 +1197,9 @@ void CursedTemple::ReceiveCursedTempleInfo(const BYTE* ReceiveBuffer)
     if (data->btUserIndex != 0xffff)
     {
         WORD holyitemkey = data->btUserIndex;
-        WORD holyitemcharacterindex = FindCharacterIndex(holyitemkey);
+        int holyitemcharacterindex = FindCharacterIndex(holyitemkey);
 
-        if (holyitemcharacterindex != MAX_CHARACTERS_CLIENT)
+        if (holyitemcharacterindex >= 0 && holyitemcharacterindex < MAX_CHARACTERS_CLIENT)
         {
             CHARACTER* c = &CharactersClient[holyitemcharacterindex];
             OBJECT* o = &c->Object;

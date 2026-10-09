@@ -373,6 +373,11 @@ void SEASON3B::CNewUICatapultWindow::Init(int iKey, int iType)
 void SEASON3B::CNewUICatapultWindow::DoFire(int iKey, int iResult, int iType, int iPositionX, int iPositionY)
 {
     int iIndex = FindCharacterIndex(iKey);
+    if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+    {
+        return;
+    }
+
     CHARACTER* c = &CharactersClient[iIndex];
     OBJECT* o = &c->Object;
 
