@@ -346,6 +346,12 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
 
 inline void PATH::SetEndNodes(bool bErrorCheck, int iWall, int xEnd, int yEnd, float fDistance)
 {
+    // A negative search radius is meaningless and would invert the iteration bounds; clamp it.
+    if (fDistance < 0.0f)
+    {
+        fDistance = 0.0f;
+    }
+
     int iDistance = (int)fDistance;
     for (int j = -iDistance; j <= iDistance; j++)
     {
