@@ -38,7 +38,7 @@ public class CharInfoChatCommandPlugIn : ChatCommandPlugInBase<CharInfoChatComma
             return;
         }
 
-        await gameMaster.ShowBlueMessageAsync($"Account Name: {account.LoginName}").ConfigureAwait(false);
+        await gameMaster.ShowLocalizedBlueMessageAsync("CharInfoAccountNameFormat", account.LoginName).ConfigureAwait(false);
 
         await this.ShowAllLinesMessageToAsync(gameMaster, GetCharacterInfo(gameMaster, character)).ConfigureAwait(false);
 

@@ -65,10 +65,10 @@ protected:
 
 public:
     void SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1, const wchar_t* pszID2);
-    BOOL IsDuelChannelEnabled(int iChannelIndex) { return m_DuelChannels[iChannelIndex].m_bEnable; }
-    BOOL IsDuelChannelJoinable(int iChannelIndex) { return m_DuelChannels[iChannelIndex].m_bJoinable; }
-    const wchar_t* GetDuelChannelUserID1(int iChannelIndex) const { return m_DuelChannels[iChannelIndex].m_szID1; }
-    const wchar_t* GetDuelChannelUserID2(int iChannelIndex) const { return m_DuelChannels[iChannelIndex].m_szID2; }
+    BOOL IsDuelChannelEnabled(int iChannelIndex) { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_bEnable : FALSE; }
+    BOOL IsDuelChannelJoinable(int iChannelIndex) { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_bJoinable : FALSE; }
+    const wchar_t* GetDuelChannelUserID1(int iChannelIndex) const { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_szID1 : L""; }
+    const wchar_t* GetDuelChannelUserID2(int iChannelIndex) const { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_szID2 : L""; }
 
     void SetCurrentChannel(int iChannel = -1) { m_iCurrentChannel = iChannel; }
     int GetCurrentChannel() { return m_iCurrentChannel; }

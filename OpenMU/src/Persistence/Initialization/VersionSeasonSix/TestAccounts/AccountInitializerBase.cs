@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Persistence.Initialization.VersionSeasonSix.TestAccounts;
 
 using System;
+using System.Security.Cryptography;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.DataModel.Configuration.Items;
@@ -89,7 +90,7 @@ internal abstract class AccountInitializerBase : InitializerBase
     {
         var account = this.Context.CreateNew<Account>();
         account.LoginName = this.AccountName;
-        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(this.AccountName);
+        this.AssignRandomTemporaryPassword(account);
         account.Vault = this.Context.CreateNew<ItemStorage>();
         this.AddVaultItems(account);
 
@@ -813,5 +814,37 @@ internal abstract class AccountInitializerBase : InitializerBase
         vault.Items.Add(this.CreateDevilSquareTicket(37, 5));
         vault.Items.Add(this.CreateDevilSquareTicket(38, 4));
         vault.Items.Add(this.CreateDevilSquareTicket(39, 4));
+    }
+
+    /// <summary>
+    /// Assigns a cryptographically random temporary password to the account and marks it
+    /// as must-change-on-first-login. The plaintext password is never stored in source code
+    /// or configuration; operators retrieve it from the server log or reset it via the
+    /// admin panel. Existing accounts whose password equals the login name are flagged as
+    /// well so the next login forces a rotation.
+    /// </summary>
+    /// <param name="account">The account.</param>
+    protected void AssignRandomTemporaryPassword(Account account)
+    {
+        // Generate a 16-byte cryptographically secure random token, encode it as a
+        // URL-safe string. The result is never equal to the account name and is
+        // unpredictable across invocations.
+        var bytes = RandomNumberGenerator.GetBytes(16);
+        var temporaryPassword = Convert.ToBase64String(bytes)
+            .Replace('+', '-')
+            .Replace('/', '_')
+            .TrimEnd('=');
+
+        // Defensive: never assign the account name as the password, even by collision.
+        if (string.Equals(temporaryPassword, account.LoginName, StringComparison.Ordinal))
+        {
+            temporaryPassword = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16))
+                .Replace('+', '-')
+                .Replace('/', '_')
+                .TrimEnd('=');
+        }
+
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(temporaryPassword);
+        account.MustChangePassword = true;
     }
 }

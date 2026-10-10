@@ -9,6 +9,29 @@ function Get-RepositoryRoot {
     return (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 }
 
+function Resolve-InterfaceListHeader([string]$SourceRoot) {
+    # INTERFACE_LIST was moved out of the legacy shim Core/Globals/_enum.h into
+    # the Core/Enums chunks. Search the Enums directory for the header that
+    # actually defines the enum so a future relocation cannot silently break
+    # this gate the way the hard-coded shim path did (91-34).
+    $enumsRoot = Join-Path $SourceRoot 'Core\Enums'
+    if (Test-Path $enumsRoot) {
+        $candidates = @(Get-ChildItem $enumsRoot -Filter '*.h' | Where-Object {
+            [regex]::IsMatch([IO.File]::ReadAllText($_.FullName), 'enum\s+INTERFACE_LIST\s*\{')
+        })
+        if ($candidates.Count -ge 1) {
+            return $candidates[0].FullName
+        }
+    }
+
+    # Fall back to the historical shim location for older checkouts.
+    $legacy = Join-Path $SourceRoot 'Core\Globals\_enum.h'
+    if (Test-Path $legacy) {
+        return $legacy
+    }
+
+    throw "Could not locate a header defining enum INTERFACE_LIST. Searched under: $enumsRoot (and legacy shim $legacy)."
+}
 function Get-InterfaceIdentifiers([string]$EnumPath) {
     $source = [IO.File]::ReadAllText($EnumPath)
     $enumMatch = [regex]::Match(
@@ -16,7 +39,7 @@ function Get-InterfaceIdentifiers([string]$EnumPath) {
         'enum\s+INTERFACE_LIST\s*\{(?<body>[\s\S]*?)\};')
 
     if (-not $enumMatch.Success) {
-        throw "INTERFACE_LIST was not found in $EnumPath"
+        throw "INTERFACE_LIST was not found in $EnumPath (resolved via Resolve-InterfaceListHeader; the enum may have moved out of Core/Enums)."
     }
 
     $sentinels = @(
@@ -299,7 +322,7 @@ $generatedPath = Join-Path $repositoryRoot 'docs\controller-coverage.md'
 $packetBaselinePath = Join-Path $PSScriptRoot 'packet-entrypoints.txt'
 $registrationBaselinePath = Join-Path $PSScriptRoot 'newui-registration-sites.txt'
 $actionSendBaselinePath = Join-Path $PSScriptRoot 'action-send-sites.txt'
-$enumPath = Join-Path $sourceRoot 'Core\Globals\_enum.h'
+$enumPath = Resolve-InterfaceListHeader $sourceRoot
 $dotnetRoot = Join-Path $sourceRoot 'Dotnet'
 $legacyRoot = Join-Path $sourceRoot 'UI\Legacy'
 

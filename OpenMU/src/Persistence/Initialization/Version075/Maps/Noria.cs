@@ -82,12 +82,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 3 },
-                { Stats.MaximumHealth, 45 },
-                { Stats.MinimumPhysBaseDmg, 7 },
-                { Stats.MaximumPhysBaseDmg, 10 },
-                { Stats.DefenseBase, 2 },
-                { Stats.AttackRatePvm, 13 },
-                { Stats.DefenseRatePvm, 2 },
+                { Stats.MaximumHealth, 110 },
+                { Stats.MinimumPhysBaseDmg, 9 },
+                { Stats.MaximumPhysBaseDmg, 12 },
+                { Stats.DefenseBase, 11 },
+                { Stats.AttackRatePvm, 103 },
+                { Stats.DefenseRatePvm, 103 },
                 { Stats.WindResistance, 0f / 255 },
                 { Stats.PoisonResistance, 0f / 255 },
                 { Stats.IceResistance, 0f / 255 },
@@ -114,12 +114,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 5 },
-                { Stats.MaximumHealth, 80 },
-                { Stats.MinimumPhysBaseDmg, 13 },
-                { Stats.MaximumPhysBaseDmg, 17 },
-                { Stats.DefenseBase, 4 },
-                { Stats.AttackRatePvm, 23 },
-                { Stats.DefenseRatePvm, 4 },
+                { Stats.MaximumHealth, 149 },
+                { Stats.MinimumPhysBaseDmg, 12 },
+                { Stats.MaximumPhysBaseDmg, 16 },
+                { Stats.DefenseBase, 13 },
+                { Stats.AttackRatePvm, 115 },
+                { Stats.DefenseRatePvm, 115 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -142,12 +142,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 10 },
-                { Stats.MaximumHealth, 165 },
-                { Stats.MinimumPhysBaseDmg, 26 },
-                { Stats.MaximumPhysBaseDmg, 31 },
-                { Stats.DefenseBase, 10 },
-                { Stats.AttackRatePvm, 44 },
-                { Stats.DefenseRatePvm, 10 },
+                { Stats.MaximumHealth, 248 },
+                { Stats.MinimumPhysBaseDmg, 18 },
+                { Stats.MaximumPhysBaseDmg, 24 },
+                { Stats.DefenseBase, 19 },
+                { Stats.AttackRatePvm, 144 },
+                { Stats.DefenseRatePvm, 144 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);
@@ -169,12 +169,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 13 },
-                { Stats.MaximumHealth, 220 },
-                { Stats.MinimumPhysBaseDmg, 36 },
-                { Stats.MaximumPhysBaseDmg, 41 },
-                { Stats.DefenseBase, 13 },
-                { Stats.AttackRatePvm, 56 },
-                { Stats.DefenseRatePvm, 13 },
+                { Stats.MaximumHealth, 308 },
+                { Stats.MinimumPhysBaseDmg, 22 },
+                { Stats.MaximumPhysBaseDmg, 30 },
+                { Stats.DefenseBase, 23 },
+                { Stats.AttackRatePvm, 161 },
+                { Stats.DefenseRatePvm, 161 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -197,12 +197,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 15 },
-                { Stats.MaximumHealth, 295 },
-                { Stats.MinimumPhysBaseDmg, 46 },
-                { Stats.MaximumPhysBaseDmg, 51 },
-                { Stats.DefenseBase, 15 },
-                { Stats.AttackRatePvm, 68 },
-                { Stats.DefenseRatePvm, 15 },
+                { Stats.MaximumHealth, 349 },
+                { Stats.MinimumPhysBaseDmg, 25 },
+                { Stats.MaximumPhysBaseDmg, 33 },
+                { Stats.DefenseBase, 26 },
+                { Stats.AttackRatePvm, 173 },
+                { Stats.DefenseRatePvm, 173 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -225,12 +225,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 16 },
-                { Stats.MaximumHealth, 340 },
-                { Stats.MinimumPhysBaseDmg, 51 },
-                { Stats.MaximumPhysBaseDmg, 57 },
-                { Stats.DefenseBase, 16 },
-                { Stats.AttackRatePvm, 74 },
-                { Stats.DefenseRatePvm, 16 },
+                { Stats.MaximumHealth, 369 },
+                { Stats.MinimumPhysBaseDmg, 26 },
+                { Stats.MaximumPhysBaseDmg, 35 },
+                { Stats.DefenseBase, 27 },
+                { Stats.AttackRatePvm, 178 },
+                { Stats.DefenseRatePvm, 178 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -253,12 +253,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 18 },
-                { Stats.MaximumHealth, 465 },
-                { Stats.MinimumPhysBaseDmg, 62 },
-                { Stats.MaximumPhysBaseDmg, 68 },
-                { Stats.DefenseBase, 20 },
-                { Stats.AttackRatePvm, 86 },
-                { Stats.DefenseRatePvm, 20 },
+                { Stats.MaximumHealth, 411 },
+                { Stats.MinimumPhysBaseDmg, 28 },
+                { Stats.MaximumPhysBaseDmg, 38 },
+                { Stats.DefenseBase, 30 },
+                { Stats.AttackRatePvm, 190 },
+                { Stats.DefenseRatePvm, 190 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
             monster.SetGuid(monster.Number);
@@ -280,12 +280,12 @@ internal class Noria : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 8 },
-                { Stats.MaximumHealth, 120 },
-                { Stats.MinimumPhysBaseDmg, 19 },
-                { Stats.MaximumPhysBaseDmg, 23 },
-                { Stats.DefenseBase, 8 },
-                { Stats.AttackRatePvm, 33 },
-                { Stats.DefenseRatePvm, 8 },
+                { Stats.MaximumHealth, 208 },
+                { Stats.MinimumPhysBaseDmg, 16 },
+                { Stats.MaximumPhysBaseDmg, 21 },
+                { Stats.DefenseBase, 17 },
+                { Stats.AttackRatePvm, 132 },
+                { Stats.DefenseRatePvm, 132 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

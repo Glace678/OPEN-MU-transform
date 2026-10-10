@@ -6,6 +6,13 @@ cmake_minimum_required(VERSION 3.25)
 # UIKit/Metal 等系统框架。
 project(OpenMUiOS LANGUAGES C CXX OBJC OBJCXX)
 
+# 108-03: ensure MinimumOSVersion in the plist is never empty. build-ios.sh
+# passes -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0; this is the fallback for anyone
+# configuring CMake directly.
+if(NOT DEFINED CMAKE_OSX_DEPLOYMENT_TARGET OR CMAKE_OSX_DEPLOYMENT_TARGET STREQUAL "")
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0" CACHE STRING "Minimum iOS deployment target" FORCE)
+endif()
+
 # 解析共享的 MuMain 检出目录（仓库布局：OpenMU-iOS/game-ios 与 MuMain 平级）。
 # 布局不同时用 -DMU_REPOSITORY_ROOT=<绝对路径> 覆盖。
 if(NOT DEFINED MU_REPOSITORY_ROOT)
@@ -30,6 +37,17 @@ add_subdirectory("${MU_REPOSITORY_ROOT}/src" "${CMAKE_CURRENT_BINARY_DIR}/mumain
 # ---------------------------------------------------------------------------
 set(MU_IOS_BUNDLE_ID "net.munique.openmu.game" CACHE STRING "iOS application bundle identifier")
 set(MU_IOS_BUNDLE_VERSION "1.0.0" CACHE STRING "iOS application marketing version")
+
+# 108-03: UIRequiredDeviceCapabilities must match the actual slice arch.
+# The plist template previously hardcoded arm64, which is wrong for an
+# x86_64 simulator build on Intel Macs. Compute the capabilities array here.
+if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "arm64")
+  set(MU_IOS_DEVICE_CAPABILITIES "arm64")
+elseif("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")
+  set(MU_IOS_DEVICE_CAPABILITIES "x86_64")
+else()
+  set(MU_IOS_DEVICE_CAPABILITIES "arm64")
+endif()
 
 set_target_properties(Main PROPERTIES
   OUTPUT_NAME "OpenMU-Game"

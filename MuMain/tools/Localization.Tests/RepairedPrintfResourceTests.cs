@@ -76,7 +76,37 @@ internal static class RepairedPrintfResourceTests
         tests.Add(("bounded printf contract retains argument order", VerifyArgumentOrder));
         tests.Add(("bounded printf contract distinguishes literal percent-s", VerifyLiteralPercent));
         tests.Add(("bounded printf contract rejects bare percent signs", VerifyBarePercent));
+        tests.Add(("reverted format-specifier contract locks integer and literal placeholders", () => VerifyFixedPlaceholderContract(resources)));
         return tests;
+    }
+
+    private static readonly string[] ContractLocales =
+    [
+        "en", "de", "es", "id", "ja", "pl", "pt", "ru", "tl", "uk", "zh-CN", "zh-TW",
+    ];
+
+    private const string GiftKey = "%d sent you a gift.";
+    private const string PurchaseKey = "You need more %%s to purchase this item.";
+
+    private static void VerifyFixedPlaceholderContract(string resources)
+    {
+        var english = ResxDocument.Load(Path.Combine(resources, "Game.en.resx"));
+        var enGift = english.GetValue(GiftKey);
+        var enPurchase = english.GetValue(PurchaseKey);
+        Require(PlaceholderScanner.Scan(enGift).SequenceEqual(new[] { "d" }),
+            $"Gift notice must take one integer argument (%d); English value is: {enGift}");
+        Require(PlaceholderScanner.Scan(enPurchase).SequenceEqual([]),
+            $"Purchase notice must keep %%s as a literal with no printf argument; English value is: {enPurchase}");
+        Require(enPurchase.Contains("%%s", StringComparison.Ordinal),
+            "Purchase notice must retain the escaped literal percent-s (%%s).");
+        foreach (var locale in ContractLocales)
+        {
+            var localized = ResxDocument.Load(Path.Combine(resources, $"Game.{locale}.resx"));
+            Require(PlaceholderScanner.Scan(localized.GetValue(GiftKey)).SequenceEqual(PlaceholderScanner.Scan(enGift)),
+                $"{locale} gift notice placeholder contract drifted from the English %d.");
+            Require(PlaceholderScanner.Scan(localized.GetValue(PurchaseKey)).SequenceEqual(PlaceholderScanner.Scan(enPurchase)),
+                $"{locale} purchase notice placeholder contract drifted from the English %%s literal.");
+        }
     }
 
     private static void VerifyRepair(ResxDocument english, ResxDocument localized, string key)

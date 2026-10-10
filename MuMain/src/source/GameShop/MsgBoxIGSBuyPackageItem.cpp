@@ -57,7 +57,7 @@ bool CMsgBoxIGSBuyPackageItem::Create(float fPriority)
 
 void CMsgBoxIGSBuyPackageItem::Initialize(CShopPackage* pPackage)
 {
-    int iProductSeq;
+    int iProductSeq = -1;
     int iValue = 0;
     wchar_t szText[MAX_TEXT_LENGTH] = { '\0', };
 
@@ -80,7 +80,10 @@ void CMsgBoxIGSBuyPackageItem::Initialize(CShopPackage* pPackage)
 
     // Period
     pPackage->SetProductSeqFirst();
-    pPackage->GetProductSeqNext(iProductSeq);
+    if (pPackage->GetProductSeqNext(iProductSeq) == false)
+    {
+        iProductSeq = -1;
+    }
 
     g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
 

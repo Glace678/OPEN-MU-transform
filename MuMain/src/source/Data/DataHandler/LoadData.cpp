@@ -59,6 +59,13 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
         Texture_t* pTexture = &pModel->Textures[i];
 
         int wchars_num = MultiByteToWideChar(CP_UTF8, 0, pTexture->FileName, -1, NULL, 0);
+        // 88-21 (P2): if the UTF-8 -> wide conversion FAILS (invalid byte sequence in a hostile
+        // model's texture name), MultiByteToWideChar returns 0, which would size a zero-length
+        // wchar_t buffer. The second call below then has no room for even the NUL terminator, and
+        // wcscpy_s/wcslen on the following lines read past that empty array. Skip this texture
+        // (continue the per-mesh loop) on conversion failure instead.
+        if (wchars_num <= 0)
+            continue;
         auto* textureFileName = new wchar_t[wchars_num];
         MultiByteToWideChar(CP_UTF8, 0, pTexture->FileName, -1, textureFileName, wchars_num);
 

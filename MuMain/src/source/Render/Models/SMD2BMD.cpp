@@ -16,6 +16,9 @@ bool FixupSMD()
 {
     Skeleton_t* s = &NodeGroup.Skeleton;
     NodeGroup_t* ng = &NodeGroup;
+    // 88-08: NodeNum feeds the fixed arrays Node[NODE_MAX]/Skeleton[NODE_MAX] and BoneFixup[
+    // NODE_MAX]. ParseNodes already bounds it, but guard the conversion as well (runtime guard).
+    if (ng->NodeNum < 0 || ng->NodeNum > NODE_MAX) return false;
     for (int i = 0; i < ng->NodeNum; i++)
     {
         Node_t* n = &ng->Node[i];
@@ -24,6 +27,12 @@ bool FixupSMD()
         Angle[0] = s->Rotation[i][0] * (180.f / Q_PI);
         Angle[1] = s->Rotation[i][1] * (180.f / Q_PI);
         Angle[2] = s->Rotation[i][2] * (180.f / Q_PI);
+
+        // 88-08: Parent is a raw SMD short. Only a value in [0, NodeNum) may subscript
+        // BoneFixup[]; anything else (other negatives, or an index >= NodeNum) is normalized to
+        // the root sentinel (-1) instead of reading a foreign matrix.
+        if (n->Parent != -1 && (n->Parent < 0 || n->Parent >= ng->NodeNum))
+            n->Parent = -1;
 
         if (n->Parent == -1)
         {
@@ -47,17 +56,23 @@ bool FixupSMD()
 
     TriangleGroup_t* tg = &TriangleGroup;
 
+    // 88-08: TriangleNum bounds the fixed TriangleGroup.Vertex[TRIANGLE_MAX][3] array; guard it.
+    if (tg->TriangleNum < 0 || tg->TriangleNum > TRIANGLE_MAX) return false;
+
     for (int i = 0; i < tg->TriangleNum; i++)
     {
         for (int j = 0; j < 3; j++)
         {
             SMDVertex_t* v = &tg->Vertex[i][j];
+            // 88-08: v->Node is a raw SMD short; clamp to [0, NodeNum) before it subscripts
+            // BoneFixup[]. Out-of-range node falls back to bone 0.
+            const int fixNode = (v->Node >= 0 && v->Node < ng->NodeNum) ? v->Node : 0;
             vec3_t p;
-            VectorSubtract(v->Position, BoneFixup[v->Node].WorldOrg, p);
-            VectorTransform(p, BoneFixup[v->Node].im, v->Position);
+            VectorSubtract(v->Position, BoneFixup[fixNode].WorldOrg, p);
+            VectorTransform(p, BoneFixup[fixNode].im, v->Position);
 
             VectorCopy(v->Normal, p);
-            VectorTransform(p, BoneFixup[v->Node].im, v->Normal);
+            VectorTransform(p, BoneFixup[fixNode].im, v->Normal);
             VectorNormalize(v->Normal);
         }
     }
@@ -104,6 +119,16 @@ bool FixupSMD()
         }
 
         SMDMesh_t* m = &mg->Mesh[MeshNum];
+
+        // 88-03 (P0#4): the triangle capacity check used to sit AFTER the j-loop below, which
+        // already writes m->VertexList/NormalList/TexCoordList[m->TriangleNum][j] -- so on the
+        // TRIANGLE_MAX-th triangle that check ran one row too late and overwrote a full mesh's
+        // trailing list row. Check BEFORE any row-indexed write.
+        if (m->TriangleNum >= TRIANGLE_MAX)
+        {
+            g_ErrorReport.Write(L"SMD2BMD: triangle limit (%d) exceeded for a mesh; aborting conversion.\r\n", TRIANGLE_MAX);
+            return false;
+        }
 
         for (int j = 0; j < 3; j++)
         {
@@ -198,12 +223,6 @@ bool FixupSMD()
                 m->TexCoord[m->TexCoordNum].TexCoordV = tg->Vertex[i][j].TexCoordV;
                 m->TexCoordNum++;
             }
-        }
-
-        if (m->TriangleNum >= TRIANGLE_MAX)
-        {
-            g_ErrorReport.Write(L"SMD2BMD: triangle limit (%d) exceeded for a mesh; aborting conversion.\r\n", TRIANGLE_MAX);
-            return false;
         }
 
         m->Polygon[m->TriangleNum] = 3;
@@ -316,6 +335,10 @@ void SMD2BMDAnimation(int ID, bool LockPosition)
 {
     int i, j;
     BMD* bmd = &Models[ID];
+
+    // 88-08: a zero-bone model has no BoneMatrixes to write into, and Bones[0] below would be an
+    // out-of-bounds read; bail out instead.
+    if (bmd->NumBones <= 0) return;
 
     for (i = 0; i < bmd->NumBones; i++)
     {

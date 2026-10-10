@@ -21,6 +21,13 @@ services:
       OPENMU_ADMIN_PASSWORD: ${OPENMU_ADMIN_PASSWORD:?Run deploy/quick-start to create an admin user}
       # Optional base32 TOTP secret, if the bootstrap user should require a second factor.
       OPENMU_ADMIN_TOTP_SECRET: ${OPENMU_ADMIN_TOTP_SECRET:-}
+      # Per-role database passwords injected from the environment (75-01).
+      # ConnectionSettings.xml no longer stores plaintext passwords.
+      OPENMU_DB_ADMIN_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      OPENMU_DB_CONFIG_PASSWORD: ${OPENMU_DB_CONFIG_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_ACCOUNT_PASSWORD: ${OPENMU_DB_ACCOUNT_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_FRIEND_PASSWORD: ${OPENMU_DB_FRIEND_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_GUILD_PASSWORD: ${OPENMU_DB_GUILD_PASSWORD:-${POSTGRES_PASSWORD}}
       # website authenticates itself at the public API under /api.
     volumes:
       - adminpanel-keys:/app/data-protection-keys

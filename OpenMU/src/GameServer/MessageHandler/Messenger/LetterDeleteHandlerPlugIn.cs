@@ -31,6 +31,13 @@ internal class LetterDeleteHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        // A truncated packet must be dropped before indexing the sub-op (offset 3) and the
+        // letter index (offset 4..5); otherwise a short packet would throw out of bounds.
+        if (packet.Length < LetterDeleteRequest.Length)
+        {
+            return;
+        }
+
         if (packet.Span[3] != 0)
         {
             player.Logger.LogWarning("Player {0} Unknown Letter Delete Request: {1}", player.SelectedCharacter?.Name, packet.Span.AsString());

@@ -106,7 +106,7 @@ bool SEASON3B::CNewUIChatLogWindow::RenderMessages()
     EnableAlphaTest();
     for (int i = iRenderStartLine, s = 0; i <= GetCurrentRenderEndLine(); i++, s++)
     {
-        if (i < 0 && i >= (int)pvecMsgs->size()) break;
+        if (i < 0 || i >= (int)pvecMsgs->size()) break;   // 86-07: guard must be ||, && was always false
 
         bool bRenderMessage = true;
         g_pRenderText->SetFont(g_hFont);
@@ -708,6 +708,11 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
                 return false;
             }
 
+            // 86-07: the mouse-hover path had no bounds guard at all; the render
+            // end line can lag the current vector size after Clear/RemoveFrontLine.
+            if (i < 0 || i >= (int)pvecMsgs->size())
+                break;
+
             CMessageText* pMsgText = (*pvecMsgs)[i];
 
             if (pMsgText->GetType() == TYPE_WHISPER_MESSAGE
@@ -1124,7 +1129,7 @@ bool SEASON3B::CNewUISystemLogWindow::RenderMessages()
     EnableAlphaTest();
     for (int i = iRenderStartLine; i <= GetCurrentRenderEndLine(); i++)
     {
-        if (i < 0 && i >= static_cast<int>(m_vecAllMsgs.size())) break;
+        if (i < 0 || i >= static_cast<int>(m_vecAllMsgs.size())) break;   // 86-07: guard must be ||
 
         g_pRenderText->SetFont(g_hFont);
 

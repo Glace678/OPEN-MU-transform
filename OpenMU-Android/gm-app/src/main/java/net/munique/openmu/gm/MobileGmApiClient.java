@@ -32,11 +32,11 @@ final class MobileGmApiClient {
     private static final String MOBILE_KEY_HEADER = "X-OpenMU-Mobile-Key";
 
     private final String baseUrl;
-    private final String packageKey;
+    private final String gmToken;
 
-    MobileGmApiClient(String baseUrl, String packageKey) throws ApiException {
+    MobileGmApiClient(String baseUrl, String gmToken) throws ApiException {
         this.baseUrl = trimTrailingSlash(baseUrl);
-        this.packageKey = packageKey;
+        this.gmToken = gmToken;
         // A-04: never send the shared write key in cleartext to a public host.
         // HTTPS is always allowed; plain HTTP is only permitted against loopback or
         // RFC1918 private addresses (the bundled LAN sideload server).
@@ -204,7 +204,7 @@ final class MobileGmApiClient {
             connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
             connection.setReadTimeout(READ_TIMEOUT_MS);
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty(MOBILE_KEY_HEADER, packageKey);
+            connection.setRequestProperty(MOBILE_KEY_HEADER, gmToken);
             connection.setUseCaches(false);
             if (body != null) {
                 byte[] bytes = body.getBytes(StandardCharsets.UTF_8);

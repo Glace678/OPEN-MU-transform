@@ -9,6 +9,7 @@
 #include "Engine/Object/ZzzCharacter.h"
 #include "Render/Textures/ZzzTexture.h"
 #include "Engine/Object/ZzzInventory.h"
+#include "Engine/Object/TextListSafe.h"   // 86-54: unified bounded TextList[50] append
 #include "UI/Legacy/UIControls.h"
 #include "UI/NewUI/Dialogs/NewUICommonMessageBox.h"
 
@@ -363,9 +364,11 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffIcon(eBuffState& eBuffType, float x, 
 void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, eBuffState& eBuffType, float x, float y)
 {
     int TextNum = 0;
-    ::memset(TextList[0], 0, sizeof(char) * 30 * 100);
-    ::memset(TextListColor, 0, sizeof(int) * 30);
-    ::memset(TextBold, 0, sizeof(int) * 30);
+    // 86-54: clear the WHOLE 50-line buffers (previously only 30 rows were
+    // zeroed, leaving stale rows to be rendered).
+    ::memset(TextList, 0, sizeof(TextList));
+    ::memset(TextListColor, 0, sizeof(TextListColor));
+    ::memset(TextBold, 0, sizeof(TextBold));
 
     std::list<std::wstring> tooltipinfo;
     g_BuffToolTipString(tooltipinfo, eBuffType);
@@ -374,20 +377,12 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, e
     {
         std::wstring& temp = *iter;
 
-        mu_swprintf(TextList[TextNum], temp.c_str());
-
-        if (TextNum == 0)
-        {
-            TextListColor[TextNum] = TEXT_COLOR_BLUE;
-            TextBold[TextNum] = true;
-        }
-        else
-        {
-            TextListColor[TextNum] = TEXT_COLOR_WHITE;
-            TextBold[TextNum] = false;
-        }
-
-        TextNum += 1;
+        // 86-54: unified bounded append; first line stays blue/bold, the rest
+        // white. Once the 50-line buffer is full, further tooltip lines are
+        // dropped instead of writing past TextList[50].
+        const int color = (TextNum == 0) ? TEXT_COLOR_BLUE : TEXT_COLOR_WHITE;
+        const int bold  = (TextNum == 0) ? 1 : 0;
+        TextNum = SafeAppendTextLine(TextNum, temp.c_str(), color, bold);
     }
 
     std::wstring bufftime;
@@ -395,10 +390,9 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, e
 
     if (bufftime.size() != 0)
     {
-        mu_swprintf(TextList[TextNum], I18N::Game::DurationPeriodS, bufftime.c_str());
-        TextListColor[TextNum] = TEXT_COLOR_PURPLE;
-        TextBold[TextNum] = false;
-        TextNum += 1;
+        wchar_t szDuration[TEXT_LIST_ROW_WIDTH] = {};
+        ::mu_swprintf(szDuration, I18N::Game::DurationPeriodS, bufftime.c_str());
+        TextNum = SafeAppendTextLine(TextNum, szDuration, TEXT_COLOR_PURPLE, 0);
     }
 
     SIZE TextSize = { 0, 0 };

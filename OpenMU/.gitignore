@@ -307,6 +307,9 @@ doc/*.htm
 
 # text files; for documentation etc. use markdown
 *.txt
+# 84-07: package READMEs are source assets required by Build-LocalPackage.ps1 / Build-DesktopPackage.ps1
+!tools/local-package/README-zh-CN.txt
+!tools/local-package/DESKTOP-README.txt
 
 # bundles
 src/AdminPanel/wwwroot/content/css/app.css
@@ -328,3 +331,6 @@ data-protection-keys/
 
 # Local one-click deployment credentials.
 deploy/all-in-one/.env
+
+# Built distribution archives (84-01); ship via release channel, not git
+/dist/

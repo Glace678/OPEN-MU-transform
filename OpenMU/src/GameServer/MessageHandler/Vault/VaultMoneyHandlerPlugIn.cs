@@ -64,7 +64,11 @@ internal class VaultMoneyHandlerPlugIn : IPacketHandlerPlugIn
                 success = player.TryTakeVaultMoney(amount);
                 break;
             default:
-                throw new InvalidEnumArgumentException($"The direction {request.Direction} is not a valid value.");
+                // An out-of-range direction byte must be rejected safely with an explicit failure
+                // response instead of throwing and leaving the client without a reply (and dropping
+                // the connection). The caller below reports the failure through UpdateVaultMoneyAsync.
+                success = false;
+                break;
         }
 
         await player.InvokeViewPlugInAsync<IUpdateVaultMoneyPlugIn>(p => p.UpdateVaultMoneyAsync(success)).ConfigureAwait(false);

@@ -109,6 +109,23 @@ public sealed class Checks(Rules rules, Simulation simulation)
         TestRewards();
         TestBudgets();
         TestAllLevels();
+        TestNewbieTtk();
+    }
+
+    private void TestNewbieTtk()
+    {
+        // User-reported pain point: a level-1 character must kill an equal-level
+        // normal mob in a bounded number of seconds even with starting gear, with
+        // no potions (raw combat). Bounds mirror the design reference kill cycle.
+        foreach (var cls in D.Classes)
+        foreach (var build in cls.Builds)
+        {
+            var newbie = rules.Player(cls.Id, build.Id, 1, gearId: "progression");
+            var mob = rules.Monster(1.0);
+            var result = simulation.Fight(newbie, mob, count: 1, potions: false);
+            Check(result.Won, $"Newbie wins equal-level fight {cls.Id}/{build.Id}/L1");
+            Check(result.Seconds is > 0 and <= 8, $"Newbie TTK bounded {cls.Id}/{build.Id}/L1 = {result.Seconds:F2}s");
+        }
     }
 
     private void ValidateDesign()

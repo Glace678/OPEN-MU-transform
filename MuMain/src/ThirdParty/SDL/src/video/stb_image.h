@@ -4050,6 +4050,14 @@ static stbi_uc *output_jpeg_nv12(stbi__jpeg *z, stbi__nv12 *nv12)
       const int u_vs = (z->img_v_max / z->img_comp[1].v);
       const int v_hs = (z->img_h_max / z->img_comp[2].h);
       const int v_vs = (z->img_v_max / z->img_comp[2].v);
+      // L5 r3-71 98A-01: NV12 interleaves U/V on a fixed 2x2 chroma grid. The
+      // strides below are "1 + (2 - ratio)"; for a ratio of 4 (4:1:1 or 4x
+      // vertical subsample) that stride goes negative and reads before the
+      // chroma plane allocation. Only ratios of 1 or 2 are safe.
+      if (u_hs < 1 || u_hs > 2 || u_vs < 1 || u_vs > 2 ||
+          v_hs < 1 || v_hs > 2 || v_vs < 1 || v_vs > 2) {
+         return NULL; // load_jpeg_image rejects this earlier; defense in depth.
+      }
       for (i=0; i < (z->s->img_y + 1) / 2; ++i) {
          stbi_uc *src_u = z->img_comp[1].data + i * (1 + (nv12_vs - u_vs)) * z->img_comp[1].x;
          stbi_uc *src_v = z->img_comp[2].data + i * (1 + (nv12_vs - v_vs)) * z->img_comp[2].x;
@@ -4114,6 +4122,16 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
          if (is_rgb) {
              stbi__cleanup_jpeg(z);
              return stbi__errpuc("rgbtonv12", "Can't convert RGB to NV12");
+         }
+
+         // L5 r3-71 98A-01: NV12 only supports a 2x2 (4:2:0) chroma grid. A JPEG
+         // with a 4x subsample ratio (4:1:1 / 4x vertical) would make
+         // output_jpeg_nv12 step the source pointer backwards and read before the
+         // chroma plane allocation. Reject it up front instead of decoding.
+         if (z->img_h_max / z->img_comp[1].h > 2 || z->img_v_max / z->img_comp[1].v > 2 ||
+             z->img_h_max / z->img_comp[2].h > 2 || z->img_v_max / z->img_comp[2].v > 2) {
+             stbi__cleanup_jpeg(z);
+             return stbi__errpuc("nv12subsample", "Unsupported NV12 chroma subsampling");
          }
 
          output = output_jpeg_nv12(z, nv12);

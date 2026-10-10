@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- B2 shard independent probe. References the same product DLLs but builds its own
+       player/monster resolution and legacy damage model from source reading, not by
+       copying EngineProbe's report loop. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OpenMuAssemblyDir Condition="'$(OpenMuAssemblyDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\OpenMU\src\bin\Release</OpenMuAssemblyDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.AttributeSystem.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.DataModel.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.Interfaces.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.GameLogic.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.Persistence.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.Persistence.InMemory.dll" />
+    <Reference Include="$(OpenMuAssemblyDir)\MUnique.OpenMU.Persistence.Initialization.dll" />
+  </ItemGroup>
+</Project>

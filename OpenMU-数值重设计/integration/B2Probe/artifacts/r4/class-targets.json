@@ -1,0 +1,86 @@
+{
+  "shard": "B2-class-numbers",
+  "version": "R4-target-v1",
+  "profile": "season6-solo-legacy",
+  "damagePath": "legacy: dmg=playerBase-minus-monDefensePvm; floor=max(4,level/10); hit=max(1-monDefRatePvm/playerAtkRatePvm,0.03), then EarlyGameBalance floor 0.80 for level<=20; overrate x0.3 only if level>40 and monDefRatePvm>atkRatePvm",
+  "targetBaseDamageConst": {"min": 10, "max": 15},
+  "targetRates": {"AttackRatePvm": 70, "DefenseRatePvm": 95},
+  "classes": [
+    {
+      "name": "Dark Knight", "number": 4, "dmgType": "phys",
+      "baseStats": {"Str": 28, "Agi": 20, "Vit": 25, "Ene": 10},
+      "constBaseValues": {"MinimumPhysBaseDmg": 10, "MaximumPhysBaseDmg": 15, "AttackRatePvm": 70, "DefenseRatePvm": 95},
+      "relationships": [
+        {"target": "MinimumPhysBaseDmg", "multiplier": 0.7, "source": "TotalStrength", "op": "Add", "agg": "AddRaw"},
+        {"target": "MaximumPhysBaseDmg", "multiplier": 1.05, "source": "TotalStrength", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 5, "source": "TotalLevel", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 1.5, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 0.25, "source": "TotalStrength", "op": "Add", "agg": "AddRaw"},
+        {"target": "DefenseRatePvm", "multiplier": 0.3333, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"},
+        {"target": "DefenseBase", "multiplier": 0.3333, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"},
+        {"target": "MaximumHealth", "multiplier": 2, "source": "TotalLevel", "op": "Add", "agg": "AddRaw"},
+        {"target": "MaximumHealth", "multiplier": 3, "source": "TotalVitality", "op": "Add", "agg": "AddRaw"}
+      ],
+      "nakedL1": {"baseMin": 29.6, "baseMax": 44.4, "atkRatePvm": 112.0, "defRatePvm": 101.7, "maxHp": 112}
+    },
+    {
+      "name": "Dark Wizard", "number": 0, "dmgType": "wiz",
+      "baseStats": {"Str": 18, "Agi": 18, "Vit": 15, "Ene": 30},
+      "constBaseValues": {"MinimumWizBaseDmg": 10, "MaximumWizBaseDmg": 15, "AttackRatePvm": 70, "DefenseRatePvm": 95},
+      "relationships": [
+        {"target": "MinimumWizBaseDmg", "multiplier": 0.6, "source": "TotalEnergy", "op": "Add", "agg": "AddRaw"},
+        {"target": "MaximumWizBaseDmg", "multiplier": 1.0, "source": "TotalEnergy", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 5, "source": "TotalLevel", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 1.5, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 0.25, "source": "TotalStrength", "op": "Add", "agg": "AddRaw"},
+        {"target": "DefenseRatePvm", "multiplier": 0.3333, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"}
+      ],
+      "nakedL1": {"baseMin": 28.0, "baseMax": 45.0, "atkRatePvm": 106.5, "defRatePvm": 101.0, "maxHp": 61}
+    },
+    {
+      "name": "Fairy Elf", "number": 8, "dmgType": "phys-conditional",
+      "baseStats": {"Str": 22, "Agi": 25, "Vit": 20, "Ene": 15},
+      "constBaseValues": {"MinimumPhysBaseDmg": 10, "MaximumPhysBaseDmg": 15, "AttackRatePvm": 70, "DefenseRatePvm": 95},
+      "relationships": [
+        {"target": "ArcheryMinDmg", "multiplier": 0.5, "source": "TotalAgility", "op": "Add", "agg": "AddRaw", "when": "IsBowEquipped"},
+        {"target": "ArcheryMinDmg", "multiplier": 0.25, "source": "TotalStrength", "op": "Add", "agg": "AddRaw", "when": "IsBowEquipped"},
+        {"target": "ArcheryMaxDmg", "multiplier": 0.85, "source": "TotalAgility", "op": "Add", "agg": "AddRaw", "when": "IsBowEquipped"},
+        {"target": "ArcheryMaxDmg", "multiplier": 0.45, "source": "TotalStrength", "op": "Add", "agg": "AddRaw", "when": "IsBowEquipped"},
+        {"target": "MeleeMinDmg", "multiplier": 0.45, "source": "StrPlusAgi", "op": "Add", "agg": "AddRaw", "when": "NOT IsBowEquipped"},
+        {"target": "MeleeMaxDmg", "multiplier": 0.8, "source": "StrPlusAgi", "op": "Add", "agg": "AddRaw", "when": "NOT IsBowEquipped"},
+        {"target": "AttackRatePvm", "multiplier": 5, "source": "TotalLevel", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 1.5, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"},
+        {"target": "AttackRatePvm", "multiplier": 0.25, "source": "TotalStrength", "op": "Add", "agg": "AddRaw"},
+        {"target": "DefenseRatePvm", "multiplier": 0.25, "source": "TotalAgility", "op": "Add", "agg": "AddRaw"}
+      ],
+      "nakedL1": {"baseMin": 31.1, "baseMax": 52.6, "atkRatePvm": 118.0, "defRatePvm": 101.2, "maxHp": 80}
+    }
+  ],
+  "patchForUnlockClasses": {
+    "note": "Add the SAME constBaseValues below to the live DB rows which currently lack them. Phys classes use Minimum/MaximumPhysBaseDmg; Summoner uses Minimum/MaximumWizBaseDmg. Their existing stat-coefficient relationships are left unchanged (minimal change).",
+    "Magic Gladiator": {"constMin": 10, "constMax": 15, "dmgStat": "phys", "atkRatePvm": 70, "defRatePvm": 95, "nakedL1": {"baseMin": 16.5, "baseMax": 24.8, "atkRatePvm": 120, "defRatePvm": 104}},
+    "Dark Lord": {"constMin": 10, "constMax": 15, "dmgStat": "phys", "atkRatePvm": 70, "defRatePvm": 95, "nakedL1": {"baseMin": 14.8, "baseMax": 21.7, "atkRatePvm": 132, "defRatePvm": 98}},
+    "Summoner": {"constMin": 10, "constMax": 15, "dmgStat": "wiz", "atkRatePvm": 70, "defRatePvm": 95, "nakedL1": {"baseMin": 23.8, "baseMax": 38.0, "atkRatePvm": 112, "defRatePvm": 100}},
+    "Rage Fighter": {"constMin": 10, "constMax": 15, "dmgStat": "phys", "atkRatePvm": 70, "defRatePvm": 95, "nakedL1": {"baseMin": 16.0, "baseMax": 23.0, "atkRatePvm": 112, "defRatePvm": 98}}
+  },
+  "measuredTtkNakedL1_postSolo": {
+    "DK":  {"Spider": 1.9, "Beetle": 4.9, "Hunter": 6.5, "Forest": 7.8},
+    "DW":  {"Spider": 2.0, "Beetle": 5.0, "Hunter": 6.6, "Forest": 7.9},
+    "FE":  {"Spider": 1.7, "Beetle": 4.2, "Hunter": 5.5, "Forest": 6.5},
+    "Summoner(afterPatch)": {"Spider": 2.4, "Beetle": 6.2, "Hunter": 8.4, "Forest": 10.2},
+    "MG(afterPatch)": {"Spider": 3.9, "Beetle": 11.6, "Hunter": 16.9, "Forest": 22.0},
+    "DL(afterPatch)": {"Spider": 4.7, "Beetle": 14.4, "Hunter": 22.0, "Forest": 30.0},
+    "RF(afterPatch)": {"Spider": 4.1, "Beetle": 12.3, "Hunter": 18.2, "Forest": 24.1}
+  },
+  "pvp": {
+    "CORRECTED": "Cross-audit: the const min10/max15 and new Str/Agi relationships live on the SHARED MinimumPhysBaseDmg/MaximumPhysBaseDmg, so they raise PVP base too. Earlier breakRequired=false was wrong.",
+    "pvm_only_feasible_via_db": false,
+    "evidence": "GetBaseDmg (AttackableExtensions.cs 933-969) reads shared MinimumPhysBaseDmg with NO PvM/PvP branch; Stats.cs has NO PvM-only damage multiplier attribute. PvM/PvP diverge only at defense attribute, overrate(x0.3, PvM-only), duelDmgDec=0.6. A PvM-only split needs a C# source change (new attribute + pipeline branch), out of DB-only v110 scope.",
+    "measured_naked_mirror": {"DK_to_DW_hits": "1.8(L1)->1.2(L148)", "DW_to_DK_hits": "3.4(L1)->2.0(L148)", "finding": "damage number inflates ~4x low / ~20x high, but HP scales with Vit in step, so PVP TTK stays ~1.5-2 hits all levels; no high-level oneshot blowup."},
+    "recommendation": [
+      "(a) solo has no PVP opponents; naked 2-hit PVP is normal MU pace, acceptable.",
+      "(b) if duels open and naked TTK must be 4-6 hits: add a defender-side DefensePvp relationship (separate attribute, does not touch PvM). Target anchors: DW defPvp ~22 at L1, ~380 at L148 (so DK base551 - 380 = 171/hit, DW 678hp/171 ~ 4 hits). C1 wires this in v110; B2 does not author the coefficient."
+    ],
+    "breakRequired": "false-for-solo; pvp-compensation-targets-provided-for-C1"
+  }
+}

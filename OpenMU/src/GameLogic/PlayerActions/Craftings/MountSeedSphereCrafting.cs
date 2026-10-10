@@ -60,6 +60,33 @@ public class MountSeedSphereCrafting : SimpleItemCraftingHandler
     }
 
     /// <inheritdoc />
+    protected override CraftingResult? ValidateSocketSlot(Player player, IList<CraftingRequiredItemLink> requiredItems, byte socketSlot)
+    {
+        // Validate the client-supplied socketSlot BEFORE any zen is charged or any
+        // item is consumed. Previously these checks lived inside CreateOrModifyResultItemsAsync,
+        // which ran after items were destroyed and zen was paid, causing net asset loss.
+        var socketItem = requiredItems.Single(i => i.ItemRequirement.Reference == SocketItemReference).Items.Single();
+
+        if (socketItem.SocketCount <= socketSlot)
+        {
+            player.Logger.LogWarning(
+                "Invalid socketSlot {slot} for item with SocketCount {count} from player {player}.",
+                socketSlot, socketItem.SocketCount, player.Name);
+            return CraftingResult.IncorrectMixItems;
+        }
+
+        if (socketItem.ItemOptions.Any(link => link.Index == socketSlot && link.ItemOption?.OptionType == ItemOptionTypes.SocketOption))
+        {
+            player.Logger.LogWarning(
+                "Socket slot {slot} is already occupied from player {player}.",
+                socketSlot, player.Name);
+            return CraftingResult.IncorrectMixItems;
+        }
+
+        return null;
+    }
+
+    /// <inheritdoc />
     protected override async ValueTask<List<Item>> CreateOrModifyResultItemsAsync(IList<CraftingRequiredItemLink> requiredItems, Player player, byte socketSlot, byte successRate)
     {
         var seedSphere = requiredItems.Single(i => i.ItemRequirement.Reference == SeedSphereReference).Items.Single();

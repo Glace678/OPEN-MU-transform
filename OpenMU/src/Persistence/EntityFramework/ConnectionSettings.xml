@@ -1,10 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ConnectionSettings xmlns="http://www.munique.net/ConnectionSettings">
+  <!--
+    SECURITY (75-01): Plaintext passwords are NO LONGER stored in this file.
+    Every password is injected from the environment at startup via:
+      OPENMU_DB_ADMIN_PASSWORD    (postgres / EntityDataContext / AdminPanelContext / TypedContext)
+      OPENMU_DB_CONFIG_PASSWORD   (ConfigurationContext)
+      OPENMU_DB_ACCOUNT_PASSWORD  (AccountContext / TradeContext)
+      OPENMU_DB_FRIEND_PASSWORD   (FriendContext)
+      OPENMU_DB_GUILD_PASSWORD    (GuildContext)
+    DB_HOST overrides the server for all connections.
+    DB_ADMIN_USER / DB_ADMIN_PW are legacy aliases for OPENMU_DB_ADMIN_USER / OPENMU_DB_ADMIN_PASSWORD.
+    If a required password variable is unset, the application FAILS FAST at startup
+    (it does NOT fall back to a default password).
+    Existing deployed credentials must be rotated out-of-band; see the delivery checklist.
+  -->
   <Connections>
     <Connection>
       <!-- The user role of this context should have rights to create/update a database and user roles. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.EntityDataContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=admin;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
@@ -12,43 +26,43 @@
            created before the game database exists. This schema is deliberately not granted to any
            of the game server roles, so a game server can't read or modify admin panel credentials. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.AdminAuth.AdminPanelContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=admin;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The user role of this context should have rights to select/insert/update/delete data in all schemas. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.TypedContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=admin;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=postgres;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The user role of this context should have rights to select the config schema -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.ConfigurationContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=config;Password=config;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=config;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The account context should connect with a user with less privileges. It should not be allowed to edit configuration tables, for example. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.AccountContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=account;Password=account;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=account;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The trade context should connect with a user with less privileges. It should just be allowed to edit the item table. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.TradeContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=account;Password=account;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=account;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The friend context should connect with a user with less privileges. It should not be allowed to edit configuration tables, for example. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.FriendContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=friend;Password=friend;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=friend;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
     <Connection>
       <!-- The guild context should connect with a user with less privileges. It should not be allowed to edit Guild and GuildMember and to read the Character table. -->
       <ContextTypeName>MUnique.OpenMU.Persistence.EntityFramework.GuildContext</ContextTypeName>
-      <ConnectionString>Server=localhost;Port=5432;User Id=guild;Password=guild;Database=openmu;Command Timeout=120;</ConnectionString>
+      <ConnectionString>Server=localhost;Port=5432;User Id=guild;Password=__SET_BY_ENV__;Database=openmu;Command Timeout=120;</ConnectionString>
       <DatabaseEngine>Npgsql</DatabaseEngine>
     </Connection>
   </Connections>

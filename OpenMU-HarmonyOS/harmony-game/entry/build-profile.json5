@@ -8,6 +8,9 @@
         // the GM app, and DEFAULT_SERVER_ADDRESS must be THIS machine's LAN IPv4
         // (localhost or a private address per RFC1918). The address below is only a
         // neutral placeholder -- it is not a real host.
+        // 107-02: this injected value is the LOGIN derivation seed. It is also the
+        // shared source of the GM X-OpenMU-Mobile-Key bearer today; inject the real
+        // value only at build time (never commit it) and plan a split + rotation.
         "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "DEFAULT_SERVER_ADDRESS": "192.168.0.2"
       }

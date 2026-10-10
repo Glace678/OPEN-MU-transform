@@ -388,7 +388,7 @@ void CNewUIQuestProgressByEtc::SetCurNPCWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszNPCWords[0], 0, sizeof(char) * QPE_NPC_LINE_MAX * QPE_WORDS_ROW_MAX);
+    ::memset(m_aszNPCWords, 0, sizeof(m_aszNPCWords));
 
     g_pRenderText->SetFont(g_hFont);
     int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0],
@@ -406,7 +406,7 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszPlayerWords[0], 0, sizeof(char) * QPE_PLAYER_LINE_MAX * QPE_WORDS_ROW_MAX);
+    ::memset(m_aszPlayerWords, 0, sizeof(m_aszPlayerWords));
     ::memset(m_anAnswerLine, 0, sizeof(int) * QM_MAX_ANSWER);
 
     g_pRenderText->SetFont(g_hFont);
@@ -421,7 +421,22 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
         pszAnswer = g_QuestMng.GetAnswer(m_dwCurQuestIndex, i);
         if (NULL == pszAnswer)
             break;
-        ::wcscat(szAnswer, pszAnswer);
+        // P2 hardening: bounded concat into szAnswer[128] to prevent overflow
+        {
+            const int nAnsBufSize = 2 * QPE_WORDS_ROW_MAX;
+            int nPrefixLen = ::wcslen(szAnswer);
+            int nSpaceLeft = nAnsBufSize - nPrefixLen - 1;
+            if (nSpaceLeft > 0)
+            {
+                int j = 0;
+                while (j < nSpaceLeft && pszAnswer[j] != L'\0')
+                {
+                    szAnswer[nPrefixLen + j] = pszAnswer[j];
+                    ++j;
+                }
+                szAnswer[nPrefixLen + j] = L'\0';
+            }
+        }
 
         m_anAnswerLine[i] = ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QPE_WORDS_ROW_MAX, szAnswer, 160, false);
 

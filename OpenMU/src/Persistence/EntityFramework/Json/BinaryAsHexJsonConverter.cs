@@ -67,25 +67,26 @@ public class BinaryAsHexJsonConverter : JsonConverter<byte[]>
 
         if (reader.TokenType == JsonTokenType.String)
         {
-            var raw = reader.ValueSpan;
-            if (raw.Length >= ByteArrayPrefix.Length &&
-                raw[0] == (byte)'\\' && raw[1] == (byte)'x')
+            // reader.GetString() unescapes JSON escapes. reader.ValueSpan would return the raw
+            // escaped text (postgres bytea arrives as "\\x00ff...") which misses the "\\x" prefix.
+            var rawText = reader.GetString() ?? string.Empty;
+            if (rawText.StartsWith(ByteArrayPrefix, StringComparison.Ordinal))
             {
-                raw = raw[ByteArrayPrefix.Length..];
+                rawText = rawText[ByteArrayPrefix.Length..];
             }
 
-            if (raw.Length % 2 != 0)
+            if (rawText.Length % 2 != 0)
             {
-                throw new ArgumentException($"Hex string has an odd length ({raw.Length}).", nameof(reader));
+                throw new ArgumentException($"Hex string has an odd length ({rawText.Length}).", nameof(reader));
             }
 
-            var data = new byte[raw.Length / 2];
-            for (var i = 0; i < data.Length; i++)
+            var data = new byte[rawText.Length / 2];
+            for (var j = 0; j < data.Length; j++)
             {
-                var index = i * 2;
-                int highNibble = this.ParseCharacter(raw[index]);
-                int lowNibble = this.ParseCharacter(raw[index + 1]);
-                data[i] = (byte)((highNibble << 4) | lowNibble);
+                var idx = j * 2;
+                int highNibble = this.ParseCharacter((byte)rawText[idx]);
+                int lowNibble = this.ParseCharacter((byte)rawText[idx + 1]);
+                data[j] = (byte)((highNibble << 4) | lowNibble);
             }
 
             return data;

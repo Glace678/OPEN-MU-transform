@@ -40,6 +40,11 @@ public sealed partial class Install
     public bool IsInstalled { get; private set; }
 
     /// <summary>
+    /// Gets the error message of a failed installation, if any.
+    /// </summary>
+    public string? ErrorMessage { get; private set; }
+
+    /// <summary>
     /// Gets or sets the installation finished callback.
     /// </summary>
     [Parameter]
@@ -72,14 +77,22 @@ public sealed partial class Install
     private async Task StartInstallationAsync()
     {
         this.IsInstalling = true;
+        this.ErrorMessage = null;
         await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
         try
         {
             await this.SetupService.CreateDatabaseAsync(() => this.SelectedVersion!.CreateInitialDataAsync((byte)this.GameServerCount, this.CreateTestAccounts)).ConfigureAwait(false);
+            this.IsInstalled = true;
+        }
+        catch (Exception ex)
+        {
+            // A failed database creation must not be reported as a successful installation: keep the
+            // error visible so the operator can retry, instead of restarting the game services on a
+            // half-created database.
+            this.ErrorMessage = ex.Message;
         }
         finally
         {
-            this.IsInstalled = true;
             this.IsInstalling = false;
         }
     }

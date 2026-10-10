@@ -1,0 +1,8 @@
+class	num	str	agi	vit	ener	atkRate	minPhys	maxPhys	minWiz	maxWiz
+Dark Wizard	0	18	18	15	30	106.5	2.2	4.5	28.0	45.0
+Dark Knight	4	28	20	25	10	112.0	29.6	44.4	0.0	0.0
+Fairy Elf	8	22	25	20	15	118.0	31.1	52.6	0.0	0.0
+Magic Gladiator	12	26	26	26	26	50.5	6.5	9.8	2.9	6.5
+Dark Lord	16	26	20	20	15	61.8	4.8	6.7	0.0	0.0
+Summoner	20	21	21	18	23	41.8	6.0	10.5	13.8	23.0
+Rage Fighter	24	32	27	25	20	42.1	6.2	8.5	0.0	0.0

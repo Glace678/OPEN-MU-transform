@@ -308,6 +308,7 @@
         "resolved": "6.0.0-preview.4.21253.7",
         "contentHash": "h0eWBYUk1rLI31AAmLMgmVzy6UBMUBvRfAqB9VH+O8pMT5GBFpBJoTEIdhBfzcn7VS+aPPDzpLlASHXdjt2qXQ=="
       }
-    }
+    },
+    "net10.0/win-x64": {}
   }
 }

@@ -9,11 +9,20 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 /// <summary>
 /// Implementation of <see cref="IDatabaseConnectionSettingProvider"/> which takes the connection strings out of
 /// a configuration file, usually <c>ConnectionSettings.xml</c>.
-/// The settings can be influenced by the environment variables <c>DB_HOST</c>, <c>DB_ADMIN_USER</c> and <c>DB_ADMIN_PW</c>.
+/// The settings can be influenced by environment variables:
+/// <list type="bullet">
+/// <item><c>DB_HOST</c> overrides the database server for all connections.</item>
+/// <item><c>OPENMU_DB_ADMIN_PASSWORD</c> / <c>OPENMU_DB_CONFIG_PASSWORD</c> /
+/// <c>OPENMU_DB_ACCOUNT_PASSWORD</c> / <c>OPENMU_DB_FRIEND_PASSWORD</c> /
+/// <c>OPENMU_DB_GUILD_PASSWORD</c> inject the password for every database role.
+/// If a required variable is unset, startup fails fast (no plaintext fallback).</item>
+/// <item><c>DB_ADMIN_USER</c> overrides the admin username. <c>DB_ADMIN_PW</c> is a legacy fallback for <c>OPENMU_DB_ADMIN_PASSWORD</c> (admin role only); if both are unset, startup throws.</item>
+/// </list>
 /// </summary>
 public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSettingProvider
 {
@@ -141,27 +150,86 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         return Path.Combine(Path.GetDirectoryName(new Uri(typeof(ConnectionConfigurator).Assembly.Location!).LocalPath)!, this._fileName);
     }
 
+    /// <summary>
+    /// Injects the database host and per-role password from environment variables.
+    /// Plaintext passwords in ConnectionSettings.xml are placeholders (<c>__SET_BY_ENV__</c>);
+    /// if the required variable is missing, startup throws instead of falling back to a default.
+    /// </summary>
     private void ApplyEnvironmentVariables(ConnectionSetting setting)
     {
-        if (Environment.GetEnvironmentVariable(DbHostVariableName) is { } dbHost
+        var csb = new NpgsqlConnectionStringBuilder(setting.ConnectionString!);
+
+        // DB_HOST overrides the server for every connection (all branches/variants).
+        if (Environment.GetEnvironmentVariable(DbHostVariableName) is { Length: > 0 } dbHost
             && !string.IsNullOrEmpty(dbHost))
         {
-            setting.ConnectionString = setting.ConnectionString!.Replace("Server=localhost;", $"Server={dbHost};");
+            csb.Host = dbHost;
         }
 
-        if (setting.ConnectionString!.Contains("User Id=postgres;"))
+        // Map the connection to a database role and inject the corresponding password.
+        var role = DetermineRole(csb.Username);
+        var passwordVariableName = role switch
         {
-            if (Environment.GetEnvironmentVariable(DbAdminUserVariableName) is { } dbAdminUser
-                && !string.IsNullOrEmpty(dbAdminUser))
-            {
-                setting.ConnectionString = setting.ConnectionString.Replace("User Id=postgres;", $"User Id={dbAdminUser};");
-            }
+            DbRole.Admin => "OPENMU_DB_ADMIN_PASSWORD",
+            DbRole.Config => "OPENMU_DB_CONFIG_PASSWORD",
+            DbRole.Account => "OPENMU_DB_ACCOUNT_PASSWORD",
+            DbRole.Friend => "OPENMU_DB_FRIEND_PASSWORD",
+            DbRole.Guild => "OPENMU_DB_GUILD_PASSWORD",
+            _ => throw new InvalidDataException($"Unknown database role for username '{csb.Username}'."),
+        };
 
-            if (Environment.GetEnvironmentVariable(DbAdminPasswordVariableName) is { } dbAdminPassword
-                && !string.IsNullOrEmpty(dbAdminPassword))
-            {
-                setting.ConnectionString = setting.ConnectionString.Replace("Password=admin;", $"Password={dbAdminPassword};");
-            }
+        // Resolve the password: prefer the per-role env var; fall back to the
+        // legacy DB_ADMIN_PW alias for the admin role; fail fast if neither is set.
+        string? resolvedPassword = Environment.GetEnvironmentVariable(passwordVariableName);
+        if (string.IsNullOrEmpty(resolvedPassword)
+            && role == DbRole.Admin
+            && Environment.GetEnvironmentVariable(DbAdminPasswordVariableName) is { Length: > 0 } legacyAdminPw)
+        {
+            resolvedPassword = legacyAdminPw;
         }
+
+        if (!string.IsNullOrEmpty(resolvedPassword))
+        {
+            csb.Password = resolvedPassword;
+        }
+        else
+        {
+            var triedVariables = role == DbRole.Admin
+                ? $"{passwordVariableName} (or legacy {DbAdminPasswordVariableName})"
+                : passwordVariableName;
+            throw new InvalidOperationException(
+                $"Database password environment variable {triedVariables} is not set. " +
+                "ConnectionSettings.xml no longer stores plaintext passwords; set the variable in the environment or secrets store.");
+        }
+
+        // Legacy alias: DB_ADMIN_USER overrides the admin username.
+        if (role == DbRole.Admin
+            && Environment.GetEnvironmentVariable(DbAdminUserVariableName) is { Length: > 0 } legacyAdminUser
+            && !string.IsNullOrEmpty(legacyAdminUser))
+        {
+            csb.Username = legacyAdminUser;
+        }
+
+        setting.ConnectionString = csb.ConnectionString;
+    }
+
+    private static DbRole DetermineRole(string? username) => (username?.Trim().ToLowerInvariant()) switch
+    {
+        "postgres" or "admin" => DbRole.Admin,
+        "config" => DbRole.Config,
+        "account" or "trade" => DbRole.Account,
+        "friend" => DbRole.Friend,
+        "guild" => DbRole.Guild,
+        _ => DbRole.Unknown,
+    };
+
+    private enum DbRole
+    {
+        Unknown,
+        Admin,
+        Config,
+        Account,
+        Friend,
+        Guild,
     }
 }

@@ -1,7 +1,20 @@
 ﻿// ArkTS port of the Android GM API client. It talks to the same
-// /api/mobile-gm/* endpoints on the local OpenMU server and carries the same
+// /api/mobile-gm/* endpoints on the local OpenMU server and carries the
 // X-OpenMU-Mobile-Key pairing header, so the server-side account and grants
 // are identical across Android and HarmonyOS.
+//
+// 107-02 (mobile GM keychain): the value sent as X-OpenMU-Mobile-Key is the
+// build-time-injected pairing secret. It currently doubles as the game login
+// credential derivation seed on the game/PC builds -- the known weak point:
+// anyone who extracts it from a built HAP gets BOTH the GM write API and the
+// derived login account. This MUST be rotated and the duties split:
+//   - login seed (game/PC MobileIdentity.deriveCredentials) -> server derives local account
+//   - GM bearer  (this X-OpenMU-Mobile-Key header)           -> must become a short-lived,
+//                                                               revocable pairing token
+// Until the server and the Android/iOS clients are migrated, treat this as a
+// LAN-trusted tool only. Never commit a real secret here: it is injected from
+// entry/build-profile.json5 at build time, and the committed 43-'A' placeholder
+// is rejected at runtime in the constructor below.
 import http from '@ohos.net.http';
 
 export interface CharacterOption {
@@ -171,6 +184,8 @@ function parseExcellentNumbers(item: Record<string, Object>, excellentCount: num
 
 export class MobileGmClient {
   private baseUrl: string;
+  // 107-02: build-time-injected GM bearer (X-OpenMU-Mobile-Key). Rotate this; do
+  // not reuse it as the login derivation seed (see header note).
   private packageKey: string;
 
   constructor(baseUrl: string, packageKey: string) {

@@ -17,6 +17,7 @@ using Microsoft.JSInterop;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.Persistence;
+using MUnique.OpenMU.Web.Shared.Components.Toast;
 using MUnique.OpenMU.Web.Shared.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
@@ -119,6 +120,12 @@ public partial class MapEditor : IAsyncDisposable
 
     [Inject]
     private ILogger<MapEditor> Logger { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the toast service used to surface import errors.
+    /// </summary>
+    [Inject]
+    private IToastService ToastService { get; set; } = null!;
 
     /// <summary>
     /// Gets the current zoom level expressed as a rounded percentage.
@@ -699,6 +706,14 @@ public partial class MapEditor : IAsyncDisposable
             await this.SelectedMapChanging.InvokeAsync(cancelEventArgs).ConfigureAwait(true);
         }
 
+        // Do not silently discard pending deletions: switching maps while objects are queued
+        // for deletion used to drop them (never persisted, reappear on reload). Block the
+        // switch until the user saves, in addition to whatever the parent decided.
+        if (!cancelEventArgs.Cancel && this._pendingDeletions.Count > 0)
+        {
+            cancelEventArgs.Cancel = true;
+        }
+
         if (cancelEventArgs.Cancel)
         {
             if (this._jsModule is not null)
@@ -761,18 +776,24 @@ public partial class MapEditor : IAsyncDisposable
 
     private async Task SaveAsync()
     {
+        // Mark the pending deletions in the context first; they become part of the unit of work
+        // that the parent saves through OnValidSubmit (one SaveChanges transaction).
         foreach (var obj in this._pendingDeletions)
         {
             await this.PersistenceContext.DeleteAsync(obj).ConfigureAwait(true);
         }
 
-        this._pendingDeletions.Clear();
-        this._history.Clear();
-
+        // Let the parent perform the actual save. Only after it succeeds do we consider the
+        // deletions/history committed: when it throws we keep both lists so the operation can be
+        // retried without losing track of what was pending (previously the lists were cleared
+        // before the save, leaving a half-committed state that could not be retried).
         if (this.OnValidSubmit.HasDelegate)
         {
             await this.OnValidSubmit.InvokeAsync().ConfigureAwait(true);
         }
+
+        this._pendingDeletions.Clear();
+        this._history.Clear();
     }
 
     private void OnStartResizing(Resizers.ResizerPosition? position)
@@ -882,11 +903,20 @@ public partial class MapEditor : IAsyncDisposable
             using var reader = new StreamReader(memoryStream);
             var json = await reader.ReadToEndAsync().ConfigureAwait(true);
 
-            await this._exportImportService.ApplyImportAsync(this._selectedMap, json, this.PersistenceContext).ConfigureAwait(true);
+            var result = await this._exportImportService.ApplyImportAsync(this._selectedMap, json, this.PersistenceContext).ConfigureAwait(true);
 
-            this._history.Clear();
-            this._pendingDeletions.Clear();
-            this._focusedObject = null;
+            if (result.Success)
+            {
+                this._history.Clear();
+                this._pendingDeletions.Clear();
+                this._focusedObject = null;
+                this.ToastService.ShowSuccess($"{result.ImportedCount} spawn area(s) imported.", "Map import");
+            }
+            else
+            {
+                // The service validated before deleting anything, so the current map is untouched.
+                this.ToastService.ShowError(result.ErrorMessage ?? "The import failed.", "Map import");
+            }
         }
         finally
         {

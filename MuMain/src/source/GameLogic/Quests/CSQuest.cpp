@@ -383,6 +383,12 @@ short   CSQuest::FindQuestContext(QUEST_ATTRIBUTE* pQuest, int index)
         }
     }
 
+    if (m_byCurrQuestIndex == 0)
+    {
+        m_shCurrPage = 0;
+        return m_shCurrPage;
+    }
+
     m_byCurrQuestIndex--;
     CheckQuestState();
 
@@ -542,6 +548,8 @@ std::uint8_t CSQuest::CheckQuestState(std::uint8_t state)
         }
     }
 
+    if (m_byCurrQuestIndex >= MAX_QUESTS)
+        m_byCurrQuestIndex = 0;
     QUEST_ATTRIBUTE* lpQuest = &m_Quest[m_byCurrQuestIndex];
     //    m_byCurrState = m_byQuestList[m_byCurrQuestIndex];
 

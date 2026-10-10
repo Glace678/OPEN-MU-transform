@@ -22,6 +22,7 @@
 #ifdef DECODER_WAV
 
 #include "SDL_mixer_internal.h"
+#include <stddef.h>  /* offsetof for 97-01 SamplerChunk bounds */
 
 
 // this is originally SDL2_mixer's music_wav.c, which was probably
@@ -117,7 +118,7 @@ typedef struct {
     Uint32 play_count;
 } SampleLoop;
 
-typedef struct {
+typedef struct SamplerChunk {
     // Not saved in the chunk we read:
     //Uint32  chunkID;
     //Uint32  chunkLen;
@@ -1012,10 +1013,15 @@ static bool AddLoopPoint(WAV_AudioData *adata, Uint32 play_count, Uint32 start, 
 
 static bool ParseSMPL(WAV_AudioData *adata, SDL_IOStream *io, Uint32 chunk_length)
 {
-    SamplerChunk *chunk;
     Uint8 *data;
     Uint32 i;
     bool loaded = false;
+    /* L5 r3-71 97-01: offset in bytes from the chunk buffer start to the
+       flexible loops[] array, and the size of one loop record. Declared here at
+       the top of the block on purpose: this file is compiled as C (MSVC C89),
+       which forbids declarations after statements. Use the struct tag form. */
+    const Uint32 fixed_header_size = (Uint32)offsetof(struct SamplerChunk, loops);
+    const Uint32 sample_loop_size = (Uint32)sizeof(SampleLoop);
 
     data = (Uint8 *)SDL_malloc(chunk_length);
     if (!data) {
@@ -1026,15 +1032,30 @@ static bool ParseSMPL(WAV_AudioData *adata, SDL_IOStream *io, Uint32 chunk_lengt
         SDL_free(data);
         return false;
     }
-    chunk = (SamplerChunk *)data;
-
-    for (i = 0; i < SDL_Swap32LE(chunk->sample_loops); ++i) {
-        const Uint32 LOOP_TYPE_FORWARD = 0;
-        const Uint32 loop_type = SDL_Swap32LE(chunk->loops[i].type);
-        if (loop_type == LOOP_TYPE_FORWARD) {
-            AddLoopPoint(adata, SDL_Swap32LE(chunk->loops[i].play_count), SDL_Swap32LE(chunk->loops[i].start), SDL_Swap32LE(chunk->loops[i].end) + 1);  // +1 because the end field is inclusive.
+    // L5 r3-71 97-01: A hostile smpl chunk may declare sample_loops far larger
+    // than the chunk buffer can hold. We must (a) guarantee the fixed header
+    // (every field up to the flexible loops[] array) is present before reading
+    // sample_loops, and (b) clamp the loop count to how many SampleLoop records
+    // actually fit inside the chunk_length allocation, otherwise we walk the
+    // heap past the SDL_malloc buffer.
+    if (chunk_length >= fixed_header_size) {
+        const SamplerChunk *body = (const SamplerChunk *)data;
+        const Uint32 sample_loops = SDL_Swap32LE(body->sample_loops);
+        const Uint32 max_loops = (chunk_length - fixed_header_size) / sample_loop_size;
+        const Uint32 loop_count = SDL_min(sample_loops, max_loops);
+        for (i = 0; i < loop_count; ++i) {
+            const Uint32 LOOP_TYPE_FORWARD = 0;
+            const Uint32 loop_type = SDL_Swap32LE(body->loops[i].type);
+            if (loop_type == LOOP_TYPE_FORWARD) {
+                AddLoopPoint(adata, SDL_Swap32LE(body->loops[i].play_count), SDL_Swap32LE(body->loops[i].start), SDL_Swap32LE(body->loops[i].end) + 1);  // +1 because the end field is inclusive.
+            }
         }
+        // If sample_loops > max_loops the file is malformed: use only the
+        // records that actually fit and ignore the non-existent extras,
+        // rather than reading out of bounds.
     }
+    // else: chunk smaller than the fixed header; nothing safe to read, skip
+    // loop parsing entirely (the bytes were already consumed from the stream).
 
     loaded = true;
     SDL_free(data);
@@ -1057,9 +1078,18 @@ static bool CheckWAVMetadataField(const char *wantedtag, const char *propname, S
 
     Uint32 len = 0;
     char *field = NULL;
+
+    // L5 r3-71 97-02: the LIST chunk buffer is only chunk_length bytes. After
+    // the matching 4-byte tag we must still hold the 4-byte length header, and
+    // the declared value length must fit inside the bytes REMAINING in the
+    // buffer (not merely "within chunk_length" overall). The old check let a
+    // value declared near the end of the chunk read past the heap allocation.
+    if (*i + 8 > chunk_length) {
+        return false;  // not even tag + length header fits; resync one byte.
+    }
     *i += 4;
     len = SDL_Swap32LE(*((Uint32 *)(data + *i)));  // LIST
-    if (len > chunk_length) {
+    if (len > chunk_length - (*i + 4)) {
         *i -= 4;  // move back so we can resync.
         return false; // Do nothing due to broken length
     }
@@ -1069,7 +1099,11 @@ static bool CheckWAVMetadataField(const char *wantedtag, const char *propname, S
         *i += len;
         return true;
     }
-    SDL_strlcpy(field, (char *)(data + *i), len);
+    // Source read is bounded: we already verified len <= chunk_length - (*i),
+    // so copy exactly len bytes and NUL-terminate instead of strlcpy (which
+    // would stop at an embedded NUL and rely on an untrusted source length).
+    SDL_memcpy(field, (char *)(data + *i), len);
+    field[len] = '\0';
     *i += len;
 
     char key[64];
@@ -1095,7 +1129,7 @@ static bool ParseLIST(WAV_AudioData *adata, SDL_IOStream *io, SDL_PropertiesID p
         return SDL_SetError("Couldn't read %" SDL_PRIu32 " bytes from WAV file", chunk_length);
     }
 
-    if (SDL_strncmp((const char *)data, "INFO", 4) == 0) {
+    if (chunk_length >= 4 && SDL_strncmp((const char *)data, "INFO", 4) == 0) {
         for (size_t i = 4; i < chunk_length - 4;) {
             if (CheckWAVMetadataField("INAM", MIX_PROP_METADATA_TITLE_STRING, props, &i, chunk_length, data)) {
                 continue;

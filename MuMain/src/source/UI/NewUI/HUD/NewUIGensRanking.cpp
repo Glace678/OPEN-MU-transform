@@ -34,12 +34,12 @@ CNewUIGensRanking::~CNewUIGensRanking()
 void CNewUIGensRanking::Init()
 {
     m_nContribution = 0;
-    memset(m_szRanking, 0, sizeof(char) * TEAMNAME_LENTH);
+    memset(m_szRanking, 0, sizeof(m_szRanking));
 
     m_Pos.x = 0;
     m_Pos.y = 0;
 
-    memset(m_szGensTeam, 0, sizeof(char) * TEAMNAME_LENTH);
+    memset(m_szGensTeam, 0, sizeof(m_szGensTeam));
 
     m_byGensInfluence = GENSTYPE_NONE;
     m_ptRenderMarkPos.x = 0;
@@ -47,7 +47,7 @@ void CNewUIGensRanking::Init()
 
     m_nNextContribution = 0;
 
-    memset(m_szTitleName, 0, sizeof(char) * TITLENAME_END * MAX_TITLELENGTH);
+    memset(m_szTitleName, 0, sizeof(m_szTitleName));
     SetTitleName();
 }
 

@@ -14,12 +14,12 @@ final class MobileIdentity {
     private MobileIdentity() {
     }
 
-    static Credentials derive(String packageKey) {
-        if (packageKey == null || !packageKey.matches("[A-Za-z0-9_-]{43}")) {
-            throw new IllegalArgumentException("Invalid mobile package key");
+    static Credentials derive(String loginSeed) {
+        if (loginSeed == null || !loginSeed.matches("[A-Za-z0-9_-]{43}")) {
+            throw new IllegalArgumentException("Invalid mobile login seed");
         }
 
-        byte[] key = packageKey.getBytes(StandardCharsets.UTF_8);
+        byte[] key = loginSeed.getBytes(StandardCharsets.UTF_8);
         String usernameHex = toUpperHex(hmacSha256(key, LOGIN_NAME_CONTEXT));
         String passwordBase64 = Base64.getUrlEncoder().withoutPadding()
             .encodeToString(hmacSha256(key, LOGIN_PASSWORD_CONTEXT));

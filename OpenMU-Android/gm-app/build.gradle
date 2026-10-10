@@ -31,9 +31,15 @@ if (!isValidServerAddress(openMuServerAddress)) {
         'hostname (no empty labels, no leading/trailing hyphens, no leading-zero ' +
         'octets). Pass it with -POPENMU_SERVER_ADDRESS=<address>.')
 }
-def mobilePackageKey = providers.gradleProperty('OPENMU_MOBILE_PACKAGE_KEY').getOrElse('')
-if (!(mobilePackageKey ==~ /[A-Za-z0-9_-]{43}/)) {
-    throw new GradleException('OPENMU_MOBILE_PACKAGE_KEY must be exactly 43 base64url characters')
+// 107-02: the GM API bearer token (X-OpenMU-Mobile-Key). Distinct from the
+// game login derivation seed (game-app uses OPENMU_MOBILE_LOGIN_SEED).
+// This is a build-time default; on first launch the GM app copies it into
+// app-private storage and marks it as needing rotation. Inject at build time
+// only; never commit a real value.
+def mobileGmToken = providers.gradleProperty('OPENMU_MOBILE_GM_TOKEN').getOrElse('')
+if (!(mobileGmToken ==~ /[A-Za-z0-9_-]{43}/)) {
+    throw new GradleException('OPENMU_MOBILE_GM_TOKEN must be exactly 43 base64url characters ' +
+        '(the GM API bearer, distinct from OPENMU_MOBILE_LOGIN_SEED).')
 }
 // A-04: the GM bearer must ride HTTPS by default. The bundled LAN sideload
 // delivery passes -POPENMU_SERVER_SCHEME=http explicitly; a hand release build
@@ -55,7 +61,7 @@ android {
         versionCode 1
         versionName '1.0.0'
         buildConfigField 'String', 'DEFAULT_SERVER_URL', '"' + openMuServerScheme + '://' + openMuServerAddress + ':5080"'
-        buildConfigField 'String', 'MOBILE_PACKAGE_KEY', '"' + mobilePackageKey + '"'
+        buildConfigField 'String', 'MOBILE_GM_TOKEN', '"' + mobileGmToken + '"'
     }
 
     buildFeatures {

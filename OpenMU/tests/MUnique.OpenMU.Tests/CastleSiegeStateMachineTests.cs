@@ -11,6 +11,7 @@ using MUnique.OpenMU.DataModel.Entities;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.CastleSiege;
 using MUnique.OpenMU.GameLogic.PlugIns;
+using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.Persistence.InMemory;
 using MUnique.OpenMU.PlugIns;
@@ -401,7 +402,7 @@ public class CastleSiegeStateMachineTests
         await plugIn.ExecuteTaskAsync(fixture.GameContext.Object).ConfigureAwait(false);
 
         Assert.That(fixture.Notifications, Has.Count.EqualTo(2));
-        Assert.That(fixture.Notifications, Has.All.Contains("registration"));
+        Assert.That(fixture.Notifications, Has.All.EqualTo("CastleSiegeGuildRegistrationOpen"));
     }
 
     /// <summary>
@@ -426,7 +427,7 @@ public class CastleSiegeStateMachineTests
         }
 
         Assert.That(fixture.Notifications, Has.Count.EqualTo(6));
-        Assert.That(fixture.Notifications, Has.All.Contains("starts in"));
+        Assert.That(fixture.Notifications, Has.All.EqualTo("CastleSiegeStartsInFormat"));
     }
 
     /// <summary>
@@ -546,9 +547,14 @@ public class CastleSiegeStateMachineTests
         gameContext.SetupGet(game => game.Configuration).Returns(gameConfiguration);
         gameContext.SetupGet(game => game.PersistenceContextProvider).Returns(persistenceContextProvider);
         gameContext.SetupGet(game => game.LoggerFactory).Returns(NullLoggerFactory.Instance);
+        // The plug-in now delivers state/countdown announcements through the culture-grouped
+        // ShowGlobalLocalizedMessageAsync (resource key + args) instead of a hardcoded English
+        // string. Capture the message key so the assertions below stay meaningful: the count of
+        // announcements and which announcement (key) fires is the behavior under test; the actual
+        // English->Chinese rendering is covered by PlayerMessageLocalizationTests.
         gameContext
-            .Setup(game => game.SendGlobalNotificationAsync(It.IsAny<string>()))
-            .Callback<string>(notifications.Add)
+            .Setup(game => game.ShowGlobalLocalizedMessageAsync(It.IsAny<MessageType>(), It.IsAny<string>(), It.IsAny<object?[]>()))
+            .Callback<MessageType, string, object?[]>((_, messageKey, _) => notifications.Add(messageKey))
             .Returns(ValueTask.CompletedTask);
 
         return new(

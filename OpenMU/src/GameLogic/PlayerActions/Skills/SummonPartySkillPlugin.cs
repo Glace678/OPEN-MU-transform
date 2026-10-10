@@ -63,13 +63,14 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
 
                 foreach (var targetPlayer in targetPlayers)
                 {
+                    var countdownMessage = targetPlayer.GetLocalizedMessage("SummoningInSecondsFormat", count);
                     await targetPlayer.InvokeViewPlugInAsync<IChatViewPlugIn>(
-                        p => p.ChatMessageAsync($"Summoning in {count} second(s)...", player.Name, ChatMessageType.Party)).ConfigureAwait(false);
+                        p => p.ChatMessageAsync(countdownMessage, player.Name, ChatMessageType.Party)).ConfigureAwait(false);
                 }
 
                 if (!player.IsAlive || player.IsAtSafezone())
                 {
-                    await player.Party.SendChatMessageAsync("Summoning canceled.", player.Name).ConfigureAwait(false);
+                    await this.SendPartySummoningCanceledAsync(player).ConfigureAwait(false);
                     return;
                 }
 
@@ -81,7 +82,7 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         catch (OperationCanceledException)
         {
             // Handle cancellation (if needed)
-            await player.Party.SendChatMessageAsync("Summoning canceled.", player.Name).ConfigureAwait(false);
+            await this.SendPartySummoningCanceledAsync(player).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -92,6 +93,33 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         {
             player.SkillCancelTokenSource?.Dispose();
             player.SkillCancelTokenSource = null;
+        }
+    }
+
+    /// <summary>
+    /// Sends the localized "summoning canceled" party-channel message to every online party member,
+    /// using each member's own culture.
+    /// </summary>
+    /// <param name="player">The summoning player whose party is notified.</param>
+    private async ValueTask SendPartySummoningCanceledAsync(Player player)
+    {
+        if (player.Party is not { } party)
+        {
+            return;
+        }
+
+        foreach (var member in party.PartyList.OfType<Player>())
+        {
+            try
+            {
+                var message = member.GetLocalizedMessage("SummoningCanceled");
+                await member.InvokeViewPlugInAsync<IChatViewPlugIn>(
+                    p => p.ChatMessageAsync(message, player.Name, ChatMessageType.Party)).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                player.Logger.LogDebug(ex, "Error sending summoning canceled message to {Name}", member.Name);
+            }
         }
     }
 

@@ -1,0 +1,10 @@
+class	level	atkRatePvp	defRatePvp	defensePvp	maxHp
+Dark Wizard	1	75.0	6.5	2.2	61.0
+Dark Wizard	50	222.0	104.5	2.2	266.8
+Dark Wizard	200	672.0	404.5	2.2	896.8
+Dark Knight	1	93.0	12.0	3.3	112.0
+Dark Knight	50	592.8	149.2	16.4	562.8
+Dark Knight	200	2122.8	569.2	56.4	1942.8
+Fairy Elf	1	18.0	4.5	1.2	80.0
+Fairy Elf	50	329.6	129.9	15.0	285.8
+Fairy Elf	200	1283.6	513.9	57.0	915.8

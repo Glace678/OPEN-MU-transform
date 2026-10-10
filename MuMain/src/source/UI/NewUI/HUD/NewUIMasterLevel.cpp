@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Engine/Object/TextListSafe.h"   // 86-01: unified bounded TextList[50] append
 #include "App/Platform/Windows/Winmain.h"
 #include "Render/Textures/ZzzTexture.h"
 #include "GameLogic/Items/CSItemOption.h"
@@ -411,10 +412,6 @@ int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTi
 
     for (int i = 0; i < nLine; i++)
     {
-        TextListColor[TextNum] = iTextColor;
-
-        TextBold[TextNum] = iTextBold;
-
         std::wstring cText = alpszDst[i];
 
         if (isPercent)
@@ -425,9 +422,12 @@ int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTi
             }
         }
 
-        mu_swprintf(TextList[TextNum], cText.c_str());
-
-        TextNum++;
+        // 86-01: route every line through the unified bounded appender so the
+        // TextList[50]/TextListColor[50]/TextBold[50] index is clamped and the
+        // row copy is truncated. Once full, further lines are dropped.
+        TextNum = SafeAppendTextLine(TextNum, cText.c_str(), iTextColor, iTextBold);
+        if (TextNum >= TEXT_LIST_LINE_CAPACITY)
+            break;
     }
 
     return TextNum;
@@ -629,6 +629,12 @@ void SEASON3B::CNewUIMasterLevel::RenderIcon()
     {
         const auto group = it->second.Group;
         const auto skill = it->second.Skill;
+        // 86-02: group/skill come from BMD-driven map data; keep the fixed
+        // categoryPos/MasterSkillInfo/SkillAttribute storage in range.
+        if (group >= MAX_MASTER_SKILL_CATEGORY || skill < 0 || skill >= MAX_SKILLS)
+            continue;
+        if (skill < AT_SKILL_MASTER_BEGIN || skill > AT_SKILL_MASTER_END)
+            continue;
         const auto skillAttribute = &SkillAttribute[skill];
         const auto skillLevel = CharacterAttribute->MasterSkillInfo[skill].GetSkillLevel();
 
@@ -693,11 +699,15 @@ void SEASON3B::CNewUIMasterLevel::RenderToolTip()
 
         auto Skill = it->second.Skill;
 
+        // 86-02: `&SkillAttribute[Skill] == nullptr` was a no-op (an array address
+        // is never null); do a real range check instead and skip bad entries.
+        if (group >= MAX_MASTER_SKILL_CATEGORY || Skill < 0 || Skill >= MAX_SKILLS)
+            continue;
         SKILL_ATTRIBUTE* p = &SkillAttribute[Skill];
 
         if (p == nullptr)
         {
-            break;
+            continue;
         }
 
         const int index = (it->second.Index - 1) % 4;
@@ -1074,6 +1084,11 @@ void SEASON3B::CNewUIMasterLevel::SkillUpgrade(int index, BYTE skillLevel, float
     }
 
     const auto realSkill = it->second.Skill;
+    // 86-02: keep MasterSkillInfo[AT_SKILL_MASTER_END+1] and CategoryPoint[] in range.
+    if (realSkill < AT_SKILL_MASTER_BEGIN || realSkill > AT_SKILL_MASTER_END)
+        return;
+    if (it->second.Group >= MAX_MASTER_SKILL_CATEGORY)
+        return;
     const int oldLevel = CharacterAttribute->MasterSkillInfo[realSkill].GetSkillLevel();
 
     const CSkillTreeInfo skillTreeInfo = { skillLevel, value, nextValue };

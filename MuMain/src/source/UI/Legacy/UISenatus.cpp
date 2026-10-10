@@ -299,18 +299,40 @@ void CSenatusInfo::DoWithdrawAction(DWORD dwMoney)
 
 void CSenatusInfo::SetNPCInfo(LPPMSG_NPCDBLIST pInfo)
 {
+    // 85-02: network-supplied iNpcIndex is range-guarded before indexing; an illegal
+    // index is dropped so memcpy can never overrun m_GateInfo/m_StatueInfo.
+    // Valid domains: Gate 1..6, Statue 1..4 (1-based wire index).
     if (pInfo->iNpcNumber == GATENPC_NUMBER)
+    {
+        if (pInfo->iNpcIndex < 1 || pInfo->iNpcIndex > (int)_countof(m_GateInfo))
+            return;
         memcpy(&m_GateInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
-    if (pInfo->iNpcNumber == STATUENPC_NUMBER)
+    }
+    else if (pInfo->iNpcNumber == STATUENPC_NUMBER)
+    {
+        if (pInfo->iNpcIndex < 1 || pInfo->iNpcIndex > (int)_countof(m_StatueInfo))
+            return;
         memcpy(&m_StatueInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
+    }
 }
 
 LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 {
+    // 85-02: single entry-point range guard. Unknown type or out-of-range index
+    // returns NULL so callers (BuyNewNPC / WSclient table lookup) safely reject
+    // instead of dereferencing an out-of-bounds or null pointer.
     if (iNpcNumber == GATENPC_NUMBER)
+    {
+        if (iNpcIndex < 1 || iNpcIndex > (int)_countof(m_GateInfo))
+            return NULL;
         return &m_GateInfo[iNpcIndex - 1];
+    }
     else if (iNpcNumber == STATUENPC_NUMBER)
+    {
+        if (iNpcIndex < 1 || iNpcIndex > (int)_countof(m_StatueInfo))
+            return NULL;
         return &m_StatueInfo[iNpcIndex - 1];
+    }
     else
         return NULL;
 }
@@ -318,6 +340,8 @@ LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 void CSenatusInfo::BuyNewNPC(int iNpcNumber, int iNpcIndex)
 {
     LPPMSG_NPCDBLIST pNPCInfo = GetNPCInfo(iNpcNumber, iNpcIndex);
+    if (pNPCInfo == NULL)
+        return; // 85-02: reject illegal/unknown NPC index; no null-pointer memset/write.
     memset(pNPCInfo, 0, sizeof(PMSG_NPCDBLIST));
 
     pNPCInfo->btNpcLive = 1;

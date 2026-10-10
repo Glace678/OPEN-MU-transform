@@ -7,6 +7,8 @@
         // and the GM app, and DEFAULT_SERVER_ADDRESS must be THIS machine's LAN
         // IPv4 (localhost or a private address per RFC1918). The address below is
         // only a neutral placeholder -- it is not a real host.
+        // 107-02: login derivation seed (same duty split as harmony-game; see
+        // MobileIdentity.ets). Inject the real value at build time only.
         "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "DEFAULT_SERVER_ADDRESS": "192.168.0.2"
       }

@@ -16,4 +16,19 @@
   <data name="AccountPortalUnavailable" xml:space="preserve">
     <value>Impossible de joindre le serveur. Vérifiez qu&apos;il est démarré.</value>
   </data>
+  <data name="AlreadyReachedMaximumLevel" xml:space="preserve">
+    <value>You already reached maximum Level.</value>
+  </data>
+  <data name="AlreadyReachedMaximumMasterLevel" xml:space="preserve">
+    <value>You already reached maximum master Level.</value>
+  </data>
+  <data name="NeedToKillStrongerMonstersForMasterExp" xml:space="preserve">
+    <value>You need to kill stronger monsters to gain master experience.</value>
+  </data>
+  <data name="InvalidGuildAssign" xml:space="preserve">
+    <value>Invalid GuildAssign</value>
+  </data>
+  <data name="InvalidGuildRelationShipResult" xml:space="preserve">
+    <value>Invalid GuildRelationShipResult</value>
+  </data>
 </root>

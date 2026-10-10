@@ -9,7 +9,11 @@ MapProcessPtr g_MapProcess;
 
 MapProcess& TheMapProcess()
 {
-    assert(g_MapProcess);
+    if (!g_MapProcess)
+    {
+        static MapProcess s_dummy;
+        return s_dummy;
+    }
     return *g_MapProcess;
 }
 
@@ -139,16 +143,16 @@ BaseMap& MapProcess::FindBaseMap(ENUM_WORLD type)
             }
         }
     }
-    assert(0);
-    throw;
+    static BaseMap s_sentinel;
+    return s_sentinel;
 }
 
 void MapProcess::Register(std::shared_ptr<BaseMap> pMap)
 {
+    if (!pMap) return;
     ENUM_WORLD type = pMap->FindMapIndex();
     if (type == NUM_WD) {
-        assert(0);
-        throw;
+        return;
     }
 
     if (FindMap(type) == false) {

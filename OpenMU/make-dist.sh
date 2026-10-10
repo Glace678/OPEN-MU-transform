@@ -19,6 +19,9 @@ log() { echo "[dist] $*"; }
 fail() { echo "[dist] $*" >&2; exit 1; }
 
 [[ -d "$SCRIPT_DIR/deploy/all-in-one" ]] || fail "deploy/all-in-one not found; run from the repository root."
+[[ -d "$SCRIPT_DIR/src" ]] || fail "src/ not found at repository root; the local-source docker build context would be missing (84-01). Run make-dist.sh from a full checkout."
+[[ -f "$SCRIPT_DIR/install.sh" ]] || fail "install.sh not found at repository root."
+[[ -f "$SCRIPT_DIR/deploy/quick-start.sh" ]] || fail "deploy/quick-start.sh not found."
 
 rm -rf -- "$STAGE"
 mkdir -p "$STAGE/deploy"
@@ -36,6 +39,14 @@ chmod +x "$STAGE/deploy/quick-start.sh"
 log "Staging source build context..."
 cp -R -- "$SCRIPT_DIR/src" "$STAGE/src"
 find "$STAGE/src" -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} + 2>/dev/null || true
+
+# 84-01: fail the build if the staged archive would be missing key directories
+# (previously the committed tar.gz shipped without src/ and one-click install broke).
+[[ -d "$STAGE/src" ]] || fail "Staging failed: src/ missing from stage; refusing to produce a broken archive."
+[[ -d "$STAGE/deploy/all-in-one" ]] || fail "Staging failed: deploy/all-in-one missing from stage."
+[[ -f "$STAGE/install.sh" ]] || fail "Staging failed: install.sh missing from stage."
+[[ -f "$STAGE/deploy/quick-start.sh" ]] || fail "Staging failed: deploy/quick-start.sh missing from stage."
+log "Pre-flight archive contents OK (src/, deploy/, install.sh, quick-start.sh present)."
 
 # Drop build/test-only noise and any local secrets from the distributed copy.
 find "$STAGE" -type f \( -name '.env' -o -name '*.local' \) -delete 2>/dev/null || true

@@ -2922,9 +2922,22 @@ bool SEASON3B::CPersonalShopItemBuyMsgBoxLayout::SetLayout()
 CALLBACK_RESULT SEASON3B::CPersonalShopItemBuyMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
     ITEM* pItem = g_pPurchaseShopInventory->FindItem(g_pPurchaseShopInventory->GetSourceIndex());
-    CHARACTER* pCha = &CharactersClient[g_pPurchaseShopInventory->GetShopCharacterIndex()];
 
-    if (pItem && pCha)
+    // 85-08: shop character index can be reset to -1 (shop closed / owner left) while
+    // the dialog is still open. Validate before addressing CharactersClient; an
+    // out-of-range index closes the dialog and bails instead of reading
+    // CharactersClient[-1] and sending a forged buy request. pCha was an array slot
+    // address and could never be null, so the old && pCha check was dead code.
+    int nShopIndex = g_pPurchaseShopInventory->GetShopCharacterIndex();
+    if (nShopIndex < 0 || nShopIndex >= MAX_CHARACTERS_CLIENT)
+    {
+        PlayBuffer(SOUND_CLICK01);
+        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+        return CALLBACK_BREAK;
+    }
+    CHARACTER* pCha = &CharactersClient[nShopIndex];
+
+    if (pItem)
     {
         int sourceIndex = g_pPurchaseShopInventory->GetItemInventoryIndex(pItem);
         if (sourceIndex >= 0)
@@ -3046,6 +3059,11 @@ bool SEASON3B::CGuildPerson_Get_Out::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL))
         return false;
 
+    // 85-07: DeleteIndex is a captured global that can be -1 (member not found) or
+    // stale once the guild list refreshes while the dialog is open. Reject before
+    // indexing GuildList[] so we never read an out-of-range member name.
+    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
+        return false;
     wchar_t Buff[300];
     mu_swprintf(Buff, I18N::Game::CharacterS, GuildList[DeleteIndex].Name);
     pMsgBox->AddMsg(Buff, RGBA(255, 255, 255, 255), MSGBOX_FONT_BOLD);
@@ -3091,6 +3109,13 @@ bool SEASON3B::CGuildPerson_Cancel_Position_MsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CGuildPerson_Cancel_Position_MsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
+    // 85-07: guard the captured index before reading GuildList[].Name and sending.
+    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
+    {
+        PlayBuffer(SOUND_CLICK01);
+        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+        return CALLBACK_BREAK;
+    }
     SocketClient->ToGameServer()->SendGuildRoleAssignRequest(G_PERSON, GuildList[DeleteIndex].Name, 0x03);
 
     PlayBuffer(SOUND_CLICK01);

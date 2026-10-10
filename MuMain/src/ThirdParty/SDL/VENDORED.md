@@ -24,3 +24,19 @@ Snapshot baseline: SDL release-3.4.8 (`android-project` Java glue included).
    still use `mWidth`/`mHeight`, so this is a genuine local modification, not a
    version drift. Active on Android/OpenHarmony touch input. Candidate to
    upstream or re-verify on each SDL upgrade.
+
+2. `src/video/stb_image.h` — NV12 JPEG chroma subsampling guard (L5 r3-71 finding 98A-01).
+   - `load_jpeg_image` nv12 branch now rejects a JPEG whose chroma horizontal/vertical subsample
+     ratio exceeds 2 (4:1:1 / 4x vertical) via `stbi__errpuc("nv12subsample", ...)`, and
+     `output_jpeg_nv12` defensively returns NULL if any of the u/v horizontal/vertical ratios is
+     outside {1,2}. Previously such a JPEG made the UV source stride go negative and read before
+     the chroma plane allocation. Offline local patch; re-verify against upstream on next sync.
+
+3. `src/video/x11/SDL_x11events.c` — X11 clipboard/drag target bounds (L5 r3-71 finding 98B-03).
+   - SelectionNotify TARGETS/SDL_FORMATS path now requires `XGetWindowProperty == Success`,
+     non-NULL data and `format == 32` before treating the buffer as an Atom array; clamps the
+     count to the requested 200; uses `size_t` for the allocation size; skips (never derefs)
+     NULL atom names. The XdndTypeList drop path only calls `X11_PickTarget` when
+     `p.format == 32 && p.data != NULL`. Offline local patch; re-verify against upstream.
+   - NOTE: 98B-03 is X11-only; it does not trigger on Windows but the source is hardened here
+     for the Linux/X11 build. EXTERNAL BLOCKER: needs network access to diff upstream SDL.

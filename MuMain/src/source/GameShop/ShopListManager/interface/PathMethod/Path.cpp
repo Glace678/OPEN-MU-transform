@@ -59,10 +59,13 @@ TCHAR* Path::SetDirString(TCHAR* szPath)
     if ((*szPath))
     {
         std::size_t len = 0;
-        StringCchLength(szPath, MAX_PATH, &len);
+        if (FAILED(StringCchLength(szPath, MAX_PATH, &len)) || len == 0)
+            return szPath;
 
         if (szPath[len - 1] != '\\')
         {
+            if (len + 1 >= MAX_PATH)
+                return szPath;
             szPath[len] = '\\';
             szPath[len + 1] = 0;
         }

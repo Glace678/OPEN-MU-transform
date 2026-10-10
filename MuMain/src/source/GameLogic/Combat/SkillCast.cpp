@@ -414,16 +414,20 @@ void UseSkillWarrior(CHARACTER* c, OBJECT* o)
         BYTE positionX = (BYTE)(c->TargetPosition[0] / TERRAIN_SCALE);
         BYTE positionY = (BYTE)(c->TargetPosition[1] / TERRAIN_SCALE);
 
+        int targetIdx = g_MovementSkill.m_iTarget;
+        bool bTargetMonsterType = (targetIdx >= 0 && targetIdx < MAX_CHARACTERS_CLIENT)
+            && (CharactersClient[targetIdx].MonsterIndex == MONSTER_CASTLE_GATE1
+                || CharactersClient[targetIdx].MonsterIndex == MONSTER_GUARDIAN_STATUE
+                || CharactersClient[targetIdx].MonsterIndex == MONSTER_LIFE_STONE
+                || CharactersClient[targetIdx].MonsterIndex == MONSTER_CANON_TOWER);
+
         if ((gMapManager.InBloodCastle() == true)
             || Skill == AT_SKILL_FORCE
             || Skill == AT_SKILL_FORCE_WAVE
             || Skill == AT_SKILL_FORCE_WAVE_STR
             || Skill == AT_SKILL_SPIRAL_SLASH
             || Skill == AT_SKILL_RUSH
-            || CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CASTLE_GATE1
-            || CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_GUARDIAN_STATUE
-            || CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_LIFE_STONE
-            || CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CANON_TOWER
+            || bTargetMonsterType
             )
         {
             int angle = abs((int)(o->Angle[2] / 45.f));
@@ -997,7 +1001,8 @@ void AttackRagefighter(CHARACTER* pCha, int nSkill, float fDistance)
     else
         g_MovementSkill.m_iTarget = -1;
 
-    g_ConsoleDebug->Write(MCD_SEND, L"AttackRagefighter ID : %d, Success : %d, SelectedCharacter: %d %d | 5d", nSkill, bSuccess, SelectedCharacter, CharactersClient[SelectedCharacter].Dead, bCheckAttack);
+    int selectedDead = (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT) ? CharactersClient[SelectedCharacter].Dead : 0;
+    g_ConsoleDebug->Write(MCD_SEND, L"AttackRagefighter ID : %d, Success : %d, SelectedCharacter: %d %d | 5d", nSkill, bSuccess, SelectedCharacter, selectedDead, bCheckAttack);
 
     if (bSuccess)
     {

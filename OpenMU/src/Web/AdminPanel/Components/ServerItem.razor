@@ -1,4 +1,4 @@
-﻿@using System.ComponentModel
+@using System.ComponentModel
 @using MUnique.OpenMU.DataModel
 @using MUnique.OpenMU.DataModel.Configuration
 @using MUnique.OpenMU.Interfaces
@@ -98,6 +98,8 @@
 
     private bool _isDeleted;
 
+    private bool _isBusy;
+
     /// <summary>
     /// Gets or sets the server which is shown in this component.
     /// </summary>
@@ -186,14 +188,42 @@
             return "btn-warning";
     }
 
-    private async Task OnPauseClickAsync()
+    private Task OnPauseClickAsync()
     {
-        await this.Server.StopAsync(default);
+        return this.RunBusyAsync(() => this.Server.StopAsync(default));
     }
 
-    private async Task OnStartClickAsync()
+    private Task OnStartClickAsync()
     {
-      await this.Server.StartAsync(default);
+        return this.RunBusyAsync(() => this.Server.StartAsync(default));
+    }
+
+    /// <summary>
+    /// Runs a server control action with a row-level busy flag and error handling, so concurrent
+    /// clicks are ignored, failures surface a readable error instead of breaking the circuit, and
+    /// the buttons are re-enabled when the action finished.
+    /// </summary>
+    private async Task RunBusyAsync(Func<Task> action)
+    {
+        if (this._isBusy)
+        {
+            return;
+        }
+
+        this._isBusy = true;
+        try
+        {
+            await action().ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await this.InvokeAsync(() => this.ModalService.ShowMessageAsync(Resources.Error, ex.Message)).ConfigureAwait(false);
+        }
+        finally
+        {
+            this._isBusy = false;
+            await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
+        }
     }
 
     private async Task OnDeleteServerClickAsync()
@@ -206,21 +236,36 @@
       var dialogResult = await this.ModalService.ShowQuestionAsync(
         @Resources.RemoveServer,
         @Resources.ServerDeleteProceedQuestion);
-      if (!dialogResult)
+      if (!dialogResult || this._isBusy)
       {
         return;
       }
 
-      await this.Server.StopAsync(default);
-      if (this.Server.Type == ServerType.GameServer)
+      this._isBusy = true;
+      try
       {
-        await this.GameServerInstanceManager.RemoveGameServerAsync((byte)this.Server.Id);
-        await this.DeleteAsync<GameServerDefinition>(s => s.ServerID == this.Server.Id);
+        await this.Server.StopAsync(default);
+        if (this.Server.Type == ServerType.GameServer)
+        {
+          await this.GameServerInstanceManager.RemoveGameServerAsync((byte)this.Server.Id);
+          await this.DeleteAsync<GameServerDefinition>(s => s.ServerID == this.Server.Id);
+        }
+        else
+        {
+          await this.ConnectServerInstanceManager.RemoveConnectServerAsync(this.Server.ConfigurationId);
+          await this.DeleteAsync<ConnectServerDefinition>(s => s.ConfigurationId == this.Server.ConfigurationId);
+        }
       }
-      else
+      catch (Exception ex)
       {
-        await this.ConnectServerInstanceManager.RemoveConnectServerAsync(this.Server.ConfigurationId);
-        await this.DeleteAsync<ConnectServerDefinition>(s => s.ConfigurationId == this.Server.ConfigurationId);
+        // A failed stop/delete must not be reported as success: surface the error and keep the row
+        // actionable so the operator can inspect and retry.
+        await this.InvokeAsync(() => this.ModalService.ShowMessageAsync(Resources.Error, ex.Message)).ConfigureAwait(false);
+      }
+      finally
+      {
+        this._isBusy = false;
+        await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
       }
     }
 

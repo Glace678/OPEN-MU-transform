@@ -311,7 +311,9 @@ void CRegisterWin::SubmitRegistration()
         wcsncpy_s(m_lastPass, pass, _TRUNCATE);
         m_pBox[FIELD_PASSWORD]->SetText(L"");
         m_pBox[FIELD_CONFIRM]->SetText(L"");
-        SetStatus(L"\u6CE8\u518C\u6210\u529F\uFF01\u8BF7\u70B9\u51FB Cancel \u8FD4\u56DE\u3002", kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
+        wchar_t status[160];
+        mu_swprintf(status, L"\u6CE8\u518C\u6210\u529F\uFF01\u8BF7\u70B9\u51FB %ls \u8FD4\u56DE\u3002", I18N::Game::Cancel);
+        SetStatus(status, kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
         return;
     }
 

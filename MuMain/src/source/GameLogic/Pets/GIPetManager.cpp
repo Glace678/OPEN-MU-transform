@@ -546,7 +546,7 @@ namespace giPetManager
     {
         if (ip->Type == ITEM_DARK_HORSE_ITEM)
         {
-            int Index = 0;
+            int Index = -1;
             for (int i = 0; i < ip->SpecialNum; ++i)
             {
                 if (ip->Special[i] == AT_SET_OPTION_IMPROVE_DEFENCE)
@@ -556,8 +556,9 @@ namespace giPetManager
                 }
             }
 
-            if (Index == 0)
+            if (Index < 0)
             {
+                if (ip->SpecialNum >= MAX_ITEM_SPECIAL) return;
                 ip->SpecialValue[ip->SpecialNum] = static_cast<std::uint8_t>((5 + (CharacterAttribute->Dexterity / 20) + pPetInfo->m_wLevel * 2) & 0xFF);
                 ip->Special[ip->SpecialNum] = AT_SET_OPTION_IMPROVE_DEFENCE;
                 ip->SpecialNum++;

@@ -87,11 +87,11 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
     CListVersionInfo Version,
     std::vector<std::wstring>	vScriptFiles) // OK
 {
-    static WZResult result;
+    WZResult result;
 
 #ifndef _WIN32
     // Off Windows the WinINet FileDownloader is replaced by libcurl (issue #462).
-    result.BuildSuccessResult();
+    result.SetSuccessResult();
 
     wchar_t versionDir[MAX_PATH] = { 0 };
     StringCchPrintf(versionDir, std::size(versionDir), L"%03d.%04d.%03d", Version.Zone, Version.year, Version.yearId);
@@ -121,7 +121,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
     return result;
 #else
-    result.BuildSuccessResult();
+    result.SetSuccessResult();
 
     DownloadServerInfo ServerInfo;
     DownloadFileInfo FileInfo;

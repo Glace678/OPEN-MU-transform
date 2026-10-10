@@ -757,10 +757,41 @@ void BeginOpengl(int x, int y, int Width, int Height)
 {
     IR::Flush(); // GLP-19 -- viewport + perspective change below; see BeginBitmap()
 
-    x = x * WindowWidth / REFERENCE_WIDTH;
-    y = y * WindowHeight / REFERENCE_HEIGHT;
-    Width = Width * WindowWidth / REFERENCE_WIDTH;
-    Height = Height * WindowHeight / REFERENCE_HEIGHT;
+    // L4 widescreen viewport mapping.
+    //
+    // The ref viewport (x,y,Width,Height) describes the game area in 640x480 ref
+    // coords. Width == REFERENCE_WIDTH means the game spans the full reference
+    // width; Width < REFERENCE_WIDTH means a side panel (inventory/char/etc.) is
+    // open and the game area is only the LEFT ref portion.
+    if (Width >= REFERENCE_WIDTH)
+    {
+        // No side panel: L4 widescreen pillarbox. Uniform *contain* scale
+        // preserves the ref aspect (640:432) and centers horizontally. Using
+        // min(scaleY,scaleX) instead of height-only scale prevents left/right
+        // crop on portrait (tall) windows. Old independent X/Y stretch widened
+        // the 3D view past its designed aspect; the far-terrain LOD mesh (built
+        // for that aspect) then exposed its edge as a vertical color/ghost band
+        // along the window top.
+        const float scaleY = (float)WindowHeight / (float)REFERENCE_HEIGHT;
+        const float scaleX = (float)WindowWidth  / (float)Width;
+        const float scale  = (scaleY < scaleX) ? scaleY : scaleX;
+        Width  = (int)(Width  * scale);
+        Height = (int)(Height * scale);
+        x = (int)(x * scale) + (WindowWidth - Width) / 2;
+        y = (int)(y * scale);
+    }
+    else
+    {
+        // Side panel open: restore the OLD left-aligned non-uniform mapping so
+        // the 3D viewport stays in the LEFT available region and never slides
+        // into / overlaps the right-side panel. (Centering here was the P1
+        // regression: on 4:3 1024x768 with inventory open it pushed the viewport
+        // to [152,872], overlapping the panel [720,1024] by 152px.)
+        x = x * WindowWidth / REFERENCE_WIDTH;
+        y = y * WindowHeight / REFERENCE_HEIGHT;
+        Width  = Width  * WindowWidth / REFERENCE_WIDTH;
+        Height = Height * WindowHeight / REFERENCE_HEIGHT;
+    }
 
     glViewport2(x, y, Width, Height);
 

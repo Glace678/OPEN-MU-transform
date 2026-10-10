@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true)]
     [string]$GamePublishDirectory,
 
@@ -27,6 +27,17 @@ $resolvedPostgreSqlSha256 = if ([string]::IsNullOrWhiteSpace($PostgreSqlSha256))
 }
 if ($resolvedPostgreSqlSha256 -notmatch '^[0-9A-Fa-f]{64}$') {
     throw 'The pinned PostgreSQL SHA-256 is missing or malformed.'
+}
+# 84-07: fail fast before the expensive publish if a required static input is missing.
+foreach ($required in @(
+    (Join-Path $PSScriptRoot 'README-zh-CN.txt'),
+    (Join-Path $PSScriptRoot 'postgresql-runtime.json'),
+    (Join-Path $repositoryRoot 'tools\balance\README.md'),
+    (Join-Path $repositoryRoot 'LICENSE')
+)) {
+    if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
+        throw "Required packaging input missing (84-07): $required. Run from a full checkout; see .gitignore negation rules."
+    }
 }
 $outputRoot = [IO.Path]::GetFullPath($OutputDirectory)
 $packageRoot = Join-Path $outputRoot 'OpenMU-Local'
@@ -133,6 +144,20 @@ dotnet publish (Join-Path $repositoryRoot 'src\Startup\MUnique.OpenMU.Startup.cs
     -o $serverPublish
 if ($LASTEXITCODE -ne 0) { throw 'OpenMU server publish failed.' }
 
+# Sync satellite resource assemblies: dotnet publish may drop transitive
+# satellites (e.g. GameLogic.resources.dll). Copy all MUnique satellites
+# from the build output so every culture directory is complete.
+$buildOutput = Join-Path $repositoryRoot 'bin\Release'
+Get-ChildItem -LiteralPath $buildOutput -Directory |
+    Where-Object { $_.Name -match '^[a-z]{2}(-[A-Z]{2})?$' } |
+    ForEach-Object {
+        $cult = $_.Name
+        $satDir = Join-Path $serverPublish $cult
+        New-Item -ItemType Directory -Path $satDir -Force | Out-Null
+        Get-ChildItem -LiteralPath $_.FullName -Filter 'MUnique*.resources.dll' -File |
+            Copy-Item -Destination $satDir -Force
+    }
+
 dotnet publish (Join-Path $repositoryRoot 'src\LocalLauncher\MUnique.OpenMU.LocalLauncher.csproj') `
     -c Release -r win-x64 --self-contained true --disable-build-servers -m:1 `
     -p:BuildInParallel=false -p:UseSharedCompilation=false -p:GeneratePersistenceModels=false `
@@ -151,6 +176,16 @@ foreach ($directory in $directories) {
 
 Copy-GamePayload -SourceDirectory $gameSource -DestinationDirectory (Join-Path $packageRoot 'App\Game')
 Get-ChildItem -LiteralPath $serverPublish -Force | Copy-Item -Destination (Join-Path $packageRoot 'App\Server') -Recurse -Force
+
+# Post-packaging assertion: verify GameLogic satellite exists in zh-CN.
+# PlayerMessage lives in GameLogic; missing satellite = English fallback.
+$gameLogicSat = Join-Path $packageRoot 'App\Server\zh-CN\MUnique.OpenMU.GameLogic.resources.dll'
+if (-not (Test-Path -LiteralPath $gameLogicSat -PathType Leaf)) {
+    throw "Post-packaging check failed: $gameLogicSat is missing. Server chat/system messages will fall back to English."
+}
+if ((Get-Item -LiteralPath $gameLogicSat).Length -lt 1024) {
+    throw "Post-packaging check failed: $gameLogicSat is suspiciously small (<1KB)."
+}
 Copy-Item -LiteralPath (Join-Path $launcherPublish 'OpenMU-Local.exe') -Destination (Join-Path $packageRoot 'OpenMU-Local.exe')
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README-zh-CN.txt') -Destination (Join-Path $packageRoot 'README-简体中文.txt')
 Copy-Item -LiteralPath (Join-Path $repositoryRoot 'tools\balance\README.md') -Destination (Join-Path $packageRoot 'Solo-Balance.md')

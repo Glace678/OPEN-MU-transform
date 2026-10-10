@@ -92,12 +92,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 4 },
-                { Stats.MaximumHealth, 60 },
-                { Stats.MinimumPhysBaseDmg, 10 },
-                { Stats.MaximumPhysBaseDmg, 13 },
-                { Stats.DefenseBase, 3 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 3 },
+                { Stats.MaximumHealth, 110 },
+                { Stats.MinimumPhysBaseDmg, 9 },
+                { Stats.MaximumPhysBaseDmg, 12 },
+                { Stats.DefenseBase, 11 },
+                { Stats.AttackRatePvm, 103 },
+                { Stats.DefenseRatePvm, 103 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -120,12 +120,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 13 },
-                { Stats.MaximumHealth, 230 },
-                { Stats.MinimumPhysBaseDmg, 37 },
-                { Stats.MaximumPhysBaseDmg, 42 },
-                { Stats.DefenseBase, 13 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 13 },
+                { Stats.MaximumHealth, 170 },
+                { Stats.MinimumPhysBaseDmg, 13 },
+                { Stats.MaximumPhysBaseDmg, 18 },
+                { Stats.DefenseBase, 15 },
+                { Stats.AttackRatePvm, 121 },
+                { Stats.DefenseRatePvm, 121 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -148,12 +148,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 19 },
-                { Stats.MaximumHealth, 520 },
-                { Stats.MinimumPhysBaseDmg, 68 },
-                { Stats.MaximumPhysBaseDmg, 72 },
-                { Stats.DefenseBase, 22 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 22 },
+                { Stats.MaximumHealth, 210 },
+                { Stats.MinimumPhysBaseDmg, 16 },
+                { Stats.MaximumPhysBaseDmg, 21 },
+                { Stats.DefenseBase, 17 },
+                { Stats.AttackRatePvm, 133 },
+                { Stats.DefenseRatePvm, 133 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -176,12 +176,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 24 },
-                { Stats.MaximumHealth, 720 },
-                { Stats.MinimumPhysBaseDmg, 85 },
-                { Stats.MaximumPhysBaseDmg, 90 },
-                { Stats.DefenseBase, 30 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 30 },
+                { Stats.MaximumHealth, 244 },
+                { Stats.MinimumPhysBaseDmg, 18 },
+                { Stats.MaximumPhysBaseDmg, 24 },
+                { Stats.DefenseBase, 19 },
+                { Stats.AttackRatePvm, 143 },
+                { Stats.DefenseRatePvm, 143 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -205,12 +205,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 30 },
-                { Stats.MaximumHealth, 900 },
-                { Stats.MinimumPhysBaseDmg, 105 },
-                { Stats.MaximumPhysBaseDmg, 110 },
-                { Stats.DefenseBase, 33 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 33 },
+                { Stats.MaximumHealth, 285 },
+                { Stats.MinimumPhysBaseDmg, 20 },
+                { Stats.MaximumPhysBaseDmg, 28 },
+                { Stats.DefenseBase, 22 },
+                { Stats.AttackRatePvm, 154 },
+                { Stats.DefenseRatePvm, 154 },
                 { Stats.PoisonResistance, 4f / 255 },
                 { Stats.IceResistance, 4f / 255 },
                 { Stats.WaterResistance, 4f / 255 },
@@ -237,12 +237,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 36 },
-                { Stats.MaximumHealth, 1200 },
-                { Stats.MinimumPhysBaseDmg, 120 },
-                { Stats.MaximumPhysBaseDmg, 125 },
-                { Stats.DefenseBase, 50 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 50 },
+                { Stats.MaximumHealth, 327 },
+                { Stats.MinimumPhysBaseDmg, 23 },
+                { Stats.MaximumPhysBaseDmg, 31 },
+                { Stats.DefenseBase, 24 },
+                { Stats.AttackRatePvm, 166 },
+                { Stats.DefenseRatePvm, 166 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -266,12 +266,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 43 },
-                { Stats.MaximumHealth, 2400 },
-                { Stats.MinimumPhysBaseDmg, 130 },
-                { Stats.MaximumPhysBaseDmg, 145 },
-                { Stats.DefenseBase, 65 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 65 },
+                { Stats.MaximumHealth, 376 },
+                { Stats.MinimumPhysBaseDmg, 26 },
+                { Stats.MaximumPhysBaseDmg, 35 },
+                { Stats.DefenseBase, 27 },
+                { Stats.AttackRatePvm, 180 },
+                { Stats.DefenseRatePvm, 180 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -294,12 +294,12 @@ internal class Elvenland : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 48 },
-                { Stats.MaximumHealth, 3000 },
-                { Stats.MinimumPhysBaseDmg, 150 },
-                { Stats.MaximumPhysBaseDmg, 155 },
-                { Stats.DefenseBase, 80 },
-                { Stats.AttackRatePvm, 10 },
-                { Stats.DefenseRatePvm, 70 },
+                { Stats.MaximumHealth, 411 },
+                { Stats.MinimumPhysBaseDmg, 28 },
+                { Stats.MaximumPhysBaseDmg, 38 },
+                { Stats.DefenseBase, 30 },
+                { Stats.AttackRatePvm, 190 },
+                { Stats.DefenseRatePvm, 190 },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

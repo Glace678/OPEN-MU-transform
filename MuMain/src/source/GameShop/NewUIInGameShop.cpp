@@ -105,7 +105,7 @@ void CNewUIInGameShop::RenderFrame()
 
     int iSizeCategory = g_InGameShopSystem->GetSizeCategoriesAsSelectedZone();
 
-    if (iSizeCategory < 0)
+    if (iSizeCategory <= 0)
         return;
 
     // Category Deco Middle Render

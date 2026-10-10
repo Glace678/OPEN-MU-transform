@@ -4,6 +4,13 @@
 // derives from the same key. Uses a self-contained SHA-256/HMAC so the result
 // matches the Java implementation byte-for-byte without relying on a specific
 // cryptoFramework HMAC key-shape.
+//
+// 107-02: this HMAC key is the LOGIN DERIVATION SEED only. It must stay distinct
+// from the GM X-OpenMU-Mobile-Key bearer (see harmony-gm MobileGmClient.ets). The
+// build currently injects one shared value for both roles -- split and rotate
+// once the server issues a separate, short-lived GM token. Do NOT change the
+// LOGIN_NAME_PASSWORD contexts below: the server derives the identical account
+// from them, and changing them breaks auto-login interop.
 
 const LOGIN_NAME_CONTEXT = 'OpenMU-Mobile.LoginName.v1';
 const LOGIN_PASSWORD_CONTEXT = 'OpenMU-Mobile.LoginPassword.v1';

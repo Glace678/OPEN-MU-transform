@@ -54,7 +54,7 @@ void CMsgWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    memset(m_aszMsg[0], 0, sizeof(char) * MW_MSG_LINE_MAX * MW_MSG_ROW_MAX);
+    memset(m_aszMsg, 0, sizeof(m_aszMsg));
 
     m_eType = MWT_NON;
     m_nMsgLine = 0;

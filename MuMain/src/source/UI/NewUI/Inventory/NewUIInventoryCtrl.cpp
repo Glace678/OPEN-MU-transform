@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // NewUIInventoryCtrl.cpp: implementation of the CNewUIInventoryCtrl class.
 //////////////////////////////////////////////////////////////////////
 
@@ -441,7 +441,10 @@ bool SEASON3B::CNewUIInventoryCtrl::AddItem(int iColumnX, int iRowY, std::span<c
         for (int x = 0; x < pItemAttr->Width; x++)
         {
             const int iCurIndex = (pNewItem->y + y) * m_nColumn + (pNewItem->x + x);
-            m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
+            // 86-71: only mark cells inside the grid; a footprint near the edge must
+            // not wrap across rows or run past the checkbox array.
+            if (iCurIndex >= 0 && iCurIndex < m_nColumn * m_nRow)
+                m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
         }
     }
     m_vecItem.push_back(pNewItem);
@@ -473,7 +476,10 @@ bool SEASON3B::CNewUIInventoryCtrl::AddItem(int iColumnX, int iRowY, ITEM* pItem
         for (int x = 0; x < pItemAttr->Width; x++)
         {
             const int iCurIndex = (pNewItem->y + y) * m_nColumn + (pNewItem->x + x);
-            m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
+            // 86-71: only mark cells inside the grid; a footprint near the edge must
+            // not wrap across rows or run past the checkbox array.
+            if (iCurIndex >= 0 && iCurIndex < m_nColumn * m_nRow)
+                m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
         }
     }
     m_vecItem.push_back(pNewItem);
@@ -505,7 +511,10 @@ bool SEASON3B::CNewUIInventoryCtrl::AddItem(int iColumnX, int iRowY, BYTE byType
         for (int x = 0; x < pItemAttr->Width; x++)
         {
             const int iCurIndex = (pNewItem->y + y) * m_nColumn + (pNewItem->x + x);
-            m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
+            // 86-71: only mark cells inside the grid; a footprint near the edge must
+            // not wrap across rows or run past the checkbox array.
+            if (iCurIndex >= 0 && iCurIndex < m_nColumn * m_nRow)
+                m_pdwItemCheckBox[iCurIndex] = pNewItem->Key;
         }
     }
     m_vecItem.push_back(pNewItem);
@@ -527,7 +536,9 @@ void SEASON3B::CNewUIInventoryCtrl::RemoveItem(ITEM* pItem)
                 for (int x = 0; x < pItemAttr->Width; x++)
                 {
                     const int iCurIndex = (pItem->y + y) * m_nColumn + (pItem->x + x);
-                    m_pdwItemCheckBox[iCurIndex] = 0;
+                    // 86-71: clear only cells inside the grid bounds.
+                    if (iCurIndex >= 0 && iCurIndex < m_nColumn * m_nRow)
+                        m_pdwItemCheckBox[iCurIndex] = 0;
                 }
             }
             m_pNewItemMng->DeleteItem(pItem);
@@ -1315,7 +1326,15 @@ bool SEASON3B::CNewUIInventoryCtrl::CheckSlot(int startIndex, int width, int hei
         {
             const int iIndex = startIndex + (y * m_nColumn) + x;
 
-            if (iIndex >= (m_nColumn * m_nRow))
+            // 86-71: reject negative origins and footprints that would wrap across
+            // a row boundary. The previous end-only check let a wide item on the
+            // last column clear cells belonging to the row below.
+            const int absColumn = (startIndex % m_nColumn) + x;
+            const int absRow = (startIndex / m_nColumn) + y;
+            if (iIndex < 0
+                || absColumn >= m_nColumn
+                || absRow >= m_nRow
+                || iIndex >= (m_nColumn * m_nRow))
             {
                 return false;
             }

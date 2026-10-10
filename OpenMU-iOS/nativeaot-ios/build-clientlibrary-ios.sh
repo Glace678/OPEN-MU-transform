@@ -61,25 +61,41 @@ dotnet publish "${PROJECT_FILE}" \
       exit 1
     }
 
-SOURCE_LIBRARY="${PUBLISH_DIR}/MUnique.Client.Library.dylib"
-if [[ ! -f "${SOURCE_LIBRARY}" ]]; then
-  # 某些工具链版本输出 .so 命名；统一改名。
-  if [[ -f "${PUBLISH_DIR}/MUnique.Client.Library.so" ]]; then
-    SOURCE_LIBRARY="${PUBLISH_DIR}/MUnique.Client.Library.so"
-  else
-    echo "未在 ${PUBLISH_DIR} 找到协议库产物（.dylib/.so）。" >&2
-    exit 1
-  fi
+# 108-05: this script produces a Mach-O dylib for iOS. Fail closed if the host
+# lacks lipo/file (Xcode command line tools) rather than silently skipping the
+# architecture/format check. Also refuse to stage a bare .so (ELF) just by
+# renaming it to .dylib -- that produces a binary that only fails at load time
+# with a confusing error far from the root cause.
+if ! command -v lipo >/dev/null 2>&1; then
+  echo "error: 'lipo' not found. Install Xcode command line tools " >&2
+  echo "  (xcode-select --install) before building the iOS ClientLibrary." >&2
+  exit 1
+fi
+if ! command -v file >/dev/null 2>&1; then
+  echo "error: 'file' utility not found; cannot validate Mach-O format (108-05)." >&2
+  exit 1
 fi
 
-# I-04: verify the produced slice is arm64 before staging it as the arm64 dylib.
-if command -v lipo >/dev/null 2>&1; then
-  ARCHES="$(lipo -info "${SOURCE_LIBRARY}" 2>/dev/null || true)"
-  echo "  ${SOURCE_LIBRARY}: ${ARCHES}"
-  if [[ "${ARCHES}" != *arm64* ]]; then
-    echo "error: produced library is not arm64 (${ARCHES}); refusing to stage (I-04)." >&2
-    exit 1
-  fi
+SOURCE_LIBRARY="${PUBLISH_DIR}/MUnique.Client.Library.dylib"
+if [[ ! -f "${SOURCE_LIBRARY}" ]]; then
+  echo "error: expected Mach-O dylib not found: ${SOURCE_LIBRARY}" >&2
+  echo "  (Some toolchains emit .so, but a .so is ELF and cannot be loaded by iOS;" >&2
+  echo "   do not just rename it -- fix the publish RID/toolchain, 108-05.)" >&2
+  exit 1
+fi
+
+# Verify the produced slice is arm64 Mach-O before staging it as the arm64 dylib.
+ARCHES="$(lipo -info "${SOURCE_LIBRARY}" 2>&1)"
+echo "  ${SOURCE_LIBRARY}: ${ARCHES}"
+if [[ "${ARCHES}" != *arm64* ]]; then
+  echo "error: produced library is not arm64 (${ARCHES}); refusing to stage (I-04/108-05)." >&2
+  exit 1
+fi
+# Also confirm it is actually a Mach-O dynamic library, not some other format.
+FILETYPE="$(file -b "${SOURCE_LIBRARY}")"
+if [[ "${FILETYPE}" != *"Mach-O"* ]]; then
+  echo "error: produced file is not a Mach-O binary (${FILETYPE}); refusing to stage (108-05)." >&2
+  exit 1
 fi
 
 cp -- "${SOURCE_LIBRARY}" "${FINAL_DIR}/${FINAL_LIBRARY_NAME}"

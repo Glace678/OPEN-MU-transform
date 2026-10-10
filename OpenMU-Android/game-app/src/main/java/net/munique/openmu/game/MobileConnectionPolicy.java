@@ -25,10 +25,10 @@ final class MobileConnectionPolicy {
     }
 
     static MobileIdentity.Credentials localCredentials(String server, boolean localPairing,
-                                                       String packageKey) {
+                                                       String loginSeed) {
         // A saved local identity must never be sent to a public server.
         return localPairing && LocalIpv4Address.isTrusted(server)
-            ? MobileIdentity.derive(packageKey) : null;
+            ? MobileIdentity.derive(loginSeed) : null;
     }
 
     private static boolean isUnicastIpv4(String value) {

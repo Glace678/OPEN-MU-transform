@@ -146,9 +146,9 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath) // OK
 
 WZResult CShopList::LoadProduct(const wchar_t* szFilePath) // OK
 {
-    static WZResult result;
+    WZResult result;
 
-    result.BuildSuccessResult();
+    result.SetSuccessResult();
 
     FILE_ENCODE enc = this->IsFileEncodingUtf8(szFilePath);
 

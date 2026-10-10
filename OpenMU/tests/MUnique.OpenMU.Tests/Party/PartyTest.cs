@@ -376,6 +376,20 @@ public class PartyTest
         Mock.Get(toRequest.ViewPlugIns.GetPlugIn<IShowPartyRequestPlugIn>()!).Verify(v => v!.ShowPartyRequestAsync(player), Times.Once);
     }
 
+    /// <summary>
+    /// A kick request with an index beyond the member count must be a no-op instead of an
+    /// index-out-of-range crash.
+    /// </summary>
+    [Test]
+    public async ValueTask KickByOutOfRangeIndexIsIgnoredAsync()
+    {
+        var party = await this.CreatePartyWithMembersAsync(3).ConfigureAwait(false);
+
+        await party.KickPlayerAsync(200).ConfigureAwait(false);
+
+        Assert.That(party.PartyList, Has.Count.EqualTo(3));
+    }
+
     private static IGameServerContext CreateGameServerContext(IFriendServer friendServer)
     {
         var contextProvider = new InMemoryPersistenceContextProvider();

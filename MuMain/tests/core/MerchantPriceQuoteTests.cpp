@@ -277,14 +277,24 @@ TEST_CASE("production OpenMU merchant bytes drive native display and affordabili
 #else
     const auto path = std::getenv("MU_MERCHANT_QUOTE_FIXTURE");
 #endif
-    if (!path)
+    std::vector<std::uint8_t> bytes;
+    if (path)
     {
-        MESSAGE("Set MU_MERCHANT_QUOTE_FIXTURE to invoke the separately reported production-wire acceptance.");
-        return;
+        std::ifstream file(std::filesystem::path(path), std::ios::binary);
+        REQUIRE(file.good());
+        bytes = std::vector<std::uint8_t> { std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
     }
-    std::ifstream file(std::filesystem::path(path), std::ios::binary);
-    REQUIRE(file.good());
-    const std::vector<std::uint8_t> bytes { std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
+    else
+    {
+        // No captured production fixture on disk: exercise the exact on-wire
+        // framing (a quote packet immediately followed by the stock packet)
+        // against a deterministic blob so this acceptance case always runs its
+        // assertions instead of silently passing when MU_MERCHANT_QUOTE_FIXTURE
+        // is unset. Point the env var at a real captured packet to validate the
+        // production bytes end-to-end (91-12/F19-01).
+        bytes = Packet(24, 0);
+        bytes.insert(bytes.end(), { 0xC2, 0, 12, 0x31, 0, 1, 0, 0xE0, 4, 1, 3, 0 });
+    }
     REQUIRE(bytes.size() >= QuoteCache::HeaderSize);
     const auto quoteSize = (static_cast<std::size_t>(bytes[1]) << 8) | bytes[2];
     REQUIRE(quoteSize < bytes.size());

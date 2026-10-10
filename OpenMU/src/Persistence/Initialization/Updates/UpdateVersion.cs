@@ -554,4 +554,9 @@ public enum UpdateVersion
     /// The version of the <see cref="AddIsSellableToNpcFlagPlugIn"/>.
     /// </summary>
     AddIsSellableToNpcFlag = 109,
+
+    /// <summary>
+    /// The version of the <see cref="SoloCombatBalanceSeason6UpdatePlugIn"/>.
+    /// </summary>
+    SoloCombatBalanceSeason6 = 110,
 }

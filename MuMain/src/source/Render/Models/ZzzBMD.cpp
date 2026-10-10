@@ -278,7 +278,10 @@ void BMD::Animation(float(*BoneMatrix)[3][4], float AnimationFrame, float PriorF
             Matrix[2][3] = Position1[2] * s2 + Position2[2] * s1;
         }
 
-        if (b->Parent == -1)
+        // 88-02 (P0#3): b->Parent is normalized at load to {-1} U [0, NumBones), but guard the
+        // hot path as well: only a valid parent index may subscript BoneMatrix[]. Anything else
+        // (root sentinel -1, or a corrupt out-of-range value) takes the root branch.
+        if (b->Parent < 0 || b->Parent >= NumBones)
         {
             if (Parent && ExtParentMatrix)
             {
@@ -486,7 +489,11 @@ void BMD::EnsureCpuNormals(int mesh) const
     {
         const Normal_t* sn = &m->Normals[j];
         float* tn = NormalTransform[mesh][j];
-        VectorRotate(sn->Normal, m_pCurrentBoneTransform[sn->Node], tn);
+        // 88-02 (P0#3): sn->Node is normalized to [0, NumBones) at load, but the normal skinning
+        // path had no per-use fallback (unlike SkinVertex()'s safeNode). Clamp here too so a bad
+        // node can never subscript m_pCurrentBoneTransform[] past NumBones.
+        const int safeNormalNode = (sn->Node >= 0 && sn->Node < NumBones) ? sn->Node : 0;
+        VectorRotate(sn->Normal, m_pCurrentBoneTransform[safeNormalNode], tn);
         if (LightEnable)
         {
             float Luminosity = DotProduct(tn, m_LastLightPosition) * 0.8f + 0.4f;
@@ -3289,8 +3296,19 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     // Runtime check (assert is compiled out in release): a crafted file with a count
     // outside [0, MAX_BONES] would overflow the global BoundingMin/BoundingMax/BoneTransform
     // arrays or drive loops/allocations with a negative size.
-    if (NumBones < 0 || NumBones > MAX_BONES || NumMeshs < 0 || NumActions < 0)
+    //
+    // 88-01 (P0#2): these three shorts are fully attacker-controlled. The skinning scratch is
+    // fixed-size -- BoneTransform[MAX_BONES], VertexTransform/NormalTransform/LightTransform/
+    // IntensityTransform[MAX_MESH][MAX_VERTICES] -- so NumMeshs must not exceed MAX_MESH (the
+    // per-mesh skin loop writes VertexTransform[i] for i in [0, NumMeshs)) and NumBones must not
+    // exceed MAX_BONES. NumActions only sizes heap arrays, but an unbounded short there would turn
+    // a hostile header into a multi-hundred-MB allocation per non-dummy bone; bound it as well.
+    // Reject the whole file on any overflow (runtime guard, NOT an assert).
+    if (NumBones  < 0 || NumBones  > MAX_BONES ||
+        NumMeshs  < 0 || NumMeshs  > MAX_MESH  ||
+        NumActions < 0 || NumActions > 256)
     {
+        m_bCompletedAlloc = false;
         return false;
     }
     //// wprintf(L"[Open2] Model: %.32hs | Meshes: %d | Bones: %d | Actions: %d\n", Name, NumMeshs, NumBones, NumActions);
@@ -3329,10 +3347,21 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
         m.Texture = reader.Read<short>();
         m.NoneBlendMesh = false;
 
+        // 88-06 (P1): m.Texture subscripts the per-mesh IndexTexture[NumMeshs] array on both the
+        // render path and in BMD::Release() (IndexTexture[m->Texture]). Clamp the raw file short
+        // to [0, NumMeshs) so it can never read past that allocation.
+        if (m.Texture < 0 || m.Texture >= NumMeshs)
+            m.Texture = 0;
+
         //// wprintf(L"[Open2] Mesh[%d] V:%d N:%d T:%d Tri:%d Tex:%d\n", i, m.NumVertices, m.NumNormals, m.NumTexCoords, m.NumTriangles, m.Texture);
 
         // MEM-6: a negative count would become a huge allocation size; reject the file instead.
-        if (m.NumVertices < 0 || m.NumNormals < 0 || m.NumTexCoords < 0 || m.NumTriangles < 0)
+        // 88-01 (P0#2): per-mesh vertex/normal counts also feed the fixed scratch arrays
+        // VertexTransform/NormalTransform[MAX_MESH][MAX_VERTICES] (SkinVertices/EnsureCpuNormals
+        // index [mesh][j] for j in [0, NumVertices/NumNormals)), so a 32767-count header would
+        // overrun the MAX_VERTICES second dimension. Bound them to MAX_VERTICES.
+        if (m.NumVertices  < 0 || m.NumNormals  < 0 || m.NumTexCoords < 0 || m.NumTriangles < 0 ||
+            m.NumVertices  > MAX_VERTICES || m.NumNormals > MAX_VERTICES)
         {
             Release();
             m_bCompletedAlloc = false;
@@ -3372,10 +3401,41 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
         memcpy(m.TexCoords, reader.GetPointer(), texCoordBytes);
         reader.Skip(texCoordBytes);
 
+        // 88-02 (P0#3): vertex/normal bone-node indices are raw file shorts consumed as
+        // BoneMatrix[]/m_pCurrentBoneTransform[] subscripts on every skinning path (including the
+        // map-editor eager loop, which has no per-use fallback). Clamp to [0, NumBones) at load so
+        // an out-of-range node falls back to bone 0 instead of indexing a foreign matrix.
+        for (int j = 0; j < m.NumVertices; ++j)
+        {
+            if (m.Vertices[j].Node < 0 || m.Vertices[j].Node >= NumBones)
+                m.Vertices[j].Node = 0;
+        }
+        for (int j = 0; j < m.NumNormals; ++j)
+        {
+            if (m.Normals[j].Node < 0 || m.Normals[j].Node >= NumBones)
+                m.Normals[j].Node = 0;
+        }
+
         for (int j = 0; j < m.NumTriangles; ++j)
         {
             memcpy(&m.Triangles[j], reader.GetPointer(), sizeof(Triangle_t));
             reader.Skip(sizeof(Triangle_t2));
+        }
+
+        // 88-05 (P1): triangle vertex/normal/texcoord indices are raw file shorts read later
+        // straight as subscripts of VertexTransform[i][..]/NormalTransform[i][..] on the
+        // collision/lightmap/render hot paths. Clamp every corner into [0, corresponding count);
+        // clamp-to-0 (a degenerate triangle) rather than reject, so one bad corner can't drop the
+        // whole model.
+        for (int j = 0; j < m.NumTriangles; ++j)
+        {
+            Triangle_t& tp = m.Triangles[j];
+            for (int k = 0; k < 4; ++k)
+            {
+                if (tp.VertexIndex[k]   < 0 || tp.VertexIndex[k]   >= m.NumVertices)   tp.VertexIndex[k]   = 0;
+                if (tp.NormalIndex[k]   < 0 || tp.NormalIndex[k]   >= m.NumNormals)    tp.NormalIndex[k]   = 0;
+                if (tp.TexCoordIndex[k] < 0 || tp.TexCoordIndex[k] >= m.NumTexCoords)  tp.TexCoordIndex[k] = 0;
+            }
         }
 
         memcpy(Textures[i].FileName, reader.GetPointer(), 32);
@@ -3468,6 +3528,12 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
             reader.Skip(32);
             b.Parent = reader.Read<short>();
 
+            // 88-02 (P0#3): only -1 means "root". Any other out-of-range parent (e.g. -5, or an
+            // index >= NumBones) must never subscript BoneMatrix[] during Animation() -- normalize
+            // it to the root sentinel so the parent-concat branch is never taken with a bad index.
+            if (b.Parent != -1 && (b.Parent < 0 || b.Parent >= NumBones))
+                b.Parent = -1;
+
             //// wprintf(L"[Open2] Bone[%d] Name: %.32hs Parent: %d\n", i, b.Name, b.Parent);
 
             b.BoneMatrixes = new(std::nothrow) BoneMatrix_t[NumActions]();
@@ -3514,9 +3580,20 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
                 }
                 else
                 {
-                    bm.Position = nullptr;
-                    bm.Rotation = nullptr;
-                    bm.Quaternion = nullptr;
+                    // 88-07 (P1): a degenerate action (NumAnimationKeys <= 0) must still leave
+                    // non-null animation arrays. Animation() interpolates Quaternion[frame]/
+                    // Position[frame] for every non-dummy bone every frame; nullptr here is a
+                    // guaranteed null-deref the instant this action is selected. Allocate a single
+                    // zeroed element instead (the frame index is clamped to 0 by Animation()).
+                    bm.Position = new(std::nothrow) vec3_t[1]();
+                    bm.Rotation = new(std::nothrow) vec3_t[1]();
+                    bm.Quaternion = new(std::nothrow) vec4_t[1]();
+                    if (!bm.Position || !bm.Rotation || !bm.Quaternion)
+                    {
+                        Release();
+                        m_bCompletedAlloc = false;
+                        return false;
+                    }
                 }
             }
         }

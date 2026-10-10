@@ -537,6 +537,10 @@ void  SEASON3B::CNewUISiegeWarBase::SetTime(int iHour, int iMinute)
 
 void SEASON3B::CNewUISiegeWarBase::SetMapInfo(GuildCommander& data)
 {
+    // 85-03: byTeam is a raw wire BYTE; reject anything outside the m_CmdBuffer
+    // capacity [0, MAX_COMMANDGROUP) instead of writing past the fixed array.
+    if (data.byTeam >= MAX_COMMANDGROUP)
+        return;
     m_CmdBuffer[data.byTeam].byCmd = data.byCmd;
     m_CmdBuffer[data.byTeam].byTeam = data.byTeam;
     m_CmdBuffer[data.byTeam].byX = data.byX;

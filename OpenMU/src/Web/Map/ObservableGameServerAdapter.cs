@@ -103,6 +103,24 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
         base.Dispose(disposing);
         this._gameContext.GameMapCreated -= this.OnGameMapCreated;
         this._gameContext.GameMapRemoved -= this.OnGameMapRemoved;
+
+        // Tear down every per-map adapter symmetrically with the subscriptions created in
+        // InitializeAsync / OnGameMapCreated. Each GameMapInfoAdapter subscribes to its
+        // long-lived GameMap's ObjectAdded/ObjectRemoved events; disposing only the outer
+        // adapter (as TerrainController does via using) left those handlers attached to the
+        // GameMap objects, leaking an event callback and a player dictionary per request.
+        List<IGameMapInfo> adapters;
+        lock (this._mapsLock)
+        {
+            adapters = new List<IGameMapInfo>(this._gameMapInfos);
+            this._gameMapInfos.Clear();
+        }
+
+        foreach (var map in adapters)
+        {
+            map.PropertyChanged -= this.OnMapPropertyChanged;
+            (map as IDisposable)?.Dispose();
+        }
     }
 
     /// <summary>

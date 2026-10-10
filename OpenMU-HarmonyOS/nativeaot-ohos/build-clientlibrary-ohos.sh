@@ -15,9 +15,15 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 ROOT_DIR="$(cd -- "${SCRIPT_DIR}/../.." &>/dev/null && pwd)"
-SRC_DIR="${ROOT_DIR}/MuMain/src/MUnique/Server/Interfaces/ClientLibrary"
+SRC_DIR="${ROOT_DIR}/MuMain/ClientLibrary"  # 107-03: real project is MuMain/ClientLibrary (old .../src/MUnique/Server/Interfaces/ClientLibrary does not exist)
 GAME_ENTRY_DIR="${ROOT_DIR}/OpenMU-HarmonyOS/harmony-game/entry"
 PC_ENTRY_DIR="${ROOT_DIR}/OpenMU-HarmonyOS/harmony-pc/entry"
+SRC_CSPROJ="${SRC_DIR}/MUnique.Client.Library.csproj"
+# 107-03: fail fast on a missing/mis-pointed project instead of inside dotnet restore.
+test -f "${SRC_CSPROJ}" || {
+  echo "error: project not found at '${SRC_CSPROJ}' (expected MuMain/ClientLibrary under ROOT_DIR)." >&2
+  exit 1
+}
 
 # NEW-HARMONY-01: accept only RIDs we can place correctly, and map each to its
 # prebuilt ABI slot. linux-bionic-* is accepted as an alias for linux-ohos-*.

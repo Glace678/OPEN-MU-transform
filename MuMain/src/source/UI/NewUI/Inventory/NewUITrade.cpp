@@ -1,4 +1,4 @@
-﻿//*****************************************************************************
+//*****************************************************************************
 // Desc: implementation of the CNewUITrade class.
 //*****************************************************************************
 
@@ -122,6 +122,7 @@ bool CNewUITrade::UpdateMouseEvent()
         || (m_pMyInvenCtrl && false == m_pMyInvenCtrl->UpdateMouseEvent()))
     {
         if (SEASON3B::IsPress(VK_LBUTTON)
+            && CNewUIInventoryCtrl::GetPickedItem() != nullptr   // 86-33: null-picked guard
             && CNewUIInventoryCtrl::GetPickedItem()->GetOwnerInventory() == m_pMyInvenCtrl
             && m_bMyConfirm)
         {

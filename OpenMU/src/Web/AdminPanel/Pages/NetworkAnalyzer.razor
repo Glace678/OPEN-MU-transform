@@ -1,5 +1,6 @@
-﻿@page "/network-analyzer"
+@page "/network-analyzer"
 @page "/network-analyzer/{ConnectionId:guid}"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
 
 @using MUnique.OpenMU.Network.Analyzer
 @using MUnique.OpenMU.Web.AdminPanel.Components.NetworkAnalyzer

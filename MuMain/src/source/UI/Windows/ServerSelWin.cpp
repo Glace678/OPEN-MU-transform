@@ -32,6 +32,13 @@ using namespace SEASON3A;
 
 CServerSelWin::CServerSelWin()
 {
+    m_icntServerGroup = 0;
+    m_icntLeftServerGroup = 0;
+    m_icntRightServerGroup = 0;
+    m_icntServer = 0;
+    m_bTestServerBtn = false;
+    m_iSelectServerBtnIndex = -1;
+    m_pSelectServerGroup = NULL;
 }
 
 CServerSelWin::~CServerSelWin()
@@ -204,7 +211,7 @@ void CServerSelWin::SetServerBtnPosition()
         ? nLServerGBtnTop
         : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
 
-    for (int i = 0; i < m_pSelectServerGroup->GetServerSize(); i++)
+    for (int i = 0; i < m_pSelectServerGroup->GetServerSize() && i < SSW_SERVER_MAX; i++)
     {
         m_aServerBtn[i].SetPositionArt(
             nServerBtnPosX, nServerBtnBasePosY + nServerBtnHeight * i);
@@ -307,7 +314,7 @@ void CServerSelWin::UpdateDisplay()
     ShowServerGBtns();
     ShowDecoSprite();
 
-    memset(m_szDescription, 0, sizeof(char) * SSW_DESC_LINE_MAX * SSW_DESC_ROW_MAX);
+    memset(m_szDescription, 0, sizeof(m_szDescription));
 
     if (m_iSelectServerBtnIndex != -1)
     {
@@ -320,6 +327,9 @@ void CServerSelWin::UpdateDisplay()
     }
 
     m_icntServer = m_pSelectServerGroup->GetServerSize();
+    // P1 hardening: clamp to button array capacity (MAX_SERVER_PER_GROUP=20 > SSW_SERVER_MAX=16)
+    if (m_icntServer > SSW_SERVER_MAX)
+        m_icntServer = SSW_SERVER_MAX;
 
     if (m_icntServer < 1)
         return;
@@ -331,6 +341,8 @@ void CServerSelWin::UpdateDisplay()
     int icntServer = 0;
     while (m_pSelectServerGroup->GetNext(pServerInfo))
     {
+        if (icntServer >= SSW_SERVER_MAX)
+            break;
         m_aServerBtn[icntServer].SetText(pServerInfo->m_bName, adwServerBtnClr[pServerInfo->m_byNonPvP]);
         m_aServerGauge[icntServer].SetValue(pServerInfo->m_iPercent, 100);
         icntServer++;
@@ -490,7 +502,7 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
         return;
 
     CServerInfo* pServerInfo = NULL;
-    for (i = 0; i < m_icntServer; i++)
+    for (i = 0; i < m_icntServer && i < SSW_SERVER_MAX; i++)
     {
         if (m_aServerBtn[i].IsClick())
         {

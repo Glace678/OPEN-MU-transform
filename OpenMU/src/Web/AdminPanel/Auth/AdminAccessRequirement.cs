@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Web.AdminPanel.Auth;
 
 using Microsoft.AspNetCore.Authorization;
+using MUnique.OpenMU.Persistence.AdminAuth;
 
 /// <summary>
 /// The requirement to access the admin panel, optionally with a specific role.
@@ -13,28 +14,61 @@ using Microsoft.AspNetCore.Authorization;
 public record AdminAccessRequirement(string? RequiredRole = null) : IAuthorizationRequirement;
 
 /// <summary>
-/// Handles the <see cref="AdminAccessRequirement"/>.
+/// The requirement for the initial setup wizard.
 /// </summary>
 /// <remarks>
-/// As long as no user exists at all, the panel has to stay reachable: it's the tool which creates
-/// the database and therefore the first user. That initial setup mode ends as soon as the first
-/// user exists, or immediately when a bootstrap user is configured.
+/// On a fresh installation there is neither a database nor an admin user, and the panel has to stay
+/// reachable to create both. Only the few routes which are needed for that (the setup page and the
+/// first-user creation) carry this requirement. It succeeds anonymously only while it is positively
+/// confirmed that no admin user exists yet; afterwards it requires the administrator role, so the
+/// rest of the panel (API, logs, management pages) is never reachable anonymously.
 /// </remarks>
+public sealed record AdminSetupRequirement : IAuthorizationRequirement;
+
+/// <summary>
+/// Handles the <see cref="AdminAccessRequirement"/>.
+/// </summary>
 public class AdminAccessRequirementHandler : AuthorizationHandler<AdminAccessRequirement>
+{
+    /// <inheritdoc />
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminAccessRequirement requirement)
+    {
+        // Default-deny: an anonymous request never satisfies a role-based requirement, not even
+        // during the initial setup window. The setup wizard itself uses <see cref="AdminSetupRequirement"/>
+        // which has its own, narrowly scoped handler.
+        if (context.User.Identity?.IsAuthenticated is not true)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (requirement.RequiredRole is null || context.User.IsInRole(requirement.RequiredRole))
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
+
+/// <summary>
+/// Handles the <see cref="AdminSetupRequirement"/>: anonymous access only while the panel has no
+/// admin user yet; otherwise the administrator role is required.
+/// </summary>
+public class AdminSetupRequirementHandler : AuthorizationHandler<AdminSetupRequirement>
 {
     private readonly AdminUserAvailabilityService _userAvailability;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AdminAccessRequirementHandler"/> class.
+    /// Initializes a new instance of the <see cref="AdminSetupRequirementHandler"/> class.
     /// </summary>
     /// <param name="userAvailability">The service which knows whether any user exists.</param>
-    public AdminAccessRequirementHandler(AdminUserAvailabilityService userAvailability)
+    public AdminSetupRequirementHandler(AdminUserAvailabilityService userAvailability)
     {
         this._userAvailability = userAvailability;
     }
 
     /// <inheritdoc />
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminAccessRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminSetupRequirement requirement)
     {
         if (await this._userAvailability.IsConfirmedEmptyAsync().ConfigureAwait(false))
         {
@@ -42,12 +76,8 @@ public class AdminAccessRequirementHandler : AuthorizationHandler<AdminAccessReq
             return;
         }
 
-        if (context.User.Identity?.IsAuthenticated is not true)
-        {
-            return;
-        }
-
-        if (requirement.RequiredRole is null || context.User.IsInRole(requirement.RequiredRole))
+        if (context.User.Identity?.IsAuthenticated is true
+            && context.User.IsInRole(AdminRoles.Administrator))
         {
             context.Succeed(requirement);
         }

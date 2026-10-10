@@ -6,7 +6,9 @@
         // Same HMAC package pairing key as the Android APKs (43 base64url chars).
         // Override at build time with -b buildMode or by editing here; the
         // server and the game APK must share the identical key. The URL below is
-        // a neutral placeholder -- point it at THIS machine's LAN IPv4 before use.
+        // a neutral placeholder -- point it at THIS machine''s LAN IPv4 before use.
+        // 107-02: this injected value is the GM X-OpenMU-Mobile-Key BEARER. It must be
+        // rotated and split from the game login seed; inject at build time only.
         "MOBILE_PACKAGE_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "DEFAULT_SERVER_URL": "http://192.168.0.2:5080"
       }

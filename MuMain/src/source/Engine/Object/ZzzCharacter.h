@@ -43,10 +43,21 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
 void ClearCharacters(int Key = -1);
 void DeleteCharacter(int Key);
 void DeleteCharacter(CHARACTER* c, OBJECT* o);
+// Safe lookup contract (NET-05 / P0#11): on hit returns true and sets outIndex
+// to a slot in [0, MAX_CHARACTERS_CLIENT); on miss returns false and sets
+// outIndex = -1. The out value on false MUST NOT be used to index CharactersClient.
+bool TryFindCharacterIndex(int Key, int& outIndex);
+bool TryFindCharacterIndexByMonsterIndex(int Type, int& outIndex);
+
+// Legacy wrappers kept for source compatibility -- deprecated. New code must use
+// the TryFind* contract and branch on the bool result; never index on -1.
+[[deprecated("use TryFindCharacterIndex; branch on bool, never index on -1")]]
 int FindCharacterIndex(int Key);
 // Returns -1 when the character key is not present, otherwise its 0-based slot.
+[[deprecated("use TryFindCharacterIndex; branch on bool, never index on -1")]]
 int FindCharacterIndexSafe(int Key);
 CHARACTER* FindCharacterByKey(int Key);
+[[deprecated("use TryFindCharacterIndexByMonsterIndex; branch on bool, never index on -1")]]
 int FindCharacterIndexByMonsterIndex(int Type);
 
 void DeadCharacterBuff(OBJECT* o);

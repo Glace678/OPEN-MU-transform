@@ -5220,6 +5220,7 @@ CALLBACK_RESULT SEASON3B::CStorageLockMsgBoxLayout::ProcessOk(class CNewUIMessag
         return CALLBACK_CONTINUE;
     }
 
+
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
     // fills up to its default length, so the old [20] buffer overflowed the
     // stack on Linux when entering the guild security code / break password.
@@ -5333,6 +5334,7 @@ CALLBACK_RESULT SEASON3B::CStorageUnlockMsgBoxLayout::OkBtnDown(class CNewUIMess
     {
         return CALLBACK_CONTINUE;
     }
+
 
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
     // fills up to its default length, so the old [20] buffer overflowed the
@@ -7260,6 +7262,15 @@ CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ProcessOk(class CNewU
         return CALLBACK_CONTINUE;
     }
 
+    // 85-07: captured guild index can be -1 (member not found) or stale after a
+    // list refresh; reject before reading GuildList[].Name out of bounds.
+    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
+    {
+        PlayBuffer(SOUND_CLICK01);
+        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+        return CALLBACK_BREAK;
+    }
+
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
     // fills up to its default length, so the old [20] buffer overflowed the
     // stack on Linux when entering the guild security code / break password.
@@ -7476,9 +7487,14 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
     m_MsgDataList.clear();
 
     wchar_t strText[256];
+    // 85-07: this renders every frame while the guild list can refresh underneath;
+    // resolve the member name through a bounds-checked pointer so a stale/-1 index
+    // never reads GuildList[] out of range. OK/Cancel buttons still render.
+    const wchar_t* pszGuildMemberName =
+        (DeleteIndex >= 0 && DeleteIndex < g_nGuildMemberCount) ? GuildList[DeleteIndex].Name : L"";
     if (COMGEM::m_cGemType == COMGEM::CELE)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::AssistM);
+        mu_swprintf(strText, I18N::Game::SAsAS, pszGuildMemberName, I18N::Game::AssistM);
         AppointType = SUBGUILDMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7492,7 +7508,7 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
 
     if (COMGEM::m_cGemType == COMGEM::SOUL)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::BattleM);
+        mu_swprintf(strText, I18N::Game::SAsAS, pszGuildMemberName, I18N::Game::BattleM);
         AppointType = BATTLEMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7555,6 +7571,14 @@ CALLBACK_RESULT SEASON3B::CGuild_ToPerson_Position::SoulBtnDown(class CNewUIMess
 
 CALLBACK_RESULT SEASON3B::CGuild_ToPerson_Position::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
+    // 85-07: guard the captured index before reading GuildList[].Name and sending.
+    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
+    {
+        COMGEM::Exit();
+        PlayBuffer(SOUND_CLICK01);
+        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
+        return CALLBACK_BREAK;
+    }
     COMGEM::Exit();
     SocketClient->ToGameServer()->SendGuildRoleAssignRequest(
         AppointType,

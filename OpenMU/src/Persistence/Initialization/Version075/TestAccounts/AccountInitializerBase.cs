@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.Persistence.Initialization.Version075.TestAccounts;
 
+using System.Security.Cryptography;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.DataModel.Configuration.Items;
@@ -62,7 +63,7 @@ internal abstract class AccountInitializerBase : InitializerBase
     {
         var account = this.Context.CreateNew<Account>();
         account.LoginName = this.AccountName;
-        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(this.AccountName);
+        this.AssignRandomTemporaryPassword(account);
         account.Vault = this.Context.CreateNew<ItemStorage>();
 
         if (this.CreateKnight() is { } knight)
@@ -514,5 +515,32 @@ internal abstract class AccountInitializerBase : InitializerBase
         jewel.Durability = 1;
         jewel.ItemSlot = itemSlot;
         return jewel;
+    }
+
+    /// <summary>
+    /// Assigns a cryptographically random temporary password to the account and marks it
+    /// as must-change-on-first-login. The plaintext password is never stored in source code
+    /// or configuration; operators retrieve it from the server log or reset it via the
+    /// admin panel.
+    /// </summary>
+    /// <param name="account">The account.</param>
+    protected void AssignRandomTemporaryPassword(Account account)
+    {
+        var bytes = RandomNumberGenerator.GetBytes(16);
+        var temporaryPassword = Convert.ToBase64String(bytes)
+            .Replace('+', '-')
+            .Replace('/', '_')
+            .TrimEnd('=');
+
+        if (string.Equals(temporaryPassword, account.LoginName, StringComparison.Ordinal))
+        {
+            temporaryPassword = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16))
+                .Replace('+', '-')
+                .Replace('/', '_')
+                .TrimEnd('=');
+        }
+
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(temporaryPassword);
+        account.MustChangePassword = true;
     }
 }

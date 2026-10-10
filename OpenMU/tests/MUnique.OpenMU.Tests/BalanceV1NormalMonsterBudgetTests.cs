@@ -112,6 +112,24 @@ public class BalanceV1NormalMonsterBudgetTests
             var enabled = mapping.Rank >= 95 && mapping.MonsterNumber is not (38 or 49 or 77 or 275 or 412 or 459);
             var expectedHealth = enabled ? Math.Min(sourceHealth, BalanceV1NormalMonsterBudget.GetHealthCap(mapping.Rank)) : sourceHealth;
             var attackRatio = enabled ? Math.Min(1, BalanceV1NormalMonsterBudget.GetPhysicalMaximumCap(mapping.Rank) / sourceMax) : 1;
+
+            // Per-map identity: the high-rank route of a monster that is SHARED across routes (e.g. Skeleton Warrior
+            // num 14 on Dungeon rank 60) starts from its low-rank home definition (411 HP) and is scaled up to its
+            // fixed rank combat budget (743 HP / 56.8 dmg) by the runtime. Single-route monsters keep their authored stats.
+            if (!enabled && BalanceV1NormalMonsterBudget.IsHighestRankSharedRoute(mapping.MonsterNumber, mapping.Rank))
+            {
+                var healthTarget = BalanceV1NormalMonsterBudget.GetSharedRouteHealthTarget(mapping.Rank);
+                if (healthTarget > expectedHealth)
+                {
+                    expectedHealth = (float)healthTarget;
+                }
+
+                var attackTarget = BalanceV1NormalMonsterBudget.GetSharedRouteAttackTarget(mapping.Rank);
+                if (attackTarget > sourceMax)
+                {
+                    attackRatio = attackTarget / sourceMax;
+                }
+            }
             if (enabled)
             {
                 adjusted++;
@@ -163,8 +181,12 @@ public class BalanceV1NormalMonsterBudgetTests
         {
             near.CurrentMap = map;
             over.CurrentMap = map;
-            var nearExp = await near.CalculateExpAfterKillAsync(instance).ConfigureAwait(false);
-            var overExp = await over.CalculateExpAfterKillAsync(instance).ConfigureAwait(false);
+            // The live XP path applies a per-kill random multiplier in [0.8, 1.2]; a single draw can swing the
+            // near/over ratio by up to 1.5x, which flips this thin-margin assertion (design ratio ~0.185).
+            // Average enough kills to measure the deterministic overlevel ratio instead of one noisy sample.
+            // The 0.2 threshold and the anti-farming intent are unchanged.
+            var nearExp = await MeanKillExperienceAsync(near, instance).ConfigureAwait(false);
+            var overExp = await MeanKillExperienceAsync(over, instance).ConfigureAwait(false);
             Assert.Multiple(() =>
             {
                 Assert.That(overExp, Is.LessThan(nearExp * 0.2), "Existing overlevel XP penalty must still discourage low-tier farming.");
@@ -329,6 +351,17 @@ public class BalanceV1NormalMonsterBudgetTests
         Assert.That(rows, Has.Count.EqualTo(7));
         Assert.That(gearSensitivity.Any(sensitivity => Math.Abs(sensitivity) > 0.02), Is.True,
             "Legal enhanced gear must expose an actual damage sensitivity, which need not be monotonic across different loadouts.");
+    }
+
+    private static async Task<double> MeanKillExperienceAsync(Player player, Monster monster, int samples = 200)
+    {
+        double sum = 0;
+        for (var i = 0; i < samples; i++)
+        {
+            sum += await player.CalculateExpAfterKillAsync(monster).ConfigureAwait(false);
+        }
+
+        return sum / samples;
     }
 
     private static async ValueTask<double> SampleMeanAsync(IAttacker attacker, IAttackable defender, SkillEntry? skill)

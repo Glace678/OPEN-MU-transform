@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -172,10 +172,16 @@
     <EmbeddedResource Include="Resources\Terrain81.att" />
     <EmbeddedResource Include="Resources\Terrain82.att" />
     <EmbeddedResource Include="Resources\Terrain9.att" />
+    <EmbeddedResource Include="Updates\Resources\MonsterTargets.json" />
+    <EmbeddedResource Include="Updates\Resources\ClassTargets.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="MUnique.OpenMU.Persistence.Initialization.Tests" />
   </ItemGroup>
 
   <ItemGroup>

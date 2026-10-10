@@ -9,7 +9,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BUILD = REPO / "out" / "build" / "windows-x86"
-INC_RE = re.compile(r'^\s*#\s*include\s*"([^"]+)"')
+INC_RE = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.MULTILINE)  # 91-35: ^ matches every line start
 FLAG_RE = re.compile(r'(?:^|\s)-I([^\s]+)')
 
 

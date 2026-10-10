@@ -74,12 +74,12 @@ internal partial class CharacterClassInitialization
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumMana, 1.5f, Stats.TotalLevel));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumHealth, 1, Stats.TotalLevel));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumHealth, 2, Stats.TotalVitality));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMinDmg, 1.0f / 7, Stats.TotalAgility));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMaxDmg, 1.0f / 4, Stats.TotalAgility));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMinDmg, 1.0f / 14, Stats.TotalStrength));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMaxDmg, 1.0f / 8, Stats.TotalStrength));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MeleeMinDmg, 1.0f / 7, Stats.TotalStrengthAndAgility));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MeleeMaxDmg, 1.0f / 4, Stats.TotalStrengthAndAgility));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMinDmg, 0.5f, Stats.TotalAgility));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMaxDmg, 0.85f, Stats.TotalAgility));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMinDmg, 0.25f, Stats.TotalStrength));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryMaxDmg, 0.45f, Stats.TotalStrength));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MeleeMinDmg, 0.45f, Stats.TotalStrengthAndAgility));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MeleeMaxDmg, 0.8f, Stats.TotalStrengthAndAgility));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.PhysicalBaseDmgIncrease, 1, ammunitionDmgIncrease, InputOperator.Add, AggregateType.Multiplicate));
 
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.ArcheryAttackMode, 1, Stats.IsBowEquipped));
@@ -122,6 +122,10 @@ internal partial class CharacterClassInitialization
         result.BaseAttributeValues.Add(this.CreateConstValueAttribute(6, Stats.MaximumMana));
         result.BaseAttributeValues.Add(this.CreateConstValueAttribute(1, Stats.SkillMultiplier));
         result.BaseAttributeValues.Add(this.CreateConstValueAttribute(0.03f, Stats.AbilityRecoveryMultiplier));
+        result.BaseAttributeValues.Add(this.CreateConstValueAttribute(10, Stats.MinimumPhysBaseDmg));
+        result.BaseAttributeValues.Add(this.CreateConstValueAttribute(15, Stats.MaximumPhysBaseDmg));
+        result.BaseAttributeValues.Add(this.CreateConstValueAttribute(70, Stats.AttackRatePvm));
+        result.BaseAttributeValues.Add(this.CreateConstValueAttribute(95, Stats.DefenseRatePvm));
 
         this.AddCommonBaseAttributeValues(result.BaseAttributeValues, isMaster);
 

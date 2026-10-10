@@ -603,4 +603,73 @@
   <data name="CharacterNotStrongEnoughMessage" xml:space="preserve">
     <value>你的实力还不足以获得此项帮助。</value>
   </data>
+  <data name="CastleSiegeStartsInFormat" xml:space="preserve">
+    <value>攻城战将在 {0} 分钟后开始。</value>
+  </data>
+  <data name="CastleSiegeGuildRegistrationOpen" xml:space="preserve">
+    <value>攻城战公会报名已开放。</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationOpen" xml:space="preserve">
+    <value>攻城战战旗登记已开放。</value>
+  </data>
+  <data name="CastleSiegePreparationsInProgress" xml:space="preserve">
+    <value>攻城战准备工作进行中。</value>
+  </data>
+  <data name="CastleSiegeInProgress" xml:space="preserve">
+    <value>攻城战进行中。</value>
+  </data>
+  <data name="ItemRegistrationNpcNotAvailable" xml:space="preserve">
+    <value>此 NPC 的物品登记功能暂未开放，后续可能扩展。</value>
+  </data>
+  <data name="ItemRegistrationMissingRequiredItem" xml:space="preserve">
+    <value>你的背包里没有所需物品。</value>
+  </data>
+  <data name="ItemRegistrationInventoryMoneyLimitReached" xml:space="preserve">
+    <value>你的背包金币已达上限。</value>
+  </data>
+  <data name="ItemRegistrationCompletedWithRewardFormat" xml:space="preserve">
+    <value>已登记 {0}/{1} 件物品！奖励已领取。</value>
+  </data>
+  <data name="ItemRegistrationTotalAllTimeFormat" xml:space="preserve">
+    <value>历史累计登记物品总数：{0}。</value>
+  </data>
+  <data name="ItemRegistrationProgressFormat" xml:space="preserve">
+    <value>已登记 {0}/{1} 件物品。</value>
+  </data>
+  <data name="SpeedHackWarningDetected" xml:space="preserve">
+    <value>警告：检测到异常活动（速度检测）。屡次违规将导致账号受限。</value>
+  </data>
+  <data name="CharInfoAccountNameFormat" xml:space="preserve">
+    <value>账号名：{0}</value>
+  </data>
+  <data name="SummoningInSecondsFormat" xml:space="preserve">
+    <value>将在 {0} 秒后开始召唤...</value>
+  </data>
+  <data name="SummoningCanceled" xml:space="preserve">
+    <value>召唤已取消。</value>
+  </data>
+  <data name="InvasionGoldenStartMessage" xml:space="preserve">
+    <value>[{0}] 黄金入侵！</value>
+  </data>
+  <data name="InvasionGoldenEndMessage" xml:space="preserve">
+    <value>[{0}] 黄金入侵已结束。</value>
+  </data>
+  <data name="InvasionRedDragonStartMessage" xml:space="preserve">
+    <value>[{0}] 红龙入侵！</value>
+  </data>
+  <data name="InvasionRedDragonEndMessage" xml:space="preserve">
+    <value>[{0}] 红龙入侵已结束。</value>
+  </data>
+  <data name="InvasionWhiteWizardStartMessage" xml:space="preserve">
+    <value>[{0}] 白巫师军团入侵！</value>
+  </data>
+  <data name="InvasionWhiteWizardEndMessage" xml:space="preserve">
+    <value>[{0}] 白巫师军团入侵已结束。</value>
+  </data>
+  <data name="MiniGameEntranceOpenMinutesFormat" xml:space="preserve">
+    <value>活动入口已开放，将在 {0} 分钟后关闭。</value>
+  </data>
+  <data name="MiniGameEntranceClosed" xml:space="preserve">
+    <value>活动入口已关闭。</value>
+  </data>
 </root>

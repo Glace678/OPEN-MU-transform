@@ -152,6 +152,13 @@ public class Account
     public bool IsBot { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the account holder must change the
+    /// password on the next login. Set automatically when a random temporary password
+    /// is assigned by the initialization (e.g. GM / test accounts).
+    /// </summary>
+    public bool MustChangePassword { get; set; }
+
+    /// <summary>
     /// Gets or sets the versioned solo shop wallet and unclaimed purchases.
     /// Updated together with inventory changes in the player's database transaction.
     /// </summary>

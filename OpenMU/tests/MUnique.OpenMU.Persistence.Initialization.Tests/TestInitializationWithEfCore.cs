@@ -1,4 +1,4 @@
-// <copyright file="TestInitializationWithEfCore.cs" company="MUnique">
+﻿// <copyright file="TestInitializationWithEfCore.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -129,9 +129,13 @@ internal class TestInitializationWithEfCore
 
         await this.AssertCastleSiegeDataAsync(contextProvider).ConfigureAwait(false);
 
-        // Testing loading of an account
+        // Testing loading of an account. Test accounts are provisioned with a random BCrypt
+        // temporary password that is never equal to the login name (see AccountInitializerBase.
+        // AssignRandomTemporaryPassword and AccountPasswordSecurityTests), so the password-based
+        // lookup no longer matches by design. Look the account up by login name only to verify
+        // the real initialization path created it.
         using var accountContext = contextProvider.CreateNewPlayerContext(gameConfiguraton!);
-        var account1 = await accountContext.GetAccountByLoginNameAsync("test1", "test1").ConfigureAwait(false);
+        var account1 = await accountContext.GetAccountByLoginNameAsync("test1").ConfigureAwait(false);
         Assert.That(account1, Is.Not.Null);
         Assert.That(account1!.LoginName, Is.EqualTo("test1"));
     }

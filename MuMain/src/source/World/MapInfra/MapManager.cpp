@@ -1181,6 +1181,16 @@ void CMapManager::Load() // OK
 
 bool CMapManager::LoadWorld(int Map)
 {
+    // 87-128: reject an out-of-range server map before tearing down the old
+    // world, so a corrupt/malicious Map value leaves the current world intact
+    // instead of deleting every object and then failing mid-load.
+    if (Map < 0 || Map >= NUM_WD)
+    {
+        g_ErrorReport.Write(L"[LoadWorld] rejected out-of-range map");
+        g_ErrorReport.Write(L"\r\n");
+        return false;
+    }
+
     if (Map == 32 && this->WorldActive == 32)
     {
         Map = this->WorldActive = 9;

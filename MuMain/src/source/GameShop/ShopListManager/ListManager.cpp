@@ -88,7 +88,7 @@ void			CListManager::SetListManagerInfo(DownloaderType type,
 
 WZResult		CListManager::LoadScriptList(bool bDonwLoad) // OK
 {
-    this->m_Result.BuildSuccessResult();
+    this->m_Result.SetSuccessResult();
 
     if (!bDonwLoad && this->IsScriptFileExist())
     {
@@ -182,7 +182,7 @@ WZResult		CListManager::FileDownLoad() // OK
 
         if (hHandle == INVALID_HANDLE_VALUE)
         {
-            this->m_Result.BuildResult(8, GetLastError(), L"Fail : _beginthreadex");
+            this->m_Result = WZResult::BuildResult(8, GetLastError(), L"Fail : _beginthreadex");
         }
         else if (WaitForSingleObject(hHandle, this->m_ListManagerInfo.m_dwDownloadMaxTime) == WAIT_TIMEOUT)
         {
@@ -199,7 +199,7 @@ WZResult		CListManager::FileDownLoad() // OK
 
             CloseHandle(hHandle);
 
-            this->m_Result.BuildResult(1, 0, L"Time Out!");
+            this->m_Result = WZResult::BuildResult(1, 0, L"Time Out!");
         }
         else
         {

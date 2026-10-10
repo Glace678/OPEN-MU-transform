@@ -23,4 +23,10 @@ internal static class AdminPolicies
     /// Gets the policy which requires the administrator role.
     /// </summary>
     internal const string Administrator = "OpenMU.Administrator";
+
+    /// <summary>
+    /// Gets the policy for the initial setup wizard. It is reachable anonymously only while no
+    /// admin user exists yet; afterwards it requires the administrator role.
+    /// </summary>
+    internal const string Setup = "OpenMU.Setup";
 }

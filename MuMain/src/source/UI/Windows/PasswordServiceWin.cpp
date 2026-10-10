@@ -366,10 +366,12 @@ void CPasswordServiceWin::Submit()
         m_pBox[FIELD_OLD]->SetText(L"");
         m_pBox[FIELD_NEW]->SetText(L"");
         m_pBox[FIELD_CONFIRM]->SetText(L"");
-        SetStatus((m_mode == ModeChange)
-                ? L"密码修改成功！请点击 Cancel 返回。"
-                : L"密码已重置！请点击 Cancel 返回。",
-            kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
+        wchar_t status[160];
+        mu_swprintf(status, (m_mode == ModeChange)
+                ? L"密码修改成功！请点击 %ls 返回。"
+                : L"密码已重置！请点击 %ls 返回。",
+            I18N::Game::Cancel);
+        SetStatus(status, kStatusGreen[0], kStatusGreen[1], kStatusGreen[2]);
         return;
     }
 

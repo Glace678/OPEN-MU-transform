@@ -35,9 +35,14 @@ if (!isValidServerAddress(openMuServerAddress)) {
         'hostname (no empty labels, no leading/trailing hyphens, no leading-zero ' +
         'octets). Pass it with -POPENMU_SERVER_ADDRESS=<address>.')
 }
-def mobilePackageKey = providers.gradleProperty('OPENMU_MOBILE_PACKAGE_KEY').getOrElse('')
-if (!(mobilePackageKey ==~ /[A-Za-z0-9_-]{43}/)) {
-    throw new GradleException('OPENMU_MOBILE_PACKAGE_KEY must be exactly 43 base64url characters')
+// 107-02: the login derivation seed. Distinct from the GM bearer token
+// (gm-app uses OPENMU_MOBILE_GM_TOKEN). The server derives the identical
+// local account from this value via HMAC-SHA256. Inject at build time only;
+// never commit a real value.
+def mobileLoginSeed = providers.gradleProperty('OPENMU_MOBILE_LOGIN_SEED').getOrElse('')
+if (!(mobileLoginSeed ==~ /[A-Za-z0-9_-]{43}/)) {
+    throw new GradleException('OPENMU_MOBILE_LOGIN_SEED must be exactly 43 base64url characters ' +
+        '(the game login HMAC seed, distinct from OPENMU_MOBILE_GM_TOKEN).')
 }
 def gameDataArchive = file('src/main/assets/game-data.zip')
 if (!gameDataArchive.isFile()) {
@@ -79,7 +84,7 @@ android {
         versionName '1.0.0-mobile-preview'
         buildConfigField 'String', 'GAME_DATA_VERSION', '"sha256:' + gameDataVersion + '"'
         buildConfigField 'String', 'DEFAULT_SERVER_ADDRESS', '"' + openMuServerAddress + '"'
-        buildConfigField 'String', 'MOBILE_PACKAGE_KEY', '"' + mobilePackageKey + '"'
+        buildConfigField 'String', 'MOBILE_LOGIN_SEED', '"' + mobileLoginSeed + '"'
 
         ndk {
             abiFilters 'arm64-v8a'

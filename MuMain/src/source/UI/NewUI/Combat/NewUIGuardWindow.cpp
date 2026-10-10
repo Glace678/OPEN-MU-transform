@@ -27,6 +27,16 @@ CNewUIGuardWindow::CNewUIGuardWindow()
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
     m_iNumCurOpenTab = TAB_SIEGE_INFO;
+    // T0 same-pattern fix: siege time/state members are filled only by the castle-siege info
+    // packet (SetInfo ~:633). RenderSeigeInfoTab() reads them unconditionally; zero-init so a
+    // Render before the packet arrives never prints garbage or switches on a bogus enum.
+    m_eTimeType = CASTLESIEGE_STATE_NONE;
+    ZeroMemory(m_szOwnerGuild, sizeof(m_szOwnerGuild));
+    ZeroMemory(m_szOwnerGuildMaster, sizeof(m_szOwnerGuildMaster));
+    m_wStartYear = 0; m_byStartMonth = 0; m_byStartDay = 0; m_byStartHour = 0; m_byStartMinute = 0;
+    m_wEndYear = 0; m_byEndMonth = 0; m_byEndDay = 0; m_byEndHour = 0; m_byEndMinute = 0;
+    m_wSiegeStartYear = 0; m_bySiegeStartMonth = 0; m_bySiegeStartDay = 0; m_bySiegeStartHour = 0; m_bySiegeStartMinute = 0;
+    m_dwStateLeftSec = 0;
 }
 
 CNewUIGuardWindow::~CNewUIGuardWindow()
@@ -622,8 +632,8 @@ void CNewUIGuardWindow::SetData(LPPMSG_ANS_CASTLESIEGESTATE Info)
 {
     if (!Info)	return;
 
-    memset(m_szOwnerGuild, 0, sizeof(char) * 9);
-    memset(m_szOwnerGuildMaster, 0, sizeof(char) * 11);
+    memset(m_szOwnerGuild, 0, sizeof(m_szOwnerGuild));
+    memset(m_szOwnerGuildMaster, 0, sizeof(m_szOwnerGuildMaster));
 
     m_eTimeType = (CASTLESIEGE_STATE)Info->cCastleSiegeState;
     CMultiLanguage::ConvertFromUtf8(m_szOwnerGuild, Info->cOwnerGuild, MAX_GUILDNAME);

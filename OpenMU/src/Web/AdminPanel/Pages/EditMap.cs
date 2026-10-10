@@ -1,4 +1,4 @@
-﻿// <copyright file="EditMap.cs" company="MUnique">
+// <copyright file="EditMap.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -6,7 +6,9 @@ namespace MUnique.OpenMU.Web.AdminPanel.Pages;
 
 using System.Reflection;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using MUnique.OpenMU.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Logging;
@@ -26,6 +28,7 @@ using MUnique.OpenMU.Web.Shared.Services;
 /// </summary>
 [Route("/map-editor")]
 [Route("/map-editor/{SelectedMapId:guid}")]
+[Authorize(Policy = AdminPolicies.Administrator)]
 public sealed class EditMap : ComponentBase, IDisposable
 {
     private List<GameMapDefinition>? _maps;

@@ -102,6 +102,54 @@
       "cacheVariables": {
         "ENABLE_ASAN": "ON"
       }
+    },
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "linux-x64",
+      "displayName": "Linux x64",
+      "description": "Desktop Linux x64. Configure on a Linux host; needs system OpenGL/GLEW, turbojpeg and libcurl (see src/CMakeLists.txt Linux branch).",
+      "inherits": "linux-base",
+      "toolchainFile": "${sourceDir}/toolchain-x64.cmake",
+      "cacheVariables": {
+        "ENABLE_EDITOR": "OFF"
+      }
+    },
+    {
+      "name": "macos-base",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "macos",
+      "displayName": "macOS",
+      "description": "Desktop macOS. Configure on a macOS host; needs the OpenGL framework, GLEW and turbojpeg (see src/CMakeLists.txt APPLE branch).",
+      "inherits": "macos-base",
+      "toolchainFile": "${sourceDir}/toolchain-x64.cmake",
+      "cacheVariables": {
+        "ENABLE_EDITOR": "OFF"
+      }
     }
   ],
   "buildPresets": [
@@ -169,6 +217,30 @@
       "name": "windows-x64-asan-release",
       "displayName": "x64 + AddressSanitizer Release",
       "configurePreset": "windows-x64-asan",
+      "configuration": "Release"
+    },
+    {
+      "name": "linux-x64-debug",
+      "displayName": "Linux x64 Debug",
+      "configurePreset": "linux-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-x64-release",
+      "displayName": "Linux x64 Release",
+      "configurePreset": "linux-x64",
+      "configuration": "Release"
+    },
+    {
+      "name": "macos-debug",
+      "displayName": "macOS Debug",
+      "configurePreset": "macos",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-release",
+      "displayName": "macOS Release",
+      "configurePreset": "macos",
       "configuration": "Release"
     }
   ]

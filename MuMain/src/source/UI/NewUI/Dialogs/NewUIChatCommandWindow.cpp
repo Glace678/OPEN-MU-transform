@@ -278,7 +278,11 @@ bool SEASON3B::CNewUIChatCommandWindow::AreRequiredValuesSet() const
         return false;
     }
 
-    for (size_t i = 0; i < command->Parameters.size(); ++i)
+    // 85-09: m_parameterValues was sized by the parameters captured at PickCommand
+    // time; the command catalog can be replaced while this page stays open, so never
+    // index past the vector we actually own.
+    const size_t valueCount = m_parameterValues.size();
+    for (size_t i = 0; i < command->Parameters.size() && i < valueCount; ++i)
     {
         if (command->Parameters[i].IsRequired && m_parameterValues[i].empty())
         {
@@ -409,7 +413,8 @@ bool SEASON3B::CNewUIChatCommandWindow::IsPickedFromList(const ChatCommandParame
 void SEASON3B::CNewUIChatCommandWindow::CycleParameterValue(size_t parameterIndex)
 {
     const auto* command = GetSelectedCommand();
-    if (command == NULL || parameterIndex >= command->Parameters.size())
+    if (command == NULL || parameterIndex >= command->Parameters.size()
+        || parameterIndex >= m_parameterValues.size()) // 85-09
     {
         return;
     }
@@ -442,7 +447,8 @@ void SEASON3B::CNewUIChatCommandWindow::BeginEditingParameter(size_t parameterIn
     CommitEditedValue();
 
     const auto* command = GetSelectedCommand();
-    if (command == NULL || parameterIndex >= command->Parameters.size() || m_pValueInput == nullptr)
+    if (command == NULL || parameterIndex >= command->Parameters.size() || m_pValueInput == nullptr
+        || parameterIndex >= m_parameterValues.size()) // 85-09
     {
         return;
     }
@@ -919,7 +925,8 @@ void SEASON3B::CNewUIChatCommandWindow::RenderParameterPage()
 void SEASON3B::CNewUIChatCommandWindow::RenderParameter(size_t parameterIndex, int y)
 {
     const auto* command = GetSelectedCommand();
-    if (command == NULL || parameterIndex >= command->Parameters.size())
+    if (command == NULL || parameterIndex >= command->Parameters.size()
+        || parameterIndex >= m_parameterValues.size()) // 85-09
     {
         return;
     }

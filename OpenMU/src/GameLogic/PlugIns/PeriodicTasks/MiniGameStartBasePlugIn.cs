@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.PlugIns.PeriodicTasks;
 
 using MUnique.OpenMU.GameLogic.MiniGames;
+using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.PlugIns;
 
 /// <summary>
@@ -104,9 +105,9 @@ public abstract class MiniGameStartBasePlugIn<TConfiguration, TGameState> : Peri
 
             for (var remainingMinutes = (int)enterDuration.TotalMinutes; remainingMinutes > 0; remainingMinutes--)
             {
-                if (this.Configuration?.EntranceOpenedMessage is { } openMessage)
+                if (this.Configuration?.EntranceOpenedMessage is { })
                 {
-                    await state.Context.SendGlobalNotificationAsync(string.Format(openMessage, remainingMinutes)).ConfigureAwait(false);
+                    await state.Context.ShowGlobalLocalizedMessageAsync(MessageType.GoldenCenter, "MiniGameEntranceOpenMinutesFormat", remainingMinutes).ConfigureAwait(false);
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(1)).ConfigureAwait(false);
@@ -118,9 +119,9 @@ public abstract class MiniGameStartBasePlugIn<TConfiguration, TGameState> : Peri
                 await Task.Delay(remainingSeconds).ConfigureAwait(false);
             }
 
-            if (this.Configuration?.EntranceClosedMessage is { } closedMessage)
+            if (this.Configuration?.EntranceClosedMessage is { })
             {
-                await state.Context.SendGlobalNotificationAsync(closedMessage).ConfigureAwait(false);
+                await state.Context.ShowGlobalLocalizedMessageAsync(MessageType.GoldenCenter, "MiniGameEntranceClosed").ConfigureAwait(false);
             }
         }
         catch (Exception ex)

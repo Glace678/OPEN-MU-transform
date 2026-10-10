@@ -346,6 +346,42 @@ public class CastleSiegeEconomyTests
         });
     }
 
+    /// <summary>
+    /// When the treasury debit cannot be persisted, the withdraw must report failure, must not credit
+    /// the player, and must leave the in-memory tribute consistent (no partial / free credit).
+    /// </summary>
+    [Test]
+    public async ValueTask TributeWithdrawDoesNotCreditWhenTributePersistenceFailsAsync()
+    {
+        var fixture = await CreateFixtureAsync().ConfigureAwait(false);
+        fixture.Context.CurrentState = CastleSiegeState.End;
+        fixture.Context.SiegeData.TributeMoney = 500;
+        fixture.Owner.Money = 100;
+
+        // Simulate the treasury store being unavailable right when the debit should land: drop the
+        // persistent CastleSiegeData row so SaveOwnerAsync cannot find it and throws.
+        using (var dropContext = fixture.PersistenceContextProvider.CreateNewTypedContext(
+                   typeof(CastleSiegeData),
+                   false,
+                   fixture.GameServerContext.Configuration))
+        {
+            var persisted = (await dropContext.GetAsync<CastleSiegeData>().ConfigureAwait(false)).Single();
+            await dropContext.DeleteAsync(persisted).ConfigureAwait(false);
+            await dropContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var withdrawn = await new CastleSiegeTributeWithdrawAction()
+            .WithdrawAsync(fixture.Owner, fixture.Context, 200)
+            .ConfigureAwait(false);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(withdrawn, Is.False, "a failed treasury debit must be reported as a failed withdraw");
+            Assert.That(fixture.Owner.Money, Is.EqualTo(100), "the player must not be credited when the debit did not persist");
+            Assert.That(fixture.Context.SiegeData.TributeMoney, Is.EqualTo(500), "the in-memory tribute must be restored on debit failure");
+        });
+    }
+
     private static async ValueTask<TestFixture> CreateFixtureAsync()
     {
         var persistenceContextProvider = new InMemoryPersistenceContextProvider();

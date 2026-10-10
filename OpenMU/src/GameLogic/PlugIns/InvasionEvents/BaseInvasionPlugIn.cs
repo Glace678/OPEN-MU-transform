@@ -46,6 +46,33 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
     /// </summary>
     protected virtual ushort? AnnouncedMonsterId => null;
 
+    /// <summary>
+    /// Gets the <see cref="PlayerMessage"/> resource key for the localized invasion-start announcement.
+    /// The template holds a single {0} placeholder for the announced map name. When <c>null</c>, the
+    /// configured <see cref="PeriodicInvasionConfiguration.StartMessage"/> is used instead. The built-in
+    /// invasion types resolve to their dedicated localized keys; subclasses may override.
+    /// </summary>
+    protected virtual string? StartMessageResourceKey => this.GetType().Name switch
+    {
+        nameof(GoldenInvasionPlugIn) => "InvasionGoldenStartMessage",
+        nameof(RedDragonInvasionPlugIn) => "InvasionRedDragonStartMessage",
+        nameof(WhiteWizardInvasionPlugIn) => "InvasionWhiteWizardStartMessage",
+        _ => null,
+    };
+
+    /// <summary>
+    /// Gets the <see cref="PlayerMessage"/> resource key for the localized invasion-end announcement.
+    /// The template holds a single {0} placeholder for the announced map name. When <c>null</c>, the
+    /// configured <see cref="PeriodicInvasionConfiguration.EndMessage"/> is used instead.
+    /// </summary>
+    protected virtual string? EndMessageResourceKey => this.GetType().Name switch
+    {
+        nameof(GoldenInvasionPlugIn) => "InvasionGoldenEndMessage",
+        nameof(RedDragonInvasionPlugIn) => "InvasionRedDragonEndMessage",
+        nameof(WhiteWizardInvasionPlugIn) => "InvasionWhiteWizardEndMessage",
+        _ => null,
+    };
+
     /// <inheritdoc />
     public virtual async ValueTask ObjectAddedToMapAsync(GameMap map, ILocateable addedObject)
     {
@@ -186,9 +213,11 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
 
         var mapName = BuildAnnouncedMapNames(state, player);
 
-        var message = (configuration.StartMessage.GetTranslation(player.Culture)
-                       ?? PlugInResources.BaseInvasionPlugIn_DefaultStartMessage)
-            .Replace("{mapName}", mapName, StringComparison.InvariantCulture);
+        var message = this.StartMessageResourceKey is { } startKey
+            ? player.GetLocalizedMessage(startKey, mapName)
+            : (configuration.StartMessage.GetTranslation(player.Culture)
+               ?? PlugInResources.BaseInvasionPlugIn_DefaultStartMessage)
+                .Replace("{mapName}", mapName, StringComparison.InvariantCulture);
 
         try
         {
@@ -215,8 +244,10 @@ public abstract class BaseInvasionPlugIn<TConfiguration> : PeriodicTaskBasePlugI
 
         var mapName = BuildAnnouncedMapNames(state, player);
 
-        var message = (configuration.EndMessage.GetTranslation(player.Culture) ?? string.Empty)
-            .Replace("{mapName}", mapName, StringComparison.InvariantCulture);
+        var message = this.EndMessageResourceKey is { } endKey
+            ? player.GetLocalizedMessage(endKey, mapName)
+            : (configuration.EndMessage.GetTranslation(player.Culture) ?? string.Empty)
+                .Replace("{mapName}", mapName, StringComparison.InvariantCulture);
 
         if (string.IsNullOrWhiteSpace(message))
         {

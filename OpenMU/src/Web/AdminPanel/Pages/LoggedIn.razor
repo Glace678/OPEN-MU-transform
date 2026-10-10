@@ -1,4 +1,5 @@
-﻿@page "/logged-in"
+@page "/logged-in"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
 @using MUnique.OpenMU.DataModel
 @using MUnique.OpenMU.DataModel.Entities
 @using MUnique.OpenMU.Web.AdminPanel.Properties

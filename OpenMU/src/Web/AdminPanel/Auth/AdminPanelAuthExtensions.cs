@@ -129,11 +129,13 @@ public static class AdminPanelAuthExtensions
                     MobileGmAuthenticationDefaults.PackageKeyEnvironmentVariable) ?? string.Empty);
 
         services.AddSingleton<IAuthorizationHandler, AdminAccessRequirementHandler>();
+        services.AddSingleton<IAuthorizationHandler, AdminSetupRequirementHandler>();
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder().AddRequirements(new AdminAccessRequirement()).Build())
             .AddPolicy(AdminPolicies.Viewer, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Viewer)))
             .AddPolicy(AdminPolicies.Operator, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Operator)))
             .AddPolicy(AdminPolicies.Administrator, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Administrator)))
+            .AddPolicy(AdminPolicies.Setup, policy => policy.AddRequirements(new AdminSetupRequirement()))
             .AddPolicy(MobileGmAuthenticationDefaults.Policy, policy =>
             {
                 policy.AddAuthenticationSchemes(MobileGmAuthenticationDefaults.AuthenticationScheme);

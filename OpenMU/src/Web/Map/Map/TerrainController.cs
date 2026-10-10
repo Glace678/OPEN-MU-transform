@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.Web.Map.Map;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,7 @@ using MUnique.OpenMU.Interfaces;
 /// </summary>
 [Route("/[controller]")]
 [ApiController]
+[Authorize]
 public class TerrainController : Controller
 {
     private readonly IList<IManageableServer> _servers;

@@ -1,4 +1,4 @@
-﻿@using MUnique.OpenMU.Web.AdminPanel.Properties
+@using MUnique.OpenMU.Web.AdminPanel.Properties
 <div>
 @if (this.SelectedVersion is null)
 {
@@ -20,6 +20,11 @@ else if (this.IsInstalled)
 }
 else
 {
+    if (this.ErrorMessage is not null)
+    {
+        <div class="alert alert-danger" role="alert">@Resources.Error: @this.ErrorMessage</div>
+    }
+
     if (this.CurrentConnections > 0)
     {
         <div class="alert alert-danger" role="alert">

@@ -1,0 +1,8 @@
+class	number	baseStr	baseAgi	baseVit	baseEne	constMinDmg	constMaxDmg	dmgType	constAtkRatePvm	constDefRatePvm	nakedL1_baseMin	nakedL1_baseMax	nakedL1_atkRatePvm	nakedL1_defRatePvm	source
+Dark Knight	4	28	20	25	10	10	15	phys	70	95	29.6	44.4	112.0	101.7	R3-seed(verified)
+Dark Wizard	0	18	18	15	30	10	15	wiz	70	95	28.0	45.0	106.5	101.0	R3-seed(verified)
+Fairy Elf	8	22	25	20	15	10	15	phys	70	95	31.1	52.6	118.0	101.2	R3-seed(verified)
+Magic Gladiator	12	26	26	26	26	10	15	phys	70	95	16.5	24.8	120.0	104.0	B2-patch(new)
+Dark Lord	16	26	20	20	15	10	15	phys	70	95	14.8	21.7	132.0	98.0	B2-patch(new)
+Summoner	20	21	21	18	23	10	15	wiz	70	95	23.8	38.0	112.0	100.0	B2-patch(new)
+Rage Fighter	24	32	27	25	20	10	15	phys	70	95	16.0	23.0	112.0	98.0	B2-patch(new)

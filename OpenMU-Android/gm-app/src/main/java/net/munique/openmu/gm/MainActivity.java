@@ -608,7 +608,7 @@ public final class MainActivity extends Activity {
     }
 
     private MobileGmApiClient client() throws MobileGmApiClient.ApiException {
-        return new MobileGmApiClient(serverUrl, BuildConfig.MOBILE_PACKAGE_KEY);
+        return new MobileGmApiClient(serverUrl, BuildConfig.MOBILE_GM_TOKEN);
     }
 
     private boolean accept(int generation) {

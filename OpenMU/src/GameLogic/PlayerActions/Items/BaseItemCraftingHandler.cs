@@ -32,6 +32,13 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
             return (error, null);
         }
 
+        // Validate socket-specific parameters BEFORE charging or destroying any items,
+        // so an invalid client-supplied socketSlot never costs the player zen or materials.
+        if (this.ValidateSocketSlot(player, items, socketSlot) is { } socketError)
+        {
+            return (socketError, null);
+        }
+
         if (SoloBalance.IsEnabled(player.GameContext.Configuration))
         {
             successRate = 100;
@@ -51,19 +58,36 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
         if (success)
         {
             player.Logger.LogInformation("Crafting succeeded with success chance: {successRate} %", successRate);
-            if (await this.DoTheMixAsync(items, player, socketSlot, successRate).ConfigureAwait(false) is { } item)
+            try
             {
-                player.Logger.LogInformation("Crafted item: {item}", item);
+                if (await this.DoTheMixAsync(items, player, socketSlot, successRate).ConfigureAwait(false) is { } item)
+                {
+                    player.Logger.LogInformation("Crafted item: {item}", item);
 
-                // Reset backup inventory to avoid old items are restored after success and sudden disconnect of the client.
-                // Newly created items are not in the backup inventory, so they won't be restored in case of a disconnect.
-                // So the best solution is to just clear it and rely on the restore mechanism for the temporary storage.
-                player.BackupInventory = null;
+                    // Reset backup inventory to avoid old items are restored after success and sudden disconnect of the client.
+                    // Newly created items are not in the backup inventory, so they won't be restored in case of a disconnect.
+                    // So the best solution is to just clear it and rely on the restore mechanism for the temporary storage.
+                    player.BackupInventory = null;
 
-                return (CraftingResult.Success, item);
+                    return (CraftingResult.Success, item);
+                }
+            }
+            catch (Exception ex)
+            {
+                // The mix threw after zen was paid but (because of the reordered DoTheMixAsync)
+                // before any input item was destroyed. Refund the zen so the player suffers no net loss.
+                player.Logger.LogError(ex, "Crafting mix threw an exception. Refunding the price to prevent asset loss.");
+                player.TryAddMoney(price);
+                await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                return (CraftingResult.Failed, null);
             }
 
-            player.Logger.LogInformation("Crafting handler failed to mix the items.");
+            // DoTheMixAsync returned no item: CreateOrModify produced an empty result.
+            // Items were not destroyed (guarded in DoTheMixAsync), but zen was already
+            // paid. Refund it so the player has zero net loss.
+            player.Logger.LogInformation("Crafting handler produced no result. Refunding the price.");
+            player.TryAddMoney(price);
+            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             return (CraftingResult.Failed, null);
         }
 
@@ -81,6 +105,20 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
 
     /// <inheritdoc/>
     public abstract CraftingResult? TryGetRequiredItems(Player player, out IList<CraftingRequiredItemLink> items, out byte successRateByItems);
+
+    /// <summary>
+    /// Validates socket-specific parameters (e.g. client-supplied socketSlot) BEFORE
+    /// any price is charged or any item is consumed. Override in subclasses that use
+    /// the socketSlot parameter. Default implementation accepts any socketSlot.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="requiredItems">The validated required items.</param>
+    /// <param name="socketSlot">The client-supplied socket slot.</param>
+    /// <returns>An error result if the socketSlot is invalid; otherwise <c>null</c>.</returns>
+    protected virtual CraftingResult? ValidateSocketSlot(Player player, IList<CraftingRequiredItemLink> requiredItems, byte socketSlot)
+    {
+        return null;
+    }
 
     /// <summary>
     /// Gets the price based on the success rate and the required items.
@@ -112,12 +150,26 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
     /// </returns>
     private async ValueTask<Item?> DoTheMixAsync(IList<CraftingRequiredItemLink> requiredItems, Player player, byte socketSlot, byte successRate)
     {
+        // Create or modify the result FIRST, before destroying any input items.
+        // If CreateOrModify throws (e.g. invalid socketSlot), the input items are
+        // still intact and the caller can refund the price. This prevents the
+        // charge-destroy-throw sequence that caused net asset loss.
+        var resultItems = await this.CreateOrModifyResultItemsAsync(requiredItems, player, socketSlot, successRate).ConfigureAwait(false);
+
+        // If CreateOrModify produced no result (empty list or null), do NOT destroy
+        // any input items. The caller (DoMixAsync) will refund the price so the player
+        // suffers no net loss. This closes the empty-list corner case where the old
+        // code would still consume materials and keep the zen despite producing nothing.
+        if (resultItems is null || resultItems.Count == 0)
+        {
+            return null;
+        }
+
         foreach (var requiredItemLink in requiredItems)
         {
             await this.RequiredItemChangeAsync(player, requiredItemLink, true).ConfigureAwait(false);
         }
 
-        var resultItems = await this.CreateOrModifyResultItemsAsync(requiredItems, player, socketSlot, successRate).ConfigureAwait(false);
         return resultItems.LastOrDefault();
     }
 

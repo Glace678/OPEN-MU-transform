@@ -1,5 +1,6 @@
-﻿param(
-    [string]$ServerAddress = '192.168.215.56',
+param(
+    # 107-09: no hardcoded developer LAN IP default -- require -ServerAddress explicitly.
+    [string]$ServerAddress = '',
     [switch]$RebuildGameData,
     [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\OpenMU-安卓手机版-可安装'),
     [string]$NdkPath = '',
@@ -63,6 +64,9 @@ function Test-ServerAddress([string]$value) {
         if ($label -notmatch '^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?$') { return $false }
     }
     return $true
+}
+if ([string]::IsNullOrWhiteSpace($ServerAddress)) {
+    throw 'ServerAddress is required. Pass -ServerAddress <ip-or-hostname>.'
 }
 if (-not (Test-ServerAddress $ServerAddress)) {
     throw "ServerAddress '$ServerAddress' is not a valid IPv4 address or hostname " +
@@ -307,8 +311,9 @@ try {
         ":game-app:lint$BuildType" ":gm-app:lint$BuildType" `
         ":game-app:assemble$BuildType" ":gm-app:assemble$BuildType" `
         "-POPENMU_SERVER_ADDRESS=$ServerAddress" `
-        "-POPENMU_MOBILE_PACKAGE_KEY=$mobilePackageKey" `
-        "-POPENMU_SERVER_SCHEME=http"
+        "-POPENMU_MOBILE_LOGIN_SEED=$mobilePackageKey" `
+        "-POPENMU_MOBILE_GM_TOKEN=$mobilePackageKey" `
+        $(if ($BuildType -eq 'Debug') { '-POPENMU_SERVER_SCHEME=http' } else { '-POPENMU_SERVER_SCHEME=https' })
 } finally {
     Pop-Location
 }

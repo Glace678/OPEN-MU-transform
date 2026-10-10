@@ -1,8 +1,11 @@
 # CMake toolchain file for x86 (32-bit) builds
 # Cross-platform: works on Windows, Linux, and macOS
 
-# Force 32-bit pointer size BEFORE compiler detection
-set(CMAKE_SIZEOF_VOID_P 4 CACHE INTERNAL "Pointer size in bytes" FORCE)
+# Pointer width is detected by CMake from the real compiler ABI (vcvars on
+# Windows, the -m32 flags below on Unix). Do NOT FORCE CMAKE_SIZEOF_VOID_P here:
+# it is a compiler-detected result variable; overriding it desyncs CMake's
+# architecture decisions (library search paths, package selection) from the
+# actual target (issue 91-09).
 
 # Platform-specific configuration
 if(WIN32)

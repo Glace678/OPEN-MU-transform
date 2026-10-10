@@ -74,36 +74,66 @@ public sealed class MapExportImportService
     }
 
     /// <summary>
-    /// Applies a JSON import to the given map, replacing all monster spawns
-    /// with those parsed from the JSON. Existing spawns are deleted via the persistence context.
+    /// Applies a JSON import to the given map, replacing all monster spawns with those parsed
+    /// from the JSON. The whole payload is validated before any existing spawn is deleted, so a
+    /// rejected import leaves the current map untouched and can be retried with a corrected file.
     /// Gates are preserved to avoid breaking warp entries and cross-map references.
     /// </summary>
     /// <param name="map">The map whose spawns will be replaced.</param>
     /// <param name="json">The JSON string containing the replacement spawns.</param>
     /// <param name="context">The persistence context used for create and delete operations.</param>
-    public async Task ApplyImportAsync(GameMapDefinition map, string json, IContext context)
+    /// <returns>The result of the import; on failure the map was not modified.</returns>
+    public async Task<MapImportResult> ApplyImportAsync(GameMapDefinition map, string json, IContext context)
     {
         MapSpawnExport? dto;
         try
         {
             dto = JsonSerializer.Deserialize<MapSpawnExport>(json);
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
-            return;
+            return MapImportResult.Failure($"The import file is not valid JSON: {ex.Message}");
         }
 
-        if (dto is null || dto.FormatVersion != "1.0")
+        if (dto is null)
         {
-            return;
+            return MapImportResult.Failure("The import file is empty.");
         }
 
-        var monsters = await context.GetAsync<MonsterDefinition>().ConfigureAwait(false);
-        if (monsters is null || dto.Spawns is null)
+        if (dto.FormatVersion != "1.0")
         {
-            return;
+            return MapImportResult.Failure($"Unsupported import format version '{dto.FormatVersion}'.");
         }
 
+        if (dto.Spawns is null)
+        {
+            return MapImportResult.Failure("The import file does not contain a spawn list.");
+        }
+
+        var monsters = (await context.GetAsync<MonsterDefinition>().ConfigureAwait(false)).ToList();
+
+        // Validate the whole payload BEFORE touching any existing data. Deleting first and then
+        // failing used to silently drop every existing spawn when a monster number was unknown or
+        // the rectangle was invalid, with no error surfaced to the caller.
+        var unknownMonsterNumbers = dto.Spawns
+            .Where(spawnDto => !monsters.Any(m => m.Number == spawnDto.MonsterNumber))
+            .Select(spawnDto => spawnDto.MonsterNumber)
+            .Distinct()
+            .ToList();
+        if (unknownMonsterNumbers.Count > 0)
+        {
+            return MapImportResult.Failure(
+                $"The import references unknown monster number(s) {string.Join(", ", unknownMonsterNumbers)}. No existing spawns were modified.");
+        }
+
+        var invalidRectangle = dto.Spawns.FirstOrDefault(spawn => spawn.X1 > spawn.X2 || spawn.Y1 > spawn.Y2);
+        if (invalidRectangle is not null)
+        {
+            return MapImportResult.Failure(
+                $"A spawn area has inverted coordinates (X1={invalidRectangle.X1}, X2={invalidRectangle.X2}, Y1={invalidRectangle.Y1}, Y2={invalidRectangle.Y2}). No existing spawns were modified.");
+        }
+
+        // All checks passed: it is now safe to replace the spawn set.
         foreach (var spawn in map.MonsterSpawns.ToList())
         {
             map.MonsterSpawns.Remove(spawn);
@@ -112,11 +142,7 @@ public sealed class MapExportImportService
 
         foreach (var spawnDto in dto.Spawns)
         {
-            var monsterDef = monsters.FirstOrDefault(m => m.Number == spawnDto.MonsterNumber);
-            if (monsterDef is null)
-            {
-                continue;
-            }
+            var monsterDef = monsters.First(m => m.Number == spawnDto.MonsterNumber);
 
             var spawn = context.CreateNew<MonsterSpawnArea>();
             spawn.X1 = spawnDto.X1;
@@ -132,5 +158,7 @@ public sealed class MapExportImportService
             spawn.GameMap = map;
             map.MonsterSpawns.Add(spawn);
         }
+
+        return MapImportResult.SuccessResult(dto.Spawns.Count);
     }
 }

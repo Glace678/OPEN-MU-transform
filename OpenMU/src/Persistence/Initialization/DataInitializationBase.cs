@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Persistence.Initialization;
 
 using System.ComponentModel.Design;
+using System.Threading;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
@@ -27,6 +28,10 @@ public abstract class DataInitializationBase : IDataInitializationPlugIn
     private readonly ILoggerFactory _loggerFactory;
     private GameConfiguration? _gameConfiguration;
     private IContext? _context;
+
+    private readonly SemaphoreSlim _initializationLock = new(1, 1);
+
+    private int _initializationDone;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataInitializationBase" /> class.
@@ -86,6 +91,33 @@ public abstract class DataInitializationBase : IDataInitializationPlugIn
     /// <param name="numberOfGameServers">The number of game servers.</param>
     /// <param name="createTestAccounts">If set to <c>true</c>, test accounts should be created.</param>
     public async Task CreateInitialDataAsync(byte numberOfGameServers, bool createTestAccounts)
+    {
+        // Reentrancy / idempotency guard: concurrent or repeated calls must not
+        // corrupt the root configuration. The first caller performs the full
+        // initialization; subsequent callers return immediately once it is done.
+        if (Volatile.Read(ref this._initializationDone) == 1)
+        {
+            return;
+        }
+
+        await this._initializationLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (Volatile.Read(ref this._initializationDone) == 1)
+            {
+                return;
+            }
+
+            await this.InitializeCoreAsync(numberOfGameServers, createTestAccounts).ConfigureAwait(false);
+            Volatile.Write(ref this._initializationDone, 1);
+        }
+        finally
+        {
+            this._initializationLock.Release();
+        }
+    }
+
+    private async Task InitializeCoreAsync(byte numberOfGameServers, bool createTestAccounts)
     {
         BaseMapInitializer.ClearDefaultDropItemGroups();
 

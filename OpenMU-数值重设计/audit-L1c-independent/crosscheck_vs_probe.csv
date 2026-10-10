@@ -1,0 +1,16 @@
+﻿cls,mon,my_hit,probe_hit,my_mult,probe_mult,my_hits,probe_hits,my_ttk,probe_ttk
+Dark Knight,Bull Fighter,0.9092,0.9092,0.8284,0.8284,6,6,6.6,6.6
+Dark Wizard,Bull Fighter,0.9034,0.9034,0.8284,0.8284,65,65,71.95,71.95
+Fairy Elf,Bull Fighter,0.9152,0.9152,0.8284,0.8284,6,6,6.56,6.56
+Dark Knight,Budge Dragon,0.919,0.919,0.8478,0.8478,5,5,5.44,5.44
+Dark Wizard,Budge Dragon,0.9132,0.9132,0.8478,0.8478,51,51,55.85,55.85
+Fairy Elf,Budge Dragon,0.925,0.925,0.8478,0.8478,5,5,5.41,5.41
+Dark Knight,Spider,0.9297,0.9297,0.8681,0.8681,4,4,4.3,4.3
+Dark Wizard,Spider,0.9239,0.9239,0.8681,0.8681,38,38,41.13,41.13
+Fairy Elf,Spider,0.9357,0.9357,0.8681,0.8681,4,4,4.27,4.27
+Dark Knight,Goblin,0.9297,0.9297,0.8681,0.8681,4,4,4.3,4.3
+Dark Wizard,Goblin,0.9239,0.9239,0.8681,0.8681,38,38,41.13,41.13
+Fairy Elf,Goblin,0.9357,0.9357,0.8681,0.8681,4,4,4.27,4.27
+Dark Knight,Chain Scorpion,0.9169,0.9169,0.8478,0.8478,5,5,5.45,5.45
+Dark Wizard,Chain Scorpion,0.9111,0.9111,0.8478,0.8478,53,53,58.17,58.17
+Fairy Elf,Chain Scorpion,0.923,0.923,0.8478,0.8478,5,5,5.42,5.42

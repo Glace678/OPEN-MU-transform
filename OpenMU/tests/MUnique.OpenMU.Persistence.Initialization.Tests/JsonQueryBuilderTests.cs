@@ -38,21 +38,20 @@ internal class JsonQueryBuilderTests
     {
         using var installationContext = new ConfigurationContext();
         var type = installationContext.Model.GetEntityTypes().FirstOrDefault(t => t.ClrType == typeof(GameConfiguration));
-        string result;
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        try
-        {
-            var builder = new GameConfigurationJsonQueryBuilder();
-            result = builder.BuildJsonQueryForEntity(type!);
-        }
-        finally
-        {
-            stopwatch.Stop();
-        }
+        var builder = new GameConfigurationJsonQueryBuilder();
+        var result = builder.BuildJsonQueryForEntity(type!);
 
-        result = $"-- Json query created in {stopwatch.ElapsedMilliseconds} ms:{Environment.NewLine}" + result;
-        //// File.WriteAllText(@"C:\temp\json_GameConfiguration.txt", result);
+        // Real structural assertions on the generated Postgres JSON SQL. This test used
+        // to only prepend a timing comment and never assert, so a broken/empty builder
+        // output stayed green (T5-03): now a malformed query returns red.
+        Assert.That(result, Is.Not.Null.Or.Empty);
+        Assert.That(result.TrimStart(), Does.StartWith("select"));
+        Assert.That(result, Does.Contain("row_to_json"));
+        Assert.That(result, Does.Contain(type!.GetTableName()));
+        Assert.That(result.TrimEnd(), Does.EndWith("result"));
+        Assert.That(result.Count(ch => ch == '('), Is.EqualTo(result.Count(ch => ch == ')')));
+        // GameConfiguration owns collections; the root must embed at least one json array.
+        Assert.That(result, Does.Contain("array_to_json"));
     }
 
     /// <summary>
@@ -63,49 +62,38 @@ internal class JsonQueryBuilderTests
     {
         using var installationContext = new ConfigurationContext();
         var type = installationContext.Model.GetEntityTypes().FirstOrDefault(t => t.ClrType == typeof(Account));
-        string result;
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        try
-        {
-            var builder = new JsonQueryBuilder();
-            result = builder.BuildJsonQueryForEntity(type!);
-        }
-        finally
-        {
-            stopwatch.Stop();
-        }
+        var builder = new JsonQueryBuilder();
+        var result = builder.BuildJsonQueryForEntity(type!);
 
-        result = $"-- Json query created in {stopwatch.ElapsedMilliseconds} ms:{Environment.NewLine}" + result;
-        //// File.WriteAllText(@"C:\temp\json_Account.txt", result);
+        // Real structural assertions on the generated Postgres JSON SQL (T5-03).
+        Assert.That(result, Is.Not.Null.Or.Empty);
+        Assert.That(result.TrimStart(), Does.StartWith("select"));
+        Assert.That(result, Does.Contain("row_to_json"));
+        Assert.That(result, Does.Contain(type!.GetTableName()));
+        Assert.That(result.TrimEnd(), Does.EndWith("result"));
+        Assert.That(result.Count(ch => ch == '('), Is.EqualTo(result.Count(ch => ch == ')')));
     }
 
     /// <summary>
     /// Loads the <see cref="GameConfiguration"/> using the <see cref="JsonQueryBuilder"/> and the <see cref="JsonObjectLoader"/>.
-    /// It always fails, because it reports the taken time.
+    /// This hits a real PostgreSQL database. It only runs when OPENMU_INTEGRATION_DB is set;
+    /// otherwise it is explicitly reported as inconclusive instead of silently passing (T5-03).
     /// </summary>
     [Test]
-    [Ignore("It hits the database.")]
+    [Category("Integration")]
     public async Task LoadConfigByJsonAsync()
     {
+        if (string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("OPENMU_INTEGRATION_DB")))
+        {
+            Assert.Inconclusive("Set OPENMU_INTEGRATION_DB to a PostgreSQL connection string to run the JsonObjectLoader integration test.");
+        }
+
         await using var installationContext = new ConfigurationContext();
         installationContext.Database.OpenConnection();
         var builder = new GameConfigurationJsonObjectLoader();
-        IEnumerable<GameConfiguration> result;
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        try
-        {
-            result = await builder.LoadAllObjectsAsync<EntityFramework.Model.GameConfiguration>(installationContext).ConfigureAwait(false);
-            result = result.ToList();
-        }
-        finally
-        {
-            stopwatch.Stop();
-        }
+        var result = (await builder.LoadAllObjectsAsync<EntityFramework.Model.GameConfiguration>(installationContext).ConfigureAwait(false)).ToList();
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Count, Is.Not.EqualTo(0));
-        Assert.That(stopwatch.ElapsedMilliseconds, Is.EqualTo(0));
     }
 }

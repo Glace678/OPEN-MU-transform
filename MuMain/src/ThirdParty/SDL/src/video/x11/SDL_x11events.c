@@ -902,33 +902,54 @@ static void X11_HandleClipboardEvent(SDL_VideoDevice *_this, const XEvent *xeven
             unsigned long bytes_left = 0;
             int j;
 
-            X11_XGetWindowProperty(display, GetWindow(_this), videodata->atoms.SDL_FORMATS, 0, 200,
-                                            0, XA_ATOM, &atom, &format_property, &length, &bytes_left, &data);
-
-            int allocationsize = (length + 1) * sizeof(char *);
-            for (j = 0, patom = (Atom *)data; j < length; j++, patom++) {
-                char *atomStr = X11_XGetAtomName(display, *patom);
-                allocationsize += SDL_strlen(atomStr) + 1;
-                X11_XFree(atomStr);
-            }
-
-            char **new_mime_types = SDL_AllocateTemporaryMemory(allocationsize);
-            if (new_mime_types) {
-                char *strPtr = (char *)(new_mime_types + length + 1);
-
-                for (j = 0, patom = (Atom *)data; j < length; j++, patom++) {
-                    char *atomStr = X11_XGetAtomName(display, *patom);
-                    new_mime_types[j] = strPtr;
-                    strPtr = stpcpy(strPtr, atomStr) + 1;
-                    X11_XFree(atomStr);
+            /* L5 r3-71 98B-03: a hostile clipboard owner can return failure, NULL
+             * data, or a non-32-bit format for SDL_FORMATS. Casting that buffer to
+             * an array of Atoms (8-byte elements) when it is actually 8-bit bytes
+             * would read far out of bounds. Require Success, non-NULL data and
+             * format==32 before treating it as an Atom list. */
+            if (X11_XGetWindowProperty(display, GetWindow(_this), videodata->atoms.SDL_FORMATS, 0, 200,
+                                       0, XA_ATOM, &atom, &format_property, &length, &bytes_left, &data) != Success ||
+                data == NULL || format_property != 32) {
+                if (data) {
+                    X11_XFree(data);
                 }
-                new_mime_types[length] = NULL;
-
-                SDL_SendClipboardUpdate(false, new_mime_types, length);
+                data = NULL;
+                length = 0;
+            } else if (length > 200) {
+                length = 200;
             }
 
             if (data) {
+                size_t allocationsize = (size_t)(length + 1) * sizeof(char *);
+                for (j = 0, patom = (Atom *)data; j < (int)length; j++, patom++) {
+                    char *atomStr = X11_XGetAtomName(display, *patom);
+                    if (atomStr) {  /* unknown Atom: skip, never strlen(NULL) */
+                        allocationsize += SDL_strlen(atomStr) + 1;
+                        X11_XFree(atomStr);
+                    }
+                }
+
+                char **new_mime_types = SDL_AllocateTemporaryMemory(allocationsize);
+                if (new_mime_types) {
+                    char *strPtr = (char *)(new_mime_types + length + 1);
+                    int count = 0;
+
+                    for (j = 0, patom = (Atom *)data; j < (int)length; j++, patom++) {
+                        char *atomStr = X11_XGetAtomName(display, *patom);
+                        if (!atomStr) {
+                            continue;  /* unknown Atom: emit no MIME entry */
+                        }
+                        new_mime_types[count++] = strPtr;
+                        strPtr = stpcpy(strPtr, atomStr) + 1;
+                        X11_XFree(atomStr);
+                    }
+                    new_mime_types[count] = NULL;
+
+                    SDL_SendClipboardUpdate(false, new_mime_types, count);
+                }
+
                 X11_XFree(data);
+                data = NULL;
             }
         }
 
@@ -1709,8 +1730,16 @@ static void X11_DispatchEvent(SDL_VideoDevice *_this, XEvent *xevent)
                 // fetch conversion targets
                 SDL_x11Prop p;
                 X11_ReadProperty(&p, display, data->xdnd_source, videodata->atoms.XdndTypeList);
-                // pick one
-                data->xdnd_req = X11_PickTarget(display, (Atom *)p.data, p.count);
+                // L5 r3-71 98B-03: XdndTypeList must be a 32-bit array of Atoms. A
+                // hostile/odd drag source can give a different format or NULL data;
+                // casting that to Atom* would read out of bounds. Treat anything
+                // non-32-bit as "no usable target".
+                if (p.format == 32 && p.data != NULL) {
+                    // pick one
+                    data->xdnd_req = X11_PickTarget(display, (Atom *)p.data, p.count);
+                } else {
+                    data->xdnd_req = None;
+                }
                 X11_XFree(p.data);
             } else {
                 // pick from list of three

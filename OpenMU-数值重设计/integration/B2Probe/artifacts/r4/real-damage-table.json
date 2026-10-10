@@ -1,0 +1,16 @@
+{
+  "doc": "REAL naked base damage from engine AttributeSystem (B2Probe v3). This is the ONLY authoritative per-level player damage for B1 monster-HP sizing. Naked = no weapon/armor; main-stat build (DK 50Str/30Vit/20Agi, DW 80Ene/20Vit, FE 70Agi/20Vit/10Str, etc.; solo 8 points/level). avgDmg = (baseMin+baseMax)/2 = per-hit vs monster defense 0; monster defense subtracts per legacy path. skillX2 = starter-skill hit (SkillMultiplier const = 2). These are BASE, pre-weapon.",
+  "levels": [1, 10, 15, 40, 80, 120, 148],
+  "units": "damage points; monster HP target = avgDmg * desiredHits / hitChance",
+  "rows": [
+    {"class":"Dark Knight","dmgStat":"phys","L1_avg":37.0,"L10_avg":68.0,"L15_avg":86.0,"L40_avg":174.0,"L80_avg":313.0,"L120_avg":453.0,"L148_avg":551.0,"L1_skillX2":73.0},
+    {"class":"Dark Wizard","dmgStat":"wiz","L1_avg":36.5,"L10_avg":82.6,"L15_avg":108.2,"L40_avg":236.2,"L80_avg":441.0,"L120_avg":645.8,"L148_avg":789.1,"L1_skillX2":73.0},
+    {"class":"Fairy Elf","dmgStat":"phys(melee naked)","L1_avg":42.0,"L10_avg":78.0,"L15_avg":98.0,"L40_avg":198.0,"L80_avg":358.0,"L120_avg":518.0,"L148_avg":630.0,"L1_skillX2":84.0},
+    {"class":"Magic Gladiator","dmgStat":"phys(after B2 const patch)","L1_avg":21.0,"L10_avg":30.0,"L15_avg":36.0,"L40_avg":63.0,"L80_avg":106.0,"L120_avg":150.0,"L148_avg":180.0},
+    {"class":"Dark Lord","dmgStat":"phys(after B2 const patch)","L1_avg":18.0,"L10_avg":26.0,"L15_avg":30.0,"L40_avg":50.0,"L80_avg":83.0,"L120_avg":116.0,"L148_avg":139.0},
+    {"class":"Summoner","dmgStat":"wiz(after B2 const patch)","L1_avg":31.0,"L10_avg":77.0,"L15_avg":103.0,"L40_avg":231.0,"L80_avg":435.0,"L120_avg":640.0,"L148_avg":784.0},
+    {"class":"Rage Fighter","dmgStat":"phys(after B2 const patch)","L1_avg":20.0,"L10_avg":28.0,"L15_avg":33.0,"L40_avg":57.0,"L80_avg":94.0,"L120_avg":132.0,"L148_avg":158.0}
+  ],
+  "note_to_B1": "Your hand-written monster HP curve used damage 2-4x HIGHER than these real values. Re-size monster HP = avgDmg(real) * desiredHits / hitChance. For the 4-8s starter target at L1 with 1 swing/s and hit~1.0: HP = avgDmg * 4..8. DK avgDmg=37 => starter grind mob HP ~150..300 (pre-solo); after solo x0.45 => ~70..135. This matches the current Beetle post-solo HP=112.",
+  "pvp_mirror_naked": {"DK_to_DW_hits":"1.8(L1) -> 1.2(L148)","DW_to_DK_hits":"3.4(L1) -> 2.0(L148)","note":"naked PVP stays ~1.5-2 hits across levels because HP scales with Vit in step with damage; not a high-level oneshot blowup."}
+}

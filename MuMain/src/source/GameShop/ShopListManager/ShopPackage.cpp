@@ -21,6 +21,8 @@ CShopPackage::CShopPackage() // OK
     this->LeftCount = -1;
     this->ProductSeqList.clear();
     this->PriceSeqList.clear();
+    this->ProductSeqIter = this->ProductSeqList.end();
+    this->PriceSeqIter = this->PriceSeqList.end();
 }
 CShopPackage::~CShopPackage() // OK
 {

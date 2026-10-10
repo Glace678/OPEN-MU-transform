@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic.PlugIns;
+using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.PlugIns;
 
 /// <summary>
@@ -466,23 +467,23 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
 
         if (context.SentReadyCountdownMinutes.Add(remainingMinutes))
         {
-            await context.GameContext.SendGlobalNotificationAsync($"Castle Siege starts in {remainingMinutes} minute(s).").ConfigureAwait(false);
+            await context.GameContext.ShowGlobalLocalizedMessageAsync(MessageType.GoldenCenter, "CastleSiegeStartsInFormat", remainingMinutes).ConfigureAwait(false);
         }
     }
 
     private ValueTask SendStateNotificationAsync(CastleSiegeContext context)
     {
-        var message = context.CurrentState switch
+        var messageKey = context.CurrentState switch
         {
-            CastleSiegeState.RegisterGuild => "Castle Siege guild registration is open.",
-            CastleSiegeState.RegisterMark => "Castle Siege mark registration is open.",
-            CastleSiegeState.Idle3 or CastleSiegeState.Notify => "Castle Siege preparations are in progress.",
-            CastleSiegeState.Start => "Castle Siege is in progress.",
+            CastleSiegeState.RegisterGuild => "CastleSiegeGuildRegistrationOpen",
+            CastleSiegeState.RegisterMark => "CastleSiegeMarkRegistrationOpen",
+            CastleSiegeState.Idle3 or CastleSiegeState.Notify => "CastleSiegePreparationsInProgress",
+            CastleSiegeState.Start => "CastleSiegeInProgress",
             _ => string.Empty,
         };
 
-        return string.IsNullOrEmpty(message)
+        return string.IsNullOrEmpty(messageKey)
             ? ValueTask.CompletedTask
-            : context.GameContext.SendGlobalNotificationAsync(message);
+            : context.GameContext.ShowGlobalLocalizedMessageAsync(MessageType.GoldenCenter, messageKey);
     }
 }

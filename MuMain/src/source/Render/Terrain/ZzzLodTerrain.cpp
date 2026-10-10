@@ -2733,8 +2733,25 @@ void CreateFrustrum2D(vec3_t Position)
                 refHeight = REFERENCE_HEIGHT - 48;
             else if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
                 refHeight = 430;
-            float vpW = (float)(refWidth * WindowWidth) / (float)REFERENCE_WIDTH;
-            float vpH = (float)(refHeight * WindowHeight) / (float)REFERENCE_HEIGHT;
+            // L4 widescreen: match BeginOpengl()'s viewport mapping 1:1 so the
+            // terrain hull aspect equals the real 3D viewport. Branched on the
+            // same Width>=REFERENCE_WIDTH test BeginOpengl uses:
+            //  - no side panel: uniform contain scale = min(scaleY, scaleX)
+            //  - side panel open: old non-uniform left-aligned mapping
+            float vpW, vpH;
+            if (refWidth >= REFERENCE_WIDTH)
+            {
+                float scaleY = (float)WindowHeight / (float)REFERENCE_HEIGHT;
+                float scaleX = (float)WindowWidth  / (float)refWidth;
+                float scale  = (scaleY < scaleX) ? scaleY : scaleX;
+                vpW = (float)refWidth  * scale;
+                vpH = (float)refHeight * scale;
+            }
+            else
+            {
+                vpW = (float)refWidth  * WindowWidth  / REFERENCE_WIDTH;
+                vpH = (float)refHeight * WindowHeight / REFERENCE_HEIGHT;
+            }
             float aspect = vpW / vpH;
 
 #ifdef _EDITOR

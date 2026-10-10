@@ -1,4 +1,4 @@
-﻿//*****************************************************************************
+//*****************************************************************************
 // File: NewUIStorageInventory.cpp
 //*****************************************************************************
 
@@ -612,12 +612,18 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
                 {
                     pItemObj = m_pNewInventoryCtrl->FindItemAtPt(
                         m_nBackupMouseX, m_nBackupMouseY);
+                    // 86-34: FindItemAtPt can miss on an empty cell; never deref null.
+                    if (pItemObj == nullptr)
+                        break;
                     nStorageIndex
                         = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn()
                         + pItemObj->x;
                 }
                 else
                 {
+                    // 86-34: g_pPickedItem is null when nothing is actually picked.
+                    if (g_pPickedItem == nullptr)
+                        break;
                     nStorageIndex = g_pPickedItem->GetSourceLinealPos();
                     pItemObj = g_pPickedItem->GetItem();
                 }

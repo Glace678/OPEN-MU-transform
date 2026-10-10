@@ -1,7 +1,7 @@
 @page "/users"
 @using MUnique.OpenMU.Persistence.AdminAuth
 @using MUnique.OpenMU.Web.AdminPanel.Properties
-@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@attribute [Authorize(Policy = AdminPolicies.Setup)]
 
 @{
     var title = Resources.AdminUsers;

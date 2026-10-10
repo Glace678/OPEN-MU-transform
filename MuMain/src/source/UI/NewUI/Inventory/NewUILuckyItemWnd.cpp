@@ -24,6 +24,11 @@ CNewUILuckyItemWnd::CNewUILuckyItemWnd()
     memset(m_szSubject, 0, sizeof(m_szSubject)); // P4: was hardcoded 255 bytes but m_szSubject is wchar_t[255] = 510 bytes
     m_eType = eLuckyItemType_None;
     m_nMixEffectTimer = 0;
+    // 86-44: assigned only in OpeningProcess()/GetResult(); init so Render/Result before activation
+    // never reads garbage (m_nTextMaxLine as loop bound over m_sText[20], m_eEnd/m_eWndAction as switch keys).
+    m_nTextMaxLine = 0;
+    m_eEnd = eLuckyItem_None;
+    m_eWndAction = eLuckyItem_None;
 }
 
 CNewUILuckyItemWnd::~CNewUILuckyItemWnd()
@@ -139,6 +144,7 @@ void CNewUILuckyItemWnd::UI2DEffectCallback(LPVOID pClass, DWORD dwParamA, DWORD
 
 void CNewUILuckyItemWnd::RenderMixEffect()
 {
+    if (!m_pNewInventoryCtrl) return; // 86-37: Create-failure/SafeDelete path
     if (m_nMixEffectTimer <= 0)
     {
         return;
@@ -151,8 +157,11 @@ void CNewUILuckyItemWnd::RenderMixEffect()
     EnableAlphaBlend();
     for (int i = 0; i < (int)m_pNewInventoryCtrl->GetNumberOfItems(); ++i)
     {
-        int iWidth = ItemAttribute[m_pNewInventoryCtrl->GetItem(i)->Type].Width;
-        int iHeight = ItemAttribute[m_pNewInventoryCtrl->GetItem(i)->Type].Height;
+        ITEM* pItem = m_pNewInventoryCtrl->GetItem(i);
+        if (!pItem) continue; // 86-37: sparse item list -> GetItem(i) may be null
+        if (pItem->Type < 0 || pItem->Type >= MAX_ITEM) continue; // 86-37: bounds guard for ItemAttribute[Type]
+        int iWidth = ItemAttribute[pItem->Type].Width;
+        int iHeight = ItemAttribute[pItem->Type].Height;
 
         for (int h = 0; h < iHeight; ++h)
         {
@@ -162,10 +171,10 @@ void CNewUILuckyItemWnd::RenderMixEffect()
                 float Rotate = (float)((int)(WorldTime) % 100) * 20.f;
                 float Scale = 5.f + (rand() % 10);
                 float x = m_pNewInventoryCtrl->GetPos().x +
-                    (m_pNewInventoryCtrl->GetItem(i)->x + w) * INVENTORY_SQUARE_WIDTH +
+                    (pItem->x + w) * INVENTORY_SQUARE_WIDTH +
                     (rand() % INVENTORY_SQUARE_WIDTH);
                 float y = m_pNewInventoryCtrl->GetPos().y +
-                    (m_pNewInventoryCtrl->GetItem(i)->y + h) * INVENTORY_SQUARE_WIDTH +
+                    (pItem->y + h) * INVENTORY_SQUARE_WIDTH +
                     (rand() % INVENTORY_SQUARE_WIDTH);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, 0);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, Rotate);

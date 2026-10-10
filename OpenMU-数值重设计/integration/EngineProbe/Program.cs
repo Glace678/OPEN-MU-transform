@@ -1,91 +1,116 @@
-using System.Security.Cryptography;
-using System.Text.Json;
+using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.DataModel.Configuration;
+using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.Attributes;
 using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.Persistence.InMemory;
 using MUnique.OpenMU.Persistence.Initialization.VersionSeasonSix;
+using MUnique.OpenMU.Persistence.Initialization;
 
-// This executable creates a transient configuration only. No database or server is opened.
-if (args.Length != 1)
-{
-    Console.Error.WriteLine("Usage: EngineProbe <output-directory>");
-    return 2;
-}
-
+if (args.Length != 1) { Console.Error.WriteLine("Usage: EngineProbe <output-dir>"); return 2; }
 var output = ResolveControlledOutput(args[0]);
 Directory.CreateDirectory(output);
+
 var provider = new InMemoryPersistenceContextProvider();
-using var context = provider.CreateNewConfigurationContext();
-var config = context.CreateNew<GameConfiguration>();
-new GameConfigurationInitializer(context, config).Initialize();
+using var stockCtx = provider.CreateNewConfigurationContext();
+var stockCfg = stockCtx.CreateNew<GameConfiguration>();
+new GameConfigurationInitializer(stockCtx, stockCfg).Initialize();
 
-var catalog = new
+using var soloCtx = provider.CreateNewConfigurationContext();
+var soloCfg = soloCtx.CreateNew<GameConfiguration>();
+new GameConfigurationInitializer(soloCtx, soloCfg).Initialize();
+new SoloBalanceInitializer(soloCtx, soloCfg).Initialize();
+
+Console.WriteLine($"solo marker installed -> stock:{SoloBalance.IsEnabled(stockCfg)} solo:{SoloBalance.IsEnabled(soloCfg)}");
+Console.WriteLine($"ExperienceRate stock={stockCfg.ExperienceRate} solo={soloCfg.ExperienceRate}");
+Sanity(stockCfg, "stock"); Sanity(soloCfg, "solo");
+
+var starters = stockCfg.CharacterClasses.Where(c => c.CanGetCreated && !c.IsMasterClass).OrderBy(c=>c.Number).Take(3).ToList();
+Console.WriteLine("starter classes: " + string.Join(", ", starters.Select(c=>c.Name.ToString())));
+short[] monIds = [3,26,27,28,29,30];
+
+var report = new List<object>();
+foreach (var (cfg, tag) in new[]{ (stockCfg,"STOCK-live"), (soloCfg,"SOLO-applied") })
 {
-    generatedUtc = DateTimeOffset.UtcNow,
-    kind = "real-s6-in-memory-initialization-not-live-database",
-    engineAssemblies = new[] { typeof(GameConfigurationInitializer).Assembly, typeof(GameConfiguration).Assembly }
-        .Select(a => new { name = a.GetName().Name, version = a.GetName().Version?.ToString(),
-            sha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))) }),
-    monsters = config.Monsters.OrderBy(m => m.Number).Select(m => new
+  foreach (var cls in starters)
+  {
+    foreach (var mid in monIds)
     {
-        id = m.Number, name = m.Designation.ToString(), kind = m.ObjectKind.ToString(),
-        level = Read(m, Stats.Level), hp = Read(m, Stats.MaximumHealth),
-        minDamage = Read(m, Stats.MinimumPhysBaseDmg), maxDamage = Read(m, Stats.MaximumPhysBaseDmg),
-        armor = Read(m, Stats.DefenseBase), accuracy = Read(m, Stats.AttackRatePvm), evasion = Read(m, Stats.DefenseRatePvm),
-        attackSeconds = m.AttackDelay.TotalSeconds, respawnSeconds = m.RespawnDelay.TotalSeconds,
-        dropSlots = m.NumberOfMaximumItemDrops,
-    }),
-    maps = config.Maps.OrderBy(m => m.Number).Select(m => new
-    {
-        id = m.Number, definitionId = m.GetId(), name = m.Name.ToString(),
-        spawns = m.MonsterSpawns.Where(s => s.MonsterDefinition is not null).Select(s => new
-        {
-            monsterId = s.MonsterDefinition!.Number,
-            count = s.Quantity,
-            trigger = s.SpawnTrigger.ToString(),
-        }),
-    }),
-    skills = config.Skills.OrderBy(s => s.Number).Select(s => new
-    {
-        id = s.Number, name = s.Name.ToString(), type = s.SkillType.ToString(),
-        damage = s.AttackDamage,
-        master = s.MasterDefinition is not null,
-    }),
-    items = config.Items.OrderBy(i => i.Group).ThenBy(i => i.Number).Select(i => new
-    {
-        group = i.Group, id = i.Number, name = i.Name.ToString(), dropLevel = i.DropLevel,
-        value = i.Value, slot = i.ItemSlot?.ToString(), skillId = i.Skill?.Number,
-    }),
-    classes = config.CharacterClasses.OrderBy(c => c.Number).Select(c => new
-    {
-        id = c.Number, name = c.Name.ToString(), master = c.IsMasterClass, creatable = c.CanGetCreated,
-    }),
-};
+      var mon = cfg.Monsters.FirstOrDefault(m => m.Number == mid);
+      if (mon is null) continue;
+      report.Add(RunOne(cfg, cls, mon, tag));
+    }
+  }
+}
+var sb = new System.Text.StringBuilder();
+sb.AppendLine("tag`tcls`tmon`tmonNum`thp`tdef`tdefrate`tlevel`tatkRate`twiz`tbaseMin`tbaseMax`thit`teffMin`teffMax`texpHits`texpSwings`ttk1s");
+foreach (dynamic r in report) sb.AppendLine($"{r.tag}`t{r.cls}`t{r.mon}`t{r.monNum}`t{r.monHp}`t{r.monDef}`t{r.monDefRate}`t{r.level}`t{r.atkRate}`t{r.wiz}`t{r.baseMin}`t{r.baseMax}`t{r.hit}`t{r.effMin}`t{r.effMax}`t{r.expHits}`t{r.expSwings}`t{r.ttk1s}");
+File.WriteAllText(Path.Combine(output,"ttk-report.tsv"), sb.ToString());
 
-File.WriteAllText(Path.Combine(output, "engine-catalog.json"),
-    JsonSerializer.Serialize(catalog, new JsonSerializerOptions { WriteIndented = true }));
-Console.WriteLine($"Transient S6 catalog: {config.CharacterClasses.Count} classes, {config.Monsters.Count} monsters/NPCs, " +
-    $"{config.Maps.Count} maps, {config.Skills.Count} skills, {config.Items.Count} items.");
-Console.WriteLine("No save, database connection, network listener or game configuration write was performed.");
+Console.WriteLine();
+Console.WriteLine("tag          cls          monster            hp   def  baseMin-baseMax  hit%   effMin-effMax  expHits  ttk(s@1s/swing)");
+foreach (dynamic r in report)
+{
+  Console.WriteLine($"{r.tag,-11} {r.cls,-12} {r.mon,-16} {r.monHp,5:F0} {r.monDef,4:F0}  {r.baseMin,5:F1}-{r.baseMax,-5:F1}   {r.hit,4:P0}  {r.effMin,4:F0}-{r.effMax,-4:F0}     {r.expHits,6:F1}  {r.ttk1s,7:F1}");
+}
+Console.WriteLine("No save, db connection, network listener or config write was performed.");
 return 0;
 
-static float Read(MonsterDefinition monster, MUnique.OpenMU.AttributeSystem.AttributeDefinition stat) =>
-    monster.Attributes.FirstOrDefault(a => a.AttributeDefinition == stat)?.Value ?? 0;
+static void Sanity(GameConfiguration cfg, string tag)
+{
+  foreach (var n in new short[]{3,26,12})
+  {
+    var m = cfg.Monsters.First(x=>x.Number==n);
+    Console.WriteLine($"[{tag}] #{n} {m.Designation} HP={Read(m,Stats.MaximumHealth):F0} def={Read(m,Stats.DefenseBase):F0} defrate={Read(m,Stats.DefenseRatePvm):F0} atkrate={Read(m,Stats.AttackRatePvm):F0}");
+  }
+}
 
-// B-04: restrict writes to the controlled artifacts root (relative to the working
-// directory Verify.ps1 runs from). A caller-supplied absolute path outside it is
-// refused instead of overwriting a fixed-name file anywhere on disk.
+static object RunOne(GameConfiguration cfg, CharacterClass cls, MonsterDefinition mon, string tag)
+{
+  var sys = BuildPlayerSystem(cls);
+  double level = sys[Stats.Level];
+  double atkRate = sys[Stats.AttackRatePvm];
+  bool wiz = sys[Stats.MinimumWizBaseDmg] > 0;
+  double baseMin = wiz ? sys[Stats.MinimumWizBaseDmg] : sys[Stats.MinimumPhysBaseDmg];
+  double baseMax = wiz ? sys[Stats.MaximumWizBaseDmg] : sys[Stats.MaximumPhysBaseDmg];
+
+  double monHp = Read(mon, Stats.MaximumHealth);
+  double monDef = Read(mon, Stats.DefenseBase);
+  double monDefRate = Read(mon, Stats.DefenseRatePvm);
+
+  // LIVE legacy path (no BalanceV1 marker on this DB)
+  double legacyHit = monDefRate < atkRate ? 1.0 - monDefRate / atkRate : 0.03;
+  double hit = EarlyGameBalance.AdjustHitChance((int)level, (float)legacyHit);
+
+  double floor = Math.Max(4.0, level / 10.0);
+  double effMin = Math.Max(baseMin - monDef, floor);
+  double effMax = Math.Max(baseMax - monDef, floor);
+  double avg = (effMin + effMax) / 2.0;
+  double expHits = monHp / Math.Max(1.0, avg);
+  double expSwings = expHits / hit;
+  return new { tag, cls=cls.Name.ToString(), mon=mon.Designation.ToString(), monNum=mon.Number,
+    monHp, monDef, monDefRate, level, atkRate, wiz, baseMin, baseMax,
+    legacyHit, hit, effMin, effMax, avg, expHits, expSwings, ttk1s=expSwings*1.0 };
+}
+
+static float Read(MonsterDefinition monster, AttributeDefinition stat) =>
+  monster.Attributes.FirstOrDefault(a => a.AttributeDefinition == stat)?.Value ?? 0;
+
+static AttributeSystem BuildPlayerSystem(CharacterClass cls)
+{
+  var statAttributes = cls.StatAttributes.Where(sa=>sa.Attribute is not null)
+    .Select(sa=>new StatAttribute(sa.Attribute!, sa.BaseValue)).ToList();
+  var baseAttributes = cls.BaseAttributeValues.ToList();
+  var relationships = cls.AttributeCombinations.ToList();
+  return new AttributeSystem(statAttributes, baseAttributes, relationships);
+}
+
 static string ResolveControlledOutput(string requested)
 {
-    var allowedRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "artifacts"));
-    var output = Path.GetFullPath(requested);
-    var within = output.StartsWith(allowedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
-                 || string.Equals(output, allowedRoot, StringComparison.OrdinalIgnoreCase);
-    if (!within)
-    {
-        Console.Error.WriteLine($"Refusing to write outside the controlled artifacts root: {output} (allowed: {allowedRoot})");
-        Environment.Exit(2);
-    }
-    return output;
+  var allowedRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "artifacts"));
+  var output = Path.GetFullPath(requested);
+  bool within = output.StartsWith(allowedRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(output, allowedRoot, StringComparison.OrdinalIgnoreCase);
+  if (!within) { Console.Error.WriteLine($"Refusing to write outside controlled artifacts root: {output}"); Environment.Exit(2); }
+  return output;
 }

@@ -27,6 +27,9 @@ FileDownloader::FileDownloader(IDownloaderStateEvent* pStateEvent,
     this->m_pFileInfo = pFileInfo;
     this->m_pConnecter = 0;
     this->m_hLocalFile = INVALID_HANDLE_VALUE;
+    this->m_hSession = 0;
+    this->m_hConnection = 0;
+    this->m_hRemoteFile = 0;
     this->m_nFileLength = 0;
 }
 
@@ -127,7 +130,7 @@ WZResult 			FileDownloader::CreateConnection()
 
         auto hHandle = (HANDLE)_beginthreadex(0, 0, FileDownloader::RunConnectThread, this, 0, &ThreadID);
 
-        if (hHandle == INVALID_HANDLE_VALUE)
+        if (hHandle == 0)
         {
             this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, GetLastError(), L"[FileDownloader::CreateConnection] Fail : _beginthreadex, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
         }
@@ -188,8 +191,16 @@ WZResult 			FileDownloader::Connection()
 WZResult 			FileDownloader::TransferRemoteFile()
 {
     DWORD CbSize = this->m_pServerInfo->GetReadBufferSize();
+    if (CbSize == 0)
+        CbSize = DL_DEFAULT_BUFFER_SIZE;
 
-    BYTE* buffer = new BYTE[CbSize];
+    BYTE* buffer = new (std::nothrow) BYTE[CbSize];
+    if (buffer == nullptr)
+    {
+        this->m_Result.SetResult(DL_EXCEPTION, ERROR_OUTOFMEMORY, L"[FileDownloader::TransferRemoteFile] Fail : buffer alloc, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+        this->SendCompletedDownloadFileEvent(this->m_Result);
+        return this->m_Result;
+    }
 
     DWORD TotalSize = 0;
     DWORD ReadSize = 0;

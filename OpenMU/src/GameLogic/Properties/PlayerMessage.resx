@@ -708,4 +708,73 @@
   <data name="CharacterNotStrongEnoughMessage" xml:space="preserve">
     <value>You are not strong enough for this yet.</value>
   </data>
+  <data name="CastleSiegeStartsInFormat" xml:space="preserve">
+    <value>Castle Siege starts in {0} minute(s).</value>
+  </data>
+  <data name="CastleSiegeGuildRegistrationOpen" xml:space="preserve">
+    <value>Castle Siege guild registration is open.</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationOpen" xml:space="preserve">
+    <value>Castle Siege mark registration is open.</value>
+  </data>
+  <data name="CastleSiegePreparationsInProgress" xml:space="preserve">
+    <value>Castle Siege preparations are in progress.</value>
+  </data>
+  <data name="CastleSiegeInProgress" xml:space="preserve">
+    <value>Castle Siege is in progress.</value>
+  </data>
+  <data name="ItemRegistrationNpcNotAvailable" xml:space="preserve">
+    <value>Registration for this NPC is not yet available. It can be expanded in the future.</value>
+  </data>
+  <data name="ItemRegistrationMissingRequiredItem" xml:space="preserve">
+    <value>You don't have the required item in your inventory.</value>
+  </data>
+  <data name="ItemRegistrationInventoryMoneyLimitReached" xml:space="preserve">
+    <value>You have reached the maximum inventory money limit.</value>
+  </data>
+  <data name="ItemRegistrationCompletedWithRewardFormat" xml:space="preserve">
+    <value>Registered {0}/{1} items! Reward claimed.</value>
+  </data>
+  <data name="ItemRegistrationTotalAllTimeFormat" xml:space="preserve">
+    <value>Total items registered all-time: {0}.</value>
+  </data>
+  <data name="ItemRegistrationProgressFormat" xml:space="preserve">
+    <value>Registered {0}/{1} items.</value>
+  </data>
+  <data name="SpeedHackWarningDetected" xml:space="preserve">
+    <value>Warning: Unusual activity detected (speed check). Repeated violations will result in account restriction.</value>
+  </data>
+  <data name="CharInfoAccountNameFormat" xml:space="preserve">
+    <value>Account Name: {0}</value>
+  </data>
+  <data name="SummoningInSecondsFormat" xml:space="preserve">
+    <value>Summoning in {0} second(s)...</value>
+  </data>
+  <data name="SummoningCanceled" xml:space="preserve">
+    <value>Summoning canceled.</value>
+  </data>
+  <data name="InvasionGoldenStartMessage" xml:space="preserve">
+    <value>[{0}] Golden invasion!</value>
+  </data>
+  <data name="InvasionGoldenEndMessage" xml:space="preserve">
+    <value>[{0}] Golden invasion has ended.</value>
+  </data>
+  <data name="InvasionRedDragonStartMessage" xml:space="preserve">
+    <value>[{0}] Red Dragon invasion!</value>
+  </data>
+  <data name="InvasionRedDragonEndMessage" xml:space="preserve">
+    <value>[{0}] Red Dragon invasion has ended.</value>
+  </data>
+  <data name="InvasionWhiteWizardStartMessage" xml:space="preserve">
+    <value>[{0}] White Wizard corps invasion!</value>
+  </data>
+  <data name="InvasionWhiteWizardEndMessage" xml:space="preserve">
+    <value>[{0}] White Wizard corps invasion has ended.</value>
+  </data>
+  <data name="MiniGameEntranceOpenMinutesFormat" xml:space="preserve">
+    <value>The event entrance is open and closes in {0} minute(s).</value>
+  </data>
+  <data name="MiniGameEntranceClosed" xml:space="preserve">
+    <value>The event entrance has closed.</value>
+  </data>
 </root>

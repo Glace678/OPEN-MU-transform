@@ -283,6 +283,7 @@ bool CInGameShopSystem::IsBannerDownload()
 
 bool CInGameShopSystem::SelectZone(int iIndex)
 {
+    if (m_pCategoryList == NULL) return false;
     int iZoneSeqIndex = GetZoneSeqIndexByIndex(iIndex);
     if ((INGAMESHOP_ERROR_ZERO_SIZE == iZoneSeqIndex) || (INGAMESHOP_ERROR_INVALID_INDEX == iZoneSeqIndex))
     {
@@ -300,6 +301,7 @@ bool CInGameShopSystem::SelectZone(int iIndex)
 
 bool CInGameShopSystem::SelectCategory(int iIndex)
 {
+    if (m_pCategoryList == NULL) return false;
     m_listDisplayPackage.clear();
 
     int iCategorySeqIndex = GetCategorySeqIndexByIndex(iIndex);
@@ -557,6 +559,7 @@ bool CInGameShopSystem::GetIsRequestShopOpenning()
 
 bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OUT int& iValue, OUT wchar_t* pszText)
 {
+    if (m_pPackageList == NULL) return false;
     CShopPackage Package;
 
     if (m_pPackageList->GetValueByKey(iPackageSeq, Package) == true)
@@ -602,6 +605,7 @@ bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OU
 
 bool CInGameShopSystem::GetProductInfoFromPriceSeq(int iProductSeq, int iPriceSeq, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName)
 {
+    if (m_pProductList == NULL) return false;
     CShopProduct Product;
 
     m_pProductList->SetPriceSeqFirst(iProductSeq, iPriceSeq);
@@ -622,6 +626,7 @@ bool CInGameShopSystem::GetProductInfoFromPriceSeq(int iProductSeq, int iPriceSe
 
 bool CInGameShopSystem::GetProductInfoFromProductSeq(int iProductSeq, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName)
 {
+    if (m_pProductList == NULL) return false;
     CShopProduct Product;
 
     m_pProductList->SetProductSeqFirst(iProductSeq);
@@ -807,6 +812,8 @@ void CInGameShopSystem::InitZoneInfo()
     m_mapZoneSeqIndex.clear();
     m_listZoneName.clear();
 
+    if (m_pCategoryList == NULL) return;
+
     m_pCategoryList->SetFirst();
     CShopCategory Zone;
 
@@ -880,6 +887,7 @@ int CInGameShopSystem::GetCategorySeqIndexByIndex(int iIndex)
 
 void CInGameShopSystem::SetCategoryName()
 {
+    if (m_pCategoryList == NULL) return;
     m_listCategoryName.clear();
 
     int iCategorySeqIndex;

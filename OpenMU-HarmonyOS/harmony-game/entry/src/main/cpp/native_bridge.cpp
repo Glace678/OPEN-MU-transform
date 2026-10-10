@@ -96,7 +96,7 @@ static napi_module demoModule = {
     .nm_flags = 0,
     .nm_filename = nullptr,
     .nm_register_func = Init,
-    .nm_modname = "entry",
+    .nm_modname = "openmubridge",  // 107-01: must equal CMake target openmubridge (libopenmubridge.so) imported by ArkTS
     .nm_priv = ((void*)0),
     .reserved = {0},
 };

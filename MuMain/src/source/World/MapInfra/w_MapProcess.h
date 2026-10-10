@@ -12,6 +12,7 @@ using MapProcessPtr = std::shared_ptr<MapProcess>;class MapProcess
 {
 public:
     static MapProcessPtr Make();
+    friend MapProcess& TheMapProcess();  /* fallback singleton access to private ctor */
     virtual ~MapProcess();
 
 public:

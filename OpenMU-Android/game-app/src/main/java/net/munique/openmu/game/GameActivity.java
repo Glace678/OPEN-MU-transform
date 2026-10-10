@@ -68,7 +68,7 @@ public final class GameActivity extends SDLActivity {
         String server = MobilePreferences.get(this).getString(MobilePreferences.KEY_SERVER,
             MobilePreferences.DEFAULT_SERVER);
         MobileIdentity.Credentials credentials = MobileConnectionPolicy.localCredentials(server,
-            MobilePreferences.usesLocalPairing(this), BuildConfig.MOBILE_PACKAGE_KEY);
+            MobilePreferences.usesLocalPairing(this), BuildConfig.MOBILE_LOGIN_SEED);
         boolean automaticLogin = credentials != null;
         SDLActivity.nativeSetenv("MU_LOCAL_AUTO_LOGIN", automaticLogin ? "1" : "0");
         SDLActivity.nativeSetenv("MU_MOBILE_LOCAL_AUTO_LOGIN", automaticLogin ? "1" : "0");

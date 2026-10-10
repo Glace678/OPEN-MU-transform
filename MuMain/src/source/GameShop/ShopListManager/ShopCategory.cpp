@@ -19,6 +19,8 @@ CShopCategory::CShopCategory() // OK
 {
     this->CategoryList.clear();
     this->PackageList.clear();
+    this->Categoryiter = this->CategoryList.end();
+    this->Packageiter = this->PackageList.end();
 }
 
 CShopCategory::~CShopCategory() // OK

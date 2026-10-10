@@ -11634,23 +11634,46 @@ void DeleteCharacter(CHARACTER* c, OBJECT* o)
     DeleteParts(c);
 }
 
-int FindCharacterIndex(int Key)
+// Safe lookup contract (NET-05 / P0#11): on hit returns true and writes the slot
+// into outIndex; on miss returns false and sets outIndex = -1. Callers MUST branch on
+// the bool and never use outIndex to index CharactersClient when false.
+bool TryFindCharacterIndex(int Key, int& outIndex)
 {
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
         if (c->Object.Live && c->Key == Key)
         {
-            return i;
+            outIndex = i;
+            return true;
         }
     }
+    outIndex = -1;
+    return false;
+}
 
-    // Not found: return -1 (invalid index). Every caller must treat a result outside
-    // [0, MAX_CHARACTERS_CLIENT) as "character not present". The previous sentinel
-    // MAX_CHARACTERS_CLIENT (400) silently addressed the first uninitialized slot past the
-    // client array when used unchecked; -1 is rejected by all `idx < 0 || idx >= MAX` guards
-    // and by the CharacterExt reader helpers.
-    return -1;
+bool TryFindCharacterIndexByMonsterIndex(int Type, int& outIndex)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+    {
+        CHARACTER* c = &CharactersClient[i];
+        if (c->Object.Live && c->MonsterIndex == Type)
+        {
+            outIndex = i;
+            return true;
+        }
+    }
+    outIndex = -1;
+    return false;
+}
+
+// Legacy wrappers -- deprecated in the header. They delegate to the safe contract
+// and return the slot index or -1; new call sites must use the TryFind* contract.
+int FindCharacterIndex(int Key)
+{
+    int index = -1;
+    TryFindCharacterIndex(Key, index);
+    return index;
 }
 
 // Kept for source compatibility with callers that prefer an explicit safe-lookup name.
@@ -11661,16 +11684,9 @@ int FindCharacterIndexSafe(int Key)
 
 int FindCharacterIndexByMonsterIndex(int Type)
 {
-    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-    {
-        CHARACTER* c = &CharactersClient[i];
-        if (c->Object.Live && c->MonsterIndex == Type)
-        {
-            return i;
-        }
-    }
-    // Not found: return -1 (consistent with FindCharacterIndex); callers must guard.
-    return -1;
+    int index = -1;
+    TryFindCharacterIndexByMonsterIndex(Type, index);
+    return index;
 }
 
 int HangerBloodCastleQuestItem(int Key)

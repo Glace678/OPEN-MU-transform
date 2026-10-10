@@ -1,9 +1,19 @@
 @inject NavigationManager NavigationManager
+@inject MUnique.OpenMU.Web.AdminPanel.Auth.AdminUserAvailabilityService UserAvailability
 
 @code {
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // During the unprovisioned initial setup window the panel has no loginable account, so
+        // sending the operator to the (non-functional) login page would dead-end them. Send them
+        // straight to the setup wizard instead, which is the only route that is reachable then.
+        if (await this.UserAvailability.IsConfirmedEmptyAsync().ConfigureAwait(true))
+        {
+            this.NavigationManager.NavigateTo("setup", replace: true);
+            return;
+        }
+
         var returnUrl = this.NavigationManager.ToBaseRelativePath(this.NavigationManager.Uri);
         var target = string.IsNullOrEmpty(returnUrl) || returnUrl.StartsWith("login", StringComparison.OrdinalIgnoreCase)
             ? "login"

@@ -448,7 +448,7 @@ void CNewUINPCDialogue::SetCurSelTexts()
         pszAnswer = g_QuestMng.GetNPCDlgAnswer(m_dwCurDlgIndex, i);
         if (NULL == pszAnswer)
             break;
-        ::wcscat(szAnswer, pszAnswer);
+        ::wcsncat_s(szAnswer, _countof(szAnswer), pszAnswer, _TRUNCATE);   // 86-78: bounded, no stack overflow
 
         m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
 
@@ -538,7 +538,7 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
 
         if (NULL == pszSelText)
             break;
-        ::wcscat(szSelText, pszSelText);
+        ::wcsncat_s(szSelText, _countof(szSelText), pszSelText, _TRUNCATE);   // 86-78: bounded, no stack overflow
 
         m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0],
             2, ND_WORDS_ROW_MAX, szSelText, 160, false);

@@ -267,10 +267,21 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                 {
                     this._accountLoggingScope = this.Logger.BeginScope("Account: {Name}", this._account.LoginName);
                     this.IsVaultLocked = !string.IsNullOrWhiteSpace(this._account.VaultPassword);
-                    this.Culture = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                    var culture = CultureInfo.GetCultures(CultureTypes.AllCultures)
                         .FirstOrDefault(cu => cu.TwoLetterISOLanguageName == account.LanguageIsoCode
                                               || cu.ThreeLetterISOLanguageName == account.LanguageIsoCode)
                         ?? CultureInfo.CurrentCulture;
+                    // A two-letter ISO code (e.g. "zh") resolves to the neutral language culture whose parent is
+                    // the invariant culture. No neutral-language resource satellite is shipped (only region-specific
+                    // ones such as zh-CN), so ResourceManager falls back to invariant English resources and the
+                    // player would see English even though a translated satellite exists. Map the neutral
+                    // simplified-Chinese culture to the zh-CN satellite that is actually shipped.
+                    if (culture.IsNeutralCulture && culture.Name == "zh")
+                    {
+                        culture = new CultureInfo("zh-CN");
+                    }
+
+                    this.Culture = culture;
                     this.LogInvalidVaultItems();
                 }
             }

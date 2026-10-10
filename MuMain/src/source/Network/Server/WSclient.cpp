@@ -43,6 +43,7 @@
 #include "Network/Server/SoloCashShopPackets.h"
 #include "Network/Server/MerchantPricePackets.h"
 #include "Network/Server/ItemWireLayout.h"
+#include "Network/Server/PacketDispatchPolicy.h"
 #include "Data/GameConfig/GameConfig.h"
 #include "GameLogic/NPCs/npcGateSwitch.h"
 #include "GameLogic/Items/CComGem.h"
@@ -6260,15 +6261,15 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     {
     case eExperienceType_MaxLevelReached:
         // TODO: show message "You already reached maximum Level."
-        g_pSystemLogBox->AddText(L"You already reached maximum Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(I18N::Game::AlreadyReachedMaximumLevel, SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     case eExperienceType_MaxMasterLevelReached:
         // TODO: show message "You already reached maximum master Level."
-        g_pSystemLogBox->AddText(L"You already reached maximum master Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(I18N::Game::AlreadyReachedMaximumMasterLevel, SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     case eExperienceType_MonsterLevelTooLowForMasterExperience:
         // TODO: You need to kill stronger monsters to gain master experience.
-        g_pSystemLogBox->AddText(L"You need to kill stronger monsters to gain master experience.", SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(I18N::Game::NeedToKillStrongerMonstersForMasterExp, SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     }
 
@@ -8433,7 +8434,8 @@ void ReceiveGuildInfo(const BYTE* ReceiveBuffer)
 // Guild rank appointment/change/release result
 void ReceiveGuildAssign(const BYTE* ReceiveBuffer)
 {
-    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildAssign";
+    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING];
+    wcscpy(szTemp, I18N::Game::InvalidGuildAssign);
     auto pData = (LPPRECEIVE_GUILD_ASSIGN)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
@@ -8486,7 +8488,8 @@ void ReceiveGuildRelationShip(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildRelationShipResult(const BYTE* ReceiveBuffer)
 {
-    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildRelationShipResult";
+    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING];
+    wcscpy(szTemp, I18N::Game::InvalidGuildRelationShipResult);
     auto pData = (LPPMSG_GUILD_RELATIONSHIP_RESULT)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
@@ -11741,6 +11744,12 @@ void ReceiveBCNPCRepair(const BYTE* ReceiveBuffer)
     {
         LPPMSG_NPCDBLIST pNPCInfo = nullptr;
         pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
+        if (!pNPCInfo)
+        {
+            g_ErrorReport.Write(L"ReceiveBCNPCRepair: GetNPCInfo null (npc %u idx %u); skipping.\r\n",
+                Data->iNpcNumber, Data->iNpcIndex);
+            break;
+        }
         pNPCInfo->iNpcHp = Data->iNpcHP;
         pNPCInfo->iNpcMaxHp = Data->iNpcMaxHP;
     }
@@ -11766,6 +11775,12 @@ void ReceiveBCNPCUpgrade(const BYTE* ReceiveBuffer)
     {
         LPPMSG_NPCDBLIST pNPCInfo = nullptr;
         pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
+        if (!pNPCInfo)
+        {
+            g_ErrorReport.Write(L"ReceiveBCNPCUpgrade: GetNPCInfo null (npc %u idx %u); skipping.\r\n",
+                Data->iNpcNumber, Data->iNpcIndex);
+            break;
+        }
         if (Data->iNpcUpType == 1)
             pNPCInfo->iNpcDfLevel = Data->iNpcUpValue;
         else if (Data->iNpcUpType == 2)
@@ -14048,6 +14063,9 @@ void ReceiveDarkside(const BYTE* ReceiveBuffer)
     }
 }
 
+// NET-01 / P0#10: running count of packets dropped by the dispatch-layer gate.
+static int g_DroppedShortPackets = 0;
+
 static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 {
     constexpr int MinimumC1PacketSize = 4;
@@ -14075,6 +14093,20 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         }
 
         HeadCode = ReceiveBuffer[3];
+    }
+
+    // NET-01 / P0#10 (89-01): centralised dispatch-layer minimum-length gate.
+    // Before entering the opcode switch -- and before any handler casts the
+    // buffer to a fixed struct -- enforce the minimum bytes the dispatcher itself
+    // needs to safely read SubCode/Value for this HeadCode. Short/illegal packets
+    // are dropped in full and counted; no handler runs. Runtime branch, not assert.
+    const int minimumDispatchBytes = PacketDispatchPolicy::MinimumDispatchBytes(bIsC1C3 != 0, HeadCode);
+    if (Size < minimumDispatchBytes)
+    {
+        ++g_DroppedShortPackets;
+        g_ErrorReport.Write(L"Rejected packet HeadCode 0x%02x: size %d < minimum %d (dispatch gate).\r\n",
+            HeadCode, Size, minimumDispatchBytes);
+        return;
     }
     switch (HeadCode)
     {

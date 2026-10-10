@@ -29,6 +29,8 @@ void CNewBloodCastleSystem::SetMatchResult(const int iNumDevilRank, const int iM
         return;
     }
 
+    if (pMatchResult == NULL) return;
+
     m_iNumResult = Success;
     memcpy(m_MatchResult, pMatchResult, sizeof(MatchResult));
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CBloodCastleResultMsgBoxLayout));

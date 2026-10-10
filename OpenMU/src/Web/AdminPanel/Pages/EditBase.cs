@@ -6,8 +6,10 @@ namespace MUnique.OpenMU.Web.AdminPanel.Pages;
 
 using System.Reflection;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using MUnique.OpenMU.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -24,6 +26,7 @@ using MUnique.OpenMU.Web.Shared.Services;
 /// <summary>
 /// Abstract common base class for an edit page.
 /// </summary>
+[Authorize(Policy = AdminPolicies.Administrator)]
 public abstract class EditBase : ComponentBase, IAsyncDisposable
 {
     private object? _model;
@@ -350,7 +353,20 @@ public abstract class EditBase : ComponentBase, IAsyncDisposable
     private Type? DetermineTypeByTypeString()
     {
         return AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.FullName?.StartsWith(nameof(MUnique)) ?? false)
-            .Select(assembly => assembly.GetType(this.TypeString)).FirstOrDefault(t => t != null);
+            .Select(assembly => assembly.GetType(this.TypeString)).FirstOrDefault(t => t != null && this.IsAllowedType(t));
+    }
+
+    /// <summary>
+    /// Determines whether the resolved <see cref="Type"/> may be edited through this generic reflection
+    /// editor. Only the types on the whitelist are editable; anything else (e.g. account or admin
+    /// security entities, which have their own dedicated, ownership-checked pages) is rejected.
+    /// </summary>
+    /// <param name="type">The resolved type.</param>
+    /// <returns><c>true</c>, if the type is whitelisted for this editor.</returns>
+    protected virtual bool IsAllowedType(Type type)
+    {
+        // The generic configuration editor only edits game configuration types.
+        return type.Namespace == "MUnique.OpenMU.DataModel.Configuration";
     }
 
     private async Task LoadDataAsync(CancellationToken cancellationToken)
@@ -360,7 +376,10 @@ public abstract class EditBase : ComponentBase, IAsyncDisposable
             cancellationToken.ThrowIfCancellationRequested();
             if (this.Type is null)
             {
-                throw new InvalidOperationException($"Only types of namespace {nameof(MUnique)} can be edited on this page.");
+                // Not on the whitelist: render nothing (not found) instead of opening a reflection form.
+                this._loadingState = DataLoadingState.NotFound;
+                await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(true);
+                return;
             }
 
             await this.LoadOwnerAsync(cancellationToken).ConfigureAwait(true);

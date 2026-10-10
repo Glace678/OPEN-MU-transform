@@ -20,7 +20,10 @@ using MUnique.OpenMU.Persistence.Json;
 /// <typeparam name="TSerializable">The type of the serializable.</typeparam>
 [Route("download/[controller]")]
 [GenericControllerName]
-[Authorize]
+
+// Exporting persisted entities (notably any Account) is restricted to administrators: a plain
+// [Authorize] let any authenticated low-privilege role (Viewer) pull arbitrary accounts by id.
+[Authorize(Policy = "OpenMU.Administrator")]
 public class JsonDownloadController<T, TSerializable> : ControllerBase
     where T : class
     where TSerializable : class
@@ -49,7 +52,8 @@ public class JsonDownloadController<T, TSerializable> : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async ValueTask<IActionResult> GetConfigurationByIdAsync(Guid objectId, CancellationToken cancellationToken)
     {
-        await this._dataSource.DiscardChangesAsync().ConfigureAwait(false);
+        // This is a GET (read-only) export: do not discard the data source's unsaved in-memory
+        // changes here, that side effect could silently drop another admin's in-progress edits.
         var owner = await this._dataSource.GetOwnerAsync(objectId, cancellationToken).ConfigureAwait(false);
 
         if (owner is IConvertibleTo<TSerializable> convertibleTo)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -10181,7 +10181,7 @@
     <comment>legacy_id=2920</comment>
   </data>
   <data name="%d sent you a gift." xml:space="preserve">
-    <value>%s hat Ihnen ein Geschenk geschickt.</value>
+    <value>%d hat Ihnen ein Geschenk geschickt.</value>
     <comment>legacy_id=2921</comment>
   </data>
   <data name="Use Confirmation" xml:space="preserve">
@@ -11022,7 +11022,7 @@ Kann nur über die MU Online-Website verwendet werden.</value>
     <comment>legacy_id=3145</comment>
   </data>
   <data name="You need more %%s to purchase this item." xml:space="preserve">
-    <value>Sie benötigen mehr %s, um diesen Artikel zu kaufen.</value>
+    <value>Sie benötigen mehr %%s, um diesen Artikel zu kaufen.</value>
     <comment>legacy_id=3146</comment>
   </data>
   <data name="Cannot apply in Battle Zone." xml:space="preserve">
@@ -13137,6 +13137,111 @@ Kann nur über die MU Online-Website verwendet werden.</value>
   <data name="GamepadActionNextTarget" xml:space="preserve">
     <value>Nächstes Ziel</value>
   </data>
+  <data name="GamepadCtrlSouth" xml:space="preserve">
+    <value>South: A / Cross / B</value>
+  </data>
+  <data name="GamepadCtrlEast" xml:space="preserve">
+    <value>East: B / Circle / A</value>
+  </data>
+  <data name="GamepadCtrlWest" xml:space="preserve">
+    <value>West: X / Square / Y</value>
+  </data>
+  <data name="GamepadCtrlNorth" xml:space="preserve">
+    <value>North: Y / Triangle / X</value>
+  </data>
+  <data name="GamepadCtrlBack" xml:space="preserve">
+    <value>View / Share / Minus</value>
+  </data>
+  <data name="GamepadCtrlStart" xml:space="preserve">
+    <value>Menu / Options / Plus</value>
+  </data>
+  <data name="GamepadCtrlLeftStick" xml:space="preserve">
+    <value>Left Stick (L3)</value>
+  </data>
+  <data name="GamepadCtrlRightStick" xml:space="preserve">
+    <value>Right Stick (R3)</value>
+  </data>
+  <data name="GamepadCtrlLeftShoulder" xml:space="preserve">
+    <value>Left Bumper (LB / L1)</value>
+  </data>
+  <data name="GamepadCtrlRightShoulder" xml:space="preserve">
+    <value>Right Bumper (RB / R1)</value>
+  </data>
+  <data name="GamepadCtrlDpadUp" xml:space="preserve">
+    <value>D-pad Up</value>
+  </data>
+  <data name="GamepadCtrlDpadDown" xml:space="preserve">
+    <value>D-pad Down</value>
+  </data>
+  <data name="GamepadCtrlDpadLeft" xml:space="preserve">
+    <value>D-pad Left</value>
+  </data>
+  <data name="GamepadCtrlDpadRight" xml:space="preserve">
+    <value>D-pad Right</value>
+  </data>
+  <data name="GamepadCtrlLeftTrigger" xml:space="preserve">
+    <value>Left Trigger (LT / L2)</value>
+  </data>
+  <data name="GamepadCtrlRightTrigger" xml:space="preserve">
+    <value>Right Trigger (RT / R2)</value>
+  </data>
+  <data name="GamepadCtrlShortSouth" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="GamepadCtrlShortEast" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="GamepadCtrlShortWest" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="GamepadCtrlShortNorth" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="GamepadCtrlShortBack" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="GamepadCtrlShortStart" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="GamepadCtrlShortLeftStick" xml:space="preserve">
+    <value>L-Stick</value>
+  </data>
+  <data name="GamepadCtrlShortRightStick" xml:space="preserve">
+    <value>R-Stick</value>
+  </data>
+  <data name="GamepadCtrlShortLeftShoulder" xml:space="preserve">
+    <value>LB</value>
+  </data>
+  <data name="GamepadCtrlShortRightShoulder" xml:space="preserve">
+    <value>RB</value>
+  </data>
+  <data name="GamepadCtrlShortDpadUp" xml:space="preserve">
+    <value>D-Up</value>
+  </data>
+  <data name="GamepadCtrlShortDpadDown" xml:space="preserve">
+    <value>D-Down</value>
+  </data>
+  <data name="GamepadCtrlShortDpadLeft" xml:space="preserve">
+    <value>D-Left</value>
+  </data>
+  <data name="GamepadCtrlShortDpadRight" xml:space="preserve">
+    <value>D-Right</value>
+  </data>
+  <data name="GamepadCtrlShortLeftTrigger" xml:space="preserve">
+    <value>LT</value>
+  </data>
+  <data name="GamepadCtrlShortRightTrigger" xml:space="preserve">
+    <value>RT</value>
+  </data>
+  <data name="GamepadFamilyXbox" xml:space="preserve">
+    <value>Xbox layout (A/B/X/Y)</value>
+  </data>
+  <data name="GamepadFamilyPlayStation" xml:space="preserve">
+    <value>PlayStation layout (Cross/Circle)</value>
+  </data>
+  <data name="GamepadFamilyNintendo" xml:space="preserve">
+    <value>Nintendo layout (B/A/Y/X)</value>
+  </data>
   <data name="DisplaySettingsConfirmation" xml:space="preserve">
     <value>Diese Anzeigeeinstellungen behalten? Rückkehr in %d Sekunden.</value>
   </data>
@@ -13225,5 +13330,50 @@ Kann nur über die MU Online-Website verwendet werden.</value>
   </data>
   <data name="TutorialFinish" xml:space="preserve">
     <value>Bereit! Sprich mit NPCs für Quests und verlasse die Stadt, um Monster zu bekämpfen. Viel Spaß!</value>
+  </data>
+  <data name="QuestReqMonster" xml:space="preserve">
+    <value>Mon.: %s x %lu/%lu</value>
+  </data>
+  <data name="QuestReqSkill" xml:space="preserve">
+    <value>Skill: %s</value>
+  </data>
+  <data name="QuestReqItem" xml:space="preserve">
+    <value>Item: %s x %lu/%lu</value>
+  </data>
+  <data name="QuestReqLevel" xml:space="preserve">
+    <value>Level: %lu %s</value>
+  </data>
+  <data name="QuestReqBonus" xml:space="preserve">
+    <value>Bonus: %s</value>
+  </data>
+  <data name="QuestRewardExp" xml:space="preserve">
+    <value>Exp.: %lu</value>
+  </data>
+  <data name="QuestRewardZen" xml:space="preserve">
+    <value>Zen: %lu</value>
+  </data>
+  <data name="QuestRewardItem" xml:space="preserve">
+    <value>Item: %s x %lu</value>
+  </data>
+  <data name="QuestRewardBuff" xml:space="preserve">
+    <value>Bonus: %s x %lu%s</value>
+  </data>
+  <data name="TapToStart" xml:space="preserve">
+    <value>Tap to Start</value>
+  </data>
+  <data name="AlreadyReachedMaximumLevel" xml:space="preserve">
+    <value>You already reached maximum Level.</value>
+  </data>
+  <data name="AlreadyReachedMaximumMasterLevel" xml:space="preserve">
+    <value>You already reached maximum master Level.</value>
+  </data>
+  <data name="NeedToKillStrongerMonstersForMasterExp" xml:space="preserve">
+    <value>You need to kill stronger monsters to gain master experience.</value>
+  </data>
+  <data name="InvalidGuildAssign" xml:space="preserve">
+    <value>Invalid GuildAssign</value>
+  </data>
+  <data name="InvalidGuildRelationShipResult" xml:space="preserve">
+    <value>Invalid GuildRelationShipResult</value>
   </data>
 </root>

@@ -56,6 +56,9 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
+                    b.Property<bool>("MustChangePassword")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -71,13 +74,13 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("SoloCashShopData")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("State")
                         .HasColumnType("integer");
-
-                    b.Property<string>("SoloCashShopData")
-                        .IsRequired()
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
 
                     b.Property<short>("TimeZone")
                         .HasColumnType("smallint");
@@ -1834,11 +1837,11 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                     b.Property<Guid?>("ItemStorageId")
                         .HasColumnType("uuid");
 
-                    b.Property<byte>("Level")
-                        .HasColumnType("smallint");
-
                     b.Property<int>("JewelUpgradeFailures")
                         .HasColumnType("integer");
+
+                    b.Property<byte>("Level")
+                        .HasColumnType("smallint");
 
                     b.Property<int>("PetExperience")
                         .HasColumnType("integer");

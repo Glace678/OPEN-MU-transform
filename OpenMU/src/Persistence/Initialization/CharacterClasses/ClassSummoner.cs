@@ -91,8 +91,13 @@ internal partial class CharacterClassInitialization
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumHealth, 2, Stats.TotalVitality));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MinimumPhysBaseDmg, 1.0f / 7, Stats.TotalStrengthAndAgility));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumPhysBaseDmg, 1.0f / 4, Stats.TotalStrengthAndAgility));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(statsMinWizAndCurseBaseDmg, 1.0f / 9, Stats.TotalEnergy));
-        result.AttributeCombinations.Add(this.CreateAttributeRelationship(statsMaxWizAndCurseBaseDmg, 1.0f / 4, Stats.TotalEnergy));
+        // Balance-v2 lockstep with BalanceLab: Summoner energy-derived magic base damage scales on a par with the
+        // Dark Wizard (ClassDarkWizard uses 0.6x min / 1.0x max of TotalEnergy). The legacy 1/9 and 1/4 divisors
+        // collapsed a 400-level Summoner direct damage (Drain Life 214 / Chain Lightning 215) to ~182/hit vs
+        // ~1450-1480 for peer casters, while BalanceLab combat.json models SU power ~= DW (~1500-1600 at level 400
+        // progression; class damage 1.038 vs DW 1.025). These feed both Wizardry- and Curse-typed Summoner skills.
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(statsMinWizAndCurseBaseDmg, 0.6f, Stats.TotalEnergy));
+        result.AttributeCombinations.Add(this.CreateAttributeRelationship(statsMaxWizAndCurseBaseDmg, 1.0f, Stats.TotalEnergy));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MinimumWizBaseDmg, 1, statsMinWizAndCurseBaseDmg));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MaximumWizBaseDmg, 1, statsMaxWizAndCurseBaseDmg));
         result.AttributeCombinations.Add(this.CreateAttributeRelationship(Stats.MinimumWizBaseDmg, 1, Stats.BaseMinDamageBonus));

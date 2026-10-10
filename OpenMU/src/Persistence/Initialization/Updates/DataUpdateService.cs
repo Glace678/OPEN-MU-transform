@@ -105,6 +105,26 @@ public class DataUpdateService
         }
     }
 
+    /// <summary>
+    /// Applies every available <see cref="IConfigurationUpdatePlugIn.IsMandatory"/> update during
+    /// server startup, so an old, never-dropped installation is migrated without manual action.
+    /// Optional (non-mandatory) updates are intentionally left for the administrator to trigger
+    /// from the admin panel. Updates that are already installed are skipped by
+    /// <see cref="DetermineAvailableUpdatesAsync"/>, so this is safe to call on every boot and on a
+    /// freshly initialized database (where all updates were recorded as installed up front).
+    /// </summary>
+    /// <param name="progress">The optional progress callback.</param>
+    public async ValueTask ApplyMandatoryUpdatesOnStartupAsync(IProgress<(UpdateVersion CurrentUpdatingVersion, bool IsCompleted)>? progress = null)
+    {
+        var available = await this.DetermineAvailableUpdatesAsync().ConfigureAwait(false);
+        var mandatory = available.Where(update => update.IsMandatory).ToList();
+        if (mandatory.Count == 0)
+        {
+            return;
+        }
+
+        await this.ApplyUpdatesAsync(mandatory, progress ?? new Progress<(UpdateVersion CurrentUpdatingVersion, bool IsCompleted)>()).ConfigureAwait(false);
+    }
     private async ValueTask<string> DetermineInitializationKeyAsync(IContext context)
     {
         var updateStates = await context.GetAsync<ConfigurationUpdateState>().ConfigureAwait(false);

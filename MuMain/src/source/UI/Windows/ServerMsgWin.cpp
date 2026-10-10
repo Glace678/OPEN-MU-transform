@@ -49,16 +49,24 @@ bool CServerMsgWin::CursorInWin(int nArea)
 
 void CServerMsgWin::AddMsg(wchar_t* pszMsg)
 {
+    // 86-06 (client top priority): pszMsg comes straight from the server
+    // (dialog text, guild names, applicant IDs). Reject NULL and copy into the
+    // fixed SMW_MSG_ROW_MAX-wide row with a bounded, truncating copy so an
+    // over-long server message cannot overflow the row (server-controllable
+    // object/stack corruption). The line-shift copy is bounded the same way.
+    if (pszMsg == NULL)
+        return;
+
     if (++m_nMsgLine > SMW_MSG_LINE_MAX)
     {
         m_nMsgLine = SMW_MSG_LINE_MAX;
         for (int i = 0; i < SMW_MSG_LINE_MAX - 1; ++i)
-            ::wcscpy(m_aszMsg[i], m_aszMsg[i + 1]);
+            ::wcsncpy_s(m_aszMsg[i], SMW_MSG_ROW_MAX, m_aszMsg[i + 1], _TRUNCATE);
     }
     else
         CWinEx::SetLine(m_nMsgLine * 5);
 
-    wcscpy(m_aszMsg[m_nMsgLine - 1], pszMsg);
+    ::wcsncpy_s(m_aszMsg[m_nMsgLine - 1], SMW_MSG_ROW_MAX, pszMsg, _TRUNCATE);
 
     CWinEx::Show(true);
 }

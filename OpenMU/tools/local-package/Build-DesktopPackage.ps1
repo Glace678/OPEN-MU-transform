@@ -31,6 +31,16 @@ foreach ($source in @($game, $postgres)) {
     }
 }
 
+# 84-07: fail fast before the expensive publish if a required static input is missing.
+foreach ($required in @(
+    (Join-Path $PSScriptRoot 'DESKTOP-README.txt'),
+    (Join-Path $repo 'LICENSE')
+)) {
+    if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
+        throw "Required packaging input missing (84-07): $required. Run from a full checkout; see .gitignore negation rules."
+    }
+}
+
 function Assert-NativeBinary([string]$Path) {
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { throw "Missing native payload: $Path" }
     $stream = [IO.File]::OpenRead($Path)

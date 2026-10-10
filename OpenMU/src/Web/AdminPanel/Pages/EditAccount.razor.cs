@@ -41,6 +41,14 @@ public partial class EditAccount : EditBase
     }
 
     /// <inheritdoc />
+    protected override bool IsAllowedType(Type type)
+    {
+        // The account editor only edits player-entity types that belong to an account; any other
+        // type string is rejected. The owner lookup below is additionally scoped to the route account.
+        return type.Namespace == "MUnique.OpenMU.DataModel.Entities";
+    }
+
+    /// <inheritdoc />
     protected override void AddFormToRenderTree(RenderTreeBuilder builder, ref int currentSequence)
     {
         if (this.Type == typeof(Item))

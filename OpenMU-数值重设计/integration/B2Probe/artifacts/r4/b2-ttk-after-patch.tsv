@@ -1,0 +1,29 @@
+class	mon	hp	def	level	baseMin	baseMax	atkRatePvm	defRatePvm	hit	effMin	effMax	hits	ttk_s
+Dark Wizard	Spider	49.5	4.9	1	28.0	45.0	106.5	101.0	0.80	23.1	40.1	1.6	2.0
+Dark Wizard	Beetle Monster	111.6	8.6	1	28.0	45.0	106.5	101.0	0.80	19.4	36.4	4.0	5.0
+Dark Wizard	Hunter	138.6	10.3	1	28.0	45.0	106.5	101.0	0.80	17.7	34.7	5.3	6.6
+Dark Wizard	Forest Monster	157.1	11.7	1	28.0	45.0	106.5	101.0	0.80	16.3	33.3	6.3	7.9
+Dark Knight	Spider	49.5	4.9	1	29.6	44.4	112.0	101.7	0.80	24.7	39.4	1.5	1.9
+Dark Knight	Beetle Monster	111.6	8.6	1	29.6	44.4	112.0	101.7	0.80	21.1	35.8	3.9	4.9
+Dark Knight	Hunter	138.6	10.3	1	29.6	44.4	112.0	101.7	0.80	19.3	34.0	5.2	6.5
+Dark Knight	Forest Monster	157.1	11.7	1	29.6	44.4	112.0	101.7	0.80	17.9	32.7	6.2	7.8
+Fairy Elf	Spider	49.5	4.9	1	31.1	52.6	118.0	101.2	0.80	26.2	47.7	1.3	1.7
+Fairy Elf	Beetle Monster	111.6	8.6	1	31.1	52.6	118.0	101.2	0.80	22.6	44.1	3.3	4.2
+Fairy Elf	Hunter	138.6	10.3	1	31.1	52.6	118.0	101.2	0.80	20.8	42.3	4.4	5.5
+Fairy Elf	Forest Monster	157.1	11.7	1	31.1	52.6	118.0	101.2	0.80	19.4	40.9	5.2	6.5
+Magic Gladiator	Spider	49.5	4.9	1	16.5	24.8	120.5	103.7	0.80	11.6	19.8	3.2	3.9
+Magic Gladiator	Beetle Monster	111.6	8.6	1	16.5	24.8	120.5	103.7	0.80	7.9	16.2	9.2	11.6
+Magic Gladiator	Hunter	138.6	10.3	1	16.5	24.8	120.5	103.7	0.80	6.2	14.4	13.5	16.9
+Magic Gladiator	Forest Monster	157.1	11.7	1	16.5	24.8	120.5	103.7	0.80	4.8	13.1	17.6	22.0
+Dark Lord	Spider	49.5	4.9	1	14.8	21.7	131.8	97.9	0.80	9.8	16.8	3.7	4.7
+Dark Lord	Beetle Monster	111.6	8.6	1	14.8	21.7	131.8	97.9	0.80	6.2	13.2	11.5	14.4
+Dark Lord	Hunter	138.6	10.3	1	14.8	21.7	131.8	97.9	0.80	4.4	11.4	17.6	22.0
+Dark Lord	Forest Monster	157.1	11.7	1	14.8	21.7	131.8	97.9	0.80	4.0	10.0	24.0	30.0
+Summoner	Spider	49.5	4.9	1	23.8	38.0	111.8	100.2	0.80	18.8	33.1	1.9	2.4
+Summoner	Beetle Monster	111.6	8.6	1	23.8	38.0	111.8	100.2	0.80	15.2	29.4	5.0	6.2
+Summoner	Hunter	138.6	10.3	1	23.8	38.0	111.8	100.2	0.80	13.4	27.7	6.7	8.4
+Summoner	Forest Monster	157.1	11.7	1	23.8	38.0	111.8	100.2	0.80	12.1	26.3	8.2	10.2
+Rage Fighter	Spider	49.5	4.9	1	16.2	23.5	112.1	97.7	0.80	11.3	18.5	3.3	4.1
+Rage Fighter	Beetle Monster	111.6	8.6	1	16.2	23.5	112.1	97.7	0.80	7.7	14.9	9.9	12.3
+Rage Fighter	Hunter	138.6	10.3	1	16.2	23.5	112.1	97.7	0.80	5.9	13.1	14.6	18.2
+Rage Fighter	Forest Monster	157.1	11.7	1	16.2	23.5	112.1	97.7	0.80	4.5	11.8	19.2	24.1

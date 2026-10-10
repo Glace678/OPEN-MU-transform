@@ -52,11 +52,11 @@ ULONGLONG DownloadFileInfo::GetFileLength() // OK
 
 void DownloadFileInfo::SetFilePath(TCHAR* szFileName, TCHAR* szLocalFilePath, TCHAR* szRemoteFilePath, TCHAR* szTargerDirPath) // OK
 {
-    StringCchCopy(this->m_szFileName, sizeof(this->m_szFileName), szFileName);
-    StringCchCopy(this->m_szLocalFilePath, sizeof(this->m_szLocalFilePath), szLocalFilePath);
-    StringCchCopy(this->m_szRemoteFilePath, sizeof(this->m_szRemoteFilePath), szRemoteFilePath);
+    StringCchCopy(this->m_szFileName, _countof(this->m_szFileName), szFileName);
+    StringCchCopy(this->m_szLocalFilePath, _countof(this->m_szLocalFilePath), szLocalFilePath);
+    StringCchCopy(this->m_szRemoteFilePath, _countof(this->m_szRemoteFilePath), szRemoteFilePath);
     if (szTargerDirPath)
-        StringCchCopy(this->m_szTargerDirPath, sizeof(this->m_szTargerDirPath), szTargerDirPath);
+        StringCchCopy(this->m_szTargerDirPath, _countof(this->m_szTargerDirPath), szTargerDirPath);
 }
 
 void  DownloadFileInfo::SetFileLength(ULONGLONG uFileLength) // OK
@@ -130,12 +130,12 @@ void DownloadServerInfo::SetServerInfo(TCHAR* szServerURL, INTERNET_PORT nPort, 
 {
     auto* search = wcschr(szServerURL, ':');
     if (search && search[1] == '/' && search[2] == '/')
-        StringCchCopy(this->m_szServerURL, sizeof(this->m_szServerURL), search + 3);
+        StringCchCopy(this->m_szServerURL, _countof(this->m_szServerURL), search + 3);
     else
-        StringCchCopy(this->m_szServerURL, sizeof(this->m_szServerURL), szServerURL);
+        StringCchCopy(this->m_szServerURL, _countof(this->m_szServerURL), szServerURL);
     this->m_nPort = nPort;
-    StringCchCopy(this->m_szUserID, sizeof(this->m_szUserID), szUserID);
-    StringCchCopy(this->m_szPassword, sizeof(this->m_szPassword), szPassword);
+    StringCchCopy(this->m_szUserID, _countof(this->m_szUserID), szUserID);
+    StringCchCopy(this->m_szPassword, _countof(this->m_szPassword), szPassword);
 }
 
 void DownloadServerInfo::SetDownloaderType(DownloaderType dwDownloaderType) // OK
@@ -145,6 +145,8 @@ void DownloadServerInfo::SetDownloaderType(DownloaderType dwDownloaderType) // O
 
 void DownloadServerInfo::SetReadBufferSize(DWORD dwReadBufferSize) // OK
 {
+    if (dwReadBufferSize < 1024) dwReadBufferSize = 1024;
+    if (dwReadBufferSize > (1u << 20)) dwReadBufferSize = (1u << 20);
     this->m_dwReadBufferSize = dwReadBufferSize;
 }
 

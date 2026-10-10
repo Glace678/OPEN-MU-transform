@@ -57,7 +57,7 @@ bool CMsgBoxIGSBuySelectItem::Create(float fPriority)
 
 void CMsgBoxIGSBuySelectItem::Initialize(CShopPackage* pPackage)
 {
-    int iProductSeq, iPriceSeq;
+    int iProductSeq = -1, iPriceSeq = -1;
 
     m_wItemCode = _wtoi(pPackage->InGamePackageID);
 
@@ -83,6 +83,7 @@ void CMsgBoxIGSBuySelectItem::Initialize(CShopPackage* pPackage)
     pPackage->SetProductSeqFirst();
     if (pPackage->GetProductSeqNext(iProductSeq) == false)
     {
+        return;
     }
 
     pPackage->SetPriceSeqFirst();

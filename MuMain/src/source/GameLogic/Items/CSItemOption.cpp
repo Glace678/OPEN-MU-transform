@@ -1,4 +1,4 @@
-﻿/*+++++++++++++++++++++++++++++++++++++
+/*+++++++++++++++++++++++++++++++++++++
     INCLUDE.
 +++++++++++++++++++++++++++++++++++++*/
 #include "stdafx.h"
@@ -10,6 +10,7 @@
 #include "Scenes/SceneCore.h"
 #include "Engine/Object/ZzzInterface.h"
 #include "Engine/Object/ZzzInventory.h"
+#include "Engine/Object/TextListSafe.h"   // 87-38: unified bounded TextList[50] append
 #include "Character/CharacterManager.h"
 #include "UI/Legacy/UIControls.h"
 #include "UI/NewUI/NewUISystem.h"
@@ -1137,31 +1138,45 @@ std::uint8_t  CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set
             break;
         }
 
-        if (getExplainText(TextList[textIndex], option.OptionNumber, option.Value))
+        // 87-38: textIndex is a server/data-driven uint8. Clamp the row to the
+        // TextList[50] capacity; once full, stop instead of writing past
+        // TextList/TextListColor/TextBold[50].
+        int rowIdx = textIndex;
+        wchar_t* row = SafeTextRowForAppend(rowIdx);
+        if (row == nullptr)
+        {
+            break;
+        }
+
+        if (getExplainText(row, option.OptionNumber, option.Value))
         {
             if (!bIsEquippedItem || !option.IsActive)
             {
-                TextListColor[textIndex] = TEXT_COLOR_GRAY;
+                TextListColor[rowIdx] = TEXT_COLOR_GRAY;
             }
             else if (option.OptionNumber >= AT_SET_OPTION_IMPROVE_ATTACK_1 && !option.FulfillsClassRequirement)
             {
                 // Mastery
-                TextListColor[textIndex] = TEXT_COLOR_RED;
+                TextListColor[rowIdx] = TEXT_COLOR_RED;
             }
             else
             {
-                TextListColor[textIndex] = option.IsFullOption ? TEXT_COLOR_YELLOW
-                                            : option.IsExtOption ? TEXT_COLOR_GREEN
-                                            : TEXT_COLOR_BLUE;
+                TextListColor[rowIdx] = option.IsFullOption ? TEXT_COLOR_YELLOW
+                                        : option.IsExtOption ? TEXT_COLOR_GREEN
+                                        : TEXT_COLOR_BLUE;
             }
 
-            TextBold[textIndex] = false;
-            textIndex++;
+            TextBold[rowIdx] = false;
+            textIndex = static_cast<std::uint8_t>(rowIdx + 1);
         }
     }
 
-    mu_swprintf(TextList[textIndex], L"\n");
-    textIndex++;
+    // Trailing blank line, also clamped to capacity.
+    if (textIndex < TEXT_LIST_LINE_CAPACITY)
+    {
+        mu_swprintf(TextList[textIndex], L"\n");
+        textIndex++;
+    }
 
     return textIndex;
 }

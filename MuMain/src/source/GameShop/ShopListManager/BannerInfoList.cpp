@@ -26,9 +26,9 @@ CBannerInfoList::~CBannerInfoList() // OK
 
 WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strScriptFileName, bool bDonwLoad)
 {
-    static WZResult result;
+    WZResult result;
 
-    result.BuildSuccessResult();
+    result.SetSuccessResult();
 
     std::wifstream ifs;
 

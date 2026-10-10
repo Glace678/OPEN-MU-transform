@@ -233,7 +233,13 @@ public static class AttackableExtensions
 
         var attackerLevel = attacker is Player ? attacker.Attributes[Stats.TotalLevel] :
             attacker is AttackerSurrogate ? attackerPlayer!.Attributes![Stats.Level] : attacker.Attributes[Stats.Level];
-        var minLevelDmg = Math.Max(1, (int)attackerLevel / 10);
+        // Early-game minimum-damage guarantee. The legacy floor (max(1, level/10) = 1 at level 1)
+        // let an attacker whose computed damage collapsed to ~0 -- e.g. a fresh character whose
+        // stat->damage attribute relationships are missing after a profile marker migration mismatch
+        // -- tick a newbie mob for exactly 1 damage (the "can't kill" report). Raise only the low
+        // end to 4 (max(4, level/10)) so level 1 gets a real safety net while the late-game floor stays
+        // identical to the legacy level/10 ramp (40 at level 400), preserving tuned late-game TTK.
+        var minLevelDmg = Math.Max(1, (int)Math.Max(4.0, attackerLevel / 10.0));
         if (dmg < minLevelDmg)
         {
             dmg = minLevelDmg;

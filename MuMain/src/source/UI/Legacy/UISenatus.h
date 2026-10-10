@@ -100,10 +100,11 @@ public:
     int GetCurrStatue() { return m_iCurrStatue; }
     void SetCurrStatue(int iCurrStatue) { m_iCurrStatue = iCurrStatue; }
 
-    PMSG_NPCDBLIST& GetGateInfo(int iIndex) { return m_GateInfo[iIndex]; }
-    PMSG_NPCDBLIST& GetStatueInfo(int iIndex) { return m_StatueInfo[iIndex]; }
-    PMSG_NPCDBLIST& GetCurrGateInfo() { return m_GateInfo[m_iCurrGate]; }
-    PMSG_NPCDBLIST& GetCurrStatueInfo() { return m_StatueInfo[m_iCurrStatue]; }
+    // 85-02: clamp 0-based array accessors so a stale/negative index can never underrun the arrays.
+    PMSG_NPCDBLIST& GetGateInfo(int iIndex) { if (iIndex < 0 || iIndex >= (int)_countof(m_GateInfo)) iIndex = 0; return m_GateInfo[iIndex]; }
+    PMSG_NPCDBLIST& GetStatueInfo(int iIndex) { if (iIndex < 0 || iIndex >= (int)_countof(m_StatueInfo)) iIndex = 0; return m_StatueInfo[iIndex]; }
+    PMSG_NPCDBLIST& GetCurrGateInfo() { int i = m_iCurrGate; if (i < 0 || i >= (int)_countof(m_GateInfo)) i = 0; return m_GateInfo[i]; }
+    PMSG_NPCDBLIST& GetCurrStatueInfo() { int i = m_iCurrStatue; if (i < 0 || i >= (int)_countof(m_StatueInfo)) i = 0; return m_StatueInfo[i]; }
 
     BOOL IsGateRepairable() { return (GetCurrGateInfo().iNpcHp < GetCurrGateInfo().iNpcMaxHp); }
     BOOL IsGateHPUpgradable() { return (GetHPLevel(&GetCurrGateInfo()) < GATE_MAX_HP_LEVEL); }

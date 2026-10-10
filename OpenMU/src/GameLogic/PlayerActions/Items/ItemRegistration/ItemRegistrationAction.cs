@@ -27,7 +27,7 @@ public class ItemRegistrationAction
         var strategy = player.GameContext.PlugInManager.GetStrategy<short, IItemRegistrationStrategy>(npcNumber);
         if (strategy == null)
         {
-            await player.ShowBlueMessageAsync("Registration for this NPC is not yet available. It can be expanded in the future.").ConfigureAwait(false);
+            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationNpcNotAvailable").ConfigureAwait(false);
             return false;
         }
 

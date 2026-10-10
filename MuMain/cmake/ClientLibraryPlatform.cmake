@@ -76,6 +76,16 @@ function(mu_resolve_client_library_platform)
     if(NOT ARG_POINTER_SIZE EQUAL 8)
       message(FATAL_ERROR "The Native AOT client library supports Linux x64 only")
     endif()
+    # Validate the processor like the Android/iOS/OHOS/Darwin branches: a 64-bit
+    # Linux host on ARM64 would otherwise silently be mapped to linux-x64 and emit
+    # the wrong RID (issue T-05 / 90-28).
+    string(TOLOWER "${ARG_SYSTEM_PROCESSOR}" linux_processor)
+    if(NOT linux_processor MATCHES "^(x86_64|amd64)$")
+      message(FATAL_ERROR
+        "The Native AOT client library supports Linux x64 only (got processor "
+        "'${ARG_SYSTEM_PROCESSOR}'); a linux-arm64 build needs an explicit RID and "
+        "the lib-prefixed soname.")
+    endif()
     set(library_name "MUnique.Client.Library.so")
     set(runtime_identifier "linux-x64")
     set(platform "x64")

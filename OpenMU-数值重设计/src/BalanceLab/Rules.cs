@@ -107,7 +107,12 @@ public sealed class Rules(Design design)
 
     public double CastDamage(PlayerStats player, MonsterStats target, Skill skill, Random? random = null)
     {
-        var baseDamage = player.Power * skill.Coefficient * (1 - Reduction(target.Armor, player.Rank));
+        // Lockstep with the runtime early-game minimum-damage floor in AttackableExtensions:
+        // an attacker whose computed damage collapsed to ~0 (e.g. missing stat->damage
+        // relationships after a profile-marker migration) still chunks an equal-level mob.
+        var baseDamage = Math.Max(
+            player.Power * skill.Coefficient * (1 - Reduction(target.Armor, player.Rank)),
+            MinimumDamage(player.Level));
         var chance = HitChance(player.Accuracy, target.Evasion);
         if (random is null)
         {
@@ -243,6 +248,10 @@ public sealed class Rules(Design design)
         var shield = Math.Min(availableShield, damage * Design.Pvp.ShieldDamageShare);
         return new ShieldHit(damage - shield, shield);
     }
+    // Concave sqrt ramp mirroring AttackableExtensions: level 1 floor ~= 4, negligible at level 400.
+    public static double MinimumDamage(int attackerLevel) =>
+        Math.Max(1, Math.Max(4.0, Math.Max(1, attackerLevel) / 10.0));
+
     public static void RollGuard(double roll)
     {
         if (!double.IsFinite(roll) || roll < 0 || roll >= 1) throw new ArgumentOutOfRangeException(nameof(roll));

@@ -6,9 +6,24 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       DB_HOST: database
+      # Bootstrap admin panel user. Compose refuses to start when unset/empty,
+      # so the panel can never be reached anonymously (fixes 84-05 squatting).
+      OPENMU_ADMIN_USER: ${OPENMU_ADMIN_USER:?Run deploy/quick-start to create an admin user}
+      OPENMU_ADMIN_PASSWORD: ${OPENMU_ADMIN_PASSWORD:?Run deploy/quick-start to create an admin user}
+      OPENMU_ADMIN_TOTP_SECRET: ${OPENMU_ADMIN_TOTP_SECRET:-}
+      # Per-role database passwords injected from the environment (fixes 75-01).
+      # No plaintext fallback in ConnectionSettings.xml; missing values fail fast.
+      OPENMU_DB_ADMIN_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      OPENMU_DB_CONFIG_PASSWORD: ${OPENMU_DB_CONFIG_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_ACCOUNT_PASSWORD: ${OPENMU_DB_ACCOUNT_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_FRIEND_PASSWORD: ${OPENMU_DB_FRIEND_PASSWORD:-${POSTGRES_PASSWORD}}
+      OPENMU_DB_GUILD_PASSWORD: ${OPENMU_DB_GUILD_PASSWORD:-${POSTGRES_PASSWORD}}
     networks:
       - proxy
     ports:
+      # Game ports are public; the admin panel (55980) stays loopback-only here.
+      # Reach it through Traefik with the IP-allowlist middleware below, or via SSH tunnel.
+      - "127.0.0.1:55980:55980"
       - "55901:55901"
       - "55902:55902"
       - "55903:55903"
@@ -16,7 +31,6 @@ services:
       - "55905:55905"
       - "55906:55906"
       - "44405:44405"
-      - "55980:55980"
     working_dir: /app/
     depends_on:
       - database
@@ -25,6 +39,9 @@ services:
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.openmu.entrypoints=websecure"
       - "traefik.http.routers.openmu.rule=Host(`${DOMAIN}`)"
+      # Restrict the admin panel to private source IPs (RFC1918 + loopback);
+      # anonymous public squatting is impossible even before a user is created.
+      - "traefik.http.routers.openmu.middlewares=admin-allowlist@file,secureHeaders@file,nofloc@file"
 
   database:
     image: postgres:17-alpine
@@ -41,22 +58,49 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql #store data on volume
 
+  socket-proxy:
+    # Traefik needs read access to the container API for its docker provider (fixes R-01).
+    # Mounting /var/run/docker.sock directly grants root-equivalent API access; the proxy
+    # exposes only the read-only endpoints Traefik actually uses. This service makes the
+    # prod file self-contained when run as a single-file compose.
+    image: tecnativa/docker-socket-proxy:0.3.0
+    container_name: "socket-proxy"
+    restart: always
+    environment:
+      CONTAINERS: "1"
+      SERVICES: "1"
+      NETWORKS: "1"
+      TASKS: "1"
+      VERSION: "1"
+      POST: "0"
+      EXEC: "0"
+      IMAGES: "0"
+      VOLUMES: "0"
+      SECRETS: "0"
+      SYSTEM: "0"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - proxy
+
   traefik:
     image: traefik:2.11
     container_name: traefik
     restart: always
     security_opt:
       - no-new-privileges:true
+    command:
+      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
     ports:
       - 80:80
       - 443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      # Docker access goes through the read-only socket-proxy service from the base
-      # compose file; never mount /var/run/docker.sock directly (root-equivalent API).
       - ./data-traefik/traefik.yml:/traefik.yml:ro
       - ./data-traefik/acme.json:/acme.json
       - ./data-traefik/configurations:/configurations:ro
+    depends_on:
+      - socket-proxy
     networks:
       - proxy
     labels:
@@ -67,4 +111,5 @@ networks:
     external: true
 
 volumes:
+  adminpanel-keys:
   dbdata:

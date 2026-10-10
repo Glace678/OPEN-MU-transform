@@ -4,7 +4,8 @@ param([switch]$PortalOnly, [switch]$ResourcesOnly)
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
 $mobileKey = 'A' * 43
-$keyArgument = '-POPENMU_MOBILE_PACKAGE_KEY={0}' -f $mobileKey
+$loginSeedArgument = '-POPENMU_MOBILE_LOGIN_SEED={0}' -f $mobileKey
+$gmTokenArgument = '-POPENMU_MOBILE_GM_TOKEN={0}' -f $mobileKey
 $serverArgument = '-POPENMU_SERVER_ADDRESS=127.0.0.1'
 $gradleWrapper = if ($env:OS -eq 'Windows_NT') { '.\gradlew.bat' } else { './gradlew' }
 
@@ -101,7 +102,7 @@ function Invoke-MobileJUnitTests {
 
 Push-Location $projectRoot
 try {
-    & $gradleWrapper :game-app:compileDebugUnitTestJavaWithJavac :gm-app:compileDebugUnitTestJavaWithJavac $keyArgument $serverArgument
+    & $gradleWrapper :game-app:compileDebugUnitTestJavaWithJavac :gm-app:compileDebugUnitTestJavaWithJavac $loginSeedArgument $gmTokenArgument $serverArgument
     if ($LASTEXITCODE -ne 0) {
         throw "Test compilation failed with exit code $LASTEXITCODE"
     }

@@ -32,6 +32,7 @@ using MUnique.OpenMU.Persistence.EntityFramework;
 using MUnique.OpenMU.Persistence.EntityFramework.AdminAuth;
 using MUnique.OpenMU.Persistence.EntityFramework.Json;
 using MUnique.OpenMU.Persistence.Initialization;
+using MUnique.OpenMU.Persistence.Initialization.Updates;
 using MUnique.OpenMU.Persistence.Initialization.Version075;
 using MUnique.OpenMU.Persistence.InMemory;
 using MUnique.OpenMU.PlugIns;
@@ -527,6 +528,8 @@ internal sealed class Program : IDisposable
 
         await ValidateInstalledBalanceProfilesAsync(contextProvider).ConfigureAwait(false);
 
+        await this.ApplyMandatoryUpdatesOnStartupAsync(contextProvider, loggerFactory).ConfigureAwait(false);
+
         await this.ReadSystemConfigurationAsync(contextProvider).ConfigureAwait(false);
 
         return contextProvider;
@@ -651,6 +654,46 @@ internal sealed class Program : IDisposable
         }
     }
 
+    /// <summary>
+    /// Applies every available mandatory configuration update after the schema migration and any
+    /// solo / balance-v1 profile conversion, but before the servers accept players. This keeps an
+    /// old, never-dropped database in lockstep with a fresh initialization without manual admin-panel
+    /// action. Mandatory updates already installed are skipped; optional updates are left to the admin.
+    /// </summary>
+    private async Task ApplyMandatoryUpdatesOnStartupAsync(IPersistenceContextProvider contextProvider, ILoggerFactory loggerFactory)
+    {
+        try
+        {
+            var serviceContainer = new ServiceContainer();
+            serviceContainer.AddService(typeof(ILoggerFactory), loggerFactory);
+            serviceContainer.AddService(typeof(IPersistenceContextProvider), contextProvider);
+
+            var referenceHandler = new ByDataSourceReferenceHandler(
+                new GameConfigurationDataSource(serviceContainer.GetService<ILogger<GameConfigurationDataSource>>()!, contextProvider));
+
+            var plugInManager = new PlugInManager(null, loggerFactory, serviceContainer, referenceHandler);
+            plugInManager.DiscoverAndRegisterPlugInsOf<IConfigurationUpdatePlugIn>();
+
+            var updateService = new DataUpdateService(contextProvider, plugInManager);
+            var progress = new Progress<(UpdateVersion CurrentUpdatingVersion, bool IsCompleted)>();
+            progress.ProgressChanged += (_, args) =>
+            {
+                if (args.IsCompleted)
+                {
+                    this._logger.Information("Mandatory configuration update {Version} has been applied.", args.CurrentUpdatingVersion);
+                }
+            };
+
+            this._logger.Information("Applying pending mandatory configuration updates after profile conversion...");
+            await updateService.ApplyMandatoryUpdatesOnStartupAsync(progress).ConfigureAwait(false);
+            this._logger.Information("Mandatory configuration updates are up to date.");
+        }
+        catch (Exception ex)
+        {
+            this._logger.Error(ex, "Applying mandatory configuration updates on startup failed.");
+            throw;
+        }
+    }
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, string[] args, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
     {
         var contextProvider = new PersistenceContextProvider(loggerFactory, changeListener);

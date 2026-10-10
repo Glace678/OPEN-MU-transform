@@ -36,22 +36,47 @@ public sealed class CastleSiegeTributeWithdrawAction
                 }
                 else
                 {
-                    if (amount is > 0 and <= int.MaxValue
-                        && amount <= context.SiegeData.TributeMoney
-                        && player.TryAddMoney((int)amount))
+                    if (amount is > 0 and <= int.MaxValue && amount <= context.SiegeData.TributeMoney)
                     {
                         var previousTribute = context.SiegeData.TributeMoney;
                         context.SiegeData.TributeMoney -= amount;
+
+                        // Persist the treasury debit reliably BEFORE crediting the player's in-memory
+                        // money. The old order (TryAddMoney first, then SaveOwnerAsync) credited the
+                        // player first; a crash or disconnect in between persisted the player's extra
+                        // zen while the tribute debit was lost, so the guild master could withdraw the
+                        // same zen twice. Reordered, a failure in this window can only leave a persisted
+                        // debit without a matching player credit (server-conservative), never the reverse.
+                        bool debitPersisted;
                         try
                         {
                             await context.SaveOwnerAsync().ConfigureAwait(false);
-                            result = CastleSiegeRequestResult.Success;
+                            debitPersisted = true;
                         }
                         catch
                         {
                             context.SiegeData.TributeMoney = previousTribute;
-                            _ = player.TryRemoveMoney((int)amount);
-                            throw;
+                            debitPersisted = false;
+                        }
+
+                        if (debitPersisted && player.TryAddMoney((int)amount))
+                        {
+                            result = CastleSiegeRequestResult.Success;
+                        }
+                        else if (debitPersisted)
+                        {
+                            // The debit is persisted but the player cannot hold the money (inventory zen
+                            // cap). Compensate by restoring the treasury debit so the two stay consistent.
+                            context.SiegeData.TributeMoney = previousTribute;
+                            try
+                            {
+                                await context.SaveOwnerAsync().ConfigureAwait(false);
+                            }
+                            catch
+                            {
+                                // Best-effort compensation: the in-memory treasury value is restored
+                                // regardless; a failure here only leaves a tiny debit, never a free credit.
+                            }
                         }
                     }
                 }

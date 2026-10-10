@@ -92,12 +92,12 @@ internal class Lorencia : BaseMapInitializer
             var bullFighterAttributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 6 },
-                { Stats.MaximumHealth, 100 },
-                { Stats.MinimumPhysBaseDmg, 16 },
-                { Stats.MaximumPhysBaseDmg, 20 },
-                { Stats.DefenseBase, 6 },
-                { Stats.AttackRatePvm, 28 },
-                { Stats.DefenseRatePvm, 6 },
+                { Stats.MaximumHealth, 179 },
+                { Stats.MinimumPhysBaseDmg, 14 },
+                { Stats.MaximumPhysBaseDmg, 18 },
+                { Stats.DefenseBase, 15 },
+                { Stats.AttackRatePvm, 123 },
+                { Stats.DefenseRatePvm, 123 },
             };
             bullFighter.AddAttributes(bullFighterAttributes, this.Context, this.GameConfiguration);
         }
@@ -110,12 +110,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 9 },
-                { Stats.MaximumHealth, 140 },
-                { Stats.MinimumPhysBaseDmg, 22 },
-                { Stats.MaximumPhysBaseDmg, 27 },
-                { Stats.DefenseBase, 9 },
-                { Stats.AttackRatePvm, 39 },
-                { Stats.DefenseRatePvm, 9 },
+                { Stats.MaximumHealth, 231 },
+                { Stats.MinimumPhysBaseDmg, 17 },
+                { Stats.MaximumPhysBaseDmg, 23 },
+                { Stats.DefenseBase, 18 },
+                { Stats.AttackRatePvm, 139 },
+                { Stats.DefenseRatePvm, 139 },
             };
             hound.AddAttributes(attributes, this.Context, this.GameConfiguration);
             hound.MoveRange = 3;
@@ -136,12 +136,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 4 },
-                { Stats.MaximumHealth, 60 },
-                { Stats.MinimumPhysBaseDmg, 10 },
-                { Stats.MaximumPhysBaseDmg, 13 },
-                { Stats.DefenseBase, 3 },
-                { Stats.AttackRatePvm, 18 },
-                { Stats.DefenseRatePvm, 3 },
+                { Stats.MaximumHealth, 144 },
+                { Stats.MinimumPhysBaseDmg, 11 },
+                { Stats.MaximumPhysBaseDmg, 15 },
+                { Stats.DefenseBase, 13 },
+                { Stats.AttackRatePvm, 113 },
+                { Stats.DefenseRatePvm, 113 },
             };
             budgeDragon.AddAttributes(attributes, this.Context, this.GameConfiguration);
             budgeDragon.MoveRange = 3;
@@ -162,12 +162,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 2 },
-                { Stats.MaximumHealth, 30 },
-                { Stats.MinimumPhysBaseDmg, 4 },
-                { Stats.MaximumPhysBaseDmg, 7 },
-                { Stats.DefenseBase, 1 },
-                { Stats.AttackRatePvm, 8 },
-                { Stats.DefenseRatePvm, 1 },
+                { Stats.MaximumHealth, 110 },
+                { Stats.MinimumPhysBaseDmg, 9 },
+                { Stats.MaximumPhysBaseDmg, 12 },
+                { Stats.DefenseBase, 11 },
+                { Stats.AttackRatePvm, 103 },
+                { Stats.DefenseRatePvm, 103 },
             };
             spider.AddAttributes(attributes, this.Context, this.GameConfiguration);
             spider.MoveRange = 2;
@@ -188,12 +188,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 12 },
-                { Stats.MaximumHealth, 190 },
-                { Stats.MinimumPhysBaseDmg, 31 },
-                { Stats.MaximumPhysBaseDmg, 36 },
-                { Stats.DefenseBase, 12 },
-                { Stats.AttackRatePvm, 50 },
-                { Stats.DefenseRatePvm, 12 },
+                { Stats.MaximumHealth, 285 },
+                { Stats.MinimumPhysBaseDmg, 20 },
+                { Stats.MaximumPhysBaseDmg, 28 },
+                { Stats.DefenseBase, 22 },
+                { Stats.AttackRatePvm, 154 },
+                { Stats.DefenseRatePvm, 154 },
             };
             eliteBullFighter.AddAttributes(attributes, this.Context, this.GameConfiguration);
             eliteBullFighter.MoveRange = 3;
@@ -214,12 +214,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 14 },
-                { Stats.MaximumHealth, 255 },
-                { Stats.MinimumPhysBaseDmg, 41 },
-                { Stats.MaximumPhysBaseDmg, 46 },
-                { Stats.DefenseBase, 14 },
-                { Stats.AttackRatePvm, 62 },
-                { Stats.DefenseRatePvm, 14 },
+                { Stats.MaximumHealth, 320 },
+                { Stats.MinimumPhysBaseDmg, 23 },
+                { Stats.MaximumPhysBaseDmg, 31 },
+                { Stats.DefenseBase, 24 },
+                { Stats.AttackRatePvm, 164 },
+                { Stats.DefenseRatePvm, 164 },
                 { Stats.FireResistance, 1f / 255 },
             };
             lich.AddAttributes(attributes, this.Context, this.GameConfiguration);
@@ -242,12 +242,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 17 },
-                { Stats.MaximumHealth, 400 },
-                { Stats.MinimumPhysBaseDmg, 57 },
-                { Stats.MaximumPhysBaseDmg, 62 },
-                { Stats.DefenseBase, 18 },
-                { Stats.AttackRatePvm, 80 },
-                { Stats.DefenseRatePvm, 18 },
+                { Stats.MaximumHealth, 374 },
+                { Stats.MinimumPhysBaseDmg, 26 },
+                { Stats.MaximumPhysBaseDmg, 35 },
+                { Stats.DefenseBase, 27 },
+                { Stats.AttackRatePvm, 180 },
+                { Stats.DefenseRatePvm, 180 },
             };
             giant.AddAttributes(attributes, this.Context, this.GameConfiguration);
             giant.MoveRange = 2;
@@ -268,12 +268,12 @@ internal class Lorencia : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 19 },
-                { Stats.MaximumHealth, 525 },
-                { Stats.MinimumPhysBaseDmg, 68 },
-                { Stats.MaximumPhysBaseDmg, 74 },
-                { Stats.DefenseBase, 22 },
-                { Stats.AttackRatePvm, 93 },
-                { Stats.DefenseRatePvm, 22 },
+                { Stats.MaximumHealth, 411 },
+                { Stats.MinimumPhysBaseDmg, 28 },
+                { Stats.MaximumPhysBaseDmg, 38 },
+                { Stats.DefenseBase, 30 },
+                { Stats.AttackRatePvm, 190 },
+                { Stats.DefenseRatePvm, 190 },
             };
             skeleton.AddAttributes(attributes, this.Context, this.GameConfiguration);
             skeleton.MoveRange = 2;
