@@ -36,8 +36,15 @@ public sealed class ConnectionSettingsWriter
         };
         var document = new XDocument(
             new XDeclaration("1.0", "utf-8", null),
+            new XComment("WARNING (W2-04): this file contains plaintext database passwords. It lives in the current-user-only Keys directory, is deleted when the stack stops, and must never be backed up or shared."),
             new XElement(Namespace + "ConnectionSettings", new XElement(Namespace + "Connections", connections)));
         document.Save(filePath);
+
+        // W2-04: the directory is already 0700 on Unix; pin the file itself to 0600 as defense in depth.
+        if (!OperatingSystem.IsWindows())
+        {
+            File.SetUnixFileMode(filePath, LocalPlatform.PrivateFileMode);
+        }
     }
 
     private static XElement CreateConnection(string contextType, string userName, string password, int port)

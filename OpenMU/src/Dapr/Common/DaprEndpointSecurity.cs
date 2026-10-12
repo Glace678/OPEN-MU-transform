@@ -66,19 +66,35 @@ internal static class DaprEndpointSecurity
     /// <returns><c>true</c> if the request is authorized; otherwise, <c>false</c>.</returns>
     public static bool IsAuthorized(HttpContext context, string? expectedToken)
     {
-        if (IsLoopback(context))
+        if (!string.IsNullOrEmpty(expectedToken))
         {
-            return true;
+            // When a token is configured, the loopback sidecar and any caller presenting the
+            // matching token are authorized.
+            return IsLoopback(context) || HasValidToken(context, expectedToken);
         }
 
-        if (!string.IsNullOrEmpty(expectedToken)
-            && context.Request.Headers.TryGetValue(TokenHeaderName, out var providedToken)
-            && FixedTimeEquals(providedToken.ToString(), expectedToken))
-        {
-            return true;
-        }
+        // No token configured: loopback is only trusted in Development / when explicitly opted in
+        // via OPENMU_DAPR_ALLOW_NO_TOKEN=1. In production this is fail-closed: the service refuses
+        // to start without APP_API_TOKEN (see ConfigureDaprService), so no endpoint should be reached.
+        return IsLoopback(context) && AllowLoopbackWithoutToken();
+    }
 
-        return false;
+    /// <summary>
+    /// Determines whether loopback callers (the local Dapr sidecar) are trusted even when no
+    /// <see cref="TokenEnvironmentVariable"/> is configured. Only in Development or when the
+    /// explicit opt-in environment variable is set; otherwise production runs fail-closed.
+    /// </summary>
+    /// <returns><c>true</c> if loopback callers are allowed without a configured token.</returns>
+    public static bool AllowLoopbackWithoutToken()
+    {
+        return string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(Environment.GetEnvironmentVariable("OPENMU_DAPR_ALLOW_NO_TOKEN"), "1", StringComparison.Ordinal);
+    }
+
+    private static bool HasValidToken(HttpContext context, string expectedToken)
+    {
+        return context.Request.Headers.TryGetValue(TokenHeaderName, out var providedToken)
+            && FixedTimeEquals(providedToken.ToString(), expectedToken);
     }
 
     private static bool IsLoopback(HttpContext context)

@@ -3914,14 +3914,20 @@ void ReceiveChatRoomUserList(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveChatRoomChatText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
+void ReceiveChatRoomChatText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, int Size)
 {
     auto Data = (LPFS_CHAT_TEXT)ReceiveBuffer;
+    // G5-01: variable frame = Header + Index + MsgSize + Msg[MsgSize]. Validate the
+    // fixed head and the Msg[] source span against the real frame length before
+    // memcpy, and bound MsgSize by the destination buffer.
+    if (Size < (int)offsetof(FS_CHAT_TEXT, Msg)) return;
+    if (Data->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) return;
+    if (Size < (int)offsetof(FS_CHAT_TEXT, Msg) + (int)Data->MsgSize) return;
+
     auto* pChatWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwWindowUIID);
     if (pChatWindow == NULL) return;
 
     char temp[MAX_CHATROOM_TEXT_LENGTH] = { };
-    if (Data->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) return;
 
     memcpy(temp, Data->Msg, Data->MsgSize);
     BuxConvert((LPBYTE)temp, Data->MsgSize);
@@ -3997,7 +4003,15 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
         ReceiveChatRoomUserList(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x04:
-        ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer);
+    {
+        // G5-01: validate the variable text frame against the real size before
+        // handing it off (sibling branches 0x02 #MG-14 / 0x0D #MG-13 already do).
+        if (Size < (int)offsetof(FS_CHAT_TEXT, Msg)) break;
+        auto pTxtHdr = (LPFS_CHAT_TEXT)ReceiveBuffer;
+        if (pTxtHdr->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) break;
+        if (Size < (int)offsetof(FS_CHAT_TEXT, Msg) + (int)pTxtHdr->MsgSize) break;
+    }
+        ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer, Size);
         break;
     case 0x0D:
         if (Size < (int)sizeof(FS_CHAT_TEXT)) break;  // #MG-13: reject short notice frame before writing Msg[99]

@@ -1,4 +1,4 @@
-﻿// <copyright file="ShowDroppedItemsPlugIn.cs" company="MUnique">
+// <copyright file="ShowDroppedItemsPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -36,7 +36,8 @@ public class ShowDroppedItemsPlugIn : IShowDroppedItemsPlugIn
             return;
         }
 
-        int itemCount = droppedItems.Count();
+        var droppedItemList = droppedItems as IReadOnlyList<DroppedItem> ?? droppedItems.ToList();
+        int itemCount = droppedItemList.Count;
         int Write()
         {
             var itemSerializer = this._player.ItemSerializer;
@@ -51,7 +52,7 @@ public class ShowDroppedItemsPlugIn : IShowDroppedItemsPlugIn
             int headerSize = ItemsDroppedRef.GetRequiredSize(0, 0);
             int actualSize = headerSize;
             int i = 0;
-            foreach (var item in droppedItems)
+            foreach (var item in droppedItemList)
             {
                 var itemBlock = new ItemsDroppedRef.DroppedItemRef(span[actualSize..]);
                 itemBlock.Id = item.Id;

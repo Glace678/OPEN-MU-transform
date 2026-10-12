@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.LocalLauncher.Tests;
 
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 /// <summary>
@@ -13,6 +14,7 @@ using System.Text.Json;
 public class PackageManifestValidatorTests
 {
     private string _directory = null!;
+    private string? _previousAllowUnsigned;
 
     /// <summary>Creates an isolated package directory.</summary>
     [SetUp]
@@ -20,12 +22,19 @@ public class PackageManifestValidatorTests
     {
         this._directory = Path.Combine(Path.GetTempPath(), $"openmu-manifest-{Guid.NewGuid():N}");
         Directory.CreateDirectory(this._directory);
+
+        // These tests exercise the size/SHA-256/required-file logic that runs AFTER the
+        // signature gate, so tolerate a missing signature via the explicit dev switch.
+        // The signature fail-closed behavior is covered by the dedicated tests below.
+        this._previousAllowUnsigned = Environment.GetEnvironmentVariable(ManifestSignatureVerifier.AllowUnsignedEnvironmentVariableName);
+        Environment.SetEnvironmentVariable(ManifestSignatureVerifier.AllowUnsignedEnvironmentVariableName, "1");
     }
 
     /// <summary>Removes the isolated package directory.</summary>
     [TearDown]
     public void TearDown()
     {
+        Environment.SetEnvironmentVariable(ManifestSignatureVerifier.AllowUnsignedEnvironmentVariableName, this._previousAllowUnsigned);
         Directory.Delete(this._directory, recursive: true);
     }
 
@@ -142,5 +151,41 @@ public class PackageManifestValidatorTests
             await new PackageManifestValidator().ValidateAsync(new LocalPaths(this._directory), CancellationToken.None));
 
         Assert.That(exception!.Message, Does.StartWith("便携程序包清单未包含必需文件"));
+    }
+
+    // --- Signature trust-anchor tests (F5, W2-01) --------------------------------
+
+    /// <summary>An unsigned manifest is rejected by default (no dev switch), fail-closed.</summary>
+    [Test]
+    public void MissingSignatureIsRejectedByDefault()
+    {
+        Environment.SetEnvironmentVariable(ManifestSignatureVerifier.AllowUnsignedEnvironmentVariableName, null);
+        File.WriteAllBytes(Path.Combine(this._directory, "manifest.json"), "{}"u8.ToArray());
+
+        var exception = Assert.ThrowsAsync<InvalidDataException>(async () =>
+            await new PackageManifestValidator().ValidateAsync(new LocalPaths(this._directory), CancellationToken.None));
+        StringAssert.Contains("manifest.json.sig", exception!.Message);
+    }
+
+    /// <summary>A present-but-invalid signature is always rejected, even with the dev switch set.</summary>
+    [Test]
+    public void InvalidSignatureIsRejectedEvenWhenMissingWouldBeAllowed()
+    {
+        // The dev switch only tolerates a MISSING signature file; a present .sig that does
+        // not verify must still fail closed.
+        File.WriteAllBytes(Path.Combine(this._directory, "manifest.json"), "{}"u8.ToArray());
+        File.WriteAllText(Path.Combine(this._directory, "manifest.json.sig"), Convert.ToBase64String(new byte[256]));
+
+        var exception = Assert.ThrowsAsync<InvalidDataException>(async () =>
+            await new PackageManifestValidator().ValidateAsync(new LocalPaths(this._directory), CancellationToken.None));
+        StringAssert.Contains("签名校验失败", exception!.Message);
+    }
+
+    /// <summary>The verifier rejects a signature whose bytes are not valid base64.</summary>
+    [Test]
+    public void GarbageSignatureContentIsRejected()
+    {
+        var manifestBytes = "{}"u8.ToArray();
+        Assert.That(ManifestSignatureVerifier.TryVerify(manifestBytes, Encoding.ASCII.GetBytes("not-base64!!")), Is.False);
     }
 }

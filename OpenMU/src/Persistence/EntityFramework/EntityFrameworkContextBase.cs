@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Composition;
 using MUnique.OpenMU.DataModel.Configuration;
+using MUnique.OpenMU.Persistence.EntityFramework.Model;
 using Nito.AsyncEx;
 using Nito.Disposables;
 
@@ -162,6 +163,30 @@ internal class EntityFrameworkContextBase : IContext
     {
         using var l = this._lock.Lock();
         this.Context.Attach(item);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<bool> AttachMoneyBalanceAsync(Guid itemStorageId, int newMoney, CancellationToken cancellationToken = default)
+    {
+        using var l = await this._lock.LockAsync(cancellationToken).ConfigureAwait(false);
+
+        // The item storage entity type must be mapped by this context (the trade context maps it).
+        // Configuration / friend / guild / in-memory contexts do not support it; the default
+        // interface implementation already covers those, guard again so an unsupported context
+        // reports false instead of throwing on Attach.
+        if (!this.IsSupporting(typeof(ItemStorage)))
+        {
+            return false;
+        }
+
+        // Attach a detached shadow of the wallet row (Id + Money only) and mark it modified, so the
+        // next SaveChanges issues a single UPDATE data."ItemStorage"."Money" WHERE "Id" = @id, in the
+        // very same transaction as the traded item transfer. The live player contexts keep tracking
+        // their own instance and will re-write the same value on their next periodic save.
+        var shadow = new ItemStorage { Id = itemStorageId, Money = newMoney };
+        this.Context.Attach(shadow);
+        this.Context.Entry(shadow).State = EntityState.Modified;
+        return true;
     }
 
     /// <inheritdoc />
@@ -464,7 +489,7 @@ internal class EntityFrameworkContextBase : IContext
                         break;
                 }
 
-                if (parent is not null && parent is not GameConfiguration && parent is not Guid)
+                if (parent is not null && parent is not Model.GameConfiguration && parent is not Guid)
                 {
                     await this._changeListener.ConfigurationChangedAsync(parent.GetType(), parent.GetId(), parent, null).ConfigureAwait(false);
                 }

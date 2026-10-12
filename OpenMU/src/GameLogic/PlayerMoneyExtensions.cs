@@ -36,7 +36,7 @@ public static class PlayerMoneyExtensions
     public static bool TryAddMoney(this Player player, int value)
     {
         var newTotal = (long)player.Money + value;
-        if (value < 0 || newTotal < 0 || newTotal > player.GameContext?.Configuration?.MaximumInventoryMoney)
+        if (value < 0 || newTotal < 0 || newTotal > (player.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue))
         {
             return false;
         }
@@ -58,7 +58,7 @@ public static class PlayerMoneyExtensions
             return false;
         }
 
-        if ((long)player.Vault.ItemStorage.Money + value > player.GameContext?.Configuration?.MaximumVaultMoney)
+        if ((long)player.Vault.ItemStorage.Money + value > (player.GameContext?.Configuration?.MaximumVaultMoney ?? int.MaxValue))
         {
             return false;
         }
@@ -90,7 +90,7 @@ public static class PlayerMoneyExtensions
             return false;
         }
 
-        if ((long)player.Money + value > player.GameContext?.Configuration?.MaximumInventoryMoney)
+        if ((long)player.Money + value > (player.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue))
         {
             return false;
         }

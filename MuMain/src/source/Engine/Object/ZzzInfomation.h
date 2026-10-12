@@ -98,7 +98,13 @@ inline DWORD GenerateCheckSum2(const BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
 {
     DWORD dwKey = (DWORD)wKey;
     DWORD dwResult = dwKey << 9;
-    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
+    // C3-01: dwSize is unsigned; `dwSize - 4` underflows for dwSize < 4 and the
+    // loop would run to ~4GB. Bail out early and use a non-wrapping bound.
+    if (dwSize < 4)
+    {
+        return dwResult;
+    }
+    for (DWORD dwChecked = 0; dwChecked + 4 <= dwSize; dwChecked += 4)
     {
         DWORD dwTemp;
         memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));

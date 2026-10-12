@@ -134,7 +134,7 @@ public class AccountCreationTests
         component.Find("form").Submit();
         await creation.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
         Assert.That(changed, Is.EqualTo(1));
-        Assert.That(component.FindAll(".modal"), Is.Empty);
+        component.WaitForAssertion(() => Assert.That(component.FindAll(".modal"), Is.Empty), TimeSpan.FromSeconds(5));
     }
 
     /// <summary>Duplicate names are rejected before an entity is added; cancel stays available.</summary>

@@ -1,4 +1,4 @@
-﻿// <copyright file="TradeButtonAction.cs" company="MUnique">
+// <copyright file="TradeButtonAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -66,25 +66,22 @@ public class TradeButtonAction : BaseTradeAction
         return (long)player.Money + incomingMoney <= maximumMoney;
     }
 
-    private static void CreditTradeMoney(ITrader trader, int incomingMoney)
+    private static async ValueTask RegisterWalletBalanceAsync(IContext itemContext, ITrader trader, int newMoney)
     {
-        if (incomingMoney == 0)
+        if (trader is not Player player || player.SelectedCharacter?.Inventory is not { } inventory)
         {
             return;
         }
 
-        if (trader is Player player)
+        var storageId = inventory.GetId();
+        if (storageId == Guid.Empty)
         {
-            // Validated up-front; this also updates the money view through the Player.Money setter.
-            if (!player.TryAddMoney(incomingMoney))
-            {
-                throw new InvalidOperationException($"Could not credit {incomingMoney} zen to {player.Name}.");
-            }
+            return;
         }
-        else
-        {
-            trader.Money += incomingMoney;
-        }
+
+        // Register the wallet row on the trade context so it is persisted together with the traded
+        // item transfer in the very next SaveChanges (same DB transaction).
+        await itemContext.AttachMoneyBalanceAsync(storageId, newMoney).ConfigureAwait(false);
     }
 
     private static async ValueTask<bool> TryAddItemsOfTradingPartnerAsync(ITrader trader)
@@ -146,38 +143,38 @@ public class TradeButtonAction : BaseTradeAction
         try
         {
             this.DetachItemsFromPersistenceContext(traderItems, trader.PersistenceContext);
-            this.DetachItemsFromPersistenceContext(tradePartnerItems, trader.TradingPartner!.PersistenceContext);
+            this.DetachItemsFromPersistenceContext(tradePartnerItems, tradingPartner.PersistenceContext);
+
+            // Compute the post-trade wallet balances WITHOUT mutating memory yet, and register both
+            // wallet rows on the trade context. The single SaveChanges below then commits the traded
+            // item transfer AND both money updates in ONE database transaction. If the commit throws,
+            // the whole transaction rolls back and memory was never touched, so the pre-commit cancel
+            // path restores everything cleanly - no torn ledger, no duplicate. Previously the money was
+            // persisted by two extra SaveProgress calls on the players' own (different) connections; a
+            // crash in that window left the items swapped in the DB while the zen never arrived.
+            var newTraderMoney = (int)((long)trader.Money + traderIncoming);
+            var newPartnerMoney = (int)((long)tradingPartner.Money + partnerIncoming);
+            await RegisterWalletBalanceAsync(itemContext, trader, newTraderMoney).ConfigureAwait(false);
+            await RegisterWalletBalanceAsync(itemContext, tradingPartner, newPartnerMoney).ConfigureAwait(false);
+
             await itemContext.SaveChangesAsync().ConfigureAwait(false);
 
-            // The item ownership transfer is now durably committed. From this point on the in-memory
-            // state must not be rolled back from the trade backups, otherwise memory would disagree
-            // with the database and the committed items could be duplicated (see 25-01).
+            // The item transfer AND both wallets are now durably committed in a single transaction.
+            // From this point on the in-memory state must not be rolled back from the trade backups,
+            // otherwise memory would disagree with the database and the committed items could be
+            // duplicated (see 25-01).
             itemTransferCommitted = true;
-            this.AttachItemsToPersistenceContext(traderItems, trader.TradingPartner.PersistenceContext);
+
+            // Mirror the settled balances into memory. This also marks the players' own contexts,
+            // which re-write the same value on their next periodic save.
+            trader.Money = newTraderMoney;
+            tradingPartner.Money = newPartnerMoney;
+
+            this.AttachItemsToPersistenceContext(traderItems, tradingPartner.PersistenceContext);
             this.AttachItemsToPersistenceContext(tradePartnerItems, trader.PersistenceContext);
-            CreditTradeMoney(trader, traderIncoming);
-            CreditTradeMoney(tradingPartner, partnerIncoming);
 
-            // Persist both zen balances. Retry transient failures a few times; the credited zen is
-            // already in memory and a later periodic save will persist it as well.
-            var moneyPersisted = false;
-            for (var attempt = 1; attempt <= 3 && !moneyPersisted; attempt++)
-            {
-                moneyPersisted = await trader.SaveProgressAsync().ConfigureAwait(false)
-                                 && await tradingPartner.SaveProgressAsync().ConfigureAwait(false);
-                if (!moneyPersisted)
-                {
-                    await Task.Delay(attempt * 50).ConfigureAwait(false);
-                }
-            }
-
-            if (!moneyPersisted)
-            {
-                throw new InvalidOperationException("Persisting the traded zen balances failed after retries.");
-            }
-
-            await trader.TradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Checked)).ConfigureAwait(false);
-            this.ResetTradeState(trader.TradingPartner);
+            await tradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Checked)).ConfigureAwait(false);
+            this.ResetTradeState(tradingPartner);
             this.ResetTradeState(trader);
             this.CallPlugIn(traderItems, trader, tradingPartner);
             this.CallPlugIn(tradePartnerItems, tradingPartner, trader);
@@ -188,13 +185,13 @@ public class TradeButtonAction : BaseTradeAction
         {
             if (itemTransferCommitted)
             {
-                // The item transfer already reached the database. Restoring the in-memory backups now
-                // would desync memory from the database and duplicate items, so we keep the settled
-                // result (the credited zen stays in memory and is persisted by a later periodic save)
-                // and only clear the trade UI state. This needs manual attention.
+                // The item transfer and both wallets already reached the database in one transaction.
+                // Restoring the in-memory backups now would desync memory from the database and duplicate
+                // items, so we keep the settled result and only clear the trade UI state. This needs
+                // manual attention.
                 (trader as Player)?.Logger.LogCritical(
                     exception,
-                    "Trade item transfer was committed but the settlement could not be fully completed for {trader} and {partner}; in-memory state is kept consistent with the committed items.",
+                    "Trade settlement could not be fully completed for {trader} and {partner} after the atomic commit; in-memory state is kept consistent with the committed result.",
                     trader.Name,
                     tradingPartner.Name);
                 await this.SendMessageAsync(trader, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
@@ -207,7 +204,8 @@ public class TradeButtonAction : BaseTradeAction
                 return TradeResult.Success;
             }
 
-            // Pre-commit failure: nothing was persisted yet, so cancelling and restoring backups is safe.
+            // Pre-commit failure: nothing was persisted yet (items + money rolled back together), so
+            // cancelling and restoring backups is safe. Memory was never mutated either.
             await this.SendMessageAsync(trader, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
             await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
             context.Allowed = false;

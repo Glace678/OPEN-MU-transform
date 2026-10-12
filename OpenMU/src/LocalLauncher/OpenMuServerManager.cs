@@ -23,6 +23,7 @@ public sealed class OpenMuServerManager
     private readonly ControlPipeClient _controlClient;
     private Process? _process;
     private int? _attachedProcessId;
+    private string? _controlToken;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenMuServerManager"/> class.
@@ -93,6 +94,8 @@ public sealed class OpenMuServerManager
             throw new FileNotFoundException("缺少已发布的 OpenMU 服务器。", this._paths.ServerExecutable);
         }
 
+        // W2-02 (F5): fresh per-launch control token; the packaged server only accepts commands carrying it.
+        this.InitializeControlToken();
         var advertisedAddress = ResolveAdvertisedAddress(this._settings);
         var gameplayProfile = GetGameplayProfileArgument(this._settings.GameplayProfile);
         var process = this._processRunner.Start(
@@ -113,7 +116,7 @@ public sealed class OpenMuServerManager
                 55980,
             };
             await Task.WhenAll(requiredPorts.Distinct().Select(port => this.WaitForEndpointAsync(port, cancellationToken))).ConfigureAwait(false);
-            var response = await this._controlClient.SendAsync("status", TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
+            var response = await this._controlClient.SendAsync("status", this.ResolveControlToken(), TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             var processId = EnsureControlResponse(response, "running");
             if (processId != process.Id)
             {
@@ -136,7 +139,7 @@ public sealed class OpenMuServerManager
     {
         try
         {
-            var response = await this._controlClient.SendAsync("shutdown", TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
+            var response = await this._controlClient.SendAsync("shutdown", this.ResolveControlToken(), TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             this._attachedProcessId = EnsureControlResponse(response, "stopping");
             if (this._process is { } ownedProcess && this._attachedProcessId != ownedProcess.Id)
             {
@@ -224,7 +227,7 @@ public sealed class OpenMuServerManager
     {
         try
         {
-            var response = await this._controlClient.SendAsync("status", TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+            var response = await this._controlClient.SendAsync("status", this.ResolveControlToken(), TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
             var processId = EnsureControlResponse(response, "running");
             this.EnsurePackagedServerProcess(processId);
             this._attachedProcessId = processId;
@@ -271,22 +274,52 @@ public sealed class OpenMuServerManager
         var gameLogin = this._settings.MobileAccessEnabled && this._settings.AutomaticGameLogin
             ? LocalGameLogin.FromMobilePackageKey(this._settings.MobilePackageKey)
             : LocalGameLogin.FromSecrets(secrets);
-        var listenerAddress = this._settings.MobileAccessEnabled ? "0.0.0.0" : "127.0.0.1";
+
+        // Game TCP ports: when mobile access is enabled they must be reachable from the LAN phone.
+        var gameBindAddress = this._settings.MobileAccessEnabled ? "0.0.0.0" : "127.0.0.1";
+
+        // Admin panel: the panel UI itself is always reachable on loopback. Only expose it on the LAN
+        // when the user explicitly opted in (AdminPanelExposedToLan) AND has configured a TOTP secret
+        // for the bootstrap admin; otherwise the panel stays loopback-only. When mobile access is on but
+        // the panel is not explicitly exposed, we still listen on 0.0.0.0 so the phone can call
+        // /api/mobile-gm, but the panel middleware (OPENMU_ADMIN_PUBLIC_PATH_WHITELIST) blocks every
+        // other path on the non-loopback interface.
+        var adminUrls = new List<string> { $"http://127.0.0.1:{this._settings.AdminPanelPort}" };
+        string? publicPathWhitelist = null;
+        if (this._settings.AdminPanelExposedToLan)
+        {
+            if (string.IsNullOrWhiteSpace(secrets.AdminPanelTotpSecret))
+            {
+                throw new InvalidOperationException(
+                    "要把管理面板整体对局域网开放（AdminPanelExposedToLan=true），必须先为引导管理员 localadmin 配置 TOTP 两步验证（在 Secrets 中设置 AdminPanelTotpSecret）。" +
+                    "出于安全考虑，未启用 2FA 时拒绝把登录页暴露到局域网。手机 GM 功能不受影响：仅启用手机访问即可，无需对外暴露整个面板。");
+            }
+
+            adminUrls.Add($"http://0.0.0.0:{this._settings.AdminPanelPort}");
+        }
+        else if (this._settings.MobileAccessEnabled)
+        {
+            adminUrls.Add($"http://0.0.0.0:{this._settings.AdminPanelPort}");
+            publicPathWhitelist = "/api/mobile-gm";
+        }
+
         return new Dictionary<string, string?>
         {
             ["OPENMU_LOCAL_GAME_USERNAME"] = this._settings.AutomaticGameLogin ? gameLogin.Username : null,
             ["OPENMU_LOCAL_GAME_PASSWORD"] = this._settings.AutomaticGameLogin ? gameLogin.Password : null,
             ["OPENMU_MOBILE_PACKAGE_KEY"] = this._settings.MobileAccessEnabled ? this._settings.MobilePackageKey : null,
             ["OPENMU_CONNECTION_SETTINGS_FILE"] = this._paths.ConnectionSettingsFile,
-            ["OPENMU_BIND_ADDRESS"] = listenerAddress,
+            ["OPENMU_BIND_ADDRESS"] = gameBindAddress,
             ["OPENMU_CONTROL_PIPE"] = this.PipeName,
+            ["OPENMU_CONTROL_TOKEN"] = this._controlToken,
             ["OPENMU_ADMIN_USER"] = "localadmin",
             ["OPENMU_ADMIN_PASSWORD"] = secrets.AdminPanelPassword,
-            ["OPENMU_ADMIN_TOTP_SECRET"] = null,
+            ["OPENMU_ADMIN_TOTP_SECRET"] = string.IsNullOrWhiteSpace(secrets.AdminPanelTotpSecret) ? null : secrets.AdminPanelTotpSecret,
+            ["OPENMU_ADMIN_PUBLIC_PATH_WHITELIST"] = publicPathWhitelist,
             ["DB_HOST"] = null,
             ["DB_ADMIN_USER"] = null,
             ["DB_ADMIN_PW"] = null,
-            ["ASPNETCORE_URLS"] = $"http://{listenerAddress}:{this._settings.AdminPanelPort}",
+            ["ASPNETCORE_URLS"] = string.Join(';', adminUrls),
             ["ASPNETCORE_ENVIRONMENT"] = "Production",
             ["DOTNET_ENVIRONMENT"] = "Production",
             ["Database__AssumeExternallyProvisioned"] = "false",
@@ -355,6 +388,57 @@ public sealed class OpenMuServerManager
             gateway.Address.AddressFamily == AddressFamily.InterNetwork
             && !gateway.Address.Equals(IPAddress.Any));
         return interfaceScore + (isPrivate ? 50 : 0) + (hasGateway ? 20 : 0);
+    }
+
+    private string ControlTokenFilePath => Path.Combine(this._paths.KeysDirectory, "control.token");
+
+    private void InitializeControlToken()
+    {
+        this._controlToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        File.WriteAllText(this.ControlTokenFilePath, this._controlToken);
+        if (!OperatingSystem.IsWindows())
+        {
+            File.SetUnixFileMode(this.ControlTokenFilePath, LocalPlatform.PrivateFileMode);
+        }
+    }
+
+    private string? ResolveControlToken()
+    {
+        if (this._controlToken is not null)
+        {
+            return this._controlToken;
+        }
+
+        try
+        {
+            if (File.Exists(this.ControlTokenFilePath))
+            {
+                this._controlToken = File.ReadAllText(this.ControlTokenFilePath).Trim();
+            }
+        }
+        catch (IOException)
+        {
+            // A missing token file simply means the server rejects our commands with "unauthorized".
+        }
+
+        return this._controlToken;
+    }
+
+    /// <summary>Deletes the one-shot control token file after the stack has stopped.</summary>
+    internal void ClearControlToken()
+    {
+        this._controlToken = null;
+        try
+        {
+            if (File.Exists(this.ControlTokenFilePath))
+            {
+                File.Delete(this.ControlTokenFilePath);
+            }
+        }
+        catch (IOException)
+        {
+            // Best effort: the next start overwrites the token file anyway.
+        }
     }
 
     private static string CreatePipeName(string rootDirectory)
@@ -538,7 +622,7 @@ public sealed class OpenMuServerManager
 
         try
         {
-            var response = await this._controlClient.SendAsync("shutdown", TimeSpan.FromSeconds(2), CancellationToken.None).ConfigureAwait(false);
+            var response = await this._controlClient.SendAsync("shutdown", this.ResolveControlToken(), TimeSpan.FromSeconds(2), CancellationToken.None).ConfigureAwait(false);
             _ = EnsureControlResponse(response, "stopping");
             using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             await process.WaitForExitAsync(timeoutCts.Token).ConfigureAwait(false);

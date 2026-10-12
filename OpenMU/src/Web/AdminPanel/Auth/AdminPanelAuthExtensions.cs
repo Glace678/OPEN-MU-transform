@@ -122,11 +122,14 @@ public static class AdminPanelAuthExtensions
             })
             .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
                 ApiKeyAuthenticationDefaults.AuthenticationScheme,
-                configureOptions: null)
-            .AddScheme<MobileGmAuthenticationOptions, MobileGmAuthenticationHandler>(
-                MobileGmAuthenticationDefaults.AuthenticationScheme,
-                options => options.PackageKey = Environment.GetEnvironmentVariable(
-                    MobileGmAuthenticationDefaults.PackageKeyEnvironmentVariable) ?? string.Empty);
+                configureOptions: null);
+        // F1 (M1-01 / M2-H1): the mobile GM write API is no longer guarded by a
+        // static, APK-distributed bearer (X-OpenMU-Mobile-Key). That key was baked
+        // into every distributed package and could be read back with Jadx/apktool,
+        // which let any LAN player call /grant-item|grant-zen. The MobileGm* scheme
+        // registration is intentionally removed; the policy below now requires an
+        // admin-panel cookie session (issued by POST /api/mobile-gm/login after
+        // username + password + optional TOTP) and the Administrator role.
 
         services.AddSingleton<IAuthorizationHandler, AdminAccessRequirementHandler>();
         services.AddSingleton<IAuthorizationHandler, AdminSetupRequirementHandler>();
@@ -138,11 +141,12 @@ public static class AdminPanelAuthExtensions
             .AddPolicy(AdminPolicies.Setup, policy => policy.AddRequirements(new AdminSetupRequirement()))
             .AddPolicy(MobileGmAuthenticationDefaults.Policy, policy =>
             {
-                policy.AddAuthenticationSchemes(MobileGmAuthenticationDefaults.AuthenticationScheme);
+                // F1: reuse the admin-panel cookie session (same scheme as the web
+                // panel) and require the Administrator role. The old static
+                // package-key marker claim is gone.
+                policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim(
-                    MobileGmAuthenticationDefaults.MarkerClaimType,
-                    MobileGmAuthenticationDefaults.MarkerClaimValue);
+                policy.RequireRole(AdminRoles.Administrator);
             });
         services.AddCascadingAuthenticationState();
         services.AddScoped<AdminAuthenticationStateProvider>();

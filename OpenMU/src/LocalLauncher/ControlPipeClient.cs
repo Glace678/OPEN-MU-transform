@@ -29,8 +29,11 @@ public sealed class ControlPipeClient
     /// <param name="timeout">The connection timeout.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The JSON response line.</returns>
-    public async Task<string> SendAsync(string command, TimeSpan timeout, CancellationToken cancellationToken)
+    public async Task<string> SendAsync(string command, string? controlToken, TimeSpan timeout, CancellationToken cancellationToken)
     {
+        // W2-02 (F5): first line of the conversation is "TOKEN command"; a legacy line without
+        // a token is rejected by launcher-started servers (shutdown) or answered for status.
+        var line = controlToken is { Length: > 0 } ? controlToken + " " + command : command;
         await using var pipe = new NamedPipeClientStream(".", this._pipeName, PipeDirection.InOut, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutCts.CancelAfter(timeout);
@@ -38,7 +41,7 @@ public sealed class ControlPipeClient
 
         await using var writer = new StreamWriter(pipe, new UTF8Encoding(false), 1024, leaveOpen: true) { AutoFlush = true };
         using var reader = new StreamReader(pipe, Encoding.UTF8, false, 1024, leaveOpen: true);
-        await writer.WriteLineAsync(command).ConfigureAwait(false);
+        await writer.WriteLineAsync(line).ConfigureAwait(false);
         return await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(false)
                ?? throw new EndOfStreamException("OpenMU 控制通道已关闭，但未返回结果。");
     }

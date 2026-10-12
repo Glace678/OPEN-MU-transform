@@ -1,4 +1,4 @@
-﻿// <copyright file="BaseItemCraftingHandler.cs" company="MUnique">
+// <copyright file="BaseItemCraftingHandler.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -62,12 +62,14 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
             {
                 if (await this.DoTheMixAsync(items, player, socketSlot, successRate).ConfigureAwait(false) is { } item)
                 {
-                    player.Logger.LogInformation("Crafted item: {item}", item);
-
-                    // Reset backup inventory to avoid old items are restored after success and sudden disconnect of the client.
-                    // Newly created items are not in the backup inventory, so they won't be restored in case of a disconnect.
-                    // So the best solution is to just clear it and rely on the restore mechanism for the temporary storage.
+                    // A4-H1: disable the pre-craft inventory restore as the very first step after the mix
+                    // has committed (product created + materials consumed in DoTheMixAsync). This closes the
+                    // disconnect window where the product was already built but BackupInventory was not yet
+                    // cleared, so a reconnect could fall back to the stale backup and resurrect the consumed
+                    // materials. Newly created items are tracked in the temporary storage, not the backup.
                     player.BackupInventory = null;
+
+                    player.Logger.LogInformation("Crafted item: {item}", item);
 
                     return (CraftingResult.Success, item);
                 }

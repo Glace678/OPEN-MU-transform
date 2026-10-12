@@ -199,7 +199,14 @@ void OpenGateScript(const wchar_t* FileName)
         BYTE* Buffer = new BYTE[Size];
         for (int i = 0; i < MAX_GATES; i++)
         {
-            fread(Buffer, Size, 1, fp);
+            // C3-03: align with OpenMonsterSkillScript (XC-12); a truncated file
+            // must not leave stale/uninitialised buffer bytes in GateAttribute.
+            // AbortWithFileError takes ownership of Buffer and closes fp.
+            if (fread(Buffer, Size, 1, fp) != 1)
+            {
+                AbortWithFileError(fp, FileName, L"File truncated (gate script).", Buffer);
+                return;
+            }
             BuxConvert(Buffer, Size);
             memcpy(&GateAttribute[i], Buffer, Size);
         }

@@ -33,6 +33,7 @@ $excludedRoots = @(
 $files = Get-ChildItem -LiteralPath $root -File -Recurse | Where-Object {
     $fullName = $_.FullName
     $fullName -ne $manifestPath -and
+    $fullName -ne ($manifestPath + '.sig') -and
     -not $excludedFiles.Contains($fullName) -and
     -not ($excludedRoots | Where-Object { $fullName.StartsWith($_ + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase) })
 } | Sort-Object FullName | ForEach-Object {
@@ -57,4 +58,17 @@ $manifest = [ordered]@{
     files = @($files)
 }
 $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding utf8NoBOM
+
+# F5 (W2-01): detached signature over manifest.json. Release builds must set
+# OPENMU_MANIFEST_SIGNING_KEY to the offline private key XML; unsigned output is
+# rejected by the launcher unless OPENMU_ALLOW_UNSIGNED_MANIFEST=1 is set.
+$signer = Join-Path $PSScriptRoot '..\ManifestSigner\Sign-Manifest.ps1'
+if ($env:OPENMU_MANIFEST_SIGNING_KEY -and (Test-Path -LiteralPath $env:OPENMU_MANIFEST_SIGNING_KEY)) {
+    & $signer -ManifestPath $manifestPath -PrivateKeyXmlPath $env:OPENMU_MANIFEST_SIGNING_KEY
+    if ($LASTEXITCODE -ne 0) { throw "manifest signing failed: $manifestPath" }
+}
+else {
+    Write-Warning "OPENMU_MANIFEST_SIGNING_KEY not set; manifest.json is UNSIGNED. Distribution builds must set it."
+}
+
 Write-Output $manifestPath

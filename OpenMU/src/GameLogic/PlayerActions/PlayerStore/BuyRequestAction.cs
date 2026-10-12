@@ -1,4 +1,4 @@
-﻿// <copyright file="BuyRequestAction.cs" company="MUnique">
+// <copyright file="BuyRequestAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -8,6 +8,7 @@ using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.GameLogic.Views;
 using MUnique.OpenMU.GameLogic.Views.Inventory;
 using MUnique.OpenMU.Interfaces;
+using MUnique.OpenMU.Persistence;
 
 /// <summary>
 /// Action to buy an item from another player shop.
@@ -25,6 +26,17 @@ public class BuyRequestAction
     public async ValueTask BuyItemAsync(Player player, Player requestedPlayer, byte slot)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
+
+        // A player must not buy from their own shop: the money would only move between their own
+        // pockets while the item jumps out of the shop storage into the inventory, bypassing the
+        // "close the shop before taking items back" flow.
+        if (ReferenceEquals(player, requestedPlayer))
+        {
+            player.Logger.LogWarning("Player {Character} tried to buy an item from their own shop.", player.SelectedCharacter?.Name);
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.NameMismatchOrPriceMissing, null)).ConfigureAwait(false);
+            return;
+        }
+
         if (requestedPlayer.IsTemplatePlayer || player.IsTemplatePlayer)
         {
             await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ItemBlock, null)).ConfigureAwait(false);
@@ -143,8 +155,23 @@ public class BuyRequestAction
             }
 
             requestedPlayer.PersistenceContext.Detach(item);
+
+            // Register both wallet balances on the trade context so the single SaveChanges below
+            // commits the item transfer AND the buyer deduction + seller credit atomically in one DB
+            // transaction. Previously the money only lived in memory and was persisted by a later
+            // periodic save; a crash in that window let the buyer walk off with the item for free.
+            await RegisterWalletBalanceAsync(itemContext, player, player.Money).ConfigureAwait(false);
+            await RegisterWalletBalanceAsync(itemContext, requestedPlayer, requestedPlayer.Money).ConfigureAwait(false);
+
             await itemContext.SaveChangesAsync().ConfigureAwait(false);
             player.PersistenceContext.Attach(item);
+
+            // Explicitly persist both players' own contexts. The wallet rows were already committed
+            // in the trade transaction above; this also flushes any other in-flight change and means
+            // the settlement does not rely on a later periodic save.
+            await player.SaveProgressAsync().ConfigureAwait(false);
+            await requestedPlayer.SaveProgressAsync().ConfigureAwait(false);
+
             await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.Success, item)).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             itemSold = true;
@@ -164,5 +191,21 @@ public class BuyRequestAction
                 await this._closeStoreAction.CloseStoreAsync(requestedPlayer).ConfigureAwait(false);
             }
         }
+    }
+
+    private static async ValueTask RegisterWalletBalanceAsync(IContext itemContext, Player player, int newMoney)
+    {
+        if (player.SelectedCharacter?.Inventory is not { } inventory)
+        {
+            return;
+        }
+
+        var storageId = inventory.GetId();
+        if (storageId == Guid.Empty)
+        {
+            return;
+        }
+
+        await itemContext.AttachMoneyBalanceAsync(storageId, newMoney).ConfigureAwait(false);
     }
 }

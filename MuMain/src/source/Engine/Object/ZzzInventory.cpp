@@ -2496,13 +2496,16 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type == ITEM_ORB_OF_SUMMONING)
     {
-        mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
+        // C3-02: SkillAttribute is MAX_SKILLS wide; clamp before indexing.
+        if (Level >= 0 && (30 + Level) < MAX_SKILLS)
+            mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
     }
     else if (ip->Type == ITEM_TRANSFORMATION_RING)
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {
-            if (SommonTable[Level] == MonsterScript[i].Type)
+            // C3-02: SommonTable[] has only 6 entries; clamp Level.
+            if (Level >= 0 && Level < 6 && SommonTable[Level] == MonsterScript[i].Type)
             {
                 mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
                 break;
@@ -5892,13 +5895,16 @@ void RenderRepairInfo(int sx, int sy, ITEM* ip, bool Sell)
 
     if (ip->Type == ITEM_ORB_OF_SUMMONING)
     {
-        mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
+        // C3-02: SkillAttribute is MAX_SKILLS wide; clamp before indexing.
+        if (Level >= 0 && (30 + Level) < MAX_SKILLS)
+            mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
     }
     else if (ip->Type == ITEM_TRANSFORMATION_RING)
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {
-            if (SommonTable[Level] == MonsterScript[i].Type)
+            // C3-02: SommonTable[] has only 6 entries; clamp Level.
+            if (Level >= 0 && Level < 6 && SommonTable[Level] == MonsterScript[i].Type)
             {
                 mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
                 break;
@@ -6538,7 +6544,9 @@ void BuildGroundItemLabelDescriptor(OBJECT* o, ITEM* ip, GroundItemLabelDescript
     if (o->Type == MODEL_ORB_OF_SUMMONING)
     {
         SetDescriptorGrayTextColor(descriptor);
-        FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", SkillAttribute[30 + ItemLevel].Name, I18N::Game::Jewel);
+        // C3-02: clamp ItemLevel before indexing SkillAttribute.
+        if (ItemLevel >= 0 && (30 + ItemLevel) < MAX_SKILLS)
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", SkillAttribute[30 + ItemLevel].Name, I18N::Game::Jewel);
     }
     else if (COMGEM::NOGEM != COMGEM::Check_Jewel_Com(o->Type, true))
     {
@@ -6738,7 +6746,8 @@ void BuildGroundItemLabelDescriptor(OBJECT* o, ITEM* ip, GroundItemLabelDescript
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {
-            if (SommonTable[ItemLevel] == MonsterScript[i].Type)
+            // C3-02: SommonTable[] has only 6 entries; clamp ItemLevel.
+            if (ItemLevel >= 0 && ItemLevel < 6 && SommonTable[ItemLevel] == MonsterScript[i].Type)
             {
                 FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
                 break;

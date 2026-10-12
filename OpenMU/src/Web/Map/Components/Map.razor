@@ -1,4 +1,4 @@
-﻿@using Microsoft.Extensions.Logging
+@using Microsoft.Extensions.Logging
 @using MUnique.OpenMU.Web.Map.Properties
 @using Nito.AsyncEx
 
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div>
-                <MapPlayerList MapController="@this._controller" FollowedPlayerName="@FollowedPlayerName" OnFollowPlayer="@OnFollowPlayer" OnSelectPlayer="@SelectPlayerAsync"/>
+                <MapPlayerList MapController="@this._controller" FollowedPlayerName="@FollowedPlayerName" OnFollowPlayer="@OnFollowPlayer" OnSelectPlayer="@SelectPlayerAsync" ShowModerationActions="@ShowModerationActions"/>
             </div>
         </div>
     }
@@ -48,6 +48,13 @@
     /// </summary>
     [Parameter]
     public Guid MapId { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the moderation actions (disconnect / temporarily ban)
+    /// are rendered. Hosts without an authenticated Operator/Administrator must leave this false.
+    /// </summary>
+    [Parameter]
+    public bool ShowModerationActions { get; set; }
 
     /// <summary>
     /// Gets or sets the followed player name.

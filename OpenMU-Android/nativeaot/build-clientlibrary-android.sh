@@ -97,7 +97,7 @@ dotnet publish "${PROJECT_FILE}" \
     -p:NativeLib=Shared \
     -p:DebugType=None \
     -p:DebugSymbols=false \
-    -p:StripSymbols=false \
+    -p:StripSymbols=true \
     -p:ci=true \
     2>&1 | tee "${SCRIPT_DIR}/publish.log"
 

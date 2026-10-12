@@ -1262,6 +1262,13 @@ namespace MUHelper
             }
         }
 
+        // C2-02: clamp the current item index against Items[].
+        if (m_iCurrentItem < 0 || m_iCurrentItem >= MAX_ITEMS)
+        {
+            m_iCurrentItem = MAX_ITEMS;
+            return 1;
+        }
+
         ITEM_t* pDrop = &Items[m_iCurrentItem];
 
         if (!pDrop->Object.Live)
@@ -1301,6 +1308,11 @@ namespace MUHelper
 
     bool CMuHelper::ShouldObtainItem(int iItemId)
     {
+        // C2-02: clamp against Items[] before dereferencing.
+        if (iItemId < 0 || iItemId >= MAX_ITEMS)
+        {
+            return false;
+        }
         ITEM_t* pDrop = &Items[iItemId];
         ITEM* pItem = &pDrop->Item;
 
@@ -1331,6 +1343,13 @@ namespace MUHelper
 
     void CMuHelper::AddItem(int iItemId, POINT posWhere)
     {
+        // C2-02: Items[] is indexed by the server-supplied id; ignore ids that
+        // would fall outside the table so the auto-pickup paths never read
+        // Items[] out of bounds.
+        if (iItemId < 0 || iItemId >= MAX_ITEMS)
+        {
+            return;
+        }
         _itemsLock.lock();
         m_setItems.insert(iItemId);
         _itemsLock.unlock();
@@ -1362,6 +1381,11 @@ namespace MUHelper
 
         for (const int& iItemId : setItems)
         {
+            // C2-02: clamp against Items[] before reading its position.
+            if (iItemId < 0 || iItemId >= MAX_ITEMS)
+            {
+                continue;
+            }
             if (!ShouldObtainItem(iItemId))
             {
                 continue;

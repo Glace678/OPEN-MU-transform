@@ -67,7 +67,13 @@ public sealed class PackageManifestValidator
             throw new FileNotFoundException("缺少便携程序包清单。", paths.ManifestFile);
         }
 
-        await using var manifestStream = File.OpenRead(paths.ManifestFile);
+        var manifestBytes = await File.ReadAllBytesAsync(paths.ManifestFile, cancellationToken).ConfigureAwait(false);
+
+        // W2-01 (F5): verify the detached manifest signature BEFORE trusting any size/SHA-256 value inside it.
+        // Fail closed: unsigned manifests are rejected unless the explicit dev switch is set.
+        ManifestSignatureVerifier.EnsureVerified(paths.ManifestFile, manifestBytes);
+
+        await using var manifestStream = new MemoryStream(manifestBytes);
         var manifest = await JsonSerializer.DeserializeAsync<PackageManifest>(manifestStream, SerializerOptions, cancellationToken).ConfigureAwait(false)
                        ?? throw new InvalidDataException("便携程序包清单为空。");
         if (manifest.FormatVersion != 1

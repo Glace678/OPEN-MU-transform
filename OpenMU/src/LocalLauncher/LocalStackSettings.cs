@@ -30,6 +30,14 @@ public sealed class LocalStackSettings
     /// <summary>Gets or sets a value indicating whether game and admin endpoints accept trusted-LAN clients.</summary>
     public bool MobileAccessEnabled { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the full admin panel (login UI, all pages) is exposed to the LAN.
+    /// When false (default), the panel UI stays on loopback and only /api/mobile-gm is reachable from the LAN
+    /// when MobileAccessEnabled is true. Enabling this requires a configured TOTP secret for the bootstrap
+    /// administrator (LocalSecrets.AdminPanelTotpSecret); the launcher refuses to start otherwise.
+    /// </summary>
+    public bool AdminPanelExposedToLan { get; set; }
+
     /// <summary>Gets or sets an optional IPv4 address advertised to mobile clients; empty selects the best LAN address.</summary>
     public string MobileAdvertisedAddress { get; set; } = string.Empty;
 

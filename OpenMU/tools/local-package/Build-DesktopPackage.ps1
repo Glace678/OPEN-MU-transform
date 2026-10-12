@@ -183,6 +183,25 @@ $entries = @(Get-ChildItem -LiteralPath $output -File -Recurse |
     acceptance = 'development-unverified'
     files = $entries
 } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $output 'manifest.json') -Encoding utf8NoBOM
-Invoke-Checked (Join-Path $output 'App/GMHost/OpenMU-GM') @('--root', $output, '--verify')
+
+# F5 (W2-01): sign the manifest when an offline private key is configured; this
+# script otherwise stays an explicitly unsigned development package.
+$signer = Join-Path $PSScriptRoot '..\ManifestSigner\Sign-Manifest.ps1'
+if ($env:OPENMU_MANIFEST_SIGNING_KEY -and (Test-Path -LiteralPath $env:OPENMU_MANIFEST_SIGNING_KEY)) {
+    & $signer -ManifestPath (Join-Path $output 'manifest.json') -PrivateKeyXmlPath $env:OPENMU_MANIFEST_SIGNING_KEY
+    if ($LASTEXITCODE -ne 0) { throw "manifest signing failed" }
+}
+else {
+    Write-Warning 'OPENMU_MANIFEST_SIGNING_KEY not set; development package ships without a manifest signature.'
+}
+
+# Tolerate unsigned development packages in the --verify smoke run (signed release builds are fail-closed).
+$env:OPENMU_ALLOW_UNSIGNED_MANIFEST = '1'
+try {
+    Invoke-Checked (Join-Path $output 'App/GMHost/OpenMU-GM') @('--root', $output, '--verify')
+}
+finally {
+    Remove-Item Env:\OPENMU_ALLOW_UNSIGNED_MANIFEST -ErrorAction SilentlyContinue
+}
 Write-Output "Development package created: $output"
 Write-Output 'Not a release: native playthrough, controller/motor tests and macOS signing/notarization are still required.'

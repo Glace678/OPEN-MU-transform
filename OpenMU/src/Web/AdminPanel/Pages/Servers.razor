@@ -1,9 +1,11 @@
-﻿@page "/servers"
+@page "/servers"
 @attribute [Authorize(Policy = AdminPolicies.Operator)]
 
 @using System.ComponentModel
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.DependencyInjection
 @using MUnique.OpenMU.Interfaces
+@using MUnique.OpenMU.Persistence.AdminAuth
 @using MUnique.OpenMU.Web.AdminPanel.Properties
 
 @implements IDisposable;
@@ -80,7 +82,7 @@ else
       <td></td>
       <td></td>
       <td>
-        @if (this.ServerInstanceManager is not null)
+        @if (this._isAdministrator && this.ServerInstanceManager is not null)
         {
           @if (this._isRestarting)
           {
@@ -138,6 +140,15 @@ else
     public IToastService ToastService { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets the authentication state provider, used to decide whether the destructive
+    /// restart-all action is offered (Administrator only).
+    /// </summary>
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+
+    private bool _isAdministrator;
+
+    /// <summary>
     /// The game servers, resolved optionally: the dictionary is only registered in the
     /// single-process host, so it is null on the distributed (Dapr) admin panel host. When
     /// null, the global message card is not rendered (graceful degradation).
@@ -157,6 +168,14 @@ else
         this._servers = this.ServerProvider.Servers;
         this._gameServers = this.ServiceProvider.GetService<IDictionary<int, IGameServer>>();
         this.ServerProvider.PropertyChanged += this.OnServersChanged;
+        _ = this.ResolveAdministratorAsync();
+    }
+
+    private async Task ResolveAdministratorAsync()
+    {
+        var state = await this.AuthenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false);
+        this._isAdministrator = state.User.IsInRole(AdminRoles.Administrator);
+        await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
     }
 
     private void OnServersChanged(object? sender, PropertyChangedEventArgs e)

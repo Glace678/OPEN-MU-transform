@@ -3566,8 +3566,11 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer, int Size)
 }
 int AttackPlayer = 0;
 
-void ReceiveDamage(const BYTE* ReceiveBuffer)
+void ReceiveDamage(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-03: second length check beyond the dispatch gate.
+    if (Size < static_cast<int>(sizeof(PRECEIVE_DAMAGE)))
+        return;
     auto Data = (LPPRECEIVE_DAMAGE)ReceiveBuffer;
     int Damage = ((int)(Data->DamageH) << 8) + Data->DamageL;
     if (CharacterAttribute->Life >= Damage)
@@ -7699,8 +7702,11 @@ BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     return (TRUE);
 }
 
-void ReceiveWeather(const BYTE* ReceiveBuffer)
+void ReceiveWeather(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-03: second length check beyond the dispatch gate.
+    if (Size < static_cast<int>(sizeof(PHEADER_DEFAULT)))
+        return;
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     int Weather = (Data->Value >> 4);
     if (Weather == 0)
@@ -7709,8 +7715,11 @@ void ReceiveWeather(const BYTE* ReceiveBuffer)
         RainTarget = (Data->Value & 15) * 6;
 }
 
-void ReceiveEvent(const BYTE* ReceiveBuffer)
+void ReceiveEvent(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-03: second length check beyond the dispatch gate.
+    if (Size < static_cast<int>(sizeof(PHEADER_EVENT)))
+        return;
     auto Data = (LPPHEADER_EVENT)ReceiveBuffer;
 
     switch (Data->m_byNumber)
@@ -7727,8 +7736,11 @@ void ReceiveEvent(const BYTE* ReceiveBuffer)
     DeleteBoids();
 }
 
-void ReceiveSummonLife(const BYTE* ReceiveBuffer)
+void ReceiveSummonLife(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-03: second length check beyond the dispatch gate.
+    if (Size < static_cast<int>(sizeof(PHEADER_DEFAULT_SUBCODE)))
+        return;
     auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
     SummonLife = Data->Value;
 }
@@ -7812,8 +7824,11 @@ void ReceivePing(const BYTE* ReceiveBuffer)
     SocketClient->ToGameServer()->SendPingResponse();
 }
 
-void ReceiveStorageGold(const BYTE* ReceiveBuffer)
+void ReceiveStorageGold(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-03: second length check beyond the dispatch gate.
+    if (Size < static_cast<int>(sizeof(PRECEIVE_STORAGE_GOLD)))
+        return;
     auto Data = (LPPRECEIVE_STORAGE_GOLD)ReceiveBuffer;
     if (Data->Result)
     {
@@ -8425,8 +8440,12 @@ void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer, int Size)
     }
 }
 
-void ReceiveGuildInfo(const BYTE* ReceiveBuffer)
+void ReceiveGuildInfo(const BYTE* ReceiveBuffer, int Size)
 {
+    // C2-03 / N2-03: require the whole fixed struct; Mark[32] is its last
+    // field, so this guarantees SetGuildMark reads Mark[0..31] in bounds.
+    if (Size < static_cast<int>(sizeof(PPRECEIVE_GUILDINFO)))
+        return;
     auto Data = (LPPPRECEIVE_GUILDINFO)ReceiveBuffer;
     int Index = g_GuildCache.SetGuildMark(Data->GuildKey, Data->UnionName, Data->GuildName, Data->Mark);
 }
@@ -11914,8 +11933,18 @@ void ReceiveHuntZoneEnter(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveBCNPCList(const BYTE* ReceiveBuffer)
+void ReceiveBCNPCList(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-01: the fixed header (incl. btResult + iCount) must fully fit before we
+    // cast and read iCount; a short malicious packet must not read past the heap
+    // buffer.
+    if (Size < static_cast<int>(sizeof(PMSG_ANS_NPCDBLIST)))
+    {
+        g_ErrorReport.Write(L"ReceiveBCNPCList: size %d < header %d, packet dropped.\r\n",
+            Size, (int)sizeof(PMSG_ANS_NPCDBLIST));
+        return;
+    }
+
     auto Data = (LPPMSG_ANS_NPCDBLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_NPCDBLIST);
 
@@ -11926,8 +11955,22 @@ void ReceiveBCNPCList(const BYTE* ReceiveBuffer)
         break;
     case 1:
     {
+        // N2-01: iCount is a signed INT from the wire; reject negatives and cap
+        // the loop. Per-record length is re-checked below so a truncated body
+        // truncates the list instead of over-reading.
+        constexpr int kMaxNpcListRecords = 512;
+        if (Data->iCount < 0 || Data->iCount > kMaxNpcListRecords)
+        {
+            g_ErrorReport.Write(L"ReceiveBCNPCList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
+            break;
+        }
         for (int i = 0; i < Data->iCount; ++i)
         {
+            if (Offset + static_cast<int>(sizeof(PMSG_NPCDBLIST)) > Size)
+            {
+                g_ErrorReport.Write(L"ReceiveBCNPCList: record %d overruns packet, truncated.\r\n", i);
+                break;
+            }
             auto pNpcInfo = (LPPMSG_NPCDBLIST)(ReceiveBuffer + Offset);
             g_SenatusInfo.SetNPCInfo(pNpcInfo);
             Offset += sizeof(PMSG_NPCDBLIST);
@@ -11940,8 +11983,16 @@ void ReceiveBCNPCList(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer)
+void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-01: fixed header must fit before reading iCount; see ReceiveBCNPCList.
+    if (Size < static_cast<int>(sizeof(PMSG_ANS_CSREGGUILDLIST)))
+    {
+        g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: size %d < header %d, packet dropped.\r\n",
+            Size, (int)sizeof(PMSG_ANS_CSREGGUILDLIST));
+        return;
+    }
+
     auto Data = (LPPMSG_ANS_CSREGGUILDLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_CSREGGUILDLIST);
 
@@ -11953,8 +12004,19 @@ void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer)
     case 1:
     {
         g_pGuardWindow->ClearDeclareGuildList();
+        constexpr int kMaxDeclareGuildRecords = 64;
+        if (Data->iCount < 0 || Data->iCount > kMaxDeclareGuildRecords)
+        {
+            g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
+            break;
+        }
         for (int i = 0; i < Data->iCount; ++i)
         {
+            if (Offset + static_cast<int>(sizeof(PMSG_CSREGGUILDLIST)) > Size)
+            {
+                g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: record %d overruns packet, truncated.\r\n", i);
+                break;
+            }
             auto pData2 = (LPPMSG_CSREGGUILDLIST)(ReceiveBuffer + Offset);
 
             // WTF - why not just use an int?
@@ -11977,8 +12039,16 @@ void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveBCGuildList(const BYTE* ReceiveBuffer)
+void ReceiveBCGuildList(const BYTE* ReceiveBuffer, int Size)
 {
+    // N2-01: fixed header must fit before reading iCount; see ReceiveBCNPCList.
+    if (Size < static_cast<int>(sizeof(PMSG_ANS_CSATTKGUILDLIST)))
+    {
+        g_ErrorReport.Write(L"ReceiveBCGuildList: size %d < header %d, packet dropped.\r\n",
+            Size, (int)sizeof(PMSG_ANS_CSATTKGUILDLIST));
+        return;
+    }
+
     auto Data = (LPPMSG_ANS_CSATTKGUILDLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_CSATTKGUILDLIST);
 
@@ -11990,8 +12060,19 @@ void ReceiveBCGuildList(const BYTE* ReceiveBuffer)
     case 1:
     {
         g_pGuardWindow->ClearGuildList();
+        constexpr int kMaxAttackGuildRecords = 64;
+        if (Data->iCount < 0 || Data->iCount > kMaxAttackGuildRecords)
+        {
+            g_ErrorReport.Write(L"ReceiveBCGuildList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
+            break;
+        }
         for (int i = 0; i < Data->iCount; ++i)
         {
+            if (Offset + static_cast<int>(sizeof(PMSG_CSATTKGUILDLIST)) > Size)
+            {
+                g_ErrorReport.Write(L"ReceiveBCGuildList: record %d overruns packet, truncated.\r\n", i);
+                break;
+            }
             auto pData2 = (LPPMSG_CSATTKGUILDLIST)(ReceiveBuffer + Offset);
             wchar_t guildName[MAX_GUILDNAME + 1]{};
             CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
@@ -14300,7 +14381,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 
             break;
         case 0x07: //receive damage
-            ReceiveDamage(ReceiveBuffer);
+            ReceiveDamage(ReceiveBuffer, Size);
             break;
         case 0x08:
             ReceivePK(ReceiveBuffer);
@@ -14316,7 +14397,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceiveModifyItemExtended(received_span);
             break;
         case 0x20:
-            ReceiveSummonLife(ReceiveBuffer);
+            ReceiveSummonLife(ReceiveBuffer, Size);
             break;
         case 0x22:
             ReceiveWTTimeLeft(ReceiveBuffer);
@@ -14397,7 +14478,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     case 0x0B:
         AddDebugText(ReceiveBuffer, Size);
-        ReceiveEvent(ReceiveBuffer);
+        ReceiveEvent(ReceiveBuffer, Size);
         break;
     case 0x0C:
         //AddDebugText(ReceiveBuffer,Size);
@@ -14407,7 +14488,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveNotice(ReceiveBuffer);
         break;
     case 0x0f:
-        ReceiveWeather(ReceiveBuffer);
+        ReceiveWeather(ReceiveBuffer, Size);
         break;
     case PACKET_MOVE: //move character
         ReceiveMoveCharacter(received_span);
@@ -14641,7 +14722,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveGuildIDViewport(ReceiveBuffer, Size);
         break;
     case 0x66:
-        ReceiveGuildInfo(ReceiveBuffer);
+        ReceiveGuildInfo(ReceiveBuffer, Size);
         break;
     case 0x5D:
         ReceiveDeleteGuildViewport(ReceiveBuffer);
@@ -14709,7 +14790,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceivePing(ReceiveBuffer);
         break;
     case 0x81:
-        ReceiveStorageGold(ReceiveBuffer);
+        ReceiveStorageGold(ReceiveBuffer, Size);
         break;
     case 0x82:
         ReceiveStorageExit(ReceiveBuffer);
@@ -15184,13 +15265,13 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     break;
 
     case 0xB3:
-        ReceiveBCNPCList(ReceiveBuffer);
+        ReceiveBCNPCList(ReceiveBuffer, Size);
         break;
     case 0xB4:
-        ReceiveBCDeclareGuildList(ReceiveBuffer);
+        ReceiveBCDeclareGuildList(ReceiveBuffer, Size);
         break;
     case 0xB5:
-        ReceiveBCGuildList(ReceiveBuffer);
+        ReceiveBCGuildList(ReceiveBuffer, Size);
         break;
     case 0xB6:
         ReceiveGuildMemberLocation(ReceiveBuffer, Size);

@@ -62,6 +62,9 @@ namespace PacketDispatchPolicy
         case 0xBF: // cursed temple / doppelganger
         case 0xDE: // character card
         case 0xD2: // in-game shop (config-gated)
+        case 0xB3: // castle siege NPC DB list (fixed header + iCount; handler bounds records by size)
+        case 0xB4: // castle siege registered guild list
+        case 0xB5: // castle siege attacking guild list
             return true;
         default:
             return false;

@@ -316,6 +316,8 @@ public final class MainActivity extends Activity {
                     updateZenBalance();
                     updateGrantAvailability();
                 });
+            } catch (MobileGmApiClient.NotAuthorizedException error) {
+                showLoginDialog(generation);
             } catch (MobileGmApiClient.ApiException error) {
                 showFailure(generation, error, true);
             }
@@ -497,6 +499,66 @@ public final class MainActivity extends Activity {
         });
     }
 
+    // F1 (M1-01 / M2-H1): prompt for the administrator credentials. The mobile GM
+    // API no longer accepts a static bearer; it requires an admin-panel session
+    // issued by POST /api/mobile-gm/login (username + password + optional TOTP).
+    private void showLoginDialog(int generation) {
+        runOnUiThread(() -> {
+            if (!accept(generation)) return;
+            setBusy(false);
+            LinearLayout box = new LinearLayout(this);
+            box.setOrientation(LinearLayout.VERTICAL);
+            box.setPadding(dp(20), dp(8), dp(20), dp(8));
+            EditText user = new EditText(this);
+            user.setHint(R.string.login_user_hint);
+            user.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+            EditText pass = new EditText(this);
+            pass.setHint(R.string.login_password_hint);
+            pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            EditText code = new EditText(this);
+            code.setHint(R.string.login_code_hint);
+            code.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+            box.addView(user);
+            box.addView(pass);
+            box.addView(code);
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.login_title)
+                .setView(box)
+                .setNegativeButton(R.string.login_cancel, null)
+                .setPositiveButton(R.string.login_ok, null)
+                .create();
+            dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener(view -> {
+                    final String u = user.getText().toString().trim();
+                    final String p = pass.getText().toString();
+                    final String c = code.getText().toString().trim();
+                    if (u.isEmpty() || p.isEmpty()) {
+                        pass.setError(getString(R.string.login_required));
+                        return;
+                    }
+                    dialog.dismiss();
+                    setBusy(true);
+                    networkExecutor.execute(() -> {
+                        try {
+                            MobileGmApiClient loginClient = new MobileGmApiClient(serverUrl, "");
+                            String cookie = loginClient.login(u, p, c);
+                            GmTokenStore.setSessionCookie(MainActivity.this, cookie);
+                            runOnUiThread(() -> loadStatus());
+                        } catch (MobileGmApiClient.TwoFactorRequiredException tf) {
+                            runOnUiThread(() -> {
+                                if (!accept(generation)) return;
+                                resultText.setText(R.string.login_need_code);
+                                showLoginDialog(generation);
+                            });
+                        } catch (MobileGmApiClient.ApiException error) {
+                            runOnUiThread(() -> showFailure(generation, error, true));
+                        }
+                    });
+                }));
+            dialog.show();
+        });
+    }
+
     private void applySelectedItem() {
         int position = itemSpinner.getSelectedItemPosition();
         MobileGmApiClient.ItemOption item =
@@ -608,7 +670,7 @@ public final class MainActivity extends Activity {
     }
 
     private MobileGmApiClient client() throws MobileGmApiClient.ApiException {
-        return new MobileGmApiClient(serverUrl, BuildConfig.MOBILE_GM_TOKEN);
+        return new MobileGmApiClient(serverUrl, GmTokenStore.getSessionCookie(this));
     }
 
     private boolean accept(int generation) {

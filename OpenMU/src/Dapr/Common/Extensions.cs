@@ -313,13 +313,34 @@ public static class Extensions
         app.UseRouting();
 
         var appApiToken = Environment.GetEnvironmentVariable(DaprEndpointSecurity.TokenEnvironmentVariable);
+        if (string.IsNullOrEmpty(appApiToken))
+        {
+            if (!DaprEndpointSecurity.AllowLoopbackWithoutToken())
+            {
+                // Fail-closed: production deployments must configure APP_API_TOKEN and start daprd
+                // with the matching --app-api-token. Trusting "loopback only" is too weak once the
+                // 8080 port is reachable on the container bridge.
+                throw new InvalidOperationException(
+                    "Dapr 服务缺少 APP_API_TOKEN。生产环境下必须为每个服务配置 APP_API_TOKEN，并让 daprd 使用相同的 --app-api-token 启动；" +
+                    "若确为本地开发，可设置环境变量 OPENMU_DAPR_ALLOW_NO_TOKEN=1 显式放行 loopback（仅限开发）。");
+            }
+
+            app.Logger.LogWarning("Dapr 服务未配置 APP_API_TOKEN，当前仅在显式开发模式下放行 loopback 调用；生产部署必须配置 APP_API_TOKEN。");
+        }
+
         app.Use(async (context, next) =>
         {
-            // Every controller action requires either a loopback caller (the local Dapr sidecar)
-            // or a valid app API token, regardless of the HTTP method. GET endpoints are not
-            // automatically public: endpoints which must be reachable through the reverse proxy
-            // (e.g. public server info) are explicitly marked with [AllowAnonymous].
-            if (DaprEndpointSecurity.IsControllerAction(context)
+            // Health probes and the metrics scrape endpoint are infrastructure concerns reachable
+            // from the local container orchestrator; they never carry admin/game data.
+            var path = context.Request.Path;
+            var isInfrastructure = path.StartsWithSegments("/health") || path.StartsWithSegments("/metrics");
+
+            // Gate every non-[AllowAnonymous] endpoint — MVC controllers AND Razor component
+            // endpoints (Blazor pages / interactive circuits) — on loopback or a valid app API
+            // token. Previously only MVC controller actions were checked, which left the Razor
+            // live-map pages reachable through the reverse proxy without authorization. Endpoints
+            // which must be public (e.g. server info) opt out with [AllowAnonymous].
+            if (!isInfrastructure
                 && DaprEndpointSecurity.RequiresAuthorization(context)
                 && !DaprEndpointSecurity.IsAuthorized(context, appApiToken))
             {

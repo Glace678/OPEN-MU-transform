@@ -1,4 +1,5 @@
-﻿@page "/gameServer/{gameServerId:int}/map/{mapId:guid}"
+@page "/gameServer/{gameServerId:int}/map/{mapId:guid}"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
 @implements IDisposable
 
 @using MUnique.OpenMU.Web.AdminPanel.Properties
@@ -29,7 +30,7 @@
     </div>
 
     <CascadingValue Value="@_gameServer">
-        <Map Server="@_gameServer" MapId="@MapId" FollowedPlayerName="@_followedPlayerName" OnFollowPlayer="@HandleFollowPlayer"></Map>
+        <Map Server="@_gameServer" MapId="@MapId" FollowedPlayerName="@_followedPlayerName" OnFollowPlayer="@HandleFollowPlayer" ShowModerationActions="true"></Map>
     </CascadingValue>
 }
 

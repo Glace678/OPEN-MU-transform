@@ -510,6 +510,7 @@ public sealed class LocalStackManager : IDisposable
         }
 
         File.Delete(this._paths.ConnectionSettingsFile);
+        this._server.ClearControlToken(); // W2-02 (F5): drop the one-shot control token with the stack
         var message = skippedBackupError is null ? null : $"强制停止已跳过本次备份：{skippedBackupError.Message}";
         await this.SetStatusAsync(LocalStackState.Stopped, message, cancellationToken).ConfigureAwait(false);
     }
@@ -540,6 +541,7 @@ public sealed class LocalStackManager : IDisposable
             }
 
             File.Delete(this._paths.ConnectionSettingsFile);
+        this._server.ClearControlToken(); // W2-02 (F5): drop the one-shot control token with the stack
             if (databaseStartedHere && await this._database.IsRunningAsync(CancellationToken.None).ConfigureAwait(false))
             {
                 await this._database.StopAsync(CancellationToken.None).ConfigureAwait(false);

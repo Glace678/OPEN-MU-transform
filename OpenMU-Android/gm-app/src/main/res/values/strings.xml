@@ -9,7 +9,7 @@
     <string name="server_cancel">取消</string>
     <string name="invalid_server">HTTP 仅允许本机或局域网 IP；公网地址必须使用 HTTPS</string>
     <string name="server_public_title">该地址不在局域网内</string>
-    <string name="server_public_warning">连接公网服务器会把配对密钥（X-OpenMU-Mobile-Key）发送到 %1$s。请确认这是你自己的服务器：密钥可对 GM 接口执行全部写操作。</string>
+    <string name="server_public_warning">连接公网服务器会把管理员会话发送到 %1$s。请确认这是你自己的服务器。</string>
     <string name="server_public_confirm">仍然连接</string>
     <string name="status_connecting">正在连接本地服务器&#8230;</string>
     <string name="status_connected">已连接：%1$s</string>
@@ -56,4 +56,12 @@
     <string name="granting_zen">正在发放金币，请勿重复点击&#8230;</string>
     <string name="zen_balance_label">当前余额：%1$s</string>
     <string name="zen_balance_unknown">当前余额：未获取</string>
+    <string name="login_title">管理员登录</string>
+    <string name="login_user_hint">管理员账号</string>
+    <string name="login_password_hint">管理员密码</string>
+    <string name="login_code_hint">两步验证码（已开启时必填）</string>
+    <string name="login_ok">登录</string>
+    <string name="login_cancel">取消</string>
+    <string name="login_required">请输入管理员账号和密码</string>
+    <string name="login_need_code">需要两步验证，请输入验证码后重试</string>
 </resources>

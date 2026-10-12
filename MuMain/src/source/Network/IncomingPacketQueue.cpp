@@ -23,6 +23,13 @@ namespace Network
         }
 
         std::lock_guard<std::mutex> lock(m_mutex);
+
+        // N2-02: drop the oldest frame once the depth cap is reached so a flood
+        // of tiny packets from a hostile server cannot exhaust client memory.
+        if (m_queue.size() >= kMaxQueuedPackets)
+        {
+            m_queue.pop();
+        }
         m_queue.push(std::move(packet));
     }
 

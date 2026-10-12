@@ -26,4 +26,11 @@ public sealed class LocalSecrets
 
     /// <summary>Gets or sets the bootstrap administrator password.</summary>
     public string AdminPanelPassword { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the bootstrap administrator TOTP secret (base32, opt-in). When the admin panel is
+    /// explicitly exposed to the LAN (LocalStackSettings.AdminPanelExposedToLan), this must be non-empty;
+    /// the launcher refuses to expose the panel without 2FA.
+    /// </summary>
+    public string AdminPanelTotpSecret { get; set; } = string.Empty;
 }

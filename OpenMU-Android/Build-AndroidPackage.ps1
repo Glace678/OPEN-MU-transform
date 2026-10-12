@@ -85,13 +85,20 @@ try {
 } catch {
     throw "Invalid mobile server settings JSON: $mobileServerSettings"
 }
-$mobilePackageKey = [string]$mobileSettings.MobilePackageKey
+# F1 (M1-01 / M2-H1): the game-login HMAC seed is read from the MOBILE_PACKAGE_KEY
+# environment variable first, then from the settings file. A real per-install value
+# must never be committed or baked as a constant into the repo. The GM API no longer
+# uses any shared bearer at all (it authenticates with the administrator account), so
+# no GM token is injected below.
+$mobilePackageKey = $env:MOBILE_PACKAGE_KEY
+if ([string]::IsNullOrWhiteSpace($mobilePackageKey)) {
+    $mobilePackageKey = [string]$mobileSettings.MobilePackageKey
+}
 if ($mobilePackageKey -notmatch '^[A-Za-z0-9_-]{43}$') {
-    throw 'MobilePackageKey must be a 32-byte base64url value without padding.'
+    throw 'MOBILE_PACKAGE_KEY (env) or mobile-server-settings.json MobilePackageKey must be a 43-char base64url value. Set the env var or the settings field to a fresh random key before building.'
 }
-if ($mobileSettings.MobileAccessEnabled -ne $true -or $mobileSettings.AutomaticGameLogin -ne $true) {
-    throw 'The Android delivery requires MobileAccessEnabled and AutomaticGameLogin.'
-}
+# F1: mobile access / auto-login are now operator choices (default off in the
+# settings template); do not force them on just to build the APK.
 
 function Remove-DeliveryTree {
     param([Parameter(Mandatory)][string]$Path)
@@ -312,7 +319,6 @@ try {
         ":game-app:assemble$BuildType" ":gm-app:assemble$BuildType" `
         "-POPENMU_SERVER_ADDRESS=$ServerAddress" `
         "-POPENMU_MOBILE_LOGIN_SEED=$mobilePackageKey" `
-        "-POPENMU_MOBILE_GM_TOKEN=$mobilePackageKey" `
         $(if ($BuildType -eq 'Debug') { '-POPENMU_SERVER_SCHEME=http' } else { '-POPENMU_SERVER_SCHEME=https' })
 } finally {
     Pop-Location

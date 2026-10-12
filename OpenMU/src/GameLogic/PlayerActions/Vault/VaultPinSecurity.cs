@@ -16,6 +16,9 @@ using MUnique.OpenMU.GameLogic;
 /// (from before this change) are verified with a constant-time comparison and are upgraded
 /// to a hash on the first successful unlock. After <see cref="MaxFailedAttempts"/> failed
 /// attempts, further unlocks are rejected until <see cref="LockoutDuration"/> has passed.
+/// The failure counter and lockout deadline are held in the process-global <see cref="LoginThrottle"/>
+/// (keyed by account login name) so that a disconnect/reconnect within the same server process
+/// no longer resets them.
 /// </remarks>
 public static class VaultPinSecurity
 {
@@ -44,7 +47,7 @@ public static class VaultPinSecurity
     /// <returns><c>true</c> if unlock attempts are currently rejected; otherwise, <c>false</c>.</returns>
     public static bool IsLockedOut(Player player, DateTime now)
     {
-        return player.VaultLockoutUntil is { } lockoutUntil && now < lockoutUntil;
+        return GetKey(player) is { } key && LoginThrottle.IsLockedOut(key, now);
     }
 
     /// <summary>
@@ -80,27 +83,22 @@ public static class VaultPinSecurity
             }
         }
 
+        var key = "vault:" + account.LoginName;
         if (valid)
         {
-            player.VaultUnlockFailCount = 0;
-            player.VaultLockoutUntil = null;
+            LoginThrottle.Reset(key);
         }
         else
         {
-            RegisterFailure(player, now);
+            LoginThrottle.RegisterFailure(key, now, MaxFailedAttempts, LockoutDuration);
         }
 
         return valid;
     }
 
-    private static void RegisterFailure(Player player, DateTime now)
+    private static string? GetKey(Player player)
     {
-        player.VaultUnlockFailCount++;
-        if (player.VaultUnlockFailCount >= MaxFailedAttempts)
-        {
-            player.VaultLockoutUntil = now.Add(LockoutDuration);
-            player.VaultUnlockFailCount = 0;
-        }
+        return player.Account?.LoginName is { Length: > 0 } name ? "vault:" + name : null;
     }
 
     private static bool IsBcryptHash(string value)

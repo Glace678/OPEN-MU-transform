@@ -173,6 +173,13 @@ ITEM* SEASON3B::CNewUIItemMng::CreateItemExtended(std::span<const BYTE> itemData
 
 ITEM* SEASON3B::CNewUIItemMng::CreateItemOld(std::span<const BYTE> pbyItemPacket)
 {
+    // C1-M: this legacy path indexes up to pbyItemPacket[11]; reject a span
+    // shorter than the fixed item layout instead of reading past it.
+    if (pbyItemPacket.size() < 12)
+    {
+        return nullptr;
+    }
+
     WORD wType = ExtractItemType(pbyItemPacket);
     BYTE byOption380 = 0, byOptionHarmony = 0;
 
@@ -460,5 +467,10 @@ DWORD SEASON3B::CNewUIItemMng::FindAvailableKeyIndex(DWORD dwSeed)
 
 WORD SEASON3B::CNewUIItemMng::ExtractItemType(std::span<const BYTE> pbyItemPacket)
 {
+    // C1-M: indexes [0],[3],[5]; require at least 6 bytes.
+    if (pbyItemPacket.size() < 6)
+    {
+        return 0;
+    }
     return pbyItemPacket[0] + (pbyItemPacket[3] & 128) * 2 + (pbyItemPacket[5] & 240) * 32;
 }

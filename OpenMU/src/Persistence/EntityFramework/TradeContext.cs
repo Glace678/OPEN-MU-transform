@@ -1,4 +1,4 @@
-﻿// <copyright file="TradeContext.cs" company="MUnique">
+// <copyright file="TradeContext.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -28,6 +28,10 @@ internal class TradeContext : AccountContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Ignore<ItemStorage>();
+        // ItemStorage is intentionally NOT ignored here anymore: the trade settlement must persist
+        // both players' wallet balances (data."ItemStorage"."Money") in the very same SaveChanges
+        // transaction as the traded item transfer, so this context has to map ItemStorage. Attaching traded
+        // items is unaffected, because Item.RawItemStorage is already ignored at the entity level (see
+        // AccountContext); dropping this Ignore only allows an explicit wallet shadow to be persisted.
     }
 }

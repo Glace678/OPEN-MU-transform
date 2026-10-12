@@ -7,37 +7,27 @@ namespace MUnique.OpenMU.Web.AdminPanel.Auth;
 using System.Net;
 
 /// <summary>
-/// Constants and validation helpers of the restricted mobile GM authentication scheme.
+/// Constants and validation helpers for the restricted mobile GM API boundary.
 /// </summary>
+/// <remarks>
+/// F1 (M1-01 / M2-H1, 2026-10-12): the previous static, package-distributed bearer
+/// scheme (the <c>X-OpenMU-Mobile-Key</c> header authenticated by a key baked into every
+/// APK/HAP) was removed. Decompiling a package exposed that key and let any LAN peer call
+/// the grant endpoints. The mobile GM API now reuses the admin-panel cookie session: the
+/// packaged GM app signs in at <c>POST /api/mobile-gm/login</c> with an administrator
+/// account (password + TOTP when enabled), and the grant endpoints require that cookie
+/// session plus the Administrator role.
+/// </remarks>
 public static class MobileGmAuthenticationDefaults
 {
-    /// <summary>Gets the request header which carries the mobile package key.</summary>
-    public const string HeaderName = "X-OpenMU-Mobile-Key";
-
     /// <summary>Gets the environment variable which contains the mobile package key.</summary>
     public const string PackageKeyEnvironmentVariable = "OPENMU_MOBILE_PACKAGE_KEY";
 
     /// <summary>Gets the environment variable which contains the mobile game account name.</summary>
     public const string AccountNameEnvironmentVariable = "OPENMU_LOCAL_GAME_USERNAME";
 
-    /// <summary>Gets the name of the authentication scheme.</summary>
-    internal const string AuthenticationScheme = "OpenMU.MobileGm";
-
     /// <summary>Gets the authorization policy used exclusively by the mobile GM API.</summary>
     internal const string Policy = "OpenMU.MobileGmOnly";
-
-    /// <summary>Gets the private marker claim issued only by this authentication scheme.</summary>
-    internal const string MarkerClaimType = "openmu:mobile-gm";
-
-    /// <summary>Gets the required marker claim value.</summary>
-    internal const string MarkerClaimValue = "package";
-
-    /// <summary>Checks the syntax of an unpadded, 32-byte base64url package key.</summary>
-    /// <param name="packageKey">The package key.</param>
-    /// <returns><c>true</c> when the key has the required syntax; otherwise, <c>false</c>.</returns>
-    internal static bool IsValidPackageKey(string? packageKey) =>
-        packageKey is { Length: 43 }
-        && packageKey.All(character => char.IsAsciiLetterOrDigit(character) || character is '-' or '_');
 
     /// <summary>
     /// Checks whether the direct peer belongs to an explicitly trusted local network range.
@@ -45,31 +35,12 @@ public static class MobileGmAuthenticationDefaults
     /// <param name="address">The direct peer address from the connection.</param>
     /// <returns><c>true</c> for loopback, RFC1918, link-local or IPv6 ULA addresses.</returns>
     /// <remarks>
-    /// <para>
-    /// Topology note (L7 security review):
-    /// </para>
-    /// <list type="bullet">
-    /// <item>
-    /// <b>Direct connection</b> (mobile device on the same LAN, no reverse proxy):
-    /// <see cref="Microsoft.AspNetCore.Http.ConnectionInfo.RemoteIpAddress"/> is the real
-    /// device IP. This whitelist correctly restricts access to LAN peers.
-    /// </item>
-    /// <item>
-    /// <b>Behind a trusted reverse proxy</b> (nginx/docker/traefik on RFC1918):
-    /// the ForwardedHeaders middleware (configured in Startup.cs with KnownNetworks
-    /// covering RFC1918) rewrites RemoteIpAddress to the real client IP from
-    /// X-Forwarded-For <i>before</i> authentication runs. The whitelist then evaluates
-    /// the real client IP. If the real client is on the public internet, it is rejected.
-    /// </item>
-    /// <item>
-    /// <b>Behind an untrusted / misconfigured proxy</b>: RemoteIpAddress stays as the
-    /// proxy's RFC1918 address and the whitelist always passes. In this topology the IP
-    /// check provides <i>no</i> additional security — the actual boundary is the
-    /// 256-bit package key plus the per-IP rate limiter in
-    /// <see cref="MobileGmAuthenticationHandler"/>. Operators must not rely on the IP
-    /// whitelist as a security control when exposing the GM API through a public proxy.
-    /// </item>
-    /// </list>
+    /// This is an additional, network-level guard on the login endpoint. It is not the
+    /// primary boundary: credential brute force is covered by ASP.NET Core Identity lockout
+    /// and the grant endpoints additionally require an authenticated Administrator cookie
+    /// session. Behind a correctly configured reverse proxy the ForwardedHeaders middleware
+    /// rewrites <see cref="Microsoft.AspNetCore.Http.ConnectionInfo.RemoteIpAddress"/> to the
+    /// real client IP before this check runs.
     /// </remarks>
     internal static bool IsAllowedDirectAddress(IPAddress? address)
     {

@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 final class MobileGmApiClient {
     private static final int CONNECT_TIMEOUT_MS = 7000;
@@ -29,27 +30,77 @@ final class MobileGmApiClient {
 
     private static final String API_BASE_PATH = "/api/mobile-gm";
 
-    private static final String MOBILE_KEY_HEADER = "X-OpenMU-Mobile-Key";
-
     private final String baseUrl;
-    private final String gmToken;
+    // F1 (M1-01 / M2-H1): no static, APK-distributed bearer. The client holds the
+    // short-lived admin-panel cookie session issued by POST /api/mobile-gm/login.
+    private final String sessionCookie;
 
-    MobileGmApiClient(String baseUrl, String gmToken) throws ApiException {
+    MobileGmApiClient(String baseUrl, String sessionCookie) throws ApiException {
         this.baseUrl = trimTrailingSlash(baseUrl);
-        this.gmToken = gmToken;
-        // A-04: never send the shared write key in cleartext to a public host.
-        // HTTPS is always allowed; plain HTTP is only permitted against loopback or
-        // RFC1918 private addresses (the bundled LAN sideload server).
+        this.sessionCookie = sessionCookie;
+        // A-04: never send credentials/session in cleartext to a public host.
         assertSafeTransport(this.baseUrl);
     }
 
     private static void assertSafeTransport(String baseUrl) throws ApiException {
-        // Reuse the shared policy so loopback/RFC1918 and local IPv6 (::1,
-        // fc00::/7 ULA, fe80::/10 link-local) are all accepted over plain HTTP;
-        // HTTPS is allowed to any host. This mirrors isLocalServerUrl() on the
-        // HarmonyOS client and keeps the two transports in sync.
         if (!ServerAddressPolicy.isAllowed(baseUrl)) {
-            throw new ApiException("拒绝通过明文 HTTP 向公网地址发送 GM 密钥，或服务器地址无效：" + baseUrl);
+            throw new ApiException("拒绝通过明文 HTTP 向公网地址发送 GM 会话，或服务器地址无效：" + baseUrl);
+        }
+    }
+
+    /**
+     * Signs in with the administrator account. On success the returned string is the
+     * Set-Cookie value to store and reuse; on two-factor required the server returns
+     * twoFactorRequired=true and the caller must retry with the TOTP/recovery code.
+     */
+    String login(String username, String password, String code) throws ApiException {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("loginName", username == null ? "" : username);
+            body.put("password", password == null ? "" : password);
+            if (code != null && !code.isEmpty()) {
+                body.put("code", code);
+            }
+        } catch (JSONException error) {
+            throw new ApiException("无法生成登录请求", error);
+        }
+
+        HttpURLConnection connection = null;
+        try {
+            connection = openConnection("POST", "/login");
+            byte[] bytes = body.toString().getBytes(StandardCharsets.UTF_8);
+            connection.setDoOutput(true);
+            connection.setFixedLengthStreamingMode(bytes.length);
+            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            try (OutputStream output = connection.getOutputStream()) {
+                output.write(bytes);
+            }
+
+            int statusCode = connection.getResponseCode();
+            InputStream stream = statusCode >= 200 && statusCode < 300
+                ? connection.getInputStream() : connection.getErrorStream();
+            String response = readResponse(stream);
+
+            if (statusCode == 200 && response.contains("\"twoFactorRequired\":true")) {
+                throw new TwoFactorRequiredException();
+            }
+            if (statusCode < 200 || statusCode >= 300) {
+                String serverMessage = extractMessage(response);
+                throw new ApiException("管理员登录失败 HTTP " + statusCode
+                    + (serverMessage.isEmpty() ? "" : "：" + serverMessage));
+            }
+
+            String cookie = readSessionCookie(connection);
+            if (cookie == null || cookie.isEmpty()) {
+                throw new ApiException("登录成功但未收到会话 Cookie");
+            }
+            return cookie;
+        } catch (IOException error) {
+            throw new ApiException("无法连接服务器：" + cleanString(error.getMessage()), error);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 
@@ -128,7 +179,7 @@ final class MobileGmApiClient {
                 int maxLevel = Math.max(0, Math.min(MAX_BYTE_VALUE,
                     item.optInt("maxLevel", item.optInt("maximumLevel", DEFAULT_MAX_ITEM_LEVEL))));
                 boolean canHaveSkill = item.optBoolean("hasSkill", item.optBoolean("canHaveSkill", true));
-                boolean canHaveLuck = item.optBoolean("canHaveLuck", false);
+                boolean canHaveLuck = item.optBoolean("hasLuck", item.optBoolean("canHaveLuck", false));
                 boolean canHaveAdditional = item.optBoolean("canHaveAdditionalOption",
                     item.optBoolean("canHaveAdditional", false));
                 int excellentCount = Math.max(0, Math.min(MAX_EXCELLENT_OPTIONS,
@@ -178,9 +229,6 @@ final class MobileGmApiClient {
         return this.readGrantResult(root, "金币已成功发放", "服务器拒绝发放金币");
     }
 
-    // Parses the shared grant response shape: throws on an explicit failure,
-    // uses the server message when present, and otherwise keeps the local
-    // success message.
     private GrantResult readGrantResult(Object root, String successMessage, String rejectionMessage)
         throws ApiException {
         if (root instanceof JSONObject) {
@@ -196,16 +244,23 @@ final class MobileGmApiClient {
         return new GrantResult(successMessage);
     }
 
+    private HttpURLConnection openConnection(String method, String path) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(baseUrl + API_BASE_PATH + path).openConnection();
+        connection.setRequestMethod(method);
+        connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
+        connection.setReadTimeout(READ_TIMEOUT_MS);
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setUseCaches(false);
+        if (sessionCookie != null && !sessionCookie.isEmpty()) {
+            connection.setRequestProperty("Cookie", sessionCookie);
+        }
+        return connection;
+    }
+
     private Object request(String method, String path, String body) throws ApiException {
         HttpURLConnection connection = null;
         try {
-            connection = (HttpURLConnection) new URL(baseUrl + API_BASE_PATH + path).openConnection();
-            connection.setRequestMethod(method);
-            connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
-            connection.setReadTimeout(READ_TIMEOUT_MS);
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty(MOBILE_KEY_HEADER, gmToken);
-            connection.setUseCaches(false);
+            connection = openConnection(method, path);
             if (body != null) {
                 byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
                 connection.setDoOutput(true);
@@ -220,6 +275,11 @@ final class MobileGmApiClient {
             InputStream stream = statusCode >= 200 && statusCode < 300
                 ? connection.getInputStream() : connection.getErrorStream();
             String response = readResponse(stream);
+            if (statusCode == 401 || statusCode == 403) {
+                // Session expired or the account lacks the Administrator role: the UI
+                // must re-prompt for the administrator credentials.
+                throw new NotAuthorizedException("需要管理员登录（HTTP " + statusCode + "）");
+            }
             if (statusCode < 200 || statusCode >= 300) {
                 String serverMessage = extractMessage(response);
                 throw new ApiException("服务器返回 HTTP " + statusCode
@@ -242,6 +302,21 @@ final class MobileGmApiClient {
                 connection.disconnect();
             }
         }
+    }
+
+    // Extracts the first Set-Cookie value (up to the first ';') from the login
+    // response headers, so the native client can replay it as a Cookie header.
+    private static String readSessionCookie(HttpURLConnection connection) {
+        for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
+            String key = entry.getKey();
+            if (key != null && key.equalsIgnoreCase("Set-Cookie") && entry.getValue() != null
+                && !entry.getValue().isEmpty()) {
+                String raw = entry.getValue().get(0);
+                int semi = raw.indexOf(';');
+                return semi >= 0 ? raw.substring(0, semi) : raw;
+            }
+        }
+        return null;
     }
 
     private static String readResponse(InputStream stream) throws IOException, ApiException {
@@ -332,8 +407,8 @@ final class MobileGmApiClient {
         }
         int[] parsed = new int[Math.min(numbers.length(), MAX_EXCELLENT_OPTIONS)];
         int written = 0;
-        for (int index = 0; index < parsed.length; index++) {
-            int value = numbers.optInt(index, 0);
+        for (int index = 0; index < excellentNumbers.length; index++) {
+            int value = numbers.optInt(index);
             if (value >= 1 && value <= MAX_EXCELLENT_OPTIONS) {
                 parsed[written++] = value;
             }
@@ -342,8 +417,8 @@ final class MobileGmApiClient {
     }
 
     static final class ItemOption {
-        final int group;
-        final int number;
+        final String group;
+        final String number;
         final String name;
         final int maxLevel;
         final boolean canHaveSkill;
@@ -422,13 +497,29 @@ final class MobileGmApiClient {
         }
     }
 
-    static final class ApiException extends Exception {
+    static class ApiException extends Exception {
         ApiException(String message) {
             super(message);
         }
 
         ApiException(String message, Throwable cause) {
             super(message, cause);
+        }
+    }
+
+    // Thrown when the server answered the password step but still requires the TOTP
+    // / recovery code. The UI should prompt for the second factor and retry.
+    static final class TwoFactorRequiredException extends ApiException {
+        TwoFactorRequiredException() {
+            super("需要两步验证");
+        }
+    }
+
+    // Thrown on 401/403: the stored session is missing/expired, or the account is
+    // not an Administrator. The UI must show the administrator login dialog.
+    static final class NotAuthorizedException extends ApiException {
+        NotAuthorizedException(String message) {
+            super(message);
         }
     }
 }

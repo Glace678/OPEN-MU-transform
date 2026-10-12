@@ -1,4 +1,4 @@
-﻿// <copyright file="SetItemPriceAction.cs" company="MUnique">
+// <copyright file="SetItemPriceAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -48,6 +48,13 @@ public class SetItemPriceAction
                 if (price < 0)
                 {
                     // Validate before mutating: a negative price must not clear the existing price.
+                    result = ItemPriceResult.PriceNegative;
+                }
+                else if (price > (player.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue))
+                {
+                    // Defensive upper bound: a price above the maximum money a buyer can carry can
+                    // never actually be paid (every buyer is capped at the same limit), so reject it
+                    // instead of storing an absurd value that would also overflow a naive settlement.
                     result = ItemPriceResult.PriceNegative;
                 }
                 else

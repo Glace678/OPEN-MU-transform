@@ -41,6 +41,11 @@ namespace Network
         IncomingPacketQueue() = default;
         ~IncomingPacketQueue();
 
+        // N2-02: hard bound on pending frames. A hostile server that floods tiny
+        // packets cannot grow the queue without limit (OOM); Push() drops the
+        // oldest frame once this many are queued.
+        static constexpr size_t kMaxQueuedPackets = 1024;
+
         std::mutex m_mutex;
         std::queue<std::unique_ptr<PacketInfo>> m_queue;
     };

@@ -1,4 +1,4 @@
-﻿// <copyright file="SetVaultPinAction.cs" company="MUnique">
+// <copyright file="SetVaultPinAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -28,6 +28,9 @@ public class SetVaultPinAction
         if (BCrypt.Net.BCrypt.Verify(accountPassword, player.Account.PasswordHash))
         {
             player.Account.VaultPassword = VaultPinSecurity.HashPin(newPin);
+            // A5-M1: after installing a fresh pin the current session must be locked; the player
+            // has to unlock with the new pin instead of leaving the vault accessible right away.
+            player.IsVaultLocked = true;
             await player.InvokeViewPlugInAsync<IShowVaultLockChangeResponse>(p => p.ShowResponseAsync(VaultLockChangeResult.Unlocked)).ConfigureAwait(false);
         }
         else

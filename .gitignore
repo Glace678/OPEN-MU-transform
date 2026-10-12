@@ -41,3 +41,8 @@ configure_log.txt
 /OpenMU-安卓手机版-可安装*/OpenMU-手机服务器/
 /OpenMU/tools/balance/test-results/
 /MuMain/docs/loc-coverage.json
+
+# Local security audit artifacts (contains manifest signing private key, never publish)
+/_安全审计-2026-10-12/
+# Temporary write probe
+/MuMain/src/source/Network/Server/f4_write_probe.tmp

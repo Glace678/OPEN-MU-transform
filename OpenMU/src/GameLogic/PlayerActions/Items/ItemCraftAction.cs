@@ -1,9 +1,10 @@
-﻿// <copyright file="ItemCraftAction.cs" company="MUnique">
+// <copyright file="ItemCraftAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.OpenMU.GameLogic.PlayerActions.Items;
 
+using System.Collections.Concurrent;
 using MUnique.OpenMU.DataModel.Configuration.ItemCrafting;
 using MUnique.OpenMU.GameLogic.Views.NPC;
 
@@ -12,7 +13,10 @@ using MUnique.OpenMU.GameLogic.Views.NPC;
 /// </summary>
 public class ItemCraftAction
 {
-    private readonly IDictionary<ItemCrafting, IItemCraftingHandler> _craftingHandlerCache = new Dictionary<ItemCrafting, IItemCraftingHandler>();
+    // A4-H2: this cache is shared across all players (the action is a single long-lived instance),
+    // so it must be thread-safe. A plain Dictionary with a TryGetValue-then-Add check is not: two
+    // players crafting the same ItemCrafting concurrently could race into a corrupted dictionary.
+    private readonly ConcurrentDictionary<ItemCrafting, IItemCraftingHandler> _craftingHandlerCache = new();
 
     /// <summary>
     /// Mixes the items at the currently opened crafting NPC.
@@ -31,11 +35,7 @@ public class ItemCraftAction
             return;
         }
 
-        if (!this._craftingHandlerCache.TryGetValue(crafting, out var craftingHandler))
-        {
-            craftingHandler = this.CreateCraftingHandler(crafting);
-            this._craftingHandlerCache.Add(crafting, craftingHandler);
-        }
+        var craftingHandler = this._craftingHandlerCache.GetOrAdd(crafting, this.CreateCraftingHandler);
 
         (CraftingResult, Item?) result;
         try
@@ -76,11 +76,7 @@ public class ItemCraftAction
             // chaos weapon crafting, so we set a descending order so it gets checked first
             foreach (var itemCrafting in npc.ItemCraftings.OrderByDescending(c => c.Number))
             {
-                if (!this._craftingHandlerCache.TryGetValue(itemCrafting, out var craftingHandler))
-                {
-                    craftingHandler = this.CreateCraftingHandler(itemCrafting);
-                    this._craftingHandlerCache.Add(itemCrafting, craftingHandler);
-                }
+                var craftingHandler = this._craftingHandlerCache.GetOrAdd(itemCrafting, this.CreateCraftingHandler);
 
                 if (craftingHandler.TryGetRequiredItems(player, out _, out _) is null)
                 {

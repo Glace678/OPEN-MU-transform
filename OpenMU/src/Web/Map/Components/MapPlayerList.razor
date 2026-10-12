@@ -1,4 +1,4 @@
-﻿@using MUnique.OpenMU.DataModel.Entities
+@using MUnique.OpenMU.DataModel.Entities
 @using MUnique.OpenMU.Web.Map.Properties
 @implements IDisposable
 
@@ -17,8 +17,11 @@
             <td>@player.Name</td>
             <td>@player.Id</td>
             <td class="d-flex gap-1">
-                <button type="button" class="btn btn-secondary btn-sm" @onclick:stopPropagation="true" @onclick=@(async () => await player.DisconnectAsync()) title="@(Resources.Disconnect)"><i class="oi oi-account-logout"></i></button>
-                <button type="button" class="btn btn-secondary btn-sm" @onclick:stopPropagation="true" @onclick=@(async () => { if (player.Account is not null) { player.Account.State = AccountState.TemporarilyBanned; } await player.DisconnectAsync(); }) title="@(Resources.TemporarilyBan)"><i class="oi oi-ban"></i></button>
+                @if (this.ShowModerationActions)
+                {
+                    <button type="button" class="btn btn-secondary btn-sm" @onclick:stopPropagation="true" @onclick=@(async () => await player.DisconnectAsync()) title="@(Resources.Disconnect)"><i class="oi oi-account-logout"></i></button>
+                    <button type="button" class="btn btn-secondary btn-sm" @onclick:stopPropagation="true" @onclick=@(async () => { if (player.Account is not null) { player.Account.State = AccountState.TemporarilyBanned; } await player.DisconnectAsync(); }) title="@(Resources.TemporarilyBan)"><i class="oi oi-ban"></i></button>
+                }
                 @if (this.FollowedPlayerName is not null && this.FollowedPlayerName == player.SelectedCharacter?.Name)
                 {
                     <button type="button" class="btn btn-info btn-sm" @onclick:stopPropagation="true" @onclick="() => this.OnFollowPlayer.InvokeAsync(null)" title="@(Resources.Following)"><i class="oi oi-eye"></i></button>
@@ -34,6 +37,14 @@
 </table>
 
 @code {
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the moderation actions (disconnect / temporarily ban)
+    /// are rendered. Hosts without an authenticated Operator/Administrator must leave this false so
+    /// the GM buttons are never offered to anonymous visitors.
+    /// </summary>
+    [Parameter]
+    public bool ShowModerationActions { get; set; }
 
     /// <summary>
     /// Gets or sets the map controller.

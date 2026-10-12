@@ -1,4 +1,4 @@
-﻿// <copyright file="IContext.cs" company="MUnique">
+// <copyright file="IContext.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -54,6 +54,25 @@ public interface IContext : IDisposable
     /// When calling this method, be sure to clear a previous back reference property before. Otherwise, you might attach more than you intended.
     /// </remarks>
     void Attach(object item);
+
+    /// <summary>
+    /// Registers the money balance of an item storage as a pending modification, so it is
+    /// durably persisted together with the other tracked changes (e.g. a traded item transfer)
+    /// in the very next <see cref="SaveChangesAsync"/> call - i.e. the same database transaction.
+    /// This keeps a cross-player settlement (item transfer + both wallets) atomic: either all of
+    /// it commits, or nothing of it does, so a crash can no longer leave the items swapped while
+    /// the zen never reaches its recipient.
+    /// </summary>
+    /// <param name="itemStorageId">The id of the item storage whose money balance changed.</param>
+    /// <param name="newMoney">The new money balance to persist.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>
+    /// <c>true</c> when the balance change was registered; <c>false</c> when this context cannot
+    /// persist item-storage money (e.g. in-memory development contexts), in which case the caller
+    /// falls back to its regular in-memory/periodic-save path.
+    /// </returns>
+    ValueTask<bool> AttachMoneyBalanceAsync(Guid itemStorageId, int newMoney, CancellationToken cancellationToken = default)
+        => ValueTask.FromResult(false);
 
     /// <summary>
     /// Creates a new instance of <typeparamref name="T" />.

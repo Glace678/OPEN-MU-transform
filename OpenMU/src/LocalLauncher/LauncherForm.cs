@@ -179,7 +179,7 @@ public sealed class LauncherForm : Form
 
         try
         {
-            this._networkDescription.Text = $"手机地址：{this._manager.MobileAccessAddress}。游戏和后台对局域网开放，数据库仍仅监听 127.0.0.1；更改后需重启服务。";
+            this._networkDescription.Text = $"手机地址：{this._manager.MobileAccessAddress}。游戏端口与手机 GM API 对局域网开放；管理后台默认仅监听 127.0.0.1，如需对局域网开放整个后台必须先为 localadmin 配置 TOTP 两步验证。数据库仍仅监听 127.0.0.1；更改后需重启服务。";
         }
         catch (InvalidOperationException error)
         {

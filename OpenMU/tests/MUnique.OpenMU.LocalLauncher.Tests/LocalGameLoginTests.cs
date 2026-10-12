@@ -118,7 +118,8 @@ public class LocalGameLoginTests
         {
             Assert.That(OpenMuServerManager.ResolveAdvertisedAddress(settings), Is.EqualTo("192.168.10.25"));
             Assert.That(environment["OPENMU_BIND_ADDRESS"], Is.EqualTo("0.0.0.0"));
-            Assert.That(environment["ASPNETCORE_URLS"], Is.EqualTo("http://0.0.0.0:5080"));
+            Assert.That(environment["ASPNETCORE_URLS"], Is.EqualTo("http://127.0.0.1:5080;http://0.0.0.0:5080"));
+            Assert.That(environment["OPENMU_ADMIN_PUBLIC_PATH_WHITELIST"], Is.EqualTo("/api/mobile-gm"));
             Assert.That(environment["OPENMU_MOBILE_PACKAGE_KEY"], Is.EqualTo(MobilePackageKey));
             Assert.That(environment["OPENMU_LOCAL_GAME_USERNAME"], Is.EqualTo(login.Username));
             Assert.That(environment["OPENMU_LOCAL_GAME_PASSWORD"], Is.EqualTo(login.Password));

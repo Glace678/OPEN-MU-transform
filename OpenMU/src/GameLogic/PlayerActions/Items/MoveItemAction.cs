@@ -1,4 +1,4 @@
-﻿// <copyright file="MoveItemAction.cs" company="MUnique">
+// <copyright file="MoveItemAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -336,6 +336,14 @@ public class MoveItemAction
 
     private bool IsTargetSlotBlocked(Item item, byte toSlot, StorageInfo toStorage, bool[,] usedSlots)
     {
+        // A1-M1: a target slot below the storage start index (a small/raw client-supplied toSlot)
+        // would make rowIndex/columnIndex negative; the upper-bound checks below would not catch that
+        // and usedSlots[r, c] would throw IndexOutOfRangeException. Treat it as a blocked/invalid move.
+        if (toSlot < toStorage.StartIndex)
+        {
+            return true;
+        }
+
         int rowIndex = (toSlot - toStorage.StartIndex) / RowSize;
         int columnIndex = (toSlot - toStorage.StartIndex) % RowSize;
 

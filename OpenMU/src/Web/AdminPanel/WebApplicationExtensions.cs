@@ -1,4 +1,4 @@
-﻿// <copyright file="WebApplicationExtensions.cs" company="MUnique">
+// <copyright file="WebApplicationExtensions.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -31,6 +31,13 @@ using MUnique.OpenMU.Web.Shared.Services;
 public static class WebApplicationExtensions
 {
     private const string LogDirectoryEnvironmentVariable = "OPENMU_LOG_DIRECTORY";
+
+    /// <summary>
+    /// When set (e.g. to "/api/mobile-gm"), requests that arrive on a non-loopback local interface may
+    /// only target paths starting with this prefix; everything else is answered with 404. This keeps
+    /// the panel UI loopback-only while exposing a single API surface to the LAN (set by the launcher).
+    /// </summary>
+    private const string PublicPathWhitelistEnvironmentVariable = "OPENMU_ADMIN_PUBLIC_PATH_WHITELIST";
 
     /// <summary>
     /// Adds the map application to the web app.
@@ -134,6 +141,38 @@ public static class WebApplicationExtensions
         // Must run before any other middleware so scheme/host/client IP from the
         // reverse proxy are visible to redirects, auth cookie policy, etc.
         app.UseForwardedHeaders();
+
+        // When the launcher binds the panel to 0.0.0.0 for the phone GM API, only the whitelisted
+        // surface (e.g. /api/mobile-gm) may be reachable on the non-loopback interface. The panel UI
+        // (login, register, all pages, Blazor circuits) stays loopback-only. This is a network-layer
+        // restriction; the actual mobile-gm authentication is unchanged.
+        var publicPathWhitelist = Environment.GetEnvironmentVariable(PublicPathWhitelistEnvironmentVariable);
+        if (!string.IsNullOrWhiteSpace(publicPathWhitelist))
+        {
+            app.Use(async (context, next) =>
+            {
+                var localAddress = context.Connection.LocalIpAddress;
+                if (localAddress is not null)
+                {
+                    if (localAddress.IsIPv4MappedToIPv6)
+                    {
+                        localAddress = localAddress.MapToIPv4();
+                    }
+
+                    if (!System.Net.IPAddress.IsLoopback(localAddress))
+                    {
+                        var path = context.Request.Path.Value ?? string.Empty;
+                        if (!path.StartsWith(publicPathWhitelist, StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Response.StatusCode = 404; // Status404NotFound
+                            return;
+                        }
+                    }
+                }
+
+                await next();
+            });
+        }
 
         if (app.Environment.IsDevelopment())
         {
