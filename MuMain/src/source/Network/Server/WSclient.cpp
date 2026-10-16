@@ -47,7 +47,7 @@
 #include "GameLogic/NPCs/npcGateSwitch.h"
 #include "GameLogic/Items/CComGem.h"
 #include "GameLogic/Items/InventoryUtils.h"
-#include "UI/Legacy/UIMapName.h" // rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Commands/ChatCommandCatalog.h"
 #include "UI/Legacy/UIMng.h"
 #include "GameLogic/Events/Cinematic/CDirection.h"
@@ -70,7 +70,7 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "GameShop/InGameShopSystem.h"
 #include "GameShop/MsgBoxIGSCommon.h"
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 
 #include "World/MapInfra/w_MapHeaders.h"
 
@@ -82,7 +82,7 @@
 #include "Scenes/SceneCommon.h"
 #ifdef PBG_ADD_SECRETBUFF
 #include "FatigueTimeSystem.h"
-#endif //PBG_ADD_SECRETBUFF
+#endif  //PBG_ADD_SECRETBUFF
 #include <codecvt>
 #include <limits>
 
@@ -97,69 +97,66 @@
 
 namespace
 {
-    void PublishHaptic(Core::Haptics::HapticEvent event)
-    {
-        Core::Input::GamepadService::Instance().PublishHaptic(
-            event,
-            static_cast<double>(SDL_GetTicks()));
-    }
+void PublishHaptic(Core::Haptics::HapticEvent event)
+{
+    Core::Input::GamepadService::Instance().PublishHaptic(event, static_cast<double>(SDL_GetTicks()));
+}
 }
 
 extern BYTE m_AltarState[];
-extern int g_iChatInputType;
+extern int  g_iChatInputType;
 extern BOOL g_bUseChatListBox;
 
-extern BOOL g_bUseWindowMode;
+extern BOOL             g_bUseWindowMode;
 extern CUITextInputBox* g_pSingleTextInputBox;
 
 #ifdef _PVP_ADD_MOVE_SCROLL
 extern CMurdererMove g_MurdererMove;
-#endif	// _PVP_ADD_MOVE_SCROLL
+#endif  // _PVP_ADD_MOVE_SCROLL
 
-extern  short   g_shCameraLevel;
+extern short g_shCameraLevel;
 
 extern BYTE DebugText[MAX_DEBUG_MAX][256];
 extern int  DebugTextLength[MAX_DEBUG_MAX];
 extern char DebugTextCount;
 extern int  TotalPacketSize;
-extern int g_iKeyPadEnable;
+extern int  g_iKeyPadEnable;
 
-extern BOOL g_bWhileMovingZone;
+extern BOOL  g_bWhileMovingZone;
 extern DWORD g_dwLatestZoneMoving;
 
-extern CUIMapName* g_pUIMapName; 
+extern CUIMapName* g_pUIMapName;
 
 extern bool g_PetEnableDuel;
 
-MASTER_LEVEL_VALUE	Master_Level_Data;
+MASTER_LEVEL_VALUE Master_Level_Data;
 
 //BYTE Version[SIZE_PROTOCOLVERSION] = {'1'+1, '0'+2, '4'+3, '0'+4, '5'+5};
 //BYTE Serial[SIZE_PROTOCOLSERIAL+1] = {"TbYehR2hFUPBKgZj"};
 
-BYTE Version[SIZE_PROTOCOLVERSION] = { '2', '0', '4', '0', '4' };
-BYTE Serial[SIZE_PROTOCOLSERIAL + 1] = { "k1Pk2jcET48mxL3b" };
-Connection* SocketClient = nullptr;
-bool EnableSocket = false;
+BYTE        Version[SIZE_PROTOCOLVERSION]   = {'2', '0', '4', '0', '4'};
+BYTE        Serial[SIZE_PROTOCOLSERIAL + 1] = {"k1Pk2jcET48mxL3b"};
+Connection* SocketClient                    = nullptr;
+bool        EnableSocket                    = false;
 
+BOOL g_bGameServerConnected = FALSE;
 
-BOOL    g_bGameServerConnected = FALSE;
-
-MATCH_RESULT	g_wtMatchResult;
-PMSG_MATCH_TIMEVIEW	g_wtMatchTimeLeft;
-int g_iGoalEffect = 0;
+MATCH_RESULT        g_wtMatchResult;
+PMSG_MATCH_TIMEVIEW g_wtMatchTimeLeft;
+int                 g_iGoalEffect = 0;
 
 CROWN_SWITCH_INFO* Switch_Info = nullptr;
 
-int     HeroKey;
-int     CurrentProtocolState;
+int HeroKey;
+int CurrentProtocolState;
 
-int DirTable[16] = { -1,-1,  0,-1,  1,-1,  1,0,  1,1,  0,1,  -1,1,  -1,0 };
+int DirTable[16] = {-1, -1, 0, -1, 1, -1, 1, 0, 1, 1, 0, 1, -1, 1, -1, 0};
 
-wchar_t    Password[MAX_USERNAME_SIZE + 1];
-wchar_t    QuestionID[MAX_USERNAME_SIZE + 1];
-wchar_t    Question[31];
+wchar_t Password[MAX_USERNAME_SIZE + 1];
+wchar_t QuestionID[MAX_USERNAME_SIZE + 1];
+wchar_t Question[31];
 
-#define FIRST_CROWN_SWITCH_NUMBER	322
+#define FIRST_CROWN_SWITCH_NUMBER 322
 
 void AddDebugText(const unsigned char* Buffer, int Size)
 {
@@ -193,8 +190,8 @@ static uint64_t GetNormalLowerBound(const WORD level)
         return 0;
     }
 
-    const uint64_t priorLevel = static_cast<uint64_t>(level - 1);
-    uint64_t priorExperience = (9ull + priorLevel) * priorLevel * priorLevel * 10ull;
+    const uint64_t priorLevel      = static_cast<uint64_t>(level - 1);
+    uint64_t       priorExperience = (9ull + priorLevel) * priorLevel * priorLevel * 10ull;
 
     if (priorLevel > 255ull)
     {
@@ -207,8 +204,7 @@ static uint64_t GetNormalLowerBound(const WORD level)
 
 static int64_t GetMasterLowerBound(const short masterLevel)
 {
-    const auto saturatingAdd = [](const int64_t left, const int64_t right)
-    {
+    const auto saturatingAdd = [](const int64_t left, const int64_t right) {
         if (right > 0 && left > kInt64Max - right)
         {
             return kInt64Max;
@@ -221,8 +217,7 @@ static int64_t GetMasterLowerBound(const short masterLevel)
 
         return left + right;
     };
-    const auto saturatingSub = [&](const int64_t left, const int64_t right)
-    {
+    const auto saturatingSub = [&](const int64_t left, const int64_t right) {
         if (right == kInt64Min)
         {
             return kInt64Max;
@@ -230,15 +225,13 @@ static int64_t GetMasterLowerBound(const short masterLevel)
 
         return saturatingAdd(left, -right);
     };
-    const auto saturatingMul = [](const int64_t left, const int64_t right)
-    {
+    const auto saturatingMul = [](const int64_t left, const int64_t right) {
         if (left == 0 || right == 0)
         {
             return static_cast<int64_t>(0);
         }
 
-        const auto magnitude = [](const int64_t value)
-        {
+        const auto magnitude = [](const int64_t value) {
             if (value >= 0)
             {
                 return static_cast<uint64_t>(value);
@@ -252,12 +245,10 @@ static int64_t GetMasterLowerBound(const short masterLevel)
             return static_cast<uint64_t>(-value);
         };
 
-        const bool isNegativeResult = (left < 0) != (right < 0);
-        const uint64_t resultLimit = isNegativeResult
-            ? (uint64_t{1} << 63)
-            : static_cast<uint64_t>(kInt64Max);
-        const uint64_t leftMagnitude = magnitude(left);
-        const uint64_t rightMagnitude = magnitude(right);
+        const bool     isNegativeResult = (left < 0) != (right < 0);
+        const uint64_t resultLimit      = isNegativeResult ? (uint64_t{1} << 63) : static_cast<uint64_t>(kInt64Max);
+        const uint64_t leftMagnitude    = magnitude(left);
+        const uint64_t rightMagnitude   = magnitude(right);
 
         if (leftMagnitude > resultLimit / rightMagnitude)
         {
@@ -266,8 +257,7 @@ static int64_t GetMasterLowerBound(const short masterLevel)
 
         return left * right;
     };
-    const auto saturatingDiv = [](const int64_t numerator, const int64_t denominator)
-    {
+    const auto saturatingDiv = [](const int64_t numerator, const int64_t denominator) {
         if (denominator == 0)
         {
             return numerator >= 0 ? kInt64Max : kInt64Min;
@@ -282,20 +272,16 @@ static int64_t GetMasterLowerBound(const short masterLevel)
     };
 
     const int64_t totalLevel = saturatingAdd(static_cast<int64_t>(masterLevel), static_cast<int64_t>(400));
-    const int64_t overLevel = saturatingSub(totalLevel, static_cast<int64_t>(255));
+    const int64_t overLevel  = saturatingSub(totalLevel, static_cast<int64_t>(255));
 
     const int64_t leftTerm = saturatingMul(
-        saturatingMul(
-            saturatingMul(saturatingAdd(static_cast<int64_t>(9), totalLevel), totalLevel),
-            totalLevel),
+        saturatingMul(saturatingMul(saturatingAdd(static_cast<int64_t>(9), totalLevel), totalLevel), totalLevel),
         static_cast<int64_t>(10));
     const int64_t rightTerm = saturatingMul(
-        saturatingMul(
-            saturatingMul(saturatingAdd(static_cast<int64_t>(9), overLevel), overLevel),
-            overLevel),
+        saturatingMul(saturatingMul(saturatingAdd(static_cast<int64_t>(9), overLevel), overLevel), overLevel),
         static_cast<int64_t>(1000));
     const int64_t dataMaster = saturatingAdd(leftTerm, rightTerm);
-    const int64_t numerator = saturatingSub(dataMaster, static_cast<int64_t>(3892250000ll));
+    const int64_t numerator  = saturatingSub(dataMaster, static_cast<int64_t>(3892250000ll));
 
     return saturatingDiv(numerator, static_cast<int64_t>(2));
 }
@@ -390,7 +376,7 @@ BOOL CreateSocket(const wchar_t* IpAddr, unsigned short Port)
 
     // todo: generally, it's a bad idea to assume a specific port number (range).
     const bool isEncrypted = Port > 0xADFF || Port < 0xAD00;
-    SocketClient = new Connection(IpAddr, Port, isEncrypted, &HandleIncomingPacket);
+    SocketClient           = new Connection(IpAddr, Port, isEncrypted, &HandleIncomingPacket);
     if (!SocketClient->IsConnected())
     {
         bResult = FALSE;
@@ -427,12 +413,13 @@ void DeleteSocket()
     }
 }
 
+int     LogIn                          = 0;
+wchar_t LogInID[MAX_USERNAME_SIZE + 1] = {
+    0,
+};
 
-int  LogIn = 0;
-wchar_t LogInID[MAX_USERNAME_SIZE + 1] = { 0, };
-
-bool First = false;
-int FirstTime = 0;
+bool First     = false;
+int  FirstTime = 0;
 
 bool LogOut = false;
 
@@ -444,10 +431,13 @@ int CurrentSkill = 0;
 
 int BuyCost = 0;
 
-int  EnableUse = 0; // todo: get rid of this, it may cause the stuck client bug, so that players can't use items anymore.
+int EnableUse =
+    0;  // todo: get rid of this, it may cause the stuck client bug, so that players can't use items anymore.
 
-int SendGetItem = -1; // todo: get rid of this, it may cause the stuck client bug, so that players can't pick up anything anymore.
-int SendDropItem = -1; // todo: get rid of this, it may cause the stuck client bug, so that players can't drop anything anymore.
+int SendGetItem =
+    -1;  // todo: get rid of this, it may cause the stuck client bug, so that players can't pick up anything anymore.
+int SendDropItem =
+    -1;  // todo: get rid of this, it may cause the stuck client bug, so that players can't drop anything anymore.
 
 int FindGuildName(wchar_t* Name)
 {
@@ -488,8 +478,8 @@ void GuildTeam(CHARACTER* c)
 
 void InitGuildWar()
 {
-    EnableGuildWar = false;
-    GuildWarIndex = -1;
+    EnableGuildWar  = false;
+    GuildWarIndex   = -1;
     GuildWarName[0] = 0;
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
@@ -498,23 +488,22 @@ void InitGuildWar()
     }
 }
 
-BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring &lpszString);
+BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString);
 
 static bool TrySelectLocalServer()
 {
-    auto& automaticLogin = Network::Login::LocalAutoLogin::Instance();
-    const auto& config = GameConfig::GetInstance();
-    const char* enabled = std::getenv(Network::Login::LocalAutoLoginEnvironment);
-    const char* mobileEnabled = std::getenv(Network::Login::MobileLocalAutoLoginEnvironment);
-    const bool isMobileAutomaticLogin = mobileEnabled != nullptr && std::string_view(mobileEnabled) == "1";
-    const bool hasSavedCredentials = config.GetRememberMe() && config.GetSavePassword()
-        && !config.GetEncryptedUsername().empty() && !config.GetEncryptedPassword().empty();
+    auto&       automaticLogin         = Network::Login::LocalAutoLogin::Instance();
+    const auto& config                 = GameConfig::GetInstance();
+    const char* enabled                = std::getenv(Network::Login::LocalAutoLoginEnvironment);
+    const char* mobileEnabled          = std::getenv(Network::Login::MobileLocalAutoLoginEnvironment);
+    const bool  isMobileAutomaticLogin = mobileEnabled != nullptr && std::string_view(mobileEnabled) == "1";
+    const bool  hasSavedCredentials    = config.GetRememberMe() && config.GetSavePassword() &&
+                                     !config.GetEncryptedUsername().empty() && !config.GetEncryptedPassword().empty();
     const bool hasLocalCredentials = Network::Login::LocalLoginCredentials::FromEnvironment().IsValid();
-    const bool hasAutomaticCredentials = isMobileAutomaticLogin
-        ? hasLocalCredentials
-        : hasSavedCredentials || hasLocalCredentials;
-    automaticLogin.Initialize(enabled != nullptr && std::string_view(enabled) == "1",
-        szServerIpAddress, hasAutomaticCredentials, isMobileAutomaticLogin);
+    const bool hasAutomaticCredentials =
+        isMobileAutomaticLogin ? hasLocalCredentials : hasSavedCredentials || hasLocalCredentials;
+    automaticLogin.Initialize(enabled != nullptr && std::string_view(enabled) == "1", szServerIpAddress,
+                              hasAutomaticCredentials, isMobileAutomaticLogin);
     if (!automaticLogin.CanSelectServer() || ReconnectManager::Instance().IsActive())
     {
         return false;
@@ -546,8 +535,8 @@ static bool TrySelectLocalServer()
 
 void ReceiveServerList(const BYTE* ReceiveBuffer, int32_t Size)
 {
-    auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-    int Offset = sizeof(PHEADER_DEFAULT_SUBCODE_WORD);
+    auto Data   = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PHEADER_DEFAULT_SUBCODE_WORD);
     if (Offset >= Size)
     {
         return;
@@ -557,7 +546,7 @@ void ReceiveServerList(const BYTE* ReceiveBuffer, int32_t Size)
 
     g_ServerListManager->Release();
 
-    const int totalServer = MAKEWORD(Value2, Data->Value);
+    const int     totalServer              = MAKEWORD(Value2, Data->Value);
     constexpr int MaximumServerListEntries = 200;
     if (totalServer > MaximumServerListEntries)
     {
@@ -601,7 +590,7 @@ void ReceiveServerList(const BYTE* ReceiveBuffer, int32_t Size)
 }
 void ReceiveServerConnect(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_SERVER_ADDRESS)ReceiveBuffer;
+    auto    Data = (LPPRECEIVE_SERVER_ADDRESS)ReceiveBuffer;
     wchar_t IP[16];
     CMultiLanguage::ConvertFromUtf8(IP, Data->IP);
     Network::Login::LocalAutoLogin::Instance().ServerAddressReceived(IP);
@@ -623,7 +612,7 @@ void ReceiveServerConnect(const BYTE* ReceiveBuffer)
 
     wchar_t Text[100];
     mu_swprintf(Text, I18N::Game::YouAreConnectedToTheServer, IP, Data->Port);
-    g_pSystemLogBox->AddText( Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
+    g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
 }
 
 void ReceiveServerConnectBusy(const BYTE* ReceiveBuffer)
@@ -636,7 +625,7 @@ void ReceiveServerConnectBusy(const BYTE* ReceiveBuffer)
 static bool IsJoinServerVersionSupported(const BYTE* serverVersion)
 {
     u_int64 received = 0;
-    u_int64 actual = 0;
+    u_int64 actual   = 0;
     for (int i = 0; i < SIZE_PROTOCOLVERSION; ++i)
     {
         received |= serverVersion[i];
@@ -658,23 +647,22 @@ void ReceiveJoinServer(const BYTE* ReceiveBuffer)
     }
     else
     {
-        bool accepted = Network::Server::IsSuccessfulResult(
-            Network::Server::ResultOperation::JoinServer,
-            Data2->Result);
+        bool accepted =
+            Network::Server::IsSuccessfulResult(Network::Server::ResultOperation::JoinServer, Data2->Result);
         CUIMng& rUIMng = CUIMng::Instance();
 
         switch (Data2->Result)
         {
-        case 0x01:
-            HeroKey = ((int)(Data2->NumberH) << 8) + Data2->NumberL;
-            CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
-            break;
+            case 0x01:
+                HeroKey              = ((int)(Data2->NumberH) << 8) + Data2->NumberL;
+                CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
+                break;
 
-        default:
-            g_ErrorReport.Write(L"Connecting error. ");
-            g_ErrorReport.WriteCurrentTime();
-            rUIMng.PopUpMsgWin(MESSAGE_SERVER_LOST);
-            break;
+            default:
+                g_ErrorReport.Write(L"Connecting error. ");
+                g_ErrorReport.WriteCurrentTime();
+                rUIMng.PopUpMsgWin(MESSAGE_SERVER_LOST);
+                break;
         }
 
         if (!IsJoinServerVersionSupported(Data2->Version))
@@ -702,24 +690,22 @@ void ReceiveJoinServer(const BYTE* ReceiveBuffer)
             }
         }
 
-        PublishHaptic(accepted
-            ? Core::Haptics::HapticEvent::Confirmed
-            : Core::Haptics::HapticEvent::OperationFailed);
+        PublishHaptic(accepted ? Core::Haptics::HapticEvent::Confirmed : Core::Haptics::HapticEvent::OperationFailed);
     }
 
     g_GuildCache.Reset();
 
-//#if defined _DEBUG || defined FOR_WORK
-//    if (Data2->Result == 0x01)
-//    {
-//        wchar_t lpszTemp[256];
-//        if (Util_CheckOption(GetCommandLineW(), L'i', lpszTemp))
-//        {
-//            g_ErrorReport.Write(L"> Try to Login \"%ls\"\r\n", m_ID);
-//            SendRequestLogIn(m_ID, lpszTemp);
-//        }
-//    }
-//#endif
+    //#if defined _DEBUG || defined FOR_WORK
+    //    if (Data2->Result == 0x01)
+    //    {
+    //        wchar_t lpszTemp[256];
+    //        if (Util_CheckOption(GetCommandLineW(), L'i', lpszTemp))
+    //        {
+    //            g_ErrorReport.Write(L"> Try to Login \"%ls\"\r\n", m_ID);
+    //            SendRequestLogIn(m_ID, lpszTemp);
+    //        }
+    //    }
+    //#endif
 }
 
 void ReceiveConfirmPassword(const BYTE* ReceiveBuffer)
@@ -727,14 +713,14 @@ void ReceiveConfirmPassword(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_CONFIRM_PASSWORD)ReceiveBuffer;
     switch (Data->Result)
     {
-    case 0:
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD_FAIL_ID;
-        break;
-    case 1:
-        BuxConvert((BYTE*)Data->Question, sizeof(Data->Question));
-        CMultiLanguage::ConvertFromUtf8(Question, Data->Question, sizeof Data->Question);
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD_SUCCESS;
-        break;
+        case 0:
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD_FAIL_ID;
+            break;
+        case 1:
+            BuxConvert((BYTE*)Data->Question, sizeof(Data->Question));
+            CMultiLanguage::ConvertFromUtf8(Question, Data->Question, sizeof Data->Question);
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD_SUCCESS;
+            break;
     }
 }
 
@@ -749,20 +735,20 @@ void ReceiveConfirmPassword2(const std::span<const BYTE> ReceiveBuffer)
 
     switch (Data->Result)
     {
-    case 1:
-        BuxConvert((BYTE*)Data->Password, sizeof(Data->Password));
-        CMultiLanguage::ConvertFromUtf8(Password, Data->Password, sizeof Data->Password);
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_SUCCESS;
-        break;
-    case 0:
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_ID;
-        break;
-    case 2:
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_ANSWER;
-        break;
-    case 3:
-        CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_RESIDENT;
-        break;
+        case 1:
+            BuxConvert((BYTE*)Data->Password, sizeof(Data->Password));
+            CMultiLanguage::ConvertFromUtf8(Password, Data->Password, sizeof Data->Password);
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_SUCCESS;
+            break;
+        case 0:
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_ID;
+            break;
+        case 2:
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_ANSWER;
+            break;
+        case 3:
+            CurrentProtocolState = RECEIVE_CONFIRM_PASSWORD2_FAIL_RESIDENT;
+            break;
     }
 }
 
@@ -771,18 +757,18 @@ void ReceiveChangePassword(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 1:
-        CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_SUCCESS;
-        break;
-    case 0:
-        CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_ID;
-        break;
-    case 2:
-        CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_RESIDENT;
-        break;
-    case 3:
-        CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_PASSWORD;
-        break;
+        case 1:
+            CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_SUCCESS;
+            break;
+        case 0:
+            CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_ID;
+            break;
+        case 2:
+            CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_RESIDENT;
+            break;
+        case 3:
+            CurrentProtocolState = RECEIVE_CHANGE_PASSWORD_FAIL_PASSWORD;
+            break;
     }
 }
 
@@ -792,9 +778,9 @@ void ReceiveCharacterListExtended(const std::span<const BYTE> Packet)
 
     auto Data = (LPPHEADER_DEFAULT_CHARACTER_LIST)Packet.data();
 
-    int Offset = sizeof(PHEADER_DEFAULT_CHARACTER_LIST);
-    const int PacketSize = static_cast<int>(Packet.size());
-    const int CharacterCount = Data->CharacterCount;
+    int           Offset                  = sizeof(PHEADER_DEFAULT_CHARACTER_LIST);
+    const int     PacketSize              = static_cast<int>(Packet.size());
+    const int     CharacterCount          = Data->CharacterCount;
     constexpr int MaximumCharacterEntries = 10;
     if (CharacterCount > MaximumCharacterEntries)
     {
@@ -819,22 +805,43 @@ void ReceiveCharacterListExtended(const std::span<const BYTE> Packet)
 
         auto Data2 = (LPPRECEIVE_CHARACTER_LIST_EXTENDED)(Packet.data() + Offset);
 
-        auto iClass = gCharacterManager.ChangeServerClassTypeToClientClassType(Data2->Class);
+        auto  iClass = gCharacterManager.ChangeServerClassTypeToClientClassType(Data2->Class);
         float fPos[2], fAngle = 0.0f;
 
         switch (Data2->Index)
         {
-            case 0:	fPos[0] = 8008.0f;	fPos[1] = 18885.0f;	fAngle = 115.0f; break;
-            case 1:	fPos[0] = 7986.0f;	fPos[1] = 19145.0f;	fAngle = 90.0f; break;
-            case 2:	fPos[0] = 8046.0f;	fPos[1] = 19400.0f;	fAngle = 75.0f; break;
-            case 3:	fPos[0] = 8133.0f;	fPos[1] = 19645.0f;	fAngle = 60.0f; break;
-            case 4:	fPos[0] = 8282.0f;	fPos[1] = 19845.0f;	fAngle = 35.0f; break;
-            default: return;
+            case 0:
+                fPos[0] = 8008.0f;
+                fPos[1] = 18885.0f;
+                fAngle  = 115.0f;
+                break;
+            case 1:
+                fPos[0] = 7986.0f;
+                fPos[1] = 19145.0f;
+                fAngle  = 90.0f;
+                break;
+            case 2:
+                fPos[0] = 8046.0f;
+                fPos[1] = 19400.0f;
+                fAngle  = 75.0f;
+                break;
+            case 3:
+                fPos[0] = 8133.0f;
+                fPos[1] = 19645.0f;
+                fAngle  = 60.0f;
+                break;
+            case 4:
+                fPos[0] = 8282.0f;
+                fPos[1] = 19845.0f;
+                fAngle  = 35.0f;
+                break;
+            default:
+                return;
         }
 
         CHARACTER* c = CreateHero(Data2->Index, iClass, 0, fPos[0], fPos[1], fAngle);
 
-        c->Level = Data2->Level;
+        c->Level   = Data2->Level;
         c->CtlCode = Data2->CtlCode;
 
         memset(c->ID, 0, sizeof(c->ID));
@@ -854,7 +861,7 @@ CHARACTER_ENABLE g_CharCardEnable;
 
 void ReceiveCharacterCard_New(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_CHARACTERCARD)ReceiveBuffer;
+    auto Data                            = (LPPHEADER_CHARACTERCARD)ReceiveBuffer;
     g_CharCardEnable.bCharacterEnable[0] = false;
     g_CharCardEnable.bCharacterEnable[1] = false;
     g_CharCardEnable.bCharacterEnable[2] = false;
@@ -868,43 +875,63 @@ void ReceiveCharacterCard_New(const BYTE* ReceiveBuffer)
     if ((Data->CharacterCard & CLASS_SUMMONER_CARD) == CLASS_SUMMONER_CARD)
         g_CharCardEnable.bCharacterEnable[2] = true;
 
-    g_ConsoleDebug->Write(MCD_NORMAL, L"[BOTH MESSAGE] CharacterCard Recv %d = %d %d %d", Data->CharacterCard, g_CharCardEnable.bCharacterEnable[0], g_CharCardEnable.bCharacterEnable[1], g_CharCardEnable.bCharacterEnable[2]);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"[BOTH MESSAGE] CharacterCard Recv %d = %d %d %d", Data->CharacterCard,
+                          g_CharCardEnable.bCharacterEnable[0], g_CharCardEnable.bCharacterEnable[1],
+                          g_CharCardEnable.bCharacterEnable[2]);
 }
 
 void ReceiveCreateCharacter(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_CREATE_CHARACTER)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::CreateCharacter,
-        Data->Result));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::CreateCharacter, Data->Result));
     if (Data->Result == 1)
     {
-        float fPos[2] = { 0.0f,0.0f }, fAngle = 0.0f;
+        float fPos[2] = {0.0f, 0.0f}, fAngle = 0.0f;
 
         switch (Data->Index)
         {
-            case 0:	fPos[0] = 8008.0f;	fPos[1] = 18885.0f;	fAngle = 115.0f; break;
-            case 1:	fPos[0] = 7986.0f;	fPos[1] = 19145.0f;	fAngle = 90.0f; break;
-            case 2:	fPos[0] = 8046.0f;	fPos[1] = 19400.0f;	fAngle = 75.0f; break;
-            case 3:	fPos[0] = 8133.0f;	fPos[1] = 19645.0f;	fAngle = 60.0f; break;
-            case 4:	fPos[0] = 8282.0f;	fPos[1] = 19845.0f;	fAngle = 35.0f; break;
+            case 0:
+                fPos[0] = 8008.0f;
+                fPos[1] = 18885.0f;
+                fAngle  = 115.0f;
+                break;
+            case 1:
+                fPos[0] = 7986.0f;
+                fPos[1] = 19145.0f;
+                fAngle  = 90.0f;
+                break;
+            case 2:
+                fPos[0] = 8046.0f;
+                fPos[1] = 19400.0f;
+                fAngle  = 75.0f;
+                break;
+            case 3:
+                fPos[0] = 8133.0f;
+                fPos[1] = 19645.0f;
+                fAngle  = 60.0f;
+                break;
+            case 4:
+                fPos[0] = 8282.0f;
+                fPos[1] = 19845.0f;
+                fAngle  = 35.0f;
+                break;
         }
 
-        INT		iCharacterKey;
+        INT iCharacterKey;
         iCharacterKey = Data->Index;
         DeleteCharacter(iCharacterKey);
 
         CreateHero(Data->Index, CharacterView.Class, CharacterView.Skin, fPos[0], fPos[1], fAngle);
         CharactersClient[Data->Index].Level = Data->Level;
-        auto serverClass = (SERVER_CLASS_TYPE)(Data->Class >> 3);
-        auto iClass = gCharacterManager.ChangeServerClassTypeToClientClassType(serverClass);
+        auto serverClass                    = (SERVER_CLASS_TYPE)(Data->Class >> 3);
+        auto iClass                         = gCharacterManager.ChangeServerClassTypeToClientClassType(serverClass);
 
-        CharactersClient[Data->Index].Class = iClass;
+        CharactersClient[Data->Index].Class     = iClass;
         CharactersClient[Data->Index].SkinIndex = gCharacterManager.GetSkinModelIndex(iClass);
         CMultiLanguage::ConvertFromUtf8(CharactersClient[Data->Index].ID, Data->ID, MAX_USERNAME_SIZE);
         CharactersClient[Data->Index].ID[MAX_USERNAME_SIZE] = L'\0';
-        CurrentProtocolState = RECEIVE_CREATE_CHARACTER_SUCCESS;
-        CUIMng& rUIMng = CUIMng::Instance();
+        CurrentProtocolState                                = RECEIVE_CREATE_CHARACTER_SUCCESS;
+        CUIMng& rUIMng                                      = CUIMng::Instance();
         rUIMng.CloseMsgWin();
         rUIMng.m_CharSelMainWin.UpdateDisplay();
         rUIMng.m_CharInfoBalloonMng.UpdateDisplay();
@@ -920,27 +947,25 @@ void ReceiveCreateCharacter(const BYTE* ReceiveBuffer)
 void ReceiveDeleteCharacter(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::DeleteCharacter,
-        Data->Value));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::DeleteCharacter, Data->Value));
     switch (Data->Value)
     {
-    case 1:
-        INT		iKey;
-        iKey = CharactersClient[SelectedHero].Key;
-        DeleteCharacter(iKey);
-        CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_SUCCESS);
-        break;
-    case 0:
-        CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_GUILDWARNING);
-        break;
-    case 3:
-        CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_ITEM_BLOCK);
-        break;
-    case 2:
-    default:
-        CUIMng::Instance().PopUpMsgWin(MESSAGE_STORAGE_RESIDENTWRONG);
-        break;
+        case 1:
+            INT iKey;
+            iKey = CharactersClient[SelectedHero].Key;
+            DeleteCharacter(iKey);
+            CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_SUCCESS);
+            break;
+        case 0:
+            CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_GUILDWARNING);
+            break;
+        case 3:
+            CUIMng::Instance().PopUpMsgWin(MESSAGE_DELETE_CHARACTER_ITEM_BLOCK);
+            break;
+        case 2:
+        default:
+            CUIMng::Instance().PopUpMsgWin(MESSAGE_STORAGE_RESIDENTWRONG);
+            break;
     }
 }
 
@@ -951,22 +976,22 @@ extern void StopMusic();
 void InitGame()
 {
     Network::MerchantPrices::Cache().Reset();
-    EnableUse = 0;
-    SendGetItem = -1;
-    SummonLife = 0;
-    SoccerTime = 0;
+    EnableUse      = 0;
+    SendGetItem    = -1;
+    SummonLife     = 0;
+    SoccerTime     = 0;
     SoccerObserver = false;
 
     g_wtMatchResult.Clear();
     g_wtMatchTimeLeft.m_Time = 0;
-    g_iGoalEffect = 0;
+    g_iGoalEffect            = 0;
 
     g_shCameraLevel = 0;
 
-    SelectedNpc = -1;
-    SelectedOperate = -1;
+    SelectedNpc       = -1;
+    SelectedOperate   = -1;
     SelectedCharacter = -1;
-    SelectedItem = -1;
+    SelectedItem      = -1;
 
     Attacking = -1;
     g_pOption->SetAutoAttack(true);
@@ -981,23 +1006,23 @@ void InitGame()
     LockInputStatus = false;
 
     RepairEnable = 0;
-    CheckSkill = -1;
+    CheckSkill   = -1;
 
     UI::Notices::Clear();
 
     CharacterAttribute->InventoryExtensions = 0;
-    CharacterAttribute->Ability = 0;
-    CharacterAttribute->AbilityTime[0] = 0;
-    CharacterAttribute->AbilityTime[1] = 0;
-    CharacterAttribute->AbilityTime[2] = 0;
+    CharacterAttribute->Ability             = 0;
+    CharacterAttribute->AbilityTime[0]      = 0;
+    CharacterAttribute->AbilityTime[1]      = 0;
+    CharacterAttribute->AbilityTime[2]      = 0;
 
     CharacterMachine->StorageGold = 0;
-    CharacterMachine->Gold = 0;
+    CharacterMachine->Gold        = 0;
 
     g_shEventChipCount = 0;
-    g_shMutoNumber[0] = -1;
-    g_shMutoNumber[1] = -1;
-    g_shMutoNumber[2] = -1;
+    g_shMutoNumber[0]  = -1;
+    g_shMutoNumber[1]  = -1;
+    g_shMutoNumber[2]  = -1;
 
     UI::Chat::Whisper::Clear();
 
@@ -1031,65 +1056,65 @@ void InitGame()
 
 BOOL ReceiveLogOut(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
-    LogOut = false;
+    LogOut    = false;
     auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:
-        g_GuildCache.Reset();
-        memset(GuildMark[MARK_EDIT].Mark, 0, sizeof(GuildMark[MARK_EDIT].Mark));
-        memset(GuildMark[MARK_EDIT].GuildName, 0, sizeof(GuildMark[MARK_EDIT].GuildName));
-        SelectMarkColor = 0;
-        PostMessage(g_hWnd, WM_DESTROY, 0, 0);
-        break;
-    case 1:
-        StopMusic();
-        AllStopSound();
-
-        SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
-
-        ReleaseMainData();
-        CryWolfMVPInit();
-
-        SceneFlag = CHARACTER_SCENE;
-        CurrentProtocolState = REQUEST_CHARACTERS_LIST;
-        SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
-
-        g_sceneInit.ResetForDisconnect();
-        CurrentProtocolState = REQUEST_JOIN_SERVER;
-        InitGame();
-        break;
-    case 2:
-        if (SceneFlag == MAIN_SCENE)
-        {
-            CryWolfMVPInit();
+        case 0:
+            g_GuildCache.Reset();
+            memset(GuildMark[MARK_EDIT].Mark, 0, sizeof(GuildMark[MARK_EDIT].Mark));
+            memset(GuildMark[MARK_EDIT].GuildName, 0, sizeof(GuildMark[MARK_EDIT].GuildName));
+            SelectMarkColor = 0;
+            PostMessage(g_hWnd, WM_DESTROY, 0, 0);
+            break;
+        case 1:
             StopMusic();
             AllStopSound();
+
             SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
+
             ReleaseMainData();
-        }
+            CryWolfMVPInit();
 
-        g_GuildCache.Reset();
-        memset(GuildMark[MARK_EDIT].Mark, 0, sizeof(GuildMark[MARK_EDIT].Mark));
-        memset(GuildMark[MARK_EDIT].GuildName, 0, sizeof(GuildMark[MARK_EDIT].GuildName));
-        SelectMarkColor = 0;
-        g_ErrorReport.Write(L"[ReceiveLogOut]");
-        if (SocketClient != nullptr)
-        {
-            SocketClient->Close();
-            g_bGameServerConnected = false;
-        }
+            SceneFlag            = CHARACTER_SCENE;
+            CurrentProtocolState = REQUEST_CHARACTERS_LIST;
+            SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
 
-        ReleaseCharacterSceneData();
-        SceneFlag = LOG_IN_SCENE;
+            g_sceneInit.ResetForDisconnect();
+            CurrentProtocolState = REQUEST_JOIN_SERVER;
+            InitGame();
+            break;
+        case 2:
+            if (SceneFlag == MAIN_SCENE)
+            {
+                CryWolfMVPInit();
+                StopMusic();
+                AllStopSound();
+                SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
+                ReleaseMainData();
+            }
 
-        g_sceneInit.ResetForDisconnect();
-        CurrentProtocolState = REQUEST_JOIN_SERVER;
+            g_GuildCache.Reset();
+            memset(GuildMark[MARK_EDIT].Mark, 0, sizeof(GuildMark[MARK_EDIT].Mark));
+            memset(GuildMark[MARK_EDIT].GuildName, 0, sizeof(GuildMark[MARK_EDIT].GuildName));
+            SelectMarkColor = 0;
+            g_ErrorReport.Write(L"[ReceiveLogOut]");
+            if (SocketClient != nullptr)
+            {
+                SocketClient->Close();
+                g_bGameServerConnected = false;
+            }
 
-        LogIn = 0;
-        g_csMapServer.Init();
-        InitGame();
-        break;
+            ReleaseCharacterSceneData();
+            SceneFlag = LOG_IN_SCENE;
+
+            g_sceneInit.ResetForDisconnect();
+            CurrentProtocolState = REQUEST_JOIN_SERVER;
+
+            LogIn = 0;
+            g_csMapServer.Init();
+            InitGame();
+            break;
     }
 
     g_pWindowMgr->Reset();
@@ -1135,7 +1160,7 @@ void ResetClientToLoginScene()
     SceneFlag = LOG_IN_SCENE;
     g_sceneInit.ResetForDisconnect();
     CurrentProtocolState = REQUEST_JOIN_SERVER;
-    LogIn = 0;
+    LogIn                = 0;
     g_csMapServer.Init();
     InitGame();
 
@@ -1151,57 +1176,55 @@ void LogSafeCastSizeMismatch(const char* packet_type, std::size_t received, std:
     // %u + cast (instead of %zu) keeps the format compatible with older msvcrt
     // builds where vswprintf does not recognise C99 length modifiers. Packet
     // sizes always fit in 32 bits.
-    g_ConsoleDebug->Write(MCD_ERROR,
-        L"safe_cast<%.64hs>: received %u bytes, expected at least %u -- packet dropped",
-        packet_type ? packet_type : "?",
-        static_cast<unsigned>(received), static_cast<unsigned>(expected));
+    g_ConsoleDebug->Write(MCD_ERROR, L"safe_cast<%.64hs>: received %u bytes, expected at least %u -- packet dropped",
+                          packet_type ? packet_type : "?", static_cast<unsigned>(received),
+                          static_cast<unsigned>(expected));
 }
 
 BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 {
     MouseLButton = false;
-    HeroIndex = rand() % MAX_CHARACTERS_CLIENT;
+    HeroIndex    = rand() % MAX_CHARACTERS_CLIENT;
     CHARACTER* c = &CharactersClient[HeroIndex];
 
-    CharacterAttribute->Ability = 0;
+    CharacterAttribute->Ability        = 0;
     CharacterAttribute->AbilityTime[0] = 0;
     CharacterAttribute->AbilityTime[1] = 0;
     CharacterAttribute->AbilityTime[2] = 0;
 
-    auto const Data = safe_cast<PRECEIVE_JOIN_MAP_SERVER_EXTENDED>(
-        ReceiveBuffer, "PRECEIVE_JOIN_MAP_SERVER_EXTENDED");
+    auto const Data = safe_cast<PRECEIVE_JOIN_MAP_SERVER_EXTENDED>(ReceiveBuffer, "PRECEIVE_JOIN_MAP_SERVER_EXTENDED");
     if (Data == nullptr)
     {
         assert(false);
         return false;
     }
 
-    CharacterAttribute->Experience = ntoh64(Data->CurrentExperience);
-    CharacterAttribute->NextExperience = ntoh64(Data->ExperienceForNextLevel);
-    CharacterAttribute->LevelUpPoint = Data->LevelUpPoint;
-    CharacterAttribute->Strength = Data->Strength;
-    CharacterAttribute->Dexterity = Data->Dexterity;
-    CharacterAttribute->Vitality = Data->Vitality;
-    CharacterAttribute->Energy = Data->Energy;
-    CharacterAttribute->Charisma = Data->Charisma;
-    CharacterAttribute->Life = Data->Life;
-    CharacterAttribute->LifeMax = Data->LifeMax;
-    CharacterAttribute->Mana = Data->Mana;
-    CharacterAttribute->ManaMax = Data->ManaMax;
-    CharacterAttribute->SkillMana = Data->SkillMana;
-    CharacterAttribute->SkillManaMax = Data->SkillManaMax;
-    CharacterAttribute->Shield = Data->Shield;
-    CharacterAttribute->ShieldMax = Data->ShieldMax;
-    CharacterAttribute->AddPoint = Data->AddPoint;
-    CharacterAttribute->MaxAddPoint = Data->MaxAddPoint;
-    CharacterAttribute->wMinusPoint = Data->wMinusPoint;
-    CharacterAttribute->wMaxMinusPoint = Data->wMaxMinusPoint;
+    CharacterAttribute->Experience          = ntoh64(Data->CurrentExperience);
+    CharacterAttribute->NextExperience      = ntoh64(Data->ExperienceForNextLevel);
+    CharacterAttribute->LevelUpPoint        = Data->LevelUpPoint;
+    CharacterAttribute->Strength            = Data->Strength;
+    CharacterAttribute->Dexterity           = Data->Dexterity;
+    CharacterAttribute->Vitality            = Data->Vitality;
+    CharacterAttribute->Energy              = Data->Energy;
+    CharacterAttribute->Charisma            = Data->Charisma;
+    CharacterAttribute->Life                = Data->Life;
+    CharacterAttribute->LifeMax             = Data->LifeMax;
+    CharacterAttribute->Mana                = Data->Mana;
+    CharacterAttribute->ManaMax             = Data->ManaMax;
+    CharacterAttribute->SkillMana           = Data->SkillMana;
+    CharacterAttribute->SkillManaMax        = Data->SkillManaMax;
+    CharacterAttribute->Shield              = Data->Shield;
+    CharacterAttribute->ShieldMax           = Data->ShieldMax;
+    CharacterAttribute->AddPoint            = Data->AddPoint;
+    CharacterAttribute->MaxAddPoint         = Data->MaxAddPoint;
+    CharacterAttribute->wMinusPoint         = Data->wMinusPoint;
+    CharacterAttribute->wMaxMinusPoint      = Data->wMaxMinusPoint;
     CharacterAttribute->InventoryExtensions = Data->InventoryExtensions;
-    CharacterAttribute->Resets = Data->Resets;
-    CharacterAttribute->AttackSpeed = Data->AttackSpeed;
-    CharacterAttribute->MagicSpeed = Data->MagicSpeed;
-    CharacterAttribute->MaxAttackSpeed = Data->MaxAttackSpeed;
-    CharacterMachine->Gold = Data->Gold;
+    CharacterAttribute->Resets              = Data->Resets;
+    CharacterAttribute->AttackSpeed         = Data->AttackSpeed;
+    CharacterAttribute->MagicSpeed          = Data->MagicSpeed;
+    CharacterAttribute->MaxAttackSpeed      = Data->MaxAttackSpeed;
+    CharacterMachine->Gold                  = Data->Gold;
 
     gMapManager.WorldActive = Data->Map;
     gMapManager.LoadWorld(gMapManager.WorldActive);
@@ -1216,13 +1239,14 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     CreateCharacterPointer(c, MODEL_PLAYER, Data->PositionX, Data->PositionY, ((float)Data->Angle - 1.f) * 45.f);
     c->Key = HeroKey;
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x03 [ReceiveJoinMapServer] Key: %d Map: %d X: %d Y:%d", c->Key, gMapManager.WorldActive, Data->PositionX, Data->PositionY);
-    OBJECT* o = &c->Object;
-    c->Class = CharacterAttribute->Class;
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x03 [ReceiveJoinMapServer] Key: %d Map: %d X: %d Y:%d", c->Key,
+                          gMapManager.WorldActive, Data->PositionX, Data->PositionY);
+    OBJECT* o    = &c->Object;
+    c->Class     = CharacterAttribute->Class;
     c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-    c->Skin = 0;
-    c->PK = Data->PK;
-    c->CtlCode = Data->CtlCode;
+    c->Skin      = 0;
+    c->PK        = Data->PK;
+    c->CtlCode   = Data->CtlCode;
 
     o->Kind = KIND_PLAYER;
     SetCharacterClass(c);
@@ -1232,21 +1256,21 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     memset(c->ID, 0, sizeof c->ID);
     wcscpy(c->ID, CharacterAttribute->Name);
 
-    for (auto & i : CharacterMachine->Equipment)
+    for (auto& i : CharacterMachine->Equipment)
     {
-        i.Type = -1;
-        i.Level = 0;
+        i.Type           = -1;
+        i.Level          = 0;
         i.ExcellentFlags = 0;
     }
-    
+
     CreateEffect(BITMAP_MAGIC + 2, o->Position, o->Angle, o->Light, 0, o);
     CurrentProtocolState = RECEIVE_JOIN_MAP_SERVER;
 
     LockInputStatus = false;
     Input::IME::CheckStatus(true, 0);
 
-    LoadingWorld = 30;
-    MouseUpdateTime = 0;
+    LoadingWorld       = 30;
+    MouseUpdateTime    = 0;
     MouseUpdateTimeMax = 6;
 
     CreatePetDarkSpirit_Now(Hero);
@@ -1256,12 +1280,12 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 
     g_pNewUISystem->HideAll();
 
-    SelectedItem = -1;
-    SelectedNpc = -1;
+    SelectedItem      = -1;
+    SelectedNpc       = -1;
     SelectedCharacter = -1;
-    SelectedOperate = -1;
-    Attacking = -1;
-    RepairEnable = 0;
+    SelectedOperate   = -1;
+    Attacking         = -1;
+    RepairEnable      = 0;
 
     Hero->Movement = false;
     SetPlayerStop(Hero);
@@ -1277,10 +1301,8 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
         StopBuffer(SOUND_CHAOS_ENVIR, true);
     }
 
-    if (gMapManager.IsEmpireGuardian1() == false &&
-        gMapManager.IsEmpireGuardian2() == false &&
-        gMapManager.IsEmpireGuardian3() == false &&
-        gMapManager.IsEmpireGuardian4() == false)
+    if (gMapManager.IsEmpireGuardian1() == false && gMapManager.IsEmpireGuardian2() == false &&
+        gMapManager.IsEmpireGuardian3() == false && gMapManager.IsEmpireGuardian4() == false)
     {
         StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_RAIN, true);
         StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_FOG, true);
@@ -1292,7 +1314,8 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 
     CreateMyGensInfluenceGroundEffect();
 
-    if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
+    if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4)
+        ;
     else
     {
         wchar_t Text[256];
@@ -1342,31 +1365,33 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 
 void ReceiveRevival(const BYTE* ReceiveBuffer)
 {
-    MouseLButton = false;
+    MouseLButton          = false;
     Hero->Object.Teleport = false;
-    Hero->Object.Live = false;
-    auto Data = (LPPRECEIVE_REVIVAL_EXTENDED)ReceiveBuffer;
+    Hero->Object.Live     = false;
+    auto Data             = (LPPRECEIVE_REVIVAL_EXTENDED)ReceiveBuffer;
 
-    CharacterAttribute->Life = Data->Life;
-    CharacterAttribute->Mana = Data->Mana;
-    CharacterAttribute->Shield = Data->Shield;
+    CharacterAttribute->Life      = Data->Life;
+    CharacterAttribute->Mana      = Data->Mana;
+    CharacterAttribute->Shield    = Data->Shield;
     CharacterAttribute->SkillMana = Data->SkillMana;
 
     if (gCharacterManager.IsMasterExperienceActive(CharacterAttribute->Class, CharacterAttribute->Level) == true)
     {
-        const auto lowerBound = GetMasterLowerBound(Master_Level_Data.nMLevel);
-        const auto upperBound = Master_Level_Data.lNext_MasterLevel_Experince;
-        const auto currentExperience = Master_Level_Data.lMasterLevel_Experince;
-        const auto rawRevivalExperience = Data->CurrentExperience;
+        const auto lowerBound               = GetMasterLowerBound(Master_Level_Data.nMLevel);
+        const auto upperBound               = Master_Level_Data.lNext_MasterLevel_Experince;
+        const auto currentExperience        = Master_Level_Data.lMasterLevel_Experince;
+        const auto rawRevivalExperience     = Data->CurrentExperience;
         const auto swappedRevivalExperience = ntoh64(Data->CurrentExperience);
 
-        const bool rawConvertible = rawRevivalExperience <= static_cast<uint64_t>(kInt64Max);
+        const bool rawConvertible     = rawRevivalExperience <= static_cast<uint64_t>(kInt64Max);
         const bool swappedConvertible = swappedRevivalExperience <= static_cast<uint64_t>(kInt64Max);
-        const auto rawCandidate = rawConvertible ? static_cast<int64_t>(rawRevivalExperience) : currentExperience;
-        const auto swappedCandidate = swappedConvertible ? static_cast<int64_t>(swappedRevivalExperience) : currentExperience;
+        const auto rawCandidate       = rawConvertible ? static_cast<int64_t>(rawRevivalExperience) : currentExperience;
+        const auto swappedCandidate =
+            swappedConvertible ? static_cast<int64_t>(swappedRevivalExperience) : currentExperience;
 
         const bool isRawPlausible = rawConvertible && (rawCandidate >= lowerBound && rawCandidate <= upperBound);
-        const bool isSwappedPlausible = swappedConvertible && (swappedCandidate >= lowerBound && swappedCandidate <= upperBound);
+        const bool isSwappedPlausible =
+            swappedConvertible && (swappedCandidate >= lowerBound && swappedCandidate <= upperBound);
 
         int64_t selectedExperience = currentExperience;
         if (isRawPlausible != isSwappedPlausible)
@@ -1382,14 +1407,15 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
     }
     else
     {
-        const auto lowerBound = GetNormalLowerBound(CharacterAttribute->Level);
-        const auto upperBound = CharacterAttribute->NextExperience;
-        const auto currentExperience = CharacterAttribute->Experience;
-        const auto rawRevivalExperience = Data->CurrentExperience;
+        const auto lowerBound               = GetNormalLowerBound(CharacterAttribute->Level);
+        const auto upperBound               = CharacterAttribute->NextExperience;
+        const auto currentExperience        = CharacterAttribute->Experience;
+        const auto rawRevivalExperience     = Data->CurrentExperience;
         const auto swappedRevivalExperience = ntoh64(Data->CurrentExperience);
 
         const bool isRawPlausible = rawRevivalExperience >= lowerBound && rawRevivalExperience <= upperBound;
-        const bool isSwappedPlausible = swappedRevivalExperience >= lowerBound && swappedRevivalExperience <= upperBound;
+        const bool isSwappedPlausible =
+            swappedRevivalExperience >= lowerBound && swappedRevivalExperience <= upperBound;
 
         uint64_t selectedExperience = currentExperience;
         if (isRawPlausible != isSwappedPlausible)
@@ -1407,34 +1433,34 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
     CharacterMachine->Gold = Data->Gold;
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
-        CHARACTER* c = &CharactersClient[i];
+        CHARACTER* c   = &CharactersClient[i];
         c->Object.Live = false;
     }
 
-    BYTE Temp = Hero->PK;
-    int TempGuild = Hero->GuildMarkIndex;
+    BYTE Temp      = Hero->PK;
+    int  TempGuild = Hero->GuildMarkIndex;
 
     CHARACTER* c = &CharactersClient[HeroIndex];
 
-    BYTE BackUpGuildStatus = c->GuildStatus;
-    BYTE BackUpGuildType = c->GuildType;
+    BYTE BackUpGuildStatus       = c->GuildStatus;
+    BYTE BackUpGuildType         = c->GuildType;
     BYTE BackUpGuildRelationShip = c->GuildRelationShip;
-    BYTE byBackupEtcPart = c->EtcPart;
+    BYTE byBackupEtcPart         = c->EtcPart;
 
     CreateCharacterPointer(c, MODEL_PLAYER, Data->PositionX, Data->PositionY, ((float)Data->Angle - 1.f) * 45.f);
-    c->Key = HeroKey;
-    c->GuildStatus = BackUpGuildStatus;
-    c->GuildType = BackUpGuildType;
+    c->Key               = HeroKey;
+    c->GuildStatus       = BackUpGuildStatus;
+    c->GuildType         = BackUpGuildType;
     c->GuildRelationShip = BackUpGuildRelationShip;
-    c->EtcPart = byBackupEtcPart;
+    c->EtcPart           = byBackupEtcPart;
 
-    OBJECT* o = &c->Object;
-    c->Class = CharacterAttribute->Class;
-    c->Skin = 0;
-    c->PK = Temp;
-    o->Kind = KIND_PLAYER;
+    OBJECT* o         = &c->Object;
+    c->Class          = CharacterAttribute->Class;
+    c->Skin           = 0;
+    c->PK             = Temp;
+    o->Kind           = KIND_PLAYER;
     c->GuildMarkIndex = TempGuild;
-    c->SafeZone = true;
+    c->SafeZone       = true;
     SetCharacterClass(c);
     SetPlayerStop(c);
     CreateEffect(BITMAP_MAGIC + 2, o->Position, o->Angle, o->Light, 0, o);
@@ -1458,8 +1484,8 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         gMapManager.WorldActive = Data->Map;
         gMapManager.LoadWorld(gMapManager.WorldActive);
 
-        if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive)
-            || gMapManager.InChaosCastle() == true)
+        if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive) ||
+            gMapManager.InChaosCastle() == true)
         {
             SetCharacterClass(Hero);
         }
@@ -1470,10 +1496,8 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
             StopBuffer(SOUND_CHAOS_ENVIR, true);
         }
 
-        if (gMapManager.IsEmpireGuardian1() == false &&
-            gMapManager.IsEmpireGuardian2() == false &&
-            gMapManager.IsEmpireGuardian3() == false &&
-            gMapManager.IsEmpireGuardian4() == false)
+        if (gMapManager.IsEmpireGuardian1() == false && gMapManager.IsEmpireGuardian2() == false &&
+            gMapManager.IsEmpireGuardian3() == false && gMapManager.IsEmpireGuardian4() == false)
         {
             StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_RAIN, true);
             StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_FOG, true);
@@ -1519,28 +1543,28 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
 void ReceiveMagicList(const BYTE* ReceiveBuffer)
 {
     int Master_Skill_Bool = -1;
-    int Skill_Bool = -1;
+    int Skill_Bool        = -1;
 
-    auto Data = (LPPHEADER_MAGIC_LIST_COUNT)ReceiveBuffer;
-    int Offset = sizeof(PHEADER_MAGIC_LIST_COUNT);
+    auto Data   = (LPPHEADER_MAGIC_LIST_COUNT)ReceiveBuffer;
+    int  Offset = sizeof(PHEADER_MAGIC_LIST_COUNT);
     if (Data->Value == 0xFF)
     {
-        auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-        CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+        auto Data2                                   = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
+        CharacterAttribute->Skill[Data2->Index]      = AT_SKILL_UNDEFINED;
         CharacterAttribute->SkillLevel[Data2->Index] = 0;
     }
     else if (Data->Value == 0xFE)
     {
-        auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-        CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+        auto Data2                                   = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
+        CharacterAttribute->Skill[Data2->Index]      = (ActionSkillType)Data2->Type;
         CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
     }
     else if (Data->ListType == 0x02)
     {
         for (int i = 0; i < Data->Value; ++i)
         {
-            auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+            auto Data2                                   = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
+            CharacterAttribute->Skill[Data2->Index]      = AT_SKILL_UNDEFINED;
             CharacterAttribute->SkillLevel[Data2->Index] = 0;
         }
     }
@@ -1553,8 +1577,8 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer)
         }
         for (int i = 0; i < Data->Value; i++)
         {
-            auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+            auto Data2                                   = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
+            CharacterAttribute->Skill[Data2->Index]      = (ActionSkillType)Data2->Type;
             CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
             Offset += sizeof(PRECEIVE_MAGIC_LIST);
         }
@@ -1568,11 +1592,11 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer)
         }
     }
 
-    CharacterAttribute->SkillNumber = 0;
+    CharacterAttribute->SkillNumber       = 0;
     CharacterAttribute->SkillMasterNumber = 0;
 
     int SkillType = 0;
-    for (auto & i : CharacterAttribute->Skill)
+    for (auto& i : CharacterAttribute->Skill)
     {
         SkillType = i;
         if (SkillType != 0)
@@ -1605,7 +1629,8 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer)
     for (int i = 0; i < MAX_SKILLS; i++)
     {
         Skill = CharacterAttribute->Skill[i];
-        if (AT_SKILL_POWER_SLASH_STR == Skill || AT_SKILL_TRIPLE_SHOT_STR == Skill || AT_SKILL_TRIPLE_SHOT_MASTERY == Skill)
+        if (AT_SKILL_POWER_SLASH_STR == Skill || AT_SKILL_TRIPLE_SHOT_STR == Skill ||
+            AT_SKILL_TRIPLE_SHOT_MASTERY == Skill)
         {
             Master_Skill_Bool = i;
         }
@@ -1634,7 +1659,8 @@ void Receive_Master_SetSkillList(PMSG_MASTER_SKILL_LIST_SEND* lpMsg)
 
     for (int n = 0; n < lpMsg->count; n++)
     {
-        auto lpInfo = (PMSG_MASTER_SKILL_LIST*)(((BYTE*)lpMsg) + sizeof(PMSG_MASTER_SKILL_LIST_SEND) + (sizeof(PMSG_MASTER_SKILL_LIST) * n));
+        auto lpInfo = (PMSG_MASTER_SKILL_LIST*)(((BYTE*)lpMsg) + sizeof(PMSG_MASTER_SKILL_LIST_SEND) +
+                                                (sizeof(PMSG_MASTER_SKILL_LIST) * n));
         interface->SetMasterSkillTreeInfo(lpInfo->SkillIndex, lpInfo->SkillLevel, lpInfo->MainValue, lpInfo->NextValue);
     }
 
@@ -1676,7 +1702,7 @@ void ReceiveMuHelperStatusUpdate(std::span<const BYTE> ReceiveBuffer)
 
         if (pMuHelperStatus->Money > 0 && pMuHelperStatus->ConsumeMoney)
         {
-            MUHelper:: g_MuHelper.AddCost(pMuHelperStatus->Money);
+            MUHelper::g_MuHelper.AddCost(pMuHelperStatus->Money);
             int iTotalCost = MUHelper::g_MuHelper.GetTotalCost();
 
             wchar_t Text[100];
@@ -1727,10 +1753,10 @@ int CalcItemLength(std::span<const BYTE> ReceiveBuffer)
 
 BOOL ReceiveInventoryExtended(std::span<const BYTE> ReceiveBuffer)
 {
-    for (auto & i : CharacterMachine->Equipment)
+    for (auto& i : CharacterMachine->Equipment)
     {
-        i.Type = -1;
-        i.Number = 0;
+        i.Type           = -1;
+        i.Number         = 0;
         i.ExcellentFlags = 0;
     }
 
@@ -1766,8 +1792,8 @@ BOOL ReceiveInventoryExtended(std::span<const BYTE> ReceiveBuffer)
         Offset++;
 
         auto itemData = ReceiveBuffer.subspan(Offset);
-        int length = CalcItemLength(itemData);
-        itemData = itemData.subspan(0, length);
+        int  length   = CalcItemLength(itemData);
+        itemData      = itemData.subspan(0, length);
 
         if (itemindex >= 0 && itemindex < MAX_EQUIPMENT_INDEX)
         {
@@ -1793,8 +1819,6 @@ BOOL ReceiveInventoryExtended(std::span<const BYTE> ReceiveBuffer)
 
     return (TRUE);
 }
-
-
 
 void ReceiveTradeInventoryExtended(std::span<const BYTE> ReceiveBuffer)
 {
@@ -1825,9 +1849,9 @@ void ReceiveTradeInventoryExtended(std::span<const BYTE> ReceiveBuffer)
     }
     else
     {
-        for (auto & i : ShopInventory)
+        for (auto& i : ShopInventory)
         {
-            i.Type = -1;
+            i.Type   = -1;
             i.Number = 0;
         }
 
@@ -1852,7 +1876,7 @@ void ReceiveTradeInventoryExtended(std::span<const BYTE> ReceiveBuffer)
         Offset++;
 
         auto itemData = ReceiveBuffer.subspan(Offset);
-        int length = CalcItemLength(itemData);
+        int  length   = CalcItemLength(itemData);
         if (length == 0)
             return;
         itemData = itemData.subspan(0, length);
@@ -1898,12 +1922,12 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
     {
         auto Data = (LPPCHATING)ReceiveBuffer;
 
-        wchar_t ID[MAX_USERNAME_SIZE + 1] {};
+        wchar_t ID[MAX_USERNAME_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(ID, Data->ID, MAX_USERNAME_SIZE);
         ID[MAX_USERNAME_SIZE] = L'\0';
 
         const auto messageSize = Data->Header.Size - MAX_USERNAME_SIZE - sizeof(PBMSG_HEADER);
-        wchar_t Text[MAX_CHAT_SIZE + 1] {};
+        wchar_t    Text[MAX_CHAT_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText);
         Text[MAX_CHAT_SIZE] = L'\0';
 
@@ -1941,8 +1965,10 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
             for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
             {
                 CHARACTER* c = &CharactersClient[i];
-                OBJECT* o = &c->Object;
-                if (o->Live && o->Kind == KIND_PLAYER && (g_isCharacterBuff((&c->Object), eBuff_GMEffect) || (c->CtlCode == CTLCODE_20OPERATOR) || (c->CtlCode == CTLCODE_08OPERATOR)))
+                OBJECT*    o = &c->Object;
+                if (o->Live && o->Kind == KIND_PLAYER &&
+                    (g_isCharacterBuff((&c->Object), eBuff_GMEffect) || (c->CtlCode == CTLCODE_20OPERATOR) ||
+                     (c->CtlCode == CTLCODE_08OPERATOR)))
                 {
                     if (wcscmp(c->ID, ID) == 0)
                     {
@@ -1967,8 +1993,9 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
             for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
             {
                 CHARACTER* c = &CharactersClient[i];
-                OBJECT* o = &c->Object;
-                if (o->Live && o->Kind == KIND_PLAYER && g_isCharacterBuff((&c->Object), eBuff_GMEffect) || (c->CtlCode == CTLCODE_20OPERATOR) || (c->CtlCode == CTLCODE_08OPERATOR))
+                OBJECT*    o = &c->Object;
+                if (o->Live && o->Kind == KIND_PLAYER && g_isCharacterBuff((&c->Object), eBuff_GMEffect) ||
+                    (c->CtlCode == CTLCODE_20OPERATOR) || (c->CtlCode == CTLCODE_08OPERATOR))
                 {
                     if (wcscmp(c->ID, ID) == 0)
                     {
@@ -2007,18 +2034,19 @@ void ReceiveChatWhisper(const std::span<const BYTE> Packet)
 
     auto Data = (LPPCHATING)Packet.data();
 
-    const int messageSize = static_cast<int>(Data->Header.Size) - MAX_USERNAME_SIZE - static_cast<int>(sizeof(PBMSG_HEADER));
+    const int messageSize =
+        static_cast<int>(Data->Header.Size) - MAX_USERNAME_SIZE - static_cast<int>(sizeof(PBMSG_HEADER));
     if (messageSize <= 0 || messageSize > MAX_CHAT_SIZE)
     {
         g_ErrorReport.Write(L"Rejected whisper packet with invalid message size %d.\r\n", messageSize);
         return;
     }
 
-    wchar_t ID[MAX_USERNAME_SIZE + 1] {};
+    wchar_t ID[MAX_USERNAME_SIZE + 1]{};
     CMultiLanguage::ConvertFromUtf8(ID, Data->ID, MAX_USERNAME_SIZE);
     ID[MAX_USERNAME_SIZE] = L'\0';
 
-    wchar_t Text[MAX_CHAT_SIZE + 1] {};
+    wchar_t Text[MAX_CHAT_SIZE + 1]{};
     CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText, messageSize);
     Text[messageSize] = L'\0';
 
@@ -2037,42 +2065,42 @@ void ReceiveChatWhisperResult(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:
-    {
-        g_pChatListBox->AddText(ChatWhisperID, I18N::Game::NoUsers, SEASON3B::TYPE_ERROR_MESSAGE, SEASON3B::TYPE_WHISPER_MESSAGE);
-    }
+        case 0: {
+            g_pChatListBox->AddText(ChatWhisperID, I18N::Game::NoUsers, SEASON3B::TYPE_ERROR_MESSAGE,
+                                    SEASON3B::TYPE_WHISPER_MESSAGE);
+        }
     }
 }
 
 void ReceiveChatKey(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPCHATING_KEY)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    int Index = FindCharacterIndex(Key);
+    auto Data  = (LPPCHATING_KEY)ReceiveBuffer;
+    int  Key   = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    int  Index = FindCharacterIndex(Key);
 
     if (Hero->GuildStatus == G_MASTER && wcscmp(CharactersClient[Index].ID, L"길드 마스터") == 0)
     {
         g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCGUILDMASTER);
 
         GuildInputEnable = true;
-        InputEnable = false;
+        InputEnable      = false;
         ClearInput(FALSE);
         InputTextMax[0] = 8;
-        InputNumber = 0;
+        InputNumber     = 0;
 
         if (Hero->GuildMarkIndex == -1)
             Hero->GuildMarkIndex = MARK_EDIT;
         return;
     }
 
-    wchar_t ChatText[sizeof Data->ChatText + 1] {};
+    wchar_t ChatText[sizeof Data->ChatText + 1]{};
     CMultiLanguage::ConvertFromUtf8(ChatText, Data->ChatText, sizeof Data->ChatText);
     UI::Chat::CreateChat(CharactersClient[Index].ID, ChatText, &CharactersClient[Index]);
 }
 
 void ReceiveNotice(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_NOTICE)ReceiveBuffer;
+    auto    Data = (LPPRECEIVE_NOTICE)ReceiveBuffer;
     wchar_t Text[256]{};
     CMultiLanguage::ConvertFromUtf8(Text, Data->Notice);
 
@@ -2096,7 +2124,7 @@ void ReceiveNotice(const BYTE* ReceiveBuffer)
     }
     else if (Data->Result == 2)
     {
-        wchar_t FullText[300] {0};
+        wchar_t FullText[300]{0};
         mu_swprintf(FullText, I18N::Game::NoticeForGuildMembersS, Text);
         UI::Notices::Create(FullText, 1);
         g_pGuildInfoWindow->AddGuildNotice(Text);
@@ -2105,7 +2133,8 @@ void ReceiveNotice(const BYTE* ReceiveBuffer)
     {
         if (Data->Notice != nullptr && Data->Notice[0] != '\0')
         {
-            g_pSlideHelpMgr->AddSlide(Data->Count, Data->Delay, Text, Data->Result - 10, Data->Speed / 10.0f, Data->Color);
+            g_pSlideHelpMgr->AddSlide(Data->Count, Data->Delay, Text, Data->Result - 10, Data->Speed / 10.0f,
+                                      Data->Color);
         }
     }
 
@@ -2115,7 +2144,7 @@ void ReceiveNotice(const BYTE* ReceiveBuffer)
 void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
 {
     auto fixedSize = sizeof(PMOVE_CHARACTER);
-    auto Data = safe_cast<PMOVE_CHARACTER>(ReceiveBuffer.subspan(0, fixedSize));
+    auto Data      = safe_cast<PMOVE_CHARACTER>(ReceiveBuffer.subspan(0, fixedSize));
     if (Data == nullptr)
     {
         assert(false);
@@ -2135,9 +2164,9 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
-    OBJECT* o = &c->Object;
+    int        Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    CHARACTER* c   = &CharactersClient[FindCharacterIndex(Key)];
+    OBJECT*    o   = &c->Object;
 
     if (c->Dead > 0 || !o->Live)
     {
@@ -2149,11 +2178,12 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
         MUHelper::g_MuHelper.AddTarget(Key, false);
     }
 
-    c->TargetX = Data->TargetX;
-    c->TargetY = Data->TargetY;
+    c->TargetX     = Data->TargetX;
+    c->TargetY     = Data->TargetY;
     c->TargetAngle = Data->PathMetadata >> 4;
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls | sX : %d | sY : %d | tX : %d | tY : %d", c->ID, Data->SourceX, Data->SourceY, c->TargetX, c->TargetY);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls | sX : %d | sY : %d | tX : %d | tY : %d", c->ID, Data->SourceX,
+                          Data->SourceY, c->TargetX, c->TargetY);
 
     if (Key == HeroKey)
     {
@@ -2169,7 +2199,7 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
     {
         c->PositionX = Data->TargetX;
         c->PositionY = Data->TargetY;
-        o->Angle[2] = CreateAngle(o->Position[0], o->Position[1], c->PositionX * 100.f, c->PositionY * 100.f);
+        o->Angle[2]  = CreateAngle(o->Position[0], o->Position[1], c->PositionX * 100.f, c->PositionY * 100.f);
         SetPlayerWalk(c);
         c->JumpTime = 1;
 
@@ -2180,8 +2210,8 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
     {
         int iDefaultWall = TW_CHARACTER;
 
-        if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4
-            && Key != HeroKey)
+        if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4 &&
+            Key != HeroKey)
         {
             iDefaultWall = TW_NOMOVE;
         }
@@ -2200,28 +2230,28 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
 
 void ReceiveMovePosition(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_MOVE_POSITION)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
+    auto       Data = (LPPRECEIVE_MOVE_POSITION)ReceiveBuffer;
+    int        Key  = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    CHARACTER* c    = &CharactersClient[FindCharacterIndex(Key)];
 
     OBJECT* o = &c->Object;
     if (o->Type == MODEL_BALL)
     {
-        o->Gravity = 20.f;
+        o->Gravity      = 20.f;
         o->Direction[1] = (Data->PositionX - (c->PositionX)) * 400.f;
         o->Direction[0] = -(Data->PositionY - (c->PositionY)) * 400.f;
         PlayBuffer(SOUND_MENU01);
         CreateBomb(o->Position, false);
     }
 
-    c->PositionX = Data->PositionX;
-    c->PositionY = Data->PositionY;
-    c->TargetX = Data->PositionX;
-    c->TargetY = Data->PositionY;
-    c->JumpTime = 1;
-    c->Movement = false;
-    c->Path.PathNum = 0;
-    c->Path.CurrentPath = 0;
+    c->PositionX             = Data->PositionX;
+    c->PositionY             = Data->PositionY;
+    c->TargetX               = Data->PositionX;
+    c->TargetY               = Data->PositionY;
+    c->JumpTime              = 1;
+    c->Movement              = false;
+    c->Path.PathNum          = 0;
+    c->Path.CurrentPath      = 0;
     c->Path.CurrentPathFloat = 0;
     SetPlayerStop(c);
 }
@@ -2232,13 +2262,13 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
     SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
 
-    auto Data = (LPPRECEIVE_TELEPORT_POSITION)ReceiveBuffer;
+    auto Data       = (LPPRECEIVE_TELEPORT_POSITION)ReceiveBuffer;
     Hero->PositionX = Data->PositionX;
     Hero->PositionY = Data->PositionY;
 
     Hero->JumpTime = 0;
 
-    OBJECT* o = &Hero->Object;
+    OBJECT* o      = &Hero->Object;
     o->Position[0] = ((float)(Hero->PositionX) + 0.5f) * TERRAIN_SCALE;
     o->Position[1] = ((float)(Hero->PositionY) + 0.5f) * TERRAIN_SCALE;
 
@@ -2287,7 +2317,8 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
                 SocketClient->ToGameServer()->SendCrywolfInfoRequest();
             }
 
-            if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive) || gMapManager.InChaosCastle() == true)
+            if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive) ||
+                gMapManager.InChaosCastle() == true)
             {
                 PlayBuffer(SOUND_CHAOS_ENVIR, nullptr, true);
 
@@ -2302,10 +2333,8 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
                 StopBuffer(SOUND_CHAOS_ENVIR, true);
             }
 
-            if (gMapManager.IsEmpireGuardian1() == false &&
-                gMapManager.IsEmpireGuardian2() == false &&
-                gMapManager.IsEmpireGuardian3() == false &&
-                gMapManager.IsEmpireGuardian4() == false)
+            if (gMapManager.IsEmpireGuardian1() == false && gMapManager.IsEmpireGuardian2() == false &&
+                gMapManager.IsEmpireGuardian3() == false && gMapManager.IsEmpireGuardian4() == false)
             {
                 StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_RAIN, true);
                 StopBuffer(SOUND_EMPIREGUARDIAN_WEATHER_FOG, true);
@@ -2327,7 +2356,8 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
                     o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 30.f;
             }
 
-            if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
+            if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4)
+                ;
             else
             {
                 wchar_t Text[256];
@@ -2340,11 +2370,11 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         SocketClient->ToGameServer()->SendClientReadyAfterMapChange();
 
         g_dwLatestZoneMoving = GetTickCount();
-        g_bWhileMovingZone = FALSE;
+        g_bWhileMovingZone   = FALSE;
 
         LoadingWorld = 30;
 
-        MouseUpdateTime = 0;
+        MouseUpdateTime    = 0;
         MouseUpdateTimeMax = 6;
 
         if (gMapManager.WorldActive < WD_65DOPPLEGANGER1 || gMapManager.WorldActive > WD_68DOPPLEGANGER4)
@@ -2361,15 +2391,15 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         CreatePetDarkSpirit_Now(Hero);
         CreateEffect(BITMAP_MAGIC + 2, o->Position, o->Angle, o->Light, 0, o);
 
-        o->Alpha = 0.f;
-        EnableEvent = 0; //USE_EVENT_ELDORADO
+        o->Alpha    = 0.f;
+        EnableEvent = 0;  //USE_EVENT_ELDORADO
 
-        SelectedItem = -1;
-        SelectedNpc = -1;
+        SelectedItem      = -1;
+        SelectedNpc       = -1;
         SelectedCharacter = -1;
-        SelectedOperate = -1;
-        Attacking = -1;
-        RepairEnable = 0;
+        SelectedOperate   = -1;
+        Attacking         = -1;
+        RepairEnable      = 0;
     }
 
     MUHelper::g_MuHelper.TriggerStop();
@@ -2378,7 +2408,7 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     SetPlayerStop(Hero);
 
     if (Data->Flag)
-        g_pUIMapName->ShowMapName();	// rozy
+        g_pUIMapName->ShowMapName();  // rozy
 
     CreateMyGensInfluenceGroundEffect();
 
@@ -2417,216 +2447,222 @@ void ReceiveChangePlayer(std::span<const BYTE> ReceiveBuffer)
     int Key = Data->Key;
 
     CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
-    OBJECT* o = &c->Object;
+    OBJECT*    o = &c->Object;
 
     int Type = ((Data->ItemGroup & 0xF) * MAX_ITEM_INDEX) | Data->ItemNumber;
     //BYTE Level = Data->Item[1] & 0xf;
     //BYTE Option = Data->Item[3] & 63;
     //BYTE ExtOption = Data->Item[4];
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x25 ReceiveChangePlayer Key(0x%04X) Item Slot(0x%02X) Group(0x%02X) Number(0x%04X) Level(0x%02X)", 
-        Data->Key,
-        Data->ItemSlot, 
-        Data->ItemGroup,
-        Data->ItemNumber,
-        Data->ItemLevel
-    );
+    g_ConsoleDebug->Write(
+        MCD_RECEIVE,
+        L"0x25 ReceiveChangePlayer Key(0x%04X) Item Slot(0x%02X) Group(0x%02X) Number(0x%04X) Level(0x%02X)", Data->Key,
+        Data->ItemSlot, Data->ItemGroup, Data->ItemNumber, Data->ItemLevel);
 
     int maxClass = MAX_CLASS;
 
     switch (Data->ItemSlot)
     {
-    case 0:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->Weapon[0].Type = -1;
-            c->Weapon[0].ExcellentFlags = 0;
-        }
-        else
-        {
-            c->Weapon[0].Type = MODEL_ITEM + Type;
-            c->Weapon[0].Level = Data->ItemLevel;
-            c->Weapon[0].ExcellentFlags = Data->ExcellentFlags;
-        }
-        break;
-    case 1:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->Weapon[1].Type = -1;
-            c->Weapon[1].ExcellentFlags = 0;
-            DeletePet(c);
-        }
-        else
-        {
-            c->Weapon[1].Type = MODEL_ITEM + Type;
-            c->Weapon[1].Level = Data->ItemLevel;
-            c->Weapon[1].ExcellentFlags = Data->ExcellentFlags;
-            CreatePetDarkSpirit_Now(c);
-            g_SummonSystem.RemoveEquipEffects(c);
-        }
-        break;
-    case 2:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->BodyPart[BODYPART_HELM].Type = static_cast<int>(MODEL_BODY_HELM) + c->SkinIndex;
-            c->BodyPart[BODYPART_HELM].Level = 0;
-            c->BodyPart[BODYPART_HELM].ExcellentFlags = 0;
-            c->BodyPart[BODYPART_HELM].AncientDiscriminator = 0;
-        }
-        else
-        {
-            c->BodyPart[BODYPART_HELM].Type = MODEL_ITEM + Type;
-            c->BodyPart[BODYPART_HELM].Level = Data->ItemLevel;
-            c->BodyPart[BODYPART_HELM].ExcellentFlags = Data->ExcellentFlags;
-            c->BodyPart[BODYPART_HELM].AncientDiscriminator = Data->AncientDiscriminator;
-        }
-        break;
-    case 3:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->BodyPart[BODYPART_ARMOR].Type = static_cast<int>(MODEL_BODY_ARMOR) + c->SkinIndex;
-            c->BodyPart[BODYPART_ARMOR].Level = 0;
-            c->BodyPart[BODYPART_ARMOR].ExcellentFlags = 0;
-            c->BodyPart[BODYPART_ARMOR].AncientDiscriminator = 0;
-        }
-        else
-        {
-            c->BodyPart[BODYPART_ARMOR].Type = MODEL_ITEM + Type;
-            c->BodyPart[BODYPART_ARMOR].Level = Data->ItemLevel;
-            c->BodyPart[BODYPART_ARMOR].ExcellentFlags = Data->ExcellentFlags;
-            c->BodyPart[BODYPART_ARMOR].AncientDiscriminator = Data->AncientDiscriminator;
-        }
-        break;
-    case 4:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->BodyPart[BODYPART_PANTS].Type = static_cast<int>(MODEL_BODY_PANTS) + c->SkinIndex;
-            c->BodyPart[BODYPART_PANTS].Level = 0;
-            c->BodyPart[BODYPART_PANTS].ExcellentFlags = 0;
-            c->BodyPart[BODYPART_PANTS].AncientDiscriminator = 0;
-        }
-        else
-        {
-            c->BodyPart[BODYPART_PANTS].Type = MODEL_ITEM + Type;
-            c->BodyPart[BODYPART_PANTS].Level = Data->ItemLevel;
-            c->BodyPart[BODYPART_PANTS].ExcellentFlags = Data->ExcellentFlags;
-            c->BodyPart[BODYPART_PANTS].AncientDiscriminator = Data->AncientDiscriminator;
-        }
-        break;
-    case 5:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->BodyPart[BODYPART_GLOVES].Type = static_cast<int>(MODEL_BODY_GLOVES) + c->SkinIndex;
-            c->BodyPart[BODYPART_GLOVES].Level = 0;
-            c->BodyPart[BODYPART_GLOVES].ExcellentFlags = 0;
-            c->BodyPart[BODYPART_GLOVES].AncientDiscriminator = 0;
-        }
-        else
-        {
-            c->BodyPart[BODYPART_GLOVES].Type = MODEL_ITEM + Type;
-            c->BodyPart[BODYPART_GLOVES].Level = Data->ItemLevel;
-            c->BodyPart[BODYPART_GLOVES].ExcellentFlags = Data->ExcellentFlags;
-            c->BodyPart[BODYPART_GLOVES].AncientDiscriminator = Data->AncientDiscriminator;
-        }
-        break;
-    case 6:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->BodyPart[BODYPART_BOOTS].Type = static_cast<int>(MODEL_BODY_BOOTS) + c->SkinIndex;
-            c->BodyPart[BODYPART_BOOTS].Level = 0;
-            c->BodyPart[BODYPART_BOOTS].ExcellentFlags = 0;
-            c->BodyPart[BODYPART_BOOTS].AncientDiscriminator = 0;
-        }
-        else
-        {
-            c->BodyPart[BODYPART_BOOTS].Type = MODEL_ITEM + Type;
-            c->BodyPart[BODYPART_BOOTS].Level = Data->ItemLevel;
-            c->BodyPart[BODYPART_BOOTS].ExcellentFlags = Data->ExcellentFlags;
-            c->BodyPart[BODYPART_BOOTS].AncientDiscriminator = Data->AncientDiscriminator;
-        }
-        break;
-    case 7:
-        if (Data->ItemGroup == 0xFF)
-        {
-            if (c->Wing.Type == MODEL_WING_OF_RUIN ||
-                c->Wing.Type == MODEL_CAPE_OF_LORD ||
-                c->Wing.Type == MODEL_WING + 130 ||
-                c->Wing.Type == MODEL_CAPE_OF_FIGHTER ||
-                c->Wing.Type == MODEL_CAPE_OF_OVERRULE ||
-                c->Wing.Type == MODEL_WING + 135 ||
-                c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
+        case 0:
+            if (Data->ItemGroup == 0xFF)
             {
-                DeleteCloth(c, o);
+                c->Weapon[0].Type           = -1;
+                c->Weapon[0].ExcellentFlags = 0;
             }
-            c->Wing.Type = -1;
-        }
-        else
-        {
-            c->Wing.Type = MODEL_ITEM + Type;
-            c->Wing.Level = 0;
-            if (c->Wing.Type == MODEL_WING_OF_RUIN ||
-                c->Wing.Type == MODEL_CAPE_OF_LORD ||
-                c->Wing.Type == MODEL_WING + 130 ||
-                c->Wing.Type == MODEL_CAPE_OF_FIGHTER ||
-                c->Wing.Type == MODEL_CAPE_OF_OVERRULE ||
-                c->Wing.Type == MODEL_WING + 135 ||
-                c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
+            else
             {
-                DeleteCloth(c, o);
+                c->Weapon[0].Type           = MODEL_ITEM + Type;
+                c->Weapon[0].Level          = Data->ItemLevel;
+                c->Weapon[0].ExcellentFlags = Data->ExcellentFlags;
             }
-        }
-        break;
-    case 8:
-        if (Data->ItemGroup == 0xFF)
-        {
-            c->Helper.Type = -1;
-            DeleteMount(o);
-            ThePetProcess().DeletePet(c, c->Helper.Type, true);
-        }
-        else
-        {
-            c->Helper.Type = MODEL_ITEM + Type;
-            c->Helper.Level = 0;
-            switch (Type)
+            break;
+        case 1:
+            if (Data->ItemGroup == 0xFF)
             {
-            case ITEM_HELPER:CreateMount(MODEL_HELPER, o->Position, o); break;
-            case ITEM_HORN_OF_UNIRIA:CreateMount(MODEL_UNICON, o->Position, o); break;
-            case ITEM_HORN_OF_DINORANT:CreateMount(MODEL_PEGASUS, o->Position, o); break;
-            case ITEM_DARK_HORSE_ITEM:CreateMount(MODEL_DARK_HORSE, o->Position, o); break;
-            case ITEM_HORN_OF_FENRIR:
-                c->Helper.ExcellentFlags = Data->ExcellentFlags;
-                if (Data->ExcellentFlags == 0x01)
-                {
-                    CreateMount(MODEL_FENRIR_BLACK, o->Position, o);
-                }
-                else if (Data->ExcellentFlags == 0x02)
-                {
-                    CreateMount(MODEL_FENRIR_BLUE, o->Position, o);
-                }
-                else if (Data->ExcellentFlags == 0x04)
-                {
-                    CreateMount(MODEL_FENRIR_GOLD, o->Position, o);
-                }
-                else
-                {
-                    CreateMount(MODEL_FENRIR_RED, o->Position, o);
-                }
-                break;
-            case ITEM_DEMON:
-            case ITEM_SPIRIT_OF_GUARDIAN:
+                c->Weapon[1].Type           = -1;
+                c->Weapon[1].ExcellentFlags = 0;
+                DeletePet(c);
+            }
+            else
             {
+                c->Weapon[1].Type           = MODEL_ITEM + Type;
+                c->Weapon[1].Level          = Data->ItemLevel;
+                c->Weapon[1].ExcellentFlags = Data->ExcellentFlags;
+                CreatePetDarkSpirit_Now(c);
+                g_SummonSystem.RemoveEquipEffects(c);
+            }
+            break;
+        case 2:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->BodyPart[BODYPART_HELM].Type                 = static_cast<int>(MODEL_BODY_HELM) + c->SkinIndex;
+                c->BodyPart[BODYPART_HELM].Level                = 0;
+                c->BodyPart[BODYPART_HELM].ExcellentFlags       = 0;
+                c->BodyPart[BODYPART_HELM].AncientDiscriminator = 0;
+            }
+            else
+            {
+                c->BodyPart[BODYPART_HELM].Type                 = MODEL_ITEM + Type;
+                c->BodyPart[BODYPART_HELM].Level                = Data->ItemLevel;
+                c->BodyPart[BODYPART_HELM].ExcellentFlags       = Data->ExcellentFlags;
+                c->BodyPart[BODYPART_HELM].AncientDiscriminator = Data->AncientDiscriminator;
+            }
+            break;
+        case 3:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->BodyPart[BODYPART_ARMOR].Type                 = static_cast<int>(MODEL_BODY_ARMOR) + c->SkinIndex;
+                c->BodyPart[BODYPART_ARMOR].Level                = 0;
+                c->BodyPart[BODYPART_ARMOR].ExcellentFlags       = 0;
+                c->BodyPart[BODYPART_ARMOR].AncientDiscriminator = 0;
+            }
+            else
+            {
+                c->BodyPart[BODYPART_ARMOR].Type                 = MODEL_ITEM + Type;
+                c->BodyPart[BODYPART_ARMOR].Level                = Data->ItemLevel;
+                c->BodyPart[BODYPART_ARMOR].ExcellentFlags       = Data->ExcellentFlags;
+                c->BodyPart[BODYPART_ARMOR].AncientDiscriminator = Data->AncientDiscriminator;
+            }
+            break;
+        case 4:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->BodyPart[BODYPART_PANTS].Type                 = static_cast<int>(MODEL_BODY_PANTS) + c->SkinIndex;
+                c->BodyPart[BODYPART_PANTS].Level                = 0;
+                c->BodyPart[BODYPART_PANTS].ExcellentFlags       = 0;
+                c->BodyPart[BODYPART_PANTS].AncientDiscriminator = 0;
+            }
+            else
+            {
+                c->BodyPart[BODYPART_PANTS].Type                 = MODEL_ITEM + Type;
+                c->BodyPart[BODYPART_PANTS].Level                = Data->ItemLevel;
+                c->BodyPart[BODYPART_PANTS].ExcellentFlags       = Data->ExcellentFlags;
+                c->BodyPart[BODYPART_PANTS].AncientDiscriminator = Data->AncientDiscriminator;
+            }
+            break;
+        case 5:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->BodyPart[BODYPART_GLOVES].Type                 = static_cast<int>(MODEL_BODY_GLOVES) + c->SkinIndex;
+                c->BodyPart[BODYPART_GLOVES].Level                = 0;
+                c->BodyPart[BODYPART_GLOVES].ExcellentFlags       = 0;
+                c->BodyPart[BODYPART_GLOVES].AncientDiscriminator = 0;
+            }
+            else
+            {
+                c->BodyPart[BODYPART_GLOVES].Type                 = MODEL_ITEM + Type;
+                c->BodyPart[BODYPART_GLOVES].Level                = Data->ItemLevel;
+                c->BodyPart[BODYPART_GLOVES].ExcellentFlags       = Data->ExcellentFlags;
+                c->BodyPart[BODYPART_GLOVES].AncientDiscriminator = Data->AncientDiscriminator;
+            }
+            break;
+        case 6:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->BodyPart[BODYPART_BOOTS].Type                 = static_cast<int>(MODEL_BODY_BOOTS) + c->SkinIndex;
+                c->BodyPart[BODYPART_BOOTS].Level                = 0;
+                c->BodyPart[BODYPART_BOOTS].ExcellentFlags       = 0;
+                c->BodyPart[BODYPART_BOOTS].AncientDiscriminator = 0;
+            }
+            else
+            {
+                c->BodyPart[BODYPART_BOOTS].Type                 = MODEL_ITEM + Type;
+                c->BodyPart[BODYPART_BOOTS].Level                = Data->ItemLevel;
+                c->BodyPart[BODYPART_BOOTS].ExcellentFlags       = Data->ExcellentFlags;
+                c->BodyPart[BODYPART_BOOTS].AncientDiscriminator = Data->AncientDiscriminator;
+            }
+            break;
+        case 7:
+            if (Data->ItemGroup == 0xFF)
+            {
+                if (c->Wing.Type == MODEL_WING_OF_RUIN || c->Wing.Type == MODEL_CAPE_OF_LORD ||
+                    c->Wing.Type == MODEL_WING + 130 || c->Wing.Type == MODEL_CAPE_OF_FIGHTER ||
+                    c->Wing.Type == MODEL_CAPE_OF_OVERRULE || c->Wing.Type == MODEL_WING + 135 ||
+                    c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
                 {
-                    ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                    DeleteCloth(c, o);
+                }
+                c->Wing.Type = -1;
+            }
+            else
+            {
+                c->Wing.Type  = MODEL_ITEM + Type;
+                c->Wing.Level = 0;
+                if (c->Wing.Type == MODEL_WING_OF_RUIN || c->Wing.Type == MODEL_CAPE_OF_LORD ||
+                    c->Wing.Type == MODEL_WING + 130 || c->Wing.Type == MODEL_CAPE_OF_FIGHTER ||
+                    c->Wing.Type == MODEL_CAPE_OF_OVERRULE || c->Wing.Type == MODEL_WING + 135 ||
+                    c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
+                {
+                    DeleteCloth(c, o);
                 }
             }
             break;
-            case ITEM_PET_RUDOLF:ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c); break;
-            case ITEM_PET_PANDA:ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c); break;
-            case ITEM_PET_UNICORN:ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c); break;
-            case ITEM_PET_SKELETON:ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c); break;
+        case 8:
+            if (Data->ItemGroup == 0xFF)
+            {
+                c->Helper.Type = -1;
+                DeleteMount(o);
+                ThePetProcess().DeletePet(c, c->Helper.Type, true);
             }
-        }
-        break;
+            else
+            {
+                c->Helper.Type  = MODEL_ITEM + Type;
+                c->Helper.Level = 0;
+                switch (Type)
+                {
+                    case ITEM_HELPER:
+                        CreateMount(MODEL_HELPER, o->Position, o);
+                        break;
+                    case ITEM_HORN_OF_UNIRIA:
+                        CreateMount(MODEL_UNICON, o->Position, o);
+                        break;
+                    case ITEM_HORN_OF_DINORANT:
+                        CreateMount(MODEL_PEGASUS, o->Position, o);
+                        break;
+                    case ITEM_DARK_HORSE_ITEM:
+                        CreateMount(MODEL_DARK_HORSE, o->Position, o);
+                        break;
+                    case ITEM_HORN_OF_FENRIR:
+                        c->Helper.ExcellentFlags = Data->ExcellentFlags;
+                        if (Data->ExcellentFlags == 0x01)
+                        {
+                            CreateMount(MODEL_FENRIR_BLACK, o->Position, o);
+                        }
+                        else if (Data->ExcellentFlags == 0x02)
+                        {
+                            CreateMount(MODEL_FENRIR_BLUE, o->Position, o);
+                        }
+                        else if (Data->ExcellentFlags == 0x04)
+                        {
+                            CreateMount(MODEL_FENRIR_GOLD, o->Position, o);
+                        }
+                        else
+                        {
+                            CreateMount(MODEL_FENRIR_RED, o->Position, o);
+                        }
+                        break;
+                    case ITEM_DEMON:
+                    case ITEM_SPIRIT_OF_GUARDIAN: {
+                        {
+                            ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                        }
+                    }
+                    break;
+                    case ITEM_PET_RUDOLF:
+                        ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                        break;
+                    case ITEM_PET_PANDA:
+                        ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                        break;
+                    case ITEM_PET_UNICORN:
+                        ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                        break;
+                    case ITEM_PET_SKELETON:
+                        ThePetProcess().CreatePet(Type, c->Helper.Type, o->Position, c);
+                        break;
+                }
+            }
+            break;
     }
 
     // Ancient full-set glow state (purple aura) is sent explicitly per equipment change.
@@ -2650,11 +2686,9 @@ void ReceiveCreatePlayerViewportExtended(std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    WORD Key = Data->Key;
-    int CreateFlag = (Key >> 15);
+    WORD Key        = Data->Key;
+    int  CreateFlag = (Key >> 15);
     Key &= 0x7FFF;
-
-    
 
     //if (Index != MAX_CHARACTERS_CLIENT)
     //{
@@ -2676,46 +2710,47 @@ void ReceiveCreatePlayerViewportExtended(std::span<const BYTE> ReceiveBuffer)
     CMultiLanguage::ConvertFromUtf8(c->ID, Data->ID, MAX_USERNAME_SIZE);
     OBJECT* o = &c->Object;
     //DeleteCloth(c, o);
-    c->Class = gCharacterManager.ChangeServerClassTypeToClientClassType(Data->Class);
-    c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-    c->Skin = 0;
-    c->AttackSpeed = Data->AttackSpeed;
-    c->MagicSpeed = Data->MagicSpeed;
-    c->PK = Data->RotationAndHeroState & 0xf;
+    c->Class           = gCharacterManager.ChangeServerClassTypeToClientClassType(Data->Class);
+    c->SkinIndex       = gCharacterManager.GetSkinModelIndex(c->Class);
+    c->Skin            = 0;
+    c->AttackSpeed     = Data->AttackSpeed;
+    c->MagicSpeed      = Data->MagicSpeed;
+    c->PK              = Data->RotationAndHeroState & 0xf;
     c->Object.Angle[2] = ((float)(Data->RotationAndHeroState >> 4) - 1.f) * 45.f;
-    o->Kind = KIND_PLAYER;
-    o->Type = MODEL_PLAYER;
-    c->PositionX = Data->PositionX;
-    c->PositionY = Data->PositionY;
-    c->TargetX = Data->TargetX;
-    c->TargetY = Data->TargetY;
+    o->Kind            = KIND_PLAYER;
+    o->Type            = MODEL_PLAYER;
+    c->PositionX       = Data->PositionX;
+    c->PositionY       = Data->PositionY;
+    c->TargetX         = Data->TargetX;
+    c->TargetY         = Data->TargetY;
     switch (Data->Flags & 0x07)
     {
-    case 1:
-        CreateTeleportEnd(o);
-        // AddDebugText(ReceiveBuffer, Size);
-        break;
-    case 2:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_SIT1);
-        else
-            SetAction(o, PLAYER_SIT_FEMALE1);
-        break;
-    case 3:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_POSE1);
-        else
-            SetAction(o, PLAYER_POSE_FEMALE1);
-        break;
-    case 4:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_HEALING1);
-        else
-            SetAction(o, PLAYER_HEALING_FEMALE1);
-        break;
+        case 1:
+            CreateTeleportEnd(o);
+            // AddDebugText(ReceiveBuffer, Size);
+            break;
+        case 2:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_SIT1);
+            else
+                SetAction(o, PLAYER_SIT_FEMALE1);
+            break;
+        case 3:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_POSE1);
+            else
+                SetAction(o, PLAYER_POSE_FEMALE1);
+            break;
+        case 4:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_HEALING1);
+            else
+                SetAction(o, PLAYER_HEALING_FEMALE1);
+            break;
     }
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"(RCPV)ID : %ls | sX : %d | sY : %d | tX : %d | tY : %d", c->ID, c->PositionX, c->PositionY, c->TargetX, c->TargetY);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"(RCPV)ID : %ls | sX : %d | sY : %d | tX : %d | tY : %d", c->ID, c->PositionX,
+                          c->PositionY, c->TargetX, c->TargetY);
 
     if (CreateFlag)
     {
@@ -2794,34 +2829,34 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
             return;
         }
 
-        WORD Key = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
-        int CreateFlag = (Key >> 15);
+        WORD Key        = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
+        int  CreateFlag = (Key >> 15);
         Key &= 0x7FFF;
 
         wchar_t characterName[MAX_USERNAME_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(characterName, Data2->ID, MAX_USERNAME_SIZE);
 
         CHARACTER* pCha;
-        int iIndex = FindCharacterIndex(Key);
-        pCha = &CharactersClient[iIndex];
+        int        iIndex = FindCharacterIndex(Key);
+        pCha              = &CharactersClient[iIndex];
 
-        short sBackUpGuildMarkIndex = -1;
-        BYTE byBackUpGuildStatus = 0;
-        BYTE byBackUpGuildType = 0;
-        BYTE byBackUpGuildRelationShip = 0;
-        BYTE byBackUpGuildMasterKillCount = 0;
-        BYTE byEtcPart = 0;
-        BYTE byBackupCtlcode = 0;
+        short sBackUpGuildMarkIndex        = -1;
+        BYTE  byBackUpGuildStatus          = 0;
+        BYTE  byBackUpGuildType            = 0;
+        BYTE  byBackUpGuildRelationShip    = 0;
+        BYTE  byBackUpGuildMasterKillCount = 0;
+        BYTE  byEtcPart                    = 0;
+        BYTE  byBackupCtlcode              = 0;
 
         if (iIndex != MAX_CHARACTERS_CLIENT)
         {
-            sBackUpGuildMarkIndex = pCha->GuildMarkIndex;
-            byBackUpGuildStatus = pCha->GuildStatus;
-            byBackUpGuildType = pCha->GuildType;
-            byBackUpGuildRelationShip = pCha->GuildRelationShip;
+            sBackUpGuildMarkIndex        = pCha->GuildMarkIndex;
+            byBackUpGuildStatus          = pCha->GuildStatus;
+            byBackUpGuildType            = pCha->GuildType;
+            byBackUpGuildRelationShip    = pCha->GuildRelationShip;
             byBackUpGuildMasterKillCount = pCha->GuildMasterKillCount;
-            byEtcPart = pCha->EtcPart;
-            byBackupCtlcode = pCha->CtlCode;
+            byEtcPart                    = pCha->EtcPart;
+            byBackupCtlcode              = pCha->CtlCode;
         }
 
         if (FindText(characterName, L"webzen") == false)
@@ -2831,7 +2866,7 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
             auto Type = (EMonsterType)(((WORD)(Data2->TypeH) << 8) + Data2->TypeL);
 
             CHARACTER* c = CreateMonster(Type, Data2->PositionX, Data2->PositionY, Key);
-            OBJECT* o = &c->Object;
+            OBJECT*    o = &c->Object;
 
             if (c->MonsterIndex == MONSTER_GIANT)
             {
@@ -2850,38 +2885,39 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
 
             DeleteCloth(c, o);
 
-            c->GuildMarkIndex = sBackUpGuildMarkIndex;
-            c->GuildStatus = byBackUpGuildStatus;
-            c->GuildType = byBackUpGuildType;
-            c->GuildRelationShip = byBackUpGuildRelationShip;
+            c->GuildMarkIndex       = sBackUpGuildMarkIndex;
+            c->GuildStatus          = byBackUpGuildStatus;
+            c->GuildType            = byBackUpGuildType;
+            c->GuildRelationShip    = byBackUpGuildRelationShip;
             c->GuildMasterKillCount = byBackUpGuildMasterKillCount;
-            c->EtcPart = byEtcPart;
-            c->CtlCode = byBackupCtlcode;
-            c->Class = Class;
-            c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-            c->PK = Data2->Path & 0xf;
-            o->Kind = KIND_PLAYER;
-            c->Change = true;
+            c->EtcPart              = byEtcPart;
+            c->CtlCode              = byBackupCtlcode;
+            c->Class                = Class;
+            c->SkinIndex            = gCharacterManager.GetSkinModelIndex(c->Class);
+            c->PK                   = Data2->Path & 0xf;
+            o->Kind                 = KIND_PLAYER;
+            c->Change               = true;
 
             for (int j = 0; j < Data2->s_BuffCount; ++j)
             {
                 RegisterBuff(static_cast<eBuffState>(Data2->s_BuffEffectState[j]), o);
                 battleCastle::SettingBattleFormation(c, static_cast<eBuffState>(Data2->s_BuffEffectState[j]));
 
-                g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(Data2->s_BuffEffectState[j]));
+                g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID,
+                                      static_cast<int>(Data2->s_BuffEffectState[j]));
             }
 
-            c->PositionX = Data2->PositionX;
-            c->PositionY = Data2->PositionY;
-            c->TargetX = Data2->PositionX;
-            c->TargetY = Data2->PositionY;
+            c->PositionX       = Data2->PositionX;
+            c->PositionY       = Data2->PositionY;
+            c->TargetX         = Data2->PositionX;
+            c->TargetY         = Data2->PositionY;
             c->Object.Angle[2] = ((float)(Data2->Path >> 4) - 1.f) * 45.f;
 
             if (CreateFlag)
             {
                 c->Object.Position[0] = ((c->PositionX) + 0.5f) * TERRAIN_SCALE;
                 c->Object.Position[1] = ((c->PositionY) + 0.5f) * TERRAIN_SCALE;
-                c->Object.Alpha = 0.f;
+                c->Object.Alpha       = 0.f;
                 CreateEffect(MODEL_MAGIC_CIRCLE1, o->Position, o->Angle, o->Light, 0, o);
                 CreateParticle(BITMAP_LIGHTNING + 1, o->Position, o->Angle, o->Light, 2, 1.f, o);
             }
@@ -2906,105 +2942,103 @@ void AppearMonster(CHARACTER* c)
     OBJECT* o = &c->Object;
     switch (c->MonsterIndex)
     {
-    case MONSTER_GOLDEN_DRAGON:
-        SetAction(o, MONSTER01_STOP2);
-        o->PriorAction = MONSTER01_STOP2;
-        c->Object.Alpha = 1.f;
-        PlayBuffer(SOUND_MONSTER_BULLATTACK1);
-        break;
-    case MONSTER_ASSASSIN:
-        SetAction(o, MONSTER01_STOP2);
-        o->PriorAction = MONSTER01_STOP2;
-        c->Object.Alpha = 1.f;
-        PlayBuffer(SOUND_ASSASSIN);
-        break;
-    case MONSTER_GOLDEN_TITAN:
-    case MONSTER_GOLDEN_SOLDIER:
-        c->Appear = 60;
-        SetAction(o, MONSTER01_STOP2);
-        o->PriorAction = MONSTER01_STOP2;
-        c->Object.Alpha = 1.f;
-        //PlayBuffer(SOUND_ASSASSIN);
-        break;
-    case MONSTER_CHIEF_SKELETON_ARCHER_1:
-    case MONSTER_CHIEF_SKELETON_ARCHER_2:
-    case MONSTER_CHIEF_SKELETON_ARCHER_3:
-    case MONSTER_CHIEF_SKELETON_ARCHER_4:
-    case MONSTER_CHIEF_SKELETON_ARCHER_5:
-    case MONSTER_CHIEF_SKELETON_ARCHER_6:
-        PlayBuffer(SOUND_MONSTER_ORCCAPATTACK1);
-        break;
-    case MONSTER_DARK_ELF:
-    case MONSTER_DARKELF:
-    case MONSTER_SORAM:
-    case MONSTER_BALRAM:
-    case MONSTER_DEATH_SPIRIT:
-    {
-        if (g_Direction.m_CMVP.m_iCryWolfState == CRYWOLF_STATE_READY)
-            c->Object.Alpha = 1.0f;
-        else
-        {
-            c->Object.Alpha = 0.f;
-
-            vec3_t vPos;
-            Vector(c->Object.Position[0] + 20.0f, c->Object.Position[1] + 20.0f, c->Object.Position[2], vPos);
-
-            CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 60.f + rand() % 10);
-            CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 50.f + rand() % 10);
-            CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 50.f + rand() % 10);
-            CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 60.f + rand() % 10);
-
-            CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
-            CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
-            CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
-
-            Vector(c->Object.Position[0], c->Object.Position[1], c->Object.Position[2] + 120.0f, vPos);
-            CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
-            CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
-            CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
-            CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
-        }
-    }
-    break;
-    case MONSTER_MAYA_HAND_LEFT:
-    case MONSTER_MAYA_HAND_RIGHT:
-    {
-        SetAction(o, MONSTER01_APEAR);
-        c->Object.Alpha = 0.f;
-    }
-    break;
-    default:
-        if (o->Type == MODEL_PLAYER)
-        {
-            SetAction(o, PLAYER_COME_UP);
-            o->PriorAction = PLAYER_COME_UP;
+        case MONSTER_GOLDEN_DRAGON:
+            SetAction(o, MONSTER01_STOP2);
+            o->PriorAction  = MONSTER01_STOP2;
             c->Object.Alpha = 1.f;
+            PlayBuffer(SOUND_MONSTER_BULLATTACK1);
+            break;
+        case MONSTER_ASSASSIN:
+            SetAction(o, MONSTER01_STOP2);
+            o->PriorAction  = MONSTER01_STOP2;
+            c->Object.Alpha = 1.f;
+            PlayBuffer(SOUND_ASSASSIN);
+            break;
+        case MONSTER_GOLDEN_TITAN:
+        case MONSTER_GOLDEN_SOLDIER:
+            c->Appear = 60;
+            SetAction(o, MONSTER01_STOP2);
+            o->PriorAction  = MONSTER01_STOP2;
+            c->Object.Alpha = 1.f;
+            //PlayBuffer(SOUND_ASSASSIN);
+            break;
+        case MONSTER_CHIEF_SKELETON_ARCHER_1:
+        case MONSTER_CHIEF_SKELETON_ARCHER_2:
+        case MONSTER_CHIEF_SKELETON_ARCHER_3:
+        case MONSTER_CHIEF_SKELETON_ARCHER_4:
+        case MONSTER_CHIEF_SKELETON_ARCHER_5:
+        case MONSTER_CHIEF_SKELETON_ARCHER_6:
+            PlayBuffer(SOUND_MONSTER_ORCCAPATTACK1);
+            break;
+        case MONSTER_DARK_ELF:
+        case MONSTER_DARKELF:
+        case MONSTER_SORAM:
+        case MONSTER_BALRAM:
+        case MONSTER_DEATH_SPIRIT: {
+            if (g_Direction.m_CMVP.m_iCryWolfState == CRYWOLF_STATE_READY)
+                c->Object.Alpha = 1.0f;
+            else
+            {
+                c->Object.Alpha = 0.f;
+
+                vec3_t vPos;
+                Vector(c->Object.Position[0] + 20.0f, c->Object.Position[1] + 20.0f, c->Object.Position[2], vPos);
+
+                CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 60.f + rand() % 10);
+                CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 50.f + rand() % 10);
+                CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 50.f + rand() % 10);
+                CreateJoint(BITMAP_JOINT_THUNDER + 1, vPos, vPos, c->Object.Angle, 7, nullptr, 60.f + rand() % 10);
+
+                CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
+                CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
+                CreateParticle(BITMAP_SMOKE + 4, c->Object.Position, c->Object.Angle, c->Object.Light, 1, 5.0f);
+
+                Vector(c->Object.Position[0], c->Object.Position[1], c->Object.Position[2] + 120.0f, vPos);
+                CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
+                CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
+                CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
+                CreateJoint(BITMAP_JOINT_THUNDER, c->Object.Position, vPos, c->Object.Angle, 17);
+            }
         }
-        else
-        {
+        break;
+        case MONSTER_MAYA_HAND_LEFT:
+        case MONSTER_MAYA_HAND_RIGHT: {
+            SetAction(o, MONSTER01_APEAR);
             c->Object.Alpha = 0.f;
         }
         break;
+        default:
+            if (o->Type == MODEL_PLAYER)
+            {
+                SetAction(o, PLAYER_COME_UP);
+                o->PriorAction  = PLAYER_COME_UP;
+                c->Object.Alpha = 1.f;
+            }
+            else
+            {
+                c->Object.Alpha = 0.f;
+            }
+            break;
     }
 }
 
 void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    auto Data   = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
         auto Data2 = (LPPCREATE_MONSTER)(ReceiveBuffer + Offset);
-        WORD Key = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
+        WORD Key   = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
 
-        BYTE bMyMob = (Data2->TypeH) & 0x80;
+        BYTE bMyMob      = (Data2->TypeH) & 0x80;
         BYTE byBuildTime = (Data2->TypeH & 0x70) >> 4;
-        auto Type = (EMonsterType)(((WORD)(Data2->TypeH & 0x03) << 8) + Data2->TypeL);
+        auto Type        = (EMonsterType)(((WORD)(Data2->TypeH & 0x03) << 8) + Data2->TypeL);
 
         if (Type != 106)
             int a = 0;
 
-        int CreateFlag = (Key >> 15);
+        int CreateFlag   = (Key >> 15);
         int TeleportFlag = (Data2->KeyH & 0x40) >> 6;
 
         Key &= 0x7FFF;
@@ -3012,7 +3046,8 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 
         g_ConsoleDebug->Write(MCD_RECEIVE, L"0x13 [ReceiveCreateMonsterViewport(Type : %d | Key : %d)]", Type, Key);
 
-        if (c == nullptr) break;
+        if (c == nullptr)
+            break;
 
         OBJECT* o = &c->Object;
         if (IsMonster(c))
@@ -3024,7 +3059,8 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
         {
             RegisterBuff(static_cast<eBuffState>(Data2->s_BuffEffectState[j]), o);
 
-            g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(Data2->s_BuffEffectState[j]));
+            g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID,
+                                  static_cast<int>(Data2->s_BuffEffectState[j]));
         }
 
         float fAngle = 45.0f;
@@ -3040,7 +3076,7 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
         else if (o->Type == MODEL_KANTURU2ND_ENTER_NPC)
         {
             o->m_fEdgeScale = 1.0f;
-            fAngle = 90.f;
+            fAngle          = 90.f;
         }
 
         c->Object.Angle[2] = ((float)(Data2->Path >> 4) - 1.f) * fAngle;
@@ -3066,10 +3102,10 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 
         c->PositionX = Data2->PositionX;
         c->PositionY = Data2->PositionY;
-        c->TargetX = Data2->PositionX;
-        c->TargetY = Data2->PositionY;
+        c->TargetX   = Data2->PositionX;
+        c->TargetY   = Data2->PositionY;
 
-        c->m_byFriend = bMyMob;
+        c->m_byFriend    = bMyMob;
         o->m_byBuildTime = byBuildTime;
 
         if (gMapManager.InBattleCastle() && c->MonsterIndex == MONSTER_CASTLE_GATE1)
@@ -3101,8 +3137,8 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 
         int iDefaultWall = TW_CHARACTER;
 
-        if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4
-            && Key != HeroKey)
+        if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4 &&
+            Key != HeroKey)
         {
             iDefaultWall = TW_NOMOVE;
         }
@@ -3122,14 +3158,14 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 
 void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    auto Data   = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
-        auto Data2 = (LPPCREATE_SUMMON)(ReceiveBuffer + Offset);
-        WORD Key = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
-        auto Type = (EMonsterType)(((WORD)(Data2->TypeH) << 8) + Data2->TypeL);
-        int CreateFlag = (Key >> 15);
+        auto Data2      = (LPPCREATE_SUMMON)(ReceiveBuffer + Offset);
+        WORD Key        = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
+        auto Type       = (EMonsterType)(((WORD)(Data2->TypeH) << 8) + Data2->TypeL);
+        int  CreateFlag = (Key >> 15);
         Key &= 0x7FFF;
 
         CHARACTER* c;
@@ -3143,7 +3179,8 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
             c = CreateMonster(Type, Data2->PositionX, Data2->PositionY, Key);
         }
 
-        if (c == nullptr) break;
+        if (c == nullptr)
+            break;
 
         OBJECT* o = &c->Object;
 
@@ -3153,19 +3190,19 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
         }
 
         c->Object.Angle[2] = ((float)(Data2->Path >> 4) - 1.f) * 45.f;
-        c->PositionX = Data2->PositionX;
-        c->PositionY = Data2->PositionY;
-        c->TargetX = Data2->PositionX;
-        c->TargetY = Data2->PositionY;
-        o->Kind = KIND_PLAYER;
-        c->PK = Data2->Path & 0xf;
+        c->PositionX       = Data2->PositionX;
+        c->PositionY       = Data2->PositionY;
+        c->TargetX         = Data2->PositionX;
+        c->TargetY         = Data2->PositionY;
+        o->Kind            = KIND_PLAYER;
+        c->PK              = Data2->Path & 0xf;
 
         if (c->PK >= PVP_MURDERER2)
             c->Level = 1;
 
-        if (Type < 152 || Type>158)
+        if (Type < 152 || Type > 158)
         {
-            wchar_t Temp[100] {};
+            wchar_t Temp[100]{};
             wcscat(c->ID, I18N::Game::Of);
             CMultiLanguage::ConvertFromUtf8(Temp, Data2->ID, MAX_USERNAME_SIZE);
             wcscat(c->ID, Temp);
@@ -3182,7 +3219,7 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
             if (Type >= 152 && Type <= 158)
             {
                 o->PriorAnimationFrame = 0.f;
-                o->AnimationFrame = 0.f;
+                o->AnimationFrame      = 0.f;
                 PlayBuffer(SOUND_CHAOS_FALLING_STONE);
             }
         }
@@ -3199,8 +3236,8 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
 
 void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    int Offset = sizeof(PHEADER_DEFAULT);
+    auto Data   = (LPPHEADER_DEFAULT)ReceiveBuffer;
+    int  Offset = sizeof(PHEADER_DEFAULT);
     for (int i = 0; i < Data->Value; i++)
     {
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
@@ -3218,7 +3255,7 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
             }
         }
 
-        int Key = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
+        int Key        = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
         int DeleteFlag = (Key >> 15);
 
         Key &= 0x7FFF;
@@ -3233,7 +3270,7 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
             }
         }
 
-        iIndex = FindCharacterIndex(Key);
+        iIndex          = FindCharacterIndex(Key);
         CHARACTER* pCha = &CharactersClient[iIndex];
 
         int buffSize = g_CharacterBuffSize((&pCha->Object));
@@ -3257,8 +3294,8 @@ int AttackPlayer = 0;
 
 void ReceiveDamage(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_DAMAGE)ReceiveBuffer;
-    int Damage = ((int)(Data->DamageH) << 8) + Data->DamageL;
+    auto Data   = (LPPRECEIVE_DAMAGE)ReceiveBuffer;
+    int  Damage = ((int)(Data->DamageH) << 8) + Data->DamageL;
     if (CharacterAttribute->Life >= Damage)
         CharacterAttribute->Life -= Damage;
     else
@@ -3274,12 +3311,14 @@ void ReceiveDamage(const BYTE* ReceiveBuffer)
         PublishHaptic(Core::Haptics::HapticEvent::Injured);
 }
 
-void ReceiveAttackDamageCastle(CHARACTER* c, OBJECT* o, const bool success, const int key, const int damage, const int shieldDamage, const int damageType, const bool bRepeatedly, const bool bEndRepeatedly, const bool bDoubleEnable, const bool bComboEnable)
+void ReceiveAttackDamageCastle(CHARACTER* c, OBJECT* o, const bool success, const int key, const int damage,
+                               const int shieldDamage, const int damageType, const bool bRepeatedly,
+                               const bool bEndRepeatedly, const bool bDoubleEnable, const bool bComboEnable)
 {
     vec3_t Light;
-    int accumDamage = shieldDamage + damage;
-    int	rstDamage = -1;
-    float rstScale = 0.8f;
+    int    accumDamage = shieldDamage + damage;
+    int    rstDamage   = -1;
+    float  rstScale    = 0.8f;
     Vector(0.5f, 0.5f, 0.5f, Light);
     if (accumDamage > 0)
     {
@@ -3345,24 +3384,23 @@ void ReceiveAttackDamageCastle(CHARACTER* c, OBJECT* o, const bool success, cons
 
             if (g_isCharacterBuff(o, eBuff_WizDefense) && o->Type == MODEL_PLAYER)
             {
-                CHARACTER* cm = &CharactersClient[AttackPlayer];
-                OBJECT* om = &cm->Object;
-                float fAngle = CreateAngle2D(om->Position, o->Position);
+                CHARACTER* cm     = &CharactersClient[AttackPlayer];
+                OBJECT*    om     = &cm->Object;
+                float      fAngle = CreateAngle2D(om->Position, o->Position);
                 if (fabs(fAngle - om->Angle[2]) < 10.f)
                 {
-                    vec3_t Angle = { 0.0f, 0.0f, fAngle + 180.f };
+                    vec3_t Angle = {0.0f, 0.0f, fAngle + 180.f};
                     CreateEffect(MODEL_MAGIC_CAPSULE2, o->Position, Angle, o->Light, 0, o);
                 }
             }
 #ifdef _PVP_ADD_MOVE_SCROLL
             if (Damage > 0)
                 g_MurdererMove.CancelMove();
-#endif	// _PVP_ADD_MOVE_SCROLL
+#endif  // _PVP_ADD_MOVE_SCROLL
         }
         else
         {
-            if (c->MonsterIndex != MONSTER_ILLUSION_OF_KUNDUN_7
-                && rand_fps_check(2))
+            if (c->MonsterIndex != MONSTER_ILLUSION_OF_KUNDUN_7 && rand_fps_check(2))
             {
                 SetPlayerShock(c, damage);
             }
@@ -3379,7 +3417,9 @@ void ReceiveAttackDamageCastle(CHARACTER* c, OBJECT* o, const bool success, cons
     c->Hit = damage;
 }
 
-void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int key, const int damage, const int shieldDamage, const int damageType, const bool bRepeatedly, const bool bEndRepeatedly, const bool bDoubleEnable, const bool bComboEnable)
+void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int key, const int damage,
+                         const int shieldDamage, const int damageType, const bool bRepeatedly,
+                         const bool bEndRepeatedly, const bool bDoubleEnable, const bool bComboEnable)
 {
     vec3_t Light;
     if (success)
@@ -3393,7 +3433,8 @@ void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int 
         {
             vec3_t nPosShieldDamage;
             Vector(0.8f, 1.f, 0.f, Light);
-            nPosShieldDamage[0] = o->Position[0]; nPosShieldDamage[1] = o->Position[1];
+            nPosShieldDamage[0] = o->Position[0];
+            nPosShieldDamage[1] = o->Position[1];
             nPosShieldDamage[2] = o->Position[2] + 25.f;
             CreatePoint(nPosShieldDamage, shieldDamage, Light);
         }
@@ -3427,20 +3468,19 @@ void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int 
 
             if (g_isCharacterBuff(o, eBuff_WizDefense) && o->Type == MODEL_PLAYER)
             {
-                CHARACTER* cm = &CharactersClient[AttackPlayer];
-                OBJECT* om = &cm->Object;
-                float fAngle = CreateAngle2D(om->Position, o->Position);
+                CHARACTER* cm     = &CharactersClient[AttackPlayer];
+                OBJECT*    om     = &cm->Object;
+                float      fAngle = CreateAngle2D(om->Position, o->Position);
                 if (fabs(fAngle - om->Angle[2]) < 10.f)
                 {
-                    vec3_t Angle = { 0.0f, 0.0f, fAngle + 180.f };
+                    vec3_t Angle = {0.0f, 0.0f, fAngle + 180.f};
                     CreateEffect(MODEL_MAGIC_CAPSULE2, o->Position, Angle, o->Light, 0, o);
                 }
             }
         }
         else
         {
-            if (c->MonsterIndex != MONSTER_ILLUSION_OF_KUNDUN_7
-                && rand_fps_check(2))
+            if (c->MonsterIndex != MONSTER_ILLUSION_OF_KUNDUN_7 && rand_fps_check(2))
             {
                 SetPlayerShock(c, damage);
             }
@@ -3461,40 +3501,40 @@ void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int 
         {
             switch (damageType)
             {
-            case 0:	//	DT_NONE
-                if (key == HeroKey)
-                {
-                    Vector(1.f, 0.f, 0.f, Light);
-                }
-                else
-                {
-                    Vector(1.f, 0.6f, 0.f, Light);
-                }
-                break;
-            case 1:	//	DT_PERFECT
-                scale = 50.f;
-                Vector(0.0f, 1.f, 1.f, Light);
-                break;
-            case 2:	//	DT_EXCELLENT
-                scale = 50.f;
-                Vector(0.f, 1.f, 0.6f, Light);
-                break;
-            case 3:	//	DT_CRITICAL
-                scale = 50.f;
-                Vector(0.f, 0.6f, 1.f, Light);
-                break;
-            case 4:	//	DT_MIRROR
-                Vector(1.f, 0.f, 1.f, Light);
-                break;
-            case 5: //	DT_POSION
-                Vector(0.f, 1.f, 0.f, Light);
-                break;
-            case 6:	//	DT_DOT
-                Vector(0.7f, 0.4f, 1.0f, Light);
-                break;
-            default:
-                Vector(1.f, 1.f, 1.f, Light);
-                break;
+                case 0:  //	DT_NONE
+                    if (key == HeroKey)
+                    {
+                        Vector(1.f, 0.f, 0.f, Light);
+                    }
+                    else
+                    {
+                        Vector(1.f, 0.6f, 0.f, Light);
+                    }
+                    break;
+                case 1:  //	DT_PERFECT
+                    scale = 50.f;
+                    Vector(0.0f, 1.f, 1.f, Light);
+                    break;
+                case 2:  //	DT_EXCELLENT
+                    scale = 50.f;
+                    Vector(0.f, 1.f, 0.6f, Light);
+                    break;
+                case 3:  //	DT_CRITICAL
+                    scale = 50.f;
+                    Vector(0.f, 0.6f, 1.f, Light);
+                    break;
+                case 4:  //	DT_MIRROR
+                    Vector(1.f, 0.f, 1.f, Light);
+                    break;
+                case 5:  //	DT_POSION
+                    Vector(0.f, 1.f, 0.f, Light);
+                    break;
+                case 6:  //	DT_DOT
+                    Vector(0.7f, 0.4f, 1.0f, Light);
+                    break;
+                default:
+                    Vector(1.f, 1.f, 1.f, Light);
+                    break;
             }
 
             if (bComboEnable)
@@ -3527,7 +3567,7 @@ void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int 
                 Position[2] += 10.f;
                 CreatePoint(Position, damage, Light, scale + 10.f);
             }
-            else if (bDoubleEnable)    //  Double Damage
+            else if (bDoubleEnable)  //  Double Damage
             {
                 vec3_t Position, Light2;
                 VectorCopy(o->Position, Position);
@@ -3545,7 +3585,8 @@ void ReceiveAttackDamage(CHARACTER* c, OBJECT* o, const bool success, const int 
         {
             vec3_t nPosShieldDamage;
             Vector(0.8f, 1.f, 0.f, Light);
-            nPosShieldDamage[0] = o->Position[0]; nPosShieldDamage[1] = o->Position[1];
+            nPosShieldDamage[0] = o->Position[0];
+            nPosShieldDamage[1] = o->Position[1];
             nPosShieldDamage[2] = o->Position[2] + 25.f;
             CreatePoint(nPosShieldDamage, shieldDamage, Light);
         }
@@ -3559,22 +3600,22 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_ATTACK_EXTENDED)ReceiveBuffer;
 
-    int Key = Data->TargetId;
+    int Key     = Data->TargetId;
     int Success = (Key >> 15);
     Key &= 0x7FFF;
 
-    int Index = FindCharacterIndex(Key);
-    CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
-    
+    int        Index = FindCharacterIndex(Key);
+    CHARACTER* c     = &CharactersClient[Index];
+    OBJECT*    o     = &c->Object;
+
     auto Damage = Data->HealthDamage;
     // DamageType
-    int	 DamageType = (Data->DamageType) & 0x0f;
-    bool bRepeatedly = (Data->DamageType >> 4) & 0x01;
+    int  DamageType     = (Data->DamageType) & 0x0f;
+    bool bRepeatedly    = (Data->DamageType >> 4) & 0x01;
     bool bEndRepeatedly = (Data->DamageType >> 5) & 0x01;
-    bool bDoubleEnable = (Data->DamageType >> 6) & 0x01;
-    bool bComboEnable = (Data->DamageType >> 7) & 0x01;
-    auto ShieldDamage = Data->ShieldDamage;
+    bool bDoubleEnable  = (Data->DamageType >> 6) & 0x01;
+    bool bComboEnable   = (Data->DamageType >> 7) & 0x01;
+    auto ShieldDamage   = Data->ShieldDamage;
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x15 [ReceiveAttackDamageExtended(%d %d)]", AttackPlayer, Damage);
     if (IsMonster(c))
@@ -3610,12 +3651,13 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
 
     if (gMapManager.InChaosCastle())
     {
-        ReceiveAttackDamageCastle(c, o, Success, Key, Damage, ShieldDamage, DamageType, bRepeatedly, bEndRepeatedly, bDoubleEnable, bComboEnable);
-        
+        ReceiveAttackDamageCastle(c, o, Success, Key, Damage, ShieldDamage, DamageType, bRepeatedly, bEndRepeatedly,
+                                  bDoubleEnable, bComboEnable);
     }
     else
     {
-        ReceiveAttackDamage(c, o, Success, Key, Damage, ShieldDamage, DamageType, bRepeatedly, bEndRepeatedly, bDoubleEnable, bComboEnable);
+        ReceiveAttackDamage(c, o, Success, Key, Damage, ShieldDamage, DamageType, bRepeatedly, bEndRepeatedly,
+                            bDoubleEnable, bComboEnable);
     }
 
     if (Damage == 0 && ShieldDamage == 0)
@@ -3625,9 +3667,7 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
     {
         PublishHaptic(Core::Haptics::HapticEvent::Injured);
     }
-    else if (AttackPlayer >= 0
-        && AttackPlayer < MAX_CHARACTERS_CLIENT
-        && &CharactersClient[AttackPlayer] == Hero)
+    else if (AttackPlayer >= 0 && AttackPlayer < MAX_CHARACTERS_CLIENT && &CharactersClient[AttackPlayer] == Hero)
     {
         if (bComboEnable || bDoubleEnable)
             PublishHaptic(Core::Haptics::HapticEvent::HeavyHit);
@@ -3641,240 +3681,236 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
 void ReceiveAction(const BYTE* ReceiveBuffer, int Size)
 {
     auto Data = (LPPRECEIVE_ACTION)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    int  Key  = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
-    int Index = FindCharacterIndex(Key);
-    CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
+    int        Index = FindCharacterIndex(Key);
+    CHARACTER* c     = &CharactersClient[Index];
+    OBJECT*    o     = &c->Object;
 
     int iTargetKey, iTargetIndex;
 
-    iTargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
+    iTargetKey   = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
     iTargetIndex = FindCharacterIndex(iTargetKey);
 
     if (!c->SafeZone && c->Helper.Type == MODEL_DARK_HORSE_ITEM)
     {
         // on a Dark Horse, don't show
-        
+
         return;
     }
     //if(c->Helper.Type == MODEL_HELPER+37) return;
 
     c->Object.Angle[2] = ((float)(Data->Angle) - 1.f) * 45.f;
-    c->Movement = false;
+    c->Movement        = false;
 
     c->Object.Position[0] = c->TargetX * TERRAIN_SCALE + TERRAIN_SCALE * 0.5f;
     c->Object.Position[1] = c->TargetY * TERRAIN_SCALE + TERRAIN_SCALE * 0.5f;
     switch (Data->Action)
     {
-    case AT_STAND1:
-    case AT_STAND2:
-        SetPlayerStop(c);
-        break;
-    case AT_ATTACK1:
-    case AT_ATTACK2:
-        SetPlayerAttack(c);
-        c->AttackTime = 1;
-        c->Object.AnimationFrame = 0;
+        case AT_STAND1:
+        case AT_STAND2:
+            SetPlayerStop(c);
+            break;
+        case AT_ATTACK1:
+        case AT_ATTACK2:
+            SetPlayerAttack(c);
+            c->AttackTime            = 1;
+            c->Object.AnimationFrame = 0;
 
-        c->TargetCharacter = HeroIndex;
-        if (IsMonster(c))
-        {
-            MUHelper::g_MuHelper.AddTarget(Key, true);
+            c->TargetCharacter = HeroIndex;
+            if (IsMonster(c))
+            {
+                MUHelper::g_MuHelper.AddTarget(Key, true);
+            }
+
+            AttackPlayer = Index;
+            break;
+        case AT_SKILL_BLOCKING:
+            SetAction(o, PLAYER_DEFENSE1);
+            PlayBuffer(SOUND_SKILL_DEFENSE);
+            break;
+        case AT_SIT1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(&c->Object, PLAYER_SIT1);
+            else
+                SetAction(&c->Object, PLAYER_SIT_FEMALE1);
+            break;
+        case AT_POSE1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(&c->Object, PLAYER_POSE1);
+            else
+                SetAction(&c->Object, PLAYER_POSE_FEMALE1);
+            break;
+        case AT_HEALING1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(&c->Object, PLAYER_HEALING1);
+            else
+                SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
+            break;
+        case AT_GREETING1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_GREETING1);
+            else
+                SetAction(o, PLAYER_GREETING_FEMALE1);
+            break;
+        case AT_GOODBYE1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_GOODBYE1);
+            else
+                SetAction(o, PLAYER_GOODBYE_FEMALE1);
+            break;
+        case AT_CLAP1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_CLAP1);
+            else
+                SetAction(o, PLAYER_CLAP_FEMALE1);
+            break;
+        case AT_GESTURE1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_GESTURE1);
+            else
+                SetAction(o, PLAYER_GESTURE_FEMALE1);
+            break;
+        case AT_DIRECTION1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_DIRECTION1);
+            else
+                SetAction(o, PLAYER_DIRECTION_FEMALE1);
+            break;
+        case AT_UNKNOWN1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_UNKNOWN1);
+            else
+                SetAction(o, PLAYER_UNKNOWN_FEMALE1);
+            break;
+        case AT_CRY1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_CRY1);
+            else
+                SetAction(o, PLAYER_CRY_FEMALE1);
+            break;
+        case AT_AWKWARD1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_AWKWARD1);
+            else
+                SetAction(o, PLAYER_AWKWARD_FEMALE1);
+            break;
+        case AT_SEE1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_SEE1);
+            else
+                SetAction(o, PLAYER_SEE_FEMALE1);
+            break;
+        case AT_CHEER1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_CHEER1);
+            else
+                SetAction(o, PLAYER_CHEER_FEMALE1);
+            break;
+        case AT_WIN1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_WIN1);
+            else
+                SetAction(o, PLAYER_WIN_FEMALE1);
+            break;
+        case AT_SMILE1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_SMILE1);
+            else
+                SetAction(o, PLAYER_SMILE_FEMALE1);
+            break;
+        case AT_SLEEP1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_SLEEP1);
+            else
+                SetAction(o, PLAYER_SLEEP_FEMALE1);
+            break;
+        case AT_COLD1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_COLD1);
+            else
+                SetAction(o, PLAYER_COLD_FEMALE1);
+            break;
+        case AT_AGAIN1:
+            if (!gCharacterManager.IsFemale(c->Class))
+                SetAction(o, PLAYER_AGAIN1);
+            else
+                SetAction(o, PLAYER_AGAIN_FEMALE1);
+            break;
+        case AT_RESPECT1:
+            SetAction(o, PLAYER_RESPECT1);
+            break;
+        case AT_SALUTE1:
+            SetAction(o, PLAYER_SALUTE1);
+            break;
+        case AT_RUSH1:
+            SetAction(o, PLAYER_RUSH1);
+            break;
+        case AT_SCISSORS:
+            SetAction(o, PLAYER_SCISSORS);
+            break;
+        case AT_ROCK:
+            SetAction(o, PLAYER_ROCK);
+            break;
+        case AT_PAPER:
+            SetAction(o, PLAYER_PAPER);
+            break;
+        case AT_HUSTLE:
+            SetAction(o, PLAYER_HUSTLE);
+            break;
+        case AT_DAMAGE1:
+            SetAction(&c->Object, MONSTER01_SHOCK);
+            break;
+        case AT_PROVOCATION:
+            SetAction(o, PLAYER_PROVOCATION);
+            break;
+        case AT_LOOK_AROUND:
+            SetAction(o, PLAYER_LOOK_AROUND);
+            break;
+        case AT_CHEERS:
+            SetAction(o, PLAYER_CHEERS);
+            break;
+        case AT_JACK1:
+            SetAction(o, PLAYER_JACK_1);
+            o->m_iAnimation = 0;
+            break;
+        case AT_JACK2:
+            SetAction(o, PLAYER_JACK_2);
+            o->m_iAnimation = 0;
+            break;
+        case AT_SANTA1_1:
+        case AT_SANTA1_2:
+        case AT_SANTA1_3: {
+            SetAction(o, PLAYER_SANTA_1);
+            int i = Data->Action % AT_SANTA1_1;
+            g_XmasEvent->CreateXmasEventEffect(c, o, i);
+            o->m_iAnimation = 0;
+            PlayBuffer(static_cast<ESound>(SOUND_XMAS_JUMP_SANTA + i));
         }
-
-        AttackPlayer = Index;
         break;
-    case AT_SKILL_BLOCKING:
-        SetAction(o, PLAYER_DEFENSE1);
-        PlayBuffer(SOUND_SKILL_DEFENSE);
+        case AT_SANTA2_1:
+        case AT_SANTA2_2:
+        case AT_SANTA2_3: {
+            SetAction(o, PLAYER_SANTA_2);
+            int i = Data->Action % AT_SANTA2_1;
+            g_XmasEvent->CreateXmasEventEffect(c, o, i);
+            o->m_iAnimation = 0;
+            PlayBuffer(SOUND_XMAS_TURN);
+        }
         break;
-    case AT_SIT1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(&c->Object, PLAYER_SIT1);
-        else
-            SetAction(&c->Object, PLAYER_SIT_FEMALE1);
+        case AT_RAGEBUFF_1: {
+            SetAction(o, PLAYER_SKILL_ATT_UP_OURFORCES);
+            PlayBuffer(SOUND_RAGESKILL_BUFF_1);
+        }
         break;
-    case AT_POSE1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(&c->Object, PLAYER_POSE1);
-        else
-            SetAction(&c->Object, PLAYER_POSE_FEMALE1);
+        case AT_RAGEBUFF_2: {
+            SetAction(o, PLAYER_SKILL_HP_UP_OURFORCES);
+            PlayBuffer(SOUND_RAGESKILL_BUFF_2);
+        }
         break;
-    case AT_HEALING1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(&c->Object, PLAYER_HEALING1);
-        else
-            SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
-        break;
-    case AT_GREETING1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_GREETING1);
-        else
-            SetAction(o, PLAYER_GREETING_FEMALE1);
-        break;
-    case AT_GOODBYE1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_GOODBYE1);
-        else
-            SetAction(o, PLAYER_GOODBYE_FEMALE1);
-        break;
-    case AT_CLAP1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_CLAP1);
-        else
-            SetAction(o, PLAYER_CLAP_FEMALE1);
-        break;
-    case AT_GESTURE1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_GESTURE1);
-        else
-            SetAction(o, PLAYER_GESTURE_FEMALE1);
-        break;
-    case AT_DIRECTION1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_DIRECTION1);
-        else
-            SetAction(o, PLAYER_DIRECTION_FEMALE1);
-        break;
-    case AT_UNKNOWN1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_UNKNOWN1);
-        else
-            SetAction(o, PLAYER_UNKNOWN_FEMALE1);
-        break;
-    case AT_CRY1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_CRY1);
-        else
-            SetAction(o, PLAYER_CRY_FEMALE1);
-        break;
-    case AT_AWKWARD1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_AWKWARD1);
-        else
-            SetAction(o, PLAYER_AWKWARD_FEMALE1);
-        break;
-    case AT_SEE1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_SEE1);
-        else
-            SetAction(o, PLAYER_SEE_FEMALE1);
-        break;
-    case AT_CHEER1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_CHEER1);
-        else
-            SetAction(o, PLAYER_CHEER_FEMALE1);
-        break;
-    case AT_WIN1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_WIN1);
-        else
-            SetAction(o, PLAYER_WIN_FEMALE1);
-        break;
-    case AT_SMILE1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_SMILE1);
-        else
-            SetAction(o, PLAYER_SMILE_FEMALE1);
-        break;
-    case AT_SLEEP1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_SLEEP1);
-        else
-            SetAction(o, PLAYER_SLEEP_FEMALE1);
-        break;
-    case AT_COLD1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_COLD1);
-        else
-            SetAction(o, PLAYER_COLD_FEMALE1);
-        break;
-    case AT_AGAIN1:
-        if (!gCharacterManager.IsFemale(c->Class))
-            SetAction(o, PLAYER_AGAIN1);
-        else
-            SetAction(o, PLAYER_AGAIN_FEMALE1);
-        break;
-    case AT_RESPECT1:
-        SetAction(o, PLAYER_RESPECT1);
-        break;
-    case AT_SALUTE1:
-        SetAction(o, PLAYER_SALUTE1);
-        break;
-    case AT_RUSH1:
-        SetAction(o, PLAYER_RUSH1);
-        break;
-    case AT_SCISSORS:
-        SetAction(o, PLAYER_SCISSORS);
-        break;
-    case AT_ROCK:
-        SetAction(o, PLAYER_ROCK);
-        break;
-    case AT_PAPER:
-        SetAction(o, PLAYER_PAPER);
-        break;
-    case AT_HUSTLE:
-        SetAction(o, PLAYER_HUSTLE);
-        break;
-    case AT_DAMAGE1:
-        SetAction(&c->Object, MONSTER01_SHOCK);
-        break;
-    case AT_PROVOCATION:
-        SetAction(o, PLAYER_PROVOCATION);
-        break;
-    case AT_LOOK_AROUND:
-        SetAction(o, PLAYER_LOOK_AROUND);
-        break;
-    case AT_CHEERS:
-        SetAction(o, PLAYER_CHEERS);
-        break;
-    case AT_JACK1:
-        SetAction(o, PLAYER_JACK_1);
-        o->m_iAnimation = 0;
-        break;
-    case AT_JACK2:
-        SetAction(o, PLAYER_JACK_2);
-        o->m_iAnimation = 0;
-        break;
-    case AT_SANTA1_1:
-    case AT_SANTA1_2:
-    case AT_SANTA1_3:
-    {
-        SetAction(o, PLAYER_SANTA_1);
-        int i = Data->Action % AT_SANTA1_1;
-        g_XmasEvent->CreateXmasEventEffect(c, o, i);
-        o->m_iAnimation = 0;
-        PlayBuffer(static_cast<ESound>(SOUND_XMAS_JUMP_SANTA + i));
-    }
-    break;
-    case AT_SANTA2_1:
-    case AT_SANTA2_2:
-    case AT_SANTA2_3:
-    {
-        SetAction(o, PLAYER_SANTA_2);
-        int i = Data->Action % AT_SANTA2_1;
-        g_XmasEvent->CreateXmasEventEffect(c, o, i);
-        o->m_iAnimation = 0;
-        PlayBuffer(SOUND_XMAS_TURN);
-    }
-    break;
-    case AT_RAGEBUFF_1:
-    {
-        SetAction(o, PLAYER_SKILL_ATT_UP_OURFORCES);
-        PlayBuffer(SOUND_RAGESKILL_BUFF_1);
-    }
-    break;
-    case AT_RAGEBUFF_2:
-    {
-        SetAction(o, PLAYER_SKILL_HP_UP_OURFORCES);
-        PlayBuffer(SOUND_RAGESKILL_BUFF_2);
-    }
-    break;
-    default:
-        SetAction(&c->Object, Data->Action);
-        break;
+        default:
+            SetAction(&c->Object, Data->Action);
+            break;
     }
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x18 [ReceiveAction(%d)]", Data->Angle);
@@ -3882,22 +3918,22 @@ void ReceiveAction(const BYTE* ReceiveBuffer, int Size)
 
 void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_VIEWSKILLSTATE)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
-    OBJECT* o = &c->Object;
+    auto       Data = (LPPMSG_VIEWSKILLSTATE)ReceiveBuffer;
+    int        Key  = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    CHARACTER* c    = &CharactersClient[FindCharacterIndex(Key)];
+    OBJECT*    o    = &c->Object;
 
-    if (Data->State == 1) // add
+    if (Data->State == 1)  // add
     {
         auto bufftype = static_cast<eBuffState>(Data->BuffIndex);
 
-        if (bufftype == eBuffNone || bufftype >= eBuff_Count) return;
+        if (bufftype == eBuffNone || bufftype >= eBuff_Count)
+            return;
 
         if (g_isCharacterBuff(o, bufftype))
         {
-            if ((o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
-                || MODEL_SMITH || MODEL_NPC_SERBIS || MODEL_MERCHANT_MAN
-                || MODEL_STORAGE || MODEL_NPC_BREEDER)
+            if ((o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5) || MODEL_SMITH ||
+                MODEL_NPC_SERBIS || MODEL_MERCHANT_MAN || MODEL_STORAGE || MODEL_NPC_BREEDER)
             {
                 if (g_isCharacterBuff(o, eBuff_CrywolfHeroContracted))
                 {
@@ -3913,8 +3949,8 @@ void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
         else
         {
             RegisterBuff(bufftype, o);
-            if (bufftype == eBuff_CastleRegimentDefense || bufftype == eBuff_CastleRegimentAttack1
-                || bufftype == eBuff_CastleRegimentAttack2 || bufftype == eBuff_CastleRegimentAttack3)
+            if (bufftype == eBuff_CastleRegimentDefense || bufftype == eBuff_CastleRegimentAttack1 ||
+                bufftype == eBuff_CastleRegimentAttack2 || bufftype == eBuff_CastleRegimentAttack3)
             {
                 battleCastle::SettingBattleFormation(c, bufftype);
             }
@@ -3930,19 +3966,21 @@ void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
             g_ConsoleDebug->Write(MCD_RECEIVE, L"RegisterBuff ID : %ls, Buff : %d", c->ID, static_cast<int>(bufftype));
         }
     }
-    else // clear
+    else  // clear
     {
         auto bufftype = static_cast<eBuffState>(Data->BuffIndex);
 
-        if (bufftype == eBuffNone || bufftype >= eBuff_Count) return;
+        if (bufftype == eBuffNone || bufftype >= eBuff_Count)
+            return;
 
         UnRegisterBuff(bufftype, o);
-        if (bufftype == eBuff_CastleRegimentDefense || bufftype == eBuff_CastleRegimentAttack1
-            || bufftype == eBuff_CastleRegimentAttack2 || bufftype == eBuff_CastleRegimentAttack3)
+        if (bufftype == eBuff_CastleRegimentDefense || bufftype == eBuff_CastleRegimentAttack1 ||
+            bufftype == eBuff_CastleRegimentAttack2 || bufftype == eBuff_CastleRegimentAttack3)
         {
             battleCastle::DeleteBattleFormation(c, bufftype);
 
-            g_ConsoleDebug->Write(MCD_RECEIVE, L"UnRegisterBuff ID : %ls, Buff : %d", c->ID, static_cast<int>(bufftype));
+            g_ConsoleDebug->Write(MCD_RECEIVE, L"UnRegisterBuff ID : %ls, Buff : %d", c->ID,
+                                  static_cast<int>(bufftype));
         }
         else if (bufftype == eBuff_GMEffect)
         {
@@ -3953,113 +3991,114 @@ void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
 
 void ReceiveMagicFinish(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT_VALUE_KEY)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    OBJECT* o = &CharactersClient[FindCharacterIndex(Key)].Object;
+    auto    Data = (LPPHEADER_DEFAULT_VALUE_KEY)ReceiveBuffer;
+    int     Key  = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    OBJECT* o    = &CharactersClient[FindCharacterIndex(Key)].Object;
 
-    switch ((ActionSkillType)Data->Value) // todo: is this correct? Data->Value is a byte, but ActionSkillType is an int
+    switch (
+        (ActionSkillType)Data->Value)  // todo: is this correct? Data->Value is a byte, but ActionSkillType is an int
     {
-    case AT_SKILL_POISON:
-    case AT_SKILL_POISON_STR:
-        UnRegisterBuff(eDeBuff_Poison, o);
-        break;
-    case AT_SKILL_ICE:
-    case AT_SKILL_ICE_STR:
-    case AT_SKILL_ICE_STR_MG:
-        UnRegisterBuff(eDeBuff_Freeze, o);
-        break;
-    case AT_SKILL_STRIKE_OF_DESTRUCTION:
-    case AT_SKILL_STRIKE_OF_DESTRUCTION_STR:
-        UnRegisterBuff(eDeBuff_BlowOfDestruction, o);
-        break;
-    case AT_SKILL_ATTACK:
-    case AT_SKILL_ATTACK_STR:
-    case AT_SKILL_ATTACK_MASTERY:
-        UnRegisterBuff(eBuff_Attack, o);
-        break;
-    case AT_SKILL_DEFENSE:
-    case AT_SKILL_DEFENSE_STR:
-    case AT_SKILL_DEFENSE_MASTERY:
-        UnRegisterBuff(eBuff_Defense, o);
-        break;
-    case AT_SKILL_STUN:
-        UnRegisterBuff(eDeBuff_Stun, o);
-        break;
-    case AT_SKILL_INVISIBLE:
-        UnRegisterBuff(eBuff_Cloaking, o);
-        break;
-    case AT_SKILL_MANA:
-        UnRegisterBuff(eBuff_AddMana, o);
-        break;
-    case AT_SKILL_BRAND_OF_SKILL:
-        UnRegisterBuff(eBuff_AddSkill, o);
-        break;
-    case AT_SKILL_IMPROVE_AG:
-        UnRegisterBuff(eBuff_AddAG, o);
-        break;
-    case AT_SKILL_ADD_CRITICAL:
-    case AT_SKILL_ADD_CRITICAL_STR1:
-    case AT_SKILL_ADD_CRITICAL_STR2:
-    case AT_SKILL_ADD_CRITICAL_STR3:
-        UnRegisterBuff(eBuff_AddCriticalDamage, o);
-        break;
-    case AT_SKILL_SWELL_LIFE:
-    case AT_SKILL_SWELL_LIFE_STR:
-    case AT_SKILL_SWELL_LIFE_PROFICIENCY:
-        UnRegisterBuff(eBuff_Life, o);
-        break;
-    case AT_SKILL_ICE_ARROW:
-    case AT_SKILL_ICE_ARROW_STR:
-        UnRegisterBuff(eDeBuff_Harden, o);
-        break;
-    case AT_SKILL_FIRE_SLASH:
-    case AT_SKILL_FIRE_SLASH_STR:
-        UnRegisterBuff(eDeBuff_Defense, o);
-        break;
-    case AT_SKILL_SOUL_BARRIER:
-    case AT_SKILL_SOUL_BARRIER_STR:
-    case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
-        UnRegisterBuff(eBuff_WizDefense, o);
-        break;
-    case AT_SKILL_DECAY:
-    case AT_SKILL_DECAY_STR:
-        UnRegisterBuff(eDeBuff_Poison, o);
-        break;
-    case AT_SKILL_ICE_STORM:
-        UnRegisterBuff(eDeBuff_Freeze, o);
-        break;
-    case AT_SKILL_MONSTER_MAGIC_DEF:
-        SetActionDestroy_Def(o);
-        UnRegisterBuff(eBuff_Defense, o);
-        break;
-    case AT_SKILL_MONSTER_PHY_DEF:
-        SetActionDestroy_Def(o);
-        UnRegisterBuff(eBuff_WizDefense, o);
-        break;
-    case AT_SKILL_ATT_UP_OURFORCES:
-        UnRegisterBuff(eBuff_Att_up_Ourforces, o);
-        break;
-    case AT_SKILL_HP_UP_OURFORCES:
-    case AT_SKILL_HP_UP_OURFORCES_STR:
-        UnRegisterBuff(eBuff_Hp_up_Ourforces, o);
-        break;
-    case AT_SKILL_DEF_UP_OURFORCES:
-    case AT_SKILL_DEF_UP_OURFORCES_STR:
-    case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
-        UnRegisterBuff(eBuff_Def_up_Ourforces, o);
-        break;
-    case AT_SKILL_ALICE_THORNS:
-        UnRegisterBuff(eBuff_Thorns, o);
-        break;
-    case AT_SKILL_EXPANSION_OF_WIZARDRY:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY:
-        UnRegisterBuff(eBuff_SwellOfMagicPower, o);
-        break;
-    case AT_SKILL_ALICE_BERSERKER:
-    case AT_SKILL_ALICE_BERSERKER_STR:
-        UnRegisterBuff(eBuff_Berserker, o);
-        break;
+        case AT_SKILL_POISON:
+        case AT_SKILL_POISON_STR:
+            UnRegisterBuff(eDeBuff_Poison, o);
+            break;
+        case AT_SKILL_ICE:
+        case AT_SKILL_ICE_STR:
+        case AT_SKILL_ICE_STR_MG:
+            UnRegisterBuff(eDeBuff_Freeze, o);
+            break;
+        case AT_SKILL_STRIKE_OF_DESTRUCTION:
+        case AT_SKILL_STRIKE_OF_DESTRUCTION_STR:
+            UnRegisterBuff(eDeBuff_BlowOfDestruction, o);
+            break;
+        case AT_SKILL_ATTACK:
+        case AT_SKILL_ATTACK_STR:
+        case AT_SKILL_ATTACK_MASTERY:
+            UnRegisterBuff(eBuff_Attack, o);
+            break;
+        case AT_SKILL_DEFENSE:
+        case AT_SKILL_DEFENSE_STR:
+        case AT_SKILL_DEFENSE_MASTERY:
+            UnRegisterBuff(eBuff_Defense, o);
+            break;
+        case AT_SKILL_STUN:
+            UnRegisterBuff(eDeBuff_Stun, o);
+            break;
+        case AT_SKILL_INVISIBLE:
+            UnRegisterBuff(eBuff_Cloaking, o);
+            break;
+        case AT_SKILL_MANA:
+            UnRegisterBuff(eBuff_AddMana, o);
+            break;
+        case AT_SKILL_BRAND_OF_SKILL:
+            UnRegisterBuff(eBuff_AddSkill, o);
+            break;
+        case AT_SKILL_IMPROVE_AG:
+            UnRegisterBuff(eBuff_AddAG, o);
+            break;
+        case AT_SKILL_ADD_CRITICAL:
+        case AT_SKILL_ADD_CRITICAL_STR1:
+        case AT_SKILL_ADD_CRITICAL_STR2:
+        case AT_SKILL_ADD_CRITICAL_STR3:
+            UnRegisterBuff(eBuff_AddCriticalDamage, o);
+            break;
+        case AT_SKILL_SWELL_LIFE:
+        case AT_SKILL_SWELL_LIFE_STR:
+        case AT_SKILL_SWELL_LIFE_PROFICIENCY:
+            UnRegisterBuff(eBuff_Life, o);
+            break;
+        case AT_SKILL_ICE_ARROW:
+        case AT_SKILL_ICE_ARROW_STR:
+            UnRegisterBuff(eDeBuff_Harden, o);
+            break;
+        case AT_SKILL_FIRE_SLASH:
+        case AT_SKILL_FIRE_SLASH_STR:
+            UnRegisterBuff(eDeBuff_Defense, o);
+            break;
+        case AT_SKILL_SOUL_BARRIER:
+        case AT_SKILL_SOUL_BARRIER_STR:
+        case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
+            UnRegisterBuff(eBuff_WizDefense, o);
+            break;
+        case AT_SKILL_DECAY:
+        case AT_SKILL_DECAY_STR:
+            UnRegisterBuff(eDeBuff_Poison, o);
+            break;
+        case AT_SKILL_ICE_STORM:
+            UnRegisterBuff(eDeBuff_Freeze, o);
+            break;
+        case AT_SKILL_MONSTER_MAGIC_DEF:
+            SetActionDestroy_Def(o);
+            UnRegisterBuff(eBuff_Defense, o);
+            break;
+        case AT_SKILL_MONSTER_PHY_DEF:
+            SetActionDestroy_Def(o);
+            UnRegisterBuff(eBuff_WizDefense, o);
+            break;
+        case AT_SKILL_ATT_UP_OURFORCES:
+            UnRegisterBuff(eBuff_Att_up_Ourforces, o);
+            break;
+        case AT_SKILL_HP_UP_OURFORCES:
+        case AT_SKILL_HP_UP_OURFORCES_STR:
+            UnRegisterBuff(eBuff_Hp_up_Ourforces, o);
+            break;
+        case AT_SKILL_DEF_UP_OURFORCES:
+        case AT_SKILL_DEF_UP_OURFORCES_STR:
+        case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
+            UnRegisterBuff(eBuff_Def_up_Ourforces, o);
+            break;
+        case AT_SKILL_ALICE_THORNS:
+            UnRegisterBuff(eBuff_Thorns, o);
+            break;
+        case AT_SKILL_EXPANSION_OF_WIZARDRY:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY:
+            UnRegisterBuff(eBuff_SwellOfMagicPower, o);
+            break;
+        case AT_SKILL_ALICE_BERSERKER:
+        case AT_SKILL_ALICE_BERSERKER_STR:
+            UnRegisterBuff(eBuff_Berserker, o);
+            break;
     }
 }
 
@@ -4074,44 +4113,44 @@ void SetPlayerBow(CHARACTER* c)
 
     switch (gCharacterManager.GetEquipedBowType(c))
     {
-    case BOWTYPE_BOW:
-    {
-        if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
-        {
-            SetAction(&c->Object, PLAYER_FENRIR_ATTACK_BOW);
+        case BOWTYPE_BOW: {
+            if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
+            {
+                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_BOW);
+            }
+            else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW);
+            }
+            else if (c->Wing.Type != -1)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_FLY_BOW);
+            }
+            else
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_BOW);
+            }
         }
-        else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW);
+        break;
+        case BOWTYPE_CROSSBOW: {
+            if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
+            {
+                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW);
+            }
+            else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW);
+            }
+            else if (c->Wing.Type != -1)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_FLY_CROSSBOW);
+            }
+            else
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_CROSSBOW);
+            }
         }
-        else if (c->Wing.Type != -1)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_FLY_BOW);
-        }
-        else
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_BOW);
-        }
-    }break;
-    case BOWTYPE_CROSSBOW:
-    {
-        if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
-        {
-            SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW);
-        }
-        else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW);
-        }
-        else if (c->Wing.Type != -1)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_FLY_CROSSBOW);
-        }
-        else
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_CROSSBOW);
-        }
-    }break;
+        break;
     }
 }
 
@@ -4119,44 +4158,44 @@ void SetPlayerHighBow(CHARACTER* c)
 {
     switch (gCharacterManager.GetEquipedBowType(c))
     {
-    case BOWTYPE_BOW:
-    {
-        if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW_UP);
+        case BOWTYPE_BOW: {
+            if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW_UP);
+            }
+            else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW_UP);
+            }
+            else if (c->Wing.Type != -1)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_FLY_BOW_UP);
+            }
+            else
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_BOW_UP);
+            }
         }
-        else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_BOW_UP);
+        break;
+        case BOWTYPE_CROSSBOW: {
+            if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW_UP);
+            }
+            else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW_UP);
+            }
+            else if (c->Wing.Type != -1)
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_FLY_CROSSBOW_UP);
+            }
+            else
+            {
+                SetAction(&c->Object, PLAYER_ATTACK_CROSSBOW_UP);
+            }
         }
-        else if (c->Wing.Type != -1)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_FLY_BOW_UP);
-        }
-        else
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_BOW_UP);
-        }
-    }break;
-    case BOWTYPE_CROSSBOW:
-    {
-        if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW_UP);
-        }
-        else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA) || (c->Helper.Type == MODEL_HORN_OF_DINORANT))
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_RIDE_CROSSBOW_UP);
-        }
-        else if (c->Wing.Type != -1)
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_FLY_CROSSBOW_UP);
-        }
-        else
-        {
-            SetAction(&c->Object, PLAYER_ATTACK_CROSSBOW_UP);
-        }
-    }break;
+        break;
     }
 }
 
@@ -4166,11 +4205,11 @@ BOOL ReceiveMonsterSkill(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     int SourceKey = Data->SourceKey;
     int TargetKey = Data->TargetKey;
-    int Success = (TargetKey >> 15);
+    int Success   = (TargetKey >> 15);
 
     WORD SkillNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
 
-    int Index = FindCharacterIndex(SourceKey);
+    int Index       = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
     if (TargetIndex == MAX_CHARACTERS_CLIENT)
         return (TRUE);
@@ -4178,12 +4217,12 @@ BOOL ReceiveMonsterSkill(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     CHARACTER* sc = &CharactersClient[Index];
     CHARACTER* tc = &CharactersClient[TargetIndex];
-    OBJECT* so = &sc->Object;
-    OBJECT* to = &tc->Object;
+    OBJECT*    so = &sc->Object;
+    OBJECT*    to = &tc->Object;
 
     sc->MonsterSkill = SkillNumber;
 
-    sc->SkillSuccess = (Success != 0);
+    sc->SkillSuccess    = (Success != 0);
     sc->TargetCharacter = TargetIndex;
 
     if (SkillNumber > ATMON_SKILL_BIGIN && SkillNumber < ATMON_SKILL_END)
@@ -4191,29 +4230,27 @@ BOOL ReceiveMonsterSkill(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         sc->Object.Angle[2] = CreateAngle2D(so->Position, to->Position);
         SetPlayerAttack(sc);
         so->AnimationFrame = 0;
-        sc->AttackTime = 1;
+        sc->AttackTime     = 1;
     }
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x69 [ReceiveMonsterSkill(Skill : %d | SKey : %d |TKey : %d)]", SkillNumber, SourceKey, TargetKey);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x69 [ReceiveMonsterSkill(Skill : %d | SKey : %d |TKey : %d)]", SkillNumber,
+                          SourceKey, TargetKey);
 
     return (TRUE);
 }
 
 BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 {
-    auto Data = (LPPRECEIVE_MAGIC)ReceiveBuffer;
-    int SourceKey = ((int)(Data->SourceKeyH) << 8) + Data->SourceKeyL;
-    int TargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
-    int Success = (TargetKey >> 15);
+    auto Data      = (LPPRECEIVE_MAGIC)ReceiveBuffer;
+    int  SourceKey = ((int)(Data->SourceKeyH) << 8) + Data->SourceKeyL;
+    int  TargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
+    int  Success   = (TargetKey >> 15);
 
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
 
-    if (MagicNumber == AT_SKILL_ATTACK
-        || MagicNumber == AT_SKILL_DEFENSE
-        || MagicNumber == AT_SKILL_ATTACK_STR
-        || MagicNumber == AT_SKILL_DEFENSE_STR
-        || MagicNumber == AT_SKILL_ATTACK_MASTERY
-        || MagicNumber == AT_SKILL_DEFENSE_MASTERY)
+    if (MagicNumber == AT_SKILL_ATTACK || MagicNumber == AT_SKILL_DEFENSE || MagicNumber == AT_SKILL_ATTACK_STR ||
+        MagicNumber == AT_SKILL_DEFENSE_STR || MagicNumber == AT_SKILL_ATTACK_MASTERY ||
+        MagicNumber == AT_SKILL_DEFENSE_MASTERY)
     {
         if (Success == false)
         {
@@ -4227,16 +4264,16 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     TargetKey &= 0x7FFF;
 
-    int Index = FindCharacterIndex(SourceKey);
+    int Index       = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
     if (TargetIndex == MAX_CHARACTERS_CLIENT)
         return (TRUE);
 
-    AttackPlayer = Index;
+    AttackPlayer  = Index;
     CHARACTER* sc = &CharactersClient[Index];
     CHARACTER* tc = &CharactersClient[TargetIndex];
-    OBJECT* so = &sc->Object;
-    OBJECT* to = &tc->Object;
+    OBJECT*    so = &sc->Object;
+    OBJECT*    to = &tc->Object;
 
     if (MagicNumber != AT_SKILL_COMBO)
     {
@@ -4248,1006 +4285,987 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
             sc->m_iFenrirSkillTarget = TargetIndex;
 
         sc->SkillSuccess = (Success != 0);
-        sc->Skill = MagicNumber;
+        sc->Skill        = MagicNumber;
     }
     switch (MagicNumber)
     {
-    case AT_SKILL_MONSTER_SUMMON:
-        SetPlayerAttack(sc);
-        break;
-    case AT_SKILL_RECOVER:
-    {
-        OBJECT* oh = &Hero->Object;
-        OBJECT* o = so;
-        vec3_t Light, Position, P, dp;
-        vec3_t vFirePosition;
+        case AT_SKILL_MONSTER_SUMMON:
+            SetPlayerAttack(sc);
+            break;
+        case AT_SKILL_RECOVER: {
+            OBJECT* oh = &Hero->Object;
+            OBJECT* o  = so;
+            vec3_t  Light, Position, P, dp;
+            vec3_t  vFirePosition;
 
-        float Matrix[3][4];
+            float Matrix[3][4];
 
-        if (sc != Hero)
-        {
-            Vector(0.f, -220.f, 130.f, P);
+            if (sc != Hero)
+            {
+                Vector(0.f, -220.f, 130.f, P);
+                AngleMatrix(o->Angle, Matrix);
+                VectorRotate(P, Matrix, dp);
+                VectorAdd(dp, o->Position, Position);
+                Vector(0.7f, 0.6f, 0.f, Light);
+                CreateEffect(BITMAP_IMPACT, Position, o->Angle, Light, 0, o);
+                SetAction(o, PLAYER_RECOVER_SKILL);
+                sc->AttackTime = 1;
+            }
+
+            o = to;
+
+            Vector(0.4f, 0.6f, 1.f, Light);
+            Vector(0.f, 0.f, 0.f, P);
             AngleMatrix(o->Angle, Matrix);
             VectorRotate(P, Matrix, dp);
             VectorAdd(dp, o->Position, Position);
-            Vector(0.7f, 0.6f, 0.f, Light);
-            CreateEffect(BITMAP_IMPACT, Position, o->Angle, Light, 0, o);
-            SetAction(o, PLAYER_RECOVER_SKILL);
+            Position[2] += 130;
+            VectorCopy(o->Position, Position);
+            for (int i = 0; i < 19; ++i)
+            {
+                CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 47, o, 40, 2);
+            }
+            Vector(0.3f, 0.2f, 0.1f, Light);
+            CreateEffect(MODEL_SUMMON, Position, o->Angle, Light, 0);
+            CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 0);
+            CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 1);
+            CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 2);
+
+            for (int i = 0; i < 2; ++i)
+            {
+                int iNumBones = Models[o->Type].NumBones;
+                Models[o->Type].TransformByObjectBone(vFirePosition, o, rand() % iNumBones);
+                CreateEffect(BITMAP_FLARE, vFirePosition, o->Angle, Light, 3);
+            }
+        }
+
+        break;
+        case AT_SKILL_MONSTER_MAGIC_DEF:
             sc->AttackTime = 1;
-        }
+            g_CharacterRegisterBuff(so, eBuff_WizDefense);
+            SetPlayerAttack(sc);
+            break;
 
-        o = to;
-
-        Vector(0.4f, 0.6f, 1.f, Light);
-        Vector(0.f, 0.f, 0.f, P);
-        AngleMatrix(o->Angle, Matrix);
-        VectorRotate(P, Matrix, dp);
-        VectorAdd(dp, o->Position, Position);
-        Position[2] += 130;
-        VectorCopy(o->Position, Position);
-        for (int i = 0; i < 19; ++i)
-        {
-            CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 47, o, 40, 2);
-        }
-        Vector(0.3f, 0.2f, 0.1f, Light);
-        CreateEffect(MODEL_SUMMON, Position, o->Angle, Light, 0);
-        CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 0);
-        CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 1);
-        CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 2);
-
-        for (int i = 0; i < 2; ++i)
-        {
-            int iNumBones = Models[o->Type].NumBones;
-            Models[o->Type].TransformByObjectBone(vFirePosition, o, rand() % iNumBones);
-            CreateEffect(BITMAP_FLARE, vFirePosition, o->Angle, Light, 3);
-        }
-    }
-
-    break;
-    case AT_SKILL_MONSTER_MAGIC_DEF:
-        sc->AttackTime = 1;
-        g_CharacterRegisterBuff(so, eBuff_WizDefense);
-        SetPlayerAttack(sc);
-        break;
-
-    case AT_SKILL_MONSTER_PHY_DEF:
-        sc->AttackTime = 1;
-        g_CharacterRegisterBuff(so, eBuff_Defense);
-        SetPlayerAttack(sc);
-        break;
-    case AT_SKILL_HEALING:
-    case AT_SKILL_HEALING_STR:
-    case AT_SKILL_ATTACK:
-    case AT_SKILL_ATTACK_STR:
-    case AT_SKILL_ATTACK_MASTERY:
-    case AT_SKILL_DEFENSE:
-    case AT_SKILL_DEFENSE_STR:
-    case AT_SKILL_DEFENSE_MASTERY:
-    case AT_SKILL_SUMMON:
-    case AT_SKILL_SUMMON + 1:
-    case AT_SKILL_SUMMON + 2:
-    case AT_SKILL_SUMMON + 3:
-    case AT_SKILL_SUMMON + 4:
-    case AT_SKILL_SUMMON + 5:
-    case AT_SKILL_SUMMON + 6:
+        case AT_SKILL_MONSTER_PHY_DEF:
+            sc->AttackTime = 1;
+            g_CharacterRegisterBuff(so, eBuff_Defense);
+            SetPlayerAttack(sc);
+            break;
+        case AT_SKILL_HEALING:
+        case AT_SKILL_HEALING_STR:
+        case AT_SKILL_ATTACK:
+        case AT_SKILL_ATTACK_STR:
+        case AT_SKILL_ATTACK_MASTERY:
+        case AT_SKILL_DEFENSE:
+        case AT_SKILL_DEFENSE_STR:
+        case AT_SKILL_DEFENSE_MASTERY:
+        case AT_SKILL_SUMMON:
+        case AT_SKILL_SUMMON + 1:
+        case AT_SKILL_SUMMON + 2:
+        case AT_SKILL_SUMMON + 3:
+        case AT_SKILL_SUMMON + 4:
+        case AT_SKILL_SUMMON + 5:
+        case AT_SKILL_SUMMON + 6:
 #ifdef ADD_ELF_SUMMON
-    case AT_SKILL_SUMMON + 7:
-#endif // ADD_ELF_SUMMON
-        if (sc->MonsterIndex != MONSTER_DARK_PHOENIX)
-        {
-            PlayBuffer(SOUND_SKILL_DEFENSE);
-        }
-    case AT_SKILL_SOUL_BARRIER:
-    case AT_SKILL_SOUL_BARRIER_STR:
-    case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
-        if (sc != Hero)
-        {
-            SetPlayerMagic(sc);
-            so->AnimationFrame = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_LIGHTNING:
-    case AT_SKILL_LIGHTNING_STR:
-    case AT_SKILL_LIGHTNING_STR_MG:
-        if (so->Type != MODEL_QUEEN_BEE)
-            PlayBuffer(SOUND_THUNDER01);
-        if (to->CurrentAction == PLAYER_POSE1 || to->CurrentAction == PLAYER_POSE_FEMALE1 ||
-            to->CurrentAction == PLAYER_SIT1 || to->CurrentAction == PLAYER_SIT_FEMALE1)
-            SetPlayerStop(tc);
-    case AT_SKILL_FIREBALL:
-    case AT_SKILL_METEO:
-    case AT_SKILL_ICE:
-    case AT_SKILL_ICE_STR:
-    case AT_SKILL_ICE_STR_MG:
-    case AT_SKILL_ENERGYBALL:
-    case AT_SKILL_POWERWAVE:
-    case AT_SKILL_POISON:
-    case AT_SKILL_POISON_STR:
-    case AT_SKILL_FLAME:
-    case AT_SKILL_FLAME_STR:
-    case AT_SKILL_FLAME_STR_MG:
-        if (sc != Hero)
-        {
-            if (so->Type == MODEL_PLAYER)
+        case AT_SKILL_SUMMON + 7:
+#endif  // ADD_ELF_SUMMON
+            if (sc->MonsterIndex != MONSTER_DARK_PHOENIX)
+            {
+                PlayBuffer(SOUND_SKILL_DEFENSE);
+            }
+        case AT_SKILL_SOUL_BARRIER:
+        case AT_SKILL_SOUL_BARRIER_STR:
+        case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
+            if (sc != Hero)
             {
                 SetPlayerMagic(sc);
                 so->AnimationFrame = 0;
             }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_LIGHTNING:
+        case AT_SKILL_LIGHTNING_STR:
+        case AT_SKILL_LIGHTNING_STR_MG:
+            if (so->Type != MODEL_QUEEN_BEE)
+                PlayBuffer(SOUND_THUNDER01);
+            if (to->CurrentAction == PLAYER_POSE1 || to->CurrentAction == PLAYER_POSE_FEMALE1 ||
+                to->CurrentAction == PLAYER_SIT1 || to->CurrentAction == PLAYER_SIT_FEMALE1)
+                SetPlayerStop(tc);
+        case AT_SKILL_FIREBALL:
+        case AT_SKILL_METEO:
+        case AT_SKILL_ICE:
+        case AT_SKILL_ICE_STR:
+        case AT_SKILL_ICE_STR_MG:
+        case AT_SKILL_ENERGYBALL:
+        case AT_SKILL_POWERWAVE:
+        case AT_SKILL_POISON:
+        case AT_SKILL_POISON_STR:
+        case AT_SKILL_FLAME:
+        case AT_SKILL_FLAME_STR:
+        case AT_SKILL_FLAME_STR_MG:
+            if (sc != Hero)
+            {
+                if (so->Type == MODEL_PLAYER)
+                {
+                    SetPlayerMagic(sc);
+                    so->AnimationFrame = 0;
+                }
+                else
+                {
+                    SetPlayerAttack(sc);
+                    so->AnimationFrame = 0;
+                }
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_TELEPORT_ALLY:
+            CreateTeleportBegin(to);
+            CreateTeleportEnd(so);
+
+            PlayBuffer(SOUND_TELEKINESIS, so);
+            break;
+
+        case AT_SKILL_TELEPORT:
+            if (gMapManager.WorldActive == WD_39KANTURU_3RD && so->Type == MODEL_DARK_SKULL_SOLDIER_5)
+            {
+                vec3_t Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
+                so->AlphaTarget = 0.f;
+                CreateEffect(BITMAP_SPARK + 1, so->Position, so->Angle, Light);
+                CreateEffect(BITMAP_SPARK + 1, so->Position, so->Angle, Light);
+                PlayBuffer(SOUND_KANTURU_3RD_NIGHTMARE_TELE);
+            }
             else
+                CreateTeleportBegin(so);
+            break;
+
+        case AT_SKILL_FORCE:
+        case AT_SKILL_FORCE_WAVE:
+        case AT_SKILL_FORCE_WAVE_STR:
+            if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_STRIKE);
+            }
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD1);
+            break;
+        case AT_SKILL_FIREBURST:
+        case AT_SKILL_FIREBURST_STR:
+        case AT_SKILL_FIREBURST_MASTERY:
+            if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_STRIKE);
+            }
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_ATTACK_FIRE_BUST);
+            break;
+
+        case AT_SKILL_FALLING_SLASH:
+        case AT_SKILL_FALLING_SLASH_STR:
+            SetAction(so,
+                      static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_FALLING_SLASH - AT_SKILL_FALLING_SLASH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD1);
+            break;
+
+        case AT_SKILL_LUNGE:
+        case AT_SKILL_LUNGE_STR:
+            SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_LUNGE - AT_SKILL_FALLING_SLASH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD2);
+            break;
+
+        case AT_SKILL_UPPERCUT:
+            SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_UPPERCUT - AT_SKILL_FALLING_SLASH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD3);
+            break;
+
+        case AT_SKILL_CYCLONE:
+        case AT_SKILL_CYCLONE_STR:
+        case AT_SKILL_CYCLONE_STR_MG:
+            SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_CYCLONE - AT_SKILL_FALLING_SLASH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD4);
+            break;
+
+        case AT_SKILL_SLASH:  //베기
+        case AT_SKILL_SLASH_STR:
+            if (sc->SwordCount % 2 == 0)
+            {
+                SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_SLASH - AT_SKILL_FALLING_SLASH);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD1 + 2);
+                //SetAction(so,PLAYER_ATTACK_TWO_HAND_SWORD1+sc->SwordCount%3);
+            }
+            sc->SwordCount++;
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD4);
+            break;
+        case AT_SKILL_POWER_SLASH:
+        case AT_SKILL_POWER_SLASH_STR:
+            SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD_TWO);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD4);
+            break;
+
+        case AT_SKILL_IMPALE:  // 창찌르기
+            if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
+            else
+                SetAction(so, PLAYER_ATTACK_SKILL_SPEAR);
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_DEATHSTAB:
+        case AT_SKILL_DEATHSTAB_STR:
+            SetAction(so, PLAYER_ATTACK_DEATHSTAB);
+            if (sc != Hero && so->Type == MODEL_PLAYER)
+            {
+                so->AnimationFrame = 0;
+            }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_TRIPLE_SHOT:
+        case AT_SKILL_TRIPLE_SHOT_STR:
+        case AT_SKILL_TRIPLE_SHOT_MASTERY:
+            SetPlayerBow(sc);
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_MULTI_SHOT:
+            SetPlayerBow(sc);
+            if (sc != Hero && so->Type == MODEL_PLAYER)
+            {
+                so->AnimationFrame = 0;
+            }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_BLAST_CROSSBOW4:
+            SetPlayerBow(sc);
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_FIRE_SLASH:
+        case AT_SKILL_FIRE_SLASH_STR:
+            if (sc->SkillSuccess)
+            {
+                DeleteEffect(BITMAP_SKULL, to, 0);
+                vec3_t Light = {1.0f, 1.f, 1.f};
+                CreateEffect(BITMAP_SKULL, to->Position, to->Angle, Light, 0, to);
+
+                PlayBuffer(SOUND_BLOODATTACK, to);
+                g_CharacterRegisterBuff(to, eDeBuff_Defense);
+            }
+            if (so->Type != MODEL_PLAYER)
+            {
+                SetPlayerAttack(sc);
+                so->AnimationFrame = 0;
+                sc->AttackTime     = 1;
+            }
+            break;
+
+        case AT_SKILL_PENETRATION:
+        case AT_SKILL_PENETRATION_STR:
+            SetPlayerBow(sc);
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_ICE_ARROW:
+        case AT_SKILL_ICE_ARROW_STR:
+            SetPlayerBow(sc);
+            if (sc->SkillSuccess)
+            {
+                DeleteEffect(MODEL_ICE, to, 1);
+
+                vec3_t Angle;
+                VectorCopy(to->Angle, Angle);
+
+                CreateEffect(MODEL_ICE, to->Position, Angle, to->Light, 1, to);
+
+                Angle[2] += 180.f;
+                CreateEffect(MODEL_ICE, to->Position, Angle, to->Light, 2, to);
+
+                tc->Movement = false;
+                SetPlayerStop(tc);
+
+                g_CharacterRegisterBuff(to, eDeBuff_Harden);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_RUSH:
+            SetAction(so, PLAYER_ATTACK_RUSH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD2);
+            break;
+
+        case AT_SKILL_JAVELIN:
+            if (sc != Hero)
+            {
+                if (so->Type == MODEL_PLAYER)
+                {
+                    SetPlayerMagic(sc);
+                    so->AnimationFrame = 0;
+                }
+            }
+            so->AnimationFrame = 0;
+            sc->AttackTime     = 1;
+            break;
+
+        case AT_SKILL_DEATH_CANNON:
+            SetAction(so, PLAYER_ATTACK_DEATH_CANNON);
+            so->AnimationFrame = 0;
+            sc->AttackTime     = 1;
+            break;
+
+        case AT_SKILL_DEEPIMPACT:
+            SetPlayerHighBow(sc);
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_SPACE_SPLIT:
+            if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_STRIKE);
+            }
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_ATTACK_FIRE_BUST);
+            break;
+
+        case AT_SKILL_BRAND_OF_SKILL:
+
+            g_CharacterRegisterBuff(to, eBuff_AddSkill);
+
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+            {
+                SetAction(so, PLAYER_SKILL_HAND1);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_SPIRAL_SLASH:
+            SetAction(so, PLAYER_ATTACK_ONE_FLASH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD2);
+            break;
+
+        case AT_SKILL_STUN:
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+            {
+                SetAction(so, PLAYER_SKILL_VITALITY);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_REMOVAL_STUN:
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_REMOVAL);
+            }
+
+            if (sc->SkillSuccess)
+            {
+                UnRegisterBuff(eDeBuff_Stun, to);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_INVISIBLE:
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+                SetAction(so, PLAYER_SKILL_VITALITY);
+            if (sc->SkillSuccess)
+            {
+                if (!g_isCharacterBuff(to, eBuff_Cloaking))
+                {
+                    if (so != to)
+                    {
+                        g_CharacterRegisterBuff(to, eBuff_Cloaking);
+                    }
+                }
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_REMOVAL_INVISIBLE:
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+                SetAction(so, PLAYER_ATTACK_REMOVAL);
+            if (sc->SkillSuccess)
+            {
+                UnRegisterBuff(eBuff_Cloaking, to);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_MANA:
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+                SetAction(so, PLAYER_SKILL_VITALITY);
+            if (sc->SkillSuccess)
+            {
+                g_CharacterRegisterBuff(so, eBuff_AddMana);
+
+                CreateEffect(MODEL_MANA_RUNE, so->Position, so->Angle, so->Light);
+            }
+            sc->AttackTime = 1;
+            break;
+
+        case AT_SKILL_REMOVAL_BUFF:
+            if (sc->SkillSuccess)
+            {
+                UnRegisterBuff(eBuff_Attack, to);
+                UnRegisterBuff(eBuff_Defense, to);
+                UnRegisterBuff(eBuff_Life, to);
+                UnRegisterBuff(eBuff_WizDefense, to);
+                UnRegisterBuff(eBuff_AddCriticalDamage, to);
+                UnRegisterBuff(eBuff_AddMana, to);
+            }
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+                SetAction(so, PLAYER_SKILL_VITALITY);
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_IMPROVE_AG:
+            if (!g_isCharacterBuff(to, eBuff_AddAG))
+            {
+                DeleteEffect(BITMAP_LIGHT, to, 2);
+                DeleteJoint(BITMAP_JOINT_HEALING, to, 9);
+
+                CreateEffect(BITMAP_LIGHT, to->Position, to->Angle, to->Light, 2, to);
+            }
+
+            g_CharacterRegisterBuff(to, eBuff_AddAG);
+
+            if (sc != Hero)
+            {
+                SetPlayerMagic(sc);
+                so->AnimationFrame = 0;
+            }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_ADD_CRITICAL:
+            SetAttackSpeed();
+
+            g_CharacterRegisterBuff(to, eBuff_AddCriticalDamage);
+
+            if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
+            }
+            else
+            {
+                SetAction(so, PLAYER_SKILL_HAND1);
+            }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_PARTY_TELEPORT:
+            if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_ATTACK_RIDE_TELEPORT);
+            }
+            else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
+            {
+                SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT);
+            }
+            else
+            {
+                SetAction(so, PLAYER_ATTACK_TELEPORT);
+            }
+            if (so->Type != MODEL_PLAYER)
             {
                 SetPlayerAttack(sc);
                 so->AnimationFrame = 0;
             }
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_TELEPORT_ALLY:
-        CreateTeleportBegin(to);
-        CreateTeleportEnd(so);
-
-        PlayBuffer(SOUND_TELEKINESIS, so);
-        break;
-
-    case AT_SKILL_TELEPORT:
-        if (gMapManager.WorldActive == WD_39KANTURU_3RD && so->Type == MODEL_DARK_SKULL_SOLDIER_5)
-        {
-            vec3_t Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
-            so->AlphaTarget = 0.f;
-            CreateEffect(BITMAP_SPARK + 1, so->Position, so->Angle, Light);
-            CreateEffect(BITMAP_SPARK + 1, so->Position, so->Angle, Light);
-            PlayBuffer(SOUND_KANTURU_3RD_NIGHTMARE_TELE);
-        }
-        else
-            CreateTeleportBegin(so);
-        break;
-
-    case AT_SKILL_FORCE:
-    case AT_SKILL_FORCE_WAVE:
-    case AT_SKILL_FORCE_WAVE_STR:
-        if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_STRIKE);
-        }
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD1);
-        break;
-    case AT_SKILL_FIREBURST:
-    case AT_SKILL_FIREBURST_STR:
-    case AT_SKILL_FIREBURST_MASTERY:
-        if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_STRIKE);
-        }
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_ATTACK_FIRE_BUST);
-        break;
-
-    case AT_SKILL_FALLING_SLASH:
-    case AT_SKILL_FALLING_SLASH_STR:
-        SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_FALLING_SLASH - AT_SKILL_FALLING_SLASH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD1);
-        break;
-
-    case AT_SKILL_LUNGE:
-    case AT_SKILL_LUNGE_STR:
-        SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_LUNGE - AT_SKILL_FALLING_SLASH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD2);
-        break;
-
-    case AT_SKILL_UPPERCUT:
-        SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_UPPERCUT - AT_SKILL_FALLING_SLASH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD3);
-        break;
-
-    case AT_SKILL_CYCLONE:
-    case AT_SKILL_CYCLONE_STR:
-    case AT_SKILL_CYCLONE_STR_MG:
-        SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_CYCLONE - AT_SKILL_FALLING_SLASH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD4);
-        break;
-
-    case AT_SKILL_SLASH://베기
-    case AT_SKILL_SLASH_STR:
-        if (sc->SwordCount % 2 == 0)
-        {
-            SetAction(so, static_cast<int>(PLAYER_ATTACK_SKILL_SWORD1) + AT_SKILL_SLASH - AT_SKILL_FALLING_SLASH);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD1 + 2);
-            //SetAction(so,PLAYER_ATTACK_TWO_HAND_SWORD1+sc->SwordCount%3);
-        }
-        sc->SwordCount++;
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD4);
-        break;
-    case AT_SKILL_POWER_SLASH:
-    case AT_SKILL_POWER_SLASH_STR:
-        SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD_TWO);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD4);
-        break;
-
-    case AT_SKILL_IMPALE:	// 창찌르기
-        if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-            SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
-        else
-            SetAction(so, PLAYER_ATTACK_SKILL_SPEAR);
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_DEATHSTAB:
-    case AT_SKILL_DEATHSTAB_STR:
-        SetAction(so, PLAYER_ATTACK_DEATHSTAB);
-        if (sc != Hero && so->Type == MODEL_PLAYER)
-        {
-            so->AnimationFrame = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_TRIPLE_SHOT:
-    case AT_SKILL_TRIPLE_SHOT_STR:
-    case AT_SKILL_TRIPLE_SHOT_MASTERY:
-        SetPlayerBow(sc);
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_MULTI_SHOT:
-        SetPlayerBow(sc);
-        if (sc != Hero && so->Type == MODEL_PLAYER)
-        {
-            so->AnimationFrame = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_BLAST_CROSSBOW4:
-        SetPlayerBow(sc);
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_FIRE_SLASH:
-    case AT_SKILL_FIRE_SLASH_STR:
-        if (sc->SkillSuccess)
-        {
-            DeleteEffect(BITMAP_SKULL, to, 0);
-            vec3_t Light = { 1.0f, 1.f, 1.f };
-            CreateEffect(BITMAP_SKULL, to->Position, to->Angle, Light, 0, to);
-
-            PlayBuffer(SOUND_BLOODATTACK, to);
-            g_CharacterRegisterBuff(to, eDeBuff_Defense);
-        }
-        if (so->Type != MODEL_PLAYER)
-        {
-            SetPlayerAttack(sc);
-            so->AnimationFrame = 0;
             sc->AttackTime = 1;
-        }
-        break;
-
-    case AT_SKILL_PENETRATION:
-    case AT_SKILL_PENETRATION_STR:
-        SetPlayerBow(sc);
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_ICE_ARROW:
-    case AT_SKILL_ICE_ARROW_STR:
-        SetPlayerBow(sc);
-        if (sc->SkillSuccess)
-        {
-            DeleteEffect(MODEL_ICE, to, 1);
-
-            vec3_t Angle;
-            VectorCopy(to->Angle, Angle);
-
-            CreateEffect(MODEL_ICE, to->Position, Angle, to->Light, 1, to);
-
-            Angle[2] += 180.f;
-            CreateEffect(MODEL_ICE, to->Position, Angle, to->Light, 2, to);
-
-            tc->Movement = false;
-            SetPlayerStop(tc);
-
-            g_CharacterRegisterBuff(to, eDeBuff_Harden);
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_RUSH:
-        SetAction(so, PLAYER_ATTACK_RUSH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD2);
-        break;
-
-    case AT_SKILL_JAVELIN:
-        if (sc != Hero)
-        {
-            if (so->Type == MODEL_PLAYER)
-            {
-                SetPlayerMagic(sc);
-                so->AnimationFrame = 0;
-            }
-        }
-        so->AnimationFrame = 0;
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_DEATH_CANNON:
-        SetAction(so, PLAYER_ATTACK_DEATH_CANNON);
-        so->AnimationFrame = 0;
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_DEEPIMPACT:
-        SetPlayerHighBow(sc);
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_SPACE_SPLIT:
-        if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_STRIKE);
-        }
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_ATTACK_FIRE_BUST);
-        break;
-
-    case AT_SKILL_BRAND_OF_SKILL:
-
-        g_CharacterRegisterBuff(to, eBuff_AddSkill);
-
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-        }
-        else
-        {
-            SetAction(so, PLAYER_SKILL_HAND1);
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_SPIRAL_SLASH:
-        SetAction(so, PLAYER_ATTACK_ONE_FLASH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD2);
-        break;
-
-    case AT_SKILL_STUN:
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                {
-                    SetAction(so, PLAYER_SKILL_VITALITY);
-                }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_REMOVAL_STUN:
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                {
-                    SetAction(so, PLAYER_ATTACK_REMOVAL);
-                }
-
-        if (sc->SkillSuccess)
-        {
-            UnRegisterBuff(eDeBuff_Stun, to);
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_INVISIBLE:
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                    SetAction(so, PLAYER_SKILL_VITALITY);
-        if (sc->SkillSuccess)
-        {
-            if (!g_isCharacterBuff(to, eBuff_Cloaking))
-            {
-                if (so != to)
-                {
-                    g_CharacterRegisterBuff(to, eBuff_Cloaking);
-                }
-            }
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_REMOVAL_INVISIBLE:
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                    SetAction(so, PLAYER_ATTACK_REMOVAL);
-        if (sc->SkillSuccess)
-        {
-            UnRegisterBuff(eBuff_Cloaking, to);
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_MANA:
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                    SetAction(so, PLAYER_SKILL_VITALITY);
-        if (sc->SkillSuccess)
-        {
-            g_CharacterRegisterBuff(so, eBuff_AddMana);
-
-            CreateEffect(MODEL_MANA_RUNE, so->Position, so->Angle, so->Light);
-        }
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_REMOVAL_BUFF:
-        if (sc->SkillSuccess)
-        {
-            UnRegisterBuff(eBuff_Attack, to);
-            UnRegisterBuff(eBuff_Defense, to);
-            UnRegisterBuff(eBuff_Life, to);
-            UnRegisterBuff(eBuff_WizDefense, to);
-            UnRegisterBuff(eBuff_AddCriticalDamage, to);
-            UnRegisterBuff(eBuff_AddMana, to);
-        }
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else
-            if (sc->Helper.Type == MODEL_HORN_OF_UNIRIA && !sc->SafeZone)
-            {
-                SetAction(so, PLAYER_SKILL_RIDER);
-            }
-            else
-                if (sc->Helper.Type == MODEL_HORN_OF_DINORANT && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_SKILL_RIDER_FLY);
-                }
-                else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-                }
-                else
-                    SetAction(so, PLAYER_SKILL_VITALITY);
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_IMPROVE_AG:
-        if (!g_isCharacterBuff(to, eBuff_AddAG))
-        {
-            DeleteEffect(BITMAP_LIGHT, to, 2);
-            DeleteJoint(BITMAP_JOINT_HEALING, to, 9);
-
-            CreateEffect(BITMAP_LIGHT, to->Position, to->Angle, to->Light, 2, to);
-        }
-
-        g_CharacterRegisterBuff(to, eBuff_AddAG);
-
-        if (sc != Hero)
-        {
-            SetPlayerMagic(sc);
-            so->AnimationFrame = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_ADD_CRITICAL:
-        SetAttackSpeed();
-
-        g_CharacterRegisterBuff(to, eBuff_AddCriticalDamage);
-
-        if (sc->Helper.Type == MODEL_DARK_HORSE_ITEM && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_ATTACK_MAGIC);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_MAGIC);
-        }
-        else
-        {
-            SetAction(so, PLAYER_SKILL_HAND1);
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_PARTY_TELEPORT:
-        if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA && sc->Helper.Type <= MODEL_DARK_HORSE_ITEM) && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_TELEPORT);
-        }
-        else if (sc->Helper.Type == MODEL_HORN_OF_FENRIR && !sc->SafeZone)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_TELEPORT);
-        }
-        if (so->Type != MODEL_PLAYER)
-        {
-            SetPlayerAttack(sc);
-            so->AnimationFrame = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_SWELL_LIFE:
-    case AT_SKILL_SWELL_LIFE_STR:
-    case AT_SKILL_SWELL_LIFE_PROFICIENCY:
-        if (!g_isCharacterBuff(to, eBuff_Life))
-        {
-            DeleteEffect(BITMAP_LIGHT, to, 1);
-
-            CreateEffect(BITMAP_LIGHT, to->Position, to->Angle, to->Light, 1, to);
-        }
-
-        g_CharacterRegisterBuff(to, eBuff_Life);
-
-        SetAction(so, PLAYER_SKILL_VITALITY);
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_RIDER:
-        if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN || g_Direction.m_CKanturu.IsMayaScene())
-            SetAction(so, PLAYER_SKILL_RIDER_FLY);
-        else
-            SetAction(so, PLAYER_SKILL_RIDER);
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_BOSS:
-        sc->AttackTime = 1;
-        break;
-
-    case AT_SKILL_COMBO:
-        CreateEffect(MODEL_COMBO, so->Position, so->Angle, so->Light);
-        PlayBuffer(SOUND_COMBO);
-        break;
-    case AT_SKILL_NOVA_BEGIN:
-        SetAction(so, PLAYER_SKILL_HELL_BEGIN);
-        PlayBuffer(SOUND_NUKE1);
-        so->m_bySkillCount = 0;
-        break;
-    case AT_SKILL_NOVA:
-        SetAction(so, PLAYER_SKILL_HELL_START);
-        if (sc == Hero)
-        {
-            MouseRButtonPop = false;
-            MouseRButtonPush = false;
-            MouseRButton = false;
-
-            MouseRButtonPress = 0;
-        }
-        sc->AttackTime = 1;
-        break;
-    case AT_SKILL_FIRE_SCREAM:
-    case AT_SKILL_FIRE_SCREAM_STR:
-    {
-        if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-        {
-            SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-        }
-        else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
-        {
-            SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
-        }
-        else
-        {
-            SetAction(so, PLAYER_ATTACK_STRIKE);
-        }
-        PlayBuffer(SOUND_FIRE_SCREAM);
-    }
-    break;
-    case AT_SKILL_EXPLODE:
-    {
-        vec3_t Pos;
-        float addx, addz;
-        for (int iaa = 0; iaa < 3; iaa++)
-        {
-            addx = rand() % 160;
-            addz = rand() % 160;
-            Vector(to->Position[0] + addx, to->Position[1] + addz, to->Position[2], Pos);
-
-            CreateBomb(Pos, true);
-        }
-    }
-    break;
-    case AT_SKILL_INFINITY_ARROW:
-    case AT_SKILL_INFINITY_ARROW_STR:
-    {
-        CharacterMachine->InfinityArrowAdditionalMana = 10;
-        CreateEffect(MODEL_INFINITY_ARROW, so->Position, so->Angle, so->Light, 0, so);
-        PlayBuffer(SOUND_INFINITYARROW);
-    }
-    break;
-    case AT_SKILL_ALICE_CHAINLIGHTNING:
-    case AT_SKILL_ALICE_CHAINLIGHTNING_STR:
-    {
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_CHAIN_LIGHTNING);
-    }
-    break;
-    case AT_SKILL_ALICE_SLEEP:
-    case AT_SKILL_ALICE_SLEEP_STR:
-    {
-        sc->AttackTime = 1;
-
-        switch (sc->Helper.Type)
-        {
-        case MODEL_HORN_OF_UNIRIA:
-            SetAction(so, PLAYER_SKILL_SLEEP_UNI);
             break;
-        case MODEL_HORN_OF_DINORANT:
-            SetAction(so, PLAYER_SKILL_SLEEP_DINO);
+        case AT_SKILL_SWELL_LIFE:
+        case AT_SKILL_SWELL_LIFE_STR:
+        case AT_SKILL_SWELL_LIFE_PROFICIENCY:
+            if (!g_isCharacterBuff(to, eBuff_Life))
+            {
+                DeleteEffect(BITMAP_LIGHT, to, 1);
+
+                CreateEffect(BITMAP_LIGHT, to->Position, to->Angle, to->Light, 1, to);
+            }
+
+            g_CharacterRegisterBuff(to, eBuff_Life);
+
+            SetAction(so, PLAYER_SKILL_VITALITY);
+            sc->AttackTime = 1;
             break;
-        case MODEL_HORN_OF_FENRIR:
-            SetAction(so, PLAYER_SKILL_SLEEP_FENRIR);
+
+        case AT_SKILL_RIDER:
+            if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN ||
+                g_Direction.m_CKanturu.IsMayaScene())
+                SetAction(so, PLAYER_SKILL_RIDER_FLY);
+            else
+                SetAction(so, PLAYER_SKILL_RIDER);
+            sc->AttackTime = 1;
             break;
-        default:
-            SetAction(so, PLAYER_SKILL_SLEEP);
+
+        case AT_SKILL_BOSS:
+            sc->AttackTime = 1;
             break;
-        }
 
-        PlayBuffer(SOUND_SUMMON_SKILL_SLEEP);
-    }
-    break;
-    case AT_SKILL_ALICE_BLIND:
-        sc->AttackTime = 1; // todo: what is this?
+        case AT_SKILL_COMBO:
+            CreateEffect(MODEL_COMBO, so->Position, so->Angle, so->Light);
+            PlayBuffer(SOUND_COMBO);
+            break;
+        case AT_SKILL_NOVA_BEGIN:
+            SetAction(so, PLAYER_SKILL_HELL_BEGIN);
+            PlayBuffer(SOUND_NUKE1);
+            so->m_bySkillCount = 0;
+            break;
+        case AT_SKILL_NOVA:
+            SetAction(so, PLAYER_SKILL_HELL_START);
+            if (sc == Hero)
+            {
+                MouseRButtonPop  = false;
+                MouseRButtonPush = false;
+                MouseRButton     = false;
 
-        SetAttackSpeed();
-        SetAction(so, PLAYER_SKILL_SLEEP); // todo: check if same action for this skill
-
-        PlayBuffer(SOUND_SUMMON_SKILL_BLIND);
-        break;
-    case AT_SKILL_ALICE_THORNS:
-        sc->AttackTime = 1; // todo: what is this?
-
-        SetAttackSpeed();
-        SetAction(so, PLAYER_SKILL_SLEEP); // todo: check if same action for this skill
-
-        g_CharacterRegisterBuff(to, eBuff_Thorns);
-
-        PlayBuffer(SOUND_SUMMON_SKILL_THORNS);
-        break;
-    case AT_SKILL_ALICE_BERSERKER:
-    case AT_SKILL_ALICE_BERSERKER_STR:
-        sc->AttackTime = 1; // todo: what is this?
-
-        SetAttackSpeed();
-        SetAction(so, PLAYER_SKILL_SLEEP); // todo: check if same action for this skill
-
-        g_CharacterRegisterBuff(to, eBuff_Berserker);
-
-        PlayBuffer(SOUND_SKILL_BERSERKER);
-        break;
-    case AT_SKILL_EXPANSION_OF_WIZARDRY:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY:
-    {
-        SetAttackSpeed();
-        SetAction(so, PLAYER_SKILL_SWELL_OF_MP);
-
-        g_CharacterRegisterBuff(to, eBuff_SwellOfMagicPower);
-
-        vec3_t vLight;
-        Vector(0.3f, 0.2f, 0.9f, vLight);
-        CreateEffect(MODEL_SWELL_OF_MAGICPOWER, so->Position, so->Angle, vLight, 0, so);
-        PlayBuffer(SOUND_SKILL_SWELL_OF_MAGICPOWER);
-    }break;
-    case AT_SKILL_DOPPELGANGER_SELFDESTRUCTION:
-    {
-        SetAction(so, MONSTER01_APEAR);
-        so->m_bActionStart = FALSE;
-    }
-    break;
-    case AT_SKILL_CHAOTIC_DISEIER:
-    {
-        if (so->Type == MODEL_PLAYER)
-        {
+                MouseRButtonPress = 0;
+            }
+            sc->AttackTime = 1;
+            break;
+        case AT_SKILL_FIRE_SCREAM:
+        case AT_SKILL_FIRE_SCREAM_STR: {
             if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
             {
-                SetAction(&sc->Object, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+                SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
             }
             else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
             {
-                SetAction(&sc->Object, PLAYER_ATTACK_RIDE_STRIKE);
+                SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
             }
             else
             {
-                SetAction(&sc->Object, PLAYER_ATTACK_STRIKE);
+                SetAction(so, PLAYER_ATTACK_STRIKE);
             }
+            PlayBuffer(SOUND_FIRE_SCREAM);
         }
-        else
-        {
-            SetPlayerAttack(sc);
-        }
-
-        OBJECT* o = so;
-        vec3_t Light, Position, P, dp;
-
-        float Matrix[3][4];
-        Vector(0.f, -20.f, 0.f, P);
-        Vector(0.f, 0.f, 0.f, P);
-        AngleMatrix(o->Angle, Matrix);
-        VectorRotate(P, Matrix, dp);
-        VectorAdd(dp, o->Position, Position);
-
-        Vector(0.5f, 0.5f, 0.5f, Light);
-        for (int i = 0; i < 5; ++i)
-        {
-            CreateEffect(BITMAP_SHINY + 6, Position, o->Angle, Light, 3, o, -1, 0, 0, 0, 0.5f);
-        }
-
-        VectorCopy(o->Position, Position);
-
-        for (int i = 0; i < 8; i++)
-        {
-            Position[0] = (o->Position[0] - 119.f) + (float)(rand() % 240);
-            Position[2] = (o->Position[2] + 49.f) + (float)(rand() % 60);
-            CreateJoint(BITMAP_2LINE_GHOST, Position, o->Position, o->Angle, 0, o, 20.f, o->PKKey, 0, o->m_bySkillSerialNum);
-        }
-        if (sc == Hero && SelectedCharacter != -1)
-        {
+        break;
+        case AT_SKILL_EXPLODE: {
             vec3_t Pos;
-            CHARACTER* st = &CharactersClient[SelectedCharacter];
-            VectorCopy(st->Object.Position, Pos);
-            CreateBomb(Pos, true);
-        }
-        PlayBuffer(SOUND_SKILL_CAOTIC);
-    }
-    break;
-    case AT_SKILL_KILLING_BLOW:
-    case AT_SKILL_KILLING_BLOW_STR:
-    case AT_SKILL_KILLING_BLOW_MASTERY:
-    {
-        g_CMonkSystem.SetRageSkillAni(MagicNumber, so);
-        so->m_sTargetIndex = TargetIndex;
-        sc->AttackTime = 1;
+            float  addx, addz;
+            for (int iaa = 0; iaa < 3; iaa++)
+            {
+                addx = rand() % 160;
+                addz = rand() % 160;
+                Vector(to->Position[0] + addx, to->Position[1] + addz, to->Position[2], Pos);
 
-        if (sc != Hero)
-        {
-            g_CMonkSystem.RageCreateEffect(so, MagicNumber);
-        }
-    }
-    break;
-    case AT_SKILL_ATT_UP_OURFORCES:
-    case AT_SKILL_HP_UP_OURFORCES:
-    case AT_SKILL_HP_UP_OURFORCES_STR:
-    case AT_SKILL_DEF_UP_OURFORCES:
-    case AT_SKILL_DEF_UP_OURFORCES_STR:
-    case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
-    {
-        if (sc == Hero)
-        {
-            if (so->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES)
-            {
-                SendRequestAction(sc->Object, AT_RAGEBUFF_1);
-            }
-            else
-            {
-                SendRequestAction(sc->Object, AT_RAGEBUFF_2);
+                CreateBomb(Pos, true);
             }
         }
-        OBJECT* _pObj = to;
-        if (sc != Hero)
-        {
-            _pObj = so;
-            g_CMonkSystem.RageCreateEffect(_pObj, MagicNumber);
+        break;
+        case AT_SKILL_INFINITY_ARROW:
+        case AT_SKILL_INFINITY_ARROW_STR: {
+            CharacterMachine->InfinityArrowAdditionalMana = 10;
+            CreateEffect(MODEL_INFINITY_ARROW, so->Position, so->Angle, so->Light, 0, so);
+            PlayBuffer(SOUND_INFINITYARROW);
         }
+        break;
+        case AT_SKILL_ALICE_CHAINLIGHTNING:
+        case AT_SKILL_ALICE_CHAINLIGHTNING_STR: {
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_CHAIN_LIGHTNING);
+        }
+        break;
+        case AT_SKILL_ALICE_SLEEP:
+        case AT_SKILL_ALICE_SLEEP_STR: {
+            sc->AttackTime = 1;
 
-        if (MagicNumber == AT_SKILL_HP_UP_OURFORCES || MagicNumber == AT_SKILL_HP_UP_OURFORCES_STR)
-        {
-            DeleteEffect(BITMAP_LIGHT_RED, _pObj, 0);
-            CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 0, _pObj, -1, 0, 0, 0, 1.5f);
+            switch (sc->Helper.Type)
+            {
+                case MODEL_HORN_OF_UNIRIA:
+                    SetAction(so, PLAYER_SKILL_SLEEP_UNI);
+                    break;
+                case MODEL_HORN_OF_DINORANT:
+                    SetAction(so, PLAYER_SKILL_SLEEP_DINO);
+                    break;
+                case MODEL_HORN_OF_FENRIR:
+                    SetAction(so, PLAYER_SKILL_SLEEP_FENRIR);
+                    break;
+                default:
+                    SetAction(so, PLAYER_SKILL_SLEEP);
+                    break;
+            }
+
+            PlayBuffer(SOUND_SUMMON_SKILL_SLEEP);
         }
-        else if (MagicNumber == AT_SKILL_DEF_UP_OURFORCES || MagicNumber == AT_SKILL_DEF_UP_OURFORCES_STR || MagicNumber == AT_SKILL_DEF_UP_OURFORCES_MASTERY)
-        {
-            DeleteEffect(BITMAP_LIGHT_RED, _pObj, 2);
-            CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 2, _pObj, -1, 0, 0, 0, 1.5f);
+        break;
+        case AT_SKILL_ALICE_BLIND:
+            sc->AttackTime = 1;  // todo: what is this?
+
+            SetAttackSpeed();
+            SetAction(so, PLAYER_SKILL_SLEEP);  // todo: check if same action for this skill
+
+            PlayBuffer(SOUND_SUMMON_SKILL_BLIND);
+            break;
+        case AT_SKILL_ALICE_THORNS:
+            sc->AttackTime = 1;  // todo: what is this?
+
+            SetAttackSpeed();
+            SetAction(so, PLAYER_SKILL_SLEEP);  // todo: check if same action for this skill
+
+            g_CharacterRegisterBuff(to, eBuff_Thorns);
+
+            PlayBuffer(SOUND_SUMMON_SKILL_THORNS);
+            break;
+        case AT_SKILL_ALICE_BERSERKER:
+        case AT_SKILL_ALICE_BERSERKER_STR:
+            sc->AttackTime = 1;  // todo: what is this?
+
+            SetAttackSpeed();
+            SetAction(so, PLAYER_SKILL_SLEEP);  // todo: check if same action for this skill
+
+            g_CharacterRegisterBuff(to, eBuff_Berserker);
+
+            PlayBuffer(SOUND_SKILL_BERSERKER);
+            break;
+        case AT_SKILL_EXPANSION_OF_WIZARDRY:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY: {
+            SetAttackSpeed();
+            SetAction(so, PLAYER_SKILL_SWELL_OF_MP);
+
+            g_CharacterRegisterBuff(to, eBuff_SwellOfMagicPower);
 
             vec3_t vLight;
-            Vector(0.7f, 0.7f, 1.0f, vLight);
-            DeleteEffect(MODEL_WINDFOCE, _pObj, 1);
-            CreateEffect(MODEL_WINDFOCE, _pObj->Position, _pObj->Angle, vLight, 1, _pObj, -1, 0, 0, 0, 1.0f);
+            Vector(0.3f, 0.2f, 0.9f, vLight);
+            CreateEffect(MODEL_SWELL_OF_MAGICPOWER, so->Position, so->Angle, vLight, 0, so);
+            PlayBuffer(SOUND_SKILL_SWELL_OF_MAGICPOWER);
         }
-        else if (MagicNumber == AT_SKILL_ATT_UP_OURFORCES)
-        {
-            DeleteEffect(BITMAP_LIGHT_RED, _pObj, 1);
-            CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 1, _pObj, -1, 0, 0, 0, 1.5f);
+        break;
+        case AT_SKILL_DOPPELGANGER_SELFDESTRUCTION: {
+            SetAction(so, MONSTER01_APEAR);
+            so->m_bActionStart = FALSE;
         }
+        break;
+        case AT_SKILL_CHAOTIC_DISEIER: {
+            if (so->Type == MODEL_PLAYER)
+            {
+                if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                {
+                    SetAction(&sc->Object, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+                }
+                else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
+                {
+                    SetAction(&sc->Object, PLAYER_ATTACK_RIDE_STRIKE);
+                }
+                else
+                {
+                    SetAction(&sc->Object, PLAYER_ATTACK_STRIKE);
+                }
+            }
+            else
+            {
+                SetPlayerAttack(sc);
+            }
 
-        switch (MagicNumber)
-        {
+            OBJECT* o = so;
+            vec3_t  Light, Position, P, dp;
+
+            float Matrix[3][4];
+            Vector(0.f, -20.f, 0.f, P);
+            Vector(0.f, 0.f, 0.f, P);
+            AngleMatrix(o->Angle, Matrix);
+            VectorRotate(P, Matrix, dp);
+            VectorAdd(dp, o->Position, Position);
+
+            Vector(0.5f, 0.5f, 0.5f, Light);
+            for (int i = 0; i < 5; ++i)
+            {
+                CreateEffect(BITMAP_SHINY + 6, Position, o->Angle, Light, 3, o, -1, 0, 0, 0, 0.5f);
+            }
+
+            VectorCopy(o->Position, Position);
+
+            for (int i = 0; i < 8; i++)
+            {
+                Position[0] = (o->Position[0] - 119.f) + (float)(rand() % 240);
+                Position[2] = (o->Position[2] + 49.f) + (float)(rand() % 60);
+                CreateJoint(BITMAP_2LINE_GHOST, Position, o->Position, o->Angle, 0, o, 20.f, o->PKKey, 0,
+                            o->m_bySkillSerialNum);
+            }
+            if (sc == Hero && SelectedCharacter != -1)
+            {
+                vec3_t     Pos;
+                CHARACTER* st = &CharactersClient[SelectedCharacter];
+                VectorCopy(st->Object.Position, Pos);
+                CreateBomb(Pos, true);
+            }
+            PlayBuffer(SOUND_SKILL_CAOTIC);
+        }
+        break;
+        case AT_SKILL_KILLING_BLOW:
+        case AT_SKILL_KILLING_BLOW_STR:
+        case AT_SKILL_KILLING_BLOW_MASTERY: {
+            g_CMonkSystem.SetRageSkillAni(MagicNumber, so);
+            so->m_sTargetIndex = TargetIndex;
+            sc->AttackTime     = 1;
+
+            if (sc != Hero)
+            {
+                g_CMonkSystem.RageCreateEffect(so, MagicNumber);
+            }
+        }
+        break;
         case AT_SKILL_ATT_UP_OURFORCES:
-            g_CharacterRegisterBuff(_pObj, eBuff_Att_up_Ourforces);
-            break;
         case AT_SKILL_HP_UP_OURFORCES:
         case AT_SKILL_HP_UP_OURFORCES_STR:
-            g_CharacterRegisterBuff(_pObj, eBuff_Hp_up_Ourforces);
-            break;
         case AT_SKILL_DEF_UP_OURFORCES:
         case AT_SKILL_DEF_UP_OURFORCES_STR:
-        case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
-            g_CharacterRegisterBuff(_pObj, eBuff_Def_up_Ourforces);
-            break;
-        }
-        sc->AttackTime = 1;
-    }
-    break;
-    case AT_SKILL_BEAST_UPPERCUT:
-    case AT_SKILL_BEAST_UPPERCUT_STR:
-    case AT_SKILL_BEAST_UPPERCUT_MASTERY:
-    {
-        sc->AttackTime = 1;
-    }
-    break;
-    case AT_SKILL_CHAIN_DRIVE:
-    case AT_SKILL_CHAIN_DRIVE_STR:
-    case AT_SKILL_DRAGON_KICK:
-    {
-        sc->AttackTime = 1;
-        if (sc != Hero)
-            g_CMonkSystem.RageCreateEffect(so, MagicNumber);
-    }
-    break;
-    case AT_SKILL_OCCUPY:
-    {
-        SetAction(so, PLAYER_ATTACK_RUSH);
-        sc->AttackTime = 1;
-        PlayBuffer(SOUND_SKILL_SWORD2);
-    }
-    break;
-    case AT_SKILL_DRAGON_ROAR:
-    case AT_SKILL_DRAGON_ROAR_STR:
-    {
-        vec3_t vLight;
-        Vector(1.0f, 1.0f, 1.0f, vLight);
-        if (g_CMonkSystem.SetLowerEffEct())
-        {
-            CreateEffect(MODEL_VOLCANO_OF_MONK, to->Position, to->Angle, vLight, g_CMonkSystem.GetLowerEffCnt(), to, -1, 0, 0, 0, 0.8f);
-        }
+        case AT_SKILL_DEF_UP_OURFORCES_MASTERY: {
+            if (sc == Hero)
+            {
+                if (so->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES)
+                {
+                    SendRequestAction(sc->Object, AT_RAGEBUFF_1);
+                }
+                else
+                {
+                    SendRequestAction(sc->Object, AT_RAGEBUFF_2);
+                }
+            }
+            OBJECT* _pObj = to;
+            if (sc != Hero)
+            {
+                _pObj = so;
+                g_CMonkSystem.RageCreateEffect(_pObj, MagicNumber);
+            }
 
-        CreateEffect(MODEL_TARGETMON_EFFECT, to->Position, to->Angle, vLight, 0, to, -1, 0, 0, 0, 1.0f);
-        StopBuffer(SOUND_RAGESKILL_DRAGONLOWER_ATTACK, true);
-        PlayBuffer(SOUND_RAGESKILL_DRAGONLOWER_ATTACK);
-    }
-    break;
-    case AT_SKILL_DARKSIDE:
-    case AT_SKILL_DARKSIDE_STR:
-    {
-        if (sc != Hero)
-            g_CMonkSystem.SetDarksideCnt();
-    }
-    break;
+            if (MagicNumber == AT_SKILL_HP_UP_OURFORCES || MagicNumber == AT_SKILL_HP_UP_OURFORCES_STR)
+            {
+                DeleteEffect(BITMAP_LIGHT_RED, _pObj, 0);
+                CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 0, _pObj, -1, 0, 0, 0,
+                             1.5f);
+            }
+            else if (MagicNumber == AT_SKILL_DEF_UP_OURFORCES || MagicNumber == AT_SKILL_DEF_UP_OURFORCES_STR ||
+                     MagicNumber == AT_SKILL_DEF_UP_OURFORCES_MASTERY)
+            {
+                DeleteEffect(BITMAP_LIGHT_RED, _pObj, 2);
+                CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 2, _pObj, -1, 0, 0, 0,
+                             1.5f);
+
+                vec3_t vLight;
+                Vector(0.7f, 0.7f, 1.0f, vLight);
+                DeleteEffect(MODEL_WINDFOCE, _pObj, 1);
+                CreateEffect(MODEL_WINDFOCE, _pObj->Position, _pObj->Angle, vLight, 1, _pObj, -1, 0, 0, 0, 1.0f);
+            }
+            else if (MagicNumber == AT_SKILL_ATT_UP_OURFORCES)
+            {
+                DeleteEffect(BITMAP_LIGHT_RED, _pObj, 1);
+                CreateEffect(BITMAP_LIGHT_RED, _pObj->Position, _pObj->Angle, _pObj->Light, 1, _pObj, -1, 0, 0, 0,
+                             1.5f);
+            }
+
+            switch (MagicNumber)
+            {
+                case AT_SKILL_ATT_UP_OURFORCES:
+                    g_CharacterRegisterBuff(_pObj, eBuff_Att_up_Ourforces);
+                    break;
+                case AT_SKILL_HP_UP_OURFORCES:
+                case AT_SKILL_HP_UP_OURFORCES_STR:
+                    g_CharacterRegisterBuff(_pObj, eBuff_Hp_up_Ourforces);
+                    break;
+                case AT_SKILL_DEF_UP_OURFORCES:
+                case AT_SKILL_DEF_UP_OURFORCES_STR:
+                case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
+                    g_CharacterRegisterBuff(_pObj, eBuff_Def_up_Ourforces);
+                    break;
+            }
+            sc->AttackTime = 1;
+        }
+        break;
+        case AT_SKILL_BEAST_UPPERCUT:
+        case AT_SKILL_BEAST_UPPERCUT_STR:
+        case AT_SKILL_BEAST_UPPERCUT_MASTERY: {
+            sc->AttackTime = 1;
+        }
+        break;
+        case AT_SKILL_CHAIN_DRIVE:
+        case AT_SKILL_CHAIN_DRIVE_STR:
+        case AT_SKILL_DRAGON_KICK: {
+            sc->AttackTime = 1;
+            if (sc != Hero)
+                g_CMonkSystem.RageCreateEffect(so, MagicNumber);
+        }
+        break;
+        case AT_SKILL_OCCUPY: {
+            SetAction(so, PLAYER_ATTACK_RUSH);
+            sc->AttackTime = 1;
+            PlayBuffer(SOUND_SKILL_SWORD2);
+        }
+        break;
+        case AT_SKILL_DRAGON_ROAR:
+        case AT_SKILL_DRAGON_ROAR_STR: {
+            vec3_t vLight;
+            Vector(1.0f, 1.0f, 1.0f, vLight);
+            if (g_CMonkSystem.SetLowerEffEct())
+            {
+                CreateEffect(MODEL_VOLCANO_OF_MONK, to->Position, to->Angle, vLight, g_CMonkSystem.GetLowerEffCnt(), to,
+                             -1, 0, 0, 0, 0.8f);
+            }
+
+            CreateEffect(MODEL_TARGETMON_EFFECT, to->Position, to->Angle, vLight, 0, to, -1, 0, 0, 0, 1.0f);
+            StopBuffer(SOUND_RAGESKILL_DRAGONLOWER_ATTACK, true);
+            PlayBuffer(SOUND_RAGESKILL_DRAGONLOWER_ATTACK);
+        }
+        break;
+        case AT_SKILL_DARKSIDE:
+        case AT_SKILL_DARKSIDE_STR: {
+            if (sc != Hero)
+                g_CMonkSystem.SetDarksideCnt();
+        }
+        break;
     }
 
 #ifdef CONSOLE_DEBUG
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x19 [ReceiveMagic(%d)]", MagicNumber);
-#endif // CONSOLE_DEBUG
+#endif  // CONSOLE_DEBUG
 
     return (TRUE);
 }
 
 BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 {
-    auto Data = (LPPRECEIVE_MAGIC_CONTINUE)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    auto Data        = (LPPRECEIVE_MAGIC_CONTINUE)ReceiveBuffer;
+    int  Key         = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
 
     CHARACTER* sc = &CharactersClient[FindCharacterIndex(Key)];
-    OBJECT* so = &sc->Object;
+    OBJECT*    so = &sc->Object;
 
     sc->Skill = MagicNumber;
 
@@ -5262,377 +5280,370 @@ BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         {
             switch (MagicNumber)
             {
-            case AT_SKILL_TRIPLE_SHOT:
-            case AT_SKILL_TRIPLE_SHOT_STR:
-            case AT_SKILL_TRIPLE_SHOT_MASTERY:
-                SetPlayerAttack(sc);
-                break;
-            case AT_SKILL_BLAST_CROSSBOW4:
-                SetPlayerAttack(sc);
-                break;
-            case AT_SKILL_DECAY:
-            case AT_SKILL_DECAY_STR:
-            case AT_SKILL_ICE_STORM:
-                SetPlayerMagic(sc);
-                break;
-
-            case AT_SKILL_PENETRATION:
-            case AT_SKILL_PENETRATION_STR:
-                SetPlayerAttack(sc);
-                break;
-
-            case AT_SKILL_FLASH:
-                SetAction(so, PLAYER_SKILL_FLASH);
-                break;
-
-            case AT_SKILL_HELL_FIRE:
-            case AT_SKILL_HELL_FIRE_STR:
-                SetAction(so, PLAYER_SKILL_HELL);
-                break;
-
-            case AT_SKILL_INFERNO:
-            case AT_SKILL_INFERNO_STR:
-            case AT_SKILL_INFERNO_STR_MG:
-                SetAction(so, PLAYER_SKILL_INFERNO);
-                break;
-            case AT_SKILL_TWISTING_SLASH:
-            case AT_SKILL_TWISTING_SLASH_STR:
-            case AT_SKILL_TWISTING_SLASH_MASTERY:
-            case AT_SKILL_TWISTING_SLASH_STR_MG:
-#ifdef YDG_ADD_SKILL_RIDING_ANIMATIONS
-                switch (sc->Helper.Type)
-                {
-                case MODEL_HORN_OF_UNIRIA:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_UNI);
+                case AT_SKILL_TRIPLE_SHOT:
+                case AT_SKILL_TRIPLE_SHOT_STR:
+                case AT_SKILL_TRIPLE_SHOT_MASTERY:
+                    SetPlayerAttack(sc);
                     break;
-                case MODEL_HORN_OF_DINORANT:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_DINO);
+                case AT_SKILL_BLAST_CROSSBOW4:
+                    SetPlayerAttack(sc);
                     break;
-                case MODEL_HORN_OF_FENRIR:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_FENRIR);
+                case AT_SKILL_DECAY:
+                case AT_SKILL_DECAY_STR:
+                case AT_SKILL_ICE_STORM:
+                    SetPlayerMagic(sc);
                     break;
-                default:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
-                    break;
-                }
-#else	// YDG_ADD_SKILL_RIDING_ANIMATIONS
-                SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
-#endif	// YDG_ADD_SKILL_RIDING_ANIMATIONS
-                break;
 
-            case AT_SKILL_FIRE_SCREAM:
-            case AT_SKILL_FIRE_SCREAM_STR:
-            {
-                if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-                {
-                    SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-                }
-                else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
-                {
-                    SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
-                }
-                else
-                {
-                    SetAction(so, PLAYER_ATTACK_STRIKE);
-                }
-                PlayBuffer(SOUND_FIRE_SCREAM);
-            }
-            break;
+                case AT_SKILL_PENETRATION:
+                case AT_SKILL_PENETRATION_STR:
+                    SetPlayerAttack(sc);
+                    break;
 
-            case AT_SKILL_THUNDER_STRIKE:
-                if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-                    SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_FLASH);
-                else
+                case AT_SKILL_FLASH:
                     SetAction(so, PLAYER_SKILL_FLASH);
-                break;
-            case AT_SKILL_EARTHSHAKE:
-            case AT_SKILL_EARTHSHAKE_STR:
-            case AT_SKILL_EARTHSHAKE_MASTERY:
-                SetAction(so, PLAYER_ATTACK_DARKHORSE);
-                PlayBuffer(SOUND_EARTH_QUAKE);
-                break;
-            case AT_SKILL_RAGEFUL_BLOW:
-            case AT_SKILL_RAGEFUL_BLOW_STR:
-            case AT_SKILL_RAGEFUL_BLOW_MASTERY:
-                
-                SetAction(so, PLAYER_ATTACK_SKILL_FURY_STRIKE);
-                break;
-            case AT_SKILL_STRIKE_OF_DESTRUCTION:
-            case AT_SKILL_STRIKE_OF_DESTRUCTION_STR:
-                SetAction(so, PLAYER_SKILL_BLOW_OF_DESTRUCTION);
-                break;
-            case AT_SKILL_IMPALE:
-                if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-                    SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
-                else
-                    SetAction(so, PLAYER_ATTACK_SKILL_SPEAR);
-                break;
-            case AT_SKILL_FIRE_SLASH:
-            case AT_SKILL_FIRE_SLASH_STR:
+                    break;
+
+                case AT_SKILL_HELL_FIRE:
+                case AT_SKILL_HELL_FIRE_STR:
+                    SetAction(so, PLAYER_SKILL_HELL);
+                    break;
+
+                case AT_SKILL_INFERNO:
+                case AT_SKILL_INFERNO_STR:
+                case AT_SKILL_INFERNO_STR_MG:
+                    SetAction(so, PLAYER_SKILL_INFERNO);
+                    break;
+                case AT_SKILL_TWISTING_SLASH:
+                case AT_SKILL_TWISTING_SLASH_STR:
+                case AT_SKILL_TWISTING_SLASH_MASTERY:
+                case AT_SKILL_TWISTING_SLASH_STR_MG:
 #ifdef YDG_ADD_SKILL_RIDING_ANIMATIONS
-                switch (sc->Helper.Type)
-                {
-                case MODEL_HORN_OF_UNIRIA:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_UNI);
-                    break;
-                case MODEL_HORN_OF_DINORANT:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_DINO);
-                    break;
-                case MODEL_HORN_OF_FENRIR:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_FENRIR);
-                    break;
-                default:
-                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
-                    break;
-                }
-#else	// YDG_ADD_SKILL_RIDING_ANIMATIONS
-                SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
-#endif	// YDG_ADD_SKILL_RIDING_ANIMATIONS
-                break;
-            case AT_SKILL_POWER_SLASH:
-            case AT_SKILL_POWER_SLASH_STR:
-                SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD_TWO);
-                break;
-            case AT_SKILL_DEATHSTAB:
-            case AT_SKILL_DEATHSTAB_STR:
-                SetAction(so, PLAYER_ATTACK_DEATHSTAB);
-                break;
-
-            case AT_SKILL_STUN:
-                SetAction(so, PLAYER_SKILL_VITALITY);
-                break;
-
-            case AT_SKILL_INVISIBLE:
-                SetAction(so, PLAYER_SKILL_VITALITY);
-                break;
-
-            case AT_SKILL_PLASMA_STORM_FENRIR:
-                SetAction_Fenrir_Skill(sc, so);
-                break;
-            case AT_SKILL_CHAOTIC_DISEIER:
-            {
-                if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
-                {
-                    SetAction(&sc->Object, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
-                }
-                else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
-                {
-                    SetAction(&sc->Object, PLAYER_ATTACK_RIDE_STRIKE);
-                }
-                else
-                {
-                    SetAction(&sc->Object, PLAYER_ATTACK_STRIKE);
-                }
-
-                OBJECT* o = so;
-                vec3_t Light, Position, P, dp;
-
-                float Matrix[3][4];
-                Vector(0.f, -20.f, 0.f, P);
-                Vector(0.f, 0.f, 0.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-
-                Vector(0.5f, 0.5f, 0.5f, Light);
-                for (int i = 0; i < 5; ++i)
-                {
-                    CreateEffect(BITMAP_SHINY + 6, Position, o->Angle, Light, 3, o, -1, 0, 0, 0, 0.5f);
-                }
-
-                VectorCopy(o->Position, Position);
-
-                for (int i = 0; i < 8; i++)
-                {
-                    Position[0] = (o->Position[0] - 119.f) + (float)(rand() % 240);
-                    Position[2] = (o->Position[2] + 49.f) + (float)(rand() % 60);
-                    CreateJoint(BITMAP_2LINE_GHOST, Position, o->Position, o->Angle, 0, o, 20.f, o->PKKey, 0, o->m_bySkillSerialNum);
-                }
-                if (sc == Hero && SelectedCharacter != -1)
-                {
-                    vec3_t Pos;
-                    CHARACTER* st = &CharactersClient[SelectedCharacter];
-                    VectorCopy(st->Object.Position, Pos);
-                    CreateBomb(Pos, true);
-                }
-                PlayBuffer(SOUND_SKILL_CAOTIC);
-            }
-            break;
-            case AT_SKILL_MULTI_SHOT:
-            {
-                SetPlayerBow(sc);
-                OBJECT* o = so;
-                vec3_t Light, Position, P, dp;
-
-                float Matrix[3][4];
-                Vector(0.f, 20.f, 0.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-                Vector(0.8f, 0.9f, 1.6f, Light);
-                CreateEffect(MODEL_MULTI_SHOT3, Position, o->Angle, Light, 0);
-                CreateEffect(MODEL_MULTI_SHOT3, Position, o->Angle, Light, 0);
-
-                Vector(0.f, -20.f, 0.f, P);
-                Vector(0.f, 0.f, 0.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-
-                CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
-                CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
-                CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
-
-                Vector(0.f, 20.f, 0.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-                CreateEffect(MODEL_MULTI_SHOT2, Position, o->Angle, Light, 0);
-                CreateEffect(MODEL_MULTI_SHOT2, Position, o->Angle, Light, 0);
-
-                Vector(0.f, -120.f, 145.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-
-                short Key = -1;
-                for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-                {
-                    CHARACTER* tc = &CharactersClient[i];
-                    if (tc == sc)
+                    switch (sc->Helper.Type)
                     {
-                        Key = i;
-                        break;
+                        case MODEL_HORN_OF_UNIRIA:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_UNI);
+                            break;
+                        case MODEL_HORN_OF_DINORANT:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_DINO);
+                            break;
+                        case MODEL_HORN_OF_FENRIR:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_FENRIR);
+                            break;
+                        default:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
+                            break;
+                    }
+#else   // YDG_ADD_SKILL_RIDING_ANIMATIONS
+                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
+#endif  // YDG_ADD_SKILL_RIDING_ANIMATIONS
+                    break;
+
+                case AT_SKILL_FIRE_SCREAM:
+                case AT_SKILL_FIRE_SCREAM_STR: {
+                    if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                    {
+                        SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+                    }
+                    else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
+                    {
+                        SetAction(so, PLAYER_ATTACK_RIDE_STRIKE);
+                    }
+                    else
+                    {
+                        SetAction(so, PLAYER_ATTACK_STRIKE);
+                    }
+                    PlayBuffer(SOUND_FIRE_SCREAM);
+                }
+                break;
+
+                case AT_SKILL_THUNDER_STRIKE:
+                    if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                        SetAction(so, PLAYER_FENRIR_ATTACK_DARKLORD_FLASH);
+                    else
+                        SetAction(so, PLAYER_SKILL_FLASH);
+                    break;
+                case AT_SKILL_EARTHSHAKE:
+                case AT_SKILL_EARTHSHAKE_STR:
+                case AT_SKILL_EARTHSHAKE_MASTERY:
+                    SetAction(so, PLAYER_ATTACK_DARKHORSE);
+                    PlayBuffer(SOUND_EARTH_QUAKE);
+                    break;
+                case AT_SKILL_RAGEFUL_BLOW:
+                case AT_SKILL_RAGEFUL_BLOW_STR:
+                case AT_SKILL_RAGEFUL_BLOW_MASTERY:
+
+                    SetAction(so, PLAYER_ATTACK_SKILL_FURY_STRIKE);
+                    break;
+                case AT_SKILL_STRIKE_OF_DESTRUCTION:
+                case AT_SKILL_STRIKE_OF_DESTRUCTION_STR:
+                    SetAction(so, PLAYER_SKILL_BLOW_OF_DESTRUCTION);
+                    break;
+                case AT_SKILL_IMPALE:
+                    if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                        SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
+                    else
+                        SetAction(so, PLAYER_ATTACK_SKILL_SPEAR);
+                    break;
+                case AT_SKILL_FIRE_SLASH:
+                case AT_SKILL_FIRE_SLASH_STR:
+#ifdef YDG_ADD_SKILL_RIDING_ANIMATIONS
+                    switch (sc->Helper.Type)
+                    {
+                        case MODEL_HORN_OF_UNIRIA:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_UNI);
+                            break;
+                        case MODEL_HORN_OF_DINORANT:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_DINO);
+                            break;
+                        case MODEL_HORN_OF_FENRIR:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL_FENRIR);
+                            break;
+                        default:
+                            SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
+                            break;
+                    }
+#else   // YDG_ADD_SKILL_RIDING_ANIMATIONS
+                    SetAction(so, PLAYER_ATTACK_SKILL_WHEEL);
+#endif  // YDG_ADD_SKILL_RIDING_ANIMATIONS
+                    break;
+                case AT_SKILL_POWER_SLASH:
+                case AT_SKILL_POWER_SLASH_STR:
+                    SetAction(so, PLAYER_ATTACK_TWO_HAND_SWORD_TWO);
+                    break;
+                case AT_SKILL_DEATHSTAB:
+                case AT_SKILL_DEATHSTAB_STR:
+                    SetAction(so, PLAYER_ATTACK_DEATHSTAB);
+                    break;
+
+                case AT_SKILL_STUN:
+                    SetAction(so, PLAYER_SKILL_VITALITY);
+                    break;
+
+                case AT_SKILL_INVISIBLE:
+                    SetAction(so, PLAYER_SKILL_VITALITY);
+                    break;
+
+                case AT_SKILL_PLASMA_STORM_FENRIR:
+                    SetAction_Fenrir_Skill(sc, so);
+                    break;
+                case AT_SKILL_CHAOTIC_DISEIER: {
+                    if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
+                    {
+                        SetAction(&sc->Object, PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE);
+                    }
+                    else if ((sc->Helper.Type >= MODEL_HORN_OF_UNIRIA) && (sc->Helper.Type <= MODEL_DARK_HORSE_ITEM))
+                    {
+                        SetAction(&sc->Object, PLAYER_ATTACK_RIDE_STRIKE);
+                    }
+                    else
+                    {
+                        SetAction(&sc->Object, PLAYER_ATTACK_STRIKE);
+                    }
+
+                    OBJECT* o = so;
+                    vec3_t  Light, Position, P, dp;
+
+                    float Matrix[3][4];
+                    Vector(0.f, -20.f, 0.f, P);
+                    Vector(0.f, 0.f, 0.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+
+                    Vector(0.5f, 0.5f, 0.5f, Light);
+                    for (int i = 0; i < 5; ++i)
+                    {
+                        CreateEffect(BITMAP_SHINY + 6, Position, o->Angle, Light, 3, o, -1, 0, 0, 0, 0.5f);
+                    }
+
+                    VectorCopy(o->Position, Position);
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        Position[0] = (o->Position[0] - 119.f) + (float)(rand() % 240);
+                        Position[2] = (o->Position[2] + 49.f) + (float)(rand() % 60);
+                        CreateJoint(BITMAP_2LINE_GHOST, Position, o->Position, o->Angle, 0, o, 20.f, o->PKKey, 0,
+                                    o->m_bySkillSerialNum);
+                    }
+                    if (sc == Hero && SelectedCharacter != -1)
+                    {
+                        vec3_t     Pos;
+                        CHARACTER* st = &CharactersClient[SelectedCharacter];
+                        VectorCopy(st->Object.Position, Pos);
+                        CreateBomb(Pos, true);
+                    }
+                    PlayBuffer(SOUND_SKILL_CAOTIC);
+                }
+                break;
+                case AT_SKILL_MULTI_SHOT: {
+                    SetPlayerBow(sc);
+                    OBJECT* o = so;
+                    vec3_t  Light, Position, P, dp;
+
+                    float Matrix[3][4];
+                    Vector(0.f, 20.f, 0.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+                    Vector(0.8f, 0.9f, 1.6f, Light);
+                    CreateEffect(MODEL_MULTI_SHOT3, Position, o->Angle, Light, 0);
+                    CreateEffect(MODEL_MULTI_SHOT3, Position, o->Angle, Light, 0);
+
+                    Vector(0.f, -20.f, 0.f, P);
+                    Vector(0.f, 0.f, 0.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+
+                    CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
+                    CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
+                    CreateEffect(MODEL_MULTI_SHOT1, Position, o->Angle, Light, 0);
+
+                    Vector(0.f, 20.f, 0.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+                    CreateEffect(MODEL_MULTI_SHOT2, Position, o->Angle, Light, 0);
+                    CreateEffect(MODEL_MULTI_SHOT2, Position, o->Angle, Light, 0);
+
+                    Vector(0.f, -120.f, 145.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+
+                    short Key = -1;
+                    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+                    {
+                        CHARACTER* tc = &CharactersClient[i];
+                        if (tc == sc)
+                        {
+                            Key = i;
+                            break;
+                        }
+                    }
+
+                    CreateEffect(MODEL_BLADE_SKILL, Position, o->Angle, Light, 1, o, Key);
+                }
+                break;
+                case AT_SKILL_RECOVER: {
+                    //			OBJECT* o = so;
+                    vec3_t Light, Position, P, dp;
+                    vec3_t vFirePosition;
+
+                    float Matrix[3][4];
+
+                    OBJECT* o = so;
+
+                    Vector(0.4f, 0.6f, 1.f, Light);
+                    Vector(0.f, 0.f, 0.f, P);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(P, Matrix, dp);
+                    VectorAdd(dp, o->Position, Position);
+                    Position[2] += 130;
+                    VectorCopy(o->Position, Position);
+                    for (int i = 0; i < 19; ++i)
+                    {
+                        CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 47, o, 40, 2);
+                    }
+                    Vector(0.3f, 0.2f, 0.1f, Light);
+                    CreateEffect(MODEL_SUMMON, Position, o->Angle, Light, 0);
+                    CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 0);
+                    CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 1);
+                    CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 2);
+
+                    for (int i = 0; i < 2; ++i)
+                    {
+                        int iNumBones = Models[o->Type].NumBones;
+                        Models[o->Type].TransformByObjectBone(vFirePosition, o, rand() % iNumBones);
+                        CreateEffect(BITMAP_FLARE, vFirePosition, o->Angle, Light, 3);
+                    }
+                    PlayBuffer(SOUND_SKILL_RECOVER);
+                }
+                break;
+                case AT_SKILL_ALICE_LIGHTNINGORB: {
+                    switch (sc->Helper.Type)
+                    {
+                        case MODEL_HORN_OF_UNIRIA:
+                            SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_UNI);
+                            break;
+                        case MODEL_HORN_OF_DINORANT:
+                            SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_DINO);
+                            break;
+                        case MODEL_HORN_OF_FENRIR:
+                            SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_FENRIR);
+                            break;
+                        default:
+                            SetAction(so, PLAYER_SKILL_LIGHTNING_ORB);
+                            break;
                     }
                 }
-
-                CreateEffect(MODEL_BLADE_SKILL, Position, o->Angle, Light, 1, o, Key);
-            }
-            break;
-            case AT_SKILL_RECOVER:
-            {
-                //			OBJECT* o = so;
-                vec3_t Light, Position, P, dp;
-                vec3_t vFirePosition;
-
-                float Matrix[3][4];
-
-                OBJECT* o = so;
-
-                Vector(0.4f, 0.6f, 1.f, Light);
-                Vector(0.f, 0.f, 0.f, P);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(P, Matrix, dp);
-                VectorAdd(dp, o->Position, Position);
-                Position[2] += 130;
-                VectorCopy(o->Position, Position);
-                for (int i = 0; i < 19; ++i)
-                {
-                    CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 47, o, 40, 2);
+                break;
+                case AT_SKILL_ALICE_DRAINLIFE:
+                case AT_SKILL_ALICE_DRAINLIFE_STR: {
+                    switch (sc->Helper.Type)
+                    {
+                        case MODEL_HORN_OF_UNIRIA:
+                            SetAction(so, PLAYER_SKILL_DRAIN_LIFE_UNI);
+                            break;
+                        case MODEL_HORN_OF_DINORANT:
+                            SetAction(so, PLAYER_SKILL_DRAIN_LIFE_DINO);
+                            break;
+                        case MODEL_HORN_OF_FENRIR:
+                            SetAction(so, PLAYER_SKILL_DRAIN_LIFE_FENRIR);
+                            break;
+                        default:
+                            SetAction(so, PLAYER_SKILL_DRAIN_LIFE);
+                            break;
+                    }
                 }
-                Vector(0.3f, 0.2f, 0.1f, Light);
-                CreateEffect(MODEL_SUMMON, Position, o->Angle, Light, 0);
-                CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 0);
-                CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 1);
-                CreateEffect(BITMAP_TWLIGHT, Position, o->Angle, Light, 2);
+                break;
+                case AT_SKILL_ALICE_WEAKNESS:
+                case AT_SKILL_ALICE_ENERVATION:
+                    switch (sc->Helper.Type)
+                    {
+                        case MODEL_HORN_OF_UNIRIA:
+                            SetAction(so, PLAYER_SKILL_SLEEP_UNI);
+                            break;
+                        case MODEL_HORN_OF_DINORANT:
+                            SetAction(so, PLAYER_SKILL_SLEEP_DINO);
+                            break;
+                        case MODEL_HORN_OF_FENRIR:
+                            SetAction(so, PLAYER_SKILL_SLEEP_FENRIR);
+                            break;
+                        default:
+                            SetAction(so, PLAYER_SKILL_SLEEP);
+                            break;
+                    }
+                    break;
 
-                for (int i = 0; i < 2; ++i)
-                {
-                    int iNumBones = Models[o->Type].NumBones;
-                    Models[o->Type].TransformByObjectBone(vFirePosition, o, rand() % iNumBones);
-                    CreateEffect(BITMAP_FLARE, vFirePosition, o->Angle, Light, 3);
+                case AT_SKILL_SUMMON_EXPLOSION:
+                case AT_SKILL_SUMMON_REQUIEM:
+                case AT_SKILL_SUMMON_POLLUTION: {
+                    g_SummonSystem.CastSummonSkill(MagicNumber, sc, so, Data->PositionX, Data->PositionY);
                 }
-                PlayBuffer(SOUND_SKILL_RECOVER);
-            }
-            break;
-            case AT_SKILL_ALICE_LIGHTNINGORB:
-            {
-                switch (sc->Helper.Type)
-                {
-                case MODEL_HORN_OF_UNIRIA:
-                    SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_UNI);
+                break;
+                case AT_SKILL_FLAME_STRIKE:
+                    SetAction(so, PLAYER_SKILL_FLAMESTRIKE);
                     break;
-                case MODEL_HORN_OF_DINORANT:
-                    SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_DINO);
+                case AT_SKILL_GIGANTIC_STORM:
+                    SetAction(so, PLAYER_SKILL_GIGANTICSTORM);
                     break;
-                case MODEL_HORN_OF_FENRIR:
-                    SetAction(so, PLAYER_SKILL_LIGHTNING_ORB_FENRIR);
+
+                case AT_SKILL_LIGHTNING_SHOCK:
+                case AT_SKILL_LIGHTNING_SHOCK_STR:
+                    SetAction(so, PLAYER_SKILL_LIGHTNING_SHOCK);
                     break;
+                case AT_SKILL_DRAGON_ROAR:
+                case AT_SKILL_DRAGON_ROAR_STR: {
+                    if (sc != Hero)
+                        g_CMonkSystem.RageCreateEffect(so, MagicNumber);
+
+                    g_CMonkSystem.SetRageSkillAni(MagicNumber, so);
+                }
+                break;
                 default:
-                    SetAction(so, PLAYER_SKILL_LIGHTNING_ORB);
+                    SetPlayerMagic(sc);
                     break;
-                }
-            }
-            break;
-            case AT_SKILL_ALICE_DRAINLIFE:
-            case AT_SKILL_ALICE_DRAINLIFE_STR:
-            {
-                switch (sc->Helper.Type)
-                {
-                case MODEL_HORN_OF_UNIRIA:
-                    SetAction(so, PLAYER_SKILL_DRAIN_LIFE_UNI);
-                    break;
-                case MODEL_HORN_OF_DINORANT:
-                    SetAction(so, PLAYER_SKILL_DRAIN_LIFE_DINO);
-                    break;
-                case MODEL_HORN_OF_FENRIR:
-                    SetAction(so, PLAYER_SKILL_DRAIN_LIFE_FENRIR);
-                    break;
-                default:
-                    SetAction(so, PLAYER_SKILL_DRAIN_LIFE);
-                    break;
-                }
-            }
-            break;
-            case AT_SKILL_ALICE_WEAKNESS:
-            case AT_SKILL_ALICE_ENERVATION:
-                switch (sc->Helper.Type)
-                {
-                case MODEL_HORN_OF_UNIRIA:
-                    SetAction(so, PLAYER_SKILL_SLEEP_UNI);
-                    break;
-                case MODEL_HORN_OF_DINORANT:
-                    SetAction(so, PLAYER_SKILL_SLEEP_DINO);
-                    break;
-                case MODEL_HORN_OF_FENRIR:
-                    SetAction(so, PLAYER_SKILL_SLEEP_FENRIR);
-                    break;
-                default:
-                    SetAction(so, PLAYER_SKILL_SLEEP);
-                    break;
-                }
-                break;
-
-            case AT_SKILL_SUMMON_EXPLOSION:
-            case AT_SKILL_SUMMON_REQUIEM:
-            case AT_SKILL_SUMMON_POLLUTION:
-            {
-                g_SummonSystem.CastSummonSkill(MagicNumber, sc, so, Data->PositionX, Data->PositionY);
-            }
-            break;
-            case AT_SKILL_FLAME_STRIKE:
-                SetAction(so, PLAYER_SKILL_FLAMESTRIKE);
-                break;
-            case AT_SKILL_GIGANTIC_STORM:
-                SetAction(so, PLAYER_SKILL_GIGANTICSTORM);
-                break;
-
-            case AT_SKILL_LIGHTNING_SHOCK:
-            case AT_SKILL_LIGHTNING_SHOCK_STR:
-                SetAction(so, PLAYER_SKILL_LIGHTNING_SHOCK);
-                break;
-            case AT_SKILL_DRAGON_ROAR:
-            case AT_SKILL_DRAGON_ROAR_STR:
-            {
-                if (sc != Hero)
-                    g_CMonkSystem.RageCreateEffect(so, MagicNumber);
-
-                g_CMonkSystem.SetRageSkillAni(MagicNumber, so);
-            }
-            break;
-            default:
-                SetPlayerMagic(sc);
-                break;
             }
             so->AnimationFrame = 0;
         }
@@ -5642,11 +5653,11 @@ BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         SetPlayerAttack(sc);
         so->AnimationFrame = 0;
     }
-    sc->AttackTime = 1;
+    sc->AttackTime      = 1;
     sc->TargetCharacter = -1;
-    sc->AttackFlag = ATTACK_FAIL;
-    sc->SkillX = Data->PositionX;
-    sc->SkillY = Data->PositionY;
+    sc->AttackFlag      = ATTACK_FAIL;
+    sc->SkillX          = Data->PositionX;
+    sc->SkillY          = Data->PositionY;
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x1E [ReceiveMagicContinue(%d)]", MagicNumber);
 
@@ -5658,26 +5669,26 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
 {
     auto pPacketData = (LPPRECEIVE_CHAIN_MAGIC)ReceiveBuffer;
 
-    CHARACTER* pSourceChar = &CharactersClient[FindCharacterIndex(pPacketData->wUserIndex)];
-    OBJECT* pSourceObject = &pSourceChar->Object;
-    OBJECT* pTempObject = nullptr;
+    CHARACTER* pSourceChar   = &CharactersClient[FindCharacterIndex(pPacketData->wUserIndex)];
+    OBJECT*    pSourceObject = &pSourceChar->Object;
+    OBJECT*    pTempObject   = nullptr;
 
     //SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING);
 
     switch (pSourceChar->Helper.Type)
     {
-    case MODEL_HORN_OF_UNIRIA:
-        SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_UNI);
-        break;
-    case MODEL_HORN_OF_DINORANT:
-        SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_DINO);
-        break;
-    case MODEL_HORN_OF_FENRIR:
-        SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_FENRIR);
-        break;
-    default:
-        SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING);
-        break;
+        case MODEL_HORN_OF_UNIRIA:
+            SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_UNI);
+            break;
+        case MODEL_HORN_OF_DINORANT:
+            SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_DINO);
+            break;
+        case MODEL_HORN_OF_FENRIR:
+            SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING_FENRIR);
+            break;
+        default:
+            SetAction(pSourceObject, PLAYER_SKILL_CHAIN_LIGHTNING);
+            break;
     }
 
     pSourceChar->Skill = ((WORD)(pPacketData->MagicH) << 8) + pPacketData->MagicL;
@@ -5687,9 +5698,9 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
     int iOffset = sizeof(PRECEIVE_CHAIN_MAGIC);
     for (int i = 0; i < (int)(pPacketData->byCount); i++)
     {
-        auto pPacketData2 = (LPPRECEIVE_CHAIN_MAGIC_OBJECT)(ReceiveBuffer + iOffset);
-        CHARACTER* pTargetChar = &CharactersClient[FindCharacterIndex(pPacketData2->wTargetIndex)];
-        OBJECT* pTargetObject = &pTargetChar->Object;
+        auto       pPacketData2  = (LPPRECEIVE_CHAIN_MAGIC_OBJECT)(ReceiveBuffer + iOffset);
+        CHARACTER* pTargetChar   = &CharactersClient[FindCharacterIndex(pPacketData2->wTargetIndex)];
+        OBJECT*    pTargetObject = &pTargetChar->Object;
 
         if (pTempObject != pTargetObject && pTargetObject != nullptr && pTargetObject->Live == true)
         {
@@ -5698,8 +5709,8 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
 
             //SetPlayerStop(pTargetChar);
 
-            CreateEffect(MODEL_CHAIN_LIGHTNING, pSourceObject->Position, vAngle, pSourceObject->Light, i,
-                pTempObject, -1, 0, 0, 0, 0.f, pPacketData2->wTargetIndex);
+            CreateEffect(MODEL_CHAIN_LIGHTNING, pSourceObject->Position, vAngle, pSourceObject->Light, i, pTempObject,
+                         -1, 0, 0, 0, 0.f, pPacketData2->wTargetIndex);
         }
 
         pTempObject = pTargetObject;
@@ -5710,27 +5721,27 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer)
 
 void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
 {
-    auto Data = (LPPRECEIVE_MAGIC_POSITIONS)ReceiveBuffer;
-    int SourceKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    auto Data        = (LPPRECEIVE_MAGIC_POSITIONS)ReceiveBuffer;
+    int  SourceKey   = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
-    int Index = FindCharacterIndex(SourceKey);
-    AttackPlayer = Index;
+    int  Index       = FindCharacterIndex(SourceKey);
+    AttackPlayer     = Index;
 
     CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
+    OBJECT*    o = &c->Object;
     CreateMagicShiny(c);
     PlayBuffer(SOUND_MAGIC);
     SetAction(o, PLAYER_SKILL_HELL);
-    c->Skill = MagicNumber;
+    c->Skill      = MagicNumber;
     c->AttackTime = 1;
 
     int Offset = sizeof(PRECEIVE_MAGIC_POSITIONS);
     for (int i = 0; i < Data->Count; i++)
     {
-        auto Data2 = (LPPRECEIVE_MAGIC_POSITION)(ReceiveBuffer + Offset);
-        int TargetKey = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
-        CHARACTER* tc = &CharactersClient[FindCharacterIndex(TargetKey)];
-        OBJECT* to = &tc->Object;
+        auto       Data2     = (LPPRECEIVE_MAGIC_POSITION)(ReceiveBuffer + Offset);
+        int        TargetKey = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
+        CHARACTER* tc        = &CharactersClient[FindCharacterIndex(TargetKey)];
+        OBJECT*    to        = &tc->Object;
         if (rand_fps_check(2))
             SetPlayerShock(tc, tc->Hit);
         if (tc->Hit > 0)
@@ -5752,35 +5763,35 @@ void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
 
 void ReceiveSkillCount(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_EX_SKILL_COUNT)ReceiveBuffer;
-    int TargetKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* tc = &CharactersClient[FindCharacterIndex(TargetKey)];
-    OBJECT* to = &tc->Object;
+    auto       Data      = (LPPRECEIVE_EX_SKILL_COUNT)ReceiveBuffer;
+    int        TargetKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    CHARACTER* tc        = &CharactersClient[FindCharacterIndex(TargetKey)];
+    OBJECT*    to        = &tc->Object;
 
     switch (Data->m_byType)
     {
-    case AT_SKILL_NOVA_BEGIN:
-        break;
+        case AT_SKILL_NOVA_BEGIN:
+            break;
 
-    case AT_SKILL_NOVA:
-        to->m_bySkillCount = Data->m_byCount;
-        break;
+        case AT_SKILL_NOVA:
+            to->m_bySkillCount = Data->m_byCount;
+            break;
     }
 }
 
 BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
-    auto Data = (LPPRECEIVE_DIE)ReceiveBuffer;
-    int     Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    DWORD   Exp = ((DWORD)(Data->ExpH) << 8) + Data->ExpL;
-    int     Damage = ((int)(Data->DamageH) << 8) + Data->DamageL;
-    int     Success = (Key >> 15);
+    auto  Data    = (LPPRECEIVE_DIE)ReceiveBuffer;
+    int   Key     = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    DWORD Exp     = ((DWORD)(Data->ExpH) << 8) + Data->ExpL;
+    int   Damage  = ((int)(Data->DamageH) << 8) + Data->DamageL;
+    int   Success = (Key >> 15);
     Key &= 0x7FFF;
 
-    int Index = FindCharacterIndex(Key);
-    CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
-    vec3_t Light;
+    int        Index = FindCharacterIndex(Key);
+    CHARACTER* c     = &CharactersClient[Index];
+    OBJECT*    o     = &c->Object;
+    vec3_t     Light;
     Vector(1.f, 0.6f, 0.f, Light);
     if (Success)
     {
@@ -5789,12 +5800,12 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     }
     else
     {
-        Hero->AttackFlag = ATTACK_DIE;
-        Hero->Damage = Damage;
+        Hero->AttackFlag      = ATTACK_DIE;
+        Hero->Damage          = Damage;
         Hero->TargetCharacter = Index;
         CreatePoint(o->Position, Damage, Light);
     }
-    c->Dead = 1;
+    c->Dead     = 1;
     c->Movement = false;
 
     if (gCharacterManager.IsMasterExperienceActive(CharacterAttribute->Class, CharacterAttribute->Level) == true)
@@ -5804,26 +5815,23 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
         const auto lowerBound = GetMasterLowerBound(Master_Level_Data.nMLevel);
         const auto upperBound = Master_Level_Data.lNext_MasterLevel_Experince;
-        const auto currentExperience = ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
-        const auto addedExperience = static_cast<int64_t>(Exp);
+        const auto currentExperience =
+            ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
+        const auto addedExperience               = static_cast<int64_t>(Exp);
         Master_Level_Data.lMasterLevel_Experince = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, addedExperience, upperBound),
-            lowerBound,
-            upperBound);
+            SaturatingAddToUpper(currentExperience, addedExperience, upperBound), lowerBound, upperBound);
     }
     else
     {
         g_pMainFrame->SetPreExp(CharacterAttribute->Experience);
         g_pMainFrame->SetGetExp(Exp);
 
-        const auto lowerBound = GetNormalLowerBound(CharacterAttribute->Level);
-        const auto upperBound = CharacterAttribute->NextExperience;
-        const auto currentExperience = ClampToInterval(CharacterAttribute->Experience, lowerBound, upperBound);
-        const auto addedExperience = static_cast<uint64_t>(Exp);
+        const auto lowerBound          = GetNormalLowerBound(CharacterAttribute->Level);
+        const auto upperBound          = CharacterAttribute->NextExperience;
+        const auto currentExperience   = ClampToInterval(CharacterAttribute->Experience, lowerBound, upperBound);
+        const auto addedExperience     = static_cast<uint64_t>(Exp);
         CharacterAttribute->Experience = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, addedExperience, upperBound),
-            lowerBound,
-            upperBound);
+            SaturatingAddToUpper(currentExperience, addedExperience, upperBound), lowerBound, upperBound);
     }
 
     if (Exp > 0)
@@ -5840,7 +5848,7 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
 #ifdef CONSOLE_DEBUG
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x16 [ReceiveDieExp : %d]", Exp);
-#endif // CONSOLE_DEBUG
+#endif  // CONSOLE_DEBUG
 
     return (TRUE);
 }
@@ -5851,25 +5859,24 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
     auto addedExperience = Data->AddedExperience;
     auto damageOfLastHit = Data->DamageOfLastHit;
-    auto experienceType = Data->ExperienceType;
-    auto killedId = Data->KilledObjectId;
-    auto killerId = Data->KillerObjectId;
+    auto experienceType  = Data->ExperienceType;
+    auto killedId        = Data->KilledObjectId;
+    auto killerId        = Data->KillerObjectId;
 
-    int Index = FindCharacterIndex(killedId);
+    int        Index        = FindCharacterIndex(killedId);
     CHARACTER* killedObject = &CharactersClient[Index];
-    OBJECT* o = &killedObject->Object;
-    vec3_t Light;
+    OBJECT*    o            = &killedObject->Object;
+    vec3_t     Light;
     Vector(1.f, 0.6f, 0.f, Light);
     if (Hero->Key == killerId)
     {
-        Hero->AttackFlag = ATTACK_DIE;
-        Hero->Damage = damageOfLastHit;
+        Hero->AttackFlag      = ATTACK_DIE;
+        Hero->Damage          = damageOfLastHit;
         Hero->TargetCharacter = Index;
     }
     else
     {
         SetPlayerDie(killedObject);
-        
     }
 
     if (damageOfLastHit > 0)
@@ -5877,23 +5884,24 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         CreatePoint(o->Position, damageOfLastHit, Light);
     }
 
-    killedObject->Dead = 1;
+    killedObject->Dead     = 1;
     killedObject->Movement = false;
 
-    switch(experienceType)
+    switch (experienceType)
     {
-    case eExperienceType_MaxLevelReached:
-        // TODO: show message "You already reached maximum Level."
-        g_pSystemLogBox->AddText(L"You already reached maximum Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
-        return TRUE;
-    case eExperienceType_MaxMasterLevelReached:
-        // TODO: show message "You already reached maximum master Level."
-        g_pSystemLogBox->AddText(L"You already reached maximum master Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
-        return TRUE;
-    case eExperienceType_MonsterLevelTooLowForMasterExperience:
-        // TODO: You need to kill stronger monsters to gain master experience.
-        g_pSystemLogBox->AddText(L"You need to kill stronger monsters to gain master experience.", SEASON3B::TYPE_SYSTEM_MESSAGE);
-        return TRUE;
+        case eExperienceType_MaxLevelReached:
+            // TODO: show message "You already reached maximum Level."
+            g_pSystemLogBox->AddText(L"You already reached maximum Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
+            return TRUE;
+        case eExperienceType_MaxMasterLevelReached:
+            // TODO: show message "You already reached maximum master Level."
+            g_pSystemLogBox->AddText(L"You already reached maximum master Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
+            return TRUE;
+        case eExperienceType_MonsterLevelTooLowForMasterExperience:
+            // TODO: You need to kill stronger monsters to gain master experience.
+            g_pSystemLogBox->AddText(L"You need to kill stronger monsters to gain master experience.",
+                                     SEASON3B::TYPE_SYSTEM_MESSAGE);
+            return TRUE;
     }
 
     if (addedExperience == 0)
@@ -5908,24 +5916,23 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
         const auto lowerBound = GetMasterLowerBound(Master_Level_Data.nMLevel);
         const auto upperBound = Master_Level_Data.lNext_MasterLevel_Experince;
-        const auto currentExperience = ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
-        Master_Level_Data.lMasterLevel_Experince = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, static_cast<int64_t>(addedExperience), upperBound),
-            lowerBound,
-            upperBound);
+        const auto currentExperience =
+            ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
+        Master_Level_Data.lMasterLevel_Experince =
+            ClampToInterval(SaturatingAddToUpper(currentExperience, static_cast<int64_t>(addedExperience), upperBound),
+                            lowerBound, upperBound);
     }
     else
     {
         g_pMainFrame->SetPreExp(CharacterAttribute->Experience);
         g_pMainFrame->SetGetExp(addedExperience);
 
-        const auto lowerBound = GetNormalLowerBound(CharacterAttribute->Level);
-        const auto upperBound = CharacterAttribute->NextExperience;
+        const auto lowerBound        = GetNormalLowerBound(CharacterAttribute->Level);
+        const auto upperBound        = CharacterAttribute->NextExperience;
         const auto currentExperience = ClampToInterval(CharacterAttribute->Experience, lowerBound, upperBound);
-        CharacterAttribute->Experience = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, static_cast<uint64_t>(addedExperience), upperBound),
-            lowerBound,
-            upperBound);
+        CharacterAttribute->Experience =
+            ClampToInterval(SaturatingAddToUpper(currentExperience, static_cast<uint64_t>(addedExperience), upperBound),
+                            lowerBound, upperBound);
     }
 
     if (addedExperience > 0)
@@ -5951,16 +5958,16 @@ void FallingStartCharacter(CHARACTER* c, OBJECT* o)
 {
     auto positionX = (BYTE)(o->Position[0] / TERRAIN_SCALE);
     auto positionY = (BYTE)(o->Position[1] / TERRAIN_SCALE);
-    int WallIndex = TERRAIN_INDEX_REPEAT(positionX, positionY);
-    int Wall = TerrainWall[WallIndex] & TW_ACTION;
+    int  WallIndex = TERRAIN_INDEX_REPEAT(positionX, positionY);
+    int  Wall      = TerrainWall[WallIndex] & TW_ACTION;
 
     o->m_bActionStart = false;
 
     if (gMapManager.InChaosCastle() == true && (TerrainWall[WallIndex] & TW_NOGROUND) == TW_NOGROUND)
     {
-        c->StormTime = 0;
+        c->StormTime      = 0;
         o->m_bActionStart = true;
-        o->Gravity = rand() % 10 + 10.f;
+        o->Gravity        = rand() % 10 + 10.f;
         o->Velocity -= rand() % 3 + 3.f;
 
         Vector(0.f, 0.f, 1.f, o->Direction);
@@ -5970,11 +5977,11 @@ void FallingStartCharacter(CHARACTER* c, OBJECT* o)
     }
     else if (Wall == TW_ACTION)
     {
-        c->StormTime = 0;
+        c->StormTime      = 0;
         o->m_bActionStart = true;
-        o->Gravity = rand() % 10 + 10.f;
-        o->Velocity = rand() % 20 + 20.f;
-        float angle = rand() % 10 + 85.f;
+        o->Gravity        = rand() % 10 + 10.f;
+        o->Velocity       = rand() % 20 + 20.f;
+        float angle       = rand() % 10 + 85.f;
 
         if ((TerrainWall[WallIndex + 1] & TW_NOGROUND) == TW_NOGROUND)
         {
@@ -6005,9 +6012,9 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
     int Index = FindCharacterIndex(Key);
 
     CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
-    c->Dead = 1;
-    c->Movement = false;
+    OBJECT*    o = &c->Object;
+    c->Dead      = 1;
+    c->Movement  = false;
 
     WORD SkillType = ((int)(Data->MagicH) << 8) + Data->MagicL;
 
@@ -6032,24 +6039,24 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
 
         switch (SkillType)
         {
-        case AT_SKILL_NOVA:
-        case AT_SKILL_COMBO:
-            o->m_bActionStart = true;
-            c->StormTime = 0;
-            o->Velocity = (rand() % 5 + 10.f) * 0.1f;
-            o->m_bySkillCount = 0;
+            case AT_SKILL_NOVA:
+            case AT_SKILL_COMBO:
+                o->m_bActionStart = true;
+                c->StormTime      = 0;
+                o->Velocity       = (rand() % 5 + 10.f) * 0.1f;
+                o->m_bySkillCount = 0;
 
-            Vector(0.f, rand() % 15 + 40.f, 0.f, o->Direction);
-            VectorCopy(o->Position, o->m_vDeadPosition);
-            break;
+                Vector(0.f, rand() % 15 + 40.f, 0.f, o->Direction);
+                VectorCopy(o->Position, o->m_vDeadPosition);
+                break;
         }
 
         if (SkillType == AT_SKILL_NOVA || SkillType == AT_SKILL_COMBO)
         {
-            int TKey = ((int)(Data->TKeyH) << 8) + Data->TKeyL;
-            int TIndex = FindCharacterIndex(TKey);
-            CHARACTER* tc = &CharactersClient[TIndex];
-            OBJECT* to = &tc->Object;
+            int        TKey   = ((int)(Data->TKeyH) << 8) + Data->TKeyL;
+            int        TIndex = FindCharacterIndex(TKey);
+            CHARACTER* tc     = &CharactersClient[TIndex];
+            OBJECT*    to     = &tc->Object;
 
             o->Angle[2] = CreateAngle2D(o->Position, to->Position);
 
@@ -6074,7 +6081,7 @@ void ReceiveCreateMoney(std::span<const BYTE> ReceiveBuffer)
         assert(false);
         return;
     }
-    
+
     if (Data->Id < 0 || Data->Id >= MAX_ITEMS)
     {
         // we don't have a free place for it ...
@@ -6082,11 +6089,11 @@ void ReceiveCreateMoney(std::span<const BYTE> ReceiveBuffer)
     }
 
     vec3_t Position;
-    Position[0] = (float)(Data->PositionX + 0.5f)* TERRAIN_SCALE;
+    Position[0] = (float)(Data->PositionX + 0.5f) * TERRAIN_SCALE;
     Position[1] = (float)(Data->PositionY + 0.5f) * TERRAIN_SCALE;
 
     CreateMoneyDrop(&Items[Data->Id], Data->Amount, Position, Data->IsFreshDrop);
-    MUHelper::g_MuHelper.AddItem(Data->Id, { Data->PositionX, Data->PositionY });
+    MUHelper::g_MuHelper.AddItem(Data->Id, {Data->PositionX, Data->PositionY});
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x20 [ReceiveCreateMoney]");
 }
@@ -6110,7 +6117,7 @@ void ReceiveCreateItemViewportExtended(std::span<const BYTE> ReceiveBuffer)
             return;
         }
 
-        auto id = MAKEWORD(itemStartData->IdH, itemStartData->IdL) & 0x7FFF;
+        auto id          = MAKEWORD(itemStartData->IdH, itemStartData->IdL) & 0x7FFF;
         auto isFreshDrop = (itemStartData->IdL & 0x80) > 0;
         if (id < 0 || id >= MAX_ITEMS)
         {
@@ -6120,16 +6127,16 @@ void ReceiveCreateItemViewportExtended(std::span<const BYTE> ReceiveBuffer)
 
         Offset += 4;
         auto itemData = ReceiveBuffer.subspan(Offset);
-        int length = CalcItemLength(itemData);
-        itemData = itemData.subspan(0, length);
+        int  length   = CalcItemLength(itemData);
+        itemData      = itemData.subspan(0, length);
 
-        auto params = ParseItemData(itemData);
+        auto   params = ParseItemData(itemData);
         vec3_t Position;
         Position[0] = (float)(itemStartData->PositionX + 0.5f) * TERRAIN_SCALE;
         Position[1] = (float)(itemStartData->PositionY + 0.5f) * TERRAIN_SCALE;
 
         CreateItemDrop(&Items[id], params, Position, isFreshDrop);
-        MUHelper::g_MuHelper.AddItem(id, { itemStartData->PositionX, itemStartData->PositionY });
+        MUHelper::g_MuHelper.AddItem(id, {itemStartData->PositionX, itemStartData->PositionY});
 
         Offset += length;
     }
@@ -6139,12 +6146,12 @@ void ReceiveCreateItemViewportExtended(std::span<const BYTE> ReceiveBuffer)
 
 void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    auto Data   = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
-        int Key = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
+        int  Key   = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
         if (Key < 0 || Key >= MAX_ITEMS)
             Key = 0;
         Items[Key].Object.Live = false;
@@ -6154,23 +6161,23 @@ void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer)
     }
 }
 
-static  const   BYTE    NOT_GET_ITEM = 0xff;
-static  const   BYTE    GET_ITEM_ZEN = 0xfe;
-static  const   BYTE    GET_ITEM_MULTI = 0xfd; // received when item was added in a stack
+static const BYTE NOT_GET_ITEM   = 0xff;
+static const BYTE GET_ITEM_ZEN   = 0xfe;
+static const BYTE GET_ITEM_MULTI = 0xfd;  // received when item was added in a stack
 
 namespace
 {
-    void RequestInventorySync()
+void RequestInventorySync()
+{
+    if (SocketClient != nullptr && SocketClient->ToGameServer() != nullptr)
     {
-        if (SocketClient != nullptr && SocketClient->ToGameServer() != nullptr)
-        {
-            SocketClient->ToGameServer()->SendInventoryRequest();
-        }
+        SocketClient->ToGameServer()->SendInventoryRequest();
     }
+}
 }
 
 extern int ItemKey;
-void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
+void       ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
 {
     auto Data = safe_cast<PHEADER_DEFAULT>(ReceiveBuffer);
     if (Data == nullptr)
@@ -6178,7 +6185,7 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
         assert(false);
         return;
     }
-    
+
     if (Data->Value == NOT_GET_ITEM)
     {
         PublishHaptic(Core::Haptics::HapticEvent::OperationFailed);
@@ -6196,8 +6203,9 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
             }
 
             wchar_t szMessage[128];
-            int backupGold = CharacterMachine->Gold;
-            CharacterMachine->Gold = (Data2->Money[0] << 24) + (Data2->Money[1] << 16) + (Data2->Money[2] << 8) + (Data2->Money[3]);
+            int     backupGold = CharacterMachine->Gold;
+            CharacterMachine->Gold =
+                (Data2->Money[0] << 24) + (Data2->Money[1] << 16) + (Data2->Money[2] << 8) + (Data2->Money[3]);
 
             int getGold = CharacterMachine->Gold - backupGold;
 
@@ -6209,9 +6217,9 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
         }
         else
         {
-            auto pickedItem = &Items[ItemKey].Item;
+            auto pickedItem            = &Items[ItemKey].Item;
             bool shouldResyncInventory = false;
-            auto itemIndex = Data->Value;
+            auto itemIndex             = Data->Value;
             if (itemIndex != GET_ITEM_MULTI)
             {
                 if (safe_cast<PRECEIVE_GET_ITEM_EXTENDED>(ReceiveBuffer) == nullptr)
@@ -6220,10 +6228,10 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
                     return;
                 }
 
-                auto offset = sizeof(PBMSG_HEADER) + 1;
+                auto offset   = sizeof(PBMSG_HEADER) + 1;
                 auto itemData = ReceiveBuffer.subspan(offset);
-                int length = CalcItemLength(itemData);
-                itemData = itemData.subspan(0, length);
+                int  length   = CalcItemLength(itemData);
+                itemData      = itemData.subspan(0, length);
 
                 if (IsMainInventorySlot(itemIndex))
                 {
@@ -6254,7 +6262,9 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
                 RequestInventorySync();
             }
 
-            wchar_t szItem[64] = { 0, };
+            wchar_t szItem[64] = {
+                0,
+            };
             int level = pickedItem->Level;
             GetItemName(pickedItem->Type, level, szItem);
 
@@ -6263,8 +6273,9 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
             g_pSystemLogBox->AddText(szMessage, SEASON3B::TYPE_SYSTEM_MESSAGE);
 
             int Type = pickedItem->Type;
-            if (Type == ITEM_JEWEL_OF_BLESS || Type == ITEM_JEWEL_OF_SOUL || Type == ITEM_JEWEL_OF_LIFE || Type == ITEM_JEWEL_OF_CHAOS || Type == ITEM_JEWEL_OF_CREATION
-                || Type == INDEX_COMPILED_CELE || Type == INDEX_COMPILED_SOUL || Type == ITEM_JEWEL_OF_GUARDIAN)
+            if (Type == ITEM_JEWEL_OF_BLESS || Type == ITEM_JEWEL_OF_SOUL || Type == ITEM_JEWEL_OF_LIFE ||
+                Type == ITEM_JEWEL_OF_CHAOS || Type == ITEM_JEWEL_OF_CREATION || Type == INDEX_COMPILED_CELE ||
+                Type == INDEX_COMPILED_SOUL || Type == ITEM_JEWEL_OF_GUARDIAN)
                 PlayBuffer(SOUND_JEWEL01, &Hero->Object);
             else if (Type == ITEM_GEMSTONE)
                 PlayBuffer(SOUND_JEWEL02, &Hero->Object);
@@ -6311,24 +6322,24 @@ void ReceiveTradeExit(const BYTE* ReceiveBuffer);
 BOOL ReceiveEquipmentItemExtended(std::span<const BYTE> ReceiveBuffer)
 {
     EquipmentItem = false;
-    auto Data = safe_cast<PHEADER_DEFAULT_SUBCODE_ITEM_EXTENDED>(ReceiveBuffer);
+    auto Data     = safe_cast<PHEADER_DEFAULT_SUBCODE_ITEM_EXTENDED>(ReceiveBuffer);
     if (Data == nullptr)
     {
         assert(false);
         return false;
     }
 
-    auto Offset = sizeof(PBMSG_HEADER) + 2;
+    auto Offset   = sizeof(PBMSG_HEADER) + 2;
     auto itemData = ReceiveBuffer.subspan(Offset);
-    int length = CalcItemLength(itemData);
-    itemData = itemData.subspan(0, length);
+    int  length   = CalcItemLength(itemData);
+    itemData      = itemData.subspan(0, length);
 
     if (Data->SubCode != 255)
     {
         PublishHaptic(Core::Haptics::HapticEvent::ItemDropped);
-        const auto storageType = static_cast<STORAGE_TYPE>(Data->SubCode);
-        SEASON3B::CNewUIPickedItem* pPickedItem = SEASON3B::CNewUIInventoryCtrl::GetPickedItem();
-        int iSourceIndex = g_pMyShopInventory->GetSourceIndex();
+        const auto                  storageType  = static_cast<STORAGE_TYPE>(Data->SubCode);
+        SEASON3B::CNewUIPickedItem* pPickedItem  = SEASON3B::CNewUIInventoryCtrl::GetPickedItem();
+        int                         iSourceIndex = g_pMyShopInventory->GetSourceIndex();
         if (pPickedItem)
         {
             iSourceIndex = pPickedItem->GetSourceLinealPos();
@@ -6351,7 +6362,7 @@ BOOL ReceiveEquipmentItemExtended(std::span<const BYTE> ReceiveBuffer)
         {
             SEASON3B::CNewUIInventoryCtrl::DeletePickedItem();
 
-            int itemindex = Data->Index;
+            int  itemindex             = Data->Index;
             bool shouldResyncInventory = false;
 
             if (itemindex >= 0 && itemindex < MAX_EQUIPMENT_INDEX)
@@ -6395,8 +6406,8 @@ BOOL ReceiveEquipmentItemExtended(std::span<const BYTE> ReceiveBuffer)
                 g_pStorageInventoryExt->ProcessToReceiveStorageItems(Data->Index, itemData);
             }
         }
-        if (storageType == STORAGE_TYPE::CHAOS_MIX
-            || (storageType >= STORAGE_TYPE::TRAINER_MIX && storageType <= STORAGE_TYPE::DETACH_SOCKET_MIX))
+        if (storageType == STORAGE_TYPE::CHAOS_MIX ||
+            (storageType >= STORAGE_TYPE::TRAINER_MIX && storageType <= STORAGE_TYPE::DETACH_SOCKET_MIX))
         {
             SEASON3B::CNewUIInventoryCtrl::DeletePickedItem();
             if (Data->Index >= 0 && Data->Index < MAX_MIX_INVENTORY)
@@ -6435,7 +6446,6 @@ BOOL ReceiveEquipmentItemExtended(std::span<const BYTE> ReceiveBuffer)
     return (TRUE);
 }
 
-
 void ReceiveModifyItemExtended(std::span<const BYTE> ReceiveBuffer)
 {
     auto Data = safe_cast<PHEADER_DEFAULT_SUBCODE_ITEM_EXTENDED>(ReceiveBuffer);
@@ -6445,10 +6455,10 @@ void ReceiveModifyItemExtended(std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    auto Offset = sizeof(PBMSG_HEADER) + 2;
+    auto Offset   = sizeof(PBMSG_HEADER) + 2;
     auto itemData = ReceiveBuffer.subspan(Offset);
-    int length = CalcItemLength(itemData);
-    itemData = itemData.subspan(0, length);
+    int  length   = CalcItemLength(itemData);
+    itemData      = itemData.subspan(0, length);
 
     if (SEASON3B::CNewUIInventoryCtrl::GetPickedItem())
     {
@@ -6503,151 +6513,133 @@ BOOL ReceiveTalk(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
     switch (Data->Value)
     {
-    case 2:
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_STORAGE);
-        break;
+        case 2:
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_STORAGE);
+            break;
 
-    case 3:
-        g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_GOBLIN_NORMAL);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
-        //BYTE *pbyChaosRate = ( &Data->Value) + 1;
-        //int iDummyRate[6];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림
-        //for ( int i = 0; i < 6; ++i)
-        //	iDummyRate[i] = ( int)pbyChaosRate[i];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림(스크립트사용)
-        break;
+        case 3:
+            g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_GOBLIN_NORMAL);
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
+            //BYTE *pbyChaosRate = ( &Data->Value) + 1;
+            //int iDummyRate[6];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림
+            //for ( int i = 0; i < 6; ++i)
+            //	iDummyRate[i] = ( int)pbyChaosRate[i];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림(스크립트사용)
+            break;
 
-    case 4:
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_DEVILSQUARE);
-        break;
+        case 4:
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_DEVILSQUARE);
+            break;
 
-    case 5:
-        g_pUIManager->Open(::INTERFACE_SERVERDIVISION);
-        break;
+        case 5:
+            g_pUIManager->Open(::INTERFACE_SERVERDIVISION);
+            break;
 
-    case 6:
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_BLOODCASTLE);
-        break;
+        case 6:
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_BLOODCASTLE);
+            break;
 
-    case 7:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTrainerMenuMsgBoxLayout));
-        break;
+        case 7:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTrainerMenuMsgBoxLayout));
+            break;
 
-    case INDEX_NPC_LAHAP:
-    {
-        if (COMGEM::isAble())
-        {
-            g_pNewUISystem->HideAll();
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationMsgBoxLayout));
+        case INDEX_NPC_LAHAP: {
+            if (COMGEM::isAble())
+            {
+                g_pNewUISystem->HideAll();
+                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationMsgBoxLayout));
+            }
         }
-    }
-    break;
-
-    case 0x0C:
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_SENATUS);
         break;
 
-    case 0x0D:
-        SocketClient->ToGameServer()->SendCastleSiegeStatusRequest();
-        break;
-    case 0x11:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CElpisMsgBoxLayout));
-    }
-    break;
-    case 0x12:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::COsbourneMsgBoxLayout));
-        // 			BYTE *pbyChaosRate = ( &Data->Value) + 1;
-        // 			g_pUIJewelHarmony->SetMixSuccessRate(pbyChaosRate);
-    }
-    break;
-    case 0x13:
-    {
-        g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_JERRIDON);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
-        // 			BYTE *pbyChaosRate = ( &Data->Value) + 1;
-        // 			g_pUIJewelHarmony->SetMixSuccessRate(pbyChaosRate);
-    }
-    break;
-    case 0x14:
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_CURSEDTEMPLE_NPC);
+        case 0x0C:
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_SENATUS);
+            break;
 
-        BYTE* cursedtempleenterinfo = (&Data->Value) + 1;
-        g_pCursedTempleEnterWindow->SetCursedTempleEnterInfo(cursedtempleenterinfo);
-    }
-    break;
-    case 0x15:
-    {
-        g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_CHAOS_CARD);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
-    }
-    break;
-    case 0x16:
-    {
-        g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_CHERRYBLOSSOM);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
-    }
-    break;
-    case 0x17:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSeedMasterMenuMsgBoxLayout));
-    }
-    break;
-    case 0x18:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSeedInvestigatorMenuMsgBoxLayout));
-    }
-    break;
-    case 0x19:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CResetCharacterPointMsgBoxLayout));
-    }
-    break;
-    case 0x20:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDelgardoMainMenuMsgBoxLayout));
-    }
-    break;
-    case 0x21:
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH);
-    }
-    break;
-    case 0x22:
-    {
-        GambleSystem::Instance().SetGambleShop();
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCSHOP);
-    }
-    break;
-    case 0x23:
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_DOPPELGANGER_NPC);
-        BYTE* pbtRemainTime = (&Data->Value) + 1;
-        g_pDoppelGangerWindow->SetRemainTime(*pbtRemainTime);
-    }
-    break;
-    case 0x24:
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_EMPIREGUARDIAN_NPC);
-    }
-    break;
-    case 0x25:
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_UNITEDMARKETPLACE_NPC_JULIA);
-    }
-    break;
-    case 0x26:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CLuckyTradeMenuMsgBoxLayout));
-    }
-    break;
-    default:
-    {
-        // Data->Value
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCSHOP);
-    }
-    break;
+        case 0x0D:
+            SocketClient->ToGameServer()->SendCastleSiegeStatusRequest();
+            break;
+        case 0x11: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CElpisMsgBoxLayout));
+        }
+        break;
+        case 0x12: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::COsbourneMsgBoxLayout));
+            // 			BYTE *pbyChaosRate = ( &Data->Value) + 1;
+            // 			g_pUIJewelHarmony->SetMixSuccessRate(pbyChaosRate);
+        }
+        break;
+        case 0x13: {
+            g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_JERRIDON);
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
+            // 			BYTE *pbyChaosRate = ( &Data->Value) + 1;
+            // 			g_pUIJewelHarmony->SetMixSuccessRate(pbyChaosRate);
+        }
+        break;
+        case 0x14: {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_CURSEDTEMPLE_NPC);
+
+            BYTE* cursedtempleenterinfo = (&Data->Value) + 1;
+            g_pCursedTempleEnterWindow->SetCursedTempleEnterInfo(cursedtempleenterinfo);
+        }
+        break;
+        case 0x15: {
+            g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_CHAOS_CARD);
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
+        }
+        break;
+        case 0x16: {
+            g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_CHERRYBLOSSOM);
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
+        }
+        break;
+        case 0x17: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSeedMasterMenuMsgBoxLayout));
+        }
+        break;
+        case 0x18: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSeedInvestigatorMenuMsgBoxLayout));
+        }
+        break;
+        case 0x19: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CResetCharacterPointMsgBoxLayout));
+        }
+        break;
+        case 0x20: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDelgardoMainMenuMsgBoxLayout));
+        }
+        break;
+        case 0x21: {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH);
+        }
+        break;
+        case 0x22: {
+            GambleSystem::Instance().SetGambleShop();
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCSHOP);
+        }
+        break;
+        case 0x23: {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_DOPPELGANGER_NPC);
+            BYTE* pbtRemainTime = (&Data->Value) + 1;
+            g_pDoppelGangerWindow->SetRemainTime(*pbtRemainTime);
+        }
+        break;
+        case 0x24: {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_EMPIREGUARDIAN_NPC);
+        }
+        break;
+        case 0x25: {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_UNITEDMARKETPLACE_NPC_JULIA);
+        }
+        break;
+        case 0x26: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CLuckyTradeMenuMsgBoxLayout));
+        }
+        break;
+        default: {
+            // Data->Value
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCSHOP);
+        }
+        break;
     }
     PlayBuffer(SOUND_CLICK01);
     PlayBuffer(SOUND_INTERFACE01);
@@ -6655,13 +6647,13 @@ BOOL ReceiveTalk(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 #ifdef WINDOWMODE
     if (g_bUseWindowMode == FALSE)
     {
-#endif	// WINDOWMODE
+#endif  // WINDOWMODE
         int x = 260 * MouseX / REFERENCE_WIDTH;
         SetCursorPos((x)*WindowWidth / REFERENCE_WIDTH, (MouseY)*WindowHeight / REFERENCE_HEIGHT);
 #ifdef WINDOWMODE
     }
-#endif	// WINDOWMODE
-#endif	// FOR_WORK
+#endif  // WINDOWMODE
+#endif  // FOR_WORK
 
     return (TRUE);
 }
@@ -6708,15 +6700,15 @@ void ReceiveBuyExtended(const std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    constexpr BYTE BUY_FAILED = 0xFE;
+    constexpr BYTE BUY_FAILED        = 0xFE;
     constexpr BYTE BUY_FAILED_SILENT = 0xFF;
 
-    auto Offset = sizeof(PHEADER_DEFAULT_ITEM_EXTENDED_HEAD);
+    auto Offset   = sizeof(PHEADER_DEFAULT_ITEM_EXTENDED_HEAD);
     auto itemData = ReceiveBuffer.subspan(Offset);
     if (!itemData.empty())
     {
         int length = CalcItemLength(itemData);
-        itemData = itemData.subspan(0, length);
+        itemData   = itemData.subspan(0, length);
     }
 
     if (Data->Index == BUY_FAILED)
@@ -6759,10 +6751,10 @@ void ReceiveTradeYourInventoryExtended(std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    auto Offset = sizeof(PBMSG_HEADER) + 1;
+    auto Offset   = sizeof(PBMSG_HEADER) + 1;
     auto itemData = ReceiveBuffer.subspan(Offset);
-    int length = CalcItemLength(itemData);
-    itemData = itemData.subspan(0, length);
+    int  length   = CalcItemLength(itemData);
+    itemData      = itemData.subspan(0, length);
 
     g_pTrade->ProcessToReceiveYourItemAdd(Data->Index, itemData);
 }
@@ -6776,152 +6768,152 @@ void ReceiveMixExtended(std::span<const BYTE> ReceiveBuffer)
         return;
     }
 
-    auto Offset = sizeof(PBMSG_HEADER) + 1;
+    auto Offset   = sizeof(PBMSG_HEADER) + 1;
     auto itemData = ReceiveBuffer.subspan(Offset);
-    int length = CalcItemLength(itemData);
-    itemData = itemData.subspan(0, length);
+    int  length   = CalcItemLength(itemData);
+    itemData      = itemData.subspan(0, length);
 
-    PublishHaptic(Data->Index == 1 || Data->Index == 100
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->Index == 1 || Data->Index == 100 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                                         : Core::Haptics::HapticEvent::OperationFailed);
 
     switch (Data->Index)
     {
-    case 0:
-    {
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) && g_pLuckyItemWnd->GetAct())
-        {
-            std::span<const BYTE> empty = {};
-            g_pLuckyItemWnd->GetResult(0, Data->Index, empty);
-            break;
+        case 0: {
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) && g_pLuckyItemWnd->GetAct())
+            {
+                std::span<const BYTE> empty = {};
+                g_pLuckyItemWnd->GetResult(0, Data->Index, empty);
+                break;
+            }
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            wchar_t szText[256] = {
+                0,
+            };
+            switch (g_MixRecipeMgr.GetMixInventoryType())
+            {
+                case SEASON3A::MIXTYPE_GOBLIN_NORMAL:
+                case SEASON3A::MIXTYPE_GOBLIN_CHAOSITEM:
+                case SEASON3A::MIXTYPE_GOBLIN_ADD380:
+                case SEASON3A::MIXTYPE_EXTRACT_SEED:
+                case SEASON3A::MIXTYPE_SEED_SPHERE:
+                    mu_swprintf(szText, I18N::Game::ChaosCombinationHasFailed);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+                    // 			case SEASON3A::MIXTYPE_TRAINER:
+                    // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// 부활 실패
+                    // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    // 				break;
+                case SEASON3A::MIXTYPE_OSBOURNE:
+                    mu_swprintf(szText, I18N::Game::SHasFailed, I18N::Game::Refine);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_JERRIDON:
+                    mu_swprintf(szText, I18N::Game::SHasFailed, I18N::Game::Restore);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_ELPIS:
+                    mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::Refine);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_CHAOS_CARD:
+                    mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::ChaosCardCombination);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_CHERRYBLOSSOM:
+                    mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::CherryBlossomsBranchesAssembly);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+                    break;
+            }
         }
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
-        wchar_t szText[256] = { 0, };
-        switch (g_MixRecipeMgr.GetMixInventoryType())
-        {
-        case SEASON3A::MIXTYPE_GOBLIN_NORMAL:
-        case SEASON3A::MIXTYPE_GOBLIN_CHAOSITEM:
-        case SEASON3A::MIXTYPE_GOBLIN_ADD380:
-        case SEASON3A::MIXTYPE_EXTRACT_SEED:
-        case SEASON3A::MIXTYPE_SEED_SPHERE:
-            mu_swprintf(szText, I18N::Game::ChaosCombinationHasFailed);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-            // 			case SEASON3A::MIXTYPE_TRAINER:
-            // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// 부활 실패
-            // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            // 				break;
-        case SEASON3A::MIXTYPE_OSBOURNE:
-            mu_swprintf(szText, I18N::Game::SHasFailed, I18N::Game::Refine);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_JERRIDON:
-            mu_swprintf(szText, I18N::Game::SHasFailed, I18N::Game::Restore);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_ELPIS:
-            mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::Refine);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_CHAOS_CARD:
-            mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::ChaosCardCombination);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_CHERRYBLOSSOM:
-            mu_swprintf(szText, I18N::Game::SHasFailed2112, I18N::Game::CherryBlossomsBranchesAssembly);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-            break;
-        }
-    }
-    break;
-    case 1:
-    {
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) && g_pLuckyItemWnd->GetAct())
-        {
-            g_pLuckyItemWnd->GetResult(1, 0, itemData);
-            break;
-        }
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
-        wchar_t szText[256] = { 0, };
-        switch (g_MixRecipeMgr.GetMixInventoryType())
-        {
-        case SEASON3A::MIXTYPE_GOBLIN_NORMAL:
-        case SEASON3A::MIXTYPE_GOBLIN_CHAOSITEM:
-        case SEASON3A::MIXTYPE_GOBLIN_ADD380:
-        case SEASON3A::MIXTYPE_EXTRACT_SEED:
-        case SEASON3A::MIXTYPE_SEED_SPHERE:
-            mu_swprintf(szText, I18N::Game::ChaosCombinationHasSucceeded);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-            // 			case SEASON3A::MIXTYPE_TRAINER:
-            // 				wprintf(szText, I18N::Game::ResurrectionSuccessful);
-            // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            // 				break;
-        case SEASON3A::MIXTYPE_OSBOURNE:
-            mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Refine);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_JERRIDON:
-            mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Restore);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_ELPIS:
-            mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Refine);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_CHAOS_CARD:
-            mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::ChaosCardCombination);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-        case SEASON3A::MIXTYPE_CHERRYBLOSSOM:
-            mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::CherryBlossomsBranchesAssembly);
-            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            break;
-        }
+        break;
+        case 1: {
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) && g_pLuckyItemWnd->GetAct())
+            {
+                g_pLuckyItemWnd->GetResult(1, 0, itemData);
+                break;
+            }
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            wchar_t szText[256] = {
+                0,
+            };
+            switch (g_MixRecipeMgr.GetMixInventoryType())
+            {
+                case SEASON3A::MIXTYPE_GOBLIN_NORMAL:
+                case SEASON3A::MIXTYPE_GOBLIN_CHAOSITEM:
+                case SEASON3A::MIXTYPE_GOBLIN_ADD380:
+                case SEASON3A::MIXTYPE_EXTRACT_SEED:
+                case SEASON3A::MIXTYPE_SEED_SPHERE:
+                    mu_swprintf(szText, I18N::Game::ChaosCombinationHasSucceeded);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+                    // 			case SEASON3A::MIXTYPE_TRAINER:
+                    // 				wprintf(szText, I18N::Game::ResurrectionSuccessful);
+                    // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    // 				break;
+                case SEASON3A::MIXTYPE_OSBOURNE:
+                    mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Refine);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_JERRIDON:
+                    mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Restore);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_ELPIS:
+                    mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::Refine);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_CHAOS_CARD:
+                    mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::ChaosCardCombination);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+                case SEASON3A::MIXTYPE_CHERRYBLOSSOM:
+                    mu_swprintf(szText, I18N::Game::SWasSuccessful, I18N::Game::CherryBlossomsBranchesAssembly);
+                    g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
+            }
 
-        g_pMixInventory->DeleteAllItems();
-        g_pMixInventory->InsertItem(0, itemData);
+            g_pMixInventory->DeleteAllItems();
+            g_pMixInventory->InsertItem(0, itemData);
 
-        PlayBuffer(SOUND_MIX01);
-        PlayBuffer(SOUND_JEWEL01);
-    }
-    break;
-    case 2:
-    case 0x0B:
-    {
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_READY);
-        g_pSystemLogBox->AddText(I18N::Game::NotEnoughZenToCombineItems, SEASON3B::TYPE_ERROR_MESSAGE);
-    }
-    break;
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::MustBeOverLevel10ToCombineTheInvitationToDevilSquare);
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
-        break;
-
-    case 9:
-        SEASON3B::CreateOkMessageBox(I18N::Game::MustBeOverLevel15ToCombineACloakOfInvisibility);
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
-        break;
-
-    case 100:
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
-        g_pMixInventory->DeleteAllItems();
-        g_pMixInventory->InsertItem(0, itemData);
-        break;
-    case 0x20:
-        if (g_pLuckyItemWnd->GetAct())
-        {
-            g_pLuckyItemWnd->GetResult(0, Data->Index, itemData);
+            PlayBuffer(SOUND_MIX01);
+            PlayBuffer(SOUND_JEWEL01);
         }
         break;
-    case 3:
-    case 5:
-    case 7:
-    case 8:
-    case 0x0A:
-    default:
-        g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+        case 2:
+        case 0x0B: {
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_READY);
+            g_pSystemLogBox->AddText(I18N::Game::NotEnoughZenToCombineItems, SEASON3B::TYPE_ERROR_MESSAGE);
+        }
         break;
+        case 4:
+            SEASON3B::CreateOkMessageBox(I18N::Game::MustBeOverLevel10ToCombineTheInvitationToDevilSquare);
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            break;
+
+        case 9:
+            SEASON3B::CreateOkMessageBox(I18N::Game::MustBeOverLevel15ToCombineACloakOfInvisibility);
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            break;
+
+        case 100:
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            g_pMixInventory->DeleteAllItems();
+            g_pMixInventory->InsertItem(0, itemData);
+            break;
+        case 0x20:
+            if (g_pLuckyItemWnd->GetAct())
+            {
+                g_pLuckyItemWnd->GetResult(0, Data->Index, itemData);
+            }
+            break;
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 0x0A:
+        default:
+            g_pMixInventory->SetMixState(SEASON3B::CNewUIMixInventory::MIX_FINISHED);
+            break;
     }
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x86 [ReceiveMix(%d)]", Data->Index);
@@ -6990,40 +6982,40 @@ void ReceiveLevelUp(const BYTE* ReceiveBuffer, int Size)
 {
     if (Size >= sizeof(PRECEIVE_LEVEL_UP_EXTENDED))
     {
-        auto Data = (LPPRECEIVE_LEVEL_UP_EXTENDED)ReceiveBuffer;
-        CharacterAttribute->Level = Data->Level;
+        auto Data                        = (LPPRECEIVE_LEVEL_UP_EXTENDED)ReceiveBuffer;
+        CharacterAttribute->Level        = Data->Level;
         CharacterAttribute->LevelUpPoint = Data->LevelUpPoint;
-        CharacterAttribute->LifeMax = Data->MaxLife;
-        CharacterAttribute->ManaMax = Data->MaxMana;
-        CharacterAttribute->Life = Data->MaxLife;
-        CharacterAttribute->Mana = Data->MaxMana;
+        CharacterAttribute->LifeMax      = Data->MaxLife;
+        CharacterAttribute->ManaMax      = Data->MaxMana;
+        CharacterAttribute->Life         = Data->MaxLife;
+        CharacterAttribute->Mana         = Data->MaxMana;
 
         // Character level changed, invalidate skill requirements cache
         gSkillManager.InvalidateSkillAttributeRequirementsCache();
-        CharacterAttribute->ShieldMax = Data->MaxShield;
-        CharacterAttribute->SkillManaMax = Data->SkillManaMax;
-        CharacterAttribute->AddPoint = Data->AddPoint;
-        CharacterAttribute->MaxAddPoint = Data->MaxAddPoint;
-        CharacterAttribute->wMinusPoint = Data->wMinusPoint;
+        CharacterAttribute->ShieldMax      = Data->MaxShield;
+        CharacterAttribute->SkillManaMax   = Data->SkillManaMax;
+        CharacterAttribute->AddPoint       = Data->AddPoint;
+        CharacterAttribute->MaxAddPoint    = Data->MaxAddPoint;
+        CharacterAttribute->wMinusPoint    = Data->wMinusPoint;
         CharacterAttribute->wMaxMinusPoint = Data->wMaxMinusPoint;
     }
     else
     {
-        auto Data = (LPPRECEIVE_LEVEL_UP)ReceiveBuffer;
-        CharacterAttribute->Level = Data->Level;
+        auto Data                        = (LPPRECEIVE_LEVEL_UP)ReceiveBuffer;
+        CharacterAttribute->Level        = Data->Level;
         CharacterAttribute->LevelUpPoint = Data->LevelUpPoint;
-        CharacterAttribute->LifeMax = Data->MaxLife;
-        CharacterAttribute->ManaMax = Data->MaxMana;
-        CharacterAttribute->Life = Data->MaxLife;
-        CharacterAttribute->Mana = Data->MaxMana;
+        CharacterAttribute->LifeMax      = Data->MaxLife;
+        CharacterAttribute->ManaMax      = Data->MaxMana;
+        CharacterAttribute->Life         = Data->MaxLife;
+        CharacterAttribute->Mana         = Data->MaxMana;
 
         // Character level changed, invalidate skill requirements cache
         gSkillManager.InvalidateSkillAttributeRequirementsCache();
-        CharacterAttribute->ShieldMax = Data->MaxShield;
-        CharacterAttribute->SkillManaMax = Data->SkillManaMax;
-        CharacterAttribute->AddPoint = Data->AddPoint;
-        CharacterAttribute->MaxAddPoint = Data->MaxAddPoint;
-        CharacterAttribute->wMinusPoint = Data->wMinusPoint;
+        CharacterAttribute->ShieldMax      = Data->MaxShield;
+        CharacterAttribute->SkillManaMax   = Data->SkillManaMax;
+        CharacterAttribute->AddPoint       = Data->AddPoint;
+        CharacterAttribute->MaxAddPoint    = Data->MaxAddPoint;
+        CharacterAttribute->wMinusPoint    = Data->wMinusPoint;
         CharacterAttribute->wMaxMinusPoint = Data->wMaxMinusPoint;
     }
 
@@ -7060,26 +7052,26 @@ void ReceiveAddPoint(const BYTE* ReceiveBuffer)
         CharacterAttribute->LevelUpPoint--;
         switch (Data->Result & 0xf)
         {
-        case 0:
-            CharacterAttribute->Strength++;
-            break;
-        case 1:
-            CharacterAttribute->Dexterity++;
-            break;
-        case 2:
-            CharacterAttribute->Vitality++;
-            CharacterAttribute->LifeMax = Data->Max;
-            break;
-        case 3:
-            CharacterAttribute->Energy++;
-            CharacterAttribute->ManaMax = Data->Max;
-            break;
-        case 4:
-            CharacterAttribute->Charisma++;
-            break;
+            case 0:
+                CharacterAttribute->Strength++;
+                break;
+            case 1:
+                CharacterAttribute->Dexterity++;
+                break;
+            case 2:
+                CharacterAttribute->Vitality++;
+                CharacterAttribute->LifeMax = Data->Max;
+                break;
+            case 3:
+                CharacterAttribute->Energy++;
+                CharacterAttribute->ManaMax = Data->Max;
+                break;
+            case 4:
+                CharacterAttribute->Charisma++;
+                break;
         }
         CharacterAttribute->SkillManaMax = Data->SkillManaMax;
-        CharacterAttribute->ShieldMax = Data->ShieldMax;
+        CharacterAttribute->ShieldMax    = Data->ShieldMax;
     }
     CharacterMachine->CalculateAll();
 }
@@ -7095,39 +7087,39 @@ void ReceiveAddPointExtended(const BYTE* ReceiveBuffer)
     CharacterAttribute->LevelUpPoint -= Data->AddedAmount;
     switch (Data->StatType)
     {
-    case 0:
-        CharacterAttribute->Strength += Data->AddedAmount;
-        break;
-    case 1:
-        CharacterAttribute->Dexterity += Data->AddedAmount;
-        break;
-    case 2:
-        CharacterAttribute->Vitality += Data->AddedAmount;
-        break;
-    case 3:
-        CharacterAttribute->Energy += Data->AddedAmount;
-        break;
-    case 4:
-        CharacterAttribute->Charisma += Data->AddedAmount;
-        break;
+        case 0:
+            CharacterAttribute->Strength += Data->AddedAmount;
+            break;
+        case 1:
+            CharacterAttribute->Dexterity += Data->AddedAmount;
+            break;
+        case 2:
+            CharacterAttribute->Vitality += Data->AddedAmount;
+            break;
+        case 3:
+            CharacterAttribute->Energy += Data->AddedAmount;
+            break;
+        case 4:
+            CharacterAttribute->Charisma += Data->AddedAmount;
+            break;
     }
 
-    CharacterAttribute->LifeMax = Data->MaxHealth;
-    CharacterAttribute->ManaMax = Data->MaxMana;
+    CharacterAttribute->LifeMax      = Data->MaxHealth;
+    CharacterAttribute->ManaMax      = Data->MaxMana;
     CharacterAttribute->SkillManaMax = Data->SkillManaMax;
-    CharacterAttribute->ShieldMax = Data->ShieldMax;
+    CharacterAttribute->ShieldMax    = Data->ShieldMax;
 
     CharacterMachine->CalculateAll();
 }
 
 void ReceiveSetPointsExtended(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_SET_POINTS_EXTENDED)ReceiveBuffer;
-    CharacterAttribute->Strength = Data->Strength;
+    auto Data                     = (LPPRECEIVE_SET_POINTS_EXTENDED)ReceiveBuffer;
+    CharacterAttribute->Strength  = Data->Strength;
     CharacterAttribute->Dexterity = Data->Dexterity;
-    CharacterAttribute->Vitality = Data->Vitality;
-    CharacterAttribute->Energy = Data->Energy;
-    CharacterAttribute->Charisma = Data->Charisma;
+    CharacterAttribute->Vitality  = Data->Vitality;
+    CharacterAttribute->Energy    = Data->Energy;
+    CharacterAttribute->Charisma  = Data->Charisma;
 
     CharacterMachine->CalculateAll();
 
@@ -7141,55 +7133,55 @@ void ReceiveStatsExtended(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_STATS_EXTENDED)ReceiveBuffer;
     switch (Data->Index)
     {
-    case 0xff:
-        CharacterAttribute->Life = Data->Life;
-        CharacterAttribute->Shield = Data->Shield;
-        CharacterAttribute->Mana = Data->Mana;
-        CharacterAttribute->SkillMana = Data->BP;
-        CharacterAttribute->AttackSpeed = Data->AttackSpeed;
-        CharacterAttribute->MagicSpeed = Data->MagicSpeed;
-        break;
-    case 0xfe:
-        CharacterAttribute->LifeMax = Data->Life;
-        CharacterAttribute->ShieldMax = Data->Shield;
-        CharacterAttribute->ManaMax = Data->Mana;
-        CharacterAttribute->SkillManaMax = Data->BP;
-        if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
-        {
-            Master_Level_Data.wMaxLife = Data->Life;
-            Master_Level_Data.wMaxShield = Data->Shield;
-            Master_Level_Data.wMaxMana = Data->Mana;
-            Master_Level_Data.wMaxBP = Data->BP;
-        }
+        case 0xff:
+            CharacterAttribute->Life        = Data->Life;
+            CharacterAttribute->Shield      = Data->Shield;
+            CharacterAttribute->Mana        = Data->Mana;
+            CharacterAttribute->SkillMana   = Data->BP;
+            CharacterAttribute->AttackSpeed = Data->AttackSpeed;
+            CharacterAttribute->MagicSpeed  = Data->MagicSpeed;
+            break;
+        case 0xfe:
+            CharacterAttribute->LifeMax      = Data->Life;
+            CharacterAttribute->ShieldMax    = Data->Shield;
+            CharacterAttribute->ManaMax      = Data->Mana;
+            CharacterAttribute->SkillManaMax = Data->BP;
+            if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
+            {
+                Master_Level_Data.wMaxLife   = Data->Life;
+                Master_Level_Data.wMaxShield = Data->Shield;
+                Master_Level_Data.wMaxMana   = Data->Mana;
+                Master_Level_Data.wMaxBP     = Data->BP;
+            }
 
-        break;
-    case 0xfd:
-        EnableUse = 0;
-        break;
-    default:
-        // todo: is that ever used?
-        if (ITEM* pItem = g_pMyInventory->FindItem(Data->Index))
-        {
-            if (pItem->Durability > 0)
-                pItem->Durability--;
-            if (pItem->Durability <= 0)
-                g_pMyInventory->DeleteItem(Data->Index);
-        }
+            break;
+        case 0xfd:
+            EnableUse = 0;
+            break;
+        default:
+            // todo: is that ever used?
+            if (ITEM* pItem = g_pMyInventory->FindItem(Data->Index))
+            {
+                if (pItem->Durability > 0)
+                    pItem->Durability--;
+                if (pItem->Durability <= 0)
+                    g_pMyInventory->DeleteItem(Data->Index);
+            }
 
-        break;
+            break;
     }
 }
 
 void ReceivePK(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_PK)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
-    c->PK = Data->PK;
+    auto       Data = (LPPRECEIVE_PK)ReceiveBuffer;
+    int        Key  = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    CHARACTER* c    = &CharactersClient[FindCharacterIndex(Key)];
+    c->PK           = Data->PK;
 
 #ifdef PK_ATTACK_TESTSERVER_LOG
     PrintPKLog(c);
-#endif // PK_ATTACK_TESTSERVER_LOG
+#endif  // PK_ATTACK_TESTSERVER_LOG
 
     if (c->PK >= PVP_MURDERER2)
         c->Level = 1;
@@ -7201,40 +7193,36 @@ void ReceivePK(const BYTE* ReceiveBuffer)
     wcscat(message, L" : ");
     switch (Data->PK)
     {
-    case 1: case 2:
-    {
-        wcscat(message, I18N::Game::Hero);
-        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
-    }
-    break;
-    case 3:
-    {
-        wcscat(message, I18N::Game::Commoner);
-        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
-    }
-    break;
-    case 4:
-    {
-        wcscat(message, I18N::Game::OutlawWarning);
-        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
-    }
-    break;
-    case 5:
-    {
-        wchar_t szTemp[100];
-        mu_swprintf(szTemp, L"%ls %d%ls", I18N::Game::_1stStageOutlaw, 1, I18N::Game::_2ndStageOutlaw);
-        wcscat(message, szTemp);
-        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
-    }
-    break;
-    case 6:
-    {
-        wchar_t szTemp[100];
-        mu_swprintf(szTemp, L"%ls %d%ls", I18N::Game::_1stStageOutlaw, 2, I18N::Game::_2ndStageOutlaw);
-        wcscat(message, szTemp);
-        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
-    }
-    break;
+        case 1:
+        case 2: {
+            wcscat(message, I18N::Game::Hero);
+            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        }
+        break;
+        case 3: {
+            wcscat(message, I18N::Game::Commoner);
+            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
+        }
+        break;
+        case 4: {
+            wcscat(message, I18N::Game::OutlawWarning);
+            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        }
+        break;
+        case 5: {
+            wchar_t szTemp[100];
+            mu_swprintf(szTemp, L"%ls %d%ls", I18N::Game::_1stStageOutlaw, 1, I18N::Game::_2ndStageOutlaw);
+            wcscat(message, szTemp);
+            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
+        }
+        break;
+        case 6: {
+            wchar_t szTemp[100];
+            mu_swprintf(szTemp, L"%ls %d%ls", I18N::Game::_1stStageOutlaw, 2, I18N::Game::_2ndStageOutlaw);
+            wcscat(message, szTemp);
+            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_ERROR_MESSAGE);
+        }
+        break;
     }
 }
 
@@ -7270,21 +7258,21 @@ void ReceiveDurability(const BYTE* ReceiveBuffer)
 
 BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
-    auto Data = (LPPRECEIVE_HELPER_ITEM)ReceiveBuffer;
+    auto Data                                    = (LPPRECEIVE_HELPER_ITEM)ReceiveBuffer;
     CharacterAttribute->AbilityTime[Data->Index] = Data->Time * REFERENCE_FPS;
     switch (Data->Index)
     {
-    case 0:
-        CharacterAttribute->Ability |= ABILITY_FAST_ATTACK_SPEED;
-        break;
-    case 1:
-        CharacterAttribute->Ability |= ABILITY_PLUS_DAMAGE;
-        CharacterMachine->CalculateDamage();
-        CharacterMachine->CalculateMagicDamage();
-        break;
-    case 2:
-        CharacterAttribute->Ability |= ABILITY_FAST_ATTACK_SPEED2;
-        break;
+        case 0:
+            CharacterAttribute->Ability |= ABILITY_FAST_ATTACK_SPEED;
+            break;
+        case 1:
+            CharacterAttribute->Ability |= ABILITY_PLUS_DAMAGE;
+            CharacterMachine->CalculateDamage();
+            CharacterMachine->CalculateMagicDamage();
+            break;
+        case 2:
+            CharacterAttribute->Ability |= ABILITY_FAST_ATTACK_SPEED2;
+            break;
     }
     EnableUse = 0;
 
@@ -7293,8 +7281,8 @@ BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
 void ReceiveWeather(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    int Weather = (Data->Value >> 4);
+    auto Data    = (LPPHEADER_DEFAULT)ReceiveBuffer;
+    int  Weather = (Data->Value >> 4);
     if (Weather == 0)
         RainTarget = 0;
     else if (Weather == 1)
@@ -7307,21 +7295,25 @@ void ReceiveEvent(const BYTE* ReceiveBuffer)
 
     switch (Data->m_byNumber)
     {
-    case 1:
-        if (Data->m_byValue) EnableEvent = 1;
-        else               EnableEvent = 0;
-        break;
-    case 3:
-        if (Data->m_byValue) EnableEvent = 3;
-        else               EnableEvent = 0;
-        break;
+        case 1:
+            if (Data->m_byValue)
+                EnableEvent = 1;
+            else
+                EnableEvent = 0;
+            break;
+        case 3:
+            if (Data->m_byValue)
+                EnableEvent = 3;
+            else
+                EnableEvent = 0;
+            break;
     }
     DeleteBoids();
 }
 
 void ReceiveSummonLife(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+    auto Data  = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
     SummonLife = Data->Value;
 }
 BOOL ReceiveTrade(const BYTE* ReceiveBuffer, BOOL bEncrypted)
@@ -7335,9 +7327,8 @@ BOOL ReceiveTrade(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 void ReceiveTradeResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPTRADE)ReceiveBuffer;
-    PublishHaptic(Data->SubCode == 1
-        ? Core::Haptics::HapticEvent::Confirmed
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->SubCode == 1 ? Core::Haptics::HapticEvent::Confirmed
+                                     : Core::Haptics::HapticEvent::OperationFailed);
     g_pTrade->ProcessToReceiveTradeResult(Data);
 }
 
@@ -7385,9 +7376,8 @@ void ReceiveTradeExit(const BYTE* ReceiveBuffer)
     }
 
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    PublishHaptic(Data->Value == 1
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->Value == 1 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                   : Core::Haptics::HapticEvent::OperationFailed);
     g_pTrade->ProcessToReceiveTradeExit(Data->Value);
 }
 
@@ -7403,14 +7393,15 @@ void ReceiveStorageGold(const BYTE* ReceiveBuffer)
     {
         PublishHaptic(Core::Haptics::HapticEvent::TransactionSucceeded);
         CharacterMachine->StorageGold = Data->StorageGold;
-        CharacterMachine->Gold = Data->Gold;
+        CharacterMachine->Gold        = Data->Gold;
     }
     else
     {
         PublishHaptic(Core::Haptics::HapticEvent::OperationFailed);
     }
 
-    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x81 [ReceiveStorageGold(%d %d %d)]", Data->Result, Data->StorageGold, Data->Gold);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"0x81 [ReceiveStorageGold(%d %d %d)]", Data->Result, Data->StorageGold,
+                          Data->Gold);
 }
 
 void ReceiveStorageExit(const BYTE* ReceiveBuffer)
@@ -7428,7 +7419,7 @@ void ReceiveStorageStatus(const BYTE* ReceiveBuffer)
 void ReceiveParty(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
-    PartyKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    PartyKey  = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPartyMsgBoxLayout));
 }
@@ -7436,20 +7427,37 @@ void ReceiveParty(const BYTE* ReceiveBuffer)
 void ReceivePartyResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::Party,
-        Data->Value));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::Party, Data->Value));
     switch (Data->Value)
     {
-    case 0:g_pSystemLogBox->AddText(I18N::Game::CreatingAPartyHasFailed, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 1:g_pSystemLogBox->AddText(I18N::Game::YourRequestHasBeenDenied, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 2:g_pSystemLogBox->AddText(I18N::Game::PartyIsFull, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 3:g_pSystemLogBox->AddText(I18N::Game::TheUserHasLeftTheGame, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 4:g_pSystemLogBox->AddText(I18N::Game::TheUserIsAlreadyInAnotherParty, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 5:g_pSystemLogBox->AddText(I18N::Game::YouHaveJustLeftTheParty, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 6:g_pSystemLogBox->AddText(I18N::Game::YouCannotFormAPartyWithAMemberOfTheOpposingGens, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 7:g_pSystemLogBox->AddText(I18N::Game::YouCannotFormAPartyWithinABattleZone, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 8:g_pSystemLogBox->AddText(I18N::Game::PartiesAreNotActivatedWithinABattleZone, SEASON3B::TYPE_ERROR_MESSAGE); break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::CreatingAPartyHasFailed, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 1:
+            g_pSystemLogBox->AddText(I18N::Game::YourRequestHasBeenDenied, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::PartyIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::TheUserHasLeftTheGame, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::TheUserIsAlreadyInAnotherParty, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveJustLeftTheParty, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 6:
+            g_pSystemLogBox->AddText(I18N::Game::YouCannotFormAPartyWithAMemberOfTheOpposingGens,
+                                     SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 7:
+            g_pSystemLogBox->AddText(I18N::Game::YouCannotFormAPartyWithinABattleZone, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 8:
+            g_pSystemLogBox->AddText(I18N::Game::PartiesAreNotActivatedWithinABattleZone, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
     }
 }
 
@@ -7460,20 +7468,20 @@ void ReceivePartyList(const BYTE* ReceiveBuffer)
     {
         Data->Count = MAX_PARTYS;
     }
-    int Offset = sizeof(PRECEIVE_PARTY_LISTS);
+    int Offset  = sizeof(PRECEIVE_PARTY_LISTS);
     PartyNumber = Data->Count;
     for (int i = 0; i < Data->Count; i++)
     {
-        auto Data2 = (LPPRECEIVE_PARTY_LIST)(ReceiveBuffer + Offset);
-        PARTY_t* p = &Party[i];
+        auto     Data2 = (LPPRECEIVE_PARTY_LIST)(ReceiveBuffer + Offset);
+        PARTY_t* p     = &Party[i];
         CMultiLanguage::ConvertFromUtf8(p->Name, Data2->ID, MAX_USERNAME_SIZE);
         p->Name[MAX_USERNAME_SIZE] = 0;
-        p->Number = Data2->Number;
-        p->Map = Data2->Map;
-        p->x = Data2->x;
-        p->y = Data2->y;
-        p->currHP = Data2->currHP;
-        p->maxHP = Data2->maxHP;
+        p->Number                  = Data2->Number;
+        p->Map                     = Data2->Map;
+        p->x                       = Data2->x;
+        p->y                       = Data2->y;
+        p->currHP                  = Data2->currHP;
+        p->maxHP                   = Data2->maxHP;
         Offset += sizeof(PRECEIVE_PARTY_LIST);
     }
 
@@ -7488,11 +7496,11 @@ void ReceivePartyList(const BYTE* ReceiveBuffer)
 
 void ReceivePartyInfo(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_PARTY_INFOS)ReceiveBuffer;
-    int Offset = sizeof(PRECEIVE_PARTY_INFOS);
+    auto Data   = (LPPRECEIVE_PARTY_INFOS)ReceiveBuffer;
+    int  Offset = sizeof(PRECEIVE_PARTY_INFOS);
     for (int i = 0; i < Data->Count; i++)
     {
-        auto Data2 = (LPPRECEIVE_PARTY_INFO)(ReceiveBuffer + Offset);
+        auto    Data2  = (LPPRECEIVE_PARTY_INFO)(ReceiveBuffer + Offset);
         wchar_t stepHP = Data2->value & 0xf;
 
         PARTY_t* p = &Party[i];
@@ -7515,8 +7523,8 @@ void ReceivePartyLeave(const BYTE* ReceiveBuffer)
 
     if (g_iFollowCharacter >= 0)
     {
-        bool IsParty = false;
-        CHARACTER* c = &CharactersClient[g_iFollowCharacter];
+        bool       IsParty = false;
+        CHARACTER* c       = &CharactersClient[g_iFollowCharacter];
         for (int i = 0; i < PartyNumber; ++i)
         {
             if (wcscmp(Party[i].Name, c->ID) == 0 && wcslen(Party[i].Name) == wcslen(c->ID))
@@ -7534,25 +7542,35 @@ void ReceivePartyLeave(const BYTE* ReceiveBuffer)
 
 void ReceivePartyGetItem(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_GETITEMINFO_FOR_PARTY)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    int Index = FindCharacterIndex(Key);
-    CHARACTER* c = &CharactersClient[Index];
-    if (Hero == c) return;
+    auto       Data  = (LPPRECEIVE_GETITEMINFO_FOR_PARTY)ReceiveBuffer;
+    int        Key   = ((int)(Data->KeyH) << 8) + Data->KeyL;
+    int        Index = FindCharacterIndex(Key);
+    CHARACTER* c     = &CharactersClient[Index];
+    if (Hero == c)
+        return;
 
-    int itemType = Data->ItemInfo & 0x01fff;
-    wchar_t itemName[100] = { 0, };
-    wchar_t Text[200] = { 0, };
+    int     itemType      = Data->ItemInfo & 0x01fff;
+    wchar_t itemName[100] = {
+        0,
+    };
+    wchar_t Text[200] = {
+        0,
+    };
 
-    if ((Data->ItemInfo & 0x10000))      mu_swprintf(itemName, L"%ls ", I18N::Game::Excellent);
-    else if ((Data->ItemInfo & 0x20000)) mu_swprintf(itemName, L"%ls ", I18N::Game::Set);
+    if ((Data->ItemInfo & 0x10000))
+        mu_swprintf(itemName, L"%ls ", I18N::Game::Excellent);
+    else if ((Data->ItemInfo & 0x20000))
+        mu_swprintf(itemName, L"%ls ", I18N::Game::Set);
 
     int itemLevel = Data->ItemLevel;
     GetItemName(itemType, itemLevel, Text);
     wcscat(itemName, Text);
-    if ((Data->ItemInfo & 0x02000)) wcscat(itemName, I18N::Game::Skill);
-    if ((Data->ItemInfo & 0x08000)) wcscat(itemName, I18N::Game::Option);
-    if ((Data->ItemInfo & 0x04000)) wcscat(itemName, I18N::Game::Luck);
+    if ((Data->ItemInfo & 0x02000))
+        wcscat(itemName, I18N::Game::Skill);
+    if ((Data->ItemInfo & 0x08000))
+        wcscat(itemName, I18N::Game::Option);
+    if ((Data->ItemInfo & 0x04000))
+        wcscat(itemName, I18N::Game::Luck);
 
     mu_swprintf(Text, L"%ls : %ls %ls", c->ID, itemName, I18N::Game::Obtained);
 
@@ -7563,7 +7581,7 @@ extern int ErrorMessage;
 
 void ReceiveGuild(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
+    auto Data      = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
     GuildPlayerKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
     SEASON3B::CNewUICommonMessageBox* pMsgBox;
@@ -7575,46 +7593,68 @@ void ReceiveGuild(const BYTE* ReceiveBuffer)
 void ReceiveGuildResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::GuildJoin,
-        Data->Value));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::GuildJoin, Data->Value));
     switch (Data->Value)
     {
-    case 0:g_pSystemLogBox->AddText(I18N::Game::GuildMasterHasRefusedYourRequestToJoinTheGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 1:g_pSystemLogBox->AddText(I18N::Game::YouHaveJustJoinedTheGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 2:g_pSystemLogBox->AddText(I18N::Game::TheGuildIsFull, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 3:g_pSystemLogBox->AddText(I18N::Game::TheUserHasLeftTheGame, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 4:g_pSystemLogBox->AddText(I18N::Game::TheUserIsNotAGuildMaster, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 5:g_pSystemLogBox->AddText(I18N::Game::YouCannotJoinMoreThanOneGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 6:g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterIsTooBusyToApproveYourRequestToJoinTheGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 7:g_pSystemLogBox->AddText(I18N::Game::ChractersOverLevel6CanJoinAGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 0xA1:g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterHasNotJoinedTheGens, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 0xA2:g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterIsWithADifferentGens, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 0xA3:g_pSystemLogBox->AddText(I18N::Game::YouMustBelongToTheSame, SEASON3B::TYPE_ERROR_MESSAGE); break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::GuildMasterHasRefusedYourRequestToJoinTheGuild,
+                                     SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 1:
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveJustJoinedTheGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::TheUserHasLeftTheGame, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::TheUserIsNotAGuildMaster, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::YouCannotJoinMoreThanOneGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 6:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterIsTooBusyToApproveYourRequestToJoinTheGuild,
+                                     SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 7:
+            g_pSystemLogBox->AddText(I18N::Game::ChractersOverLevel6CanJoinAGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 0xA1:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterHasNotJoinedTheGens, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 0xA2:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildMasterIsWithADifferentGens, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 0xA3:
+            g_pSystemLogBox->AddText(I18N::Game::YouMustBelongToTheSame, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
     }
 }
 
 void ReceiveGuildList(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_GUILD_LISTS)ReceiveBuffer;
-    int Offset = sizeof(PRECEIVE_GUILD_LISTS);
+    auto Data   = (LPPRECEIVE_GUILD_LISTS)ReceiveBuffer;
+    int  Offset = sizeof(PRECEIVE_GUILD_LISTS);
 
     g_nGuildMemberCount = Data->Count;
-    GuildTotalScore = Data->TotalScore;
-    GuildTotalScore = std::max<int>(0, GuildTotalScore);
+    GuildTotalScore     = Data->TotalScore;
+    GuildTotalScore     = std::max<int>(0, GuildTotalScore);
 
-    wchar_t rivalGuildName[sizeof Data->szRivalGuildName + 1] {};
+    wchar_t rivalGuildName[sizeof Data->szRivalGuildName + 1]{};
     CMultiLanguage::ConvertFromUtf8(rivalGuildName, Data->szRivalGuildName, sizeof Data->szRivalGuildName);
     g_pGuildInfoWindow->GuildClear();
     g_pGuildInfoWindow->UnionGuildClear();
     g_pGuildInfoWindow->SetRivalGuildName(rivalGuildName);
     for (int i = 0; i < Data->Count; i++)
     {
-        auto Data2 = (LPPRECEIVE_GUILD_LIST)(ReceiveBuffer + Offset);
-        GUILD_LIST_t* p = &GuildList[i];
+        auto          Data2 = (LPPRECEIVE_GUILD_LIST)(ReceiveBuffer + Offset);
+        GUILD_LIST_t* p     = &GuildList[i];
         CMultiLanguage::ConvertFromUtf8(p->Name, Data2->ID, MAX_USERNAME_SIZE);
-        p->Number = Data2->Number;
-        p->Server = (0x80 & Data2->CurrentServer) ? (0x7F & Data2->CurrentServer) : -1;
+        p->Number      = Data2->Number;
+        p->Server      = (0x80 & Data2->CurrentServer) ? (0x7F & Data2->CurrentServer) : -1;
         p->GuildStatus = Data2->GuildStatus;
         Offset += sizeof(PRECEIVE_GUILD_LIST);
         g_pGuildInfoWindow->AddGuildMember(p);
@@ -7624,38 +7664,48 @@ void ReceiveGuildList(const BYTE* ReceiveBuffer)
 void ReceiveGuildLeave(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::GuildLeave,
-        Data->Value));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::GuildLeave, Data->Value));
     switch (Data->Value)
     {
-    case 0:g_pSystemLogBox->AddText(I18N::Game::ThePasswordYouHaveEnteredIsIncorrect, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 1:g_pSystemLogBox->AddText(I18N::Game::YouHaveLeftTheGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 2:g_pSystemLogBox->AddText(I18N::Game::OnlyAGuildMasterCanDisbandAGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 3:g_pSystemLogBox->AddText(I18N::Game::YouHaveFailedFromTheGuild, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 4:g_pSystemLogBox->AddText(I18N::Game::TheGuildHasBeenDissolved, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 5:g_pSystemLogBox->AddText(I18N::Game::GuildMemberHasBeenWithdrawn, SEASON3B::TYPE_ERROR_MESSAGE); break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::ThePasswordYouHaveEnteredIsIncorrect, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 1:
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveLeftTheGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::OnlyAGuildMasterCanDisbandAGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveFailedFromTheGuild, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildHasBeenDissolved, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::GuildMemberHasBeenWithdrawn, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
     }
     if (Data->Value == 1 || Data->Value == 4)
     {
         if (Data->Value == 4 && Hero->GuildMarkIndex != -1)
         {
-            GuildMark[Hero->GuildMarkIndex].Key = -1;
+            GuildMark[Hero->GuildMarkIndex].Key          = -1;
             GuildMark[Hero->GuildMarkIndex].UnionName[0] = 0;
             GuildMark[Hero->GuildMarkIndex].GuildName[0] = 0;
-            Hero->GuildMarkIndex = -1;
+            Hero->GuildMarkIndex                         = -1;
         }
 
         EnableGuildWar = false;
 
-        g_nGuildMemberCount = -1;
-        Hero->GuildStatus = G_NONE;
+        g_nGuildMemberCount     = -1;
+        Hero->GuildStatus       = G_NONE;
         Hero->GuildRelationShip = GR_NONE;
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GUILDINFO);
 
 #ifdef CSK_MOD_MOVE_COMMAND_WINDOW
         g_pMoveCommandWindow->SetCastleOwner(false);
-#endif // CSK_MOD_MOVE_COMMAND_WINDOW
+#endif  // CSK_MOD_MOVE_COMMAND_WINDOW
     }
     else if (Data->Value == 5)
     {
@@ -7668,22 +7718,20 @@ void ReceiveCreateGuildInterface(const BYTE* ReceiveBuffer)
     g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCGUILDMASTER);
 }
 
-void ReceiveCreateGuildMasterInterface(const BYTE* ReceiveBuffer)
-{
-}
+void ReceiveCreateGuildMasterInterface(const BYTE* ReceiveBuffer) {}
 
 void ReceiveDeleteGuildViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
-    int Key = ((int)(Data->KeyH & 0x7f) << 8) + Data->KeyL;
-    int Index = FindCharacterIndex(Key);
-    CHARACTER* c = &CharactersClient[Index];
+    auto       Data  = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
+    int        Key   = ((int)(Data->KeyH & 0x7f) << 8) + Data->KeyL;
+    int        Index = FindCharacterIndex(Key);
+    CHARACTER* c     = &CharactersClient[Index];
 
-    c->GuildStatus = -1;
-    c->GuildType = 0;
+    c->GuildStatus               = -1;
+    c->GuildType                 = 0;
     c->ProtectGuildMarkWorldTime = 0.0f;
-    c->GuildRelationShip = 0;
-    c->GuildMarkIndex = -1;
+    c->GuildRelationShip         = 0;
+    c->GuildMarkIndex            = -1;
 
     g_nGuildMemberCount = -1;
 
@@ -7693,40 +7741,50 @@ void ReceiveDeleteGuildViewport(const BYTE* ReceiveBuffer)
 void ReceiveCreateGuildResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_GUILD_CREATE_RESULT)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::GuildCreate,
-        Data->Value));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::GuildCreate, Data->Value));
     switch (Data->Value)
     {
-    case 0:g_pSystemLogBox->AddText(I18N::Game::TheGuildNameAlreadyExists, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 2:g_pSystemLogBox->AddText(I18N::Game::GuildNameMustBeAtLeast4Characters, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 3:g_pSystemLogBox->AddText(I18N::Game::YouAreAlreadyInAGuild518, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 4:g_pSystemLogBox->AddText(I18N::Game::NoSpaceAllowedInGuildNames, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 5:g_pSystemLogBox->AddText(I18N::Game::NoSymbolsAllowedInGuildNames, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 6:g_pSystemLogBox->AddText(I18N::Game::ReservedName, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 1:
-        memset(InputText[0], 0, MAX_USERNAME_SIZE);
-        InputLength[0] = 0;
-        InputTextMax[0] = MAX_USERNAME_SIZE;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::TheGuildNameAlreadyExists, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::GuildNameMustBeAtLeast4Characters, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::YouAreAlreadyInAGuild518, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::NoSpaceAllowedInGuildNames, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::NoSymbolsAllowedInGuildNames, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 6:
+            g_pSystemLogBox->AddText(I18N::Game::ReservedName, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 1:
+            memset(InputText[0], 0, MAX_USERNAME_SIZE);
+            InputLength[0]  = 0;
+            InputTextMax[0] = MAX_USERNAME_SIZE;
 
-        g_pNewUISystem->Hide(SEASON3B::INTERFACE_NPCGUILDMASTER);
+            g_pNewUISystem->Hide(SEASON3B::INTERFACE_NPCGUILDMASTER);
 
-        MouseUpdateTime = 0;
-        MouseUpdateTimeMax = 6;
-        break;
+            MouseUpdateTime    = 0;
+            MouseUpdateTimeMax = 6;
+            break;
     }
 }
 
-bool EnableGuildWar = false;
-int  GuildWarIndex = -1;
+bool    EnableGuildWar = false;
+int     GuildWarIndex  = -1;
 wchar_t GuildWarName[8 + 1];
-int  GuildWarScore[2];
+int     GuildWarScore[2];
 
-bool EnableSoccer = false;
-BYTE HeroSoccerTeam = 0;
-int  SoccerTime;
+bool    EnableSoccer   = false;
+BYTE    HeroSoccerTeam = 0;
+int     SoccerTime;
 wchar_t SoccerTeamName[2][8 + 1];
-bool SoccerObserver = false;
+bool    SoccerObserver = false;
 
 void ReceiveDeclareWar(const BYTE* ReceiveBuffer)
 {
@@ -7749,13 +7807,27 @@ void ReceiveDeclareWarResult(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:g_pSystemLogBox->AddText(I18N::Game::ThatGuildDoesNotExist, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 1:g_pSystemLogBox->AddText(I18N::Game::YouHaveDeclaredAGuildWar, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 2:g_pSystemLogBox->AddText(I18N::Game::TheOpposingGuildMasterIsNotInTheGame, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 3:g_pSystemLogBox->AddText(I18N::Game::ThatGuildDoesNotExist, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 4:g_pSystemLogBox->AddText(I18N::Game::YouCanNotDeclareAGuildWarNow, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 5:g_pSystemLogBox->AddText(I18N::Game::OnlyGuildMastersCanDeclareAGuildWar, SEASON3B::TYPE_ERROR_MESSAGE); break;
-    case 6:g_pSystemLogBox->AddText(I18N::Game::YourRequestForAGuildWarIsRefused, SEASON3B::TYPE_ERROR_MESSAGE); break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::ThatGuildDoesNotExist, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 1:
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveDeclaredAGuildWar, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::TheOpposingGuildMasterIsNotInTheGame, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::ThatGuildDoesNotExist, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::YouCanNotDeclareAGuildWarNow, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::OnlyGuildMastersCanDeclareAGuildWar, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
+        case 6:
+            g_pSystemLogBox->AddText(I18N::Game::YourRequestForAGuildWarIsRefused, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
     }
     if (Data->Value != 1 && !EnableGuildWar)
     {
@@ -7765,7 +7837,7 @@ void ReceiveDeclareWarResult(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildBeginWar(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_WAR)ReceiveBuffer;
+    auto Data      = (LPPRECEIVE_WAR)ReceiveBuffer;
     EnableGuildWar = true;
 
     wchar_t Text[100];
@@ -7812,19 +7884,39 @@ void ReceiveGuildBeginWar(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildEndWar(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
+    auto    Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     wchar_t Text[100];
-    int Win = 0;
+    int     Win = 0;
     switch (Data->Value)
     {
-    case 0:wprintf(Text, I18N::Game::YouHaveLostTheGuildWar); break;
-    case 1:wprintf(Text, I18N::Game::YouHaveWonTheGuildWar); Win = 2; break;
-    case 2:wprintf(Text, I18N::Game::YouHaveWonTheGuildWarOpposingGuildMasterLeft); Win = 2; break;
-    case 3:wprintf(Text, I18N::Game::YouHaveLostTheGuildWarGuildMasterLeft); break;
-    case 4:wprintf(Text, I18N::Game::YouHaveWonTheGuildWarOpposingGuildDisbanded); Win = 2; break;
-    case 5:wprintf(Text, I18N::Game::YouHaveLostTheGuildWarGuildDisbanded); break;
-    case 6:wprintf(Text, I18N::Game::Tied); Win = 1; break;
-    default:mu_swprintf(Text, L""); break;
+        case 0:
+            wprintf(Text, I18N::Game::YouHaveLostTheGuildWar);
+            break;
+        case 1:
+            wprintf(Text, I18N::Game::YouHaveWonTheGuildWar);
+            Win = 2;
+            break;
+        case 2:
+            wprintf(Text, I18N::Game::YouHaveWonTheGuildWarOpposingGuildMasterLeft);
+            Win = 2;
+            break;
+        case 3:
+            wprintf(Text, I18N::Game::YouHaveLostTheGuildWarGuildMasterLeft);
+            break;
+        case 4:
+            wprintf(Text, I18N::Game::YouHaveWonTheGuildWarOpposingGuildDisbanded);
+            Win = 2;
+            break;
+        case 5:
+            wprintf(Text, I18N::Game::YouHaveLostTheGuildWarGuildDisbanded);
+            break;
+        case 6:
+            wprintf(Text, I18N::Game::Tied);
+            Win = 1;
+            break;
+        default:
+            mu_swprintf(Text, L"");
+            break;
     }
 
     g_wtMatchTimeLeft.m_Time = 0;
@@ -7834,9 +7926,9 @@ void ReceiveGuildEndWar(const BYTE* ReceiveBuffer)
 #endif
 
     EnableGuildWar = false;
-    EnableSoccer = false;
+    EnableSoccer   = false;
 
-    GuildWarIndex = -1;
+    GuildWarIndex   = -1;
     GuildWarName[0] = 0;
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
@@ -7845,14 +7937,14 @@ void ReceiveGuildEndWar(const BYTE* ReceiveBuffer)
     }
     switch (Win)
     {
-    case 2:
-        SetActionClass(Hero, &Hero->Object, PLAYER_WIN1, AT_WIN1);
-        SendRequestAction(Hero->Object, AT_WIN1);
-        break;
-    case 0:
-        SetActionClass(Hero, &Hero->Object, PLAYER_CRY1, AT_CRY1);
-        SendRequestAction(Hero->Object, AT_CRY1);
-        break;
+        case 2:
+            SetActionClass(Hero, &Hero->Object, PLAYER_WIN1, AT_WIN1);
+            SendRequestAction(Hero->Object, AT_WIN1);
+            break;
+        case 0:
+            SetActionClass(Hero, &Hero->Object, PLAYER_CRY1, AT_CRY1);
+            SendRequestAction(Hero->Object, AT_CRY1);
+            break;
     }
 
     g_pNewUISystem->Hide(SEASON3B::INTERFACE_BATTLE_SOCCER_SCORE);
@@ -7860,7 +7952,7 @@ void ReceiveGuildEndWar(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildWarScore(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_WAR_SCORE)ReceiveBuffer;
+    auto Data      = (LPPRECEIVE_WAR_SCORE)ReceiveBuffer;
     EnableGuildWar = true;
 
 #ifdef GUILD_WAR_EVENT
@@ -7868,8 +7960,10 @@ void ReceiveGuildWarScore(const BYTE* ReceiveBuffer)
     int t2 = Data->Score2 - GuildWarScore[1];
     if (t1 == 20 || t2 == 20)
     {
-        if (t1 > t2) g_iGoalEffect = 1;
-        else g_iGoalEffect = 2;
+        if (t1 > t2)
+            g_iGoalEffect = 1;
+        else
+            g_iGoalEffect = 2;
     }
 #endif
 
@@ -7879,23 +7973,23 @@ void ReceiveGuildWarScore(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    auto Data   = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; ++i)
     {
-        auto Data2 = (LPPRECEIVE_GUILD_ID)(ReceiveBuffer + Offset);
-        int GuildKey = Data2->GuildKey;
-        int Key = ((int)(Data2->KeyH & 0x7f) << 8) + Data2->KeyL;
-        int Index = FindCharacterIndex(Key);
-        CHARACTER* c = &CharactersClient[Index];
+        auto       Data2    = (LPPRECEIVE_GUILD_ID)(ReceiveBuffer + Offset);
+        int        GuildKey = Data2->GuildKey;
+        int        Key      = ((int)(Data2->KeyH & 0x7f) << 8) + Data2->KeyL;
+        int        Index    = FindCharacterIndex(Key);
+        CHARACTER* c        = &CharactersClient[Index];
 
-        c->GuildStatus = Data2->GuildStatus;
-        c->GuildType = Data2->GuildType;
+        c->GuildStatus       = Data2->GuildStatus;
+        c->GuildType         = Data2->GuildType;
         c->GuildRelationShip = Data2->GuildRelationShip;
 
 #ifdef CSK_MOD_MOVE_COMMAND_WINDOW
         g_pMoveCommandWindow->SetCastleOwner((bool)Data2->btCastleOwner);
-#endif // CSK_MOD_MOVE_COMMAND_WINDOW
+#endif  // CSK_MOD_MOVE_COMMAND_WINDOW
 
         if (g_GuildCache.IsExistGuildMark(GuildKey))
             c->GuildMarkIndex = g_GuildCache.GetGuildMarkIndex(GuildKey);
@@ -7926,52 +8020,52 @@ void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildInfo(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPPRECEIVE_GUILDINFO)ReceiveBuffer;
-    int Index = g_GuildCache.SetGuildMark(Data->GuildKey, Data->UnionName, Data->GuildName, Data->Mark);
+    auto Data  = (LPPPRECEIVE_GUILDINFO)ReceiveBuffer;
+    int  Index = g_GuildCache.SetGuildMark(Data->GuildKey, Data->UnionName, Data->GuildName, Data->Mark);
 }
 
 // 길드직책을 임명/변경/해제 결과
 void ReceiveGuildAssign(const BYTE* ReceiveBuffer)
 {
     wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildAssign";
-    auto pData = (LPPRECEIVE_GUILD_ASSIGN)ReceiveBuffer;
+    auto    pData                          = (LPPRECEIVE_GUILD_ASSIGN)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
         switch (pData->byType)
         {
-        case 0x01:
-            wcscpy(szTemp, I18N::Game::Appointed);
-            break;
-        case 0x02:
-            wcscpy(szTemp, I18N::Game::Changed);
-            break;
-        case 0x03:
-            wcscpy(szTemp, I18N::Game::Cancelled);
-            break;
-        default:
-            assert(!"Packet(0xE1)");
-            break;
+            case 0x01:
+                wcscpy(szTemp, I18N::Game::Appointed);
+                break;
+            case 0x02:
+                wcscpy(szTemp, I18N::Game::Changed);
+                break;
+            case 0x03:
+                wcscpy(szTemp, I18N::Game::Cancelled);
+                break;
+            default:
+                assert(!"Packet(0xE1)");
+                break;
         }
     }
     else
     {
         switch (pData->byResult)
         {
-        case GUILD_ANS_NOTEXIST_GUILD:
-            wcscpy(szTemp, I18N::Game::ThatGuildDoesNotExist);
-            break;
-        case GUILD_ANS_NOTEXIST_PERMISSION:
-            wcscpy(szTemp, I18N::Game::NoAuthorization);
-            break;
-        case GUILD_ANS_NOTEXIST_EXTRA_STATUS:
-            wcscpy(szTemp, I18N::Game::CanNoLongerBeAppointed);
-            break;
-        case GUILD_ANS_NOTEXIST_EXTRA_TYPE:
-            wcscpy(szTemp, I18N::Game::WrongAppointment);
-            break;
-        default:
-            assert(!"Packet(0xE1)");
-            break;
+            case GUILD_ANS_NOTEXIST_GUILD:
+                wcscpy(szTemp, I18N::Game::ThatGuildDoesNotExist);
+                break;
+            case GUILD_ANS_NOTEXIST_PERMISSION:
+                wcscpy(szTemp, I18N::Game::NoAuthorization);
+                break;
+            case GUILD_ANS_NOTEXIST_EXTRA_STATUS:
+                wcscpy(szTemp, I18N::Game::CanNoLongerBeAppointed);
+                break;
+            case GUILD_ANS_NOTEXIST_EXTRA_TYPE:
+                wcscpy(szTemp, I18N::Game::WrongAppointment);
+                break;
+            default:
+                assert(!"Packet(0xE1)");
+                break;
         }
     }
     g_pSystemLogBox->AddText(szTemp, SEASON3B::TYPE_SYSTEM_MESSAGE);
@@ -7981,13 +8075,14 @@ void ReceiveGuildRelationShip(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_GUILD_RELATIONSHIP)ReceiveBuffer;
 
-    g_pGuildInfoWindow->ReceiveGuildRelationShip(pData->byRelationShipType, pData->byRequestType, pData->byTargetUserIndexH, pData->byTargetUserIndexL);
+    g_pGuildInfoWindow->ReceiveGuildRelationShip(pData->byRelationShipType, pData->byRequestType,
+                                                 pData->byTargetUserIndexH, pData->byTargetUserIndexL);
 }
 
 void ReceiveGuildRelationShipResult(const BYTE* ReceiveBuffer)
 {
     wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildRelationShipResult";
-    auto pData = (LPPMSG_GUILD_RELATIONSHIP_RESULT)ReceiveBuffer;
+    auto    pData                          = (LPPMSG_GUILD_RELATIONSHIP_RESULT)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
         if (pData->byRelationShipType == 0x01)
@@ -8007,8 +8102,10 @@ void ReceiveGuildRelationShipResult(const BYTE* ReceiveBuffer)
         }
         else
         {
-            if (pData->byRequestType == 0x01)	wcscpy(szTemp, I18N::Game::HostileGuildIsConnected);
-            else								wcscpy(szTemp, I18N::Game::HostileGuildIsDisconnected);
+            if (pData->byRequestType == 0x01)
+                wcscpy(szTemp, I18N::Game::HostileGuildIsConnected);
+            else
+                wcscpy(szTemp, I18N::Game::HostileGuildIsDisconnected);
         }
     }
     else if (pData->byResult == 0)
@@ -8019,65 +8116,66 @@ void ReceiveGuildRelationShipResult(const BYTE* ReceiveBuffer)
     {
         switch (pData->byResult)
         {
-        case GUILD_ANS_UNIONFAIL_BY_CASTLE:
-            wcscpy(szTemp, I18N::Game::AllianceFunctionWillBeRestrictedDueToTheCastleSiege);
-            break;
-        case GUILD_ANS_NOTEXIST_PERMISSION:
-            wcscpy(szTemp, I18N::Game::NoAuthorization);
-            break;
-        case GUILD_ANS_EXIST_RELATIONSHIP_UNION:
-            wcscpy(szTemp, I18N::Game::AllianceGuild);
-            break;
-        case GUILD_ANS_EXIST_RELATIONSHIP_RIVAL:
-            wcscpy(szTemp, I18N::Game::HostileGuild);
-            break;
-        case GUILD_ANS_EXIST_UNION:
-            wcscpy(szTemp, I18N::Game::GuildAllianceExists);
-            break;
-        case GUILD_ANS_EXIST_RIVAL:
-            wcscpy(szTemp, I18N::Game::HostileGuildExists);
-            break;
-        case GUILD_ANS_NOTEXIST_UNION:
-            wcscpy(szTemp, I18N::Game::GuildAllianceDoesNotExist);
-            break;
-        case GUILD_ANS_NOTEXIST_RIVAL:
-            wcscpy(szTemp, I18N::Game::HostileGuildDoesNotExist);
-            break;
-        case GUILD_ANS_NOT_UNION_MASTER:
-            wcscpy(szTemp, I18N::Game::NotAMasterOfGuildAlliance);
-            break;
-        case GUILD_ANS_NOT_GUILD_RIVAL:
-            wcscpy(szTemp, I18N::Game::Income);
-            break;
-        case GUILD_ANS_CANNOT_BE_UNION_MASTER_GUILD:
-            wcscpy(szTemp, I18N::Game::IncompleteRequirementsForCreatingAGuildAlliance);
-            break;
-        case GUILD_ANS_EXCEED_MAX_UNION_MEMBER:
-            wcscpy(szTemp, I18N::Game::MaximumNoOfGuildAllianceIs7);
-            break;
-        case GUILD_ANS_CANCEL_REQUEST:
-            wcscpy(szTemp, I18N::Game::RequestHasBeenCancelled);
-            break;
+            case GUILD_ANS_UNIONFAIL_BY_CASTLE:
+                wcscpy(szTemp, I18N::Game::AllianceFunctionWillBeRestrictedDueToTheCastleSiege);
+                break;
+            case GUILD_ANS_NOTEXIST_PERMISSION:
+                wcscpy(szTemp, I18N::Game::NoAuthorization);
+                break;
+            case GUILD_ANS_EXIST_RELATIONSHIP_UNION:
+                wcscpy(szTemp, I18N::Game::AllianceGuild);
+                break;
+            case GUILD_ANS_EXIST_RELATIONSHIP_RIVAL:
+                wcscpy(szTemp, I18N::Game::HostileGuild);
+                break;
+            case GUILD_ANS_EXIST_UNION:
+                wcscpy(szTemp, I18N::Game::GuildAllianceExists);
+                break;
+            case GUILD_ANS_EXIST_RIVAL:
+                wcscpy(szTemp, I18N::Game::HostileGuildExists);
+                break;
+            case GUILD_ANS_NOTEXIST_UNION:
+                wcscpy(szTemp, I18N::Game::GuildAllianceDoesNotExist);
+                break;
+            case GUILD_ANS_NOTEXIST_RIVAL:
+                wcscpy(szTemp, I18N::Game::HostileGuildDoesNotExist);
+                break;
+            case GUILD_ANS_NOT_UNION_MASTER:
+                wcscpy(szTemp, I18N::Game::NotAMasterOfGuildAlliance);
+                break;
+            case GUILD_ANS_NOT_GUILD_RIVAL:
+                wcscpy(szTemp, I18N::Game::Income);
+                break;
+            case GUILD_ANS_CANNOT_BE_UNION_MASTER_GUILD:
+                wcscpy(szTemp, I18N::Game::IncompleteRequirementsForCreatingAGuildAlliance);
+                break;
+            case GUILD_ANS_EXCEED_MAX_UNION_MEMBER:
+                wcscpy(szTemp, I18N::Game::MaximumNoOfGuildAllianceIs7);
+                break;
+            case GUILD_ANS_CANCEL_REQUEST:
+                wcscpy(szTemp, I18N::Game::RequestHasBeenCancelled);
+                break;
 #ifdef ASG_ADD_GENS_SYSTEM
-        case GUILD_ANS_UNION_MASTER_NOT_GENS:
-            wcscpy(szTemp, I18N::Game::TheAllianceMasterHasNotJoinedTheGens);
-            break;
-        case GUILD_ANS_GUILD_MASTER_NOT_GENS:
-            wcscpy(szTemp, I18N::Game::TheGuildMasterHasNotJoinedTheGens);
-            break;
-        case GUILD_ANS_UNION_MASTER_DISAGREE_GENS:
-            wcscpy(szTemp, I18N::Game::YouAreWithADifferentGensThanTheAllianceMaster);
-            break;
-#endif	// ASG_ADD_GENS_SYSTEM
-        default:
-            assert(!"Packet (0xE6)");
-            break;
+            case GUILD_ANS_UNION_MASTER_NOT_GENS:
+                wcscpy(szTemp, I18N::Game::TheAllianceMasterHasNotJoinedTheGens);
+                break;
+            case GUILD_ANS_GUILD_MASTER_NOT_GENS:
+                wcscpy(szTemp, I18N::Game::TheGuildMasterHasNotJoinedTheGens);
+                break;
+            case GUILD_ANS_UNION_MASTER_DISAGREE_GENS:
+                wcscpy(szTemp, I18N::Game::YouAreWithADifferentGensThanTheAllianceMaster);
+                break;
+#endif  // ASG_ADD_GENS_SYSTEM
+            default:
+                assert(!"Packet (0xE6)");
+                break;
         }
     }
     g_pSystemLogBox->AddText(szTemp, SEASON3B::TYPE_SYSTEM_MESSAGE);
 
     int nCharKey = MAKEWORD(pData->byTargetUserIndexL, pData->byTargetUserIndexH);
-    if (nCharKey == HeroKey && pData->byResult == 0x01 && pData->byRelationShipType == 0x01 && pData->byRequestType == 0x02)
+    if (nCharKey == HeroKey && pData->byResult == 0x01 && pData->byRelationShipType == 0x01 &&
+        pData->byRequestType == 0x02)
         GuildMark[Hero->GuildMarkIndex].UnionName[0] = 0;
 }
 
@@ -8100,17 +8198,17 @@ void ReceiveBanUnionGuildResult(const BYTE* ReceiveBuffer)
 
 void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer)
 {
-    auto pData = (LPPMSG_UNION_VIEWPORT_NOTIFY_COUNT)ReceiveBuffer;
-    int Offset = sizeof(PMSG_UNION_VIEWPORT_NOTIFY_COUNT);
+    auto pData  = (LPPMSG_UNION_VIEWPORT_NOTIFY_COUNT)ReceiveBuffer;
+    int  Offset = sizeof(PMSG_UNION_VIEWPORT_NOTIFY_COUNT);
     for (int i = 0; i < pData->byCount; ++i)
     {
-        auto pData2 = (LPPMSG_UNION_VIEWPORT_NOTIFY)(ReceiveBuffer + Offset);
-        int nGuildMarkIndex = g_GuildCache.GetGuildMarkIndex(pData2->nGuildKey);
+        auto pData2          = (LPPMSG_UNION_VIEWPORT_NOTIFY)(ReceiveBuffer + Offset);
+        int  nGuildMarkIndex = g_GuildCache.GetGuildMarkIndex(pData2->nGuildKey);
         CMultiLanguage::ConvertFromUtf8(GuildMark[nGuildMarkIndex].UnionName, pData2->szUnionName, MAX_GUILDNAME);
 
         int nCharKey = MAKEWORD(pData2->byKeyL, pData2->byKeyH);
 
-        int nCharIndex = FindCharacterIndex(nCharKey);
+        int nCharIndex                                 = FindCharacterIndex(nCharKey);
         CharactersClient[nCharIndex].GuildRelationShip = pData2->byGuildRelationShip;
 
         Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
@@ -8149,7 +8247,7 @@ void ReceiveUnionList(const BYTE* ReceiveBuffer)
 
 void ReceiveSoccerTime(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_SOCCER_TIME)ReceiveBuffer;
+    auto Data  = (LPPRECEIVE_SOCCER_TIME)ReceiveBuffer;
     SoccerTime = Data->Time;
 }
 
@@ -8183,7 +8281,7 @@ void ReceiveSoccerScore(const BYTE* ReceiveBuffer)
 
 void ReceiveSoccerGoal(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
+    auto    Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     wchar_t Text[100];
     if (Data->Value == HeroSoccerTeam)
         mu_swprintf(Text, I18N::Game::SGuildWinsAPoint, GuildMark[Hero->GuildMarkIndex].GuildName);
@@ -8194,31 +8292,31 @@ void ReceiveSoccerGoal(const BYTE* ReceiveBuffer)
 
 void Receive_Master_LevelUp(const BYTE* ReceiveBuffer, int Size)
 {
-    auto Data = (LPPMSG_MASTERLEVEL_UP)ReceiveBuffer;
-    Master_Level_Data.nMLevel = Data->nMLevel;
-    Master_Level_Data.nAddMPoint = Data->nAddMPoint;
+    auto Data                         = (LPPMSG_MASTERLEVEL_UP)ReceiveBuffer;
+    Master_Level_Data.nMLevel         = Data->nMLevel;
+    Master_Level_Data.nAddMPoint      = Data->nAddMPoint;
     Master_Level_Data.nMLevelUpMPoint = Data->nMLevelUpMPoint;
     //	Master_Level_Data.nTotalMPoint		= Data->nTotalMPoint;
     Master_Level_Data.nMaxPoint = Data->nMaxPoint;
 
     if (Size >= sizeof(PMSG_MASTERLEVEL_UP_EXTENDED))
     {
-        auto ExtData = (LPPMSG_MASTERLEVEL_UP_EXTENDED)ReceiveBuffer;
-        Master_Level_Data.wMaxLife = ExtData->wMaxLife;
-        Master_Level_Data.wMaxMana = ExtData->wMaxMana;
+        auto ExtData                 = (LPPMSG_MASTERLEVEL_UP_EXTENDED)ReceiveBuffer;
+        Master_Level_Data.wMaxLife   = ExtData->wMaxLife;
+        Master_Level_Data.wMaxMana   = ExtData->wMaxMana;
         Master_Level_Data.wMaxShield = ExtData->wMaxShield;
-        Master_Level_Data.wMaxBP = ExtData->wMaxBP;
+        Master_Level_Data.wMaxBP     = ExtData->wMaxBP;
     }
     else
     {
-        Master_Level_Data.wMaxLife = Data->wMaxLife;
-        Master_Level_Data.wMaxMana = Data->wMaxMana;
+        Master_Level_Data.wMaxLife   = Data->wMaxLife;
+        Master_Level_Data.wMaxMana   = Data->wMaxMana;
         Master_Level_Data.wMaxShield = Data->wMaxShield;
-        Master_Level_Data.wMaxBP = Data->wMaxBP;
+        Master_Level_Data.wMaxBP     = Data->wMaxBP;
     }
 
     wchar_t szText[256] = {};
-    DWORD iExp = Master_Level_Data.lNext_MasterLevel_Experince - Master_Level_Data.lMasterLevel_Experince;
+    DWORD   iExp        = Master_Level_Data.lNext_MasterLevel_Experince - Master_Level_Data.lMasterLevel_Experince;
     if (iExp > 0)
     {
         mu_swprintf(szText, I18N::Game::MasterEXPAchievementD, iExp);
@@ -8243,8 +8341,8 @@ void Receive_Master_LevelUp(const BYTE* ReceiveBuffer, int Size)
 
 void Receive_Master_Level_Exp(const BYTE* ReceiveBuffer, int Size)
 {
-    auto Data = (LPPMSG_MASTERLEVEL_INFO)ReceiveBuffer;
-    Master_Level_Data.nMLevel = Data->nMLevel;
+    auto Data                                = (LPPMSG_MASTERLEVEL_INFO)ReceiveBuffer;
+    Master_Level_Data.nMLevel                = Data->nMLevel;
     Master_Level_Data.lMasterLevel_Experince = 0x0000000000000000;
     Master_Level_Data.lMasterLevel_Experince |= Data->btMExp1;
     Master_Level_Data.lMasterLevel_Experince <<= 8;
@@ -8281,18 +8379,18 @@ void Receive_Master_Level_Exp(const BYTE* ReceiveBuffer, int Size)
 
     if (Size >= sizeof(PMSG_MASTERLEVEL_INFO_EXTENDED))
     {
-        auto ExtData = (LPPMSG_MASTERLEVEL_INFO_EXTENDED)ReceiveBuffer;
-        Master_Level_Data.wMaxLife = ExtData->wMaxLife;
-        Master_Level_Data.wMaxMana = ExtData->wMaxMana;
+        auto ExtData                 = (LPPMSG_MASTERLEVEL_INFO_EXTENDED)ReceiveBuffer;
+        Master_Level_Data.wMaxLife   = ExtData->wMaxLife;
+        Master_Level_Data.wMaxMana   = ExtData->wMaxMana;
         Master_Level_Data.wMaxShield = ExtData->wMaxShield;
-        Master_Level_Data.wMaxBP = ExtData->wMaxSkillMana;
+        Master_Level_Data.wMaxBP     = ExtData->wMaxSkillMana;
     }
     else
     {
-        Master_Level_Data.wMaxLife = Data->wMaxLife;
-        Master_Level_Data.wMaxMana = Data->wMaxMana;
+        Master_Level_Data.wMaxLife   = Data->wMaxLife;
+        Master_Level_Data.wMaxMana   = Data->wMaxMana;
         Master_Level_Data.wMaxShield = Data->wMaxShield;
-        Master_Level_Data.wMaxBP = Data->wMaxSkillMana;
+        Master_Level_Data.wMaxBP     = Data->wMaxSkillMana;
     }
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x50 [Receive_Master_Level_Exp]");
@@ -8308,7 +8406,7 @@ void Receive_Master_LevelGetSkill(const BYTE* ReceiveBuffer)
         if (auto search = SKILL_REPLACEMENTS.find(newSkill); search != SKILL_REPLACEMENTS.end())
         {
             const auto replacedSkill = search->second;
-            for (auto & i : CharacterAttribute->Skill)
+            for (auto& i : CharacterAttribute->Skill)
             {
                 if (i == replacedSkill)
                 {
@@ -8325,7 +8423,7 @@ void Receive_Master_LevelGetSkill(const BYTE* ReceiveBuffer)
             if (CharacterAttribute->Skill[i] == Data->SkillNumber)
             {
                 CharacterAttribute->SkillLevel[i] = Data->SkillLevel;
-                isSkillUpdated = true;
+                isSkillUpdated                    = true;
                 break;
             }
         }
@@ -8337,7 +8435,7 @@ void Receive_Master_LevelGetSkill(const BYTE* ReceiveBuffer)
             {
                 if (CharacterAttribute->Skill[i] == AT_SKILL_UNDEFINED)
                 {
-                    CharacterAttribute->Skill[i] = (ActionSkillType)Data->SkillNumber;
+                    CharacterAttribute->Skill[i]      = (ActionSkillType)Data->SkillNumber;
                     CharacterAttribute->SkillLevel[i] = Data->SkillLevel;
                     break;
                 }
@@ -8358,183 +8456,175 @@ void ReceiveServerCommand(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_SERVER_COMMAND)ReceiveBuffer;
     switch (Data->Cmd1)
     {
-    case 2:
-        PlayBuffer(SOUND_MEDAL);
-        break;
-    case 0:
-    {
-        vec3_t Position, Angle, Light;
-        Position[0] = (float)(Data->Cmd2 + 0.5f) * TERRAIN_SCALE;
-        Position[1] = (float)(Data->Cmd3 + 0.5f) * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]);
-        ZeroMemory(Angle, sizeof(Angle));
-        Light[0] = Light[1] = Light[2] = 1.0f;
-        CreateEffect(BITMAP_FIRECRACKER0001, Position, Angle, Light, 0);
-    }
-    break;
-    case 1:
-        if (Data->Cmd2 >= 20)
-        {
-            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(830 + Data->Cmd2 - 20));
-        }
-        else
-        {
-            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(650 + Data->Cmd2));
-        }
-        break;
-
-    case 3:
-        SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(710 + Data->Cmd2));
-        break;
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(725 + Data->Cmd2));
-        break;
-    case 5:
-    {
-        SEASON3B::CDialogMsgBox* pMsgBox = nullptr;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDialogMsgBoxLayout), &pMsgBox);
-        if (pMsgBox)
-        {
-            pMsgBox->AddMsg(I18N::Dialog::Lookup(Data->Cmd2));
-        }
-    }
-    break;
-
-    case 6:
-        SEASON3B::CreateOkMessageBox(I18N::Game::DissolveOrLeaveYourGuild);
-        break;
-    case 13:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouCanNowStandAloneWithoutMySupport);
-        break;
-    case 14:
-    {
-        switch (Data->Cmd2)
-        {
-        case 0:
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CWhiteAngelEventLayout));
-            break;
-
-        case 1:
-            SEASON3B::CreateOkMessageBox(I18N::Game::ThisIsNotAEventPrize);
-            break;
-
         case 2:
-            SEASON3B::CreateOkMessageBox(I18N::Game::ItemHasAlreadyGiven);
+            PlayBuffer(SOUND_MEDAL);
+            break;
+        case 0: {
+            vec3_t Position, Angle, Light;
+            Position[0] = (float)(Data->Cmd2 + 0.5f) * TERRAIN_SCALE;
+            Position[1] = (float)(Data->Cmd3 + 0.5f) * TERRAIN_SCALE;
+            Position[2] = RequestTerrainHeight(Position[0], Position[1]);
+            ZeroMemory(Angle, sizeof(Angle));
+            Light[0] = Light[1] = Light[2] = 1.0f;
+            CreateEffect(BITMAP_FIRECRACKER0001, Position, Angle, Light, 0);
+        }
+        break;
+        case 1:
+            if (Data->Cmd2 >= 20)
+            {
+                SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(830 + Data->Cmd2 - 20));
+            }
+            else
+            {
+                SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(650 + Data->Cmd2));
+            }
             break;
 
         case 3:
-            SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
+            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(710 + Data->Cmd2));
             break;
-
         case 4:
-            //ShowCustomMessageBox(I18N::Game::CongratulationsYouHaveSuccessfully);
+            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(725 + Data->Cmd2));
             break;
-
-        case 5:
-            SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
-            break;
-        }
-    }
-    break;
-    case 15:
-    {
-        switch (Data->Cmd2)
-        {
-        case 0:
-            SEASON3B::CreateOkMessageBox(I18N::Game::ItemHasAlreadyGiven);
-            break;
-        case 1:
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CHarvestEventLayout));
-            break;
-        case 2:
-            SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
-            break;
-        }
-    }
-    break;
-    case 16:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox = nullptr;
-
-        switch (Data->Cmd2)
-        {
-        case 0:
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownSantaMsgBoxLayout), &pMsgBox);
-            pMsgBox->AddMsg(I18N::Game::WelcomeToSantaSVillageHere);
-            break;
-        case 1:
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownSantaMsgBoxLayout), &pMsgBox);
-            pMsgBox->AddMsg(I18N::Game::WelcomeToSantaSVillagePleaseComeClaimYourGift);
-            break;
-        case 2:
-            SEASON3B::CreateOkMessageBox(I18N::Game::YouCanClickOnlyOnce);
-            break;
-        case 3:
-            SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
-            break;
-        }
-    }
-    break;
-    case 17:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownLeaveMsgBoxLayout));
-        break;
-    case 47:
-    case 48:
-    case 49:
-        SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(1823 + Data->Cmd1 - 47));
-        break;
-    case 55:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::DevilSquare);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 56:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::BloodCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 57:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::ChaosCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 58:
-    {
-        WORD Key = ((WORD)(Data->Cmd2) << 8) + Data->Cmd3;
-        Key &= 0x7FFF;
-        int Index = FindCharacterIndex(Key);
-        if (Index >= 0 && Index != MAX_CHARACTERS_CLIENT) {
-            OBJECT* to = &CharactersClient[Index].Object;
-            if (to != nullptr) {
-                CreateEffect(MODEL_EFFECT_SKURA_ITEM, to->Position, to->Angle, to->Light, 0, to);
-                PlayBuffer(SOUND_CHERRYBLOSSOM_EFFECT0, to);
+        case 5: {
+            SEASON3B::CDialogMsgBox* pMsgBox = nullptr;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDialogMsgBoxLayout), &pMsgBox);
+            if (pMsgBox)
+            {
+                pMsgBox->AddMsg(I18N::Dialog::Lookup(Data->Cmd2));
             }
         }
-    }
-    break;
-    case 59:
-    {
-        vec3_t Position, Angle, Light;
-        Position[0] = (float)(Data->Cmd2 + 0.5f) * TERRAIN_SCALE;
-        Position[1] = (float)(Data->Cmd3 + 0.5f) * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]);
-        ZeroMemory(Angle, sizeof(Angle));
-        Light[0] = Light[1] = Light[2] = 1.0f;
-        CreateEffect(BITMAP_FIRECRACKER0001, Position, Angle, Light, 1);
-    }
-    break;
-    case 60:
-        g_PortalMgr.ResetRevivePosition();
         break;
-    case 61:
-        g_PortalMgr.ResetPortalPosition();
+
+        case 6:
+            SEASON3B::CreateOkMessageBox(I18N::Game::DissolveOrLeaveYourGuild);
+            break;
+        case 13:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouCanNowStandAloneWithoutMySupport);
+            break;
+        case 14: {
+            switch (Data->Cmd2)
+            {
+                case 0:
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CWhiteAngelEventLayout));
+                    break;
+
+                case 1:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::ThisIsNotAEventPrize);
+                    break;
+
+                case 2:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::ItemHasAlreadyGiven);
+                    break;
+
+                case 3:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
+                    break;
+
+                case 4:
+                    //ShowCustomMessageBox(I18N::Game::CongratulationsYouHaveSuccessfully);
+                    break;
+
+                case 5:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
+                    break;
+            }
+        }
         break;
+        case 15: {
+            switch (Data->Cmd2)
+            {
+                case 0:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::ItemHasAlreadyGiven);
+                    break;
+                case 1:
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CHarvestEventLayout));
+                    break;
+                case 2:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
+                    break;
+            }
+        }
+        break;
+        case 16: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox = nullptr;
+
+            switch (Data->Cmd2)
+            {
+                case 0:
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownSantaMsgBoxLayout), &pMsgBox);
+                    pMsgBox->AddMsg(I18N::Game::WelcomeToSantaSVillageHere);
+                    break;
+                case 1:
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownSantaMsgBoxLayout), &pMsgBox);
+                    pMsgBox->AddMsg(I18N::Game::WelcomeToSantaSVillagePleaseComeClaimYourGift);
+                    break;
+                case 2:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::YouCanClickOnlyOnce);
+                    break;
+                case 3:
+                    SEASON3B::CreateOkMessageBox(I18N::Game::FailedToGetAnItemPleaseTryAgain);
+                    break;
+            }
+        }
+        break;
+        case 17:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSantaTownLeaveMsgBoxLayout));
+            break;
+        case 47:
+        case 48:
+        case 49:
+            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(1823 + Data->Cmd1 - 47));
+            break;
+        case 55: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::DevilSquare);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
+        case 56: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::BloodCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
+        case 57: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::ChaosCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
+        case 58: {
+            WORD Key = ((WORD)(Data->Cmd2) << 8) + Data->Cmd3;
+            Key &= 0x7FFF;
+            int Index = FindCharacterIndex(Key);
+            if (Index >= 0 && Index != MAX_CHARACTERS_CLIENT)
+            {
+                OBJECT* to = &CharactersClient[Index].Object;
+                if (to != nullptr)
+                {
+                    CreateEffect(MODEL_EFFECT_SKURA_ITEM, to->Position, to->Angle, to->Light, 0, to);
+                    PlayBuffer(SOUND_CHERRYBLOSSOM_EFFECT0, to);
+                }
+            }
+        }
+        break;
+        case 59: {
+            vec3_t Position, Angle, Light;
+            Position[0] = (float)(Data->Cmd2 + 0.5f) * TERRAIN_SCALE;
+            Position[1] = (float)(Data->Cmd3 + 0.5f) * TERRAIN_SCALE;
+            Position[2] = RequestTerrainHeight(Position[0], Position[1]);
+            ZeroMemory(Angle, sizeof(Angle));
+            Light[0] = Light[1] = Light[2] = 1.0f;
+            CreateEffect(BITMAP_FIRECRACKER0001, Position, Angle, Light, 1);
+        }
+        break;
+        case 60:
+            g_PortalMgr.ResetRevivePosition();
+            break;
+        case 61:
+            g_PortalMgr.ResetPortalPosition();
+            break;
     }
 }
 
@@ -8546,87 +8636,78 @@ void ReceiveMixExit(const BYTE* ReceiveBuffer)
 void ReceiveGemMixResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_ANS_JEWEL_MIX)ReceiveBuffer;
-    PublishHaptic(Data->m_iResult == 1
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->m_iResult == 1 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                       : Core::Haptics::HapticEvent::OperationFailed);
     wchar_t sBuf[256];
     memset(sBuf, 0, 256);
     switch (Data->m_iResult)
     {
-    case 0:
-    case 2:
-    case 3:
-    {
-        mu_swprintf(sBuf, L"%ls%ls %ls", I18N::Game::JewelCombination, I18N::Game::To1816, I18N::Game::EntranceIsAllowedForDTimes);
-        g_pSystemLogBox->AddText(sBuf, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
-    case 1:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationUnityResultMsgBoxLayout));
-    }
-    break;
-    case 4:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::ItemsForCombinationSystemIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
-    case 5:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::ZenIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
+        case 0:
+        case 2:
+        case 3: {
+            mu_swprintf(sBuf, L"%ls%ls %ls", I18N::Game::JewelCombination, I18N::Game::To1816,
+                        I18N::Game::EntranceIsAllowedForDTimes);
+            g_pSystemLogBox->AddText(sBuf, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
+        case 1: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationUnityResultMsgBoxLayout));
+        }
+        break;
+        case 4: {
+            g_pSystemLogBox->AddText(I18N::Game::ItemsForCombinationSystemIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
+        case 5: {
+            g_pSystemLogBox->AddText(I18N::Game::ZenIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
     }
 }
 
 void ReceiveGemUnMixResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_ANS_JEWEL_UNMIX)ReceiveBuffer;
-    PublishHaptic(Data->m_iResult == 1
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->m_iResult == 1 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                       : Core::Haptics::HapticEvent::OperationFailed);
     wchar_t sBuf[256];
     memset(sBuf, 0, 256);
 
     switch (Data->m_iResult)
     {
-    case 0:
-    case 5:
-    {
-        mu_swprintf(sBuf, L"%ls%ls %ls", I18N::Game::DismantleJewel, I18N::Game::To1816, I18N::Game::EntranceIsAllowedForDTimes);
-        g_pSystemLogBox->AddText(sBuf, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
-    case 1:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationDisjointResultMsgBoxLayout));
-    }
-    break;
-    case 2:
-    case 3:
-    case 4:
-    case 6:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::CorrespondingItemIsInappropriate, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
-    case 7:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::InventorySpaceIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
-    case 8:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::ZenIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        COMGEM::GetBack();
-    }
-    break;
+        case 0:
+        case 5: {
+            mu_swprintf(sBuf, L"%ls%ls %ls", I18N::Game::DismantleJewel, I18N::Game::To1816,
+                        I18N::Game::EntranceIsAllowedForDTimes);
+            g_pSystemLogBox->AddText(sBuf, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
+        case 1: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGemIntegrationDisjointResultMsgBoxLayout));
+        }
+        break;
+        case 2:
+        case 3:
+        case 4:
+        case 6: {
+            g_pSystemLogBox->AddText(I18N::Game::CorrespondingItemIsInappropriate, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
+        case 7: {
+            g_pSystemLogBox->AddText(I18N::Game::InventorySpaceIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
+        case 8: {
+            g_pSystemLogBox->AddText(I18N::Game::ZenIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            COMGEM::GetBack();
+        }
+        break;
     }
 }
 
@@ -8637,35 +8718,34 @@ void ReceiveMoveToDevilSquareResult(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:
-        break;
-    case 1:
-        SEASON3B::CreateOkMessageBox(I18N::Game::BringTheDevilSInvitationToEnter);
-        break;
+        case 0:
+            break;
+        case 1:
+            SEASON3B::CreateOkMessageBox(I18N::Game::BringTheDevilSInvitationToEnter);
+            break;
 
-    case 2:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouVeComeTooLateToEnterTheDevilSquare);
-        break;
+        case 2:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouVeComeTooLateToEnterTheDevilSquare);
+            break;
 
-    case 3:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
-        break;
+        case 3:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
+            break;
 
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
-        break;
+        case 4:
+            SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
+            break;
 
-    case 5:
-        SEASON3B::CreateOkMessageBox(I18N::Game::DevilSquareIsFull);
-        break;
+        case 5:
+            SEASON3B::CreateOkMessageBox(I18N::Game::DevilSquareIsFull);
+            break;
 
-    case 6:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::DevilSquare);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
+        case 6: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::DevilSquare);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
     }
 }
 
@@ -8690,8 +8770,7 @@ void ReceiveDevilSquareCountDown(const BYTE* ReceiveBuffer)
 
     if (gMapManager.IsCursedTemple())
     {
-        if (Data->Value == TYPE_MATCH_CURSEDTEMPLE_ENTER_CLOSE
-            || Data->Value == TYPE_MATCH_CURSEDTEMPLE_GAME_START)
+        if (Data->Value == TYPE_MATCH_CURSEDTEMPLE_ENTER_CLOSE || Data->Value == TYPE_MATCH_CURSEDTEMPLE_GAME_START)
         {
             g_CursedTemple->SetInterfaceState(false, 0);
             matchEvent::StartMatchCountDown(Data->Value + 1);
@@ -8699,7 +8778,9 @@ void ReceiveDevilSquareCountDown(const BYTE* ReceiveBuffer)
     }
     else if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4)
     {
-        if (((BYTE)(Data->Value + 1) >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE && (BYTE)(Data->Value + 1) <= TYPE_MATCH_DOPPELGANGER_CLOSE) || (BYTE)(Data->Value + 1) == TYPE_MATCH_NONE)
+        if (((BYTE)(Data->Value + 1) >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE &&
+             (BYTE)(Data->Value + 1) <= TYPE_MATCH_DOPPELGANGER_CLOSE) ||
+            (BYTE)(Data->Value + 1) == TYPE_MATCH_NONE)
         {
             matchEvent::StartMatchCountDown((BYTE)(Data->Value + 1));
         }
@@ -8723,65 +8804,61 @@ void ReceiveMoveToEventMatchResult(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:
-        break;
-    case 1:
-        SEASON3B::CreateOkMessageBox(I18N::Game::TheLevelOfTheCloakOfInvisibilityIsIncorrect);
-        break;
+        case 0:
+            break;
+        case 1:
+            SEASON3B::CreateOkMessageBox(I18N::Game::TheLevelOfTheCloakOfInvisibilityIsIncorrect);
+            break;
 
-    case 2:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::BloodCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-
-    case 3:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
+        case 2: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::BloodCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
         break;
 
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
+        case 3:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
+            break;
+
+        case 4:
+            SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
+            break;
+
+        case 5: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD,
+                        I18N::Game::BloodCastle, MAX_BLOOD_CASTLE_MEN);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
         break;
 
-    case 5:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD, I18N::Game::BloodCastle, MAX_BLOOD_CASTLE_MEN);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
+        case 6: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::YouAreNotAllowedToEnterMoreThanDTimesInOneDay, 6);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
+        case 7: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::BloodCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
+        case 8: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::ChaosCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
 
-    case 6:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::YouAreNotAllowedToEnterMoreThanDTimesInOneDay, 6);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 7:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::BloodCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 8:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::ChaosCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-
-    case 9:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD, I18N::Game::ChaosCastle, MAX_CHAOS_CASTLE_MEN);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
+        case 9: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD,
+                        I18N::Game::ChaosCastle, MAX_CHAOS_CASTLE_MEN);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
     }
 }
 
@@ -8820,8 +8897,12 @@ void ReceiveEventZoneOpenTime(const BYTE* ReceiveBuffer)
 
         if (0 == time)
         {
-            wchar_t szOpenTime1[256] = { 0, };
-            wchar_t szOpenTime2[256] = { 0, };
+            wchar_t szOpenTime1[256] = {
+                0,
+            };
+            wchar_t szOpenTime2[256] = {
+                0,
+            };
 
             mu_swprintf(szOpenTime1, I18N::Game::YouCanEnterSNow, I18N::Game::ChaosCastle);
             mu_swprintf(szOpenTime2, I18N::Game::InSCurrentlyDDEntered, I18N::Game::ChaosCastle, Data->KeyM, 100);
@@ -8837,10 +8918,12 @@ void ReceiveEventZoneOpenTime(const BYTE* ReceiveBuffer)
         else
         {
             wchar_t Text[256];
-            auto Hour = (int)(time / 60);
-            int Mini = (int)(time)-(Hour * 60);
+            auto    Hour = (int)(time / 60);
+            int     Mini = (int)(time) - (Hour * 60);
 
-            wchar_t szOpenTime[256] = { 0, };
+            wchar_t szOpenTime[256] = {
+                0,
+            };
 
             mu_swprintf(szOpenTime, I18N::Game::WhenD, Hour);
             mu_swprintf(Text, I18N::Game::AfterDMinutesYouMayEnterS, Mini, I18N::Game::ChaosCastle);
@@ -8876,55 +8959,52 @@ void ReceiveMoveToEventMatchResult2(const BYTE* ReceiveBuffer)
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     switch (Data->Value)
     {
-    case 0:
-        break;
-    case 1:
-        SEASON3B::CreateOkMessageBox(I18N::Game::TheLevelOfTheCloakOfInvisibilityIsIncorrect);
-        break;
+        case 0:
+            break;
+        case 1:
+            SEASON3B::CreateOkMessageBox(I18N::Game::TheLevelOfTheCloakOfInvisibilityIsIncorrect);
+            break;
 
-    case 2:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::ChaosCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-
-    case 3:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
+        case 2: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheTimeToEnterSHasPassed, I18N::Game::ChaosCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
         break;
 
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
+        case 3:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouReUnderestimatingYourselfChooseAnotherSquare);
+            break;
+
+        case 4:
+            SEASON3B::CreateOkMessageBox(I18N::Game::IfYouWishToStayAliveChooseAnotherSquare);
+            break;
+
+        case 5: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD,
+                        I18N::Game::ChaosCastle, MAX_CHAOS_CASTLE_MEN);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
         break;
 
-    case 5:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::TheMaximumCapacityOfSHasBeenReachedTheMaxNumberAllowedIsD, I18N::Game::ChaosCastle, MAX_CHAOS_CASTLE_MEN);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-
-    case 6:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::YouAreNotAllowedToEnterMoreThanDTimesInOneDay, 6);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-
-    case 7:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouAreShortOfZen);
+        case 6: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::YouAreNotAllowedToEnterMoreThanDTimesInOneDay, 6);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
         break;
 
-    case 8:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::ChaosCastle);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
+        case 7:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouAreShortOfZen);
+            break;
+
+        case 8: {
+            wchar_t strText[128];
+            mu_swprintf(strText, I18N::Game::KillersAreRestrictedToEnterS, I18N::Game::ChaosCastle);
+            SEASON3B::CreateOkMessageBox(strText);
+        }
+        break;
     }
 }
 
@@ -8936,40 +9016,42 @@ void ReceiveSetAttribute(const BYTE* ReceiveBuffer)
 
     switch (Data->m_byType)
     {
-    case 0:
-    {
-        if (gMapManager.InBloodCastle() && Data->m_byMapAttr == TW_NOGROUND)
-        {
-            SetActionObject(gMapManager.WorldActive, 36, 0, 1.f);
-        }
-
-        for (int k = 0; k < Data->m_byCount; k++)
-        {
-            int dx = Data->m_vAttribute[(k * 2) + 1].m_byX - Data->m_vAttribute[(k * 2)].m_byX + 1;
-            int dy = Data->m_vAttribute[(k * 2) + 1].m_byY - Data->m_vAttribute[(k * 2)].m_byY + 1;
-
-            g_ErrorReport.Write(L"count:%d, x:%d, y:%d \r\n", Data->m_byCount, dx, dy);
-
-            AddTerrainAttributeRange(Data->m_vAttribute[(k * 2)].m_byX, Data->m_vAttribute[(k * 2)].m_byY, dx, dy, Data->m_byMapAttr, 1 - Data->m_byMapSetType);
-        }
-    }
-    break;
-
-    case 1:
-        for (int i = 0; i < Data->m_byCount; ++i)
-        {
-            if (Data->m_byMapSetType)
+        case 0: {
+            if (gMapManager.InBloodCastle() && Data->m_byMapAttr == TW_NOGROUND)
             {
-                g_ErrorReport.Write(L"SubTerrainAttribute - count:%d, x:%d, y:%d \r\n", Data->m_byCount, Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY);
-                SubTerrainAttribute(Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY, Data->m_byMapAttr);
+                SetActionObject(gMapManager.WorldActive, 36, 0, 1.f);
             }
-            else
+
+            for (int k = 0; k < Data->m_byCount; k++)
             {
-                g_ErrorReport.Write(L"AddTerrainAttribute - count:%d, x:%d, y:%d \r\n", Data->m_byCount, Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY);
-                AddTerrainAttribute(Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY, Data->m_byMapAttr);
+                int dx = Data->m_vAttribute[(k * 2) + 1].m_byX - Data->m_vAttribute[(k * 2)].m_byX + 1;
+                int dy = Data->m_vAttribute[(k * 2) + 1].m_byY - Data->m_vAttribute[(k * 2)].m_byY + 1;
+
+                g_ErrorReport.Write(L"count:%d, x:%d, y:%d \r\n", Data->m_byCount, dx, dy);
+
+                AddTerrainAttributeRange(Data->m_vAttribute[(k * 2)].m_byX, Data->m_vAttribute[(k * 2)].m_byY, dx, dy,
+                                         Data->m_byMapAttr, 1 - Data->m_byMapSetType);
             }
         }
         break;
+
+        case 1:
+            for (int i = 0; i < Data->m_byCount; ++i)
+            {
+                if (Data->m_byMapSetType)
+                {
+                    g_ErrorReport.Write(L"SubTerrainAttribute - count:%d, x:%d, y:%d \r\n", Data->m_byCount,
+                                        Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY);
+                    SubTerrainAttribute(Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY, Data->m_byMapAttr);
+                }
+                else
+                {
+                    g_ErrorReport.Write(L"AddTerrainAttribute - count:%d, x:%d, y:%d \r\n", Data->m_byCount,
+                                        Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY);
+                    AddTerrainAttribute(Data->m_vAttribute[i].m_byX, Data->m_vAttribute[i].m_byY, Data->m_byMapAttr);
+                }
+            }
+            break;
     }
 }
 
@@ -8987,12 +9069,12 @@ void ReceiveDuelRequest(const BYTE* ReceiveBuffer)
         return;
     }
 
-    auto Data = (LPPMSG_REQ_DUEL_ANSWER)ReceiveBuffer;
+    auto    Data = (LPPMSG_REQ_DUEL_ANSWER)ReceiveBuffer;
     wchar_t playerName[MAX_USERNAME_SIZE + 1]{};
     CMultiLanguage::ConvertFromUtf8(playerName, Data->szID, MAX_USERNAME_SIZE);
 
-    auto enemyCharacter = FindCharacterByID(playerName);
-    short enemyKey = enemyCharacter->Key;
+    auto  enemyCharacter = FindCharacterByID(playerName);
+    short enemyKey       = enemyCharacter->Key;
 
     g_DuelMgr.SetDuelPlayer(DUEL_ENEMY, enemyKey, playerName);
 
@@ -9008,7 +9090,7 @@ void ReceiveDuelRequest(const BYTE* ReceiveBuffer)
 
 void ReceiveDuelStart(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_ANS_DUEL_INVITE)ReceiveBuffer;
+    auto    Data = (LPPMSG_ANS_DUEL_INVITE)ReceiveBuffer;
     wchar_t szMessage[256];
     wchar_t playerName[MAX_USERNAME_SIZE + 1]{};
     CMultiLanguage::ConvertFromUtf8(playerName, Data->szID, MAX_USERNAME_SIZE);
@@ -9173,7 +9255,7 @@ void ReceiveDuelWatchEnd(const BYTE* ReceiveBuffer)
 
 void ReceiveDuelWatcherQuit(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_DUEL_LEAVECNANNEL_BROADCAST)ReceiveBuffer;
+    auto    Data = (LPPMSG_DUEL_LEAVECNANNEL_BROADCAST)ReceiveBuffer;
     wchar_t name[MAX_USERNAME_SIZE + 1]{};
     CMultiLanguage::ConvertFromUtf8(name, Data->szID, MAX_USERNAME_SIZE);
     g_DuelMgr.RemoveDuelWatchUser(name);
@@ -9235,13 +9317,15 @@ void ReceiveCreateShopTitleViewport(const BYTE* ReceiveBuffer)
     auto Header = (LPPSHOPTITLE_HEADERINFO)ReceiveBuffer;
 
     auto* pShopTitle = (PSHOPTITLE_DATAINFO*)(ReceiveBuffer + sizeof(PSHOPTITLE_HEADERINFO));
-    for (int i = 0; i < Header->byCount; i++, pShopTitle++) {
-        int key = MAKEWORD(pShopTitle->byIndexL, pShopTitle->byIndexH);
+    for (int i = 0; i < Header->byCount; i++, pShopTitle++)
+    {
+        int key   = MAKEWORD(pShopTitle->byIndexL, pShopTitle->byIndexH);
         int index = FindCharacterIndex(key);
-        if (index >= 0 && index < MAX_CHARACTERS_CLIENT) {
+        if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
+        {
             CHARACTER* pPlayer = &CharactersClient[index];
 
-            wchar_t szShopTitle[MAX_SHOPTITLE + 1] { };
+            wchar_t szShopTitle[MAX_SHOPTITLE + 1]{};
             CMultiLanguage::ConvertFromUtf8(szShopTitle, pShopTitle->szTitle, MAX_SHOPTITLE);
 
             if (pPlayer == Hero)
@@ -9260,11 +9344,12 @@ void ReceiveShopTitleChange(const BYTE* ReceiveBuffer)
 {
     auto Header = (LPPSHOPTITLE_CHANGEINFO)ReceiveBuffer;
 
-    int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
+    int key   = MAKEWORD(Header->byIndexL, Header->byIndexH);
     int index = FindCharacterIndex(key);
-    if (index >= 0 && index < MAX_CHARACTERS_CLIENT) {
+    if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
+    {
         CHARACTER* pPlayer = &CharactersClient[index];
-        wchar_t szShopTitle[40]{};
+        wchar_t    szShopTitle[40]{};
         CMultiLanguage::ConvertFromUtf8(szShopTitle, Header->szTitle, MAX_SHOPTITLE);
 
         wchar_t szID[MAX_USERNAME_SIZE + 1]{};
@@ -9278,9 +9363,8 @@ void ReceiveShopTitleChange(const BYTE* ReceiveBuffer)
 void ReceiveSetPriceResult(const BYTE* ReceiveBuffer)
 {
     auto Header = (LPPSHOPSETPRICE_RESULTINFO)ReceiveBuffer;
-    PublishHaptic(Header->byResult == 0x01
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Header->byResult == 0x01 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                           : Core::Haptics::HapticEvent::OperationFailed);
 
     if (Header->byResult != 0x01 && g_IsPurchaseShop == PSHOPWNDTYPE_SALE)
     {
@@ -9301,9 +9385,8 @@ void ReceiveSetPriceResult(const BYTE* ReceiveBuffer)
 void ReceiveCreatePersonalShop(const BYTE* ReceiveBuffer)
 {
     auto Header = (LPCREATEPSHOP_RESULSTINFO)ReceiveBuffer;
-    PublishHaptic(Header->byResult == 0x01
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Header->byResult == 0x01 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                           : Core::Haptics::HapticEvent::OperationFailed);
     if (Header->byResult == 0x01)
     {
         g_pMyShopInventory->ChangePersonal(true);
@@ -9318,12 +9401,11 @@ void ReceiveCreatePersonalShop(const BYTE* ReceiveBuffer)
 void ReceiveDestroyPersonalShop(const BYTE* ReceiveBuffer)
 {
     auto Header = (LPDESTROYPSHOP_RESULTINFO)ReceiveBuffer;
-    PublishHaptic(Header->byResult == 0x01
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Header->byResult == 0x01 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                           : Core::Haptics::HapticEvent::OperationFailed);
     if (Header->byResult == 0x01)
     {
-        int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
+        int key   = MAKEWORD(Header->byIndexL, Header->byIndexH);
         int index = FindCharacterIndex(key);
         if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
         {
@@ -9365,7 +9447,7 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
 
         g_PersonalShopSeller.Initialize();
 
-        wchar_t shopName[MAX_SHOPTITLE + 1] {};
+        wchar_t shopName[MAX_SHOPTITLE + 1]{};
         CMultiLanguage::ConvertFromUtf8(shopName, Header->szShopTitle, MAX_SHOPTITLE);
         g_pPurchaseShopInventory->ChangeTitleText(shopName);
         g_pPurchaseShopInventory->GetInventoryCtrl()->RemoveAllItems();
@@ -9374,7 +9456,7 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
         g_pNewUISystem->Show(SEASON3B::INTERFACE_INVENTORY);
         g_pMyInventory->ChangeMyShopButtonStateOpen();
 
-        RemoveAllPerosnalItemPrice(PSHOPWNDTYPE_PURCHASE);	//. clear item price table
+        RemoveAllPerosnalItemPrice(PSHOPWNDTYPE_PURCHASE);  //. clear item price table
         int Offset = sizeof(GETPSHOPITEMLIST_HEADERINFO);
         for (int i = 0; i < Header->ItemCount; i++)
         {
@@ -9385,10 +9467,10 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
                 return;
             }
 
-            Offset+=9;
+            Offset += 9;
             auto itemData = ReceiveBuffer.subspan(Offset);
-            int length = CalcItemLength(itemData);
-            itemData = itemData.subspan(0, length);
+            int  length   = CalcItemLength(itemData);
+            itemData      = itemData.subspan(0, length);
 
             // todo: use item prices as well when the UI is ready
             if (pShopItem->MoneyPrice > 0)
@@ -9398,9 +9480,12 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
             }
             else
             {
-                g_ConsoleDebug->Write(MCD_ERROR, L"[ReceivePersonalShopItemList]Item Count : %d, Item Index : %d, Item Price : %d", Header->ItemCount, i, pShopItem->MoneyPrice);
+                g_ConsoleDebug->Write(MCD_ERROR,
+                                      L"[ReceivePersonalShopItemList]Item Count : %d, Item Index : %d, Item Price : %d",
+                                      Header->ItemCount, i, pShopItem->MoneyPrice);
 
-                g_ErrorReport.Write(L"@ ReceivePersonalShopItemList - item price less than zero(%d)\n", pShopItem->MoneyPrice);
+                g_ErrorReport.Write(L"@ ReceivePersonalShopItemList - item price less than zero(%d)\n",
+                                    pShopItem->MoneyPrice);
 
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_INVENTORY);
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_MYSHOP_INVENTORY);
@@ -9412,7 +9497,7 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
             Offset += length;
         }
 
-        int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
+        int key   = MAKEWORD(Header->byIndexL, Header->byIndexH);
         int index = FindCharacterIndex(key);
 
         g_pPurchaseShopInventory->ChangeShopCharacterIndex(index);
@@ -9421,14 +9506,13 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
     {
         switch (Header->byResult)
         {
-        case Fail1:
-        {
-            g_pSystemLogBox->AddText(I18N::Game::StoreIsNotOpenAtTheMoment, SEASON3B::TYPE_ERROR_MESSAGE);
-        }
-        break;
-        case Fail2:
-        default:
-            g_ErrorReport.Write(L"@ [Fault] ReceivePersonalShopItemList (result : %d)\n", Header->byResult);
+            case Fail1: {
+                g_pSystemLogBox->AddText(I18N::Game::StoreIsNotOpenAtTheMoment, SEASON3B::TYPE_ERROR_MESSAGE);
+            }
+            break;
+            case Fail2:
+            default:
+                g_ErrorReport.Write(L"@ [Fault] ReceivePersonalShopItemList (result : %d)\n", Header->byResult);
         }
     }
 
@@ -9445,7 +9529,7 @@ void ReceiveRefreshItemList(std::span<const BYTE> ReceiveBuffer)
     }
 
     int Offset = sizeof(GETPSHOPITEMLIST_HEADERINFO);
-    int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
+    int key    = MAKEWORD(Header->byIndexL, Header->byIndexH);
     if (Header->byResult == Success && Hero->Key == key)
     {
         g_pMyShopInventory->GetInventoryCtrl()->RemoveAllItems();
@@ -9460,8 +9544,8 @@ void ReceiveRefreshItemList(std::span<const BYTE> ReceiveBuffer)
 
             Offset += 9;
             auto itemData = ReceiveBuffer.subspan(Offset);
-            int length = CalcItemLength(itemData);
-            itemData = itemData.subspan(0, length);
+            int  length   = CalcItemLength(itemData);
+            itemData      = itemData.subspan(0, length);
 
             g_pMyShopInventory->InsertItem(pShopItem->ItemSlot, itemData);
             AddPersonalItemPrice(pShopItem->ItemSlot, pShopItem->MoneyPrice, PSHOPWNDTYPE_SALE);
@@ -9492,8 +9576,8 @@ void ReceiveRefreshItemList(std::span<const BYTE> ReceiveBuffer)
 
             Offset += 9;
             auto itemData = ReceiveBuffer.subspan(Offset);
-            int length = CalcItemLength(itemData);
-            itemData = itemData.subspan(0, length);
+            int  length   = CalcItemLength(itemData);
+            itemData      = itemData.subspan(0, length);
 
             g_pPurchaseShopInventory->InsertItem(pShopItem->ItemSlot, itemData);
             AddPersonalItemPrice(pShopItem->ItemSlot, pShopItem->MoneyPrice, PSHOPWNDTYPE_PURCHASE);
@@ -9540,8 +9624,8 @@ void ReceivePurchaseItem(std::span<const BYTE> ReceiveBuffer)
         }
 
         auto itemindex = Header->ItemSlot;
-        auto offset = sizeof(PURCHASEITEM_RESULTINFO);
-        auto itemData = ReceiveBuffer.subspan(offset);
+        auto offset    = sizeof(PURCHASEITEM_RESULTINFO);
+        auto itemData  = ReceiveBuffer.subspan(offset);
 
         if (IsMainInventorySlot(itemindex))
         {
@@ -9564,19 +9648,17 @@ void ReceivePurchaseItem(std::span<const BYTE> ReceiveBuffer)
         PublishHaptic(Core::Haptics::HapticEvent::OperationFailed);
         switch (Header->Result)
         {
-        case PURCHASEITEM_RESULTINFO::LackOfMoney:
-        {
-            g_pSystemLogBox->AddText(I18N::Game::YouAreShortOfZen, SEASON3B::TYPE_ERROR_MESSAGE);
-        }
-        break;
-        case PURCHASEITEM_RESULTINFO::MoneyOverflowOrNotEnoughSpace:
-        {
-            g_pSystemLogBox->AddText(I18N::Game::InventoryIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
-        }
-        break;
-        case PURCHASEITEM_RESULTINFO::ItemBlock:
-        default:
-            g_ErrorReport.Write(L"@ [Fault] ReceivePurchaseItem (result : %d)\n", Header->Result);
+            case PURCHASEITEM_RESULTINFO::LackOfMoney: {
+                g_pSystemLogBox->AddText(I18N::Game::YouAreShortOfZen, SEASON3B::TYPE_ERROR_MESSAGE);
+            }
+            break;
+            case PURCHASEITEM_RESULTINFO::MoneyOverflowOrNotEnoughSpace: {
+                g_pSystemLogBox->AddText(I18N::Game::InventoryIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
+            }
+            break;
+            case PURCHASEITEM_RESULTINFO::ItemBlock:
+            default:
+                g_ErrorReport.Write(L"@ [Fault] ReceivePurchaseItem (result : %d)\n", Header->Result);
         }
         SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
     }
@@ -9584,8 +9666,8 @@ void ReceivePurchaseItem(std::span<const BYTE> ReceiveBuffer)
 
 void NotifySoldItem(const BYTE* ReceiveBuffer)
 {
-    auto Header = (LPSOLDITEM_RESULTINFO)ReceiveBuffer;
-    wchar_t szId[MAX_USERNAME_SIZE + 2] = { 0 };
+    auto    Header                      = (LPSOLDITEM_RESULTINFO)ReceiveBuffer;
+    wchar_t szId[MAX_USERNAME_SIZE + 2] = {0};
 
     CMultiLanguage::ConvertFromUtf8(szId, Header->szId, MAX_USERNAME_SIZE);
     wchar_t Text[100];
@@ -9608,62 +9690,63 @@ void ReceiveDisplayEffectViewport(const BYTE* ReceiveBuffer)
 {
     auto Header = (LPDISPLAYEREFFECT_NOTIFYINFO)ReceiveBuffer;
 
-    int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
+    int key   = MAKEWORD(Header->byIndexL, Header->byIndexH);
     int index = FindCharacterIndex(key);
-    if (index >= 0 && index < MAX_CHARACTERS_CLIENT) {
+    if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
+    {
         CHARACTER* pPlayer = &CharactersClient[index];
-        OBJECT* o = &pPlayer->Object;
-        if (o->Kind == KIND_PLAYER) {
-            switch (Header->byType) {
-            case 0x01:	//. HP up
+        OBJECT*    o       = &pPlayer->Object;
+        if (o->Kind == KIND_PLAYER)
+        {
+            switch (Header->byType)
             {
+                case 0x01:  //. HP up
+                {
 #ifdef ENABLE_POTION_EFFECT
-                CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 5, o);
-#endif // ENABLE_POTION_EFFECT
-            }
-            break;
-            case 0x02:	//. MP up
-            {
-            }
-            break;
-            case 0x10:	//. Level up
-            {
-                if (gCharacterManager.IsMasterLevel(pPlayer->Class) == true)
-                {
-                    CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 45, o, 80, 2);
-                    for (int i = 0; i < 19; ++i)
-                    {
-                        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 46, o, 80, 2);
-                    }
+                    CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 5, o);
+#endif  // ENABLE_POTION_EFFECT
                 }
-                else
+                break;
+                case 0x02:  //. MP up
                 {
-                    for (int i = 0; i < 15; ++i)
-                    {
-                        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
-                    }
-                    CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
                 }
-                PlayBuffer(SOUND_LEVEL_UP);
-            }
-            break;
-            case 0x03:
-            {
-                CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 5, o);
-            }
-            break;
+                break;
+                case 0x10:  //. Level up
+                {
+                    if (gCharacterManager.IsMasterLevel(pPlayer->Class) == true)
+                    {
+                        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 45, o, 80, 2);
+                        for (int i = 0; i < 19; ++i)
+                        {
+                            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 46, o, 80, 2);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 15; ++i)
+                        {
+                            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
+                        }
+                        CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
+                    }
+                    PlayBuffer(SOUND_LEVEL_UP);
+                }
+                break;
+                case 0x03: {
+                    CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 5, o);
+                }
+                break;
 
-            case 0x11:
-            {
-                if (!gMapManager.InChaosCastle())
-                {
-                    CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, o->Light, 0, o);
-                    PlayBuffer(SOUND_SHIELDCLASH);
+                case 0x11: {
+                    if (!gMapManager.InChaosCastle())
+                    {
+                        CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, o->Light, 0, o);
+                        PlayBuffer(SOUND_SHIELDCLASH);
+                    }
                 }
-            }
-            break;
-            }	//. end of switch
-        }	//. end of (o->Kind == KIND_PLAYER)
+                break;
+            }  //. end of switch
+        }  //. end of (o->Kind == KIND_PLAYER)
     }
 }
 
@@ -9672,9 +9755,9 @@ int g_iMaxLetterCount = 0;
 void ReceiveFriendList(const BYTE* ReceiveBuffer)
 {
     g_pWindowMgr->Reset();
-    auto Header = (LPFS_FRIEND_LIST_HEADER)ReceiveBuffer;
-    int iMoveOffset = sizeof(FS_FRIEND_LIST_HEADER);
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    auto    Header                        = (LPFS_FRIEND_LIST_HEADER)ReceiveBuffer;
+    int     iMoveOffset                   = sizeof(FS_FRIEND_LIST_HEADER);
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     for (int i = 0; i < Header->Count; ++i)
     {
         auto Data = (LPFS_FRIEND_LIST_DATA)(ReceiveBuffer + iMoveOffset);
@@ -9708,47 +9791,46 @@ void ReceiveAddFriendResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_FRIEND_RESULT)ReceiveBuffer;
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
     szName[MAX_USERNAME_SIZE] = '\0';
 
-    wchar_t szText[MAX_TEXT_LENGTH + 1] = { 0 };
+    wchar_t szText[MAX_TEXT_LENGTH + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szText, Data->Name, MAX_USERNAME_SIZE);
     szText[MAX_USERNAME_SIZE] = '\0';
 
     switch (Data->Result)
     {
-    case 0x00:
-        wcscat(szText, I18N::Game::IDDoesNotExist);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+        case 0x00:
+            wcscat(szText, I18N::Game::IDDoesNotExist);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+            break;
+        case 0x01: {
+            g_pSystemLogBox->AddText(I18N::Game::TheFriendSStatusWillBe, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            g_pFriendList->AddFriend(szName, 0, Data->Server);
+            g_pFriendList->Sort();
+            g_pWindowMgr->RefreshMainWndPalList();
+            g_pFriendMenu->UpdateAllChatWindowInviteList();
+        }
         break;
-    case 0x01:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::TheFriendSStatusWillBe, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        g_pFriendList->AddFriend(szName, 0, Data->Server);
-        g_pFriendList->Sort();
-        g_pWindowMgr->RefreshMainWndPalList();
-        g_pFriendMenu->UpdateAllChatWindowInviteList();
-    }
-    break;
-    case 0x03:
-        wcscpy(szText, I18N::Game::YouCannotAddMorePleaseDeleteToAdd);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
-        break;
-    case 0x04:
-        wcscat(szText, I18N::Game::IsAlreadyRegistered);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
-        break;
-    case 0x05:
-        wcscpy(szText, I18N::Game::YouCannotRegisterYourOwnID);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
-        break;
-    case 0x06:
-        wcscpy(szText, I18N::Game::TheOtherCharacterMustBeOverLevel6);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
-        break;
-    default:
-        break;
+        case 0x03:
+            wcscpy(szText, I18N::Game::YouCannotAddMorePleaseDeleteToAdd);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+            break;
+        case 0x04:
+            wcscat(szText, I18N::Game::IsAlreadyRegistered);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+            break;
+        case 0x05:
+            wcscpy(szText, I18N::Game::YouCannotRegisterYourOwnID);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+            break;
+        case 0x06:
+            wcscpy(szText, I18N::Game::TheOtherCharacterMustBeOverLevel6);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, szText);
+            break;
+        default:
+            break;
     }
 }
 
@@ -9756,15 +9838,16 @@ void ReceiveRequestAcceptAddFriend(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_ACCEPT_ADD_FRIEND_RESULT)ReceiveBuffer;
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
     szName[MAX_USERNAME_SIZE] = '\0';
 
-    wchar_t szText[MAX_TEXT_LENGTH + 1] = { 0 };
+    wchar_t szText[MAX_TEXT_LENGTH + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szText, Data->Name, MAX_USERNAME_SIZE);
     szText[MAX_USERNAME_SIZE] = '\0';
 
-    mu_swprintf(szText, L"%ls %ls", szText, I18N::Game::HasRequestedToListYouAsAFriend); // " has requested to list you as a friend."
+    mu_swprintf(szText, L"%ls %ls", szText,
+                I18N::Game::HasRequestedToListYouAsAFriend);  // " has requested to list you as a friend."
 
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_FRIEND) == false)
     {
@@ -9783,21 +9866,21 @@ void ReceiveDeleteFriendResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_FRIEND_RESULT)ReceiveBuffer;
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
     szName[MAX_USERNAME_SIZE] = '\0';
 
     switch (Data->Result)
     {
-    case 0x00:
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::CouldnTDelete);
-        break;
-    case 0x01:
-        g_pFriendList->RemoveFriend(szName);
-        g_pWindowMgr->RefreshMainWndPalList();
-        break;
-    default:
-        break;
+        case 0x00:
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::CouldnTDelete);
+            break;
+        case 0x01:
+            g_pFriendList->RemoveFriend(szName);
+            g_pWindowMgr->RefreshMainWndPalList();
+            break;
+        default:
+            break;
     }
 }
 
@@ -9805,7 +9888,7 @@ void ReceiveFriendStateChange(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_FRIEND_STATE_CHANGE)ReceiveBuffer;
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
     szName[MAX_USERNAME_SIZE] = '\0';
 
@@ -9827,8 +9910,9 @@ void ReceiveFriendStateChange(const BYTE* ReceiveBuffer)
     if (dwChatRoomUIID > 0)
     {
         auto* pWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwChatRoomUIID);
-        if (pWindow == nullptr);
-        else if (Data->Server >= 0xFD/* || Data->Server == 0xFB*/)
+        if (pWindow == nullptr)
+            ;
+        else if (Data->Server >= 0xFD /* || Data->Server == 0xFB*/)
         {
             pWindow->Lock(TRUE);
         }
@@ -9844,47 +9928,51 @@ void ReceiveLetterSendResult(const BYTE* ReceiveBuffer)
     auto Data = (LPFS_SEND_LETTER_RESULT)ReceiveBuffer;
     switch (Data->Result)
     {
-    case 0x00:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::TheLetterCouldNotBeSentPleaseTryAgain);
+        case 0x00:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::TheLetterCouldNotBeSentPleaseTryAgain);
+            break;
+        case 0x01: {
+            if (Data->WindowGuid != 0)
+                g_pWindowMgr->SendUIMessage(UI_MESSAGE_CLOSE, Data->WindowGuid, 0);
+            wchar_t temp[MAX_TEXT_LENGTH + 1];
+            mu_swprintf(temp, I18N::Game::LetterHasBeenSentCostDZen, g_cdwLetterCost);
+            g_pSystemLogBox->AddText(temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        }
         break;
-    case 0x01:
-    {
-        if (Data->WindowGuid != 0)
-            g_pWindowMgr->SendUIMessage(UI_MESSAGE_CLOSE, Data->WindowGuid, 0);
-        wchar_t temp[MAX_TEXT_LENGTH + 1];
-        mu_swprintf(temp, I18N::Game::LetterHasBeenSentCostDZen, g_cdwLetterCost);
-        g_pSystemLogBox->AddText(temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
-    }
-    break;
-    case 0x02:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::TheLetterCanTBeSentBecauseTheReceiverSMailBoxIsFull);
-        break;
-    case 0x03:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::EitherTheReceiverDoesNotExistOrThereIsNoMailBox);
-        break;
-    case 0x04:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::YouCannotSendALetterToYourself);
-        break;
-    case 0x06:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::TheOtherCharacterMustBeOverLevel6);
-        break;
-    case 0x07:
-        if (Data->WindowGuid != 0)
-            ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::YouAreShortOfZen);
-        break;
-    default:
-        break;
+        case 0x02:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::TheLetterCanTBeSentBecauseTheReceiverSMailBoxIsFull);
+            break;
+        case 0x03:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::EitherTheReceiverDoesNotExistOrThereIsNoMailBox);
+            break;
+        case 0x04:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::YouCannotSendALetterToYourself);
+            break;
+        case 0x06:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::TheOtherCharacterMustBeOverLevel6);
+            break;
+        case 0x07:
+            if (Data->WindowGuid != 0)
+                ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid))->SetSendState(FALSE);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::YouAreShortOfZen);
+            break;
+        default:
+            break;
     };
 }
 
@@ -9892,43 +9980,44 @@ void ReceiveLetter(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_LETTER_ALERT)ReceiveBuffer;
 
-    wchar_t szDate[MAX_LETTER_DATE_LENGTH + 1] = { };
+    wchar_t szDate[MAX_LETTER_DATE_LENGTH + 1] = {};
     CMultiLanguage::ConvertFromUtf8(szDate, Data->Date, MAX_LETTER_DATE_LENGTH);
 
-    wchar_t szTime[MAX_LETTER_TIME_LENGTH + 1] = { };
+    wchar_t szTime[MAX_LETTER_TIME_LENGTH + 1] = {};
     CMultiLanguage::ConvertFromUtf8(szTime, Data->Time, MAX_LETTER_TIME_LENGTH);
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {};
     CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
     szName[MAX_USERNAME_SIZE] = '\0';
 
-    wchar_t szSubject[MAX_TEXT_LENGTH + 1] = { };
+    wchar_t szSubject[MAX_TEXT_LENGTH + 1] = {};
     CMultiLanguage::ConvertFromUtf8(szSubject, Data->Subject, MAX_USERNAME_SIZE);
     szSubject[MAX_USERNAME_SIZE] = '\0';
 
     switch (Data->Read)
     {
-    case 0x02:
-        PlayBuffer(SOUND_FRIEND_MAIL_ALERT);
-        g_pFriendMenu->SetNewMailAlert(TRUE);
-        g_pSystemLogBox->AddText(I18N::Game::NewMailHasArrived, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        g_pLetterList->AddLetter(Data->Index, szName, szSubject, szDate, szTime, 0x00);
-        g_pLetterList->Sort();
-        break;
-    case 0x00:
-    case 0x01:
-        g_pLetterList->AddLetter(Data->Index, szName, szSubject, szDate, szTime, Data->Read);
-        g_pLetterList->Sort(2);
-        break;
-    default:
-        break;
+        case 0x02:
+            PlayBuffer(SOUND_FRIEND_MAIL_ALERT);
+            g_pFriendMenu->SetNewMailAlert(TRUE);
+            g_pSystemLogBox->AddText(I18N::Game::NewMailHasArrived, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            g_pLetterList->AddLetter(Data->Index, szName, szSubject, szDate, szTime, 0x00);
+            g_pLetterList->Sort();
+            break;
+        case 0x00:
+        case 0x01:
+            g_pLetterList->AddLetter(Data->Index, szName, szSubject, szDate, szTime, Data->Read);
+            g_pLetterList->Sort(2);
+            break;
+        default:
+            break;
     };
 
     g_pWindowMgr->RefreshMainWndLetterList();
 
     if (g_pLetterList->GetLetterCount() >= g_iMaxLetterCount)
     {
-        g_pSystemLogBox->AddText(I18N::Game::YourMailboxIsFullYouMustDeleteLettersToReceiveNewOnes, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(I18N::Game::YourMailboxIsFullYouMustDeleteLettersToReceiveNewOnes,
+                                 SEASON3B::TYPE_SYSTEM_MESSAGE);
     }
 }
 
@@ -9969,13 +10058,14 @@ void ReceiveLetterText(std::span<const BYTE> ReceiveBuffer, bool isCached)
     }
     else
     {
-        dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_READLETTER, g_iLetterReadNextPos_x, g_iLetterReadNextPos_y, tempTxt, 0, UIADDWND_FORCEPOSITION);
+        dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_READLETTER, g_iLetterReadNextPos_x, g_iLetterReadNextPos_y, tempTxt,
+                                         0, UIADDWND_FORCEPOSITION);
         g_iLetterReadNextPos_x = UIWND_DEFAULT;
     }
 
-    auto* pWindow = (CUILetterReadWindow*)g_pWindowMgr->GetWindow(dwUIID);
-    auto* pLetterText = (char*)ReceiveBuffer.subspan(sizeof(FS_LETTER_TEXT_HEADER)).data();
-    wchar_t letterText[1000 + 1] = { };
+    auto*   pWindow              = (CUILetterReadWindow*)g_pWindowMgr->GetWindow(dwUIID);
+    auto*   pLetterText          = (char*)ReceiveBuffer.subspan(sizeof(FS_LETTER_TEXT_HEADER)).data();
+    wchar_t letterText[1000 + 1] = {};
     CMultiLanguage::ConvertFromUtf8(letterText, pLetterText, MAX_LETTERTEXT_LENGTH);
     letterText[MAX_LETTERTEXT_LENGTH] = '\0';
     pWindow->SetLetter(pLetterHead, letterText);
@@ -9992,7 +10082,7 @@ void ReceiveLetterText(std::span<const BYTE> ReceiveBuffer, bool isCached)
         pWindow->m_Photo.SetEquipmentPacket(Data->Equipment);
         pWindow->m_Photo.SetAnimation(Data->PhotoAction + AT_ATTACK1);
         int iAngle = Data->PhotoDir & 0x3F;
-        int iZoom = (Data->PhotoDir & 0xC0) >> 6;
+        int iZoom  = (Data->PhotoDir & 0xC0) >> 6;
         pWindow->m_Photo.SetAngle(iAngle * 6);
         pWindow->m_Photo.SetZoom((iZoom * 10 + 80) / 100.0f);
     }
@@ -10004,15 +10094,15 @@ void ReceiveLetterDeleteResult(const BYTE* ReceiveBuffer)
     auto Data = (LPFS_LETTER_RESULT)ReceiveBuffer;
     switch (Data->Result)
     {
-    case 0x00:
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::CouldnTDeleteLetter);
-        break;
-    case 0x01:
-        g_pLetterList->RemoveLetter(Data->Index);
-        g_pLetterList->RemoveLetterTextCache(Data->Index);
-        break;
-    default:
-        break;
+        case 0x00:
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::CouldnTDeleteLetter);
+            break;
+        case 0x01:
+            g_pLetterList->RemoveLetter(Data->Index);
+            g_pLetterList->RemoveLetterTextCache(Data->Index);
+            break;
+        default:
+            break;
     };
 
     g_pWindowMgr->RefreshMainWndLetterList();
@@ -10022,92 +10112,100 @@ void ReceiveCreateChatRoomResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_CHAT_CREATE_RESULT)ReceiveBuffer;
 
-    wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
+    wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
     CMultiLanguage::ConvertFromUtf8(szName, Data->ID, MAX_USERNAME_SIZE);
 
-    wchar_t szIP[sizeof(Data->IP) + 1] { };
+    wchar_t szIP[sizeof(Data->IP) + 1]{};
     CMultiLanguage::ConvertFromUtf8(szIP, Data->IP, sizeof(Data->IP));
 
     switch (Data->Result)
     {
-    case 0x00:
-        g_pFriendMenu->RemoveRequestWindow(szName);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::TheConversationCannotContinue);
-        break;
-    case 0x01:
-        g_pFriendMenu->RemoveRequestWindow(szName);
-        if (Data->Type == 0)
-        {
-            DWORD dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT, 100, 100, I18N::Game::Talking);
-            ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
-        }
-        else if (Data->Type == 1)
-        {
-            DWORD dwUIID = g_pFriendMenu->CheckChatRoomDuplication(szName);
-            if (dwUIID == 0)
+        case 0x00:
+            g_pFriendMenu->RemoveRequestWindow(szName);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::TheConversationCannotContinue);
+            break;
+        case 0x01:
+            g_pFriendMenu->RemoveRequestWindow(szName);
+            if (Data->Type == 0)
             {
-                dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT_READY, 100, 100, I18N::Game::Talking);
-                ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
+                DWORD dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT, 100, 100, I18N::Game::Talking);
+                ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))
+                    ->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
+            }
+            else if (Data->Type == 1)
+            {
+                DWORD dwUIID = g_pFriendMenu->CheckChatRoomDuplication(szName);
+                if (dwUIID == 0)
+                {
+                    dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT_READY, 100, 100, I18N::Game::Talking);
+                    ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))
+                        ->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
+                    g_pWindowMgr->GetWindow(dwUIID)->SetState(UISTATE_READY);
+                    g_pWindowMgr->SendUIMessage(UI_MESSAGE_BOTTOM, dwUIID, 0);
+
+                    g_pWindowMgr->GetWindow(dwUIID)->SetState(UISTATE_HIDE);
+                    g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, dwUIID, 0);
+                }
+                else if (dwUIID == -1)
+                    ;
+                else
+                {
+                    ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->DisconnectToChatServer();
+                    ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))
+                        ->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
+                }
+            }
+            else if (Data->Type == 2)
+            {
+                DWORD dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT_READY, 100, 100, I18N::Game::Talking);
+                ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))
+                    ->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
                 g_pWindowMgr->GetWindow(dwUIID)->SetState(UISTATE_READY);
                 g_pWindowMgr->SendUIMessage(UI_MESSAGE_BOTTOM, dwUIID, 0);
-
-                g_pWindowMgr->GetWindow(dwUIID)->SetState(UISTATE_HIDE);
-                g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, dwUIID, 0);
             }
-            else if (dwUIID == -1);
-            else
-            {
-                ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->DisconnectToChatServer();
-                ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
-            }
-        }
-        else if (Data->Type == 2)
-        {
-            DWORD dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_CHAT_READY, 100, 100, I18N::Game::Talking);
-            ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwUIID))->ConnectToChatServer(szIP, Data->RoomNumber, Data->Ticket);
-            g_pWindowMgr->GetWindow(dwUIID)->SetState(UISTATE_READY);
-            g_pWindowMgr->SendUIMessage(UI_MESSAGE_BOTTOM, dwUIID, 0);
-        }
-        break;
-    case 0x02:
-        g_pFriendMenu->RemoveRequestWindow(szName);
-        g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT, I18N::Game::TheChatServerIsNowUnavailable);
-        break;
-    default:
-        break;
+            break;
+        case 0x02:
+            g_pFriendMenu->RemoveRequestWindow(szName);
+            g_pWindowMgr->AddWindow(UIWNDTYPE_OK_FORCE, UIWND_DEFAULT, UIWND_DEFAULT,
+                                    I18N::Game::TheChatServerIsNowUnavailable);
+            break;
+        default:
+            break;
     };
 }
 
 void ReceiveChatRoomInviteResult(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPFS_CHAT_INVITE_RESULT)ReceiveBuffer;
+    auto  Data        = (LPFS_CHAT_INVITE_RESULT)ReceiveBuffer;
     auto* pChatWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(Data->WindowGuid);
-    if (pChatWindow == nullptr) return;
+    if (pChatWindow == nullptr)
+        return;
 
     switch (Data->Result)
     {
-    case 0x00:
-        pChatWindow->AddChatText(255, I18N::Game::UserIsOffline, 1, 0);
-        break;
-    case 0x01:
-        if (pChatWindow->GetCurrentInvitePal() != nullptr)
-        {
-            wchar_t szText[MAX_TEXT_LENGTH + 1] = { 0 };
-            wcsncpy(szText, pChatWindow->GetCurrentInvitePal()->m_szID, MAX_USERNAME_SIZE);
-            szText[MAX_USERNAME_SIZE] = '\0';
-            wcscat(szText, I18N::Game::HasBeenInvited);
-            pChatWindow->AddChatText(255, szText, 1, 0);
-        }
-        else
-        {
-            assert(!"ReceiveChatRoomInviteResult");
-        }
-        break;
-    case 0x03:
-        pChatWindow->AddChatText(255, I18N::Game::YouHaveReachedTheMaximumNumberOfFriendsYouCanList, 1, 0);
-        break;
-    default:
-        break;
+        case 0x00:
+            pChatWindow->AddChatText(255, I18N::Game::UserIsOffline, 1, 0);
+            break;
+        case 0x01:
+            if (pChatWindow->GetCurrentInvitePal() != nullptr)
+            {
+                wchar_t szText[MAX_TEXT_LENGTH + 1] = {0};
+                wcsncpy(szText, pChatWindow->GetCurrentInvitePal()->m_szID, MAX_USERNAME_SIZE);
+                szText[MAX_USERNAME_SIZE] = '\0';
+                wcscat(szText, I18N::Game::HasBeenInvited);
+                pChatWindow->AddChatText(255, szText, 1, 0);
+            }
+            else
+            {
+                assert(!"ReceiveChatRoomInviteResult");
+            }
+            break;
+        case 0x03:
+            pChatWindow->AddChatText(255, I18N::Game::YouHaveReachedTheMaximumNumberOfFriendsYouCanList, 1, 0);
+            break;
+        default:
+            break;
     };
 }
 
@@ -10121,7 +10219,7 @@ void ReceiveOption(const BYTE* ReceiveBuffer)
     for (int i = 0; i < 10; ++i)
     {
         int iIndex = i * 2;
-        iHotKey = MAKEWORD(Data->HotKey[iIndex + 1], Data->HotKey[iIndex]);
+        iHotKey    = MAKEWORD(Data->HotKey[iIndex + 1], Data->HotKey[iIndex]);
 
         if (iHotKey != 0xffff)
         {
@@ -10173,7 +10271,7 @@ void ReceiveOption(const BYTE* ReceiveBuffer)
     g_pMainFrame->SetItemHotKey(SEASON3B::HOTKEY_W, Data->KeyQWE[1] + ITEM_POTION, byWLevel);
     g_pMainFrame->SetItemHotKey(SEASON3B::HOTKEY_E, Data->KeyQWE[2] + ITEM_POTION, byELevel);
 
-    BYTE wChatListBoxSize = (Data->ChatLogBox >> 4) * 3;
+    BYTE wChatListBoxSize      = (Data->ChatLogBox >> 4) * 3;
     BYTE wChatListBoxBackAlpha = Data->ChatLogBox & 0x0F;
 
     g_pMainFrame->SetItemHotKey(SEASON3B::HOTKEY_R, Data->KeyR + ITEM_POTION, byRLevel);
@@ -10185,7 +10283,7 @@ void ReceiveEventChipInfomation(const BYTE* ReceiveBuffer)
 
     g_pNewUISystem->HideAll();
     g_bEventChipDialogEnable = Data->m_byType + 1;
-    g_shEventChipCount = Data->m_nChipCount;
+    g_shEventChipCount       = Data->m_nChipCount;
 
     if (g_bEventChipDialogEnable == EVENT_SCRATCH_TICKET)
     {
@@ -10198,7 +10296,8 @@ void ReceiveEventChipInfomation(const BYTE* ReceiveBuffer)
         g_pNewUISystem->Show(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         g_bEventChipDialogEnable = 0;
 
-        if (Data->m_shMutoNum[0] != -1 && Data->m_shMutoNum[1] != -1 && Data->m_shMutoNum[2] != -1) {
+        if (Data->m_shMutoNum[0] != -1 && Data->m_shMutoNum[1] != -1 && Data->m_shMutoNum[2] != -1)
+        {
             memcpy(g_shMutoNumber, Data->m_shMutoNum, sizeof(short) * 3);
         }
     }
@@ -10210,12 +10309,12 @@ void ReceiveEventChipInfomation(const BYTE* ReceiveBuffer)
             ZeroMemory(g_strGiftName, sizeof(char) * 64);
 
             ClearInput(FALSE);
-            InputTextMax[0] = 12;
-            InputNumber = 1;
-            InputEnable = false;
-            GoldInputEnable = false;
-            InputGold = 0;
-            StorageGoldFlag = 0;
+            InputTextMax[0]  = 12;
+            InputNumber      = 1;
+            InputEnable      = false;
+            GoldInputEnable  = false;
+            InputGold        = 0;
+            StorageGoldFlag  = 0;
             g_bScratchTicket = true;
         }
 }
@@ -10233,7 +10332,8 @@ void ReceiveBuffState(const BYTE* ReceiveBuffer)
 
     auto bufftype = static_cast<eBuffState>(Data->byBuffType);
 
-    if (bufftype == eBuffNone || bufftype >= eBuff_Count) return;
+    if (bufftype == eBuffNone || bufftype >= eBuff_Count)
+        return;
 
     if (Data->byEffectOption == 0)
     {
@@ -10266,12 +10366,12 @@ void ReceiveServerImmigration(const BYTE* ReceiveBuffer)
 
     switch (Data->Value)
     {
-    case 0:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CServerImmigrationErrorMsgBoxLayout));
-        break;
-    case 1:
-        SEASON3B::CreateOkMessageBox(L"ReceiveServerImmigration");
-        break;
+        case 0:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CServerImmigrationErrorMsgBoxLayout));
+            break;
+        case 1:
+            SEASON3B::CreateOkMessageBox(L"ReceiveServerImmigration");
+            break;
     }
 }
 
@@ -10281,17 +10381,17 @@ void ReceiveScratchResult(const BYTE* ReceiveBuffer)
 
     switch (Data->m_byIsRegistered)
     {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-        SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(886 + Data->m_byIsRegistered));
-        break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            SEASON3B::CreateOkMessageBox(I18N::Game::Lookup(886 + Data->m_byIsRegistered));
+            break;
 
-    case 5:
-        SEASON3B::CreateOkMessageBox(I18N::Game::YouHaveAlreadyRegistered);
-        break;
+        case 5:
+            SEASON3B::CreateOkMessageBox(I18N::Game::YouHaveAlreadyRegistered);
+            break;
     }
 
     CMultiLanguage::ConvertFromUtf8(g_strGiftName, Data->m_strGiftName, sizeof Data->m_strGiftName);
@@ -10303,17 +10403,17 @@ void ReceivePlaySoundEffect(const BYTE* ReceiveBuffer)
 
     switch (Data->wEffectNum)
     {
-    case 0:
-        PlayBuffer(SOUND_RING_EVENT_READY);
-        break;
-    case 1:
-        PlayBuffer(SOUND_RING_EVENT_START);
-        break;
-    case 2:
-        PlayBuffer(SOUND_RING_EVENT_END);
-        break;
-    default:
-        break;
+        case 0:
+            PlayBuffer(SOUND_RING_EVENT_READY);
+            break;
+        case 1:
+            PlayBuffer(SOUND_RING_EVENT_START);
+            break;
+        case 2:
+            PlayBuffer(SOUND_RING_EVENT_END);
+            break;
+        default:
+            break;
     }
 }
 
@@ -10343,9 +10443,7 @@ void ReceiveQuestState(const BYTE* ReceiveBuffer)
 void ReceiveQuestResult(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_QUEST_RESULT)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::LegacyQuest,
-        Data->m_byResult));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::LegacyQuest, Data->m_byResult));
 
     if (Data->m_byResult == 0)
     {
@@ -10365,141 +10463,138 @@ void ReceiveQuestPrize(const BYTE* ReceiveBuffer)
 
     switch (Data->m_byReparation)
     {
-    case 200:
-    {
-        CHARACTER* c = &CharactersClient[Index];
+        case 200: {
+            CHARACTER* c = &CharactersClient[Index];
 
-        if (c == Hero)
-        {
-            CharacterAttribute->LevelUpPoint += Data->m_byNumber;
+            if (c == Hero)
+            {
+                CharacterAttribute->LevelUpPoint += Data->m_byNumber;
+            }
+
+            OBJECT* o = &c->Object;
+
+            vec3_t Position;
+            VectorCopy(o->Position, Position);
+            for (int i = 0; i < 15; ++i)
+            {
+                CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
+            }
+            CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
+            PlayBuffer(SOUND_CHANGE_UP);
         }
-
-        OBJECT* o = &c->Object;
-
-        vec3_t      Position;
-        VectorCopy(o->Position, Position);
-        for (int i = 0; i < 15; ++i)
-        {
-            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
-        }
-        CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
-        PlayBuffer(SOUND_CHANGE_UP);
-    }
-    break;
-
-    case 201:
-    {
-        // Evolution from 1st to 2nd class
-        CHARACTER* c = &CharactersClient[Index];
-        OBJECT* o = &c->Object;
-        vec3_t      Position;
-
-        auto byClass = gCharacterManager.ChangeServerClassTypeToClientClassType(static_cast<SERVER_CLASS_TYPE>((Data->m_byNumber >> 3)));
-        if (2 != gCharacterManager.GetStepClass(byClass))
-            break;
-
-        c->Class = byClass;
-        c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-
-        if (Hero == c)
-        {
-            CharacterAttribute->Class = c->Class;
-        }
-
-        VectorCopy(o->Position, Position);
-        Position[2] += 200.f;
-        for (int i = 0; i < 15; ++i)
-        {
-            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
-            CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
-        }
-        CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
-
-        SetChangeClass(c);
-        SetAction(o, PLAYER_SALUTE1);
-
-        PlayBuffer(SOUND_CHANGE_UP);
-    }
-    break;
-
-    case 202:
-    {
-        CHARACTER* c = &CharactersClient[Index];
-        OBJECT* o = &c->Object;
-        vec3_t      Position;
-
-        if (Hero == c)
-        {
-            CharacterAttribute->LevelUpPoint += Data->m_byNumber;
-        }
-
-        VectorCopy(o->Position, Position);
-        Position[2] += 200.f;
-        for (int i = 0; i < 15; ++i)
-        {
-            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
-            CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
-        }
-        CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
-
-        SetChangeClass(c);
-        SetAction(o, PLAYER_SALUTE1);
-        PlayBuffer(SOUND_CHANGE_UP);
-    }
-    break;
-
-    case 203:
-    {
-        CHARACTER* c = &CharactersClient[Index];
-        OBJECT* o = &c->Object;
-        vec3_t      Position;
-
-        VectorCopy(o->Position, Position);
-        Position[2] += 200.f;
-        for (int i = 0; i < 15; ++i)
-        {
-            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
-            CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
-        }
-        CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
-
-        SetChangeClass(c);
-        SetAction(o, PLAYER_SALUTE1);
-
-        PlayBuffer(SOUND_CHANGE_UP);
-    }
-    break;
-
-    case 204:
-    {
-        // Evolution from 2nd to 3rd class
-        CHARACTER* c = &CharactersClient[Index];
-
-        auto byClass = gCharacterManager.ChangeServerClassTypeToClientClassType(static_cast<SERVER_CLASS_TYPE>((Data->m_byNumber >> 3)));
-        if (3 != gCharacterManager.GetStepClass(byClass))
-            break;
-
-        c->Class = byClass;
-        c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-
-        if (Hero == c)
-        {
-            CharacterAttribute->Class = c->Class;
-        }
-
-        CreateEffect(MODEL_CHANGE_UP_EFF, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
-        CreateEffect(MODEL_CHANGE_UP_NASA, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
-        CreateEffect(MODEL_CHANGE_UP_CYLINDER, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
-        CreateEffect(MODEL_INFINITY_ARROW3, c->Object.Position, c->Object.Angle, c->Object.Light, 1, &c->Object);
-
-        SetChangeClass(c);
-        SetAction(&c->Object, PLAYER_CHANGE_UP);
-        PlayBuffer(SOUND_CHANGE_UP);
-    }
-    break;
-
-    default:
         break;
+
+        case 201: {
+            // Evolution from 1st to 2nd class
+            CHARACTER* c = &CharactersClient[Index];
+            OBJECT*    o = &c->Object;
+            vec3_t     Position;
+
+            auto byClass = gCharacterManager.ChangeServerClassTypeToClientClassType(
+                static_cast<SERVER_CLASS_TYPE>((Data->m_byNumber >> 3)));
+            if (2 != gCharacterManager.GetStepClass(byClass))
+                break;
+
+            c->Class     = byClass;
+            c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
+
+            if (Hero == c)
+            {
+                CharacterAttribute->Class = c->Class;
+            }
+
+            VectorCopy(o->Position, Position);
+            Position[2] += 200.f;
+            for (int i = 0; i < 15; ++i)
+            {
+                CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
+                CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
+            }
+            CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
+
+            SetChangeClass(c);
+            SetAction(o, PLAYER_SALUTE1);
+
+            PlayBuffer(SOUND_CHANGE_UP);
+        }
+        break;
+
+        case 202: {
+            CHARACTER* c = &CharactersClient[Index];
+            OBJECT*    o = &c->Object;
+            vec3_t     Position;
+
+            if (Hero == c)
+            {
+                CharacterAttribute->LevelUpPoint += Data->m_byNumber;
+            }
+
+            VectorCopy(o->Position, Position);
+            Position[2] += 200.f;
+            for (int i = 0; i < 15; ++i)
+            {
+                CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
+                CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
+            }
+            CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
+
+            SetChangeClass(c);
+            SetAction(o, PLAYER_SALUTE1);
+            PlayBuffer(SOUND_CHANGE_UP);
+        }
+        break;
+
+        case 203: {
+            CHARACTER* c = &CharactersClient[Index];
+            OBJECT*    o = &c->Object;
+            vec3_t     Position;
+
+            VectorCopy(o->Position, Position);
+            Position[2] += 200.f;
+            for (int i = 0; i < 15; ++i)
+            {
+                CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 0, o, 40, 2);
+                CreateJoint(BITMAP_FLARE, Position, Position, o->Angle, 10, o, 40, 2);
+            }
+            CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 0, o);
+
+            SetChangeClass(c);
+            SetAction(o, PLAYER_SALUTE1);
+
+            PlayBuffer(SOUND_CHANGE_UP);
+        }
+        break;
+
+        case 204: {
+            // Evolution from 2nd to 3rd class
+            CHARACTER* c = &CharactersClient[Index];
+
+            auto byClass = gCharacterManager.ChangeServerClassTypeToClientClassType(
+                static_cast<SERVER_CLASS_TYPE>((Data->m_byNumber >> 3)));
+            if (3 != gCharacterManager.GetStepClass(byClass))
+                break;
+
+            c->Class     = byClass;
+            c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
+
+            if (Hero == c)
+            {
+                CharacterAttribute->Class = c->Class;
+            }
+
+            CreateEffect(MODEL_CHANGE_UP_EFF, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
+            CreateEffect(MODEL_CHANGE_UP_NASA, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
+            CreateEffect(MODEL_CHANGE_UP_CYLINDER, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object);
+            CreateEffect(MODEL_INFINITY_ARROW3, c->Object.Position, c->Object.Angle, c->Object.Light, 1, &c->Object);
+
+            SetChangeClass(c);
+            SetAction(&c->Object, PLAYER_CHANGE_UP);
+            PlayBuffer(SOUND_CHANGE_UP);
+        }
+        break;
+
+        default:
+            break;
     }
 }
 
@@ -10520,9 +10615,9 @@ void ReceiveQuestLimitResult(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byResult)
     {
-    case QUEST_RESULT_CNT_LIMIT:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CQuestCountLimitMsgBoxLayout));
-        break;
+        case QUEST_RESULT_CNT_LIMIT:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CQuestCountLimitMsgBoxLayout));
+            break;
     }
 }
 
@@ -10531,28 +10626,26 @@ void ReceiveQuestByItemUseEP(const BYTE* ReceiveBuffer)
     DWORD* pdwQuestIndex = (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST));
     SendQuestSelection(*pdwQuestIndex, 0);
 }
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
 
 void ReceiveQuestByEtcEPList(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
-    g_QuestMng.SetQuestIndexByEtcList((DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)),
-        pData->m_wQuestCount);
+    g_QuestMng.SetQuestIndexByEtcList((DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), pData->m_wQuestCount);
 }
 
 void ReceiveQuestByNPCEPList(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE))
-        g_pNPCDialogue->ProcessQuestListReceive(
-            (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), pData->m_wQuestCount);
+        g_pNPCDialogue->ProcessQuestListReceive((DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)),
+                                                pData->m_wQuestCount);
 }
 
 void ReceiveQuestQSSelSentence(const BYTE* ReceiveBuffer)
 {
-    auto pData = (LPPMSG_QUEST_STEP_INFO)ReceiveBuffer;
-    const DWORD dwQuestIndex
-        = (static_cast<DWORD>(pData->m_wQuestGroup) << 16) | pData->m_wQuestStepNumber;
+    auto        pData        = (LPPMSG_QUEST_STEP_INFO)ReceiveBuffer;
+    const DWORD dwQuestIndex = (static_cast<DWORD>(pData->m_wQuestGroup) << 16) | pData->m_wQuestStepNumber;
 
     g_QuestMng.SetCurQuestProgress(dwQuestIndex);
 }
@@ -10568,40 +10661,38 @@ void ReceiveQuestQSRequestReward(const BYTE* ReceiveBuffer)
 void ReceiveQuestCompleteResult(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_ANS_QUESTEXP_COMPLETE)ReceiveBuffer;
-    PublishHaptic(Network::Server::HapticForResult(
-        Network::Server::ResultOperation::QuestComplete,
-        pData->m_byResult));
+    PublishHaptic(Network::Server::HapticForResult(Network::Server::ResultOperation::QuestComplete, pData->m_byResult));
 
     switch (pData->m_byResult)
     {
-    case 0:
-        break;
-    case 1:
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_QUEST_PROGRESS);
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC);
+        case 0:
+            break;
+        case 1:
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_QUEST_PROGRESS);
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC);
 
-        g_QuestMng.SetEPRequestRewardState(pData->m_dwQuestIndex, false);
-        g_QuestMng.RemoveCurQuestIndexList(pData->m_dwQuestIndex);
-        break;
+            g_QuestMng.SetEPRequestRewardState(pData->m_dwQuestIndex, false);
+            g_QuestMng.RemoveCurQuestIndexList(pData->m_dwQuestIndex);
+            break;
 
-    case 2:
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
-            g_pQuestProgress->EnableCompleteBtn(false);
-        else if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
-            g_pQuestProgressByEtc->EnableCompleteBtn(false);
-        g_pSystemLogBox->AddText(I18N::Game::YouHaveReachedYourZenLimit, SEASON3B::TYPE_ERROR_MESSAGE);
-        break;
+        case 2:
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
+                g_pQuestProgress->EnableCompleteBtn(false);
+            else if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
+                g_pQuestProgressByEtc->EnableCompleteBtn(false);
+            g_pSystemLogBox->AddText(I18N::Game::YouHaveReachedYourZenLimit, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
 
-    case 3:
-        if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
-            g_pQuestProgress->EnableCompleteBtn(false);
-        else if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
-            g_pQuestProgressByEtc->EnableCompleteBtn(false);
-        g_pSystemLogBox->AddText(I18N::Game::InventoryIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
-        g_pSystemLogBox->AddText(I18N::Game::TheSameItemThatYouWantToTrade, SEASON3B::TYPE_ERROR_MESSAGE);
-        break;
+        case 3:
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS))
+                g_pQuestProgress->EnableCompleteBtn(false);
+            else if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC))
+                g_pQuestProgressByEtc->EnableCompleteBtn(false);
+            g_pSystemLogBox->AddText(I18N::Game::InventoryIsFull, SEASON3B::TYPE_ERROR_MESSAGE);
+            g_pSystemLogBox->AddText(I18N::Game::TheSameItemThatYouWantToTrade, SEASON3B::TYPE_ERROR_MESSAGE);
+            break;
     }
 }
 
@@ -10617,7 +10708,7 @@ void ReceiveProgressQuestList(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_ANS_QUESTEXP_PROGRESS_LIST)ReceiveBuffer;
     g_QuestMng.SetCurQuestIndexList((DWORD*)(ReceiveBuffer + sizeof(PMSG_ANS_QUESTEXP_PROGRESS_LIST)),
-        int(pData->m_byQuestCount));
+                                    int(pData->m_byQuestCount));
 }
 
 void ReceiveProgressQuestRequestReward(const BYTE* ReceiveBuffer)
@@ -10651,9 +10742,9 @@ void ReceiveGensSecession(const BYTE* ReceiveBuffer)
 
 void ReceivePlayerGensInfluence(const BYTE* ReceiveBuffer)
 {
-    auto pData = (LPPMSG_MSG_SEND_GENS_INFO)ReceiveBuffer;
+    auto pData              = (LPPMSG_MSG_SEND_GENS_INFO)ReceiveBuffer;
     Hero->m_byGensInfluence = pData->m_byInfluence;
-    Hero->GensRanking = pData->m_nGensClass;
+    Hero->GensRanking       = pData->m_nGensClass;
     g_pNewUIGensRanking->SetContribution(pData->m_nContributionPoint);
     g_pNewUIGensRanking->SetRanking(pData->m_nRanking);
     g_pNewUIGensRanking->SetNextContribution(pData->m_nNextContributionPoint);
@@ -10661,22 +10752,22 @@ void ReceivePlayerGensInfluence(const BYTE* ReceiveBuffer)
 
 void ReceiveOtherPlayerGensInfluenceViewport(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_SEND_GENS_MEMBER_VIEWPORT)ReceiveBuffer;
-    int nOffset = sizeof(PMSG_SEND_GENS_MEMBER_VIEWPORT);
-    int i;
+    auto Data    = (LPPMSG_SEND_GENS_MEMBER_VIEWPORT)ReceiveBuffer;
+    int  nOffset = sizeof(PMSG_SEND_GENS_MEMBER_VIEWPORT);
+    int  i;
     for (i = 0; i < Data->m_byCount; ++i)
     {
-        auto Data2 = (LPPMSG_GENS_MEMBER_VIEWPORT_INFO)(ReceiveBuffer + nOffset);
-        int nKey = ((int)(Data2->m_byNumberH & 0x7f) << 8) + Data2->m_byNumberL;
-        int nIndex = FindCharacterIndex(nKey);
-        CHARACTER* c = &CharactersClient[nIndex];
+        auto       Data2  = (LPPMSG_GENS_MEMBER_VIEWPORT_INFO)(ReceiveBuffer + nOffset);
+        int        nKey   = ((int)(Data2->m_byNumberH & 0x7f) << 8) + Data2->m_byNumberL;
+        int        nIndex = FindCharacterIndex(nKey);
+        CHARACTER* c      = &CharactersClient[nIndex];
 
-        c->m_byGensInfluence = Data2->m_byInfluence;
-        c->GensRanking = Data2->m_nGensClass;
+        c->m_byGensInfluence      = Data2->m_byInfluence;
+        c->GensRanking            = Data2->m_nGensClass;
         c->GensContributionPoints = Data2->m_nContributionPoint;
         if (::IsStrifeMap(gMapManager.WorldActive))
         {
-            vec3_t vTemp = { 0.f, 0.f, 0.f };
+            vec3_t vTemp = {0.f, 0.f, 0.f};
             if (Hero->m_byGensInfluence == c->m_byGensInfluence)
                 CreateEffect(BITMAP_OUR_INFLUENCE_GROUND, c->Object.Position, vTemp, vTemp, 0, &c->Object);
             else
@@ -10705,184 +10796,185 @@ void ReceiveReward(const BYTE* ReceiveBuffer)
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE))
         g_pNPCDialogue->ProcessGensRewardReceive(pData->m_byRewardResult);
 }
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING
 
 void ReceiveUseStateItem(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_USE_STAT_FRUIT)ReceiveBuffer;
 
     BYTE result = Data->result;
-    BYTE fruit = Data->btFruitType;
-    WORD point = Data->btStatValue;
+    BYTE fruit  = Data->btFruitType;
+    WORD point  = Data->btStatValue;
 
     wchar_t strText[MAX_GLOBAL_TEXT_STRING];
 
-    switch (result) {
-    case 0x00:
-        if (fruit >= 0 && fruit <= 4)
-        {
-            int  index;
-
-            switch (fruit)
+    switch (result)
+    {
+        case 0x00:
+            if (fruit >= 0 && fruit <= 4)
             {
-            case 0:
-                CharacterAttribute->Energy += point;
-                index = 168;
-                break;
+                int index;
 
-            case 1:
-                CharacterAttribute->Vitality += point;
-                index = 169;
-                break;
+                switch (fruit)
+                {
+                    case 0:
+                        CharacterAttribute->Energy += point;
+                        index = 168;
+                        break;
 
-            case 2:
-                CharacterAttribute->Dexterity += point;
-                index = 167;
-                break;
+                    case 1:
+                        CharacterAttribute->Vitality += point;
+                        index = 169;
+                        break;
 
-            case 3:
-                CharacterAttribute->Strength += point;
-                index = 166;
-                break;
-            case 4:
-                CharacterAttribute->Charisma += point;
-                index = 1900;
-                break;
+                    case 2:
+                        CharacterAttribute->Dexterity += point;
+                        index = 167;
+                        break;
+
+                    case 3:
+                        CharacterAttribute->Strength += point;
+                        index = 166;
+                        break;
+                    case 4:
+                        CharacterAttribute->Charisma += point;
+                        index = 1900;
+                        break;
+                }
+
+                CharacterAttribute->AddPoint += point;
+
+                mu_swprintf(strText, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point,
+                            I18N::Game::Create);
+                SEASON3B::CreateOkMessageBox(strText);
             }
+            break;
 
-            CharacterAttribute->AddPoint += point;
+        case 0x01:
+            SEASON3B::CreateOkMessageBox(I18N::Game::StatCreationFailedFromFruitCombination);
+            break;
 
-            mu_swprintf(strText, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point, I18N::Game::Create);
+        case 0x02: {
+            mu_swprintf(strText, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Create);
             SEASON3B::CreateOkMessageBox(strText);
         }
         break;
-
-    case 0x01:
-        SEASON3B::CreateOkMessageBox(I18N::Game::StatCreationFailedFromFruitCombination);
-        break;
-
-    case 0x02:
-    {
-        mu_swprintf(strText, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Create);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 0x03:
-        if (fruit >= 0 && fruit <= 4)
-        {
-            int  index;
-
-            switch (fruit)
+        case 0x03:
+            if (fruit >= 0 && fruit <= 4)
             {
-            case 0:
-                CharacterAttribute->Energy -= point;
-                index = 168;
-                break;
+                int index;
 
-            case 1:
-                CharacterAttribute->Vitality -= point;
-                index = 169;
-                break;
+                switch (fruit)
+                {
+                    case 0:
+                        CharacterAttribute->Energy -= point;
+                        index = 168;
+                        break;
 
-            case 2:
-                CharacterAttribute->Dexterity -= point;
-                index = 167;
-                break;
+                    case 1:
+                        CharacterAttribute->Vitality -= point;
+                        index = 169;
+                        break;
 
-            case 3:
-                CharacterAttribute->Strength -= point;
-                index = 166;
-                break;
-            case 4:
-                CharacterAttribute->Charisma -= point;
-                index = 1900;
-                break;
+                    case 2:
+                        CharacterAttribute->Dexterity -= point;
+                        index = 167;
+                        break;
+
+                    case 3:
+                        CharacterAttribute->Strength -= point;
+                        index = 166;
+                        break;
+                    case 4:
+                        CharacterAttribute->Charisma -= point;
+                        index = 1900;
+                        break;
+                }
+
+                CharacterAttribute->LevelUpPoint += point;
+                CharacterAttribute->wMinusPoint += point;
+
+                wchar_t strText[128];
+                mu_swprintf(strText, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point,
+                            I18N::Game::Decrease);
+                SEASON3B::CreateOkMessageBox(strText);
             }
+            break;
 
-            CharacterAttribute->LevelUpPoint += point;
-            CharacterAttribute->wMinusPoint += point;
+        case 0x04:
+            SEASON3B::CreateOkMessageBox(I18N::Game::FruitDecreaseIsFailed);
+            break;
 
+        case 0x05: {
             wchar_t strText[128];
-            mu_swprintf(strText, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point, I18N::Game::Decrease);
+            mu_swprintf(strText, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Decrease);
             SEASON3B::CreateOkMessageBox(strText);
         }
         break;
-
-    case 0x04:
-        SEASON3B::CreateOkMessageBox(I18N::Game::FruitDecreaseIsFailed);
-        break;
-
-    case 0x05:
-    {
-        wchar_t strText[128];
-        mu_swprintf(strText, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Decrease);
-        SEASON3B::CreateOkMessageBox(strText);
-    }
-    break;
-    case 0x06:
-        if (fruit >= 0 && fruit <= 4)
-        {
-            wchar_t Text[MAX_GLOBAL_TEXT_STRING];
-            int  index;
-
-            switch (fruit)
+        case 0x06:
+            if (fruit >= 0 && fruit <= 4)
             {
-            case 0:
-                CharacterAttribute->Energy -= point;
-                index = 168;
-                break;
+                wchar_t Text[MAX_GLOBAL_TEXT_STRING];
+                int     index;
 
-            case 1:
-                CharacterAttribute->Vitality -= point;
-                index = 169;
-                break;
+                switch (fruit)
+                {
+                    case 0:
+                        CharacterAttribute->Energy -= point;
+                        index = 168;
+                        break;
 
-            case 2:
-                CharacterAttribute->Dexterity -= point;
-                index = 167;
-                break;
+                    case 1:
+                        CharacterAttribute->Vitality -= point;
+                        index = 169;
+                        break;
 
-            case 3:
-                CharacterAttribute->Strength -= point;
-                index = 166;
-                break;
-            case 4:
-                CharacterAttribute->Charisma -= point;
-                index = 1900;
-                break;
+                    case 2:
+                        CharacterAttribute->Dexterity -= point;
+                        index = 167;
+                        break;
+
+                    case 3:
+                        CharacterAttribute->Strength -= point;
+                        index = 166;
+                        break;
+                    case 4:
+                        CharacterAttribute->Charisma -= point;
+                        index = 1900;
+                        break;
+                }
+
+                CharacterAttribute->LevelUpPoint += point;
+
+                mu_swprintf(Text, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point,
+                            I18N::Game::Decrease);
+                SEASON3B::CreateOkMessageBox(Text);
             }
-
-            CharacterAttribute->LevelUpPoint += point;
-
-            mu_swprintf(Text, I18N::Game::SFruitStatDPointsHaveBeenS, I18N::Game::Lookup(index), point, I18N::Game::Decrease);
+            break;
+        case 0x07:
+            SEASON3B::CreateOkMessageBox(I18N::Game::FruitDecreaseIsFailed);
+            break;
+        case 0x08:
+            wchar_t Text[MAX_GLOBAL_TEXT_STRING];
+            mu_swprintf(Text, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Decrease);
             SEASON3B::CreateOkMessageBox(Text);
+            break;
+        case 0x10: {
+            SEASON3B::CreateOkMessageBox(I18N::Game::ToDecreaseTheFruitWeaponsArmorsAndOthersMustBeRemoved);
         }
         break;
-    case 0x07:
-        SEASON3B::CreateOkMessageBox(I18N::Game::FruitDecreaseIsFailed);
-        break;
-    case 0x08:
-        wchar_t Text[MAX_GLOBAL_TEXT_STRING];
-        mu_swprintf(Text, I18N::Game::ThisStatCannotBeSAnymore, I18N::Game::Decrease);
-        SEASON3B::CreateOkMessageBox(Text);
-        break;
-    case 0x10:
-    {
-        SEASON3B::CreateOkMessageBox(I18N::Game::ToDecreaseTheFruitWeaponsArmorsAndOthersMustBeRemoved);
-    }
-    break;
 
-    case 0x21:
-        SEASON3B::CreateOkMessageBox(I18N::Game::ImpossibleSinceTheUsableFruitPointsAreAtMaximum);
-        break;
+        case 0x21:
+            SEASON3B::CreateOkMessageBox(I18N::Game::ImpossibleSinceTheUsableFruitPointsAreAtMaximum);
+            break;
 
-    case 0x25:
-        SEASON3B::CreateOkMessageBox(I18N::Game::ImpossibleSinceTheUsableFruitPointsAreAtMaximum);
-        break;
+        case 0x25:
+            SEASON3B::CreateOkMessageBox(I18N::Game::ImpossibleSinceTheUsableFruitPointsAreAtMaximum);
+            break;
 
-    case 0x26:
-        SEASON3B::CreateOkMessageBox(I18N::Game::CannotBeDecreasedUnderTheDefaultStatValue);
-        break;
+        case 0x26:
+            SEASON3B::CreateOkMessageBox(I18N::Game::CannotBeDecreasedUnderTheDefaultStatValue);
+            break;
     }
 
     EnableUse = 0;
@@ -10891,17 +10983,17 @@ void ReceiveUseStateItem(const BYTE* ReceiveBuffer)
 void ReceivePetCommand(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_PET_COMMAND)ReceiveBuffer;
-    WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
+    WORD Key  = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
 
     giPetManager::SetPetCommand(Hero, Key, Data->m_byCommand);
 }
 
 void ReceivePetAttack(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_PET_ATTACK)ReceiveBuffer;
-    WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
-    int  index = FindCharacterIndex(Key);
-    CHARACTER* sc = &CharactersClient[index];
+    auto       Data  = (LPPRECEIVE_PET_ATTACK)ReceiveBuffer;
+    WORD       Key   = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
+    int        index = FindCharacterIndex(Key);
+    CHARACTER* sc    = &CharactersClient[index];
 
     Key = ((WORD)(Data->m_byTKeyH) << 8) + Data->m_byTKeyL;
 
@@ -10916,16 +11008,16 @@ void ReceivePetInfo(const BYTE* ReceiveBuffer)
     ZeroMemory(&Petinfo, sizeof(PET_INFO));
 
     Petinfo.m_dwPetType = Data->m_byPetType;
-    Petinfo.m_wLevel = Data->m_byLevel;
-    Petinfo.m_wLife = Data->m_byLife;
-    Petinfo.m_dwExp1 = Data->m_iExp;
+    Petinfo.m_wLevel    = Data->m_byLevel;
+    Petinfo.m_wLife     = Data->m_byLife;
+    Petinfo.m_dwExp1    = Data->m_iExp;
 
     giPetManager::SetPetInfo(Data->m_byInvType, Data->m_byPos, &Petinfo);
 }
 
 void ReceiveWTTimeLeft(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_MATCH_TIMEVIEW)ReceiveBuffer;
+    auto Data                = (LPPMSG_MATCH_TIMEVIEW)ReceiveBuffer;
     g_wtMatchTimeLeft.m_Time = Data->m_Time;
     g_wtMatchTimeLeft.m_Type = Data->m_Type;
 }
@@ -10935,7 +11027,7 @@ void ReceiveWTMatchResult(const BYTE* ReceiveBuffer)
     auto Data = (LPPMSG_MATCH_RESULT)ReceiveBuffer;
     if (Data->m_Type >= 0 && Data->m_Type < 3)
     {
-        g_wtMatchResult.m_Type = Data->m_Type;
+        g_wtMatchResult.m_Type   = Data->m_Type;
         g_wtMatchResult.m_Score1 = Data->m_Score1;
         g_wtMatchResult.m_Score2 = Data->m_Score2;
         CMultiLanguage::ConvertFromUtf8(g_wtMatchResult.m_MatchTeamName1, Data->m_MatchTeamName1, MAX_USERNAME_SIZE);
@@ -10984,20 +11076,20 @@ void ReceiveBCStatus(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0x00:
-        g_pSystemLogBox->AddText(I18N::Game::CastleInformationFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x01:
-    case 0x02:
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_GUARDSMAN);
-        g_pGuardWindow->SetData(Data);
-        break;
-    case 0x03:
-        g_pSystemLogBox->AddText(I18N::Game::UnusualCastleInformation, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x04:
-        g_pSystemLogBox->AddText(I18N::Game::CastleGuildIsDisappeared, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0x00:
+            g_pSystemLogBox->AddText(I18N::Game::CastleInformationFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x01:
+        case 0x02:
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_GUARDSMAN);
+            g_pGuardWindow->SetData(Data);
+            break;
+        case 0x03:
+            g_pSystemLogBox->AddText(I18N::Game::UnusualCastleInformation, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x04:
+            g_pSystemLogBox->AddText(I18N::Game::CastleGuildIsDisappeared, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11007,37 +11099,38 @@ void ReceiveBCReg(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0x00:
-        g_pSystemLogBox->AddText(I18N::Game::FailedToRegisterForCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x01:
-        g_GuardsMan.SetRegStatus(1);
-        g_pSystemLogBox->AddText(I18N::Game::CastleSiegeRegistrationIsSuccessful, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x02:
-        g_pSystemLogBox->AddText(I18N::Game::AlreadyRegisteredInCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x03:
-        g_pSystemLogBox->AddText(I18N::Game::YouBelongToTheGuildOfTheDefendingTeam, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x04:
-        g_pSystemLogBox->AddText(I18N::Game::IncorrectGuild, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x05:
-        g_pSystemLogBox->AddText(I18N::Game::GuildMasterSLevelIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x06:
-        g_pSystemLogBox->AddText(I18N::Game::NoAffiliatedGuild, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x07:
-        g_pSystemLogBox->AddText(I18N::Game::ItSNotARegistrationPeriodForCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x08:
-        g_pSystemLogBox->AddText(I18N::Game::NumberOfGuildMembersIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    default:
-        assert(!"ReceiveBCReg(0xB2, 0x01)");
-        break;
+        case 0x00:
+            g_pSystemLogBox->AddText(I18N::Game::FailedToRegisterForCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x01:
+            g_GuardsMan.SetRegStatus(1);
+            g_pSystemLogBox->AddText(I18N::Game::CastleSiegeRegistrationIsSuccessful, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x02:
+            g_pSystemLogBox->AddText(I18N::Game::AlreadyRegisteredInCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x03:
+            g_pSystemLogBox->AddText(I18N::Game::YouBelongToTheGuildOfTheDefendingTeam, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x04:
+            g_pSystemLogBox->AddText(I18N::Game::IncorrectGuild, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x05:
+            g_pSystemLogBox->AddText(I18N::Game::GuildMasterSLevelIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x06:
+            g_pSystemLogBox->AddText(I18N::Game::NoAffiliatedGuild, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x07:
+            g_pSystemLogBox->AddText(I18N::Game::ItSNotARegistrationPeriodForCastleSiege,
+                                     SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x08:
+            g_pSystemLogBox->AddText(I18N::Game::NumberOfGuildMembersIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        default:
+            assert(!"ReceiveBCReg(0xB2, 0x01)");
+            break;
     }
 }
 
@@ -11047,24 +11140,25 @@ void ReceiveBCGiveUp(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0x00:
-        g_pSystemLogBox->AddText(I18N::Game::SurrenderingCastleSiegeHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x01:
-        SocketClient->ToGameServer()->SendCastleSiegeRegistrationStateRequest();
-        SocketClient->ToGameServer()->SendCastleSiegeRegisteredGuildsListRequest();
-        g_GuardsMan.SetRegStatus(0);
-        g_pSystemLogBox->AddText(I18N::Game::SurrenderingCastleSiegeIsSuccessful, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x02:
-        g_pSystemLogBox->AddText(I18N::Game::ThisGuildIsNotRegisteredInCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x03:
-        g_pSystemLogBox->AddText(I18N::Game::ItSNotASurrenderingPeriodForCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    default:
-        assert(!"ReceiveBCGiveUp(0xB2,0x02)");
-        break;
+        case 0x00:
+            g_pSystemLogBox->AddText(I18N::Game::SurrenderingCastleSiegeHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x01:
+            SocketClient->ToGameServer()->SendCastleSiegeRegistrationStateRequest();
+            SocketClient->ToGameServer()->SendCastleSiegeRegisteredGuildsListRequest();
+            g_GuardsMan.SetRegStatus(0);
+            g_pSystemLogBox->AddText(I18N::Game::SurrenderingCastleSiegeIsSuccessful, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x02:
+            g_pSystemLogBox->AddText(I18N::Game::ThisGuildIsNotRegisteredInCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x03:
+            g_pSystemLogBox->AddText(I18N::Game::ItSNotASurrenderingPeriodForCastleSiege,
+                                     SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        default:
+            assert(!"ReceiveBCGiveUp(0xB2,0x02)");
+            break;
     }
 }
 
@@ -11074,24 +11168,23 @@ void ReceiveBCRegInfo(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0x00:
-        g_GuardsMan.SetRegStatus(0);
+        case 0x00:
+            g_GuardsMan.SetRegStatus(0);
+            break;
+        case 0x01: {
+            g_GuardsMan.SetRegStatus(!Data->btIsGiveUp);
+            DWORD dwMarkCount;
+            auto* pMarkCount = (BYTE*)&dwMarkCount;
+            *pMarkCount++    = Data->btGuildMark4;
+            *pMarkCount++    = Data->btGuildMark3;
+            *pMarkCount++    = Data->btGuildMark2;
+            *pMarkCount++    = Data->btGuildMark1;
+            g_GuardsMan.SetMarkCount(dwMarkCount);
+        }
         break;
-    case 0x01:
-    {
-        g_GuardsMan.SetRegStatus(!Data->btIsGiveUp);
-        DWORD dwMarkCount;
-        auto* pMarkCount = (BYTE*)&dwMarkCount;
-        *pMarkCount++ = Data->btGuildMark4;
-        *pMarkCount++ = Data->btGuildMark3;
-        *pMarkCount++ = Data->btGuildMark2;
-        *pMarkCount++ = Data->btGuildMark1;
-        g_GuardsMan.SetMarkCount(dwMarkCount);
-    }
-    break;
-    case 0x02:
-        g_GuardsMan.SetRegStatus(0);
-        break;
+        case 0x02:
+            g_GuardsMan.SetRegStatus(0);
+            break;
     }
 }
 
@@ -11101,83 +11194,79 @@ void ReceiveBCRegMark(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0x00:
-        g_pSystemLogBox->AddText(I18N::Game::RegistrationOfSignHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        case 0x00:
+            g_pSystemLogBox->AddText(I18N::Game::RegistrationOfSignHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x01: {
+            DWORD dwMarkCount;
+            auto* pMarkCount = (BYTE*)&dwMarkCount;
+            *pMarkCount++    = Data->btGuildMark4;
+            *pMarkCount++    = Data->btGuildMark3;
+            *pMarkCount++    = Data->btGuildMark2;
+            *pMarkCount++    = Data->btGuildMark1;
+            g_GuardsMan.SetMarkCount(dwMarkCount);
+        }
         break;
-    case 0x01:
-    {
-        DWORD dwMarkCount;
-        auto* pMarkCount = (BYTE*)&dwMarkCount;
-        *pMarkCount++ = Data->btGuildMark4;
-        *pMarkCount++ = Data->btGuildMark3;
-        *pMarkCount++ = Data->btGuildMark2;
-        *pMarkCount++ = Data->btGuildMark1;
-        g_GuardsMan.SetMarkCount(dwMarkCount);
-    }
-    break;
-    case 0x02:
-        g_pSystemLogBox->AddText(I18N::Game::ThisGuildHasNotParticipatedInCastleSiege, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 0x03:
-        g_pSystemLogBox->AddText(I18N::Game::IncorrectItemWasRegistered, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0x02:
+            g_pSystemLogBox->AddText(I18N::Game::ThisGuildHasNotParticipatedInCastleSiege,
+                                     SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 0x03:
+            g_pSystemLogBox->AddText(I18N::Game::IncorrectItemWasRegistered, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
 void ReceiveBCNPCBuy(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_ANS_NPCBUY)ReceiveBuffer;
-    PublishHaptic(Data->btResult == 1
-        ? Core::Haptics::HapticEvent::PurchaseSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->btResult == 1 ? Core::Haptics::HapticEvent::PurchaseSucceeded
+                                      : Core::Haptics::HapticEvent::OperationFailed);
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-        g_SenatusInfo.BuyNewNPC(Data->iNpcNumber, Data->iNpcIndex);
-        break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 3:
-        g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 4:
-        g_pSystemLogBox->AddText(I18N::Game::AlreadyExists, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1:
+            g_SenatusInfo.BuyNewNPC(Data->iNpcNumber, Data->iNpcIndex);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::AlreadyExists, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
 void ReceiveBCNPCRepair(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_ANS_NPCREPAIR)ReceiveBuffer;
-    PublishHaptic(Data->btResult == 1
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic(Data->btResult == 1 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                      : Core::Haptics::HapticEvent::OperationFailed);
     switch (Data->btResult)
     {
-    case 0:
-    {
-        g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
-    }
+        case 0: {
+            g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        }
 
-    break;
-    case 1:
-    {
-        LPPMSG_NPCDBLIST pNPCInfo = nullptr;
-        pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
-        pNPCInfo->iNpcHp = Data->iNpcHP;
-        pNPCInfo->iNpcMaxHp = Data->iNpcMaxHP;
-    }
-    break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
         break;
-    case 3:
-        g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        case 1: {
+            LPPMSG_NPCDBLIST pNPCInfo = nullptr;
+            pNPCInfo                  = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
+            pNPCInfo->iNpcHp          = Data->iNpcHP;
+            pNPCInfo->iNpcMaxHp       = Data->iNpcMaxHP;
+        }
         break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11186,39 +11275,38 @@ void ReceiveBCNPCUpgrade(const BYTE* ReceiveBuffer)
     auto Data = (LPPMSG_ANS_NPCUPGRADE)ReceiveBuffer;
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::FailedToPurchase, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1: {
+            LPPMSG_NPCDBLIST pNPCInfo = nullptr;
+            pNPCInfo                  = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
+            if (Data->iNpcUpType == 1)
+                pNPCInfo->iNpcDfLevel = Data->iNpcUpValue;
+            else if (Data->iNpcUpType == 2)
+                pNPCInfo->iNpcRgLevel = Data->iNpcUpValue;
+            else if (Data->iNpcUpType == 3)
+                pNPCInfo->iNpcHp = pNPCInfo->iNpcMaxHp = Data->iNpcUpValue;
+        }
         break;
-    case 1:
-    {
-        LPPMSG_NPCDBLIST pNPCInfo = nullptr;
-        pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
-        if (Data->iNpcUpType == 1)
-            pNPCInfo->iNpcDfLevel = Data->iNpcUpValue;
-        else if (Data->iNpcUpType == 2)
-            pNPCInfo->iNpcRgLevel = Data->iNpcUpValue;
-        else if (Data->iNpcUpType == 3)
-            pNPCInfo->iNpcHp = pNPCInfo->iNpcMaxHp = Data->iNpcUpValue;
-    }
-    break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 3:
-        g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 4:
-        g_pSystemLogBox->AddText(I18N::Game::JewelIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 5:
-        g_pSystemLogBox->AddText(I18N::Game::IncorrectType, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 6:
-        g_pSystemLogBox->AddText(I18N::Game::IncorrectRequestedValue, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 7:
-        g_pSystemLogBox->AddText(I18N::Game::NPCDoesNotExist, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::PurchasingCostIsInsufficient, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 4:
+            g_pSystemLogBox->AddText(I18N::Game::JewelIsLacking, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 5:
+            g_pSystemLogBox->AddText(I18N::Game::IncorrectType, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 6:
+            g_pSystemLogBox->AddText(I18N::Game::IncorrectRequestedValue, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 7:
+            g_pSystemLogBox->AddText(I18N::Game::NPCDoesNotExist, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11227,15 +11315,15 @@ void ReceiveBCGetTaxInfo(const BYTE* ReceiveBuffer)
     auto Data = (LPPMSG_ANS_TAXMONEYINFO)ReceiveBuffer;
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::AcquiringTaxRateInformationHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-        g_SenatusInfo.SetTaxInfo(Data);
-        break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::AcquiringTaxRateInformationHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1:
+            g_SenatusInfo.SetTaxInfo(Data);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11244,22 +11332,23 @@ void ReceiveBCChangeTaxRate(const BYTE* ReceiveBuffer)
     auto Data = (LPPMSG_ANS_TAXRATECHANGE)ReceiveBuffer;
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::ChangingTaxRateInformationHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-        if (Data->btTaxType == 3)
-        {
-            g_pUIGateKeeper->SetEntranceFee((Data->btTaxRate1 << 24) | (Data->btTaxRate2 << 16) | (Data->btTaxRate3 << 8) | (Data->btTaxRate4));
-        }
-        else
-        {
-            g_SenatusInfo.ChangeTaxInfo(Data);
-        }
-        break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::ChangingTaxRateInformationHasFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1:
+            if (Data->btTaxType == 3)
+            {
+                g_pUIGateKeeper->SetEntranceFee((Data->btTaxRate1 << 24) | (Data->btTaxRate2 << 16) |
+                                                (Data->btTaxRate3 << 8) | (Data->btTaxRate4));
+            }
+            else
+            {
+                g_SenatusInfo.ChangeTaxInfo(Data);
+            }
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11268,15 +11357,15 @@ void ReceiveBCWithdraw(const BYTE* ReceiveBuffer)
     auto Data = (LPPMSG_ANS_MONEYDRAWOUT)ReceiveBuffer;
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::WithdrawalFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-        g_SenatusInfo.ChangeCastleMoney(Data);
-        break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::WithdrawalFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1:
+            g_SenatusInfo.ChangeCastleMoney(Data);
+            break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
@@ -11306,165 +11395,161 @@ void ReceiveHuntZoneEnter(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byResult)
     {
-    case 0:
-    {
-        g_pUIPopup->CancelPopup();
-        g_pUIPopup->SetPopup(I18N::Game::UnfortunatelyYouHaveFailed, 1, 50, POPUP_OK, nullptr);
-    }
-    break;
-
-    case 1:
-        g_pUIGateKeeper->SetPublic(pData->m_byHuntZoneEnter);
+        case 0: {
+            g_pUIPopup->CancelPopup();
+            g_pUIPopup->SetPopup(I18N::Game::UnfortunatelyYouHaveFailed, 1, 50, POPUP_OK, nullptr);
+        }
         break;
 
-    case 2:
-    {
-        g_pUIPopup->CancelPopup();
-        g_pUIPopup->SetPopup(I18N::Game::NoAuthorization, 1, 50, POPUP_OK, nullptr);
-    }
-    break;
+        case 1:
+            g_pUIGateKeeper->SetPublic(pData->m_byHuntZoneEnter);
+            break;
+
+        case 2: {
+            g_pUIPopup->CancelPopup();
+            g_pUIPopup->SetPopup(I18N::Game::NoAuthorization, 1, 50, POPUP_OK, nullptr);
+        }
+        break;
     }
 }
 
 void ReceiveBCNPCList(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_ANS_NPCDBLIST)ReceiveBuffer;
-    int Offset = sizeof(PMSG_ANS_NPCDBLIST);
+    auto Data   = (LPPMSG_ANS_NPCDBLIST)ReceiveBuffer;
+    int  Offset = sizeof(PMSG_ANS_NPCDBLIST);
 
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-    {
-        for (int i = 0; i < Data->iCount; ++i)
-        {
-            auto pNpcInfo = (LPPMSG_NPCDBLIST)(ReceiveBuffer + Offset);
-            g_SenatusInfo.SetNPCInfo(pNpcInfo);
-            Offset += sizeof(PMSG_NPCDBLIST);
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1: {
+            for (int i = 0; i < Data->iCount; ++i)
+            {
+                auto pNpcInfo = (LPPMSG_NPCDBLIST)(ReceiveBuffer + Offset);
+                g_SenatusInfo.SetNPCInfo(pNpcInfo);
+                Offset += sizeof(PMSG_NPCDBLIST);
+            }
         }
-    }
-    break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
         break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::NoAuthorization, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
 void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_ANS_CSREGGUILDLIST)ReceiveBuffer;
-    int Offset = sizeof(PMSG_ANS_CSREGGUILDLIST);
+    auto Data   = (LPPMSG_ANS_CSREGGUILDLIST)ReceiveBuffer;
+    int  Offset = sizeof(PMSG_ANS_CSREGGUILDLIST);
 
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-    {
-        g_pGuardWindow->ClearDeclareGuildList();
-        for (int i = 0; i < Data->iCount; ++i)
-        {
-            auto pData2 = (LPPMSG_CSREGGUILDLIST)(ReceiveBuffer + Offset);
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1: {
+            g_pGuardWindow->ClearDeclareGuildList();
+            for (int i = 0; i < Data->iCount; ++i)
+            {
+                auto pData2 = (LPPMSG_CSREGGUILDLIST)(ReceiveBuffer + Offset);
 
-            // WTF - why not just use an int?
-            DWORD dwMarkCount;
-            auto* pMarkCount = (BYTE*)&dwMarkCount;
-            *pMarkCount++ = pData2->btRegMarks4;
-            *pMarkCount++ = pData2->btRegMarks3;
-            *pMarkCount++ = pData2->btRegMarks2;
-            *pMarkCount++ = pData2->btRegMarks1;
+                // WTF - why not just use an int?
+                DWORD dwMarkCount;
+                auto* pMarkCount = (BYTE*)&dwMarkCount;
+                *pMarkCount++    = pData2->btRegMarks4;
+                *pMarkCount++    = pData2->btRegMarks3;
+                *pMarkCount++    = pData2->btRegMarks2;
+                *pMarkCount++    = pData2->btRegMarks1;
 
-            wchar_t guildName[MAX_GUILDNAME + 1]{};
-            CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
-            g_pGuardWindow->AddDeclareGuildList(guildName, dwMarkCount, pData2->btIsGiveUp, pData2->btSeqNum);
+                wchar_t guildName[MAX_GUILDNAME + 1]{};
+                CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
+                g_pGuardWindow->AddDeclareGuildList(guildName, dwMarkCount, pData2->btIsGiveUp, pData2->btSeqNum);
 
-            Offset += sizeof(PMSG_CSREGGUILDLIST);
+                Offset += sizeof(PMSG_CSREGGUILDLIST);
+            }
+            g_pGuardWindow->SortDeclareGuildList();
         }
-        g_pGuardWindow->SortDeclareGuildList();
-    }
-    break;
+        break;
     }
 }
 
 void ReceiveBCGuildList(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPMSG_ANS_CSATTKGUILDLIST)ReceiveBuffer;
-    int Offset = sizeof(PMSG_ANS_CSATTKGUILDLIST);
+    auto Data   = (LPPMSG_ANS_CSATTKGUILDLIST)ReceiveBuffer;
+    int  Offset = sizeof(PMSG_ANS_CSATTKGUILDLIST);
 
     switch (Data->btResult)
     {
-    case 0:
-        g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
-    case 1:
-    {
-        g_pGuardWindow->ClearGuildList();
-        for (int i = 0; i < Data->iCount; ++i)
-        {
-            auto pData2 = (LPPMSG_CSATTKGUILDLIST)(ReceiveBuffer + Offset);
-            wchar_t guildName[MAX_GUILDNAME + 1]{};
-            CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
+        case 0:
+            g_pSystemLogBox->AddText(I18N::Game::UnfortunatelyYouHaveFailed, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 1: {
+            g_pGuardWindow->ClearGuildList();
+            for (int i = 0; i < Data->iCount; ++i)
+            {
+                auto    pData2 = (LPPMSG_CSATTKGUILDLIST)(ReceiveBuffer + Offset);
+                wchar_t guildName[MAX_GUILDNAME + 1]{};
+                CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
 
-            g_pGuardWindow->AddGuildList(guildName, pData2->btCsJoinSide, pData2->btGuildInvolved, pData2->iGuildScore);
+                g_pGuardWindow->AddGuildList(guildName, pData2->btCsJoinSide, pData2->btGuildInvolved,
+                                             pData2->iGuildScore);
 
-            Offset += sizeof(PMSG_CSATTKGUILDLIST);
+                Offset += sizeof(PMSG_CSATTKGUILDLIST);
+            }
         }
-    }
-    break;
-    case 2:
-        g_pSystemLogBox->AddText(I18N::Game::HasNotBeenConfirmedYet, SEASON3B::TYPE_SYSTEM_MESSAGE);
         break;
-    case 3:
-        g_pSystemLogBox->AddText(I18N::Game::HasNotBeenConfirmedYet, SEASON3B::TYPE_SYSTEM_MESSAGE);
-        break;
+        case 2:
+            g_pSystemLogBox->AddText(I18N::Game::HasNotBeenConfirmedYet, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+        case 3:
+            g_pSystemLogBox->AddText(I18N::Game::HasNotBeenConfirmedYet, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
     }
 }
 
 void ReceiveGateState(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_GATE_STATE)ReceiveBuffer;
-    int Key = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
+    int  Key  = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
 
     switch (Data->m_byResult)
     {
-    case 0:
-        break;
+        case 0:
+            break;
 
-    case 1:
-        npcGateSwitch::DoInterfaceOpen(Key);
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
-        break;
+        case 1:
+            npcGateSwitch::DoInterfaceOpen(Key);
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
+            break;
 
-    case 2:
-        break;
+        case 2:
+            break;
 
-    case 3:
-        break;
+        case 3:
+            break;
 
-    case 4:
-        break;
+        case 4:
+            break;
     }
 }
 
 void ReceiveGateOperator(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_GATE_OPERATOR)ReceiveBuffer;
-    int Key = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
+    int  Key  = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
 
     npcGateSwitch::ProcessState(Key, Data->m_byOperator, Data->m_byResult);
 }
 
 void ReceiveGateCurrentState(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPRECEIVE_GATE_CURRENT_STATE)ReceiveBuffer;
-    int Key = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
-    int Index = FindCharacterIndex(Key);
+    auto Data  = (LPPRECEIVE_GATE_CURRENT_STATE)ReceiveBuffer;
+    int  Key   = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
+    int  Index = FindCharacterIndex(Key);
 
     CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
+    OBJECT*    o = &c->Object;
 
     if (Data->m_byOperator)
     {
@@ -11484,7 +11569,7 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPRECEIVE_SWITCH_PROC)ReceiveBuffer;
 
-    int iKey = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
+    int iKey   = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
     int iIndex = FindCharacterIndex(iKey);
 
     CHARACTER* CrownSwitch = &CharactersClient[iIndex];
@@ -11500,52 +11585,50 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byState)
     {
-    case 0:
-    {
-        int iSwitchIndex = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
-        if (iSwitchIndex == FIRST_CROWN_SWITCH_NUMBER)
-        {
-            Switch_Info[0].Reset();
-        }
-        else
-        {
-            Switch_Info[1].Reset();
-        }
-
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchPopLayout));
-    }
-    break;
-
-    case 1:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchPushLayout));
-        break;
-
-    case 2:
-    {
-        int iKey = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
-        int iIndex = FindCharacterIndex(iKey);
-        CHARACTER* pCha = &CharactersClient[iIndex];
-        wchar_t strText[256];
-
-        SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchOtherPushLayout), &pMsgBox);
-        if (pMsgBox)
-        {
-            if (pCha != nullptr && pCha->ID != nullptr)
+        case 0: {
+            int iSwitchIndex = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
+            if (iSwitchIndex == FIRST_CROWN_SWITCH_NUMBER)
             {
-                mu_swprintf(strText, I18N::Game::CharacterSIs, pCha->ID);
+                Switch_Info[0].Reset();
             }
             else
             {
-                mu_swprintf(strText, I18N::Game::CharacterIs);
+                Switch_Info[1].Reset();
             }
-            pMsgBox->AddMsg(strText);
 
-            mu_swprintf(strText, I18N::Game::AlreadyPressingS, CrownSwitch->ID);
-            pMsgBox->AddMsg(strText);
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchPopLayout));
         }
-    }
-    break;
+        break;
+
+        case 1:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchPushLayout));
+            break;
+
+        case 2: {
+            int        iKey   = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
+            int        iIndex = FindCharacterIndex(iKey);
+            CHARACTER* pCha   = &CharactersClient[iIndex];
+            wchar_t    strText[256];
+
+            SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownSwitchOtherPushLayout), &pMsgBox);
+            if (pMsgBox)
+            {
+                if (pCha != nullptr && pCha->ID != nullptr)
+                {
+                    mu_swprintf(strText, I18N::Game::CharacterSIs, pCha->ID);
+                }
+                else
+                {
+                    mu_swprintf(strText, I18N::Game::CharacterIs);
+                }
+                pMsgBox->AddMsg(strText);
+
+                mu_swprintf(strText, I18N::Game::AlreadyPressingS, CrownSwitch->ID);
+                pMsgBox->AddMsg(strText);
+            }
+        }
+        break;
     }
 }
 
@@ -11564,51 +11647,50 @@ void ReceiveCrownRegist(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byCrownState)
     {
-    case 0:
-    {
-        SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterStartLayout), &pMsgBox);
-        if (pMsgBox)
-        {
-            wchar_t strText[256];
-            int iTime = (pData->m_dwCrownAccessTime / 1000);
-            if (iTime >= 59)
-                iTime = 59;
-            mu_swprintf(strText, I18N::Game::SAccumulatedHourDseconds, I18N::Game::OfficialSealRegistrationWillStart, iTime);
-            pMsgBox->AddMsg(strText);
-            pMsgBox->SetElapseTime(60000 - pData->m_dwCrownAccessTime);
+        case 0: {
+            SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterStartLayout), &pMsgBox);
+            if (pMsgBox)
+            {
+                wchar_t strText[256];
+                int     iTime = (pData->m_dwCrownAccessTime / 1000);
+                if (iTime >= 59)
+                    iTime = 59;
+                mu_swprintf(strText, I18N::Game::SAccumulatedHourDseconds,
+                            I18N::Game::OfficialSealRegistrationWillStart, iTime);
+                pMsgBox->AddMsg(strText);
+                pMsgBox->SetElapseTime(60000 - pData->m_dwCrownAccessTime);
+            }
         }
-    }
-    break;
-
-    case 1:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterSuccessLayout));
         break;
 
-    case 2:
-    {
-        SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterFailLayout), &pMsgBox);
-        if (pMsgBox)
-        {
-            wchar_t strText[256];
-            int iTime = (pData->m_dwCrownAccessTime / 1000);
-            if (iTime >= 59)
-                iTime = 59;
-            mu_swprintf(strText, I18N::Game::SAccumulatedHourDseconds, I18N::Game::OfficialSealRegistrationIsFailed, iTime);
-            pMsgBox->AddMsg(strText);
-        }
-    }
-    break;
+        case 1:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterSuccessLayout));
+            break;
 
-    case 3:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterOtherLayout));
-    }
-    break;
-    case 4:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterOtherCampLayout));
+        case 2: {
+            SEASON3B::CProgressMsgBox* pMsgBox = nullptr;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterFailLayout), &pMsgBox);
+            if (pMsgBox)
+            {
+                wchar_t strText[256];
+                int     iTime = (pData->m_dwCrownAccessTime / 1000);
+                if (iTime >= 59)
+                    iTime = 59;
+                mu_swprintf(strText, I18N::Game::SAccumulatedHourDseconds, I18N::Game::OfficialSealRegistrationIsFailed,
+                            iTime);
+                pMsgBox->AddMsg(strText);
+            }
+        }
         break;
+
+        case 3: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterOtherLayout));
+        }
+        break;
+        case 4:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterOtherCampLayout));
+            break;
     }
 }
 
@@ -11619,34 +11701,32 @@ void ReceiveCrownState(const BYTE* ReceiveBuffer)
     g_pUIPopup->CancelPopup();
     switch (pData->m_byCrownState)
     {
-    case 0:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownDefenseRemoveLayout));
+        case 0: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownDefenseRemoveLayout));
 
-        int Index = FindCharacterIndexByMonsterIndex(216);
+            int Index = FindCharacterIndexByMonsterIndex(216);
 
-        OBJECT* o = &CharactersClient[Index].Object;
+            OBJECT* o = &CharactersClient[Index].Object;
 
-        g_CharacterRegisterBuff(o, eBuff_CastleCrown);
-    }
-    break;
-
-    case 1:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownDefenseCreateLayout));
-
-        int Index = FindCharacterIndexByMonsterIndex(216);
-
-        OBJECT* o = &CharactersClient[Index].Object;
-
-        g_CharacterClearBuff(o);
-    }
-    break;
-
-    case 2:
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterSuccessLayout));
-
+            g_CharacterRegisterBuff(o, eBuff_CastleCrown);
+        }
         break;
+
+        case 1: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCrownDefenseCreateLayout));
+
+            int Index = FindCharacterIndexByMonsterIndex(216);
+
+            OBJECT* o = &CharactersClient[Index].Object;
+
+            g_CharacterClearBuff(o);
+        }
+        break;
+
+        case 2:
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSealRegisterSuccessLayout));
+
+            break;
     }
 }
 
@@ -11656,21 +11736,21 @@ void ReceiveBattleCastleRegiment(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byCrownState)
     {
-    case 0:
-        battleCastle::SettingBattleFormation(Hero, static_cast<eBuffState>(0));
-        return;
-    case 1:
-        battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentDefense);
-        break;
-    case 2:
-        battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack1);
-        break;
-    case 3:
-        battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack2);
-        break;
-    case 4:
-        battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack3);
-        break;
+        case 0:
+            battleCastle::SettingBattleFormation(Hero, static_cast<eBuffState>(0));
+            return;
+        case 1:
+            battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentDefense);
+            break;
+        case 2:
+            battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack1);
+            break;
+        case 3:
+            battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack2);
+            break;
+        case 4:
+            battleCastle::SettingBattleFormation(Hero, eBuff_CastleRegimentAttack3);
+            break;
     }
 }
 
@@ -11691,12 +11771,12 @@ bool Check_Switch(PRECEIVE_CROWN_SWITCH_INFO* Data)
         if (Key == FIRST_CROWN_SWITCH_NUMBER)
         {
             Switch_Info[0].m_bySwitchState = Data->m_bySwitchState;
-            Switch_Info[0].m_JoinSide = Data->m_JoinSide;
+            Switch_Info[0].m_JoinSide      = Data->m_JoinSide;
         }
         else
         {
             Switch_Info[1].m_bySwitchState = Data->m_bySwitchState;
-            Switch_Info[1].m_JoinSide = Data->m_JoinSide;
+            Switch_Info[1].m_JoinSide      = Data->m_JoinSide;
         }
     }
     else
@@ -11706,14 +11786,14 @@ bool Check_Switch(PRECEIVE_CROWN_SWITCH_INFO* Data)
         if (Key == FIRST_CROWN_SWITCH_NUMBER)
         {
             Switch_Info[0].m_bySwitchState = Data->m_bySwitchState;
-            Switch_Info[0].m_JoinSide = Data->m_JoinSide;
+            Switch_Info[0].m_JoinSide      = Data->m_JoinSide;
             CMultiLanguage::ConvertFromUtf8(Switch_Info[0].m_szGuildName, Data->m_szGuildName, MAX_GUILDNAME);
             CMultiLanguage::ConvertFromUtf8(Switch_Info[0].m_szUserName, Data->m_szUserName, MAX_USERNAME_SIZE);
         }
         else
         {
             Switch_Info[1].m_bySwitchState = Data->m_bySwitchState;
-            Switch_Info[1].m_JoinSide = Data->m_JoinSide;
+            Switch_Info[1].m_JoinSide      = Data->m_JoinSide;
             CMultiLanguage::ConvertFromUtf8(Switch_Info[1].m_szGuildName, Data->m_szGuildName, MAX_GUILDNAME);
             CMultiLanguage::ConvertFromUtf8(Switch_Info[1].m_szUserName, Data->m_szUserName, MAX_USERNAME_SIZE);
         }
@@ -11758,22 +11838,20 @@ void ReceiveBattleCastleProcess(const BYTE* ReceiveBuffer)
 
     switch (pData->m_byBasttleCastleState)
     {
-    case 0:
-    {
-        wchar_t Text[100];
-        mu_swprintf(Text, I18N::Game::SAllianceIsTryingToRegisterTheOfficialSealNow, guildName);
-        UI::Notices::Create(Text, 1);
-    }
-    break;
+        case 0: {
+            wchar_t Text[100];
+            mu_swprintf(Text, I18N::Game::SAllianceIsTryingToRegisterTheOfficialSealNow, guildName);
+            UI::Notices::Create(Text, 1);
+        }
+        break;
 
-    case 1:
-    {
-        ChangeBattleFormation(guildName, true);
-        wchar_t Text2[100];
-        mu_swprintf(Text2, I18N::Game::SGuildHasRegisteredTheOfficialSealSuccessfully, guildName);
-        UI::Notices::Create(Text2, 1);
-    }
-    break;
+        case 1: {
+            ChangeBattleFormation(guildName, true);
+            wchar_t Text2[100];
+            mu_swprintf(Text2, I18N::Game::SGuildHasRegisteredTheOfficialSealSuccessfully, guildName);
+            UI::Notices::Create(Text2, 1);
+        }
+        break;
     }
 }
 
@@ -11786,7 +11864,7 @@ void ReceiveKillCount(const BYTE* ReceiveBuffer)
         {
             Hero->CurrentSkill = Hero->BackupCurrentSkill;
         }
-        Hero->BackupCurrentSkill = 255;
+        Hero->BackupCurrentSkill   = 255;
         Hero->GuildMasterKillCount = 0;
     }
     else
@@ -11798,16 +11876,16 @@ void ReceiveKillCount(const BYTE* ReceiveBuffer)
 void ReceiveBuildTime(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPRECEIVE_MONSTER_BUILD_TIME)ReceiveBuffer;
-    int Key = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
-    int Index = FindCharacterIndex(Key);
+    int  Key   = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
+    int  Index = FindCharacterIndex(Key);
 
     CHARACTER* c = &CharactersClient[Index];
-    OBJECT* o = &c->Object;
+    OBJECT*    o = &c->Object;
 
     o->m_byBuildTime = pData->m_byBuildTime;
 }
 
-void    ReceiveCastleGuildMark(const BYTE* ReceiveBuffer)
+void ReceiveCastleGuildMark(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPRECEIVE_CASTLE_FLAG)ReceiveBuffer;
 
@@ -11832,7 +11910,8 @@ void ReceiveCastleHuntZoneInfo(const BYTE* ReceiveBuffer)
     }
     else
     {
-        g_pUIGateKeeper->SetInfo(pData->m_byResult, (bool)pData->m_byEnable, pData->m_iCurrPrice, pData->m_iUnitPrice, pData->m_iMaxPrice);
+        g_pUIGateKeeper->SetInfo(pData->m_byResult, (bool)pData->m_byEnable, pData->m_iCurrPrice, pData->m_iUnitPrice,
+                                 pData->m_iMaxPrice);
         g_pNewUISystem->Show(SEASON3B::INTERFACE_GATEKEEPER);
     }
 }
@@ -11872,7 +11951,8 @@ void ReceiveCatapultFire(const BYTE* ReceiveBuffer)
     {
         int Key = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
 
-        g_pCatapultWindow->DoFire(Key, pData->m_byResult, pData->m_byWeaponType, pData->m_byTargetX, pData->m_byTargetY);
+        g_pCatapultWindow->DoFire(Key, pData->m_byResult, pData->m_byWeaponType, pData->m_byTargetX,
+                                  pData->m_byTargetY);
     }
     else if (pData->m_byResult == 0)
     {
@@ -11880,7 +11960,7 @@ void ReceiveCatapultFire(const BYTE* ReceiveBuffer)
     }
 }
 
-void    ReceiveCatapultFireToMe(const BYTE* ReceiveBuffer)
+void ReceiveCatapultFireToMe(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPRECEIVE_BOMBING_ALERT)ReceiveBuffer;
 
@@ -11912,77 +11992,79 @@ void ReceivePreviewPort(std::span<const BYTE> ReceiveBuffer)
 
         switch (pData2->m_byObjType)
         {
-        case 1:
-        {
-            CHARACTER* c = CreateCharacter(Key, MODEL_PLAYER, pData2->m_byPosX, pData2->m_byPosY, 0);
-            OBJECT* o = &c->Object;
+            case 1: {
+                CHARACTER* c = CreateCharacter(Key, MODEL_PLAYER, pData2->m_byPosX, pData2->m_byPosY, 0);
+                OBJECT*    o = &c->Object;
 
-            c->Class = gCharacterManager.ChangeServerClassTypeToClientClassType((SERVER_CLASS_TYPE)pData2->m_byTypeH);
-            c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
-            c->Skin = 0;
-            c->PK = 0;
-            o->Kind = KIND_TMP;
+                c->Class =
+                    gCharacterManager.ChangeServerClassTypeToClientClassType((SERVER_CLASS_TYPE)pData2->m_byTypeH);
+                c->SkinIndex = gCharacterManager.GetSkinModelIndex(c->Class);
+                c->Skin      = 0;
+                c->PK        = 0;
+                o->Kind      = KIND_TMP;
 
-            for (int j = 0; j < pData2->s_BuffCount; ++j)
-            {
-                RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
-            }
-
-            c->PositionX = pData2->m_byPosX;
-            c->PositionY = pData2->m_byPosY;
-            c->TargetX = pData2->m_byPosX;
-            c->TargetY = pData2->m_byPosY;
-            c->Object.Angle[2] = rand() % 360;
-
-            c->m_iDeleteTime = 150;
-
-            ChangeCharacterExt(FindCharacterIndex(Key), pData2->m_byEquipment);
-
-            wcscpy(c->ID, L"   ");
-            c->ID[MAX_USERNAME_SIZE] = 0;
-        }
-        break;
-
-        case 2:
-        case 3:    //   NPC
-        {
-            auto Type = (EMonsterType)(((WORD)(pData2->m_byTypeH) << 8) + pData2->m_byTypeL);
-            CHARACTER* c = CreateMonster(Type, pData2->m_byPosX, pData2->m_byPosY, Key);
-            if (c == nullptr) break;
-            OBJECT* o = &c->Object;
-
-            for (int j = 0; j < pData2->s_BuffCount; ++j)
-            {
-                RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
-            }
-
-            c->PositionX = pData2->m_byPosX;
-            c->PositionY = pData2->m_byPosY;
-            c->TargetX = pData2->m_byPosX;
-            c->TargetY = pData2->m_byPosY;
-            c->Object.Angle[2] = rand() % 360;
-
-            c->m_iDeleteTime = 150;
-
-            if (gMapManager.InBattleCastle() && c->MonsterIndex == MONSTER_CASTLE_GATE1)
-            {
-                //  State
-                if (g_isCharacterBuff((&c->Object), eBuff_CastleGateIsOpen))
+                for (int j = 0; j < pData2->s_BuffCount; ++j)
                 {
-                    SetAction(&c->Object, 1);
-                    battleCastle::SetCastleGate_Attribute(pData2->m_byPosX, pData2->m_byPosY, 0);
+                    RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
                 }
-                else if (g_isNotCharacterBuff((&c->Object)))
+
+                c->PositionX       = pData2->m_byPosX;
+                c->PositionY       = pData2->m_byPosY;
+                c->TargetX         = pData2->m_byPosX;
+                c->TargetY         = pData2->m_byPosY;
+                c->Object.Angle[2] = rand() % 360;
+
+                c->m_iDeleteTime = 150;
+
+                ChangeCharacterExt(FindCharacterIndex(Key), pData2->m_byEquipment);
+
+                wcscpy(c->ID, L"   ");
+                c->ID[MAX_USERNAME_SIZE] = 0;
+            }
+            break;
+
+            case 2:
+            case 3:  //   NPC
+            {
+                auto       Type = (EMonsterType)(((WORD)(pData2->m_byTypeH) << 8) + pData2->m_byTypeL);
+                CHARACTER* c    = CreateMonster(Type, pData2->m_byPosX, pData2->m_byPosY, Key);
+                if (c == nullptr)
+                    break;
+                OBJECT* o = &c->Object;
+
+                for (int j = 0; j < pData2->s_BuffCount; ++j)
                 {
-                    SetAction(&c->Object, 0);
-                    battleCastle::SetCastleGate_Attribute(pData2->m_byPosX, pData2->m_byPosY, 1);
+                    RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
+                }
+
+                c->PositionX       = pData2->m_byPosX;
+                c->PositionY       = pData2->m_byPosY;
+                c->TargetX         = pData2->m_byPosX;
+                c->TargetY         = pData2->m_byPosY;
+                c->Object.Angle[2] = rand() % 360;
+
+                c->m_iDeleteTime = 150;
+
+                if (gMapManager.InBattleCastle() && c->MonsterIndex == MONSTER_CASTLE_GATE1)
+                {
+                    //  State
+                    if (g_isCharacterBuff((&c->Object), eBuff_CastleGateIsOpen))
+                    {
+                        SetAction(&c->Object, 1);
+                        battleCastle::SetCastleGate_Attribute(pData2->m_byPosX, pData2->m_byPosY, 0);
+                    }
+                    else if (g_isNotCharacterBuff((&c->Object)))
+                    {
+                        SetAction(&c->Object, 0);
+                        battleCastle::SetCastleGate_Attribute(pData2->m_byPosX, pData2->m_byPosY, 1);
+                    }
                 }
             }
-        }
-        break;
+            break;
         }
 
-        Offset += (sizeof(PRECEIVE_PREVIEW_PORT_EXTENDED) - (sizeof(BYTE) * (MAX_BUFF_SLOT_INDEX - pData2->s_BuffCount)));
+        Offset +=
+            (sizeof(PRECEIVE_PREVIEW_PORT_EXTENDED) - (sizeof(BYTE) * (MAX_BUFF_SLOT_INDEX - pData2->s_BuffCount)));
     }
 }
 
@@ -11993,8 +12075,8 @@ void ReceiveMapInfoResult(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildCommand(const BYTE* ReceiveBuffer)
 {
-    auto pData = (LPPRECEIVE_GUILD_COMMAND)ReceiveBuffer;
-    GuildCommander            GCmd = { pData->m_byTeam, pData->m_byX, pData->m_byY, pData->m_byCmd };
+    auto           pData = (LPPRECEIVE_GUILD_COMMAND)ReceiveBuffer;
+    GuildCommander GCmd  = {pData->m_byTeam, pData->m_byX, pData->m_byY, pData->m_byCmd};
 
     if (g_pSiegeWarfare)
     {
@@ -12009,8 +12091,8 @@ void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer)
 
     g_pSiegeWarfare->ClearGuildMemberLocation();
 
-    auto pData = (LPPWHEADER_DEFAULT_WORD2)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD2);
+    auto pData  = (LPPWHEADER_DEFAULT_WORD2)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD2);
 
     for (int i = 0; i < pData->Value; i++)
     {
@@ -12027,8 +12109,8 @@ void ReceiveGuildNpcLocation(const BYTE* ReceiveBuffer)
     if (g_pSiegeWarfare->GetCurSiegeWarType() != TYPE_GUILD_COMMANDER)
         return;
 
-    auto pData = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-    int Offset = sizeof(PWHEADER_DEFAULT_WORD);
+    auto pData  = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
+    int  Offset = sizeof(PWHEADER_DEFAULT_WORD);
 
     for (int i = 0; i < pData->Value; i++)
     {
@@ -12058,12 +12140,8 @@ void ReceiveCrywolStateAltarfInfo(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_ANS_CRYWOLF_STATE_ALTAR_INFO)ReceiveBuffer;
 
-    M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(pData->iCrywolfStatueHP,
-        pData->btAltarState1,
-        pData->btAltarState2,
-        pData->btAltarState3,
-        pData->btAltarState4,
-        pData->btAltarState5);
+    M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(pData->iCrywolfStatueHP, pData->btAltarState1, pData->btAltarState2,
+                                                pData->btAltarState3, pData->btAltarState4, pData->btAltarState5);
 }
 
 void ReceiveCrywolfAltarContract(const BYTE* ReceiveBuffer)
@@ -12142,8 +12220,8 @@ void ReceiveCrywolfPersonalRank(const BYTE* ReceiveBuffer)
 
 void ReceiveCrywolfHeroList(const BYTE* ReceiveBuffer)
 {
-    auto pData = (LPPMSG_ANS_CRYWOLF_HERO_LIST_INFO_COUNT)ReceiveBuffer;
-    int Offset = sizeof(PMSG_ANS_CRYWOLF_HERO_LIST_INFO_COUNT);
+    auto pData  = (LPPMSG_ANS_CRYWOLF_HERO_LIST_INFO_COUNT)ReceiveBuffer;
+    int  Offset = sizeof(PMSG_ANS_CRYWOLF_HERO_LIST_INFO_COUNT);
     for (int i = 0; i < pData->btCount; i++)
     {
         auto pData2 = (LPPMSG_ANS_CRYWOLF_HERO_LIST_INFO)(ReceiveBuffer + Offset);
@@ -12160,7 +12238,8 @@ void ReceiveKanturu3rdStateInfo(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_ANS_KANTURU_STATE_INFO)ReceiveBuffer;
 
-    g_pKanturu2ndEnterNpc->ReceiveKanturu3rdInfo(pData->btState, pData->btDetailState, pData->btEnter, pData->btUserCount, pData->iRemainTime);
+    g_pKanturu2ndEnterNpc->ReceiveKanturu3rdInfo(pData->btState, pData->btDetailState, pData->btEnter,
+                                                 pData->btUserCount, pData->iRemainTime);
 }
 
 void ReceiveKanturu3rdEnterBossMap(const BYTE* ReceiveBuffer)
@@ -12182,18 +12261,14 @@ void ReceiveKanturu3rdState(const BYTE* ReceiveBuffer)
 
     if (M39Kanturu3rd::IsInKanturu3rd())
     {
-        if ((pData->btState == KANTURU_STATE_MAYA_BATTLE
-            && (pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1
-                || pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA1
-                || pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2
-                || pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA2
-                || pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3
-                || pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA3
-                ))
-            || (pData->btState == KANTURU_STATE_NIGHTMARE_BATTLE
-                && (pData->btDetailState == KANTURU_NIGHTMARE_DIRECTION_BATTLE
-                    ))
-            )
+        if ((pData->btState == KANTURU_STATE_MAYA_BATTLE && (pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1 ||
+                                                             pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA1 ||
+                                                             pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 ||
+                                                             pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA2 ||
+                                                             pData->btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 ||
+                                                             pData->btDetailState == KANTURU_MAYA_DIRECTION_MAYA3)) ||
+            (pData->btState == KANTURU_STATE_NIGHTMARE_BATTLE &&
+             (pData->btDetailState == KANTURU_NIGHTMARE_DIRECTION_BATTLE)))
         {
             if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_KANTURU_INFO) == false)
             {
@@ -12356,7 +12431,7 @@ void RecevieRaklionUserMonsterCount(const BYTE* ReceiveBuffer)
 
 void ReceiveCheckSumRequest(const BYTE* ReceiveBuffer)
 {
-    auto Data = (LPPHEADER_DEFAULT_WORD)ReceiveBuffer;
+    auto  Data       = (LPPHEADER_DEFAULT_WORD)ReceiveBuffer;
     DWORD dwCheckSum = GetCheckSum(Data->Value);
     SocketClient->ToGameServer()->SendChecksumResponse(dwCheckSum);
 
@@ -12385,23 +12460,20 @@ bool ReceiveRegistLuckyCoin(const BYTE* ReceiveBuffer)
 
     switch (_pData->btResult)
     {
-    case 0:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CUseRegistLuckyCoinMsgBoxLayout));
-    }
-    break;
-    case 1:
-    {
-        g_pLuckyCoinRegistration->SetRegistCount(_pData->nCurCoinCnt);
-    }
-    break;
-    case 100:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CRegistOverLuckyCoinMsgBoxLayout));
-    }
-    break;
-    default:
-        return false;
+        case 0: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CUseRegistLuckyCoinMsgBoxLayout));
+        }
+        break;
+        case 1: {
+            g_pLuckyCoinRegistration->SetRegistCount(_pData->nCurCoinCnt);
+        }
+        break;
+        case 100: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CRegistOverLuckyCoinMsgBoxLayout));
+        }
+        break;
+        default:
+            return false;
     }
 
     return true;
@@ -12415,22 +12487,21 @@ bool ReceiveRequestExChangeLuckyCoin(const BYTE* ReceiveBuffer)
 
     switch (_pData->btResult)
     {
-    case 0:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CExchangeLuckyCoinMsgBoxLayout));
-    }
-    break;
-    case 1:
-    {
-        //g_pNewUISystem->Hide(SEASON3B::INTERFACE_EXCHANGE_LUCKYCOIN);
-        g_pSystemLogBox->AddText(I18N::Game::ExchangeHasBeenMade, SEASON3B::TYPE_SYSTEM_MESSAGE);
-    }break;
-    case 2:
-    {
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CExchangeLuckyCoinInvenErrMsgBoxLayout));
-    }break;
-    default:
-        return false;
+        case 0: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CExchangeLuckyCoinMsgBoxLayout));
+        }
+        break;
+        case 1: {
+            //g_pNewUISystem->Hide(SEASON3B::INTERFACE_EXCHANGE_LUCKYCOIN);
+            g_pSystemLogBox->AddText(I18N::Game::ExchangeHasBeenMade, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        }
+        break;
+        case 2: {
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CExchangeLuckyCoinInvenErrMsgBoxLayout));
+        }
+        break;
+        default:
+            return false;
     }
 
     return true;
@@ -12440,30 +12511,32 @@ bool ReceiveEnterDoppelGangerEvent(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_RESULT_ENTER_DOPPELGANGER)ReceiveBuffer;
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     switch (Data->btResult)
     {
-    case 0:
-        break;
-    case 1:
-        g_pDoppelGangerWindow->LockEnterButton(TRUE);
-        break;
-    case 2:
-        mu_swprintf(szText, I18N::Game::BattleHasAlreadyCommencedYouCannotEnter);
-        g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-        g_pDoppelGangerWindow->LockEnterButton(TRUE);
-        break;
-    case 3:
-        mu_swprintf(szText, I18N::Game::YouCannotEnterIfYouAreA1stStageOutlaw);
-        g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
-        g_pDoppelGangerWindow->LockEnterButton(TRUE);
-        break;
-    case 4:
-        g_pDoppelGangerWindow->LockEnterButton(FALSE);
-        break;
-    default:
-        return false;
+        case 0:
+            break;
+        case 1:
+            g_pDoppelGangerWindow->LockEnterButton(TRUE);
+            break;
+        case 2:
+            mu_swprintf(szText, I18N::Game::BattleHasAlreadyCommencedYouCannotEnter);
+            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+            g_pDoppelGangerWindow->LockEnterButton(TRUE);
+            break;
+        case 3:
+            mu_swprintf(szText, I18N::Game::YouCannotEnterIfYouAreA1stStageOutlaw);
+            g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
+            g_pDoppelGangerWindow->LockEnterButton(TRUE);
+            break;
+        case 4:
+            g_pDoppelGangerWindow->LockEnterButton(FALSE);
+            break;
+        default:
+            return false;
     }
 
     return true;
@@ -12482,25 +12555,28 @@ bool ReceiveDoppelGangerState(const BYTE* ReceiveBuffer)
 
     switch (Data->btDoppelgangerState)
     {
-    case 0:
-        break;
-    case 1:		// wait->ready
-        break;
-    case 2:		// ready->play
-    {
-        g_pNewUISystem->Show(SEASON3B::INTERFACE_DOPPELGANGER_FRAME);
+        case 0:
+            break;
+        case 1:  // wait->ready
+            break;
+        case 2:  // ready->play
+        {
+            g_pNewUISystem->Show(SEASON3B::INTERFACE_DOPPELGANGER_FRAME);
 
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::_3MonstersReachingTheMagicCircle, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(L" ");
-        pMsgBox->AddMsg(I18N::Game::TheCharacterDyingTheServerDisconnectingOrUsingTheWarpCommand, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(L" ");
-        pMsgBox->AddMsg(I18N::Game::WillResultInDoppelgangerDefenseFailure, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }
-    break;
-    case 3:		// play->end
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::_3MonstersReachingTheMagicCircle, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(L" ");
+            pMsgBox->AddMsg(I18N::Game::TheCharacterDyingTheServerDisconnectingOrUsingTheWarpCommand,
+                            RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(L" ");
+            pMsgBox->AddMsg(I18N::Game::WillResultInDoppelgangerDefenseFailure, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
         break;
+        case 3:  // play->end
+            break;
     }
 
     return true;
@@ -12512,12 +12588,12 @@ bool ReceiveDoppelGangerIcewalkerState(const BYTE* ReceiveBuffer)
 
     switch (Data->btIceworkerState)
     {
-    case 0:
-        g_pDoppelGangerFrame->SetIceWalkerMap(TRUE, (float)(22 - Data->btPosIndex) / 22.0f);
-        break;
-    case 1:
-        g_pDoppelGangerFrame->SetIceWalkerMap(FALSE, 0);
-        break;
+        case 0:
+            g_pDoppelGangerFrame->SetIceWalkerMap(TRUE, (float)(22 - Data->btPosIndex) / 22.0f);
+            break;
+        case 1:
+            g_pDoppelGangerFrame->SetIceWalkerMap(FALSE, 0);
+            break;
     }
 
     return true;
@@ -12549,38 +12625,39 @@ bool ReceiveDoppelGangerResult(const BYTE* ReceiveBuffer)
 
     switch (Data->btResult)
     {
-    case 0:
-    {
-        g_pDoppelGangerFrame->SetRemainTime(0);
+        case 0: {
+            g_pDoppelGangerFrame->SetRemainTime(0);
 
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::Congratulations, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(L" ");
-        pMsgBox->AddMsg(I18N::Game::YouVeSuccessfullyDefendedDoppelganger, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        // 			pMsgBox->AddMsg(L" ");
-        // 			pMsgBox->AddMsg(L" ");
-        // 			char szText[256] = { 0, };
-        // 			wprintf(szText, I18N::Game::RewardedExpD, Data->dwRewardExp);
-        // 			pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_BOLD);
-    }
-    break;
-    case 1:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::DoppelgangerDefenseFailed, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }
-    break;
-    case 2:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::YouFailedToFendOffMonstersAnd, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(L" ");
-        pMsgBox->AddMsg(I18N::Game::AllowedThemToReachThePointLine, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }
-    break;
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::Congratulations, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(L" ");
+            pMsgBox->AddMsg(I18N::Game::YouVeSuccessfullyDefendedDoppelganger, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+            // 			pMsgBox->AddMsg(L" ");
+            // 			pMsgBox->AddMsg(L" ");
+            // 			char szText[256] = { 0, };
+            // 			wprintf(szText, I18N::Game::RewardedExpD, Data->dwRewardExp);
+            // 			pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_BOLD);
+        }
+        break;
+        case 1: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::DoppelgangerDefenseFailed, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 2: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CDoppelGangerMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::YouFailedToFendOffMonstersAnd, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(L" ");
+            pMsgBox->AddMsg(I18N::Game::AllowedThemToReachThePointLine, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
     }
 
     return true;
@@ -12638,51 +12715,53 @@ bool ReceiveEnterEmpireGuardianEvent(const BYTE* ReceiveBuffer)
 
     switch (Data->Result)
     {
-    case 0:
-    {
-        g_pEmpireGuardianTimer->SetDay((int)Data->Day);
-        g_pEmpireGuardianTimer->SetZone((int)Data->Zone);
-        g_pEmpireGuardianTimer->SetRemainTime(Data->RemainTick);
+        case 0: {
+            g_pEmpireGuardianTimer->SetDay((int)Data->Day);
+            g_pEmpireGuardianTimer->SetZone((int)Data->Zone);
+            g_pEmpireGuardianTimer->SetRemainTime(Data->RemainTick);
 
-        g_EmpireGuardian1.SetWeather((int)Data->Wheather);
-    }break;
-    case 1:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::EntryTime2798, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(L" ");
-        wchar_t szText[256] = {};
-        mu_swprintf(szText, I18N::Game::EnterAfterDMinutes, (Data->RemainTick / 60000));
-        pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 2:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::QuestItemMissing, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 3:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::CapacityExceeded, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 4:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::ThereIsStillTimeRemainingInThisZone, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 5:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::YouCanOnlyEnterAsAMemberOfAParty, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
+            g_EmpireGuardian1.SetWeather((int)Data->Wheather);
+        }
+        break;
+        case 1: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::EntryTime2798, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(L" ");
+            wchar_t szText[256] = {};
+            mu_swprintf(szText, I18N::Game::EnterAfterDMinutes, (Data->RemainTick / 60000));
+            pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 2: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::QuestItemMissing, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 3: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::CapacityExceeded, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 4: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::ThereIsStillTimeRemainingInThisZone, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 5: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::YouCanOnlyEnterAsAMemberOfAParty, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
 
-    default:
-        return false;
+        default:
+            return false;
     }
 
     return true;
@@ -12710,37 +12789,39 @@ bool ReceiveResultEmpireGuardian(const BYTE* ReceiveBuffer)
 
     switch (Data->Result)
     {
-    case 0:
-    {
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        pMsgBox->AddMsg(I18N::Game::YouHaveFailedToConquerThe, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(I18N::Game::FortressOfEmpireGuardians, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 1:
-    {
-        int day = g_pEmpireGuardianTimer->GetDay();
-        int zone = g_pEmpireGuardianTimer->GetZone();
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        wchar_t szText[256] = {};
-        mu_swprintf(szText, I18N::Game::FortressOfEmpireGuardiansRoundD, day);
-        pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        mu_swprintf(szText, L"%d%ls", zone, I18N::Game::ZoneCleared);
-        pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
-    case 2:
-    {
-        int day = g_pEmpireGuardianTimer->GetDay();
-        SEASON3B::CNewUICommonMessageBox* pMsgBox;
-        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
-        wchar_t szText[256] = {};
-        mu_swprintf(szText, I18N::Game::FortressOfEmpireGuardiansRoundD, day);
-        pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        pMsgBox->AddMsg(I18N::Game::HasBeenCleared, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-        mu_swprintf(szText, I18N::Game::RewardedExpD, Data->Exp);
-        pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
-    }break;
+        case 0: {
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            pMsgBox->AddMsg(I18N::Game::YouHaveFailedToConquerThe, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(I18N::Game::FortressOfEmpireGuardians, RGBA(255, 255, 255, 255),
+                            SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 1: {
+            int                               day  = g_pEmpireGuardianTimer->GetDay();
+            int                               zone = g_pEmpireGuardianTimer->GetZone();
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            wchar_t szText[256] = {};
+            mu_swprintf(szText, I18N::Game::FortressOfEmpireGuardiansRoundD, day);
+            pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            mu_swprintf(szText, L"%d%ls", zone, I18N::Game::ZoneCleared);
+            pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
+        case 2: {
+            int                               day = g_pEmpireGuardianTimer->GetDay();
+            SEASON3B::CNewUICommonMessageBox* pMsgBox;
+            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CEmpireGuardianMsgBoxLayout), &pMsgBox);
+            wchar_t szText[256] = {};
+            mu_swprintf(szText, I18N::Game::FortressOfEmpireGuardiansRoundD, day);
+            pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            pMsgBox->AddMsg(I18N::Game::HasBeenCleared, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+            mu_swprintf(szText, I18N::Game::RewardedExpD, Data->Exp);
+            pMsgBox->AddMsg(szText, RGBA(255, 255, 255, 255), SEASON3B::MSGBOX_FONT_NORMAL);
+        }
+        break;
     }
 
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_EMPIREGUARDIAN_TIMER) == true)
@@ -12794,105 +12875,96 @@ bool ReceiveIGS_BuyItem(const BYTE* pReceiveBuffer)
 {
     auto Data = (LPPMSG_CASHSHOP_BUYITEM_ANS)pReceiveBuffer;
 
-    PublishHaptic((BYTE)Data->byResultCode == 0
-        ? Core::Haptics::HapticEvent::PurchaseSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic((BYTE)Data->byResultCode == 0 ? Core::Haptics::HapticEvent::PurchaseSucceeded
+                                                : Core::Haptics::HapticEvent::OperationFailed);
 
     switch ((BYTE)Data->byResultCode)
     {
-    case static_cast<BYTE>(-2):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::DatabaseAccessFailed);
-    }
-    break;
-    case static_cast<BYTE>(-1):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ADatabaseErrorHasOccurred);
-    }
-    break;
-    case 0:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseCompleted, I18N::Game::YourPurchaseHasBeenMade);
+        case static_cast<BYTE>(-2): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::DatabaseAccessFailed);
+        }
+        break;
+        case static_cast<BYTE>(-1): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ADatabaseErrorHasOccurred);
+        }
+        break;
+        case 0: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseCompleted, I18N::Game::YourPurchaseHasBeenMade);
 
-        SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
+            SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
 
-        char szCode = g_pInGameShop->GetCurrentStorageCode();
-        SocketClient->ToGameServer()->SendCashShopStorageListRequest(1, szCode);
-    }
-    break;
-    case 1:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouDoNotHaveEnoughWCoinOrPoints);
-    }
-    break;
-    case 2:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouDoNotHaveEnoughSpaceInStorage);
-    }
-    break;
-    case 3:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemHasSoldOut);
-    }
-    break;
-    case 4:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemIsNotCurrentlyAvailable);
-    }
-    break;
-    case 5:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemIsNoLongerAvailable);
-    }
-    break;
-    case 6:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemCannotBeBought);
-    }break;
-    case 7:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::EventItemsCannotBeBought);
-    }break;
-    case 8:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouVeExceededTheMaximumNumberOfTimesYouCanPurchaseEventItems);
-    }break;
-    case 9:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouHaveSelectedAnIncorrectWCoinTypePleaseSelectAgain);
-    }
-    break;
-    default:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
-    }
-    break;
+            char szCode = g_pInGameShop->GetCurrentStorageCode();
+            SocketClient->ToGameServer()->SendCashShopStorageListRequest(1, szCode);
+        }
+        break;
+        case 1: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouDoNotHaveEnoughWCoinOrPoints);
+        }
+        break;
+        case 2: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::YouDoNotHaveEnoughSpaceInStorage);
+        }
+        break;
+        case 3: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemHasSoldOut);
+        }
+        break;
+        case 4: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemIsNotCurrentlyAvailable);
+        }
+        break;
+        case 5: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemIsNoLongerAvailable);
+        }
+        break;
+        case 6: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::ThisItemCannotBeBought);
+        }
+        break;
+        case 7: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed, I18N::Game::EventItemsCannotBeBought);
+        }
+        break;
+        case 8: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed,
+                                I18N::Game::YouVeExceededTheMaximumNumberOfTimesYouCanPurchaseEventItems);
+        }
+        break;
+        case 9: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::PurchaseFailed,
+                                I18N::Game::YouHaveSelectedAnIncorrectWCoinTypePleaseSelectAgain);
+        }
+        break;
+        default: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
+        }
+        break;
     }
 
     return true;
@@ -12903,118 +12975,105 @@ bool ReceiveIGS_BuyItem(const BYTE* pReceiveBuffer)
 bool ReceiveIGS_SendItemGift(const BYTE* pReceiveBuffer)
 {
     auto Data = (LPPMSG_CASHSHOP_GIFTSEND_ANS)pReceiveBuffer;
-    PublishHaptic((BYTE)Data->byResultCode == 0
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic((BYTE)Data->byResultCode == 0 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                                : Core::Haptics::HapticEvent::OperationFailed);
 
     switch ((BYTE)Data->byResultCode)
     {
-    case static_cast<BYTE>(-2):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::DatabaseAccessFailed);
-    }
-    break;
-    case static_cast<BYTE>(-1):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ADatabaseErrorHasOccurred);
-    }
-    break;
-    case 0:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDelivered, I18N::Game::YourGiftHasBeenDelivered);
+        case static_cast<BYTE>(-2): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::DatabaseAccessFailed);
+        }
+        break;
+        case static_cast<BYTE>(-1): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ADatabaseErrorHasOccurred);
+        }
+        break;
+        case 0: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDelivered, I18N::Game::YourGiftHasBeenDelivered);
 
-        SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
-    }
-    break;
-    case 1:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::YouDoNotHaveEnoughCash);
-    }
-    break;
-    case 2:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::TheRecipientSStorageIsFull);
-    }
-    break;
-    case 3:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::CannotFindTheRecipient);
-    }
-    break;
-    case 4:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemHasSoldOut);
-    }
-    break;
-    case 5:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemIsNoLongerAvailable);
-    }
-    break;
-    case 6:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::ThisItemIsNoLongerAvailable);
-    }break;
-    case 7:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemCannotBeSentAsAGift);
-    }
-    break;
-    case 8:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisEventItemCannotBeSentAsAGift);
-    }
-    break;
-    case 9:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::YouVeExceededTheNumberOfEventItemGiftsAllowed);
-    }
-    break;
-    case 10:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::YouHaveSelectedAnIncorrectWCoinTypePleaseSelectAgain);
-    }
-    break;
-    case 20:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::IDDoesNotExist);
-    }
-    break;
-    default:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
-    }
-    break;
+            SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
+        }
+        break;
+        case 1: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::YouDoNotHaveEnoughCash);
+        }
+        break;
+        case 2: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::TheRecipientSStorageIsFull);
+        }
+        break;
+        case 3: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::CannotFindTheRecipient);
+        }
+        break;
+        case 4: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemHasSoldOut);
+        }
+        break;
+        case 5: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemIsNoLongerAvailable);
+        }
+        break;
+        case 6: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::ThisItemIsNoLongerAvailable);
+        }
+        break;
+        case 7: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisItemCannotBeSentAsAGift);
+        }
+        break;
+        case 8: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::ThisEventItemCannotBeSentAsAGift);
+        }
+        break;
+        case 9: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed,
+                                I18N::Game::YouVeExceededTheNumberOfEventItemGiftsAllowed);
+        }
+        break;
+        case 10: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed,
+                                I18N::Game::YouHaveSelectedAnIncorrectWCoinTypePleaseSelectAgain);
+        }
+        break;
+        case 20: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::GiftDeliveryFailed, I18N::Game::IDDoesNotExist);
+        }
+        break;
+        default: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
+        }
+        break;
     }
 
     return true;
@@ -13024,7 +13083,8 @@ bool ReceiveIGS_SendItemGift(const BYTE* pReceiveBuffer)
 bool ReceiveIGS_StorageItemListCount(const BYTE* pReceiveBuffer)
 {
     auto Data = (LPPMSG_CASHSHOP_STORAGECOUNT)pReceiveBuffer;
-    g_pInGameShop->InitStorage((int)Data->wTotalItemCount, (int)Data->wCurrentItemCount, (int)Data->wTotalPage, (int)Data->wPageIndex);
+    g_pInGameShop->InitStorage((int)Data->wTotalItemCount, (int)Data->wCurrentItemCount, (int)Data->wTotalPage,
+                               (int)Data->wPageIndex);
     return true;
 }
 
@@ -13036,9 +13096,11 @@ bool ReceiveIGS_StorageItemList(const BYTE* pReceiveBuffer)
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     if (g_InGameShopSystem->IsShopOpen() == false)
         return false;
-#endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
-    g_pInGameShop->AddStorageItem((int)Data->lStorageIndex, (int)Data->lItemSeq, (int)Data->lStorageGroupCode, (int)Data->lProductSeq, (int)Data->lPriceSeq, (int)Data->dCashPoint, (char)Data->chItemType);
+    g_pInGameShop->AddStorageItem((int)Data->lStorageIndex, (int)Data->lItemSeq, (int)Data->lStorageGroupCode,
+                                  (int)Data->lProductSeq, (int)Data->lPriceSeq, (int)Data->dCashPoint,
+                                  (char)Data->chItemType);
     return true;
 }
 
@@ -13050,14 +13112,16 @@ bool ReceiveIGS_StorageGiftItemList(const BYTE* pReceiveBuffer)
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     if (g_InGameShopSystem->IsShopOpen() == false)
         return false;
-#endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
     wchar_t szID[MAX_USERNAME_SIZE + 1];
     wchar_t szMessage[MAX_GIFT_MESSAGE_SIZE];
     CMultiLanguage::ConvertFromUtf8(szID, Data->chSendUserName, MAX_USERNAME_SIZE);
     CMultiLanguage::ConvertFromUtf8(szMessage, Data->chMessage, MAX_GIFT_MESSAGE_SIZE);
 
-    g_pInGameShop->AddStorageItem((int)Data->lStorageIndex, (int)Data->lItemSeq, (int)Data->lStorageGroupCode, (int)Data->lProductSeq, (int)Data->lPriceSeq, (int)Data->dCashPoint, (char)Data->chItemType, szID, szMessage);
+    g_pInGameShop->AddStorageItem((int)Data->lStorageIndex, (int)Data->lItemSeq, (int)Data->lStorageGroupCode,
+                                  (int)Data->lProductSeq, (int)Data->lPriceSeq, (int)Data->dCashPoint,
+                                  (char)Data->chItemType, szID, szMessage);
     return true;
 }
 
@@ -13066,9 +13130,8 @@ bool ReceiveIGS_StorageGiftItemList(const BYTE* pReceiveBuffer)
 bool ReceiveIGS_SendCashGift(const BYTE* pReceiveBuffer)
 {
     auto Data = (LPPMSG_CASHSHOP_CASHSEND_ANS)pReceiveBuffer;
-    PublishHaptic((BYTE)Data->byResultCode == 0
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic((BYTE)Data->byResultCode == 0 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                                : Core::Haptics::HapticEvent::OperationFailed);
     return true;
 }
 
@@ -13091,92 +13154,83 @@ bool ReceiveIGS_LeftCountItem(const BYTE* pReceiveBuffer)
 bool ReceiveIGS_UseStorageItem(const BYTE* pReceiveBuffer)
 {
     auto Data = (LPPMSG_CASHSHOP_STORAGE_ITEM_USE_ANS)pReceiveBuffer;
-    PublishHaptic((BYTE)Data->byResult == 0
-        ? Core::Haptics::HapticEvent::TransactionSucceeded
-        : Core::Haptics::HapticEvent::OperationFailed);
+    PublishHaptic((BYTE)Data->byResult == 0 ? Core::Haptics::HapticEvent::TransactionSucceeded
+                                            : Core::Haptics::HapticEvent::OperationFailed);
 
     switch ((BYTE)Data->byResult)
     {
-    case static_cast<BYTE>(-2):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::ADatabaseAccessErrorHasOccurred);
-    }
-    break;
-    case static_cast<BYTE>(-1):
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::ThereHasBeenAnError);
-    }
-    break;
-    case 0:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::ItemUsed, I18N::Game::TheItemHasBeenUsed);
+        case static_cast<BYTE>(-2): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::ADatabaseAccessErrorHasOccurred);
+        }
+        break;
+        case static_cast<BYTE>(-1): {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::ThereHasBeenAnError);
+        }
+        break;
+        case 0: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::ItemUsed, I18N::Game::TheItemHasBeenUsed);
 
-        g_pInGameShop->UpdateStorageItemList();
-    }
-    break;
-    case 1:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::UseStorageDoesNotExist);
-    }
-    break;
-    case 2:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::YouCanReceiveThisItemOnlyFromAPCCafe);
-    }
-    break;
-    case 3:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::AnActiveColorPlanExistsInTheSelectedPeriod);
-    }
-    break;
-    case 4:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::AnActivePersonalFixedPlanExistsInTheSelectedPeriod);
-    }break;
-    case 21:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::NotEnoughSpacePleaseCheckFreeSpaceInYourInventory);
-    }
-    break;
-    case 22:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::CannotUseTheSelectedItem);
-    }
-    break;
+            g_pInGameShop->UpdateStorageItemList();
+        }
+        break;
+        case 1: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::UseStorageDoesNotExist);
+        }
+        break;
+        case 2: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::YouCanReceiveThisItemOnlyFromAPCCafe);
+        }
+        break;
+        case 3: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::AnActiveColorPlanExistsInTheSelectedPeriod);
+        }
+        break;
+        case 4: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse,
+                                I18N::Game::AnActivePersonalFixedPlanExistsInTheSelectedPeriod);
+        }
+        break;
+        case 21: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::NotEnoughSpacePleaseCheckFreeSpaceInYourInventory);
+        }
+        break;
+        case 22: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::CannotUseTheSelectedItem);
+        }
+        break;
 #ifdef LEM_FIX_SERVERMSG_SEALITEM
-    case 24:
-    {
-        CMsgBoxIGSCommon* pMsgBox = NULL;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::FailedToUse, I18N::Game::ThisItemCannotBeUsedAlongWithAnItemThatSAlreadyInUse);
-    }
-    break;
-#endif	// LEM_FIX_SERVERMSG_SEALITEM
-    default:
-    {
-        CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
-    }
-    break;
+        case 24: {
+            CMsgBoxIGSCommon* pMsgBox = NULL;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::FailedToUse,
+                                I18N::Game::ThisItemCannotBeUsedAlongWithAnItemThatSAlreadyInUse);
+        }
+        break;
+#endif  // LEM_FIX_SERVERMSG_SEALITEM
+        default: {
+            CMsgBoxIGSCommon* pMsgBox = nullptr;
+            CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
+            pMsgBox->Initialize(I18N::Game::Error2, I18N::Game::UnknownError);
+        }
+        break;
     }
     return true;
 }
@@ -13189,7 +13243,7 @@ bool ReceiveIGS_UpdateScript(const BYTE* pReceiveBuffer)
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     g_InGameShopSystem->SetScriptVersion(Data->wSaleZone, Data->wYear, Data->wYearIdentify);
     g_InGameShopSystem->ShopOpenUnLock();
-#else // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#else   // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_INGAMESHOP) == true)
     {
         SendRequestIGS_CashShopOpen(1);
@@ -13207,7 +13261,7 @@ bool ReceiveIGS_UpdateScript(const BYTE* pReceiveBuffer)
 
     g_InGameShopSystem->Initalize();
     g_pInGameShop->InitZoneBtn();
-#endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
     return true;
 }
@@ -13235,19 +13289,19 @@ bool ReceiveIGS_UpdateBanner(const BYTE* pReceiveBuffer)
 {
 #ifndef KWAK_FIX_COMPILE_LEVEL4_WARNING_EX
     auto Data = (LPPMSG_CASHSHOP_BANNER_UPDATE)pReceiveBuffer;
-#endif // KWAK_FIX_COMPILE_LEVEL4_WARNING_EX
+#endif  // KWAK_FIX_COMPILE_LEVEL4_WARNING_EX
 
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     g_InGameShopSystem->SetBannerVersion(Data->wBannerZone, Data->wYear, Data->wYearIdentify);
-#else // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#else  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     if (g_InGameShopSystem->IsShopOpen() == false)
         return false;
 
 #ifdef _DEBUG
     g_InGameShopSystem->SetBannerVersion(583, 0, 0);
-#else // _DEBUG
+#else   // _DEBUG
     g_InGameShopSystem->SetBannerVersion(Data->wBannerZone, Data->wYear, Data->wYearIdentify);
-#endif // _DEBUG
+#endif  // _DEBUG
 
     if (g_InGameShopSystem->BannerDownload() == false)
     {
@@ -13255,12 +13309,12 @@ bool ReceiveIGS_UpdateBanner(const BYTE* pReceiveBuffer)
     }
 
     g_pInGameShop->InitBanner(g_InGameShopSystem->GetBannerFileName(), g_InGameShopSystem->GetBannerURL());
-#endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
     return true;
 }
 
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 
 #ifdef PBG_ADD_SECRETBUFF
 bool ReceiveFatigueTime(const BYTE* pReceiveBuffer)
@@ -13272,7 +13326,7 @@ bool ReceiveFatigueTime(const BYTE* pReceiveBuffer)
         g_FatigueTimeSystem->SetIsFatigueSystem(true);
 #ifdef PBG_MOD_STAMINA_UI
         g_pNewUIStamina->SetCaution(Data->btFatiguePercentage);
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
         return true;
     }
     else
@@ -13280,14 +13334,14 @@ bool ReceiveFatigueTime(const BYTE* pReceiveBuffer)
 
     return false;
 }
-#endif //PBG_ADD_SECRETBUFF
+#endif  //PBG_ADD_SECRETBUFF
 
 #ifdef LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
 bool ReceiveEquippingInventoryItem(const BYTE* pReceiveBuffer)
 {
     LPPMSG_ANS_INVENTORY_EQUIPMENT_ITEM Data = (LPPMSG_ANS_INVENTORY_EQUIPMENT_ITEM)pReceiveBuffer;
 
-    int iResult = (int)Data->btResult;
+    int iResult  = (int)Data->btResult;
     int iItemPos = (int)Data->btItemPos;
 
     if (!(iResult == 254 || iResult == 255))
@@ -13296,16 +13350,16 @@ bool ReceiveEquippingInventoryItem(const BYTE* pReceiveBuffer)
     if (iItemPos < MAX_EQUIPMENT || iItemPos >= MAX_INVENTORY)
         return false;
 
-    ITEM* pItem = g_pMyInventory->FindItem(iItemPos);
+    ITEM* pItem       = g_pMyInventory->FindItem(iItemPos);
     pItem->Durability = iResult;
 
 #ifdef CONSOLE_DEBUG
     g_ConsoleDebug->Write(MCD_RECEIVE, L"[0xBF][0x20]  [ReceiveEquippingInventoryItem]");
-#endif // CONSOLE_DEBUG
+#endif  // CONSOLE_DEBUG
 
     return true;
 }
-#endif //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
+#endif  //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
 
 #ifdef KJH_ADD_PERIOD_ITEM_SYSTEM
 
@@ -13335,28 +13389,29 @@ bool ReceivePeriodItemList(const BYTE* pReceiveBuffer)
 
     return true;
 }
-#endif // KJH_ADD_PERIOD_ITEM_SYSTEM
+#endif  // KJH_ADD_PERIOD_ITEM_SYSTEM
 
 BOOL ReceiveStraightAttack(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 {
-    auto Data = (LPPRECEIVE_STRAIGHTATTACK)ReceiveBuffer;
-    int SourceKey = ((int)(Data->SourceKeyH) << 8) + Data->SourceKeyL;
-    int TargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
-    int Success = (TargetKey >> 15);
+    auto Data      = (LPPRECEIVE_STRAIGHTATTACK)ReceiveBuffer;
+    int  SourceKey = ((int)(Data->SourceKeyH) << 8) + Data->SourceKeyL;
+    int  TargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
+    int  Success   = (TargetKey >> 15);
 
     WORD AttackNumber = ((WORD)(Data->AttackH) << 8) + Data->AttackL;
 
     TargetKey &= 0x7FFF;
-    int Index = FindCharacterIndex(SourceKey);
+    int Index       = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (TargetIndex == MAX_CHARACTERS_CLIENT && AttackNumber != AT_SKILL_DARKSIDE && AttackNumber != AT_SKILL_DARKSIDE_STR)
+    if (TargetIndex == MAX_CHARACTERS_CLIENT && AttackNumber != AT_SKILL_DARKSIDE &&
+        AttackNumber != AT_SKILL_DARKSIDE_STR)
         return (TRUE);
 
-    AttackPlayer = Index;
+    AttackPlayer  = Index;
     CHARACTER* sc = &CharactersClient[Index];
     CHARACTER* tc = &CharactersClient[TargetIndex];
-    OBJECT* so = &sc->Object;
-    OBJECT* to = &tc->Object;
+    OBJECT*    so = &sc->Object;
+    OBJECT*    to = &tc->Object;
 
     if (sc != Hero && to->Visible)
         so->Angle[2] = CreateAngle2D(so->Position, to->Position);
@@ -13364,13 +13419,14 @@ BOOL ReceiveStraightAttack(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
     sc->TargetCharacter = TargetIndex;
 
     sc->SkillSuccess = (Success != 0);
-    sc->Skill = AttackNumber;
+    sc->Skill        = AttackNumber;
 
     so->m_sTargetIndex = TargetIndex;
 
     if (g_CMonkSystem.IsRageHalfwaySkillAni(AttackNumber))
     {
-        auto isBeastUppercut = AttackNumber == AT_SKILL_BEAST_UPPERCUT || AttackNumber == AT_SKILL_BEAST_UPPERCUT_STR || AttackNumber == AT_SKILL_BEAST_UPPERCUT_MASTERY;
+        auto isBeastUppercut = AttackNumber == AT_SKILL_BEAST_UPPERCUT || AttackNumber == AT_SKILL_BEAST_UPPERCUT_STR ||
+                               AttackNumber == AT_SKILL_BEAST_UPPERCUT_MASTERY;
         if (sc != Hero && isBeastUppercut)
         {
             g_CMonkSystem.SetRageSkillAni(AttackNumber, so);
@@ -13385,16 +13441,15 @@ BOOL ReceiveStraightAttack(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     switch (AttackNumber)
     {
-    case AT_SKILL_DARKSIDE:
-    case AT_SKILL_DARKSIDE_STR:
-    {
-        if (sc != Hero)
-            g_CMonkSystem.RageCreateEffect(so, AttackNumber);
+        case AT_SKILL_DARKSIDE:
+        case AT_SKILL_DARKSIDE_STR: {
+            if (sc != Hero)
+                g_CMonkSystem.RageCreateEffect(so, AttackNumber);
 
-        g_CMonkSystem.SetRageSkillAni(AttackNumber, so);
-        sc->AttackTime = 1;
-    }
-    break;
+            g_CMonkSystem.SetRageSkillAni(AttackNumber, so);
+            sc->AttackTime = 1;
+        }
+        break;
     }
 
     return (TRUE);
@@ -13423,10 +13478,10 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     }
 
     auto received_span = std::span<const BYTE>(ReceiveBuffer, Size);
-    BYTE HeadCode = 0;
-    BOOL bEncrypted = ReceiveBuffer[0] >= 0xC3;
-    BOOL bIsC1C3 = ReceiveBuffer[0] % 2 == 1;
-    if (bIsC1C3) // C1 and C3
+    BYTE HeadCode      = 0;
+    BOOL bEncrypted    = ReceiveBuffer[0] >= 0xC3;
+    BOOL bIsC1C3       = ReceiveBuffer[0] % 2 == 1;
+    if (bIsC1C3)  // C1 and C3
     {
         HeadCode = ReceiveBuffer[2];
     }
@@ -13442,1506 +13497,1487 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     }
     switch (HeadCode)
     {
-    case 0xF1:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x00: //receive join server
-            ReceiveJoinServer(ReceiveBuffer);
-            break;
-        case 0x01: //receive log in
-            //AddDebugText(ReceiveBuffer,Size);
-            switch (Data->Value)
-            {
-            case 0x20:
-                CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
-                LogIn = 2;
-                CheckHack();
-                break;
-            case 0x00:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PASSWORD);
-                break;
-            case 0x01:
-                CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
-                LogIn = 2;
-                CheckHack();
-                break;
-            case 0x02:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID);
-                break;
-            case 0x03:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID_CONNECTED);
-                break;
-            case 0x04:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_SERVER_BUSY);
-                break;
-            case 0x05:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID_BLOCK);
-                break;
-            case 0x06:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_VERSION);
-                g_ErrorReport.Write(L"Version dismatch. - Login\r\n");
-                break;
-            case 0x07:
-            default:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_CONNECT);
-                break;
-            case 0x08:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ERROR);
-                break;
-            case 0x09:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO);
-                break;
-            case 0x0a:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_USER_TIME1);
-                break;
-            case 0x0b:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_USER_TIME2);
-                break;
-            case 0x0c:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PC_TIME1);
-                break;
-            case 0x0d:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PC_TIME2);
-                break;
-            case 0x11:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ONLY_OVER_15);
-                break;
-            case 0x40:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL);
-                break;
-            case 0xc0:
-            case 0xd0:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_POINT_DATE);
-                break;
-            case 0xc1:
-            case 0xd1:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_POINT_HOUR);
-                break;
-            case 0xc2:
-            case 0xd2:
-                CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_INVALID_IP);
-                break;
-            }
-            break;
-        case 0x02:
-            if (!ReceiveLogOut(ReceiveBuffer, bEncrypted))
-            {
-                //return ( FALSE);
-            }
-            break;
-        case 0x12: //0x02 receive create account
-            switch (Data->Value)
-            {
-            case 0x00:
-                CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_FAIL_ID;
-                break;
-            case 0x01:
-                CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_SUCCESS;
-                break;
-            case 0x02:
-                CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_FAIL_RESIDENT;
-                break;
-            }
-            break;
-        case 0x03: //receive confirm password
-            //AddDebugText(ReceiveBuffer,Size);
-            ReceiveConfirmPassword(ReceiveBuffer);
-            break;
-        case 0x04: //receive confirm password
-            //AddDebugText(ReceiveBuffer,Size);
-            ReceiveConfirmPassword2(received_span);
-            break;
-        case 0x05: //receive change password
-            ReceiveChangePassword(ReceiveBuffer);
-            break;
-        }
-        break;
-    }
-    case 0xF3:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+        case 0xF1: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-
-        g_ConsoleDebug->Write(MCD_RECEIVE, L"Recv [0xF3][0x%02x]", subcode);
-
-        switch (subcode)
-        {
-        case 0x00: //receive characters list
-            ReceiveCharacterListExtended(received_span);
-            break;
-        case 0x01: //receive create character
-            ReceiveCreateCharacter(ReceiveBuffer);
-            break;
-        case 0x02: //receive delete character
-            ReceiveDeleteCharacter(ReceiveBuffer);
-            break;
-        case 0x03: //receive join map server
-            if (!ReceiveJoinMapServer(received_span))
+            switch (Data->SubCode)
             {
-                // safe_cast logged the size mismatch; reiterate the user-visible
-                // symptom so the cause is obvious in the console.
-                g_ConsoleDebug->Write(MCD_ERROR,
-                    L"[ReceiveJoinMapServer] dropped -- protocol state stays REQUEST_JOIN_MAP_SERVER, "
-                    L"main render will not be enabled (loading screen will appear frozen).");
-                //return ( FALSE);
+                case 0x00:  //receive join server
+                    ReceiveJoinServer(ReceiveBuffer);
+                    break;
+                case 0x01:  //receive log in
+                    //AddDebugText(ReceiveBuffer,Size);
+                    switch (Data->Value)
+                    {
+                        case 0x20:
+                            CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
+                            LogIn                = 2;
+                            CheckHack();
+                            break;
+                        case 0x00:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PASSWORD);
+                            break;
+                        case 0x01:
+                            CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
+                            LogIn                = 2;
+                            CheckHack();
+                            break;
+                        case 0x02:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID);
+                            break;
+                        case 0x03:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID_CONNECTED);
+                            break;
+                        case 0x04:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_SERVER_BUSY);
+                            break;
+                        case 0x05:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ID_BLOCK);
+                            break;
+                        case 0x06:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_VERSION);
+                            g_ErrorReport.Write(L"Version dismatch. - Login\r\n");
+                            break;
+                        case 0x07:
+                        default:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_CONNECT);
+                            break;
+                        case 0x08:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ERROR);
+                            break;
+                        case 0x09:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO);
+                            break;
+                        case 0x0a:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_USER_TIME1);
+                            break;
+                        case 0x0b:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_USER_TIME2);
+                            break;
+                        case 0x0c:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PC_TIME1);
+                            break;
+                        case 0x0d:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PC_TIME2);
+                            break;
+                        case 0x11:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_ONLY_OVER_15);
+                            break;
+                        case 0x40:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL);
+                            break;
+                        case 0xc0:
+                        case 0xd0:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_POINT_DATE);
+                            break;
+                        case 0xc1:
+                        case 0xd1:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_POINT_HOUR);
+                            break;
+                        case 0xc2:
+                        case 0xd2:
+                            CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_INVALID_IP);
+                            break;
+                    }
+                    break;
+                case 0x02:
+                    if (!ReceiveLogOut(ReceiveBuffer, bEncrypted))
+                    {
+                        //return ( FALSE);
+                    }
+                    break;
+                case 0x12:  //0x02 receive create account
+                    switch (Data->Value)
+                    {
+                        case 0x00:
+                            CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_FAIL_ID;
+                            break;
+                        case 0x01:
+                            CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_SUCCESS;
+                            break;
+                        case 0x02:
+                            CurrentProtocolState = RECEIVE_CREATE_ACCOUNT_FAIL_RESIDENT;
+                            break;
+                    }
+                    break;
+                case 0x03:  //receive confirm password
+                    //AddDebugText(ReceiveBuffer,Size);
+                    ReceiveConfirmPassword(ReceiveBuffer);
+                    break;
+                case 0x04:  //receive confirm password
+                    //AddDebugText(ReceiveBuffer,Size);
+                    ReceiveConfirmPassword2(received_span);
+                    break;
+                case 0x05:  //receive change password
+                    ReceiveChangePassword(ReceiveBuffer);
+                    break;
             }
             break;
-        case 0x04: //receive revival
-            ReceiveRevival(ReceiveBuffer);
-            break;
-        case 0x10: //receive inventory
-            ReceiveInventoryExtended(received_span);
-            break;
-        case 0x05: //receive level up
-            ReceiveLevelUp(ReceiveBuffer, Size);
-            break;
-        case 0x06: //receive Add Point
-            if (Size >= sizeof(PRECEIVE_ADD_POINT_EXTENDED))
+        }
+        case 0xF3: {
+            int subcode;
+            if (bIsC1C3)
             {
-                ReceiveAddPointExtended(ReceiveBuffer);
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
             }
             else
             {
-                ReceiveAddPoint(ReceiveBuffer);
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
             }
 
-            break;
-        case 0x07: //receive damage
-            ReceiveDamage(ReceiveBuffer);
-            break;
-        case 0x08:
-            ReceivePK(ReceiveBuffer);
-            break;
-        case 0x11:
-            ReceiveMagicList(ReceiveBuffer);
-            break;
-        case 0x13:
-            // not really in use in OpenMU
-            ReceiveEquipment(received_span);
-            break;
-        case 0x14:
-            ReceiveModifyItemExtended(received_span);
-            break;
-        case 0x20:
-            ReceiveSummonLife(ReceiveBuffer);
-            break;
-        case 0x22:
-            ReceiveWTTimeLeft(ReceiveBuffer);
-            break;
+            g_ConsoleDebug->Write(MCD_RECEIVE, L"Recv [0xF3][0x%02x]", subcode);
 
-        case 0x24:
-            ReceiveWTMatchResult(ReceiveBuffer);
-            break;
+            switch (subcode)
+            {
+                case 0x00:  //receive characters list
+                    ReceiveCharacterListExtended(received_span);
+                    break;
+                case 0x01:  //receive create character
+                    ReceiveCreateCharacter(ReceiveBuffer);
+                    break;
+                case 0x02:  //receive delete character
+                    ReceiveDeleteCharacter(ReceiveBuffer);
+                    break;
+                case 0x03:  //receive join map server
+                    if (!ReceiveJoinMapServer(received_span))
+                    {
+                        // safe_cast logged the size mismatch; reiterate the user-visible
+                        // symptom so the cause is obvious in the console.
+                        g_ConsoleDebug->Write(
+                            MCD_ERROR,
+                            L"[ReceiveJoinMapServer] dropped -- protocol state stays REQUEST_JOIN_MAP_SERVER, "
+                            L"main render will not be enabled (loading screen will appear frozen).");
+                        //return ( FALSE);
+                    }
+                    break;
+                case 0x04:  //receive revival
+                    ReceiveRevival(ReceiveBuffer);
+                    break;
+                case 0x10:  //receive inventory
+                    ReceiveInventoryExtended(received_span);
+                    break;
+                case 0x05:  //receive level up
+                    ReceiveLevelUp(ReceiveBuffer, Size);
+                    break;
+                case 0x06:  //receive Add Point
+                    if (Size >= sizeof(PRECEIVE_ADD_POINT_EXTENDED))
+                    {
+                        ReceiveAddPointExtended(ReceiveBuffer);
+                    }
+                    else
+                    {
+                        ReceiveAddPoint(ReceiveBuffer);
+                    }
 
-        case 0x25:
-            ReceiveWTBattleSoccerGoalIn(ReceiveBuffer);
+                    break;
+                case 0x07:  //receive damage
+                    ReceiveDamage(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceivePK(ReceiveBuffer);
+                    break;
+                case 0x11:
+                    ReceiveMagicList(ReceiveBuffer);
+                    break;
+                case 0x13:
+                    // not really in use in OpenMU
+                    ReceiveEquipment(received_span);
+                    break;
+                case 0x14:
+                    ReceiveModifyItemExtended(received_span);
+                    break;
+                case 0x20:
+                    ReceiveSummonLife(ReceiveBuffer);
+                    break;
+                case 0x22:
+                    ReceiveWTTimeLeft(ReceiveBuffer);
+                    break;
+
+                case 0x24:
+                    ReceiveWTMatchResult(ReceiveBuffer);
+                    break;
+
+                case 0x25:
+                    ReceiveWTBattleSoccerGoalIn(ReceiveBuffer);
+                    break;
+                case 0x23:
+                    ReceiveSoccerScore(ReceiveBuffer);
+                    break;
+                case 0x30:
+                    ReceiveOption(ReceiveBuffer);
+                    break;
+                case 0x32:
+                    ReceiveSetPointsExtended(ReceiveBuffer);
+                    break;
+                case 0x40:
+                    ReceiveServerCommand(ReceiveBuffer);
+                    break;
+                case 0x50:
+                    Receive_Master_Level_Exp(ReceiveBuffer, Size);
+                    break;
+                case 0x51:
+                    Receive_Master_LevelUp(ReceiveBuffer, Size);
+                    break;
+                case 0x52:
+                    Receive_Master_LevelGetSkill(ReceiveBuffer);
+                    break;
+                case 0x53:
+                    Receive_Master_SetSkillList((PMSG_MASTER_SKILL_LIST_SEND*)ReceiveBuffer);
+                    break;
+            }
             break;
-        case 0x23:
-            ReceiveSoccerScore(ReceiveBuffer);
+        }
+        case 0xF4: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x06:
+                    ReceiveServerList(ReceiveBuffer, Size);
+                    break;
+                case 0x03:
+                    ReceiveServerConnect(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveServerConnectBusy(ReceiveBuffer);
+                    break;
+            }
+            break;
+        }
+        case 0x00:  //chat
+            ReceiveChat(ReceiveBuffer);
+            break;
+        case 0x01:  //chat
+            ReceiveChatKey(ReceiveBuffer);
+            break;
+        case 0x02:  //chat whisper
+            ReceiveChatWhisper(received_span);
+            break;
+        case 0x03:
+            ReceiveCheckSumRequest(ReceiveBuffer);
+            break;
+        case 0x0B:
+            AddDebugText(ReceiveBuffer, Size);
+            ReceiveEvent(ReceiveBuffer);
+            break;
+        case 0x0C:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveChatWhisperResult(ReceiveBuffer);
+            break;
+        case 0x0D:  //notice
+            ReceiveNotice(ReceiveBuffer);
+            break;
+        case 0x0f:
+            ReceiveWeather(ReceiveBuffer);
+            break;
+        case PACKET_MOVE:  //move character
+            ReceiveMoveCharacter(received_span);
+            break;
+        case PACKET_POSITION:  //move position
+            ReceiveMovePosition(ReceiveBuffer);
+            break;
+        case 0x12:  //create characters
+            AddDebugText(ReceiveBuffer, Size);
+            ReceiveCreatePlayerViewportExtended(received_span);
+            break;
+        case 0x13:  //create monsters
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveCreateMonsterViewport(ReceiveBuffer);
+            break;
+        case 0x1F:  //create monsters
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveCreateSummonViewport(ReceiveBuffer);
+            break;
+        case 0x45:  //create monsters
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveCreateTransformViewport(received_span);
+            break;
+        case 0x14:  //delete characters & monsters
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveDeleteCharacterViewport(ReceiveBuffer);
+            break;
+        case 0x20:  //create item
+            ReceiveCreateItemViewportExtended(received_span);
+            break;
+        case 0x2F:
+            ReceiveCreateMoney(received_span);
+            break;
+        case 0x21:  //delete item
+            ReceiveDeleteItemViewport(ReceiveBuffer);
+            break;
+        case 0x22:  //get item
+            ReceiveGetItem(received_span);
+            break;
+        case 0x23:  //drop item
+            ReceiveDropItem(ReceiveBuffer);
+            break;
+        case 0x24:  //equipment item
+            AddDebugText(ReceiveBuffer, Size);
+            ReceiveEquipmentItemExtended(received_span);
+            break;
+        case 0x25:  //change character
+            ReceiveChangePlayer(received_span);
+            break;
+        case PACKET_ATTACK:  //attack character
+            ReceiveAttackDamageExtended(ReceiveBuffer);
+            break;
+        case 0x18:  //action character
+            ReceiveAction(ReceiveBuffer, Size);
+            break;
+        case 0x19:  //magic
+            if (!ReceiveMagic(ReceiveBuffer, Size, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case 0x69:
+            if (!ReceiveMonsterSkill(ReceiveBuffer, Size, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case 0x1A:  //magic
+            ReceiveMagicPosition(ReceiveBuffer, Size);
+            break;
+        case 0x1E:  //magic
+            if (!ReceiveMagicContinue(ReceiveBuffer, Size, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case 0x1B:  //magic
+            ReceiveMagicFinish(ReceiveBuffer);
+            break;
+        case 0x07:  //setmagicstatus
+            ReceiveSkillStatus(ReceiveBuffer);
+            break;
+        //case 0x16://die character(exp)
+        //    if (!ReceiveDieExp(ReceiveBuffer, bEncrypted))
+        //    {
+        //        //return ( FALSE);
+        //    }
+        //    break;
+        case 0x16:  //die character(exp)
+            if (Size >= sizeof(PRECEIVE_EXP_EXTENDED))
+            {
+                ReceiveDieExpLarge(ReceiveBuffer, bEncrypted);
+            }
+            else
+            {
+                ReceiveDieExp(ReceiveBuffer, bEncrypted);
+            }
+            break;
+        case 0x17:  //die character
+            ReceiveDie(ReceiveBuffer, Size);
+            break;
+        case 0x2A:
+            AddDebugText(ReceiveBuffer, Size);
+            ReceiveDurability(ReceiveBuffer);
+            break;
+        case 0x26:
+            ReceiveStatsExtended(ReceiveBuffer);
+            break;
+        case 0x28:
+            ReceiveDeleteInventory(ReceiveBuffer);
+            break;
+        case 0x29:
+            //AddDebugText(ReceiveBuffer,Size);
+            if (!ReceiveHelperItem(ReceiveBuffer, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case 0x2c:
+            ReceiveUseStateItem(ReceiveBuffer);
             break;
         case 0x30:
-            ReceiveOption(ReceiveBuffer);
+            if (!ReceiveTalk(ReceiveBuffer, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case Network::MerchantPrices::QuoteCache::PacketCode:
+            Network::MerchantPrices::Cache().Receive(received_span);
+            break;
+        case 0x31:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeInventoryExtended(received_span);
             break;
         case 0x32:
-            ReceiveSetPointsExtended(ReceiveBuffer);
+            ReceiveBuyExtended(received_span);
+            break;
+        case 0x33:
+            ReceiveSell(ReceiveBuffer);
+            break;
+        case 0x34:
+            ReceiveRepair(ReceiveBuffer);
+            break;
+        case 0x36:
+            if (!ReceiveTrade(ReceiveBuffer, bEncrypted))
+            {
+                //return ( FALSE);
+            }
+            break;
+        case 0x37:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeResult(ReceiveBuffer);
+            break;
+        case 0x38:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeYourInventoryDelete(ReceiveBuffer);
+            break;
+        case 0x39:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeYourInventoryExtended(received_span);
+            break;
+        case 0x3A:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeMyGold(ReceiveBuffer);
+            break;
+        case 0x3B:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeYourGold(ReceiveBuffer);
+            break;
+        case 0x3C:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeYourResult(ReceiveBuffer);
+            break;
+        case 0x3D:
+            //AddDebugText(ReceiveBuffer,Size);
+            ReceiveTradeExit(ReceiveBuffer);
+            break;
+        case 0x1C:
+            AddDebugText(ReceiveBuffer, Size);
+            if (!ReceiveTeleport(ReceiveBuffer, bEncrypted))
+            {
+                //return ( FALSE);
+            }
             break;
         case 0x40:
-            ReceiveServerCommand(ReceiveBuffer);
+            ReceiveParty(ReceiveBuffer);
+            break;
+        case 0x41:
+            ReceivePartyResult(ReceiveBuffer);
+            break;
+        case 0x42:
+            ReceivePartyList(ReceiveBuffer);
+            break;
+        case 0x43:
+            ReceivePartyLeave(ReceiveBuffer);
+            break;
+        case 0x44:
+            ReceivePartyInfo(ReceiveBuffer);
+            break;
+        case 0x46:
+            ReceiveSetAttribute(ReceiveBuffer);
+            break;
+        case 0x47:
+            ReceivePartyGetItem(ReceiveBuffer);
+            break;
+        case 0x48:
+            ReceiveDisplayEffectViewport(ReceiveBuffer);
             break;
         case 0x50:
-            Receive_Master_Level_Exp(ReceiveBuffer, Size);
+            ReceiveGuild(ReceiveBuffer);
             break;
         case 0x51:
-            Receive_Master_LevelUp(ReceiveBuffer, Size);
+            ReceiveGuildResult(ReceiveBuffer);
             break;
         case 0x52:
-            Receive_Master_LevelGetSkill(ReceiveBuffer);
+            ReceiveGuildList(ReceiveBuffer);
             break;
         case 0x53:
-            Receive_Master_SetSkillList((PMSG_MASTER_SKILL_LIST_SEND*)ReceiveBuffer);
+            ReceiveGuildLeave(ReceiveBuffer);
             break;
-        }
-        break;
-    }
-    case 0xF4:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+        case 0x54:
+            ReceiveCreateGuildInterface(ReceiveBuffer);
+            break;
+        case 0x55:
+            ReceiveCreateGuildMasterInterface(ReceiveBuffer);
+            break;
+        case 0x56:
+            ReceiveCreateGuildResult(ReceiveBuffer);
+            break;
+        case 0x65:
+            ReceiveGuildIDViewport(ReceiveBuffer);
+            break;
+        case 0x66:
+            ReceiveGuildInfo(ReceiveBuffer);
+            break;
+        case 0x5D:
+            ReceiveDeleteGuildViewport(ReceiveBuffer);
+            break;
+        case 0x60:
+            ReceiveDeclareWarResult(ReceiveBuffer);
+            break;
+        case 0x61:
+            ReceiveDeclareWar(ReceiveBuffer);
+            break;
+        case 0x62:
+            ReceiveGuildBeginWar(ReceiveBuffer);
+            break;
+        case 0x63:
+            ReceiveGuildEndWar(ReceiveBuffer);
+            break;
+        case 0x64:
+            ReceiveGuildWarScore(ReceiveBuffer);
+            break;
+        case 0xE1:
+            ReceiveGuildAssign(ReceiveBuffer);
+            break;
+        case 0xE5:
+            ReceiveGuildRelationShip(ReceiveBuffer);
+            break;
+        case 0xE6:
+            ReceiveGuildRelationShipResult(ReceiveBuffer);
+            break;
+        case 0xEB: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x01:
+                    ReceiveBanUnionGuildResult(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x06:
-            ReceiveServerList(ReceiveBuffer, Size);
+        break;
+        case 0x67:
+            ReceiveUnionViewportNotify(ReceiveBuffer);
             break;
-        case 0x03:
-            ReceiveServerConnect(ReceiveBuffer);
+        case 0xE9:
+            ReceiveUnionList(ReceiveBuffer);
             break;
-        case 0x05:
-            ReceiveServerConnectBusy(ReceiveBuffer);
-            break;
-        }
-        break;
-    }
-    case 0x00://chat
-        ReceiveChat(ReceiveBuffer);
-        break;
-    case 0x01://chat
-        ReceiveChatKey(ReceiveBuffer);
-        break;
-    case 0x02://chat whisper
-        ReceiveChatWhisper(received_span);
-        break;
-    case 0x03:
-        ReceiveCheckSumRequest(ReceiveBuffer);
-        break;
-    case 0x0B:
-        AddDebugText(ReceiveBuffer, Size);
-        ReceiveEvent(ReceiveBuffer);
-        break;
-    case 0x0C:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveChatWhisperResult(ReceiveBuffer);
-        break;
-    case 0x0D://notice
-        ReceiveNotice(ReceiveBuffer);
-        break;
-    case 0x0f:
-        ReceiveWeather(ReceiveBuffer);
-        break;
-    case PACKET_MOVE: //move character
-        ReceiveMoveCharacter(received_span);
-        break;
-    case PACKET_POSITION: //move position
-        ReceiveMovePosition(ReceiveBuffer);
-        break;
-    case 0x12: //create characters
-        AddDebugText(ReceiveBuffer, Size);
-        ReceiveCreatePlayerViewportExtended(received_span);
-        break;
-    case 0x13: //create monsters
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveCreateMonsterViewport(ReceiveBuffer);
-        break;
-    case 0x1F: //create monsters
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveCreateSummonViewport(ReceiveBuffer);
-        break;
-    case 0x45: //create monsters
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveCreateTransformViewport(received_span);
-        break;
-    case 0x14: //delete characters & monsters
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveDeleteCharacterViewport(ReceiveBuffer);
-        break;
-    case 0x20: //create item
-        ReceiveCreateItemViewportExtended(received_span);
-        break;
-    case 0x2F:
-        ReceiveCreateMoney(received_span);
-        break;
-    case 0x21://delete item
-        ReceiveDeleteItemViewport(ReceiveBuffer);
-        break;
-    case 0x22://get item
-        ReceiveGetItem(received_span);
-        break;
-    case 0x23://drop item
-        ReceiveDropItem(ReceiveBuffer);
-        break;
-    case 0x24://equipment item
-        AddDebugText(ReceiveBuffer, Size);
-        ReceiveEquipmentItemExtended(received_span);
-        break;
-    case 0x25://change character
-        ReceiveChangePlayer(received_span);
-        break;
-    case PACKET_ATTACK://attack character
-        ReceiveAttackDamageExtended(ReceiveBuffer);
-        break;
-    case 0x18://action character
-        ReceiveAction(ReceiveBuffer, Size);
-        break;
-    case 0x19://magic
-        if (!ReceiveMagic(ReceiveBuffer, Size, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x69:
-        if (!ReceiveMonsterSkill(ReceiveBuffer, Size, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x1A://magic
-        ReceiveMagicPosition(ReceiveBuffer, Size);
-        break;
-    case 0x1E://magic
-        if (!ReceiveMagicContinue(ReceiveBuffer, Size, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x1B://magic
-        ReceiveMagicFinish(ReceiveBuffer);
-        break;
-    case 0x07://setmagicstatus
-        ReceiveSkillStatus(ReceiveBuffer);
-        break;
-    //case 0x16://die character(exp)
-    //    if (!ReceiveDieExp(ReceiveBuffer, bEncrypted))
-    //    {
-    //        //return ( FALSE);
-    //    }
-    //    break;
-    case 0x16://die character(exp)
-        if (Size >= sizeof(PRECEIVE_EXP_EXTENDED))
-        {
-            ReceiveDieExpLarge(ReceiveBuffer, bEncrypted);
-        }
-        else
-        {
-            ReceiveDieExp(ReceiveBuffer, bEncrypted);
-        }
-        break;
-    case 0x17://die character
-        ReceiveDie(ReceiveBuffer, Size);
-        break;
-    case 0x2A:
-        AddDebugText(ReceiveBuffer, Size);
-        ReceiveDurability(ReceiveBuffer);
-        break;
-    case 0x26:
-        ReceiveStatsExtended(ReceiveBuffer);
-        break;
-    case 0x28:
-        ReceiveDeleteInventory(ReceiveBuffer);
-        break;
-    case 0x29:
-        //AddDebugText(ReceiveBuffer,Size);
-        if (!ReceiveHelperItem(ReceiveBuffer, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x2c:
-        ReceiveUseStateItem(ReceiveBuffer);
-        break;
-    case 0x30:
-        if (!ReceiveTalk(ReceiveBuffer, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case Network::MerchantPrices::QuoteCache::PacketCode:
-        Network::MerchantPrices::Cache().Receive(received_span);
-        break;
-    case 0x31:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeInventoryExtended(received_span);
-        break;
-    case 0x32:
-        ReceiveBuyExtended(received_span);
-        break;
-    case 0x33:
-        ReceiveSell(ReceiveBuffer);
-        break;
-    case 0x34:
-        ReceiveRepair(ReceiveBuffer);
-        break;
-    case 0x36:
-        if (!ReceiveTrade(ReceiveBuffer, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x37:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeResult(ReceiveBuffer);
-        break;
-    case 0x38:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeYourInventoryDelete(ReceiveBuffer);
-        break;
-    case 0x39:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeYourInventoryExtended(received_span);
-        break;
-    case 0x3A:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeMyGold(ReceiveBuffer);
-        break;
-    case 0x3B:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeYourGold(ReceiveBuffer);
-        break;
-    case 0x3C:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeYourResult(ReceiveBuffer);
-        break;
-    case 0x3D:
-        //AddDebugText(ReceiveBuffer,Size);
-        ReceiveTradeExit(ReceiveBuffer);
-        break;
-    case 0x1C:
-        AddDebugText(ReceiveBuffer, Size);
-        if (!ReceiveTeleport(ReceiveBuffer, bEncrypted))
-        {
-            //return ( FALSE);
-        }
-        break;
-    case 0x40:
-        ReceiveParty(ReceiveBuffer);
-        break;
-    case 0x41:
-        ReceivePartyResult(ReceiveBuffer);
-        break;
-    case 0x42:
-        ReceivePartyList(ReceiveBuffer);
-        break;
-    case 0x43:
-        ReceivePartyLeave(ReceiveBuffer);
-        break;
-    case 0x44:
-        ReceivePartyInfo(ReceiveBuffer);
-        break;
-    case 0x46:
-        ReceiveSetAttribute(ReceiveBuffer);
-        break;
-    case 0x47:
-        ReceivePartyGetItem(ReceiveBuffer);
-        break;
-    case 0x48:
-        ReceiveDisplayEffectViewport(ReceiveBuffer);
-        break;
-    case 0x50:
-        ReceiveGuild(ReceiveBuffer);
-        break;
-    case 0x51:
-        ReceiveGuildResult(ReceiveBuffer);
-        break;
-    case 0x52:
-        ReceiveGuildList(ReceiveBuffer);
-        break;
-    case 0x53:
-        ReceiveGuildLeave(ReceiveBuffer);
-        break;
-    case 0x54:
-        ReceiveCreateGuildInterface(ReceiveBuffer);
-        break;
-    case 0x55:
-        ReceiveCreateGuildMasterInterface(ReceiveBuffer);
-        break;
-    case 0x56:
-        ReceiveCreateGuildResult(ReceiveBuffer);
-        break;
-    case 0x65:
-        ReceiveGuildIDViewport(ReceiveBuffer);
-        break;
-    case 0x66:
-        ReceiveGuildInfo(ReceiveBuffer);
-        break;
-    case 0x5D:
-        ReceiveDeleteGuildViewport(ReceiveBuffer);
-        break;
-    case 0x60:
-        ReceiveDeclareWarResult(ReceiveBuffer);
-        break;
-    case 0x61:
-        ReceiveDeclareWar(ReceiveBuffer);
-        break;
-    case 0x62:
-        ReceiveGuildBeginWar(ReceiveBuffer);
-        break;
-    case 0x63:
-        ReceiveGuildEndWar(ReceiveBuffer);
-        break;
-    case 0x64:
-        ReceiveGuildWarScore(ReceiveBuffer);
-        break;
-    case 0xE1:
-        ReceiveGuildAssign(ReceiveBuffer);
-        break;
-    case 0xE5:
-        ReceiveGuildRelationShip(ReceiveBuffer);
-        break;
-    case 0xE6:
-        ReceiveGuildRelationShipResult(ReceiveBuffer);
-        break;
-    case 0xEB:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x01:
-            ReceiveBanUnionGuildResult(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0x67:
-        ReceiveUnionViewportNotify(ReceiveBuffer);
-        break;
-    case 0xE9:
-        ReceiveUnionList(ReceiveBuffer);
-        break;
-    case 0xBC:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x00:
-            ReceiveGemMixResult(ReceiveBuffer);
-            break;
-        case 0x01:
-            ReceiveGemUnMixResult(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0x68:
-        ReceivePreviewPort(received_span);
-        break;
-
-    case 0x71:
-        ReceivePing(ReceiveBuffer);
-        break;
-    case 0x81:
-        ReceiveStorageGold(ReceiveBuffer);
-        break;
-    case 0x82:
-        ReceiveStorageExit(ReceiveBuffer);
-        break;
-    case 0x83:
-        ReceiveStorageStatus(ReceiveBuffer);
-        break;
-    case 0x86:
-        ReceiveMixExtended(received_span);
-        break;
-    case 0x87:
-        ReceiveMixExit(ReceiveBuffer);
-        break;
-    case 0x8E:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x01:
-            ReceiveMoveMapChecksum(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveRequestMoveMap(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0x90:
-        ReceiveMoveToDevilSquareResult(ReceiveBuffer);
-        break;
-    case 0x91:
-        ReceiveEventZoneOpenTime(ReceiveBuffer);
-        break;
-    case 0x92:
-        ReceiveDevilSquareCountDown(ReceiveBuffer);
-        break;
-    case 0x93:
-        ReceiveDevilSquareRank(ReceiveBuffer);
-        break;
-    case 0x9A:
-        ReceiveMoveToEventMatchResult(ReceiveBuffer);
-        break;
-    case 0x9B:
-        ReceiveMatchGameCommand(ReceiveBuffer);
-        break;
-    case 0x94:
-        ReceiveEventChipInfomation(ReceiveBuffer);
-        break;
-    case 0x95:
-        ReceiveEventChip(ReceiveBuffer);
-        break;
-    case 0x96:
-        ReceiveMutoNumber(ReceiveBuffer);
-        break;
-    case 0x99:
-        ReceiveServerImmigration(ReceiveBuffer);
-        break;
-    case 0x9D:
-        ReceiveScratchResult(ReceiveBuffer);
-        break;
-    case 0x9E:
-        ReceivePlaySoundEffect(ReceiveBuffer);
-        break;
-    case 0x9F:
-        ReceiveEventCount(ReceiveBuffer);
-        break;
-    case 0xA0:
-        ReceiveQuestHistory(ReceiveBuffer);
-        break;
-    case 0xA1:
-        ReceiveQuestState(ReceiveBuffer);
-        break;
-    case 0xA2:
-        ReceiveQuestResult(ReceiveBuffer);
-        break;
-    case 0xA3:
-        ReceiveQuestPrize(ReceiveBuffer);
-        break;
-    case 0xA4:
-        ReceiveQuestMonKillInfo(ReceiveBuffer);
-        break;
-    case 0xF5:
-    {
-        // The chat commands which are available to this player. It's only sent
-        // by servers which know the request, so an unknown sub code is no error.
-        const auto subcode = bIsC1C3 ? ReceiveBuffer[3] : ReceiveBuffer[4];
-        if (subcode == 0x01)
-        {
-            GameLogic::Commands::Catalog().AddFromPacket(ReceiveBuffer, Size);
-        }
-        else
-        {
-            g_ConsoleDebug->Write(MCD_RECEIVE, L"Recv [0xF5][0x%02x] (unknown)", subcode);
-        }
-    }
-    break;
-    case 0xF6:
-    {
-        BYTE bySubcode;
-
-        if (bIsC1C3)
-        {
+        case 0xBC: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            bySubcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x00:
+                    ReceiveGemMixResult(ReceiveBuffer);
+                    break;
+                case 0x01:
+                    ReceiveGemUnMixResult(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            bySubcode = Data->SubCode;
-        }
+        break;
+        case 0x68:
+            ReceivePreviewPort(received_span);
+            break;
 
-        switch (bySubcode)
-        {
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-        case 0x00:
-            ReceiveQuestLimitResult(ReceiveBuffer);
+        case 0x71:
+            ReceivePing(ReceiveBuffer);
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
-        case 0x03:
-            ReceiveQuestByEtcEPList(ReceiveBuffer);
+        case 0x81:
+            ReceiveStorageGold(ReceiveBuffer);
             break;
-#ifdef ASG_ADD_TIME_LIMIT_QUEST
-        case 0x04:
-            ReceiveQuestByItemUseEP(ReceiveBuffer);
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
-        case 0x0A:
-            ReceiveQuestByNPCEPList(ReceiveBuffer);
+        case 0x82:
+            ReceiveStorageExit(ReceiveBuffer);
             break;
-        case 0x0B:
-            ReceiveQuestQSSelSentence(ReceiveBuffer);
+        case 0x83:
+            ReceiveStorageStatus(ReceiveBuffer);
             break;
-        case 0x0C:
-            ReceiveQuestQSRequestReward(ReceiveBuffer);
+        case 0x86:
+            ReceiveMixExtended(received_span);
             break;
-        case 0x0D:
-            ReceiveQuestCompleteResult(ReceiveBuffer);
+        case 0x87:
+            ReceiveMixExit(ReceiveBuffer);
             break;
-        case 0x0F:
-            ReceiveQuestGiveUp(ReceiveBuffer);
-            break;
-        case 0x1A:
-            ReceiveProgressQuestList(ReceiveBuffer);
-            break;
-        case 0x1B:
-            ReceiveProgressQuestRequestReward(ReceiveBuffer);
-            break;
-        case 0x20:
-            ReceiveProgressQuestListReady(ReceiveBuffer);
-            break;
+        case 0x8E: {
+            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+            switch (Data->SubCode)
+            {
+                case 0x01:
+                    ReceiveMoveMapChecksum(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveRequestMoveMap(ReceiveBuffer);
+                    break;
+            }
         }
-    }
-    break;
+        break;
+        case 0x90:
+            ReceiveMoveToDevilSquareResult(ReceiveBuffer);
+            break;
+        case 0x91:
+            ReceiveEventZoneOpenTime(ReceiveBuffer);
+            break;
+        case 0x92:
+            ReceiveDevilSquareCountDown(ReceiveBuffer);
+            break;
+        case 0x93:
+            ReceiveDevilSquareRank(ReceiveBuffer);
+            break;
+        case 0x9A:
+            ReceiveMoveToEventMatchResult(ReceiveBuffer);
+            break;
+        case 0x9B:
+            ReceiveMatchGameCommand(ReceiveBuffer);
+            break;
+        case 0x94:
+            ReceiveEventChipInfomation(ReceiveBuffer);
+            break;
+        case 0x95:
+            ReceiveEventChip(ReceiveBuffer);
+            break;
+        case 0x96:
+            ReceiveMutoNumber(ReceiveBuffer);
+            break;
+        case 0x99:
+            ReceiveServerImmigration(ReceiveBuffer);
+            break;
+        case 0x9D:
+            ReceiveScratchResult(ReceiveBuffer);
+            break;
+        case 0x9E:
+            ReceivePlaySoundEffect(ReceiveBuffer);
+            break;
+        case 0x9F:
+            ReceiveEventCount(ReceiveBuffer);
+            break;
+        case 0xA0:
+            ReceiveQuestHistory(ReceiveBuffer);
+            break;
+        case 0xA1:
+            ReceiveQuestState(ReceiveBuffer);
+            break;
+        case 0xA2:
+            ReceiveQuestResult(ReceiveBuffer);
+            break;
+        case 0xA3:
+            ReceiveQuestPrize(ReceiveBuffer);
+            break;
+        case 0xA4:
+            ReceiveQuestMonKillInfo(ReceiveBuffer);
+            break;
+        case 0xF5: {
+            // The chat commands which are available to this player. It's only sent
+            // by servers which know the request, so an unknown sub code is no error.
+            const auto subcode = bIsC1C3 ? ReceiveBuffer[3] : ReceiveBuffer[4];
+            if (subcode == 0x01)
+            {
+                GameLogic::Commands::Catalog().AddFromPacket(ReceiveBuffer, Size);
+            }
+            else
+            {
+                g_ConsoleDebug->Write(MCD_RECEIVE, L"Recv [0xF5][0x%02x] (unknown)", subcode);
+            }
+        }
+        break;
+        case 0xF6: {
+            BYTE bySubcode;
+
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                bySubcode = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                bySubcode = Data->SubCode;
+            }
+
+            switch (bySubcode)
+            {
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                case 0x00:
+                    ReceiveQuestLimitResult(ReceiveBuffer);
+                    break;
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                case 0x03:
+                    ReceiveQuestByEtcEPList(ReceiveBuffer);
+                    break;
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                case 0x04:
+                    ReceiveQuestByItemUseEP(ReceiveBuffer);
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                case 0x0A:
+                    ReceiveQuestByNPCEPList(ReceiveBuffer);
+                    break;
+                case 0x0B:
+                    ReceiveQuestQSSelSentence(ReceiveBuffer);
+                    break;
+                case 0x0C:
+                    ReceiveQuestQSRequestReward(ReceiveBuffer);
+                    break;
+                case 0x0D:
+                    ReceiveQuestCompleteResult(ReceiveBuffer);
+                    break;
+                case 0x0F:
+                    ReceiveQuestGiveUp(ReceiveBuffer);
+                    break;
+                case 0x1A:
+                    ReceiveProgressQuestList(ReceiveBuffer);
+                    break;
+                case 0x1B:
+                    ReceiveProgressQuestRequestReward(ReceiveBuffer);
+                    break;
+                case 0x20:
+                    ReceiveProgressQuestListReady(ReceiveBuffer);
+                    break;
+            }
+        }
+        break;
 #ifdef ASG_ADD_GENS_SYSTEM
-    case 0xF8:
-    {
-        BYTE bySubcode;
+        case 0xF8: {
+            BYTE bySubcode;
 
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            bySubcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            bySubcode = Data->SubCode;
-        }
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                bySubcode = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                bySubcode = Data->SubCode;
+            }
 
-        switch (bySubcode)
-        {
-        case 0x02:
-            ReceiveGensJoining(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveGensSecession(ReceiveBuffer);
-            break;
-        case 0x07:
-            ReceivePlayerGensInfluence(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceiveOtherPlayerGensInfluenceViewport(ReceiveBuffer);
-            break;
+            switch (bySubcode)
+            {
+                case 0x02:
+                    ReceiveGensJoining(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveGensSecession(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceivePlayerGensInfluence(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveOtherPlayerGensInfluenceViewport(ReceiveBuffer);
+                    break;
 #ifdef PBG_ADD_GENSRANKING
-        case 0x0A:
-            ReceiveReward(ReceiveBuffer);
-            break;
-#endif //PBG_ADD_GENSRANKING
+                case 0x0A:
+                    ReceiveReward(ReceiveBuffer);
+                    break;
+#endif  //PBG_ADD_GENSRANKING
+            }
         }
-    }
-    break;
-#endif	// ASG_ADD_GENS_SYSTEM
-    case 0xF9:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x01:
-            ReceiveNPCDlgUIStart(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-
-    case 0xA7:
-        ReceivePetCommand(ReceiveBuffer);
         break;
-    case 0xA8:
-        ReceivePetAttack(ReceiveBuffer);
-        break;
-    case 0xA9:
-        ReceivePetInfo(ReceiveBuffer);
-        break;
-
-    case 0xAA:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x01:
-            ReceiveDuelStart(ReceiveBuffer);
-            break;
-        case 0x02:
-            ReceiveDuelRequest(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveDuelEnd(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveDuelScore(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceiveDuelHP(ReceiveBuffer);
-            break;
-        case 0x06:
-            ReceiveDuelChannelList(ReceiveBuffer);
-            break;
-        case 0x07:
-            ReceiveDuelWatchRequestReply(ReceiveBuffer);
-            break;
-        case 0x08:
-            ReceiveDuelWatcherJoin(ReceiveBuffer);
-            break;
-        case 0x09:
-            ReceiveDuelWatchEnd(ReceiveBuffer);
-            break;
-        case 0x0A:
-            ReceiveDuelWatcherQuit(ReceiveBuffer);
-            break;
-        case 0x0B:
-            ReceiveDuelWatcherList(ReceiveBuffer);
-            break;
-        case 0x0C:
-            ReceiveDuelResult(ReceiveBuffer);
-            break;
-        case 0x0D:
-            ReceiveDuelRound(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0xF7:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x02:
-            ReceiveEnterEmpireGuardianEvent(ReceiveBuffer);
-            break;
-
-        case 0x04:
-            ReceiveRemainTickEmpireGuardian(ReceiveBuffer);
-            break;
-
-        case 0x06:
-            ReceiveResultEmpireGuardian(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0x3F:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+#endif  // ASG_ADD_GENS_SYSTEM
+        case 0xF9: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x01:
+                    ReceiveNPCDlgUIStart(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveCreateShopTitleViewport(ReceiveBuffer);
+        break;
+
+        case 0xA7:
+            ReceivePetCommand(ReceiveBuffer);
             break;
-        case 0x01:
-            ReceiveSetPriceResult(ReceiveBuffer);
+        case 0xA8:
+            ReceivePetAttack(ReceiveBuffer);
             break;
-        case 0x02:
-            ReceiveCreatePersonalShop(ReceiveBuffer);
+        case 0xA9:
+            ReceivePetInfo(ReceiveBuffer);
             break;
-        case 0x03:
-            ReceiveDestroyPersonalShop(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceivePersonalShopItemList(received_span);
-            break;
-        case 0x06:
-            ReceivePurchaseItem(received_span);
-            break;
-        case 0x08:
-            NotifySoldItem(ReceiveBuffer);
-            break;
-        case 0x10:
-            ReceiveShopTitleChange(ReceiveBuffer);
-            break;
-        case 0x12:
-            NotifyClosePersonalShop(ReceiveBuffer);
-            break;
-        case 0x13:
-            ReceiveRefreshItemList(received_span);
-            break;
-        }
-    }
-    break;
-    case 0xAF:
-    {
-        auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-        switch (Data->SubCode)
-        {
-        case 0x01:
-            ReceiveMoveToEventMatchResult2(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0xB1:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+
+        case 0xAA: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x01:
+                    ReceiveDuelStart(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveDuelRequest(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveDuelEnd(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveDuelScore(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveDuelHP(ReceiveBuffer);
+                    break;
+                case 0x06:
+                    ReceiveDuelChannelList(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceiveDuelWatchRequestReply(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceiveDuelWatcherJoin(ReceiveBuffer);
+                    break;
+                case 0x09:
+                    ReceiveDuelWatchEnd(ReceiveBuffer);
+                    break;
+                case 0x0A:
+                    ReceiveDuelWatcherQuit(ReceiveBuffer);
+                    break;
+                case 0x0B:
+                    ReceiveDuelWatcherList(ReceiveBuffer);
+                    break;
+                case 0x0C:
+                    ReceiveDuelResult(ReceiveBuffer);
+                    break;
+                case 0x0D:
+                    ReceiveDuelRound(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveChangeMapServerInfo(ReceiveBuffer);
-            break;
-
-        case 0x01:
-            ReceiveChangeMapServerResult(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-    case 0xB2:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+        break;
+        case 0xF7: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x02:
+                    ReceiveEnterEmpireGuardianEvent(ReceiveBuffer);
+                    break;
+
+                case 0x04:
+                    ReceiveRemainTickEmpireGuardian(ReceiveBuffer);
+                    break;
+
+                case 0x06:
+                    ReceiveResultEmpireGuardian(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
+        break;
+        case 0x3F: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveCreateShopTitleViewport(ReceiveBuffer);
+                    break;
+                case 0x01:
+                    ReceiveSetPriceResult(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveCreatePersonalShop(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveDestroyPersonalShop(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceivePersonalShopItemList(received_span);
+                    break;
+                case 0x06:
+                    ReceivePurchaseItem(received_span);
+                    break;
+                case 0x08:
+                    NotifySoldItem(ReceiveBuffer);
+                    break;
+                case 0x10:
+                    ReceiveShopTitleChange(ReceiveBuffer);
+                    break;
+                case 0x12:
+                    NotifyClosePersonalShop(ReceiveBuffer);
+                    break;
+                case 0x13:
+                    ReceiveRefreshItemList(received_span);
+                    break;
+            }
         }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveBCStatus(ReceiveBuffer);
-            break;
-        case 0x01:
-            ReceiveBCReg(ReceiveBuffer);
-            break;
-        case 0x02:
-            ReceiveBCGiveUp(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveBCRegInfo(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveBCRegMark(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceiveBCNPCBuy(ReceiveBuffer);
-            break;
-        case 0x06:
-            ReceiveBCNPCRepair(ReceiveBuffer);
-            break;
-        case 0x07:
-            ReceiveBCNPCUpgrade(ReceiveBuffer);
-            break;
-        case 0x08:
-            ReceiveBCGetTaxInfo(ReceiveBuffer);
-            break;
-        case 0x09:
-            ReceiveBCChangeTaxRate(ReceiveBuffer);
-            break;
-        case 0x10:
-            ReceiveBCWithdraw(ReceiveBuffer);
-            break;
-        case 0x1A:
-            ReceiveTaxInfo(ReceiveBuffer);
-            break;
-        case 0x1F:
-            ReceiveHuntZoneEnter(ReceiveBuffer);
-            break;
-
-        case 0x11:
-            ReceiveGateState(ReceiveBuffer);
-            break;
-
-        case 0x12:
-            ReceiveGateOperator(ReceiveBuffer);
-            break;
-
-        case 0x13:
-            ReceiveGateCurrentState(ReceiveBuffer);
-            break;
-
-        case 0x14:
-            ReceiveCrownSwitchState(ReceiveBuffer);
-            break;
-
-        case 0x15:
-            ReceiveCrownRegist(ReceiveBuffer);
-            break;
-
-        case 0x16:
-            ReceiveCrownState(ReceiveBuffer);
-            break;
-
-        case 0x17:
-            ReceiveBattleCastleStart(ReceiveBuffer);
-            break;
-
-        case 0x18:
-            ReceiveBattleCastleProcess(ReceiveBuffer);
-            break;
-
-        case 0x19:
-            ReceiveBattleCastleRegiment(ReceiveBuffer);
-            break;
-
-        case 0x20:
-            ReceiveBattleCasleSwitchInfo(ReceiveBuffer);
-            break;
-
-        case 0x1B:
-            ReceiveMapInfoResult(ReceiveBuffer);
-            break;
-
-        case 0x1D:
-            ReceiveGuildCommand(ReceiveBuffer);
-            break;
-
-        case 0x1E:
-            ReceiveMatchTimer(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
-
-    case 0xB3:
-        ReceiveBCNPCList(ReceiveBuffer);
         break;
-    case 0xB4:
-        ReceiveBCDeclareGuildList(ReceiveBuffer);
-        break;
-    case 0xB5:
-        ReceiveBCGuildList(ReceiveBuffer);
-        break;
-    case 0xB6:
-        ReceiveGuildMemberLocation(ReceiveBuffer);
-        break;
-    case 0xBB:
-        ReceiveGuildNpcLocation(ReceiveBuffer);
-        break;
-    case 0xB7:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
+        case 0xAF: {
             auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
+            switch (Data->SubCode)
+            {
+                case 0x01:
+                    ReceiveMoveToEventMatchResult2(ReceiveBuffer);
+                    break;
+            }
         }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveCatapultState(ReceiveBuffer);
-            break;
+        break;
+        case 0xB1: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveChangeMapServerInfo(ReceiveBuffer);
+                    break;
 
-        case 0x01:
-            ReceiveCatapultFire(ReceiveBuffer);
-            break;
+                case 0x01:
+                    ReceiveChangeMapServerResult(ReceiveBuffer);
+                    break;
+            }
+        }
+        break;
+        case 0xB2: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveBCStatus(ReceiveBuffer);
+                    break;
+                case 0x01:
+                    ReceiveBCReg(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveBCGiveUp(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveBCRegInfo(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveBCRegMark(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveBCNPCBuy(ReceiveBuffer);
+                    break;
+                case 0x06:
+                    ReceiveBCNPCRepair(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceiveBCNPCUpgrade(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceiveBCGetTaxInfo(ReceiveBuffer);
+                    break;
+                case 0x09:
+                    ReceiveBCChangeTaxRate(ReceiveBuffer);
+                    break;
+                case 0x10:
+                    ReceiveBCWithdraw(ReceiveBuffer);
+                    break;
+                case 0x1A:
+                    ReceiveTaxInfo(ReceiveBuffer);
+                    break;
+                case 0x1F:
+                    ReceiveHuntZoneEnter(ReceiveBuffer);
+                    break;
 
-        case 0x02:
-            ReceiveCatapultFireToMe(ReceiveBuffer);
-            break;
+                case 0x11:
+                    ReceiveGateState(ReceiveBuffer);
+                    break;
 
-        case 0x03:
-            //                ReceiveDamageFrmeCatapult ( ReceiveBuffer );
-            break;
-        }
-    }
-    break;
+                case 0x12:
+                    ReceiveGateOperator(ReceiveBuffer);
+                    break;
 
-    case 0xB8:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x01:
-            ReceiveKillCount(ReceiveBuffer);
-            break;
+                case 0x13:
+                    ReceiveGateCurrentState(ReceiveBuffer);
+                    break;
 
-        case 0x02:
-            break;
-        }
-    }
-    break;
-    case 0xB9:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x01:
-            ReceiveBuildTime(ReceiveBuffer);
-            break;
+                case 0x14:
+                    ReceiveCrownSwitchState(ReceiveBuffer);
+                    break;
 
-        case 0x02:
-            ReceiveCastleGuildMark(ReceiveBuffer);
-            break;
+                case 0x15:
+                    ReceiveCrownRegist(ReceiveBuffer);
+                    break;
 
-        case 0x03:
-            ReceiveCastleHuntZoneInfo(ReceiveBuffer);
-            break;
+                case 0x16:
+                    ReceiveCrownState(ReceiveBuffer);
+                    break;
 
-        case 0x05:
-            ReceiveCastleHuntZoneResult(ReceiveBuffer);
-            break;
-        }
-    }
-    break;
+                case 0x17:
+                    ReceiveBattleCastleStart(ReceiveBuffer);
+                    break;
 
-    case 0xBA:
-        ReceiveSkillCount(ReceiveBuffer);
-        break;
-    case 0xBD:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveCrywolfInfo(ReceiveBuffer);
-            break;
-        case 0x02:
-            ReceiveCrywolStateAltarfInfo(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveCrywolfAltarContract(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveCrywolfLifeTime(ReceiveBuffer);
-            break;
-        case 0x0C:
-            ReceiveCrywolfTankerHit(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceiveCrywolfBossMonsterInfo(ReceiveBuffer);
-            break;
-        case 0x07:
-            ReceiveCrywolfPersonalRank(ReceiveBuffer);
-            break;
-        case 0x09:
-            ReceiveCrywolfBenefitPlusChaosRate(ReceiveBuffer);
-            break;
-        case 0x08:
-            ReceiveCrywolfHeroList(ReceiveBuffer);
-            break;
-        }
-        break;
-    }
-    case 0xC0:
-        ReceiveFriendList(ReceiveBuffer);
-        break;
-    case 0xC1:
-        ReceiveAddFriendResult(ReceiveBuffer);
-        break;
-    case 0xC2:
-        ReceiveRequestAcceptAddFriend(ReceiveBuffer);
-        break;
-    case 0xC3:
-        ReceiveDeleteFriendResult(ReceiveBuffer);
-        break;
-    case 0xC4:
-        ReceiveFriendStateChange(ReceiveBuffer);
-        break;
-    case 0xC5:
-        ReceiveLetterSendResult(ReceiveBuffer);
-        break;
-    case 0xC6:
-        ReceiveLetter(ReceiveBuffer);
-        break;
-    case 0xC7:
-        ReceiveLetterText(received_span, false);
-        break;
-    case 0xC8:
-        ReceiveLetterDeleteResult(ReceiveBuffer);
-        break;
-    case 0xCA:
-        ReceiveCreateChatRoomResult(ReceiveBuffer);
-        break;
-    case 0xCB:
-        ReceiveChatRoomInviteResult(ReceiveBuffer);
-        break;
-    case 0x2D:
-        ReceiveBuffState(ReceiveBuffer);
-        break;
-    case 0xD1:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveKanturu3rdStateInfo(ReceiveBuffer);
-            break;
-        case 0x01:
-            ReceiveKanturu3rdEnterBossMap(ReceiveBuffer);
-            break;
-        case 0x02:
-            ReceiveKanturu3rdCurrentState(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveKanturu3rdState(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveKanturu3rdResult(ReceiveBuffer);
-            break;
-        case 0x05:
-            ReceiveKanturu3rdTimer(ReceiveBuffer);
-            break;
-        case 0x06:
-            RecevieKanturu3rdMayaSKill(ReceiveBuffer);
-            break;
-        case 0x07:
-            RecevieKanturu3rdLeftUserandMonsterCount(ReceiveBuffer);
-            break;
-        case 0x10:
-            ReceiveRaklionStateInfo(ReceiveBuffer);
-            break;
-        case 0x11:
-            ReceiveRaklionCurrentState(ReceiveBuffer);
-            break;
-        case 0x12:
-            RecevieRaklionStateChange(ReceiveBuffer);
-            break;
-        case 0x13:
-            RecevieRaklionBattleResult(ReceiveBuffer);
-            break;
-        case 0x14:
-            RecevieRaklionWideAreaAttack(ReceiveBuffer);
-            break;
-        case 0x15:
-            RecevieRaklionUserMonsterCount(ReceiveBuffer);
-            break;
-        }
-        break;
-    }
-    case 0xBF:
-    {
-        int subcode;
-        if (bIsC1C3)
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else
-        {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
+                case 0x18:
+                    ReceiveBattleCastleProcess(ReceiveBuffer);
+                    break;
 
-        switch (subcode)
-        {
-        case 0x00:
-            ReceiveCursedTempleEnterResult(ReceiveBuffer);
+                case 0x19:
+                    ReceiveBattleCastleRegiment(ReceiveBuffer);
+                    break;
+
+                case 0x20:
+                    ReceiveBattleCasleSwitchInfo(ReceiveBuffer);
+                    break;
+
+                case 0x1B:
+                    ReceiveMapInfoResult(ReceiveBuffer);
+                    break;
+
+                case 0x1D:
+                    ReceiveGuildCommand(ReceiveBuffer);
+                    break;
+
+                case 0x1E:
+                    ReceiveMatchTimer(ReceiveBuffer);
+                    break;
+            }
+        }
+        break;
+
+        case 0xB3:
+            ReceiveBCNPCList(ReceiveBuffer);
             break;
-        case 0x01:
-            ReceiveCursedTempleInfo(ReceiveBuffer);
+        case 0xB4:
+            ReceiveBCDeclareGuildList(ReceiveBuffer);
             break;
-        case 0x02:
-            ReceiveCursedTempMagicResult(ReceiveBuffer);
+        case 0xB5:
+            ReceiveBCGuildList(ReceiveBuffer);
             break;
-        case 0x03:
-            ReceiveCursedTempleEnterInfo(ReceiveBuffer);
+        case 0xB6:
+            ReceiveGuildMemberLocation(ReceiveBuffer);
             break;
-        case 0x04:
-            ReceiveCursedTempleGameResult(ReceiveBuffer);
+        case 0xBB:
+            ReceiveGuildNpcLocation(ReceiveBuffer);
             break;
-        case 0x06:
-            ReceiveCursedTempSkillPoint(ReceiveBuffer);
+        case 0xB7: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveCatapultState(ReceiveBuffer);
+                    break;
+
+                case 0x01:
+                    ReceiveCatapultFire(ReceiveBuffer);
+                    break;
+
+                case 0x02:
+                    ReceiveCatapultFireToMe(ReceiveBuffer);
+                    break;
+
+                case 0x03:
+                    //                ReceiveDamageFrmeCatapult ( ReceiveBuffer );
+                    break;
+            }
+        }
+        break;
+
+        case 0xB8: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x01:
+                    ReceiveKillCount(ReceiveBuffer);
+                    break;
+
+                case 0x02:
+                    break;
+            }
+        }
+        break;
+        case 0xB9: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x01:
+                    ReceiveBuildTime(ReceiveBuffer);
+                    break;
+
+                case 0x02:
+                    ReceiveCastleGuildMark(ReceiveBuffer);
+                    break;
+
+                case 0x03:
+                    ReceiveCastleHuntZoneInfo(ReceiveBuffer);
+                    break;
+
+                case 0x05:
+                    ReceiveCastleHuntZoneResult(ReceiveBuffer);
+                    break;
+            }
+        }
+        break;
+
+        case 0xBA:
+            ReceiveSkillCount(ReceiveBuffer);
             break;
-        case 0x07:
-            ReceiveCursedTempSkillEnd(ReceiveBuffer);
+        case 0xBD: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveCrywolfInfo(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveCrywolStateAltarfInfo(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveCrywolfAltarContract(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveCrywolfLifeTime(ReceiveBuffer);
+                    break;
+                case 0x0C:
+                    ReceiveCrywolfTankerHit(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveCrywolfBossMonsterInfo(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceiveCrywolfPersonalRank(ReceiveBuffer);
+                    break;
+                case 0x09:
+                    ReceiveCrywolfBenefitPlusChaosRate(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceiveCrywolfHeroList(ReceiveBuffer);
+                    break;
+            }
             break;
-        case 0x08:
-            ReceiveCursedTempleHolyItemRelics(ReceiveBuffer);
+        }
+        case 0xC0:
+            ReceiveFriendList(ReceiveBuffer);
             break;
-        case 0x09:
-            ReceiveCursedTempleState(ReceiveBuffer);
+        case 0xC1:
+            ReceiveAddFriendResult(ReceiveBuffer);
             break;
-        case 0x0a:
-            ReceiveChainMagic(ReceiveBuffer);
+        case 0xC2:
+            ReceiveRequestAcceptAddFriend(ReceiveBuffer);
             break;
-        case 0x0B:
-            ReceiveRegistedLuckyCoin(ReceiveBuffer);
+        case 0xC3:
+            ReceiveDeleteFriendResult(ReceiveBuffer);
             break;
-        case 0x0C:
-            ReceiveRegistLuckyCoin(ReceiveBuffer);
+        case 0xC4:
+            ReceiveFriendStateChange(ReceiveBuffer);
             break;
-        case 0x0D:
-            ReceiveRequestExChangeLuckyCoin(ReceiveBuffer);
+        case 0xC5:
+            ReceiveLetterSendResult(ReceiveBuffer);
             break;
-        case 0x0E:
-            ReceiveEnterDoppelGangerEvent(ReceiveBuffer);
+        case 0xC6:
+            ReceiveLetter(ReceiveBuffer);
             break;
-        case 0x0F:
-            ReceiveDoppelGangerMonsterPosition(ReceiveBuffer);
+        case 0xC7:
+            ReceiveLetterText(received_span, false);
             break;
-        case 0x10:
-            ReceiveDoppelGangerState(ReceiveBuffer);
+        case 0xC8:
+            ReceiveLetterDeleteResult(ReceiveBuffer);
             break;
-        case 0x11:
-            ReceiveDoppelGangerIcewalkerState(ReceiveBuffer);
+        case 0xCA:
+            ReceiveCreateChatRoomResult(ReceiveBuffer);
             break;
-        case 0x12:
-            ReceiveDoppelGangerTimePartyState(ReceiveBuffer);
+        case 0xCB:
+            ReceiveChatRoomInviteResult(ReceiveBuffer);
             break;
-        case 0x13:
-            ReceiveDoppelGangerResult(ReceiveBuffer);
+        case 0x2D:
+            ReceiveBuffState(ReceiveBuffer);
             break;
-        case 0x14:
-            ReceiveDoppelGangerMonsterGoal(ReceiveBuffer);
+        case 0xD1: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveKanturu3rdStateInfo(ReceiveBuffer);
+                    break;
+                case 0x01:
+                    ReceiveKanturu3rdEnterBossMap(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveKanturu3rdCurrentState(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveKanturu3rdState(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveKanturu3rdResult(ReceiveBuffer);
+                    break;
+                case 0x05:
+                    ReceiveKanturu3rdTimer(ReceiveBuffer);
+                    break;
+                case 0x06:
+                    RecevieKanturu3rdMayaSKill(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    RecevieKanturu3rdLeftUserandMonsterCount(ReceiveBuffer);
+                    break;
+                case 0x10:
+                    ReceiveRaklionStateInfo(ReceiveBuffer);
+                    break;
+                case 0x11:
+                    ReceiveRaklionCurrentState(ReceiveBuffer);
+                    break;
+                case 0x12:
+                    RecevieRaklionStateChange(ReceiveBuffer);
+                    break;
+                case 0x13:
+                    RecevieRaklionBattleResult(ReceiveBuffer);
+                    break;
+                case 0x14:
+                    RecevieRaklionWideAreaAttack(ReceiveBuffer);
+                    break;
+                case 0x15:
+                    RecevieRaklionUserMonsterCount(ReceiveBuffer);
+                    break;
+            }
             break;
+        }
+        case 0xBF: {
+            int subcode;
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveCursedTempleEnterResult(ReceiveBuffer);
+                    break;
+                case 0x01:
+                    ReceiveCursedTempleInfo(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveCursedTempMagicResult(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveCursedTempleEnterInfo(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveCursedTempleGameResult(ReceiveBuffer);
+                    break;
+                case 0x06:
+                    ReceiveCursedTempSkillPoint(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceiveCursedTempSkillEnd(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceiveCursedTempleHolyItemRelics(ReceiveBuffer);
+                    break;
+                case 0x09:
+                    ReceiveCursedTempleState(ReceiveBuffer);
+                    break;
+                case 0x0a:
+                    ReceiveChainMagic(ReceiveBuffer);
+                    break;
+                case 0x0B:
+                    ReceiveRegistedLuckyCoin(ReceiveBuffer);
+                    break;
+                case 0x0C:
+                    ReceiveRegistLuckyCoin(ReceiveBuffer);
+                    break;
+                case 0x0D:
+                    ReceiveRequestExChangeLuckyCoin(ReceiveBuffer);
+                    break;
+                case 0x0E:
+                    ReceiveEnterDoppelGangerEvent(ReceiveBuffer);
+                    break;
+                case 0x0F:
+                    ReceiveDoppelGangerMonsterPosition(ReceiveBuffer);
+                    break;
+                case 0x10:
+                    ReceiveDoppelGangerState(ReceiveBuffer);
+                    break;
+                case 0x11:
+                    ReceiveDoppelGangerIcewalkerState(ReceiveBuffer);
+                    break;
+                case 0x12:
+                    ReceiveDoppelGangerTimePartyState(ReceiveBuffer);
+                    break;
+                case 0x13:
+                    ReceiveDoppelGangerResult(ReceiveBuffer);
+                    break;
+                case 0x14:
+                    ReceiveDoppelGangerMonsterGoal(ReceiveBuffer);
+                    break;
 #ifdef PBG_ADD_SECRETBUFF
-        case 0x15:
-            ReceiveFatigueTime(ReceiveBuffer);
-            break;
-#endif //PBG_ADD_SECRETBUFF
+                case 0x15:
+                    ReceiveFatigueTime(ReceiveBuffer);
+                    break;
+#endif  //PBG_ADD_SECRETBUFF
 #ifdef LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
-        case 0x20:
-            ReceiveEquippingInventoryItem(ReceiveBuffer);
-            break;
-#endif //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
-        case 0x51:
-            ReceiveMuHelperStatusUpdate(received_span);
-            break;
+                case 0x20:
+                    ReceiveEquippingInventoryItem(ReceiveBuffer);
+                    break;
+#endif  //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
+                case 0x51:
+                    ReceiveMuHelperStatusUpdate(received_span);
+                    break;
+            }
         }
-    }
-    break;
-    case 0xDE:
-    {
-        int subcode = 0;
+        break;
+        case 0xDE: {
+            int subcode = 0;
 
-        if (bIsC1C3) {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
-        else {
-            auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
-            subcode = Data->SubCode;
-        }
+            if (bIsC1C3)
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
+            else
+            {
+                auto Data = (LPPHEADER_DEFAULT_SUBCODE_WORD)ReceiveBuffer;
+                subcode   = Data->SubCode;
+            }
 
-        switch (subcode)
-        {
-        case 0x00: ReceiveCharacterCard_New(ReceiveBuffer);
-            break;
+            switch (subcode)
+            {
+                case 0x00:
+                    ReceiveCharacterCard_New(ReceiveBuffer);
+                    break;
+            }
         }
-    }
-    break;
+        break;
 
 #ifdef KJH_PBG_ADD_INGAMESHOP_SYSTEM
-    case 0xD2:
-    {
-        if (Network::SoloCashShop::HandlePacket(received_span))
-            break;
-        auto* Data = (PBMSG_HEADER2*)ReceiveBuffer;
-        switch (Data->m_bySubCode)
-        {
-        case 0x01:
-            ReceiveIGS_CashPoint(ReceiveBuffer);
-            break;
-        case 0x02:
-            ReceiveIGS_ShopOpenResult(ReceiveBuffer);
-            break;
-        case 0x03:
-            ReceiveIGS_BuyItem(ReceiveBuffer);
-            break;
-        case 0x04:
-            ReceiveIGS_SendItemGift(ReceiveBuffer);
-            break;
-        case 0x06:
-            ReceiveIGS_StorageItemListCount(ReceiveBuffer);
-            break;
-        case 0x07:
-            ReceiveIGS_SendCashGift(ReceiveBuffer);
-            break;
-        case 0x08:
-            ReceiveIGS_PossibleBuy(ReceiveBuffer);
-            break;
-        case 0x09:
-            ReceiveIGS_LeftCountItem(ReceiveBuffer);
-            break;
-        case 0x0B:
-            ReceiveIGS_UseStorageItem(ReceiveBuffer);
-            break;
-        case 0x0C:
-            ReceiveIGS_UpdateScript(ReceiveBuffer);
-            break;
-        case 0x0D:
-            ReceiveIGS_StorageItemList(ReceiveBuffer);
-            break;
-        case 0x0E:
-            ReceiveIGS_StorageGiftItemList(ReceiveBuffer);
-            break;
-        case 0x13:
-            ReceiveIGS_EventItemlistCnt(ReceiveBuffer);
-            break;
-        case 0x14:
-            ReceiveIGS_EventItemlist(ReceiveBuffer);
-            break;
-        case 0x15:
-            ReceiveIGS_UpdateBanner(ReceiveBuffer);
-            break;
+        case 0xD2: {
+            if (Network::SoloCashShop::HandlePacket(received_span))
+                break;
+            auto* Data = (PBMSG_HEADER2*)ReceiveBuffer;
+            switch (Data->m_bySubCode)
+            {
+                case 0x01:
+                    ReceiveIGS_CashPoint(ReceiveBuffer);
+                    break;
+                case 0x02:
+                    ReceiveIGS_ShopOpenResult(ReceiveBuffer);
+                    break;
+                case 0x03:
+                    ReceiveIGS_BuyItem(ReceiveBuffer);
+                    break;
+                case 0x04:
+                    ReceiveIGS_SendItemGift(ReceiveBuffer);
+                    break;
+                case 0x06:
+                    ReceiveIGS_StorageItemListCount(ReceiveBuffer);
+                    break;
+                case 0x07:
+                    ReceiveIGS_SendCashGift(ReceiveBuffer);
+                    break;
+                case 0x08:
+                    ReceiveIGS_PossibleBuy(ReceiveBuffer);
+                    break;
+                case 0x09:
+                    ReceiveIGS_LeftCountItem(ReceiveBuffer);
+                    break;
+                case 0x0B:
+                    ReceiveIGS_UseStorageItem(ReceiveBuffer);
+                    break;
+                case 0x0C:
+                    ReceiveIGS_UpdateScript(ReceiveBuffer);
+                    break;
+                case 0x0D:
+                    ReceiveIGS_StorageItemList(ReceiveBuffer);
+                    break;
+                case 0x0E:
+                    ReceiveIGS_StorageGiftItemList(ReceiveBuffer);
+                    break;
+                case 0x13:
+                    ReceiveIGS_EventItemlistCnt(ReceiveBuffer);
+                    break;
+                case 0x14:
+                    ReceiveIGS_EventItemlist(ReceiveBuffer);
+                    break;
+                case 0x15:
+                    ReceiveIGS_UpdateBanner(ReceiveBuffer);
+                    break;
 #ifdef KJH_ADD_PERIOD_ITEM_SYSTEM
-        case 0x11:
-            ReceivePeriodItemListCount(ReceiveBuffer);
-            break;
-        case 0x12:
-            ReceivePeriodItemList(ReceiveBuffer);
-            break;
-#endif // KJH_ADD_PERIOD_ITEM_SYSTEM
+                case 0x11:
+                    ReceivePeriodItemListCount(ReceiveBuffer);
+                    break;
+                case 0x12:
+                    ReceivePeriodItemList(ReceiveBuffer);
+                    break;
+#endif  // KJH_ADD_PERIOD_ITEM_SYSTEM
+            }
         }
-    }break;
+        break;
 
-#endif // KJH_PBG_ADD_INGAMESHOP_SYSTEM
-    case 0x4A:
-        ReceiveStraightAttack(ReceiveBuffer, Size, bEncrypted);
-        break;
-    case 0x4B:
-        ReceiveDarkside(ReceiveBuffer);
-        break;
-    case 0xAE:
-        // Received mu helper config from server
-        ReceiveMuHelperConfigurationData(received_span);
-        break;
-    default:
-        break;
+#endif  // KJH_PBG_ADD_INGAMESHOP_SYSTEM
+        case 0x4A:
+            ReceiveStraightAttack(ReceiveBuffer, Size, bEncrypted);
+            break;
+        case 0x4B:
+            ReceiveDarkside(ReceiveBuffer);
+            break;
+        case 0xAE:
+            // Received mu helper config from server
+            ReceiveMuHelperConfigurationData(received_span);
+            break;
+        default:
+            break;
     }
 }
 
@@ -14952,13 +14988,12 @@ void ProcessPacketCallback(const PacketInfo* Packet)
         ProcessPacket(Packet->ReceiveBuffer.get(), Packet->Size);
     }
     catch (const std::exception&)
-    {
-    }
+    {}
 }
 
 static void HandleIncomingPacket(int32_t Handle, const BYTE* ReceiveBuffer, int32_t Size)
 {
-    auto Packet = std::make_unique<PacketInfo>();
+    auto Packet           = std::make_unique<PacketInfo>();
     Packet->ReceiveBuffer = std::make_unique<BYTE[]>(Size);
     std::copy(ReceiveBuffer, ReceiveBuffer + Size, Packet->ReceiveBuffer.get());
     Packet->Size = Size;
@@ -14975,53 +15010,53 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
     {
         switch (buff)
         {
-        case eBuff_SoulPotion:
-        {
-            if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
-            {
-                g_CharacterUnRegisterBuff(o, eBuff_CrywolfAltarEnable);
-                return false;
+            case eBuff_SoulPotion: {
+                if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
+                {
+                    g_CharacterUnRegisterBuff(o, eBuff_CrywolfAltarEnable);
+                    return false;
+                }
             }
-        }
-        break;
+            break;
 
-        case eBuff_RemovalMagic:
-        {
-            std::list<eBuffState> bufflist;
+            case eBuff_RemovalMagic: {
+                std::list<eBuffState> bufflist;
 
-            //debuff
-            bufflist.push_back(eDeBuff_Poison);
-            bufflist.push_back(eDeBuff_Freeze);
-            bufflist.push_back(eDeBuff_Harden);
-            bufflist.push_back(eDeBuff_Defense);
-            bufflist.push_back(eDeBuff_Stun);
-            bufflist.push_back(eDeBuff_Sleep);
-            bufflist.push_back(eDeBuff_BlowOfDestruction);
+                //debuff
+                bufflist.push_back(eDeBuff_Poison);
+                bufflist.push_back(eDeBuff_Freeze);
+                bufflist.push_back(eDeBuff_Harden);
+                bufflist.push_back(eDeBuff_Defense);
+                bufflist.push_back(eDeBuff_Stun);
+                bufflist.push_back(eDeBuff_Sleep);
+                bufflist.push_back(eDeBuff_BlowOfDestruction);
 
-            //buff
-            bufflist.push_back(eBuff_Life); bufflist.push_back(eBuff_Attack);
-            bufflist.push_back(eBuff_Defense); bufflist.push_back(eBuff_AddAG);
-            bufflist.push_back(eBuff_Cloaking); bufflist.push_back(eBuff_AddSkill);
-            bufflist.push_back(eBuff_WizDefense); bufflist.push_back(eBuff_AddCriticalDamage);
-            bufflist.push_back(eBuff_CrywolfAltarOccufied);
+                //buff
+                bufflist.push_back(eBuff_Life);
+                bufflist.push_back(eBuff_Attack);
+                bufflist.push_back(eBuff_Defense);
+                bufflist.push_back(eBuff_AddAG);
+                bufflist.push_back(eBuff_Cloaking);
+                bufflist.push_back(eBuff_AddSkill);
+                bufflist.push_back(eBuff_WizDefense);
+                bufflist.push_back(eBuff_AddCriticalDamage);
+                bufflist.push_back(eBuff_CrywolfAltarOccufied);
 
-            g_CharacterUnRegisterBuffList(o, bufflist);
-        }
-        break;
+                g_CharacterUnRegisterBuffList(o, bufflist);
+            }
+            break;
         }
 
         return true;
     }
-    
+
     switch (buff)
-        {
-        case eBuff_CastleRegimentAttack3:
-        {
+    {
+        case eBuff_CastleRegimentAttack3: {
             g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
         }
         break;
-        case eBuff_SoulPotion:
-        {
+        case eBuff_SoulPotion: {
             if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
             {
                 g_CharacterRegisterBuff(o, eBuff_CrywolfAltarEnable);
@@ -15029,8 +15064,7 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
             }
         }
         break;
-        case eBuff_CastleGateIsOpen:
-        {
+        case eBuff_CastleGateIsOpen: {
             if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
             {
                 g_CharacterRegisterBuff(o, eBuff_CrywolfAltarDisable);
@@ -15038,8 +15072,7 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
             }
         }
         break;
-        case eBuff_CastleRegimentDefense:
-        {
+        case eBuff_CastleRegimentDefense: {
             if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
             {
                 g_CharacterRegisterBuff(o, eBuff_CrywolfAltarContracted);
@@ -15052,8 +15085,7 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
             }
         }
         break;
-        case eBuff_CastleRegimentAttack1:
-        {
+        case eBuff_CastleRegimentAttack1: {
             if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
             {
                 g_CharacterRegisterBuff(o, eBuff_CrywolfAltarAttempt);
@@ -15065,8 +15097,7 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
             }
         }
         break;
-        case eBuff_RemovalMagic:
-        {
+        case eBuff_RemovalMagic: {
             if (o->Type >= MODEL_CRYWOLF_ALTAR1 && o->Type <= MODEL_CRYWOLF_ALTAR5)
             {
                 g_CharacterRegisterBuff(o, eBuff_CrywolfAltarOccufied);
@@ -15074,14 +15105,13 @@ bool CheckExceptionBuff(eBuffState buff, OBJECT* o, bool iserase)
             }
         }
         break;
-        case eBuff_CastleRegimentAttack2:
-        {
+        case eBuff_CastleRegimentAttack2: {
             if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
                 g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
         }
         break;
-        }
-        return true;
+    }
+    return true;
 }
 
 void InsertBuffLogicalEffect(eBuffState buff, OBJECT* o, const int bufftime)
@@ -15090,175 +15120,169 @@ void InsertBuffLogicalEffect(eBuffState buff, OBJECT* o, const int bufftime)
     {
         switch (buff)
         {
-        case eBuff_Hellowin1:
-        case eBuff_Hellowin2:
-        case eBuff_Hellowin3:
-        case eBuff_Hellowin4:
-        case eBuff_Hellowin5:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+            case eBuff_Hellowin1:
+            case eBuff_Hellowin2:
+            case eBuff_Hellowin3:
+            case eBuff_Hellowin4:
+            case eBuff_Hellowin5: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            if (buff == eBuff_Hellowin2)
-            {
-                CharacterMachine->CalculateDamage();
+                if (buff == eBuff_Hellowin2)
+                {
+                    CharacterMachine->CalculateDamage();
+                }
+                if (buff == eBuff_Hellowin3)
+                {
+                    CharacterMachine->CalculateDefense();
+                }
             }
-            if (buff == eBuff_Hellowin3)
-            {
-                CharacterMachine->CalculateDefense();
+            break;
+            case eBuff_PcRoomSeal1:
+            case eBuff_PcRoomSeal2:
+            case eBuff_PcRoomSeal3: {
+                g_RegisterBuffTime(buff, bufftime);
             }
-        }
-        break;
-        case eBuff_PcRoomSeal1:
-        case eBuff_PcRoomSeal2:
-        case eBuff_PcRoomSeal3:
-        {
-            g_RegisterBuffTime(buff, bufftime);
-        }
-        break;
-        case eBuff_Seal1:
-        case eBuff_Seal2:
-        case eBuff_Seal3:
-        case eBuff_Seal4:
-        case eBuff_Seal_HpRecovery:
-        case eBuff_Seal_MpRecovery:
-        case eBuff_GuardCharm:
-        case eBuff_ItemGuardCharm:
-        case eBuff_AscensionSealMaster:
-        case eBuff_WealthSealMaster:
-        case eBuff_NewWealthSeal:
-        case eBuff_AG_Addition:
-        case eBuff_SD_Addition:
-        case eBuff_PartyExpBonus:
-        {
-            g_RegisterBuffTime(buff, bufftime);
-        }
-        break;
-        case eBuff_EliteScroll1:
-        case eBuff_EliteScroll2:
-        case eBuff_EliteScroll3:
-        case eBuff_EliteScroll4:
-        case eBuff_EliteScroll5:
-        case eBuff_EliteScroll6:
-        case eBuff_Scroll_Battle:
-        case eBuff_Scroll_Strengthen:
-        case eBuff_Scroll_Healing:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+            break;
+            case eBuff_Seal1:
+            case eBuff_Seal2:
+            case eBuff_Seal3:
+            case eBuff_Seal4:
+            case eBuff_Seal_HpRecovery:
+            case eBuff_Seal_MpRecovery:
+            case eBuff_GuardCharm:
+            case eBuff_ItemGuardCharm:
+            case eBuff_AscensionSealMaster:
+            case eBuff_WealthSealMaster:
+            case eBuff_NewWealthSeal:
+            case eBuff_AG_Addition:
+            case eBuff_SD_Addition:
+            case eBuff_PartyExpBonus: {
+                g_RegisterBuffTime(buff, bufftime);
+            }
+            break;
+            case eBuff_EliteScroll1:
+            case eBuff_EliteScroll2:
+            case eBuff_EliteScroll3:
+            case eBuff_EliteScroll4:
+            case eBuff_EliteScroll5:
+            case eBuff_EliteScroll6:
+            case eBuff_Scroll_Battle:
+            case eBuff_Scroll_Strengthen:
+            case eBuff_Scroll_Healing: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            if (buff == eBuff_EliteScroll2)
-            {
-                CharacterMachine->CalculateDefense();
+                if (buff == eBuff_EliteScroll2)
+                {
+                    CharacterMachine->CalculateDefense();
+                }
+                else if (buff == eBuff_EliteScroll3)
+                {
+                    CharacterMachine->CalculateDamage();
+                }
+                else if (buff == eBuff_EliteScroll4)
+                {
+                    CharacterMachine->CalculateMagicDamage();
+                }
             }
-            else if (buff == eBuff_EliteScroll3)
-            {
-                CharacterMachine->CalculateDamage();
-            }
-            else if (buff == eBuff_EliteScroll4)
-            {
-                CharacterMachine->CalculateMagicDamage();
-            }
-        }
-        break;
-        case eBuff_SecretPotion1:
-        case eBuff_SecretPotion2:
-        case eBuff_SecretPotion3:
-        case eBuff_SecretPotion4:
-        case eBuff_SecretPotion5:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+            break;
+            case eBuff_SecretPotion1:
+            case eBuff_SecretPotion2:
+            case eBuff_SecretPotion3:
+            case eBuff_SecretPotion4:
+            case eBuff_SecretPotion5: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            CharacterMachine->CalculateAll();
-        }
-        break;
-        case eBuff_CherryBlossom_Liguor:
-        case eBuff_CherryBlossom_RiceCake:
-        case eBuff_CherryBlossom_Petal:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+                CharacterMachine->CalculateAll();
+            }
+            break;
+            case eBuff_CherryBlossom_Liguor:
+            case eBuff_CherryBlossom_RiceCake:
+            case eBuff_CherryBlossom_Petal: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            if (buff == eBuff_CherryBlossom_Petal)
-            {
-                CharacterMachine->CalculateDamage();
+                if (buff == eBuff_CherryBlossom_Petal)
+                {
+                    CharacterMachine->CalculateDamage();
+                }
             }
-        }
-        break;
-        case eBuff_SwellOfMagicPower:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+            break;
+            case eBuff_SwellOfMagicPower: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            if (buff == eBuff_SwellOfMagicPower)
-            {
-                CharacterMachine->CalculateMagicDamage();
+                if (buff == eBuff_SwellOfMagicPower)
+                {
+                    CharacterMachine->CalculateMagicDamage();
+                }
             }
-        }break;
-        case eBuff_BlessingOfXmax:
-        case eBuff_CureOfSanta:
-        case eBuff_SafeGuardOfSanta:
-        case eBuff_StrengthOfSanta:
-        case eBuff_DefenseOfSanta:
-        case eBuff_QuickOfSanta:
-        case eBuff_LuckOfSanta:
-        {
-            g_RegisterBuffTime(buff, bufftime);
+            break;
+            case eBuff_BlessingOfXmax:
+            case eBuff_CureOfSanta:
+            case eBuff_SafeGuardOfSanta:
+            case eBuff_StrengthOfSanta:
+            case eBuff_DefenseOfSanta:
+            case eBuff_QuickOfSanta:
+            case eBuff_LuckOfSanta: {
+                g_RegisterBuffTime(buff, bufftime);
 
-            wchar_t _Temp[64] = { 0, };
+                wchar_t _Temp[64] = {
+                    0,
+                };
 
-            if (buff == eBuff_BlessingOfXmax)
-            {
-                g_pSystemLogBox->AddText(I18N::Game::TheAttackAndDefensePowerHaveIncreased, SEASON3B::TYPE_SYSTEM_MESSAGE);
-                CharacterMachine->CalculateDamage();
-                CharacterMachine->CalculateDefense();
-            }
-            else if (buff == eBuff_StrengthOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::AttackPowerHasIncreasedOfD, 30);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                if (buff == eBuff_BlessingOfXmax)
+                {
+                    g_pSystemLogBox->AddText(I18N::Game::TheAttackAndDefensePowerHaveIncreased,
+                                             SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    CharacterMachine->CalculateDamage();
+                    CharacterMachine->CalculateDefense();
+                }
+                else if (buff == eBuff_StrengthOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::AttackPowerHasIncreasedOfD, 30);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
 
-                CharacterMachine->CalculateDamage();
-            }
-            else if (buff == eBuff_DefenseOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::DefenseHasIncreasedOfD, 100);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    CharacterMachine->CalculateDamage();
+                }
+                else if (buff == eBuff_DefenseOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::DefenseHasIncreasedOfD, 100);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
 
-                CharacterMachine->CalculateDefense();
+                    CharacterMachine->CalculateDefense();
+                }
+                else if (buff == eBuff_QuickOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::AttackSpeedHasIncreasedOfD, 15);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                }
+                else if (buff == eBuff_LuckOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::AGRecoverySpeedHasIncreasedOfD, 10);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                }
+                else if (buff == eBuff_CureOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::MaximumLifeHasBeenIncreasedOfD, 500);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                }
+                else if (buff == eBuff_SafeGuardOfSanta)
+                {
+                    mu_swprintf(_Temp, I18N::Game::MaximumManaHasIncreasedOfD, 500);
+                    g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                }
             }
-            else if (buff == eBuff_QuickOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::AttackSpeedHasIncreasedOfD, 15);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+            case eBuff_DuelWatch: {
+                g_pNewUISystem->HideAll();
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_MAINFRAME);
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_BUFF_WINDOW);
+                g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH_MAINFRAME);
+                g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH_USERLIST);
             }
-            else if (buff == eBuff_LuckOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::AGRecoverySpeedHasIncreasedOfD, 10);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            break;
+            case eBuff_HonorOfGladiator: {
+                g_RegisterBuffTime(buff, bufftime);
             }
-            else if (buff == eBuff_CureOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::MaximumLifeHasBeenIncreasedOfD, 500);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            }
-            else if (buff == eBuff_SafeGuardOfSanta)
-            {
-                mu_swprintf(_Temp, I18N::Game::MaximumManaHasIncreasedOfD, 500);
-                g_pSystemLogBox->AddText(_Temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
-            }
-        }
-        break;
-        case eBuff_DuelWatch:
-        {
-            g_pNewUISystem->HideAll();
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_MAINFRAME);
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_BUFF_WINDOW);
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH_MAINFRAME);
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_DUELWATCH_USERLIST);
-        }
-        break;
-        case eBuff_HonorOfGladiator:
-        {
-            g_RegisterBuffTime(buff, bufftime);
-        }
-        break;
+            break;
         }
     }
 }
@@ -15269,152 +15293,142 @@ void ClearBuffLogicalEffect(eBuffState buff, OBJECT* o)
     {
         switch (buff)
         {
-        case eBuff_Hellowin1:
-        case eBuff_Hellowin2:
-        case eBuff_Hellowin3:
-        case eBuff_Hellowin4:
-        case eBuff_Hellowin5:
-        {
-            g_UnRegisterBuffTime(buff);
+            case eBuff_Hellowin1:
+            case eBuff_Hellowin2:
+            case eBuff_Hellowin3:
+            case eBuff_Hellowin4:
+            case eBuff_Hellowin5: {
+                g_UnRegisterBuffTime(buff);
 
-            if (buff == eBuff_Hellowin2)
-            {
-                int iBaseClass = gCharacterManager.GetBaseClass(Hero->Class);
+                if (buff == eBuff_Hellowin2)
+                {
+                    int iBaseClass = gCharacterManager.GetBaseClass(Hero->Class);
 
-                if (iBaseClass == CLASS_WIZARD || iBaseClass == CLASS_DARK || iBaseClass == CLASS_SUMMONER)
+                    if (iBaseClass == CLASS_WIZARD || iBaseClass == CLASS_DARK || iBaseClass == CLASS_SUMMONER)
+                    {
+                        CharacterMachine->CalculateMagicDamage();
+                    }
+                    else
+                    {
+                        CharacterMachine->CalculateDamage();
+                    }
+                }
+                else if (buff == eBuff_Hellowin3)
+                {
+                    CharacterMachine->CalculateDefense();
+                }
+            }
+            break;
+            case eBuff_PcRoomSeal1:
+            case eBuff_PcRoomSeal2:
+            case eBuff_PcRoomSeal3: {
+                g_UnRegisterBuffTime(buff);
+            }
+            break;
+            case eBuff_Seal1:
+            case eBuff_Seal2:
+            case eBuff_Seal3:
+            case eBuff_Seal4:
+            case eBuff_Seal_HpRecovery:
+            case eBuff_Seal_MpRecovery:
+            case eBuff_GuardCharm:
+            case eBuff_ItemGuardCharm:
+            case eBuff_AscensionSealMaster:
+            case eBuff_WealthSealMaster:
+            case eBuff_NewWealthSeal:
+            case eBuff_AG_Addition:
+            case eBuff_SD_Addition:
+            case eBuff_PartyExpBonus: {
+                g_UnRegisterBuffTime(buff);
+            }
+            break;
+            case eBuff_EliteScroll1:
+            case eBuff_EliteScroll2:
+            case eBuff_EliteScroll3:
+            case eBuff_EliteScroll4:
+            case eBuff_EliteScroll5:
+            case eBuff_EliteScroll6:
+            case eBuff_Scroll_Battle:
+            case eBuff_Scroll_Strengthen:
+            case eBuff_Scroll_Healing: {
+                g_UnRegisterBuffTime(buff);
+
+                if (buff == eBuff_EliteScroll2)
+                {
+                    CharacterMachine->CalculateDefense();
+                }
+                else if (buff == eBuff_EliteScroll3)
+                {
+                    CharacterMachine->CalculateDamage();
+                }
+                else if (buff == eBuff_EliteScroll4)
                 {
                     CharacterMachine->CalculateMagicDamage();
                 }
-                else
+            }
+            break;
+            case eBuff_SecretPotion1:
+            case eBuff_SecretPotion2:
+            case eBuff_SecretPotion3:
+            case eBuff_SecretPotion4:
+            case eBuff_SecretPotion5: {
+                g_UnRegisterBuffTime(buff);
+
+                CharacterMachine->CalculateAll();
+            }
+            break;
+            case eBuff_CherryBlossom_Liguor:
+            case eBuff_CherryBlossom_RiceCake:
+            case eBuff_CherryBlossom_Petal: {
+                g_UnRegisterBuffTime(buff);
+
+                if (buff == eBuff_CherryBlossom_Petal)
                 {
                     CharacterMachine->CalculateDamage();
                 }
             }
-            else if (buff == eBuff_Hellowin3)
-            {
-                CharacterMachine->CalculateDefense();
-            }
-        }
-        break;
-        case eBuff_PcRoomSeal1:
-        case eBuff_PcRoomSeal2:
-        case eBuff_PcRoomSeal3:
-        {
-            g_UnRegisterBuffTime(buff);
-        }
-        break;
-        case eBuff_Seal1:
-        case eBuff_Seal2:
-        case eBuff_Seal3:
-        case eBuff_Seal4:
-        case eBuff_Seal_HpRecovery:
-        case eBuff_Seal_MpRecovery:
-        case eBuff_GuardCharm:
-        case eBuff_ItemGuardCharm:
-        case eBuff_AscensionSealMaster:
-        case eBuff_WealthSealMaster:
-        case eBuff_NewWealthSeal:
-        case eBuff_AG_Addition:
-        case eBuff_SD_Addition:
-        case eBuff_PartyExpBonus:
-        {
-            g_UnRegisterBuffTime(buff);
-        }
-        break;
-        case eBuff_EliteScroll1:
-        case eBuff_EliteScroll2:
-        case eBuff_EliteScroll3:
-        case eBuff_EliteScroll4:
-        case eBuff_EliteScroll5:
-        case eBuff_EliteScroll6:
-        case eBuff_Scroll_Battle:
-        case eBuff_Scroll_Strengthen:
-        case eBuff_Scroll_Healing:
-        {
-            g_UnRegisterBuffTime(buff);
+            break;
+            case eBuff_SwellOfMagicPower: {
+                g_UnRegisterBuffTime(buff);
 
-            if (buff == eBuff_EliteScroll2)
-            {
-                CharacterMachine->CalculateDefense();
-            }
-            else if (buff == eBuff_EliteScroll3)
-            {
-                CharacterMachine->CalculateDamage();
-            }
-            else if (buff == eBuff_EliteScroll4)
-            {
                 CharacterMachine->CalculateMagicDamage();
             }
-        }
-        break;
-        case eBuff_SecretPotion1:
-        case eBuff_SecretPotion2:
-        case eBuff_SecretPotion3:
-        case eBuff_SecretPotion4:
-        case eBuff_SecretPotion5:
-        {
-            g_UnRegisterBuffTime(buff);
+            break;
+            case eBuff_BlessingOfXmax:
+            case eBuff_CureOfSanta:
+            case eBuff_SafeGuardOfSanta:
+            case eBuff_StrengthOfSanta:
+            case eBuff_DefenseOfSanta:
+            case eBuff_QuickOfSanta:
+            case eBuff_LuckOfSanta: {
+                g_UnRegisterBuffTime(buff);
 
-            CharacterMachine->CalculateAll();
-        }
-        break;
-        case eBuff_CherryBlossom_Liguor:
-        case eBuff_CherryBlossom_RiceCake:
-        case eBuff_CherryBlossom_Petal:
-        {
-            g_UnRegisterBuffTime(buff);
-
-            if (buff == eBuff_CherryBlossom_Petal)
-            {
-                CharacterMachine->CalculateDamage();
+                if (buff == eBuff_BlessingOfXmax)
+                {
+                    CharacterMachine->CalculateDamage();
+                    CharacterMachine->CalculateDefense();
+                }
+                else if (buff == eBuff_StrengthOfSanta)
+                {
+                    CharacterMachine->CalculateDamage();
+                }
+                else if (buff == eBuff_DefenseOfSanta)
+                {
+                    CharacterMachine->CalculateDefense();
+                }
             }
-        }
-        break;
-        case eBuff_SwellOfMagicPower:
-        {
-            g_UnRegisterBuffTime(buff);
-
-            CharacterMachine->CalculateMagicDamage();
-        }
-        break;
-        case eBuff_BlessingOfXmax:
-        case eBuff_CureOfSanta:
-        case eBuff_SafeGuardOfSanta:
-        case eBuff_StrengthOfSanta:
-        case eBuff_DefenseOfSanta:
-        case eBuff_QuickOfSanta:
-        case eBuff_LuckOfSanta:
-        {
-            g_UnRegisterBuffTime(buff);
-
-            if (buff == eBuff_BlessingOfXmax)
-            {
-                CharacterMachine->CalculateDamage();
-                CharacterMachine->CalculateDefense();
+            break;
+            case eBuff_DuelWatch: {
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_DUELWATCH_MAINFRAME);
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_DUELWATCH_USERLIST);
+                g_pNewUISystem->Show(SEASON3B::INTERFACE_MAINFRAME);
+                g_pNewUISystem->Show(SEASON3B::INTERFACE_BUFF_WINDOW);
             }
-            else if (buff == eBuff_StrengthOfSanta)
-            {
-                CharacterMachine->CalculateDamage();
+            break;
+            case eBuff_HonorOfGladiator: {
+                g_UnRegisterBuffTime(buff);
             }
-            else if (buff == eBuff_DefenseOfSanta)
-            {
-                CharacterMachine->CalculateDefense();
-            }
-        }
-        break;
-        case eBuff_DuelWatch:
-        {
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_DUELWATCH_MAINFRAME);
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_DUELWATCH_USERLIST);
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_MAINFRAME);
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_BUFF_WINDOW);
-        }
-        break;
-        case eBuff_HonorOfGladiator:
-        {
-            g_UnRegisterBuffTime(buff);
-        }
-        break;
+            break;
         }
     }
 }
@@ -15423,217 +15437,192 @@ void InsertBuffPhysicalEffect(eBuffState buff, OBJECT* o)
 {
     switch (buff)
     {
-    case eBuff_CursedTempleProdection:
-    {
-        if (o->Type == MODEL_PLAYER)
-        {
-            DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
-            DeleteEffect(MODEL_SHIELD_CRASH, o);
-            DeleteEffect(BITMAP_SHOCK_WAVE, o);
-            vec3_t  Light;
-            Vector(0.3f, 0.3f, 0.8f, Light);
-            CreateEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o->Position, o->Angle, Light, 0, o);
-            CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, Light, 1, o);
-            CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, Light, 10, o);
-        }
-    }
-    break;
-    case eBuff_WizDefense:
-    {
-        if (o->Type == MODEL_PLAYER)
-        {
-            PlayBuffer(SOUND_SOULBARRIER);
-            DeleteJoint(MODEL_SPEARSKILL, o, 0);
-            for (int j = 0; j < 5; ++j)
+        case eBuff_CursedTempleProdection: {
+            if (o->Type == MODEL_PLAYER)
             {
-                CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 0, o, 50.0f);
+                DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
+                DeleteEffect(MODEL_SHIELD_CRASH, o);
+                DeleteEffect(BITMAP_SHOCK_WAVE, o);
+                vec3_t Light;
+                Vector(0.3f, 0.3f, 0.8f, Light);
+                CreateEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o->Position, o->Angle, Light, 0, o);
+                CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, Light, 1, o);
+                CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, Light, 10, o);
             }
         }
-    }
-    break;
-    case eBuff_AddAG:
-    {
-        DeleteEffect(BITMAP_LIGHT, o, 2);
-        CreateEffect(BITMAP_LIGHT, o->Position, o->Angle, o->Light, 2, o);
-    }
-    break;
-
-    case eBuff_Life:
-    {
-        DeleteEffect(BITMAP_LIGHT, o, 1);
-        CreateEffect(BITMAP_LIGHT, o->Position, o->Angle, o->Light, 1, o);
-    }
-    break;
-    case eDeBuff_Harden:
-    {
-        vec3_t Angle;
-        VectorCopy(o->Angle, Angle);
-
-        DeleteEffect(MODEL_ICE, o, 1);
-        CreateEffect(MODEL_ICE, o->Position, Angle, o->Light, 1, o);
-
-        Angle[2] += 180.f;
-        CreateEffect(MODEL_ICE, o->Position, Angle, o->Light, 2, o);
-    }
-    break;
-    case eDeBuff_Defense:
-    {
-        vec3_t Light = { 1.0f, 1.f, 1.f };
-        DeleteEffect(BITMAP_SKULL, o, 0);
-        CreateEffect(BITMAP_SKULL, o->Position, o->Angle, Light, 0, o);
-
-        PlayBuffer(SOUND_BLOODATTACK, o);
-    }
-    break;
-    case eDeBuff_Stun:
-    {
-        DeleteEffect(BITMAP_SKULL, o, 5);
-
-        vec3_t Angle;
-        vec3_t Position;
-        VectorCopy(o->Position, Position);
-        Vector(0.f, 0.f, 90.f, Angle);
-        CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
-        Position[2] -= 10.f;
-        Vector(0.f, 0.f, 180.f, Angle);
-        CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
-        Position[2] -= 10.f;
-        Vector(0.f, 0.f, 270.f, Angle);
-        CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
-    }
-    break;
-    case eDeBuff_NeilDOT:
-    {
-        g_SummonSystem.CreateDamageOfTimeEffect(AT_SKILL_SUMMON_REQUIEM, o);
-    }
-    break;
-    case eDeBuff_SahamuttDOT:
-    {
-        g_SummonSystem.CreateDamageOfTimeEffect(AT_SKILL_SUMMON_EXPLOSION, o);
-    }
-    break;
-    case eBuff_Thorns:
-    {
-        vec3_t vLight;
-        Vector(0.9f, 0.6f, 0.1f, vLight);
-        CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 43, o, 50.f, 0, 0, 0, 0, vLight);
-    }
-    break;
-    case eDeBuff_Blind:
-    {
-        vec3_t vLight;
-        Vector(1.0f, 1.0f, 1.0f, vLight);
-        CreateEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o->Position, o->Angle, vLight, 3, o);
-    }
-    break;
-    case eDeBuff_Sleep:
-    {
-        vec3_t vLight;
-        Vector(0.7f, 0.1f, 0.9f, vLight);
-        CreateEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o->Position, o->Angle, vLight, 4, o);
-    }
-    break;
-    case eDeBuff_AttackDown:
-    {
-        vec3_t vLight;
-        Vector(1.4f, 0.2f, 0.2f, vLight);
-        CreateEffect(BITMAP_SHINY + 6, o->Position, o->Angle, vLight, 1, o, -1, 0, 0, 0, 0.5f);
-        CreateEffect(BITMAP_PIN_LIGHT, o->Position, o->Angle, vLight, 1, o, -1, 0, 0, 0, 1.f);
-    }
-    break;
-
-    case eDeBuff_DefenseDown:
-    {
-        vec3_t vLight;
-        Vector(0.25f, 1.0f, 0.7f, vLight);
-        CreateEffect(BITMAP_SHINY + 6, o->Position, o->Angle, vLight, 2, o, -1, 0, 0, 0, 0.5f);
-        CreateEffect(BITMAP_PIN_LIGHT, o->Position, o->Angle, vLight, 2, o, -1, 0, 0, 0, 1.f);
-    }
-    break;
-    case eBuff_Berserker:
-    {
-        vec3_t vLight[2];
-        Vector(0.9f, 0.0f, 0.1f, vLight[0]);
-        Vector(1.0f, 1.0f, 1.0f, vLight[1]);
-        for (int i = 0; i < 4; ++i)
-        {
-            DeleteEffect(BITMAP_ORORA, o, i);
-            CreateEffect(BITMAP_ORORA, o->Position, o->Angle, vLight[0], i, o);
-            if (i == 2 || i == 3)
+        break;
+        case eBuff_WizDefense: {
+            if (o->Type == MODEL_PLAYER)
             {
-                DeleteEffect(BITMAP_SPARK + 2, o, i);
-                CreateEffect(BITMAP_SPARK + 2, o->Position, o->Angle, vLight[1], i, o);
+                PlayBuffer(SOUND_SOULBARRIER);
+                DeleteJoint(MODEL_SPEARSKILL, o, 0);
+                for (int j = 0; j < 5; ++j)
+                {
+                    CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 0, o, 50.0f);
+                }
             }
         }
-        DeleteEffect(BITMAP_LIGHT_MARKS, o);
-        CreateEffect(BITMAP_LIGHT_MARKS, o->Position, o->Angle, vLight[0], 0, o);
-    }
-    break;
-    case eDeBuff_FlameStrikeDamage:
-    {
-        CreateEffect(BITMAP_FIRE_CURSEDLICH, o->Position, o->Angle, o->Light, 2, o);
-    }
-    break;
-    case eDeBuff_GiganticStormDamage:
-    {
-        DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
-        CreateEffect(BITMAP_JOINT_THUNDER, o->Position, o->Angle, o->Light, 0, o);
-    }
-    break;
-    case eDeBuff_LightningShockDamage:
-    {
-        CreateEffect(MODEL_LIGHTNING_SHOCK, o->Position, o->Angle, o->Light, 2, o);
-    }
-    break;
-    case eDeBuff_BlowOfDestruction:
-    {
-        CreateEffect(MODEL_ICE, o->Position, o->Angle, o->Light);
-    }
-    break;
-    case eBuff_Doppelganger_Ascension:
-    {
-        PlayBuffer(SOUND_SKILL_BERSERKER);
-        CreateEffect(MODEL_CHANGE_UP_EFF, o->Position, o->Angle, o->Light, 2, o);
-        CreateEffect(MODEL_CHANGE_UP_CYLINDER, o->Position, o->Angle, o->Light, 2, o);
-        CreateEffect(MODEL_INFINITY_ARROW3, o->Position, o->Angle, o->Light, 1, o);
-    }
-    break;
-    case eBuff_SD_Addition:
-    {
-        DeleteEffect(MODEL_EFFECT_SD_AURA, o);
-        CreateEffect(MODEL_EFFECT_SD_AURA, o->Position, o->Angle, o->Light, 0, o);
-    }
-    break;
-    case eBuff_AG_Addition:
-    {
-        DeleteParticle(BITMAP_AG_ADDITION_EFFECT);
-
-        for (int i = 0; i < 5; ++i)
-        {
-            CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 0, 1.0f, o);
-            CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 1, 1.0f, o);
-            CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 2, 1.0f, o);
+        break;
+        case eBuff_AddAG: {
+            DeleteEffect(BITMAP_LIGHT, o, 2);
+            CreateEffect(BITMAP_LIGHT, o->Position, o->Angle, o->Light, 2, o);
         }
-    }
-    break;
-    case eBuff_Att_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 1);
-        CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 1, o, -1, 0, 0, 0, 1.5f);
-    }
-    break;
-    case eBuff_Hp_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 0);
-        CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 0, o, -1, 0, 0, 0, 1.5f);
-    }
-    break;
-    case eBuff_Def_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 2);
-        CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 2, o, -1, 0, 0, 0, 1.5f);
-    }
-    break;
+        break;
+
+        case eBuff_Life: {
+            DeleteEffect(BITMAP_LIGHT, o, 1);
+            CreateEffect(BITMAP_LIGHT, o->Position, o->Angle, o->Light, 1, o);
+        }
+        break;
+        case eDeBuff_Harden: {
+            vec3_t Angle;
+            VectorCopy(o->Angle, Angle);
+
+            DeleteEffect(MODEL_ICE, o, 1);
+            CreateEffect(MODEL_ICE, o->Position, Angle, o->Light, 1, o);
+
+            Angle[2] += 180.f;
+            CreateEffect(MODEL_ICE, o->Position, Angle, o->Light, 2, o);
+        }
+        break;
+        case eDeBuff_Defense: {
+            vec3_t Light = {1.0f, 1.f, 1.f};
+            DeleteEffect(BITMAP_SKULL, o, 0);
+            CreateEffect(BITMAP_SKULL, o->Position, o->Angle, Light, 0, o);
+
+            PlayBuffer(SOUND_BLOODATTACK, o);
+        }
+        break;
+        case eDeBuff_Stun: {
+            DeleteEffect(BITMAP_SKULL, o, 5);
+
+            vec3_t Angle;
+            vec3_t Position;
+            VectorCopy(o->Position, Position);
+            Vector(0.f, 0.f, 90.f, Angle);
+            CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
+            Position[2] -= 10.f;
+            Vector(0.f, 0.f, 180.f, Angle);
+            CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
+            Position[2] -= 10.f;
+            Vector(0.f, 0.f, 270.f, Angle);
+            CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 8, o, 30.0f);
+        }
+        break;
+        case eDeBuff_NeilDOT: {
+            g_SummonSystem.CreateDamageOfTimeEffect(AT_SKILL_SUMMON_REQUIEM, o);
+        }
+        break;
+        case eDeBuff_SahamuttDOT: {
+            g_SummonSystem.CreateDamageOfTimeEffect(AT_SKILL_SUMMON_EXPLOSION, o);
+        }
+        break;
+        case eBuff_Thorns: {
+            vec3_t vLight;
+            Vector(0.9f, 0.6f, 0.1f, vLight);
+            CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 43, o, 50.f, 0, 0, 0, 0, vLight);
+        }
+        break;
+        case eDeBuff_Blind: {
+            vec3_t vLight;
+            Vector(1.0f, 1.0f, 1.0f, vLight);
+            CreateEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o->Position, o->Angle, vLight, 3, o);
+        }
+        break;
+        case eDeBuff_Sleep: {
+            vec3_t vLight;
+            Vector(0.7f, 0.1f, 0.9f, vLight);
+            CreateEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o->Position, o->Angle, vLight, 4, o);
+        }
+        break;
+        case eDeBuff_AttackDown: {
+            vec3_t vLight;
+            Vector(1.4f, 0.2f, 0.2f, vLight);
+            CreateEffect(BITMAP_SHINY + 6, o->Position, o->Angle, vLight, 1, o, -1, 0, 0, 0, 0.5f);
+            CreateEffect(BITMAP_PIN_LIGHT, o->Position, o->Angle, vLight, 1, o, -1, 0, 0, 0, 1.f);
+        }
+        break;
+
+        case eDeBuff_DefenseDown: {
+            vec3_t vLight;
+            Vector(0.25f, 1.0f, 0.7f, vLight);
+            CreateEffect(BITMAP_SHINY + 6, o->Position, o->Angle, vLight, 2, o, -1, 0, 0, 0, 0.5f);
+            CreateEffect(BITMAP_PIN_LIGHT, o->Position, o->Angle, vLight, 2, o, -1, 0, 0, 0, 1.f);
+        }
+        break;
+        case eBuff_Berserker: {
+            vec3_t vLight[2];
+            Vector(0.9f, 0.0f, 0.1f, vLight[0]);
+            Vector(1.0f, 1.0f, 1.0f, vLight[1]);
+            for (int i = 0; i < 4; ++i)
+            {
+                DeleteEffect(BITMAP_ORORA, o, i);
+                CreateEffect(BITMAP_ORORA, o->Position, o->Angle, vLight[0], i, o);
+                if (i == 2 || i == 3)
+                {
+                    DeleteEffect(BITMAP_SPARK + 2, o, i);
+                    CreateEffect(BITMAP_SPARK + 2, o->Position, o->Angle, vLight[1], i, o);
+                }
+            }
+            DeleteEffect(BITMAP_LIGHT_MARKS, o);
+            CreateEffect(BITMAP_LIGHT_MARKS, o->Position, o->Angle, vLight[0], 0, o);
+        }
+        break;
+        case eDeBuff_FlameStrikeDamage: {
+            CreateEffect(BITMAP_FIRE_CURSEDLICH, o->Position, o->Angle, o->Light, 2, o);
+        }
+        break;
+        case eDeBuff_GiganticStormDamage: {
+            DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
+            CreateEffect(BITMAP_JOINT_THUNDER, o->Position, o->Angle, o->Light, 0, o);
+        }
+        break;
+        case eDeBuff_LightningShockDamage: {
+            CreateEffect(MODEL_LIGHTNING_SHOCK, o->Position, o->Angle, o->Light, 2, o);
+        }
+        break;
+        case eDeBuff_BlowOfDestruction: {
+            CreateEffect(MODEL_ICE, o->Position, o->Angle, o->Light);
+        }
+        break;
+        case eBuff_Doppelganger_Ascension: {
+            PlayBuffer(SOUND_SKILL_BERSERKER);
+            CreateEffect(MODEL_CHANGE_UP_EFF, o->Position, o->Angle, o->Light, 2, o);
+            CreateEffect(MODEL_CHANGE_UP_CYLINDER, o->Position, o->Angle, o->Light, 2, o);
+            CreateEffect(MODEL_INFINITY_ARROW3, o->Position, o->Angle, o->Light, 1, o);
+        }
+        break;
+        case eBuff_SD_Addition: {
+            DeleteEffect(MODEL_EFFECT_SD_AURA, o);
+            CreateEffect(MODEL_EFFECT_SD_AURA, o->Position, o->Angle, o->Light, 0, o);
+        }
+        break;
+        case eBuff_AG_Addition: {
+            DeleteParticle(BITMAP_AG_ADDITION_EFFECT);
+
+            for (int i = 0; i < 5; ++i)
+            {
+                CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 0, 1.0f, o);
+                CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 1, 1.0f, o);
+                CreateParticle(BITMAP_AG_ADDITION_EFFECT, o->Position, o->Angle, o->Light, 2, 1.0f, o);
+            }
+        }
+        break;
+        case eBuff_Att_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 1);
+            CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 1, o, -1, 0, 0, 0, 1.5f);
+        }
+        break;
+        case eBuff_Hp_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 0);
+            CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 0, o, -1, 0, 0, 0, 1.5f);
+        }
+        break;
+        case eBuff_Def_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 2);
+            CreateEffect(BITMAP_LIGHT_RED, o->Position, o->Angle, o->Light, 2, o, -1, 0, 0, 0, 1.5f);
+        }
+        break;
     }
 }
 
@@ -15641,184 +15630,158 @@ void ClearBuffPhysicalEffect(eBuffState buff, OBJECT* o)
 {
     switch (buff)
     {
-    case eBuff_CursedTempleProdection:
-    {
-        if (g_isCharacterBuff(o, eBuff_CursedTempleProdection))
-        {
-            DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
+        case eBuff_CursedTempleProdection: {
+            if (g_isCharacterBuff(o, eBuff_CursedTempleProdection))
+            {
+                DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
+            }
         }
-    }
-    break;
+        break;
 
-    case eBuff_Defense:
-    {
-        DeleteJoint(MODEL_SPEARSKILL, o, 4);
-        DeleteJoint(MODEL_SPEARSKILL, o, 9);
-    }
-    break;
+        case eBuff_Defense: {
+            DeleteJoint(MODEL_SPEARSKILL, o, 4);
+            DeleteJoint(MODEL_SPEARSKILL, o, 9);
+        }
+        break;
 
-    case eBuff_AddAG:
-    {
-        DeleteEffect(BITMAP_LIGHT, o, 2);
-    }
-    break;
+        case eBuff_AddAG: {
+            DeleteEffect(BITMAP_LIGHT, o, 2);
+        }
+        break;
 
-    case eBuff_Life:
-    {
-        DeleteEffect(BITMAP_LIGHT, o, 1);
-    }
-    break;
+        case eBuff_Life: {
+            DeleteEffect(BITMAP_LIGHT, o, 1);
+        }
+        break;
 
-    case eBuff_WizDefense:
-    {
-        if (o->Type == MODEL_PLAYER)
-        {
+        case eBuff_WizDefense: {
+            if (o->Type == MODEL_PLAYER)
+            {
+                DeleteJoint(MODEL_SPEARSKILL, o, 0);
+            }
+        }
+        break;
+
+        case eBuff_HelpNpc: {
+            DeleteJoint(MODEL_SPEARSKILL, o, 4);
+            DeleteJoint(MODEL_SPEARSKILL, o, 9);
+        }
+        break;
+
+        case eBuff_RemovalMagic: {
+            DeleteEffect(BITMAP_LIGHT, o, 2);
+            DeleteEffect(BITMAP_LIGHT, o, 1);
+            DeleteEffect(BITMAP_SKULL, o, 0);
+            DeleteJoint(MODEL_SPEARSKILL, o, 4);
+            DeleteJoint(MODEL_SPEARSKILL, o, 9);
             DeleteJoint(MODEL_SPEARSKILL, o, 0);
         }
-    }
-    break;
-
-    case eBuff_HelpNpc:
-    {
-        DeleteJoint(MODEL_SPEARSKILL, o, 4);
-        DeleteJoint(MODEL_SPEARSKILL, o, 9);
-    }
-    break;
-
-    case eBuff_RemovalMagic:
-    {
-        DeleteEffect(BITMAP_LIGHT, o, 2);
-        DeleteEffect(BITMAP_LIGHT, o, 1);
-        DeleteEffect(BITMAP_SKULL, o, 0);
-        DeleteJoint(MODEL_SPEARSKILL, o, 4);
-        DeleteJoint(MODEL_SPEARSKILL, o, 9);
-        DeleteJoint(MODEL_SPEARSKILL, o, 0);
-    }
-    break;
-    case eDeBuff_CursedTempleRestraint:
-    {
-        if (g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint))
-        {
-            DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o);
+        break;
+        case eDeBuff_CursedTempleRestraint: {
+            if (g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint))
+            {
+                DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o);
+            }
         }
-    }
-    break;
-
-    case eDeBuff_Defense:
-    {
-        DeleteEffect(BITMAP_SKULL, o, 0);
-    }
-    break;
-
-    case eDeBuff_Stun:
-    {
-        DeleteEffect(BITMAP_SKULL, o, 5);
-    }
-    break;
-
-    case eDeBuff_NeilDOT:
-    {
-        g_SummonSystem.RemoveDamageOfTimeEffect(AT_SKILL_SUMMON_REQUIEM, o);
-    }
-    break;
-
-    case eDeBuff_SahamuttDOT:
-    {
-        g_SummonSystem.RemoveDamageOfTimeEffect(AT_SKILL_SUMMON_EXPLOSION, o);
-    }
-    break;
-
-    case eBuff_Thorns:
-    {
-        DeleteJoint(BITMAP_FLARE, o, 43);
-    }
-    break;
-
-    case eDeBuff_Sleep:
-    {
-        DeleteEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o, 4);
-    }
-    break;
-
-    case eDeBuff_Blind:
-    {
-        DeleteEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o, 3);
-    }
-    break;
-
-    case eDeBuff_AttackDown:
-        DeleteEffect(BITMAP_SHINY + 6, o, 1);
-        DeleteEffect(BITMAP_PIN_LIGHT, o, 1);
         break;
 
-    case eDeBuff_DefenseDown:
-        DeleteEffect(BITMAP_SHINY + 6, o, 2);
-        DeleteEffect(BITMAP_PIN_LIGHT, o, 2);
-        break;
-    case eBuff_Berserker:
-    {
-        for (int i = 0; i < 4; ++i)
-        {
-            DeleteEffect(BITMAP_ORORA, o, i);
-            if (i == 2 || i == 3)
-                DeleteEffect(BITMAP_SPARK + 2, o, i);
+        case eDeBuff_Defense: {
+            DeleteEffect(BITMAP_SKULL, o, 0);
         }
-        DeleteEffect(BITMAP_LIGHT_MARKS, o);
-    }
-    break;
-    case eDeBuff_FlameStrikeDamage:
-    {
-        // 			DeleteEffect(BITMAP_FIRE_CURSEDLICH, o, 2);
-    }
-    break;
-    case eDeBuff_GiganticStormDamage:
-    {
-        // 			DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
-    }
-    break;
-    case eDeBuff_LightningShockDamage:
-    {
-        // 			DeleteEffect(MODEL_LIGHTNING_SHOCK, o, 2);
-    }
-    break;
-    case eDeBuff_BlowOfDestruction:
-    {
-    }
-    break;
-    case eBuff_SwellOfMagicPower:
-    {
-        DeleteEffect(MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF, o, 0);
-    }break;
-    case eBuff_Doppelganger_Ascension:
-    {
-        DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
-    }
-    break;
-    case eBuff_SD_Addition:
-    {
-        DeleteEffect(MODEL_EFFECT_SD_AURA, o);
-    }
-    break;
-    case eBuff_AG_Addition:
-    {
-        DeleteParticle(BITMAP_AG_ADDITION_EFFECT);
-    }
-    break;
-    case eBuff_Att_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 1);
-    }
-    break;
-    case eBuff_Hp_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 0);
-    }
-    break;
-    case eBuff_Def_up_Ourforces:
-    {
-        DeleteEffect(BITMAP_LIGHT_RED, o, 2);
-    }
-    break;
+        break;
+
+        case eDeBuff_Stun: {
+            DeleteEffect(BITMAP_SKULL, o, 5);
+        }
+        break;
+
+        case eDeBuff_NeilDOT: {
+            g_SummonSystem.RemoveDamageOfTimeEffect(AT_SKILL_SUMMON_REQUIEM, o);
+        }
+        break;
+
+        case eDeBuff_SahamuttDOT: {
+            g_SummonSystem.RemoveDamageOfTimeEffect(AT_SKILL_SUMMON_EXPLOSION, o);
+        }
+        break;
+
+        case eBuff_Thorns: {
+            DeleteJoint(BITMAP_FLARE, o, 43);
+        }
+        break;
+
+        case eDeBuff_Sleep: {
+            DeleteEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o, 4);
+        }
+        break;
+
+        case eDeBuff_Blind: {
+            DeleteEffect(MODEL_ALICE_BUFFSKILL_EFFECT, o, 3);
+        }
+        break;
+
+        case eDeBuff_AttackDown:
+            DeleteEffect(BITMAP_SHINY + 6, o, 1);
+            DeleteEffect(BITMAP_PIN_LIGHT, o, 1);
+            break;
+
+        case eDeBuff_DefenseDown:
+            DeleteEffect(BITMAP_SHINY + 6, o, 2);
+            DeleteEffect(BITMAP_PIN_LIGHT, o, 2);
+            break;
+        case eBuff_Berserker: {
+            for (int i = 0; i < 4; ++i)
+            {
+                DeleteEffect(BITMAP_ORORA, o, i);
+                if (i == 2 || i == 3)
+                    DeleteEffect(BITMAP_SPARK + 2, o, i);
+            }
+            DeleteEffect(BITMAP_LIGHT_MARKS, o);
+        }
+        break;
+        case eDeBuff_FlameStrikeDamage: {
+            // 			DeleteEffect(BITMAP_FIRE_CURSEDLICH, o, 2);
+        }
+        break;
+        case eDeBuff_GiganticStormDamage: {
+            // 			DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
+        }
+        break;
+        case eDeBuff_LightningShockDamage: {
+            // 			DeleteEffect(MODEL_LIGHTNING_SHOCK, o, 2);
+        }
+        break;
+        case eDeBuff_BlowOfDestruction: {
+        }
+        break;
+        case eBuff_SwellOfMagicPower: {
+            DeleteEffect(MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF, o, 0);
+        }
+        break;
+        case eBuff_Doppelganger_Ascension: {
+            DeleteEffect(BITMAP_JOINT_THUNDER, o, 0);
+        }
+        break;
+        case eBuff_SD_Addition: {
+            DeleteEffect(MODEL_EFFECT_SD_AURA, o);
+        }
+        break;
+        case eBuff_AG_Addition: {
+            DeleteParticle(BITMAP_AG_ADDITION_EFFECT);
+        }
+        break;
+        case eBuff_Att_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 1);
+        }
+        break;
+        case eBuff_Hp_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 0);
+        }
+        break;
+        case eBuff_Def_up_Ourforces: {
+            DeleteEffect(BITMAP_LIGHT_RED, o, 2);
+        }
+        break;
     }
 }
 

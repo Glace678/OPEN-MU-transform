@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketBindings.h" company="MUnique">
+﻿// <copyright file="PacketBindings.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -13,7 +13,7 @@
 
 #pragma once
 
-    enum class TradeButtonState : uint32_t
+enum class TradeButtonState : uint32_t
 {
     Unchecked = 0,  ///< Trade button is not pressed. It means that the trade is not yet accepted by the trader.
     Checked   = 1,  ///< Trade Button is pressed. It means that the trade is accepted by the trader.

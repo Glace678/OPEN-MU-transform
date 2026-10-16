@@ -10,8 +10,7 @@
 #include <utility>
 #include <vector>
 
-    template <class T>
-    class CList;
+template <class T> class CList;
 
 template <class T> class CNode
 {

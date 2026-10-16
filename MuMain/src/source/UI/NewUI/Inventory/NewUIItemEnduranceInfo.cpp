@@ -1,4 +1,4 @@
-﻿  // NewUIItemEnduranceInfo.cpp: implementation of the CNewUIItemEnduranceInfo class.
+﻿// NewUIItemEnduranceInfo.cpp: implementation of the CNewUIItemEnduranceInfo class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -12,7 +12,7 @@
 #include "GameLogic/Pets/GIPetManager.h"
 #endif  //PJH_FIX_SPRIT
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 CNewUIItemEnduranceInfo::CNewUIItemEnduranceInfo()
 {

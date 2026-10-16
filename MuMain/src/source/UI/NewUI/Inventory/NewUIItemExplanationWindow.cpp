@@ -1,4 +1,4 @@
-﻿  // NewUIItemExplanationWindow.cpp: implementation of the CNewUIItemExplanationWindow class.
+﻿// NewUIItemExplanationWindow.cpp: implementation of the CNewUIItemExplanationWindow class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -11,7 +11,7 @@
 #include "GameLogic/Items/CSItemOption.h"
 #include "I18N/All.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -13,9 +13,9 @@
 #include "UI/NewUI/Inventory/NewUIInventoryCtrl.h"
 #include "UI/NewUI/NewUISystem.h"
 
-    extern DWORD g_dwActiveUIID;
-extern int       InventoryStartX;
-extern int       InventoryStartY;
+extern DWORD g_dwActiveUIID;
+extern int   InventoryStartX;
+extern int   InventoryStartY;
 
 namespace COMGEM
 {

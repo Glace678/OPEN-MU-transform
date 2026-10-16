@@ -32,37 +32,40 @@ extern "C" void DevEditor_GetCameraFogRange(const char* cameraName, float viewFa
 
 extern "C" CameraManager& CameraManager_Instance();
 
-int     OpenglWindowX = 0;
-int     OpenglWindowY = 0;
-int     OpenglWindowWidth = 1024;
+int     OpenglWindowX      = 0;
+int     OpenglWindowY      = 0;
+int     OpenglWindowWidth  = 1024;
 int     OpenglWindowHeight = 768;
 vec3_t  MousePosition;
 vec3_t  MouseTarget;
-bool    FogEnable = true;
-GLfloat FogDensity = 0.0004f;
-GLfloat FogColor[4] = { 30 / 256.f,20 / 256.f,10 / 256.f, };
+bool    FogEnable   = true;
+GLfloat FogDensity  = 0.0004f;
+GLfloat FogColor[4] = {
+    30 / 256.f,
+    20 / 256.f,
+    10 / 256.f,
+};
 
 bool _isVSyncAvailable = false;
 
-
-unsigned int WindowWidth = 1024;
+unsigned int WindowWidth  = 1024;
 unsigned int WindowHeight = 768;
-int          MouseX = WindowWidth / 2;
-int          MouseY = WindowHeight / 2;
-int          BackMouseX = MouseX;
-int          BackMouseY = MouseY;
+int          MouseX       = WindowWidth / 2;
+int          MouseY       = WindowHeight / 2;
+int          BackMouseX   = MouseX;
+int          BackMouseY   = MouseY;
 bool         MouseLButton;
-bool 		 MouseLButtonPop;
-bool 		 MouseLButtonPush;
+bool         MouseLButtonPop;
+bool         MouseLButtonPush;
 bool         MouseRButton;
-bool 		 MouseRButtonPop;
-bool 		 MouseRButtonPush;
-bool 	   	 MouseLButtonDBClick;
+bool         MouseRButtonPop;
+bool         MouseRButtonPush;
+bool         MouseLButtonDBClick;
 bool         MouseMButton;
 bool         MouseMButtonPop;
 bool         MouseMButtonPush;
 int          MouseWheel;
-DWORD		 MouseRButtonPress = 0;
+DWORD        MouseRButtonPress = 0;
 
 //bool    showShoppingMall = false;
 
@@ -73,22 +76,23 @@ void OpenExploper(wchar_t* Name, wchar_t* para)
 
 bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 {
-    typedef struct  __day_history__
+    typedef struct __day_history__
     {
         wchar_t ID[MAX_USERNAME_SIZE + 1];
-        WORD date;
-    }dayHistory;
+        WORD    date;
+    } dayHistory;
 
-    FILE* fp;
+    FILE*      fp;
     dayHistory days[100];
-    int   count = 0;
-    WORD  num = 0;
-    bool  sameName = false;
-    bool  update = true;
+    int        count    = 0;
+    WORD       num      = 0;
+    bool       sameName = false;
+    bool       update   = true;
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
-        if (fread(&num, sizeof(WORD), 1, fp) != 1) num = 0;  // #20: reject unreadable header
+        if (fread(&num, sizeof(WORD), 1, fp) != 1)
+            num = 0;  // #20: reject unreadable header
 
         if (num > 100)
         {
@@ -100,7 +104,7 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
             {
                 if (fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
                     fread(&days[i].date, sizeof(WORD), 1, fp) != 1)
-                    break;  // #20: truncated/corrupt record
+                    break;                              // #20: truncated/corrupt record
                 days[i].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
 
                 if (!wcscmp(days[i].ID, Name))
@@ -143,12 +147,12 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 
     //    showShoppingMall = update;
 
-    return  update;
+    return update;
 }
 
-bool GrabEnable = false;
+bool    GrabEnable = false;
 wchar_t GrabFileName[MAX_PATH];
-int  GrabScreen = 0;
+int     GrabScreen = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 // opengl render util
@@ -169,7 +173,8 @@ int  AlphaBlendType;
 // AlphaTestEnable, so the shader ref must track the threshold even while enabled continuously.
 void SetAlphaFuncRef(float ref)
 {
-    if (!g_CoreProfile) glAlphaFunc(GL_GREATER, ref);
+    if (!g_CoreProfile)
+        glAlphaFunc(GL_GREATER, ref);
     g_AlphaFuncRef = ref;
     if (AlphaTestEnable)
         g_AlphaRef = ref;
@@ -178,11 +183,8 @@ void SetAlphaFuncRef(float ref)
 GLRenderStateSnapshot GetRenderStateSnapshot()
 {
     // GLP-19 -- see ZzzOpenglUtil.h. Plain reads of already-cached values; no GL calls.
-    return GLRenderStateSnapshot{
-        AlphaBlendType, AlphaTestEnable, g_AlphaRef,
-        DepthTestEnable, DepthMaskEnable, CullFaceEnable,
-        TextureEnable, FogEnable, CachTexture
-    };
+    return GLRenderStateSnapshot{AlphaBlendType, AlphaTestEnable, g_AlphaRef, DepthTestEnable, DepthMaskEnable,
+                                 CullFaceEnable, TextureEnable,   FogEnable,  CachTexture};
 }
 
 void BindTexture(int tex)
@@ -194,15 +196,15 @@ void BindTexture(int tex)
         // so the common case (consecutive same-texture particles) costs nothing and still merges.
         IR::Flush(IR::FlushCause::Texture);
         CachTexture = tex;
-        const uint32_t textureID = (tex >= 0) ? static_cast<uint32_t>(Bitmaps[tex].TextureNumber)
-                                               : static_cast<uint32_t>(-1 * tex);
+        const uint32_t textureID =
+            (tex >= 0) ? static_cast<uint32_t>(Bitmaps[tex].TextureNumber) : static_cast<uint32_t>(-1 * tex);
         BindTexture2D(0, textureID);
     }
 }
 
 bool TextureStream = false;
 
-extern  int test;
+extern int test;
 
 void EndTextureStream()
 {
@@ -214,22 +216,61 @@ void EndTextureStream()
 // DXP-10 dumb single-call state wrappers -- see ZzzOpenglUtil.h for why these are separate
 // from the bundled Enable/Disable* family below (no caching, no side effects, no CoreProfile
 // gating beyond what the original call site had).
-void EnableTexture2D()  { if (!g_CoreProfile) glEnable(GL_TEXTURE_2D); }
-void DisableTexture2D() { if (!g_CoreProfile) glDisable(GL_TEXTURE_2D); }
-void EnableAlphaTestRaw()  { if (!g_CoreProfile) glEnable(GL_ALPHA_TEST); }
-void DisableAlphaTestRaw() { if (!g_CoreProfile) glDisable(GL_ALPHA_TEST); }
+void EnableTexture2D()
+{
+    if (!g_CoreProfile)
+        glEnable(GL_TEXTURE_2D);
+}
+void DisableTexture2D()
+{
+    if (!g_CoreProfile)
+        glDisable(GL_TEXTURE_2D);
+}
+void EnableAlphaTestRaw()
+{
+    if (!g_CoreProfile)
+        glEnable(GL_ALPHA_TEST);
+}
+void DisableAlphaTestRaw()
+{
+    if (!g_CoreProfile)
+        glDisable(GL_ALPHA_TEST);
+}
 // GL_FOG is FFP-only and inert under Core Profile like every other call above -- gating it here
 // mirrors the guard already used at every other glEnable/glDisable(GL_FOG) call site in this
 // file; the one caller that used to call this unguarded (GMBattleCastle.cpp) had no observable
 // effect from that call under Core Profile anyway (no FFP fog machinery exists to enable).
-void EnableFog()  { if (!g_CoreProfile) glEnable(GL_FOG); }
-void DisableFog() { if (!g_CoreProfile) glDisable(GL_FOG); }
-void EnableBlend()  { glEnable(GL_BLEND); }
-void DisableBlend() { glDisable(GL_BLEND); }
-void SetBlendFuncAlpha() { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); }
-void SetDepthFuncLEqual() { glDepthFunc(GL_LEQUAL); }
+void EnableFog()
+{
+    if (!g_CoreProfile)
+        glEnable(GL_FOG);
+}
+void DisableFog()
+{
+    if (!g_CoreProfile)
+        glDisable(GL_FOG);
+}
+void EnableBlend()
+{
+    glEnable(GL_BLEND);
+}
+void DisableBlend()
+{
+    glDisable(GL_BLEND);
+}
+void SetBlendFuncAlpha()
+{
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+void SetDepthFuncLEqual()
+{
+    glDepthFunc(GL_LEQUAL);
+}
 
-namespace { float g_ClearColor[4] = { 0.f, 0.f, 0.f, 1.f }; }
+namespace
+{
+float g_ClearColor[4] = {0.f, 0.f, 0.f, 1.f};
+}
 void ClearColorBuffer()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -244,16 +285,22 @@ void ClearColorAndDepthBuffers()
 }
 void SetClearColor(float r, float g, float b, float a)
 {
-    g_ClearColor[0] = r; g_ClearColor[1] = g; g_ClearColor[2] = b; g_ClearColor[3] = a;
+    g_ClearColor[0] = r;
+    g_ClearColor[1] = g;
+    g_ClearColor[2] = b;
+    g_ClearColor[3] = a;
     glClearColor(r, g, b, a);
 }
-void FlushGL() { glFlush(); }
+void FlushGL()
+{
+    glFlush();
+}
 
 void EnableDepthTest()
 {
     if (!DepthTestEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- depth state is batch state; flush before it changes
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- depth state is batch state; flush before it changes
         DepthTestEnable = true;
         glEnable(GL_DEPTH_TEST);
     }
@@ -263,7 +310,7 @@ void DisableDepthTest()
 {
     if (DepthTestEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- see EnableDepthTest
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- see EnableDepthTest
         DepthTestEnable = false;
         glDisable(GL_DEPTH_TEST);
     }
@@ -273,7 +320,7 @@ void EnableDepthMask()
 {
     if (!DepthMaskEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- see EnableDepthTest
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- see EnableDepthTest
         DepthMaskEnable = true;
         glDepthMask(true);
     }
@@ -283,7 +330,7 @@ void DisableDepthMask()
 {
     if (DepthMaskEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- see EnableDepthTest
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- see EnableDepthTest
         DepthMaskEnable = false;
         glDepthMask(false);
     }
@@ -293,7 +340,7 @@ void EnableCullFace()
 {
     if (!CullFaceEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- see EnableDepthTest
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- see EnableDepthTest
         CullFaceEnable = true;
         glEnable(GL_CULL_FACE);
     }
@@ -303,7 +350,7 @@ void DisableCullFace()
 {
     if (CullFaceEnable)
     {
-        IR::Flush(IR::FlushCause::Depth); // GLP-19 -- see EnableDepthTest
+        IR::Flush(IR::FlushCause::Depth);  // GLP-19 -- see EnableDepthTest
         CullFaceEnable = false;
         glDisable(GL_CULL_FACE);
     }
@@ -318,8 +365,9 @@ void DisableTexture(bool AlphaTest)
         if (!AlphaTestEnable)
         {
             AlphaTestEnable = true;
-            g_AlphaRef = g_AlphaFuncRef;
-            if (!g_CoreProfile) glEnable(GL_ALPHA_TEST);
+            g_AlphaRef      = g_AlphaFuncRef;
+            if (!g_CoreProfile)
+                glEnable(GL_ALPHA_TEST);
         }
     }
     else
@@ -327,14 +375,16 @@ void DisableTexture(bool AlphaTest)
         if (AlphaTestEnable)
         {
             AlphaTestEnable = false;
-            g_AlphaRef = -1.0f;
-            if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+            g_AlphaRef      = -1.0f;
+            if (!g_CoreProfile)
+                glDisable(GL_ALPHA_TEST);
         }
     }
     if (TextureEnable)
     {
         TextureEnable = false;
-        if (!g_CoreProfile) glDisable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glDisable(GL_TEXTURE_2D);
     }
 }
 
@@ -342,7 +392,7 @@ void DisableAlphaBlend()
 {
     if (AlphaBlendType != 0)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- blend func is batch state; flush BEFORE it changes
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- blend func is batch state; flush BEFORE it changes
         AlphaBlendType = 0;
         glDisable(GL_BLEND);
     }
@@ -351,17 +401,20 @@ void DisableAlphaBlend()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -369,7 +422,7 @@ void EnableAlphaTest(bool DepthMask)
 {
     if (AlphaBlendType != 2)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 2;
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -380,17 +433,20 @@ void EnableAlphaTest(bool DepthMask)
     if (!AlphaTestEnable)
     {
         AlphaTestEnable = true;
-        g_AlphaRef = g_AlphaFuncRef;
-        if (!g_CoreProfile) glEnable(GL_ALPHA_TEST);
+        g_AlphaRef      = g_AlphaFuncRef;
+        if (!g_CoreProfile)
+            glEnable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -398,7 +454,7 @@ void EnableAlphaBlend()
 {
     if (AlphaBlendType != 3)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 3;
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
@@ -408,17 +464,20 @@ void EnableAlphaBlend()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glDisable(GL_FOG);
+        if (!g_CoreProfile)
+            glDisable(GL_FOG);
     }
 }
 
@@ -426,8 +485,8 @@ void EnableAlphaBlendMinus()
 {
     if (AlphaBlendType != 4)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- subtractive blend (ZERO, ONE_MINUS_SRC_COLOR); a batch leaking
-                      // into this is exactly the black-polygon artifact
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- subtractive blend (ZERO, ONE_MINUS_SRC_COLOR); a batch leaking
+                                           // into this is exactly the black-polygon artifact
         AlphaBlendType = 4;
         glEnable(GL_BLEND);
         glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
@@ -437,17 +496,20 @@ void EnableAlphaBlendMinus()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -455,7 +517,7 @@ void EnableAlphaBlend2()
 {
     if (AlphaBlendType != 5)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 5;
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE_MINUS_SRC_COLOR, GL_ONE);
@@ -465,17 +527,20 @@ void EnableAlphaBlend2()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -483,7 +548,7 @@ void EnableAlphaBlend3()
 {
     if (AlphaBlendType != 6)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 6;
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -493,17 +558,20 @@ void EnableAlphaBlend3()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -511,7 +579,7 @@ void EnableAlphaBlend4()
 {
     if (AlphaBlendType != 7)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 7;
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
@@ -521,17 +589,20 @@ void EnableAlphaBlend4()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -539,7 +610,7 @@ void EnableLightMap()
 {
     if (AlphaBlendType != 1)
     {
-        IR::Flush(IR::FlushCause::Blend); // GLP-19 -- see AlphaBlendType 0
+        IR::Flush(IR::FlushCause::Blend);  // GLP-19 -- see AlphaBlendType 0
         AlphaBlendType = 1;
         glEnable(GL_BLEND);
         glBlendFunc(GL_ZERO, GL_SRC_COLOR);
@@ -549,17 +620,20 @@ void EnableLightMap()
     if (AlphaTestEnable)
     {
         AlphaTestEnable = false;
-        g_AlphaRef = -1.0f;
-        if (!g_CoreProfile) glDisable(GL_ALPHA_TEST);
+        g_AlphaRef      = -1.0f;
+        if (!g_CoreProfile)
+            glDisable(GL_ALPHA_TEST);
     }
     if (!TextureEnable)
     {
         TextureEnable = true;
-        if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+        if (!g_CoreProfile)
+            glEnable(GL_TEXTURE_2D);
     }
     if (FogEnable)
     {
-        if (!g_CoreProfile) glEnable(GL_FOG);
+        if (!g_CoreProfile)
+            glEnable(GL_FOG);
     }
 }
 
@@ -581,26 +655,26 @@ void glViewport2(int x, int y, int Width, int Height)
 static struct
 {
     float PerspectiveX, PerspectiveY;
-    int ScreenCenterX, ScreenCenterY, ScreenCenterYFlip;
+    int   ScreenCenterX, ScreenCenterY, ScreenCenterYFlip;
     float Matrix[3][4];
 } s_SavedCameraState;
 
 void SaveCameraPerspective()
 {
-    s_SavedCameraState.PerspectiveX     = g_Camera.PerspectiveX;
-    s_SavedCameraState.PerspectiveY     = g_Camera.PerspectiveY;
-    s_SavedCameraState.ScreenCenterX    = g_Camera.ScreenCenterX;
-    s_SavedCameraState.ScreenCenterY    = g_Camera.ScreenCenterY;
+    s_SavedCameraState.PerspectiveX      = g_Camera.PerspectiveX;
+    s_SavedCameraState.PerspectiveY      = g_Camera.PerspectiveY;
+    s_SavedCameraState.ScreenCenterX     = g_Camera.ScreenCenterX;
+    s_SavedCameraState.ScreenCenterY     = g_Camera.ScreenCenterY;
     s_SavedCameraState.ScreenCenterYFlip = g_Camera.ScreenCenterYFlip;
     memcpy(s_SavedCameraState.Matrix, g_Camera.Matrix, sizeof(g_Camera.Matrix));
 }
 
 void RestoreCameraPerspective()
 {
-    g_Camera.PerspectiveX     = s_SavedCameraState.PerspectiveX;
-    g_Camera.PerspectiveY     = s_SavedCameraState.PerspectiveY;
-    g_Camera.ScreenCenterX    = s_SavedCameraState.ScreenCenterX;
-    g_Camera.ScreenCenterY    = s_SavedCameraState.ScreenCenterY;
+    g_Camera.PerspectiveX      = s_SavedCameraState.PerspectiveX;
+    g_Camera.PerspectiveY      = s_SavedCameraState.PerspectiveY;
+    g_Camera.ScreenCenterX     = s_SavedCameraState.ScreenCenterX;
+    g_Camera.ScreenCenterY     = s_SavedCameraState.ScreenCenterY;
     g_Camera.ScreenCenterYFlip = s_SavedCameraState.ScreenCenterYFlip;
     memcpy(g_Camera.Matrix, s_SavedCameraState.Matrix, sizeof(g_Camera.Matrix));
 }
@@ -619,11 +693,11 @@ void gluPerspective2(float Fov, float Aspect, float ZNear, float ZFar)
     // for BeginOpengl/BeginBitmap, deleted the same way (unconditionally, not profile-guarded).
     // ZNear/ZFar were only used by the deleted call; Fov/Aspect still feed PerspectiveX/Y below.
 
-    g_Camera.ScreenCenterX = OpenglWindowX + OpenglWindowWidth / 2;
-    g_Camera.ScreenCenterY = OpenglWindowY + OpenglWindowHeight / 2;
+    g_Camera.ScreenCenterX     = OpenglWindowX + OpenglWindowWidth / 2;
+    g_Camera.ScreenCenterY     = OpenglWindowY + OpenglWindowHeight / 2;
     g_Camera.ScreenCenterYFlip = WindowHeight - g_Camera.ScreenCenterY;
 
-    float fovRad = Fov * 0.5f * Q_PI / 180.0f;
+    float fovRad          = Fov * 0.5f * Q_PI / 180.0f;
     g_Camera.PerspectiveX = tanf(fovRad) / (float)(OpenglWindowWidth / 2) * Aspect;
     g_Camera.PerspectiveY = tanf(fovRad) / (float)(OpenglWindowHeight / 2);
 }
@@ -667,12 +741,7 @@ static void MakeRotationX(float degrees, float* out)
 {
     float rad = degrees * Q_PI / 180.0f;
     float c = cosf(rad), s = sinf(rad);
-    float m[16] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, c,   s,   0.f,
-        0.f, -s,  c,   0.f,
-        0.f, 0.f, 0.f, 1.f
-    };
+    float m[16] = {1.f, 0.f, 0.f, 0.f, 0.f, c, s, 0.f, 0.f, -s, c, 0.f, 0.f, 0.f, 0.f, 1.f};
     memcpy(out, m, sizeof(m));
 }
 
@@ -680,12 +749,7 @@ static void MakeRotationY(float degrees, float* out)
 {
     float rad = degrees * Q_PI / 180.0f;
     float c = cosf(rad), s = sinf(rad);
-    float m[16] = {
-        c,   0.f, -s,  0.f,
-        0.f, 1.f, 0.f, 0.f,
-        s,   0.f, c,   0.f,
-        0.f, 0.f, 0.f, 1.f
-    };
+    float m[16] = {c, 0.f, -s, 0.f, 0.f, 1.f, 0.f, 0.f, s, 0.f, c, 0.f, 0.f, 0.f, 0.f, 1.f};
     memcpy(out, m, sizeof(m));
 }
 
@@ -693,33 +757,23 @@ static void MakeRotationZ(float degrees, float* out)
 {
     float rad = degrees * Q_PI / 180.0f;
     float c = cosf(rad), s = sinf(rad);
-    float m[16] = {
-        c,   s,   0.f, 0.f,
-        -s,  c,   0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        0.f, 0.f, 0.f, 1.f
-    };
+    float m[16] = {c, s, 0.f, 0.f, -s, c, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
     memcpy(out, m, sizeof(m));
 }
 
 static void MakeTranslation(float x, float y, float z, float* out)
 {
-    float m[16] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, 1.f, 0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        x,   y,   z,   1.f
-    };
+    float m[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, x, y, z, 1.f};
     memcpy(out, m, sizeof(m));
 }
 
 void BeginOpengl(int x, int y, int Width, int Height)
 {
-    IR::Flush(); // GLP-19 -- viewport + perspective change below; see BeginBitmap()
+    IR::Flush();  // GLP-19 -- viewport + perspective change below; see BeginBitmap()
 
-    x = x * WindowWidth / REFERENCE_WIDTH;
-    y = y * WindowHeight / REFERENCE_HEIGHT;
-    Width = Width * WindowWidth / REFERENCE_WIDTH;
+    x      = x * WindowWidth / REFERENCE_WIDTH;
+    y      = y * WindowHeight / REFERENCE_HEIGHT;
+    Width  = Width * WindowWidth / REFERENCE_WIDTH;
     Height = Height * WindowHeight / REFERENCE_HEIGHT;
 
     glViewport2(x, y, Width, Height);
@@ -730,7 +784,8 @@ void BeginOpengl(int x, int y, int Width, int Height)
     float aspectRatio = (float)Width / (float)Height;
 
     // Apply RENDER_DISTANCE_MULTIPLIER for consistent rendering distance across all systems
-    CameraProjection::SetupPerspective(g_Camera, g_Camera.FOV, aspectRatio, g_Camera.ViewNear, g_Camera.ViewFar * RENDER_DISTANCE_MULTIPLIER);
+    CameraProjection::SetupPerspective(g_Camera, g_Camera.FOV, aspectRatio, g_Camera.ViewNear,
+                                       g_Camera.ViewFar * RENDER_DISTANCE_MULTIPLIER);
 
     // This per-frame reset must actually reach the GPU, not just the DepthTestEnable/CullFaceEnable/
     // DepthMaskEnable bookkeeping bools below -- EnableCullFace()/EnableDepthTest()/EnableDepthMask()
@@ -739,16 +794,21 @@ void BeginOpengl(int x, int y, int Width, int Height)
     // previous frame's last alpha-tested/double-sided mesh left cull off) silently in effect for
     // every draw this frame until something happens to force it back -- surfaced as back-facing/
     // "underground" geometry bleeding through on the next frame's opaque meshes.
-    if (!g_CoreProfile) { glDisable(GL_ALPHA_TEST); glEnable(GL_TEXTURE_2D); }
+    if (!g_CoreProfile)
+    {
+        glDisable(GL_ALPHA_TEST);
+        glEnable(GL_TEXTURE_2D);
+    }
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glDepthMask(true);
     glDepthFunc(GL_LEQUAL);
     AlphaTestEnable = false;
-    g_AlphaRef = -1.0f; // per-frame reset must clear the shader ref too, or draws before the first EnableAlphaTest() this frame inherit last frame's discard threshold
-    TextureEnable = true;
+    g_AlphaRef =
+        -1.0f;  // per-frame reset must clear the shader ref too, or draws before the first EnableAlphaTest() this frame inherit last frame's discard threshold
+    TextureEnable   = true;
     DepthTestEnable = true;
-    CullFaceEnable = true;
+    CullFaceEnable  = true;
     DepthMaskEnable = true;
     SetAlphaFuncRef(0.25f);
     if (FogEnable)
@@ -791,7 +851,8 @@ void BeginOpengl(int x, int y, int Width, int Height)
     }
     else
     {
-        if (!g_CoreProfile) glDisable(GL_FOG);
+        if (!g_CoreProfile)
+            glDisable(GL_FOG);
         SceneUBO::Instance().SetFogEnabled(false);
     }
 
@@ -799,9 +860,9 @@ void BeginOpengl(int x, int y, int Width, int Height)
         // --- DXP-07b stage 2: GlobalUBO fed from the CPU-computed camera matrices (verified
         // bit-exact against the old GL-derived matrices across three stage-1 soaks before the GL
         // side was deleted in DXP-08a — see DXP-07b-beginopengl-cpu-camera.md for the full trail).
-        float zFar = g_Camera.ViewFar * RENDER_DISTANCE_MULTIPLIER;
+        float zFar   = g_Camera.ViewFar * RENDER_DISTANCE_MULTIPLIER;
         float fovRad = g_Camera.FOV * 0.5f * Q_PI / 180.0f;
-        float f = 1.0f / tanf(fovRad);
+        float f      = 1.0f / tanf(fovRad);
         float cpuProj[16];
         BuildPerspectiveProjection(f, aspectRatio, g_Camera.ViewNear, zFar, cpuProj);
 
@@ -838,9 +899,7 @@ void BeginOpengl(int x, int y, int Width, int Height)
     }
 }
 
-void EndOpengl()
-{
-}
+void EndOpengl() {}
 
 // CPU equivalent for UpdateMousePositionn()'s MousePosition. For any view matrix
 // M = R * T(-camPos) (proper rotation R composed with translation), VectorIRotate(-M[:,3], M)
@@ -855,14 +914,14 @@ void UpdateMousePositionn()
 #ifdef LDS_ADD_MULTISAMPLEANTIALIASING
 BOOL IsGLExtensionSupported(const wchar_t* extension)
 {
-    const size_t extlen = wcslen(extension);
+    const size_t   extlen    = wcslen(extension);
     const wchar_t* supported = NULL;
 
     // Try To Use wglGetExtensionStringARB On Current DC, If Possible
     auto wglGetExtString = wglGetProcAddress("wglGetExtensionsStringARB");
 
     if (wglGetExtString)
-        supported = ((wchar_t* (__stdcall*)(HDC))wglGetExtString)(wglGetCurrentDC());
+        supported = ((wchar_t * (__stdcall*)(HDC)) wglGetExtString)(wglGetCurrentDC());
 
     // If That Failed, Try Standard Opengl Extensions String
     if (supported == NULL)
@@ -873,20 +932,20 @@ BOOL IsGLExtensionSupported(const wchar_t* extension)
         return FALSE;
 
     // Begin Examination At Start Of String, Increment By 1 On False Match
-    for (const wchar_t* p = supported; ; p++)
+    for (const wchar_t* p = supported;; p++)
     {
         // Advance p Up To The Next Possible Match
         p = wcsstr(p, extension);
 
         if (p == NULL)
-            return FALSE;															// No Match
+            return FALSE;  // No Match
 
         if ((p == supported || p[-1] == ' ') && (p[extlen] == '\0' || p[extlen] == ' '))
-            return TRUE;															// Match
+            return TRUE;  // Match
     }
 }
 
-#endif // LDS_ADD_MULTISAMPLEANTIALIASING
+#endif  // LDS_ADD_MULTISAMPLEANTIALIASING
 
 void InitVSync()
 {
@@ -931,13 +990,14 @@ bool DisableVSync()
 // monitor refresh rate, which SDL exposes per display (issue #442).
 
 #ifdef LDS_ADD_MULTISAMPLEANTIALIASING
-BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd, int iRequestMSAAValue, int& OutiPixelFormat)
+BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd, int iRequestMSAAValue,
+                       int& OutiPixelFormat)
 {
     BOOL bIsGLMultisampleSupported = FALSE;
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // See If The String Exists In WGL!
     if (!IsGLExtensionSupported(L"WGL_ARB_multisample"))
@@ -948,9 +1008,10 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
     // Get Our Pixel Format
-    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress(L"wglChoosePixelFormatARB");
+    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB =
+        (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress(L"wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
         bIsGLMultisampleSupported = FALSE;
@@ -959,45 +1020,53 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // Get Our Current Device Context
     HDC hDC = GetDC(hWnd);
 
-    int		valid;
-    UINT	numFormats;
-    float	fAttributes[] = { 0,0 };
+    int   valid;
+    UINT  numFormats;
+    float fAttributes[] = {0, 0};
 
     // These Attributes Are The Bits We Want To Test For In Our Sample
     // Everything Is Pretty Standard, The Only One We Want To
     // Really Focus On Is The SAMPLE BUFFERS ARB And WGL SAMPLES
     // These Two Are Going To Do The Main Testing For Whether Or Not
     // We Support Multisampling On This Hardware.
-    int iAttributes[] =
-    {
-        WGL_DRAW_TO_WINDOW_ARB,GL_TRUE,
-            WGL_SUPPORT_OPENGL_ARB,GL_TRUE,
-            WGL_ACCELERATION_ARB,WGL_FULL_ACCELERATION_ARB,
-            WGL_COLOR_BITS_ARB,24,
-            WGL_ALPHA_BITS_ARB,8,
-            WGL_DEPTH_BITS_ARB,16,
-            WGL_STENCIL_BITS_ARB,0,
-            WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
-            WGL_SAMPLE_BUFFERS_ARB,GL_TRUE,
-            WGL_SAMPLES_ARB, iRequestMSAAValue,					// xN MultiSampling (N=4,2,1)
-            0,0
-    };
+    int iAttributes[] = {WGL_DRAW_TO_WINDOW_ARB,
+                         GL_TRUE,
+                         WGL_SUPPORT_OPENGL_ARB,
+                         GL_TRUE,
+                         WGL_ACCELERATION_ARB,
+                         WGL_FULL_ACCELERATION_ARB,
+                         WGL_COLOR_BITS_ARB,
+                         24,
+                         WGL_ALPHA_BITS_ARB,
+                         8,
+                         WGL_DEPTH_BITS_ARB,
+                         16,
+                         WGL_STENCIL_BITS_ARB,
+                         0,
+                         WGL_DOUBLE_BUFFER_ARB,
+                         GL_TRUE,
+                         WGL_SAMPLE_BUFFERS_ARB,
+                         GL_TRUE,
+                         WGL_SAMPLES_ARB,
+                         iRequestMSAAValue,  // xN MultiSampling (N=4,2,1)
+                         0,
+                         0};
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // First We Check To See If We Can Get A Pixel Format For 4 Samples
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &OutiPixelFormat, &numFormats);
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // If We Returned True, And Our Format Count Is Greater Than 1
     if (valid && numFormats >= 1)
@@ -1008,11 +1077,11 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // Our Pixel Format With 4 Samples Failed, Test For 2 Samples
     iAttributes[19] = 2;
-    valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &OutiPixelFormat, &numFormats);
+    valid           = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &OutiPixelFormat, &numFormats);
     if (valid && numFormats >= 1)
     {
         bIsGLMultisampleSupported = TRUE;
@@ -1021,37 +1090,37 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 
     // Return The Valid Format
-    return  bIsGLMultisampleSupported;
+    return bIsGLMultisampleSupported;
 }
 
 void SetEnableMultisample()
 {
     if (TRUE == g_bSupportedMSAA)
     {
-        glEnable(GL_MULTISAMPLE_ARB);							// Enable Multisampling
+        glEnable(GL_MULTISAMPLE_ARB);  // Enable Multisampling
     }
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 }
 
 void SetDisableMultisample()
 {
     if (TRUE == g_bSupportedMSAA)
     {
-        glDisable(GL_MULTISAMPLE_ARB);							// Enable Multisampling
+        glDisable(GL_MULTISAMPLE_ARB);  // Enable Multisampling
     }
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
-#endif // defined(_DEBUG)
+#endif  // defined(_DEBUG)
 }
 
-#endif // LDS_ADD_MULTISAMPLEANTIALIASING
+#endif  // LDS_ADD_MULTISAMPLEANTIALIASING
 
 ///////////////////////////////////////////////////////////////////////////////
 // render util
@@ -1074,10 +1143,14 @@ void RenderPlane3D(float Width, float Height, float Matrix[3][4])
     IR::Begin(GL_QUADS);
     PassthroughShader::Instance().SetUseTexture(true);
     IR::Color3f(1.f, 1.f, 1.f);
-    IR::TexCoord2f(0.f, 1.f); IR::Vertex3fv(TransformVertices[0]);
-    IR::TexCoord2f(1.f, 1.f); IR::Vertex3fv(TransformVertices[1]);
-    IR::TexCoord2f(1.f, 0.f); IR::Vertex3fv(TransformVertices[2]);
-    IR::TexCoord2f(0.f, 0.f); IR::Vertex3fv(TransformVertices[3]);
+    IR::TexCoord2f(0.f, 1.f);
+    IR::Vertex3fv(TransformVertices[0]);
+    IR::TexCoord2f(1.f, 1.f);
+    IR::Vertex3fv(TransformVertices[1]);
+    IR::TexCoord2f(1.f, 0.f);
+    IR::Vertex3fv(TransformVertices[2]);
+    IR::TexCoord2f(0.f, 0.f);
+    IR::Vertex3fv(TransformVertices[3]);
     IR::End();
 }
 
@@ -1087,9 +1160,8 @@ void BeginSprite()
     // against g_Camera.Matrix below), matching the FFP identity-modelview trick above.
     // Override GlobalUBO's view to identity for the duration of the sprite batch so the
     // shader doesn't apply the camera view transform a second time.
-    static const float s_Identity[16] = {
-        1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f
-    };
+    static const float s_Identity[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f,
+                                         0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
     GlobalUBO::Instance().PushView();
     GlobalUBO::Instance().SetView(s_Identity);
 }
@@ -1099,7 +1171,8 @@ void EndSprite()
     GlobalUBO::Instance().PopView();
 }
 
-void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_t Light, float Rotation, float u, float v, float uWidth, float vHeight)
+void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_t Light, float Rotation, float u,
+                  float v, float uWidth, float vHeight)
 {
     BindTexture(Texture);
 
@@ -1131,11 +1204,11 @@ void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_
         // Same arithmetic and the same degrees->radians constant, minus three sinf/cosf pairs
         // (two of them on a constant 0) and ~20 multiplies for every rotated sprite. This is a hot
         // per-particle path: smoke, clouds and explosions all pass a non-zero Rotation.
-        const float rad = Rotation * (Q_PI * 2 / 360);
-        const float sy  = sinf(rad);
-        const float cy  = cosf(rad);
-        const float dx[4] = { -Width,   Width,  Width, -Width  };
-        const float dy[4] = { -Height, -Height, Height, Height };
+        const float rad   = Rotation * (Q_PI * 2 / 360);
+        const float sy    = sinf(rad);
+        const float cy    = cosf(rad);
+        const float dx[4] = {-Width, Width, Width, -Width};
+        const float dy[4] = {-Height, -Height, Height, Height};
         for (int i = 0; i < 4; i++)
         {
             p[i][0] = x + dx[i] * cy - dy[i] * sy;
@@ -1171,7 +1244,8 @@ void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_
     IR::End();
 }
 
-void RenderSpriteUV(int Texture, vec3_t Position, float Width, float Height, float(*UV)[2], vec3_t Light[4], float Alpha)
+void RenderSpriteUV(int Texture, vec3_t Position, float Width, float Height, float (*UV)[2], vec3_t Light[4],
+                    float Alpha)
 {
     BindTexture(Texture);
 
@@ -1297,20 +1371,10 @@ void BeginBitmap()
     memcpy(s_PreBitmapView, GlobalUBO::Instance().GetView(), sizeof(s_PreBitmapView));
 
     // gluOrtho2D(0,W,0,H) with the implicit near=-1/far=1, closed form.
-    float w = (float)WindowWidth;
-    float h = (float)WindowHeight;
-    float cpuProj[16] = {
-        2.f / w, 0.f,     0.f,  0.f,
-        0.f,     2.f / h, 0.f,  0.f,
-        0.f,     0.f,    -1.f,  0.f,
-       -1.f,    -1.f,     0.f,  1.f
-    };
-    static const float cpuView[16] = {
-        1.f, 0.f, 0.f, 0.f,
-        0.f, 1.f, 0.f, 0.f,
-        0.f, 0.f, 1.f, 0.f,
-        0.f, 0.f, 0.f, 1.f
-    };
+    float w           = (float)WindowWidth;
+    float h           = (float)WindowHeight;
+    float cpuProj[16] = {2.f / w, 0.f, 0.f, 0.f, 0.f, 2.f / h, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, -1.f, -1.f, 0.f, 1.f};
+    static const float cpuView[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
 
     GlobalUBO::Instance().SetProj(cpuProj);
     GlobalUBO::Instance().SetView(cpuView);
@@ -1326,29 +1390,39 @@ void RenderColor(float x, float y, float Width, float Height, float Alpha, int F
 {
     DisableTexture();
 
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     float p[4][2];
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     if (Alpha > 0.f)
     {
         if (Flag == 0)
         {
-            currColor[0] = 1.f; currColor[1] = 1.f; currColor[2] = 1.f; currColor[3] = Alpha;
+            currColor[0] = 1.f;
+            currColor[1] = 1.f;
+            currColor[2] = 1.f;
+            currColor[3] = Alpha;
         }
         else if (Flag == 1)
         {
-            currColor[0] = 0.f; currColor[1] = 0.f; currColor[2] = 0.f; currColor[3] = Alpha;
+            currColor[0] = 0.f;
+            currColor[1] = 0.f;
+            currColor[2] = 0.f;
+            currColor[3] = Alpha;
         }
     }
     else
@@ -1368,28 +1442,34 @@ void RenderColor(float x, float y, float Width, float Height, float Alpha, int F
 void EndRenderColor()
 {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    if (!g_CoreProfile) glEnable(GL_TEXTURE_2D);
+    if (!g_CoreProfile)
+        glEnable(GL_TEXTURE_2D);
     IR::Color4f(1.0f, 1.0f, 1.0f, 1.0f);
     PassthroughShader::Instance().SetUseTexture(true);
 }
 
-void RenderColorBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight, unsigned int color)
+void RenderColorBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                       float vHeight, unsigned int color)
 {
     BindTexture(Texture);
     PassthroughShader::Instance().SetUseTexture(true);
 
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     float p[4][2];
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v);
@@ -1400,10 +1480,8 @@ void RenderColorBitmap(int Texture, float x, float y, float Width, float Height,
     IR::Begin(GL_TRIANGLE_FAN);
     for (int i = 0; i < 4; i++)
     {
-        IR::Color4ub(static_cast<GLubyte>((color & 0xff)),
-            static_cast<GLubyte>((color >> 8) & 0xff),
-            static_cast<GLubyte>((color >> 16) & 0xff),
-            static_cast<GLubyte>((color >> 24) & 0xff));
+        IR::Color4ub(static_cast<GLubyte>((color & 0xff)), static_cast<GLubyte>((color >> 8) & 0xff),
+                     static_cast<GLubyte>((color >> 16) & 0xff), static_cast<GLubyte>((color >> 24) & 0xff));
 
         IR::TexCoord2f(c[i][0], c[i][1]);
         IR::Vertex2f(p[i][0], p[i][1]);
@@ -1411,7 +1489,8 @@ void RenderColorBitmap(int Texture, float x, float y, float Width, float Height,
     IR::End();
 }
 
-void RenderBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight, bool Scale, bool StartScale, float Alpha)
+void RenderBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                  float vHeight, bool Scale, bool StartScale, float Alpha)
 {
     if (StartScale)
     {
@@ -1420,7 +1499,7 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
     }
     if (Scale)
     {
-        Width = ConvertX(Width);
+        Width  = ConvertX(Width);
         Height = ConvertY(Height);
     }
 
@@ -1429,10 +1508,14 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
     float p[4][2];
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v);
@@ -1440,10 +1523,13 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
     TEXCOORD(c[2], u + uWidth, v + vHeight);
     TEXCOORD(c[1], u, v + vHeight);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     if (Alpha > 0.f)
     {
-        currColor[0] = 1.f; currColor[1] = 1.f; currColor[2] = 1.f; currColor[3] = Alpha;
+        currColor[0] = 1.f;
+        currColor[1] = 1.f;
+        currColor[2] = 1.f;
+        currColor[3] = Alpha;
     }
     else
     {
@@ -1461,11 +1547,12 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
     IR::End();
 }
 
-void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v, float uWidth, float vHeight)
+void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v,
+                        float uWidth, float vHeight)
 {
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     BindTexture(Texture);
@@ -1489,7 +1576,7 @@ void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height
     TEXCOORD(c[2], u + uWidth, v + vHeight);
     TEXCOORD(c[1], u, v + vHeight);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     memcpy(currColor, g_CurrentColor, sizeof(currColor));
 
     IR::Begin(GL_TRIANGLE_FAN);
@@ -1506,9 +1593,9 @@ void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height
 
 void RenderBitRotate(int Texture, float x, float y, float Width, float Height, float Rotate)
 {
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     BindTexture(Texture);
@@ -1540,7 +1627,7 @@ void RenderBitRotate(int Texture, float x, float y, float Width, float Height, f
     TEXCOORD(c[2], 1.f, 1.f);
     TEXCOORD(c[1], 0.f, 1.f);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     memcpy(currColor, g_CurrentColor, sizeof(currColor));
 
     IR::Begin(GL_TRIANGLE_FAN);
@@ -1555,25 +1642,27 @@ void RenderBitRotate(int Texture, float x, float y, float Width, float Height, f
     IR::End();
 }
 
-void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHeight, float x, float y, float Width, float Height, float Rotate, float Rotate_Loc, float uWidth, float vHeight, int Num)
+void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHeight, float x, float y, float Width,
+                       float Height, float Rotate, float Rotate_Loc, float uWidth, float vHeight, int Num)
 {
-    int i = 0;
+    int    i = 0;
     vec3_t p, p2[4], p3, p4[4], Angle;
-    float c[4][2], Matrix[3][4];
+    float  c[4][2], Matrix[3][4];
 
-    ix = ConvertX(ix);
-    iy = ConvertY(iy);
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    ix     = ConvertX(ix);
+    iy     = ConvertY(iy);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     BindTexture(Texture);
 
-    y = Height - y;
+    y  = Height - y;
     iy = Height - iy;
 
-    Vector((ix - (Width * 0.5f)) + ((Width / 2.f) - (Width - x)), (iy - (Height * 0.5f)) + ((Height / 2.f) - (Height - y)), 0.f, p);
+    Vector((ix - (Width * 0.5f)) + ((Width / 2.f) - (Width - x)),
+           (iy - (Height * 0.5f)) + ((Height / 2.f) - (Height - y)), 0.f, p);
 
     Vector(0.f, 0.f, Rotate, Angle);
     AngleMatrix(Angle, Matrix);
@@ -1593,7 +1682,7 @@ void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHei
     TEXCOORD(c[2], uWidth, vHeight);
     TEXCOORD(c[1], 0.f, vHeight);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     memcpy(currColor, g_CurrentColor, sizeof(currColor));
 
     IR::Begin(GL_TRIANGLE_FAN);
@@ -1620,7 +1709,8 @@ void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHei
         dy = dy * (float)((float)REFERENCE_HEIGHT / WindowHeight);
         if (Num >= 100)
         {
-            g_pNewUIMiniMap->SetBtnPos(Num - 100, dx - (iWidth / 2), (REFERENCE_HEIGHT - dy) - (iHeight / 2), iWidth, iHeight);
+            g_pNewUIMiniMap->SetBtnPos(Num - 100, dx - (iWidth / 2), (REFERENCE_HEIGHT - dy) - (iHeight / 2), iWidth,
+                                       iHeight);
         }
         else
         {
@@ -1629,15 +1719,16 @@ void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHei
     }
 }
 
-void RenderBitmapLocalRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v, float uWidth, float vHeight)
+void RenderBitmapLocalRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v,
+                             float uWidth, float vHeight)
 {
     BindTexture(Texture);
 
     vec3_t p[4];
-    x = ConvertX(x);
-    y = ConvertY(y);
-    y = WindowHeight - y;
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    y      = WindowHeight - y;
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
 
     vec3_t vCenter, vDir;
@@ -1658,7 +1749,7 @@ void RenderBitmapLocalRotate(int Texture, float x, float y, float Width, float H
     TEXCOORD(c[2], u + uWidth, v + vHeight);
     TEXCOORD(c[1], u, v + vHeight);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     memcpy(currColor, g_CurrentColor, sizeof(currColor));
 
     IR::Begin(GL_TRIANGLE_FAN);
@@ -1683,10 +1774,14 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
         for (int x = 0; x < 4; x++)
         {
             float p[4][2];
-            p[0][0] = sx + ((x)*Width) * 0.25f; p[0][1] = sy - ((y)*Height) * 0.25f;
-            p[1][0] = sx + ((x)*Width) * 0.25f; p[1][1] = sy - ((y + 1) * Height) * 0.25f;
-            p[2][0] = sx + ((x + 1) * Width) * 0.25f; p[2][1] = sy - ((y + 1) * Height) * 0.25f;
-            p[3][0] = sx + ((x + 1) * Width) * 0.25f; p[3][1] = sy - ((y)*Height) * 0.25f;
+            p[0][0] = sx + ((x)*Width) * 0.25f;
+            p[0][1] = sy - ((y)*Height) * 0.25f;
+            p[1][0] = sx + ((x)*Width) * 0.25f;
+            p[1][1] = sy - ((y + 1) * Height) * 0.25f;
+            p[2][0] = sx + ((x + 1) * Width) * 0.25f;
+            p[2][1] = sy - ((y + 1) * Height) * 0.25f;
+            p[3][0] = sx + ((x + 1) * Width) * 0.25f;
+            p[3][1] = sy - ((y)*Height) * 0.25f;
 
             float c[4][2];
             TEXCOORD(c[0], (x) * 0.25f, (y) * 0.25f);
@@ -1694,11 +1789,27 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
             TEXCOORD(c[2], (x + 1) * 0.25f, (y + 1) * 0.25f);
             TEXCOORD(c[3], (x + 1) * 0.25f, (y) * 0.25f);
 
-            float Alpha[4] = { 1.f,1.f,1.f,1.f };
-            if (x == 0) { Alpha[0] = 0.f; Alpha[1] = 0.f; }
-            if (x == 3) { Alpha[2] = 0.f; Alpha[3] = 0.f; }
-            if (y == 0) { Alpha[0] = 0.f; Alpha[3] = 0.f; }
-            if (y == 3) { Alpha[1] = 0.f; Alpha[2] = 0.f; }
+            float Alpha[4] = {1.f, 1.f, 1.f, 1.f};
+            if (x == 0)
+            {
+                Alpha[0] = 0.f;
+                Alpha[1] = 0.f;
+            }
+            if (x == 3)
+            {
+                Alpha[2] = 0.f;
+                Alpha[3] = 0.f;
+            }
+            if (y == 0)
+            {
+                Alpha[0] = 0.f;
+                Alpha[3] = 0.f;
+            }
+            if (y == 3)
+            {
+                Alpha[1] = 0.f;
+                Alpha[2] = 0.f;
+            }
 
             IR::Begin(GL_TRIANGLE_FAN);
             PassthroughShader::Instance().SetUseTexture(true);
@@ -1713,20 +1824,25 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
     }
 }
 
-void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight)
+void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                    float vHeight)
 {
-    x = ConvertX(x);
-    y = ConvertY(y);
-    Width = ConvertX(Width);
+    x      = ConvertX(x);
+    y      = ConvertY(y);
+    Width  = ConvertX(Width);
     Height = ConvertY(Height);
     BindTexture(Texture);
 
     float p[4][2];
-    y = WindowHeight - y;
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    y       = WindowHeight - y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v + vHeight * 0.25f);
@@ -1734,7 +1850,7 @@ void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, fl
     TEXCOORD(c[2], u + uWidth, v + vHeight);
     TEXCOORD(c[1], u, v + vHeight - vHeight * 0.25f);
 
-    float currColor[4] = { 1.f, 1.f, 1.f, 1.f };
+    float currColor[4] = {1.f, 1.f, 1.f, 1.f};
     memcpy(currColor, g_CurrentColor, sizeof(currColor));
 
     IR::Begin(GL_TRIANGLE_FAN);
@@ -1754,19 +1870,22 @@ void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, fl
 
 float absf(float a)
 {
-    if (a < 0.f) return -a;
+    if (a < 0.f)
+        return -a;
     return a;
 }
 
 float minf(float a, float b)
 {
-    if (a > b) return b;
+    if (a > b)
+        return b;
     return a;
 }
 
 float maxf(float a, float b)
 {
-    if (a > b) return a;
+    if (a > b)
+        return a;
     return b;
 }
 
@@ -1775,7 +1894,7 @@ int InsideTest(float x, float y, float z, int n, float* v1, float* v2, float* v3
     if (type > 0.f)
         flag <<= 3;
 
-    int i;
+    int     i;
     vec3_t* vtx[4];
     vtx[0] = (vec3_t*)v1;
     vtx[1] = (vec3_t*)v2;
@@ -1785,54 +1904,54 @@ int InsideTest(float x, float y, float z, int n, float* v1, float* v2, float* v3
     int j = n - 1;
     switch (flag)
     {
-    case 1:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[1] - y) * ((*vtx[j])[2] - z) - ((*vtx[j])[1] - y) * ((*vtx[i])[2] - z);
-            if (d <= 0.f)
-                return false;
-        }
-        break;
-    case 2:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[2] - z) * ((*vtx[j])[0] - x) - ((*vtx[j])[2] - z) * ((*vtx[i])[0] - x);
-            if (d <= 0.f)
-                return false;
-        }
-        break;
-    case 4:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[0] - x) * ((*vtx[j])[1] - y) - ((*vtx[j])[0] - x) * ((*vtx[i])[1] - y);
-            if (d <= 0.f)
-                return false;
-        }
-        break;
-    case 8:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[1] - y) * ((*vtx[j])[2] - z) - ((*vtx[j])[1] - y) * ((*vtx[i])[2] - z);
-            if (d >= 0.f)
-                return false;
-        }
-        break;
-    case 16:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[2] - z) * ((*vtx[j])[0] - x) - ((*vtx[j])[2] - z) * ((*vtx[i])[0] - x);
-            if (d >= 0.f)
-                return false;
-        }
-        break;
-    case 32:
-        for (i = 0; i < n; j = i, i++)
-        {
-            float d = ((*vtx[i])[0] - x) * ((*vtx[j])[1] - y) - ((*vtx[j])[0] - x) * ((*vtx[i])[1] - y);
-            if (d >= 0.f)
-                return false;
-        }
-        break;
+        case 1:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[1] - y) * ((*vtx[j])[2] - z) - ((*vtx[j])[1] - y) * ((*vtx[i])[2] - z);
+                if (d <= 0.f)
+                    return false;
+            }
+            break;
+        case 2:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[2] - z) * ((*vtx[j])[0] - x) - ((*vtx[j])[2] - z) * ((*vtx[i])[0] - x);
+                if (d <= 0.f)
+                    return false;
+            }
+            break;
+        case 4:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[0] - x) * ((*vtx[j])[1] - y) - ((*vtx[j])[0] - x) * ((*vtx[i])[1] - y);
+                if (d <= 0.f)
+                    return false;
+            }
+            break;
+        case 8:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[1] - y) * ((*vtx[j])[2] - z) - ((*vtx[j])[1] - y) * ((*vtx[i])[2] - z);
+                if (d >= 0.f)
+                    return false;
+            }
+            break;
+        case 16:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[2] - z) * ((*vtx[j])[0] - x) - ((*vtx[j])[2] - z) * ((*vtx[i])[0] - x);
+                if (d >= 0.f)
+                    return false;
+            }
+            break;
+        case 32:
+            for (i = 0; i < n; j = i, i++)
+            {
+                float d = ((*vtx[i])[0] - x) * ((*vtx[j])[1] - y) - ((*vtx[j])[0] - x) * ((*vtx[i])[1] - y);
+                if (d >= 0.f)
+                    return false;
+            }
+            break;
     }
 
     return true;
@@ -1847,37 +1966,43 @@ void InitCollisionDetectLineToFace()
 
 vec3_t CollisionPosition;
 
-bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, float* v1, float* v2, float* v3, float* v4, vec3_t Normal, bool Collision)
+bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, float* v1, float* v2, float* v3, float* v4,
+                               vec3_t Normal, bool Collision)
 {
     vec3_t Direction;
     VectorSubtract(Target, Position, Direction);
     float a = DotProduct(Direction, Normal);
-    if (a >= 0.f) return false;
+    if (a >= 0.f)
+        return false;
     float b = DotProduct(Position, Normal) - DotProduct(v1, Normal);
     float t = -b / a;
     if (t >= 0.f && t <= Distance)
     {
-        float X = Direction[0] * t + Position[0];
-        float Y = Direction[1] * t + Position[1];
-        float Z = Direction[2] * t + Position[2];
-        int Count = 0;
-        float MIN = minf(minf(absf(Direction[0]), absf(Direction[1])), absf(Direction[2]));
+        float X     = Direction[0] * t + Position[0];
+        float Y     = Direction[1] * t + Position[1];
+        float Z     = Direction[2] * t + Position[2];
+        int   Count = 0;
+        float MIN   = minf(minf(absf(Direction[0]), absf(Direction[1])), absf(Direction[2]));
         if (MIN == absf(Direction[0]))
         {
             if ((Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1])) &&
-                (Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2]))) Count++;
+                (Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2])))
+                Count++;
         }
         else if (MIN == absf(Direction[1]))
         {
             if ((Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2])) &&
-                (X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0]))) Count++;
+                (X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0])))
+                Count++;
         }
         else
         {
             if ((X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0])) &&
-                (Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1]))) Count++;
+                (Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1])))
+                Count++;
         }
-        if (Count == 0) return false;
+        if (Count == 0)
+            return false;
         Count = 0;
         if (Normal[0] <= -0.5f || Normal[0] >= 0.5f)
         {
@@ -1891,7 +2016,8 @@ bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, floa
         {
             Count += InsideTest(X, Y, Z, Polygon, v1, v2, v3, v4, 4, Normal[2]);
         }
-        if (Count == 0) return false;
+        if (Count == 0)
+            return false;
         if (Collision)
         {
             Distance = t;
@@ -1918,12 +2044,23 @@ bool ProjectLineBox(vec3_t ax, vec3_t p1, vec3_t p2, OBB_t obb)
     float mx2 = ST;
     float mn2 = ST;
 
-    if (Q1 > 0)	mx2 += Q1; else mn2 += Q1;
-    if (Q2 > 0)	mx2 += Q2; else mn2 += Q2;
-    if (Q3 > 0) mx2 += Q3; else mn2 += Q3;
+    if (Q1 > 0)
+        mx2 += Q1;
+    else
+        mn2 += Q1;
+    if (Q2 > 0)
+        mx2 += Q2;
+    else
+        mn2 += Q2;
+    if (Q3 > 0)
+        mx2 += Q3;
+    else
+        mn2 += Q3;
 
-    if (mn1 > mx2) return false;
-    if (mn2 > mx1) return false;
+    if (mn1 > mx2)
+        return false;
+    if (mn2 > mx1)
+        return false;
 
     return true;
 }
@@ -1939,13 +2076,19 @@ bool CollisionDetectLineToOBB(vec3_t p1, vec3_t p2, OBB_t obb)
     CrossProduct(e1, obb.YAxis, eq12);
     CrossProduct(e1, obb.ZAxis, eq13);
 
-    if (!ProjectLineBox(eq11, p1, p2, obb)) return false;
-    if (!ProjectLineBox(eq12, p1, p2, obb)) return false;
-    if (!ProjectLineBox(eq13, p1, p2, obb)) return false;
+    if (!ProjectLineBox(eq11, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(eq12, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(eq13, p1, p2, obb))
+        return false;
 
-    if (!ProjectLineBox(obb.XAxis, p1, p2, obb)) return false;
-    if (!ProjectLineBox(obb.YAxis, p1, p2, obb)) return false;
-    if (!ProjectLineBox(obb.ZAxis, p1, p2, obb)) return false;
+    if (!ProjectLineBox(obb.XAxis, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(obb.YAxis, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(obb.ZAxis, p1, p2, obb))
+        return false;
 
     return true;
 }

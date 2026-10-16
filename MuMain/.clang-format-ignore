@@ -1,68 +1,14 @@
-# Auto-generated for the commercial cleanup pass (2026-10-16).
-# Files excluded from clang-format: vendored/third-party code plus large legacy or
-# data-generated translation units whose dense hand-aligned layout clang-format would
-# rewrite heavily (see cpp_churn2.csv). They are kept under review and formatted manually.
+# clang-format ignore list (2026-10-16 commercial cleanup).
+#
+# Every first-party C/C++ translation unit under src/source, src/MuEditor and
+# tests is now a clang-format fixed point (0 replacements) and is intentionally
+# kept under format enforcement. The large legacy data files (Zzz*, GM map data,
+# MapManager, etc.) were reformatted with the behavior-preserving gate, so they
+# are no longer ignored.
+#
+# Only vendored, third-party and generated trees are excluded: they belong to
+# upstream projects or are produced by the build, so they must not be reformatted.
 # Paths are relative to this directory (MuMain).
 src/ThirdParty/**
 tests/third_party/**
 out/**
-src/source/App/Platform/Windows/Winmain.cpp
-src/source/Core/Enums/GlobalEnums_3.h
-src/source/Core/Enums/GlobalEnums_4.h
-src/source/Core/Enums/GlobalEnums_Late2.h
-src/source/Dotnet/PacketBindings_ClientToServer.h
-src/source/Engine/AI/GOBoid.cpp
-src/source/Engine/Object/ZzzCharacter.cpp
-src/source/Engine/Object/ZzzInfomation.cpp
-src/source/Engine/Object/ZzzInterface.cpp
-src/source/Engine/Object/ZzzInventory.cpp
-src/source/Engine/Object/ZzzObject.cpp
-src/source/Engine/Object/ZzzOpenData.cpp
-src/source/GameLogic/Combat/ClassAttack.cpp
-src/source/GameLogic/Combat/SkillCast.cpp
-src/source/GameLogic/Events/w_CursedTemple.cpp
-src/source/GameLogic/Items/MixMgr.h
-src/source/GameLogic/Pets/GIPetManager.cpp
-src/source/GameLogic/Quests/GM3rdChangeUp.cpp
-src/source/MUHelper/MuHelper.cpp
-src/source/Network/Server/WSclient.cpp
-src/source/Network/Server/WSclient.h
-src/source/Render/Effects/Behaviors/MoveHandlers.cpp
-src/source/Render/Effects/ZzzEffect.cpp
-src/source/Render/Effects/ZzzEffectJoint.cpp
-src/source/Render/Effects/ZzzEffectParticle.cpp
-src/source/Render/Models/ZzzBMD.cpp
-src/source/Render/RHI/RHI_GL.cpp
-src/source/Render/Terrain/ZzzLodTerrain.cpp
-src/source/Render/Textures/ZzzOpenglUtil.cpp
-src/source/UI/ControllerKeyboard/ControllerKeyboard.cpp
-src/source/UI/Legacy/UIControls.cpp
-src/source/UI/Legacy/UIWindows.cpp
-src/source/UI/NewUI/Dialogs/NewUICommonMessageBox.cpp
-src/source/UI/NewUI/Dialogs/NewUICommonMessageBox.h
-src/source/UI/NewUI/Dialogs/NewUICustomMessageBox.cpp
-src/source/UI/NewUI/Dialogs/NewUICustomMessageBox.h
-src/source/UI/NewUI/HUD/NewUIMainFrameWindow.cpp
-src/source/UI/NewUI/NewUIMuHelper.cpp
-src/source/UI/NewUI/Options/NewUIOptionWindow.cpp
-src/source/World/GameMaps/GM_Kanturu_1st.cpp
-src/source/World/GameMaps/GM_Kanturu_2nd.cpp
-src/source/World/GameMaps/GM_Kanturu_3rd.cpp
-src/source/World/GameMaps/GM_PK_Field.cpp
-src/source/World/GameMaps/GM_Raklion.cpp
-src/source/World/GameMaps/GMAida.cpp
-src/source/World/GameMaps/GMBattleCastle.cpp
-src/source/World/GameMaps/GMCrywolf1st.cpp
-src/source/World/GameMaps/GMDoppelGanger1.cpp
-src/source/World/GameMaps/GMDoppelGanger2.cpp
-src/source/World/GameMaps/GMDoppelGanger4.cpp
-src/source/World/GameMaps/GMEmpireGuardian1.cpp
-src/source/World/GameMaps/GMEmpireGuardian2.cpp
-src/source/World/GameMaps/GMEmpireGuardian3.cpp
-src/source/World/GameMaps/GMEmpireGuardian4.cpp
-src/source/World/GameMaps/GMHellas.cpp
-src/source/World/GameMaps/GMHuntingGround.cpp
-src/source/World/GameMaps/GMKarutan1.cpp
-src/source/World/GameMaps/GMNewTown.cpp
-src/source/World/GameMaps/GMSwampOfQuiet.cpp
-src/source/World/MapInfra/MapManager.cpp

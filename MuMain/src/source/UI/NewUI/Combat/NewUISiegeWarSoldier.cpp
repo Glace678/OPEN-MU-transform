@@ -1,4 +1,4 @@
-﻿  // NewUISiegeWarSoldier.cpp: implementation of the NewUISiegeWarSoldier class.
+﻿// NewUISiegeWarSoldier.cpp: implementation of the NewUISiegeWarSoldier class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@
 
 #include "Engine/Object/ZzzCharacter.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

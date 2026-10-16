@@ -1,4 +1,4 @@
-﻿  // SkillManager.cpp: implementation of the CSkillManager class.
+﻿// SkillManager.cpp: implementation of the CSkillManager class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -7,8 +7,8 @@
 #include "World/MapInfra/MapManager.h"
 #include "Engine/Object/ZzzCharacter.h"
 
-    CSkillManager gSkillManager;
-extern bool       CheckAttack();
+CSkillManager gSkillManager;
+extern bool   CheckAttack();
 
 namespace
 {

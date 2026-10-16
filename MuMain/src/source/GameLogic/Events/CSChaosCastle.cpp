@@ -1,4 +1,4 @@
-﻿  //////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //  CSChaosCastle.cpp
 //////////////////////////////////////////////////////////////////////////
 
@@ -24,12 +24,12 @@
 #include <array>
 #include <cstdint>
 
-    extern int g_iChatInputType;
-extern int     g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
-extern int     g_iActionObjectType;
-extern int     g_iActionWorld;
-extern int     g_iActionTime;
-extern float   g_fActionObjectVelocity;
+extern int   g_iChatInputType;
+extern int   g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
+extern int   g_iActionObjectType;
+extern int   g_iActionWorld;
+extern int   g_iActionTime;
+extern float g_fActionObjectVelocity;
 
 namespace
 {

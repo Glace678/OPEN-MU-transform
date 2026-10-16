@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketFunctions.h" company="MUnique">
+﻿// <copyright file="PacketFunctions.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,10 +17,10 @@
 
 #include <coreclr_delegates.h>
 
-    /// <summary>
-    /// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
-    /// </summary>
-    class PacketFunctions_Base
+/// <summary>
+/// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
+/// </summary>
+class PacketFunctions_Base
 {
 private:
     int32_t _handle = -1;

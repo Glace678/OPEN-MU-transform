@@ -24,71 +24,68 @@ extern void MonsterDieSandSmoke(OBJECT* o);
 
 extern bool LogOut;
 
-BYTE m_AltarState[5] = { 2,2,2,2,2 };
+BYTE m_AltarState[5] = {2, 2, 2, 2, 2};
 
 #include "UI/Legacy/UIControls.h"
 
+bool    View_Bal           = false;
+char    Suc_Or_Fail        = -1;
+char    View_Suc_Or_Fail   = -1;
+float   Deco_Insert        = 0.f;
+char    Message_Box        = 0;
+wchar_t Box_String[2][200] = {};
+int     Dark_elf_Num       = 0;
+int     Button_Down        = 0;
+int     BackUp_Key         = 0;
+int     Val_Hp             = 100;
+int     m_iHour = 0, m_iMinute = 0;
+DWORD   m_dwSyncTime;
+int     Delay          = 1;
+int     Add_Num        = 10;
+bool    Dark_Elf_Check = false;
+int     iNextNotice    = -1;
 
-bool	View_Bal = false;
-char	Suc_Or_Fail = -1;
-char	View_Suc_Or_Fail = -1;
-float Deco_Insert = 0.f;
-char Message_Box = 0;
-wchar_t   Box_String[2][200] = {};
-int  Dark_elf_Num = 0;
-int Button_Down = 0;
-int BackUp_Key = 0;
-int Val_Hp = 100;
-int m_iHour = 0, m_iMinute = 0;
-DWORD m_dwSyncTime;
-int Delay = 1;
-int Add_Num = 10;
-bool Dark_Elf_Check = false;
-int iNextNotice = -1;
-
-BYTE Rank = 0;
-int Exp = 0;
-BYTE Ranking[5];
+BYTE       Rank = 0;
+int        Exp  = 0;
+BYTE       Ranking[5];
 CLASS_TYPE HeroClass[5];
-int HeroScore[5] = { -1,-1,-1,-1,-1 };
-wchar_t HeroName[5][MAX_USERNAME_SIZE + 1];
+int        HeroScore[5] = {-1, -1, -1, -1, -1};
+wchar_t    HeroName[5][MAX_USERNAME_SIZE + 1];
 
-int BackUpMin = 0;
-bool TimeStart = false;
-int Delay_Add_inter = 390;
+int  BackUpMin       = 0;
+bool TimeStart       = false;
+int  Delay_Add_inter = 390;
 bool View_End_Result = false;
-int nPastTick = 0;
-int BackUpTick = 0;
+int  nPastTick       = 0;
+int  BackUpTick      = 0;
 
 BYTE m_OccupationState = 0;
-BYTE m_CrywolfState = 0;
-int m_StatueHP = 0;
-
-
+BYTE m_CrywolfState    = 0;
+int  m_StatueHP        = 0;
 
 void M34CryWolf1st::CryWolfMVPInit()
 {
     Deco_Insert = 0.f;
     memset(Box_String, 0, sizeof(Box_String));
     Button_Down = 0;
-    BackUp_Key = 0;
+    BackUp_Key  = 0;
     m_iHour = 0, m_iMinute = 0;
-    m_dwSyncTime = -1;
-    Add_Num = 10;
-    TargetNpc = -1;
-    Delay = 1;
+    m_dwSyncTime   = -1;
+    Add_Num        = 10;
+    TargetNpc      = -1;
+    Delay          = 1;
     Dark_Elf_Check = false;
 
-    iNextNotice = -1;
-    View_Bal = false;
-    Message_Box = 0;
+    iNextNotice  = -1;
+    View_Bal     = false;
+    Message_Box  = 0;
     Dark_elf_Num = 0;
-    Val_Hp = 100;
+    Val_Hp       = 100;
 
     m_OccupationState = 0;
-    m_CrywolfState = 0;
-    m_StatueHP = 0;
-    SelectedNpc = -1;
+    m_CrywolfState    = 0;
+    m_StatueHP        = 0;
+    SelectedNpc       = -1;
 }
 
 int M34CryWolf1st::IsCryWolf1stMVPStart()
@@ -137,7 +134,7 @@ void M34CryWolf1st::CheckCryWolf1stMVP(BYTE btOccupationState, BYTE btCrywolfSta
             //			View_Suc_Or_Fail = 1;
             if (btOccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
             {
-                Add_Num = 11;
+                Add_Num          = 11;
                 View_Suc_Or_Fail = 1;
             }
             else
@@ -157,36 +154,37 @@ void M34CryWolf1st::CheckCryWolf1stMVP(BYTE btOccupationState, BYTE btCrywolfSta
 
     switch (m_OccupationState)
     {
-    case CRYWOLF_OCCUPATION_STATE_PEACE:
-        mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
-        break;
-    case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
-        mu_swprintf(FileName, L"%ls\\TerrainLight1.jpg", WorldName);
-        break;
-    case CRYWOLF_OCCUPATION_STATE_WAR:
-        mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
-        break;
+        case CRYWOLF_OCCUPATION_STATE_PEACE:
+            mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+            mu_swprintf(FileName, L"%ls\\TerrainLight1.jpg", WorldName);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_WAR:
+            mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+            break;
     }
     OpenTerrainLight(FileName);
 
     switch (m_OccupationState)
     {
-    case CRYWOLF_OCCUPATION_STATE_PEACE:
-        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, gMapManager.WorldActive + 1);
-        break;
-    case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
-        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 1);
-        break;
-    case CRYWOLF_OCCUPATION_STATE_WAR:
-        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 2);
-        break;
+        case CRYWOLF_OCCUPATION_STATE_PEACE:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, gMapManager.WorldActive + 1);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 1);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_WAR:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 2);
+            break;
     }
     OpenTerrainAttribute(FileName);
 }
 
-void M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(int StatueHP, BYTE AltarState1, BYTE AltarState2, BYTE AltarState3, BYTE AltarState4, BYTE AltarState5)
+void M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(int StatueHP, BYTE AltarState1, BYTE AltarState2, BYTE AltarState3,
+                                                 BYTE AltarState4, BYTE AltarState5)
 {
-    m_StatueHP = StatueHP;
+    m_StatueHP      = StatueHP;
     m_AltarState[0] = AltarState1;
     m_AltarState[1] = AltarState2;
     m_AltarState[2] = AltarState3;
@@ -201,24 +199,27 @@ void M34CryWolf1st::DoTankerFireFixStartPosition(int SourceX, int SourceY, int P
     Vector(PositionX * TERRAIN_SCALE, PositionY * TERRAIN_SCALE, 100.f, TargetPosition);
 
     int Type = 0;
-    if (SourceX == 122 || SourceX == 116) Type = 2;
-    else if (SourceX == 62)  Type = 0;
-    else if (SourceX == 183)  Type = 1;
+    if (SourceX == 122 || SourceX == 116)
+        Type = 2;
+    else if (SourceX == 62)
+        Type = 0;
+    else if (SourceX == 183)
+        Type = 1;
 
     switch (Type)
     {
-    case 0:
-        Vector(TargetPosition[0] - 800.0f, TargetPosition[1], 800.0f, Position);
-        CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 0, &Hero->Object);
-        break;
-    case 1:
-        Vector(TargetPosition[0] + 800.0f, TargetPosition[1], 800.0f, Position);
-        CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 1, &Hero->Object);
-        break;
-    case 2:
-        Vector(TargetPosition[0], TargetPosition[1] + 800.0f, 800.0f, Position);
-        CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 2, &Hero->Object);
-        break;
+        case 0:
+            Vector(TargetPosition[0] - 800.0f, TargetPosition[1], 800.0f, Position);
+            CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 0, &Hero->Object);
+            break;
+        case 1:
+            Vector(TargetPosition[0] + 800.0f, TargetPosition[1], 800.0f, Position);
+            CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 1, &Hero->Object);
+            break;
+        case 2:
+            Vector(TargetPosition[0], TargetPosition[1] + 800.0f, 800.0f, Position);
+            CreateEffect(MODEL_ARROW_TANKER_HIT, Position, TargetPosition, Hero->Object.Light, 2, &Hero->Object);
+            break;
     }
 }
 
@@ -243,7 +244,7 @@ void M34CryWolf1st::RenderNoticesCryWolf()
     iTemp = 4 * iNextNotice;
 
     wchar_t szText[256];
-    int nText = 0;
+    int     nText = 0;
 
     for (int i = 0; i < 4; i++)
     {
@@ -275,21 +276,24 @@ void M34CryWolf1st::ChangeBackGroundMusic(int World)
             StopMp3(MUSIC_BC_CRYWOLF_1ST);
             PlayMp3(MUSIC_CRYWOLF_BEFORE);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_BEFORE);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_BEFORE);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_READY)
         {
             StopMp3(MUSIC_CRYWOLF_BEFORE);
             PlayMp3(MUSIC_CRYWOLF_READY);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_READY);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_READY);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_START)
         {
             StopMp3(MUSIC_CRYWOLF_READY);
             PlayMp3(MUSIC_CRYWOLF_BACK);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_BACK);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_BACK);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_END)
         {
@@ -305,7 +309,8 @@ void M34CryWolf1st::ChangeBackGroundMusic(int World)
         {
             PlayMp3(MUSIC_BC_CRYWOLF_1ST);
 
-            if (IsEndMp3()) StopMp3(MUSIC_BC_CRYWOLF_1ST);
+            if (IsEndMp3())
+                StopMp3(MUSIC_BC_CRYWOLF_1ST);
         }
     }
     else
@@ -333,41 +338,37 @@ bool M34CryWolf1st::MoveCryWolf1stObject(OBJECT* o)
     if (!IsCyrWolf1st())
         return false;
 
-    float Luminosity;
+    float  Luminosity;
     vec3_t Light;
 
     switch (o->Type)
     {
-    case 36:
-    {
-    }
-    break;
-    case 70:
-    {
-    }
-    break;
-    case 41:
-    {
-        Vector(0.2f, 0.7f, 0.5f, Light);
-        AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
-    }
-    break;
-    case 71:
-    case 57:
-    {
-        Luminosity = (float)(rand() % 4 + 3) * 0.1f;
-        Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
-        AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
-    }
-    break;
-    case 81:
-        o->Alpha = 0.2f;
+        case 36: {
+        }
         break;
-    case 82:
-    case 83:
-    case 84:
-        o->HiddenMesh = -2;
+        case 70: {
+        }
         break;
+        case 41: {
+            Vector(0.2f, 0.7f, 0.5f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
+        }
+        break;
+        case 71:
+        case 57: {
+            Luminosity = (float)(rand() % 4 + 3) * 0.1f;
+            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+        }
+        break;
+        case 81:
+            o->Alpha = 0.2f;
+            break;
+        case 82:
+        case 83:
+        case 84:
+            o->HiddenMesh = -2;
+            break;
     }
     return true;
 }
@@ -378,7 +379,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectVisual(OBJECT* o, BMD* b)
         return false;
 
     vec3_t Light, p;
-    float Scale;//,Luminosity;
+    float  Scale;  //,Luminosity;
     Vector(0.f, 0.f, 0.f, p);
     static int Change_weather = 0;
 
@@ -386,44 +387,42 @@ bool M34CryWolf1st::RenderCryWolf1stObjectVisual(OBJECT* o, BMD* b)
 
     if (Change_weather > 70000)
     {
-        weather = rand() % 3;
+        weather        = rand() % 3;
         Change_weather = 0;
     }
     switch (o->Type)
     {
-    case 41:
-    {
-        Vector(1.f, 1.f, 1.f, Light);
-        VectorCopy(o->Position, p);
-        static float Ro = 0.0f;
-        Ro += 1.0f;
-        if (Ro >= 360.0f)
-            Ro = 0.f;
-        float aaa;
-        if (Time_Effect > 20)
-            aaa = 40 - Time_Effect;
-        else
-            aaa = Time_Effect;
-
-        Scale = 1.3f;
-        p[2] += (350.f + aaa);
-
-        Vector(1.0f, 1.0f, 1.f, Light);
-        CreateSprite(BITMAP_FLARE, p, Scale, Light, o);
-        CreateSprite(BITMAP_FLARE, p, Scale, Light, o, Ro);
-    }
-    break;
-    case 37:
-    {
-    }
-    break;
-    case 84:
-        if (rand_fps_check(3) && m_OccupationState == CRYWOLF_OCCUPATION_STATE_OCCUPIED)
-        {
+        case 41: {
             Vector(1.f, 1.f, 1.f, Light);
-            CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            VectorCopy(o->Position, p);
+            static float Ro = 0.0f;
+            Ro += 1.0f;
+            if (Ro >= 360.0f)
+                Ro = 0.f;
+            float aaa;
+            if (Time_Effect > 20)
+                aaa = 40 - Time_Effect;
+            else
+                aaa = Time_Effect;
+
+            Scale = 1.3f;
+            p[2] += (350.f + aaa);
+
+            Vector(1.0f, 1.0f, 1.f, Light);
+            CreateSprite(BITMAP_FLARE, p, Scale, Light, o);
+            CreateSprite(BITMAP_FLARE, p, Scale, Light, o, Ro);
         }
         break;
+        case 37: {
+        }
+        break;
+        case 84:
+            if (rand_fps_check(3) && m_OccupationState == CRYWOLF_OCCUPATION_STATE_OCCUPIED)
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            }
+            break;
     }
 
     return true;
@@ -435,138 +434,135 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
         return false;
     }
 
-    float Luminosity;
+    float  Luminosity;
     vec3_t Light;
 
     switch (o->Type)
     {
-    case 36:
-    {
-        if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
-        {
-            Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        case 36: {
+            if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
+            {
+                Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV, o->HiddenMesh);
+            }
+            else
+            {
+                Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV, o->HiddenMesh);
+            }
         }
-        else
-        {
-            Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            return true;
+        case 56: {
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
+            {
+                float Color = (int)rand() % 10000 * 0.0001f;
+
+                Vector(Color, Color, Color, Light);
+
+                if (rand_fps_check(3))
+                    CreateEffect(BITMAP_MAGIC, o->Position, o->Angle, Light, 3, o, 4.0f);
+            }
         }
-    }
-    return true;
-    case 56:
-    {
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
-        {
-            float Color = (int)rand() % 10000 * 0.0001f;
-
-            Vector(Color, Color, Color, Light);
-
+            return true;
+        case 41:
+            Vector(0.2f, 0.7f, 0.f, Light);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            return true;
+        case 57: {
             if (rand_fps_check(3))
-                CreateEffect(BITMAP_MAGIC, o->Position, o->Angle, Light, 3, o, 4.0f);
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 5, o->Scale);
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            }
         }
-    }
-    return true;
-    case 41:
-        Vector(0.2f, 0.7f, 0.f, Light);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        return true;
-    case 57:
-    {
-        if (rand_fps_check(3))
-        {
-            Vector(1.f, 1.f, 1.f, Light);
-            CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 5, o->Scale);
-            CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            return true;
+        case 71: {
+            if (rand_fps_check(3))
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 5, o->Scale);
+            }
         }
-    }
-    return true;
-    case 71:
-    {
-        if (rand_fps_check(3))
-        {
-            Vector(1.f, 1.f, 1.f, Light);
-            CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 5, o->Scale);
+            return true;
+        case 72: {
+            if (rand_fps_check(10))
+            {
+                vec3_t Position;
+                VectorCopy(o->Position, Position);
+                Position[2] += 50.0f;
+                Luminosity = (float)(rand() % 4 + 3) * 0.1f;
+                Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+                CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light, 33, o->Scale);
+            }
         }
-    }
-    return true;
-    case 72:
-    {
-        if (rand_fps_check(10))
-        {
-            vec3_t Position;
-            VectorCopy(o->Position, Position);
-            Position[2] += 50.0f;
-            Luminosity = (float)(rand() % 4 + 3) * 0.1f;
-            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
-            CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light, 33, o->Scale);
+            return true;
+        case 73: {
+            if (weather == 0)
+                ashies = true;
         }
-    }
-    return true;
-    case 73:
-    {
-        if (weather == 0)
-            ashies = true;
-    }
-    return true;
-    case 74:
-    {
-        if (rand_fps_check(3) && m_OccupationState == CRYWOLF_OCCUPATION_STATE_OCCUPIED)
-        {
-            Vector(1.f, 1.f, 1.f, Light);
-            CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            return true;
+        case 74: {
+            if (rand_fps_check(3) && m_OccupationState == CRYWOLF_OCCUPATION_STATE_OCCUPIED)
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            }
         }
-    }
-    return true;
-    case 77:
-    {
-        if (rand_fps_check(6))
-        {
-            //	Vector(0.02f,0.02f,0.03f,Light);
-            Vector(0.02f, 0.03f, 0.02f, Light);
-            CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
+            return true;
+        case 77: {
+            if (rand_fps_check(6))
+            {
+                //	Vector(0.02f,0.02f,0.03f,Light);
+                Vector(0.02f, 0.03f, 0.02f, Light);
+                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
+            }
         }
-    }
-    return true;
-    case 78:
-    {
-        if (rand_fps_check(6))
-        {
-            Vector(0.03f, 0.06f, 0.05f, Light);
-            CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
+            return true;
+        case 78: {
+            if (rand_fps_check(6))
+            {
+                Vector(0.03f, 0.06f, 0.05f, Light);
+                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
+            }
         }
-    }
-    return true;
-    case 81:
-    {
-        if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_WAR)
-        {
-            o->Scale = 1.03f;
+            return true;
+        case 81: {
+            if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_WAR)
+            {
+                o->Scale = 1.03f;
 
-            float fTemp = 0.1f;
+                float fTemp = 0.1f;
 
-            if (m_StatueHP <= 10) fTemp = 1.0f;
-            b->BodyLight[0] = (sinf(WorldTime * 0.004f) * 3.0f) * fTemp + 5.0f - m_StatueHP / 20.0f;
-            b->BodyLight[1] = m_StatueHP / 25.0f - 1.0f;
-            b->BodyLight[2] = m_StatueHP / 20.0f - 0.5f;
+                if (m_StatueHP <= 10)
+                    fTemp = 1.0f;
+                b->BodyLight[0] = (sinf(WorldTime * 0.004f) * 3.0f) * fTemp + 5.0f - m_StatueHP / 20.0f;
+                b->BodyLight[1] = m_StatueHP / 25.0f - 1.0f;
+                b->BodyLight[2] = m_StatueHP / 20.0f - 0.5f;
 
-            b->StreamMesh = 0;
-            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->StreamMesh = -1;
+                b->StreamMesh = 0;
+                b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+                b->StreamMesh = -1;
 
-            b->StreamMesh = 1;
-            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME2, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->StreamMesh = -1;
+                b->StreamMesh = 1;
+                b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME2, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+                b->StreamMesh = -1;
+            }
         }
-    }
-    return true;
-    case MODEL_SKILL_FURY_STRIKE:
-    {
-        Vector(0.0f, 0.0f, 0.9f, b->BodyLight);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-    }
-    return true;
+            return true;
+        case MODEL_SKILL_FURY_STRIKE: {
+            Vector(0.0f, 0.0f, 0.9f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+        }
+            return true;
     }
 
     return RenderCryWolf1stMonsterObjectMesh(o, b, ExtraMon);
@@ -581,141 +577,131 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
 
     switch (iType)
     {
-    case MONSTER_HAMMER_SCOUT:
-    {
-        OpenMonsterModel(MONSTER_MODEL_SCOUT);
-        c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
-        c->Object.Scale = 1.2f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-    }
-    break;
-    case MONSTER_LANCE_SCOUT:
-    {
-        OpenMonsterModel(MONSTER_MODEL_SOLAM);
-        c = CreateCharacter(Key, MODEL_SOLAM, PosX, PosY);
-        c->Object.Scale = 1.2f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-    }
-    break;
-    case MONSTER_BOW_SCOUT:
-    {
-        OpenMonsterModel(MONSTER_MODEL_VALAM);
-        c = CreateCharacter(Key, MODEL_VALAM, PosX, PosY);
-        c->Object.Scale = 1.2f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-
-        BoneManager::RegisterBone(c, L"Monster96_Top", 27);
-        BoneManager::RegisterBone(c, L"Monster96_Center", 28);
-        BoneManager::RegisterBone(c, L"Monster96_Bottom", 29);
-    }
-    break;
-    case MONSTER_WEREWOLF:
-    {
-        OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
-        c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
-        c->Object.Scale = 1.25f;
-        c->Object.SubType = 0;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-
-        BoneManager::RegisterBone(c, L"Monster95_Head", 6);
-    }
-    break;
-    case MONSTER_SCOUTHERO:
-    {
-        OpenMonsterModel(MONSTER_MODEL_SCOUT);
-        c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
-        c->Object.Scale = 1.6f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-    }
-    break;
-    case MONSTER_WEREWOLFHERO:
-    {
-        OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
-        c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
-        c->Object.Scale = 1.65f;
-        c->Object.SubType = 1;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-
-        BoneManager::RegisterBone(c, L"Monster95_Head", 6);
-    }
-    break;
-    case MONSTER_VALAM:
-    case MONSTER_BALRAM:
-    {
-        OpenMonsterModel(MONSTER_MODEL_BALRAM);
-        c = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
-        c->Object.Scale = 1.25f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-    }
-    break;
-    case MONSTER_SOLAM:
-    case MONSTER_SORAM:
-    {
-        OpenMonsterModel(MONSTER_MODEL_SORAM);
-        c = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
-        c->Object.Scale = 1.3f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-    }
-    break;
-    case MONSTER_BALGASS:
-    {
-        OpenMonsterModel(MONSTER_MODEL_BALGASS);
-        c = CreateCharacter(Key, MODEL_BALGASS, PosX, PosY);
-        c->Object.Scale = 2.f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        CreateJoint(BITMAP_JOINT_ENERGY, c->Object.Position, c->Object.Position, c->Object.Angle, 2, &c->Object, 30.f);
-        CreateJoint(BITMAP_JOINT_ENERGY, c->Object.Position, c->Object.Position, c->Object.Angle, 3, &c->Object, 30.f);
-    }
-    break;
-    case MONSTER_DEATH_SPIRIT:
-    {
-        OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
-        c = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
-        c->Object.Scale = 1.25f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-
-        BoneManager::RegisterBone(c, L"Monster94_zx", 27);
-        BoneManager::RegisterBone(c, L"Monster94_zx01", 28);
-    }
-    break;
-    case MONSTER_DARK_ELF:
-    case MONSTER_DARKELF:
-    {
-        OpenMonsterModel(MONSTER_MODEL_DARK_ELF_1);
-        c = CreateCharacter(Key, MODEL_DARK_ELF_1, PosX, PosY);
-        c->Object.Scale = 1.5f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-        BoneManager::RegisterBone(c, L"Left_Hand", 17);
-    }
-    break;
-    case MONSTER_BALLISTA:
-    {
-        OpenMonsterModel(MONSTER_MODEL_BALLISTA);
-        c = CreateCharacter(Key, MODEL_BALLISTA, PosX, PosY, 180);
-        c->Object.Scale = 1.0f;
-        c->Weapon[0].Type = -1;
-        c->Weapon[1].Type = -1;
-
-        if (PosY == 90)
-        {
+        case MONSTER_HAMMER_SCOUT: {
+            OpenMonsterModel(MONSTER_MODEL_SCOUT);
+            c                 = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            c->Object.Scale   = 1.2f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
         }
-        if (PosX == 62)
-            c->Object.Angle[2] = 90.0f;
-        if (PosX == 183)
-            c->Object.Angle[2] = 90.0f;
-    }
-    break;
+        break;
+        case MONSTER_LANCE_SCOUT: {
+            OpenMonsterModel(MONSTER_MODEL_SOLAM);
+            c                 = CreateCharacter(Key, MODEL_SOLAM, PosX, PosY);
+            c->Object.Scale   = 1.2f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+        }
+        break;
+        case MONSTER_BOW_SCOUT: {
+            OpenMonsterModel(MONSTER_MODEL_VALAM);
+            c                 = CreateCharacter(Key, MODEL_VALAM, PosX, PosY);
+            c->Object.Scale   = 1.2f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+
+            BoneManager::RegisterBone(c, L"Monster96_Top", 27);
+            BoneManager::RegisterBone(c, L"Monster96_Center", 28);
+            BoneManager::RegisterBone(c, L"Monster96_Bottom", 29);
+        }
+        break;
+        case MONSTER_WEREWOLF: {
+            OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
+            c                 = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            c->Object.Scale   = 1.25f;
+            c->Object.SubType = 0;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+
+            BoneManager::RegisterBone(c, L"Monster95_Head", 6);
+        }
+        break;
+        case MONSTER_SCOUTHERO: {
+            OpenMonsterModel(MONSTER_MODEL_SCOUT);
+            c                 = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            c->Object.Scale   = 1.6f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+        }
+        break;
+        case MONSTER_WEREWOLFHERO: {
+            OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
+            c                 = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            c->Object.Scale   = 1.65f;
+            c->Object.SubType = 1;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+
+            BoneManager::RegisterBone(c, L"Monster95_Head", 6);
+        }
+        break;
+        case MONSTER_VALAM:
+        case MONSTER_BALRAM: {
+            OpenMonsterModel(MONSTER_MODEL_BALRAM);
+            c                 = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
+            c->Object.Scale   = 1.25f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+        }
+        break;
+        case MONSTER_SOLAM:
+        case MONSTER_SORAM: {
+            OpenMonsterModel(MONSTER_MODEL_SORAM);
+            c                 = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
+            c->Object.Scale   = 1.3f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+        }
+        break;
+        case MONSTER_BALGASS: {
+            OpenMonsterModel(MONSTER_MODEL_BALGASS);
+            c                 = CreateCharacter(Key, MODEL_BALGASS, PosX, PosY);
+            c->Object.Scale   = 2.f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+            CreateJoint(BITMAP_JOINT_ENERGY, c->Object.Position, c->Object.Position, c->Object.Angle, 2, &c->Object,
+                        30.f);
+            CreateJoint(BITMAP_JOINT_ENERGY, c->Object.Position, c->Object.Position, c->Object.Angle, 3, &c->Object,
+                        30.f);
+        }
+        break;
+        case MONSTER_DEATH_SPIRIT: {
+            OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
+            c                 = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
+            c->Object.Scale   = 1.25f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+
+            BoneManager::RegisterBone(c, L"Monster94_zx", 27);
+            BoneManager::RegisterBone(c, L"Monster94_zx01", 28);
+        }
+        break;
+        case MONSTER_DARK_ELF:
+        case MONSTER_DARKELF: {
+            OpenMonsterModel(MONSTER_MODEL_DARK_ELF_1);
+            c                 = CreateCharacter(Key, MODEL_DARK_ELF_1, PosX, PosY);
+            c->Object.Scale   = 1.5f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+            BoneManager::RegisterBone(c, L"Left_Hand", 17);
+        }
+        break;
+        case MONSTER_BALLISTA: {
+            OpenMonsterModel(MONSTER_MODEL_BALLISTA);
+            c                 = CreateCharacter(Key, MODEL_BALLISTA, PosX, PosY, 180);
+            c->Object.Scale   = 1.0f;
+            c->Weapon[0].Type = -1;
+            c->Weapon[1].Type = -1;
+
+            if (PosY == 90)
+            {
+            }
+            if (PosX == 62)
+                c->Object.Angle[2] = 90.0f;
+            if (PosX == 183)
+                c->Object.Angle[2] = 90.0f;
+        }
+        break;
     }
 
     return c;
@@ -725,257 +711,253 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case MODEL_SCOUT:
-    {
-        float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-        float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-        b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-        vec3_t Light;
-        if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            vec3_t EndPos, EndPos1, EndRelative;
-            if (o->AnimationFrame >= 5.5f && o->AnimationFrame < (5.5f + fActionSpeed))
+        case MODEL_SCOUT: {
+            float fActionSpeed    = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+            b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                         o->HeadAngle);
+            vec3_t Light;
+            if (o->CurrentAction == MONSTER01_ATTACK2)
             {
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[24], EndRelative, EndPos, false);
-                b->TransformPosition(BoneTransform[16], EndRelative, EndPos1, false);
-                Vector(1.f, 1.f, 1.f, Light);
-
-                for (int iu = 0; iu < 6; iu++)
+                vec3_t EndPos, EndPos1, EndRelative;
+                if (o->AnimationFrame >= 5.5f && o->AnimationFrame < (5.5f + fActionSpeed))
                 {
-                    CreateEffectFpsChecked(MODEL_STONE2, EndPos, o->Angle, o->Light);
-                    CreateEffectFpsChecked(MODEL_STONE2, EndPos1, o->Angle, o->Light);
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[24], EndRelative, EndPos, false);
+                    b->TransformPosition(BoneTransform[16], EndRelative, EndPos1, false);
+                    Vector(1.f, 1.f, 1.f, Light);
+
+                    for (int iu = 0; iu < 6; iu++)
+                    {
+                        CreateEffectFpsChecked(MODEL_STONE2, EndPos, o->Angle, o->Light);
+                        CreateEffectFpsChecked(MODEL_STONE2, EndPos1, o->Angle, o->Light);
+                    }
                 }
             }
-        }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
             {
-                if (rand_fps_check(10)) {
+                if (rand_fps_check(10))
+                {
                     CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
                 }
             }
-    }
-    break;
-    case MODEL_SORAM:
-    {
-        float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-        vec3_t Light;
-        vec3_t EndPos, EndRelative;
-        Vector(1.f, 1.f, 1.f, Light);
+        }
+        break;
+        case MODEL_SORAM: {
+            float  fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            vec3_t Light;
+            vec3_t EndPos, EndRelative;
+            Vector(1.f, 1.f, 1.f, Light);
 
-        if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->AnimationFrame >= 6.5f && o->AnimationFrame < (6.5f + fActionSpeed) && rand_fps_check(1))
+            if (o->CurrentAction == MONSTER01_ATTACK1)
             {
+                if (o->AnimationFrame >= 6.5f && o->AnimationFrame < (6.5f + fActionSpeed) && rand_fps_check(1))
+                {
+                    Vector(0.0f, 0.0f, 0.0f, EndRelative);
+                    b->TransformPosition(o->BoneTransform[27], EndRelative, EndPos, true);
+                    CreateEffect(BITMAP_CRATER, EndPos, o->Angle, o->Light, 2);
+                    CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
+                    CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
+                    Vector(1.0f, 0.6f, 0.4f, Light);
+                    CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
+                    CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
+                    CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
+                    CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
+                    CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
+
+                    for (int iu = 0; iu < 4; iu++)
+                    {
+                        CreateEffect(MODEL_BIG_STONE1, EndPos, o->Angle, o->Light, 10);
+                        CreateEffect(MODEL_STONE2, EndPos, o->Angle, o->Light);
+                    }
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(10))
+                {
+                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+                }
+            }
+        }
+        break;
+        case MODEL_BALGASS: {
+            MoveEye(o, b, 9, 10);
+            float fActionSpeed    = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+            b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                         o->HeadAngle);
+            vec3_t Light;
+
+            if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                vec3_t EndPos, EndRelative;
+                if (o->AnimationFrame >= 7.5f && o->AnimationFrame < (7.5f + fActionSpeed) && rand_fps_check(1))
+                {
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[33], EndRelative, EndPos, false);
+                    Vector(1.f, 1.f, 1.f, Light);
+                    CreateEffect(BITMAP_CRATER, EndPos, o->Angle, o->Light, 2);
+                    CreateParticle(BITMAP_EXPLOTION, EndPos, o->Angle, Light, 2);
+                    for (int iu = 0; iu < 6; iu++)
+                        CreateEffect(MODEL_BIG_STONE1, EndPos, o->Angle, o->Light, 10);
+                    //						CreateEffect ( MODEL_STONE2,EndPos,o->Angle,o->Light);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(10))
+                {
+                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+                }
+            }
+        }
+        break;
+        case MODEL_BALRAM: {
+            vec3_t Light;
+            Vector(0.9f, 0.2f, 0.1f, Light);
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(10))
+                {
+                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+                }
+            }
+        }
+        break;
+        case MODEL_DARK_ELF_1: {
+            if (m_CrywolfState == CRYWOLF_STATE_START && Dark_Elf_Check)
+            {
+                Dark_Elf_Check = false;
+
+                vec3_t Light;
+                vec3_t EndPos, EndRelative;
+
+                Vector(1.f, 0.2f, 0.2f, Light);
                 Vector(0.0f, 0.0f, 0.0f, EndRelative);
                 b->TransformPosition(o->BoneTransform[27], EndRelative, EndPos, true);
                 CreateEffect(BITMAP_CRATER, EndPos, o->Angle, o->Light, 2);
                 CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
                 CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
-                Vector(1.0f, 0.6f, 0.4f, Light);
+                Vector(1.0f, 0.2f, 0.2f, Light);
                 CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
                 CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
                 CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
                 CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
                 CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-
-                for (int iu = 0; iu < 4; iu++)
-                {
-                    CreateEffect(MODEL_BIG_STONE1, EndPos, o->Angle, o->Light, 10);
-                    CreateEffect(MODEL_STONE2, EndPos, o->Angle, o->Light);
-                }
             }
         }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-            {
-                if (rand_fps_check(10)) {
-                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-                }
-            }
-    }
-    break;
-    case MODEL_BALGASS:
-    {
-        MoveEye(o, b, 9, 10);
-        float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-        float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-        b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-        vec3_t Light;
-
-        if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            vec3_t EndPos, EndRelative;
-            if (o->AnimationFrame >= 7.5f && o->AnimationFrame < (7.5f + fActionSpeed) && rand_fps_check(1))
-            {
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[33], EndRelative, EndPos, false);
-                Vector(1.f, 1.f, 1.f, Light);
-                CreateEffect(BITMAP_CRATER, EndPos, o->Angle, o->Light, 2);
-                CreateParticle(BITMAP_EXPLOTION, EndPos, o->Angle, Light, 2);
-                for (int iu = 0; iu < 6; iu++)
-                    CreateEffect(MODEL_BIG_STONE1, EndPos, o->Angle, o->Light, 10);
-                //						CreateEffect ( MODEL_STONE2,EndPos,o->Angle,o->Light);
-            }
-        }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-            {
-                if (rand_fps_check(10)) {
-                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-                }
-            }
-    }
-    break;
-    case MODEL_BALRAM:
-    {
-        vec3_t Light;
-        Vector(0.9f, 0.2f, 0.1f, Light);
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(10)) {
-                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-            }
-        }
-    }
-    break;
-    case MODEL_DARK_ELF_1:
-    {
-        if (m_CrywolfState == CRYWOLF_STATE_START && Dark_Elf_Check)
-        {
-            Dark_Elf_Check = false;
-
+        break;
+        case MODEL_DEATH_SPIRIT: {
             vec3_t Light;
-            vec3_t EndPos, EndRelative;
-
-            Vector(1.f, 0.2f, 0.2f, Light);
-            Vector(0.0f, 0.0f, 0.0f, EndRelative);
-            b->TransformPosition(o->BoneTransform[27], EndRelative, EndPos, true);
-            CreateEffect(BITMAP_CRATER, EndPos, o->Angle, o->Light, 2);
-            CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
-            CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 1);
-            Vector(1.0f, 0.2f, 0.2f, Light);
-            CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-            CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-            CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-            CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-            CreateEffect(BITMAP_SHOCK_WAVE, EndPos, o->Angle, Light, 8);
-        }
-    }
-    break;
-    case MODEL_DEATH_SPIRIT:
-    {
-        vec3_t Light;
-        Vector(0.9f, 0.2f, 0.1f, Light);
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(10)) {
-                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-            }
-        }
-    }
-    break;
-    case MODEL_WEREWOLF_HERO:
-    {
-        //CreateEffect ( MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 1, o, -1, 0, 1 );
-        vec3_t Position, Light;
-
-        if (o->CurrentAction != MONSTER01_DIE) {
             Vector(0.9f, 0.2f, 0.1f, Light);
-            BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
-            CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
-        }
-
-        float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-        vec3_t EndPos, EndRelative;
-        Vector(1.f, 1.f, 1.f, Light);
-
-        //			CreateParticle(BITMAP_FIRE,EndPos,o->Angle,Light);
-        if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->AnimationFrame >= 2.5f && o->AnimationFrame < (2.5f + fActionSpeed) && rand_fps_check(1))
-            {
-                Vector(0.0f, 0.0f, 100.0f, EndRelative);
-                b->TransformPosition(o->BoneTransform[20], EndRelative, EndPos, true);
-                if (o->Scale > 1.25f)
-                {
-                    //						Vector ( 0.f, 0.f, 1.f, Light );
-                    CreateEffect(MODEL_SKILL_FURY_STRIKE, EndPos, o->Angle, Light, 1, o, -1, 0, 1);
-                }
-            }
-        }
-        else
-            //			Vector ( 0.9f, 0.2f, 0.1f, Light );
-                        //. Walking & Running Scene Processing
             if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
             {
-                if (rand_fps_check(10)) {
+                if (rand_fps_check(10))
+                {
                     CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
                 }
             }
-    }
-    break;
-    case MODEL_SOLAM:
-    {
-        vec3_t Position, Light;
-
-        if (o->CurrentAction == MONSTER01_ATTACK2 && o->AnimationFrame >= 4.0f && o->AnimationFrame <= 6.0f)
-        {
-            float Matrix[3][4];
-            AngleMatrix(o->Angle, Matrix);
-            VectorRotate(o->Direction, Matrix, Position);
-
-            Vector(1.f, 0.0f, 0.5f, Light);
-            CreateEffectFpsChecked(MODEL_PIERCING2, o->Position, o->Angle, Light, 1);
         }
-    }
-    break;
-    case MODEL_VALAM:
-    {
-        vec3_t Position, Light;
+        break;
+        case MODEL_WEREWOLF_HERO: {
+            //CreateEffect ( MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 1, o, -1, 0, 1 );
+            vec3_t Position, Light;
 
-        auto Rotation = (float)(rand() % 360);
-        float Luminosity = sinf(WorldTime * 0.0012f) * 0.8f + 1.3f;
-
-        float fScalePercent = 1.f;
-        if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
-            fScalePercent = .5f;
-
-        BoneManager::GetBonePosition(o, L"Monster96_Center", Position);
-        Vector(Luminosity * 0.f, Luminosity * 0.5f, Luminosity * 0.1f, Light);
-        CreateSprite(BITMAP_LIGHT, Position, fScalePercent, Light, o);
-
-        Vector(0.5f, 0.5f, 0.5f, Light);
-
-        BoneManager::GetBonePosition(o, L"Monster96_Top", Position);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
-
-        BoneManager::GetBonePosition(o, L"Monster96_Bottom", Position);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
-    }
-    break;
-    case MODEL_BALLISTA:
-    {
-        if (m_CrywolfState == CRYWOLF_STATE_START)
-        {
-            if (rand_fps_check(100))
+            if (o->CurrentAction != MONSTER01_DIE)
             {
-                SetAction(o, MONSTER01_ATTACK1);
-                o->Timer = 1;
+                Vector(0.9f, 0.2f, 0.1f, Light);
+                BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
+                CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
             }
 
-            if (o->CurrentAction == MONSTER01_ATTACK1 && o->Timer == 1 && o->AnimationFrame >= 5.0f)
+            float  fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            vec3_t EndPos, EndRelative;
+            Vector(1.f, 1.f, 1.f, Light);
+
+            //			CreateParticle(BITMAP_FIRE,EndPos,o->Angle,Light);
+            if (o->CurrentAction == MONSTER01_ATTACK1)
             {
-                CreateEffect(MODEL_ARROW_TANKER, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
-                o->Timer = 0;
-                return true;
+                if (o->AnimationFrame >= 2.5f && o->AnimationFrame < (2.5f + fActionSpeed) && rand_fps_check(1))
+                {
+                    Vector(0.0f, 0.0f, 100.0f, EndRelative);
+                    b->TransformPosition(o->BoneTransform[20], EndRelative, EndPos, true);
+                    if (o->Scale > 1.25f)
+                    {
+                        //						Vector ( 0.f, 0.f, 1.f, Light );
+                        CreateEffect(MODEL_SKILL_FURY_STRIKE, EndPos, o->Angle, Light, 1, o, -1, 0, 1);
+                    }
+                }
+            }
+            else
+                //			Vector ( 0.9f, 0.2f, 0.1f, Light );
+                //. Walking & Running Scene Processing
+                if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+                {
+                    if (rand_fps_check(10))
+                    {
+                        CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+                    }
+                }
+        }
+        break;
+        case MODEL_SOLAM: {
+            vec3_t Position, Light;
+
+            if (o->CurrentAction == MONSTER01_ATTACK2 && o->AnimationFrame >= 4.0f && o->AnimationFrame <= 6.0f)
+            {
+                float Matrix[3][4];
+                AngleMatrix(o->Angle, Matrix);
+                VectorRotate(o->Direction, Matrix, Position);
+
+                Vector(1.f, 0.0f, 0.5f, Light);
+                CreateEffectFpsChecked(MODEL_PIERCING2, o->Position, o->Angle, Light, 1);
             }
         }
-    }
-    break;
+        break;
+        case MODEL_VALAM: {
+            vec3_t Position, Light;
+
+            auto  Rotation   = (float)(rand() % 360);
+            float Luminosity = sinf(WorldTime * 0.0012f) * 0.8f + 1.3f;
+
+            float fScalePercent = 1.f;
+            if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
+                fScalePercent = .5f;
+
+            BoneManager::GetBonePosition(o, L"Monster96_Center", Position);
+            Vector(Luminosity * 0.f, Luminosity * 0.5f, Luminosity * 0.1f, Light);
+            CreateSprite(BITMAP_LIGHT, Position, fScalePercent, Light, o);
+
+            Vector(0.5f, 0.5f, 0.5f, Light);
+
+            BoneManager::GetBonePosition(o, L"Monster96_Top", Position);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
+
+            BoneManager::GetBonePosition(o, L"Monster96_Bottom", Position);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
+        }
+        break;
+        case MODEL_BALLISTA: {
+            if (m_CrywolfState == CRYWOLF_STATE_START)
+            {
+                if (rand_fps_check(100))
+                {
+                    SetAction(o, MONSTER01_ATTACK1);
+                    o->Timer = 1;
+                }
+
+                if (o->CurrentAction == MONSTER01_ATTACK1 && o->Timer == 1 && o->AnimationFrame >= 5.0f)
+                {
+                    CreateEffect(MODEL_ARROW_TANKER, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
+                    o->Timer = 0;
+                    return true;
+                }
+            }
+        }
+        break;
     }
     return false;
 }
@@ -997,97 +979,94 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
 
     switch (o->Type)
     {
-    case MODEL_VALAM:
-    {
-        if (c->CheckAttackTime(14))
-        {
-            CreateEffect(MODEL_ARROW_NATURE, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
-            c->SetLastAttackEffectTime();
-            return true;
-        }
-    }
-    break;
-    case MODEL_BALRAM:
-    {
-        if (c->CheckAttackTime(14))
-        {
-            CreateEffect(MODEL_ARROW_HOLY, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
-            c->SetLastAttackEffectTime();
-            return true;
-        }
-    }
-    break;
-    case MODEL_TANTALLOS:
-    {
-        vec3_t Angle;
-        if (c->CheckAttackTime(1))
-        {
-            CreateInferno(o->Position);
-            c->SetLastAttackEffectTime();
-        }
-        if (c->CheckAttackTime(14))
-        {
-            if (c->MonsterIndex == MONSTER_ZAIKAN)
+        case MODEL_VALAM: {
+            if (c->CheckAttackTime(14))
             {
-                if ((c->Skill) == AT_SKILL_BOSS)
+                CreateEffect(MODEL_ARROW_NATURE, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
+                c->SetLastAttackEffectTime();
+                return true;
+            }
+        }
+        break;
+        case MODEL_BALRAM: {
+            if (c->CheckAttackTime(14))
+            {
+                CreateEffect(MODEL_ARROW_HOLY, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
+                c->SetLastAttackEffectTime();
+                return true;
+            }
+        }
+        break;
+        case MODEL_TANTALLOS: {
+            vec3_t Angle;
+            if (c->CheckAttackTime(1))
+            {
+                CreateInferno(o->Position);
+                c->SetLastAttackEffectTime();
+            }
+            if (c->CheckAttackTime(14))
+            {
+                if (c->MonsterIndex == MONSTER_ZAIKAN)
                 {
-                    for (int i = 0; i < 18; i++)
+                    if ((c->Skill) == AT_SKILL_BOSS)
                     {
-                        VectorCopy(o->Angle, Angle);
-                        Angle[2] += i * 20.f;
-                        CreateEffect(MODEL_STAFF_OF_DESTRUCTION, o->Position, Angle, o->Light);
+                        for (int i = 0; i < 18; i++)
+                        {
+                            VectorCopy(o->Angle, Angle);
+                            Angle[2] += i * 20.f;
+                            CreateEffect(MODEL_STAFF_OF_DESTRUCTION, o->Position, Angle, o->Light);
+                        }
                     }
                 }
+
+                c->SetLastAttackEffectTime();
             }
-
-            c->SetLastAttackEffectTime();
         }
-    }
-    break;
-    case MODEL_BEAM_KNIGHT:
-    {
-        vec3_t p, Position, Angle;
-        for (int i = 0; i < 6; i++)
-        {
-            int Hand = 0;
-            if (i >= 3) Hand = 1;
-            b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
-            Vector(0.f, 0.f, (float)(rand() % 360), Angle);
-
-            if (to != NULL)
+        break;
+        case MODEL_BEAM_KNIGHT: {
+            vec3_t p, Position, Angle;
+            for (int i = 0; i < 6; i++)
             {
-                CreateJointFpsChecked(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
-                CreateJointFpsChecked(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
+                int Hand = 0;
+                if (i >= 3)
+                    Hand = 1;
+                b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
+                Vector(0.f, 0.f, (float)(rand() % 360), Angle);
+
+                if (to != NULL)
+                {
+                    CreateJointFpsChecked(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
+                    CreateJointFpsChecked(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
+                }
+            }
+            if (c->CheckAttackTime(1))
+            {
+                PlayBuffer(SOUND_EVIL);
+                c->SetLastAttackEffectTime();
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                int Hand = 0;
+                if (i >= 2)
+                    Hand = 1;
+                b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
+                Vector(0.f, 0.f, (float)(rand() % 360), Angle);
+                if (to != NULL)
+                    CreateJointFpsChecked(BITMAP_JOINT_LASER + 1, Position, to->Position, Angle, 0, to, 50.f);
+                CreateParticleFpsChecked(BITMAP_FIRE, Position, o->Angle, o->Light);
             }
         }
-        if (c->CheckAttackTime(1))
-        {
-            PlayBuffer(SOUND_EVIL);
-            c->SetLastAttackEffectTime();
+        break;
+        case MODEL_BALLISTA: {
+            if (c->CheckAttackTime(15))
+            {
+                CreateEffect(MODEL_ARROW_TANKER, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
+                c->SetLastAttackEffectTime();
+                return true;
+            }
         }
-
-        for (int i = 0; i < 4; i++)
-        {
-            int Hand = 0;
-            if (i >= 2) Hand = 1;
-            b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
-            Vector(0.f, 0.f, (float)(rand() % 360), Angle);
-            if (to != NULL)
-                CreateJointFpsChecked(BITMAP_JOINT_LASER + 1, Position, to->Position, Angle, 0, to, 50.f);
-            CreateParticleFpsChecked(BITMAP_FIRE, Position, o->Angle, o->Light);
-        }
-    }
-    break;
-    case MODEL_BALLISTA:
-    {
-        if (c->CheckAttackTime(15))
-        {
-            CreateEffect(MODEL_ARROW_TANKER, o->Position, o->Angle, o->Light, 1, o, o->PKKey);
-            c->SetLastAttackEffectTime();
-            return true;
-        }
-    }
-    break;
+        break;
     }
     return false;
 }
@@ -1096,58 +1075,59 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
 {
     //CreateEffect ( MODEL_STONE2,o->Position,o->Angle,o->Light);
     vec3_t Angle, Position;
-    float Matrix[3][4];
-    vec3_t  p, p2, EndPos;
-    vec3_t  TempAngle;
+    float  Matrix[3][4];
+    vec3_t p, p2, EndPos;
+    vec3_t TempAngle;
     switch (o->Type)
     {
-    case MODEL_SORAM:
-    {
-        vec3_t  Light;
-        Vector(1.0f, 1.0f, 1.0f, Light);
+        case MODEL_SORAM: {
+            vec3_t Light;
+            Vector(1.0f, 1.0f, 1.0f, Light);
 
-        /*
+            /*
         Vector(0.0f,  0.0f, 0.0f, p);
         b->TransformPosition(o->BoneTransform[27],p,EndPos,true);
         CreateParticle(BITMAP_FIRE,EndPos,o->Angle,Light,0,2.0f);
 */
 
-        if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            //				vec3_t StartPos;//, StartRelative;
-            vec3_t EndRelative;
+            if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                //				vec3_t StartPos;//, StartRelative;
+                vec3_t EndRelative;
 
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-
-                Vector(0.f, 100.f, -150.f, EndRelative);
-
-                b->TransformPosition(BoneTransform[16], EndRelative, EndPos, false);
-
-                if (o->AnimationFrame > 5.0f && o->AnimationFrame < 7.0f)
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+                VectorCopy(o->Angle, TempAngle);
+                for (int i = 0; i < 10; i++)
                 {
-                    CreateParticle(BITMAP_FIRE, EndPos, o->Angle, Light);
-                    //						CreateParticle(BITMAP_BLUE_BLUR,EndPos, o->Angle, Light,1);
-                }
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
 
-                Vector(0.f, -150.f, 0.f, p);
-                AngleMatrix(o->Angle, Matrix);
-                VectorRotate(p, Matrix, Position);
-                VectorAdd(Position, o->Position, p2);
+                    Vector(0.f, 100.f, -150.f, EndRelative);
 
-                o->Angle[2] -= 18;//
+                    b->TransformPosition(BoneTransform[16], EndRelative, EndPos, false);
 
-                Vector((float)(rand() % 60 + 60 - 90), 0.f, (float)(rand() % 30 + 90), Angle);
-                VectorAdd(Angle, o->Angle, Angle);
-                VectorCopy(p2, Position);
-                //					Position[0] += rand()%20-10;
-                //					Position[1] += rand()%20-10;
+                    if (o->AnimationFrame > 5.0f && o->AnimationFrame < 7.0f)
+                    {
+                        CreateParticle(BITMAP_FIRE, EndPos, o->Angle, Light);
+                        //						CreateParticle(BITMAP_BLUE_BLUR,EndPos, o->Angle, Light,1);
+                    }
 
-                                    /*
+                    Vector(0.f, -150.f, 0.f, p);
+                    AngleMatrix(o->Angle, Matrix);
+                    VectorRotate(p, Matrix, Position);
+                    VectorAdd(Position, o->Position, p2);
+
+                    o->Angle[2] -= 18;  //
+
+                    Vector((float)(rand() % 60 + 60 - 90), 0.f, (float)(rand() % 30 + 90), Angle);
+                    VectorAdd(Angle, o->Angle, Angle);
+                    VectorCopy(p2, Position);
+                    //					Position[0] += rand()%20-10;
+                    //					Position[1] += rand()%20-10;
+
+                    /*
                                     b->TransformPosition(BoneTransform[39],StartRelative,StartPos,false);
                                     b->TransformPosition(BoneTransform[41],EndRelative,EndPos,false);
                                     CreateBlur(c,StartPos,EndPos,Light,3,true,24);
@@ -1156,80 +1136,81 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                                     b->TransformPosition(BoneTransform[45],EndRelative,EndPos,false);
                                     CreateBlur(c,StartPos,EndPos,Light,3,true,25);
                 */
-                fAnimationFrame += fSpeedPerFrame;
-            }
-            VectorCopy(TempAngle, o->Angle);
-        }
-    }
-    break;
-    case MODEL_SCOUT:
-    {
-        if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            vec3_t  Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
-
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
-
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            for (int i = 0; i < 10; i++)
-            {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-
-                //					Vector(0.f, 0.f, -60.f, StartRelative);
-                //					Vector(0.f, 0.f, -150.f, EndRelative);
-                Vector(20.f, 0.f, 0.f, StartRelative);
-                Vector(60.f, 0.f, 0.f, EndRelative);
-                //					Vector(20.f, 0.f, 0.f, StartRelative);
-                //					Vector(60.f, 0.f, 0.f, EndRelative);
-
-                b->TransformPosition(BoneTransform[12], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[16], EndRelative, EndPos, false);
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 23);
-
-                b->TransformPosition(BoneTransform[20], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[24], EndRelative, EndPos, false);
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 24);
-
-                fAnimationFrame += fSpeedPerFrame;
-            }
-        }
-    }
-    break;
-    case MODEL_BALGASS:
-    {
-        if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            vec3_t  Light;
-            Vector(1.f, 1.f, 1.f, Light);
-
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
-
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-
-            VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-
-                Vector(0.f, 0.f, -60.f, StartRelative);
-                Vector(0.f, 0.f, -150.f, EndRelative);
-                b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], EndRelative, EndPos, false);
-
-                if (o->AnimationFrame > 3.5f && o->AnimationFrame < 4.5f)
-                {
-                    CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 0);
+                    fAnimationFrame += fSpeedPerFrame;
                 }
-                Vector(0.f, 0.f, 5.f, Light);
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
+                VectorCopy(TempAngle, o->Angle);
+            }
+        }
+        break;
+        case MODEL_SCOUT: {
+            if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                vec3_t Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
 
-                /*
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
+
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
+
+                    //					Vector(0.f, 0.f, -60.f, StartRelative);
+                    //					Vector(0.f, 0.f, -150.f, EndRelative);
+                    Vector(20.f, 0.f, 0.f, StartRelative);
+                    Vector(60.f, 0.f, 0.f, EndRelative);
+                    //					Vector(20.f, 0.f, 0.f, StartRelative);
+                    //					Vector(60.f, 0.f, 0.f, EndRelative);
+
+                    b->TransformPosition(BoneTransform[12], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[16], EndRelative, EndPos, false);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 23);
+
+                    b->TransformPosition(BoneTransform[20], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[24], EndRelative, EndPos, false);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 24);
+
+                    fAnimationFrame += fSpeedPerFrame;
+                }
+            }
+        }
+        break;
+        case MODEL_BALGASS: {
+            if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                vec3_t Light;
+                Vector(1.f, 1.f, 1.f, Light);
+
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
+
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+
+                VectorCopy(o->Angle, TempAngle);
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
+
+                    Vector(0.f, 0.f, -60.f, StartRelative);
+                    Vector(0.f, 0.f, -150.f, EndRelative);
+                    b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], EndRelative, EndPos, false);
+
+                    if (o->AnimationFrame > 3.5f && o->AnimationFrame < 4.5f)
+                    {
+                        CreateParticle(BITMAP_BLUE_BLUR, EndPos, o->Angle, Light, 0);
+                    }
+                    Vector(0.f, 0.f, 5.f, Light);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
+
+                    /*
                                     Vector(0.f,-150.f,0.f,p);
                                     AngleMatrix(o->Angle,Matrix);
                                     VectorRotate(EndPos,Matrix,Position);
@@ -1243,168 +1224,172 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                                     if(o->AnimationFrame > 3.5f && o->AnimationFrame < 4.5f)
                                     CreateJoint(BITMAP_JOINT_SPARK,Position,Position,Angle);
                 */
-                fAnimationFrame += fSpeedPerFrame;
+                    fAnimationFrame += fSpeedPerFrame;
+                }
+                VectorCopy(TempAngle, o->Angle);
             }
-            VectorCopy(TempAngle, o->Angle);
         }
-    }
-    break;
+        break;
 
-    case MODEL_DARK_ELF_1:
-    {
-        if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
-        {
-            vec3_t  Light;
-            Vector(1.f, 1.f, 1.f, Light);
-
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
-
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-
-            if (o->CurrentAction == MONSTER01_ATTACK2 && (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f))
-                CreateEffect(MODEL_DARK_ELF_SKILL, o->Position, o->Angle, o->Light, 2, o);
-
-            VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-
-                Vector(0.f, 0.f, -60.f, StartRelative);
-                Vector(0.f, 0.f, -150.f, EndRelative);
-                b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], EndRelative, EndPos, false);
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
-
-                fAnimationFrame += fSpeedPerFrame;
-            }
-            VectorCopy(TempAngle, o->Angle);
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK3)
-        {
-            vec3_t Position, Light;
-            BoneManager::GetBonePosition(o, L"Left_Hand", Position);
-
-            Vector(0.2f, 0.2f, 0.7f, Light);
-            CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light, 27, 1.0f);
-            Vector(0.3f, 0.3f, 0.4f, Light);
-            CreateParticle(BITMAP_LIGHT + 1, Position, o->Angle, Light, 2, 0.8f);
-            CreateParticle(BITMAP_LIGHT + 1, Position, o->Angle, Light, 2, 0.6f);
-        }
-    }
-    break;
-    case MODEL_DEATH_SPIRIT:
-    {
-        if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
-        {
-            vec3_t  Light;
-            Vector(0.2f, 1.f, 0.4f, Light);
-
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
-
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-
-            VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
-
-                Vector(0.f, 250.f, 0.f, StartRelative);
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[27], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[27], EndRelative, EndPos, false);
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
-
-                fAnimationFrame += fSpeedPerFrame;
-            }
-            VectorCopy(TempAngle, o->Angle);
-
-            if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f)
+        case MODEL_DARK_ELF_1: {
+            if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
             {
-                CHARACTER* tc = &CharactersClient[c->TargetCharacter];
-                OBJECT* to = &tc->Object;
-                vec3_t Angle = { 0.f, 0.f, o->Angle[2] };
-                vec3_t Pos = { 0.f, 0.f, (to->BoundingBoxMax[2] / 1.f) };
+                vec3_t Light;
+                Vector(1.f, 1.f, 1.f, Light);
 
-                Vector(80.f, 0.f, 20.f, p);
-                b->TransformPosition(o->BoneTransform[0], p, Position, true);
-                Position[2] += 50.0f;
-                Angle[2] = o->Angle[2] + 90;
-                CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 0, to);
-                CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 1, to);
-                Angle[2] = o->Angle[2] - 90;
-                CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 0, to);
-                CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 1, to);
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
+
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+
+                if (o->CurrentAction == MONSTER01_ATTACK2 && (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f))
+                    CreateEffect(MODEL_DARK_ELF_SKILL, o->Position, o->Angle, o->Light, 2, o);
+
+                VectorCopy(o->Angle, TempAngle);
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
+
+                    Vector(0.f, 0.f, -60.f, StartRelative);
+                    Vector(0.f, 0.f, -150.f, EndRelative);
+                    b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[c->Weapon[0].LinkBone], EndRelative, EndPos, false);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
+
+                    fAnimationFrame += fSpeedPerFrame;
+                }
+                VectorCopy(TempAngle, o->Angle);
+            }
+            else if (o->CurrentAction == MONSTER01_ATTACK3)
+            {
+                vec3_t Position, Light;
+                BoneManager::GetBonePosition(o, L"Left_Hand", Position);
+
+                Vector(0.2f, 0.2f, 0.7f, Light);
+                CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light, 27, 1.0f);
+                Vector(0.3f, 0.3f, 0.4f, Light);
+                CreateParticle(BITMAP_LIGHT + 1, Position, o->Angle, Light, 2, 0.8f);
+                CreateParticle(BITMAP_LIGHT + 1, Position, o->Angle, Light, 2, 0.6f);
             }
         }
-    }
-    break;
-    case MODEL_WEREWOLF_HERO:
-    {
-        if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            vec3_t  Light;
-            Vector(1.f, 1.f, 1.f, Light);
+        break;
+        case MODEL_DEATH_SPIRIT: {
+            if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
+            {
+                vec3_t Light;
+                Vector(0.2f, 1.f, 0.4f, Light);
 
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
 
-                Vector(0.f, 0.f, -90.f, StartRelative);
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[80], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[80], EndRelative, EndPos, false);
+                VectorCopy(o->Angle, TempAngle);
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
 
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
+                    Vector(0.f, 250.f, 0.f, StartRelative);
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[27], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[27], EndRelative, EndPos, false);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
 
-                Vector(0.f, 0.f, 90.f, StartRelative);
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[82], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[82], EndRelative, EndPos, false);
+                    fAnimationFrame += fSpeedPerFrame;
+                }
+                VectorCopy(TempAngle, o->Angle);
 
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 84);
+                if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f)
+                {
+                    CHARACTER* tc    = &CharactersClient[c->TargetCharacter];
+                    OBJECT*    to    = &tc->Object;
+                    vec3_t     Angle = {0.f, 0.f, o->Angle[2]};
+                    vec3_t     Pos   = {0.f, 0.f, (to->BoundingBoxMax[2] / 1.f)};
 
-                fAnimationFrame += fSpeedPerFrame;
+                    Vector(80.f, 0.f, 20.f, p);
+                    b->TransformPosition(o->BoneTransform[0], p, Position, true);
+                    Position[2] += 50.0f;
+                    Angle[2] = o->Angle[2] + 90;
+                    CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 0, to);
+                    CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 1, to);
+                    Angle[2] = o->Angle[2] - 90;
+                    CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 0, to);
+                    CreateEffect(MODEL_DEATH_SPI_SKILL, Position, Angle, Pos, 1, to);
+                }
             }
         }
-    }
-    break;
-    case MODEL_SOLAM:
-    {
-        if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            vec3_t  Light;
-            Vector(1.f, 1.f, 1.f, Light);
+        break;
+        case MODEL_WEREWOLF_HERO: {
+            if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                vec3_t Light;
+                Vector(1.f, 1.f, 1.f, Light);
 
-            vec3_t StartPos, StartRelative;
-            vec3_t EndPos, EndRelative;
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
-            float fSpeedPerFrame = fActionSpeed / 10.f;
-            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
 
-                Vector(0.f, 0.f, 120.f, StartRelative);
-                Vector(0.f, 0.f, 0.f, EndRelative);
-                b->TransformPosition(BoneTransform[25], StartRelative, StartPos, false);
-                b->TransformPosition(BoneTransform[25], EndRelative, EndPos, false);
+                    Vector(0.f, 0.f, -90.f, StartRelative);
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[80], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[80], EndRelative, EndPos, false);
 
-                CreateBlur(c, StartPos, EndPos, Light, 3, true, 25);
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 80);
 
-                fAnimationFrame += fSpeedPerFrame;
+                    Vector(0.f, 0.f, 90.f, StartRelative);
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[82], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[82], EndRelative, EndPos, false);
+
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 84);
+
+                    fAnimationFrame += fSpeedPerFrame;
+                }
             }
         }
-    }
-    break;
+        break;
+        case MODEL_SOLAM: {
+            if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                vec3_t Light;
+                Vector(1.f, 1.f, 1.f, Light);
+
+                vec3_t StartPos, StartRelative;
+                vec3_t EndPos, EndRelative;
+
+                float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+                float fSpeedPerFrame  = fActionSpeed / 10.f;
+                float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+                for (int i = 0; i < 10; i++)
+                {
+                    b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
+
+                    Vector(0.f, 0.f, 120.f, StartRelative);
+                    Vector(0.f, 0.f, 0.f, EndRelative);
+                    b->TransformPosition(BoneTransform[25], StartRelative, StartPos, false);
+                    b->TransformPosition(BoneTransform[25], EndRelative, EndPos, false);
+
+                    CreateBlur(c, StartPos, EndPos, Light, 3, true, 25);
+
+                    fAnimationFrame += fSpeedPerFrame;
+                }
+            }
+        }
+        break;
     }
 }
 
@@ -1412,198 +1397,209 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
 {
     switch (o->Type)
     {
-    case MODEL_SORAM:
-    {
-        Vector(1.f, 1.f, 1.f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
-        b->EndRender();
-        return true;
-    }
-    break;
-    case MODEL_BALGASS:
-    {
-        Vector(1.f, 1.f, 1.f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
-        {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME2 | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME3);
+        case MODEL_SORAM: {
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->BeginRender(o->Alpha);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, 5);
+            b->EndRender();
+            return true;
         }
-        b->EndRender();
-        return true;
-    }
-    break;
-    case MODEL_BALRAM:
-    {
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
-        return true;
-    }
-    break;
-    case MODEL_DEATH_SPIRIT:
-    {
-        b->BeginRender(o->Alpha);
-        static float aaa = 0.f;
-        aaa += 0.1f;
-        if (aaa > 1.0f)
-            aaa = 0.f;
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
-        {
-            if (i == 2)
+        break;
+        case MODEL_BALGASS: {
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->BeginRender(o->Alpha);
+            for (int i = 0; i < Models[o->Type].NumMeshs; i++)
             {
-                if (o->Alpha > 0.3f)
-                    o->Alpha = 0.3f;
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME2 | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME3);
+            }
+            b->EndRender();
+            return true;
+        }
+        break;
+        case MODEL_BALRAM: {
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, 5);
+            return true;
+        }
+        break;
+        case MODEL_DEATH_SPIRIT: {
+            b->BeginRender(o->Alpha);
+            static float aaa = 0.f;
+            aaa += 0.1f;
+            if (aaa > 1.0f)
+                aaa = 0.f;
+            for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+            {
+                if (i == 2)
+                {
+                    if (o->Alpha > 0.3f)
+                        o->Alpha = 0.3f;
 
-                o->BlendMesh = -2;
-                b->EndRender();
+                    o->BlendMesh = -2;
+                    b->EndRender();
+                    b->BeginRender(o->Alpha);
+                    Models[o->Type].StreamMesh = i;
+                }
+                else
+                    o->BlendMesh = -1;
+
+                o->BlendMeshTexCoordU = (int)WorldTime % 10000 * 0.0005f;
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+            }
+            b->EndRender();
+            o->Alpha = 1.0f;
+            return true;
+        }
+        break;
+        case MODEL_SCOUT: {
+            if (ExtraMon)
+            {
+                Vector(0.5f, 0.5f, 0.6f, b->BodyLight);
                 b->BeginRender(o->Alpha);
-                Models[o->Type].StreamMesh = i;
+                for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+                {
+                    b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                                  o->BlendMeshTexCoordV);
+                    b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                                  o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                }
+                b->EndRender();
             }
             else
-                o->BlendMesh = -1;
-
-            o->BlendMeshTexCoordU = (int)WorldTime % 10000 * 0.0005f;
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV, 5);
+            return true;
         }
-        b->EndRender();
-        o->Alpha = 1.0f;
-        return true;
-    }
-    break;
-    case MODEL_SCOUT:
-    {
-        if (ExtraMon)
-        {
-            Vector(0.5f, 0.5f, 0.6f, b->BodyLight);
+        break;
+        case MODEL_WEREWOLF_HERO: {
+            if (ExtraMon)
+            {
+                Vector(0.5f, 0.5f, 0.8f, b->BodyLight);
+                b->BeginRender(o->Alpha);
+                for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+                {
+                    b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                                  o->BlendMeshTexCoordV);
+                    b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                                  o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                }
+                b->EndRender();
+            }
+            else
+                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV, 5);
+            return true;
+        }
+        break;
+        case MODEL_TANTALLOS: {
+            Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
             b->BeginRender(o->Alpha);
             for (int i = 0; i < Models[o->Type].NumMeshs; i++)
             {
-                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
             }
             b->EndRender();
+            return true;
         }
-        else
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
-        return true;
-    }
-    break;
-    case MODEL_WEREWOLF_HERO:
-    {
-        if (ExtraMon)
-        {
-            Vector(0.5f, 0.5f, 0.8f, b->BodyLight);
+        break;
+        case MODEL_BLOODY_WOLF: {
+            Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
             b->BeginRender(o->Alpha);
             for (int i = 0; i < Models[o->Type].NumMeshs; i++)
             {
-                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
             }
             b->EndRender();
+            return true;
         }
-        else
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
-        return true;
-    }
-    break;
-    case MODEL_TANTALLOS:
-    {
-        Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+        break;
+        case MODEL_BEAM_KNIGHT:  //318
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
+            b->BeginRender(o->Alpha);
+            for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+            {
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            }
+            b->EndRender();
+            return true;
         }
-        b->EndRender();
-        return true;
-    }
-    break;
-    case MODEL_BLOODY_WOLF:
-    {
-        Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+        break;
+        case MODEL_DRAGON_:  //319
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
+            b->BeginRender(o->Alpha);
+            for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+            {
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            }
+            b->EndRender();
+            return true;
         }
-        b->EndRender();
-        return true;
-    }
-    break;
-    case MODEL_BEAM_KNIGHT:	//318
-    {
-        Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
-        {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
-        }
-        b->EndRender();
-        return true;
-    }
-    break;
-    case MODEL_DRAGON_:	//319
-    {
-        Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
-        b->BeginRender(o->Alpha);
-        for (int i = 0; i < Models[o->Type].NumMeshs; i++)
-        {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
-        }
-        b->EndRender();
-        return true;
-    }
-    break;
+        break;
     }
     return false;
 }
 
 namespace
 {
-    void RenderCrywolfAltarVisual(OBJECT* o)
+void RenderCrywolfAltarVisual(OBJECT* o)
+{
+    vec3_t          Light;
+    constexpr float RotationSpeed = 0.01f;
+    const float     fRotation1    = WorldTime * RotationSpeed;
+    const float     fRotation2    = -fRotation1;
+    float           Luminosity    = sinf(WorldTime * 0.002f) * 0.1f + 0.28f;
+    float           Luminosity2   = sinf(WorldTime * 0.002f) * 0.04f + 0.2f;
+
+    Vector(0.15f, 0.15f, Luminosity, Light);
+
+    EnableAlphaBlend();
+
+    if (g_isCharacterBuff(o, eBuff_CrywolfAltarContracted))
     {
-        vec3_t Light;
-        constexpr float RotationSpeed = 0.01f;
-        const float fRotation1 = WorldTime * RotationSpeed;
-        const float fRotation2 = -fRotation1;
-        float Luminosity = sinf(WorldTime * 0.002f) * 0.1f + 0.28f;
-        float Luminosity2 = sinf(WorldTime * 0.002f) * 0.04f + 0.2f;
+        Vector(Luminosity2, Luminosity2, 0.05f, Light);
+        Vector(0.09f, 0.09f, 0.04f, o->Light);
 
-        Vector(0.15f, 0.15f, Luminosity, Light);
-
-        EnableAlphaBlend();
-
-        if (g_isCharacterBuff(o, eBuff_CrywolfAltarContracted))
-        {
-            Vector(Luminosity2, Luminosity2, 0.05f, Light);
-            Vector(0.09f, 0.09f, 0.04f, o->Light);
-
-            CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light);
-            CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light, 1);
-        }
-        if (g_isCharacterBuff(o, eBuff_CrywolfAltarOccufied))
-        {
-            Vector(Luminosity, 0.1f, 0.1f, Light);
-        }
-        if (g_isCharacterBuff(o, eBuff_CrywolfAltarDisable))
-        {
-            Vector(Luminosity, 0.1f, 0.1f, Light);
-        }
-        if (g_isCharacterBuff(o, eBuff_CrywolfAltarEnable) || g_isCharacterBuff(o, eBuff_CrywolfAltarAttempt))
-        {
-            Vector(0.15f, 0.15f, Luminosity, Light);
-        }
-
-        Vector(Light[0] * 2.0f, Light[1] * 2.0f, Light[2] * 2.0f, Light);
-
-        RenderTerrainAlphaBitmap(BITMAP_MAGIC_CIRCLE, o->Position[0], o->Position[1], 2.8f, 2.8f, Light, fRotation1);
-        RenderTerrainAlphaBitmap(BITMAP_MAGIC_CIRCLE, o->Position[0], o->Position[1], 3.6f, 3.6f, Light, fRotation2);
-        DisableAlphaBlend();
+        CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light);
+        CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light, 1);
     }
+    if (g_isCharacterBuff(o, eBuff_CrywolfAltarOccufied))
+    {
+        Vector(Luminosity, 0.1f, 0.1f, Light);
+    }
+    if (g_isCharacterBuff(o, eBuff_CrywolfAltarDisable))
+    {
+        Vector(Luminosity, 0.1f, 0.1f, Light);
+    }
+    if (g_isCharacterBuff(o, eBuff_CrywolfAltarEnable) || g_isCharacterBuff(o, eBuff_CrywolfAltarAttempt))
+    {
+        Vector(0.15f, 0.15f, Luminosity, Light);
+    }
+
+    Vector(Light[0] * 2.0f, Light[1] * 2.0f, Light[2] * 2.0f, Light);
+
+    RenderTerrainAlphaBitmap(BITMAP_MAGIC_CIRCLE, o->Position[0], o->Position[1], 2.8f, 2.8f, Light, fRotation1);
+    RenderTerrainAlphaBitmap(BITMAP_MAGIC_CIRCLE, o->Position[0], o->Position[1], 3.6f, 3.6f, Light, fRotation2);
+    DisableAlphaBlend();
+}
 }
 
 bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
@@ -1613,431 +1609,455 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
 
     switch (o->Type)
     {
-    case MODEL_CRYWOLF_ALTAR1:
-    case MODEL_CRYWOLF_ALTAR2:
-    case MODEL_CRYWOLF_ALTAR3:
-    case MODEL_CRYWOLF_ALTAR4:
-    case MODEL_CRYWOLF_ALTAR5:
-    {
-        RenderCrywolfAltarVisual(o);
-    }
-    break;
-    case MODEL_BALGASS:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_BALGAS_MOVE1 + rand() % 2));
+        case MODEL_CRYWOLF_ALTAR1:
+        case MODEL_CRYWOLF_ALTAR2:
+        case MODEL_CRYWOLF_ALTAR3:
+        case MODEL_CRYWOLF_ALTAR4:
+        case MODEL_CRYWOLF_ALTAR5: {
+            RenderCrywolfAltarVisual(o);
         }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK1);
+        break;
+        case MODEL_BALGASS: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_BALGAS_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK3)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL1);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK2);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK4)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL2);
+            else if (o->CurrentAction == MONSTER01_ATTACK3)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALGAS_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK4)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL2);
+                }
             }
-        }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALGAS_DIE);
+                }
+            }
 
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    break;
-    case MODEL_DARK_ELF_1:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_DARKELF_MOVE1 + rand() % 2));
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK1);
+        break;
+        case MODEL_DARK_ELF_1: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_DARKELF_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK3)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL1);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK2);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK4)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL2);
+            else if (o->CurrentAction == MONSTER01_ATTACK3)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DARKELF_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK4)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL2);
+                }
             }
-        }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DARKELF_DIE);
+                }
+            }
 
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    break;
-    case MODEL_BALLISTA:
-    {
-        if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_TANKER_ATTACK1);
-            }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_TANKER_DIE);
+        break;
+        case MODEL_BALLISTA: {
+            if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_TANKER_ATTACK1);
+                }
             }
-        }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_TANKER_DIE);
+                }
+            }
 
-        if (!(o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_DIE))
-            o->SubType = FALSE;
-    }
-    break;
-    case MODEL_DEATH_SPIRIT:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_DEATHSPIRIT_MOVE1 + rand() % 2));
+            if (!(o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_DIE))
+                o->SubType = FALSE;
         }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK1);
+        break;
+        case MODEL_DEATH_SPIRIT: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_DEATHSPIRIT_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK2);
+                }
             }
-        }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_DIE);
+                }
+            }
 
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
 
-        vec3_t Position, Light;
-        int dummy = rand() % 14;
-        auto Data = (float)((float)dummy / (float)100);
-        auto Rot = (float)(rand() % 360);
-        Vector(1.0f, 1.0f, 1.0f, Light);
-        BoneManager::GetBonePosition(o, L"Monster94_zx", Position);
-        CreateSprite(BITMAP_DS_EFFECT, Position, 1.5f, Light, o);
-        Vector(0.3f, 0.3f, 0.7f, Light);
-        CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
-        CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
-        CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
-        CreateSprite(BITMAP_DS_SHOCK, Position, 0.8f + Data, Light, o, Rot);
+            vec3_t Position, Light;
+            int    dummy = rand() % 14;
+            auto   Data  = (float)((float)dummy / (float)100);
+            auto   Rot   = (float)(rand() % 360);
+            Vector(1.0f, 1.0f, 1.0f, Light);
+            BoneManager::GetBonePosition(o, L"Monster94_zx", Position);
+            CreateSprite(BITMAP_DS_EFFECT, Position, 1.5f, Light, o);
+            Vector(0.3f, 0.3f, 0.7f, Light);
+            CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
+            CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
+            CreateSprite(BITMAP_LIGHT, Position, 3.5f + (Data * 5), Light, o);
+            CreateSprite(BITMAP_DS_SHOCK, Position, 0.8f + Data, Light, o, Rot);
 
-        BoneManager::GetBonePosition(o, L"Monster94_zx01", Position);
-        Vector(0.1f, 0.0f, 0.6f, Light);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.8f, Light, o, Rot);
-        if (rand_fps_check(2))
-        {
-            Vector(0.7f, 0.7f, 1.0f, Light);
-            CreateSprite(BITMAP_SHINY + 1, Position, 0.8f, Light, o, 360.f - Rot);
-        }
-        Vector(0.3f, 0.3f, 0.7f, Light);
-        CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-    }
-    return true;
-    case MODEL_BALRAM:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_BALRAM_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK1);
+            BoneManager::GetBonePosition(o, L"Monster94_zx01", Position);
+            Vector(0.1f, 0.0f, 0.6f, Light);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.8f, Light, o, Rot);
+            if (rand_fps_check(2))
+            {
+                Vector(0.7f, 0.7f, 1.0f, Light);
+                CreateSprite(BITMAP_SHINY + 1, Position, 0.8f, Light, o, 360.f - Rot);
             }
+            Vector(0.3f, 0.3f, 0.7f, Light);
+            CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
         }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK2);
+            return true;
+        case MODEL_BALRAM: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_BALRAM_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_BALRAM_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK1);
+                }
             }
-        }
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
-    case MODEL_SORAM:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SORAM_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK1);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK2);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_BALRAM_DIE);
+                }
             }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SORAM_DIE);
+            return true;
+        case MODEL_SORAM: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SORAM_MOVE1 + rand() % 2));
             }
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK1);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK2);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SORAM_DIE);
+                }
+            }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
-    case MODEL_WEREWOLF_HERO:
-    {
-        vec3_t Position, Light;
+            return true;
+        case MODEL_WEREWOLF_HERO: {
+            vec3_t Position, Light;
 
-        if (o->CurrentAction != MONSTER01_DIE) {
+            if (o->CurrentAction != MONSTER01_DIE)
+            {
+                Vector(0.9f, 0.2f, 0.1f, Light);
+                BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
+                CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
+            }
+
             Vector(0.9f, 0.2f, 0.1f, Light);
-            BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
-            CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
-        }
+            //. Walking & Running Scene Processing
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(10))
+                {
+                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+                }
+            }
 
-        Vector(0.9f, 0.2f, 0.1f, Light);
-        //. Walking & Running Scene Processing
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(10)) {
-                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_WWOLF_MOVE1 + rand() % 2));
             }
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK1);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK2);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_WWOLF_DIE);
+                }
+            }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
+            return true;
+        case MODEL_SOLAM: {
+            vec3_t Position, Light;
 
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_WWOLF_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK1);
-            }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK2);
-            }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_WWOLF_DIE);
-            }
-        }
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
-    case MODEL_SOLAM:
-    {
-        vec3_t Position, Light;
+            if (o->CurrentAction == MONSTER01_ATTACK2 && o->AnimationFrame >= 4.0f && o->AnimationFrame <= 6.0f)
+            {
+                float Matrix[3][4];
+                AngleMatrix(o->Angle, Matrix);
+                VectorRotate(o->Direction, Matrix, Position);
 
-        if (o->CurrentAction == MONSTER01_ATTACK2 && o->AnimationFrame >= 4.0f && o->AnimationFrame <= 6.0f)
-        {
-            float Matrix[3][4];
-            AngleMatrix(o->Angle, Matrix);
-            VectorRotate(o->Direction, Matrix, Position);
-
-            Vector(1.f, 0.0f, 0.5f, Light);
-            CreateEffect(MODEL_PIERCING2, o->Position, o->Angle, Light, 1);
-        }
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT2_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK1);
+                Vector(1.f, 0.0f, 0.5f, Light);
+                CreateEffect(MODEL_PIERCING2, o->Position, o->Angle, Light, 1);
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK2);
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT2_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT2_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK1);
+                }
             }
-        }
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
-    case MODEL_VALAM:
-    {
-        vec3_t Position, Light;
-
-        auto Rotation = (float)(rand() % 360);
-        float Luminosity = sinf(WorldTime * 0.0012f) * 0.8f + 1.3f;
-
-        float fScalePercent = 1.f;
-        if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
-            fScalePercent = .5f;
-
-        BoneManager::GetBonePosition(o, L"Monster96_Center", Position);
-        Vector(Luminosity * 0.f, Luminosity * 0.5f, Luminosity * 0.1f, Light);
-        CreateSprite(BITMAP_LIGHT, Position, fScalePercent, Light, o);
-
-        Vector(0.5f, 0.5f, 0.5f, Light);
-
-        BoneManager::GetBonePosition(o, L"Monster96_Top", Position);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
-
-        BoneManager::GetBonePosition(o, L"Monster96_Bottom", Position);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
-        CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
-
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT3_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK1);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK2);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT2_DIE);
+                }
             }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT3_DIE);
-            }
-        }
+            return true;
+        case MODEL_VALAM: {
+            vec3_t Position, Light;
 
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
-    case MODEL_SCOUT:
-    {
-        if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
-        {
-            if (rand_fps_check(15))
-                PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT1_MOVE1 + rand() % 2));
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK1)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK1);
+            auto  Rotation   = (float)(rand() % 360);
+            float Luminosity = sinf(WorldTime * 0.0012f) * 0.8f + 1.3f;
+
+            float fScalePercent = 1.f;
+            if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
+                fScalePercent = .5f;
+
+            BoneManager::GetBonePosition(o, L"Monster96_Center", Position);
+            Vector(Luminosity * 0.f, Luminosity * 0.5f, Luminosity * 0.1f, Light);
+            CreateSprite(BITMAP_LIGHT, Position, fScalePercent, Light, o);
+
+            Vector(0.5f, 0.5f, 0.5f, Light);
+
+            BoneManager::GetBonePosition(o, L"Monster96_Top", Position);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
+
+            BoneManager::GetBonePosition(o, L"Monster96_Bottom", Position);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, Rotation);
+            CreateSprite(BITMAP_SHINY + 1, Position, 0.5f * fScalePercent, Light, o, 360.f - Rotation);
+
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT3_MOVE1 + rand() % 2));
             }
-        }
-        else if (o->CurrentAction == MONSTER01_ATTACK2)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK2);
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK1);
+                }
             }
-        }
-        else if (o->CurrentAction == MONSTER01_DIE)
-        {
-            if (o->SubType == FALSE) {
-                o->SubType = TRUE;
-                PlayBuffer(SOUND_CRY1ST_SCOUT1_DIE);
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK2);
+                }
             }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT3_DIE);
+                }
+            }
+
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
         }
-        if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
-            o->SubType = FALSE;
-    }
-    return true;
+            return true;
+        case MODEL_SCOUT: {
+            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+            {
+                if (rand_fps_check(15))
+                    PlayBuffer(static_cast<ESound>(SOUND_CRY1ST_SCOUT1_MOVE1 + rand() % 2));
+            }
+            else if (o->CurrentAction == MONSTER01_ATTACK1)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK1);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_ATTACK2)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK2);
+                }
+            }
+            else if (o->CurrentAction == MONSTER01_DIE)
+            {
+                if (o->SubType == FALSE)
+                {
+                    o->SubType = TRUE;
+                    PlayBuffer(SOUND_CRY1ST_SCOUT1_DIE);
+                }
+            }
+            if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
+                o->SubType = FALSE;
+        }
+            return true;
     }
     return false;
 }
@@ -2047,46 +2067,47 @@ bool M34CryWolf1st::CreateMist(PARTICLE* pParticleObj)
     if (!IsCyrWolf1st())
         return false;
 
-    if (rand_fps_check(30)) {
+    if (rand_fps_check(30))
+    {
         vec3_t Light;
         Vector(0.07f, 0.07f, 0.07f, Light);
         int ff = 200.0f;
 
-        vec3_t TargetPosition = { 0.f, 0.f, 400.f }, TargetAngle = { 0.f, 0.f, 0.f };
+        vec3_t TargetPosition = {0.f, 0.f, 400.f}, TargetAngle = {0.f, 0.f, 0.f};
         switch (rand() % 8)
         {
-        case 0:
-            TargetPosition[0] = Hero->Object.Position[0] + (300 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1] + (300 - ff + rand() % 250);
-            break;
-        case 1:
-            TargetPosition[0] = Hero->Object.Position[0] + (250 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1] - (250 - ff + rand() % 250);
-            break;
-        case 2:
-            TargetPosition[0] = Hero->Object.Position[0] - (200 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1] + (200 - ff + rand() % 250);
-            break;
-        case 3:
-            TargetPosition[0] = Hero->Object.Position[0] - (300 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1] - (300 - ff + rand() % 250);
-            break;
-        case 4:
-            TargetPosition[0] = Hero->Object.Position[0] + (400 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1];
-            break;
-        case 5:
-            TargetPosition[0] = Hero->Object.Position[0] - (400 - ff + rand() % 250);
-            TargetPosition[1] = Hero->Object.Position[1];
-            break;
-        case 6:
-            TargetPosition[0] = Hero->Object.Position[0];
-            TargetPosition[1] = Hero->Object.Position[1] + (400 - ff + rand() % 250);
-            break;
-        case 7:
-            TargetPosition[0] = Hero->Object.Position[0];
-            TargetPosition[1] = Hero->Object.Position[1] - (400 - ff + rand() % 250);
-            break;
+            case 0:
+                TargetPosition[0] = Hero->Object.Position[0] + (300 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1] + (300 - ff + rand() % 250);
+                break;
+            case 1:
+                TargetPosition[0] = Hero->Object.Position[0] + (250 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1] - (250 - ff + rand() % 250);
+                break;
+            case 2:
+                TargetPosition[0] = Hero->Object.Position[0] - (200 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1] + (200 - ff + rand() % 250);
+                break;
+            case 3:
+                TargetPosition[0] = Hero->Object.Position[0] - (300 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1] - (300 - ff + rand() % 250);
+                break;
+            case 4:
+                TargetPosition[0] = Hero->Object.Position[0] + (400 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1];
+                break;
+            case 5:
+                TargetPosition[0] = Hero->Object.Position[0] - (400 - ff + rand() % 250);
+                TargetPosition[1] = Hero->Object.Position[1];
+                break;
+            case 6:
+                TargetPosition[0] = Hero->Object.Position[0];
+                TargetPosition[1] = Hero->Object.Position[1] + (400 - ff + rand() % 250);
+                break;
+            case 7:
+                TargetPosition[0] = Hero->Object.Position[0];
+                TargetPosition[1] = Hero->Object.Position[1] - (400 - ff + rand() % 250);
+                break;
         }
 
         if (Hero->Movement)
@@ -2118,10 +2139,12 @@ void M34CryWolf1st::RenderBaseSmoke(void)
 
     glColor3f(0.4f, 0.4f, 0.45f);
     float WindX2 = (float)((int)WorldTime % 100000) * 0.0005f;
-    RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f, 3.f, 2.f);
+    RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f,
+                   3.f, 2.f);
     EnableAlphaBlend();
     float WindX = (float)((int)WorldTime % 100000) * 0.0002f;
-    RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f, 0.3f, 0.3f);
+    RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f,
+                   0.3f, 0.3f);
 }
 
 bool M34CryWolf1st::Get_State()
@@ -2142,8 +2165,8 @@ void M34CryWolf1st::SetTime(BYTE byHour, BYTE byMinute)
 {
     if (M34CryWolf1st::Get_State() == false || M34CryWolf1st::IsCyrWolf1st() == false)
         return;
-    m_iHour = byHour;
-    m_iMinute = byMinute;
+    m_iHour      = byHour;
+    m_iMinute    = byMinute;
     m_dwSyncTime = GetTickCount();
 
     if (TimeStart == false)
@@ -2158,9 +2181,8 @@ void M34CryWolf1st::Set_BossMonster(int Val_Hp, int Dl_Num)
 
     if (Val_Hp > 0 && View_Bal == false)
         View_Bal = true;
-    else
-        if (Val_Hp <= 0 && View_Bal == true)
-            View_Bal = false;
+    else if (Val_Hp <= 0 && View_Bal == true)
+        View_Bal = false;
 
     Set_Val_Hp(Val_Hp);
 }
@@ -2169,7 +2191,8 @@ void M34CryWolf1st::Check_AltarState(int Num, int State)
 {
     if (M34CryWolf1st::Get_State_Only_Elf() == false || M34CryWolf1st::IsCyrWolf1st() == false)
         return;
-    if (Num < 1 || Num > 5) return;  // #MG-32: m_AltarState[5]
+    if (Num < 1 || Num > 5)
+        return;  // #MG-32: m_AltarState[5]
     m_AltarState[Num - 1] = State;
 }
 
@@ -2177,8 +2200,10 @@ void M34CryWolf1st::Set_Message_Box(int Str, int Num, int Key, int ObjNum)
 {
     if (M34CryWolf1st::Get_State_Only_Elf() == false || M34CryWolf1st::IsCyrWolf1st() == false || LogOut)
         return;
-    if (Num < 0 || Num >= 2) return;  // #MG-32: Box_String[2][200]
-    if (ObjNum < 0 || ObjNum >= 5) return;  // #MG-32: m_AltarState[5]
+    if (Num < 0 || Num >= 2)
+        return;  // #MG-32: Box_String[2][200]
+    if (ObjNum < 0 || ObjNum >= 5)
+        return;  // #MG-32: m_AltarState[5]
 
     if (Str == 56)
     {
@@ -2200,7 +2225,7 @@ void M34CryWolf1st::Set_Message_Box(int Str, int Num, int Key, int ObjNum)
 void M34CryWolf1st::MoveMvp_Interface()
 {
     int Yes = 250;
-    int No = 330;
+    int No  = 330;
 
     if (M34CryWolf1st::IsCyrWolf1st() == false)
         return;
@@ -2229,7 +2254,7 @@ void M34CryWolf1st::MoveMvp_Interface()
         }
         if (MouseLButton == true)
         {
-            MouseLButton = false;
+            MouseLButton     = false;
             MouseLButtonPush = false;
         }
     }
@@ -2248,10 +2273,8 @@ void M34CryWolf1st::MoveMvp_Interface()
         {
             if (MouseLButton == true)
             {
-                if (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA
-                    || Hero->Helper.Type == MODEL_HORN_OF_DINORANT
-                    || Hero->Helper.Type == MODEL_HORN_OF_FENRIR
-                    )
+                if (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA || Hero->Helper.Type == MODEL_HORN_OF_DINORANT ||
+                    Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
                 {
                     Set_Message_Box(6, 0, 0);
                 }
@@ -2264,23 +2287,22 @@ void M34CryWolf1st::MoveMvp_Interface()
         }
         if (MouseLButton == true)
         {
-            MouseLButton = false;
+            MouseLButton     = false;
             MouseLButtonPush = false;
         }
     }
-    else
-        if (Message_Box == 2)
+    else if (Message_Box == 2)
+    {
+        if (MouseX > 290 && MouseX < 290 + 54 && MouseY > 250 && MouseY < 250 + 30)
         {
-            if (MouseX > 290 && MouseX < 290 + 54 && MouseY > 250 && MouseY < 250 + 30)
+            if (MouseLButton == true)
             {
-                if (MouseLButton == true)
-                {
-                    MouseLButton = false;
-                    MouseLButtonPush = false;
-                    Button_Down = 3;
-                }
+                MouseLButton     = false;
+                MouseLButtonPush = false;
+                Button_Down      = 3;
             }
         }
+    }
 }
 
 void M34CryWolf1st::Sub_Interface()
@@ -2289,7 +2311,7 @@ void M34CryWolf1st::Sub_Interface()
         return;
 
     int Yes = 250;
-    int No = 330;
+    int No  = 330;
 
     g_pRenderText->SetTextColor(255, 148, 21, 255);
     g_pRenderText->SetBgColor(0x00000000);
@@ -2407,15 +2429,15 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
     wchar_t Text[300];
 
-    float Main[] = { 518.f,278.f,122.f,119.f,120.f / 128.f,118.f / 128.f };
-    float Number[5][6] = { {565.f,280.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {582.f,282.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {598.f,286.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {613.f,294.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {625.f,306.f,13.f,13.f,12.f / 16.f,12.f / 16.f} };
-    float bar[] = { 0.f,98.f,97.f,21.f,97.f / 128.f,21.f / 32.f };
-    float Dark_Elf_Icon[] = { 623.f,358.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
-    float Val_Icon[] = { 4.f,101.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
+    float Main[]          = {518.f, 278.f, 122.f, 119.f, 120.f / 128.f, 118.f / 128.f};
+    float Number[5][6]    = {{565.f, 280.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                             {582.f, 282.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                             {598.f, 286.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                             {613.f, 294.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                             {625.f, 306.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f}};
+    float bar[]           = {0.f, 98.f, 97.f, 21.f, 97.f / 128.f, 21.f / 32.f};
+    float Dark_Elf_Icon[] = {623.f, 358.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
+    float Val_Icon[]      = {4.f, 101.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
 
     int TotDelay = 400;
 
@@ -2461,12 +2483,17 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if (View_Suc_Or_Fail == 1)
         {
-            g_pRenderText->RenderText(330, 175 + icntIndex * 17, I18N::Game::MonsterStrengthDecreased10, 0, 0, RT3_WRITE_CENTER); icntIndex++;
-            g_pRenderText->RenderText(328, 175 + icntIndex * 17, I18N::Game::_5IncreaseInCastleAndArenaInvitationCombineRate, 0, 0, RT3_WRITE_CENTER);
+            g_pRenderText->RenderText(330, 175 + icntIndex * 17, I18N::Game::MonsterStrengthDecreased10, 0, 0,
+                                      RT3_WRITE_CENTER);
+            icntIndex++;
+            g_pRenderText->RenderText(328, 175 + icntIndex * 17,
+                                      I18N::Game::_5IncreaseInCastleAndArenaInvitationCombineRate, 0, 0,
+                                      RT3_WRITE_CENTER);
         }
         else
         {
-            g_pRenderText->RenderText(330, 175 + icntIndex * 17, I18N::Game::AllNPCsInCrywolfHaveBeenDeleted, 0, 0, RT3_WRITE_CENTER);
+            g_pRenderText->RenderText(330, 175 + icntIndex * 17, I18N::Game::AllNPCsInCrywolfHaveBeenDeleted, 0, 0,
+                                      RT3_WRITE_CENTER);
         }
 
         if (MouseX > 300 && MouseX < 300 + 54 && MouseY > 300 && MouseY < 300 + 30)
@@ -2474,8 +2501,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
             if (Button_Down == 5)
             {
                 g_pCryWolfInterface->Render(300, 300, 54, 30, 0.f, 0.f, 54.f / 64.f, 30.f / 32.f, 21);
-                Message_Box = 0;
-                Button_Down = 0;
+                Message_Box     = 0;
+                Button_Down     = 0;
                 View_End_Result = false;
             }
             else
@@ -2494,7 +2521,7 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         Delay++;
         if (Delay >= TotDelay)
         {
-            Delay = 0;
+            Delay       = 0;
             Suc_Or_Fail = 0;
         }
     }
@@ -2502,7 +2529,7 @@ bool M34CryWolf1st::Render_Mvp_Interface()
     if (Suc_Or_Fail >= 0)
     {
         float A_Value = 0.f;
-        int aa = (Delay * 2) % 140;
+        int   aa      = (Delay * 2) % 140;
 
         if (aa > 70)
             A_Value = 1.f - ((aa - 70) * 0.01f);
@@ -2516,16 +2543,18 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if ((Delay * 15) > 479)
         {
-            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false,
+                                        A_Value);
         }
         else if (Suc_Or_Fail == 0)
         {
-            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num,
+                                        false, false, A_Value);
 
             Delay++;
             if ((Delay * 15) > 479)
             {
-                Delay = 0;
+                Delay       = 0;
                 Suc_Or_Fail = -1;
 
                 Delay_Add_inter = 390;
@@ -2534,7 +2563,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         }
         else
         {
-            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f,
+                                        Add_Num, false, false, A_Value);
         }
 
         g_pCryWolfInterface->Render(230, 150, 196, 141, 0.f, 0.f, 195.f / 256.f, 140.f / 256.f, 26);
@@ -2542,7 +2572,7 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if (Delay_Add_inter == 0)
         {
-            int Exp_val[9] = { 0,0,0,0,0,0,0,0,0 }, Exp_Dummy = 0, Val = 0;
+            int Exp_val[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}, Exp_Dummy = 0, Val = 0;
 
             g_pCryWolfInterface->Render(250 + 120, 188, 29, 28, 0.f, 0.f, 29.f / 32.f, 27.f / 32.f, 28 + Rank);
 
@@ -2552,13 +2582,13 @@ bool M34CryWolf1st::Render_Mvp_Interface()
                 {
                     if (Val > 0)
                     {
-                        Exp_Dummy = Exp / Val;
+                        Exp_Dummy      = Exp / Val;
                         Exp_val[8 - i] = Exp_Dummy % 10;
                     }
                     else
                     {
                         Exp_val[8 - i] = Exp % 10;
-                        Val = 1;
+                        Val            = 1;
                     }
                 }
                 else
@@ -2568,15 +2598,24 @@ bool M34CryWolf1st::Render_Mvp_Interface()
             }
             int Move_X = 29;
             g_pCryWolfInterface->Render(200 + Move_X, 235, 60, 19, 0.f, 0.f, 60.f / 64.f, 19.f / 32.f, 43);
-            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[8]);
-            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[7]);
-            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[6]);
-            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[5]);
-            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[4]);
-            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[3]);
-            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[2]);
-            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[1]);
-            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[0]);
+            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[8]);
+            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[7]);
+            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[6]);
+            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[5]);
+            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[4]);
+            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[3]);
+            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[2]);
+            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[1]);
+            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[0]);
         }
     }
 
@@ -2587,43 +2626,50 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
     for (int ia = 0; ia < 5; ia++)
     {
-        BYTE Use = (m_AltarState[ia] & 0xf0) >> 4;
+        BYTE Use   = (m_AltarState[ia] & 0xf0) >> 4;
         BYTE State = (m_AltarState[ia] & 0x0f);
         if (Use == CRYWOLF_ALTAR_STATE_CONTRACTED)
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 23);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 23);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 24);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 24);
             }
             else
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 25);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 25);
             }
         }
         else
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 7);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 7);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 8);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 8);
             }
         }
     }
 
     if (Dark_elf_Num == 0)
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
     }
     else
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
     }
 
     g_pCryWolfInterface->Render(538, 392, 104, 37, 0.f, 0.f, 104.f / 128.f, 36.f / 64.f, 12);
@@ -2641,7 +2687,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         else
         {
             g_pCryWolfInterface->Render(bar[0], bar[1], bar[2], bar[3], 0.f, 0.f, bar[4], bar[5], 0);
-            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4], Val_Icon[5], 4);
+            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4],
+                                        Val_Icon[5], 4);
             mu_swprintf(Text, I18N::Game::Balgass);
             g_pRenderText->RenderText(38, 101, Text, 0, 0, RT3_WRITE_CENTER);
 
@@ -2663,9 +2710,9 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if (m_iMinute > 0)
         {
-            int Time_Add = 0;
-            float Tim = GetTickCount() - m_dwSyncTime;
-            nPastMinute = m_iMinute - (GetTickCount() - m_dwSyncTime) / 60000;
+            int   Time_Add = 0;
+            float Tim      = GetTickCount() - m_dwSyncTime;
+            nPastMinute    = m_iMinute - (GetTickCount() - m_dwSyncTime) / 60000;
 
             Time_Add = (Tim / 60000) * 60;
 
@@ -2677,7 +2724,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
                     nPastTick = 0;
             }
         }
-        else nPastMinute = 0;
+        else
+            nPastMinute = 0;
 
         if (nPastMinute < 0)
         {
@@ -2718,13 +2766,13 @@ bool M34CryWolf1st::SetCurrentActionCrywolfMonster(CHARACTER* c, OBJECT* o)
 
     switch (c->MonsterIndex)
     {
-    case MONSTER_DARK_ELF:
-    case MONSTER_DARKELF:
-    case MONSTER_BALRAM:
-    case MONSTER_DEATH_SPIRIT:
-    case MONSTER_SORAM:
-    case MONSTER_BALGASS:
-        return CheckMonsterSkill(c, o);
+        case MONSTER_DARK_ELF:
+        case MONSTER_DARKELF:
+        case MONSTER_BALRAM:
+        case MONSTER_DEATH_SPIRIT:
+        case MONSTER_SORAM:
+        case MONSTER_BALGASS:
+            return CheckMonsterSkill(c, o);
     }
     return false;
 }
@@ -2732,12 +2780,13 @@ bool M34CryWolf1st::SetCurrentActionCrywolfMonster(CHARACTER* c, OBJECT* o)
 void M34CryWolf1st::Set_MyRank(BYTE MyRank, int GettingExp)
 {
     Rank = MyRank;
-    Exp = GettingExp;
+    Exp  = GettingExp;
 }
 
 void M34CryWolf1st::Set_WorldRank(BYTE Rank, CLASS_TYPE Class, int Score, wchar_t* szHeroName)
 {
-    if (Rank >= 5 || szHeroName == nullptr) return;  // #MG-33: HeroScore/HeroClass/HeroName[5]
+    if (Rank >= 5 || szHeroName == nullptr)
+        return;  // #MG-33: HeroScore/HeroClass/HeroName[5]
     HeroScore[Rank] = Score;
     HeroClass[Rank] = Class;
     wcsncpy_s(HeroName[Rank], szHeroName, MAX_USERNAME_SIZE);

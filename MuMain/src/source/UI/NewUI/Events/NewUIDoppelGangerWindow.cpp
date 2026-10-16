@@ -1,4 +1,4 @@
-﻿  // NewUIDoppelGangerWindow.cpp: implementation of the CNewUIDoppelGangerWindow class.
+﻿// NewUIDoppelGangerWindow.cpp: implementation of the CNewUIDoppelGangerWindow class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@
 
 #include "Audio/DSPlaySound.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 CNewUIDoppelGangerWindow::CNewUIDoppelGangerWindow()
 {

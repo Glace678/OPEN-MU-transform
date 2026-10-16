@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketFunctions.cpp" company="MUnique">
+﻿// <copyright file="PacketFunctions.cpp" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,8 +17,7 @@
 #include "PacketFunctions_ConnectServer.h"
 #include "PacketBindings_ConnectServer.h"
 
-    void
-    PacketFunctions_ConnectServer::SendConnectionInfoRequest075(BYTE serverId)
+void PacketFunctions_ConnectServer::SendConnectionInfoRequest075(BYTE serverId)
 {
     dotnet_SendConnectionInfoRequest075(this->GetHandle(), serverId);
 }

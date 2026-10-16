@@ -1,4 +1,4 @@
-﻿  // w_BasePet.cpp: implementation of the BasePet class.
+﻿// w_BasePet.cpp: implementation of the BasePet class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -8,7 +8,7 @@
 #include "Engine/AI/ZzzAI.h"
 #include "Render/Effects/ZzzEffect.h"
 
-    extern float EarthQuake;
+extern float EarthQuake;
 
 PetObjectPtr PetObject::Make()
 {

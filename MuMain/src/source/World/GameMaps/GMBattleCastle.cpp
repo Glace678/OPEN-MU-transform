@@ -27,640 +27,664 @@
 #include "Engine/Object/ZzzInterface.h"
 #include "Camera/CameraProjection.h"
 
-
-extern  int     WaterTextureNumber;
-extern  char* NUM_MUSIC;
+extern int   WaterTextureNumber;
+extern char* NUM_MUSIC;
 
 namespace battleCastle
 {
-    typedef struct
+typedef struct
+{
+    vec3_t m_vPosition;
+    BYTE   m_byBuildTime;
+} BuildTime;
+
+static BYTE  g_byGuardAI                 = 0;
+static bool  g_bBeGate                   = false;
+static BYTE  g_byGateLocation[6][2]      = {{67, 114}, {93, 114}, {119, 114}, {81, 161}, {107, 161}, {93, 204}};
+static float g_fGuardStoneLocation[4][2] = {{8200, 13000}, {10700, 13000}, {9400, 18200}, {9400, 22700}};
+static float g_fLifeStoneLocation[2]     = {0.f, 0.f};
+static bool  g_isCrownState              = false;
+static DWORD g_dwCrownBackState          = 0x00000000;
+static bool  g_bBattleCastleStart        = false;
+static bool  g_bBattleCastleStartBackup  = false;
+static float g_iMp3PlayTime              = 0.f;
+
+static float           LastHealingParticle     = 0.0f;
+static constexpr float HealingParticleInterval = 400;  // every 400 ms
+
+static float           LastStoneFlyEffect     = 0.0f;
+static constexpr float StoneFlyEffectInterval = 800;  // every 800 ms
+
+static float           LastArrowEffectOnBattlefield     = 0.0f;
+static constexpr float ArrowEffectOnBattlefieldInterval = 2400;  // every 2400 ms
+
+static float           LastArrowEffectInStampRoom     = 0.0f;
+static constexpr float ArrowEffectInStampRoomInterval = 400;  // every 400 ms
+
+std::queue<BuildTime> g_qBuildTimeLocation;
+
+enum
+{
+    GUARD_STOP = 0,
+    GUARD_READY,
+    GUARD_ATTACK_READY,
+    GUARD_ATTACK
+};
+
+bool IsBattleCastleStart(void)
+{
+    return g_bBattleCastleStart;
+}
+void SetBattleCastleStart(bool bResult)
+{
+    g_bBattleCastleStartBackup = g_bBattleCastleStart;
+    g_bBattleCastleStart       = bResult;
+
+    if (/*g_bBattleCastleStart!=g_bBattleCastleStartBackup && */ gMapManager.WorldActive != -1 &&
+        gMapManager.InBattleCastle())
     {
-        vec3_t  m_vPosition;
-        BYTE    m_byBuildTime;
-    } BuildTime;
+        wchar_t FileName[64];
+        wchar_t WorldName[32];
 
-    static  BYTE    g_byGuardAI = 0;
-    static  bool    g_bBeGate = false;
-    static  BYTE    g_byGateLocation[6][2] = { { 67, 114 }, {  93, 114 }, { 119, 114 }, {  81, 161 }, { 107, 161 }, { 93, 204 } };
-    static  float   g_fGuardStoneLocation[4][2] = { { 8200, 13000 }, { 10700, 13000 }, {  9400, 18200 }, {  9400, 22700 } };
-    static  float   g_fLifeStoneLocation[2] = { 0.f, 0.f };
-    static  bool    g_isCrownState = false;
-    static  DWORD   g_dwCrownBackState = 0x00000000;
-    static  bool    g_bBattleCastleStart = false;
-    static  bool    g_bBattleCastleStartBackup = false;
-    static  float   g_iMp3PlayTime = 0.f;
-
-    static float LastHealingParticle = 0.0f;
-    static constexpr float HealingParticleInterval = 400; // every 400 ms
-
-    static float LastStoneFlyEffect = 0.0f;
-    static constexpr float StoneFlyEffectInterval = 800; // every 800 ms
-
-    static float LastArrowEffectOnBattlefield = 0.0f;
-    static constexpr float ArrowEffectOnBattlefieldInterval = 2400; // every 2400 ms
-
-    static float LastArrowEffectInStampRoom = 0.0f;
-    static constexpr float ArrowEffectInStampRoomInterval = 400; // every 400 ms
-
-    std::queue<BuildTime>   g_qBuildTimeLocation;
-
-    enum
-    {
-        GUARD_STOP = 0,
-        GUARD_READY,
-        GUARD_ATTACK_READY,
-        GUARD_ATTACK
-    };
-
-    bool IsBattleCastleStart(void)
-    {
-        return g_bBattleCastleStart;
-    }
-    void SetBattleCastleStart(bool bResult)
-    {
-        g_bBattleCastleStartBackup = g_bBattleCastleStart;
-        g_bBattleCastleStart = bResult;
-
-        if ( /*g_bBattleCastleStart!=g_bBattleCastleStartBackup && */ gMapManager.WorldActive != -1 && gMapManager.InBattleCastle())
+        mu_swprintf(WorldName, L"World%d", gMapManager.WorldActive + 1);
+        if (g_bBattleCastleStart)
         {
-            wchar_t FileName[64];
-            wchar_t WorldName[32];
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 2);
+            OpenTerrainAttribute(FileName);
 
-            mu_swprintf(WorldName, L"World%d", gMapManager.WorldActive + 1);
-            if (g_bBattleCastleStart)
-            {
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 2);
-                OpenTerrainAttribute(FileName);
+            mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+            OpenTerrainLight(FileName);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, gMapManager.WorldActive + 1);
+            OpenTerrainAttribute(FileName);
 
-                mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
-                OpenTerrainLight(FileName);
-            }
-            else
-            {
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, gMapManager.WorldActive + 1);
-                OpenTerrainAttribute(FileName);
+            mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+            OpenTerrainLight(FileName);  // #MG-31: actually reload normal light on battle end
+        }
 
-                mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
-                OpenTerrainLight(FileName);  // #MG-31: actually reload normal light on battle end
-            }
+        g_iMp3PlayTime = 0;
+    }
+}
 
-            g_iMp3PlayTime = 0;
+bool InArea(float x, float y, vec3_t Position, float Range)
+{
+    float dx       = x - Position[0];
+    float dy       = y - Position[1];
+    float Distance = sqrtf(dx * dx + dy * dy);
+    if (Distance <= Range)
+        return true;
+    return false;
+}
+
+void CollisionHeroCharacter(vec3_t Position, float Range, int AniType)
+{
+    OBJECT* o = &Hero->Object;
+
+    if (InArea(Position[0], Position[1], o->Position, Range) && o->CurrentAction != AniType)
+    {
+        //            if ( Range<=350.f && rand()%(int)(100-(Range-350.f)/10) )
+        if (Hero->Helper.Type == MODEL_HORN_OF_FENRIR && AniType == PLAYER_HIGH_SHOCK)
+        {
+            SetAction_Fenrir_Damage(Hero, o);
+            SendRequestAction(Hero->Object, AniType);
+        }
+        else
+        {
+            SetAction(o, AniType);
+            SendRequestAction(Hero->Object, AniType);
         }
     }
+}
 
-    bool InArea(float x, float y, vec3_t Position, float Range)
+void CollisionTempCharacter(vec3_t Position, float Range, int AniType)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
-        float dx = x - Position[0];
-        float dy = y - Position[1];
-        float Distance = sqrtf(dx * dx + dy * dy);
-        if (Distance <= Range)
-            return true;
-        return false;
-    }
-
-    void CollisionHeroCharacter(vec3_t Position, float Range, int AniType)
-    {
-        OBJECT* o = &Hero->Object;
-
-        if (InArea(Position[0], Position[1], o->Position, Range) && o->CurrentAction != AniType)
+        OBJECT* o = &CharactersClient[i].Object;
+        if (o->Live && (o->Kind == KIND_TMP) && o->Type == MODEL_PLAYER && o->CurrentAction != AniType)
         {
-            //            if ( Range<=350.f && rand()%(int)(100-(Range-350.f)/10) )
-            if (Hero->Helper.Type == MODEL_HORN_OF_FENRIR && AniType == PLAYER_HIGH_SHOCK)
+            if (InArea(Position[0], Position[1], o->Position, Range))
             {
-                SetAction_Fenrir_Damage(Hero, o);
-                SendRequestAction(Hero->Object, AniType);
-            }
-            else
-            {
-                SetAction(o, AniType);
-                SendRequestAction(Hero->Object, AniType);
-            }
-        }
-    }
-
-    void    CollisionTempCharacter(vec3_t Position, float Range, int AniType)
-    {
-        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
-        {
-            OBJECT* o = &CharactersClient[i].Object;
-            if (o->Live && (o->Kind == KIND_TMP) && o->Type == MODEL_PLAYER && o->CurrentAction != AniType)
-            {
-                if (InArea(Position[0], Position[1], o->Position, Range))
+                //                    if ( Range<=350.f && rand()%(int)(100-(Range-350.f)/10) )
                 {
-                    //                    if ( Range<=350.f && rand()%(int)(100-(Range-350.f)/10) )
-                    {
-                        SetAction(o, AniType);
-                    }
+                    SetAction(o, AniType);
                 }
             }
         }
     }
+}
 
-    bool CollisionEffectToObject(OBJECT* eff, float Range, float RangeZ, bool bCollisionGround, bool bRealCollision)
+bool CollisionEffectToObject(OBJECT* eff, float Range, float RangeZ, bool bCollisionGround, bool bRealCollision)
+{
+    int i = (int)(eff->Position[0] / (16 * TERRAIN_SCALE));
+    int j = (int)(eff->Position[1] / (16 * TERRAIN_SCALE));
+    if (i < 0 || j < 0 || i >= 16 || j >= 16)
+        return false;
+
+    BYTE          Block = i * 16 + j;
+    OBJECT_BLOCK* ob    = &ObjectBlock[Block];
+    OBJECT*       o     = ob->Head;
+    while (1)
     {
-        int i = (int)(eff->Position[0] / (16 * TERRAIN_SCALE));
-        int j = (int)(eff->Position[1] / (16 * TERRAIN_SCALE));
-        if (i < 0 || j < 0 || i >= 16 || j >= 16) return false;
-
-        BYTE Block = i * 16 + j;
-        OBJECT_BLOCK* ob = &ObjectBlock[Block];
-        OBJECT* o = ob->Head;
-        while (1)
+        if (o != NULL)
         {
-            if (o != NULL)
+            if (o->Live && o->HiddenMesh == -1 && o->m_bCollisionCheck)
             {
-                if (o->Live && o->HiddenMesh == -1 && o->m_bCollisionCheck)
+                float dx       = eff->Position[0] - o->Position[0];
+                float dy       = eff->Position[1] - o->Position[1];
+                float Distance = sqrtf(dx * dx + dy * dy);
+                if (Distance <= Range)
                 {
-                    float dx = eff->Position[0] - o->Position[0];
-                    float dy = eff->Position[1] - o->Position[1];
-                    float Distance = sqrtf(dx * dx + dy * dy);
-                    if (Distance <= Range)
+                    if (bCollisionGround)
                     {
-                        if (bCollisionGround)
+                        if (o->m_bCollisionCheck && o->ExtState == 0)
                         {
-                            if (o->m_bCollisionCheck && o->ExtState == 0)
+                            o->Timer += 0.3f * FPS_ANIMATION_FACTOR;
+                            if (o->Timer >= 5)
                             {
-                                o->Timer += 0.3f * FPS_ANIMATION_FACTOR;
+                                o->ExtState = 99;
+                            }
+                        }
+                        return true;
+                    }
+                    else if (fabs(eff->Position[2] - o->Position[2]) < RangeZ)
+                    {
+                        if (o->m_bCollisionCheck)
+                        {
+                            if (o->ExtState == 0)
+                            {
+                                o->Timer += FPS_ANIMATION_FACTOR;
                                 if (o->Timer >= 5)
                                 {
                                     o->ExtState = 99;
                                 }
                             }
-                            return true;
                         }
-                        else
-                            if (fabs(eff->Position[2] - o->Position[2]) < RangeZ)
-                            {
-                                if (o->m_bCollisionCheck)
-                                {
-                                    if (o->ExtState == 0)
-                                    {
-                                        o->Timer += FPS_ANIMATION_FACTOR;
-                                        if (o->Timer >= 5)
-                                        {
-                                            o->ExtState = 99;
-                                        }
-                                    }
-                                }
-                                eff->LifeTime = 15;
-                                eff->SubType = 99;
-                                eff->HiddenMesh = 99;
-                                return true;
-                            }
-                    }
-                }
-                if (o->Next == NULL) break;
-                o = o->Next;
-            }
-            else break;
-        }
-        return false;
-    }
-
-    bool CalcDistanceChrToChr(OBJECT* o, BYTE Type, float fRange)
-    {
-        for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-        {
-            CHARACTER* tc = &CharactersClient[i];
-            OBJECT* to = &tc->Object;
-            if (to->Kind == KIND_PLAYER && to->Type == MODEL_PLAYER && to->Visible == true)
-            {
-                if (Type == 0)
-                {
-                    float dx = o->Position[0] - to->Position[0];
-                    float dy = o->Position[1] - to->Position[1];
-                    if (dx < fRange && dy < 100) return true;
-                }
-                else if (Type == 1)
-                {
-                    float dx = fabs(o->Position[0] - to->Position[0]);
-                    float dy = o->Position[1] - to->Position[1];
-                    if (dx < 1 && dy>0 && dy < fRange)
-                    {
+                        eff->LifeTime   = 15;
+                        eff->SubType    = 99;
+                        eff->HiddenMesh = 99;
                         return true;
                     }
                 }
-                else if (Type == 2)
+            }
+            if (o->Next == NULL)
+                break;
+            o = o->Next;
+        }
+        else
+            break;
+    }
+    return false;
+}
+
+bool CalcDistanceChrToChr(OBJECT* o, BYTE Type, float fRange)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+    {
+        CHARACTER* tc = &CharactersClient[i];
+        OBJECT*    to = &tc->Object;
+        if (to->Kind == KIND_PLAYER && to->Type == MODEL_PLAYER && to->Visible == true)
+        {
+            if (Type == 0)
+            {
+                float dx = o->Position[0] - to->Position[0];
+                float dy = o->Position[1] - to->Position[1];
+                if (dx < fRange && dy < 100)
+                    return true;
+            }
+            else if (Type == 1)
+            {
+                float dx = fabs(o->Position[0] - to->Position[0]);
+                float dy = o->Position[1] - to->Position[1];
+                if (dx < 1 && dy > 0 && dy < fRange)
                 {
-                    float dx = o->Position[0] - to->Position[0];
-                    float dy = o->Position[1] - to->Position[1];
-                    float Distance = sqrtf(dx * dx + dy * dy);
-                    if (Distance < fRange) return true;
+                    return true;
                 }
+            }
+            else if (Type == 2)
+            {
+                float dx       = o->Position[0] - to->Position[0];
+                float dy       = o->Position[1] - to->Position[1];
+                float Distance = sqrtf(dx * dx + dy * dy);
+                if (Distance < fRange)
+                    return true;
             }
         }
-        return false;
     }
+    return false;
+}
 
-    void SetCastleGate_Attribute(int x, int y, BYTE Operator, bool bAllClear)
+void SetCastleGate_Attribute(int x, int y, BYTE Operator, bool bAllClear)
+{
+    for (int i = 0; i < 6; ++i)
     {
-        for (int i = 0; i < 6; ++i)
+        if (bAllClear == true)
         {
-            if (bAllClear == true)
+            DWORD wall = TerrainWall[(g_byGateLocation[i][1] + 1) * TERRAIN_SIZE + (g_byGateLocation[i][0])];
+            if ((wall & TW_NOMOVE) == TW_NOMOVE)
             {
-                DWORD wall = TerrainWall[(g_byGateLocation[i][1] + 1) * TERRAIN_SIZE + (g_byGateLocation[i][0])];
-                if ((wall & TW_NOMOVE) == TW_NOMOVE)
-                {
-                    AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE, Operator);
-                }
+                AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE,
+                                         Operator);
             }
-            else
-            {
-                if (x == g_byGateLocation[i][0] && y == g_byGateLocation[i][1])
-                {
-                    AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE, Operator);
-                    return;
-                }
-            }
-        }
-    }
-
-    void RenderAurora(int Type, int RenderType, float x, float y, float sx, float sy, vec3_t Light)
-    {
-        float   Luminosity = sinf(WorldTime * 0.0015f) * 0.3f + 0.7f;
-
-        if (RenderType == RENDER_DARK)
-        {
-            EnableAlphaBlendMinus();
-            Vector(Luminosity, Luminosity, Luminosity, Light);
         }
         else
         {
-            EnableAlphaBlend();
-            Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
+            if (x == g_byGateLocation[i][0] && y == g_byGateLocation[i][1])
+            {
+                AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE,
+                                         Operator);
+                return;
+            }
         }
-
-        RenderTerrainAlphaBitmap(Type, x, y, sx, sy, Light, WorldTime * 0.01f);
-
-        if (RenderType == RENDER_DARK)
-        {
-            Luminosity = 1.f - Luminosity;
-            Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
-        }
-        RenderTerrainAlphaBitmap(Type, x, y, sx, sy, Light, -WorldTime * 0.01f);
     }
+}
 
-    void SetBuildTimeLocation(OBJECT* o)
+void RenderAurora(int Type, int RenderType, float x, float y, float sx, float sy, vec3_t Light)
+{
+    float Luminosity = sinf(WorldTime * 0.0015f) * 0.3f + 0.7f;
+
+    if (RenderType == RENDER_DARK)
     {
-        if (o->Type == MODEL_LIFE_STONE && o->m_byBuildTime < 5)
-        {
-            BuildTime bt;
-
-            VectorCopy(o->Position, bt.m_vPosition);
-            bt.m_vPosition[2] += o->BoundingBoxMax[2] + 100.f;
-            bt.m_byBuildTime = o->m_byBuildTime;
-            g_qBuildTimeLocation.push(bt);
-        }
+        EnableAlphaBlendMinus();
+        Vector(Luminosity, Luminosity, Luminosity, Light);
+    }
+    else
+    {
+        EnableAlphaBlend();
+        Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
     }
 
-    void RenderBuildTimes(void)
+    RenderTerrainAlphaBitmap(Type, x, y, sx, sy, Light, WorldTime * 0.01f);
+
+    if (RenderType == RENDER_DARK)
+    {
+        Luminosity = 1.f - Luminosity;
+        Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
+    }
+    RenderTerrainAlphaBitmap(Type, x, y, sx, sy, Light, -WorldTime * 0.01f);
+}
+
+void SetBuildTimeLocation(OBJECT* o)
+{
+    if (o->Type == MODEL_LIFE_STONE && o->m_byBuildTime < 5)
     {
         BuildTime bt;
-        int iTotal = (int)g_qBuildTimeLocation.size();  // #MG-30: snapshot count before pops shrink the queue
-        for (int i = 0; i < iTotal; ++i)
-        {
-            bt = g_qBuildTimeLocation.front();
 
-            int ScreenX, ScreenY;
-            int Width = 50, Height = 2;
-            CameraProjection::WorldToScreen(g_Camera, bt.m_vPosition, &ScreenX, &ScreenY);
-            ScreenX -= (int)(Width / 2);
-
-            int Time = bt.m_byBuildTime / 5.f * (int)Width;
-            RenderBar(ScreenX, ScreenY + 12, Width, Height, (float)Time);
-
-            g_qBuildTimeLocation.pop();
-        }
+        VectorCopy(o->Position, bt.m_vPosition);
+        bt.m_vPosition[2] += o->BoundingBoxMax[2] + 100.f;
+        bt.m_byBuildTime = o->m_byBuildTime;
+        g_qBuildTimeLocation.push(bt);
     }
+}
 
-    void Init(void)
+void RenderBuildTimes(void)
+{
+    BuildTime bt;
+    int       iTotal = (int)g_qBuildTimeLocation.size();  // #MG-30: snapshot count before pops shrink the queue
+    for (int i = 0; i < iTotal; ++i)
     {
-        if (gMapManager.InBattleCastle() == false) return;
+        bt = g_qBuildTimeLocation.front();
 
-        g_byGuardAI = 0;
-        g_iMp3PlayTime = 0;
-        //        SetBattleCastleStart ( false );
+        int ScreenX, ScreenY;
+        int Width = 50, Height = 2;
+        CameraProjection::WorldToScreen(g_Camera, bt.m_vPosition, &ScreenX, &ScreenY);
+        ScreenX -= (int)(Width / 2);
 
-        vec3_t Angle, Position;
-        Vector(0.f, 0.f, 0.f, Angle);
-        Vector(0.f, 0.f, 0.f, Position);
+        int Time = bt.m_byBuildTime / 5.f * (int)Width;
+        RenderBar(ScreenX, ScreenY + 12, Width, Height, (float)Time);
 
-        SocketClient->ToGameServer()->SendGuildLogoOfCastleOwnerRequest();
-
-        OpenMonsterModel(MONSTER_MODEL_BATTLE_GUARD2);
-
-        constexpr float zOffset = 80.f;
-
-        Position[0] = 65 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
-
-        Position[0] = 71 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
-
-        Position[0] = 91 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
-
-        Position[0] = 97 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
-
-        Position[0] = 117 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
-
-        Position[0] = 123 * TERRAIN_SCALE;
-        Position[1] = 113 * TERRAIN_SCALE;
-        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
-        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+        g_qBuildTimeLocation.pop();
     }
+}
 
-    bool    SettingBattleFormation(CHARACTER* c, eBuffState state)
+void Init(void)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return;
+
+    g_byGuardAI    = 0;
+    g_iMp3PlayTime = 0;
+    //        SetBattleCastleStart ( false );
+
+    vec3_t Angle, Position;
+    Vector(0.f, 0.f, 0.f, Angle);
+    Vector(0.f, 0.f, 0.f, Position);
+
+    SocketClient->ToGameServer()->SendGuildLogoOfCastleOwnerRequest();
+
+    OpenMonsterModel(MONSTER_MODEL_BATTLE_GUARD2);
+
+    constexpr float zOffset = 80.f;
+
+    Position[0] = 65 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+    Position[0] = 71 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+    Position[0] = 91 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+    Position[0] = 97 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+    Position[0] = 117 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+    Position[0] = 123 * TERRAIN_SCALE;
+    Position[1] = 113 * TERRAIN_SCALE;
+    Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+    CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+}
+
+bool SettingBattleFormation(CHARACTER* c, eBuffState state)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    if (state == eBuff_CastleRegimentAttack1)
     {
-        if (gMapManager.InBattleCastle() == false)  return false;
-
-        if (state == eBuff_CastleRegimentAttack1)
-        {
-            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-            {
-                DeleteParts(c);
-            }
-            c->EtcPart = PARTS_ATTACK_TEAM_MARK;
-        }
-
-        else if (state == eBuff_CastleRegimentAttack2)
-        {
-            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-            {
-                DeleteParts(c);
-            }
-            c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
-        }
-        else if (state == eBuff_CastleRegimentAttack3)
-        {
-            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-            {
-                DeleteParts(c);
-            }
-            c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
-        }
-        else if (state == eBuff_CastleRegimentDefense)
-        {
-            if (c->EtcPart == PARTS_ATTACK_TEAM_MARK
-                || c->EtcPart == PARTS_ATTACK_TEAM_MARK2
-                || c->EtcPart == PARTS_ATTACK_TEAM_MARK3
-                )
-            {
-                DeleteParts(c);
-            }
-            c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
-        }
-        else if (c->EtcPart == PARTS_ATTACK_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK
-            || c->EtcPart == PARTS_ATTACK_TEAM_MARK2
-            || c->EtcPart == PARTS_ATTACK_TEAM_MARK3
-            )
+        if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
         {
             DeleteParts(c);
-            return false;
         }
-        return true;
+        c->EtcPart = PARTS_ATTACK_TEAM_MARK;
     }
 
-    bool    GetGuildMaster(CHARACTER* c)
+    else if (state == eBuff_CastleRegimentAttack2)
     {
-        if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == 0) return false;
-        if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0 && c->GuildStatus != G_MASTER) return false;
-        if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0 && c->GuildStatus != G_MASTER) return false;
+        if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+        {
+            DeleteParts(c);
+        }
+        c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
+    }
+    else if (state == eBuff_CastleRegimentAttack3)
+    {
+        if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+        {
+            DeleteParts(c);
+        }
+        c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
+    }
+    else if (state == eBuff_CastleRegimentDefense)
+    {
+        if (c->EtcPart == PARTS_ATTACK_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+            c->EtcPart == PARTS_ATTACK_TEAM_MARK3)
+        {
+            DeleteParts(c);
+        }
+        c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
+    }
+    else if (c->EtcPart == PARTS_ATTACK_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK ||
+             c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3)
+    {
+        DeleteParts(c);
+        return false;
+    }
+    return true;
+}
 
-        return true;
+bool GetGuildMaster(CHARACTER* c)
+{
+    if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == 0)
+        return false;
+    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0 && c->GuildStatus != G_MASTER)
+        return false;
+    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0 &&
+        c->GuildStatus != G_MASTER)
+        return false;
+
+    return true;
+}
+
+void SettingBattleKing(CHARACTER* c)
+{
+    OBJECT* o = &c->Object;
+
+    if (GetGuildMaster(c) == false)
+        return;
+
+    if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1))
+    {
+        DeleteParts(c);
+        c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK;
+    }
+    else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2))
+    {
+        DeleteParts(c);
+        c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK2;
+    }
+    else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
+    {
+        DeleteParts(c);
+        c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK3;
+    }
+    else if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+    {
+        DeleteParts(c);
+        c->EtcPart = PARTS_DEFENSE_KING_TEAM_MARK;
+    }
+}
+
+void DeleteBattleFormation(CHARACTER* c, eBuffState state)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return;
+
+    if (state != eBuff_CastleRegimentAttack1 && state != eBuff_CastleRegimentAttack2 &&
+        state != eBuff_CastleRegimentAttack3 && state != eBuff_CastleRegimentDefense)
+    {
+        return;
     }
 
-    void SettingBattleKing(CHARACTER* c)
+    OBJECT* o = &c->Object;
+
+    if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) || g_isCharacterBuff(o, eBuff_CastleRegimentAttack2) ||
+        g_isCharacterBuff(o, eBuff_CastleRegimentAttack3) || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
     {
-        OBJECT* o = &c->Object;
-
-        if (GetGuildMaster(c) == false) return;
-
-        if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1))
+        if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK ||
+            c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3)
         {
             DeleteParts(c);
-            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK;
-        }
-        else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2))
-        {
-            DeleteParts(c);
-            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK2;
-        }
-        else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
-        {
-            DeleteParts(c);
-            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK3;
-        }
-        else if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-        {
-            DeleteParts(c);
-            c->EtcPart = PARTS_DEFENSE_KING_TEAM_MARK;
         }
     }
+}
 
-    void    DeleteBattleFormation(CHARACTER* c, eBuffState state)
+void ChangeBattleFormation(wchar_t* GuildName, bool bEffect)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
-        if (gMapManager.InBattleCastle() == false)  return;
-
-        if (state != eBuff_CastleRegimentAttack1 && state != eBuff_CastleRegimentAttack2
-            && state != eBuff_CastleRegimentAttack3 && state != eBuff_CastleRegimentDefense)
+        CHARACTER* c = &CharactersClient[i];
+        OBJECT*    o = &c->Object;
+        if (o->Live && o->Visible)
         {
-            return;
-        }
-
-        OBJECT* o = &c->Object;
-
-        if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) || g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
-            || g_isCharacterBuff(o, eBuff_CastleRegimentAttack3) || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-        {
-            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK
-                || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3)
+            DeleteParts(c);
+            if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
             {
-                DeleteParts(c);
-            }
-        }
-    }
-
-    void ChangeBattleFormation(wchar_t* GuildName, bool bEffect)
-    {
-        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
-        {
-            CHARACTER* c = &CharactersClient[i];
-            OBJECT* o = &c->Object;
-            if (o->Live && o->Visible)
-            {
-                DeleteParts(c);
-                if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
-                {
-                    // _buffwani_
-                    g_TokenCharacterBuff(o, eBuff_CastleRegimentDefense);
-                    c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
-                }
                 // _buffwani_
-                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1)
-                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                {
-                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
-
-                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack1);
-                    c->EtcPart = PARTS_ATTACK_TEAM_MARK;
-                }
-                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
-                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                {
-                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
-
-                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack2);
-                    c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
-                }
-                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3)
-                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                {
-                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
-
-                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack3);
-                    c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
-                }
+                g_TokenCharacterBuff(o, eBuff_CastleRegimentDefense);
+                c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
             }
-        }
-    }
-
-    void    CreateBattleCastleCharacter_Visual(CHARACTER* c, OBJECT* o)
-    {
-        if (gMapManager.InBattleCastle() == false)  return;
-        if (IsBattleCastleStart() == false) return;
-
-        if (o->Visible == false) return;
-
-        CreateGuardStoneHealingVisual(c, 380.f);
-    }
-
-    void    DeleteTmpCharacter(void)
-    {
-        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
-        {
-            CHARACTER* c = &CharactersClient[i];
-            OBJECT* o = &c->Object;
-            if (o->Live && o->Kind == KIND_TMP)
+            // _buffwani_
+            else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) ||
+                     g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
             {
-                o->Live = false;
-                BoneManager::UnregisterBone(c);
+                if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                    g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
 
-                for (int j = 0; j < MAX_MOUNTS; j++)
-                {
-                    OBJECT* b = &Mounts[j];
-                    if (b->Live && b->Owner == o)
-                        b->Live = false;
-                }
-                DeletePet(c);
-                DeleteCloth(c, o);
-                DeleteParts(c);
+                g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack1);
+                c->EtcPart = PARTS_ATTACK_TEAM_MARK;
+            }
+            else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2) ||
+                     g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+            {
+                if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                    g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
+
+                g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack2);
+                c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
+            }
+            else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3) ||
+                     g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+            {
+                if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                    g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
+
+                g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack3);
+                c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
             }
         }
     }
+}
 
-    void    StartFog(vec3_t Color)
+void CreateBattleCastleCharacter_Visual(CHARACTER* c, OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return;
+    if (IsBattleCastleStart() == false)
+        return;
+
+    if (o->Visible == false)
+        return;
+
+    CreateGuardStoneHealingVisual(c, 380.f);
+}
+
+void DeleteTmpCharacter(void)
+{
+    for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
-        if (!g_CoreProfile)
+        CHARACTER* c = &CharactersClient[i];
+        OBJECT*    o = &c->Object;
+        if (o->Live && o->Kind == KIND_TMP)
         {
-            EnableFog();
+            o->Live = false;
+            BoneManager::UnregisterBone(c);
 
-            glFogfv(GL_FOG_COLOR, Color);
-            glFogf(GL_FOG_MODE, GL_LINEAR);
-            glFogf(GL_FOG_START, 2000.f);
-            glFogf(GL_FOG_END, 2700.f);
+            for (int j = 0; j < MAX_MOUNTS; j++)
+            {
+                OBJECT* b = &Mounts[j];
+                if (b->Live && b->Owner == o)
+                    b->Live = false;
+            }
+            DeletePet(c);
+            DeleteCloth(c, o);
+            DeleteParts(c);
         }
+    }
+}
 
-        // Shaders read fog from SceneUBO, not GL fixed-function state — mirror the legacy
-        // glFog* values so this event's close fog is visible on shader-rendered geometry.
-        // Called every frame after BeginOpengl() (MainScene.cpp), so this
-        // override only needs to last for the rest of the current frame.
-        SceneUBO::Instance().SetFog(2000.f, 2700.f, Color, true);
+void StartFog(vec3_t Color)
+{
+    if (!g_CoreProfile)
+    {
+        EnableFog();
+
+        glFogfv(GL_FOG_COLOR, Color);
+        glFogf(GL_FOG_MODE, GL_LINEAR);
+        glFogf(GL_FOG_START, 2000.f);
+        glFogf(GL_FOG_END, 2700.f);
     }
 
-    void    EndFog(void)
-    {
-        DisableFog();
+    // Shaders read fog from SceneUBO, not GL fixed-function state — mirror the legacy
+    // glFog* values so this event's close fog is visible on shader-rendered geometry.
+    // Called every frame after BeginOpengl() (MainScene.cpp), so this
+    // override only needs to last for the rest of the current frame.
+    SceneUBO::Instance().SetFog(2000.f, 2700.f, Color, true);
+}
 
-        // Mirrors the GL disable 1:1 — BeginOpengl() re-syncs SceneUBO fog from FogEnable/
-        // FogColor at the start of next frame, same as it does for GL_FOG.
-        SceneUBO::Instance().SetFogEnabled(false);
+void EndFog(void)
+{
+    DisableFog();
+
+    // Mirrors the GL disable 1:1 — BeginOpengl() re-syncs SceneUBO fog from FogEnable/
+    // FogColor at the start of next frame, same as it does for GL_FOG.
+    SceneUBO::Instance().SetFogEnabled(false);
+}
+
+void RenderBaseSmoke(void)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return;
+    if (IsBattleCastleStart() == false)
+        return;
+
+    EnableAlphaTest();
+
+    glColor3f(0.3f, 0.3f, 0.25f);
+    float WindX2 = (float)((int)WorldTime % 100000) * 0.0005f;
+    RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f,
+                   3.f, 2.f);
+    EnableAlphaBlend();
+    float WindX = (float)((int)WorldTime % 100000) * 0.0002f;
+    RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f,
+                   0.3f, 0.3f);
+}
+
+bool CreateFireSnuff(PARTICLE* o)
+{
+    if (gMapManager.WorldActive != WD_55LOGINSCENE)
+    {
+        if (gMapManager.InBattleCastle() == false)
+            return false;
+        if (IsBattleCastleStart() == false)
+            return false;
+        if (InBattleCastle3(Hero->Object.Position) == false)
+            return false;
     }
 
-    void    RenderBaseSmoke(void)
+    o->Type  = BITMAP_FIRE_SNUFF;
+    o->Scale = rand() % 50 / 100.f + 0.5f;
+    vec3_t Position;
+
+    if (gMapManager.WorldActive == WD_55LOGINSCENE)
     {
-        if (gMapManager.InBattleCastle() == false) return;
-        if (IsBattleCastleStart() == false) return;
-
-        EnableAlphaTest();
-
-        glColor3f(0.3f, 0.3f, 0.25f);
-        float WindX2 = (float)((int)WorldTime % 100000) * 0.0005f;
-        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f, 3.f, 2.f);
-        EnableAlphaBlend();
-        float WindX = (float)((int)WorldTime % 100000) * 0.0002f;
-        RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f, 0.3f, 0.3f);
+        Vector(Hero->Object.Position[0] + (float)(rand() % 1600 - 800),
+               Hero->Object.Position[1] + (float)(rand() % 1400 - 500),
+               Hero->Object.Position[2] + (float)(rand() % 1000 + 50), Position);
+    }
+    else
+    {
+        Vector(Hero->Object.Position[0] + (float)(rand() % 1600 - 800),
+               Hero->Object.Position[1] + (float)(rand() % 1400 - 500),
+               Hero->Object.Position[2] + (float)(rand() % 300 + 50), Position);
     }
 
-    bool CreateFireSnuff(PARTICLE* o)
+    VectorCopy(Position, o->Position);
+    VectorCopy(Position, o->StartPosition);
+    o->Velocity[0] = -(float)(rand() % 64 + 64) * 0.1f;
+    if (Position[1] < g_Camera.Position[1] + 400.f)
     {
-        if (gMapManager.WorldActive != WD_55LOGINSCENE)
-        {
-            if (gMapManager.InBattleCastle() == false) return false;
-            if (IsBattleCastleStart() == false) return false;
-            if (InBattleCastle3(Hero->Object.Position) == false) return false;
-        }
-
-        o->Type = BITMAP_FIRE_SNUFF;
-        o->Scale = rand() % 50 / 100.f + 0.5f;
-        vec3_t Position;
-
-        if (gMapManager.WorldActive == WD_55LOGINSCENE)
-        {
-            Vector(Hero->Object.Position[0] + (float)(rand() % 1600 - 800), Hero->Object.Position[1] + (float)(rand() % 1400 - 500), Hero->Object.Position[2] + (float)(rand() % 1000 + 50), Position);
-        }
-        else
-        {
-            Vector(Hero->Object.Position[0] + (float)(rand() % 1600 - 800), Hero->Object.Position[1] + (float)(rand() % 1400 - 500), Hero->Object.Position[2] + (float)(rand() % 300 + 50), Position);
-        }
-
-        VectorCopy(Position, o->Position);
-        VectorCopy(Position, o->StartPosition);
-        o->Velocity[0] = -(float)(rand() % 64 + 64) * 0.1f;
-        if (Position[1] < g_Camera.Position[1] + 400.f)
-        {
-            o->Velocity[0] = -o->Velocity[0] + 3.2f;
-        }
-        o->Velocity[1] = (float)(rand() % 32 - 16) * 0.1f;
-        o->Velocity[2] = (float)(rand() % 32 - 16) * 0.1f;
-        o->TurningForce[0] = (float)(rand() % 16 - 8) * 0.1f;
-        o->TurningForce[1] = (float)(rand() % 64 - 32) * 0.1f;
-        o->TurningForce[2] = (float)(rand() % 16 - 8) * 0.1f;
-
-        Vector(1.f, 0.f, 0.f, o->Light);
-
-        return true;
+        o->Velocity[0] = -o->Velocity[0] + 3.2f;
     }
+    o->Velocity[1]     = (float)(rand() % 32 - 16) * 0.1f;
+    o->Velocity[2]     = (float)(rand() % 32 - 16) * 0.1f;
+    o->TurningForce[0] = (float)(rand() % 16 - 8) * 0.1f;
+    o->TurningForce[1] = (float)(rand() % 64 - 32) * 0.1f;
+    o->TurningForce[2] = (float)(rand() % 16 - 8) * 0.1f;
 
-    void SetAttackDefenseObjectType(OBJECT* o)
+    Vector(1.f, 0.f, 0.f, o->Light);
+
+    return true;
+}
+
+void SetAttackDefenseObjectType(OBJECT* o)
+{
+    switch (o->Type)
     {
-        switch (o->Type)
-        {
         case 16:
         case 38:
         case 39:
@@ -717,250 +741,261 @@ namespace battleCastle
                 o->HiddenMesh = -2;
             }
             break;
+    }
+}
+
+bool MoveBattleCastleObjectSetting(int& objCount, int object)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    DWORD  current = timeGetTime();
+    double dif     = (double)(current - g_iMp3PlayTime) / CLOCKS_PER_SEC;
+    if (dif > 1800 || g_iMp3PlayTime == 0)
+    {
+        g_iMp3PlayTime = current;
+        if (IsBattleCastleStart())
+        {
+            StopMp3(MUSIC_CASTLE_PEACE);
+            PlayMp3(MUSIC_CASTLE_BATTLE_START);
+            //            PlayMp3 ( MUSIC_CASTLE_BATTLE_ING );
+        }
+        else
+        {
+            StopMp3(MUSIC_CASTLE_BATTLE_START);
+            //            StopMp3 ( MUSIC_CASTLE_BATTLE_ING );
+            PlayMp3(MUSIC_CASTLE_PEACE);
         }
     }
 
-    bool MoveBattleCastleObjectSetting(int& objCount, int object)
+    PlayBuffer(SOUND_BC_AMBIENT);
+    if (IsBattleCastleStart() && rand_fps_check(10))
     {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        DWORD  current = timeGetTime();
-        double dif = (double)(current - g_iMp3PlayTime) / CLOCKS_PER_SEC;
-        if (dif > 1800 || g_iMp3PlayTime == 0)
+        if (rand_fps_check(100))
         {
-            g_iMp3PlayTime = current;
-            if (IsBattleCastleStart())
+            PlayBuffer(SOUND_BC_AMBIENT_BATTLE1);
+        }
+        if (rand_fps_check(100))
+        {
+            PlayBuffer(SOUND_BC_AMBIENT_BATTLE2);
+        }
+        if (rand_fps_check(100))
+        {
+            PlayBuffer(SOUND_BC_AMBIENT_BATTLE3);
+        }
+        if (rand_fps_check(100))
+        {
+            PlayBuffer(SOUND_BC_AMBIENT_BATTLE4);
+        }
+        if (rand_fps_check(100))
+        {
+            PlayBuffer(SOUND_BC_AMBIENT_BATTLE5);
+        }
+    }
+
+    if (IsBattleCastleStart())
+    {
+        if (LastStoneFlyEffect < WorldTime - StoneFlyEffectInterval)
+        {
+            LastStoneFlyEffect = WorldTime;
+            int HeroY          = (Hero->PositionY);
+            if (rand() % 3)
             {
-                StopMp3(MUSIC_CASTLE_PEACE);
-                PlayMp3(MUSIC_CASTLE_BATTLE_START);
-                //            PlayMp3 ( MUSIC_CASTLE_BATTLE_ING );
+                if (HeroY > 50 && HeroY < 131)
+                {
+                    int    dx = rand() % 1000 - 500;
+                    vec3_t Position;
+                    vec3_t Angle = {0.f, 0.f, 0.f};
+                    vec3_t Light = {1.f, 1.f, 1.f};
+
+                    if (dx < 30 && dx > 0)
+                        dx = 100 + rand() % 30;
+                    else if (dx > -30 && dx < 0)
+                        dx -= 100 + rand() % 30;
+
+                    Position[0] = Hero->Object.Position[0] + dx;
+                    Position[2] = 500.f;
+
+                    int SiegePositionY;
+                    if (HeroY > 55)
+                    {
+                        SiegePositionY = 45;
+                    }
+                    else
+                    {
+                        SiegePositionY = HeroY - (rand() % 10 + 10);
+                    }
+                    Position[1] = SiegePositionY * TERRAIN_SCALE + (rand() % 40 - 20);
+                    CreateEffect(MODEL_FLY_BIG_STONE1, Position, Angle, Light, 0);
+                }
             }
             else
             {
-                StopMp3(MUSIC_CASTLE_BATTLE_START);
-                //            StopMp3 ( MUSIC_CASTLE_BATTLE_ING );
-                PlayMp3(MUSIC_CASTLE_PEACE);
+                if (HeroY > 70 && HeroY < 177)
+                {
+                    int    dx = rand() % 1000 - 500;
+                    vec3_t Position;
+                    vec3_t Angle = {0.f, 0.f, 0.f};
+                    vec3_t Light = {1.f, 1.f, 1.f};
+
+                    if (dx < 100 && dx > 0)
+                        dx = 100 + rand() % 30;
+                    else if (dx > -100 && dx < 0)
+                        dx -= 100 + rand() % 30;
+
+                    Position[0] = Hero->Object.Position[0] + dx;
+                    Position[2] = 500.f;
+
+                    int SiegePositionY;
+                    if (HeroY < 179)
+                    {
+                        SiegePositionY = 179;
+                    }
+                    else
+                    {
+                        SiegePositionY = HeroY - (rand() % 10 + 10);
+                    }
+                    Position[1] = SiegePositionY * TERRAIN_SCALE - (rand() % 40 - 20);
+                    CreateEffect(MODEL_FLY_BIG_STONE2, Position, Angle, Light, 0);
+                }
             }
         }
 
-        PlayBuffer(SOUND_BC_AMBIENT);
-        if (IsBattleCastleStart() && rand_fps_check(10))
+        int HeroY = (Hero->PositionY);
+        if ((HeroY > 58 && HeroY < 113) || (HeroY > 117 && HeroY < 159))
         {
-            if (rand_fps_check(100))
+            if (LastArrowEffectOnBattlefield < WorldTime - ArrowEffectOnBattlefieldInterval)
             {
-                PlayBuffer(SOUND_BC_AMBIENT_BATTLE1);
-            }
-            if (rand_fps_check(100))
-            {
-                PlayBuffer(SOUND_BC_AMBIENT_BATTLE2);
-            }
-            if (rand_fps_check(100))
-            {
-                PlayBuffer(SOUND_BC_AMBIENT_BATTLE3);
-            }
-            if (rand_fps_check(100))
-            {
-                PlayBuffer(SOUND_BC_AMBIENT_BATTLE4);
-            }
-            if (rand_fps_check(100))
-            {
-                PlayBuffer(SOUND_BC_AMBIENT_BATTLE5);
-            }
-        }
+                LastArrowEffectOnBattlefield = WorldTime;
+                int length                   = (rand() % 4 + 2) / 2;
+                int dx                       = (rand() % 1400 - 700) - 60.f * length;
 
-        if (IsBattleCastleStart())
-        {
-            if (LastStoneFlyEffect < WorldTime - StoneFlyEffectInterval)
-            {
-                LastStoneFlyEffect = WorldTime;
-                int HeroY = (Hero->PositionY);
-                if (rand() % 3)
+                if (dx < 100 && dx > 0)
+                    dx = 100 + rand() % 30;
+                else if (dx > -100 && dx < 0)
+                    dx -= 100 + rand() % 30;
+
+                vec3_t Position;
+                vec3_t Angle = {0.f, 0.f, 0.f};
+                vec3_t Light = {1.f, 1.f, 1.f};
+                for (int i = -length; i < length; ++i)
                 {
-                    if (HeroY > 50 && HeroY < 131)
-                    {
-                        int dx = rand() % 1000 - 500;
-                        vec3_t Position;
-                        vec3_t Angle = { 0.f, 0.f, 0.f };
-                        vec3_t Light = { 1.f, 1.f, 1.f };
-
-                        if (dx < 30 && dx>0) dx = 100 + rand() % 30;
-                        else if (dx > -30 && dx < 0) dx -= 100 + rand() % 30;
-
-                        Position[0] = Hero->Object.Position[0] + dx;
-                        Position[2] = 500.f;
-
-                        int SiegePositionY;
-                        if (HeroY > 55)
-                        {
-                            SiegePositionY = 45;
-                        }
-                        else
-                        {
-                            SiegePositionY = HeroY - (rand() % 10 + 10);
-                        }
-                        Position[1] = SiegePositionY * TERRAIN_SCALE + (rand() % 40 - 20);
-                        CreateEffect(MODEL_FLY_BIG_STONE1, Position, Angle, Light, 0);
-                    }
-                }
-                else
-                {
-                    if (HeroY > 70 && HeroY < 177)
-                    {
-                        int dx = rand() % 1000 - 500;
-                        vec3_t Position;
-                        vec3_t Angle = { 0.f, 0.f, 0.f };
-                        vec3_t Light = { 1.f, 1.f, 1.f };
-
-                        if (dx < 100 && dx>0) dx = 100 + rand() % 30;
-                        else if (dx > -100 && dx < 0) dx -= 100 + rand() % 30;
-
-                        Position[0] = Hero->Object.Position[0] + dx;
-                        Position[2] = 500.f;
-
-                        int SiegePositionY;
-                        if (HeroY < 179)
-                        {
-                            SiegePositionY = 179;
-                        }
-                        else
-                        {
-                            SiegePositionY = HeroY - (rand() % 10 + 10);
-                        }
-                        Position[1] = SiegePositionY * TERRAIN_SCALE - (rand() % 40 - 20);
-                        CreateEffect(MODEL_FLY_BIG_STONE2, Position, Angle, Light, 0);
-                    }
-                }
-            }
-
-            int HeroY = (Hero->PositionY);
-            if ((HeroY > 58 && HeroY < 113) || (HeroY > 117 && HeroY < 159))
-            {
-                if (LastArrowEffectOnBattlefield < WorldTime - ArrowEffectOnBattlefieldInterval)
-                {
-                    LastArrowEffectOnBattlefield = WorldTime;
-                    int length = (rand() % 4 + 2) / 2;
-                    int dx = (rand() % 1400 - 700) - 60.f * length;
-
-                    if (dx < 100 && dx>0) dx = 100 + rand() % 30;
-                    else if (dx > -100 && dx < 0) dx -= 100 + rand() % 30;
-
-                    vec3_t Position;
-                    vec3_t Angle = { 0.f, 0.f, 0.f };
-                    vec3_t Light = { 1.f, 1.f, 1.f };
-                    for (int i = -length; i < length; ++i)
-                    {
-                        dx += 60.f;
-
-                        Position[0] = Hero->Object.Position[0] + dx;
-                        Position[2] = 350.f;
-
-                        bool attArrow = rand() % 2;
-                        if (HeroY < 113)
-                        {
-                            attArrow = true;
-                        }
-                        else if (HeroY > 117)
-                        {
-                            attArrow = false;
-                        }
-
-                        if (attArrow)
-                        {
-                            int SiegePositionY = HeroY - (rand() % 1 + 10);
-                            Position[1] = SiegePositionY * TERRAIN_SCALE/*+(rand()%60-30)*/;
-
-                            Angle[2] = 180.f;
-                            CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
-                        }
-                        else
-                        {
-                            int SiegePositionY = HeroY + (rand() % 1 + 10);
-                            Position[1] = SiegePositionY * TERRAIN_SCALE/*-(rand()%60-30)*/;
-
-                            CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
-                        }
-                    }
-                }
-            }
-
-            if (LastArrowEffectInStampRoom < WorldTime - ArrowEffectInStampRoomInterval)
-            {
-                LastArrowEffectInStampRoom = WorldTime;
-                if (HeroY > 58 && HeroY < 159)
-                {
-                    vec3_t Position;
-                    vec3_t Angle = { 0.f, 0.f, 0.f };
-                    vec3_t Light = { 1.f, 1.f, 1.f };
-
-                    int dx = rand() % 1400 - 700;
-                    if (dx < 100 && dx>0) dx = 100 + rand() % 30;
-                    else if (dx > -100 && dx < 0) dx -= 100 + rand() % 30;
+                    dx += 60.f;
 
                     Position[0] = Hero->Object.Position[0] + dx;
                     Position[2] = 350.f;
 
-                    BYTE subtype = 3;
-                    if (HeroY < 82 || HeroY>112 || rand_fps_check(10))
-                    {
-                        subtype = 4;
-                        if (rand_fps_check(10))
-                        {
-                            subtype = 3;
-                        }
-                    }
-
                     bool attArrow = rand() % 2;
-                    if (HeroY < 82)
+                    if (HeroY < 113)
                     {
                         attArrow = true;
                     }
-                    else if (HeroY > 112)
+                    else if (HeroY > 117)
                     {
                         attArrow = false;
                     }
 
                     if (attArrow)
                     {
-                        int SiegePositionY = HeroY - (rand() % 3 + 10);
-                        Position[1] = SiegePositionY * TERRAIN_SCALE + (rand() % 60 - 30);
+                        int SiegePositionY = HeroY - (rand() % 1 + 10);
+                        Position[1]        = SiegePositionY * TERRAIN_SCALE /*+(rand()%60-30)*/;
 
                         Angle[2] = 180.f;
-                        CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                        CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
                     }
                     else
                     {
-                        int SiegePositionY = HeroY + (rand() % 3 + 10);
-                        Position[1] = SiegePositionY * TERRAIN_SCALE - (rand() % 60 - 30);
+                        int SiegePositionY = HeroY + (rand() % 1 + 10);
+                        Position[1]        = SiegePositionY * TERRAIN_SCALE /*-(rand()%60-30)*/;
 
-                        CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                        CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
                     }
                 }
             }
         }
-        return true;
-    }
 
-    bool MoveBattleCastleObject(OBJECT* o, int& object, int& visibleObject)
-    {
-        if (gMapManager.InBattleCastle() == false)  return false;
-
-        switch (o->Type)
+        if (LastArrowEffectInStampRoom < WorldTime - ArrowEffectInStampRoomInterval)
         {
+            LastArrowEffectInStampRoom = WorldTime;
+            if (HeroY > 58 && HeroY < 159)
+            {
+                vec3_t Position;
+                vec3_t Angle = {0.f, 0.f, 0.f};
+                vec3_t Light = {1.f, 1.f, 1.f};
+
+                int dx = rand() % 1400 - 700;
+                if (dx < 100 && dx > 0)
+                    dx = 100 + rand() % 30;
+                else if (dx > -100 && dx < 0)
+                    dx -= 100 + rand() % 30;
+
+                Position[0] = Hero->Object.Position[0] + dx;
+                Position[2] = 350.f;
+
+                BYTE subtype = 3;
+                if (HeroY < 82 || HeroY > 112 || rand_fps_check(10))
+                {
+                    subtype = 4;
+                    if (rand_fps_check(10))
+                    {
+                        subtype = 3;
+                    }
+                }
+
+                bool attArrow = rand() % 2;
+                if (HeroY < 82)
+                {
+                    attArrow = true;
+                }
+                else if (HeroY > 112)
+                {
+                    attArrow = false;
+                }
+
+                if (attArrow)
+                {
+                    int SiegePositionY = HeroY - (rand() % 3 + 10);
+                    Position[1]        = SiegePositionY * TERRAIN_SCALE + (rand() % 60 - 30);
+
+                    Angle[2] = 180.f;
+                    CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                }
+                else
+                {
+                    int SiegePositionY = HeroY + (rand() % 3 + 10);
+                    Position[1]        = SiegePositionY * TERRAIN_SCALE - (rand() % 60 - 30);
+
+                    CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool MoveBattleCastleObject(OBJECT* o, int& object, int& visibleObject)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    switch (o->Type)
+    {
         case 81:
-            o->BlendMesh = 1;
-            o->BlendMeshLight = 1.f;
+            o->BlendMesh          = 1;
+            o->BlendMeshLight     = 1.f;
             o->BlendMeshTexCoordV = WorldTime * 0.0002f;
             break;
 
         case 83:
-            o->BlendMesh = 1;
-            o->BlendMeshLight = 1.f;
+            o->BlendMesh          = 1;
+            o->BlendMeshLight     = 1.f;
             o->BlendMeshTexCoordV = -WorldTime * 0.0004f;
             break;
 
         case BATTLE_CASTLE_WALL1:
         case BATTLE_CASTLE_WALL2:
-            if (IsBattleCastleStart() == false) break;
+            if (IsBattleCastleStart() == false)
+                break;
 
             if (o->ExtState == 0)
             {
@@ -978,7 +1013,8 @@ namespace battleCastle
             break;
         case BATTLE_CASTLE_WALL3:
         case BATTLE_CASTLE_WALL4:
-            if (IsBattleCastleStart() == false) break;
+            if (IsBattleCastleStart() == false)
+                break;
 
             if (o->ExtState == 0)
             {
@@ -994,18 +1030,19 @@ namespace battleCastle
                 o->HiddenMesh = 0;
             }
             break;
-        }
-
-        SetAttackDefenseObjectType(o);
-        return false;
     }
 
-    bool CreateBattleCastleObject(OBJECT* o)
-    {
-        if (gMapManager.InBattleCastle() == false) return false;
+    SetAttackDefenseObjectType(o);
+    return false;
+}
 
-        switch (o->Type)
-        {
+bool CreateBattleCastleObject(OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    switch (o->Type)
+    {
         case 8:
         case 9:
             o->ExtState = 0;
@@ -1016,23 +1053,23 @@ namespace battleCastle
         case 13:
         case 14:
             //        case    18 :
-            o->ExtState = 0;
+            o->ExtState          = 0;
             o->m_bCollisionCheck = true;
             break;
 
-        case    BATTLE_CASTLE_WALL1:
-        case    BATTLE_CASTLE_WALL2:
-        case    BATTLE_CASTLE_WALL3:
-        case    BATTLE_CASTLE_WALL4:
-            o->ExtState = 0;
+        case BATTLE_CASTLE_WALL1:
+        case BATTLE_CASTLE_WALL2:
+        case BATTLE_CASTLE_WALL3:
+        case BATTLE_CASTLE_WALL4:
+            o->ExtState          = 0;
             o->m_bCollisionCheck = true;
             break;
 
-        case    19:
+        case 19:
             o->Scale = 1.f;
             break;
 
-        case    MODEL_BATTLE_GUARD2:
+        case MODEL_BATTLE_GUARD2:
             o->Scale = 1.f;
             if (IsBattleCastleStart())
             {
@@ -1060,23 +1097,24 @@ namespace battleCastle
         case 79:
             CreateEffect(MODEL_TOWER_GATE_PLANE, o->Position, o->Angle, o->Light, 0, o);
             break;
-        }
-
-        SetAttackDefenseObjectType(o);
-        return true;
     }
 
-    bool    MoveBattleCastleVisual(OBJECT* o)
+    SetAttackDefenseObjectType(o);
+    return true;
+}
+
+bool MoveBattleCastleVisual(OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    float  Luminosity;
+    vec3_t Light;
+
+    switch (o->Type)
     {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        float Luminosity;
-        vec3_t Light;
-
-        switch (o->Type)
-        {
         case 4:
-            o->HiddenMesh = -1;
+            o->HiddenMesh         = -1;
             o->BlendMeshTexCoordU = WorldTime * 0.0001f;
             break;
 
@@ -1089,7 +1127,7 @@ namespace battleCastle
             o->HiddenMesh = -2;
             break;
 
-        case    0:
+        case 0:
             if (IsBattleCastleStart() == false)
             {
                 Luminosity = (float)(rand() % 4 + 3) * 0.1f;
@@ -1121,13 +1159,13 @@ namespace battleCastle
             }
             break;
 
-        case    BATTLE_CASTLE_WALL1:
-        case    BATTLE_CASTLE_WALL2:
-        case    BATTLE_CASTLE_WALL3:
-        case    BATTLE_CASTLE_WALL4:
+        case BATTLE_CASTLE_WALL1:
+        case BATTLE_CASTLE_WALL2:
+        case BATTLE_CASTLE_WALL3:
+        case BATTLE_CASTLE_WALL4:
             break;
 
-        case    MODEL_BATTLE_GUARD2:
+        case MODEL_BATTLE_GUARD2:
             if (IsBattleCastleStart())
             {
                 o->HiddenMesh = -2;
@@ -1137,18 +1175,19 @@ namespace battleCastle
                 o->HiddenMesh = -1;
             }
             break;
-        }
-        return true;
     }
+    return true;
+}
 
-    bool RenderBattleCastleVisual(OBJECT* o, BMD* b)
+bool RenderBattleCastleVisual(OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    vec3_t Light;
+
+    switch (o->Type)
     {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        vec3_t Light;
-
-        switch (o->Type)
-        {
         case 0:
             if (IsBattleCastleStart() == false && rand_fps_check(3))
             {
@@ -1189,251 +1228,264 @@ namespace battleCastle
                 CreateParticleFpsChecked(BITMAP_WATERFALL_3 + (rand() % 2), o->Position, o->Angle, Light, 0);
             }
             break;
-        }
-
-        return true;
     }
 
-    bool    RenderBattleCastleObjectMesh(OBJECT* o, BMD* b)
+    return true;
+}
+
+bool RenderBattleCastleObjectMesh(OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    if (o->Type == 12)
     {
-        if (gMapManager.InBattleCastle() == false)  return false;
+        Vector(1.f, 1.f, 1.f, b->BodyLight);
+        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, BITMAP_INTERFACE_MAP);
+        return true;
+    }
+    else if (o->Type == 17)
+    {
+        b->StreamMesh = 0;
+        Vector(0.45f, 0.45f, 0.45f, b->BodyLight);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      (int)WorldTime % 10000 * 0.0002f, o->HiddenMesh);
+        b->StreamMesh = -1;
+        return true;
+    }
+    else if (o->Type == 51)
+    {
+        b->StreamMesh = 0;
+        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      -(int)WorldTime % 10000 * 0.0002f, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->StreamMesh = -1;
+        return true;
+    }
+    else if (o->Type == 66)
+    {
+        Vector(0.1f, 0.4f, 0.6f, b->BodyLight);
+        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, sinf(WorldTime * 0.001f) * 0.2f + 0.3f,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        return true;
+    }
+    else if (o->Type == 50 || o->Type == 83 || o->Type == 84 || o->Type == 85)
+    {
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
 
-        if (o->Type == 12)
+        if (IsBattleCastleStart() == false)
         {
+            DisableAlphaBlend();
+            glColor3f(0.f, 0.f, 0.f);
+            b->RenderBodyShadow(o->BlendMesh, o->HiddenMesh);
+        }
+        return true;
+    }
+    else if (o->Type == 19)
+    {
+        if (IsBattleCastleStart())
+        {
+            b->BeginRender(o->Alpha);
+            glColor3fv(b->BodyLight);
+            b->RenderMesh(3, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
+            b->RenderMesh(3, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
+            b->RenderMesh(3, RENDER_BRIGHT | RENDER_METAL, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
             Vector(1.f, 1.f, 1.f, b->BodyLight);
-            b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_INTERFACE_MAP);
-            return true;
-        }
-        else if (o->Type == 17)
-        {
-            b->StreamMesh = 0;
-            Vector(0.45f, 0.45f, 0.45f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, (int)WorldTime % 10000 * 0.0002f, o->HiddenMesh);
-            b->StreamMesh = -1;
-            return true;
-        }
-        else if (o->Type == 51)
-        {
-            b->StreamMesh = 0;
-            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, -(int)WorldTime % 10000 * 0.0002f, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->StreamMesh = -1;
-            return true;
-        }
-        else if (o->Type == 66)
-        {
-            Vector(0.1f, 0.4f, 0.6f, b->BodyLight);
-            b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, sinf(WorldTime * 0.001f) * 0.2f + 0.3f, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            return true;
-        }
-        else if (o->Type == 50 || o->Type == 83 || o->Type == 84 || o->Type == 85)
-        {
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-
-            if (IsBattleCastleStart() == false)
-            {
-                DisableAlphaBlend();
-                glColor3f(0.f, 0.f, 0.f);
-                b->RenderBodyShadow(o->BlendMesh, o->HiddenMesh);
-            }
-            return true;
-        }
-        else if (o->Type == 19)
-        {
-            if (IsBattleCastleStart())
-            {
-                b->BeginRender(o->Alpha);
-                glColor3fv(b->BodyLight);
-                b->RenderMesh(3, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
-                b->RenderMesh(3, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
-                Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
-                b->RenderMesh(3, RENDER_BRIGHT | RENDER_METAL, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
-                Vector(1.f, 1.f, 1.f, b->BodyLight);
-                b->EndRender();
-            }
-            else
-            {
-                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-                Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
-                b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
-                Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
-                b->RenderBody(RENDER_BRIGHT | RENDER_METAL, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
-                Vector(1.f, 1.f, 1.f, b->BodyLight);
-            }
-            return true;
-        }
-        else if (o->Type >= BATTLE_CASTLE_WALL1 && o->Type <= BATTLE_CASTLE_WALL4)
-        {
-            if (o->SubType == 0)
-            {
-                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            }
-            else
-            {
-                b->RenderMeshEffect(0, MODEL_WALL_PART1);
-            }
-            return true;
+            b->EndRender();
         }
         else
         {
-            return RenderBattleCastleMonsterObjectMesh(o, b);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
+            b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
+            Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
+            b->RenderBody(RENDER_BRIGHT | RENDER_METAL, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
         }
-
-        return false;
+        return true;
     }
-
-    void    MoveFlyBigStone(OBJECT* o)
+    else if (o->Type >= BATTLE_CASTLE_WALL1 && o->Type <= BATTLE_CASTLE_WALL4)
     {
-    }
-
-    CHARACTER* CreateBattleCastleMonster(EMonsterType Type, int PositionX, int PositionY, int Key)
-    {
-        if (gMapManager.InBattleCastle() == false) return NULL;
-
-        CHARACTER* c = NULL;
-        switch (Type)
+        if (o->SubType == 0)
         {
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+        }
+        else
+        {
+            b->RenderMeshEffect(0, MODEL_WALL_PART1);
+        }
+        return true;
+    }
+    else
+    {
+        return RenderBattleCastleMonsterObjectMesh(o, b);
+    }
+
+    return false;
+}
+
+void MoveFlyBigStone(OBJECT* o) {}
+
+CHARACTER* CreateBattleCastleMonster(EMonsterType Type, int PositionX, int PositionY, int Key)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return NULL;
+
+    CHARACTER* c = NULL;
+    switch (Type)
+    {
         case MONSTER_TRAP:
-            c = CreateCharacter(Key, 11, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
+            c                         = CreateCharacter(Key, 11, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
             c->Object.m_bRenderShadow = false;
             break;
 
         case MONSTER_SHIELD:
-            OpenNpc(MODEL_NPC_BARRIER);      //  MODEL_NPC_BARRIER
-            c = CreateCharacter(Key, MODEL_NPC_BARRIER, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->m_bIsSelected = false;
+            OpenNpc(MODEL_NPC_BARRIER);  //  MODEL_NPC_BARRIER
+            c                         = CreateCharacter(Key, MODEL_NPC_BARRIER, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->m_bIsSelected          = false;
             c->Object.m_bRenderShadow = false;
-            c->Object.Scale = 1.52f;
-            c->Object.LifeTime = 0;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale           = 1.52f;
+            c->Object.LifeTime        = 0;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_CROWN:
-            OpenNpc(MODEL_NPC_CROWN);      //  MODEL_NPC_CROWN
-            c = CreateCharacter(Key, MODEL_NPC_CROWN, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
+            OpenNpc(MODEL_NPC_CROWN);  //  MODEL_NPC_CROWN
+            c                         = CreateCharacter(Key, MODEL_NPC_CROWN, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
             c->Object.m_bRenderShadow = false;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_CROWN_SWITCH1:
-            OpenNpc(MODEL_NPC_CHECK_FLOOR);      //  MODEL_NPC_CHECK_FLOOR
-            c = CreateCharacter(Key, MODEL_NPC_CHECK_FLOOR, PositionX, PositionY);
+            OpenNpc(MODEL_NPC_CHECK_FLOOR);  //  MODEL_NPC_CHECK_FLOOR
+            c                      = CreateCharacter(Key, MODEL_NPC_CHECK_FLOOR, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
-            c->Object.Velocity = c->Object.Position[2];
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
+            c->Object.Velocity     = c->Object.Position[2];
             if (IsBattleCastleStart() == false)
                 c->Object.Position[2] -= 100.f;
             break;
 
         case MONSTER_CROWN_SWITCH2:
-            OpenNpc(MODEL_NPC_CHECK_FLOOR);      //  MODEL_NPC_CHECK_FLOOR
-            c = CreateCharacter(Key, MODEL_NPC_CHECK_FLOOR, PositionX, PositionY);
+            OpenNpc(MODEL_NPC_CHECK_FLOOR);  //  MODEL_NPC_CHECK_FLOOR
+            c                      = CreateCharacter(Key, MODEL_NPC_CHECK_FLOOR, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
-            c->Object.Velocity = c->Object.Position[2];
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
+            c->Object.Velocity     = c->Object.Position[2];
             if (IsBattleCastleStart() == false)
                 c->Object.Position[2] -= 100.f;
             break;
 
         case MONSTER_CASTLE_GATE_SWITCH:
-            OpenNpc(MODEL_NPC_GATE_SWITCH);      //  MODEL_NPC_GATE_SWITCH
-            c = CreateCharacter(Key, MODEL_NPC_GATE_SWITCH, PositionX, PositionY);
+            OpenNpc(MODEL_NPC_GATE_SWITCH);  //  MODEL_NPC_GATE_SWITCH
+            c                      = CreateCharacter(Key, MODEL_NPC_GATE_SWITCH, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.1f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.1f;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_GUARD:
-            OpenNpc(77);      //  MODEL_MONSTER01+77
-            c = CreateCharacter(Key, MODEL_BATTLE_GUARD2, PositionX, PositionY);
+            OpenNpc(77);  //  MODEL_MONSTER01+77
+            c                      = CreateCharacter(Key, MODEL_BATTLE_GUARD2, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.1f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.1f;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_SLINGSHOT_ATTACK:
             OpenNpc(MODEL_NPC_CAPATULT_ATT);
-            c = CreateCharacter(Key, MODEL_NPC_CAPATULT_ATT, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
+            c                         = CreateCharacter(Key, MODEL_NPC_CAPATULT_ATT, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
             c->Object.m_bRenderShadow = false;
-            c->Object.Scale = 0.8f;
-            c->Object.m_fEdgeScale = 1.03f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale           = 0.8f;
+            c->Object.m_fEdgeScale    = 1.03f;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_SLINGSHOT_DEFENSE:
-            OpenNpc(MODEL_NPC_CAPATULT_DEF);   //  MODEL_NPC_CATAPULT_DEF
-            c = CreateCharacter(Key, MODEL_NPC_CAPATULT_DEF, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
+            OpenNpc(MODEL_NPC_CAPATULT_DEF);  //  MODEL_NPC_CATAPULT_DEF
+            c                         = CreateCharacter(Key, MODEL_NPC_CAPATULT_DEF, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
             c->Object.m_bRenderShadow = false;
-            c->Object.Scale = 0.8f;
-            c->Object.m_fEdgeScale = 1.03f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale           = 0.8f;
+            c->Object.m_fEdgeScale    = 1.03f;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_SENIOR:
-            OpenNpc(MODEL_NPC_SENATUS);      //  MODEL_NPC_SENATUS
-            c = CreateCharacter(Key, MODEL_NPC_SENATUS, PositionX, PositionY);
+            OpenNpc(MODEL_NPC_SENATUS);  //  MODEL_NPC_SENATUS
+            c                      = CreateCharacter(Key, MODEL_NPC_SENATUS, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.1f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.1f;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_GUARDSMAN:
-            OpenNpc(MODEL_NPC_CLERK);        //
-            c = CreateCharacter(Key, MODEL_NPC_CLERK, PositionX, PositionY);
+            OpenNpc(MODEL_NPC_CLERK);  //
+            c                      = CreateCharacter(Key, MODEL_NPC_CLERK, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
-            c->Object.SubType = rand() % 2 + 10;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.f;
+            c->Object.SubType      = rand() % 2 + 10;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_CASTLE_GATE1:
             OpenMonsterModel(MONSTER_MODEL_CASTLE_GATE1);
-            c = CreateCharacter(Key, MODEL_CASTLE_GATE1, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.0f;
+            c                         = CreateCharacter(Key, MODEL_CASTLE_GATE1, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->Object.Scale           = 1.0f;
             c->Object.m_bRenderShadow = false;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_LIFE_STONE:
             OpenMonsterModel(MONSTER_MODEL_LIFE_STONE);
-            c = CreateCharacter(Key, MODEL_LIFE_STONE, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.0f;
+            c                         = CreateCharacter(Key, MODEL_LIFE_STONE, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->Object.Scale           = 1.0f;
             c->Object.m_bRenderShadow = false;
-            c->Object.BlendMesh = 3;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.BlendMesh       = 3;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
 
             CreateEffect(MODEL_AURORA, c->Object.Position, c->Object.Angle, c->Object.Light, 0, &c->Object, 120);
             break;
 
         case MONSTER_GUARDIAN_STATUE:
             OpenMonsterModel(MONSTER_MODEL_GUARDIAN_STATUE);
-            c = CreateCharacter(Key, MODEL_GUARDIAN_STATUE, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
-            c->Object.m_fEdgeScale = 1.03f;
+            c                         = CreateCharacter(Key, MODEL_GUARDIAN_STATUE, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->Object.Scale           = 1.f;
+            c->Object.m_fEdgeScale    = 1.03f;
             c->Object.m_bRenderShadow = false;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
 
             if (IsBattleCastleStart())
             {
@@ -1448,42 +1500,42 @@ namespace battleCastle
 
         case MONSTER_GUARDIAN:
             OpenMonsterModel(MONSTER_MODEL_GUARDIAN_STATUE);
-            c = CreateCharacter(Key, MODEL_GUARDIAN_STATUE, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
+            c                         = CreateCharacter(Key, MODEL_GUARDIAN_STATUE, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->Object.Scale           = 1.f;
             c->Object.m_bRenderShadow = false;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
             break;
 
         case MONSTER_BATTLE_GUARD1:
             OpenMonsterModel(MONSTER_MODEL_BATTLE_GUARD1);
-            c = CreateCharacter(Key, MODEL_BATTLE_GUARD1, PositionX, PositionY);
+            c                      = CreateCharacter(Key, MODEL_BATTLE_GUARD1, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.f;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_BATTLE_GUARD2:
             OpenMonsterModel(MONSTER_MODEL_BATTLE_GUARD2);
-            c = CreateCharacter(Key, MODEL_BATTLE_GUARD2, PositionX, PositionY);
+            c                      = CreateCharacter(Key, MODEL_BATTLE_GUARD2, PositionX, PositionY);
             c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
-            c->Object.SubType = 30;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Object.Scale        = 1.f;
+            c->Object.SubType      = 30;
+            c->Weapon[0].Type      = -1;
+            c->Weapon[1].Type      = -1;
             break;
 
         case MONSTER_CANON_TOWER:
             OpenMonsterModel(MONSTER_MODEL_CANON_TOWER);
-            c = CreateCharacter(Key, MODEL_CANON_TOWER, PositionX, PositionY);
-            c->NotRotateOnMagicHit = true;
-            c->Object.Scale = 1.f;
-            c->Object.m_fEdgeScale = 1.04f;
+            c                         = CreateCharacter(Key, MODEL_CANON_TOWER, PositionX, PositionY);
+            c->NotRotateOnMagicHit    = true;
+            c->Object.Scale           = 1.f;
+            c->Object.m_fEdgeScale    = 1.04f;
             c->Object.m_bRenderShadow = false;
-            c->Weapon[0].Type = -1;
-            c->Weapon[1].Type = -1;
+            c->Weapon[0].Type         = -1;
+            c->Weapon[1].Type         = -1;
 
             if (IsBattleCastleStart())
             {
@@ -1495,15 +1547,15 @@ namespace battleCastle
             }
             c->Object.HiddenMesh = -1;
             break;
-        }
-
-        return c;
     }
 
-    bool    SettingBattleCastleMonsterLinkBone(CHARACTER* c, int Type)
+    return c;
+}
+
+bool SettingBattleCastleMonsterLinkBone(CHARACTER* c, int Type)
+{
+    switch (Type)
     {
-        switch (Type)
-        {
         case MODEL_NPC_CAPATULT_ATT:
             Vector(-200.f, -50.f, -100.f, c->Object.BoundingBoxMin);
             Vector(200.f, 50.f, 100.f, c->Object.BoundingBoxMax);
@@ -1514,53 +1566,54 @@ namespace battleCastle
             Vector(140.f, 140.f, 300.f, c->Object.BoundingBoxMax);
             c->SwordCount = 0;
             return true;
-        }
-
-        return false;
     }
 
-    bool    StopBattleCastleMonster(CHARACTER* c, OBJECT* o)
-    {
-        if (gMapManager.InBattleCastle() == false)  return false;
+    return false;
+}
 
-        switch (c->MonsterIndex)
-        {
+bool StopBattleCastleMonster(CHARACTER* c, OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    switch (c->MonsterIndex)
+    {
         case MONSTER_BATTLE_GUARD1:
         case MONSTER_BATTLE_GUARD2:
             if (o->CurrentAction == 5)
             {
-                o->PriorAction = 4;
+                o->PriorAction         = 4;
                 o->PriorAnimationFrame = 0.f;
-                o->CurrentAction = 4;
-                o->AnimationFrame = 0.f;
+                o->CurrentAction       = 4;
+                o->AnimationFrame      = 0.f;
 
-                g_byGuardAI = GUARD_ATTACK_READY;
-                o->AI = GUARD_READY;
+                g_byGuardAI       = GUARD_ATTACK_READY;
+                o->AI             = GUARD_READY;
                 o->AttackPoint[0] = 300;
                 return true;
             }
             else if (o->CurrentAction == 4)
             {
-                o->PriorAction = 4;
+                o->PriorAction         = 4;
                 o->PriorAnimationFrame = 0.f;
-                o->CurrentAction = 4;
-                o->AnimationFrame = 0.f;
+                o->CurrentAction       = 4;
+                o->AnimationFrame      = 0.f;
                 return true;
             }
             else if (o->CurrentAction == 2)
             {
-                o->PriorAction = 4;
+                o->PriorAction         = 4;
                 o->PriorAnimationFrame = 0.f;
-                o->CurrentAction = 4;
-                o->AnimationFrame = 0.f;
+                o->CurrentAction       = 4;
+                o->AnimationFrame      = 0.f;
                 return true;
             }
             else if (o->CurrentAction == 0)
             {
-                o->PriorAction = 0;
+                o->PriorAction         = 0;
                 o->PriorAnimationFrame = 0.f;
-                o->CurrentAction = 0;
-                o->AnimationFrame = 0.f;
+                o->CurrentAction       = 0;
+                o->AnimationFrame      = 0.f;
                 return true;
             }
             return false;
@@ -1570,8 +1623,7 @@ namespace battleCastle
             SetAction(o, 0);
             return true;
 
-        case MONSTER_CASTLE_GATE1:
-        {
+        case MONSTER_CASTLE_GATE1: {
             if (g_isCharacterBuff(o, eBuff_CastleGateIsOpen))
             {
                 c->m_bIsSelected = false;
@@ -1583,37 +1635,38 @@ namespace battleCastle
                 SetAction(o, 0);
             }
         }
-        return true;
-        }
+            return true;
+    }
+    return false;
+}
+
+void InitGateAttribute(void)
+{
+    if (g_bBeGate == false)
+    {
+        SetCastleGate_Attribute(0, 0, 0, true);
+    }
+}
+
+void InitEtcSetting(void)
+{
+    g_fLifeStoneLocation[0] = 0.f;
+    g_fLifeStoneLocation[1] = 0.f;
+
+    InitGateAttribute();
+    g_bBeGate = false;
+}
+
+bool MoveBattleCastleMonster(CHARACTER* c, OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
         return false;
-    }
 
-    void    InitGateAttribute(void)
+    switch (c->MonsterIndex)
     {
-        if (g_bBeGate == false)
-        {
-            SetCastleGate_Attribute(0, 0, 0, true);
-        }
-    }
-
-    void    InitEtcSetting(void)
-    {
-        g_fLifeStoneLocation[0] = 0.f;
-        g_fLifeStoneLocation[1] = 0.f;
-
-        InitGateAttribute();
-        g_bBeGate = false;
-    }
-
-    bool MoveBattleCastleMonster(CHARACTER* c, OBJECT* o)
-    {
-        if (gMapManager.InBattleCastle() == false)  return false;
-
-        switch (c->MonsterIndex)
-        {
         case MONSTER_CROWN:
-            o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 200.f;
-            g_isCrownState = g_isCharacterBuff(o, eBuff_CastleCrown);
+            o->Position[2]   = RequestTerrainHeight(o->Position[0], o->Position[1]) + 200.f;
+            g_isCrownState   = g_isCharacterBuff(o, eBuff_CastleCrown);
             c->m_bIsSelected = (g_isCrownState ? true : false);
             break;
 
@@ -1622,59 +1675,58 @@ namespace battleCastle
             break;
 
         case MONSTER_GUARDIAN_STATUE:
-            o->HiddenMesh = -1;
+            o->HiddenMesh    = -1;
             c->m_bIsSelected = true;
             if (IsBattleCastleStart() == false)
             {
-                o->HiddenMesh = -2;
+                o->HiddenMesh    = -2;
                 c->m_bIsSelected = false;
             }
             break;
 
         case MONSTER_BATTLE_GUARD1:
-        case MONSTER_BATTLE_GUARD2:
-        {
+        case MONSTER_BATTLE_GUARD2: {
             switch (o->AI)
             {
-            case GUARD_STOP:
-            {
-                float fRange = 500.f;
+                case GUARD_STOP: {
+                    float fRange = 500.f;
 
-                o->AttackPoint[0] = 0;
+                    o->AttackPoint[0] = 0;
 
-                if (CalcDistanceChrToChr(o, 1, fRange) || g_byGuardAI == GUARD_ATTACK_READY)
-                {
-                    SetAction(o, 4);
+                    if (CalcDistanceChrToChr(o, 1, fRange) || g_byGuardAI == GUARD_ATTACK_READY)
+                    {
+                        SetAction(o, 4);
 
-                    g_byGuardAI = GUARD_ATTACK_READY;
-                    o->AI = GUARD_READY;
-                    o->AttackPoint[0] = 300;
+                        g_byGuardAI       = GUARD_ATTACK_READY;
+                        o->AI             = GUARD_READY;
+                        o->AttackPoint[0] = 300;
+                    }
                 }
+                break;
+
+                case GUARD_READY:
+                    break;
+
+                case GUARD_ATTACK_READY:
+                    break;
+
+                case GUARD_ATTACK:
+                    break;
             }
-            break;
-
-            case GUARD_READY:
-                break;
-
-            case GUARD_ATTACK_READY:
-                break;
-
-            case GUARD_ATTACK:
-                break;
-            }
-            if (o->CurrentAction != MONSTER01_SHOCK && o->AI != GUARD_STOP && (o->AttackPoint[0] < 0 || g_byGuardAI == GUARD_STOP))
+            if (o->CurrentAction != MONSTER01_SHOCK && o->AI != GUARD_STOP &&
+                (o->AttackPoint[0] < 0 || g_byGuardAI == GUARD_STOP))
             {
                 float fRange = 500.f;
 
-                if (CalcDistanceChrToChr(o, 1, fRange))//|| g_byGuardAI==GUARD_ATTACK_READY )
+                if (CalcDistanceChrToChr(o, 1, fRange))  //|| g_byGuardAI==GUARD_ATTACK_READY )
                 {
                     o->AttackPoint[0] = 300;
-                    g_byGuardAI = GUARD_ATTACK_READY;
+                    g_byGuardAI       = GUARD_ATTACK_READY;
                 }
                 else
                 {
                     SetAction(o, 0);
-                    o->AI = GUARD_STOP;
+                    o->AI       = GUARD_STOP;
                     g_byGuardAI = GUARD_STOP;
                 }
             }
@@ -1689,14 +1741,14 @@ namespace battleCastle
                 g_fLifeStoneLocation[1] = o->Position[1];
             }
             break;
-        }
-        return false;
     }
+    return false;
+}
 
-    bool SetCurrentAction_BattleCastleMonster(CHARACTER* c, OBJECT* o)
+bool SetCurrentAction_BattleCastleMonster(CHARACTER* c, OBJECT* o)
+{
+    switch (o->Type)
     {
-        switch (o->Type)
-        {
         case 11:
             break;
 
@@ -1705,29 +1757,30 @@ namespace battleCastle
             o->AI = GUARD_ATTACK;
             SetAction(o, 5);
             return true;
-        }
+    }
+    return false;
+}
+
+bool AttackEffect_BattleCastleMonster(CHARACTER* c, OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
         return false;
+
+    CHARACTER* tc = NULL;
+    OBJECT*    to = NULL;
+    vec3_t     Light;
+    vec3_t     p, Position;
+
+    Vector(0.f, 0.f, 0.f, p);
+    Vector(1.f, 1.f, 1.f, Light);
+    if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
+    {
+        tc = &CharactersClient[c->TargetCharacter];
+        to = &tc->Object;
     }
 
-    bool AttackEffect_BattleCastleMonster(CHARACTER* c, OBJECT* o, BMD* b)
+    switch (c->MonsterIndex)
     {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        CHARACTER* tc = NULL;
-        OBJECT* to = NULL;
-        vec3_t      Light;
-        vec3_t      p, Position;
-
-        Vector(0.f, 0.f, 0.f, p);
-        Vector(1.f, 1.f, 1.f, Light);
-        if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
-        {
-            tc = &CharactersClient[c->TargetCharacter];
-            to = &tc->Object;
-        }
-
-        switch (c->MonsterIndex)
-        {
         case MONSTER_TRAP:
             if (c->CheckAttackTime(5))
             {
@@ -1744,53 +1797,55 @@ namespace battleCastle
                 CreateEffect(BITMAP_JOINT_FORCE, o->Position, o->Angle, o->Light);
             }
             return true;
+    }
+    return false;
+}
+
+void CreateGuardStoneHealingVisual(CHARACTER* c, float Range)
+{
+    OBJECT* o        = &c->Object;
+    bool    bHealing = false;
+
+    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            if (InArea(g_fGuardStoneLocation[i][0], g_fGuardStoneLocation[i][1], o->Position, Range))
+            {
+                bHealing = true;
+                break;
+            }
         }
+    }
+    else  //if ( (o->State&STATE_REGIMENT_ATTACK)==STATE_REGIMENT_ATTACK )
+    {
+        if (g_fLifeStoneLocation[0] != 0.f && g_fLifeStoneLocation[1] != 0.f &&
+            Hero->GuildMarkIndex == c->GuildMarkIndex)
+        {
+            if (InArea(g_fLifeStoneLocation[0], g_fLifeStoneLocation[1], o->Position, Range))
+            {
+                bHealing = true;
+            }
+        }
+    }
+
+    if (bHealing && LastHealingParticle < WorldTime - HealingParticleInterval)
+    {
+        LastHealingParticle = WorldTime;
+        CreateParticle(BITMAP_PLUS, o->Position, o->Angle, o->Light);
+    }
+}
+
+bool MoveBattleCastleMonsterVisual(OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
         return false;
-    }
 
-    void CreateGuardStoneHealingVisual(CHARACTER* c, float Range)
+    float  Luminosity;
+    vec3_t Light;
+
+    switch (o->Type)
     {
-        OBJECT* o = &c->Object;
-        bool bHealing = false;
-
-        if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                if (InArea(g_fGuardStoneLocation[i][0], g_fGuardStoneLocation[i][1], o->Position, Range))
-                {
-                    bHealing = true;
-                    break;
-                }
-            }
-        }
-        else //if ( (o->State&STATE_REGIMENT_ATTACK)==STATE_REGIMENT_ATTACK )
-        {
-            if (g_fLifeStoneLocation[0] != 0.f && g_fLifeStoneLocation[1] != 0.f && Hero->GuildMarkIndex == c->GuildMarkIndex)
-            {
-                if (InArea(g_fLifeStoneLocation[0], g_fLifeStoneLocation[1], o->Position, Range))
-                {
-                    bHealing = true;
-                }
-            }
-        }
-
-        if (bHealing && LastHealingParticle < WorldTime - HealingParticleInterval)
-        {
-            LastHealingParticle = WorldTime;
-            CreateParticle(BITMAP_PLUS, o->Position, o->Angle, o->Light);
-        }
-    }
-
-    bool MoveBattleCastleMonsterVisual(OBJECT* o, BMD* b)
-    {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        float  Luminosity;
-        vec3_t Light;
-
-        switch (o->Type)
-        {
         case 11:
             //            o->HiddenMesh = -2;
             break;
@@ -1837,19 +1892,20 @@ namespace battleCastle
         case MODEL_CANON_TOWER:
             o->Angle[2] = 45.f;
             return true;
-        }
-
-        return false;
     }
 
-    bool    RenderBattleCastleMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
+    return false;
+}
+
+bool RenderBattleCastleMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return false;
+
+    vec3_t Position, Light, p;
+
+    switch (o->Type)
     {
-        if (gMapManager.InBattleCastle() == false) return false;
-
-        vec3_t Position, Light, p;
-
-        switch (o->Type)
-        {
         case MODEL_CASTLE_GATE1:
             break;
 
@@ -1905,52 +1961,53 @@ namespace battleCastle
             else
             {
                 c->m_bIsSelected = false;
-                o->HiddenMesh = -2;
+                o->HiddenMesh    = -2;
             }
             return true;
 
         case MODEL_NPC_CHECK_FLOOR:
             if (IsBattleCastleStart())
             {
-                o->Position[2] = o->Velocity;
+                o->Position[2]   = o->Velocity;
                 c->m_bIsSelected = true;
             }
             else
             {
-                o->Position[2] = o->Velocity - 100.f;
+                o->Position[2]   = o->Velocity - 100.f;
                 c->m_bIsSelected = false;
             }
             o->BlendMeshLight = sinf(WorldTime * 0.001f) * 0.3f + 0.5f;
             return true;
-        }
-
-        return false;
     }
 
-    bool    RenderBattleCastleMonsterCloth(CHARACTER* c, OBJECT* o, bool Translate, int Select)
-    {
+    return false;
+}
+
+bool RenderBattleCastleMonsterCloth(CHARACTER* c, OBJECT* o, bool Translate, int Select)
+{
+    return false;
+}
+
+bool RenderBattleCastleMonsterObjectMesh(OBJECT* o, BMD* b)
+{
+    if (gMapManager.InBattleCastle() == false)
         return false;
-    }
 
-    bool    RenderBattleCastleMonsterObjectMesh(OBJECT* o, BMD* b)
+    bool success = false;
+
+    switch (o->Type)
     {
-        if (gMapManager.InBattleCastle() == false) return false;
+        case MODEL_NPC_CAPATULT_ATT: {
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
 
-        bool    success = false;
-
-        switch (o->Type)
-        {
-        case MODEL_NPC_CAPATULT_ATT:
-        {
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-
-            OBB_t   OBB;
-            vec3_t  Temp, p, Position;
-            BMD* linkBmd = &Models[MODEL_FLY_BIG_STONE1];
-            linkBmd->BodyHeight = 0.f;
+            OBB_t  OBB;
+            vec3_t Temp, p, Position;
+            BMD*   linkBmd          = &Models[MODEL_FLY_BIG_STONE1];
+            linkBmd->BodyHeight     = 0.f;
             linkBmd->ContrastEnable = o->ContrastEnable;
             BodyLight(o, linkBmd);
-            linkBmd->BodyScale = 1.3f;
+            linkBmd->BodyScale     = 1.3f;
             linkBmd->CurrentAction = 0;
 
             if (o->CurrentAction == 0 || o->AnimationFrame < 2.f || o->AnimationFrame >= 22.f)
@@ -1960,7 +2017,8 @@ namespace battleCastle
                 VectorCopy(Position, linkBmd->BodyOrigin);
                 linkBmd->Animation(BoneTransform, 0.f, 0.f, 0, o->Angle, o->Angle, true);
                 linkBmd->Transform(BoneTransform, Temp, Temp, &OBB, true);
-                linkBmd->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+                linkBmd->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                                    o->BlendMeshTexCoordV, o->HiddenMesh);
             }
 
             if (o->CurrentAction == 1 && o->AnimationFrame > 13.f && o->AnimationFrame < 22.f)
@@ -1970,17 +2028,22 @@ namespace battleCastle
                 VectorCopy(Position, linkBmd->BodyOrigin);
                 linkBmd->Animation(BoneTransform, 0.f, 0.f, 0, o->Angle, o->Angle, true);
                 linkBmd->Transform(BoneTransform, Temp, Temp, &OBB, true);
-                linkBmd->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+                linkBmd->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                                    o->BlendMeshTexCoordV, o->HiddenMesh);
             }
         }
-        success = true;
-        break;
+            success = true;
+            break;
 
         case MODEL_NPC_BARRIER:
             Vector(0.3f, 0.3f, 1.f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_WATER + WaterTextureNumber);
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh,
+                          BITMAP_WATER + WaterTextureNumber);
             Vector(0.3f, 1.f, 0.3f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_WATER + ((int)(WorldTime * 0.01f) % 32));
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh,
+                          BITMAP_WATER + ((int)(WorldTime * 0.01f) % 32));
             success = true;
             break;
 
@@ -1996,7 +2059,8 @@ namespace battleCastle
             }
             else
             {
-                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+                b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV, o->HiddenMesh);
             }
             break;
 
@@ -2018,11 +2082,14 @@ namespace battleCastle
                 }
                 else
                 {
-                    b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+                    b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                                  o->BlendMeshTexCoordV, o->HiddenMesh);
                     Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
-                    b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
+                    b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0.5f, o->BlendMeshLight,
+                                  o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
                     Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
-                    b->RenderBody(RENDER_BRIGHT | RENDER_METAL, o->Alpha, 0.5f, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
+                    b->RenderBody(RENDER_BRIGHT | RENDER_METAL, o->Alpha, 0.5f, o->BlendMeshLight,
+                                  o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh, BITMAP_CHROME);
                     Vector(1.f, 1.f, 1.f, b->BodyLight);
                 }
             }
@@ -2055,19 +2122,19 @@ namespace battleCastle
             }
             success = true;
             break;
-        }
-
-        return success;
     }
 
-    void RenderMonsterHitEffect(OBJECT* o)
-    {
-        if (gMapManager.InBattleCastle() == false) return;
+    return success;
+}
 
-        switch (o->Type)
-        {
-        case MODEL_CASTLE_GATE1:
-        {
+void RenderMonsterHitEffect(OBJECT* o)
+{
+    if (gMapManager.InBattleCastle() == false)
+        return;
+
+    switch (o->Type)
+    {
+        case MODEL_CASTLE_GATE1: {
             vec3_t Position;
             VectorCopy(o->Position, Position);
 
@@ -2077,7 +2144,8 @@ namespace battleCastle
 
             if (!g_isCharacterBuff(o, eBuff_CastleGateIsOpen))
             {
-                if (!g_isCharacterBuff((&Hero->Object), eBuff_BlessPotion) && !g_isCharacterBuff((&Hero->Object), eBuff_SoulPotion))
+                if (!g_isCharacterBuff((&Hero->Object), eBuff_BlessPotion) &&
+                    !g_isCharacterBuff((&Hero->Object), eBuff_SoulPotion))
                 {
                     CreateEffect(MODEL_WAVES, Position, o->Angle, o->Light, 6, NULL, 0);
                 }
@@ -2094,8 +2162,7 @@ namespace battleCastle
         }
         break;
 
-        case MODEL_GUARDIAN_STATUE:
-        {
+        case MODEL_GUARDIAN_STATUE: {
             vec3_t Position;
             for (int i = 0; i < 5; i++)
             {
@@ -2110,6 +2177,6 @@ namespace battleCastle
             }
         }
         break;
-        }
     }
+}
 }

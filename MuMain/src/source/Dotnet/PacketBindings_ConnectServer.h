@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketBindings.h" company="MUnique">
+﻿// <copyright file="PacketBindings.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -20,7 +20,7 @@
 #include "PacketFunctions_CommonEnums.h"
 #include "PacketFunctions_ConnectServer_Enums.h"
 
-    typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest075)(int32_t, BYTE);
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest075)(int32_t, BYTE);
 inline SendConnectionInfoRequest075 dotnet_SendConnectionInfoRequest075 =
     reinterpret_cast<SendConnectionInfoRequest075>(
         symLoad(munique_client_library_handle, "SendConnectionInfoRequest075"));

@@ -21,9 +21,8 @@ public:
     enum IMAGE_LIST
     {
         // Base Window (Reference)
-        IMAGE_ENTERBC_BASE_WINDOW_BACK = CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK,  //. newui_msgbox_back.jpg
-        IMAGE_ENTERBC_BASE_WINDOW_TOP =
-            CNewUIMyInventory::IMAGE_INVENTORY_BACK_TOP,  //. newui_item_back01.tga	(190,64)
+        IMAGE_ENTERBC_BASE_WINDOW_BACK = CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK,      //. newui_msgbox_back.jpg
+        IMAGE_ENTERBC_BASE_WINDOW_TOP = CNewUIMyInventory::IMAGE_INVENTORY_BACK_TOP,  //. newui_item_back01.tga	(190,64)
         IMAGE_ENTERBC_BASE_WINDOW_LEFT =
             CNewUIMyInventory::IMAGE_INVENTORY_BACK_LEFT,  //. newui_item_back02-l.tga	(21,320)
         IMAGE_ENTERBC_BASE_WINDOW_RIGHT =

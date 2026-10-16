@@ -1,4 +1,4 @@
-﻿  // NewUICharacterInfoWindow.cpp: implementation of the CNewUICharacterInfoWindow class.
+﻿// NewUICharacterInfoWindow.cpp: implementation of the CNewUICharacterInfoWindow class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@
 #include "Network/Server/ServerListManager.h"
 #include "I18N/All.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 namespace
 {

@@ -1,4 +1,4 @@
-﻿  ///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -31,17 +31,17 @@
 #include "Camera/CameraUtility.h"
 #include "Scenes/SceneManager.h"
 
-    extern CUITextInputBox* g_pSingleTextInputBox;
-extern CUITextInputBox*     g_pSinglePasswdInputBox;
-extern int                  g_iChatInputType;
-extern BOOL                 g_bUseChatListBox;
-extern DWORD                g_dwMouseUseUIID;
-extern DWORD                g_dwActiveUIID;
-extern DWORD                g_dwKeyFocusUIID;
-extern CUIMapName*          g_pUIMapName;
-extern bool                 HighLight;
-extern CTimer*              g_pTimer;
-extern BOOL                 g_bGameServerConnected;
+extern CUITextInputBox* g_pSingleTextInputBox;
+extern CUITextInputBox* g_pSinglePasswdInputBox;
+extern int              g_iChatInputType;
+extern BOOL             g_bUseChatListBox;
+extern DWORD            g_dwMouseUseUIID;
+extern DWORD            g_dwActiveUIID;
+extern DWORD            g_dwKeyFocusUIID;
+extern CUIMapName*      g_pUIMapName;
+extern bool             HighLight;
+extern CTimer*          g_pTimer;
+extern BOOL             g_bGameServerConnected;
 
 bool g_bTimeCheck  = false;
 int  g_iBackupTime = 0;

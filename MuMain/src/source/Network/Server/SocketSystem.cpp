@@ -9,7 +9,7 @@
 #include "UI/Legacy/UIControls.h"
 #include "Character/CharacterManager.h"
 
-    using namespace SEASON4A;
+using namespace SEASON4A;
 
 CSocketItemMgr g_SocketItemMgr;
 

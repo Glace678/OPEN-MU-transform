@@ -1,4 +1,4 @@
-﻿  //////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 // NewUIInventoryCtrl.cpp: implementation of the CNewUIInventoryCtrl class.
 //////////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Items/MixMgr.h"
 #include "UI/Items/Touch/InventoryTouchAdapter.h"
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 SEASON3B::CNewUIPickedItem::CNewUIPickedItem()
 {

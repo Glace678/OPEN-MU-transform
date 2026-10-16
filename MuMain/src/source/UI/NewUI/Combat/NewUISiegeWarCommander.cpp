@@ -1,4 +1,4 @@
-﻿  // NewUISiegeWarCommander.cpp: implementation of the CNewUISiegeWarCommander class.
+﻿// NewUISiegeWarCommander.cpp: implementation of the CNewUISiegeWarCommander class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -8,7 +8,7 @@
 
 #include "Engine/Object/ZzzCharacter.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 SEASON3B::CNewUISiegeWarCommander::CNewUISiegeWarCommander()
 {

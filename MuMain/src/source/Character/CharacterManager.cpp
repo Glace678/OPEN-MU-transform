@@ -1,4 +1,4 @@
-﻿  // CharacterManager.cpp: implementation of the CCharacterManager class.
+﻿// CharacterManager.cpp: implementation of the CCharacterManager class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -12,91 +12,90 @@
 #include <array>
 #include <type_traits>
 
-    namespace
+namespace
 {
-    template <typename T, typename U, typename V>
-    constexpr bool InRange(const T value, const U minValue, const V maxValue)
-    {
-        using Common             = std::common_type_t<T, U, V>;
-        const Common commonValue = static_cast<Common>(value);
-        return (commonValue >= static_cast<Common>(minValue)) && (commonValue <= static_cast<Common>(maxValue));
-    }
+template <typename T, typename U, typename V> constexpr bool InRange(const T value, const U minValue, const V maxValue)
+{
+    using Common             = std::common_type_t<T, U, V>;
+    const Common commonValue = static_cast<Common>(value);
+    return (commonValue >= static_cast<Common>(minValue)) && (commonValue <= static_cast<Common>(maxValue));
+}
 
-    struct ClassTextEntry
-    {
-        CLASS_TYPE type;
-        int        textIndex;
-    };
+struct ClassTextEntry
+{
+    CLASS_TYPE type;
+    int        textIndex;
+};
 
-    constexpr int kThirdGenWingMin = ITEM_WING + 130;
-    constexpr int kThirdGenWingMax = ITEM_WING + 134;
-    constexpr int kSpecialWingType = ITEM_WING + 135;
+constexpr int kThirdGenWingMin = ITEM_WING + 130;
+constexpr int kThirdGenWingMax = ITEM_WING + 134;
+constexpr int kSpecialWingType = ITEM_WING + 135;
 
-    constexpr int kDefaultClassTextIndex       = 2305;
-    constexpr int kMasterExperienceUnlockLevel = 400;
+constexpr int kDefaultClassTextIndex       = 2305;
+constexpr int kMasterExperienceUnlockLevel = 400;
 
-    constexpr std::array<ClassTextEntry, 18> kClassTextEntries{{
-        {CLASS_WIZARD, 20},
-        {CLASS_SOULMASTER, 25},
-        {CLASS_GRANDMASTER, 1669},
-        {CLASS_KNIGHT, 21},
-        {CLASS_BLADEKNIGHT, 26},
-        {CLASS_BLADEMASTER, 1668},
-        {CLASS_ELF, 22},
-        {CLASS_MUSEELF, 27},
-        {CLASS_HIGHELF, 1670},
-        {CLASS_DARK, 23},
-        {CLASS_DUELMASTER, 1671},
-        {CLASS_DARK_LORD, 24},
-        {CLASS_LORDEMPEROR, 1672},
-        {CLASS_SUMMONER, 1687},
-        {CLASS_BLOODYSUMMONER, 1688},
-        {CLASS_DIMENSIONMASTER, 1689},
-        {CLASS_RAGEFIGHTER, 3150},
-        {CLASS_TEMPLENIGHT, 3151},
-    }};
+constexpr std::array<ClassTextEntry, 18> kClassTextEntries{{
+    {CLASS_WIZARD, 20},
+    {CLASS_SOULMASTER, 25},
+    {CLASS_GRANDMASTER, 1669},
+    {CLASS_KNIGHT, 21},
+    {CLASS_BLADEKNIGHT, 26},
+    {CLASS_BLADEMASTER, 1668},
+    {CLASS_ELF, 22},
+    {CLASS_MUSEELF, 27},
+    {CLASS_HIGHELF, 1670},
+    {CLASS_DARK, 23},
+    {CLASS_DUELMASTER, 1671},
+    {CLASS_DARK_LORD, 24},
+    {CLASS_LORDEMPEROR, 1672},
+    {CLASS_SUMMONER, 1687},
+    {CLASS_BLOODYSUMMONER, 1688},
+    {CLASS_DIMENSIONMASTER, 1689},
+    {CLASS_RAGEFIGHTER, 3150},
+    {CLASS_TEMPLENIGHT, 3151},
+}};
 
-    constexpr bool IsWingType(int type)
-    {
-        return InRange(type, ITEM_WING, ITEM_WINGS_OF_DARKNESS) ||
-               InRange(type, ITEM_WING_OF_STORM, ITEM_WING_OF_DIMENSION) || type == ITEM_CAPE_OF_LORD ||
-               InRange(type, kThirdGenWingMin, kThirdGenWingMax) ||
-               InRange(type, ITEM_CAPE_OF_FIGHTER, ITEM_CAPE_OF_OVERRULE) || type == kSpecialWingType;
-    }
+constexpr bool IsWingType(int type)
+{
+    return InRange(type, ITEM_WING, ITEM_WINGS_OF_DARKNESS) ||
+           InRange(type, ITEM_WING_OF_STORM, ITEM_WING_OF_DIMENSION) || type == ITEM_CAPE_OF_LORD ||
+           InRange(type, kThirdGenWingMin, kThirdGenWingMax) ||
+           InRange(type, ITEM_CAPE_OF_FIGHTER, ITEM_CAPE_OF_OVERRULE) || type == kSpecialWingType;
+}
 
-    constexpr bool IsBowModel(int type)
-    {
-        return InRange(type, MODEL_BOW, MODEL_CHAOS_NATURE_BOW) || type == MODEL_CELESTIAL_BOW ||
-               InRange(type, MODEL_ARROW_VIPER_BOW, MODEL_STINGER_BOW) || type == MODEL_AIR_LYN_BOW;
-    }
+constexpr bool IsBowModel(int type)
+{
+    return InRange(type, MODEL_BOW, MODEL_CHAOS_NATURE_BOW) || type == MODEL_CELESTIAL_BOW ||
+           InRange(type, MODEL_ARROW_VIPER_BOW, MODEL_STINGER_BOW) || type == MODEL_AIR_LYN_BOW;
+}
 
-    constexpr bool IsCrossbowModel(int type)
-    {
-        return InRange(type, MODEL_CROSSBOW, MODEL_AQUAGOLD_CROSSBOW) || type == MODEL_SAINT_CROSSBOW ||
-               InRange(type, MODEL_DIVINE_CB_OF_ARCHANGEL, MODEL_GREAT_REIGN_CROSSBOW);
-    }
+constexpr bool IsCrossbowModel(int type)
+{
+    return InRange(type, MODEL_CROSSBOW, MODEL_AQUAGOLD_CROSSBOW) || type == MODEL_SAINT_CROSSBOW ||
+           InRange(type, MODEL_DIVINE_CB_OF_ARCHANGEL, MODEL_GREAT_REIGN_CROSSBOW);
+}
 
-    constexpr bool IsGeneralBowItem(int type)
-    {
-        return InRange(type, ITEM_BOW, ITEM_CHAOS_NATURE_BOW) || type == ITEM_CELESTIAL_BOW ||
-               InRange(type, ITEM_ARROW_VIPER_BOW, ITEM_STINGER_BOW) || type == ITEM_AIR_LYN_BOW;
-    }
+constexpr bool IsGeneralBowItem(int type)
+{
+    return InRange(type, ITEM_BOW, ITEM_CHAOS_NATURE_BOW) || type == ITEM_CELESTIAL_BOW ||
+           InRange(type, ITEM_ARROW_VIPER_BOW, ITEM_STINGER_BOW) || type == ITEM_AIR_LYN_BOW;
+}
 
-    constexpr bool IsGeneralCrossbowItem(int type)
-    {
-        return InRange(type, ITEM_CROSSBOW, ITEM_AQUAGOLD_CROSSBOW) || type == ITEM_SAINT_CROSSBOW ||
-               InRange(type, ITEM_DIVINE_CB_OF_ARCHANGEL, ITEM_GREAT_REIGN_CROSSBOW);
-    }
+constexpr bool IsGeneralCrossbowItem(int type)
+{
+    return InRange(type, ITEM_CROSSBOW, ITEM_AQUAGOLD_CROSSBOW) || type == ITEM_SAINT_CROSSBOW ||
+           InRange(type, ITEM_DIVINE_CB_OF_ARCHANGEL, ITEM_GREAT_REIGN_CROSSBOW);
+}
 
-    constexpr bool IsEquippedBowItem(int type)
-    {
-        return IsGeneralBowItem(type);
-    }
+constexpr bool IsEquippedBowItem(int type)
+{
+    return IsGeneralBowItem(type);
+}
 
-    constexpr bool IsEquippedCrossbowItem(int type)
-    {
-        return IsGeneralCrossbowItem(type);
-    }
+constexpr bool IsEquippedCrossbowItem(int type)
+{
+    return IsGeneralCrossbowItem(type);
+}
 }
 
 CCharacterManager gCharacterManager;

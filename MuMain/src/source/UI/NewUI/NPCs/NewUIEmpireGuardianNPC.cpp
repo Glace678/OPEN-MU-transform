@@ -1,4 +1,4 @@
-﻿  // CNewUIEmpireGuardianNPC.cpp: implementation of the CNewUIEmpireGuardianNPC class.
+﻿// CNewUIEmpireGuardianNPC.cpp: implementation of the CNewUIEmpireGuardianNPC class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -10,7 +10,7 @@
 #include "Audio/DSPlaySound.h"
 #include "UI/Legacy/UIControls.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 CNewUIEmpireGuardianNPC::CNewUIEmpireGuardianNPC()
 {

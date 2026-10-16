@@ -1,11 +1,11 @@
-﻿  // NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
+﻿// NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "UI/NewUI/Inventory/NewUIMyInventory.h"
 #include "UI/NewUI/NewUISystem.h"
 #include "I18N/All.h"
-    extern bool SelectFlag;
+extern bool SelectFlag;
 #ifdef _EDITOR
 #include "UI/Console/MuEditorConsoleUI.h"
 #endif

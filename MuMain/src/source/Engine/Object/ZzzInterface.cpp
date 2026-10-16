@@ -29,7 +29,6 @@
 #include "Audio/DSPlaySound.h"
 #include "I18N/All.h"
 
-
 #include "GameLogic/Events/MatchEvent.h"
 #include "GameLogic/Items/PersonalShopTitleImp.h"
 #include "GameLogic/Quests/CSQuest.h"
@@ -37,7 +36,7 @@
 #include "GameLogic/NPCs/npcBreeder.h"
 #include "GameLogic/Pets/GIPetManager.h"
 #include "Character/CSParts.h"
-#include "UI/Legacy/UIMapName.h"	// rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Events/Event.h"
@@ -57,36 +56,30 @@
 #include "Character/CharacterManager.h"
 #include "MUHelper/MuHelper.h"
 
-
 #include "Camera/CameraProjection.h"
 #include "Scenes/SceneCommon.h"
 
 extern CUITextInputBox* g_pSingleTextInputBox;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
-extern int g_iChatInputType;
-extern BOOL g_bUseChatListBox;
-extern DWORD g_dwMouseUseUIID;
-extern CUIMapName* g_pUIMapName;	// rozy
-extern bool bCheckNPC;
-extern BOOL g_bWhileMovingZone;
-extern DWORD g_dwLatestZoneMoving;
-extern bool LogOut;
-extern int DirTable[16];
+extern int              g_iChatInputType;
+extern BOOL             g_bUseChatListBox;
+extern DWORD            g_dwMouseUseUIID;
+extern CUIMapName*      g_pUIMapName;  // rozy
+extern bool             bCheckNPC;
+extern BOOL             g_bWhileMovingZone;
+extern DWORD            g_dwLatestZoneMoving;
+extern bool             LogOut;
+extern int              DirTable[16];
 
 extern BOOL g_bUseWindowMode;
 extern void SetPlayerBow(CHARACTER* c);
 
 #ifdef _PVP_ADD_MOVE_SCROLL
 extern CMurdererMove g_MurdererMove;
-#endif	// _PVP_ADD_MOVE_SCROLL
-
-
-
-
-
+#endif  // _PVP_ADD_MOVE_SCROLL
 
 extern vec3_t MousePosition, MouseTarget;
-extern bool SelectFlag;
+extern bool   SelectFlag;
 
 extern void RegisterBuff(eBuffState buff, OBJECT* o, const int bufftime = 0);
 extern void UnRegisterBuff(eBuffState buff, OBJECT* o);
@@ -95,44 +88,44 @@ MovementSkill g_MovementSkill;
 
 DWORD g_dwLatestMagicTick;
 
-const   float   AutoMouseLimitTime = (1.f * 60.f * 60.f);
-int   LoadingWorld = 0;
-int   ItemHelp = 0;
-int   MouseUpdateTime = 0;
-int   MouseUpdateTimeMax = 6;
+const float AutoMouseLimitTime = (1.f * 60.f * 60.f);
+int         LoadingWorld       = 0;
+int         ItemHelp           = 0;
+int         MouseUpdateTime    = 0;
+int         MouseUpdateTimeMax = 6;
 // Latched when a click opens an NPC conversation while the button is still held.
 // The world click handler ignores the held button until it is physically released, so the
 // same click can't fall through to ground movement and instantly close the NPC window.
 // A fresh press (e.g. deliberately clicking the ground to walk away) still works normally.
 static bool s_bIgnoreHeldClickAfterNpcTalk = false;
-bool  WhisperEnable = true;
-bool  ChatWindowEnable = true;
-int   InputFrame = 0;
-int   EditFlag = EDIT_NONE;
-wchar_t  ColorTable[][10] = { L"White", L"Black", L"Red", L"Yellow", L"Green", L"Cyan", L"Blue", L"Magenta" };
+bool        WhisperEnable                  = true;
+bool        ChatWindowEnable               = true;
+int         InputFrame                     = 0;
+int         EditFlag                       = EDIT_NONE;
+wchar_t     ColorTable[][10] = {L"White", L"Black", L"Red", L"Yellow", L"Green", L"Cyan", L"Blue", L"Magenta"};
 
-int   SelectMonster = 0;
-int   SelectModel = 0;
-int   SelectMapping = 0;
-int   SelectColor = 0;
-int   SelectWall = 0;
+int   SelectMonster      = 0;
+int   SelectModel        = 0;
+int   SelectMapping      = 0;
+int   SelectColor        = 0;
+int   SelectWall         = 0;
 float SelectMappingAngle = 0.f;
-bool  DebugEnable = true;
-int   SelectedItem = -1;
-int   SelectedNpc = -1;
-int   SelectedCharacter = -1;
-int   SelectedOperate = -1;
-int   Attacking = -1;
+bool  DebugEnable        = true;
+int   SelectedItem       = -1;
+int   SelectedNpc        = -1;
+int   SelectedCharacter  = -1;
+int   SelectedOperate    = -1;
+int   Attacking          = -1;
 
-int   g_iFollowCharacter = -1;
+int g_iFollowCharacter = -1;
 
 bool g_bAutoGetItem = false;
 
 bool g_bRenderGameCursor = true;
 
-float LButtonPopTime = 0.f;
+float LButtonPopTime   = 0.f;
 float LButtonPressTime = 0.f;
-float RButtonPopTime = 0.f;
+float RButtonPopTime   = 0.f;
 float RButtonPressTime = 0.f;
 
 //
@@ -140,66 +133,66 @@ int   BrushSize = 0;
 int   HeroTile;
 int   TargetNpc = -1;
 int   TargetType;
-int TargetX;
-int TargetY;
+int   TargetX;
+int   TargetY;
 float TargetAngle;
 int   FontHeight;
 
 OBJECT* TradeNpc = NULL;
 
-bool  DontMove = false;
-bool  ServerHide = true;
-bool  SkillEnable;
-bool  MouseOnWindow;
-int   KeyState[256];
+bool DontMove   = false;
+bool ServerHide = true;
+bool SkillEnable;
+bool MouseOnWindow;
+int  KeyState[256];
 
-int    TerrainWallType[TERRAIN_SIZE * TERRAIN_SIZE];
-float  TerrainWallAngle[TERRAIN_SIZE * TERRAIN_SIZE];
+int     TerrainWallType[TERRAIN_SIZE * TERRAIN_SIZE];
+float   TerrainWallAngle[TERRAIN_SIZE * TERRAIN_SIZE];
 OBJECT* PickObject = NULL;
-vec3_t PickObjectAngle;
-float  PickObjectHeight;
-bool   PickObjectLockHeight = false;
-bool   EnableRandomObject = false;
-float  WallAngle;
+vec3_t  PickObjectAngle;
+float   PickObjectHeight;
+bool    PickObjectLockHeight = false;
+bool    EnableRandomObject   = false;
+float   WallAngle;
 
 bool LockInputStatus = false;
 
 bool GuildInputEnable = false;
-bool TabInputEnable = false;
-bool GoldInputEnable = false;
-bool InputEnable = true;
+bool TabInputEnable   = false;
+bool GoldInputEnable  = false;
+bool InputEnable      = true;
 bool g_bScratchTicket = false;
 
-int  InputGold = 0;
-int  InputNumber = 2;
-int  InputTextWidth = 110;
-int  InputIndex = 0;
-int  InputResidentNumber = 6;
-int  InputTextMax[12] = { MAX_USERNAME_SIZE,MAX_USERNAME_SIZE,MAX_USERNAME_SIZE,30,30,10,14,20,40 };
+int     InputGold           = 0;
+int     InputNumber         = 2;
+int     InputTextWidth      = 110;
+int     InputIndex          = 0;
+int     InputResidentNumber = 6;
+int     InputTextMax[12]    = {MAX_USERNAME_SIZE, MAX_USERNAME_SIZE, MAX_USERNAME_SIZE, 30, 30, 10, 14, 20, 40};
 wchar_t InputText[12][256];
 wchar_t InputTextIME[12][4];
-char InputTextHide[12];
-int  InputLength[12];
+char    InputTextHide[12];
+int     InputLength[12];
 wchar_t MacroText[10][256];
 
-constexpr uint64_t MacroCooldownMs = 4000; // 4 Seconds
-uint64_t  LastMacroTime = 0;
+constexpr uint64_t MacroCooldownMs = 4000;  // 4 Seconds
+uint64_t           LastMacroTime   = 0;
 
-int  WhisperIDCurrent = 2;
-char WhisperID[MAX_WHISPER_ID][256];
+int   WhisperIDCurrent = 2;
+char  WhisperID[MAX_WHISPER_ID][256];
 DWORD g_dwOneToOneTick = 0;
 
 bool g_bGMObservation = false;
 
 #ifdef LEM_FIX_USER_LOGOUT
 bool g_bExit = false;
-#endif // LEM_FIX_USER_LOGOUT [lem_2010.8.18]
+#endif  // LEM_FIX_USER_LOGOUT [lem_2010.8.18]
 
 #ifdef PK_ATTACK_TESTSERVER_LOG
 void PrintPKLog(CHARACTER* pCha)
 {
     static DWORD dwStartTime = 0;
-    static SHORT sKey = 0;
+    static SHORT sKey        = 0;
 
     if (pCha->Key == sKey && (timeGetTime() - dwStartTime < 1000))
     {
@@ -212,17 +205,19 @@ void PrintPKLog(CHARACTER* pCha)
         {
             g_ErrorReport.Write(L"!!!!!!!!!!!!!!!!! PK !!!!!!!!!!!!!!!\n");
             g_ErrorReport.WriteCurrentTime();
-            g_ErrorReport.Write(L" ID(%ls) PK(%d) GuildName(%ls)\n", pCha->ID, pCha->PK, GuildMark[pCha->GuildMarkIndex].GuildName);
+            g_ErrorReport.Write(L" ID(%ls) PK(%d) GuildName(%ls)\n", pCha->ID, pCha->PK,
+                                GuildMark[pCha->GuildMarkIndex].GuildName);
 #ifdef CONSOLE_DEBUG
-            g_ConsoleDebug->Write(MCD_ERROR, L"[!!! PK !!! : ID(%ls) PK(%d) GuildName(%ls)\n]", pCha->ID, pCha->PK, GuildMark[pCha->GuildMarkIndex].GuildName);
-#endif // CONSOLE_DEBUG
+            g_ConsoleDebug->Write(MCD_ERROR, L"[!!! PK !!! : ID(%ls) PK(%d) GuildName(%ls)\n]", pCha->ID, pCha->PK,
+                                  GuildMark[pCha->GuildMarkIndex].GuildName);
+#endif  // CONSOLE_DEBUG
 
-            sKey = pCha->Key;
+            sKey        = pCha->Key;
             dwStartTime = timeGetTime();
         }
     }
 }
-#endif // PK_ATTACK_TESTSERVER_LOG
+#endif  // PK_ATTACK_TESTSERVER_LOG
 
 bool PressKey(int Key)
 {
@@ -234,20 +229,22 @@ bool PressKey(int Key)
             return true;
         }
     }
-    else KeyState[Key] = false;
+    else
+        KeyState[Key] = false;
     return false;
 }
 
 void ClearInput(BOOL bClearWhisperTarget)
 {
-    InputIndex = 0;
+    InputIndex          = 0;
     InputResidentNumber = -1;
     for (int i = 0; i < 10; i++)
     {
-        if (i == 1 && bClearWhisperTarget == FALSE) continue;
+        if (i == 1 && bClearWhisperTarget == FALSE)
+            continue;
         for (int j = 0; j < 256; j++)
             InputText[i][j] = 0;
-        InputLength[i] = 0;
+        InputLength[i]   = 0;
         InputTextHide[i] = 0;
     }
 
@@ -275,14 +272,14 @@ void RenderInputText(int x, int y, int Index, int Gold)
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         g_pRenderText->SetBgColor(0);
 
-        SIZE* Size;
+        SIZE*   Size;
         wchar_t Text[256];
         if (InputTextHide[Index] == 1)
         {
             int iTextSize = 0;
             for (unsigned int i = 0; i < wcslen(InputText[Index]); i++)
             {
-                Text[i] = '*';
+                Text[i]   = '*';
                 iTextSize = i;
             }
             Text[iTextSize] = 0;
@@ -292,12 +289,12 @@ void RenderInputText(int x, int y, int Index, int Gold)
             int iTextSize = 0;
             for (unsigned int i = 0; i < 7; i++)
             {
-                Text[i] = InputText[Index][i];
+                Text[i]   = InputText[Index][i];
                 iTextSize = i;
             }
             for (unsigned int i = 7; i < wcslen(InputText[Index]); i++)
             {
-                Text[i] = '*';
+                Text[i]   = '*';
                 iTextSize = i;
             }
             Text[iTextSize] = 0;
@@ -329,24 +326,27 @@ void RenderInputText(int x, int y, int Index, int Gold)
     }
 }
 
-extern int  AlphaBlendType;
+extern int AlphaBlendType;
 
 void RenderTipText(int sx, int sy, const wchar_t* Text)
 {
-    SIZE TextSize = { 0, 0 };
+    SIZE TextSize = {0, 0};
     g_pRenderText->SetFont(g_hFont);
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), Text, lstrlen(Text), &TextSize);
 
     int BackupAlphaBlendType = AlphaBlendType;
     EnableAlphaTest();
     glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-    RenderColor((float)sx - 2, (float)sy - 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);	// 위
-    RenderColor((float)sx - 2, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);	// 좌
-    RenderColor((float)sx - 2 + TextSize.cx / g_fScreenRate_x + 3, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);
-    RenderColor((float)sx - 2, (float)sy - 3 + TextSize.cy / g_fScreenRate_y + 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);
+    RenderColor((float)sx - 2, (float)sy - 3, (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);  // 위
+    RenderColor((float)sx - 2, (float)sy - 3, (float)1, (float)TextSize.cy / g_fScreenRate_y + 4);  // 좌
+    RenderColor((float)sx - 2 + TextSize.cx / g_fScreenRate_x + 3, (float)sy - 3, (float)1,
+                (float)TextSize.cy / g_fScreenRate_y + 4);
+    RenderColor((float)sx - 2, (float)sy - 3 + TextSize.cy / g_fScreenRate_y + 3,
+                (float)TextSize.cx / g_fScreenRate_x + 4, (float)1);
 
     glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
-    RenderColor((float)sx - 1, (float)sy - 2, (float)TextSize.cx / g_fScreenRate_x + 2, (float)TextSize.cy / g_fScreenRate_y + 2);
+    RenderColor((float)sx - 1, (float)sy - 2, (float)TextSize.cx / g_fScreenRate_x + 2,
+                (float)TextSize.cy / g_fScreenRate_y + 2);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     EnableTexture2D();
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -354,30 +354,29 @@ void RenderTipText(int sx, int sy, const wchar_t* Text)
     g_pRenderText->RenderText(sx, sy, Text);
     switch (BackupAlphaBlendType)
     {
-    case 0:
-        DisableAlphaBlend();
-        break;
-    case 1:
-        EnableLightMap();
-        break;
-    case 2:
-        EnableAlphaTest();
-        break;
-    case 3:
-        EnableAlphaBlend();
-        break;
-    case 4:
-        EnableAlphaBlendMinus();
-        break;
-    case 5:
-        EnableAlphaBlend2();
-        break;
-    default:
-        DisableAlphaBlend();
-        break;
+        case 0:
+            DisableAlphaBlend();
+            break;
+        case 1:
+            EnableLightMap();
+            break;
+        case 2:
+            EnableAlphaTest();
+            break;
+        case 3:
+            EnableAlphaBlend();
+            break;
+        case 4:
+            EnableAlphaBlendMinus();
+            break;
+        case 5:
+            EnableAlphaBlend2();
+            break;
+        default:
+            DisableAlphaBlend();
+            break;
     }
 }
-
 
 BYTE DebugText[10][256];
 int  DebugTextLength[10];
@@ -386,20 +385,21 @@ char DebugTextCount = 0;
 int RenderDebugText(int y)
 {
     wchar_t Text[100];
-    int Width = 16;
+    int     Width = 16;
     for (int i = 0; i < std::min<int>(DebugTextCount, 10); i++)
     {
-        int  Type = 0;
-        int  Count = 0;
-        int  x = 0;
-        bool Hex = true;
+        int  Type     = 0;
+        int  Count    = 0;
+        int  x        = 0;
+        bool Hex      = true;
         int  SizeByte = 1;
         for (int j = 0; j < DebugTextLength[i]; j++)
         {
             glColor3f(0.6f, 0.6f, 0.6f);
             if (j == 0)
             {
-                if (DebugText[i][j] == 0xc2) SizeByte = 2;
+                if (DebugText[i][j] == 0xc2)
+                    SizeByte = 2;
             }
             if (j == 2)
             {
@@ -491,14 +491,15 @@ int SearchArrowCount()
 
 bool CheckTile(CHARACTER* c, OBJECT* o, float Range)
 {
-    if (!c || !o) return false;
+    if (!c || !o)
+        return false;
 
     float dx = o->Position[0] - (TargetX * TERRAIN_SCALE + TERRAIN_SCALE * 0.5f);
     float dy = o->Position[1] - (TargetY * TERRAIN_SCALE + TERRAIN_SCALE * 0.5f);
 
     // Compare squared distance with squared range to avoid sqrt calculation
     float squaredDistance = dx * dx + dy * dy;
-    float squaredRange = (TERRAIN_SCALE * Range) * (TERRAIN_SCALE * Range);
+    float squaredRange    = (TERRAIN_SCALE * Range) * (TERRAIN_SCALE * Range);
 
     return squaredDistance <= squaredRange;
 }
@@ -510,18 +511,43 @@ bool CheckWall(int sx1, int sy1, int sx2, int sy2)
     int nx1, ny1, d1, d2, len1, len2;
     int px1 = sx2 - sx1;
     int py1 = sy2 - sy1;
-    if (px1 < 0) { px1 = -px1; nx1 = -1; }
-    else nx1 = 1;
-    if (py1 < 0) { py1 = -py1; ny1 = -TERRAIN_SIZE; }
-    else ny1 = TERRAIN_SIZE;
-    if (px1 > py1) { len1 = px1; len2 = py1; d1 = ny1; d2 = nx1; }
-    else { len1 = py1; len2 = px1; d1 = nx1; d2 = ny1; }
+    if (px1 < 0)
+    {
+        px1 = -px1;
+        nx1 = -1;
+    }
+    else
+        nx1 = 1;
+    if (py1 < 0)
+    {
+        py1 = -py1;
+        ny1 = -TERRAIN_SIZE;
+    }
+    else
+        ny1 = TERRAIN_SIZE;
+    if (px1 > py1)
+    {
+        len1 = px1;
+        len2 = py1;
+        d1   = ny1;
+        d2   = nx1;
+    }
+    else
+    {
+        len1 = py1;
+        len2 = px1;
+        d1   = nx1;
+        d2   = ny1;
+    }
 
     int error = 0, count = 0;
-    do {
+    do
+    {
         int _type = (SelectedCharacter >= 0 ? CharactersClient[SelectedCharacter].Object.Type : 0);
-        if ((_type != MODEL_EVIL_GATE && _type != MODEL_LION_GATE && _type != MODEL_STAR_GATE && _type != MODEL_RUSH_GATE)
-            && (TerrainWall[Index] >= TW_NOMOVE && (TerrainWall[Index] & TW_ACTION) != TW_ACTION && (TerrainWall[Index] & TW_HEIGHT) != TW_HEIGHT && (TerrainWall[Index] & TW_CAMERA_UP) != TW_CAMERA_UP))
+        if ((_type != MODEL_EVIL_GATE && _type != MODEL_LION_GATE && _type != MODEL_STAR_GATE &&
+             _type != MODEL_RUSH_GATE) &&
+            (TerrainWall[Index] >= TW_NOMOVE && (TerrainWall[Index] & TW_ACTION) != TW_ACTION &&
+             (TerrainWall[Index] & TW_HEIGHT) != TW_HEIGHT && (TerrainWall[Index] & TW_CAMERA_UP) != TW_CAMERA_UP))
         {
             return false;
         }
@@ -549,11 +575,14 @@ bool CheckAttack_Fenrir(CHARACTER* c)
     }
     else if (::IsStrifeMap(gMapManager.WorldActive) && c != Hero && c->m_byGensInfluence != Hero->m_byGensInfluence)
     {
-        if (((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) || (g_pPartyManager->IsPartyMember(SelectedCharacter))) && (Core::Input::IsKeyDown(VK_CONTROL)))
+        if (((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) ||
+             (g_pPartyManager->IsPartyMember(SelectedCharacter))) &&
+            (Core::Input::IsKeyDown(VK_CONTROL)))
         {
             return true;
         }
-        else if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) != 0) && !g_pPartyManager->IsPartyMember(SelectedCharacter))
+        else if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) != 0) &&
+                 !g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
             return true;
         }
@@ -575,12 +604,9 @@ bool CheckAttack_Fenrir(CHARACTER* c)
     {
         if (battleCastle::IsBattleCastleStart())
         {
-            if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-                || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2
-                || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3
-                || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2
-                || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3
-                ) &&
+            if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK ||
+                 Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 ||
+                 Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3) &&
                 (c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
             {
                 if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
@@ -592,10 +618,10 @@ bool CheckAttack_Fenrir(CHARACTER* c)
                     return false;
                 }
             }
-            else if ((Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-                && (c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK
-                    || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3
-                    || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
+            else if ((Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK) &&
+                     (c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK ||
+                      c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 ||
+                      c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
             {
                 if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
                 {
@@ -606,14 +632,14 @@ bool CheckAttack_Fenrir(CHARACTER* c)
                     return false;
                 }
             }
-            else if (g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack1)
-                || g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack2)
-                || g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack3))
+            else if (g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack1) ||
+                     g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack2) ||
+                     g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack3))
             {
                 OBJECT* o = &c->Object;
-                if (!g_isCharacterBuff(o, eBuff_CastleRegimentAttack1)
-                    && !g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
-                    && !g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
+                if (!g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) &&
+                    !g_isCharacterBuff(o, eBuff_CastleRegimentAttack2) &&
+                    !g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
                 {
                     if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
                     {
@@ -643,15 +669,15 @@ bool CheckAttack_Fenrir(CHARACTER* c)
             }
         }
 
-        if (c->GuildRelationShip == GR_RIVAL || c->GuildRelationShip == GR_RIVALUNION)		//박종훈 표시
+        if (c->GuildRelationShip == GR_RIVAL || c->GuildRelationShip == GR_RIVALUNION)  //박종훈 표시
         {
             return true;
         }
 
-        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1
-            && wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
+        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
+            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
-            return  false;
+            return false;
         }
 
         else if (g_DuelMgr.IsDuelEnabled())
@@ -774,7 +800,7 @@ bool CheckAttack()
         {
             if (c->GuildTeam == 2 && c != Hero)
                 return true;
-            else/* if(c->GuildRelationShip == GR_NONE)*/
+            else /* if(c->GuildRelationShip == GR_NONE)*/
                 return false;
         }
         else if (g_pPartyManager->IsPartyMember(SelectedCharacter))
@@ -813,10 +839,10 @@ bool CheckAttack()
     {
         if (battleCastle::IsBattleCastleStart())
         {
-            if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-                || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3
-                || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3)
-                && (c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
+            if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK ||
+                 Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 ||
+                 Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3) &&
+                (c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
             {
                 if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
                 {
@@ -827,10 +853,10 @@ bool CheckAttack()
                     return false;
                 }
             }
-            else if ((Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-                && (c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK
-                    || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3
-                    || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
+            else if ((Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK) &&
+                     (c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK ||
+                      c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 ||
+                      c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
             {
                 if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
                 {
@@ -841,15 +867,15 @@ bool CheckAttack()
                     return false;
                 }
             }
-            else if (g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack1)
-                || g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack2)
-                || g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack3))
+            else if (g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack1) ||
+                     g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack2) ||
+                     g_isCharacterBuff((&Hero->Object), eBuff_CastleRegimentAttack3))
             {
                 OBJECT* o = &c->Object;
 
-                if (!g_isCharacterBuff(o, eBuff_CastleRegimentAttack1)
-                    && !g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
-                    && !g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
+                if (!g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) &&
+                    !g_isCharacterBuff(o, eBuff_CastleRegimentAttack2) &&
+                    !g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
                 {
                     if (!g_isCharacterBuff((&c->Object), eBuff_Cloaking))
                     {
@@ -884,10 +910,10 @@ bool CheckAttack()
             return true;
         }
 
-        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1
-            && wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
+        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
+            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
-            return  false;
+            return false;
         }
         else if (g_DuelMgr.IsDuelEnabled())
         {
@@ -936,7 +962,7 @@ bool CheckAttack()
     return false;
 }
 
-int	getTargetCharacterKey(CHARACTER* c, int selected)
+int getTargetCharacterKey(CHARACTER* c, int selected)
 {
     if (SEASON3B::CNewUIInventoryCtrl::GetPickedItem())
     {
@@ -960,9 +986,10 @@ int	getTargetCharacterKey(CHARACTER* c, int selected)
         return sc->Key;
     }
 
-    if (EnableGuildWar && sc->PK >= PVP_MURDERER2 && sc->GuildMarkIndex != -1 && wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == 0)
+    if (EnableGuildWar && sc->PK >= PVP_MURDERER2 && sc->GuildMarkIndex != -1 &&
+        wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == 0)
     {
-        return  -1;
+        return -1;
     }
 
     if (g_DuelMgr.IsDuelEnabled())
@@ -990,7 +1017,8 @@ int	getTargetCharacterKey(CHARACTER* c, int selected)
         return -1;
     }
 
-    if (::IsStrifeMap(gMapManager.WorldActive) && sc != Hero && sc->m_byGensInfluence != Hero->m_byGensInfluence && !Core::Input::IsKeyDown(VK_MENU))
+    if (::IsStrifeMap(gMapManager.WorldActive) && sc != Hero && sc->m_byGensInfluence != Hero->m_byGensInfluence &&
+        !Core::Input::IsKeyDown(VK_MENU))
     {
         if (sc->GuildRelationShip == GR_NONE && !g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
@@ -1009,7 +1037,8 @@ int	getTargetCharacterKey(CHARACTER* c, int selected)
         }
     }
 
-    if ((sc->PK >= PVP_MURDERER2 && sc->Object.Kind == KIND_PLAYER) || (Core::Input::IsKeyDown(VK_CONTROL) && sc != Hero))
+    if ((sc->PK >= PVP_MURDERER2 && sc->Object.Kind == KIND_PLAYER) ||
+        (Core::Input::IsKeyDown(VK_CONTROL) && sc != Hero))
     {
         return sc->Key;
     }
@@ -1027,7 +1056,8 @@ int	getTargetCharacterKey(CHARACTER* c, int selected)
     return sc->Key;
 }
 
-void SendCharacterMove(unsigned short Key, float Angle, unsigned char PathNum, unsigned char* PathX, unsigned char* PathY, unsigned char TargetX, unsigned char TargetY)
+void SendCharacterMove(unsigned short Key, float Angle, unsigned char PathNum, unsigned char* PathX,
+                       unsigned char* PathY, unsigned char TargetX, unsigned char TargetY)
 {
     if (PathNum < 1)
         return;
@@ -1042,7 +1072,7 @@ void SendCharacterMove(unsigned short Key, float Angle, unsigned char PathNum, u
     for (int i = 1; i < PathNum; i++)
     {
         Dir = 0;
-        for (int j = 0; j < 8; j++) // loop to find the direction of this step
+        for (int j = 0; j < 8; j++)  // loop to find the direction of this step
         {
             if (DirTable[j * 2] == (PathX[i] - PathX[i - 1]) && DirTable[j * 2 + 1] == (PathY[i] - PathY[i - 1]))
             {
@@ -1121,10 +1151,12 @@ extern int CurrentSkill;
 inline WORD g_byLastSkillSerialNumber = 0;
 inline BYTE MakeSkillSerialNumber(BYTE* pSerialNumber)
 {
-    if (pSerialNumber == NULL) return 0;
+    if (pSerialNumber == NULL)
+        return 0;
 
     ++g_byLastSkillSerialNumber;
-    if (g_byLastSkillSerialNumber > 50) g_byLastSkillSerialNumber = 1;
+    if (g_byLastSkillSerialNumber > 50)
+        g_byLastSkillSerialNumber = 1;
 
     *pSerialNumber = g_byLastSkillSerialNumber;
     return g_byLastSkillSerialNumber;
@@ -1143,10 +1175,14 @@ BYTE GetDestValue(int xPos, int yPos, int xDst, int yDst)
 {
     int DestX = xDst - xPos;
     int DestY = yDst - yPos;
-    if (DestX < -8) DestX = -8;
-    if (DestX > 7) DestX = 7;
-    if (DestY < -8) DestY = -8;
-    if (DestY > 7) DestY = 7;
+    if (DestX < -8)
+        DestX = -8;
+    if (DestX > 7)
+        DestX = 7;
+    if (DestY < -8)
+        DestY = -8;
+    if (DestY > 7)
+        DestY = 7;
     assert(-8 <= DestX && DestX <= 7);
     assert(-8 <= DestY && DestY <= 7);
     BYTE byValue1 = ((BYTE)(DestX + 8)) << 4;
@@ -1165,10 +1201,11 @@ void ReloadArrow()
 
         bool Success = false;
 
-        if (gCharacterManager.GetBaseClass(CharacterAttribute->Class) == CLASS_ELF && SEASON3B::CNewUIInventoryCtrl::GetPickedItem() == NULL)
+        if (gCharacterManager.GetBaseClass(CharacterAttribute->Class) == CLASS_ELF &&
+            SEASON3B::CNewUIInventoryCtrl::GetPickedItem() == NULL)
         {
-            rp = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT];
-            lp = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
+            rp      = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT];
+            lp      = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
             Success = true;
         }
 
@@ -1180,23 +1217,24 @@ void ReloadArrow()
                 SEASON3B::CNewUIInventoryCtrl::CreatePickedItem(g_pMyInventory->GetInventoryCtrl(), pItem);
                 if (pItem)
                 {
-                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, Index, pItem, STORAGE_TYPE::INVENTORY, EQUIPMENT_WEAPON_RIGHT);
+                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, Index, pItem, STORAGE_TYPE::INVENTORY,
+                                             EQUIPMENT_WEAPON_RIGHT);
                 }
                 g_pMyInventory->DeleteItem(Index);
                 g_pSystemLogBox->AddText(I18N::Game::ArrowsReloaded, SEASON3B::TYPE_SYSTEM_MESSAGE);
             }
-            else
-                if ((gCharacterManager.GetEquipedBowType(rp) == BOWTYPE_CROSSBOW) && (lp->Type == -1))
+            else if ((gCharacterManager.GetEquipedBowType(rp) == BOWTYPE_CROSSBOW) && (lp->Type == -1))
+            {
+                ITEM* pItem = g_pMyInventory->FindItem(Index);
+                SEASON3B::CNewUIInventoryCtrl::CreatePickedItem(g_pMyInventory->GetInventoryCtrl(), pItem);
+                if (pItem)
                 {
-                    ITEM* pItem = g_pMyInventory->FindItem(Index);
-                    SEASON3B::CNewUIInventoryCtrl::CreatePickedItem(g_pMyInventory->GetInventoryCtrl(), pItem);
-                    if (pItem)
-                    {
-                        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, Index, pItem, STORAGE_TYPE::INVENTORY, EQUIPMENT_WEAPON_LEFT);
-                    }
-                    g_pMyInventory->DeleteItem(Index);
-                    g_pSystemLogBox->AddText(I18N::Game::ArrowsReloaded, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, Index, pItem, STORAGE_TYPE::INVENTORY,
+                                             EQUIPMENT_WEAPON_LEFT);
                 }
+                g_pMyInventory->DeleteItem(Index);
+                g_pSystemLogBox->AddText(I18N::Game::ArrowsReloaded, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            }
         }
     }
     else
@@ -1211,7 +1249,7 @@ void ReloadArrow()
 bool CheckArrow()
 {
     int Right = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
-    int Left = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
+    int Left  = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
 
     if (gCharacterManager.GetEquipedBowType() == BOWTYPE_CROSSBOW)
     {
@@ -1238,7 +1276,7 @@ void SendRequestAction(OBJECT& obj, BYTE action)
     SocketClient->ToGameServer()->SendAnimationRequest(rotation, action);
 }
 
-int ItemKey = 0;
+int ItemKey      = 0;
 int ActionTarget = -1;
 
 void Action(CHARACTER* c, OBJECT* o, bool Now)
@@ -1246,596 +1284,642 @@ void Action(CHARACTER* c, OBJECT* o, bool Now)
     float Range = 1.8f;
     switch (c->MovementType)
     {
-    case MOVEMENT_ATTACK:
-    {
-        int Right = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
-        int Left = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
+        case MOVEMENT_ATTACK: {
+            int Right = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
+            int Left  = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
 
-        if (Right >= ITEM_SPEAR && Right < ITEM_SPEAR + MAX_ITEM_INDEX)
-        {
-            Range = 2.2f;
-        }
-
-        if (gCharacterManager.GetEquipedBowType() != BOWTYPE_NONE)
-        {
-            Range = 6.f;
-        }
-
-        if (ActionTarget == -1)
-            return;
-
-        // To debounce repeat left-clicks while a swing animation is still
-        // playing, gate on a small *include* list of the actual swing
-        // animations -- never a `>= … <=` range, which would also sweep in
-        // idle/locomotion frames and lock out attacks while mounted. e.g.:
-        //
-        //   if (o->CurrentAction == PLAYER_ATTACK_FIST
-        //    || o->CurrentAction == PLAYER_ATTACK_SWORD_RIGHT1
-        //    || ... )
-        //       break;
-
-        if (ActionTarget < 0 || ActionTarget >= MAX_CHARACTERS_CLIENT)
-            break;
-
-        TargetX = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
-        TargetY = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
-
-        if (c->SafeZone)
-        {
-            break;
-        }
-        else if (!CheckTile(c, o, Range))
-        {
-            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
+            if (Right >= ITEM_SPEAR && Right < ITEM_SPEAR + MAX_ITEM_INDEX)
             {
-                if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Range))
-                {
-                    c->Movement = true;
-                }
+                Range = 2.2f;
             }
-            break;
-        }
 
-        MouseUpdateTime = MouseUpdateTimeMax;
-        SetPlayerAttack(c);
-        c->AttackTime = 1;
-        VectorCopy(CharactersClient[ActionTarget].Object.Position, c->TargetPosition);
-        o->Angle[2] = CreateAngle2D(o->Position, c->TargetPosition);
-        LetHeroStop();
-        c->Movement = false;
-        BYTE PathX[1];
-        BYTE PathY[1];
-        PathX[0] = (c->PositionX);
-        PathY[0] = (c->PositionY);
-        c->TargetCharacter = ActionTarget;
-        int Dir = ((BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8);
-        c->Skill = 0;
-        SocketClient->ToGameServer()->SendHitRequest(CharactersClient[ActionTarget].Key, AT_ATTACK1, Dir);
-    }
-    break;
-    case MOVEMENT_SKILL:
-    {
-        auto iSkill = static_cast<ActionSkillType>((g_MovementSkill.m_bMagic) ? (CharacterAttribute->Skill[g_MovementSkill.m_iSkill]) : g_MovementSkill.m_iSkill);
+            if (gCharacterManager.GetEquipedBowType() != BOWTYPE_NONE)
+            {
+                Range = 6.f;
+            }
 
-        float Distance = gSkillManager.GetSkillDistance(iSkill, c);
-        switch (iSkill)
-        {
-        case AT_SKILL_IMPALE:
-            if (Hero->Helper.Type != MODEL_HORN_OF_UNIRIA)
+            if (ActionTarget == -1)
+                return;
+
+            // To debounce repeat left-clicks while a swing animation is still
+            // playing, gate on a small *include* list of the actual swing
+            // animations -- never a `>= … <=` range, which would also sweep in
+            // idle/locomotion frames and lock out attacks while mounted. e.g.:
+            //
+            //   if (o->CurrentAction == PLAYER_ATTACK_FIST
+            //    || o->CurrentAction == PLAYER_ATTACK_SWORD_RIGHT1
+            //    || ... )
+            //       break;
+
+            if (ActionTarget < 0 || ActionTarget >= MAX_CHARACTERS_CLIENT)
+                break;
+
+            TargetX = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
+            TargetY = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
+
+            if (c->SafeZone)
             {
                 break;
             }
-        case AT_SKILL_DEATHSTAB:
-        case AT_SKILL_DEATHSTAB_STR:
-        case AT_SKILL_RIDER:
-        case AT_SKILL_FALLING_SLASH:
-        case AT_SKILL_FALLING_SLASH_STR:
-        case AT_SKILL_LUNGE:
-        case AT_SKILL_LUNGE_STR:
-        case AT_SKILL_UPPERCUT:
-        case AT_SKILL_CYCLONE:
-        case AT_SKILL_CYCLONE_STR:
-        case AT_SKILL_CYCLONE_STR_MG:
-        case AT_SKILL_SLASH:
-        case AT_SKILL_SLASH_STR:
-        case AT_SKILL_FORCE:
-        case AT_SKILL_FORCE_WAVE:
-        case AT_SKILL_FORCE_WAVE_STR:
-        case AT_SKILL_FIREBURST:
-        case AT_SKILL_FIREBURST_STR:
-        case AT_SKILL_FIREBURST_MASTERY:
-        case AT_SKILL_RUSH:
-        case AT_SKILL_SPACE_SPLIT:
-        case AT_SKILL_SPIRAL_SLASH:
-            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT && CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+            else if (!CheckTile(c, o, Range))
             {
-                TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
-                if (CheckTile(c, o, Distance * 1.2f) && !c->SafeZone)
+                if (gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
                 {
-                    GameLogic::Combat::UseSkillWarrior(c, o);
-                }
-                else
-                {
-                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance * 1.2f))
+                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Range))
                     {
                         c->Movement = true;
                     }
                 }
-            }
-            break;
-        case AT_SKILL_POISON:
-        case AT_SKILL_POISON_STR:
-        case AT_SKILL_METEO:
-        case AT_SKILL_LIGHTNING:
-        case AT_SKILL_LIGHTNING_STR:
-        case AT_SKILL_LIGHTNING_STR_MG:
-        case AT_SKILL_ENERGYBALL:
-        case AT_SKILL_POWERWAVE:
-        case AT_SKILL_ICE:
-        case AT_SKILL_ICE_STR:
-        case AT_SKILL_ICE_STR_MG:
-        case AT_SKILL_FIREBALL:
-        case AT_SKILL_JAVELIN:
-        case AT_SKILL_DEATH_CANNON:
-            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT && CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
-            {
-                TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
-                if (CheckTile(c, o, Distance) && !c->SafeZone)
-                {
-                    bool Wall = CheckWall((c->PositionX),
-                        (c->PositionY), TargetX, TargetY);
-                    if (Wall)
-                    {
-                        GameLogic::Combat::UseSkillWizard(c, o);
-                    }
-                }
-                else
-                {
-                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
-                    {
-                        c->Movement = true;
-                    }
-                }
-            }
-            break;
-        case AT_SKILL_DEEPIMPACT:
-        case AT_SKILL_ICE_ARROW:
-        case AT_SKILL_ICE_ARROW_STR:
-            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT && CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
-            {
-                TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
-                if (CheckTile(c, o, Distance) && !c->SafeZone)
-                {
-                    bool Wall = CheckWall((c->PositionX),
-                        (c->PositionY), TargetX, TargetY);
-                    if (Wall)
-                    {
-                        GameLogic::Combat::UseSkillElf(c, o);
-                    }
-                }
-                else
-                {
-                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
-                    {
-                        c->Movement = true;
-                    }
-                }
-            }
-            break;
-        case AT_SKILL_HEALING:
-        case AT_SKILL_HEALING_STR:
-        case AT_SKILL_ATTACK:
-        case AT_SKILL_ATTACK_STR:
-        case AT_SKILL_ATTACK_MASTERY:
-        case AT_SKILL_DEFENSE:
-        case AT_SKILL_DEFENSE_STR:
-        case AT_SKILL_DEFENSE_MASTERY:
-            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT && CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
-            {
-                TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
-                if (CheckTile(c, o, Distance) && !c->SafeZone)
-                {
-                    bool Wall = CheckWall((c->PositionX),
-                        (c->PositionY), TargetX, TargetY);
-                    if (Wall)
-                    {
-                        GameLogic::Combat::UseSkillElf(c, o);
-                    }
-                }
-                else
-                {
-                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
-                    {
-                        c->Movement = true;
-                    }
-                }
-            }
-            break;
-        case AT_SKILL_TWISTING_SLASH:
-        case AT_SKILL_TWISTING_SLASH_STR:
-        case AT_SKILL_TWISTING_SLASH_MASTERY:
-        case AT_SKILL_FIRE_SLASH:
-        case AT_SKILL_FIRE_SLASH_STR:
-        {
-            GameLogic::Combat::AttackKnight(c, iSkill, Distance);
-        }
-        break;
-        case AT_SKILL_KILLING_BLOW:
-        case AT_SKILL_KILLING_BLOW_STR:
-        case AT_SKILL_KILLING_BLOW_MASTERY:
-        case AT_SKILL_BEAST_UPPERCUT:
-        case AT_SKILL_BEAST_UPPERCUT_STR:
-        case AT_SKILL_BEAST_UPPERCUT_MASTERY:
-        case AT_SKILL_CHAIN_DRIVE:
-        case AT_SKILL_CHAIN_DRIVE_STR:
-        case AT_SKILL_DRAGON_KICK:
-        case AT_SKILL_DRAGON_ROAR:
-        case AT_SKILL_DRAGON_ROAR_STR:
-        case AT_SKILL_OCCUPY:
-        case AT_SKILL_PHOENIX_SHOT:
-        {
-            g_ConsoleDebug->Write(MCD_RECEIVE, L"Action ID : %d, %d | %d %d | %d %d", iSkill, Distance, CharactersClient[g_MovementSkill.m_iTarget].Dead, g_MovementSkill.m_iTarget,
-                CheckTile(c, o, Distance * 1.2f), !c->SafeZone);
-            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT && CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
-            {
-                TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
-                if (CheckTile(c, o, Distance * 1.2f) && !c->SafeZone) {
-                    GameLogic::Combat::UseSkillRagefighter(c, o);
-                    g_ConsoleDebug->Write(MCD_RECEIVE, L"Success attack ID : %d, %d", iSkill, Distance);
-                }
-                else
-                {
-                    if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance * 1.2f))
-                        c->Movement = true;
-                }
-            }
-        }
-        break;
-        }
-    }
-    break;
-    case MOVEMENT_GET:
-        if (!g_bAutoGetItem)
-        {
-            if (CheckTile(c, o, 1.5f) == false)
-            {
                 break;
             }
-            MouseUpdateTimeMax = 6;
-        }
 
-        if (ItemKey < 0 || ItemKey >= MAX_ITEMS) break;
-        if (Items[ItemKey].Item.Type == ITEM_ZEN && SendGetItem == -1)
-        {
-            SendGetItem = ItemKey;
-            SocketClient->ToGameServer()->SendPickupItemRequest(ItemKey);
-        }
-        else if (g_pMyInventory->FindEmptySlotIncludingExtensions(&Items[ItemKey].Item) == -1)
-        {
-            wchar_t Text[256];
-            mu_swprintf(Text, I18N::Game::InventoryIsFull);
-
-            g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
-
-            OBJECT* pItem = &(Items[ItemKey].Object);
-            pItem->Position[2] = RequestTerrainHeight(pItem->Position[0], pItem->Position[1]) + 3.f;
-            pItem->Gravity = 50.f;
-        }
-        else if (SendGetItem == -1)
-        {
-            SendGetItem = ItemKey;
-            SocketClient->ToGameServer()->SendPickupItemRequest(ItemKey);
+            MouseUpdateTime = MouseUpdateTimeMax;
+            SetPlayerAttack(c);
+            c->AttackTime = 1;
+            VectorCopy(CharactersClient[ActionTarget].Object.Position, c->TargetPosition);
+            o->Angle[2] = CreateAngle2D(o->Position, c->TargetPosition);
+            LetHeroStop();
+            c->Movement = false;
+            BYTE PathX[1];
+            BYTE PathY[1];
+            PathX[0]           = (c->PositionX);
+            PathY[0]           = (c->PositionY);
+            c->TargetCharacter = ActionTarget;
+            int Dir            = ((BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8);
+            c->Skill           = 0;
+            SocketClient->ToGameServer()->SendHitRequest(CharactersClient[ActionTarget].Key, AT_ATTACK1, Dir);
         }
         break;
-	case MOVEMENT_TALK :
-		{
-			MouseUpdateTimeMax = 12;
+        case MOVEMENT_SKILL: {
+            auto iSkill = static_cast<ActionSkillType>((g_MovementSkill.m_bMagic)
+                                                           ? (CharacterAttribute->Skill[g_MovementSkill.m_iSkill])
+                                                           : g_MovementSkill.m_iSkill);
 
-			const bool isCryWolfElf = M34CryWolf1st::Get_State_Only_Elf() && M34CryWolf1st::IsCyrWolf1st();
-			if (!isCryWolfElf)
-			{
-				SetPlayerStop(c);
-				c->Movement = false;
-			}
-
-			if (TargetNpc == -1)
-				break;
-
-			// === Rozpoznanie napotkanego NPC ===
-			const int npcIndex = 205;
-			const int monsterIndex = CharactersClient[TargetNpc].MonsterIndex;
-
-			if (monsterIndex >= npcIndex)
-			{
-				const int level = CharacterAttribute->Level;
-
-				if (monsterIndex == MONSTER_CHAOS_GOBLIN && level < 10)
-				{
-					wchar_t text[100];
-					mu_swprintf(text, I18N::Game::OnlyLevelAboveDCanDoTheChaosCombination, CHAOS_MIX_LEVEL);
-					g_pSystemLogBox->AddText(text, SEASON3B::TYPE_SYSTEM_MESSAGE);
-					break;
-				}
-
-				// Sklepy
-				bool isRepairNpc =
-					monsterIndex == MONSTER_EO_THE_CRAFTSMAN ||
-					monsterIndex == MONSTER_ZIENNA_THE_WEAPONS_MERCHANT ||
-					monsterIndex == MONSTER_HANZO_THE_BLACKSMITH ||
-					monsterIndex == MONSTER_RHEA ||
-					monsterIndex == MONSTER_WEAPONS_MERCHANT_BOLO;
-
-				g_pNPCShop->SetRepairShop(isRepairNpc);
-
-				if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MYQUEST))
-					g_pNewUISystem->Hide(SEASON3B::INTERFACE_MYQUEST);
-
-				if (g_csQuest.IsInit())
-					SocketClient->ToGameServer()->SendLegacyQuestStateRequest();
-
-				// === Specjalne rozmowy ===
-				const int objectType = CharactersClient[TargetNpc].Object.Type;
-				if (isCryWolfElf)
-				{
-					if (objectType >= MODEL_CRYWOLF_ALTAR1 && objectType <= MODEL_CRYWOLF_ALTAR5)
-					{
-						const int altarNum = objectType - MODEL_CRYWOLF_ALTAR1;
-						const bool isElf = gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF;
-						const bool altarActive = M34CryWolf1st::Get_AltarState_State(altarNum);
-						const BYTE state = (m_AltarState[altarNum] & 0x0f);
-
-						if (isElf && !altarActive)
-						{
-							if (state > 0)
-								SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Get_Temple));
-							else
-								SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Destroy_Set_Temple));
-						}
-						else if (isElf && altarActive)
-						{
-							SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Ing_Set_Temple));
-						}
-						else
-						{
-							SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-						}
-					}
-					else
-					{
-						SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-					}
-				}
-				else if (M34CryWolf1st::IsCyrWolf1st())
-				{
-					if (!(objectType >= MODEL_CRYWOLF_ALTAR1 && objectType <= MODEL_CRYWOLF_ALTAR5))
-					{
-						if (objectType == MODEL_NPC_QUARREL)
-							SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CMapEnterWerwolfMsgBoxLayout));
-
-						SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-					}
-				}
-				else if (SEASON3A::CGM3rdChangeUp::Instance().IsBalgasBarrackMap())
-				{
-					SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-					SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CMapEnterGateKeeperMsgBoxLayout));
-				}
-				else if (monsterIndex >= MONSTER_LITTLE_SANTA_YELLOW && monsterIndex <= MONSTER_LITTLE_SANTA_PINK)
-				{
-					SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-
-					wchar_t temp[32] = { 0 };
-					if (monsterIndex == MONSTER_LITTLE_SANTA_RED)
-						mu_swprintf(temp, I18N::Game::HealthHasBeenRecoveredOf100, 100);
-					else if (monsterIndex == MONSTER_LITTLE_SANTA_BLUE)
-						mu_swprintf(temp, I18N::Game::ManaHasBeenRecoveredOf100, 100);
-
-					g_pSystemLogBox->AddText(temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
-				}
-				else if (monsterIndex == MONSTER_DELGADO || monsterIndex == MONSTER_LUGARD ||
-					monsterIndex == MONSTER_MARKET_UNION_MEMBER_JULIA || monsterIndex == MONSTER_DAVID)
-				{
-					SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-				}
-				else
-				{
-					if (M38Kanturu2nd::Is_Kanturu2nd())
-					{
-						if (!g_pKanturu2ndEnterNpc->IsNpcAnimation())
-							SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-					}
-					else if (gMapManager.IsCursedTemple())
-					{
-						if (!g_CursedTemple->IsGaugebarEnabled())
-						{
-							if (
-								CharactersClient[TargetNpc].MonsterIndex == MONSTER_STONE_STATUE ||
-								(g_pCursedTempleWindow->CheckInventoryHolyItem(Hero) &&
-									((g_pCursedTempleWindow->GetMyTeam() == SEASON3A::eTeam_Allied && monsterIndex == MONSTER_ALLIANCE_ITEM_STORAGE) ||
-										(g_pCursedTempleWindow->GetMyTeam() == SEASON3A::eTeam_Illusion && monsterIndex == MONSTER_ILLUSION_ITEM_STORAGE)))
-								)
-							{
-								g_CursedTemple->SetGaugebarEnabled(true);
-							}
-							g_pCursedTempleWindow->CheckTalkProgressNpc(monsterIndex, CharactersClient[TargetNpc].Key);
-						}
-					}
-					else
-					{
-						SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
-					}
-				}
-
-				bCheckNPC = (monsterIndex == MONSTER_MARLON);
-
-				if (monsterIndex == MONSTER_PET_TRAINER)
-				{
-					ITEM* pItem = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
-					if (pItem->Type == ITEM_DARK_HORSE_ITEM)
-						SocketClient->ToGameServer()->SendPetInfoRequest(PetType::DarkHorse, StorageType::Inventory, EQUIPMENT_HELPER);
-
-					pItem = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
-					if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
-						SocketClient->ToGameServer()->SendPetInfoRequest(PetType::DarkRaven, StorageType::Inventory, EQUIPMENT_WEAPON_LEFT);
-				}
-			}
-
-			TargetNpc = -1;
-			break;
-		}
-    case MOVEMENT_OPERATE:
-        if (std::max<int>(abs((Hero->PositionX) - TargetX), abs((Hero->PositionY) - TargetY)) <= 1)
-        {
-            bool Healing = false;
-            bool Pose = false;
-            bool Sit = false;
-            if (gMapManager.WorldActive == WD_0LORENCIA)
+            float Distance = gSkillManager.GetSkillDistance(iSkill, c);
+            switch (iSkill)
             {
-                switch (TargetType)
+                case AT_SKILL_IMPALE:
+                    if (Hero->Helper.Type != MODEL_HORN_OF_UNIRIA)
+                    {
+                        break;
+                    }
+                case AT_SKILL_DEATHSTAB:
+                case AT_SKILL_DEATHSTAB_STR:
+                case AT_SKILL_RIDER:
+                case AT_SKILL_FALLING_SLASH:
+                case AT_SKILL_FALLING_SLASH_STR:
+                case AT_SKILL_LUNGE:
+                case AT_SKILL_LUNGE_STR:
+                case AT_SKILL_UPPERCUT:
+                case AT_SKILL_CYCLONE:
+                case AT_SKILL_CYCLONE_STR:
+                case AT_SKILL_CYCLONE_STR_MG:
+                case AT_SKILL_SLASH:
+                case AT_SKILL_SLASH_STR:
+                case AT_SKILL_FORCE:
+                case AT_SKILL_FORCE_WAVE:
+                case AT_SKILL_FORCE_WAVE_STR:
+                case AT_SKILL_FIREBURST:
+                case AT_SKILL_FIREBURST_STR:
+                case AT_SKILL_FIREBURST_MASTERY:
+                case AT_SKILL_RUSH:
+                case AT_SKILL_SPACE_SPLIT:
+                case AT_SKILL_SPIRAL_SLASH:
+                    if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+                        CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+                    {
+                        TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
+                        TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
+                        if (CheckTile(c, o, Distance * 1.2f) && !c->SafeZone)
+                        {
+                            GameLogic::Combat::UseSkillWarrior(c, o);
+                        }
+                        else
+                        {
+                            if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance * 1.2f))
+                            {
+                                c->Movement = true;
+                            }
+                        }
+                    }
+                    break;
+                case AT_SKILL_POISON:
+                case AT_SKILL_POISON_STR:
+                case AT_SKILL_METEO:
+                case AT_SKILL_LIGHTNING:
+                case AT_SKILL_LIGHTNING_STR:
+                case AT_SKILL_LIGHTNING_STR_MG:
+                case AT_SKILL_ENERGYBALL:
+                case AT_SKILL_POWERWAVE:
+                case AT_SKILL_ICE:
+                case AT_SKILL_ICE_STR:
+                case AT_SKILL_ICE_STR_MG:
+                case AT_SKILL_FIREBALL:
+                case AT_SKILL_JAVELIN:
+                case AT_SKILL_DEATH_CANNON:
+                    if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+                        CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+                    {
+                        TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
+                        TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
+                        if (CheckTile(c, o, Distance) && !c->SafeZone)
+                        {
+                            bool Wall = CheckWall((c->PositionX), (c->PositionY), TargetX, TargetY);
+                            if (Wall)
+                            {
+                                GameLogic::Combat::UseSkillWizard(c, o);
+                            }
+                        }
+                        else
+                        {
+                            if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
+                            {
+                                c->Movement = true;
+                            }
+                        }
+                    }
+                    break;
+                case AT_SKILL_DEEPIMPACT:
+                case AT_SKILL_ICE_ARROW:
+                case AT_SKILL_ICE_ARROW_STR:
+                    if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+                        CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+                    {
+                        TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
+                        TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
+                        if (CheckTile(c, o, Distance) && !c->SafeZone)
+                        {
+                            bool Wall = CheckWall((c->PositionX), (c->PositionY), TargetX, TargetY);
+                            if (Wall)
+                            {
+                                GameLogic::Combat::UseSkillElf(c, o);
+                            }
+                        }
+                        else
+                        {
+                            if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
+                            {
+                                c->Movement = true;
+                            }
+                        }
+                    }
+                    break;
+                case AT_SKILL_HEALING:
+                case AT_SKILL_HEALING_STR:
+                case AT_SKILL_ATTACK:
+                case AT_SKILL_ATTACK_STR:
+                case AT_SKILL_ATTACK_MASTERY:
+                case AT_SKILL_DEFENSE:
+                case AT_SKILL_DEFENSE_STR:
+                case AT_SKILL_DEFENSE_MASTERY:
+                    if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+                        CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+                    {
+                        TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
+                        TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
+                        if (CheckTile(c, o, Distance) && !c->SafeZone)
+                        {
+                            bool Wall = CheckWall((c->PositionX), (c->PositionY), TargetX, TargetY);
+                            if (Wall)
+                            {
+                                GameLogic::Combat::UseSkillElf(c, o);
+                            }
+                        }
+                        else
+                        {
+                            if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance))
+                            {
+                                c->Movement = true;
+                            }
+                        }
+                    }
+                    break;
+                case AT_SKILL_TWISTING_SLASH:
+                case AT_SKILL_TWISTING_SLASH_STR:
+                case AT_SKILL_TWISTING_SLASH_MASTERY:
+                case AT_SKILL_FIRE_SLASH:
+                case AT_SKILL_FIRE_SLASH_STR: {
+                    GameLogic::Combat::AttackKnight(c, iSkill, Distance);
+                }
+                break;
+                case AT_SKILL_KILLING_BLOW:
+                case AT_SKILL_KILLING_BLOW_STR:
+                case AT_SKILL_KILLING_BLOW_MASTERY:
+                case AT_SKILL_BEAST_UPPERCUT:
+                case AT_SKILL_BEAST_UPPERCUT_STR:
+                case AT_SKILL_BEAST_UPPERCUT_MASTERY:
+                case AT_SKILL_CHAIN_DRIVE:
+                case AT_SKILL_CHAIN_DRIVE_STR:
+                case AT_SKILL_DRAGON_KICK:
+                case AT_SKILL_DRAGON_ROAR:
+                case AT_SKILL_DRAGON_ROAR_STR:
+                case AT_SKILL_OCCUPY:
+                case AT_SKILL_PHOENIX_SHOT: {
+                    g_ConsoleDebug->Write(MCD_RECEIVE, L"Action ID : %d, %d | %d %d | %d %d", iSkill, Distance,
+                                          CharactersClient[g_MovementSkill.m_iTarget].Dead, g_MovementSkill.m_iTarget,
+                                          CheckTile(c, o, Distance * 1.2f), !c->SafeZone);
+                    if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+                        CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
+                    {
+                        TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
+                        TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
+                        if (CheckTile(c, o, Distance * 1.2f) && !c->SafeZone)
+                        {
+                            GameLogic::Combat::UseSkillRagefighter(c, o);
+                            g_ConsoleDebug->Write(MCD_RECEIVE, L"Success attack ID : %d, %d", iSkill, Distance);
+                        }
+                        else
+                        {
+                            if (PathFinding2(c->PositionX, c->PositionY, TargetX, TargetY, &c->Path, Distance * 1.2f))
+                                c->Movement = true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        break;
+        case MOVEMENT_GET:
+            if (!g_bAutoGetItem)
+            {
+                if (CheckTile(c, o, 1.5f) == false)
                 {
-                case MODEL_POSE_BOX:Pose = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case MODEL_TREE01 + 6:Sit = true; break;
-                case MODEL_FURNITURE01 + 5:Sit = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case MODEL_FURNITURE01 + 6:Sit = true; break;
                     break;
                 }
+                MouseUpdateTimeMax = 6;
             }
-            else if (gMapManager.WorldActive == WD_1DUNGEON)
+
+            if (ItemKey < 0 || ItemKey >= MAX_ITEMS)
+                break;
+            if (Items[ItemKey].Item.Type == ITEM_ZEN && SendGetItem == -1)
             {
-                switch (TargetType)
+                SendGetItem = ItemKey;
+                SocketClient->ToGameServer()->SendPickupItemRequest(ItemKey);
+            }
+            else if (g_pMyInventory->FindEmptySlotIncludingExtensions(&Items[ItemKey].Item) == -1)
+            {
+                wchar_t Text[256];
+                mu_swprintf(Text, I18N::Game::InventoryIsFull);
+
+                g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
+
+                OBJECT* pItem      = &(Items[ItemKey].Object);
+                pItem->Position[2] = RequestTerrainHeight(pItem->Position[0], pItem->Position[1]) + 3.f;
+                pItem->Gravity     = 50.f;
+            }
+            else if (SendGetItem == -1)
+            {
+                SendGetItem = ItemKey;
+                SocketClient->ToGameServer()->SendPickupItemRequest(ItemKey);
+            }
+            break;
+        case MOVEMENT_TALK: {
+            MouseUpdateTimeMax = 12;
+
+            const bool isCryWolfElf = M34CryWolf1st::Get_State_Only_Elf() && M34CryWolf1st::IsCyrWolf1st();
+            if (!isCryWolfElf)
+            {
+                SetPlayerStop(c);
+                c->Movement = false;
+            }
+
+            if (TargetNpc == -1)
+                break;
+
+            // === Rozpoznanie napotkanego NPC ===
+            const int npcIndex     = 205;
+            const int monsterIndex = CharactersClient[TargetNpc].MonsterIndex;
+
+            if (monsterIndex >= npcIndex)
+            {
+                const int level = CharacterAttribute->Level;
+
+                if (monsterIndex == MONSTER_CHAOS_GOBLIN && level < 10)
                 {
-                case 60:Pose = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 59:Sit = true; break;
+                    wchar_t text[100];
+                    mu_swprintf(text, I18N::Game::OnlyLevelAboveDCanDoTheChaosCombination, CHAOS_MIX_LEVEL);
+                    g_pSystemLogBox->AddText(text, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    break;
                 }
-            }
-            else if (gMapManager.WorldActive == WD_2DEVIAS)
-            {
-                switch (TargetType)
+
+                // Sklepy
+                bool isRepairNpc = monsterIndex == MONSTER_EO_THE_CRAFTSMAN ||
+                                   monsterIndex == MONSTER_ZIENNA_THE_WEAPONS_MERCHANT ||
+                                   monsterIndex == MONSTER_HANZO_THE_BLACKSMITH || monsterIndex == MONSTER_RHEA ||
+                                   monsterIndex == MONSTER_WEAPONS_MERCHANT_BOLO;
+
+                g_pNPCShop->SetRepairShop(isRepairNpc);
+
+                if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MYQUEST))
+                    g_pNewUISystem->Hide(SEASON3B::INTERFACE_MYQUEST);
+
+                if (g_csQuest.IsInit())
+                    SocketClient->ToGameServer()->SendLegacyQuestStateRequest();
+
+                // === Specjalne rozmowy ===
+                const int objectType = CharactersClient[TargetNpc].Object.Type;
+                if (isCryWolfElf)
                 {
-                case 91:Pose = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 22:Sit = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 25:Sit = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 40:Sit = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 45:Sit = true; break;
-                case 55:Sit = true; Hero->Object.Angle[2] = TargetAngle; break;
-                case 73:Sit = true; break;
-                }
-            }
-            else if (gMapManager.WorldActive == WD_3NORIA)
-            {
-                switch (TargetType)
-                {
-                case 8:Sit = true; break;
-                case 38:Healing = true; Hero->Object.Angle[2] = TargetAngle; break;
-                }
-            }
-            else if (gMapManager.WorldActive == WD_7ATLANSE)
-            {
-                switch (TargetType)
-                {
-                case 39:Pose = true; Hero->Object.Angle[2] = TargetAngle; break;
-                }
-            }
-            else if (gMapManager.WorldActive == WD_8TARKAN)
-            {
-                switch (TargetType)
-                {
-                case 78:Sit = true; break;
-                }
-            }
-            else if (gMapManager.InBattleCastle())
-            {
-                if (TargetType == 77)
-                {
-                    if (battleCastle::GetGuildMaster(Hero))
+                    if (objectType >= MODEL_CRYWOLF_ALTAR1 && objectType <= MODEL_CRYWOLF_ALTAR5)
                     {
-                        Sit = true;
+                        const int  altarNum    = objectType - MODEL_CRYWOLF_ALTAR1;
+                        const bool isElf       = gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF;
+                        const bool altarActive = M34CryWolf1st::Get_AltarState_State(altarNum);
+                        const BYTE state       = (m_AltarState[altarNum] & 0x0f);
+
+                        if (isElf && !altarActive)
+                        {
+                            if (state > 0)
+                                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Get_Temple));
+                            else
+                                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Destroy_Set_Temple));
+                        }
+                        else if (isElf && altarActive)
+                        {
+                            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCry_Wolf_Ing_Set_Temple));
+                        }
+                        else
+                        {
+                            SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                        }
+                    }
+                    else
+                    {
+                        SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                    }
+                }
+                else if (M34CryWolf1st::IsCyrWolf1st())
+                {
+                    if (!(objectType >= MODEL_CRYWOLF_ALTAR1 && objectType <= MODEL_CRYWOLF_ALTAR5))
+                    {
+                        if (objectType == MODEL_NPC_QUARREL)
+                            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CMapEnterWerwolfMsgBoxLayout));
+
+                        SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                    }
+                }
+                else if (SEASON3A::CGM3rdChangeUp::Instance().IsBalgasBarrackMap())
+                {
+                    SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CMapEnterGateKeeperMsgBoxLayout));
+                }
+                else if (monsterIndex >= MONSTER_LITTLE_SANTA_YELLOW && monsterIndex <= MONSTER_LITTLE_SANTA_PINK)
+                {
+                    SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+
+                    wchar_t temp[32] = {0};
+                    if (monsterIndex == MONSTER_LITTLE_SANTA_RED)
+                        mu_swprintf(temp, I18N::Game::HealthHasBeenRecoveredOf100, 100);
+                    else if (monsterIndex == MONSTER_LITTLE_SANTA_BLUE)
+                        mu_swprintf(temp, I18N::Game::ManaHasBeenRecoveredOf100, 100);
+
+                    g_pSystemLogBox->AddText(temp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                }
+                else if (monsterIndex == MONSTER_DELGADO || monsterIndex == MONSTER_LUGARD ||
+                         monsterIndex == MONSTER_MARKET_UNION_MEMBER_JULIA || monsterIndex == MONSTER_DAVID)
+                {
+                    SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                }
+                else
+                {
+                    if (M38Kanturu2nd::Is_Kanturu2nd())
+                    {
+                        if (!g_pKanturu2ndEnterNpc->IsNpcAnimation())
+                            SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                    }
+                    else if (gMapManager.IsCursedTemple())
+                    {
+                        if (!g_CursedTemple->IsGaugebarEnabled())
+                        {
+                            if (CharactersClient[TargetNpc].MonsterIndex == MONSTER_STONE_STATUE ||
+                                (g_pCursedTempleWindow->CheckInventoryHolyItem(Hero) &&
+                                 ((g_pCursedTempleWindow->GetMyTeam() == SEASON3A::eTeam_Allied &&
+                                   monsterIndex == MONSTER_ALLIANCE_ITEM_STORAGE) ||
+                                  (g_pCursedTempleWindow->GetMyTeam() == SEASON3A::eTeam_Illusion &&
+                                   monsterIndex == MONSTER_ILLUSION_ITEM_STORAGE))))
+                            {
+                                g_CursedTemple->SetGaugebarEnabled(true);
+                            }
+                            g_pCursedTempleWindow->CheckTalkProgressNpc(monsterIndex, CharactersClient[TargetNpc].Key);
+                        }
+                    }
+                    else
+                    {
+                        SocketClient->ToGameServer()->SendTalkToNpcRequest(CharactersClient[TargetNpc].Key);
+                    }
+                }
+
+                bCheckNPC = (monsterIndex == MONSTER_MARLON);
+
+                if (monsterIndex == MONSTER_PET_TRAINER)
+                {
+                    ITEM* pItem = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
+                    if (pItem->Type == ITEM_DARK_HORSE_ITEM)
+                        SocketClient->ToGameServer()->SendPetInfoRequest(PetType::DarkHorse, StorageType::Inventory,
+                                                                         EQUIPMENT_HELPER);
+
+                    pItem = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
+                    if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
+                        SocketClient->ToGameServer()->SendPetInfoRequest(PetType::DarkRaven, StorageType::Inventory,
+                                                                         EQUIPMENT_WEAPON_LEFT);
+                }
+            }
+
+            TargetNpc = -1;
+            break;
+        }
+        case MOVEMENT_OPERATE:
+            if (std::max<int>(abs((Hero->PositionX) - TargetX), abs((Hero->PositionY) - TargetY)) <= 1)
+            {
+                bool Healing = false;
+                bool Pose    = false;
+                bool Sit     = false;
+                if (gMapManager.WorldActive == WD_0LORENCIA)
+                {
+                    switch (TargetType)
+                    {
+                        case MODEL_POSE_BOX:
+                            Pose                  = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case MODEL_TREE01 + 6:
+                            Sit = true;
+                            break;
+                        case MODEL_FURNITURE01 + 5:
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case MODEL_FURNITURE01 + 6:
+                            Sit = true;
+                            break;
+                            break;
+                    }
+                }
+                else if (gMapManager.WorldActive == WD_1DUNGEON)
+                {
+                    switch (TargetType)
+                    {
+                        case 60:
+                            Pose                  = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 59:
+                            Sit = true;
+                            break;
+                    }
+                }
+                else if (gMapManager.WorldActive == WD_2DEVIAS)
+                {
+                    switch (TargetType)
+                    {
+                        case 91:
+                            Pose                  = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 22:
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 25:
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 40:
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 45:
+                            Sit = true;
+                            break;
+                        case 55:
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                        case 73:
+                            Sit = true;
+                            break;
+                    }
+                }
+                else if (gMapManager.WorldActive == WD_3NORIA)
+                {
+                    switch (TargetType)
+                    {
+                        case 8:
+                            Sit = true;
+                            break;
+                        case 38:
+                            Healing               = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                    }
+                }
+                else if (gMapManager.WorldActive == WD_7ATLANSE)
+                {
+                    switch (TargetType)
+                    {
+                        case 39:
+                            Pose                  = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                            break;
+                    }
+                }
+                else if (gMapManager.WorldActive == WD_8TARKAN)
+                {
+                    switch (TargetType)
+                    {
+                        case 78:
+                            Sit = true;
+                            break;
+                    }
+                }
+                else if (gMapManager.InBattleCastle())
+                {
+                    if (TargetType == 77)
+                    {
+                        if (battleCastle::GetGuildMaster(Hero))
+                        {
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                        }
+                    }
+                    else if (TargetType == 84)
+                    {
+                        Sit                   = true;
                         Hero->Object.Angle[2] = TargetAngle;
                     }
                 }
-                else if (TargetType == 84)
+                else if (M38Kanturu2nd::Is_Kanturu2nd())
                 {
-                    Sit = true;
-                    Hero->Object.Angle[2] = TargetAngle;
+                    if (TargetType == 3)
+                    {
+                        Sit = true;
+                    }
                 }
-            }
-            else if (M38Kanturu2nd::Is_Kanturu2nd())
-            {
-                if (TargetType == 3)
+                else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
                 {
-                    Sit = true;
+                    switch (TargetType)
+                    {
+                        case 103: {
+                            Sit                   = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                        }
+                        break;
+                    }
                 }
-            }
-            else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
-            {
-                switch (TargetType)
+                else if (gMapManager.WorldActive == WD_79UNITEDMARKETPLACE)
                 {
-                case 103:
+                    switch (TargetType)
+                    {
+                        case 67: {
+                            Pose                  = true;
+                            Hero->Object.Angle[2] = TargetAngle;
+                        }
+                        break;
+                    }
+                }
+                if (Healing)
                 {
-                    Sit = true;
-                    Hero->Object.Angle[2] = TargetAngle;
+                    if (!gCharacterManager.IsFemale(c->Class))
+                        SetAction(o, PLAYER_HEALING1);
+                    else
+                        SetAction(o, PLAYER_HEALING_FEMALE1);
+                    SendRequestAction(Hero->Object, AT_HEALING1);
                 }
-                break;
-                }
-            }
-            else if (gMapManager.WorldActive == WD_79UNITEDMARKETPLACE)
-            {
-                switch (TargetType)
-                {
-                case 67:
-                {
-                    Pose = true;
-                    Hero->Object.Angle[2] = TargetAngle;
-                }
-                break;
-                }
-            }
-            if (Healing)
-            {
-                if (!gCharacterManager.IsFemale(c->Class))
-                    SetAction(o, PLAYER_HEALING1);
                 else
-                    SetAction(o, PLAYER_HEALING_FEMALE1);
-                SendRequestAction(Hero->Object, AT_HEALING1);
-            }
-            else
-            {
-                BYTE PathX[1];
-                BYTE PathY[1];
-                PathX[0] = TargetX;
-                PathY[0] = TargetY;
-
-                SendCharacterMove(Hero->Key, Hero->Object.Angle[2], 1, PathX, PathY, TargetX, TargetY);
-
-                c->Path.PathNum = 0;
-                if (Pose)
                 {
-                    if (!gCharacterManager.IsFemale(c->Class))
-                        SetAction(o, PLAYER_POSE1);
-                    else
-                        SetAction(o, PLAYER_POSE_FEMALE1);
-                    SendRequestAction(Hero->Object, AT_POSE1);
-                }
-                if (Sit)
-                {
-                    if ((!c->SafeZone) && (c->Helper.Type == MODEL_HORN_OF_FENRIR || c->Helper.Type == MODEL_HORN_OF_UNIRIA || c->Helper.Type == MODEL_HORN_OF_DINORANT || c->Helper.Type == MODEL_DARK_HORSE_ITEM))
-                        return;
+                    BYTE PathX[1];
+                    BYTE PathY[1];
+                    PathX[0] = TargetX;
+                    PathY[0] = TargetY;
 
-                    if (!gCharacterManager.IsFemale(c->Class))
-                        SetAction(o, PLAYER_SIT1);
-                    else
-                        SetAction(o, PLAYER_SIT_FEMALE1);
-                    SendRequestAction(Hero->Object, AT_SIT1);
+                    SendCharacterMove(Hero->Key, Hero->Object.Angle[2], 1, PathX, PathY, TargetX, TargetY);
+
+                    c->Path.PathNum = 0;
+                    if (Pose)
+                    {
+                        if (!gCharacterManager.IsFemale(c->Class))
+                            SetAction(o, PLAYER_POSE1);
+                        else
+                            SetAction(o, PLAYER_POSE_FEMALE1);
+                        SendRequestAction(Hero->Object, AT_POSE1);
+                    }
+                    if (Sit)
+                    {
+                        if ((!c->SafeZone) &&
+                            (c->Helper.Type == MODEL_HORN_OF_FENRIR || c->Helper.Type == MODEL_HORN_OF_UNIRIA ||
+                             c->Helper.Type == MODEL_HORN_OF_DINORANT || c->Helper.Type == MODEL_DARK_HORSE_ITEM))
+                            return;
+
+                        if (!gCharacterManager.IsFemale(c->Class))
+                            SetAction(o, PLAYER_SIT1);
+                        else
+                            SetAction(o, PLAYER_SIT_FEMALE1);
+                        SendRequestAction(Hero->Object, AT_SIT1);
+                    }
+                    PlayBuffer(SOUND_DROP_ITEM01, &Hero->Object);
                 }
-                PlayBuffer(SOUND_DROP_ITEM01, &Hero->Object);
             }
-        }
-        break;
+            break;
     }
 }
 
@@ -1888,10 +1972,10 @@ void SendMove(CHARACTER* c, OBJECT* o)
         if (g_bEventChipDialogEnable == EVENT_SCRATCH_TICKET)
         {
             ClearInput(FALSE);
-            InputEnable = false;
-            GoldInputEnable = false;
-            InputGold = 0;
-            StorageGoldFlag = 0;
+            InputEnable      = false;
+            GoldInputEnable  = false;
+            InputGold        = 0;
+            StorageGoldFlag  = 0;
             g_bScratchTicket = false;
         }
         g_bEventChipDialogEnable = EVENT_NONE;
@@ -1900,15 +1984,15 @@ void SendMove(CHARACTER* c, OBJECT* o)
 #ifdef WINDOWMODE
         if (g_bUseWindowMode == FALSE)
         {
-#endif	// WINDOWMODE
+#endif  // WINDOWMODE
             int x = REFERENCE_WIDTH * MouseX / 260;
             SetCursorPos((x)*WindowWidth / REFERENCE_WIDTH, (MouseY)*WindowHeight / REFERENCE_HEIGHT);
 #ifdef WINDOWMODE
         }
-#endif	// WINDOWMODE
-#endif	// FOR_WORK
+#endif  // WINDOWMODE
+#endif  // FOR_WORK
         MouseUpdateTimeMax = 6;
-        MouseLButton = false;
+        MouseLButton       = false;
     }
 }
 
@@ -1918,33 +2002,34 @@ int HeroAngle = 0;
 bool CheckMacroLimit(wchar_t* Text)
 {
     wchar_t string[256];
-    int  length;
+    int     length;
 
     wcsncpy(string, Text + 3, 255);
     string[255] = L'\0';
-    length = wcslen(I18N::Game::Exchange);
-    if (wcscmp(string, I18N::Game::Exchange) == 0 || wcscmp(string, I18N::Game::Trade259) == 0 || wcsicmp(string, L"/trade") == 0)
+    length      = wcslen(I18N::Game::Exchange);
+    if (wcscmp(string, I18N::Game::Exchange) == 0 || wcscmp(string, I18N::Game::Trade259) == 0 ||
+        wcsicmp(string, L"/trade") == 0)
     {
-        return  true;
+        return true;
     }
     if (wcscmp(string, I18N::Game::Party256) == 0 || wcsicmp(string, L"/party") == 0 || wcsicmp(string, L"/pt") == 0)
     {
-        return  true;
+        return true;
     }
     if (wcscmp(string, I18N::Game::Guild254) == 0 || wcsicmp(string, L"/guild") == 0)
     {
-        return  true;
+        return true;
     }
     if (wcscmp(string, I18N::Game::Battle) == 0 || wcsicmp(string, L"/GuildWar") == 0)
     {
-        return  true;
+        return true;
     }
     if (wcscmp(string, I18N::Game::BattleSoccer) == 0 || wcsicmp(string, L"/BattleSoccer") == 0)
     {
-        return  true;
+        return true;
     }
 
-    return  false;
+    return false;
 }
 
 bool CheckCommand(wchar_t* Text, bool bMacroText)
@@ -1957,17 +2042,18 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
     if (bMacroText == false && LogOut == false)
     {
         wchar_t Name[256];
-        int iTextSize = 0;
+        int     iTextSize = 0;
         for (int i = 0; i < 256 && Text[i] != ' ' && Text[i] != '\0'; i++)
         {
-            Name[i] = Text[i];
+            Name[i]   = Text[i];
             iTextSize = i;
         }
         Name[iTextSize] = 0;
 
         if (!g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE))
         {
-            if (wcscmp(Name, I18N::Game::Exchange) == 0 || wcscmp(Name, I18N::Game::Trade259) == 0 || wcsicmp(Text, L"/trade") == 0)
+            if (wcscmp(Name, I18N::Game::Exchange) == 0 || wcscmp(Name, I18N::Game::Trade259) == 0 ||
+                wcsicmp(Text, L"/trade") == 0)
             {
                 if (gMapManager.InChaosCastle() == true)
                 {
@@ -1986,7 +2072,8 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 
                 if (level < TRADELIMITLEVEL)
                 {
-                    g_pSystemLogBox->AddText(I18N::Game::YouCanUseTheTradeCommandAtCharacterLevel6, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                    g_pSystemLogBox->AddText(I18N::Game::YouCanUseTheTradeCommandAtCharacterLevel6,
+                                             SEASON3B::TYPE_SYSTEM_MESSAGE);
                     return true;
                 }
 
@@ -1998,10 +2085,9 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* c = &CharactersClient[SelectedCharacter];
-                    OBJECT* o = &c->Object;
+                    OBJECT*    o = &c->Object;
                     if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                        abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                        abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                        abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                     {
                         if (IsShopInViewport(c))
                         {
@@ -2015,32 +2101,35 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                         g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
                     }
                 }
-                else for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-                {
-                    CHARACTER* c = &CharactersClient[i];
-                    OBJECT* o = &c->Object;
-
-                    if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                        abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                        abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                else
+                    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
                     {
-                        if (IsShopInViewport(c))
-                        {
-                            g_pSystemLogBox->AddText(I18N::Game::YouCannotTradeRightNow, SEASON3B::TYPE_SYSTEM_MESSAGE);
-                            return true;
-                        }
+                        CHARACTER* c = &CharactersClient[i];
+                        OBJECT*    o = &c->Object;
 
-                        BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                        BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                        if (abs(Dir1 - Dir2) == 4) {
-                            SocketClient->ToGameServer()->SendTradeRequest(c->Key);
-                            wchar_t message[100]{};
-                            mu_swprintf(message, I18N::Game::YouHaveRequestedSToTrade, c->ID);
-                            g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
-                            break;
+                        if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                            abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
+                            abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                        {
+                            if (IsShopInViewport(c))
+                            {
+                                g_pSystemLogBox->AddText(I18N::Game::YouCannotTradeRightNow,
+                                                         SEASON3B::TYPE_SYSTEM_MESSAGE);
+                                return true;
+                            }
+
+                            BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                            BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                            if (abs(Dir1 - Dir2) == 4)
+                            {
+                                SocketClient->ToGameServer()->SendTradeRequest(c->Key);
+                                wchar_t message[100]{};
+                                mu_swprintf(message, I18N::Game::YouHaveRequestedSToTrade, c->ID);
+                                g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                                break;
+                            }
                         }
                     }
-                }
                 return true;
             }
         }
@@ -2085,13 +2174,11 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 return false;
             }
 
-            if (
-                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP)
-                || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE)
-                || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_TRADE)
-                || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MIXINVENTORY)
-                || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-                )
+            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) ||
+                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE) ||
+                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_TRADE) ||
+                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MIXINVENTORY) ||
+                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
             {
                 g_pSystemLogBox->AddText(I18N::Game::StoreCanTBeOpened, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return false;
@@ -2103,7 +2190,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* c = &CharactersClient[SelectedCharacter];
-                OBJECT* o = &c->Object;
+                OBJECT*    o = &c->Object;
                 if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change))
                 {
                     SocketClient->ToGameServer()->SendPlayerShopItemListRequest(c->Key, c->ID);
@@ -2160,7 +2247,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 g_pSystemLogBox->AddText(I18N::Game::CanTBeInChaosCastle, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return false;
             }
-#endif// UILD_WAR_EVENT
+#endif  // UILD_WAR_EVENT
             if (!g_DuelMgr.IsDuelEnabled())
             {
                 int iLevel = CharacterAttribute->Level;
@@ -2171,21 +2258,21 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                     g_pSystemLogBox->AddText(szError, SEASON3B::TYPE_ERROR_MESSAGE);
                     return 3;
                 }
-                else
-                    if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
+                else if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
+                {
+                    CHARACTER* c = &CharactersClient[SelectedCharacter];
+                    OBJECT*    o = &c->Object;
+                    if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                        abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                     {
-                        CHARACTER* c = &CharactersClient[SelectedCharacter];
-                        OBJECT* o = &c->Object;
-                        if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                            abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                            abs((c->PositionY) - (Hero->PositionY)) <= 1) {
-                            SocketClient->ToGameServer()->SendDuelStartRequest(c->Key, c->ID);
-                        }
+                        SocketClient->ToGameServer()->SendDuelStartRequest(c->Key, c->ID);
                     }
-                    else for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+                }
+                else
+                    for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
                     {
                         CHARACTER* c = &CharactersClient[i];
-                        OBJECT* o = &c->Object;
+                        OBJECT*    o = &c->Object;
 
                         if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
                             abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
@@ -2203,7 +2290,8 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             }
             else
             {
-                g_pSystemLogBox->AddText(I18N::Game::YouCannotChallengePlayerIsAlreadyInADuel, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                g_pSystemLogBox->AddText(I18N::Game::YouCannotChallengePlayerIsAlreadyInADuel,
+                                         SEASON3B::TYPE_SYSTEM_MESSAGE);
             }
         }
         if (wcscmp(Text, I18N::Game::DuelCancel) == 0 || wcsicmp(Text, L"/duelend") == 0)
@@ -2214,7 +2302,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 g_pSystemLogBox->AddText(I18N::Game::CanTBeInChaosCastle, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return false;
             }
-#endif// GUILD_WAR_EVENT
+#endif  // GUILD_WAR_EVENT
             if (g_DuelMgr.IsDuelEnabled())
             {
                 SocketClient->ToGameServer()->SendDuelStopRequest();
@@ -2236,10 +2324,9 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* c = &CharactersClient[SelectedCharacter];
-                OBJECT* o = &c->Object;
+                OBJECT*    o = &c->Object;
                 if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                    abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                    abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                    abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                 {
                     GuildPlayerKey = c->Key;
                     SocketClient->ToGameServer()->SendGuildJoinRequest(c->Key);
@@ -2248,28 +2335,28 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                     g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 }
             }
-            else for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-            {
-                CHARACTER* c = &CharactersClient[i];
-                OBJECT* o = &c->Object;
-
-                if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                    abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                    abs((c->PositionY) - (Hero->PositionY)) <= 1)
+            else
+                for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
                 {
-                    BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    if (abs(Dir1 - Dir2) == 4)
+                    CHARACTER* c = &CharactersClient[i];
+                    OBJECT*    o = &c->Object;
+
+                    if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                        abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                     {
-                        GuildPlayerKey = c->Key;
-                        SocketClient->ToGameServer()->SendGuildJoinRequest(c->Key);
-                        wchar_t Text[100];
-                        mu_swprintf(Text, I18N::Game::YouHaveRequestedSToJoinYourGuild, c->ID);
-                        g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
-                        break;
+                        BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        if (abs(Dir1 - Dir2) == 4)
+                        {
+                            GuildPlayerKey = c->Key;
+                            SocketClient->ToGameServer()->SendGuildJoinRequest(c->Key);
+                            wchar_t Text[100];
+                            mu_swprintf(Text, I18N::Game::YouHaveRequestedSToJoinYourGuild, c->ID);
+                            g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                            break;
+                        }
                     }
                 }
-            }
             return true;
         }
         if (!wcscmp(Text, I18N::Game::Alliance1354) || !wcsicmp(Text, L"/union") ||
@@ -2290,63 +2377,72 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* c = &CharactersClient[SelectedCharacter];
-                OBJECT* o = &c->Object;
+                OBJECT*    o = &c->Object;
                 if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                    abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                    abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                    abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                 {
                     if (!wcscmp(Text, I18N::Game::Alliance1354) || !wcsicmp(Text, L"/union"))
                     {
                         //SendRequestGuildRelationShip(0x01, 0x01, HIBYTE(CharactersClient[SelectedCharacter].Key), LOBYTE(CharactersClient[SelectedCharacter].Key));
-                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Alliance, GuildRequestType::Join, CharactersClient[SelectedCharacter].Key);
+                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                            GuildRelationshipType::Alliance, GuildRequestType::Join,
+                            CharactersClient[SelectedCharacter].Key);
                     }
                     else if (!wcscmp(Text, I18N::Game::Hostilities) || !wcsicmp(Text, L"/rival"))
                     {
                         //SendRequestGuildRelationShip(0x02, 0x01, HIBYTE(CharactersClient[SelectedCharacter].Key), LOBYTE(CharactersClient[SelectedCharacter].Key));
-                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Hostility, GuildRequestType::Join, CharactersClient[SelectedCharacter].Key);
+                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                            GuildRelationshipType::Hostility, GuildRequestType::Join,
+                            CharactersClient[SelectedCharacter].Key);
                     }
                     else
                     {
                         SetAction(&Hero->Object, PLAYER_RESPECT1);
                         SendRequestAction(Hero->Object, AT_RESPECT1);
                         //SendRequestGuildRelationShip(0x02, 0x02, HIBYTE(CharactersClient[SelectedCharacter].Key), LOBYTE(CharactersClient[SelectedCharacter].Key));
-                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Hostility, GuildRequestType::Leave, CharactersClient[SelectedCharacter].Key);
+                        SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                            GuildRelationshipType::Hostility, GuildRequestType::Leave,
+                            CharactersClient[SelectedCharacter].Key);
                     }
                 }
             }
-            else for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-            {
-                CHARACTER* c = &CharactersClient[i];
-                OBJECT* o = &c->Object;
-
-                if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
-                    abs((c->PositionX) - (Hero->PositionX)) <= 1 &&
-                    abs((c->PositionY) - (Hero->PositionY)) <= 1)
+            else
+                for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
                 {
-                    BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    if (abs(Dir1 - Dir2) == 4) {
-                        if (!wcscmp(Text, I18N::Game::Alliance1354) || !wcsicmp(Text, L"/union"))
+                    CHARACTER* c = &CharactersClient[i];
+                    OBJECT*    o = &c->Object;
+
+                    if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                        abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                    {
+                        BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        if (abs(Dir1 - Dir2) == 4)
                         {
-                            //SendRequestGuildRelationShip(0x01, 0x01, HIBYTE(c->Key), LOBYTE(c->Key));
-                            SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Alliance, GuildRequestType::Join, c->Key);
+                            if (!wcscmp(Text, I18N::Game::Alliance1354) || !wcsicmp(Text, L"/union"))
+                            {
+                                //SendRequestGuildRelationShip(0x01, 0x01, HIBYTE(c->Key), LOBYTE(c->Key));
+                                SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                                    GuildRelationshipType::Alliance, GuildRequestType::Join, c->Key);
+                            }
+                            else if (!wcscmp(Text, I18N::Game::Hostilities) || !wcsicmp(Text, L"/rival"))
+                            {
+                                //SendRequestGuildRelationShip(0x02, 0x01, HIBYTE(c->Key), LOBYTE(c->Key));
+                                SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                                    GuildRelationshipType::Hostility, GuildRequestType::Join, c->Key);
+                            }
+                            else
+                            {
+                                SetAction(&Hero->Object, PLAYER_RESPECT1);
+                                SendRequestAction(Hero->Object, AT_RESPECT1);
+                                //SendRequestGuildRelationShip(0x02, 0x02, HIBYTE(c->Key), LOBYTE(c->Key));
+                                SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                                    GuildRelationshipType::Hostility, GuildRequestType::Leave, c->Key);
+                            }
+                            break;
                         }
-                        else if (!wcscmp(Text, I18N::Game::Hostilities) || !wcsicmp(Text, L"/rival"))
-                        {
-                            //SendRequestGuildRelationShip(0x02, 0x01, HIBYTE(c->Key), LOBYTE(c->Key));
-                            SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Hostility, GuildRequestType::Join, c->Key);
-                        }
-                        else
-                        {
-                            SetAction(&Hero->Object, PLAYER_RESPECT1);
-                            SendRequestAction(Hero->Object, AT_RESPECT1);
-                            //SendRequestGuildRelationShip(0x02, 0x02, HIBYTE(c->Key), LOBYTE(c->Key));
-                            SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Hostility, GuildRequestType::Leave, c->Key);
-                        }
-                        break;
                     }
                 }
-            }
             return true;
         }
         if (wcscmp(Text, I18N::Game::Party256) == 0 || wcsicmp(Text, L"/party") == 0 || wcsicmp(Text, L"/pt") == 0)
@@ -2365,8 +2461,9 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* c = &CharactersClient[SelectedCharacter];
-                OBJECT* o = &c->Object;
-                if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) && abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
+                OBJECT*    o = &c->Object;
+                if (o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                    abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                 {
                     PartyKey = c->Key;
                     SocketClient->ToGameServer()->SendPartyInviteRequest(c->Key);
@@ -2375,25 +2472,27 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                     g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 }
             }
-            else for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
-            {
-                CHARACTER* c = &CharactersClient[i];
-                OBJECT* o = &c->Object;
-                if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) && abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
+            else
+                for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
                 {
-                    BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
-                    if (abs(Dir1 - Dir2) == 4)
+                    CHARACTER* c = &CharactersClient[i];
+                    OBJECT*    o = &c->Object;
+                    if (o->Live && o->Kind == KIND_PLAYER && c != Hero && (o->Type == MODEL_PLAYER || c->Change) &&
+                        abs((c->PositionX) - (Hero->PositionX)) <= 1 && abs((c->PositionY) - (Hero->PositionY)) <= 1)
                     {
-                        PartyKey = c->Key;
-                        SocketClient->ToGameServer()->SendPartyInviteRequest(c->Key);
-                        wchar_t Text[100];
-                        mu_swprintf(Text, I18N::Game::YouHaveRequestedSToJoinYourParty, c->ID);
-                        g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
-                        break;
+                        BYTE Dir1 = (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        BYTE Dir2 = (BYTE)((Hero->Object.Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8;
+                        if (abs(Dir1 - Dir2) == 4)
+                        {
+                            PartyKey = c->Key;
+                            SocketClient->ToGameServer()->SendPartyInviteRequest(c->Key);
+                            wchar_t Text[100];
+                            mu_swprintf(Text, I18N::Game::YouHaveRequestedSToJoinYourParty, c->ID);
+                            g_pSystemLogBox->AddText(Text, SEASON3B::TYPE_SYSTEM_MESSAGE);
+                            break;
+                        }
                     }
                 }
-            }
             return true;
         }
         if (wcsicmp(Text, L"/charactername") == 0)
@@ -2416,14 +2515,14 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             {
                 if (CheckMacroLimit(Text) == true)
                 {
-                    return  false;
+                    return false;
                 }
 
                 int iTextSize = 0;
                 for (int j = 3; j <= (int)wcslen(Text); j++)
                 {
                     MacroText[i][j - 3] = Text[j];
-                    iTextSize = j;
+                    iTextSize           = j;
                 }
                 MacroText[i][iTextSize - 3] = 0;
                 PlayBuffer(SOUND_CLICK01);
@@ -2432,8 +2531,8 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
         }
 
         wchar_t lpszFilter[] = L"/filter";
-        if ((wcslen(I18N::Game::Filter) > 0 && wcsncmp(Text, I18N::Game::Filter, wcslen(I18N::Game::Filter)) == 0)
-            || (wcsncmp(Text, lpszFilter, wcslen(lpszFilter)) == 0))
+        if ((wcslen(I18N::Game::Filter) > 0 && wcsncmp(Text, I18N::Game::Filter, wcslen(I18N::Game::Filter)) == 0) ||
+            (wcsncmp(Text, lpszFilter, wcslen(lpszFilter)) == 0))
         {
             g_pChatListBox->SetFilterText(Text);
         }
@@ -2446,7 +2545,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
         int iTextSize = 0;
         for (int i = 0; i < 256 && Text[i] != ' ' && Text[i] != '\0'; i++)
         {
-            Name[i] = Text[i];
+            Name[i]   = Text[i];
             iTextSize = i;
         }
         Name[iTextSize] = NULL;
@@ -2460,7 +2559,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             return true;
         }
     }
-#endif // CSK_FIX_MACRO_MOVEMAP
+#endif  // CSK_FIX_MACRO_MOVEMAP
 
     if (IsIllegalMovementByUsingMsg(Text))
         return TRUE;
@@ -2503,7 +2602,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 bool FindText(const wchar_t* Text, const wchar_t* Token, bool First)
 {
     int LengthToken = (int)wcslen(Token);
-    int Length = (int)wcslen(Text) - LengthToken;
+    int Length      = (int)wcslen(Text) - LengthToken;
     if (First)
         Length = 0;
     if (Length < 0)
@@ -2530,7 +2629,7 @@ bool FindText(const wchar_t* Text, const wchar_t* Token, bool First)
 bool FindTextABS(const wchar_t* Text, const wchar_t* Token, bool First)
 {
     int LengthToken = (int)wcslen(Token);
-    int Length = (int)wcslen(Text) - LengthToken;
+    int Length      = (int)wcslen(Text) - LengthToken;
     if (First)
         Length = 0;
     if (Length < 0)
@@ -2556,10 +2655,9 @@ bool FindTextABS(const wchar_t* Text, const wchar_t* Token, bool First)
 
 void SetActionClass(CHARACTER* c, OBJECT* o, int Action, int ActionType)
 {
-    if ((o->CurrentAction >= PLAYER_STOP_MALE && o->CurrentAction <= PLAYER_STOP_RIDE_WEAPON)
-        || o->CurrentAction == PLAYER_STOP_TWO_HAND_SWORD_TWO
-        || o->CurrentAction == PLAYER_RAGE_UNI_STOP_ONE_RIGHT
-        || o->CurrentAction == PLAYER_STOP_RAGEFIGHTER)
+    if ((o->CurrentAction >= PLAYER_STOP_MALE && o->CurrentAction <= PLAYER_STOP_RIDE_WEAPON) ||
+        o->CurrentAction == PLAYER_STOP_TWO_HAND_SWORD_TWO || o->CurrentAction == PLAYER_RAGE_UNI_STOP_ONE_RIGHT ||
+        o->CurrentAction == PLAYER_STOP_RAGEFIGHTER)
     {
         if (!gCharacterManager.IsFemale(c->Class) || (Action >= PLAYER_RESPECT1 && Action <= PLAYER_RUSH1))
             SetAction(o, Action);
@@ -2569,10 +2667,7 @@ void SetActionClass(CHARACTER* c, OBJECT* o, int Action, int ActionType)
     }
 }
 
-
-
 bool EnableFastInput = false;
-
 
 bool SkillKeyPush(int Skill)
 {
@@ -2587,15 +2682,16 @@ void Attack(CHARACTER* c)
 {
     if ((MouseOnWindow || !SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), 429)) && MouseLButtonPush)
     {
-        MouseRButtonPop = false;
-        MouseRButtonPush = false;
-        MouseRButton = false;
+        MouseRButtonPop   = false;
+        MouseRButtonPush  = false;
+        MouseRButton      = false;
         MouseRButtonPress = 0;
 
         return;
     }
 
-    if (g_isCharacterBuff((&c->Object), eDeBuff_Stun) || g_isCharacterBuff((&c->Object), eDeBuff_Sleep) || g_isCharacterBuff((&Hero->Object), eBuff_DuelWatch))
+    if (g_isCharacterBuff((&c->Object), eDeBuff_Stun) || g_isCharacterBuff((&c->Object), eDeBuff_Sleep) ||
+        g_isCharacterBuff((&Hero->Object), eBuff_DuelWatch))
     {
         return;
     }
@@ -2613,7 +2709,7 @@ void Attack(CHARACTER* c)
 
     bool Success = false;
 
-    auto Skill = CharacterAttribute->Skill[Hero->CurrentSkill];
+    auto  Skill    = CharacterAttribute->Skill[Hero->CurrentSkill];
     float Distance = gSkillManager.GetSkillDistance(Skill, c);
 
     if (!EnableFastInput)
@@ -2622,12 +2718,12 @@ void Attack(CHARACTER* c)
         {
             if (MouseRButtonPop || SkillKeyPush(Skill))
             {
-                MouseRButtonPop = false;
+                MouseRButtonPop  = false;
                 MouseRButtonPush = false;
-                MouseRButton = false;
+                MouseRButton     = false;
 
                 MouseRButtonPress = 0;
-                Success = true;
+                Success           = true;
             }
             else
             {
@@ -2638,25 +2734,23 @@ void Attack(CHARACTER* c)
         {
             if (Skill == AT_SKILL_NOVA)
             {
-                if (o->Teleport != TELEPORT_END && o->Teleport != TELEPORT_NONE) return;
+                if (o->Teleport != TELEPORT_END && o->Teleport != TELEPORT_NONE)
+                    return;
                 int iReqEng = 0;
                 gSkillManager.GetSkillInformation_Energy(Skill, &iReqEng);
-                if (CharacterAttribute->Energy + CharacterAttribute->AddEnergy < iReqEng) return;
+                if (CharacterAttribute->Energy + CharacterAttribute->AddEnergy < iReqEng)
+                    return;
 
-                MouseRButtonPress = 1;
+                MouseRButtonPress           = 1;
                 Hero->Object.m_bySkillCount = 0;
-                Skill = AT_SKILL_NOVA_BEGIN;
+                Skill                       = AT_SKILL_NOVA_BEGIN;
             }
             SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
             MouseRButtonPush = false;
-            Success = true;
+            Success          = true;
         }
-        if (
-            g_pOption->IsAutoAttack()
-            && gMapManager.WorldActive != WD_6STADIUM
-            && gMapManager.InChaosCastle() == false
-            && Attacking == 2
-            && SelectedCharacter != -1)
+        if (g_pOption->IsAutoAttack() && gMapManager.WorldActive != WD_6STADIUM &&
+            gMapManager.InChaosCastle() == false && Attacking == 2 && SelectedCharacter != -1)
         {
             Success = true;
         }
@@ -2668,13 +2762,13 @@ void Attack(CHARACTER* c)
             if (RButtonPressTime >= AutoMouseLimitTime)
             {
                 MouseRButtonPush = false;
-                MouseRButton = false;
-                Success = FALSE;
+                MouseRButton     = false;
+                Success          = FALSE;
             }
         }
         else
         {
-            RButtonPopTime = WorldTime;
+            RButtonPopTime   = WorldTime;
             RButtonPressTime = 0.f;
         }
     }
@@ -2683,7 +2777,7 @@ void Attack(CHARACTER* c)
         if (MouseLButtonPush || MouseLButton)
         {
             MouseLButtonPush = false;
-            Success = true;
+            Success          = true;
         }
     }
 
@@ -2705,13 +2799,13 @@ void Attack(CHARACTER* c)
     GameLogic::Combat::ExecuteSkill(c, Skill, Distance);
 }
 
-
-BOOL g_bWhileMovingZone = FALSE;
+BOOL  g_bWhileMovingZone   = FALSE;
 DWORD g_dwLatestZoneMoving = 0;
 
 void CheckGate()
 {
-    if ((g_pMyInventory->IsItem(ITEM_POTION + 64, true)) || (gMapManager.IsCursedTemple() && g_pMyInventory->IsItem(ITEM_POTION + 64, false)))
+    if ((g_pMyInventory->IsItem(ITEM_POTION + 64, true)) ||
+        (gMapManager.IsCursedTemple() && g_pMyInventory->IsItem(ITEM_POTION + 64, false)))
     {
         return;
     }
@@ -2721,17 +2815,18 @@ void CheckGate()
         GATE_ATTRIBUTE* gs = &GateAttribute[i];
         if (gs->Flag == 1 && gs->Map == gMapManager.WorldActive)
         {
-            if ((Hero->PositionX) >= gs->x1 && (Hero->PositionY) >= gs->y1 &&
-                (Hero->PositionX) <= gs->x2 && (Hero->PositionY) <= gs->y2)
+            if ((Hero->PositionX) >= gs->x1 && (Hero->PositionY) >= gs->y1 && (Hero->PositionX) <= gs->x2 &&
+                (Hero->PositionY) <= gs->y2)
             {
                 GATE_ATTRIBUTE* gt = &GateAttribute[gs->Target];
                 if ((LoadingWorld) == 0 && Hero->JumpTime == 0)
                 {
                     bool Success = false;
-                    int Level;
+                    int  Level;
 
-                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
-                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK ||
+                        gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD ||
+                        gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
                         Level = gs->Level * 2 / 3;
                     else
                         Level = gs->Level;
@@ -2746,22 +2841,29 @@ void CheckGate()
                     if (Success)
                     {
                         if (((i >= 45 && i <= 49) || (i >= 55 && i <= 56)) &&
-                            ((CharacterMachine->Equipment[EQUIPMENT_HELPER].Type >= ITEM_HORN_OF_UNIRIA && CharacterMachine->Equipment[EQUIPMENT_HELPER].Type <= ITEM_HORN_OF_DINORANT)))
+                            ((CharacterMachine->Equipment[EQUIPMENT_HELPER].Type >= ITEM_HORN_OF_UNIRIA &&
+                              CharacterMachine->Equipment[EQUIPMENT_HELPER].Type <= ITEM_HORN_OF_DINORANT)))
                         {
-                            g_pSystemLogBox->AddText(I18N::Game::YouCannotGoToAtlansWhileRidingAUnicorn, SEASON3B::TYPE_ERROR_MESSAGE);
+                            g_pSystemLogBox->AddText(I18N::Game::YouCannotGoToAtlansWhileRidingAUnicorn,
+                                                     SEASON3B::TYPE_ERROR_MESSAGE);
                         }
                         else if ((62 <= i && i <= 65) &&
-                            !((CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_WING && CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WINGS_OF_DARKNESS
-                                || CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_DARK_HORSE_ITEM
-                                || CharacterMachine->Equipment[EQUIPMENT_WING].Type == ITEM_CAPE_OF_LORD
-                                ) || CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_DINORANT
-                                || CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_FENRIR
-                                || (CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_WING_OF_STORM && CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WING_OF_DIMENSION)
-                                || (ITEM_WING + 130 <= CharacterMachine->Equipment[EQUIPMENT_WING].Type && CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WING + 134)
-                                || (CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_CAPE_OF_FIGHTER && CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_CAPE_OF_OVERRULE)
-                                || (CharacterMachine->Equipment[EQUIPMENT_WING].Type == ITEM_WING + 135)))
+                                 !((CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_WING &&
+                                        CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WINGS_OF_DARKNESS ||
+                                    CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_DARK_HORSE_ITEM ||
+                                    CharacterMachine->Equipment[EQUIPMENT_WING].Type == ITEM_CAPE_OF_LORD) ||
+                                   CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_DINORANT ||
+                                   CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_FENRIR ||
+                                   (CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_WING_OF_STORM &&
+                                    CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WING_OF_DIMENSION) ||
+                                   (ITEM_WING + 130 <= CharacterMachine->Equipment[EQUIPMENT_WING].Type &&
+                                    CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_WING + 134) ||
+                                   (CharacterMachine->Equipment[EQUIPMENT_WING].Type >= ITEM_CAPE_OF_FIGHTER &&
+                                    CharacterMachine->Equipment[EQUIPMENT_WING].Type <= ITEM_CAPE_OF_OVERRULE) ||
+                                   (CharacterMachine->Equipment[EQUIPMENT_WING].Type == ITEM_WING + 135)))
                         {
-                            g_pSystemLogBox->AddText(I18N::Game::YouCanEnterIcarusOnlyWithWingsDinorantFenrirr, SEASON3B::TYPE_ERROR_MESSAGE);
+                            g_pSystemLogBox->AddText(I18N::Game::YouCanEnterIcarusOnlyWithWingsDinorantFenrirr,
+                                                     SEASON3B::TYPE_ERROR_MESSAGE);
 
                             if (CharacterAttribute->Level < Level)
                             {
@@ -2771,9 +2873,11 @@ void CheckGate()
                             }
                         }
 
-                        else if ((62 <= i && i <= 65) && (CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_UNIRIA))
+                        else if ((62 <= i && i <= 65) &&
+                                 (CharacterMachine->Equipment[EQUIPMENT_HELPER].Type == ITEM_HORN_OF_UNIRIA))
                         {
-                            g_pSystemLogBox->AddText(I18N::Game::YouCannotWarpWhileRidingOnAUnicorn, SEASON3B::TYPE_ERROR_MESSAGE);
+                            g_pSystemLogBox->AddText(I18N::Game::YouCannotWarpWhileRidingOnAUnicorn,
+                                                     SEASON3B::TYPE_ERROR_MESSAGE);
                         }
                         else if (CharacterAttribute->Level < Level)
                         {
@@ -2813,16 +2917,17 @@ void CheckGate()
                                     SaveMacro(L"Data\\Macro.txt");
                                 }
 
-                                SelectedItem = -1;
-                                SelectedNpc = -1;
+                                SelectedItem      = -1;
+                                SelectedNpc       = -1;
                                 SelectedCharacter = -1;
-                                SelectedOperate = -1;
-                                Attacking = -1;
+                                SelectedOperate   = -1;
+                                Attacking         = -1;
 
-                                if ((gs->Map == WD_0LORENCIA && gt->Map == WD_30BATTLECASTLE) || (gs->Map == WD_30BATTLECASTLE && gt->Map == WD_0LORENCIA))
+                                if ((gs->Map == WD_0LORENCIA && gt->Map == WD_30BATTLECASTLE) ||
+                                    (gs->Map == WD_30BATTLECASTLE && gt->Map == WD_0LORENCIA))
                                 {
                                     g_dwLatestZoneMoving = GetTickCount();
-                                    g_bWhileMovingZone = FALSE;
+                                    g_bWhileMovingZone   = FALSE;
                                 }
                                 else
                                 {
@@ -2840,35 +2945,35 @@ void CheckGate()
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-void MoveEffect(OBJECT* o, int iIndex);
+void             MoveEffect(OBJECT* o, int iIndex);
 
 namespace
 {
-    // While the hero slides to a server-set position (the basic weapon skills reposition the
-    // hero on every cast), MoveHero would freeze all input until the slide ended, which capped
-    // those skills' auto-attack cadence below the player's attack speed (issue #350). Keep the
-    // auto-attack re-cast running through the slide; the slide still animates smoothly and only
-    // manual move/click input stays suppressed. Returns true when the hero is mid-slide, in
-    // which case MoveHero should stop after this.
-    bool HandleHeroPositionSlide(CHARACTER* c)
+// While the hero slides to a server-set position (the basic weapon skills reposition the
+// hero on every cast), MoveHero would freeze all input until the slide ended, which capped
+// those skills' auto-attack cadence below the player's attack speed (issue #350). Keep the
+// auto-attack re-cast running through the slide; the slide still animates smoothly and only
+// manual move/click input stays suppressed. Returns true when the hero is mid-slide, in
+// which case MoveHero should stop after this.
+bool HandleHeroPositionSlide(CHARACTER* c)
+{
+    if (c->JumpTime <= 0)
     {
-        if (c->JumpTime <= 0)
-        {
-            return false;
-        }
-
-        if (g_pOption->IsAutoAttack() && Attacking != -1 && SelectedCharacter != -1)
-        {
-            Attack(Hero);
-        }
-        return true;
+        return false;
     }
+
+    if (g_pOption->IsAutoAttack() && Attacking != -1 && SelectedCharacter != -1)
+    {
+        Attack(Hero);
+    }
+    return true;
+}
 }
 
 void MoveHero()
 {
     CHARACTER* c = Hero;
-    OBJECT* o = &c->Object;
+    OBJECT*    o = &c->Object;
 
     // Re-arm world clicks once the button is released; the latch only suppresses the held click.
     // Kept above the early returns below (stun/sleep/dead/loading) so a release during any of
@@ -2892,9 +2997,7 @@ void MoveHero()
         return;
     }
 
-    if (c->Dead > 0
-        || g_isCharacterBuff(o, eDeBuff_Stun)
-        || g_isCharacterBuff(o, eDeBuff_Sleep))
+    if (c->Dead > 0 || g_isCharacterBuff(o, eDeBuff_Stun) || g_isCharacterBuff(o, eDeBuff_Sleep))
     {
         return;
     }
@@ -2937,15 +3040,14 @@ void MoveHero()
     int HeroX = GetScreenWidth() / 2;
     int HeroY = 180;
 
-    int Angle;
-    bool bLookAtMouse = true;
+    int  Angle;
+    bool bLookAtMouse    = true;
     bool NoAutoAttacking = false;
 
-    if (g_isCharacterBuff(o, eDeBuff_Stun)
-        || g_isCharacterBuff(o, eDeBuff_Sleep)
-        || o->CurrentAction == PLAYER_SKILL_GIANTSWING)
+    if (g_isCharacterBuff(o, eDeBuff_Stun) || g_isCharacterBuff(o, eDeBuff_Sleep) ||
+        o->CurrentAction == PLAYER_SKILL_GIANTSWING)
     {
-        Angle = (int)Hero->Object.Angle[2];
+        Angle        = (int)Hero->Object.Angle[2];
         bLookAtMouse = false;
     }
     else
@@ -2954,23 +3056,23 @@ void MoveHero()
         // by the active camera's yaw. The legacy hardcoded -45 was DefaultCamera's default
         // yaw value (DefaultCamera.cpp:260), which silently broke for OrbitalCamera and
         // for any rotated DefaultCamera state.
-        Angle = (int)(Hero->Object.Angle[2] + CreateAngle((float)HeroX, (float)HeroY, (float)MouseX, (float)MouseY) + g_Camera.Angle[2]) + 360;
+        Angle = (int)(Hero->Object.Angle[2] + CreateAngle((float)HeroX, (float)HeroY, (float)MouseX, (float)MouseY) +
+                      g_Camera.Angle[2]) +
+                360;
         Angle %= 360;
-        if (Angle < 120) Angle = 120;
-        if (Angle > 240) Angle = 240;
+        if (Angle < 120)
+            Angle = 120;
+        if (Angle > 240)
+            Angle = 240;
         Angle += 180;
         Angle %= 360;
     }
 
     Hero->Object.HeadTargetAngle[2] = 0.f;
 
-    if ((
-        g_pOption->IsAutoAttack()
-        && Attacking != -1
-        && gMapManager.WorldActive != WD_6STADIUM
-        && gMapManager.InChaosCastle() == false)
-        || o->CurrentAction == PLAYER_ATTACK_SKILL_FURY_STRIKE
-        || o->CurrentAction == PLAYER_SKILL_GIANTSWING)
+    if ((g_pOption->IsAutoAttack() && Attacking != -1 && gMapManager.WorldActive != WD_6STADIUM &&
+         gMapManager.InChaosCastle() == false) ||
+        o->CurrentAction == PLAYER_ATTACK_SKILL_FURY_STRIKE || o->CurrentAction == PLAYER_SKILL_GIANTSWING)
     {
         bLookAtMouse = false;
     }
@@ -3011,11 +3113,10 @@ void MoveHero()
 
                 if (c->MovementType == MOVEMENT_OPERATE)
                     Action(c, o, false);
+                else if (!CheckArrow() && gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF)
+                    SetPlayerStop(Hero);
                 else
-                    if (!CheckArrow() && gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF)
-                        SetPlayerStop(Hero);
-                    else
-                        Action(c, o, false);
+                    Action(c, o, false);
             }
             else
             {
@@ -3028,21 +3129,20 @@ void MoveHero()
     {
         StandTime++;
 
-        if (StandTime >= 40 && !MouseOnWindow && Hero->Dead == 0 &&
-            o->CurrentAction != PLAYER_POSE1 && o->CurrentAction != PLAYER_POSE_FEMALE1 &&
-            o->CurrentAction != PLAYER_SIT1 && o->CurrentAction != PLAYER_SIT_FEMALE1 && NoAutoAttacking &&
-            o->CurrentAction != PLAYER_ATTACK_TELEPORT &&
+        if (StandTime >= 40 && !MouseOnWindow && Hero->Dead == 0 && o->CurrentAction != PLAYER_POSE1 &&
+            o->CurrentAction != PLAYER_POSE_FEMALE1 && o->CurrentAction != PLAYER_SIT1 &&
+            o->CurrentAction != PLAYER_SIT_FEMALE1 && NoAutoAttacking && o->CurrentAction != PLAYER_ATTACK_TELEPORT &&
             o->CurrentAction != PLAYER_ATTACK_RIDE_TELEPORT &&
             o->CurrentAction != PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT &&
-            o->CurrentAction != PLAYER_SKILL_ATT_UP_OURFORCES &&
-            o->CurrentAction != PLAYER_SKILL_HP_UP_OURFORCES &&
+            o->CurrentAction != PLAYER_SKILL_ATT_UP_OURFORCES && o->CurrentAction != PLAYER_SKILL_HP_UP_OURFORCES &&
             Hero->AttackTime == 0)
         {
             StandTime = 0;
             // CreateAngle args are swapped vs the head-aim case above and the result is
             // negated, so the camera-yaw correction enters with the same magnitude but
             // appears with opposite sign in the sum (i.e. -45 became +45 for DefaultCamera).
-            HeroAngle = -(int)(CreateAngle((float)MouseX, (float)MouseY, (float)HeroX, (float)HeroY) + g_Camera.Angle[2]) + 360;
+            HeroAngle =
+                -(int)(CreateAngle((float)MouseX, (float)MouseY, (float)HeroX, (float)HeroY) + g_Camera.Angle[2]) + 360;
             HeroAngle %= 360;
             BYTE Angle1 = ((BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8);
             BYTE Angle2 = ((BYTE)(((float)HeroAngle + 22.5f) / 360.f * 8.f + 1.f) % 8);
@@ -3071,18 +3171,16 @@ void MoveHero()
                 if (MouseLButtonPush)
                 {
                     MouseLButtonPush = false;
-                    Success = true;
+                    Success          = true;
                 }
                 if (MouseLButton)
                 {
                     Success = true;
                 }
 
-                if ((
-                    g_pOption->IsAutoAttack()
-                    && gMapManager.WorldActive != WD_6STADIUM
-                    && gMapManager.InChaosCastle() == false)
-                    && (Attacking == 1 && SelectedCharacter != -1))
+                if ((g_pOption->IsAutoAttack() && gMapManager.WorldActive != WD_6STADIUM &&
+                     gMapManager.InChaosCastle() == false) &&
+                    (Attacking == 1 && SelectedCharacter != -1))
                 {
                     Success = true;
                 }
@@ -3096,13 +3194,13 @@ void MoveHero()
                     if (LButtonPressTime >= AutoMouseLimitTime)
                     {
                         MouseLButtonPush = false;
-                        MouseLButton = false;
-                        Success = FALSE;
+                        MouseLButton     = false;
+                        Success          = FALSE;
                     }
                 }
                 else
                 {
-                    LButtonPopTime = WorldTime;
+                    LButtonPopTime   = WorldTime;
                     LButtonPressTime = 0.f;
                 }
             }
@@ -3118,50 +3216,53 @@ void MoveHero()
             {
                 //
                 c->MovementType = MOVEMENT_MOVE;
-                ActionTarget = g_iFollowCharacter;
-                TargetX = (int)(followCharacter->Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(followCharacter->Object.Position[1] / TERRAIN_SCALE);
+                ActionTarget    = g_iFollowCharacter;
+                TargetX         = (int)(followCharacter->Object.Position[0] / TERRAIN_SCALE);
+                TargetY         = (int)(followCharacter->Object.Position[1] / TERRAIN_SCALE);
                 if (PathFinding2((c->PositionX), (c->PositionY), TargetX, TargetY, &c->Path))
                     SendMove(c, o);
             }
         }
         else if (Success &&
-            ((o->CurrentAction != PLAYER_SHOCK && (o->Teleport != TELEPORT_BEGIN && o->Teleport != TELEPORT && o->Alpha >= 0.7f) &&
-                !Engine::Object::IsAttackAction(o->CurrentAction)
-                && (o->CurrentAction<PLAYER_SKILL_SLEEP || o->CurrentAction>PLAYER_SKILL_LIGHTNING_SHOCK)
-                && o->CurrentAction != PLAYER_RECOVER_SKILL
-                && (o->CurrentAction<PLAYER_SKILL_THRUST || o->CurrentAction>PLAYER_SKILL_HP_UP_OURFORCES))
-                || (o->CurrentAction >= PLAYER_STOP_TWO_HAND_SWORD_TWO && o->CurrentAction <= PLAYER_RUN_TWO_HAND_SWORD_TWO)
-                || (o->CurrentAction >= PLAYER_DARKLORD_STAND && o->CurrentAction <= PLAYER_RUN_RIDE_HORSE)
-                || (o->CurrentAction >= PLAYER_FENRIR_RUN && o->CurrentAction <= PLAYER_FENRIR_WALK_ONE_LEFT)
-                || (o->CurrentAction >= PLAYER_RAGE_FENRIR_WALK && o->CurrentAction <= PLAYER_RAGE_FENRIR_STAND_ONE_LEFT)
-                ))
+                 ((o->CurrentAction != PLAYER_SHOCK &&
+                   (o->Teleport != TELEPORT_BEGIN && o->Teleport != TELEPORT && o->Alpha >= 0.7f) &&
+                   !Engine::Object::IsAttackAction(o->CurrentAction) &&
+                   (o->CurrentAction < PLAYER_SKILL_SLEEP || o->CurrentAction > PLAYER_SKILL_LIGHTNING_SHOCK) &&
+                   o->CurrentAction != PLAYER_RECOVER_SKILL &&
+                   (o->CurrentAction < PLAYER_SKILL_THRUST || o->CurrentAction > PLAYER_SKILL_HP_UP_OURFORCES)) ||
+                  (o->CurrentAction >= PLAYER_STOP_TWO_HAND_SWORD_TWO &&
+                   o->CurrentAction <= PLAYER_RUN_TWO_HAND_SWORD_TWO) ||
+                  (o->CurrentAction >= PLAYER_DARKLORD_STAND && o->CurrentAction <= PLAYER_RUN_RIDE_HORSE) ||
+                  (o->CurrentAction >= PLAYER_FENRIR_RUN && o->CurrentAction <= PLAYER_FENRIR_WALK_ONE_LEFT) ||
+                  (o->CurrentAction >= PLAYER_RAGE_FENRIR_WALK &&
+                   o->CurrentAction <= PLAYER_RAGE_FENRIR_STAND_ONE_LEFT)))
         {
             int RightType = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
-            int LeftType = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
+            int LeftType  = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
 
             SEASON3B::CNewUIPickedItem* pPickedItem = SEASON3B::CNewUIInventoryCtrl::GetPickedItem();
 
             if (!pPickedItem && RightType == -1 &&
-                ((LeftType >= ITEM_SWORD && LeftType < ITEM_MACE + MAX_ITEM_INDEX)
-                    || (LeftType >= ITEM_STAFF && LeftType < ITEM_STAFF + MAX_ITEM_INDEX
-                        && !(LeftType >= ITEM_BOOK_OF_SAHAMUTT && LeftType <= ITEM_STAFF + 29)
-                        )))
+                ((LeftType >= ITEM_SWORD && LeftType < ITEM_MACE + MAX_ITEM_INDEX) ||
+                 (LeftType >= ITEM_STAFF && LeftType < ITEM_STAFF + MAX_ITEM_INDEX &&
+                  !(LeftType >= ITEM_BOOK_OF_SAHAMUTT && LeftType <= ITEM_STAFF + 29))))
             {
-                if (g_pMyInventory->IsEquipable(EQUIPMENT_WEAPON_LEFT, &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT]))
+                if (g_pMyInventory->IsEquipable(EQUIPMENT_WEAPON_LEFT,
+                                                &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT]))
                 {
                     memcpy(&PickItem, &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT], sizeof(ITEM));
-                    CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type = -1;
+                    CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type  = -1;
                     CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Level = 0;
                     SetCharacterClass(Hero);
-                    SrcInventory = Inventory;
+                    SrcInventory      = Inventory;
                     SrcInventoryIndex = EQUIPMENT_WEAPON_LEFT;
                     DstInventoryIndex = EQUIPMENT_WEAPON_RIGHT;
-                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, SrcInventoryIndex, &PickItem, STORAGE_TYPE::INVENTORY, DstInventoryIndex);
+                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, SrcInventoryIndex, &PickItem,
+                                             STORAGE_TYPE::INVENTORY, DstInventoryIndex);
                 }
             }
             MouseUpdateTime = 0;
-            Success = false;
+            Success         = false;
 
             if (!c->SafeZone)
             {
@@ -3171,7 +3272,8 @@ void MoveHero()
             if (Success)
             {
 #ifdef SEND_POSITION_TO_SERVER
-                if (c->Movement && c->MovementType == MOVEMENT_MOVE && gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
+                if (c->Movement && c->MovementType == MOVEMENT_MOVE &&
+                    gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
                 {
                     if (gCharacterManager.GetEquipedBowType(CharacterMachine->Equipment) != BOWTYPE_NONE)
                     {
@@ -3185,9 +3287,9 @@ void MoveHero()
                     Attacking = 1;
 
                     c->MovementType = MOVEMENT_ATTACK;
-                    ActionTarget = SelectedCharacter;
-                    TargetX = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
-                    TargetY = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
+                    ActionTarget    = SelectedCharacter;
+                    TargetX         = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
+                    TargetY         = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
 
                     if (CheckWall((c->PositionX), (c->PositionY), TargetX, TargetY))
                     {
@@ -3201,7 +3303,8 @@ void MoveHero()
                         }
                         else
                         {
-                            if ((gCharacterManager.GetEquipedBowType() != BOWTYPE_NONE) || (c->MonsterIndex == MONSTER_THUNDER_LICH))
+                            if ((gCharacterManager.GetEquipedBowType() != BOWTYPE_NONE) ||
+                                (c->MonsterIndex == MONSTER_THUNDER_LICH))
                             {
                                 if (CheckArrow() == false)
                                 {
@@ -3217,28 +3320,28 @@ void MoveHero()
                     }
                 }
             }
-            else if (SelectedOperate != -1 && (c->SafeZone || (c->Helper.Type<MODEL_HORN_OF_UNIRIA || c->Helper.Type>MODEL_DARK_HORSE_ITEM || c->Helper.Type != MODEL_HORN_OF_FENRIR)))
+            else if (SelectedOperate != -1 &&
+                     (c->SafeZone || (c->Helper.Type < MODEL_HORN_OF_UNIRIA || c->Helper.Type > MODEL_DARK_HORSE_ITEM ||
+                                      c->Helper.Type != MODEL_HORN_OF_FENRIR)))
             {
-                TargetX = (int)(Operates[SelectedOperate].Owner->Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(Operates[SelectedOperate].Owner->Position[1] / TERRAIN_SCALE);
+                TargetX  = (int)(Operates[SelectedOperate].Owner->Position[0] / TERRAIN_SCALE);
+                TargetY  = (int)(Operates[SelectedOperate].Owner->Position[1] / TERRAIN_SCALE);
                 int wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
 
                 if (wall == TW_HEIGHT || wall < TW_CHARACTER)
                     if (!c->Movement)
                     {
                         c->MovementType = MOVEMENT_OPERATE;
-                        TargetType = Operates[SelectedOperate].Owner->Type;
-                        TargetAngle = Operates[SelectedOperate].Owner->Angle[2];
+                        TargetType      = Operates[SelectedOperate].Owner->Type;
+                        TargetAngle     = Operates[SelectedOperate].Owner->Angle[2];
                         if (PathFinding2((c->PositionX), (c->PositionY), TargetX, TargetY, &c->Path))
                             SendMove(c, o);
                         else
                             Action(c, o, true);
                     }
             }
-            else if (SelectedNpc != -1
-                && !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP)
-                && !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE)
-                )
+            else if (SelectedNpc != -1 && !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) &&
+                     !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE))
             {
                 // Talking to an NPC opens a window (dialogue/quest/shop). The physical button is
                 // usually still held at this point, and the held button keeps re-entering this
@@ -3250,17 +3353,17 @@ void MoveHero()
                 // press still moves the hero normally. Also restart the debounce like the sibling
                 // branches (attack/ground-move) do.
                 s_bIgnoreHeldClickAfterNpcTalk = true;
-                MouseUpdateTime = 0;
+                MouseUpdateTime                = 0;
 
                 if (g_isCharacterBuff(o, eBuff_CrywolfNPCHide) == false)
                     c->MovementType = MOVEMENT_TALK;
 
                 ActionTarget = SelectedNpc;
-                TargetX = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
-                TargetNpc = ActionTarget;
-                TargetType = CharactersClient[ActionTarget].Object.Type;
-                TargetAngle = CharactersClient[ActionTarget].Object.Angle[2];
+                TargetX      = (int)(CharactersClient[ActionTarget].Object.Position[0] / TERRAIN_SCALE);
+                TargetY      = (int)(CharactersClient[ActionTarget].Object.Position[1] / TERRAIN_SCALE);
+                TargetNpc    = ActionTarget;
+                TargetType   = CharactersClient[ActionTarget].Object.Type;
+                TargetAngle  = CharactersClient[ActionTarget].Object.Angle[2];
 
                 if (TargetType == MODEL_KANTURU2ND_ENTER_NPC)
                 {
@@ -3294,9 +3397,9 @@ void MoveHero()
             else if (SelectedItem != -1)
             {
                 c->MovementType = MOVEMENT_GET;
-                ItemKey = SelectedItem;
-                TargetX = (int)(Items[SelectedItem].Object.Position[0] / TERRAIN_SCALE);
-                TargetY = (int)(Items[SelectedItem].Object.Position[1] / TERRAIN_SCALE);
+                ItemKey         = SelectedItem;
+                TargetX         = (int)(Items[SelectedItem].Object.Position[0] / TERRAIN_SCALE);
+                TargetY         = (int)(Items[SelectedItem].Object.Position[1] / TERRAIN_SCALE);
                 if (PathFinding2((c->PositionX), (c->PositionY), TargetX, TargetY, &c->Path))
                     SendMove(c, o);
                 else
@@ -3317,11 +3420,9 @@ void MoveHero()
                     //if(CharacterMachine->Equipment[EQUIPMENT_WING].Type!=-1)
                     //	Wall = TW_NOMOVE;
                     //else
-                    Wall = TW_NOGROUND;
+                    Wall         = TW_NOGROUND;
                     WORD CurrAtt = TerrainWall[TargetY * 256 + TargetX];
-                    if (CurrAtt >= Wall && (CurrAtt & TW_ACTION) != TW_ACTION
-                        && (CurrAtt & TW_HEIGHT) != TW_HEIGHT
-                        )
+                    if (CurrAtt >= Wall && (CurrAtt & TW_ACTION) != TW_ACTION && (CurrAtt & TW_HEIGHT) != TW_HEIGHT)
                         DontMove = true;
                     else
                         DontMove = false;
@@ -3336,7 +3437,7 @@ void MoveHero()
                             c->MovementType = MOVEMENT_MOVE;
                             SendMove(c, o);
                             OBJECT* pHeroObj = &Hero->Object;
-                            vec3_t vLight, vPos;
+                            vec3_t  vLight, vPos;
                             Vector(1.f, 1.f, 0.f, vLight);
                             VectorCopy(CollisionPosition, vPos);
                             DeleteEffect(MODEL_MOVE_TARGETPOSITION_EFFECT);
@@ -3344,7 +3445,8 @@ void MoveHero()
                             int iTerrainIndex = TERRAIN_INDEX((int)SelectXF, (int)SelectYF);
                             if ((TerrainWall[iTerrainIndex] & TW_NOMOVE) != TW_NOMOVE)
                             {
-                                CreateEffect(MODEL_MOVE_TARGETPOSITION_EFFECT, vPos, pHeroObj->Angle, vLight, 0, pHeroObj, -1, 0, 0, 0, 0.6f);
+                                CreateEffect(MODEL_MOVE_TARGETPOSITION_EFFECT, vPos, pHeroObj->Angle, vLight, 0,
+                                             pHeroObj, -1, 0, 0, 0, 0.6f);
                             }
                         }
                         else
@@ -3361,12 +3463,14 @@ void MoveHero()
 
     Attack(Hero);
 
-    int Index = ((int)Hero->Object.Position[1] / (int)TERRAIN_SCALE) * 256 + ((int)Hero->Object.Position[0] / (int)TERRAIN_SCALE);
-    if (Index < 0) Index = 0;
-    else if (Index > 65535) Index = 65535;
+    int Index = ((int)Hero->Object.Position[1] / (int)TERRAIN_SCALE) * 256 +
+                ((int)Hero->Object.Position[0] / (int)TERRAIN_SCALE);
+    if (Index < 0)
+        Index = 0;
+    else if (Index > 65535)
+        Index = 65535;
     HeroTile = TerrainMappingLayer1[Index];
 }
-
 
 int FindHotKey(int Skill)
 {
@@ -3384,15 +3488,15 @@ int FindHotKey(int Skill)
     return SkillIndex;
 }
 
-extern int   CheckX;
-extern int   CheckY;
-extern int   CheckSkill;
+extern int CheckX;
+extern int CheckY;
+extern int CheckSkill;
 
 void SendMacroChat(wchar_t* Text)
 {
     if (!CheckCommand(Text, true))
     {
-        if ((Hero->Helper.Type<MODEL_HORN_OF_UNIRIA || Hero->Helper.Type>MODEL_DARK_HORSE_ITEM) || Hero->SafeZone)
+        if ((Hero->Helper.Type < MODEL_HORN_OF_UNIRIA || Hero->Helper.Type > MODEL_DARK_HORSE_ITEM) || Hero->SafeZone)
         {
             // Send animation for specific texts
             UI::Chat::CheckChatText(Text);
@@ -3459,33 +3563,41 @@ void MoveInterface()
         int x, y, Width, Height;
         if (g_iChatInputType == 0)
         {
-            Width = 190; Height = 29; x = 186; y = 415;
-            if (MouseX >= x && MouseX < x + Width && MouseY >=
-                y && MouseY < y + Height)
-            {
-                if (MouseLButtonPush)
-                {
-                    MouseLButtonPush = false;
-                    InputIndex = 0;
-                    MouseUpdateTime = 0;
-                    MouseUpdateTimeMax = 6;
-                    PlayBuffer(SOUND_CLICK01);
-                }
-            }
-            Width = 58; Height = 29; x = 186 + 190; y = 415;
+            Width  = 190;
+            Height = 29;
+            x      = 186;
+            y      = 415;
             if (MouseX >= x && MouseX < x + Width && MouseY >= y && MouseY < y + Height)
             {
                 if (MouseLButtonPush)
                 {
-                    MouseLButtonPush = false;
-                    InputIndex = 1;
-                    MouseUpdateTime = 0;
+                    MouseLButtonPush   = false;
+                    InputIndex         = 0;
+                    MouseUpdateTime    = 0;
+                    MouseUpdateTimeMax = 6;
+                    PlayBuffer(SOUND_CLICK01);
+                }
+            }
+            Width  = 58;
+            Height = 29;
+            x      = 186 + 190;
+            y      = 415;
+            if (MouseX >= x && MouseX < x + Width && MouseY >= y && MouseY < y + Height)
+            {
+                if (MouseLButtonPush)
+                {
+                    MouseLButtonPush   = false;
+                    InputIndex         = 1;
+                    MouseUpdateTime    = 0;
                     MouseUpdateTimeMax = 6;
                     PlayBuffer(SOUND_CLICK01);
                 }
             }
         }
-        Width = 20; Height = 29; x = 186 + 190 + 58; y = 415;
+        Width  = 20;
+        Height = 29;
+        x      = 186 + 190 + 58;
+        y      = 415;
         if (MouseX >= x && MouseX < x + Width && MouseY >= y && MouseY < y + Height)
         {
             if (MouseLButtonPush)
@@ -3495,7 +3607,7 @@ void MoveInterface()
                     WhisperEnable = false;
                 else
                     WhisperEnable = true;
-                MouseUpdateTime = 0;
+                MouseUpdateTime    = 0;
                 MouseUpdateTimeMax = 6;
                 PlayBuffer(SOUND_CLICK01);
             }
@@ -3505,8 +3617,7 @@ void MoveInterface()
 
 bool IsCanBCSkill(int Type)
 {
-    if (Type == 44 || Type == 45 || Type == 46 || Type == 57 || Type == 73 || Type == 74
-        || Type == AT_SKILL_OCCUPY)
+    if (Type == 44 || Type == 45 || Type == 46 || Type == 57 || Type == 73 || Type == 74 || Type == AT_SKILL_OCCUPY)
     {
         if (!gMapManager.InBattleCastle() || !battleCastle::IsBattleCastleStart())
         {
@@ -3520,8 +3631,9 @@ bool IsCanBCSkill(int Type)
 bool CheckSkillUseCondition(OBJECT* o, int Type)
 {
 #ifdef LEM_FIX_USER_LOGOUT_SKILL_ENABLE
-    if (g_bExit)		return false;
-#endif	// LEM_FIX_USER_LOGOUT_SKILL_ENABLE [lem_2010.8.18]
+    if (g_bExit)
+        return false;
+#endif  // LEM_FIX_USER_LOGOUT_SKILL_ENABLE [lem_2010.8.18]
     if (IsCanBCSkill(Type) == false)
     {
         return false;
@@ -3538,8 +3650,8 @@ bool CheckSkillUseCondition(OBJECT* o, int Type)
 }
 
 extern wchar_t TextList[50][100];
-extern int  TextListColor[50];
-extern int  TextBold[50];
+extern int     TextListColor[50];
+extern int     TextBold[50];
 
 void GetTime(DWORD time, std::wstring& timeText, bool isSecond)
 {
@@ -3547,19 +3659,21 @@ void GetTime(DWORD time, std::wstring& timeText, bool isSecond)
 
     if (isSecond)
     {
-        DWORD day = time / (1440 * 60);
-        DWORD oClock = (time - (day * (1440 * 60))) / 3600;
+        DWORD day     = time / (1440 * 60);
+        DWORD oClock  = (time - (day * (1440 * 60))) / 3600;
         DWORD minutes = (time - ((oClock * 3600) + (day * (1440 * 60)))) / 60;
-        DWORD second = time % 60;
+        DWORD second  = time % 60;
 
         if (day != 0)
         {
-            mu_swprintf(buff, L"%d %ls %d %ls %d %ls %d %ls", day, I18N::Game::Day, oClock, I18N::Game::Hour, minutes, I18N::Game::Minute, second, I18N::Game::Second);
+            mu_swprintf(buff, L"%d %ls %d %ls %d %ls %d %ls", day, I18N::Game::Day, oClock, I18N::Game::Hour, minutes,
+                        I18N::Game::Minute, second, I18N::Game::Second);
             timeText = buff;
         }
         else if (day == 0 && oClock != 0)
         {
-            mu_swprintf(buff, L"%d %ls %d %ls %d %ls", oClock, I18N::Game::Hour, minutes, I18N::Game::Minute, second, I18N::Game::Second);
+            mu_swprintf(buff, L"%d %ls %d %ls %d %ls", oClock, I18N::Game::Hour, minutes, I18N::Game::Minute, second,
+                        I18N::Game::Second);
             timeText = buff;
         }
         else if (day == 0 && oClock == 0 && minutes != 0)
@@ -3574,13 +3688,14 @@ void GetTime(DWORD time, std::wstring& timeText, bool isSecond)
     }
     else
     {
-        DWORD day = time / 1440;
-        DWORD oClock = (time - (day * 1440)) / 60;
+        DWORD day     = time / 1440;
+        DWORD oClock  = (time - (day * 1440)) / 60;
         DWORD minutes = time % 60;
 
         if (day != 0)
         {
-            mu_swprintf(buff, L"%d %ls %d %ls %d %ls", day, I18N::Game::Day, oClock, I18N::Game::Hour, minutes, I18N::Game::Minute);
+            mu_swprintf(buff, L"%d %ls %d %ls %d %ls", day, I18N::Game::Day, oClock, I18N::Game::Hour, minutes,
+                        I18N::Game::Minute);
             timeText = buff;
         }
         else if (day == 0 && oClock != 0)
@@ -3600,10 +3715,14 @@ void RenderBar(float x, float y, float Width, float Height, float Bar, bool Disa
 {
     if (clipping)
     {
-        if (x < 0) x = 0;
-        if (y < 0) y = 0;
-        if (x + Width + 4 > REFERENCE_WIDTH) x = REFERENCE_WIDTH - (Width + 1 + 4);
-        if (y + Height + 4 > REFERENCE_HEIGHT - 47) y = REFERENCE_HEIGHT - 47 - (Height + 1 + 4);
+        if (x < 0)
+            x = 0;
+        if (y < 0)
+            y = 0;
+        if (x + Width + 4 > REFERENCE_WIDTH)
+            x = REFERENCE_WIDTH - (Width + 1 + 4);
+        if (y + Height + 4 > REFERENCE_HEIGHT - 47)
+            y = REFERENCE_HEIGHT - 47 - (Height + 1 + 4);
     }
 
     EnableAlphaTest();
@@ -3650,7 +3769,8 @@ void RenderSwichState()
     {
         if (Switch_Info[i].m_bySwitchState > 0)
         {
-            mu_swprintf(Buff, L"%ls%d / %ls / %ls", I18N::Game::CrownSwitch, i + 1, Switch_Info[i].m_szGuildName, Switch_Info[i].m_szUserName);
+            mu_swprintf(Buff, L"%ls%d / %ls / %ls", I18N::Game::CrownSwitch, i + 1, Switch_Info[i].m_szGuildName,
+                        Switch_Info[i].m_szUserName);
             g_pRenderText->SetFont(g_hFont);
             g_pRenderText->SetTextColor(255, 255, 255, 255);
             g_pRenderText->SetBgColor(0);
@@ -3669,7 +3789,7 @@ void RenderInterface(bool Render)
     RenderSwichState();
     battleCastle::RenderBuildTimes();
 
-    g_pUIMapName->Render();		// rozy
+    g_pUIMapName->Render();  // rozy
 
     //	M34CryWolf1st::Render_Mvp_Interface();
     M39Kanturu3rd::RenderKanturu3rdinterface();
@@ -3685,9 +3805,11 @@ void RenderOutSides()
         EnableAlphaBlend();
         glColor3f(0.3f, 0.3f, 0.25f);
         float WindX = (float)((int)WorldTime % 100000) * 0.0002f;
-        RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f, 0.3f, 0.3f);
+        RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX, 0.f,
+                       0.3f, 0.3f);
         float WindX2 = (float)((int)WorldTime % 100000) * 0.001f;
-        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f, 3.f, 2.f);
+        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, WindX2, 0.f,
+                       3.f, 2.f);
     }
 #ifdef ASG_ADD_MAP_KARUTAN
     else if (IsKarutanMap())
@@ -3696,9 +3818,10 @@ void RenderOutSides()
         EnableAlphaBlend();
         glColor3f(0.3f, 0.3f, 0.25f);
         float fWindX = (float)((int)WorldTime % 100000) * 0.004f;
-        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, fWindX, 0.f, 3.f, 2.f);
+        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH, (float)REFERENCE_HEIGHT - 45.f, fWindX, 0.f,
+                       3.f, 2.f);
     }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif  // ASG_ADD_MAP_KARUTAN
     else if (WD_34CRYWOLF_1ST == gMapManager.WorldActive)
     {
         if (ashies == true)
@@ -3727,16 +3850,15 @@ void RenderOutSides()
 void MoveTournamentInterface()
 {
     static unsigned int s_effectCount = 0;
-    int Width = 70, Height = 20;
-    int WindowX = (REFERENCE_WIDTH - Width) / 2;
-    int WindowY = (REFERENCE_HEIGHT - Height) / 2 + 50;
+    int                 Width = 70, Height = 20;
+    int                 WindowX = (REFERENCE_WIDTH - Width) / 2;
+    int                 WindowY = (REFERENCE_HEIGHT - Height) / 2 + 50;
     if (MouseLButtonPush)
     {
-        float wRight = WindowX + Width;
+        float wRight  = WindowX + Width;
         float wBottom = WindowY + Height;
 
-        if (WindowY <= MouseY && MouseY <= WindowY + Height &&
-            WindowX <= MouseX && MouseX <= WindowX + Width)
+        if (WindowY <= MouseY && MouseY <= WindowY + Height && WindowX <= MouseX && MouseX <= WindowX + Width)
         {
             g_wtMatchResult.Clear();
             g_wtMatchTimeLeft.m_Time = 0;
@@ -3763,14 +3885,14 @@ void MoveBattleSoccerEffect(CHARACTER* c)
                 vec3_t Position, Angle;
                 for (int i = 0; i < 36; ++i)
                 {
-                    Angle[0] = -10.f;
-                    Angle[1] = 0.f;
-                    Angle[2] = 45.f;
+                    Angle[0]     = -10.f;
+                    Angle[1]     = 0.f;
+                    Angle[2]     = 45.f;
                     float x_bias = cosf(Q_PI / 180.f * 10.0f * i);
                     float y_bias = sinf(Q_PI / 180.f * 10.0f * i);
-                    Position[0] = c->Object.Position[0] + x_bias * TERRAIN_SCALE;
-                    Position[1] = c->Object.Position[1] + y_bias * TERRAIN_SCALE;
-                    Position[2] = c->Object.Position[2];
+                    Position[0]  = c->Object.Position[0] + x_bias * TERRAIN_SCALE;
+                    Position[1]  = c->Object.Position[1] + y_bias * TERRAIN_SCALE;
+                    Position[2]  = c->Object.Position[2];
                     CreateJoint(BITMAP_FLARE, Position, Position, Angle, 22, &c->Object, 35);
                 }
             }
@@ -3782,14 +3904,14 @@ void MoveBattleSoccerEffect(CHARACTER* c)
                 vec3_t Position, Angle;
                 for (int i = 0; i < 36; ++i)
                 {
-                    Angle[0] = -10.f;
-                    Angle[1] = 0.f;
-                    Angle[2] = 45.f;
+                    Angle[0]     = -10.f;
+                    Angle[1]     = 0.f;
+                    Angle[2]     = 45.f;
                     float x_bias = cosf(Q_PI / 180.f * 10.0f * i);
                     float y_bias = sinf(Q_PI / 180.f * 10.0f * i);
-                    Position[0] = c->Object.Position[0] + x_bias * TERRAIN_SCALE;
-                    Position[1] = c->Object.Position[1] + y_bias * TERRAIN_SCALE;
-                    Position[2] = c->Object.Position[2];
+                    Position[0]  = c->Object.Position[0] + x_bias * TERRAIN_SCALE;
+                    Position[1]  = c->Object.Position[1] + y_bias * TERRAIN_SCALE;
+                    Position[2]  = c->Object.Position[2];
                     CreateJoint(BITMAP_FLARE, Position, Position, Angle, 22, &c->Object, 35);
                 }
             }
@@ -3799,10 +3921,10 @@ void MoveBattleSoccerEffect(CHARACTER* c)
 
 void RenderTournamentInterface()
 {
-    int Width = 300, Height = 2 * 5 + 6 * 30;
-    int WindowX = (REFERENCE_WIDTH - Width) / 2;
-    int WindowY = 120 + 0;
-    float x = 0.0f, y = 0.0f;
+    int     Width = 300, Height = 2 * 5 + 6 * 30;
+    int     WindowX = (REFERENCE_WIDTH - Width) / 2;
+    int     WindowY = 120 + 0;
+    float   x = 0.0f, y = 0.0f;
     wchar_t t_Str[20];
     wcscpy(t_Str, L"");
 
@@ -3836,8 +3958,11 @@ void RenderTournamentInterface()
                     mu_swprintf(t_Str, I18N::Game::RemainingSecondsDD, t_valueMin, t_valueSec);
                 }
             }
-            x += (float)GetScreenWidth() / 2; y += 350;
-            g_pRenderText->RenderText((int)x, (int)y, t_Str, 0, 0, RT3_WRITE_CENTER); x++; y++;
+            x += (float)GetScreenWidth() / 2;
+            y += 350;
+            g_pRenderText->RenderText((int)x, (int)y, t_Str, 0, 0, RT3_WRITE_CENTER);
+            x++;
+            y++;
 
             g_pRenderText->SetTextColor(0xffffffff);
             g_pRenderText->RenderText((int)x, (int)y, t_Str, 0, 0, RT3_WRITE_CENTER);
@@ -3852,18 +3977,22 @@ void RenderTournamentInterface()
         return;
     }
 
-    Width = 300; Height = 2 * 5 + 5 * 40; WindowX = (REFERENCE_WIDTH - Width) / 2; WindowY = 120 + 0;
+    Width    = 300;
+    Height   = 2 * 5 + 5 * 40;
+    WindowX  = (REFERENCE_WIDTH - Width) / 2;
+    WindowY  = 120 + 0;
     int yPos = WindowY;
-    RenderBitmap(BITMAP_INTERFACE + 22, (float)WindowX, (float)yPos, (float)Width, (float)5, 0.f, 0.f, Width / 512.f, 5.f / 8.f);
+    RenderBitmap(BITMAP_INTERFACE + 22, (float)WindowX, (float)yPos, (float)Width, (float)5, 0.f, 0.f, Width / 512.f,
+                 5.f / 8.f);
     yPos += 5;
 
     for (int i = 0; i < 5; ++i)
     {
-        RenderBitmap(BITMAP_INTERFACE + 21, WindowX, (float)yPos,
-            Width, 40.f, 0.f, 0.0f, 213.f / 256.f, 40.f / 64.f);
+        RenderBitmap(BITMAP_INTERFACE + 21, WindowX, (float)yPos, Width, 40.f, 0.f, 0.0f, 213.f / 256.f, 40.f / 64.f);
         yPos += 40.f;
     }
-    RenderBitmap(BITMAP_INTERFACE + 22, (float)WindowX, (float)yPos, (float)Width, (float)5, 0.f, 0.f, Width / 512.f, 5.f / 8.f);
+    RenderBitmap(BITMAP_INTERFACE + 22, (float)WindowX, (float)yPos, (float)Width, (float)5, 0.f, 0.f, Width / 512.f,
+                 5.f / 8.f);
 
     EnableAlphaBlend();
     glColor4f(1.f, 1.f, 1.f, 1.f);
@@ -3924,14 +4053,19 @@ void RenderTournamentInterface()
     }
     g_pRenderText->SetFont(g_hFont);
 
-    Width = 70; Height = 20; x = (REFERENCE_WIDTH - Width) / 2; y = (REFERENCE_HEIGHT - Height) / 2 + 50;
+    Width  = 70;
+    Height = 20;
+    x      = (REFERENCE_WIDTH - Width) / 2;
+    y      = (REFERENCE_HEIGHT - Height) / 2 + 50;
     if (MouseX >= x && MouseX < x + Width && MouseY >= y && MouseY < y + Height)
     {
-        RenderBitmap(BITMAP_INTERFACE + 12, (float)x, (float)y, (float)Width, (float)Height, 0.f, 0.f, Width / 128.f, Height / 32.f);
+        RenderBitmap(BITMAP_INTERFACE + 12, (float)x, (float)y, (float)Width, (float)Height, 0.f, 0.f, Width / 128.f,
+                     Height / 32.f);
     }
     else
     {
-        RenderBitmap(BITMAP_INTERFACE + 11, (float)x, (float)y, (float)Width, (float)Height, 0.f, 0.f, Width / 128.f, Height / 32.f);
+        RenderBitmap(BITMAP_INTERFACE + 11, (float)x, (float)y, (float)Width, (float)Height, 0.f, 0.f, Width / 128.f,
+                     Height / 32.f);
     }
 
     glColor3f(1.f, 1.f, 1.f);
@@ -3940,21 +4074,23 @@ void RenderTournamentInterface()
 
 void RenderPartyHP()
 {
-    if (PartyNumber <= 0) return;
+    if (PartyNumber <= 0)
+        return;
 
     float   Width = 38.f;
-    wchar_t    Text[100];
+    wchar_t Text[100];
 
     for (int j = 0; j < PartyNumber; ++j)
     {
         PARTY_t* p = &Party[j];
 
-        if (p->index < 0 || p->index >= MAX_CHARACTERS_CLIENT) continue;
+        if (p->index < 0 || p->index >= MAX_CHARACTERS_CLIENT)
+            continue;
 
         CHARACTER* c = &CharactersClient[p->index];
-        OBJECT* o = &c->Object;
-        vec3_t      Position;
-        int         ScreenX, ScreenY;
+        OBJECT*    o = &c->Object;
+        vec3_t     Position;
+        int        ScreenX, ScreenY;
 
         Vector(o->Position[0], o->Position[1], o->Position[2] + o->BoundingBoxMax[2] + 100.f, Position);
         CameraProjection::WorldToScreen(g_Camera, Position, &ScreenX, &ScreenY);
@@ -3991,19 +4127,18 @@ void RenderPartyHP()
     glColor3f(1.f, 1.f, 1.f);
 }
 
-
 void RenderTimes()
 {
     const uint64_t currentTickCount = GetTickCount64();
     if (LastMacroTime > currentTickCount - MacroCooldownMs)
     {
-        constexpr float width = 50;
+        constexpr float width  = 50;
         constexpr float height = 2;
-        constexpr int y = REFERENCE_HEIGHT - 48 - 40;
-        const float x = (static_cast<float>(GetScreenWidth()) - width) / 2.0f;
+        constexpr int   y      = REFERENCE_HEIGHT - 48 - 40;
+        const float     x      = (static_cast<float>(GetScreenWidth()) - width) / 2.0f;
 
         const uint64_t remainingMacroCooldownTime = MacroCooldownMs - (currentTickCount - LastMacroTime);
-        const float progressValue = static_cast<float>(remainingMacroCooldownTime) / MacroCooldownMs * width;
+        const float    progressValue = static_cast<float>(remainingMacroCooldownTime) / MacroCooldownMs * width;
 
         EnableAlphaTest();
         g_pRenderText->RenderText(static_cast<int>(x), y, L"Macro Time");
@@ -4025,11 +4160,13 @@ void RenderCursor()
     EnableAlphaTest();
     glColor3f(1.f, 1.f, 1.f);
 
-    float u = 0.f;
-    float v = 0.f;
-    int Frame = (int)(WorldTime * 0.01f) % 6;
-    if (Frame == 1 || Frame == 3 || Frame == 5) u = 0.5f;
-    if (Frame == 2 || Frame == 3 || Frame == 4) v = 0.5f;
+    float u     = 0.f;
+    float v     = 0.f;
+    int   Frame = (int)(WorldTime * 0.01f) % 6;
+    if (Frame == 1 || Frame == 3 || Frame == 5)
+        u = 0.5f;
+    if (Frame == 2 || Frame == 3 || Frame == 4)
+        v = 0.5f;
     if (g_iKeyPadEnable || ErrorMessage)
     {
         RenderBitmap(BITMAP_CURSOR, (float)MouseX - 2.f, (float)MouseY - 2.f, 24.f, 24.f);
@@ -4054,13 +4191,12 @@ void RenderCursor()
         if ((gMapManager.WorldActive == WD_0LORENCIA && Operates[SelectedOperate].Owner->Type == MODEL_POSE_BOX) ||
             (gMapManager.WorldActive == WD_1DUNGEON && Operates[SelectedOperate].Owner->Type == 60) ||
             (gMapManager.WorldActive == WD_2DEVIAS && Operates[SelectedOperate].Owner->Type == 91) ||
-            (gMapManager.WorldActive == WD_3NORIA && Operates[SelectedOperate].Owner->Type == 38)
-            )
+            (gMapManager.WorldActive == WD_3NORIA && Operates[SelectedOperate].Owner->Type == 38))
             RenderBitmap(BITMAP_CURSOR + 6, (float)MouseX - 2.f, (float)MouseY - 2.f, 24.f, 24.f);
         else
             RenderBitmap(BITMAP_CURSOR + 7, (float)MouseX - 2.f, (float)MouseY - 2.f, 24.f, 24.f);
     }
-    else if ((!Hero->SafeZone/*||EnableEdit*/) && SelectedCharacter != -1)
+    else if ((!Hero->SafeZone /*||EnableEdit*/) && SelectedCharacter != -1)
     {
         if (CheckAttack() && !MouseOnWindow)
         {
@@ -4091,11 +4227,11 @@ void RenderCursor()
             RenderBitmap(BITMAP_CURSOR + 1, (float)MouseX - 2.f, (float)MouseY - 2.f, 24.f, 24.f);
         }
     }
-    else if (((g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_INVENTORY) || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_INVENTORY_EXT))
-        && g_pMyInventory->GetRepairMode() == SEASON3B::REPAIR_MODE_ON)
-        || (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP)
-            && g_pNPCShop->GetShopState() == SEASON3B::CNewUINPCShop::SHOP_STATE_REPAIR)
-        )
+    else if (((g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_INVENTORY) ||
+               g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_INVENTORY_EXT)) &&
+              g_pMyInventory->GetRepairMode() == SEASON3B::REPAIR_MODE_ON) ||
+             (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) &&
+              g_pNPCShop->GetShopState() == SEASON3B::CNewUINPCShop::SHOP_STATE_REPAIR))
     {
         if (MouseLButton == false)
         {
@@ -4157,13 +4293,12 @@ void ForwardSelectModel()
     }
 }
 
-extern int  EditMonsterNumber;
+extern int EditMonsterNumber;
 
 extern int MonsterKey;
 
-
-int TotalPacketSize = 0;
-int OldTime = timeGetTime();
+int        TotalPacketSize = 0;
+int        OldTime         = timeGetTime();
 extern int MixItemValue;
 extern int MixItemValueOld;
 
@@ -4175,12 +4310,12 @@ void RenderDebugWindow()
 
     if (timeGetTime() - OldTime >= 1000)
     {
-        OldTime = timeGetTime();
+        OldTime         = timeGetTime();
         TotalPacketSize = 0;
     }
 
 #ifdef ENABLE_EDIT
-    wchar_t Text[256] {};
+    wchar_t Text[256]{};
     if (EditFlag == EDIT_MAPPING)
     {
         int sx = REFERENCE_WIDTH - 30;
@@ -4232,16 +4367,15 @@ void RenderDebugWindow()
             g_pRenderText->RenderText(REFERENCE_WIDTH - 64, i * 10, ColorTable[i]);
         }
     }
-#endif //ENABLE_EDIT
+#endif  //ENABLE_EDIT
 }
-
 
 bool IsGMCharacter()
 {
-    if ((Hero->Object.Kind == KIND_PLAYER && Hero->Object.Type == MODEL_PLAYER && Hero->Object.SubType == MODEL_GM_CHARACTER)
-        || (g_isCharacterBuff((&Hero->Object), eBuff_GMEffect))
-        || (Hero->CtlCode & CTLCODE_08OPERATOR)
-        || (Hero->CtlCode & CTLCODE_20OPERATOR))
+    if ((Hero->Object.Kind == KIND_PLAYER && Hero->Object.Type == MODEL_PLAYER &&
+         Hero->Object.SubType == MODEL_GM_CHARACTER) ||
+        (g_isCharacterBuff((&Hero->Object), eBuff_GMEffect)) || (Hero->CtlCode & CTLCODE_08OPERATOR) ||
+        (Hero->CtlCode & CTLCODE_20OPERATOR))
     {
         return true;
     }
@@ -4260,8 +4394,8 @@ bool IsNonAttackGM()
 
 bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText)
 {
-    bool bCantFly = false;
-    bool bCantSwim = false;
+    bool bCantFly         = false;
+    bool bCantSwim        = false;
     bool bEquipChangeRing = false;
 
     bool bMoveAtlans = false;
@@ -4273,12 +4407,12 @@ bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText)
     _wcsupr(szChatTextUpperChars);
 
     short pEquipedRightRingType = (&CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT])->Type;
-    short pEquipedLeftRingType = (&CharacterMachine->Equipment[EQUIPMENT_RING_LEFT])->Type;
-    short pEquipedHelperType = (&CharacterMachine->Equipment[EQUIPMENT_HELPER])->Type;
-    short pEquipedWingType = (&CharacterMachine->Equipment[EQUIPMENT_WING])->Type;
+    short pEquipedLeftRingType  = (&CharacterMachine->Equipment[EQUIPMENT_RING_LEFT])->Type;
+    short pEquipedHelperType    = (&CharacterMachine->Equipment[EQUIPMENT_HELPER])->Type;
+    short pEquipedWingType      = (&CharacterMachine->Equipment[EQUIPMENT_WING])->Type;
 
     if ((pEquipedWingType == -1 && pEquipedHelperType != ITEM_HORN_OF_DINORANT &&
-        pEquipedHelperType != ITEM_HORN_OF_FENRIR && pEquipedHelperType != ITEM_DARK_HORSE_ITEM) ||
+         pEquipedHelperType != ITEM_HORN_OF_FENRIR && pEquipedHelperType != ITEM_DARK_HORSE_ITEM) ||
         pEquipedHelperType == ITEM_HORN_OF_UNIRIA)
     {
         bCantFly = true;
@@ -4335,7 +4469,8 @@ bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText)
 
     if ((bCantFly || bEquipChangeRing) && bMoveIcarus)
     {
-        g_pSystemLogBox->AddText(I18N::Game::YouCanEnterIcarusOnlyWithWingsDinorantFenrirr, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(I18N::Game::YouCanEnterIcarusOnlyWithWingsDinorantFenrirr,
+                                 SEASON3B::TYPE_SYSTEM_MESSAGE);
         return true;
     }
 

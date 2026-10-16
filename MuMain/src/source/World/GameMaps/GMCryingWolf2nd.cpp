@@ -11,8 +11,7 @@
 #include "World/MapInfra/MapManager.h"
 #include "Render/Models/BoneManager.h"
 
-    bool
-    M34CryingWolf2nd::IsCyringWolf2nd()
+bool M34CryingWolf2nd::IsCyringWolf2nd()
 {
     return (gMapManager.WorldActive == WD_35CRYWOLF_2ND) ? true : false;
 }

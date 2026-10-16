@@ -1,4 +1,4 @@
-﻿  // Event.cpp: implementation of the CEvent class.
+﻿// Event.cpp: implementation of the CEvent class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -33,60 +33,60 @@
 #include <cwchar>
 #include <limits>
 
-    namespace
+namespace
 {
-    using Clock = std::chrono::steady_clock;
+using Clock = std::chrono::steady_clock;
 
-    constexpr std::int32_t kChristmasEffectIdBase =
-        static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()) - 60;
-    constexpr std::int32_t kChristmasEffectIdLimit =
-        static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()) - 10;
+constexpr std::int32_t kChristmasEffectIdBase =
+    static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()) - 60;
+constexpr std::int32_t kChristmasEffectIdLimit =
+    static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()) - 10;
 
-    constexpr std::array<std::array<float, 3>, 3> kSnowBurstOffsets{{
-        {50.f, 50.f, 50.f},
-        {-50.f, -50.f, 50.f},
-        {50.f, -50.f, 50.f},
-    }};
+constexpr std::array<std::array<float, 3>, 3> kSnowBurstOffsets{{
+    {50.f, 50.f, 50.f},
+    {-50.f, -50.f, 50.f},
+    {50.f, -50.f, 50.f},
+}};
 
-    template <std::size_t N> void CopyWideString(wchar_t(&destination)[N], const wchar_t* source)
+template <std::size_t N> void CopyWideString(wchar_t (&destination)[N], const wchar_t* source)
+{
+    if constexpr (N == 0)
     {
-        if constexpr (N == 0)
-        {
-            return;
-        }
-
-        if (source == nullptr)
-        {
-            destination[0] = L'\0';
-            return;
-        }
-
-        std::wcsncpy(destination, source, N - 1);
-        destination[N - 1] = L'\0';
+        return;
     }
 
-    void CreateSnowBursts(OBJECT & object, vec3_t light)
+    if (source == nullptr)
     {
-        for (const auto& offset : kSnowBurstOffsets)
-        {
-            vec3_t position;
-            VectorCopy(object.Position, position);
-            position[0] += offset[0];
-            position[1] += offset[1];
-            position[2] += offset[2];
+        destination[0] = L'\0';
+        return;
+    }
 
-            CreateParticle(BITMAP_EXPLOTION_MONO, position, object.Angle, light, 0, 0.6f);
-            for (int i = 0; i < 2; ++i)
-            {
-                CreateEffect(MODEL_ICE_SMALL, position, object.Angle, light, 0);
-                CreateParticle(BITMAP_CLUD64, position, object.Angle, light, 3, 1.0f);
-                CreateParticle(BITMAP_CLUD64, position, object.Angle, light, 3, 1.0f);
-                CreateEffect(MODEL_HALLOWEEN_CANDY_STAR, position, object.Angle, light, 1);
-                CreateParticle(BITMAP_SNOW_EFFECT_1, position, object.Angle, light, 0, 0.5f);
-                CreateParticle(BITMAP_SNOW_EFFECT_1, position, object.Angle, light, 0, 0.5f);
-            }
+    std::wcsncpy(destination, source, N - 1);
+    destination[N - 1] = L'\0';
+}
+
+void CreateSnowBursts(OBJECT& object, vec3_t light)
+{
+    for (const auto& offset : kSnowBurstOffsets)
+    {
+        vec3_t position;
+        VectorCopy(object.Position, position);
+        position[0] += offset[0];
+        position[1] += offset[1];
+        position[2] += offset[2];
+
+        CreateParticle(BITMAP_EXPLOTION_MONO, position, object.Angle, light, 0, 0.6f);
+        for (int i = 0; i < 2; ++i)
+        {
+            CreateEffect(MODEL_ICE_SMALL, position, object.Angle, light, 0);
+            CreateParticle(BITMAP_CLUD64, position, object.Angle, light, 3, 1.0f);
+            CreateParticle(BITMAP_CLUD64, position, object.Angle, light, 3, 1.0f);
+            CreateEffect(MODEL_HALLOWEEN_CANDY_STAR, position, object.Angle, light, 1);
+            CreateParticle(BITMAP_SNOW_EFFECT_1, position, object.Angle, light, 0, 0.5f);
+            CreateParticle(BITMAP_SNOW_EFFECT_1, position, object.Angle, light, 0, 0.5f);
         }
     }
+}
 }  // namespace
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////

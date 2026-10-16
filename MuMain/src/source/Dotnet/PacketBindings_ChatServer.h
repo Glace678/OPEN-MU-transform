@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketBindings.h" company="MUnique">
+﻿// <copyright file="PacketBindings.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -20,7 +20,7 @@
 #include "PacketFunctions_CommonEnums.h"
 #include "PacketFunctions_ChatServer_Enums.h"
 
-    typedef void(CORECLR_DELEGATE_CALLTYPE* SendAuthenticate)(int32_t, uint16_t, const BYTE*, uint32_t);
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendAuthenticate)(int32_t, uint16_t, const BYTE*, uint32_t);
 inline SendAuthenticate dotnet_SendAuthenticate =
     reinterpret_cast<SendAuthenticate>(symLoad(munique_client_library_handle, "SendAuthenticate"));
 

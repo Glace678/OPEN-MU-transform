@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketFunctions.cpp" company="MUnique">
+﻿// <copyright file="PacketFunctions.cpp" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,8 +17,7 @@
 #include "PacketFunctions_ClientToServer.h"
 #include "PacketBindings_ClientToServer.h"
 
-    void
-    PacketFunctions_ClientToServer::SendPing(uint32_t tickCount, uint16_t attackSpeed)
+void PacketFunctions_ClientToServer::SendPing(uint32_t tickCount, uint16_t attackSpeed)
 {
     dotnet_SendPing(this->GetHandle(), tickCount, attackSpeed);
 }

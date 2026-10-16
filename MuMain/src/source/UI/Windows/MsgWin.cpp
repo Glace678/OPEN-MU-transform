@@ -1,4 +1,4 @@
-﻿  //*****************************************************************************
+﻿//*****************************************************************************
 // File: MsgWin.cpp
 //*****************************************************************************
 
@@ -24,7 +24,7 @@
 #define MW_OK     0
 #define MW_CANCEL 1
 
-    extern int          g_iChatInputType;
+extern int              g_iChatInputType;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
 
 CMsgWin::CMsgWin() {}

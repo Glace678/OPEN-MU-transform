@@ -1,4 +1,4 @@
-﻿  // GMDoppelGanger3.cpp: implementation of the CGMDoppelGanger3 class.
+﻿// GMDoppelGanger3.cpp: implementation of the CGMDoppelGanger3 class.
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include "Render/Models/ZzzBMD.h"
@@ -11,8 +11,7 @@
 #include "Engine/Object/ZzzOpenData.h"
 #include "Render/Terrain/ZzzLodTerrain.h"
 
-    CGMDoppelGanger3Ptr
-    CGMDoppelGanger3::Make()
+CGMDoppelGanger3Ptr CGMDoppelGanger3::Make()
 {
     CGMDoppelGanger3Ptr doppelganger(new CGMDoppelGanger3);
     doppelganger->Init();

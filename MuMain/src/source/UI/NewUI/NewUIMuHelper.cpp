@@ -24,82 +24,82 @@
 using namespace MUHelper;
 
 extern unsigned int WindowHeight;
-float ConvertX(float x);
-float ConvertY(float y);
+float               ConvertX(float x);
+float               ConvertY(float y);
 
 namespace
 {
-    // Stable focus-id bands per control kind (button and checkbox map keys
-    // both start at 0, so they cannot share a band).
-    constexpr std::uint32_t MUHELPER_FOCUS_TAB_BASE = 0x100;
-    constexpr std::uint32_t MUHELPER_FOCUS_BUTTON_BASE = 0x200;
-    constexpr std::uint32_t MUHELPER_FOCUS_CHECKBOX_BASE = 0x400;
-    constexpr std::uint32_t MUHELPER_FOCUS_SLOT_BASE = 0x600;
-    constexpr std::uint32_t MUHELPER_FOCUS_CLOSE = 0x800;
+// Stable focus-id bands per control kind (button and checkbox map keys
+// both start at 0, so they cannot share a band).
+constexpr std::uint32_t MUHELPER_FOCUS_TAB_BASE      = 0x100;
+constexpr std::uint32_t MUHELPER_FOCUS_BUTTON_BASE   = 0x200;
+constexpr std::uint32_t MUHELPER_FOCUS_CHECKBOX_BASE = 0x400;
+constexpr std::uint32_t MUHELPER_FOCUS_SLOT_BASE     = 0x600;
+constexpr std::uint32_t MUHELPER_FOCUS_CLOSE         = 0x800;
 
-    // Ext-page controls live on a different owner, so small ids are fine.
-    constexpr std::uint32_t EXTFOCUS_PRECON_HUNT_RANGE = 1;
-    constexpr std::uint32_t EXTFOCUS_PRECON_ATTACKING = 2;
-    constexpr std::uint32_t EXTFOCUS_SUBCON_TWO = 3;
-    constexpr std::uint32_t EXTFOCUS_SUBCON_THREE = 4;
-    constexpr std::uint32_t EXTFOCUS_SUBCON_FOUR = 5;
-    constexpr std::uint32_t EXTFOCUS_SUBCON_FIVE = 6;
-    constexpr std::uint32_t EXTFOCUS_PARTY_HEAL = 7;
-    constexpr std::uint32_t EXTFOCUS_PARTY_DURATION = 8;
-    constexpr std::uint32_t EXTFOCUS_SAVE = 20;
-    constexpr std::uint32_t EXTFOCUS_RESET = 21;
-    constexpr std::uint32_t EXTFOCUS_CLOSE = 22;
-    constexpr std::uint32_t EXTFOCUS_BAR_POTION = 30;
-    constexpr std::uint32_t EXTFOCUS_BAR_HEAL = 31;
-    constexpr std::uint32_t EXTFOCUS_BAR_PARTY_HEAL = 32;
+// Ext-page controls live on a different owner, so small ids are fine.
+constexpr std::uint32_t EXTFOCUS_PRECON_HUNT_RANGE = 1;
+constexpr std::uint32_t EXTFOCUS_PRECON_ATTACKING  = 2;
+constexpr std::uint32_t EXTFOCUS_SUBCON_TWO        = 3;
+constexpr std::uint32_t EXTFOCUS_SUBCON_THREE      = 4;
+constexpr std::uint32_t EXTFOCUS_SUBCON_FOUR       = 5;
+constexpr std::uint32_t EXTFOCUS_SUBCON_FIVE       = 6;
+constexpr std::uint32_t EXTFOCUS_PARTY_HEAL        = 7;
+constexpr std::uint32_t EXTFOCUS_PARTY_DURATION    = 8;
+constexpr std::uint32_t EXTFOCUS_SAVE              = 20;
+constexpr std::uint32_t EXTFOCUS_RESET             = 21;
+constexpr std::uint32_t EXTFOCUS_CLOSE             = 22;
+constexpr std::uint32_t EXTFOCUS_BAR_POTION        = 30;
+constexpr std::uint32_t EXTFOCUS_BAR_HEAL          = 31;
+constexpr std::uint32_t EXTFOCUS_BAR_PARTY_HEAL    = 32;
 
-    // Golden pulsing outline around the controller-focused control.
-    // Mirrors the raw-GL rect pattern in NewUIOptionWindow (UI coords -> GL).
-    void DrawMuHelperFocusOutline(int x, int y, int w, int h, float pulse)
-    {
-        DisableTexture2D();
+// Golden pulsing outline around the controller-focused control.
+// Mirrors the raw-GL rect pattern in NewUIOptionWindow (UI coords -> GL).
+void DrawMuHelperFocusOutline(int x, int y, int w, int h, float pulse)
+{
+    DisableTexture2D();
 
-        const float gx = ConvertX(static_cast<float>(x));
-        const float gyRaw = ConvertY(static_cast<float>(y));
-        const float gw = ConvertX(static_cast<float>(w));
-        const float gh = ConvertY(static_cast<float>(h));
-        const float gy = static_cast<float>(WindowHeight) - gyRaw;
+    const float gx    = ConvertX(static_cast<float>(x));
+    const float gyRaw = ConvertY(static_cast<float>(y));
+    const float gw    = ConvertX(static_cast<float>(w));
+    const float gh    = ConvertY(static_cast<float>(h));
+    const float gy    = static_cast<float>(WindowHeight) - gyRaw;
 
-        IR::Begin(GL_LINE_LOOP);
-        PassthroughShader::Instance().SetUseTexture(false);
-        const float brightness = 0.75f + 0.25f * pulse;
-        IR::Color4f(1.0f, 0.82f * brightness, 0.20f * brightness, 1.0f);
-        IR::Vertex2f(gx,      gy);
-        IR::Vertex2f(gx + gw, gy);
-        IR::Vertex2f(gx + gw, gy - gh);
-        IR::Vertex2f(gx,      gy - gh);
-        IR::End();
+    IR::Begin(GL_LINE_LOOP);
+    PassthroughShader::Instance().SetUseTexture(false);
+    const float brightness = 0.75f + 0.25f * pulse;
+    IR::Color4f(1.0f, 0.82f * brightness, 0.20f * brightness, 1.0f);
+    IR::Vertex2f(gx, gy);
+    IR::Vertex2f(gx + gw, gy);
+    IR::Vertex2f(gx + gw, gy - gh);
+    IR::Vertex2f(gx, gy - gh);
+    IR::End();
 
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        EnableTexture2D();
-    }
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    EnableTexture2D();
+}
 
-    float MuHelperFocusPulse()
-    {
-        const std::uint64_t nowMs = SDL_GetTicks();
-        return 0.65f + 0.35f * static_cast<float>(0.5 + 0.5 * std::sin(nowMs / 140.0));
-    }
+float MuHelperFocusPulse()
+{
+    const std::uint64_t nowMs = SDL_GetTicks();
+    return 0.65f + 0.35f * static_cast<float>(0.5 + 0.5 * std::sin(nowMs / 140.0));
+}
 
-    struct ExtFocusRect
-    {
-        std::uint32_t id;
-        int x;
-        int y;
-        int width;
-        int height;
-    };
+struct ExtFocusRect
+{
+    std::uint32_t id;
+    int           x;
+    int           y;
+    int           width;
+    int           height;
+};
 
-    constexpr int EXT_FOCUS_MAX = 10;
+constexpr int EXT_FOCUS_MAX = 10;
 }
 
 // defining constants naming since the original code hard coded these ids
 
-enum ECheckBoxId: uint16_t
+enum ECheckBoxId : uint16_t
 {
     CHECKBOX_ID_POTION = 0,
     CHECKBOX_ID_LONG_DISTANCE,
@@ -156,28 +156,28 @@ enum ESkillSlotImg : uint16_t
     SKILL_SLOT_SKILL1 = 0,
     SKILL_SLOT_SKILL2 = 1,
     SKILL_SLOT_SKILL3 = 2,
-    SKILL_SLOT_BUFF1 = 3,
-    SKILL_SLOT_BUFF2 = 4,
-    SKILL_SLOT_BUFF3 = 5
+    SKILL_SLOT_BUFF1  = 3,
+    SKILL_SLOT_BUFF2  = 4,
+    SKILL_SLOT_BUFF3  = 5
 };
 
 enum ETextBoxImg : uint16_t
 {
-    TEXTBOX_IMG_DISTANCE_TIME = 6,
-    TEXTBOX_IMG_SKILL1_TIME = 7,
-    TEXTBOX_IMG_SKILL2_TIME = 8,
+    TEXTBOX_IMG_DISTANCE_TIME  = 6,
+    TEXTBOX_IMG_SKILL1_TIME    = 7,
+    TEXTBOX_IMG_SKILL2_TIME    = 8,
     TEXTBOX_IMG_ADD_EXTRA_ITEM = 9
 };
 
 constexpr int BITMAP_DISTANCE_BEGIN = BITMAP_INTERFACE_CRYWOLF_BEGIN + 33;
 
-constexpr int MAX_NUMBER_DIGITS = 3;
-constexpr int MAX_HUNTING_RANGE = 6;
+constexpr int MAX_NUMBER_DIGITS   = 3;
+constexpr int MAX_HUNTING_RANGE   = 6;
 constexpr int MAX_OBTAINING_RANGE = 8;
 
 enum ESkillSlot
 {
-    SUB_PAGE_SKILL2_CONFIG = 2, // aligns with BUTTON_ID_SKILL2_CONFIG
+    SUB_PAGE_SKILL2_CONFIG = 2,  // aligns with BUTTON_ID_SKILL2_CONFIG
     SUB_PAGE_SKILL3_CONFIG,
     SUB_PAGE_POTION_CONFIG_ELF,
     SUB_PAGE_POTION_CONFIG_SUMMY,
@@ -188,50 +188,49 @@ enum ESkillSlot
 
 namespace
 {
-    // Controller-focusable controls of the visible condition/potion sub-page.
-    // The numeric buff-time edit box is deliberately excluded.
-    int BuildExtFocusRects(int page, const POINT& pos, ExtFocusRect* rects)
+// Controller-focusable controls of the visible condition/potion sub-page.
+// The numeric buff-time edit box is deliberately excluded.
+int BuildExtFocusRects(int page, const POINT& pos, ExtFocusRect* rects)
+{
+    int  count = 0;
+    auto add   = [&](std::uint32_t id, int x, int y, int width, int height) {
+        rects[count++] = {id, pos.x + x, pos.y + y, width, height};
+    };
+
+    if (page == SUB_PAGE_SKILL2_CONFIG || page == SUB_PAGE_SKILL3_CONFIG)
     {
-        int count = 0;
-        auto add = [&](std::uint32_t id, int x, int y, int width, int height)
-        {
-            rects[count++] = { id, pos.x + x, pos.y + y, width, height };
-        };
-
-        if (page == SUB_PAGE_SKILL2_CONFIG || page == SUB_PAGE_SKILL3_CONFIG)
-        {
-            add(EXTFOCUS_PRECON_HUNT_RANGE, 17, 78, 15, 15);
-            add(EXTFOCUS_PRECON_ATTACKING, 17, 93, 15, 15);
-            add(EXTFOCUS_SUBCON_TWO, 17, 143, 15, 15);
-            add(EXTFOCUS_SUBCON_THREE, 17, 158, 15, 15);
-            add(EXTFOCUS_SUBCON_FOUR, 17 + 78, 143, 15, 15);
-            add(EXTFOCUS_SUBCON_FIVE, 17 + 78, 158, 15, 15);
-        }
-        else if (page == SUB_PAGE_POTION_CONFIG)
-        {
-            add(EXTFOCUS_BAR_POTION, 33 - 8, 80, 124 + 8, 16);
-        }
-        else if (page == SUB_PAGE_POTION_CONFIG_ELF || page == SUB_PAGE_POTION_CONFIG_SUMMY)
-        {
-            add(EXTFOCUS_BAR_POTION, 33 - 8, 80, 124 + 8, 16);
-            add(EXTFOCUS_BAR_HEAL, 33 - 8, 145, 124 + 8, 16);
-        }
-        else if (page == SUB_PAGE_PARTY_CONFIG)
-        {
-            add(EXTFOCUS_PARTY_DURATION, 17, 78, 15, 15);
-        }
-        else if (page == SUB_PAGE_PARTY_CONFIG_ELF)
-        {
-            add(EXTFOCUS_PARTY_HEAL, 17, 78, 15, 15);
-            add(EXTFOCUS_BAR_PARTY_HEAL, 32 - 8, 100, 124 + 8, 16);
-            add(EXTFOCUS_PARTY_DURATION, 17, 168, 15, 15);
-        }
-
-        add(EXTFOCUS_SAVE, 120, 388, 52, 26);
-        add(EXTFOCUS_RESET, 65, 388, 52, 26);
-        add(EXTFOCUS_CLOSE, 20, 388, 36, 29);
-        return count;
+        add(EXTFOCUS_PRECON_HUNT_RANGE, 17, 78, 15, 15);
+        add(EXTFOCUS_PRECON_ATTACKING, 17, 93, 15, 15);
+        add(EXTFOCUS_SUBCON_TWO, 17, 143, 15, 15);
+        add(EXTFOCUS_SUBCON_THREE, 17, 158, 15, 15);
+        add(EXTFOCUS_SUBCON_FOUR, 17 + 78, 143, 15, 15);
+        add(EXTFOCUS_SUBCON_FIVE, 17 + 78, 158, 15, 15);
     }
+    else if (page == SUB_PAGE_POTION_CONFIG)
+    {
+        add(EXTFOCUS_BAR_POTION, 33 - 8, 80, 124 + 8, 16);
+    }
+    else if (page == SUB_PAGE_POTION_CONFIG_ELF || page == SUB_PAGE_POTION_CONFIG_SUMMY)
+    {
+        add(EXTFOCUS_BAR_POTION, 33 - 8, 80, 124 + 8, 16);
+        add(EXTFOCUS_BAR_HEAL, 33 - 8, 145, 124 + 8, 16);
+    }
+    else if (page == SUB_PAGE_PARTY_CONFIG)
+    {
+        add(EXTFOCUS_PARTY_DURATION, 17, 78, 15, 15);
+    }
+    else if (page == SUB_PAGE_PARTY_CONFIG_ELF)
+    {
+        add(EXTFOCUS_PARTY_HEAL, 17, 78, 15, 15);
+        add(EXTFOCUS_BAR_PARTY_HEAL, 32 - 8, 100, 124 + 8, 16);
+        add(EXTFOCUS_PARTY_DURATION, 17, 168, 15, 15);
+    }
+
+    add(EXTFOCUS_SAVE, 120, 388, 52, 26);
+    add(EXTFOCUS_RESET, 65, 388, 52, 26);
+    add(EXTFOCUS_CLOSE, 20, 388, 36, 29);
+    return count;
+}
 }
 
 using namespace SEASON3B;
@@ -311,24 +310,40 @@ void CNewUIMuHelper::InitButtons()
     m_TabBtn.ChangeRadioButtonInfo(true, m_Pos.x + 10.f, m_Pos.y + 48.f, 56, 22);
     m_TabBtn.ChangeFrame(m_iCurrentOpenTab);
 
-    InsertButton(IMAGE_CHAINFO_BTN_STAT, m_Pos.x + 56, m_Pos.y + 78, 16, 15, 0, 0, 0, 0, nullptr, nullptr, BUTTON_ID_HUNT_RANGE_ADD, 0);
-    InsertButton(IMAGE_MACROUI_HELPER_RAGEMINUS, m_Pos.x + 56, m_Pos.y + 97, 16, 15, 0, 0, 0, 0, nullptr, nullptr, BUTTON_ID_HUNT_RANGE_MINUS, 0);
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 191, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_SKILL2_CONFIG, 0); //-- skill 2
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 243, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_SKILL3_CONFIG, 0); //-- skill 3
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 84, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_POTION_CONFIG_ELF, 0); //-- Buff
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 79, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_POTION_CONFIG_SUMMY, 0); //-- potion
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 84, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_POTION_CONFIG, 0); //-- potion
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 17, m_Pos.y + 234, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_PARTY_CONFIG, 0); //-- potion
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 17, m_Pos.y + 234, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr, BUTTON_ID_PARTY_CONFIG_ELF, 0); //-- potion
+    InsertButton(IMAGE_CHAINFO_BTN_STAT, m_Pos.x + 56, m_Pos.y + 78, 16, 15, 0, 0, 0, 0, nullptr, nullptr,
+                 BUTTON_ID_HUNT_RANGE_ADD, 0);
+    InsertButton(IMAGE_MACROUI_HELPER_RAGEMINUS, m_Pos.x + 56, m_Pos.y + 97, 16, 15, 0, 0, 0, 0, nullptr, nullptr,
+                 BUTTON_ID_HUNT_RANGE_MINUS, 0);
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 191, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_SKILL2_CONFIG, 0);  //-- skill 2
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 243, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_SKILL3_CONFIG, 0);  //-- skill 3
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 84, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_POTION_CONFIG_ELF, 0);  //-- Buff
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 79, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_POTION_CONFIG_SUMMY, 0);  //-- potion
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 84, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_POTION_CONFIG, 0);  //-- potion
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 17, m_Pos.y + 234, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_PARTY_CONFIG, 0);  //-- potion
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 17, m_Pos.y + 234, 38, 24, 1, 0, 1, 1, &I18N::Game::Setting, nullptr,
+                 BUTTON_ID_PARTY_CONFIG_ELF, 0);  //-- potion
 
-    InsertButton(IMAGE_CHAINFO_BTN_STAT, m_Pos.x + 56, m_Pos.y + 78, 16, 15, 0, 0, 0, 0, nullptr, nullptr, BUTTON_ID_PICK_RANGE_ADD, 1);
-    InsertButton(IMAGE_MACROUI_HELPER_RAGEMINUS, m_Pos.x + 56, m_Pos.y + 97, 16, 15, 0, 0, 0, 0, nullptr, nullptr, BUTTON_ID_PICK_RANGE_MINUS, 1);
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 208, 38, 24, 1, 0, 1, 1, &I18N::Game::Add, nullptr, BUTTON_ID_ADD_OTHER_ITEM, 1); //-- Buff
-    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 309, 38, 24, 1, 0, 1, 1, &I18N::Game::Delete, nullptr, BUTTON_ID_DELETE_OTHER_ITEM, 1); //-- Buff
+    InsertButton(IMAGE_CHAINFO_BTN_STAT, m_Pos.x + 56, m_Pos.y + 78, 16, 15, 0, 0, 0, 0, nullptr, nullptr,
+                 BUTTON_ID_PICK_RANGE_ADD, 1);
+    InsertButton(IMAGE_MACROUI_HELPER_RAGEMINUS, m_Pos.x + 56, m_Pos.y + 97, 16, 15, 0, 0, 0, 0, nullptr, nullptr,
+                 BUTTON_ID_PICK_RANGE_MINUS, 1);
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 208, 38, 24, 1, 0, 1, 1, &I18N::Game::Add, nullptr,
+                 BUTTON_ID_ADD_OTHER_ITEM, 1);  //-- Buff
+    InsertButton(IMAGE_CLEARNESS_BTN, m_Pos.x + 132, m_Pos.y + 309, 38, 24, 1, 0, 1, 1, &I18N::Game::Delete, nullptr,
+                 BUTTON_ID_DELETE_OTHER_ITEM, 1);  //-- Buff
     //--
-    InsertButton(IMAGE_IGS_BUTTON, m_Pos.x + 120, m_Pos.y + 388, 52, 26, 1, 0, 1, 1, &I18N::Game::SaveSetting, nullptr, BUTTON_ID_SAVE_CONFIG, -1);
-    InsertButton(IMAGE_IGS_BUTTON, m_Pos.x + 65, m_Pos.y + 388, 52, 26, 1, 0, 1, 1, &I18N::Game::Initialization, nullptr, BUTTON_ID_INIT_CONFIG, -1);
-    InsertButton(IMAGE_BASE_WINDOW_BTN_EXIT, m_Pos.x + 20, m_Pos.y + 388, 36, 29, 0, 0, 0, 0, nullptr, &I18N::Game::Close388, BUTTON_ID_EXIT_CONFIG, -1);
+    InsertButton(IMAGE_IGS_BUTTON, m_Pos.x + 120, m_Pos.y + 388, 52, 26, 1, 0, 1, 1, &I18N::Game::SaveSetting, nullptr,
+                 BUTTON_ID_SAVE_CONFIG, -1);
+    InsertButton(IMAGE_IGS_BUTTON, m_Pos.x + 65, m_Pos.y + 388, 52, 26, 1, 0, 1, 1, &I18N::Game::Initialization,
+                 nullptr, BUTTON_ID_INIT_CONFIG, -1);
+    InsertButton(IMAGE_BASE_WINDOW_BTN_EXIT, m_Pos.x + 20, m_Pos.y + 388, 36, 29, 0, 0, 0, 0, nullptr,
+                 &I18N::Game::Close388, BUTTON_ID_EXIT_CONFIG, -1);
 
     RegisterBtnCharacter(0xFF, BUTTON_ID_HUNT_RANGE_ADD);
     RegisterBtnCharacter(0xFF, BUTTON_ID_HUNT_RANGE_MINUS);
@@ -365,41 +380,69 @@ void CNewUIMuHelper::InitButtons()
 
 void CNewUIMuHelper::InitCheckBox()
 {
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 80, 15, 15, 0, &I18N::Game::Potion, CHECKBOX_ID_POTION, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 122, 15, 15, 0, &I18N::Game::LongDistanceCounterAttack, CHECKBOX_ID_LONG_DISTANCE, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 137, 15, 15, 0, &I18N::Game::OriginalPosition, CHECKBOX_ID_ORIG_POSITION, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 174, 15, 15, 0, &I18N::Game::Delay, CHECKBOX_ID_SKILL2_DELAY, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 191, 15, 15, 0, &I18N::Game::Con, CHECKBOX_ID_SKILL2_CONDITION, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 226, 15, 15, 0, &I18N::Game::Delay, CHECKBOX_ID_SKILL3_DELAY, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 243, 15, 15, 0, &I18N::Game::Con, CHECKBOX_ID_SKILL3_CONDITION, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 226, 15, 15, 0, &I18N::Game::Combo, CHECKBOX_ID_COMBO, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 266, 15, 15, 0, &I18N::Game::BasicAttackFallback, CHECKBOX_ID_FALLBACK_BASIC_ATTACK, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 291, 15, 15, 0, &I18N::Game::BuffDuration, CHECKBOX_ID_BUFF_DURATION, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 80, 15, 15, 0, &I18N::Game::Potion, CHECKBOX_ID_POTION,
+                   0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 122, 15, 15, 0, &I18N::Game::LongDistanceCounterAttack,
+                   CHECKBOX_ID_LONG_DISTANCE, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 137, 15, 15, 0, &I18N::Game::OriginalPosition,
+                   CHECKBOX_ID_ORIG_POSITION, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 174, 15, 15, 0, &I18N::Game::Delay,
+                   CHECKBOX_ID_SKILL2_DELAY, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 191, 15, 15, 0, &I18N::Game::Con,
+                   CHECKBOX_ID_SKILL2_CONDITION, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 226, 15, 15, 0, &I18N::Game::Delay,
+                   CHECKBOX_ID_SKILL3_DELAY, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 94, m_Pos.y + 243, 15, 15, 0, &I18N::Game::Con,
+                   CHECKBOX_ID_SKILL3_CONDITION, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 226, 15, 15, 0, &I18N::Game::Combo, CHECKBOX_ID_COMBO,
+                   0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 266, 15, 15, 0, &I18N::Game::BasicAttackFallback,
+                   CHECKBOX_ID_FALLBACK_BASIC_ATTACK, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 291, 15, 15, 0, &I18N::Game::BuffDuration,
+                   CHECKBOX_ID_BUFF_DURATION, 0);
 
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 218, 15, 15, 0, &I18N::Game::UseDarkSpirits, CHECKBOX_ID_USE_PET, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 218, 15, 15, 0, &I18N::Game::Party, CHECKBOX_ID_PARTY, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 97, 15, 15, 0, &I18N::Game::AutoHeal, CHECKBOX_ID_AUTO_HEAL, 0);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 97, 15, 15, 0, &I18N::Game::DrainLife, CHECKBOX_ID_DRAIN_LIFE, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 218, 15, 15, 0, &I18N::Game::UseDarkSpirits,
+                   CHECKBOX_ID_USE_PET, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 218, 15, 15, 0, &I18N::Game::Party, CHECKBOX_ID_PARTY,
+                   0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 97, 15, 15, 0, &I18N::Game::AutoHeal,
+                   CHECKBOX_ID_AUTO_HEAL, 0);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 97, 15, 15, 0, &I18N::Game::DrainLife,
+                   CHECKBOX_ID_DRAIN_LIFE, 0);
 
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 80, 15, 15, 0, &I18N::Game::RepairItem, CHECKBOX_ID_REPAIR_ITEM, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 17, m_Pos.y + 125, 15, 15, 0, &I18N::Game::PickAllNearItems, CHECKBOX_ID_PICK_ALL, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 17, m_Pos.y + 152, 15, 15, 0, &I18N::Game::PickSelectedItems, CHECKBOX_ID_PICK_SELECTED, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 79, m_Pos.y + 80, 15, 15, 0, &I18N::Game::RepairItem,
+                   CHECKBOX_ID_REPAIR_ITEM, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 17, m_Pos.y + 125, 15, 15, 0, &I18N::Game::PickAllNearItems,
+                   CHECKBOX_ID_PICK_ALL, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 17, m_Pos.y + 152, 15, 15, 0, &I18N::Game::PickSelectedItems,
+                   CHECKBOX_ID_PICK_SELECTED, 1);
 
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 170, 15, 15, 0, &I18N::Game::JewelGem, CHECKBOX_ID_PICK_JEWEL, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 85, m_Pos.y + 170, 15, 15, 0, &I18N::Game::SetItem, CHECKBOX_ID_PICK_ANCIENT, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 185, 15, 15, 0, &I18N::Game::Zen, CHECKBOX_ID_PICK_ZEN, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 85, m_Pos.y + 185, 15, 15, 0, &I18N::Game::ExcellentItem, CHECKBOX_ID_PICK_EXCELLENT, 1);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 200, 15, 15, 0, &I18N::Game::AddExtraItem, CHECKBOX_ID_ADD_OTHER_ITEM, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 170, 15, 15, 0, &I18N::Game::JewelGem,
+                   CHECKBOX_ID_PICK_JEWEL, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 85, m_Pos.y + 170, 15, 15, 0, &I18N::Game::SetItem,
+                   CHECKBOX_ID_PICK_ANCIENT, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 185, 15, 15, 0, &I18N::Game::Zen, CHECKBOX_ID_PICK_ZEN,
+                   1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 85, m_Pos.y + 185, 15, 15, 0, &I18N::Game::ExcellentItem,
+                   CHECKBOX_ID_PICK_EXCELLENT, 1);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 22, m_Pos.y + 200, 15, 15, 0, &I18N::Game::AddExtraItem,
+                   CHECKBOX_ID_ADD_OTHER_ITEM, 1);
     //--
 
-    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 94, m_Pos.y + 235, 15, 15, 0, &I18N::Game::CeaseAttack, CHECKBOX_ID_DR_ATTACK_CEASE, 0);
-    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 30, m_Pos.y + 235, 15, 15, 0, &I18N::Game::AutoAttack, CHECKBOX_ID_DR_ATTACK_AUTO, 0);
-    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 30, m_Pos.y + 250, 15, 15, 0, &I18N::Game::AttackTogether, CHECKBOX_ID_DR_ATTACK_TOGETHER, 0);
+    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 94, m_Pos.y + 235, 15, 15, 0, &I18N::Game::CeaseAttack,
+                   CHECKBOX_ID_DR_ATTACK_CEASE, 0);
+    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 30, m_Pos.y + 235, 15, 15, 0, &I18N::Game::AutoAttack,
+                   CHECKBOX_ID_DR_ATTACK_AUTO, 0);
+    InsertCheckBox(IMAGE_MACROUI_HELPER_OPTIONBUTTON, m_Pos.x + 30, m_Pos.y + 250, 15, 15, 0,
+                   &I18N::Game::AttackTogether, CHECKBOX_ID_DR_ATTACK_TOGETHER, 0);
 
     //--
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 80, 15, 15, 0, &I18N::Game::AutoAcceptFriend, CHECKBOX_ID_AUTO_ACCEPT_FRIEND, 2);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 125, 15, 15, 0, &I18N::Game::PVPCounterattack, CHECKBOX_ID_AUTO_DEFEND, 2);
-    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 97, 15, 15, 0, &I18N::Game::AutoAcceptGuildMember, CHECKBOX_ID_AUTO_ACCEPT_GUILD, 2);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 80, 15, 15, 0, &I18N::Game::AutoAcceptFriend,
+                   CHECKBOX_ID_AUTO_ACCEPT_FRIEND, 2);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 125, 15, 15, 0, &I18N::Game::PVPCounterattack,
+                   CHECKBOX_ID_AUTO_DEFEND, 2);
+    InsertCheckBox(IMAGE_CHECKBOX_BTN, m_Pos.x + 18, m_Pos.y + 97, 15, 15, 0, &I18N::Game::AutoAcceptGuildMember,
+                   CHECKBOX_ID_AUTO_ACCEPT_GUILD, 2);
 
     RegisterBoxCharacter(0xFF, CHECKBOX_ID_POTION);
     RegisterBoxCharacter(0xFF, CHECKBOX_ID_LONG_DISTANCE);
@@ -488,21 +531,21 @@ void CNewUIMuHelper::InitImage()
 
 void CNewUIMuHelper::InitText()
 {
-    InsertText(m_Pos.x + 18, m_Pos.y + 78, I18N::Game::Range, 1, 0); // Range
+    InsertText(m_Pos.x + 18, m_Pos.y + 78, I18N::Game::Range, 1, 0);  // Range
     InsertText(m_Pos.x + 18, m_Pos.y + 83, L"________", 2, 0);
-    InsertText(m_Pos.x + 110, m_Pos.y + 141, I18N::Game::Distance, 3, 0); // Distance
+    InsertText(m_Pos.x + 110, m_Pos.y + 141, I18N::Game::Distance, 3, 0);  // Distance
     //InsertText(m_Pos.x + 162, m_Pos.y + 141, I18N::Game::Min, 4, 0);
     InsertText(m_Pos.x + 162, m_Pos.y + 141, L"s", 4, 0);
 
-    InsertText(m_Pos.x + 18, m_Pos.y + 160, I18N::Game::BasicSkill, 5, 0); // Basic Skill
-    InsertText(m_Pos.x + 59, m_Pos.y + 160, I18N::Game::ActivationSkill1, 7, 0); // Activation Skill 1
+    InsertText(m_Pos.x + 18, m_Pos.y + 160, I18N::Game::BasicSkill, 5, 0);        // Basic Skill
+    InsertText(m_Pos.x + 59, m_Pos.y + 160, I18N::Game::ActivationSkill1, 7, 0);  // Activation Skill 1
     //InsertText(m_Pos.x + 162, m_Pos.y + 178, I18N::Game::Min, 8, 0);
     InsertText(m_Pos.x + 162, m_Pos.y + 178, L"s", 8, 0);
-    InsertText(m_Pos.x + 59, m_Pos.y + 212, I18N::Game::ActivationSkill2, 9, 0); // Activation Skill 2
+    InsertText(m_Pos.x + 59, m_Pos.y + 212, I18N::Game::ActivationSkill2, 9, 0);  // Activation Skill 2
 
     //InsertText(m_Pos.x + 162, m_Pos.y + 230, I18N::Game::Min, 10, 0);
     InsertText(m_Pos.x + 162, m_Pos.y + 230, L"s", 10, 0);
-    InsertText(m_Pos.x + 18, m_Pos.y + 78, I18N::Game::Range, 11, 1); // Range
+    InsertText(m_Pos.x + 18, m_Pos.y + 78, I18N::Game::Range, 11, 1);  // Range
     InsertText(m_Pos.x + 18, m_Pos.y + 83, L"________", 12, 1);
 
     RegisterTextCharacter(0xFF, 1);
@@ -703,7 +746,7 @@ bool CNewUIMuHelper::UpdateMouseEvent()
     if (iCheckboxId != -1)
     {
         auto element = m_CheckBoxList[iCheckboxId];
-        auto state = element.box->GetBoxState();
+        auto state   = element.box->GetBoxState();
         g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Clicked checkbox [%d] state[%d]", iCheckboxId, state);
 
         if (iCheckboxId == CHECKBOX_ID_SKILL2_DELAY)
@@ -784,9 +827,7 @@ bool CNewUIMuHelper::UpdateMouseEvent()
 
             bool bPrevVisible = g_pNewUISystem->IsVisible(INTERFACE_MUHELPER_SKILL_LIST);
 
-            if (iIconIndex == SKILL_SLOT_SKILL1
-                || iIconIndex == SKILL_SLOT_SKILL2
-                || iIconIndex == SKILL_SLOT_SKILL3)
+            if (iIconIndex == SKILL_SLOT_SKILL1 || iIconIndex == SKILL_SLOT_SKILL2 || iIconIndex == SKILL_SLOT_SKILL3)
             {
                 g_pNewUIMuHelperSkillList->FilterByAttackSkills();
             }
@@ -828,7 +869,7 @@ bool CNewUIMuHelper::UpdateMouseEvent()
             CUITextInputBox::ReleaseFocus();
         }
 
-        POINT ptExitBtn = { m_Pos.x + 169, m_Pos.y + 7 };
+        POINT ptExitBtn = {m_Pos.x + 169, m_Pos.y + 7};
         if (CheckMouseIn(ptExitBtn.x, ptExitBtn.y, 13, 12))
         {
             g_pNewUISystem->Hide(SEASON3B::INTERFACE_MUHELPER);
@@ -837,7 +878,8 @@ bool CNewUIMuHelper::UpdateMouseEvent()
     if (IsRelease(VK_RBUTTON))
     {
         int iSlotIndex = UpdateMouseIconList();
-        if (iSlotIndex >= 0 && iSlotIndex < 6)  // #MG-25: only real skill slots [0,5]; control IDs 6-9 must not index m_aiSelectedSkills
+        if (iSlotIndex >= 0 &&
+            iSlotIndex < 6)  // #MG-25: only real skill slots [0,5]; control IDs 6-9 must not index m_aiSelectedSkills
         {
             g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Clicked slot slot [%d]", iSlotIndex);
             m_aiSelectedSkills[iSlotIndex] = -1;
@@ -881,160 +923,154 @@ bool CNewUIMuHelper::UpdateKeyEvent()
 
 void CNewUIMuHelper::ApplyConfigFromCheckbox(int iCheckboxId, bool bState)
 {
-    switch (iCheckboxId) {
-    case CHECKBOX_ID_POTION:
-        _TempConfig.bUseHealPotion = bState;
-        break;
+    switch (iCheckboxId)
+    {
+        case CHECKBOX_ID_POTION:
+            _TempConfig.bUseHealPotion = bState;
+            break;
 
-    case CHECKBOX_ID_LONG_DISTANCE:
-        _TempConfig.bLongRangeCounterAttack = bState;
-        break;
+        case CHECKBOX_ID_LONG_DISTANCE:
+            _TempConfig.bLongRangeCounterAttack = bState;
+            break;
 
-    case CHECKBOX_ID_ORIG_POSITION:
-        _TempConfig.bReturnToOriginalPosition = bState;
-        break;
+        case CHECKBOX_ID_ORIG_POSITION:
+            _TempConfig.bReturnToOriginalPosition = bState;
+            break;
 
-    case CHECKBOX_ID_SKILL2_DELAY:
-        _TempConfig.aiSkillCondition[1] &= ~ON_CONDITION;
-        _TempConfig.aiSkillCondition[1] = bState
-            ? (_TempConfig.aiSkillCondition[1] | ON_TIMER)
-            : (_TempConfig.aiSkillCondition[1] & ~ON_TIMER);
-        break;
+        case CHECKBOX_ID_SKILL2_DELAY:
+            _TempConfig.aiSkillCondition[1] &= ~ON_CONDITION;
+            _TempConfig.aiSkillCondition[1] =
+                bState ? (_TempConfig.aiSkillCondition[1] | ON_TIMER) : (_TempConfig.aiSkillCondition[1] & ~ON_TIMER);
+            break;
 
-    case CHECKBOX_ID_SKILL2_CONDITION:
-        _TempConfig.aiSkillCondition[1] &= ~ON_TIMER;
-        _TempConfig.aiSkillCondition[1] = bState
-            ? (_TempConfig.aiSkillCondition[1] | ON_CONDITION)
-            : (_TempConfig.aiSkillCondition[1] & ~ON_CONDITION);
-        break;
+        case CHECKBOX_ID_SKILL2_CONDITION:
+            _TempConfig.aiSkillCondition[1] &= ~ON_TIMER;
+            _TempConfig.aiSkillCondition[1] = bState ? (_TempConfig.aiSkillCondition[1] | ON_CONDITION)
+                                                     : (_TempConfig.aiSkillCondition[1] & ~ON_CONDITION);
+            break;
 
-    case CHECKBOX_ID_SKILL3_DELAY:
-        _TempConfig.aiSkillCondition[2] &= ~ON_CONDITION;
-        _TempConfig.aiSkillCondition[2] = bState
-            ? (_TempConfig.aiSkillCondition[2] | ON_TIMER)
-            : (_TempConfig.aiSkillCondition[2] & ~ON_TIMER);
-        break;
+        case CHECKBOX_ID_SKILL3_DELAY:
+            _TempConfig.aiSkillCondition[2] &= ~ON_CONDITION;
+            _TempConfig.aiSkillCondition[2] =
+                bState ? (_TempConfig.aiSkillCondition[2] | ON_TIMER) : (_TempConfig.aiSkillCondition[2] & ~ON_TIMER);
+            break;
 
-    case CHECKBOX_ID_SKILL3_CONDITION:
-        _TempConfig.aiSkillCondition[2] &= ~ON_TIMER;
-        _TempConfig.aiSkillCondition[2] = bState
-            ? (_TempConfig.aiSkillCondition[2] | ON_CONDITION)
-            : (_TempConfig.aiSkillCondition[2] & ~ON_CONDITION);
-        break;
+        case CHECKBOX_ID_SKILL3_CONDITION:
+            _TempConfig.aiSkillCondition[2] &= ~ON_TIMER;
+            _TempConfig.aiSkillCondition[2] = bState ? (_TempConfig.aiSkillCondition[2] | ON_CONDITION)
+                                                     : (_TempConfig.aiSkillCondition[2] & ~ON_CONDITION);
+            break;
 
-    case CHECKBOX_ID_COMBO:
-	{
-		auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
+        case CHECKBOX_ID_COMBO: {
+            auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
 
-		if (bState == true)
-		{
-			if (m_aiSelectedSkills[0] <= 0 || m_aiSelectedSkills[1] <= 0 || m_aiSelectedSkills[2] <= 0)
-			{
-				g_pSystemLogBox->AddText(I18N::Game::InOrderToUseComboSkill, SEASON3B::TYPE_ERROR_MESSAGE);
-				cboxCombo.box->RegisterBoxState(false);
-			}
-		}
-		
-		_TempConfig.bUseCombo = cboxCombo.box->GetBoxState();
-		break;
-	}
+            if (bState == true)
+            {
+                if (m_aiSelectedSkills[0] <= 0 || m_aiSelectedSkills[1] <= 0 || m_aiSelectedSkills[2] <= 0)
+                {
+                    g_pSystemLogBox->AddText(I18N::Game::InOrderToUseComboSkill, SEASON3B::TYPE_ERROR_MESSAGE);
+                    cboxCombo.box->RegisterBoxState(false);
+                }
+            }
 
-    case CHECKBOX_ID_BUFF_DURATION:
-        _TempConfig.bBuffDuration = bState;
-        break;
+            _TempConfig.bUseCombo = cboxCombo.box->GetBoxState();
+            break;
+        }
 
-    case CHECKBOX_ID_USE_PET:
-        _TempConfig.bUseDarkRaven = bState;
-        break;
+        case CHECKBOX_ID_BUFF_DURATION:
+            _TempConfig.bBuffDuration = bState;
+            break;
 
-    case CHECKBOX_ID_DR_ATTACK_CEASE:
-        _TempConfig.iDarkRavenMode = PET_ATTACK_CEASE;
-        break;
+        case CHECKBOX_ID_USE_PET:
+            _TempConfig.bUseDarkRaven = bState;
+            break;
 
-    case CHECKBOX_ID_DR_ATTACK_AUTO:
-        _TempConfig.iDarkRavenMode = PET_ATTACK_AUTO;
-        break;
+        case CHECKBOX_ID_DR_ATTACK_CEASE:
+            _TempConfig.iDarkRavenMode = PET_ATTACK_CEASE;
+            break;
 
-    case CHECKBOX_ID_DR_ATTACK_TOGETHER:
-        _TempConfig.iDarkRavenMode = PET_ATTACK_TOGETHER;
-        break;
+        case CHECKBOX_ID_DR_ATTACK_AUTO:
+            _TempConfig.iDarkRavenMode = PET_ATTACK_AUTO;
+            break;
 
-    case CHECKBOX_ID_PARTY:
-        _TempConfig.bSupportParty = bState;
-        break;
+        case CHECKBOX_ID_DR_ATTACK_TOGETHER:
+            _TempConfig.iDarkRavenMode = PET_ATTACK_TOGETHER;
+            break;
 
-    case CHECKBOX_ID_AUTO_HEAL:
-        _TempConfig.bAutoHeal = bState;
-        break;
+        case CHECKBOX_ID_PARTY:
+            _TempConfig.bSupportParty = bState;
+            break;
 
-    case CHECKBOX_ID_DRAIN_LIFE:
-        _TempConfig.bUseDrainLife = bState;
-        break;
+        case CHECKBOX_ID_AUTO_HEAL:
+            _TempConfig.bAutoHeal = bState;
+            break;
 
-    case CHECKBOX_ID_REPAIR_ITEM:
-        _TempConfig.bRepairItem = bState;
-        break;
+        case CHECKBOX_ID_DRAIN_LIFE:
+            _TempConfig.bUseDrainLife = bState;
+            break;
 
-    case CHECKBOX_ID_PICK_ALL:
-	{
-		auto cboxPickSelected = m_CheckBoxList[CHECKBOX_ID_PICK_SELECTED];
-		if (cboxPickSelected.box->GetBoxState())
-		{
-			cboxPickSelected.box->RegisterBoxState(false);
-		}
-		_TempConfig.bPickAllItems = bState;
-		break;
-	}
+        case CHECKBOX_ID_REPAIR_ITEM:
+            _TempConfig.bRepairItem = bState;
+            break;
 
-    case CHECKBOX_ID_PICK_SELECTED:
-	{
-		auto cboxPickAll = m_CheckBoxList[CHECKBOX_ID_PICK_ALL];
-		if (cboxPickAll.box->GetBoxState())
-		{
-			cboxPickAll.box->RegisterBoxState(false);
-		}
-		_TempConfig.bPickSelectItems = bState;
-		break;
-	}
+        case CHECKBOX_ID_PICK_ALL: {
+            auto cboxPickSelected = m_CheckBoxList[CHECKBOX_ID_PICK_SELECTED];
+            if (cboxPickSelected.box->GetBoxState())
+            {
+                cboxPickSelected.box->RegisterBoxState(false);
+            }
+            _TempConfig.bPickAllItems = bState;
+            break;
+        }
 
-    case CHECKBOX_ID_PICK_JEWEL:
-        _TempConfig.bPickJewel = bState;
-        break;
+        case CHECKBOX_ID_PICK_SELECTED: {
+            auto cboxPickAll = m_CheckBoxList[CHECKBOX_ID_PICK_ALL];
+            if (cboxPickAll.box->GetBoxState())
+            {
+                cboxPickAll.box->RegisterBoxState(false);
+            }
+            _TempConfig.bPickSelectItems = bState;
+            break;
+        }
 
-    case CHECKBOX_ID_PICK_ANCIENT:
-        _TempConfig.bPickAncient = bState;
-        break;
+        case CHECKBOX_ID_PICK_JEWEL:
+            _TempConfig.bPickJewel = bState;
+            break;
 
-    case CHECKBOX_ID_PICK_ZEN:
-        _TempConfig.bPickZen = bState;
-        break;
+        case CHECKBOX_ID_PICK_ANCIENT:
+            _TempConfig.bPickAncient = bState;
+            break;
 
-    case CHECKBOX_ID_PICK_EXCELLENT:
-        _TempConfig.bPickExcellent = bState;
-        break;
+        case CHECKBOX_ID_PICK_ZEN:
+            _TempConfig.bPickZen = bState;
+            break;
 
-    case CHECKBOX_ID_ADD_OTHER_ITEM:
-        _TempConfig.bPickExtraItems = bState;
-        break;
+        case CHECKBOX_ID_PICK_EXCELLENT:
+            _TempConfig.bPickExcellent = bState;
+            break;
 
-    case CHECKBOX_ID_AUTO_ACCEPT_FRIEND:
-        _TempConfig.bAutoAcceptFriend = bState;
-        break;
+        case CHECKBOX_ID_ADD_OTHER_ITEM:
+            _TempConfig.bPickExtraItems = bState;
+            break;
 
-    case CHECKBOX_ID_AUTO_ACCEPT_GUILD:
-        _TempConfig.bAutoAcceptGuild = bState;
-        break;
+        case CHECKBOX_ID_AUTO_ACCEPT_FRIEND:
+            _TempConfig.bAutoAcceptFriend = bState;
+            break;
 
-    case CHECKBOX_ID_AUTO_DEFEND:
-        _TempConfig.bUseSelfDefense = bState;
-        break;
+        case CHECKBOX_ID_AUTO_ACCEPT_GUILD:
+            _TempConfig.bAutoAcceptGuild = bState;
+            break;
 
-    case CHECKBOX_ID_FALLBACK_BASIC_ATTACK:
-        _TempConfig.bFallbackBasicAttack = bState;
-        break;
+        case CHECKBOX_ID_AUTO_DEFEND:
+            _TempConfig.bUseSelfDefense = bState;
+            break;
 
-    default:
-        break;
+        case CHECKBOX_ID_FALLBACK_BASIC_ATTACK:
+            _TempConfig.bFallbackBasicAttack = bState;
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -1078,7 +1114,7 @@ void CNewUIMuHelper::ApplyLootRangeUpdate(int iDelta)
 
 void CNewUIMuHelper::SaveExtraItem()
 {
-    wchar_t wsExtraItem[MAX_ITEM_NAME + 1] = { 0 };
+    wchar_t wsExtraItem[MAX_ITEM_NAME + 1] = {0};
 
     m_ItemInput.GetText(wsExtraItem, std::size(wsExtraItem));
 
@@ -1129,8 +1165,8 @@ void CNewUIMuHelper::Reset()
 {
     _TempConfig.iHuntingRange = 6;
 
-    _TempConfig.iMaxSecondsAway = 10;
-    _TempConfig.bLongRangeCounterAttack = false;
+    _TempConfig.iMaxSecondsAway           = 10;
+    _TempConfig.bLongRangeCounterAttack   = false;
     _TempConfig.bReturnToOriginalPosition = true;
 
     _TempConfig.aiSkill.fill(0);
@@ -1142,31 +1178,31 @@ void CNewUIMuHelper::Reset()
 
     _TempConfig.aiBuff.fill(0);
 
-    _TempConfig.bBuffDuration = true;
+    _TempConfig.bBuffDuration      = true;
     _TempConfig.bBuffDurationParty = true;
-    _TempConfig.iBuffCastInterval = 0;
+    _TempConfig.iBuffCastInterval  = 0;
 
-    _TempConfig.bAutoHeal = false;
-    _TempConfig.iHealThreshold = 60;
-    _TempConfig.bUseDrainLife = false;
-    _TempConfig.bUseHealPotion = false;
-    _TempConfig.iPotionThreshold = 40;
-    _TempConfig.bSupportParty = false;
-    _TempConfig.bAutoHealParty = false;
+    _TempConfig.bAutoHeal           = false;
+    _TempConfig.iHealThreshold      = 60;
+    _TempConfig.bUseDrainLife       = false;
+    _TempConfig.bUseHealPotion      = false;
+    _TempConfig.iPotionThreshold    = 40;
+    _TempConfig.bSupportParty       = false;
+    _TempConfig.bAutoHealParty      = false;
     _TempConfig.iHealPartyThreshold = 60;
 
-    _TempConfig.bUseDarkRaven = false;
+    _TempConfig.bUseDarkRaven  = false;
     _TempConfig.iDarkRavenMode = PET_ATTACK_CEASE;
-    _TempConfig.bRepairItem = false;
+    _TempConfig.bRepairItem    = false;
 
-    _TempConfig.iObtainingRange = 8;
-    _TempConfig.bPickAllItems = false;
+    _TempConfig.iObtainingRange  = 8;
+    _TempConfig.bPickAllItems    = false;
     _TempConfig.bPickSelectItems = false;
-    _TempConfig.bPickZen = false;
-    _TempConfig.bPickJewel = false;
-    _TempConfig.bPickExcellent = false;
-    _TempConfig.bPickAncient = false;
-    _TempConfig.bPickExtraItems = false;
+    _TempConfig.bPickZen         = false;
+    _TempConfig.bPickJewel       = false;
+    _TempConfig.bPickExcellent   = false;
+    _TempConfig.bPickAncient     = false;
+    _TempConfig.bPickExtraItems  = false;
     _TempConfig.aExtraItems.clear();
 
     ApplyConfig();
@@ -1225,7 +1261,8 @@ void CNewUIMuHelper::ApplyConfig()
     m_CheckBoxList[CHECKBOX_ID_USE_PET].box->RegisterBoxState(_TempConfig.bUseDarkRaven);
     m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_CEASE].box->RegisterBoxState(_TempConfig.iDarkRavenMode == PET_ATTACK_CEASE);
     m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_AUTO].box->RegisterBoxState(_TempConfig.iDarkRavenMode == PET_ATTACK_AUTO);
-    m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(_TempConfig.iDarkRavenMode == PET_ATTACK_TOGETHER);
+    m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(_TempConfig.iDarkRavenMode ==
+                                                                         PET_ATTACK_TOGETHER);
 
     m_CheckBoxList[CHECKBOX_ID_REPAIR_ITEM].box->RegisterBoxState(_TempConfig.bRepairItem);
     m_CheckBoxList[CHECKBOX_ID_PICK_ALL].box->RegisterBoxState(_TempConfig.bPickAllItems);
@@ -1271,9 +1308,9 @@ void CNewUIMuHelper::SaveConfig()
     _TempConfig.aiSkill[0] = m_aiSelectedSkills[0] > 0 ? m_aiSelectedSkills[0] : 0;
     _TempConfig.aiSkill[1] = m_aiSelectedSkills[1] > 0 ? m_aiSelectedSkills[1] : 0;
     _TempConfig.aiSkill[2] = m_aiSelectedSkills[2] > 0 ? m_aiSelectedSkills[2] : 0;
-    _TempConfig.aiBuff[0] = m_aiSelectedSkills[3] > 0 ? m_aiSelectedSkills[3] : 0;
-    _TempConfig.aiBuff[1] = m_aiSelectedSkills[4] > 0 ? m_aiSelectedSkills[4] : 0;
-    _TempConfig.aiBuff[2] = m_aiSelectedSkills[5] > 0 ? m_aiSelectedSkills[5] : 0;
+    _TempConfig.aiBuff[0]  = m_aiSelectedSkills[3] > 0 ? m_aiSelectedSkills[3] : 0;
+    _TempConfig.aiBuff[1]  = m_aiSelectedSkills[4] > 0 ? m_aiSelectedSkills[4] : 0;
+    _TempConfig.aiBuff[2]  = m_aiSelectedSkills[5] > 0 ? m_aiSelectedSkills[5] : 0;
 
     g_MuHelper.Save(_TempConfig);
 }
@@ -1319,7 +1356,8 @@ bool CNewUIMuHelper::Render()
     RenderImage(IMAGE_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(WINDOW_WIDTH), float(WINDOW_HEIGHT));
     RenderImage(IMAGE_BASE_WINDOW_TOP, m_Pos.x, m_Pos.y, float(WINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_BASE_WINDOW_RIGHT, m_Pos.x + float(WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_BASE_WINDOW_RIGHT, m_Pos.x + float(WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(WINDOW_HEIGHT) - 64.f - 45.f);
     RenderImage(IMAGE_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(WINDOW_HEIGHT) - 45.f, float(WINDOW_WIDTH), 45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -1331,10 +1369,12 @@ bool CNewUIMuHelper::Render()
         RenderBack(m_Pos.x + 12, m_Pos.y + 340, 165, 46);
 
         g_pRenderText->SetFont(g_hFont);
-        g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + 347, I18N::Game::UsedExtensionFunction, 0, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + 347, I18N::Game::UsedExtensionFunction, 0, 0,
+                                  RT3_SORT_CENTER);
 
         g_pRenderText->SetTextColor(0xFF00B4FF);
-        g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + 365, I18N::Game::NoExtensionFunctionBeingUsed, 0, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + 365, I18N::Game::NoExtensionFunctionBeingUsed, 0, 0,
+                                  RT3_SORT_CENTER);
     }
 
     g_pRenderText->SetTextColor(TextColor);
@@ -1349,7 +1389,8 @@ bool CNewUIMuHelper::Render()
         RenderBack(m_Pos.x + 12, m_Pos.y + 147, 165, 195);
         RenderBack(m_Pos.x + 16, m_Pos.y + 235, 158, 75);
 
-        RenderImage(BITMAP_DISTANCE_BEGIN + _TempConfig.iObtainingRange, m_Pos.x + 29, m_Pos.y + 92, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f);
+        RenderImage(BITMAP_DISTANCE_BEGIN + _TempConfig.iObtainingRange, m_Pos.x + 29, m_Pos.y + 92, 15, 19, 0.f, 0.f,
+                    15.f / 16.f, 19.f / 32.f);
 
         m_ItemFilter.Render();
     }
@@ -1366,7 +1407,8 @@ bool CNewUIMuHelper::Render()
         RenderBack(m_Pos.x + 12, m_Pos.y + 156, 165, 135);
         RenderBack(m_Pos.x + 12, m_Pos.y + 288, 165, 69);
 
-        RenderImage(BITMAP_DISTANCE_BEGIN + _TempConfig.iHuntingRange, m_Pos.x + 29, m_Pos.y + 92, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f);
+        RenderImage(BITMAP_DISTANCE_BEGIN + _TempConfig.iHuntingRange, m_Pos.x + 29, m_Pos.y + 92, 15, 19, 0.f, 0.f,
+                    15.f / 16.f, 19.f / 32.f);
     }
 
     RenderBoxList();
@@ -1402,14 +1444,13 @@ void CNewUIMuHelper::RenderFocusHighlight()
         return;
 
     const auto current = Core::Input::FocusNavigator::Instance().Current();
-    if (!current.has_value()
-        || current->owner != reinterpret_cast<std::uintptr_t>(this))
+    if (!current.has_value() || current->owner != reinterpret_cast<std::uintptr_t>(this))
     {
         return;
     }
 
-    const float pulse = MuHelperFocusPulse();
-    const std::uint32_t id = current->id;
+    const float         pulse = MuHelperFocusPulse();
+    const std::uint32_t id    = current->id;
 
     if (id == MUHELPER_FOCUS_CLOSE)
     {
@@ -1427,12 +1468,12 @@ void CNewUIMuHelper::RenderFocusHighlight()
     if (id >= MUHELPER_FOCUS_SLOT_BASE && id < MUHELPER_FOCUS_SLOT_BASE + MAX_SKILLS_SLOT)
     {
         const int slot = static_cast<int>(id - MUHELPER_FOCUS_SLOT_BASE);
-        auto it = m_IconList.find(slot);
+        auto      it   = m_IconList.find(slot);
         if (it != m_IconList.end())
         {
             const cTexture& image = it->second;
-            DrawMuHelperFocusOutline(image.m_Pos.x - 2, image.m_Pos.y - 2,
-                image.m_Size.x + 4, image.m_Size.y + 4, pulse);
+            DrawMuHelperFocusOutline(image.m_Pos.x - 2, image.m_Pos.y - 2, image.m_Size.x + 4, image.m_Size.y + 4,
+                                     pulse);
         }
         return;
     }
@@ -1440,7 +1481,7 @@ void CNewUIMuHelper::RenderFocusHighlight()
     if (id >= MUHELPER_FOCUS_BUTTON_BASE && id < MUHELPER_FOCUS_CHECKBOX_BASE)
     {
         const int key = static_cast<int>(id - MUHELPER_FOCUS_BUTTON_BASE);
-        auto it = m_ButtonList.find(key);
+        auto      it  = m_ButtonList.find(key);
         if (it != m_ButtonList.end())
         {
             const CButtonTap& tap = it->second;
@@ -1452,7 +1493,7 @@ void CNewUIMuHelper::RenderFocusHighlight()
     if (id >= MUHELPER_FOCUS_CHECKBOX_BASE && id < MUHELPER_FOCUS_SLOT_BASE)
     {
         const int key = static_cast<int>(id - MUHELPER_FOCUS_CHECKBOX_BASE);
-        auto it = m_CheckBoxList.find(key);
+        auto      it  = m_CheckBoxList.find(key);
         if (it != m_CheckBoxList.end())
         {
             const CheckBoxTap& tap = it->second;
@@ -1469,21 +1510,17 @@ void CNewUIMuHelper::RegisterFocusNodes()
     if (g_pNewUISystem->IsVisible(INTERFACE_MUHELPER_EXT))
         return;
 
-    auto& navigator = Core::Input::FocusNavigator::Instance();
-    const int baseClass = gCharacterManager.GetBaseClass(Hero->Class);
-    const auto visibleOnTab = [this](int iNumTab)
-    {
-        return iNumTab == m_iCurrentOpenTab || iNumTab == -1;
-    };
+    auto&      navigator    = Core::Input::FocusNavigator::Instance();
+    const int  baseClass    = gCharacterManager.GetBaseClass(Hero->Class);
+    const auto visibleOnTab = [this](int iNumTab) { return iNumTab == m_iCurrentOpenTab || iNumTab == -1; };
 
     // Window close button (top-right X) and the three tab radios.
-    navigator.Register(this, MUHELPER_FOCUS_CLOSE,
-        static_cast<float>(m_Pos.x + 169), static_cast<float>(m_Pos.y + 7), 13.f, 12.f);
+    navigator.Register(this, MUHELPER_FOCUS_CLOSE, static_cast<float>(m_Pos.x + 169), static_cast<float>(m_Pos.y + 7),
+                       13.f, 12.f);
     for (int tab = 0; tab < 3; ++tab)
     {
         navigator.Register(this, MUHELPER_FOCUS_TAB_BASE + static_cast<std::uint32_t>(tab),
-            static_cast<float>(m_Pos.x + 10 + tab * 56),
-            static_cast<float>(m_Pos.y + 48), 56.f, 22.f);
+                           static_cast<float>(m_Pos.x + 10 + tab * 56), static_cast<float>(m_Pos.y + 48), 56.f, 22.f);
     }
 
     for (const auto& pair : m_ButtonList)
@@ -1491,10 +1528,9 @@ void CNewUIMuHelper::RegisterFocusNodes()
         const CButtonTap& tap = pair.second;
         if (tap.class_character[baseClass] && visibleOnTab(tap.iNumTab))
         {
-            navigator.Register(this,
-                MUHELPER_FOCUS_BUTTON_BASE + static_cast<std::uint32_t>(pair.first),
-                static_cast<float>(tap.x), static_cast<float>(tap.y),
-                static_cast<float>(tap.width), static_cast<float>(tap.height));
+            navigator.Register(this, MUHELPER_FOCUS_BUTTON_BASE + static_cast<std::uint32_t>(pair.first),
+                               static_cast<float>(tap.x), static_cast<float>(tap.y), static_cast<float>(tap.width),
+                               static_cast<float>(tap.height));
         }
     }
 
@@ -1503,10 +1539,9 @@ void CNewUIMuHelper::RegisterFocusNodes()
         const CheckBoxTap& tap = pair.second;
         if (tap.class_character[baseClass] && visibleOnTab(tap.iNumTab))
         {
-            navigator.Register(this,
-                MUHELPER_FOCUS_CHECKBOX_BASE + static_cast<std::uint32_t>(pair.first),
-                static_cast<float>(tap.x), static_cast<float>(tap.y),
-                static_cast<float>(tap.width), static_cast<float>(tap.height));
+            navigator.Register(this, MUHELPER_FOCUS_CHECKBOX_BASE + static_cast<std::uint32_t>(pair.first),
+                               static_cast<float>(tap.x), static_cast<float>(tap.y), static_cast<float>(tap.width),
+                               static_cast<float>(tap.height));
         }
     }
 
@@ -1520,10 +1555,9 @@ void CNewUIMuHelper::RegisterFocusNodes()
         const cTexture& image = pair.second;
         if (image.class_character[baseClass] && visibleOnTab(image.iNumTab))
         {
-            navigator.Register(this,
-                MUHELPER_FOCUS_SLOT_BASE + static_cast<std::uint32_t>(pair.first),
-                static_cast<float>(image.m_Pos.x), static_cast<float>(image.m_Pos.y),
-                static_cast<float>(image.m_Size.x), static_cast<float>(image.m_Size.y));
+            navigator.Register(this, MUHELPER_FOCUS_SLOT_BASE + static_cast<std::uint32_t>(pair.first),
+                               static_cast<float>(image.m_Pos.x), static_cast<float>(image.m_Pos.y),
+                               static_cast<float>(image.m_Size.x), static_cast<float>(image.m_Size.y));
         }
     }
 }
@@ -1547,10 +1581,14 @@ void CNewUIMuHelper::RenderBack(int x, int y, int width, int height)
 
 void CNewUIMuHelper::LoadImages()
 {
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_RangeMinus.tga", IMAGE_MACROUI_HELPER_RAGEMINUS, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_OptionButton.tga", IMAGE_MACROUI_HELPER_OPTIONBUTTON, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputNumber.tga", IMAGE_MACROUI_HELPER_INPUTNUMBER, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputString.tga", IMAGE_MACROUI_HELPER_INPUTSTRING, GL_LINEAR, GL_CLAMP, 1, 0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_RangeMinus.tga", IMAGE_MACROUI_HELPER_RAGEMINUS, GL_LINEAR, GL_CLAMP, 1,
+               0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_OptionButton.tga", IMAGE_MACROUI_HELPER_OPTIONBUTTON, GL_LINEAR, GL_CLAMP,
+               1, 0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputNumber.tga", IMAGE_MACROUI_HELPER_INPUTNUMBER, GL_LINEAR, GL_CLAMP, 1,
+               0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputString.tga", IMAGE_MACROUI_HELPER_INPUTSTRING, GL_LINEAR, GL_CLAMP, 1,
+               0);
     //--
     LoadBitmap(L"Interface\\InGameShop\\Ingame_Bt03.tga", IMAGE_IGS_BUTTON, GL_LINEAR, GL_CLAMP, 1, 0);
 }
@@ -1591,28 +1629,32 @@ void CNewUIMuHelper::RegisterBtnCharacter(BYTE class_character, int Identifier)
     }
 }
 
-void CNewUIMuHelper::InsertButton(int imgindex, int x, int y, int sx, int sy, bool overflg, bool isimgwidth, bool bClickEffect, bool MoveTxt, const wchar_t* const* btnameSlot, const wchar_t* const* tooltipSlot, int Identifier, int iNumTab)
+void CNewUIMuHelper::InsertButton(int imgindex, int x, int y, int sx, int sy, bool overflg, bool isimgwidth,
+                                  bool bClickEffect, bool MoveTxt, const wchar_t* const* btnameSlot,
+                                  const wchar_t* const* tooltipSlot, int Identifier, int iNumTab)
 {
     CButtonTap cBTN;
-    auto* button = new CNewUIButton();
+    auto*      button = new CNewUIButton();
 
     button->ChangeButtonImgState(1, imgindex, overflg, isimgwidth, bClickEffect);
     button->ChangeButtonInfo(x, y, sx, sy);
 
-    if (btnameSlot != nullptr) button->ChangeText(btnameSlot);
-    if (tooltipSlot != nullptr) button->ChangeToolTipText(tooltipSlot, TRUE);
+    if (btnameSlot != nullptr)
+        button->ChangeText(btnameSlot);
+    if (tooltipSlot != nullptr)
+        button->ChangeToolTipText(tooltipSlot, TRUE);
 
     if (MoveTxt)
     {
         button->MoveTextPos(0, -1);
     }
 
-    cBTN.btn = button;
+    cBTN.btn     = button;
     cBTN.iNumTab = iNumTab;
-    cBTN.x = x;
-    cBTN.y = y;
-    cBTN.width = sx;
-    cBTN.height = sy;
+    cBTN.x       = x;
+    cBTN.y       = y;
+    cBTN.width   = sx;
+    cBTN.height  = sy;
     memset(cBTN.class_character, 0, sizeof(cBTN.class_character));
 
     RegisterButton(Identifier, cBTN);
@@ -1626,7 +1668,8 @@ void CNewUIMuHelper::RenderBtnList()
     {
         CButtonTap* cBTN = &li->second;
 
-        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
+        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
         {
             cBTN->btn->Render();
         }
@@ -1641,7 +1684,8 @@ int CNewUIMuHelper::UpdateMouseBtnList()
     {
         CButtonTap* cBTN = &li->second;
 
-        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
+        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
         {
             if (cBTN->btn->UpdateMouseEvent())
             {
@@ -1679,7 +1723,8 @@ void CNewUIMuHelper::RegisterCheckBox(int Identifier, CheckBoxTap button)
     m_CheckBoxList.insert(std::pair<int, CheckBoxTap>(Identifier, button));
 }
 
-void CNewUIMuHelper::InsertCheckBox(int imgindex, int x, int y, int sx, int sy, bool overflg, const wchar_t* const* btnameSlot, int Identifier, int iNumTab)
+void CNewUIMuHelper::InsertCheckBox(int imgindex, int x, int y, int sx, int sy, bool overflg,
+                                    const wchar_t* const* btnameSlot, int Identifier, int iNumTab)
 {
     CheckBoxTap cBOX;
 
@@ -1688,15 +1733,16 @@ void CNewUIMuHelper::InsertCheckBox(int imgindex, int x, int y, int sx, int sy, 
     cbox->CheckBoxImgState(imgindex);
     cbox->CheckBoxInfo(x, y, sx, sy);
 
-    if (btnameSlot != nullptr) cbox->ChangeText(btnameSlot);
+    if (btnameSlot != nullptr)
+        cbox->ChangeText(btnameSlot);
     cbox->RegisterBoxState(overflg);
 
-    cBOX.box = cbox;
+    cBOX.box     = cbox;
     cBOX.iNumTab = iNumTab;
-    cBOX.x = x;
-    cBOX.y = y;
-    cBOX.width = sx;
-    cBOX.height = sy;
+    cBOX.x       = x;
+    cBOX.y       = y;
+    cBOX.width   = sx;
+    cBOX.height  = sy;
     memset(cBOX.class_character, 0, sizeof(cBOX.class_character));
 
     RegisterCheckBox(Identifier, cBOX);
@@ -1710,7 +1756,8 @@ void CNewUIMuHelper::RenderBoxList()
     {
         CheckBoxTap* cBOX = &li->second;
 
-        if ((cBOX->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cBOX->iNumTab == m_iCurrentOpenTab || cBOX->iNumTab == -1))
+        if ((cBOX->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cBOX->iNumTab == m_iCurrentOpenTab || cBOX->iNumTab == -1))
         {
             cBOX->box->Render();
         }
@@ -1725,7 +1772,8 @@ int CNewUIMuHelper::UpdateMouseBoxList()
     {
         CheckBoxTap* cBOX = &li->second;
 
-        if ((cBOX->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cBOX->iNumTab == m_iCurrentOpenTab || cBOX->iNumTab == -1))
+        if ((cBOX->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cBOX->iNumTab == m_iCurrentOpenTab || cBOX->iNumTab == -1))
         {
             if (cBOX->box->UpdateMouseEvent())
             {
@@ -1747,7 +1795,8 @@ void CNewUIMuHelper::RenderIconList()
     {
         cTexture* cImage = &li->second;
 
-        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
+        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
         {
             RenderImage(cImage->s_ImgIndex, cImage->m_Pos.x, cImage->m_Pos.y, cImage->m_Size.x, cImage->m_Size.y);
 
@@ -1770,7 +1819,8 @@ int CNewUIMuHelper::UpdateMouseIconList()
     {
         cTexture* cImage = &li->second;
 
-        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
+        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
         {
             if (CheckMouseIn(cImage->m_Pos.x, cImage->m_Pos.y, cImage->m_Size.x, cImage->m_Size.y))
             {
@@ -1811,11 +1861,11 @@ void CNewUIMuHelper::InsertIcon(int imgindex, int x, int y, int sx, int sy, int 
     cTexture cImage;
 
     cImage.s_ImgIndex = imgindex;
-    cImage.m_Pos.x = x;
-    cImage.m_Pos.y = y;
-    cImage.m_Size.x = sx;
-    cImage.m_Size.y = sy;
-    cImage.iNumTab = iNumTab;
+    cImage.m_Pos.x    = x;
+    cImage.m_Pos.y    = y;
+    cImage.m_Size.x   = sx;
+    cImage.m_Size.y   = sy;
+    cImage.iNumTab    = iNumTab;
 
     memset(cImage.class_character, 0, sizeof(cImage.class_character));
 
@@ -1833,7 +1883,8 @@ void CNewUIMuHelper::RenderTextList()
     {
         cTextName* cImage = &li->second;
 
-        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) && (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
+        if ((cImage->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+            (cImage->iNumTab == m_iCurrentOpenTab || cImage->iNumTab == -1))
         {
             g_pRenderText->RenderText(cImage->m_Pos.x, cImage->m_Pos.y, cImage->m_Name.c_str());
         }
@@ -1870,7 +1921,7 @@ void CNewUIMuHelper::InsertText(int x, int y, std::wstring Name, int Identifier,
 
     cText.m_Pos.x = x;
     cText.m_Pos.y = y;
-    cText.m_Name = Name;
+    cText.m_Name  = Name;
     cText.iNumTab = iNumTab;
 
     memset(cText.class_character, 0, sizeof(cText.class_character));
@@ -1886,12 +1937,13 @@ void CNewUIMuHelper::AssignSkill(int iSkill)
             m_aiSelectedSkills[m_iSelectedSkillSlot] = iSkill;
             ApplyConfigFromSkillSlot(m_iSelectedSkillSlot, iSkill);
 
-            g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Assign m_aiSelectedSkills[%d] = %d", m_iSelectedSkillSlot, iSkill);
+            g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Assign m_aiSelectedSkills[%d] = %d", m_iSelectedSkillSlot,
+                                  iSkill);
         }
         else
         {
-            int iPrevIndex = GetSkillIndex(iSkill);
-            m_aiSelectedSkills[iPrevIndex] = -1;
+            int iPrevIndex                           = GetSkillIndex(iSkill);
+            m_aiSelectedSkills[iPrevIndex]           = -1;
             m_aiSelectedSkills[m_iSelectedSkillSlot] = iSkill;
 
             auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
@@ -1913,7 +1965,8 @@ int CNewUIMuHelper::GetSkillIndex(int iSkill)
 {
     auto it = std::find(m_aiSelectedSkills.begin(), m_aiSelectedSkills.end(), iSkill);
 
-    if (it != m_aiSelectedSkills.end()) {
+    if (it != m_aiSelectedSkills.end())
+    {
         return std::distance(m_aiSelectedSkills.begin(), it);
     }
 
@@ -1923,81 +1976,81 @@ int CNewUIMuHelper::GetSkillIndex(int iSkill)
 void CNewUIMuHelper::RenderSkillIcon(int skill, float x, float y, float width, float height)
 {
     float fU, fV;
-    int iKindofSkill = 0;
+    int   iKindofSkill = 0;
 
     BYTE bySkillUseType = SkillAttribute[skill].SkillUseType;
-    int Skill_Icon = SkillAttribute[skill].Magic_Icon;
+    int  Skill_Icon     = SkillAttribute[skill].Magic_Icon;
 
     if (skill >= AT_PET_COMMAND_DEFAULT && skill <= AT_PET_COMMAND_END)
     {
-        fU = ((skill - AT_PET_COMMAND_DEFAULT) % 8) * width / 256.f;
-        fV = ((skill - AT_PET_COMMAND_DEFAULT) / 8) * height / 256.f;
+        fU           = ((skill - AT_PET_COMMAND_DEFAULT) % 8) * width / 256.f;
+        fV           = ((skill - AT_PET_COMMAND_DEFAULT) / 8) * height / 256.f;
         iKindofSkill = KOS_COMMAND;
     }
     else if (skill == AT_SKILL_PLASMA_STORM_FENRIR)
     {
-        fU = 4 * width / 256.f;
-        fV = 0.f;
+        fU           = 4 * width / 256.f;
+        fV           = 0.f;
         iKindofSkill = KOS_COMMAND;
     }
     else if ((skill >= AT_SKILL_ALICE_DRAINLIFE && skill <= AT_SKILL_ALICE_THORNS))
     {
-        fU = ((skill - AT_SKILL_ALICE_DRAINLIFE) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((skill - AT_SKILL_ALICE_DRAINLIFE) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill >= AT_SKILL_ALICE_SLEEP && skill <= AT_SKILL_ALICE_BLIND)
     {
-        fU = ((skill - AT_SKILL_ALICE_SLEEP + 4) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((skill - AT_SKILL_ALICE_SLEEP + 4) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_ALICE_BERSERKER || skill == AT_SKILL_ALICE_BERSERKER_STR)
     {
-        fU = 10 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 10 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill >= AT_SKILL_ALICE_WEAKNESS && skill <= AT_SKILL_ALICE_ENERVATION)
     {
-        fU = (skill - AT_SKILL_ALICE_WEAKNESS + 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = (skill - AT_SKILL_ALICE_WEAKNESS + 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill >= AT_SKILL_SUMMON_EXPLOSION && skill <= AT_SKILL_SUMMON_REQUIEM)
     {
-        fU = ((skill - AT_SKILL_SUMMON_EXPLOSION + 6) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((skill - AT_SKILL_SUMMON_EXPLOSION + 6) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_SUMMON_POLLUTION)
     {
-        fU = 11 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 11 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_STRIKE_OF_DESTRUCTION)
     {
-        fU = 7 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 7 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_CHAOTIC_DISEIER)
     {
-        fU = 3 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 3 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_RECOVER)
     {
-        fU = 9 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 9 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_MULTI_SHOT)
     {
-        fU = 0 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 0 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_FLAME_STRIKE)
@@ -2005,82 +2058,83 @@ void CNewUIMuHelper::RenderSkillIcon(int skill, float x, float y, float width, f
         int iTypeL = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
         int iTypeR = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
 
-        fU = 1 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 1 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_GIGANTIC_STORM)
     {
-        fU = 2 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 2 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_LIGHTNING_SHOCK)
     {
-        fU = 2 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 2 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_LIGHTNING_SHOCK_STR)
     {
-        fU = 6 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 6 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill == AT_SKILL_EXPANSION_OF_WIZARDRY)
     {
-        fU = 8 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 8 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (bySkillUseType == 4)
     {
-        fU = (width / 256.f) * (Skill_Icon % 12);
-        fV = (height / 256.f) * ((Skill_Icon / 12) + 4);
+        fU           = (width / 256.f) * (Skill_Icon % 12);
+        fV           = (height / 256.f) * ((Skill_Icon / 12) + 4);
         iKindofSkill = KOS_SKILL2;
     }
     else if (skill >= AT_SKILL_KILLING_BLOW)
     {
-        fU = ((skill - AT_SKILL_KILLING_BLOW) % 12) * width / 256.f;
-        fV = ((skill - AT_SKILL_KILLING_BLOW) / 12) * height / 256.f;
+        fU           = ((skill - AT_SKILL_KILLING_BLOW) % 12) * width / 256.f;
+        fV           = ((skill - AT_SKILL_KILLING_BLOW) / 12) * height / 256.f;
         iKindofSkill = KOS_SKILL3;
     }
     else if (skill >= AT_SKILL_SPIRAL_SLASH)
     {
-        fU = ((skill - AT_SKILL_SPIRAL_SLASH) % 8) * width / 256.f;
-        fV = ((skill - AT_SKILL_SPIRAL_SLASH) / 8) * height / 256.f;
+        fU           = ((skill - AT_SKILL_SPIRAL_SLASH) % 8) * width / 256.f;
+        fV           = ((skill - AT_SKILL_SPIRAL_SLASH) / 8) * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else
     {
-        fU = ((skill - 1) % 8) * width / 256.f;
-        fV = ((skill - 1) / 8) * height / 256.f;
+        fU           = ((skill - 1) % 8) * width / 256.f;
+        fV           = ((skill - 1) / 8) * height / 256.f;
         iKindofSkill = KOS_SKILL1;
     }
     int iTextureIndex = 0;
     switch (iKindofSkill)
     {
-    case KOS_COMMAND:
-    {
-        iTextureIndex = IMAGE_COMMAND;
-    }break;
-    case KOS_SKILL1:
-    {
-        iTextureIndex = IMAGE_SKILL1;
-    }break;
-    case KOS_SKILL2:
-    {
-        iTextureIndex = IMAGE_SKILL2;
-    }break;
-    case KOS_SKILL3:
-    {
-        iTextureIndex = IMAGE_SKILL3;
-    }break;
+        case KOS_COMMAND: {
+            iTextureIndex = IMAGE_COMMAND;
+        }
+        break;
+        case KOS_SKILL1: {
+            iTextureIndex = IMAGE_SKILL1;
+        }
+        break;
+        case KOS_SKILL2: {
+            iTextureIndex = IMAGE_SKILL2;
+        }
+        break;
+        case KOS_SKILL3: {
+            iTextureIndex = IMAGE_SKILL3;
+        }
+        break;
     }
 
     if (skill >= AT_SKILL_MASTER_BEGIN)
     {
-        RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25), ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
+        RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+                    ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
     }
     else if (iTextureIndex != 0)
     {
@@ -2098,7 +2152,6 @@ CNewUIMuHelperSkillList::~CNewUIMuHelperSkillList()
 {
     Release();
 }
-
 
 bool CNewUIMuHelperSkillList::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNewUI3DRenderMng)
 {
@@ -2135,7 +2188,7 @@ void CNewUIMuHelperSkillList::Release()
 
 void CNewUIMuHelperSkillList::Reset()
 {
-    m_bRenderSkillInfo = false;
+    m_bRenderSkillInfo     = false;
     m_iRenderSkillInfoType = 0;
     m_iRenderSkillInfoPosX = 0;
     m_iRenderSkillInfoPosY = 0;
@@ -2230,8 +2283,8 @@ void CNewUIMuHelperSkillList::PrepareSkillsToRender()
                     continue;
                 }
 
-                if ((m_bFilterByAttackSkills && IsAttackSkill(iSkillType))
-                    || (m_bFilterByBuffSkills && IsBuffSkill(iSkillType)))
+                if ((m_bFilterByAttackSkills && IsAttackSkill(iSkillType)) ||
+                    (m_bFilterByBuffSkills && IsBuffSkill(iSkillType)))
                 {
                     m_aiSkillsToRender.push_back(iSkillType);
                 }
@@ -2247,11 +2300,11 @@ bool CNewUIMuHelperSkillList::Update()
 
 bool CNewUIMuHelperSkillList::Render()
 {
-    float scale = 1.0f; // 
-    float boxWidth = 32.f * scale;
-    float boxHeight = 38.f * scale;
-    float iconWidth = 20.f * scale;
-    float iconHeight = 28.f * scale;
+    float scale       = 1.0f;  //
+    float boxWidth    = 32.f * scale;
+    float boxHeight   = 38.f * scale;
+    float iconWidth   = 20.f * scale;
+    float iconHeight  = 28.f * scale;
     float iconOffsetX = (boxWidth - iconWidth) / 2.f;
     float iconOffsetY = (boxHeight - iconHeight) / 2.f;
 
@@ -2266,25 +2319,24 @@ bool CNewUIMuHelperSkillList::Render()
     {
         int iSkillType = m_aiSkillsToRender[i];
 
-        int col = i / itemsPerColumn;
+        int col         = i / itemsPerColumn;
         int rowInColumn = i % itemsPerColumn;
 
-        int offset = (rowInColumn + 1) / 2;
+        int  offset         = (rowInColumn + 1) / 2;
         bool skillCountEven = (rowInColumn % 2 == 0);
 
-        float x = startX - col * boxWidth; // left to right
-        float y = skillCountEven           // bounce up and down from center
-            ? startY - offset * boxHeight
-            : startY + offset * boxHeight;
+        float x = startX - col * boxWidth;  // left to right
+        float y = skillCountEven            // bounce up and down from center
+                      ? startY - offset * boxHeight
+                      : startY + offset * boxHeight;
 
         RenderImage(IMAGE_SKILLBOX, x, y, boxWidth, boxHeight);
         RenderSkillIcon(iSkillType, x + iconOffsetX, y + iconOffsetY, iconWidth, iconHeight);
 
-        m_skillIconMap.insert_or_assign(iSkillType, cSkillIcon{
-            iSkillType,
-            { static_cast<LONG>(x), static_cast<LONG>(y) },
-            { static_cast<LONG>(boxWidth), static_cast<LONG>(boxHeight) }
-            });
+        m_skillIconMap.insert_or_assign(iSkillType,
+                                        cSkillIcon{iSkillType,
+                                                   {static_cast<LONG>(x), static_cast<LONG>(y)},
+                                                   {static_cast<LONG>(boxWidth), static_cast<LONG>(boxHeight)}});
     }
 
     if (m_bRenderSkillInfo && m_pNewUI3DRenderMng)
@@ -2306,17 +2358,16 @@ void CNewUIMuHelperSkillList::RegisterFocusNodes()
         const cSkillIcon& icon = pair.second;
         // Every map entry is rendered by Render(); there is no separate
         // visibility flag on these icons.
-        navigator.Register(this, static_cast<std::uint32_t>(icon.skillId),
-            static_cast<float>(icon.location.x), static_cast<float>(icon.location.y),
-            static_cast<float>(icon.area.cx), static_cast<float>(icon.area.cy));
+        navigator.Register(this, static_cast<std::uint32_t>(icon.skillId), static_cast<float>(icon.location.x),
+                           static_cast<float>(icon.location.y), static_cast<float>(icon.area.cx),
+                           static_cast<float>(icon.area.cy));
     }
 }
 
 void CNewUIMuHelperSkillList::RenderFocusHighlight()
 {
     const auto current = Core::Input::FocusNavigator::Instance().Current();
-    if (!current.has_value()
-        || current->owner != reinterpret_cast<std::uintptr_t>(this))
+    if (!current.has_value() || current->owner != reinterpret_cast<std::uintptr_t>(this))
     {
         return;
     }
@@ -2326,8 +2377,8 @@ void CNewUIMuHelperSkillList::RenderFocusHighlight()
         return;
 
     const cSkillIcon& icon = it->second;
-    DrawMuHelperFocusOutline(icon.location.x - 2, icon.location.y - 2,
-        icon.area.cx + 4, icon.area.cy + 4, MuHelperFocusPulse());
+    DrawMuHelperFocusOutline(icon.location.x - 2, icon.location.y - 2, icon.area.cx + 4, icon.area.cy + 4,
+                             MuHelperFocusPulse());
 }
 
 void CNewUIMuHelperSkillList::RenderSkillInfo()
@@ -2343,87 +2394,87 @@ float CNewUIMuHelperSkillList::GetLayerDepth()
 void CNewUIMuHelperSkillList::RenderSkillIcon(int iSkillType, float x, float y, float width, float height)
 {
     float fU, fV;
-    int iKindofSkill = 0;
+    int   iKindofSkill = 0;
 
     BYTE bySkillUseType = SkillAttribute[iSkillType].SkillUseType;
-    int Skill_Icon = SkillAttribute[iSkillType].Magic_Icon;
+    int  Skill_Icon     = SkillAttribute[iSkillType].Magic_Icon;
 
     if (iSkillType >= AT_PET_COMMAND_DEFAULT && iSkillType <= AT_PET_COMMAND_END)
     {
-        fU = ((iSkillType - AT_PET_COMMAND_DEFAULT) % 8) * width / 256.f;
-        fV = ((iSkillType - AT_PET_COMMAND_DEFAULT) / 8) * height / 256.f;
+        fU           = ((iSkillType - AT_PET_COMMAND_DEFAULT) % 8) * width / 256.f;
+        fV           = ((iSkillType - AT_PET_COMMAND_DEFAULT) / 8) * height / 256.f;
         iKindofSkill = KOS_COMMAND;
     }
     else if (iSkillType == AT_SKILL_PLASMA_STORM_FENRIR)
     {
-        fU = 4 * width / 256.f;
-        fV = 0.f;
+        fU           = 4 * width / 256.f;
+        fV           = 0.f;
         iKindofSkill = KOS_COMMAND;
     }
     else if ((iSkillType >= AT_SKILL_ALICE_DRAINLIFE && iSkillType <= AT_SKILL_ALICE_THORNS))
     {
-        fU = ((iSkillType - AT_SKILL_ALICE_DRAINLIFE) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((iSkillType - AT_SKILL_ALICE_DRAINLIFE) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType >= AT_SKILL_ALICE_SLEEP && iSkillType <= AT_SKILL_ALICE_BLIND)
     {
-        fU = ((iSkillType - AT_SKILL_ALICE_SLEEP + 4) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((iSkillType - AT_SKILL_ALICE_SLEEP + 4) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_ALICE_SLEEP_STR)
     {
-        fU = (4 % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = (4 % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_ALICE_BERSERKER)
     {
-        fU = 10 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 10 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType >= AT_SKILL_ALICE_WEAKNESS && iSkillType <= AT_SKILL_ALICE_ENERVATION)
     {
-        fU = (iSkillType - AT_SKILL_ALICE_WEAKNESS + 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = (iSkillType - AT_SKILL_ALICE_WEAKNESS + 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType >= AT_SKILL_SUMMON_EXPLOSION && iSkillType <= AT_SKILL_SUMMON_REQUIEM)
     {
-        fU = ((iSkillType - AT_SKILL_SUMMON_EXPLOSION + 6) % 8) * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = ((iSkillType - AT_SKILL_SUMMON_EXPLOSION + 6) % 8) * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_SUMMON_POLLUTION)
     {
-        fU = 11 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 11 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_STRIKE_OF_DESTRUCTION)
     {
-        fU = 7 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 7 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_CHAOTIC_DISEIER)
     {
-        fU = 3 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 3 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_RECOVER)
     {
-        fU = 9 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 9 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_MULTI_SHOT)
     {
-        fU = 0 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 0 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_FLAME_STRIKE)
@@ -2431,76 +2482,77 @@ void CNewUIMuHelperSkillList::RenderSkillIcon(int iSkillType, float x, float y, 
         int iTypeL = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
         int iTypeR = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
 
-        fU = 1 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 1 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_GIGANTIC_STORM)
     {
-        fU = 2 * width / 256.f;
-        fV = 8 * height / 256.f;
+        fU           = 2 * width / 256.f;
+        fV           = 8 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_LIGHTNING_SHOCK)
     {
-        fU = 2 * width / 256.f;
-        fV = 3 * height / 256.f;
+        fU           = 2 * width / 256.f;
+        fV           = 3 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType == AT_SKILL_EXPANSION_OF_WIZARDRY)
     {
-        fU = 8 * width / 256.f;
-        fV = 2 * height / 256.f;
+        fU           = 8 * width / 256.f;
+        fV           = 2 * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else if (bySkillUseType == 4)
     {
-        fU = (width / 256.f) * (Skill_Icon % 12);
-        fV = (height / 256.f) * ((Skill_Icon / 12) + 4);
+        fU           = (width / 256.f) * (Skill_Icon % 12);
+        fV           = (height / 256.f) * ((Skill_Icon / 12) + 4);
         iKindofSkill = KOS_SKILL2;
     }
     else if (iSkillType >= AT_SKILL_KILLING_BLOW)
     {
-        fU = ((iSkillType - AT_SKILL_KILLING_BLOW) % 12) * width / 256.f;
-        fV = ((iSkillType - AT_SKILL_KILLING_BLOW) / 12) * height / 256.f;
+        fU           = ((iSkillType - AT_SKILL_KILLING_BLOW) % 12) * width / 256.f;
+        fV           = ((iSkillType - AT_SKILL_KILLING_BLOW) / 12) * height / 256.f;
         iKindofSkill = KOS_SKILL3;
     }
     else if (iSkillType >= AT_SKILL_SPIRAL_SLASH)
     {
-        fU = ((iSkillType - AT_SKILL_SPIRAL_SLASH) % 8) * width / 256.f;
-        fV = ((iSkillType - AT_SKILL_SPIRAL_SLASH) / 8) * height / 256.f;
+        fU           = ((iSkillType - AT_SKILL_SPIRAL_SLASH) % 8) * width / 256.f;
+        fV           = ((iSkillType - AT_SKILL_SPIRAL_SLASH) / 8) * height / 256.f;
         iKindofSkill = KOS_SKILL2;
     }
     else
     {
-        fU = ((iSkillType - 1) % 8) * width / 256.f;
-        fV = ((iSkillType - 1) / 8) * height / 256.f;
+        fU           = ((iSkillType - 1) % 8) * width / 256.f;
+        fV           = ((iSkillType - 1) / 8) * height / 256.f;
         iKindofSkill = KOS_SKILL1;
     }
     int iTextureId = 0;
     switch (iKindofSkill)
     {
-    case KOS_COMMAND:
-    {
-        iTextureId = IMAGE_COMMAND;
-    }break;
-    case KOS_SKILL1:
-    {
-        iTextureId = IMAGE_SKILL1;
-    }break;
-    case KOS_SKILL2:
-    {
-        iTextureId = IMAGE_SKILL2;
-    }break;
-    case KOS_SKILL3:
-    {
-        iTextureId = IMAGE_SKILL3;
-    }break;
+        case KOS_COMMAND: {
+            iTextureId = IMAGE_COMMAND;
+        }
+        break;
+        case KOS_SKILL1: {
+            iTextureId = IMAGE_SKILL1;
+        }
+        break;
+        case KOS_SKILL2: {
+            iTextureId = IMAGE_SKILL2;
+        }
+        break;
+        case KOS_SKILL3: {
+            iTextureId = IMAGE_SKILL3;
+        }
+        break;
     }
 
     if (iSkillType >= AT_SKILL_MASTER_BEGIN)
     {
-        RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25), ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
+        RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+                    ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
     }
     else if (iTextureId != 0)
     {
@@ -2534,48 +2586,48 @@ bool CNewUIMuHelperSkillList::IsBuffSkill(int iSkillType)
 
     switch (iSkillType)
     {
-    // BK buffs
-    case AT_SKILL_SWELL_LIFE:
-    case AT_SKILL_SWELL_LIFE_STR:
-    case AT_SKILL_SWELL_LIFE_PROFICIENCY:
-        return true;
-    // Elf buffs
-    case AT_SKILL_INFINITY_ARROW:
-    case AT_SKILL_INFINITY_ARROW_STR:
-    case AT_SKILL_DEFENSE:
-    case AT_SKILL_DEFENSE_STR:
-    case AT_SKILL_DEFENSE_MASTERY:
-    case AT_SKILL_ATTACK:
-    case AT_SKILL_ATTACK_STR:
-    case AT_SKILL_ATTACK_MASTERY:
-        return true;
-    // Wiz buffs
-    case AT_SKILL_SOUL_BARRIER:
-    case AT_SKILL_SOUL_BARRIER_STR:
-    case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
-    case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY:
-        return true;
-    // DL buffs
-    case AT_SKILL_ADD_CRITICAL:
-    case AT_SKILL_ADD_CRITICAL_STR1:
-    case AT_SKILL_ADD_CRITICAL_STR2:
-    case AT_SKILL_ADD_CRITICAL_STR3:
-        return true;
-    // Summoner buffs
-    case AT_SKILL_ALICE_BERSERKER:
-    case AT_SKILL_ALICE_BERSERKER_STR:
-    case AT_SKILL_ALICE_THORNS:
-        return true;
-        // RF Buffs
-    case AT_SKILL_ATT_UP_OURFORCES:
-    case AT_SKILL_HP_UP_OURFORCES:
-    case AT_SKILL_DEF_UP_OURFORCES:
-    case AT_SKILL_HP_UP_OURFORCES_STR:
-    case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
-    case AT_SKILL_DEF_UP_OURFORCES_STR:
-        return true;
+        // BK buffs
+        case AT_SKILL_SWELL_LIFE:
+        case AT_SKILL_SWELL_LIFE_STR:
+        case AT_SKILL_SWELL_LIFE_PROFICIENCY:
+            return true;
+        // Elf buffs
+        case AT_SKILL_INFINITY_ARROW:
+        case AT_SKILL_INFINITY_ARROW_STR:
+        case AT_SKILL_DEFENSE:
+        case AT_SKILL_DEFENSE_STR:
+        case AT_SKILL_DEFENSE_MASTERY:
+        case AT_SKILL_ATTACK:
+        case AT_SKILL_ATTACK_STR:
+        case AT_SKILL_ATTACK_MASTERY:
+            return true;
+        // Wiz buffs
+        case AT_SKILL_SOUL_BARRIER:
+        case AT_SKILL_SOUL_BARRIER_STR:
+        case AT_SKILL_SOUL_BARRIER_PROFICIENCY:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_STR:
+        case AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY:
+            return true;
+        // DL buffs
+        case AT_SKILL_ADD_CRITICAL:
+        case AT_SKILL_ADD_CRITICAL_STR1:
+        case AT_SKILL_ADD_CRITICAL_STR2:
+        case AT_SKILL_ADD_CRITICAL_STR3:
+            return true;
+        // Summoner buffs
+        case AT_SKILL_ALICE_BERSERKER:
+        case AT_SKILL_ALICE_BERSERKER_STR:
+        case AT_SKILL_ALICE_THORNS:
+            return true;
+            // RF Buffs
+        case AT_SKILL_ATT_UP_OURFORCES:
+        case AT_SKILL_HP_UP_OURFORCES:
+        case AT_SKILL_DEF_UP_OURFORCES:
+        case AT_SKILL_HP_UP_OURFORCES_STR:
+        case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
+        case AT_SKILL_DEF_UP_OURFORCES_STR:
+            return true;
     }
 
     return false;
@@ -2587,12 +2639,12 @@ bool CNewUIMuHelperSkillList::IsHealingSkill(int iSkillType)
 
     switch (iSkillType)
     {
-    case AT_SKILL_HEALING:
-    case AT_SKILL_HEALING_STR:
-        return true;
-    case AT_SKILL_ALICE_DRAINLIFE:
-    case AT_SKILL_ALICE_DRAINLIFE_STR:
-        return true;
+        case AT_SKILL_HEALING:
+        case AT_SKILL_HEALING_STR:
+            return true;
+        case AT_SKILL_ALICE_DRAINLIFE:
+        case AT_SKILL_ALICE_DRAINLIFE_STR:
+            return true;
     }
 
     return false;
@@ -2602,9 +2654,9 @@ bool CNewUIMuHelperSkillList::IsDefenseSkill(int iSkillType)
 {
     switch (iSkillType)
     {
-    case AT_SKILL_DEFENSE:
-    case AT_SKILL_DEFENSE_STR:
-        return true;
+        case AT_SKILL_DEFENSE:
+        case AT_SKILL_DEFENSE_STR:
+            return true;
     }
 
     return false;
@@ -2613,14 +2665,14 @@ bool CNewUIMuHelperSkillList::IsDefenseSkill(int iSkillType)
 void CNewUIMuHelperSkillList::FilterByAttackSkills()
 {
     m_bFilterByAttackSkills = true;
-    m_bFilterByBuffSkills = false;
+    m_bFilterByBuffSkills   = false;
 
     PrepareSkillsToRender();
 }
 
 void CNewUIMuHelperSkillList::FilterByBuffSkills()
 {
-    m_bFilterByBuffSkills = true;
+    m_bFilterByBuffSkills   = true;
     m_bFilterByAttackSkills = false;
 
     PrepareSkillsToRender();
@@ -2654,9 +2706,9 @@ int CNewUIMuHelperSkillList::UpdateMouseSkillList()
 
 CNewUIMuHelperExt::CNewUIMuHelperExt()
 {
-    m_pNewUIMng = NULL;
-    m_Pos.x = 0;
-    m_Pos.y = 0;
+    m_pNewUIMng    = NULL;
+    m_Pos.x        = 0;
+    m_Pos.y        = 0;
     m_iCurrentPage = -1;
 }
 
@@ -2719,67 +2771,62 @@ void CNewUIMuHelperExt::InitText()
     m_BuffTimeInput.SetOption(UIOPTION_NUMBERONLY);
 }
 
-void CNewUIMuHelperExt::InitImage()
-{
-
-}
+void CNewUIMuHelperExt::InitImage() {}
 
 void CNewUIMuHelperExt::InitButtons()
 {
     m_BtnPreConHuntRange.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnPreConHuntRange.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 78, 15, 15);
-    m_BtnPreConHuntRange.ChangeText(&I18N::Game::MonsterWithinHuntingRange); // "Monster Within Hunting range"
+    m_BtnPreConHuntRange.ChangeText(&I18N::Game::MonsterWithinHuntingRange);  // "Monster Within Hunting range"
 
     m_BtnPreConAttacking.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnPreConAttacking.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 93, 15, 15);
-    m_BtnPreConAttacking.ChangeText(&I18N::Game::MonsterAttackingMe); // "Monster Attacking Me"
+    m_BtnPreConAttacking.ChangeText(&I18N::Game::MonsterAttackingMe);  // "Monster Attacking Me"
 
     m_BtnSubConMoreThanTwo.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnSubConMoreThanTwo.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 143, 15, 15);
-    m_BtnSubConMoreThanTwo.ChangeText(&I18N::Game::MoreThan2Mobs); // "More Than 2 Mobs"
+    m_BtnSubConMoreThanTwo.ChangeText(&I18N::Game::MoreThan2Mobs);  // "More Than 2 Mobs"
 
     m_BtnSubConMoreThanThree.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnSubConMoreThanThree.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 158, 15, 15);
-    m_BtnSubConMoreThanThree.ChangeText(&I18N::Game::MoreThan3Mobs); // "More Than 3 Mobs"
+    m_BtnSubConMoreThanThree.ChangeText(&I18N::Game::MoreThan3Mobs);  // "More Than 3 Mobs"
 
     m_BtnSubConMoreThanFour.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnSubConMoreThanFour.CheckBoxInfo(m_Pos.x + 17 + 78, m_Pos.y + 143, 15, 15);
-    m_BtnSubConMoreThanFour.ChangeText(&I18N::Game::MoreThan4Mobs); // "More Than 4 Mobs"
+    m_BtnSubConMoreThanFour.ChangeText(&I18N::Game::MoreThan4Mobs);  // "More Than 4 Mobs"
 
     m_BtnSubConMoreThanFive.CheckBoxImgState(IMAGE_MACROUI_HELPER_OPTIONBUTTON);
     m_BtnSubConMoreThanFive.CheckBoxInfo(m_Pos.x + 17 + 78, m_Pos.y + 158, 15, 15);
-    m_BtnSubConMoreThanFive.ChangeText(&I18N::Game::MoreThan5Mobs); // "More Than 5 Mobs"
+    m_BtnSubConMoreThanFive.ChangeText(&I18N::Game::MoreThan5Mobs);  // "More Than 5 Mobs"
 
     m_BtnPartyHeal.CheckBoxImgState(IMAGE_OPTION_BTN_CHECK);
     m_BtnPartyHeal.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 78, 15, 15);
-    m_BtnPartyHeal.ChangeText(&I18N::Game::PreferenceOfPartyHeal); // "Preference of Party Heal"
+    m_BtnPartyHeal.ChangeText(&I18N::Game::PreferenceOfPartyHeal);  // "Preference of Party Heal"
 
     m_BtnPartyDuration.CheckBoxImgState(IMAGE_OPTION_BTN_CHECK);
     m_BtnPartyDuration.CheckBoxInfo(m_Pos.x + 17, m_Pos.y + 168, 15, 15);
-    m_BtnPartyDuration.ChangeText(&I18N::Game::BuffDurationForAllPartyMembers); // "Buff Duration for All Party Members"
+    m_BtnPartyDuration.ChangeText(
+        &I18N::Game::BuffDurationForAllPartyMembers);  // "Buff Duration for All Party Members"
 
     m_BtnSave.ChangeButtonImgState(1, IMAGE_IGS_BUTTON, 1, 0, 1);
     m_BtnSave.ChangeButtonInfo(m_Pos.x + 120, m_Pos.y + 388, 52, 26);
-    m_BtnSave.ChangeText(&I18N::Game::SaveSetting); // "Save Setting"
+    m_BtnSave.ChangeText(&I18N::Game::SaveSetting);  // "Save Setting"
     m_BtnSave.MoveTextPos(0, -1);
     m_BtnSave.ChangeToolTipText(L"", TRUE);
 
     m_BtnReset.ChangeButtonImgState(1, IMAGE_IGS_BUTTON, 1, 0, 1);
     m_BtnReset.ChangeButtonInfo(m_Pos.x + 65, m_Pos.y + 388, 52, 26);
-    m_BtnReset.ChangeText(&I18N::Game::Initialization); // "Initialization"
+    m_BtnReset.ChangeText(&I18N::Game::Initialization);  // "Initialization"
     m_BtnReset.MoveTextPos(0, -1);
     m_BtnReset.ChangeToolTipText(L"", TRUE);
 
     m_BtnClose.ChangeButtonImgState(1, IMAGE_BASE_WINDOW_BTN_EXIT, 0, 0, 0);
     m_BtnClose.ChangeButtonInfo(m_Pos.x + 20, m_Pos.y + 388, 36, 29);
     m_BtnClose.ChangeText(L"");
-    m_BtnClose.ChangeToolTipText(&I18N::Game::Close388, TRUE); // "Close"
+    m_BtnClose.ChangeToolTipText(&I18N::Game::Close388, TRUE);  // "Close"
 }
 
-void CNewUIMuHelperExt::InitCheckBox()
-{
-
-}
+void CNewUIMuHelperExt::InitCheckBox() {}
 
 bool CNewUIMuHelperExt::Render()
 {
@@ -2795,45 +2842,53 @@ bool CNewUIMuHelperExt::Render()
     RenderImage(IMAGE_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(WINDOW_WIDTH), float(WINDOW_HEIGHT));
     RenderImage(IMAGE_BASE_WINDOW_TOP, m_Pos.x, m_Pos.y, float(WINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_BASE_WINDOW_RIGHT, m_Pos.x + float(WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_BASE_WINDOW_RIGHT, m_Pos.x + float(WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(WINDOW_HEIGHT) - 64.f - 45.f);
     RenderImage(IMAGE_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(WINDOW_HEIGHT) - 45.f, float(WINDOW_WIDTH), 45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
 
     if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG_ELF)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0, RT3_SORT_CENTER); // "Auto Recovery"
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion); // "Auto Potion"
-        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 80, 124.f, 16.f, m_iCurrentPotionThreshold, I18N::Game::HPStatus); // "HP Status"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0,
+                                  RT3_SORT_CENTER);                                   // "Auto Recovery"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion);  // "Auto Potion"
+        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 80, 124.f, 16.f, m_iCurrentPotionThreshold,
+                      I18N::Game::HPStatus);  // "HP Status"
 
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::AutoHeal); // "Auto Heal"
-        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 145, 124.f, 16.f, m_iCurrentHealThreshold, I18N::Game::HPStatus); // "HP Status"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::AutoHeal);  // "Auto Heal"
+        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 145, 124.f, 16.f, m_iCurrentHealThreshold,
+                      I18N::Game::HPStatus);  // "HP Status"
     }
     else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG_SUMMY)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0, RT3_SORT_CENTER); // "Auto Recovery"
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion); // "Auto Potion"
-        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 80, 124.f, 16.f, m_iCurrentPotionThreshold, I18N::Game::HPStatus); // "HP Status"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0,
+                                  RT3_SORT_CENTER);                                   // "Auto Recovery"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion);  // "Auto Potion"
+        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 80, 124.f, 16.f, m_iCurrentPotionThreshold,
+                      I18N::Game::HPStatus);  // "HP Status"
 
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::DrainLife); // "Drain Life"
-        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 145, 124.f, 16.f, m_iCurrentHealThreshold, I18N::Game::HPStatus); // "HP Status"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::DrainLife);  // "Drain Life"
+        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 145, 124.f, 16.f, m_iCurrentHealThreshold,
+                      I18N::Game::HPStatus);  // "HP Status"
     }
     else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0, RT3_SORT_CENTER); // "Auto Recovery"
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion); // "Auto Potion"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::AutoRecovery, 190, 0,
+                                  RT3_SORT_CENTER);                                   // "Auto Recovery"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::AutoPotion);  // "Auto Potion"
 
         RenderHpLevel(m_Pos.x + 32, m_Pos.y + 80, 124.f, 16.f, m_iCurrentPotionThreshold, I18N::Game::HPStatus);
     }
-    else if (m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG
-        || m_iCurrentPage == SUB_PAGE_SKILL3_CONFIG)
+    else if (m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG || m_iCurrentPage == SUB_PAGE_SKILL3_CONFIG)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::ActivationSkill, 190, 0, RT3_SORT_CENTER); // "Activation Skill"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::ActivationSkill, 190, 0,
+                                  RT3_SORT_CENTER);                               // "Activation Skill"
         RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::PreCon);  // "Pre-con"
         m_BtnPreConHuntRange.Render();
         m_BtnPreConAttacking.Render();
 
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::SubCon); // "Sub-con"
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 120, 165, 45, I18N::Game::SubCon);  // "Sub-con"
         m_BtnSubConMoreThanTwo.Render();
         m_BtnSubConMoreThanThree.Render();
         m_BtnSubConMoreThanFour.Render();
@@ -2842,29 +2897,32 @@ bool CNewUIMuHelperExt::Render()
 
     else if (m_iCurrentPage == SUB_PAGE_PARTY_CONFIG)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::Party, 190, 0, RT3_SORT_CENTER); // "Party"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::Party, 190, 0, RT3_SORT_CENTER);  // "Party"
         g_pRenderText->SetTextColor(TextColor);
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::BuffSupport); // Buff Support
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 45, I18N::Game::BuffSupport);  // Buff Support
         m_BtnPartyDuration.Render();
-        g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 97, I18N::Game::TimeSpaceOfCastingBuff, 124, 0, RT3_SORT_LEFT); // "Time Space of Casting Buff"
+        g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 97, I18N::Game::TimeSpaceOfCastingBuff, 124, 0,
+                                  RT3_SORT_LEFT);  // "Time Space of Casting Buff"
         RenderImage(IMAGE_MACROUI_HELPER_INPUTNUMBER, m_Pos.x + 125, m_Pos.y + 93, 20, 15);
         m_BuffTimeInput.Render();
-        g_pRenderText->RenderText(m_Pos.x + 146, m_Pos.y + 97, L"s", 124, 0, RT3_SORT_LEFT); // "s"
+        g_pRenderText->RenderText(m_Pos.x + 146, m_Pos.y + 97, L"s", 124, 0, RT3_SORT_LEFT);  // "s"
     }
     else if (m_iCurrentPage == SUB_PAGE_PARTY_CONFIG_ELF)
     {
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::Party, 190, 0, RT3_SORT_CENTER); // "Party"
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, I18N::Game::Party, 190, 0, RT3_SORT_CENTER);  // "Party"
         g_pRenderText->SetTextColor(TextColor);
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 70, I18N::Game::HealSupport); // Heal Support
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 55, 165, 70, I18N::Game::HealSupport);  // Heal Support
         m_BtnPartyHeal.Render();
-        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 100, 124.f, 16.f, m_iCurrentPartyHealThreshold, I18N::Game::HPStatusOfPartyMembers); // "HP Status of Party Members"
+        RenderHpLevel(m_Pos.x + 32, m_Pos.y + 100, 124.f, 16.f, m_iCurrentPartyHealThreshold,
+                      I18N::Game::HPStatusOfPartyMembers);  // "HP Status of Party Members"
 
-        RenderBackPane(m_Pos.x + 12, m_Pos.y + 145, 165, 45, I18N::Game::BuffSupport); // Buff Support
+        RenderBackPane(m_Pos.x + 12, m_Pos.y + 145, 165, 45, I18N::Game::BuffSupport);  // Buff Support
         m_BtnPartyDuration.Render();
-        g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 187, I18N::Game::TimeSpaceOfCastingBuff, 124, 0, RT3_SORT_LEFT); // "Time Space of Casting Buff"
+        g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 187, I18N::Game::TimeSpaceOfCastingBuff, 124, 0,
+                                  RT3_SORT_LEFT);  // "Time Space of Casting Buff"
         RenderImage(IMAGE_MACROUI_HELPER_INPUTNUMBER, m_Pos.x + 125, m_Pos.y + 183, 20, 15);
         m_BuffTimeInput.Render();
-        g_pRenderText->RenderText(m_Pos.x + 146, m_Pos.y + 187, L"s", 124, 0, RT3_SORT_LEFT); // "s"
+        g_pRenderText->RenderText(m_Pos.x + 146, m_Pos.y + 187, L"s", 124, 0, RT3_SORT_LEFT);  // "s"
     }
 
     m_BtnSave.Render();
@@ -2881,34 +2939,32 @@ bool CNewUIMuHelperExt::Render()
 void CNewUIMuHelperExt::RegisterFocusNodes()
 {
     ExtFocusRect rects[EXT_FOCUS_MAX] = {};
-    const int count = BuildExtFocusRects(m_iCurrentPage, m_Pos, rects);
+    const int    count                = BuildExtFocusRects(m_iCurrentPage, m_Pos, rects);
 
     auto& navigator = Core::Input::FocusNavigator::Instance();
     for (int i = 0; i < count; ++i)
     {
-        navigator.Register(this, rects[i].id,
-            static_cast<float>(rects[i].x), static_cast<float>(rects[i].y),
-            static_cast<float>(rects[i].width), static_cast<float>(rects[i].height));
+        navigator.Register(this, rects[i].id, static_cast<float>(rects[i].x), static_cast<float>(rects[i].y),
+                           static_cast<float>(rects[i].width), static_cast<float>(rects[i].height));
     }
 }
 
 void CNewUIMuHelperExt::RenderFocusHighlight()
 {
     const auto current = Core::Input::FocusNavigator::Instance().Current();
-    if (!current.has_value()
-        || current->owner != reinterpret_cast<std::uintptr_t>(this))
+    if (!current.has_value() || current->owner != reinterpret_cast<std::uintptr_t>(this))
     {
         return;
     }
 
     ExtFocusRect rects[EXT_FOCUS_MAX] = {};
-    const int count = BuildExtFocusRects(m_iCurrentPage, m_Pos, rects);
+    const int    count                = BuildExtFocusRects(m_iCurrentPage, m_Pos, rects);
     for (int i = 0; i < count; ++i)
     {
         if (rects[i].id == current->id)
         {
-            DrawMuHelperFocusOutline(rects[i].x - 2, rects[i].y - 2,
-                rects[i].width + 4, rects[i].height + 4, MuHelperFocusPulse());
+            DrawMuHelperFocusOutline(rects[i].x - 2, rects[i].y - 2, rects[i].width + 4, rects[i].height + 4,
+                                     MuHelperFocusPulse());
             return;
         }
     }
@@ -2926,31 +2982,34 @@ void CNewUIMuHelperExt::RenderHpLevel(int x, int y, int width, int height, int l
 
 void CNewUIMuHelperExt::RenderBackPane(int x, int y, int width, int height, const wchar_t* pszHeader)
 {
-    DWORD TextColor = g_pRenderText->GetTextColor();
-    int headerWidth = 65;
+    DWORD TextColor   = g_pRenderText->GetTextColor();
+    int   headerWidth = 65;
 
     EnableAlphaTest();
     glColor4f(0.0, 0.0, 0.0, 0.4f);
-    RenderColor(x + 3.f, y + 2.f, headerWidth - 7.f, 18.f, 0.0, 0);  // shade for top box
+    RenderColor(x + 3.f, y + 2.f, headerWidth - 7.f, 18.f, 0.0, 0);           // shade for top box
     RenderColor(x + 3.f, y + 2.f + 18.f, width - 7.f, height - 7.f, 0.0, 0);  // shade for bottom box
     EndRenderColor();
 
     // Top box (tab) without bottom line
-    RenderImage(IMAGE_TABLE_TOP_LEFT, x, y, 14.0, 14.0);                                // Top-left corner of the tab
-    RenderImage(IMAGE_TABLE_TOP_RIGHT, (x + headerWidth) - 14.f, y, 14.0, 14.0);        // Top-right corner of the tab
-    RenderImage(IMAGE_TABLE_TOP_PIXEL, x + 6.f, y, (headerWidth - 12.f), 14.0);         // Top edge of the tab
-    RenderImage(IMAGE_TABLE_RIGHT_PIXEL, (x + headerWidth) - 14.f, y + 6.f, 14.0, 14.0); // Right edge of the tab
+    RenderImage(IMAGE_TABLE_TOP_LEFT, x, y, 14.0, 14.0);                                  // Top-left corner of the tab
+    RenderImage(IMAGE_TABLE_TOP_RIGHT, (x + headerWidth) - 14.f, y, 14.0, 14.0);          // Top-right corner of the tab
+    RenderImage(IMAGE_TABLE_TOP_PIXEL, x + 6.f, y, (headerWidth - 12.f), 14.0);           // Top edge of the tab
+    RenderImage(IMAGE_TABLE_RIGHT_PIXEL, (x + headerWidth) - 14.f, y + 6.f, 14.0, 14.0);  // Right edge of the tab
 
     // Bottom box without top line
-    RenderImage(IMAGE_TABLE_TOP_RIGHT, (x + width) - 14.f, y + 18.f, 14.0, 14.0);       // Main box top-right corner
-    RenderImage(IMAGE_TABLE_BOTTOM_LEFT, x, (y + height + 18.f) - 14.f, 14.0, 14.0);    // Main box bottom-left corner
-    RenderImage(IMAGE_TABLE_BOTTOM_RIGHT, (x + width) - 14.f, (y + height + 18.f) - 14.f, 14.0, 14.0); // Main box bottom-right corner
-    RenderImage(IMAGE_TABLE_TOP_PIXEL, x + 2.f, y + 18.f, (width - 12.f), 14.0);        // Top edge of main box
-    RenderImage(IMAGE_TABLE_RIGHT_PIXEL, (x + width) - 14.f, y + 24.f, 14.0, (height - 14.f)); // Right edge of main box
-    RenderImage(IMAGE_TABLE_BOTTOM_PIXEL, x + 6.f, (y + height + 18.f) - 14.f, (width - 12.f), 14.0); // Bottom edge of main box
+    RenderImage(IMAGE_TABLE_TOP_RIGHT, (x + width) - 14.f, y + 18.f, 14.0, 14.0);     // Main box top-right corner
+    RenderImage(IMAGE_TABLE_BOTTOM_LEFT, x, (y + height + 18.f) - 14.f, 14.0, 14.0);  // Main box bottom-left corner
+    RenderImage(IMAGE_TABLE_BOTTOM_RIGHT, (x + width) - 14.f, (y + height + 18.f) - 14.f, 14.0,
+                14.0);                                                            // Main box bottom-right corner
+    RenderImage(IMAGE_TABLE_TOP_PIXEL, x + 2.f, y + 18.f, (width - 12.f), 14.0);  // Top edge of main box
+    RenderImage(IMAGE_TABLE_RIGHT_PIXEL, (x + width) - 14.f, y + 24.f, 14.0,
+                (height - 14.f));  // Right edge of main box
+    RenderImage(IMAGE_TABLE_BOTTOM_PIXEL, x + 6.f, (y + height + 18.f) - 14.f, (width - 12.f),
+                14.0);  // Bottom edge of main box
 
     // Left line to connect top box and bottom box
-    RenderImage(IMAGE_TABLE_LEFT_PIXEL, x, y + 6.f, 14.0, (height));             // Connecting left edge
+    RenderImage(IMAGE_TABLE_LEFT_PIXEL, x, y + 6.f, 14.0, (height));  // Connecting left edge
 
     // Header inside top box
     g_pRenderText->SetTextColor(TextColor);
@@ -2960,10 +3019,14 @@ void CNewUIMuHelperExt::RenderBackPane(int x, int y, int width, int height, cons
 
 void CNewUIMuHelperExt::LoadImages()
 {
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_RangeMinus.tga", IMAGE_MACROUI_HELPER_RAGEMINUS, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_OptionButton.tga", IMAGE_MACROUI_HELPER_OPTIONBUTTON, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputNumber.tga", IMAGE_MACROUI_HELPER_INPUTNUMBER, GL_LINEAR, GL_CLAMP, 1, 0);
-    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputString.tga", IMAGE_MACROUI_HELPER_INPUTSTRING, GL_LINEAR, GL_CLAMP, 1, 0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_RangeMinus.tga", IMAGE_MACROUI_HELPER_RAGEMINUS, GL_LINEAR, GL_CLAMP, 1,
+               0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_OptionButton.tga", IMAGE_MACROUI_HELPER_OPTIONBUTTON, GL_LINEAR, GL_CLAMP,
+               1, 0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputNumber.tga", IMAGE_MACROUI_HELPER_INPUTNUMBER, GL_LINEAR, GL_CLAMP, 1,
+               0);
+    LoadBitmap(L"Interface\\MacroUI\\MacroUI_InputString.tga", IMAGE_MACROUI_HELPER_INPUTSTRING, GL_LINEAR, GL_CLAMP, 1,
+               0);
     //--
     LoadBitmap(L"Interface\\InGameShop\\Ingame_Bt03.tga", IMAGE_IGS_BUTTON, GL_LINEAR, GL_CLAMP, 1, 0);
 }
@@ -2984,7 +3047,7 @@ bool CNewUIMuHelperExt::Update()
     {
         if (m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG || m_iCurrentPage == SUB_PAGE_SKILL3_CONFIG)
         {
-            int iSkillIndex = m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG ? 1 : 2; // SKill 2 : Skill 3
+            int iSkillIndex = m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG ? 1 : 2;  // SKill 2 : Skill 3
 
             if (m_BtnPreConHuntRange.UpdateMouseEvent())
             {
@@ -2993,8 +3056,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other precondition bits and set the bit for "Hunt Range"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_PRECON_CLEAR) |
-                    ON_MOBS_NEARBY;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_PRECON_CLEAR) | ON_MOBS_NEARBY;
             }
             else if (m_BtnPreConAttacking.UpdateMouseEvent())
             {
@@ -3003,8 +3065,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other precondition bits and set the bit for "Attacking"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_PRECON_CLEAR) |
-                    ON_MOBS_ATTACKING;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_PRECON_CLEAR) | ON_MOBS_ATTACKING;
             }
             else if (m_BtnSubConMoreThanTwo.UpdateMouseEvent())
             {
@@ -3015,8 +3076,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other bits and set the bit for "More Than Two Mobs"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) |
-                    ON_MORE_THAN_TWO_MOBS;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) | ON_MORE_THAN_TWO_MOBS;
             }
             else if (m_BtnSubConMoreThanThree.UpdateMouseEvent())
             {
@@ -3027,8 +3087,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other bits and set the bit for "More Than Three Mobs"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) |
-                    ON_MORE_THAN_THREE_MOBS;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) | ON_MORE_THAN_THREE_MOBS;
             }
             else if (m_BtnSubConMoreThanFour.UpdateMouseEvent())
             {
@@ -3039,8 +3098,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other bits and set the bit for "More Than Four Mobs"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) |
-                    ON_MORE_THAN_FOUR_MOBS;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) | ON_MORE_THAN_FOUR_MOBS;
             }
             else if (m_BtnSubConMoreThanFive.UpdateMouseEvent())
             {
@@ -3051,8 +3109,7 @@ bool CNewUIMuHelperExt::Update()
 
                 // Clear other bits and set the bit for "More Than Five Mobs"
                 _TempConfig.aiSkillCondition[iSkillIndex] =
-                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) |
-                    ON_MORE_THAN_FIVE_MOBS;
+                    (_TempConfig.aiSkillCondition[iSkillIndex] & MUHELPER_SKILL_SUBCON_CLEAR) | ON_MORE_THAN_FIVE_MOBS;
             }
         }
 
@@ -3130,7 +3187,7 @@ bool CNewUIMuHelperExt::UpdateMouseEvent()
             }
             else
             {
-                float fValue = (10.f * x) / 124.f;
+                float fValue              = (10.f * x) / 124.f;
                 m_iCurrentPotionThreshold = (int)fValue + 1;
             }
         }
@@ -3167,7 +3224,7 @@ bool CNewUIMuHelperExt::UpdateMouseEvent()
                 }
                 else
                 {
-                    float fValue = (10.f * x) / 124.f;
+                    float fValue            = (10.f * x) / 124.f;
                     m_iCurrentHealThreshold = (int)fValue + 1;
                 }
             }
@@ -3204,7 +3261,7 @@ bool CNewUIMuHelperExt::UpdateMouseEvent()
                 }
                 else
                 {
-                    float fValue = (10.f * x) / 124.f;
+                    float fValue                 = (10.f * x) / 124.f;
                     m_iCurrentPartyHealThreshold = (int)fValue + 1;
                 }
             }
@@ -3262,7 +3319,7 @@ float CNewUIMuHelperExt::GetKeyEventOrder()
 
 void CNewUIMuHelperExt::Toggle(int iPageId)
 {
-    int iPrevPage = m_iCurrentPage;
+    int iPrevPage  = m_iCurrentPage;
     m_iCurrentPage = iPageId;
 
     if (IsVisible() && m_iCurrentPage == iPrevPage)
@@ -3282,10 +3339,11 @@ void CNewUIMuHelperExt::Toggle(int iPageId)
         m_BtnSubConMoreThanFour.RegisterBoxState(_TempConfig.aiSkillCondition[iSkillIndex] & ON_MORE_THAN_FOUR_MOBS);
         m_BtnSubConMoreThanFive.RegisterBoxState(_TempConfig.aiSkillCondition[iSkillIndex] & ON_MORE_THAN_FIVE_MOBS);
     }
-    else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_ELF || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_SUMMY)
+    else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_ELF ||
+             m_iCurrentPage == SUB_PAGE_POTION_CONFIG_SUMMY)
     {
         m_iCurrentPotionThreshold = _TempConfig.iPotionThreshold / 10;
-        m_iCurrentHealThreshold = _TempConfig.iHealThreshold / 10;
+        m_iCurrentHealThreshold   = _TempConfig.iHealThreshold / 10;
     }
     else if (m_iCurrentPage == SUB_PAGE_PARTY_CONFIG)
     {
@@ -3293,7 +3351,7 @@ void CNewUIMuHelperExt::Toggle(int iPageId)
         m_BtnPartyDuration.RegisterBoxState(_TempConfig.bBuffDurationParty);
         m_iCurrentPartyHealThreshold = _TempConfig.iHealPartyThreshold / 10;
 
-        wchar_t wsBuffTime[MAX_NUMBER_DIGITS + 1] = { 0 };
+        wchar_t wsBuffTime[MAX_NUMBER_DIGITS + 1] = {0};
         std::swprintf(wsBuffTime, MAX_NUMBER_DIGITS + 1, L"%d", _TempConfig.iBuffCastInterval);
         m_BuffTimeInput.SetText(wsBuffTime);
         m_BuffTimeInput.SetPosition(m_Pos.x + 127, m_Pos.y + 97);
@@ -3306,7 +3364,7 @@ void CNewUIMuHelperExt::Toggle(int iPageId)
         m_BtnPartyDuration.RegisterBoxState(_TempConfig.bBuffDurationParty);
         m_iCurrentPartyHealThreshold = _TempConfig.iHealPartyThreshold / 10;
 
-        wchar_t wsBuffTime[MAX_NUMBER_DIGITS + 1] = { 0 };
+        wchar_t wsBuffTime[MAX_NUMBER_DIGITS + 1] = {0};
         std::swprintf(wsBuffTime, MAX_NUMBER_DIGITS + 1, L"%d", _TempConfig.iBuffCastInterval);
         m_BuffTimeInput.SetText(wsBuffTime);
         m_BuffTimeInput.SetPosition(m_Pos.x + 127, m_Pos.y + 187);
@@ -3322,34 +3380,33 @@ void CNewUIMuHelperExt::Save()
     m_BuffTimeInput.GetText(wsNumberInput, std::size(wsNumberInput));
     _TempConfig.iBuffCastInterval = CNewUIMuHelper::GetIntFromTextInput(wsNumberInput);
 
-    _TempConfig.iPotionThreshold = m_iCurrentPotionThreshold * 10;
-    _TempConfig.iHealThreshold = m_iCurrentHealThreshold * 10;
+    _TempConfig.iPotionThreshold    = m_iCurrentPotionThreshold * 10;
+    _TempConfig.iHealThreshold      = m_iCurrentHealThreshold * 10;
     _TempConfig.iHealPartyThreshold = m_iCurrentPartyHealThreshold * 10;
 }
 
 void CNewUIMuHelperExt::ApplySavedConfig()
 {
-    m_iCurrentPotionThreshold = _TempConfig.iPotionThreshold / 10;
-    m_iCurrentHealThreshold = _TempConfig.iHealThreshold / 10;
+    m_iCurrentPotionThreshold    = _TempConfig.iPotionThreshold / 10;
+    m_iCurrentHealThreshold      = _TempConfig.iHealThreshold / 10;
     m_iCurrentPartyHealThreshold = _TempConfig.iHealPartyThreshold / 10;
 }
 
 // Called by the "Initialization" button from the main page
 void CNewUIMuHelperExt::InitConfig()
 {
-    _TempConfig.iPotionThreshold = 40;
-    _TempConfig.iHealThreshold = 60;
-    _TempConfig.iBuffCastInterval = 0;
+    _TempConfig.iPotionThreshold    = 40;
+    _TempConfig.iHealThreshold      = 60;
+    _TempConfig.iBuffCastInterval   = 0;
     _TempConfig.iHealPartyThreshold = 60;
-    _TempConfig.bAutoHealParty = false;
-    _TempConfig.bBuffDurationParty = false;
+    _TempConfig.bAutoHealParty      = false;
+    _TempConfig.bBuffDurationParty  = false;
 }
 
 // Called by the "Initialization" button from the sub page
 void CNewUIMuHelperExt::Reset()
 {
-    if (m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG 
-        || m_iCurrentPage == SUB_PAGE_SKILL3_CONFIG)
+    if (m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG || m_iCurrentPage == SUB_PAGE_SKILL3_CONFIG)
     {
         int iSkillIndex = m_iCurrentPage == SUB_PAGE_SKILL2_CONFIG ? 1 : 2;
 
@@ -3362,14 +3419,13 @@ void CNewUIMuHelperExt::Reset()
         m_BtnSubConMoreThanFour.RegisterBoxState(_TempConfig.aiSkillCondition[iSkillIndex] & ON_MORE_THAN_FOUR_MOBS);
         m_BtnSubConMoreThanFive.RegisterBoxState(_TempConfig.aiSkillCondition[iSkillIndex] & ON_MORE_THAN_FIVE_MOBS);
     }
-    else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG 
-        || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_ELF 
-        || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_SUMMY)
+    else if (m_iCurrentPage == SUB_PAGE_POTION_CONFIG || m_iCurrentPage == SUB_PAGE_POTION_CONFIG_ELF ||
+             m_iCurrentPage == SUB_PAGE_POTION_CONFIG_SUMMY)
     {
         _TempConfig.iPotionThreshold = 0;
-        _TempConfig.iHealThreshold = 0;
+        _TempConfig.iHealThreshold   = 0;
 
         m_iCurrentPotionThreshold = _TempConfig.iPotionThreshold / 10;
-        m_iCurrentHealThreshold = _TempConfig.iHealThreshold / 10;
+        m_iCurrentHealThreshold   = _TempConfig.iHealThreshold / 10;
     }
 }

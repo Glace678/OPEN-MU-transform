@@ -17,7 +17,7 @@
 #include <cmath>
 #include <cstddef>
 
-    static CDirection Direction;
+static CDirection Direction;
 
 namespace
 {

@@ -1,4 +1,4 @@
-﻿  ///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // AI관련 함수
 // 타켓방향으로 방향 틀기, 길찾기, fps구하기 등등
 //
@@ -30,54 +30,54 @@
 #include "Character/CharacterManager.h"
 #include "GameLogic/Skills/SkillManager.h"
 
-    namespace
+namespace
 {
-    constexpr float  FULL_ROTATION_DEGREES  = 360.f;
-    constexpr float  HALF_ROTATION_DEGREES  = 180.f;
-    constexpr float  RAD_TO_DEG             = 180.f / static_cast<float>(Q_PI);
-    constexpr double MIN_FRAME_TIME_MS      = 0.001;
-    constexpr double MILLISECONDS_IN_SECOND = 1000.0;
+constexpr float  FULL_ROTATION_DEGREES  = 360.f;
+constexpr float  HALF_ROTATION_DEGREES  = 180.f;
+constexpr float  RAD_TO_DEG             = 180.f / static_cast<float>(Q_PI);
+constexpr double MIN_FRAME_TIME_MS      = 0.001;
+constexpr double MILLISECONDS_IN_SECOND = 1000.0;
 
-    float NormalizeAngleDegrees(float angle)
+float NormalizeAngleDegrees(float angle)
+{
+    angle = std::fmod(angle, FULL_ROTATION_DEGREES);
+    if (angle < 0.f)
     {
-        angle = std::fmod(angle, FULL_ROTATION_DEGREES);
-        if (angle < 0.f)
-        {
-            angle += FULL_ROTATION_DEGREES;
-        }
-
-        return angle;
+        angle += FULL_ROTATION_DEGREES;
     }
 
-    int NormalizeAngleInt(int angle)
-    {
-        angle %= static_cast<int>(FULL_ROTATION_DEGREES);
-        if (angle < 0)
-        {
-            angle += static_cast<int>(FULL_ROTATION_DEGREES);
-        }
-        return angle;
-    }
+    return angle;
+}
 
-    float SignedAngleDelta(float from, float to)
+int NormalizeAngleInt(int angle)
+{
+    angle %= static_cast<int>(FULL_ROTATION_DEGREES);
+    if (angle < 0)
     {
-        float delta = NormalizeAngleDegrees(to) - NormalizeAngleDegrees(from);
-        if (delta > HALF_ROTATION_DEGREES)
-        {
-            delta -= FULL_ROTATION_DEGREES;
-        }
-        else if (delta < -HALF_ROTATION_DEGREES)
-        {
-            delta += FULL_ROTATION_DEGREES;
-        }
-        return delta;
+        angle += static_cast<int>(FULL_ROTATION_DEGREES);
     }
+    return angle;
+}
 
-    float StepTowardsAngle(float current, float target, float maxDelta)
+float SignedAngleDelta(float from, float to)
+{
+    float delta = NormalizeAngleDegrees(to) - NormalizeAngleDegrees(from);
+    if (delta > HALF_ROTATION_DEGREES)
     {
-        const float clampedDelta = std::clamp(SignedAngleDelta(current, target), -maxDelta, maxDelta);
-        return NormalizeAngleDegrees(current + clampedDelta);
+        delta -= FULL_ROTATION_DEGREES;
     }
+    else if (delta < -HALF_ROTATION_DEGREES)
+    {
+        delta += FULL_ROTATION_DEGREES;
+    }
+    return delta;
+}
+
+float StepTowardsAngle(float current, float target, float maxDelta)
+{
+    const float clampedDelta = std::clamp(SignedAngleDelta(current, target), -maxDelta, maxDelta);
+    return NormalizeAngleDegrees(current + clampedDelta);
+}
 }  // namespace
 
 float CreateAngle2D(const vec3_t from, const vec2_t to)

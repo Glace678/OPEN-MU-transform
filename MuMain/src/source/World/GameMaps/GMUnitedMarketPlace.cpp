@@ -1,4 +1,4 @@
-﻿  // GMUnitedMarketPlace.cpp: implementation of the GMUnitedMarketPlace class.
+﻿// GMUnitedMarketPlace.cpp: implementation of the GMUnitedMarketPlace class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -16,8 +16,7 @@
 
 #include "Engine/AI/GOBoid.h"
 
-    GMUnitedMarketPlacePtr
-    GMUnitedMarketPlace::Make()
+GMUnitedMarketPlacePtr GMUnitedMarketPlace::Make()
 {
     GMUnitedMarketPlacePtr empire(new GMUnitedMarketPlace);
     empire->Init();

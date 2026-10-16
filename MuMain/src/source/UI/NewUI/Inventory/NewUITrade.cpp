@@ -1,4 +1,4 @@
-﻿  //*****************************************************************************
+﻿//*****************************************************************************
 // Desc: implementation of the CNewUITrade class.
 //*****************************************************************************
 
@@ -12,7 +12,7 @@
 #include "GameLogic/Items/CComGem.h"
 #include "Audio/DSPlaySound.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 CNewUITrade::CNewUITrade()
 {

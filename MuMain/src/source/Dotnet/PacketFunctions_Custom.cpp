@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketFunctions.cpp" company="MUnique">
+﻿// <copyright file="PacketFunctions.cpp" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -15,8 +15,8 @@
 #include "PacketFunctions_ClientToServer.h"
 #include "PacketBindings_ClientToServer.h"
 
-    typedef void(CORECLR_DELEGATE_CALLTYPE* SendLogin)(int32_t, const wchar_t*, const wchar_t*, uint32_t, const BYTE*,
-                                                       const BYTE*);
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendLogin)(int32_t, const wchar_t*, const wchar_t*, uint32_t, const BYTE*,
+                                                   const BYTE*);
 inline SendLogin dotnet_SendLogin =
     reinterpret_cast<SendLogin>(symLoad(munique_client_library_handle, "ConnectionManager_SendLogin"));
 

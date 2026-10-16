@@ -1,4 +1,4 @@
-﻿  // SummonSystem.cpp: implementation of the CSummonSystem class.
+﻿// SummonSystem.cpp: implementation of the CSummonSystem class.
 //////////////////////////////////////////////////////////////////////
 
 #include "GameLogic/Combat/CombatTarget.h"
@@ -13,7 +13,7 @@
 #include "SkillManager.h"
 #include "Engine/Object/ZzzInterface.h"
 
-    CSummonSystem g_SummonSystem;
+CSummonSystem g_SummonSystem;
 
 CSummonSystem::CSummonSystem() {}
 

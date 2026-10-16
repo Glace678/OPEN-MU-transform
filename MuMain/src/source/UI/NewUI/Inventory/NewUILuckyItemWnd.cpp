@@ -1,4 +1,4 @@
-﻿  // NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
+﻿// NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -18,7 +18,7 @@
 #include "Audio/DSPlaySound.h"
 #include "GameLogic/Items/MixMgr.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 CNewUILuckyItemWnd::CNewUILuckyItemWnd()
 {
     memset(m_szSubject, 0, 255);

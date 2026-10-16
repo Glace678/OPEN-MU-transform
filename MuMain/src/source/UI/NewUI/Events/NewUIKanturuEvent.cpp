@@ -1,4 +1,4 @@
-﻿  //////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 // NewUIKanturu2ndEnterNpc.cpp: implementation of the CNewUIKanturu2ndEnterNpc class.
 //////////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "Audio/DSPlaySound.h"
 
-    SEASON3B::CNewUIKanturu2ndEnterNpc::CNewUIKanturu2ndEnterNpc()
+SEASON3B::CNewUIKanturu2ndEnterNpc::CNewUIKanturu2ndEnterNpc()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y        = 0;

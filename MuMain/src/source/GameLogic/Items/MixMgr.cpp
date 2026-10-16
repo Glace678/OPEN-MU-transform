@@ -10,7 +10,7 @@
 #include "Network/Server/SocketSystem.h"
 #include "GameLogic/Skills/SkillManager.h"
 
-    using namespace SEASON3A;
+using namespace SEASON3A;
 
 CMixRecipeMgr g_MixRecipeMgr;
 

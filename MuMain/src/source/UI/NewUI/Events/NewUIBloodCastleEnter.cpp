@@ -1,4 +1,4 @@
-﻿  // NewUIBloodCastleEnter.cpp: implementation of the CNewUIPartyInfo class.
+﻿// NewUIBloodCastleEnter.cpp: implementation of the CNewUIPartyInfo class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -10,7 +10,7 @@
 #include "Character/CharacterManager.h"
 #include "Audio/DSPlaySound.h"
 
-    using namespace SEASON3B;
+using namespace SEASON3B;
 
 CNewUIEnterBloodCastle::CNewUIEnterBloodCastle()
 {

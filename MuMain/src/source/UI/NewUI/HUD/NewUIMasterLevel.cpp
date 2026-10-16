@@ -11,10 +11,10 @@
 #include "UI/NewUI/Dialogs/NewUICommonMessageBox.h"
 #include "GameLogic/Skills/SkillManager.h"
 
-    namespace
+namespace
 {
-    _MASTER_SKILLTREE_DATA m_stMasterSkillTreeData[MAX_MASTER_SKILL_DATA];
-    _MASTER_SKILL_TOOLTIP  m_stMasterSkillTooltip[MAX_MASTER_SKILL_DATA];
+_MASTER_SKILLTREE_DATA m_stMasterSkillTreeData[MAX_MASTER_SKILL_DATA];
+_MASTER_SKILL_TOOLTIP  m_stMasterSkillTooltip[MAX_MASTER_SKILL_DATA];
 }
 
 SEASON3B::CNewUIMasterLevel::CNewUIMasterLevel()

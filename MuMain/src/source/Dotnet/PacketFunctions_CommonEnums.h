@@ -1,4 +1,4 @@
-﻿  // <copyright file="PacketBindings.h" company="MUnique">
+﻿// <copyright file="PacketBindings.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -13,7 +13,7 @@
 
 #pragma once
 
-    enum class ItemStorageKind : uint32_t
+enum class ItemStorageKind : uint32_t
 {
     Inventory           = 0,   ///< The inventory storage.
     Trade               = 1,   ///< The trade storage.
