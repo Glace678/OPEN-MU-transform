@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "UI/Chat/Chat.h"
 #include <cstdlib>
 #include <memory>
@@ -10813,7 +10813,7 @@ void ReceiveUseStateItem(const BYTE* ReceiveBuffer)
         case 0x00:
             if (fruit >= 0 && fruit <= 4)
             {
-                int index;
+                int index = 0;
 
                 switch (fruit)
                 {
@@ -10862,7 +10862,7 @@ void ReceiveUseStateItem(const BYTE* ReceiveBuffer)
         case 0x03:
             if (fruit >= 0 && fruit <= 4)
             {
-                int index;
+                int index = 0;
 
                 switch (fruit)
                 {
@@ -10915,7 +10915,7 @@ void ReceiveUseStateItem(const BYTE* ReceiveBuffer)
             if (fruit >= 0 && fruit <= 4)
             {
                 wchar_t Text[MAX_GLOBAL_TEXT_STRING];
-                int     index;
+                int     index = 0;
 
                 switch (fruit)
                 {

@@ -5571,8 +5571,8 @@ bool Move_MODEL_DEASULER(OBJECT* o, int index, float Luminosity)
 
                         vec3_t v3CurBlurAngle, v3CurBlurPos;
                         int    iAccess = 20;
-                        int    iBone01, iBone02;
-                        int    iBlurIdentity, iTypeBlur;
+                        int    iBone01 = 0, iBone02 = 0;
+                        int    iBlurIdentity = 0, iTypeBlur = 0;
                         float  fUnit;
                         float  fCurrentRateUnit = fStartRate;
                         float  fScale           = o->Scale;
@@ -8236,8 +8236,8 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
 
                         vec3_t v3CurBlurAngle, v3CurBlurPos;
                         int    iAccess = 10;
-                        int    iBone01, iBone02;
-                        int    iBlurIdentity, iTypeBlur;
+                        int    iBone01 = 0, iBone02 = 0;
+                        int    iBlurIdentity = 0, iTypeBlur = 0;
                         int iBlurAccessTimeAttk01, iBlurAccessTimeAttk02, iBlurAccessTimeAttk03, iBlurAccessTimeAttk04;
                         float fUnit;
                         float fCurrentRateUnit = fStartRate;
@@ -9974,7 +9974,7 @@ bool Move_BITMAP_LAVA(OBJECT* o, int index, float Luminosity)
             o->LifeTime = 0;
             return true;
         }
-        if (o->Owner->AnimationFrame > 2 && o->Owner->AnimationFrame < 8 & rand_fps_check(1))
+        if (o->Owner->AnimationFrame > 2 && o->Owner->AnimationFrame < 8 && rand_fps_check(1))
         {
             BMD*   pModel = &Models[o->Owner->Type];
             vec3_t _StartPos, _EndPos;

@@ -482,8 +482,8 @@ void CUIMng::CheckDockWin()
     }
 
     BOOL  bEdgeDocking = FALSE;
-    int   i, j, nXCoord, nYCoord;
-    CWin* pWin;
+    int   i = 0, j = 0, nXCoord = 0, nYCoord = 0;
+    CWin* pWin = nullptr;
 
     while (position)
     {

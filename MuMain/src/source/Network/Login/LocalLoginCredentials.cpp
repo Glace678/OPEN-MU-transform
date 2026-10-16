@@ -47,12 +47,35 @@ std::string ParentDirectory(std::string path)
 // Candidate sidecar locations, most specific first: next to an
 // environment-provided config, then the installed data directory and
 // the executable directory.
+// Portable, thread-safe read of an environment variable. MSVC deprecates
+// std::getenv (C4996); on Windows route through getenv_s, which fills a caller
+// buffer and never mutates global state. Returns an empty string when unset;
+// every caller treats empty the same as "not provided".
+std::string GetEnvVar(const char* name)
+{
+#ifdef _WIN32
+    std::size_t required = 0;
+    if (getenv_s(&required, nullptr, 0, name) != 0 || required == 0)
+        return {};
+    std::string value(required, '\0');
+    std::size_t written = 0;
+    if (getenv_s(&written, value.data(), required, name) != 0 || written == 0)
+        return {};
+    value.resize(written - 1);  // written includes the terminating NUL
+    return value;
+#else
+    if (const char* value = std::getenv(name))
+        return value;
+    return {};
+#endif
+}
+
 std::vector<std::string> SidecarCandidates()
 {
     constexpr const char*    kSidecarFileName = "local-client.env";
     std::vector<std::string> candidates;
 
-    if (const char* configured = std::getenv("MU_CONFIG_FILE"); configured != nullptr && configured[0] != '\0')
+    if (const std::string configured = GetEnvVar("MU_CONFIG_FILE"); !configured.empty())
     {
         const std::string parent = ParentDirectory(configured);
         if (!parent.empty())
@@ -77,7 +100,7 @@ std::vector<std::string> SidecarCandidates()
 int SetLaunchEnv(const char* name, const char* value)
 {
     // A real launcher-provided value always wins.
-    if (std::getenv(name) != nullptr)
+    if (!GetEnvVar(name).empty())
         return 0;
 #ifdef _WIN32
     return _putenv_s(name, value) == 0 ? 0 : -1;
@@ -130,10 +153,10 @@ void ApplyLaunchProfile()
 
 LocalLoginCredentials LocalLoginCredentials::FromEnvironment()
 {
-    const char* enabled  = std::getenv("MU_LOCAL_AUTO_LOGIN");
-    const char* username = std::getenv("MU_LOCAL_GAME_USERNAME");
-    const char* password = std::getenv("MU_LOCAL_GAME_PASSWORD");
-    if (!enabled || std::string_view(enabled) != "1" || !username || !password)
+    const std::string enabled  = GetEnvVar("MU_LOCAL_AUTO_LOGIN");
+    const std::string username = GetEnvVar("MU_LOCAL_GAME_USERNAME");
+    const std::string password = GetEnvVar("MU_LOCAL_GAME_PASSWORD");
+    if (enabled != "1" || username.empty() || password.empty())
     {
         return {};
     }

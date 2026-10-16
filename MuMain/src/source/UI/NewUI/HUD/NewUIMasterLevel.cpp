@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "App/Platform/Windows/Winmain.h"
 #include "Render/Textures/ZzzTexture.h"
 #include "GameLogic/Items/CSItemOption.h"
@@ -1022,7 +1022,7 @@ bool SEASON3B::CNewUIMasterLevel::CheckBeforeSkill(ActionSkillType skill, BYTE s
 
     for (int i = 0; i < MAX_MAGIC; i++)
     {
-        if (CharacterAttribute->Skill[i] == Index)
+        if (static_cast<int>(CharacterAttribute->Skill[i]) == static_cast<int>(Index))
         {
             return true;
         }

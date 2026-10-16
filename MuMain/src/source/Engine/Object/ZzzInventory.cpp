@@ -2274,7 +2274,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     if (ip->Type == -1)
         return;
 
-    tm* ExpireTime;
+    tm* ExpireTime = nullptr;
     if (ip->bPeriodItem == true && ip->bExpiredPeriod == false)
     {
         _tzset();
@@ -2930,10 +2930,10 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
 
     if (ip->Type == ITEM_WEAPON_OF_ARCHANGEL)
     {
-        int iMana;
-        int iWeaponSpeed;
-        int iNeedStrength;
-        int iNeedDex;
+        int iMana        = 0;
+        int iWeaponSpeed = 0;
+        int iNeedStrength = 0;
+        int iNeedDex      = 0;
 
         TextListColor[TextNum] = TEXT_COLOR_WHITE;
         mu_swprintf(TextList[TextNum], I18N::Game::QuestItem);

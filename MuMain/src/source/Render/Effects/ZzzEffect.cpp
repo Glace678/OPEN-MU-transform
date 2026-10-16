@@ -810,7 +810,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                 case MODEL_SUMMONER_CASTING_EFFECT22:
                 case MODEL_SUMMONER_CASTING_EFFECT222: {
                     o->LifeTime = 40;
-                    if (o->SubType = 0)
+                    if (o->SubType == 0)
                         o->Scale = 1.0f;
                     o->Alpha = 1.0f;
                     Vector(0.f, 0.f, 0.f, o->Direction);
@@ -7765,8 +7765,8 @@ void MoveEffect(OBJECT* o, int iIndex)
                 if (o->SubType == 0 || o->SubType == 2 || o->SubType == 4 || o->SubType == 6 || o->SubType == 7 ||
                     o->SubType == 8)
                 {
-                    bool  success = false;
-                    float Height;
+                    bool  success    = false;
+                    float Height     = 0.0f;
                     if (o->SubType == 4)
                     {
                         int PositionX = (int)(o->Position[0] / TERRAIN_SCALE);
@@ -9792,7 +9792,7 @@ void RenderEffectShadows()
             {
                 vec3_t Light;
                 float  Luminosity = (float)(rand() % 4 + 8) * 0.1f;
-                float  Rotation, Scale;
+                float  Rotation, Scale = 1.0f;
                 EnableAlphaBlend();
 
                 switch (o->Type)

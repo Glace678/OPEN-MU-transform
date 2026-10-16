@@ -262,9 +262,14 @@ if(MSVC)
   #           standard-header catch handlers are expected.
   #   C4201 - nonstandard nameless struct/union, used intentionally in many
   #           math/interop types.
+  #   C4456/C4457/C4458/C4459 - declaration hides an outer local/parameter/member/
+  #           global. Pure style diagnostics with no behavioral effect; the ~850
+  #           legacy names are deferred to a dedicated reviewable rename pass.
+  #   C4018/C4245/C4389 (signed/unsigned) and C4189 (unused locals) are kept.
+  #   They are behavior-relevant and not suppressed.
   # C4828 (source charset) is NOT suppressed: it is cleared by the P1 source
   # encoding normalization (CP949 -> UTF-8), not hidden.
-  target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201)
+  target_compile_options(MuClient PRIVATE /W4 /wd4530 /wd4201 /wd4456 /wd4457 /wd4458 /wd4459)
 endif()
 
 # Explicit invariant check: KJH_ADD_INGAMESHOP_UI_SYSTEM must be defined in

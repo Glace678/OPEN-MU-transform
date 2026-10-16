@@ -3053,7 +3053,7 @@ void MoveJoint(JOINT* o, int iIndex)
     float  Luminosity;
     vec3_t Position, p;
 
-    float Distance;
+    float Distance = 1.0e30f;
     float dx = o->Position[0] - o->TargetPosition[0];
     float dy = o->Position[1] - o->TargetPosition[1];
 

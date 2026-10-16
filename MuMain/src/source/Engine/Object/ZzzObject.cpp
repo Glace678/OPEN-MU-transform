@@ -5331,7 +5331,7 @@ void DeleteObjectTile(int x, int y)
             OBJECT*       o  = ob->Head;
             while (1)
             {
-                if (o != NULL && o != (OBJECT*)0xdddddddd)
+                if (o != NULL && o != (OBJECT*)(uintptr_t)0xdddddddd)
                 {
                     OBJECT* next = o->Next;
                     if (o->Live && (int)(o->Position[0] / TERRAIN_SCALE) == x &&

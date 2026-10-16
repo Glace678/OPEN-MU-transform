@@ -16,7 +16,7 @@ public:
 
     IConnecter(DownloadServerInfo* pServerInfo, DownloadFileInfo* pFileInfo)
         : m_pServerInfo(pServerInfo), m_pFileInfo(pFileInfo) {};
-    ~IConnecter() {};
+    virtual ~IConnecter() {};
 
     // abstract Function
 

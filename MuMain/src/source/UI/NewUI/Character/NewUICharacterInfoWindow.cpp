@@ -1,4 +1,4 @@
-﻿// NewUICharacterInfoWindow.cpp: implementation of the CNewUICharacterInfoWindow class.
+// NewUICharacterInfoWindow.cpp: implementation of the CNewUICharacterInfoWindow class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -383,7 +383,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderTableTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->RenderText(m_Pos.x + 18, m_Pos.y + 75, strExp);
 
-    int iAddPoint, iMinusPoint;
+    int iAddPoint = 100, iMinusPoint = 100;
 
     if (CharacterAttribute->AddPoint <= 10)
     {

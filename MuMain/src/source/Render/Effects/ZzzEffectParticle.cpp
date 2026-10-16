@@ -7364,7 +7364,7 @@ void MoveParticles()
                 }
                 break;
                 case BITMAP_ORORA: {
-                    float  fScale, fLight;
+                    float  fScale = 0.0f, fLight = 1.0f;
                     BMD*   pModel = &Models[o->Target->Type];
                     vec3_t vRelativePos, vPos;
                     Vector(0.f, 0.f, 0.f, vRelativePos);

@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // AI관련 함수
 // 타켓방향으로 방향 틀기, 길찾기, fps구하기 등등
 //
@@ -577,7 +577,7 @@ bool MovePath(CHARACTER* c, bool Turn)
             x[i] = ((float)p->PathX[Path] + 0.5f) * TERRAIN_SCALE;
             y[i] = ((float)p->PathY[Path] + 0.5f) * TERRAIN_SCALE;
         }
-        float cx, cy;
+        float cx = 0.0f, cy = 0.0f;
         switch (p->CurrentPathFloat)
         {
             case 0:
