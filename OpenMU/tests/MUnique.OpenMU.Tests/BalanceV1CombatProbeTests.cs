@@ -109,8 +109,13 @@ public class BalanceV1CombatProbeTests
                 .OrderBy(definition => Math.Abs(definition[Stats.Level] - level)).First();
             var eliteSpawn = new Persistence.BasicModel.MonsterSpawnArea
             {
-                MonsterDefinition = eliteDefinition, GameMap = normal.Map, X1 = normal.Spawn.X1, Y1 = normal.Spawn.Y1,
-                X2 = normal.Spawn.X2, Y2 = normal.Spawn.Y2, Quantity = 1,
+                MonsterDefinition = eliteDefinition,
+                GameMap = normal.Map,
+                X1 = normal.Spawn.X1,
+                Y1 = normal.Spawn.Y1,
+                X2 = normal.Spawn.X2,
+                Y2 = normal.Spawn.Y2,
+                Quantity = 1,
             };
             var encounters = new[]
             {
@@ -143,17 +148,38 @@ public class BalanceV1CombatProbeTests
                         var before = Resources(player);
                         var success = await player.TryConsumeForSkillAsync(entry).ConfigureAwait(false);
                         var after = Resources(player);
-                        costs.Add(new { Number = entry.Skill!.Number, Name = entry.Skill.Name.ToString(), Type = entry.Skill.SkillType.ToString(),
-                            entry.Skill.NumberOfHitsPerAttack, success, Mana = before.Mana - after.Mana, Ability = before.Ability - after.Ability,
+                        costs.Add(new
+                        {
+                            Number = entry.Skill!.Number,
+                            Name = entry.Skill.Name.ToString(),
+                            Type = entry.Skill.SkillType.ToString(),
+                            entry.Skill.NumberOfHitsPerAttack,
+                            success,
+                            Mana = before.Mana - after.Mana,
+                            Ability = before.Ability - after.Ability,
                             OriginalMana = entry.Skill.ConsumeRequirements.Where(requirement => requirement.Attribute == Stats.CurrentMana).Sum(requirement => requirement.MinimumValue),
                             OriginalAbility = entry.Skill.ConsumeRequirements.Where(requirement => requirement.Attribute == Stats.CurrentAbility).Sum(requirement => requirement.MinimumValue),
                             ResourceCategory = ResourceCategory(entry.Skill.Number),
-                            Health = before.Health - after.Health, Shield = before.Shield - after.Shield });
+                            Health = before.Health - after.Health,
+                            Shield = before.Shield - after.Shield
+                        });
                     }
 
-                    actors.Add(new { Class = stage.Number, Name = stage.Name.ToString(), Level = level, StageLegality = StageLegality(stage, level),
-                        Allocation = lineage.Weights, Attributes = ActorAttributes(player), Equipped = equipped, Learned = learned,
-                        SelectedSkill = preferred?.Skill?.Number, Costs = costs, Regeneration = regeneration, Potions = potions });
+                    actors.Add(new
+                    {
+                        Class = stage.Number,
+                        Name = stage.Name.ToString(),
+                        Level = level,
+                        StageLegality = StageLegality(stage, level),
+                        Allocation = lineage.Weights,
+                        Attributes = ActorAttributes(player),
+                        Equipped = equipped,
+                        Learned = learned,
+                        SelectedSkill = preferred?.Skill?.Number,
+                        Costs = costs,
+                        Regeneration = regeneration,
+                        Potions = potions
+                    });
                     var playerEncounters = encounters.ToList();
                     if (level <= 51)
                     {
@@ -183,28 +209,55 @@ public class BalanceV1CombatProbeTests
                         var mpPotion = potions.Where(potion => potion.Group == "Mana").MaxBy(potion => potion.Recovered);
                         var manaCost = preferred is null ? 0 : preferred.Skill!.ConsumeRequirements.Where(requirement => requirement.Attribute!.Id == Stats.CurrentMana.Id)
                             .Sum(requirement => player.GetRequiredValue(requirement, preferred));
-                        encounterRows.Add(new { Class = stage.Number, Level = level, StageLegality = StageLegality(stage, level), encounter.Kind,
-                            Map = map.Definition.Number, MapId = ((PersistentIdentity)map.Definition).Id, Monster = monster.Definition.Number,
-                            Name = monster.Definition.Designation.ToString(), Rank = BalanceV1ContentRank.ResolveRank(monster), RawLevel = monster.Attributes[Stats.Level],
-                            MonsterHp = hp, MonsterDefense = monster.Attributes[Stats.DefensePvm], EnemyInterval = enemyInterval,
-                            Basic = basic, SelectedSkill = preferred?.Skill?.Number, SkillPerHit = skill, VerifiedDirectAction = verifiedDirect,
+                        encounterRows.Add(new
+                        {
+                            Class = stage.Number,
+                            Level = level,
+                            StageLegality = StageLegality(stage, level),
+                            encounter.Kind,
+                            Map = map.Definition.Number,
+                            MapId = ((PersistentIdentity)map.Definition).Id,
+                            Monster = monster.Definition.Number,
+                            Name = monster.Definition.Designation.ToString(),
+                            Rank = BalanceV1ContentRank.ResolveRank(monster),
+                            RawLevel = monster.Attributes[Stats.Level],
+                            MonsterHp = hp,
+                            MonsterDefense = monster.Attributes[Stats.DefensePvm],
+                            EnemyInterval = enemyInterval,
+                            Basic = basic,
+                            SelectedSkill = preferred?.Skill?.Number,
+                            SkillPerHit = skill,
+                            VerifiedDirectAction = verifiedDirect,
                             ActionPolicy = preferred is null || verifiedDirect ? "base/direct payload" : "one successful area-target application only; not full area cast",
-                            AreaSettings = preferred?.Skill?.AreaSkillSettings is { } settings ? new { settings.MinimumNumberOfHitsPerTarget,
-                                settings.MaximumNumberOfHitsPerTarget, settings.MinimumNumberOfHitsPerAttack, settings.MaximumNumberOfHitsPerAttack,
-                                settings.HitChancePerDistanceMultiplier, settings.UseDeferredHits, settings.ProjectileCount } : null,
-                            ActionMean = action, TtkAt075Seconds = Divide(hp * 0.75, action), TtkAt100Seconds = Divide(hp, action),
-                            TtkAt125Seconds = Divide(hp * 1.25, action), Incoming = incoming,
+                            AreaSettings = preferred?.Skill?.AreaSkillSettings is { } settings ? new
+                            {
+                                settings.MinimumNumberOfHitsPerTarget,
+                                settings.MaximumNumberOfHitsPerTarget,
+                                settings.MinimumNumberOfHitsPerAttack,
+                                settings.MaximumNumberOfHitsPerAttack,
+                                settings.HitChancePerDistanceMultiplier,
+                                settings.UseDeferredHits,
+                                settings.ProjectileCount
+                            } : null,
+                            ActionMean = action,
+                            TtkAt075Seconds = Divide(hp * 0.75, action),
+                            TtkAt100Seconds = Divide(hp, action),
+                            TtkAt125Seconds = Divide(hp * 1.25, action),
+                            Incoming = incoming,
                             NoPotionSurvivalSeconds = Divide(player.Attributes![Stats.MaximumHealth] * enemyInterval, incoming.Mean),
-                            HpPotionPerSecond = hpPotion?.Recovered / 8, ManaPotionPerSecond = mpPotion?.Recovered / 12,
+                            HpPotionPerSecond = hpPotion?.Recovered / 8,
+                            ManaPotionPerSecond = mpPotion?.Recovered / 12,
                             HpNetLossPerSecond = incoming.Mean / enemyInterval - (hpPotion?.Recovered / 8 ?? 0) - RegenerationRate(player, Stats.HealthRegeneration),
-                            ManaCost = manaCost, ManaNetLossAtOneActionSecond = manaCost - (mpPotion?.Recovered / 12 ?? 0) - RegenerationRate(player, Stats.ManaRegeneration),
+                            ManaCost = manaCost,
+                            ManaNetLossAtOneActionSecond = manaCost - (mpPotion?.Recovered / 12 ?? 0) - RegenerationRate(player, Stats.ManaRegeneration),
                             Sustain = await SustainAsync(player, monster, preferred, configuration, level,
                                 new DateTime(2040, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(encounterRows.Count * 3)).ConfigureAwait(false),
                             ResourcesOnlySustain = encounter.Kind == "mapped-normal" ? await SustainAsync(player, monster, preferred, configuration, level,
                                 new DateTime(2040, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(encounterRows.Count * 3 + 1), false).ConfigureAwait(false) : null,
                             BurstResourcesOnlySustain = encounter.Kind == "mapped-normal" && player.SkillList.GetSkill(265) is { } burst
                                 ? await SustainAsync(player, monster, burst, configuration, level,
-                                    new DateTime(2040, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(encounterRows.Count * 3 + 2), false).ConfigureAwait(false) : null });
+                                    new DateTime(2040, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(encounterRows.Count * 3 + 2), false).ConfigureAwait(false) : null
+                        });
                     }
                 }
                 finally
@@ -218,12 +271,17 @@ public class BalanceV1CombatProbeTests
 
         Assert.That(actors, Has.Count.EqualTo(Levels.Length * 18));
         Assert.That(encounterRows, Has.Count.EqualTo(Levels.Length * 18 * 3 + Levels.Count(level => level <= 51) * 18));
-        var report = new { SchemaVersion = 1, SeedPolicy = "Unseeded actual Rand; 512 damage samples per direction; replicate for confidence.",
+        var report = new
+        {
+            SchemaVersion = 1,
+            SeedPolicy = "Unseeded actual Rand; 512 damage samples per direction; replicate for confidence.",
             Scope = "Full S6 in-memory, original stats; candidate first-build allocation per lineage, real common drop/merchant items.",
             SkillResourcePolicy = "balance-v1 reviewed routine AP only: 43,52,55,262; original MP/capacity/regen/unlocks; 265 remains 100 MP/100 AP burst. RF selection now prioritizes legal 262 instead of misidentifying 265 as Phoenix Shot.",
             CadencePolicy = "Player .75/1/1.25 seconds assumed, not client measured. Enemy original AttackDelay.",
             Limits = "No AI/network/movement/dodging/buff execution/affordability/evolution quest validation. Elite references unbound. Area budgets use one successful target application, not a full cast. Drain Life healing invokes its actual strategy. Other status/area effects omitted.",
-            Actors = actors, Encounters = encounterRows };
+            Actors = actors,
+            Encounters = encounterRows
+        };
         var output = Environment.GetEnvironmentVariable("OPENMU_COMBAT_PROBE_REPORT");
         if (!string.IsNullOrWhiteSpace(output))
         {
@@ -435,8 +493,14 @@ public class BalanceV1CombatProbeTests
             item.Durability = Math.Max(1, item.Durability);
             if (await handler.ConsumeItemAsync(player, item, null, FruitUsage.Undefined).ConfigureAwait(false))
             {
-                result.Add(new { Number = item.Definition.Skill.Number, Name = item.Definition.Skill.Name.ToString(), ItemGroup = item.Definition.Group,
-                    ItemNumber = item.Definition.Number, available.Source });
+                result.Add(new
+                {
+                    Number = item.Definition.Skill.Number,
+                    Name = item.Definition.Skill.Name.ToString(),
+                    ItemGroup = item.Definition.Group,
+                    ItemNumber = item.Definition.Number,
+                    available.Source
+                });
             }
         }
 
@@ -464,12 +528,25 @@ public class BalanceV1CombatProbeTests
     private static ResourceValues Resources(Player player) => new(player.Attributes![Stats.CurrentHealth], player.Attributes[Stats.CurrentMana],
         player.Attributes[Stats.CurrentAbility], player.Attributes[Stats.CurrentShield]);
 
-    private static object ActorAttributes(Player player) => new { Health = player.Attributes![Stats.MaximumHealth], Mana = player.Attributes[Stats.MaximumMana],
-        Ability = player.Attributes[Stats.MaximumAbility], Shield = player.Attributes[Stats.MaximumShield], Strength = player.Attributes[Stats.TotalStrength],
-        Agility = player.Attributes[Stats.TotalAgility], Vitality = player.Attributes[Stats.TotalVitality], Energy = player.Attributes[Stats.TotalEnergy],
-        Leadership = player.Attributes[Stats.TotalLeadership], Defense = player.Attributes[Stats.DefensePvm], AttackSpeed = player.Attributes[Stats.AttackSpeed],
-        MagicSpeed = player.Attributes[Stats.MagicSpeed], PhysMin = player.Attributes[Stats.MinimumPhysBaseDmg], PhysMax = player.Attributes[Stats.MaximumPhysBaseDmg],
-        WizMin = player.Attributes[Stats.MinimumWizBaseDmg], WizMax = player.Attributes[Stats.MaximumWizBaseDmg] };
+    private static object ActorAttributes(Player player) => new
+    {
+        Health = player.Attributes![Stats.MaximumHealth],
+        Mana = player.Attributes[Stats.MaximumMana],
+        Ability = player.Attributes[Stats.MaximumAbility],
+        Shield = player.Attributes[Stats.MaximumShield],
+        Strength = player.Attributes[Stats.TotalStrength],
+        Agility = player.Attributes[Stats.TotalAgility],
+        Vitality = player.Attributes[Stats.TotalVitality],
+        Energy = player.Attributes[Stats.TotalEnergy],
+        Leadership = player.Attributes[Stats.TotalLeadership],
+        Defense = player.Attributes[Stats.DefensePvm],
+        AttackSpeed = player.Attributes[Stats.AttackSpeed],
+        MagicSpeed = player.Attributes[Stats.MagicSpeed],
+        PhysMin = player.Attributes[Stats.MinimumPhysBaseDmg],
+        PhysMax = player.Attributes[Stats.MaximumPhysBaseDmg],
+        WizMin = player.Attributes[Stats.MinimumWizBaseDmg],
+        WizMax = player.Attributes[Stats.MaximumWizBaseDmg]
+    };
 
     internal static double RegenerationRate(Player player, Stats.Regeneration regeneration) =>
         (player.Attributes![regeneration.MaximumAttribute] * player.Attributes[regeneration.RegenerationMultiplier]
@@ -488,9 +565,15 @@ public class BalanceV1CombatProbeTests
         var watch = Stopwatch.StartNew();
         await Task.Delay(30).ConfigureAwait(false);
         await player.RegenerateAsync().ConfigureAwait(false);
-        return new { WallClockSeconds = watch.Elapsed.TotalSeconds, ActualDelta = Resources(player), HealthPerSecond = RegenerationRate(player, Stats.HealthRegeneration),
-            ManaPerSecond = RegenerationRate(player, Stats.ManaRegeneration), AbilityPerSecond = RegenerationRate(player, Stats.AbilityRegeneration),
-            ShieldPolicy = "Original combat enabler/hiatus; no universal shield regeneration assumed." };
+        return new
+        {
+            WallClockSeconds = watch.Elapsed.TotalSeconds,
+            ActualDelta = Resources(player),
+            HealthPerSecond = RegenerationRate(player, Stats.HealthRegeneration),
+            ManaPerSecond = RegenerationRate(player, Stats.ManaRegeneration),
+            AbilityPerSecond = RegenerationRate(player, Stats.AbilityRegeneration),
+            ShieldPolicy = "Original combat enabler/hiatus; no universal shield regeneration assumed."
+        };
     }
 
     private static async Task<List<PotionMeasurement>> MeasurePotionsAsync(Player player, GameConfiguration configuration, int level)
@@ -622,10 +705,18 @@ public class BalanceV1CombatProbeTests
             }
         }
 
-        return new { Policy = "60s virtual fixed-cadence stationary payload budget: real damage/skill consume/potion recovery/DrainLife healing + original regen-rate integration; no AI/death/kill/complete area-cast effects.",
+        return new
+        {
+            Policy = "60s virtual fixed-cadence stationary payload budget: real damage/skill consume/potion recovery/DrainLife healing + original regen-rate integration; no AI/death/kill/complete area-cast effects.",
             IncludeIncoming = includeIncoming,
-            Elapsed = elapsed, Attempts = attempts, SuccessfulActions = successes, HealthPotions = potionHp, ManaPotions = potionMp,
-            TotalOutgoingDamage = damage, End = Resources(player) };
+            Elapsed = elapsed,
+            Attempts = attempts,
+            SuccessfulActions = successes,
+            HealthPotions = potionHp,
+            ManaPotions = potionMp,
+            TotalOutgoingDamage = damage,
+            End = Resources(player)
+        };
     }
 
     internal sealed record AvailableItem(Item Item, string Source);

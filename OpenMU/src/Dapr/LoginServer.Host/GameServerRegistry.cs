@@ -3,6 +3,7 @@
 // </copyright>
 
 namespace MUnique.OpenMU.LoginServer.Host;
+
 using Microsoft.Extensions.Logging;
 
 using MUnique.OpenMU.Dapr.Common;

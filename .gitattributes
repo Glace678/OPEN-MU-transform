@@ -1,0 +1,163 @@
+# ===========================================================================
+# Line-ending and binary handling rules for the whole repository.
+#
+# Policy:
+#   * Text files are normalized to LF in the Git object store (text=auto)
+#     and checked out with the platform native line ending by default.
+#   * Windows-only scripts are checked out with CRLF; Unix shell scripts
+#     are always LF so they remain executable on macOS/Linux.
+#   * All binary assets, game data, compiled objects and third-party
+#     binaries are explicitly marked binary so Git never converts,
+#     merges or smudges them.
+#
+# Note: existing files were not mass-renormalized when this file was added
+# (that would bury history in a single huge diff). Normalization happens
+# naturally as files are touched. To normalize everything on purpose:
+#     git add --renormalize .
+# ===========================================================================
+
+# --- Default: let Git auto-detect text --------------------------------------
+* text=auto
+
+# --- Explicit text line endings ---------------------------------------------
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+*.psm1      text eol=crlf
+
+# --- Source code -------------------------------------------------------------
+*.cs        text
+*.cpp       text
+*.cc        text
+*.c         text
+*.h         text
+*.hpp       text
+*.cxx       text
+*.hh        text
+*.inl       text
+*.ipp       text
+*.kt        text
+*.java      text
+*.ets       text
+*.ts        text
+*.tsx       text
+*.js        text
+*.cjs       text
+*.mjs       text
+*.py        text
+*.cmake     text
+*.razor     text
+*.cshtml    text
+*.resx      text
+*.csproj    text
+*.vcxproj   text
+*.filters   text
+*.props     text
+*.targets   text
+*.gradle    text
+*.json      text
+*.json5     text
+*.xml       text
+*.yml       text
+*.yaml      text
+*.html      text
+*.htm       text
+*.css       text
+*.scss      text
+*.sql       text
+*.md        text
+*.txt       text
+*.cue       text
+*.ini       text
+*.cfg       text
+*.conf      text
+*.template  text
+*.am        text
+*.m4        text
+*.s         text
+*.asm       text
+
+# --- MU Online game data (binary, never convert) ----------------------------
+*.ozj       binary
+*.ozb       binary
+*.ozt       binary
+*.bmd       binary
+*.att       binary
+*.map       binary
+*.rpt_desc  binary
+*.vqs       binary
+
+# --- Images / fonts / media -------------------------------------------------
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.bmp       binary
+*.tga       binary
+*.tif       binary
+*.tiff      binary
+*.webp      binary
+*.ico       binary
+*.svg       text
+*.ttf       binary
+*.otf       binary
+*.woff      binary
+*.woff2     binary
+*.eot       binary
+*.mp3       binary
+*.wav       binary
+*.ogg       binary
+*.mid       binary
+*.midi      binary
+*.mp4       binary
+*.webm      binary
+*.avi       binary
+*.mov       binary
+
+# --- Compiled outputs / libraries / packages --------------------------------
+*.dll       binary
+*.exe       binary
+*.so        binary
+*.dylib     binary
+*.a         binary
+*.lib       binary
+*.obj       binary
+*.o         binary
+*.pdb       binary
+*.exp       binary
+*.ilk       binary
+*.idb       binary
+*.cache     binary
+*.class     binary
+*.jar       binary
+*.war       binary
+*.apk       binary
+*.aab       binary
+*.aar       binary
+*.ipa       binary
+*.hap       binary
+*.appx      binary
+*.msix      binary
+*.msi       binary
+*.zip       binary
+*.gz        binary
+*.tar       binary
+*.7z        binary
+*.rar       binary
+*.bz2       binary
+*.xz        binary
+*.nupkg     binary
+*.snupkg    binary
+*.mo        binary
+*.dat       binary
+*.bin       binary
+*.db        binary
+*.sqlite    binary
+*.sqlite3   binary
+*.pfx       binary
+*.p12       binary
+*.jks       binary
+*.keystore  binary
+*.sig       binary

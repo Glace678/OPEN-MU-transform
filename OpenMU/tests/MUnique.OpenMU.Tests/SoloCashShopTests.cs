@@ -274,8 +274,10 @@ public class SoloCashShopTests
         var request = new byte[CashShopItemBuyRequest.Length];
         _ = new CashShopItemBuyRequest(request)
         {
-            PackageMainIndex = this._offer.Id, ProductMainIndex = this._offer.Id,
-            Category = this._offer.Category, ItemIndex = this._offer.ItemCode,
+            PackageMainIndex = this._offer.Id,
+            ProductMainIndex = this._offer.Id,
+            Category = this._offer.Category,
+            ItemIndex = this._offer.ItemCode,
             CoinIndex = SoloCashShopCatalog.CoinIndex,
         };
         await handler.HandlePacketAsync(player, request).ConfigureAwait(false);

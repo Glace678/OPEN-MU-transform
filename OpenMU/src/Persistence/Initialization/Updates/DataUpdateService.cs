@@ -80,24 +80,24 @@ public class DataUpdateService
         await this._updateLock.WaitAsync().ConfigureAwait(false);
         try
         {
-        using var context = this._contextProvider.CreateNewContext();
-        var updateStates = await context.GetAsync<ConfigurationUpdateState>().ConfigureAwait(false);
-        var updateState = updateStates.FirstOrDefault() ?? context.CreateNew<ConfigurationUpdateState>();
-        var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).First();
-        foreach (var update in updates)
-        {
-            progress.Report((update.Version, false));
-            await update.ApplyUpdateAsync(context, gameConfiguration).ConfigureAwait(false);
+            using var context = this._contextProvider.CreateNewContext();
+            var updateStates = await context.GetAsync<ConfigurationUpdateState>().ConfigureAwait(false);
+            var updateState = updateStates.FirstOrDefault() ?? context.CreateNew<ConfigurationUpdateState>();
+            var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).First();
+            foreach (var update in updates)
+            {
+                progress.Report((update.Version, false));
+                await update.ApplyUpdateAsync(context, gameConfiguration).ConfigureAwait(false);
 
-            updateState.CurrentInstalledVersion = Math.Max((int)update.Version, updateState.CurrentInstalledVersion);
-            updateState.InitializationKey = update.DataInitializationKey;
+                updateState.CurrentInstalledVersion = Math.Max((int)update.Version, updateState.CurrentInstalledVersion);
+                updateState.InitializationKey = update.DataInitializationKey;
 
-            await context.SaveChangesAsync().ConfigureAwait(false);
-            progress.Report((update.Version, true));
-        }
+                await context.SaveChangesAsync().ConfigureAwait(false);
+                progress.Report((update.Version, true));
+            }
 
-        progress.Report((UpdateVersion.Undefined, true));
-        this.UpdatesInstalled?.SafeInvokeAsync();
+            progress.Report((UpdateVersion.Undefined, true));
+            this.UpdatesInstalled?.SafeInvokeAsync();
         }
         finally
         {

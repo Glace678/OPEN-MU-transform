@@ -541,7 +541,7 @@ public sealed class LocalStackManager : IDisposable
             }
 
             File.Delete(this._paths.ConnectionSettingsFile);
-        this._server.ClearControlToken(); // W2-02 (F5): drop the one-shot control token with the stack
+            this._server.ClearControlToken(); // W2-02 (F5): drop the one-shot control token with the stack
             if (databaseStartedHere && await this._database.IsRunningAsync(CancellationToken.None).ConfigureAwait(false))
             {
                 await this._database.StopAsync(CancellationToken.None).ConfigureAwait(false);

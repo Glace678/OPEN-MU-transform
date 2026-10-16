@@ -55,7 +55,8 @@ public class SoloCombatBalancePgUpgradeTests
         TestContext.WriteLine($"loaded {configs.Count()} configuration(s) read-only OK");
     }
 
-    [Test]    public async Task UpgradePgCopyThroughSoloThenV110Async()
+    [Test]
+    public async Task UpgradePgCopyThroughSoloThenV110Async()
     {
         var cs = Environment.GetEnvironmentVariable("OPENMU_R4_UPGRADE_CS");
         if (string.IsNullOrEmpty(cs))

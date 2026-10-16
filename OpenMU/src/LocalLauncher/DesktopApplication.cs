@@ -182,7 +182,7 @@ public static class DesktopApplication
 
         Console.Write(prompt);
         var value = new StringBuilder();
-        for (;;)
+        for (; ; )
         {
             var key = Console.ReadKey(intercept: true);
             if (key.Key == ConsoleKey.Enter)

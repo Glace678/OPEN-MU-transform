@@ -1,0 +1,89 @@
+# ===========================================================================
+# .clang-format for the MuMain client engine (first-party code only).
+# Derived from the dominant existing style: 4-space indent, Allman braces,
+# ~120 column limit, pointers attached to the type.
+#
+# Scope: MuMain/src/source, MuMain/src/MuEditor, MuMain/tests and
+# MuMain/ClientLibrary native glue. Vendored trees under src/ThirdParty
+# and src/third_party keep their upstream style and are never formatted.
+#
+# Block a region that must keep hand layout (X-macro tables, packed
+# protocol layouts, wide-char art) with:
+#     // clang-format off
+#     ...
+#     // clang-format on
+# ===========================================================================
+---
+Language: Cpp
+BasedOnStyle: LLVM
+Standard: c++20
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+AccessModifierOffset: -4
+NamespaceIndentation: None
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+PPIndentWidth: 4
+# Keep the legacy tab-aligned declarations that tables rely on.
+
+# Braces: Allman (opening brace on its own line)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterFunction: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterClass: true
+  AfterNamespace: false
+  BeforeElse: true
+  BeforeCatch: true
+  BeforeWhile: false
+  AfterControlStatement: Always
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# Line width
+ColumnLimit: 120
+
+# Pointers / references attach to the type (char* name)
+PointerAlignment: Left
+DerivePointerAlignment: false
+ReferenceAlignment: Pointer
+
+# Includes: DO NOT reorder (precompiled headers / stdafx must stay first)
+SortIncludes: false
+SortUsingDeclarations: false
+
+# Comments
+ReflowComments: false
+SpacesBeforeTrailingComments: 2
+
+# Keep existing alignment that authors laid out deliberately
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignConsecutiveMacros: Consecutive
+AlignConsecutiveBitFields: Consecutive
+AlignEscapedNewlines: DontAlign
+AlignTrailingComments: true
+AlignOperands: true
+
+# Function parameters
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+BinPackParameters: true
+BinPackArguments: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+CompactNamespaces: false
+FixNamespaceComments: false
+SpaceAfterCStyleCast: false
+SpaceBeforeParens: ControlStatements
+Cpp11BracedListStyle: true

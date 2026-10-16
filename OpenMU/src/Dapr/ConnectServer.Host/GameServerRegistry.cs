@@ -3,6 +3,7 @@
 // </copyright>
 
 namespace MUnique.OpenMU.ConnectServer.Host;
+
 using Microsoft.Extensions.Logging;
 
 using System.Net;

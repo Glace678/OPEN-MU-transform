@@ -425,11 +425,17 @@ public class BalanceV1EarlyEconomyTests
                             var ap = player.Attributes[Stats.CurrentAbility];
                             var consumed = entry is null || await player.TryConsumeForSkillAsync(entry).ConfigureAwait(false);
                             var mpCost = mp - player.Attributes[Stats.CurrentMana];
-                            actions.Add(new { Skill = entry?.Skill?.Number, Payload = payload, Consumed = consumed,
-                                Mp = mpCost, Ap = ap - player.Attributes[Stats.CurrentAbility],
+                            actions.Add(new
+                            {
+                                Skill = entry?.Skill?.Number,
+                                Payload = payload,
+                                Consumed = consumed,
+                                Mp = mpCost,
+                                Ap = ap - player.Attributes[Stats.CurrentAbility],
                                 TtkAtOneSecond = monster.Attributes[Stats.MaximumHealth] / payload,
                                 LegacySupplies = EstimateSupplies(player, monster, incoming, payload, mpCost, false),
-                                ReviewedSupplies = EstimateSupplies(player, monster, incoming, payload, mpCost, true) });
+                                ReviewedSupplies = EstimateSupplies(player, monster, incoming, payload, mpCost, true)
+                            });
                         }
 
                         var potionRows = configuration.Items.Where(definition => BalanceV1.TryGetPotionRule(definition.Group, definition.Number, out var rule)
@@ -441,18 +447,44 @@ public class BalanceV1EarlyEconomyTests
                             var item = player.PersistenceContext.CreateNew<Item>();
                             item.Definition = definition;
                             item.Durability = 1;
-                            return new { definition.Number, Group = rule.CooldownGroup.ToString(), Recovery = Math.Min(rule.RecoveryCap, max * rule.RecoveryFraction),
-                                UnitLegacyPrice = calculator.CalculateFinalBuyingPrice(item), UnitActualPrice = calculator.CalculateFinalBuyingPrice(item, configuration), rule.UnlockLevel };
+                            return new
+                            {
+                                definition.Number,
+                                Group = rule.CooldownGroup.ToString(),
+                                Recovery = Math.Min(rule.RecoveryCap, max * rule.RecoveryFraction),
+                                UnitLegacyPrice = calculator.CalculateFinalBuyingPrice(item),
+                                UnitActualPrice = calculator.CalculateFinalBuyingPrice(item, configuration),
+                                rule.UnlockLevel
+                            };
                         }).ToArray();
-                        rows.Add(new { Stage = stage, Level = level, Build = build, InitialSkills = initialSkills,
-                            Wallet = player.Money, Equipped = equipped, Hp = player.Attributes![Stats.MaximumHealth], Mp = player.Attributes[Stats.MaximumMana],
-                            Strength = player.Attributes[Stats.TotalStrength], Agility = player.Attributes[Stats.TotalAgility], Vitality = player.Attributes[Stats.TotalVitality],
-                            Ap = player.Attributes[Stats.MaximumAbility], HpRegen = Probe.RegenerationRate(player, Stats.HealthRegeneration),
-                            MpRegen = Probe.RegenerationRate(player, Stats.ManaRegeneration), ApRegen = Probe.RegenerationRate(player, Stats.AbilityRegeneration),
-                            Map = home.Number, Monster = mapping.MonsterNumber, mapping.Rank, MonsterHp = monster.Attributes[Stats.MaximumHealth],
-                            Incoming = incoming, EnemySeconds = monster.Definition.AttackDelay.TotalSeconds,
-                            ZenAmount = BalanceV1.CalculateZen(mapping.Rank, mapping.MonsterNumber), ExpectedMoneyProbability = 0.65,
-                            Actions = actions, Potions = potionRows });
+                        rows.Add(new
+                        {
+                            Stage = stage,
+                            Level = level,
+                            Build = build,
+                            InitialSkills = initialSkills,
+                            Wallet = player.Money,
+                            Equipped = equipped,
+                            Hp = player.Attributes![Stats.MaximumHealth],
+                            Mp = player.Attributes[Stats.MaximumMana],
+                            Strength = player.Attributes[Stats.TotalStrength],
+                            Agility = player.Attributes[Stats.TotalAgility],
+                            Vitality = player.Attributes[Stats.TotalVitality],
+                            Ap = player.Attributes[Stats.MaximumAbility],
+                            HpRegen = Probe.RegenerationRate(player, Stats.HealthRegeneration),
+                            MpRegen = Probe.RegenerationRate(player, Stats.ManaRegeneration),
+                            ApRegen = Probe.RegenerationRate(player, Stats.AbilityRegeneration),
+                            Map = home.Number,
+                            Monster = mapping.MonsterNumber,
+                            mapping.Rank,
+                            MonsterHp = monster.Attributes[Stats.MaximumHealth],
+                            Incoming = incoming,
+                            EnemySeconds = monster.Definition.AttackDelay.TotalSeconds,
+                            ZenAmount = BalanceV1.CalculateZen(mapping.Rank, mapping.MonsterNumber),
+                            ExpectedMoneyProbability = 0.65,
+                            Actions = actions,
+                            Potions = potionRows
+                        });
                     }
                     finally
                     {
@@ -768,8 +800,16 @@ public class BalanceV1EarlyEconomyTests
         var costs = healthLoss * UnitCost(BalanceV1.PotionGroup.Health, Stats.MaximumHealth)
             + manaLoss * UnitCost(BalanceV1.PotionGroup.Mana, Stats.MaximumMana);
         var gross = .65 * BalanceV1.CalculateZen(BalanceV1ContentRank.ResolveRank(monster), monster.Definition.Number);
-        return new { Policy = "Steady-state lower-bound supply accounting, one action/second, no repair/travel/loot-sale income. Fractional potion amortization and post-fight recovery; NOT a win or timing proof.",
-            Casts = hits, HealthToReplace = healthLoss, ManaToReplace = manaLoss, ExpectedZen = gross, PotionZen = costs, NetBeforeOtherSinks = gross - costs };
+        return new
+        {
+            Policy = "Steady-state lower-bound supply accounting, one action/second, no repair/travel/loot-sale income. Fractional potion amortization and post-fight recovery; NOT a win or timing proof.",
+            Casts = hits,
+            HealthToReplace = healthLoss,
+            ManaToReplace = manaLoss,
+            ExpectedZen = gross,
+            PotionZen = costs,
+            NetBeforeOtherSinks = gross - costs
+        };
     }
 
     private static async Task<MerchantNpc> OpenMerchantAsync(Player player, short number)

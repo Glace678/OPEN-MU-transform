@@ -50,7 +50,7 @@ public class SpeedHackAntiCheatTests
         {
             var nextFrom = new Point((byte)(StartPoint.X + i * 2), StartPoint.Y);
             var nextTo = new Point((byte)(StartPoint.X + i * 2 + 2), StartPoint.Y);
-            
+
             // Set player position to nextFrom to avoid startOffset validation check rejecting the walk.
             player.Position = nextFrom;
 
@@ -119,7 +119,7 @@ public class SpeedHackAntiCheatTests
         {
             var nextFrom = new Point((byte)(StartPoint.X + i * 2), StartPoint.Y);
             var nextTo = new Point((byte)(StartPoint.X + i * 2 + 2), StartPoint.Y);
-            
+
             player.Position = nextFrom;
             player.GameContext.FeaturePlugIns.GetPlugIn<SpeedHackDetectPlugIn>()!.SetLastAlertTime(player, DateTime.MinValue);
 
@@ -341,7 +341,7 @@ public class SpeedHackAntiCheatTests
         {
             var nextFrom = new Point((byte)(StartPoint.X + i * 2), StartPoint.Y);
             var nextTo = new Point((byte)(StartPoint.X + i * 2 + 2), StartPoint.Y);
-            
+
             player.Position = nextFrom;
             player.GameContext.FeaturePlugIns.GetPlugIn<SpeedHackDetectPlugIn>()?.SetLastAlertTime(player, DateTime.MinValue);
 
@@ -364,7 +364,7 @@ public class SpeedHackAntiCheatTests
         var player = await CreatePlayerWithSpeedAttributesAsync().ConfigureAwait(false);
         var plugin = player.GameContext.FeaturePlugIns.GetPlugIn<SpeedHackDetectPlugIn>();
         Assert.That(plugin, Is.Not.Null);
-        
+
         // Customize configuration: 5 warnings limit, no autoban, no disconnect
         plugin!.Configuration!.MaxWarnings = 5;
         plugin.Configuration.AutoBan = false;
@@ -376,7 +376,7 @@ public class SpeedHackAntiCheatTests
         {
             var nextFrom = new Point((byte)(StartPoint.X + i * 2), StartPoint.Y);
             var nextTo = new Point((byte)(StartPoint.X + i * 2 + 2), StartPoint.Y);
-            
+
             player.Position = nextFrom;
             player.GameContext.FeaturePlugIns.GetPlugIn<SpeedHackDetectPlugIn>()!.SetLastAlertTime(player, DateTime.MinValue);
 

@@ -242,7 +242,9 @@ public class BalanceV1NormalMonsterBudgetTests
 
         var unknownDefinition = new MUnique.OpenMU.Persistence.BasicModel.GameMapDefinition
         {
-            Id = Guid.NewGuid(), Number = map.Number, ExpMultiplier = 1,
+            Id = Guid.NewGuid(),
+            Number = map.Number,
+            ExpMultiplier = 1,
         };
         var unknownMap = new GameMap(unknownDefinition, TimeSpan.FromSeconds(30), 8);
         using var unknown = new Monster(spawn, spawn.MonsterDefinition, unknownMap, NullDropGenerator.Instance,
@@ -252,7 +254,9 @@ public class BalanceV1NormalMonsterBudgetTests
             new Mock<IEventStateProvider>().Object, configuration);
         var overrideSpawn = new MUnique.OpenMU.Persistence.BasicModel.MonsterSpawnArea
         {
-            MonsterDefinition = spawn.MonsterDefinition, GameMap = map, MaximumHealthOverride = 99999,
+            MonsterDefinition = spawn.MonsterDefinition,
+            GameMap = map,
+            MaximumHealthOverride = 99999,
             SpawnTrigger = SpawnTrigger.Automatic,
         };
         using var overridden = new Monster(overrideSpawn, spawn.MonsterDefinition, liveMap, NullDropGenerator.Instance,
@@ -316,11 +320,21 @@ public class BalanceV1NormalMonsterBudgetTests
                     * Math.Max(1, (int)enhancedSkill.Skill!.NumberOfHitsPerAttack);
                 var timeToKill = adjusted.Health / commonPayload;
                 gearSensitivity.Add((enhancedPayload / commonPayload) - 1);
-                rows.Add(new { Stage = stageNumber, Skill = skillNumber, CommonItems = regularItems, EnhancedItems = enhancedItems,
-                    SourceHealth = source.Attributes[Stats.MaximumHealth], AdjustedHealth = adjusted.Health,
-                    OldIncoming = oldIncoming, AdjustedIncoming = adjustedIncoming,
-                    CommonPayload = commonPayload, EnhancedPayload = enhancedPayload, CommonTtkAtOneActionSecond = timeToKill,
-                    NoPotionSurvivalAtSourceCadence = common.Attributes![Stats.MaximumHealth] * spawn.MonsterDefinition!.AttackDelay.TotalSeconds / adjustedIncoming });
+                rows.Add(new
+                {
+                    Stage = stageNumber,
+                    Skill = skillNumber,
+                    CommonItems = regularItems,
+                    EnhancedItems = enhancedItems,
+                    SourceHealth = source.Attributes[Stats.MaximumHealth],
+                    AdjustedHealth = adjusted.Health,
+                    OldIncoming = oldIncoming,
+                    AdjustedIncoming = adjustedIncoming,
+                    CommonPayload = commonPayload,
+                    EnhancedPayload = enhancedPayload,
+                    CommonTtkAtOneActionSecond = timeToKill,
+                    NoPotionSurvivalAtSourceCadence = common.Attributes![Stats.MaximumHealth] * spawn.MonsterDefinition!.AttackDelay.TotalSeconds / adjustedIncoming
+                });
                 Assert.Multiple(() =>
                 {
                     Assert.That(adjustedIncoming, Is.LessThan(oldIncoming * 0.15), $"Incoming damage stage {stageNumber}");
