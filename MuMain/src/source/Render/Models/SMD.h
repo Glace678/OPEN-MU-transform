@@ -3,11 +3,11 @@
 #define TRIANGLE_MAX 15000
 #define VERTEX_MAX   10000
 
-#define TEXTURE_MAX  100
-#define MESH_MAX     100
+#define TEXTURE_MAX 100
+#define MESH_MAX    100
 
-#define REFERENCE_FRAME     0
-#define SKELETAL_ANIMATION  1
+#define REFERENCE_FRAME    0
+#define SKELETAL_ANIMATION 1
 
 typedef struct
 {
@@ -61,17 +61,17 @@ typedef struct
     Normal_t   Normal[VERTEX_MAX];
     TexCoord_t TexCoord[VERTEX_MAX];
 
-    char       Polygon[TRIANGLE_MAX];
-    short      VertexList[TRIANGLE_MAX][4];
-    short      NormalList[TRIANGLE_MAX][4];
-    short      TexCoordList[TRIANGLE_MAX][4];
+    char  Polygon[TRIANGLE_MAX];
+    short VertexList[TRIANGLE_MAX][4];
+    short NormalList[TRIANGLE_MAX][4];
+    short TexCoordList[TRIANGLE_MAX][4];
 } SMDMesh_t;
 
 typedef struct
 {
-    short       MeshNum;
-    Texture_t   Texture[TEXTURE_MAX];
-    SMDMesh_t   Mesh[MESH_MAX];
+    short     MeshNum;
+    Texture_t Texture[TEXTURE_MAX];
+    SMDMesh_t Mesh[MESH_MAX];
 } SMDMeshGroup_t;
 
 extern NodeGroup_t     NodeGroup;

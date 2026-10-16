@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "muConsoleDebug.h"	// self
+#include "muConsoleDebug.h"  // self
 
 #ifdef _WIN32
 #include <io.h>
@@ -26,7 +26,7 @@
 #endif
 #ifdef CSK_DEBUG_MAP_PATHFINDING
 #include "Engine/Pathing/ZzzPath.h"
-#endif // CSK_DEBUG_MAP_PATHFINDING
+#endif  // CSK_DEBUG_MAP_PATHFINDING
 
 CmuConsoleDebug::CmuConsoleDebug() : m_bInit(false)
 {
@@ -41,7 +41,8 @@ CmuConsoleDebug::CmuConsoleDebug() : m_bInit(false)
         leaf::ShowConsole(true);
         m_bInit = true;
 
-        g_ErrorReport.Write(L"Mu Debug Console Window Init - completed(Handle:0x%00000008X)\r\n", leaf::GetConsoleWndHandle());
+        g_ErrorReport.Write(L"Mu Debug Console Window Init - completed(Handle:0x%00000008X)\r\n",
+                            leaf::GetConsoleWndHandle());
     }
 #endif
 }
@@ -49,9 +50,9 @@ CmuConsoleDebug::CmuConsoleDebug() : m_bInit(false)
 CmuConsoleDebug::~CmuConsoleDebug()
 {
 #ifndef _EDITOR
-    #ifdef CSK_LH_DEBUG_CONSOLE
-        leaf::CloseConsoleWindow();
-    #endif
+#ifdef CSK_LH_DEBUG_CONSOLE
+    leaf::CloseConsoleWindow();
+#endif
 #endif
 }
 
@@ -81,7 +82,6 @@ void CmuConsoleDebug::UpdateMainScene()
     }
 #endif
 }
-
 
 bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
 {
@@ -117,7 +117,7 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
     }
     else if (strCommand.compare(0, 4, L"$fps") == 0)
     {
-        auto fps_str = strCommand.substr(5);
+        auto fps_str    = strCommand.substr(5);
         auto target_fps = std::stof(fps_str);
         SetTargetFps(target_fps);
         return true;
@@ -134,7 +134,7 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
     else if (strCommand.compare(L"$vsync off") == 0)
     {
         DisableVSync();
-        SetTargetFps(-1); // explicit request for uncapped - let hardware run at its max
+        SetTargetFps(-1);  // explicit request for uncapped - let hardware run at its max
         ResetFrameStats();
         return true;
     }
@@ -150,45 +150,103 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
         // code -- feed) plus ZzzEffectPoint/ZzzEffectFireLeave/GOBoid. Together these cover
         // effectively every effect-rendering path in the tree.
         SetDisableEffects(true);
-        if (g_pOption) g_pOption->SetRenderAllEffects(false);
+        if (g_pOption)
+            g_pOption->SetRenderAllEffects(false);
         return true;
     }
     else if (strCommand.compare(L"$effects on") == 0)
     {
         SetDisableEffects(false);
-        if (g_pOption) g_pOption->SetRenderAllEffects(true);
+        if (g_pOption)
+            g_pOption->SetRenderAllEffects(true);
         return true;
     }
     // DXP-23 diagnostic, finer-grained bisection of the effect-rendering GPU cost `$effects off`
     // already confirmed. Each isolates one of the distinct object systems that can be populated
     // independently of the others (see MainScene.h doc comments for what each one covers).
-    else if (strCommand.compare(L"$effects sprites off") == 0)   { SetDisableSprites(true);  return true; }
-    else if (strCommand.compare(L"$effects sprites on") == 0)    { SetDisableSprites(false); return true; }
-    else if (strCommand.compare(L"$effects particles off") == 0) { SetDisableParticles(true);  return true; }
-    else if (strCommand.compare(L"$effects particles on") == 0)  { SetDisableParticles(false); return true; }
-    else if (strCommand.compare(L"$effects skillmodels off") == 0) { SetDisableSkillEffectModels(true);  return true; }
-    else if (strCommand.compare(L"$effects skillmodels on") == 0)  { SetDisableSkillEffectModels(false); return true; }
-    else if (strCommand.compare(L"$effects boids off") == 0)     { SetDisableBoids(true);  return true; }
-    else if (strCommand.compare(L"$effects boids on") == 0)      { SetDisableBoids(false); return true; }
+    else if (strCommand.compare(L"$effects sprites off") == 0)
+    {
+        SetDisableSprites(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects sprites on") == 0)
+    {
+        SetDisableSprites(false);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects particles off") == 0)
+    {
+        SetDisableParticles(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects particles on") == 0)
+    {
+        SetDisableParticles(false);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects skillmodels off") == 0)
+    {
+        SetDisableSkillEffectModels(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects skillmodels on") == 0)
+    {
+        SetDisableSkillEffectModels(false);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects boids off") == 0)
+    {
+        SetDisableBoids(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects boids on") == 0)
+    {
+        SetDisableBoids(false);
+        return true;
+    }
     // DXP-23 diagnostic: owner found unequipping Wings of Ruin alone took FPS 120->180. This skips
     // just the EXTRA b->RenderBodyShadow() call RenderLinkObject() (ZzzCharacter.cpp) makes for every
     // visible wing/cape-wearing character, while leaving the wing model itself equipped and visible --
     // isolates whether the shadow draw specifically is the cost, keep the wing on for this test.
-    else if (strCommand.compare(L"$effects wingshadow off") == 0) { SetDisableWingShadow(true);  return true; }
-    else if (strCommand.compare(L"$effects wingshadow on") == 0)  { SetDisableWingShadow(false); return true; }
+    else if (strCommand.compare(L"$effects wingshadow off") == 0)
+    {
+        SetDisableWingShadow(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects wingshadow on") == 0)
+    {
+        SetDisableWingShadow(false);
+        return true;
+    }
     // DXP-23 diagnostic: RenderJoints() (beam/tail-trail effects -- Wing of Ruin's growing tail
     // light, Beam Knight's lightning beam) was never gated by g_pOption->GetRenderAllEffects() at
     // all, so $effects off never covered it. Isolates it directly.
-    else if (strCommand.compare(L"$effects joints off") == 0) { SetDisableJoints(true);  return true; }
-    else if (strCommand.compare(L"$effects joints on") == 0)  { SetDisableJoints(false); return true; }
+    else if (strCommand.compare(L"$effects joints off") == 0)
+    {
+        SetDisableJoints(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects joints on") == 0)
+    {
+        SetDisableJoints(false);
+        return true;
+    }
     // DXP-23 diagnostic: MODEL_WING_OF_RUIN draws its mesh 3x per frame (base + 2 glow-layer passes,
     // ZzzObject.cpp ~7001-7007). Skips the 2 extra passes to test if triple mesh-draw is the cost.
     // Visibly changes the wing's look (removes glow layers) while active -- measurement tool only.
-    else if (strCommand.compare(L"$effects wingextralayers off") == 0) { SetDisableWingExtraLayers(true);  return true; }
-    else if (strCommand.compare(L"$effects wingextralayers on") == 0)  { SetDisableWingExtraLayers(false); return true; }
+    else if (strCommand.compare(L"$effects wingextralayers off") == 0)
+    {
+        SetDisableWingExtraLayers(true);
+        return true;
+    }
+    else if (strCommand.compare(L"$effects wingextralayers on") == 0)
+    {
+        SetDisableWingExtraLayers(false);
+        return true;
+    }
     else if (strCommand.compare(0, 7, L"$winmsg") == 0)
     {
-        auto str_limit = strCommand.substr(8);
+        auto str_limit     = strCommand.substr(8);
         auto message_limit = std::stof(str_limit);
         SetMaxMessagePerCycle(message_limit);
         return true;
@@ -225,7 +283,7 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
         EditFlag = EDIT_NONE;
         return true;
     }
-#endif // CSK_DEBUG_MAP_ATTRIBUTE
+#endif  // CSK_DEBUG_MAP_ATTRIBUTE
 #ifdef CSK_DEBUG_MAP_PATHFINDING
     else if (strCommand.compare(L"$path on") == NULL)
     {
@@ -235,7 +293,7 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
     {
         g_bShowPath = false;
     }
-#endif // CSK_DEBUG_MAP_PATHFINDING
+#endif  // CSK_DEBUG_MAP_PATHFINDING
 #ifdef CSK_DEBUG_RENDER_BOUNDINGBOX
     else if (strCommand.compare(L"$bb on") == NULL)
     {
@@ -245,7 +303,7 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
     {
         g_bRenderBoundingBox = false;
     }
-#endif // CSK_DEBUG_RENDER_BOUNDINGBOX
+#endif  // CSK_DEBUG_RENDER_BOUNDINGBOX
     else if (strCommand.compare(L"$type_test") == NULL)
     {
         Write(MCD_SEND, L"MCD_SEND");
@@ -307,9 +365,7 @@ void CmuConsoleDebug::Write(int iType, const wchar_t* pStr, ...)
         va_start(pArgsForFile, pStr);
         // C99 4-arg vswprintf -- explicit buffer size, bounded write. The
         // 3-arg MS-extension form is unsafe (no size param, can overflow).
-        _vsnwprintf(szErrorBuffer,
-                  sizeof(szErrorBuffer) / sizeof(szErrorBuffer[0]),
-                  pStr, pArgsForFile);
+        _vsnwprintf(szErrorBuffer, sizeof(szErrorBuffer) / sizeof(szErrorBuffer[0]), pStr, pArgsForFile);
         va_end(pArgsForFile);
         g_ErrorReport.Write(L"[MCD_ERROR] %ls\r\n", szErrorBuffer);
     }
@@ -319,22 +375,22 @@ void CmuConsoleDebug::Write(int iType, const wchar_t* pStr, ...)
     {
         switch (iType)
         {
-        case MCD_SEND:
-            leaf::SetConsoleTextColor(leaf::COLOR_OLIVE);
-            break;
-        case MCD_RECEIVE:
-            leaf::SetConsoleTextColor(leaf::COLOR_DARKGREEN);
-            break;
-        case MCD_ERROR:
-            leaf::SetConsoleTextColor(leaf::COLOR_WHITE, leaf::COLOR_DARKRED);
-            break;
-        case MCD_NORMAL:
-            leaf::SetConsoleTextColor(leaf::COLOR_GRAY);
-            break;
+            case MCD_SEND:
+                leaf::SetConsoleTextColor(leaf::COLOR_OLIVE);
+                break;
+            case MCD_RECEIVE:
+                leaf::SetConsoleTextColor(leaf::COLOR_DARKGREEN);
+                break;
+            case MCD_ERROR:
+                leaf::SetConsoleTextColor(leaf::COLOR_WHITE, leaf::COLOR_DARKRED);
+                break;
+            case MCD_NORMAL:
+                leaf::SetConsoleTextColor(leaf::COLOR_GRAY);
+                break;
         }
 
         wchar_t szBuffer[256] = L"";
-        va_list	pArguments;
+        va_list pArguments;
 
         va_start(pArguments, pStr);
         vswprintf(szBuffer, sizeof(szBuffer) / sizeof(wchar_t), pStr, pArguments);

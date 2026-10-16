@@ -4,5 +4,5 @@
 // from the editor's current brush/selection. Extracted from ZzzInterface.cpp.
 namespace Editor
 {
-    void EditObjects();
+void EditObjects();
 }

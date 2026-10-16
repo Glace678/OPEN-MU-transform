@@ -15,10 +15,10 @@
 #include <assert.h>
 
 #ifndef _ASSERT
-#define _ASSERT(expr)  assert(expr)
+#define _ASSERT(expr) assert(expr)
 #endif
 #ifndef _ASSERTE
 #define _ASSERTE(expr) assert(expr)
 #endif
 
-#endif // _MSC_VER
+#endif  // _MSC_VER

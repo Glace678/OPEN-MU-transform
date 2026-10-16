@@ -27,7 +27,7 @@ constexpr long kConnectTimeoutMs = 3000;
 // cannot hang the shop indefinitely (the non-Windows path runs inline, without
 // the Windows watchdog thread).
 constexpr long kLowSpeedLimitBytesPerSec = 1;
-constexpr long kLowSpeedTimeoutSec = 30;
+constexpr long kLowSpeedTimeoutSec       = 30;
 
 // libcurl needs one process-wide init before any easy handle is created.
 // curl_easy_init would do it lazily, but not thread-safely; do it once here.
@@ -73,25 +73,22 @@ int XferInfoCallback(void* clientp, curl_off_t, curl_off_t, curl_off_t, curl_off
 
 size_t WriteToStream(char* ptr, size_t size, size_t nmemb, void* userdata)
 {
-    auto* out = static_cast<std::ofstream*>(userdata);
+    auto*        out       = static_cast<std::ofstream*>(userdata);
     const size_t byteCount = size * nmemb;
     out->write(ptr, static_cast<std::streamsize>(byteCount));
     // A short return tells libcurl the write failed and aborts the transfer.
     return out->good() ? byteCount : 0;
 }
-} // namespace
+}  // namespace
 
-WZResult CurlFileDownloader::DownloadFile(const std::wstring& url,
-    const std::wstring& localPath,
-    const std::wstring& username,
-    const std::wstring& password,
-    bool passiveFtp,
-    const volatile int* pBreak)
+WZResult CurlFileDownloader::DownloadFile(const std::wstring& url, const std::wstring& localPath,
+                                          const std::wstring& username, const std::wstring& password, bool passiveFtp,
+                                          const volatile int* pBreak)
 {
     WZResult result;
 
     const std::filesystem::path targetPath(localPath);
-    std::error_code fsError;
+    std::error_code             fsError;
     if (targetPath.has_parent_path())
     {
         std::filesystem::create_directories(targetPath.parent_path(), fsError);
@@ -100,14 +97,15 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url,
     std::ofstream out(targetPath, std::ios::binary | std::ios::trunc);
     if (!out.is_open())
     {
-        result.SetResult(DL_CREATE_LOCALFILE, 0, L"[CurlFileDownloader] Fail : cannot open local file %ls", localPath.c_str());
+        result.SetResult(DL_CREATE_LOCALFILE, 0, L"[CurlFileDownloader] Fail : cannot open local file %ls",
+                         localPath.c_str());
         return result;
     }
 
     // Run the throwing UTF-8 conversions before curl_easy_init so no exception
     // can leak the CURL handle between init and curl_easy_cleanup.
-    const std::string urlUtf8 = WideToUtf8(url);
-    const std::string userUtf8 = WideToUtf8(username);
+    const std::string urlUtf8      = WideToUtf8(url);
+    const std::string userUtf8     = WideToUtf8(username);
     const std::string passwordUtf8 = WideToUtf8(password);
 
     EnsureCurlGlobalInit();
@@ -121,7 +119,7 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url,
     curl_easy_setopt(curl, CURLOPT_URL, urlUtf8.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &WriteToStream);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
-    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);      // HTTP >= 400 is a failure
+    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);  // HTTP >= 400 is a failure
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, kConnectTimeoutMs);
@@ -133,7 +131,7 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url,
     curl_easy_setopt(curl, CURLOPT_FTP_USE_EPSV, passiveFtp ? 1L : 0L);
     if (!passiveFtp)
     {
-        curl_easy_setopt(curl, CURLOPT_FTPPORT, "-");     // active mode
+        curl_easy_setopt(curl, CURLOPT_FTPPORT, "-");  // active mode
     }
     if (!userUtf8.empty())
     {
@@ -161,10 +159,11 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url,
     else
     {
         const std::wstring reason = Utf8ToWide(curl_easy_strerror(code));
-        result.SetResult(DL_READ_REMOTEFILE, code, L"[CurlFileDownloader] Fail : %ls (%ls)", reason.c_str(), url.c_str());
+        result.SetResult(DL_READ_REMOTEFILE, code, L"[CurlFileDownloader] Fail : %ls (%ls)", reason.c_str(),
+                         url.c_str());
     }
 
     return result;
 }
 
-#endif // !_WIN32 && KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // !_WIN32 && KJH_ADD_INGAMESHOP_UI_SYSTEM

@@ -9,33 +9,33 @@ using namespace Core::Haptics;
 
 namespace
 {
-    struct RumbleCall
-    {
-        std::uint16_t low;
-        std::uint16_t high;
-        std::uint32_t durationMs;
-    };
+struct RumbleCall
+{
+    std::uint16_t low;
+    std::uint16_t high;
+    std::uint32_t durationMs;
+};
 
-    class FakeHapticOutput final : public IHapticOutput
+class FakeHapticOutput final : public IHapticOutput
+{
+public:
+    bool SupportsRumble() const override { return supported; }
+    void Play(std::uint16_t low, std::uint16_t high, std::uint32_t durationMs) override
     {
-    public:
-        bool SupportsRumble() const override { return supported; }
-        void Play(std::uint16_t low, std::uint16_t high, std::uint32_t durationMs) override
-        {
-            calls.push_back({low, high, durationMs});
-        }
-        void Stop() override { ++stopCount; }
+        calls.push_back({low, high, durationMs});
+    }
+    void Stop() override { ++stopCount; }
 
-        bool supported = true;
-        std::vector<RumbleCall> calls;
-        int stopCount = 0;
-    };
+    bool                    supported = true;
+    std::vector<RumbleCall> calls;
+    int                     stopCount = 0;
+};
 }
 
 TEST_CASE("Purchase haptic uses two server-result pulses and the specified gap")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     REQUIRE(scheduler.Publish(HapticEvent::PurchaseSucceeded, 100.0));
     REQUIRE(output.calls.size() == 1);
     CHECK(output.calls[0].durationMs == 55);
@@ -54,7 +54,7 @@ TEST_CASE("Purchase haptic uses two server-result pulses and the specified gap")
 TEST_CASE("Concurrent pulses mix by the stronger value on each motor")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     REQUIRE(scheduler.Publish(HapticEvent::CriticalHit, 0.0));
     REQUIRE(scheduler.Publish(HapticEvent::Confirmed, 0.0));
     // The weaker UI pulse does not restart or shorten the critical-hit pulse.
@@ -66,7 +66,7 @@ TEST_CASE("Concurrent pulses mix by the stronger value on each motor")
 TEST_CASE("High frequency events are rate limited and stop clears the queue")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     CHECK(scheduler.Publish(HapticEvent::FocusMoved, 100.0));
     CHECK_FALSE(scheduler.Publish(HapticEvent::FocusMoved, 150.0));
     CHECK(scheduler.Publish(HapticEvent::FocusMoved, 170.0));
@@ -81,7 +81,7 @@ TEST_CASE("High frequency events are rate limited and stop clears the queue")
 TEST_CASE("Repeated equal-strength hits extend the hardware rumble deadline")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
 
     REQUIRE(scheduler.Publish(HapticEvent::NormalHit, 0.0));
     REQUIRE(output.calls.size() == 1);
@@ -95,7 +95,7 @@ TEST_CASE("Repeated equal-strength hits extend the hardware rumble deadline")
 TEST_CASE("UI test feedback cannot override a higher-priority combat event")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
 
     REQUIRE(scheduler.Publish(HapticEvent::Injured, 0.0));
     REQUIRE(scheduler.Publish(HapticEvent::LongTest, 0.0));
@@ -107,10 +107,10 @@ TEST_CASE("UI test feedback cannot override a higher-priority combat event")
 TEST_CASE("Disabling a category immediately clears active feedback")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     REQUIRE(scheduler.Publish(HapticEvent::NormalHit, 0.0));
 
-    auto settings = scheduler.GetSettings();
+    auto settings          = scheduler.GetSettings();
     settings.combatEnabled = false;
     scheduler.SetSettings(settings);
     CHECK(output.stopCount >= 1);
@@ -123,7 +123,7 @@ TEST_CASE("Disabling a category immediately clears active feedback")
 TEST_CASE("Long test pulse is bounded to 500 milliseconds")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     REQUIRE(scheduler.Publish(HapticEvent::LongTest, 0.0));
     REQUIRE(output.calls.size() == 1);
     CHECK(output.calls.front().durationMs == 500);
@@ -157,12 +157,12 @@ TEST_CASE("Server response haptics preserve protocol-specific result codes")
 
 TEST_CASE("Input acknowledgement does not replace combat or transaction feedback")
 {
-    CHECK(HapticScheduler::PatternFor(HapticEvent::InputAcknowledged).priority
-        < HapticScheduler::PatternFor(HapticEvent::NormalHit).priority);
-    CHECK(HapticScheduler::PatternFor(HapticEvent::InputAcknowledged).priority
-        < HapticScheduler::PatternFor(HapticEvent::PurchaseSucceeded).priority);
+    CHECK(HapticScheduler::PatternFor(HapticEvent::InputAcknowledged).priority <
+          HapticScheduler::PatternFor(HapticEvent::NormalHit).priority);
+    CHECK(HapticScheduler::PatternFor(HapticEvent::InputAcknowledged).priority <
+          HapticScheduler::PatternFor(HapticEvent::PurchaseSucceeded).priority);
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
+    HapticScheduler  scheduler(output);
     CHECK(scheduler.Publish(HapticEvent::InputAcknowledged, 0.0));
     CHECK_FALSE(scheduler.Publish(HapticEvent::InputAcknowledged, 1.0));
     CHECK(scheduler.Publish(HapticEvent::InputAcknowledged, 40.0));
@@ -171,8 +171,8 @@ TEST_CASE("Input acknowledgement does not replace combat or transaction feedback
 TEST_CASE("Test pulses bypass category switches but respect the master switch")
 {
     FakeHapticOutput output;
-    HapticScheduler scheduler(output);
-    HapticSettings settings;
+    HapticScheduler  scheduler(output);
+    HapticSettings   settings;
     settings.uiEnabled = false;
     scheduler.SetSettings(settings);
 

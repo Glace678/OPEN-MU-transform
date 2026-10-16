@@ -7,7 +7,8 @@
 #include "Render/Models/ZzzBMD.h"
 
 class PetActionDemon;
-using PetActionDemonPtr = std::shared_ptr<PetActionDemon>;class PetActionDemon : public PetAction
+using PetActionDemonPtr = std::shared_ptr<PetActionDemon>;
+class PetActionDemon : public PetAction
 {
 public:
     static PetActionDemonPtr Make();

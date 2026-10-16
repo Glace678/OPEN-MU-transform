@@ -11,11 +11,7 @@
 // External global camera state
 extern CameraState g_Camera;
 
-CameraManager::CameraManager()
-    : m_CurrentMode(CameraMode::Default)
-    , m_pActiveCamera(nullptr)
-{
-}
+CameraManager::CameraManager() : m_CurrentMode(CameraMode::Default), m_pActiveCamera(nullptr) {}
 
 CameraManager::~CameraManager()
 {
@@ -39,7 +35,7 @@ void CameraManager::Initialize()
 
     // Start with default camera
     m_pActiveCamera = m_pDefaultCamera.get();
-    m_CurrentMode = CameraMode::Default;
+    m_CurrentMode   = CameraMode::Default;
     m_pActiveCamera->OnActivate(g_Camera);
 }
 
@@ -87,20 +83,20 @@ void CameraManager::SaveGlobalToSpectated()
 {
     VectorCopy(g_Camera.Position, m_Spectated.Position);
     VectorCopy(g_Camera.Angle, m_Spectated.Angle);
-    m_Spectated.FOV = g_Camera.FOV;
-    m_Spectated.ViewFar = g_Camera.ViewFar;
-    m_Spectated.Distance = g_Camera.Distance;
+    m_Spectated.FOV            = g_Camera.FOV;
+    m_Spectated.ViewFar        = g_Camera.ViewFar;
+    m_Spectated.Distance       = g_Camera.Distance;
     m_Spectated.DistanceTarget = g_Camera.DistanceTarget;
-    m_Spectated.HasData = true;
+    m_Spectated.HasData        = true;
 }
 
 void CameraManager::RestoreSpectatedToGlobal()
 {
     VectorCopy(m_Spectated.Position, g_Camera.Position);
     VectorCopy(m_Spectated.Angle, g_Camera.Angle);
-    g_Camera.FOV = m_Spectated.FOV;
-    g_Camera.ViewFar = m_Spectated.ViewFar;
-    g_Camera.Distance = m_Spectated.Distance;
+    g_Camera.FOV            = m_Spectated.FOV;
+    g_Camera.ViewFar        = m_Spectated.ViewFar;
+    g_Camera.Distance       = m_Spectated.Distance;
     g_Camera.DistanceTarget = m_Spectated.DistanceTarget;
 }
 
@@ -114,9 +110,9 @@ void CameraManager::UpdateSpectatedCamera()
     SpectatedState savedFreeFly;
     VectorCopy(g_Camera.Position, savedFreeFly.Position);
     VectorCopy(g_Camera.Angle, savedFreeFly.Angle);
-    savedFreeFly.FOV = g_Camera.FOV;
-    savedFreeFly.ViewFar = g_Camera.ViewFar;
-    savedFreeFly.Distance = g_Camera.Distance;
+    savedFreeFly.FOV            = g_Camera.FOV;
+    savedFreeFly.ViewFar        = g_Camera.ViewFar;
+    savedFreeFly.Distance       = g_Camera.Distance;
     savedFreeFly.DistanceTarget = g_Camera.DistanceTarget;
 
     // Restore spectated camera's own last state so Update() reads correct values
@@ -134,9 +130,9 @@ void CameraManager::UpdateSpectatedCamera()
     // Restore FreeFly's state so rendering uses FreeFly's viewpoint
     VectorCopy(savedFreeFly.Position, g_Camera.Position);
     VectorCopy(savedFreeFly.Angle, g_Camera.Angle);
-    g_Camera.FOV = savedFreeFly.FOV;
-    g_Camera.ViewFar = savedFreeFly.ViewFar;
-    g_Camera.Distance = savedFreeFly.Distance;
+    g_Camera.FOV            = savedFreeFly.FOV;
+    g_Camera.ViewFar        = savedFreeFly.ViewFar;
+    g_Camera.Distance       = savedFreeFly.Distance;
     g_Camera.DistanceTarget = savedFreeFly.DistanceTarget;
 }
 #endif
@@ -223,7 +219,7 @@ void CameraManager::TransitionToCamera(ICamera* pNewCamera)
         if (m_Spectated.HasData)
             RestoreSpectatedToGlobal();
         m_pSpectatedCamera = nullptr;
-        m_Spectated = {};
+        m_Spectated        = {};
     }
 #endif
 
@@ -260,22 +256,27 @@ extern "C" void GetOrbitalCameraAngles(float* outYaw, float* outPitch)
     auto* orbital = GetOrbitalCameraInstance();
     if (orbital)
     {
-        if (outYaw) *outYaw = orbital->GetTotalYaw();
-        if (outPitch) *outPitch = orbital->GetTotalPitch();
+        if (outYaw)
+            *outYaw = orbital->GetTotalYaw();
+        if (outPitch)
+            *outPitch = orbital->GetTotalPitch();
     }
     else
     {
-        if (outYaw) *outYaw = 0.0f;
-        if (outPitch) *outPitch = 0.0f;
+        if (outYaw)
+            *outYaw = 0.0f;
+        if (outPitch)
+            *outPitch = 0.0f;
     }
 }
 
 // Get active camera's config (for DevEditor single source of truth)
 // In FreeFly spectator mode, returns the spectated camera's config instead
-extern "C" void GetActiveCameraConfig(float* outFOV, float* outNearPlane, float* outFarPlane, float* outTerrainCullRange)
+extern "C" void GetActiveCameraConfig(float* outFOV, float* outNearPlane, float* outFarPlane,
+                                      float* outTerrainCullRange)
 {
-    auto& manager = CameraManager::Instance();
-    ICamera* camera = manager.GetActiveCamera();
+    auto&    manager = CameraManager::Instance();
+    ICamera* camera  = manager.GetActiveCamera();
 #ifdef _EDITOR
     if (manager.GetCurrentMode() == CameraMode::FreeFly)
     {
@@ -287,9 +288,13 @@ extern "C" void GetActiveCameraConfig(float* outFOV, float* outNearPlane, float*
     if (camera)
     {
         const CameraConfig& config = camera->GetConfig();
-        if (outFOV) *outFOV = config.hFov;
-        if (outNearPlane) *outNearPlane = config.nearPlane;
-        if (outFarPlane) *outFarPlane = config.farPlane;
-        if (outTerrainCullRange) *outTerrainCullRange = config.terrainCullRange;
+        if (outFOV)
+            *outFOV = config.hFov;
+        if (outNearPlane)
+            *outNearPlane = config.nearPlane;
+        if (outFarPlane)
+            *outFarPlane = config.farPlane;
+        if (outTerrainCullRange)
+            *outTerrainCullRange = config.terrainCullRange;
     }
 }

@@ -4,5 +4,5 @@
 
 namespace Network::MerchantPrices
 {
-    QuoteCache& Cache();
+QuoteCache& Cache();
 }

@@ -13,77 +13,75 @@
 
 namespace
 {
-    std::string PathToUtf8(const std::filesystem::path& path)
+std::string PathToUtf8(const std::filesystem::path& path)
+{
+    const auto value = path.u8string();
+    return {value.begin(), value.end()};
+}
+
+class RuntimeModule
+{
+public:
+    explicit RuntimeModule(const std::filesystem::path& path)
+#ifdef _WIN32
+        : m_handle(LoadLibraryW(path.c_str()))
+#else
+        : m_handle(dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL))
+#endif
+    {}
+
+    ~RuntimeModule()
     {
-        const auto value = path.u8string();
-        return {value.begin(), value.end()};
+        if (!m_handle)
+            return;
+#ifdef _WIN32
+        FreeLibrary(m_handle);
+#else
+        dlclose(m_handle);
+#endif
     }
 
-    class RuntimeModule
+    RuntimeModule(const RuntimeModule&)            = delete;
+    RuntimeModule& operator=(const RuntimeModule&) = delete;
+
+    RimeApi* GetApi() const
     {
-    public:
-        explicit RuntimeModule(const std::filesystem::path& path)
+        if (!m_handle)
+            return nullptr;
+        using GetApiFunction = RimeApi* (*)();
 #ifdef _WIN32
-            : m_handle(LoadLibraryW(path.c_str()))
+        auto getApi = reinterpret_cast<GetApiFunction>(GetProcAddress(m_handle, "rime_get_api"));
 #else
-            : m_handle(dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL))
+        auto getApi = reinterpret_cast<GetApiFunction>(dlsym(m_handle, "rime_get_api"));
 #endif
-        {
-        }
-
-        ~RuntimeModule()
-        {
-            if (!m_handle)
-                return;
-#ifdef _WIN32
-            FreeLibrary(m_handle);
-#else
-            dlclose(m_handle);
-#endif
-        }
-
-        RuntimeModule(const RuntimeModule&) = delete;
-        RuntimeModule& operator=(const RuntimeModule&) = delete;
-
-        RimeApi* GetApi() const
-        {
-            if (!m_handle)
-                return nullptr;
-            using GetApiFunction = RimeApi* (*)();
-#ifdef _WIN32
-            auto getApi = reinterpret_cast<GetApiFunction>(GetProcAddress(m_handle, "rime_get_api"));
-#else
-            auto getApi = reinterpret_cast<GetApiFunction>(dlsym(m_handle, "rime_get_api"));
-#endif
-            return getApi ? getApi() : nullptr;
-        }
-
-    private:
-#ifdef _WIN32
-        HMODULE m_handle = nullptr;
-#else
-        void* m_handle = nullptr;
-#endif
-    };
-
-    bool HasRequiredApi(RimeApi* api)
-    {
-        return RIME_API_AVAILABLE(api, setup) && RIME_API_AVAILABLE(api, initialize)
-            && RIME_API_AVAILABLE(api, finalize) && RIME_API_AVAILABLE(api, start_maintenance)
-            && RIME_API_AVAILABLE(api, join_maintenance_thread) && RIME_API_AVAILABLE(api, create_session)
-            && RIME_API_AVAILABLE(api, destroy_session) && RIME_API_AVAILABLE(api, select_schema)
-            && RIME_API_AVAILABLE(api, process_key) && RIME_API_AVAILABLE(api, get_context)
-            && RIME_API_AVAILABLE(api, free_context) && RIME_API_AVAILABLE(api, get_commit)
-            && RIME_API_AVAILABLE(api, free_commit) && RIME_API_AVAILABLE(api, clear_composition)
-            && RIME_API_AVAILABLE(api, set_option) && RIME_API_AVAILABLE(api, change_page)
-            && RIME_API_AVAILABLE(api, select_candidate_on_current_page);
+        return getApi ? getApi() : nullptr;
     }
 
-    int Fail(const char* message, int code)
-    {
-        std::cerr << message << '\n';
-        return code;
-    }
+private:
+#ifdef _WIN32
+    HMODULE m_handle = nullptr;
+#else
+    void* m_handle = nullptr;
+#endif
+};
+
+bool HasRequiredApi(RimeApi* api)
+{
+    return RIME_API_AVAILABLE(api, setup) && RIME_API_AVAILABLE(api, initialize) && RIME_API_AVAILABLE(api, finalize) &&
+           RIME_API_AVAILABLE(api, start_maintenance) && RIME_API_AVAILABLE(api, join_maintenance_thread) &&
+           RIME_API_AVAILABLE(api, create_session) && RIME_API_AVAILABLE(api, destroy_session) &&
+           RIME_API_AVAILABLE(api, select_schema) && RIME_API_AVAILABLE(api, process_key) &&
+           RIME_API_AVAILABLE(api, get_context) && RIME_API_AVAILABLE(api, free_context) &&
+           RIME_API_AVAILABLE(api, get_commit) && RIME_API_AVAILABLE(api, free_commit) &&
+           RIME_API_AVAILABLE(api, clear_composition) && RIME_API_AVAILABLE(api, set_option) &&
+           RIME_API_AVAILABLE(api, change_page) && RIME_API_AVAILABLE(api, select_candidate_on_current_page);
+}
+
+int Fail(const char* message, int code)
+{
+    std::cerr << message << '\n';
+    return code;
+}
 }
 
 #ifdef _WIN32
@@ -101,14 +99,14 @@ int main(int argc, char** argv)
         return Fail("failed to create Rime user-data directory", 3);
 
     const RuntimeModule module(argv[1]);
-    RimeApi* api = module.GetApi();
+    RimeApi*            api = module.GetApi();
     if (!HasRequiredApi(api))
     {
         return Fail("native Rime library or required controller API was unavailable", 5);
     }
 
     const std::string sharedData = PathToUtf8(argv[2]);
-    const std::string userData = PathToUtf8(argv[3]);
+    const std::string userData   = PathToUtf8(argv[3]);
     Core::Input::InitializeRimeRuntime(api, sharedData.c_str(), userData.c_str(), "rime.mumain.test", true);
 
     const RimeSessionId session = api->create_session();

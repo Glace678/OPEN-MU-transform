@@ -16,7 +16,7 @@ TEST_CASE("Display maximum stays distinct from the active refresh and follows mo
     CHECK(policy.effectiveFrameRate == doctest::Approx(239.76));
     CHECK_FALSE(settings.verticalSync);
     settings.verticalSync = true;
-    policy = ResolveFramePolicy(settings, {60.0, true}, true, true, {239.76, true});
+    policy                = ResolveFramePolicy(settings, {60.0, true}, true, true, {239.76, true});
     CHECK(policy.effectiveFrameRate == doctest::Approx(60.0));
     CHECK(policy.reason == FrameLimitReason::VerticalSync);
     policy = ResolveFramePolicy(settings, {143.98, true}, true, false, {165.0, true});
@@ -31,11 +31,11 @@ TEST_CASE("Reference movement, interpolation and integer ticks are frame-rate in
     for (int fps : rates)
     {
         ReferenceTickAccumulator accumulator;
-        const float scale = 25.0f / fps;
-        float distance = 0.0f;
-        float blended = 0.0f;
-        float retained = 1.0f;
-        int ticks = 0;
+        const float              scale    = 25.0f / fps;
+        float                    distance = 0.0f;
+        float                    blended  = 0.0f;
+        float                    retained = 1.0f;
+        int                      ticks    = 0;
         for (int frame = 0; frame < fps; ++frame)
         {
             distance += ScaleLinearStep(4.0f, scale);
@@ -107,8 +107,8 @@ TEST_CASE("FrameClock resynchronizes after a stall instead of catch-up rendering
 TEST_CASE("Frame policy reports display, VSync, and background constraints")
 {
     FrameTimingSettings settings;
-    settings.mode = FrameRateMode::FollowDisplay;
-    settings.verticalSync = true;
+    settings.mode                = FrameRateMode::FollowDisplay;
+    settings.verticalSync        = true;
     settings.backgroundFrameRate = 30.0;
 
     const auto foreground = ResolveFramePolicy(settings, {143.98, true}, true, true);
@@ -133,7 +133,7 @@ TEST_CASE("FrameClock has no long-term drift at every supported fixed rate")
         clock.MarkFrameRendered();
 
         const double interval = 1000.0 / rate;
-        const int frames = static_cast<int>(rate * 30.0);
+        const int    frames   = static_cast<int>(rate * 30.0);
         for (int frame = 1; frame <= frames; ++frame)
         {
             clock.UpdateCurrentTime(frame * interval);
@@ -148,9 +148,9 @@ TEST_CASE("FrameClock has no long-term drift at every supported fixed rate")
 TEST_CASE("Frame policy preserves fractional refresh and only lets VSync cap at the display")
 {
     FrameTimingSettings settings;
-    settings.mode = FrameRateMode::Fixed;
+    settings.mode           = FrameRateMode::Fixed;
     settings.fixedFrameRate = 90.0;
-    settings.verticalSync = true;
+    settings.verticalSync   = true;
 
     const auto belowDisplay = ResolveFramePolicy(settings, {143.98, true}, true, true);
     CHECK(belowDisplay.requestedFrameRate == doctest::Approx(90.0));
@@ -161,7 +161,7 @@ TEST_CASE("Frame policy preserves fractional refresh and only lets VSync cap at 
     CHECK(belowDisplay.reason == FrameLimitReason::FrameLimiter);
 
     settings.fixedFrameRate = 60.0;
-    const auto evenCadence = ResolveFramePolicy(settings, {120.0, true}, true, true);
+    const auto evenCadence  = ResolveFramePolicy(settings, {120.0, true}, true, true);
     CHECK_FALSE(HasUnevenVSyncCadence(evenCadence));
 
     settings.fixedFrameRate = 180.0;

@@ -23,62 +23,62 @@
 
 namespace
 {
-constexpr int MAX_BLURS = 100;
-constexpr int MAX_BLUR_TAILS = 30;
+constexpr int MAX_BLURS         = 100;
+constexpr int MAX_BLUR_TAILS    = 30;
 constexpr int MAX_BLUR_LIFETIME = 30;
 
-constexpr int MAX_OBJECT_BLURS = 1000;
-constexpr int MAX_OBJECT_BLUR_TAILS = 600;
+constexpr int MAX_OBJECT_BLURS         = 1000;
+constexpr int MAX_OBJECT_BLUR_TAILS    = 600;
 constexpr int MAX_OBJECT_BLUR_LIFETIME = 30;
 
-constexpr int FLAG_WIDTH = 7;
-constexpr int FLAG_HEIGHT = 10;
-constexpr float FLAG_SCALE = 10.f;
+constexpr int   FLAG_WIDTH  = 7;
+constexpr int   FLAG_HEIGHT = 10;
+constexpr float FLAG_SCALE  = 10.f;
 
 struct Blur
 {
-    bool Live = false;
-    int Type = 0;
-    float LifeTime = 0.f;   // aged in reference frames (fps-independent trail duration)
-    CHARACTER* Owner = nullptr;
-    int Number = 0;
-    vec3_t Light{};
+    bool                               Live     = false;
+    int                                Type     = 0;
+    float                              LifeTime = 0.f;  // aged in reference frames (fps-independent trail duration)
+    CHARACTER*                         Owner    = nullptr;
+    int                                Number   = 0;
+    vec3_t                             Light{};
     std::array<vec3_t, MAX_BLUR_TAILS> P1{};
     std::array<vec3_t, MAX_BLUR_TAILS> P2{};
-    int SubType = 0;
+    int                                SubType = 0;
 };
 
 struct ObjectBlur
 {
-    bool Live = false;
-    int Type = 0;
-    float LifeTime = 0.f;   // aged in reference frames (fps-independent trail duration)
-    OBJECT* Owner = nullptr;
-    int Number = 0;
-    vec3_t Light{};
-    int LimitLifeTime = 0;
+    bool    Live     = false;
+    int     Type     = 0;
+    float   LifeTime = 0.f;  // aged in reference frames (fps-independent trail duration)
+    OBJECT* Owner    = nullptr;
+    int     Number   = 0;
+    vec3_t  Light{};
+    int     LimitLifeTime = 0;
     std::array<vec3_t, MAX_OBJECT_BLUR_TAILS> P1{};
     std::array<vec3_t, MAX_OBJECT_BLUR_TAILS> P2{};
-    int SubType = 0;
+    int                                       SubType = 0;
 };
 
 struct physics_vertex
 {
-    int link_num;
-    int link[4];
-    float link_length[4];
+    int    link_num;
+    int    link[4];
+    float  link_length[4];
     vec3_t p;
     vec3_t v;
     vec3_t f;
     vec3_t uf;
     vec3_t normal;
     float  light;
-    bool collision;
+    bool   collision;
 };
 
 struct physics_face
 {
-    int vlist[4];
+    int    vlist[4];
     vec3_t normal;
 };
 
@@ -87,12 +87,12 @@ struct physics_boundbox
     physics_vertex vtx[8];
 };
 
-std::array<Blur, MAX_BLURS> g_blurs{};
-std::array<ObjectBlur, MAX_OBJECT_BLURS> g_objectBlurs{};
-std::array<physics_vertex, FLAG_HEIGHT * FLAG_WIDTH> g_flagVertices{};
+std::array<Blur, MAX_BLURS>                                    g_blurs{};
+std::array<ObjectBlur, MAX_OBJECT_BLURS>                       g_objectBlurs{};
+std::array<physics_vertex, FLAG_HEIGHT * FLAG_WIDTH>           g_flagVertices{};
 std::array<physics_face, (FLAG_HEIGHT - 1) * (FLAG_WIDTH - 1)> g_flagFaces{};
 
-} // namespace
+}  // namespace
 
 void AddBlur(Blur* b, vec3_t p1, vec3_t p2, vec3_t Light, int Type)
 {
@@ -133,11 +133,11 @@ void CreateBlur(CHARACTER* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Type, 
 
     if (freeBlur != nullptr)
     {
-        freeBlur->Live = true;
-        freeBlur->Owner = Owner;
-        freeBlur->Number = 0;
+        freeBlur->Live     = true;
+        freeBlur->Owner    = Owner;
+        freeBlur->Number   = 0;
         freeBlur->LifeTime = Short ? 15 : MAX_BLUR_LIFETIME;
-        freeBlur->SubType = SubType;
+        freeBlur->SubType  = SubType;
         AddBlur(freeBlur, p1, p2, Light, Type);
     }
 }
@@ -280,7 +280,8 @@ void AddObjectBlur(ObjectBlur* b, vec3_t p1, vec3_t p2, vec3_t Light, int Type)
     b->Number = std::min<int>(b->Number + 1, MAX_OBJECT_BLUR_TAILS - 1);
 }
 
-void CreateObjectBlur(OBJECT* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Type, bool Short, int SubType, int iLimitLifeTime)
+void CreateObjectBlur(OBJECT* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Type, bool Short, int SubType,
+                      int iLimitLifeTime)
 {
     ObjectBlur* freeBlur = nullptr;
     for (auto& blur : g_objectBlurs)
@@ -305,18 +306,18 @@ void CreateObjectBlur(OBJECT* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Typ
 
     if (freeBlur != nullptr)
     {
-        freeBlur->Live = true;
-        freeBlur->Owner = Owner;
+        freeBlur->Live   = true;
+        freeBlur->Owner  = Owner;
         freeBlur->Number = 0;
         if (iLimitLifeTime > -1)
         {
-            freeBlur->LifeTime = iLimitLifeTime;
+            freeBlur->LifeTime      = iLimitLifeTime;
             freeBlur->LimitLifeTime = iLimitLifeTime;
         }
         else
         {
             freeBlur->LimitLifeTime = Short ? 15 : MAX_OBJECT_BLUR_LIFETIME;
-            freeBlur->LifeTime = freeBlur->LimitLifeTime;
+            freeBlur->LifeTime      = freeBlur->LimitLifeTime;
         }
         freeBlur->SubType = SubType;
 
@@ -341,7 +342,7 @@ void MoveObjectBlurs()
         if (blur.LifeTime <= 0.f)
         {
             blur.Number = 0;
-            blur.Live = false;
+            blur.Live   = false;
             continue;
         }
 
@@ -368,7 +369,7 @@ void RenderObjectBlurs()
             continue;
         }
 
-        Type = blur.Type;
+        Type         = blur.Type;
         int nTexture = BITMAP_BLUR + Type;
         if (Type == 3)
         {
@@ -397,8 +398,12 @@ void RenderObjectBlurs()
                 const float Data = 300.f;
                 if (blur.SubType == 113 || blur.SubType == 114)
                 {
-                    if (std::fabs(blur.P1[j][0] - blur.P1[j + 1][0]) > Data || std::fabs(blur.P1[j][1] - blur.P1[j + 1][1]) > Data || std::fabs(blur.P1[j][2] - blur.P1[j + 1][2]) > Data ||
-                        std::fabs(blur.P1[j][0] - blur.P2[j + 1][0]) > Data || std::fabs(blur.P1[j][1] - blur.P2[j + 1][1]) > Data || std::fabs(blur.P1[j][2] - blur.P2[j + 1][2]) > Data)
+                    if (std::fabs(blur.P1[j][0] - blur.P1[j + 1][0]) > Data ||
+                        std::fabs(blur.P1[j][1] - blur.P1[j + 1][1]) > Data ||
+                        std::fabs(blur.P1[j][2] - blur.P1[j + 1][2]) > Data ||
+                        std::fabs(blur.P1[j][0] - blur.P2[j + 1][0]) > Data ||
+                        std::fabs(blur.P1[j][1] - blur.P2[j + 1][1]) > Data ||
+                        std::fabs(blur.P1[j][2] - blur.P2[j + 1][2]) > Data)
                     {
                         continue;
                     }
@@ -406,7 +411,7 @@ void RenderObjectBlurs()
 
                 IR::Begin(GL_TRIANGLE_FAN);
                 float Light = (blur.Number - j) / static_cast<float>(blur.Number);
-                float TexU = (j) / static_cast<float>(blur.Number);
+                float TexU  = (j) / static_cast<float>(blur.Number);
                 IR::Color3f(blur.Light[0] * Light, blur.Light[1] * Light, blur.Light[2] * Light);
                 IR::TexCoord2f(TexU, 1.f);
                 IR::Vertex3fv(blur.P1[j]);
@@ -443,11 +448,11 @@ void RemoveObjectBlurs(OBJECT* Owner, int SubType)
 void CreateSpark(int Type, CHARACTER* tc, vec3_t Position, vec3_t Angle)
 {
     OBJECT* to = &tc->Object;
-    vec3_t Light;
+    vec3_t  Light;
     Vector(1.f, 1.f, 1.f, Light);
     CreateParticle(BITMAP_SPARK + 1, Position, to->Angle, Light);
     vec3_t p, p2;
-    float Matrix[3][4];
+    float  Matrix[3][4];
     Vector(0.f, 50.f, 0.f, p);
     AngleMatrix(Angle, Matrix);
     VectorRotate(p, Matrix, p2);
@@ -480,7 +485,7 @@ void CreateBlood(OBJECT* o)
                 Vector(Random::RangeFloat(-50.f, 50.f), Random::RangeFloat(-50.f, 50.f), 0.f, p);
                 Models[o->Type].TransformPosition(o->BoneTransform[BoneHead], p, Position, true);
                 const float rotation = Random::RangeFloat(0.f, 360.f);
-                const float scale = Random::RangeFloat(0.8f, 1.2f);
+                const float scale    = Random::RangeFloat(0.8f, 1.2f);
                 CreatePointer(BITMAP_BLOOD, Position, rotation, o->Light, scale);
             }
         }
@@ -488,11 +493,11 @@ void CreateBlood(OBJECT* o)
 }
 
 vec3_t Gravity;
-float Damping = 0.04f;
-float Ks = 5.f; //hook's spring
-float Kd = 0.1f; //spring dumping
-float Kr = 0.8f;
-float DeltaTime = 0.1f;
+float  Damping   = 0.04f;
+float  Ks        = 5.f;   //hook's spring
+float  Kd        = 0.1f;  //spring dumping
+float  Kr        = 0.8f;
+float  DeltaTime = 0.1f;
 
 void CreateFlag()
 {
@@ -500,11 +505,11 @@ void CreateFlag()
     {
         for (int j = 0; j < FLAG_WIDTH; j++)
         {
-            int index = i * FLAG_WIDTH + j;
-            physics_vertex* v = &g_flagVertices[index];
-            v->p[0] = -(float)i * FLAG_SCALE;
-            v->p[1] = 0.f;
-            v->p[2] = (float)j * FLAG_SCALE;
+            int             index = i * FLAG_WIDTH + j;
+            physics_vertex* v     = &g_flagVertices[index];
+            v->p[0]               = -(float)i * FLAG_SCALE;
+            v->p[1]               = 0.f;
+            v->p[2]               = (float)j * FLAG_SCALE;
             if (i == 0)
             {
                 if (j == 0)
@@ -520,10 +525,26 @@ void CreateFlag()
                 v->p[1] += 10.f;
             }
             v->link_num = 0;
-            if (j - 1 >= 0) { v->link[v->link_num] = (i)*FLAG_WIDTH + (j - 1); v->link_num++; }
-            if (j + 1 <= FLAG_WIDTH - 1) { v->link[v->link_num] = (i)*FLAG_WIDTH + (j + 1); v->link_num++; }
-            if (i - 1 >= 0) { v->link[v->link_num] = (i - 1) * FLAG_WIDTH + (j); v->link_num++; }
-            if (i + 1 <= FLAG_HEIGHT - 1) { v->link[v->link_num] = (i + 1) * FLAG_WIDTH + (j); v->link_num++; }
+            if (j - 1 >= 0)
+            {
+                v->link[v->link_num] = (i)*FLAG_WIDTH + (j - 1);
+                v->link_num++;
+            }
+            if (j + 1 <= FLAG_WIDTH - 1)
+            {
+                v->link[v->link_num] = (i)*FLAG_WIDTH + (j + 1);
+                v->link_num++;
+            }
+            if (i - 1 >= 0)
+            {
+                v->link[v->link_num] = (i - 1) * FLAG_WIDTH + (j);
+                v->link_num++;
+            }
+            if (i + 1 <= FLAG_HEIGHT - 1)
+            {
+                v->link[v->link_num] = (i + 1) * FLAG_WIDTH + (j);
+                v->link_num++;
+            }
         }
     }
 
@@ -531,17 +552,17 @@ void CreateFlag()
     {
         for (int j = 0; j < FLAG_WIDTH - 1; j++)
         {
-            physics_face* f = &g_flagFaces[i * (FLAG_WIDTH - 1) + j];
-            int index = i * FLAG_WIDTH + j;
-            f->vlist[0] = index;
-            f->vlist[1] = index + FLAG_WIDTH;
-            f->vlist[2] = index + FLAG_WIDTH + 1;
-            f->vlist[3] = index + 1;
+            physics_face* f     = &g_flagFaces[i * (FLAG_WIDTH - 1) + j];
+            int           index = i * FLAG_WIDTH + j;
+            f->vlist[0]         = index;
+            f->vlist[1]         = index + FLAG_WIDTH;
+            f->vlist[2]         = index + FLAG_WIDTH + 1;
+            f->vlist[3]         = index + 1;
         }
     }
 }
 
-bool InitFlag = false;
+bool InitFlag   = false;
 int  wind_frame = 0;
 
 void AnimationFlag()
@@ -561,8 +582,8 @@ void AnimationFlag()
     {
         for (int j = 0; j < FLAG_WIDTH; ++j)
         {
-            int index = i * FLAG_WIDTH + j;
-            physics_vertex* v = &g_flagVertices[index];
+            int             index = i * FLAG_WIDTH + j;
+            physics_vertex* v     = &g_flagVertices[index];
 
             v->f[0] = 0.f;
             v->f[1] = 0.f;
@@ -576,8 +597,8 @@ void AnimationFlag()
             {
                 if (wind_frame % 128 < 64)
                 {
-                    v->f[1] += 1.f;//-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
-                    v->f[0] -= 1.f;//-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
+                    v->f[1] += 1.f;  //-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
+                    v->f[0] -= 1.f;  //-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
                 }
             }
             if (i == 9)
@@ -595,7 +616,7 @@ void AnimationFlag()
 
                 vec3_t DeltaP;
                 VectorSubtract(v1->p, v2->p, DeltaP);
-                float dist = VectorLength(DeltaP);
+                float dist  = VectorLength(DeltaP);
                 float Hterm = (dist - FLAG_SCALE) * Ks;
 
                 vec3_t DeltaV;
@@ -618,8 +639,8 @@ void AnimationFlag()
     {
         for (int j = 0; j < FLAG_WIDTH; j++)
         {
-            int index = i * FLAG_WIDTH + j;
-            physics_vertex* v = &g_flagVertices[index];
+            int             index = i * FLAG_WIDTH + j;
+            physics_vertex* v     = &g_flagVertices[index];
             VectorMA(v->v, DeltaTime, v->f, v->v);
             VectorMA(v->p, DeltaTime, v->v, v->p);
         }
@@ -628,7 +649,7 @@ void AnimationFlag()
 
 void RenderFlagFace(OBJECT* o, int x, int y, vec3_t Light, int Tex1, int Tex2)
 {
-    int n = 4;
+    int   n  = 4;
     float su = (float)x / 6.f;
     float sv = (float)y / 9.f;
     float TexCoord[4][2];
@@ -641,22 +662,22 @@ void RenderFlagFace(OBJECT* o, int x, int y, vec3_t Light, int Tex1, int Tex2)
     TexCoord[3][0] = su + 1.f / 6.f;
     TexCoord[3][1] = sv;
 
-    float minz = 65536.f; //louis
-    physics_face* f = &g_flagFaces[y * (FLAG_WIDTH - 1) + x];
+    float         minz = 65536.f;  //louis
+    physics_face* f    = &g_flagFaces[y * (FLAG_WIDTH - 1) + x];
 
     for (int i = 0; i < n; i++)
     {
-        int vlist = f->vlist[i];
-        physics_vertex* v = &g_flagVertices[vlist];
-        v->light = (-v->normal[0] + v->normal[1]) * 0.5f + 0.5f;
+        int             vlist = f->vlist[i];
+        physics_vertex* v     = &g_flagVertices[vlist];
+        v->light              = (-v->normal[0] + v->normal[1]) * 0.5f + 0.5f;
     }
 
     BindTexture(Tex2);
     IR::Begin(GL_QUADS);
     for (int i = 0; i < n; i++)
     {
-        int vlist = f->vlist[i];
-        physics_vertex* v = &g_flagVertices[vlist];
+        int             vlist = f->vlist[i];
+        physics_vertex* v     = &g_flagVertices[vlist];
         IR::TexCoord2f(TexCoord[i][0], TexCoord[i][1]);
         IR::Color3f(Light[0] * v->light, Light[1] * v->light, Light[2] * v->light);
         vec3_t p, Position;
@@ -670,8 +691,8 @@ void RenderFlagFace(OBJECT* o, int x, int y, vec3_t Light, int Tex1, int Tex2)
     IR::Begin(GL_QUADS);
     for (int i = n - 1; i >= 0; i--)
     {
-        int vlist = f->vlist[i];
-        physics_vertex* v = &g_flagVertices[vlist];
+        int             vlist = f->vlist[i];
+        physics_vertex* v     = &g_flagVertices[vlist];
         IR::TexCoord2f(TexCoord[i][0], TexCoord[i][1]);
         IR::Color3f(Light[0] * v->light, Light[1] * v->light, Light[2] * v->light);
         vec3_t p, Position;
@@ -689,18 +710,16 @@ void RenderFlag(OBJECT* o, vec3_t Light, int Tex1, int Tex2)
         for (int x = 0; x < FLAG_WIDTH - 1; x++)
         {
             physics_face* f = &g_flagFaces[y * (FLAG_WIDTH - 1) + x];
-            FaceNormalize(g_flagVertices[f->vlist[0]].p,
-                g_flagVertices[f->vlist[1]].p,
-                g_flagVertices[f->vlist[2]].p,
-                f->normal);
+            FaceNormalize(g_flagVertices[f->vlist[0]].p, g_flagVertices[f->vlist[1]].p, g_flagVertices[f->vlist[2]].p,
+                          f->normal);
         }
     }
     for (int y = 0; y < FLAG_HEIGHT; y++)
     {
         for (int x = 0; x < FLAG_WIDTH; x++)
         {
-            physics_vertex* v = &g_flagVertices[y * FLAG_WIDTH + x];
-            float num = 0.f;
+            physics_vertex* v   = &g_flagVertices[y * FLAG_WIDTH + x];
+            float           num = 0.f;
             if (y < FLAG_HEIGHT - 1 && x < FLAG_WIDTH - 1)
             {
                 VectorCopy(g_flagFaces[y * (FLAG_WIDTH - 1) + x].normal, v->normal);

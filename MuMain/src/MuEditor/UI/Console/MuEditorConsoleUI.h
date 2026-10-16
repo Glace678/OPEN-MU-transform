@@ -15,14 +15,14 @@ public:
     ~ConsoleStreamBuf();
 
 protected:
-    virtual int_type overflow(int_type c) override;
+    virtual int_type        overflow(int_type c) override;
     virtual std::streamsize xsputn(const char* s, std::streamsize n) override;
 
 private:
-    std::ostream& m_stream;
+    std::ostream&   m_stream;
     std::streambuf* m_oldBuf;
-    std::string m_buffer;
-    bool m_isStdout;
+    std::string     m_buffer;
+    bool            m_isStdout;
 };
 
 class CMuEditorConsoleUI
@@ -49,12 +49,12 @@ private:
     ~CMuEditorConsoleUI();
 
     void WriteToLogFile(const std::string& message);
-    void CleanupOldLogs(); // Delete log files older than 14 days
+    void CleanupOldLogs();  // Delete log files older than 14 days
 
-    std::string m_strEditorConsole;
-    std::string m_strGameConsole;
+    std::string   m_strEditorConsole;
+    std::string   m_strGameConsole;
     std::ofstream m_logFile;
-    std::string m_strLogFilePath;
+    std::string   m_strLogFilePath;
 
     // Stream redirection
     ConsoleStreamBuf* m_pStdoutBuf;
@@ -63,4 +63,4 @@ private:
 
 #define g_MuEditorConsoleUI CMuEditorConsoleUI::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

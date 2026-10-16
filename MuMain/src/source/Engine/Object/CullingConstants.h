@@ -12,5 +12,5 @@
 // large item models (weapons, armor sets) extend further than 100 from their
 // centre, so a tighter radius caused them to flicker at the edge of view as
 // the centre point exited the frustum before the geometry did.
-constexpr float DEFAULT_CULL_RADIUS_ITEM = 400.0f;
+constexpr float DEFAULT_CULL_RADIUS_ITEM   = 400.0f;
 constexpr float DEFAULT_CULL_RADIUS_OBJECT = 100.0f;  // Unified radius for all objects

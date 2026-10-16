@@ -22,19 +22,19 @@ enum class LineColor : uint8_t
 {
     White,
     Blue,
-    Red,        // plain red text (unmet requirement lines, "(lacking N)" deficits)
-    DarkRed,    // white text on a red background (warnings, siege badge, brand info)
+    Red,      // plain red text (unmet requirement lines, "(lacking N)" deficits)
+    DarkRed,  // white text on a red background (warnings, siege badge, brand info)
 };
 
 constexpr int MAX_TOOLTIP_LINE_TEXT = 128;
-constexpr int MAX_TOOLTIP_LINES = 50;
+constexpr int MAX_TOOLTIP_LINES     = 50;
 
 struct Line
 {
-    wchar_t text[MAX_TOOLTIP_LINE_TEXT];
+    wchar_t   text[MAX_TOOLTIP_LINE_TEXT];
     LineColor color;
-    bool isBold;
-    bool isBlank;   // emit a blank "\n" line for vertical spacing
+    bool      isBold;
+    bool      isBlank;  // emit a blank "\n" line for vertical spacing
 };
 
 // Fixed-capacity buffer. `count` lines are valid. `skipCount` mirrors the
@@ -43,12 +43,12 @@ struct Line
 struct Model
 {
     Line lines[MAX_TOOLTIP_LINES];
-    int count;
-    int skipCount;
+    int  count;
+    int  skipCount;
 
     void Reset()
     {
-        count = 0;
+        count     = 0;
         skipCount = 0;
     }
 };
@@ -60,8 +60,8 @@ struct Model
 // warnings, etc.).
 struct BuildOptions
 {
-    int skillType;                // Resolved skill enum (e.g. AT_SKILL_FIRE_BALL)
-    int skillSlotIndex;           // Hero's action-bar slot, or -1 in editor
+    int  skillType;       // Resolved skill enum (e.g. AT_SKILL_FIRE_BALL)
+    int  skillSlotIndex;  // Hero's action-bar slot, or -1 in editor
     bool includeCharacterSpecific;
 };
 

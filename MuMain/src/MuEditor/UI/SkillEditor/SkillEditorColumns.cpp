@@ -31,11 +31,8 @@ static std::string GetSkillNameUtf8(int skillIndex)
 
 static void LogSkillFieldChange(int skillIndex, const char* columnName, const std::string& newValue)
 {
-    g_MuEditorConsoleUI.LogEditor(
-        "Changed skill " + std::to_string(skillIndex) +
-        " (" + GetSkillNameUtf8(skillIndex) + ") " +
-        columnName + " to " + newValue
-    );
+    g_MuEditorConsoleUI.LogEditor("Changed skill " + std::to_string(skillIndex) + " (" + GetSkillNameUtf8(skillIndex) +
+                                  ") " + columnName + " to " + newValue);
 }
 
 // ===== X-MACRO-DRIVEN RENDERING =====
@@ -49,11 +46,11 @@ void CSkillEditorColumns::RenderFieldByDescriptor(const SkillFieldDescriptor& de
 
 // ===== LOW-LEVEL TYPE-SPECIFIC RENDERING =====
 
-void CSkillEditorColumns::RenderByteColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    BYTE& value, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderByteColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
+                                           BYTE& value, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
@@ -69,15 +66,16 @@ void CSkillEditorColumns::RenderByteColumn(
         }
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-void CSkillEditorColumns::RenderWordColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    WORD& value, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderWordColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
+                                           WORD& value, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
@@ -93,15 +91,16 @@ void CSkillEditorColumns::RenderWordColumn(
         }
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-void CSkillEditorColumns::RenderIntColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    int& value, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderIntColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId, int& value,
+                                          bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
@@ -112,15 +111,16 @@ void CSkillEditorColumns::RenderIntColumn(
         LogSkillFieldChange(skillIndex, columnName, std::to_string(value));
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-void CSkillEditorColumns::RenderDWordColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    DWORD& value, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderDWordColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
+                                            DWORD& value, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
@@ -132,15 +132,16 @@ void CSkillEditorColumns::RenderDWordColumn(
         LogSkillFieldChange(skillIndex, columnName, std::to_string(value));
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-void CSkillEditorColumns::RenderBoolColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    bool& value, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderBoolColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
+                                           bool& value, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
@@ -151,21 +152,22 @@ void CSkillEditorColumns::RenderBoolColumn(
         LogSkillFieldChange(skillIndex, columnName, value ? "true" : "false");
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-void CSkillEditorColumns::RenderWCharArrayColumn(
-    const char* columnName, int& colIdx, int skillIndex, int uniqueId,
-    wchar_t* value, int arraySize, bool& rowInteracted, bool isVisible)
+void CSkillEditorColumns::RenderWCharArrayColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
+                                                 wchar_t* value, int arraySize, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    char editableBuffer[256]{};
+    char editableBuffer[256];
     WideCharToMultiByte(CP_UTF8, 0, value, -1, editableBuffer, sizeof(editableBuffer), NULL, NULL);
 
     if (ImGui::InputText("##input", editableBuffer, sizeof(editableBuffer)))
@@ -174,7 +176,8 @@ void CSkillEditorColumns::RenderWCharArrayColumn(
         LogSkillFieldChange(skillIndex, columnName, std::string(editableBuffer));
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
@@ -182,8 +185,8 @@ void CSkillEditorColumns::RenderWCharArrayColumn(
 
 void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible) return;
-    if (!SkillAttribute) return;
+    if (!isVisible)
+        return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + 999999);
@@ -193,21 +196,22 @@ void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& r
     ImGui::InputInt("##index", &newIndex, 0, 0);
 
     // Only process the change when the input is deactivated (Enter pressed or focus lost)
-    bool wasActive = ImGui::IsItemActive();
+    bool wasActive      = ImGui::IsItemActive();
     bool wasDeactivated = ImGui::IsItemDeactivatedAfterEdit();
 
     if (wasDeactivated && newIndex >= 0 && newIndex < MAX_SKILLS && newIndex != skillIndex)
     {
-        char targetName[128]{};
+        char targetName[128];
         WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[newIndex].Name, -1, targetName, sizeof(targetName), NULL, NULL);
 
         if (targetName[0] == '\0')
         {
-            SKILL_ATTRIBUTE temp = SkillAttribute[skillIndex];
+            SKILL_ATTRIBUTE temp       = SkillAttribute[skillIndex];
             SkillAttribute[skillIndex] = SkillAttribute[newIndex];
-            SkillAttribute[newIndex] = temp;
+            SkillAttribute[newIndex]   = temp;
 
-            g_MuEditorConsoleUI.LogEditor("Moved skill from index " + std::to_string(skillIndex) + " to " + std::to_string(newIndex));
+            g_MuEditorConsoleUI.LogEditor("Moved skill from index " + std::to_string(skillIndex) + " to " +
+                                          std::to_string(newIndex));
 
             m_errorLogged = false;
 
@@ -222,9 +226,7 @@ void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& r
         }
         else if (!m_errorLogged)
         {
-            std::string errorMsg = I18N::Format(I18N::Editor::ErrorIndex0AlreadyInUse, {
-                std::to_string(newIndex)
-            });
+            std::string errorMsg = I18N::Format(I18N::Editor::ErrorIndex0AlreadyInUse, {std::to_string(newIndex)});
             g_MuEditorConsoleUI.LogEditor(errorMsg);
             m_errorLogged = true;
         }
@@ -235,13 +237,14 @@ void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& r
     {
         if (m_lastEditedIndex != skillIndex)
         {
-            m_errorLogged = false;
+            m_errorLogged     = false;
             m_lastEditedIndex = skillIndex;
         }
     }
 
-    if (ImGui::IsItemActivated()) rowInteracted = true;
+    if (ImGui::IsItemActivated())
+        rowInteracted = true;
     ImGui::PopID();
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

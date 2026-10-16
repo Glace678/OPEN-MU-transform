@@ -21,24 +21,23 @@ enum class EFieldType
 };
 
 // Helper macros to convert type enum to actual C++ types
-#define FIELD_TYPE_Bool bool
-#define FIELD_TYPE_Byte BYTE
-#define FIELD_TYPE_Word WORD
-#define FIELD_TYPE_Int int
+#define FIELD_TYPE_Bool  bool
+#define FIELD_TYPE_Byte  BYTE
+#define FIELD_TYPE_Word  WORD
+#define FIELD_TYPE_Int   int
 #define FIELD_TYPE_DWord DWORD
 
 // ============================================================================
 // GENERIC FIELD DESCRIPTOR
 // ============================================================================
 
-template<typename TStruct>
-struct FieldDescriptor
+template <typename TStruct> struct FieldDescriptor
 {
-    const char* name;                  // raw C++ field name (used for CSV headers, debug)
-    const char* const* displayName;    // points to an I18N::Metadata::* extern pointer
-    EFieldType type;
-    size_t offset;
-    float width;
+    const char*        name;         // raw C++ field name (used for CSV headers, debug)
+    const char* const* displayName;  // points to an I18N::Metadata::* extern pointer
+    EFieldType         type;
+    size_t             offset;
+    float              width;
 };
 
 // ============================================================================
@@ -47,8 +46,7 @@ struct FieldDescriptor
 
 // Get translated field name. The displayName slot follows the active locale
 // because it points at one of the I18N::Metadata::* runtime pointers.
-template<typename TStruct>
-inline const char* GetFieldDisplayName(const FieldDescriptor<TStruct>& desc)
+template <typename TStruct> inline const char* GetFieldDisplayName(const FieldDescriptor<TStruct>& desc)
 {
     return *desc.displayName;
 }
@@ -61,55 +59,49 @@ inline const char* GetFieldDisplayName(const FieldDescriptor<TStruct>& desc)
 //                        RenderIntColumn, RenderDWordColumn, RenderWCharArrayColumn
 // TStruct is the data structure type (e.g., ITEM_ATTRIBUTE, SKILL_ATTRIBUTE)
 
-template<typename TColumns, typename TStruct>
-inline void RenderFieldByDescriptor(
-    const FieldDescriptor<TStruct>& desc,
-    TColumns* cols,
-    TStruct& data,
-    int& colIdx,
-    int dataIndex,
-    bool& rowInteracted,
-    bool isVisible,
-    int maxStringLength)
+template <typename TColumns, typename TStruct>
+inline void RenderFieldByDescriptor(const FieldDescriptor<TStruct>& desc, TColumns* cols, TStruct& data, int& colIdx,
+                                    int dataIndex, bool& rowInteracted, bool isVisible, int maxStringLength)
 {
-    if (!isVisible) return;
+    if (!isVisible)
+        return;
 
-    BYTE* dataPtr = reinterpret_cast<BYTE*>(&data);
-    void* fieldPtr = dataPtr + desc.offset;
+    BYTE*       dataPtr     = reinterpret_cast<BYTE*>(&data);
+    void*       fieldPtr    = dataPtr + desc.offset;
     const char* displayName = GetFieldDisplayName(desc);
 
     // Generate unique ID for ImGui
     int uniqueId = 0;
-    for (const char* p = desc.name; *p; ++p) uniqueId = (uniqueId * 31) + *p;
+    for (const char* p = desc.name; *p; ++p)
+        uniqueId = (uniqueId * 31) + *p;
 
     switch (desc.type)
     {
-    case EFieldType::Bool:
-        cols->RenderBoolColumn(displayName, colIdx, dataIndex, uniqueId,
-                               *reinterpret_cast<bool*>(fieldPtr), rowInteracted, isVisible);
-        break;
-    case EFieldType::Byte:
-        cols->RenderByteColumn(displayName, colIdx, dataIndex, uniqueId,
-                               *reinterpret_cast<BYTE*>(fieldPtr), rowInteracted, isVisible);
-        break;
-    case EFieldType::Word:
-        cols->RenderWordColumn(displayName, colIdx, dataIndex, uniqueId,
-                               *reinterpret_cast<WORD*>(fieldPtr), rowInteracted, isVisible);
-        break;
-    case EFieldType::Int:
-        cols->RenderIntColumn(displayName, colIdx, dataIndex, uniqueId,
-                              *reinterpret_cast<int*>(fieldPtr), rowInteracted, isVisible);
-        break;
-    case EFieldType::DWord:
-        cols->RenderDWordColumn(displayName, colIdx, dataIndex, uniqueId,
-                                *reinterpret_cast<DWORD*>(fieldPtr), rowInteracted, isVisible);
-        break;
-    case EFieldType::WCharArray:
-        cols->RenderWCharArrayColumn(displayName, colIdx, dataIndex, uniqueId,
-                                     reinterpret_cast<wchar_t*>(fieldPtr), maxStringLength,
-                                     rowInteracted, isVisible);
-        break;
+        case EFieldType::Bool:
+            cols->RenderBoolColumn(displayName, colIdx, dataIndex, uniqueId, *reinterpret_cast<bool*>(fieldPtr),
+                                   rowInteracted, isVisible);
+            break;
+        case EFieldType::Byte:
+            cols->RenderByteColumn(displayName, colIdx, dataIndex, uniqueId, *reinterpret_cast<BYTE*>(fieldPtr),
+                                   rowInteracted, isVisible);
+            break;
+        case EFieldType::Word:
+            cols->RenderWordColumn(displayName, colIdx, dataIndex, uniqueId, *reinterpret_cast<WORD*>(fieldPtr),
+                                   rowInteracted, isVisible);
+            break;
+        case EFieldType::Int:
+            cols->RenderIntColumn(displayName, colIdx, dataIndex, uniqueId, *reinterpret_cast<int*>(fieldPtr),
+                                  rowInteracted, isVisible);
+            break;
+        case EFieldType::DWord:
+            cols->RenderDWordColumn(displayName, colIdx, dataIndex, uniqueId, *reinterpret_cast<DWORD*>(fieldPtr),
+                                    rowInteracted, isVisible);
+            break;
+        case EFieldType::WCharArray:
+            cols->RenderWCharArrayColumn(displayName, colIdx, dataIndex, uniqueId, reinterpret_cast<wchar_t*>(fieldPtr),
+                                         maxStringLength, rowInteracted, isVisible);
+            break;
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

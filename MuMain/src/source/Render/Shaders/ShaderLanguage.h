@@ -6,7 +6,7 @@
 // applies to both.
 #if defined(__ANDROID__) || defined(__OHOS__)
 #define MU_GLSL_SOURCE_PREFIX \
-    "#version 300 es\n"       \
+    "#version 300 es\n" \
     "precision highp float;\n" \
     "precision highp int;\n"
 #else

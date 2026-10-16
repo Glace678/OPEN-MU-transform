@@ -6,15 +6,15 @@ using namespace Render::Terrain::LightRows;
 
 namespace
 {
-    // The tracker is a file-scope singleton shared by every case, so each case starts by
-    // draining both buffers rather than assuming it runs first.
-    void ResetTracker()
+// The tracker is a file-scope singleton shared by every case, so each case starts by
+// draining both buffers rather than assuming it runs first.
+void ResetTracker()
+{
+    for (int buffer = 0; buffer < BufferCount; buffer++)
     {
-        for (int buffer = 0; buffer < BufferCount; buffer++)
-        {
-            ClearRuns(buffer);
-        }
+        ClearRuns(buffer);
     }
+}
 }
 
 TEST_CASE("terrain light rows: nothing is dirty until something marks it")
@@ -112,7 +112,7 @@ TEST_CASE("terrain light rows: worst-case fragmentation fits in MaxRuns")
         MarkRange(row, row);
     }
 
-    Run runs[MaxRuns];
+    Run       runs[MaxRuns];
     const int runCount = CollectRuns(0, runs, MaxRuns);
     CHECK(runCount == RowCount / 2);
     CHECK(runCount <= MaxRuns);

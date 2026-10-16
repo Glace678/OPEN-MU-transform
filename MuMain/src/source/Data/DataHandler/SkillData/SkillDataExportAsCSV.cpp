@@ -16,20 +16,23 @@
 extern SKILL_ATTRIBUTE* SkillAttribute;
 
 // X-Macro helpers for CSV generation
-#define CSV_HEADER_SIMPLE(name, type, arraySize, width, i18nName) "," #name
+#define CSV_HEADER_SIMPLE(name, type, arraySize, width, i18nName)               "," #name
 #define CSV_HEADER_ARRAY(nameWithIndex, baseName, index, type, width, i18nName) "," #nameWithIndex
 
 // Complete CSV header with Index and Name
-#define CSV_FULL_HEADER "Index,Name" SKILL_FIELDS_SIMPLE(CSV_HEADER_SIMPLE) SKILL_FIELDS_ARRAYS(CSV_HEADER_ARRAY) SKILL_FIELDS_AFTER_ARRAYS(CSV_HEADER_SIMPLE)
+#define CSV_FULL_HEADER \
+    "Index,Name" SKILL_FIELDS_SIMPLE(CSV_HEADER_SIMPLE) SKILL_FIELDS_ARRAYS(CSV_HEADER_ARRAY) \
+        SKILL_FIELDS_AFTER_ARRAYS(CSV_HEADER_SIMPLE)
 
 // Helper to print field values
-#define PRINT_FIELD_Byte(skill, name) fprintf(csvFp, ",%d", (skill).name)
-#define PRINT_FIELD_Word(skill, name) fprintf(csvFp, ",%d", (skill).name)
-#define PRINT_FIELD_Int(skill, name) fprintf(csvFp, ",%d", (skill).name)
+#define PRINT_FIELD_Byte(skill, name)  fprintf(csvFp, ",%d", (skill).name)
+#define PRINT_FIELD_Word(skill, name)  fprintf(csvFp, ",%d", (skill).name)
+#define PRINT_FIELD_Int(skill, name)   fprintf(csvFp, ",%d", (skill).name)
 #define PRINT_FIELD_DWord(skill, name) fprintf(csvFp, ",%u", (skill).name)
 
 #define CSV_PRINT_SIMPLE(name, type, arraySize, width, i18nName) PRINT_FIELD_##type(skill, name);
-#define CSV_PRINT_ARRAY(nameWithIndex, baseName, index, type, width, i18nName) fprintf(csvFp, ",%d", skill.baseName[index]);
+#define CSV_PRINT_ARRAY(nameWithIndex, baseName, index, type, width, i18nName) \
+    fprintf(csvFp, ",%d", skill.baseName[index]);
 
 bool SkillDataExportAsCSV::ExportToCsv(wchar_t* fileName)
 {
@@ -57,7 +60,7 @@ bool SkillDataExportAsCSV::ExportToCsv(wchar_t* fileName)
 
             // Escape quotes in name
             std::string escapedName;
-            escapedName.reserve(utf8Name.length() * 2); // Reserve space for worst case
+            escapedName.reserve(utf8Name.length() * 2);  // Reserve space for worst case
             for (char c : utf8Name)
             {
                 if (c == '"')
@@ -92,4 +95,4 @@ bool SkillDataExportAsCSV::ExportToCsv(wchar_t* fileName)
     return true;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

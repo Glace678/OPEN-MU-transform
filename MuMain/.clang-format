@@ -26,8 +26,7 @@ ContinuationIndentWidth: 4
 AccessModifierOffset: -4
 NamespaceIndentation: None
 IndentCaseLabels: true
-IndentPPDirectives: BeforeHash
-PPIndentWidth: 4
+IndentPPDirectives: None
 # Keep the legacy tab-aligned declarations that tables rely on.
 
 # Braces: Allman (opening brace on its own line)
@@ -38,7 +37,7 @@ BraceWrapping:
   AfterStruct: true
   AfterUnion: true
   AfterClass: true
-  AfterNamespace: false
+  AfterNamespace: true
   BeforeElse: true
   BeforeCatch: true
   BeforeWhile: false
@@ -49,6 +48,9 @@ BraceWrapping:
 
 # Line width
 ColumnLimit: 120
+# Keep long log/format/string literals on one line: splitting them would create noisy
+# adjacent-literal diffs and risks escape sequences in legacy/UTF-16 strings.
+BreakStringLiterals: false
 
 # Pointers / references attach to the type (char* name)
 PointerAlignment: Left

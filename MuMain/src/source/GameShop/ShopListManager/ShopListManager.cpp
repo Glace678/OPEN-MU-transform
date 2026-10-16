@@ -12,7 +12,7 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "ShopListManager.h"
 
-CShopListManager::CShopListManager() // OK
+CShopListManager::CShopListManager()  // OK
 {
     this->m_ShopList = new CShopList;
 
@@ -23,12 +23,12 @@ CShopListManager::CShopListManager() // OK
     //setlocale(0,"Koraen");
 }
 
-CShopListManager::~CShopListManager() // OK
+CShopListManager::~CShopListManager()  // OK
 {
     SafeDelete(m_ShopList);
 }
 
-WZResult		CShopListManager::LoadScript(bool bDonwLoad) // OK
+WZResult CShopListManager::LoadScript(bool bDonwLoad)  // OK
 {
     if (this->m_ShopList)
     {

@@ -15,8 +15,8 @@
 
 struct ItemCreationParams
 {
-    int Group;
-    int Number;
+    int  Group;
+    int  Number;
     BYTE Level;
     BYTE Durability;
     bool WithLuck;
@@ -50,40 +50,42 @@ ItemCreationParams ParseItemData(std::span<const BYTE> itemData);
 
 namespace SEASON3B
 {
-    class CNewUIItemMng
-    {
-        typedef std::list<ITEM*>	type_list_item;
+class CNewUIItemMng
+{
+    typedef std::list<ITEM*> type_list_item;
 
-        type_list_item	m_listItem;
-        DWORD	m_dwAlternate, m_dwAvailableKeyStream;
-        CTimer2 m_UpdateTimer;
+    type_list_item m_listItem;
+    DWORD          m_dwAlternate, m_dwAvailableKeyStream;
+    CTimer2        m_UpdateTimer;
 
-    public:
-        CNewUIItemMng();
-        virtual ~CNewUIItemMng();
+public:
+    CNewUIItemMng();
+    virtual ~CNewUIItemMng();
 
-        ITEM* CreateItem(std::span<const BYTE> itemData);
-        ITEM* CreateItemOld(std::span<const BYTE> pbyItemPacket);
-        ITEM* CreateItemExtended(std::span<const BYTE> itemData);
-        ITEM* CreateItem(BYTE byType, BYTE bySubType, BYTE byLevel = 0, BYTE byDurability = 255, BYTE byOption1 = 0, BYTE ancientByte = 0, BYTE byOption380 = 0, BYTE byOptionHarmony = 0, BYTE* pbySocketOptions = NULL);	//. create instance
-        ITEM* CreateItemByParameters(const ItemCreationParams* parameters);
-        ITEM* CreateItem(ITEM* pItem);		//. refer to the instance already existed
-        ITEM* DuplicateItem(ITEM* pItem);	//. create instance
-        void DeleteItem(ITEM* pItem);
-        void DeleteDuplicatedItem(ITEM* pItem);
-        void DeleteAllItems();
+    ITEM* CreateItem(std::span<const BYTE> itemData);
+    ITEM* CreateItemOld(std::span<const BYTE> pbyItemPacket);
+    ITEM* CreateItemExtended(std::span<const BYTE> itemData);
+    ITEM* CreateItem(BYTE byType, BYTE bySubType, BYTE byLevel = 0, BYTE byDurability = 255, BYTE byOption1 = 0,
+                     BYTE ancientByte = 0, BYTE byOption380 = 0, BYTE byOptionHarmony = 0,
+                     BYTE* pbySocketOptions = NULL);  //. create instance
+    ITEM* CreateItemByParameters(const ItemCreationParams* parameters);
+    ITEM* CreateItem(ITEM* pItem);     //. refer to the instance already existed
+    ITEM* DuplicateItem(ITEM* pItem);  //. create instance
+    void  DeleteItem(ITEM* pItem);
+    void  DeleteDuplicatedItem(ITEM* pItem);
+    void  DeleteAllItems();
 
-        bool IsEmpty();
+    bool IsEmpty();
 
-        void Update();
+    void Update();
 
-    protected:
-        DWORD GenerateItemKey();
-        DWORD FindAvailableKeyIndex(DWORD dwSeed);
+protected:
+    DWORD GenerateItemKey();
+    DWORD FindAvailableKeyIndex(DWORD dwSeed);
 
-        WORD ExtractItemType(std::span<const BYTE> pbyItemPacket);
-        void SetItemAttr(ITEM* pItem, BYTE byLevel, BYTE byOption1, BYTE ancientDiscriminator);
-    };
+    WORD ExtractItemType(std::span<const BYTE> pbyItemPacket);
+    void SetItemAttr(ITEM* pItem, BYTE byLevel, BYTE byOption1, BYTE ancientDiscriminator);
+};
 }
 
-#endif // !defined(AFX_NEWUIITEMMNG_H__FAF3ACC1_45A1_4912_9EB6_E3635B4130B0__INCLUDED_)
+#endif  // !defined(AFX_NEWUIITEMMNG_H__FAF3ACC1_45A1_4912_9EB6_E3635B4130B0__INCLUDED_)

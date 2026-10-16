@@ -2,8 +2,10 @@
 #include <atomic>
 #include <thread>
 
-class SpinLock {
+class SpinLock
+{
     std::atomic_flag locked = ATOMIC_FLAG_INIT;
+
 public:
     void lock()
     {
@@ -12,8 +14,5 @@ public:
         }
     }
 
-    void unlock()
-    {
-        locked.clear(std::memory_order_release);
-    }
+    void unlock() { locked.clear(std::memory_order_release); }
 };

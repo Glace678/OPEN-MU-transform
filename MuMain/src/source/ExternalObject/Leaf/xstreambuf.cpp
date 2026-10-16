@@ -9,9 +9,9 @@ using namespace leaf;
 void xstreambuf::init()
 {
     m_pBuffer = NULL;
-    m_offset = 0;
+    m_offset  = 0;
     m_size = m_capacity = 0;
-    m_chunksize = 0;
+    m_chunksize         = 0;
 }
 
 xstreambuf::xstreambuf()
@@ -35,10 +35,12 @@ xstreambuf::~xstreambuf()
 
 void xstreambuf::seek(unsigned int n, XBUF_POS pos)
 {
-    if (pos == XBUF_BEGIN) {
+    if (pos == XBUF_BEGIN)
+    {
         m_offset = n;
     }
-    else if (pos == XBUF_END) {
+    else if (pos == XBUF_END)
+    {
         m_offset = n < size() ? static_cast<unsigned int>(size() - n) : 0;
     }
     if (m_offset > size())
@@ -50,16 +52,14 @@ xstreambuf& xstreambuf::write(const void* src, unsigned int n)
     if (size() < s)
         resize(s);
 
-    memcpy((BYTE*)(m_pBuffer)+m_offset, src, n);
+    memcpy((BYTE*)(m_pBuffer) + m_offset, src, n);
     m_offset += n;
 
     return *this;
 }
 xstreambuf& xstreambuf::read(void* dest, unsigned int n)
 {
-    const unsigned int available = m_offset < size()
-        ? static_cast<unsigned int>(size() - m_offset)
-        : 0;
+    const unsigned int available = m_offset < size() ? static_cast<unsigned int>(size() - m_offset) : 0;
     if (n > available)
     {
         n = available;
@@ -104,11 +104,13 @@ size_t xstreambuf::size() const
 }
 void xstreambuf::resize(size_t s)
 {
-    if (m_capacity < s) {
+    if (m_capacity < s)
+    {
         unsigned int buf_size = m_chunksize + (unsigned int)((float)s / 4 + 0.99f) * 4;
-        BYTE* temp = new BYTE[buf_size];
+        BYTE*        temp     = new BYTE[buf_size];
         memset(temp, 0, buf_size);
-        if (m_pBuffer) {
+        if (m_pBuffer)
+        {
             unsigned int cpysize = 0;
             if (s < size())
                 cpysize = s;
@@ -118,7 +120,7 @@ void xstreambuf::resize(size_t s)
             memcpy(temp, m_pBuffer, cpysize);
             delete[] static_cast<BYTE*>(m_pBuffer);
         }
-        m_pBuffer = temp;
+        m_pBuffer  = temp;
         m_capacity = buf_size;
     }
     m_size = s;

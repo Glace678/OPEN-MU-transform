@@ -1,4 +1,4 @@
-﻿// <copyright file="PacketFunctions.cpp" company="MUnique">
+﻿  // <copyright file="PacketFunctions.cpp" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,8 +17,8 @@
 #include "PacketFunctions_ChatServer.h"
 #include "PacketBindings_ChatServer.h"
 
-
-void PacketFunctions_ChatServer::SendAuthenticate(uint16_t roomId, const BYTE* token, uint32_t tokenByteLength)
+    void
+    PacketFunctions_ChatServer::SendAuthenticate(uint16_t roomId, const BYTE* token, uint32_t tokenByteLength)
 {
     dotnet_SendAuthenticate(this->GetHandle(), roomId, token, tokenByteLength);
 }
@@ -38,7 +38,8 @@ void PacketFunctions_ChatServer::SendChatRoomClientLeft(BYTE clientIndex, const 
     dotnet_SendChatRoomClientLeft(this->GetHandle(), clientIndex, name);
 }
 
-void PacketFunctions_ChatServer::SendChatMessage(BYTE senderIndex, BYTE messageLength, const BYTE* message, uint32_t messageByteLength)
+void PacketFunctions_ChatServer::SendChatMessage(BYTE senderIndex, BYTE messageLength, const BYTE* message,
+                                                 uint32_t messageByteLength)
 {
     dotnet_SendChatMessage(this->GetHandle(), senderIndex, messageLength, message, messageByteLength);
 }

@@ -26,9 +26,9 @@ public:
     void* RemoveTail();
     NODE* AddHead(void* newElement);
     NODE* AddTail(void* newElement);
-    BOOL AddHead(CPList* pNewList);
-    BOOL AddTail(CPList* pNewList);
-    void RemoveAll();
+    BOOL  AddHead(CPList* pNewList);
+    BOOL  AddTail(CPList* pNewList);
+    void  RemoveAll();
 
     NODE* GetHeadPosition() const { return m_pNodeHead; }
     NODE* GetTailPosition() const { return m_pNodeTail; }
@@ -36,8 +36,8 @@ public:
     void* GetPrev(NODE*& rPosition) const;
 
     void* GetAt(NODE* position) const;
-    BOOL SetAt(NODE* pos, void* newElement);
-    BOOL RemoveAt(NODE* position);
+    BOOL  SetAt(NODE* pos, void* newElement);
+    BOOL  RemoveAt(NODE* position);
 
     NODE* InsertBefore(NODE* position, void* newElement);
     NODE* InsertAfter(NODE* position, void* newElement);
@@ -47,16 +47,16 @@ public:
     NODE* Find(void* searchValue, NODE* startAfter = NULL) const;
     NODE* FindIndex(int nIndex) const;
 
-    int GetCount() const { return m_nCount; }
+    int  GetCount() const { return m_nCount; }
     BOOL IsEmpty() const { return 0 == m_nCount; }
 
 protected:
     NODE* m_pNodeHead;
     NODE* m_pNodeTail;
-    int		m_nCount;
+    int   m_nCount;
 
     NODE* NewNode(NODE* pPrev, NODE* pNext);
-    void FreeNode(NODE* pNode);
+    void  FreeNode(NODE* pNode);
 };
 
 #endif

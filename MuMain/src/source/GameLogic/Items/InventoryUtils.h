@@ -40,4 +40,4 @@ inline const ITEM* FindInventoryItemBySlot(const int slot)
     return (g_pMyInventoryExt != nullptr) ? g_pMyInventoryExt->FindItem(slot) : nullptr;
 }
 
-#endif // _INVENTORYUTILS_H_
+#endif  // _INVENTORYUTILS_H_

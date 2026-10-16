@@ -8,7 +8,8 @@
 #include "w_PetActionCollecter.h"
 
 class PetActionUnicorn;
-using PetActionUnicornPtr = std::shared_ptr<PetActionUnicorn>;class PetActionUnicorn : public PetAction
+using PetActionUnicornPtr = std::shared_ptr<PetActionUnicorn>;
+class PetActionUnicorn : public PetAction
 {
 public:
     static PetActionUnicornPtr Make();
@@ -26,12 +27,12 @@ public:
     bool CompTimeControl(const DWORD& dwCompTime, DWORD& dwTime);
 
 public:
-    typedef std::list< RootingItem > ItemList;
+    typedef std::list<RootingItem> ItemList;
     enum ActionState
     {
-        eAction_Stand = 0,
-        eAction_Move = 1,
-        eAction_Get = 2,
+        eAction_Stand  = 0,
+        eAction_Move   = 1,
+        eAction_Get    = 2,
         eAction_Return = 3,
 
         eAction_End_NotUse,
@@ -42,11 +43,11 @@ private:
 
     //ItemList m_ItemList;
     RootingItem m_RootItem;
-    bool m_isRooting;
+    bool        m_isRooting;
 
-    DWORD m_dwSendDelayTime;
-    DWORD m_dwRootingTime;
-    DWORD m_dwRoundCountDelay;
+    DWORD       m_dwSendDelayTime;
+    DWORD       m_dwRootingTime;
+    DWORD       m_dwRoundCountDelay;
     ActionState m_state;
 
     float m_fRadWidthStand;

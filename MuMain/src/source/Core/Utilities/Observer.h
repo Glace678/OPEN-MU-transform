@@ -37,4 +37,4 @@ private:
     CPList m_ObserverList;
 };
 
-#endif // !defined(AFX_OBSERVER_H__D77AB996_491E_44AD_AE54_179DE70DFC3B__INCLUDED_)
+#endif  // !defined(AFX_OBSERVER_H__D77AB996_491E_44AD_AE54_179DE70DFC3B__INCLUDED_)

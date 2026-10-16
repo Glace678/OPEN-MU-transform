@@ -16,22 +16,20 @@
 
 CKanturuDirection::CKanturuDirection()
 {
-    m_iKanturuState = 0;
-    m_iMayaState = 0;
+    m_iKanturuState   = 0;
+    m_iMayaState      = 0;
     m_iNightmareState = 0;
     Init();
 }
 
-CKanturuDirection::~CKanturuDirection()
-{
-}
+CKanturuDirection::~CKanturuDirection() {}
 
 void CKanturuDirection::Init()
 {
-    m_bDirectionEnd = false;
+    m_bDirectionEnd     = false;
     m_bKanturuDirection = false;
-    m_bMayaDie = false;
-    m_bMayaAppear = false;
+    m_bMayaDie          = false;
+    m_bMayaAppear       = false;
 }
 
 bool CKanturuDirection::IsKanturuDirection() const
@@ -46,12 +44,12 @@ bool CKanturuDirection::IsMayaScene() const
 
     switch (m_iKanturuState)
     {
-    case KANTURU_STATE_NIGHTMARE_BATTLE:
-    case KANTURU_STATE_TOWER:
-    case KANTURU_STATE_END:
-        return false;
-    default:
-        return true;
+        case KANTURU_STATE_NIGHTMARE_BATTLE:
+        case KANTURU_STATE_TOWER:
+        case KANTURU_STATE_END:
+            return false;
+        default:
+            return true;
     }
 }
 
@@ -62,15 +60,15 @@ bool CKanturuDirection::IsKanturu3rdTimer() const
 
     switch (m_iMayaState)
     {
-    case KANTURU_MAYA_DIRECTION_MONSTER1:
-    case KANTURU_MAYA_DIRECTION_MAYA1:
-    case KANTURU_MAYA_DIRECTION_MONSTER2:
-    case KANTURU_MAYA_DIRECTION_MAYA2:
-    case KANTURU_MAYA_DIRECTION_MONSTER3:
-    case KANTURU_MAYA_DIRECTION_MAYA3:
-        return true;
-    default:
-        break;
+        case KANTURU_MAYA_DIRECTION_MONSTER1:
+        case KANTURU_MAYA_DIRECTION_MAYA1:
+        case KANTURU_MAYA_DIRECTION_MONSTER2:
+        case KANTURU_MAYA_DIRECTION_MAYA2:
+        case KANTURU_MAYA_DIRECTION_MONSTER3:
+        case KANTURU_MAYA_DIRECTION_MAYA3:
+            return true;
+        default:
+            break;
     }
 
     return (m_iNightmareState == KANTURU_NIGHTMARE_DIRECTION_BATTLE);
@@ -84,7 +82,7 @@ void CKanturuDirection::GetKanturuAllState(std::uint8_t State, std::uint8_t Deta
     {
         g_Direction.Init();
         Init();
-        m_iMayaState = 0;
+        m_iMayaState      = 0;
         m_iNightmareState = 0;
     }
     else if (m_iKanturuState == KANTURU_STATE_MAYA_BATTLE)
@@ -108,17 +106,17 @@ void CKanturuDirection::GetKanturuMayaState(std::uint8_t DetailState)
 
     switch (m_iMayaState)
     {
-    case KANTURU_MAYA_DIRECTION_NOTIFY:
-        PrepareCameraFocus();
-        ActivateDirectionSequence();
-        break;
-    case KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3:
-        PrepareCameraFocus();
-        ActivateDirectionSequence();
-        break;
-    default:
-        ResetDirectionState();
-        break;
+        case KANTURU_MAYA_DIRECTION_NOTIFY:
+            PrepareCameraFocus();
+            ActivateDirectionSequence();
+            break;
+        case KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3:
+            PrepareCameraFocus();
+            ActivateDirectionSequence();
+            break;
+        default:
+            ResetDirectionState();
+            break;
     }
 }
 
@@ -131,20 +129,20 @@ void CKanturuDirection::GetKanturuNightmareState(std::uint8_t DetailState)
 
     switch (m_iNightmareState)
     {
-    case KANTURU_NIGHTMARE_DIRECTION_NIGHTMARE:
-        PrepareCameraFocus(false);
-        ActivateDirectionSequence();
-        break;
-    case KANTURU_NIGHTMARE_DIRECTION_END:
-        g_Direction.m_CameraLevel = 5;
-        ActivateDirectionSequence();
-        g_Direction.DeleteMonster();
-        ResetDirectionState();
-        break;
-    default:
-        g_Direction.DeleteMonster();
-        ResetDirectionState();
-        break;
+        case KANTURU_NIGHTMARE_DIRECTION_NIGHTMARE:
+            PrepareCameraFocus(false);
+            ActivateDirectionSequence();
+            break;
+        case KANTURU_NIGHTMARE_DIRECTION_END:
+            g_Direction.m_CameraLevel = 5;
+            ActivateDirectionSequence();
+            g_Direction.DeleteMonster();
+            ResetDirectionState();
+            break;
+        default:
+            g_Direction.DeleteMonster();
+            ResetDirectionState();
+            break;
     }
 }
 
@@ -175,29 +173,34 @@ void CKanturuDirection::KanturuMayaDirection()
 {
     switch (m_iMayaState)
     {
-    case KANTURU_MAYA_DIRECTION_NOTIFY:
-        Move1stDirection();
-        break;
-    case KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3:
-        Move2ndDirection();
-        break;
+        case KANTURU_MAYA_DIRECTION_NOTIFY:
+            Move1stDirection();
+            break;
+        case KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3:
+            Move2ndDirection();
+            break;
     }
 }
 
 void CKanturuDirection::Move1stDirection()
 {
-    if (g_Direction.DirectionCameraMove()) return;
+    if (g_Direction.DirectionCameraMove())
+        return;
 
     switch (g_Direction.m_iTimeSchedule)
     {
-    case 0:        Direction1st0();        break;
-    case 1:        Direction1st1();        break;
+        case 0:
+            Direction1st0();
+            break;
+        case 1:
+            Direction1st1();
+            break;
     }
 }
 
 void CKanturuDirection::Direction1st0()
 {
-    ApplyDirectionTarget(DirectionTarget{ 196, 85, 0, 100.0f });
+    ApplyDirectionTarget(DirectionTarget{196, 85, 0, 100.0f});
 }
 
 void CKanturuDirection::Direction1st1()
@@ -229,19 +232,26 @@ void CKanturuDirection::Direction1st1()
 
 void CKanturuDirection::Move2ndDirection()
 {
-    if (g_Direction.DirectionCameraMove()) return;
+    if (g_Direction.DirectionCameraMove())
+        return;
 
     switch (g_Direction.m_iTimeSchedule)
     {
-    case 0:        Direction2nd0();        break;
-    case 1:        Direction2nd1();        break;
-    case 2:        Direction2nd2();        break;
+        case 0:
+            Direction2nd0();
+            break;
+        case 1:
+            Direction2nd1();
+            break;
+        case 2:
+            Direction2nd2();
+            break;
     }
 }
 
 void CKanturuDirection::Direction2nd0()
 {
-    ApplyDirectionTarget(DirectionTarget{ 196, 85, 0, 100.0f });
+    ApplyDirectionTarget(DirectionTarget{196, 85, 0, 100.0f});
 }
 
 void CKanturuDirection::Direction2nd1()
@@ -262,7 +272,7 @@ void CKanturuDirection::Direction2nd1()
         {
             Init();
             g_Direction.Init();
-            g_Direction.m_bAction = true;
+            g_Direction.m_bAction       = true;
             g_Direction.m_iTimeSchedule = 2;
         }
     }
@@ -301,44 +311,51 @@ void CKanturuDirection::KanturuNightmareDirection()
 {
     switch (m_iNightmareState)
     {
-    case KANTURU_NIGHTMARE_DIRECTION_NIGHTMARE:
-        Move3rdDirection();
-        break;
-    case KANTURU_NIGHTMARE_DIRECTION_END:
-        Move4thDirection();
-        break;
+        case KANTURU_NIGHTMARE_DIRECTION_NIGHTMARE:
+            Move3rdDirection();
+            break;
+        case KANTURU_NIGHTMARE_DIRECTION_END:
+            Move4thDirection();
+            break;
     }
 }
 
 void CKanturuDirection::Move3rdDirection()
 {
-    if (g_Direction.DirectionCameraMove()) return;
+    if (g_Direction.DirectionCameraMove())
+        return;
 
     switch (g_Direction.m_iTimeSchedule)
     {
-    case 0:        Direction3rd0();        break;
-    case 1:        Direction3rd1();        break;
+        case 0:
+            Direction3rd0();
+            break;
+        case 1:
+            Direction3rd1();
+            break;
     }
 }
 
 void CKanturuDirection::Direction3rd0()
 {
-    ApplyDirectionTarget(DirectionTarget{ 80, 142, 0, 100.0f });
+    ApplyDirectionTarget(DirectionTarget{80, 142, 0, 100.0f});
 }
 
 void CKanturuDirection::Direction3rd1()
 {
     if (g_Direction.m_bAction)
     {
-        if (g_Direction.m_iCheckTime == 0) g_Direction.GetTimeCheck(1000);
+        if (g_Direction.m_iCheckTime == 0)
+            g_Direction.GetTimeCheck(1000);
         else if (g_Direction.m_iCheckTime == 1)
             g_Direction.SummonCreateMonster(MONSTER_NIGHTMARE, 79, 142, 0, true, true, 0.25f);
-        else if (g_Direction.m_iCheckTime == 2) g_Direction.GetTimeCheck(5000);
+        else if (g_Direction.m_iCheckTime == 2)
+            g_Direction.GetTimeCheck(5000);
         else if (g_Direction.m_iCheckTime == 3)
         {
             Init();
             g_Direction.Init();
-            m_bDirectionEnd = true;
+            m_bDirectionEnd          = true;
             g_Direction.m_bOrderExit = true;
         }
     }
@@ -346,23 +363,26 @@ void CKanturuDirection::Direction3rd1()
 
 void CKanturuDirection::Move4thDirection()
 {
-    if (g_Direction.DirectionCameraMove()) return;
+    if (g_Direction.DirectionCameraMove())
+        return;
 
     switch (g_Direction.m_iTimeSchedule)
     {
-    case 0:        Direction4th0();        break;
-    case 1:        Direction4th1();        break;
+        case 0:
+            Direction4th0();
+            break;
+        case 1:
+            Direction4th1();
+            break;
     }
 }
 
 void CKanturuDirection::Direction4th0()
 {
-    ApplyDirectionTarget(DirectionTarget{ 113, 232, 0, 300.0f });
+    ApplyDirectionTarget(DirectionTarget{113, 232, 0, 300.0f});
 }
 
-void CKanturuDirection::Direction4th1()
-{
-}
+void CKanturuDirection::Direction4th1() {}
 
 bool CKanturuDirection::IsKanturuWorldActive() const
 {

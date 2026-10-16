@@ -34,15 +34,11 @@ int ClampStateIndex(int state)
 {
     return IsValidStateIndex(state) ? state : BTN_UP;
 }
-} // namespace
+}  // namespace
 
 CButton* CButton::m_pBtnHeld = nullptr;
 
-CButton::CButton()
-    : m_bEnable(true)
-    , m_bActive(true)
-    , m_bClick(false)
-    , m_bCheck(false)
+CButton::CButton() : m_bEnable(true), m_bActive(true), m_bClick(false), m_bCheck(false)
 {
     m_imageFrames.fill(-1);
 }
@@ -57,35 +53,37 @@ void CButton::Release()
     ReleaseText();
 }
 
-void CButton::Create(int nWidth, int nHeight, int nTexID, int nMaxFrame, int nDownFrame, int nActiveFrame, int nDisableFrame, int nCheckUpFrame, int nCheckDownFrame, int nCheckActiveFrame, int nCheckDisableFrame)
+void CButton::Create(int nWidth, int nHeight, int nTexID, int nMaxFrame, int nDownFrame, int nActiveFrame,
+                     int nDisableFrame, int nCheckUpFrame, int nCheckDownFrame, int nCheckActiveFrame,
+                     int nCheckDisableFrame)
 {
     Release();
 
-    const int frameCount = nMaxFrame;
+    const int                frameCount = nMaxFrame;
     std::vector<SFrameCoord> frameCoords(static_cast<std::size_t>(frameCount > 0 ? frameCount : 0));
     for (int i = 0; i < frameCount; ++i)
     {
         auto& coord = frameCoords[static_cast<std::size_t>(i)];
-        coord.nX = 0;
-        coord.nY = nHeight * i;
+        coord.nX    = 0;
+        coord.nY    = nHeight * i;
     }
 
     CSprite::Create(nWidth, nHeight, nTexID, frameCount, frameCoords.data());
     CSprite::SetAction(0, frameCount - 1);
 
     m_imageFrames.fill(-1);
-    m_imageFrames[BTN_UP] = 0;
-    m_imageFrames[BTN_DOWN] = (nDownFrame >= 0) ? nDownFrame : m_imageFrames[BTN_UP];
-    m_imageFrames[BTN_ACTIVE] = (nActiveFrame >= 0) ? nActiveFrame : m_imageFrames[BTN_UP];
+    m_imageFrames[BTN_UP]      = 0;
+    m_imageFrames[BTN_DOWN]    = (nDownFrame >= 0) ? nDownFrame : m_imageFrames[BTN_UP];
+    m_imageFrames[BTN_ACTIVE]  = (nActiveFrame >= 0) ? nActiveFrame : m_imageFrames[BTN_UP];
     m_imageFrames[BTN_DISABLE] = nDisableFrame;
 
-    m_imageFrames[BTN_UP_CHECK] = nCheckUpFrame;
-    m_imageFrames[BTN_DOWN_CHECK] = (nCheckDownFrame >= 0) ? nCheckDownFrame : m_imageFrames[BTN_UP_CHECK];
-    m_imageFrames[BTN_ACTIVE_CHECK] = (nCheckActiveFrame >= 0) ? nCheckActiveFrame : m_imageFrames[BTN_UP_CHECK];
+    m_imageFrames[BTN_UP_CHECK]      = nCheckUpFrame;
+    m_imageFrames[BTN_DOWN_CHECK]    = (nCheckDownFrame >= 0) ? nCheckDownFrame : m_imageFrames[BTN_UP_CHECK];
+    m_imageFrames[BTN_ACTIVE_CHECK]  = (nCheckActiveFrame >= 0) ? nCheckActiveFrame : m_imageFrames[BTN_UP_CHECK];
     m_imageFrames[BTN_DISABLE_CHECK] = nCheckDisableFrame;
 
-    m_bClick = false;
-    m_bCheck = false;
+    m_bClick  = false;
+    m_bCheck  = false;
     m_bEnable = true;
     m_bActive = true;
 }
@@ -116,16 +114,13 @@ void CButton::Update()
         return;
     }
 
-    Core::Input::FocusNavigator::Instance().Register(
-        this,
-        0,
-        static_cast<float>(CSprite::GetXPos()) / g_fScreenRate_x,
-        static_cast<float>(CSprite::GetYPos()) / g_fScreenRate_y,
-        static_cast<float>(CSprite::GetWidth()) / g_fScreenRate_x,
-        static_cast<float>(CSprite::GetHeight()) / g_fScreenRate_y,
-        m_bEnable && m_bActive);
+    Core::Input::FocusNavigator::Instance().Register(this, 0, static_cast<float>(CSprite::GetXPos()) / g_fScreenRate_x,
+                                                     static_cast<float>(CSprite::GetYPos()) / g_fScreenRate_y,
+                                                     static_cast<float>(CSprite::GetWidth()) / g_fScreenRate_x,
+                                                     static_cast<float>(CSprite::GetHeight()) / g_fScreenRate_y,
+                                                     m_bEnable && m_bActive);
 
-    CInput& input = CInput::Instance();
+    CInput& input  = CInput::Instance();
     m_fTextAddYPos = kDefaultTextOffset;
 
     if (m_bEnable)
@@ -219,18 +214,15 @@ void CButton::RenderLabel()
     g_pRenderText->SetBgColor(0);
     g_pRenderText->SetFont(g_hFixFont);
 
-    constexpr int padding = 2;
-    const int verticalInset = padding + static_cast<int>(std::ceil(std::abs(m_fTextAddYPos)));
-    const int width = static_cast<int>(CSprite::GetWidth() / g_fScreenRate_x) - padding * 2;
-    const int height = static_cast<int>(CSprite::GetHeight() / g_fScreenRate_y) - verticalInset * 2;
+    constexpr int padding       = 2;
+    const int     verticalInset = padding + static_cast<int>(std::ceil(std::abs(m_fTextAddYPos)));
+    const int     width         = static_cast<int>(CSprite::GetWidth() / g_fScreenRate_x) - padding * 2;
+    const int     height        = static_cast<int>(CSprite::GetHeight() / g_fScreenRate_y) - verticalInset * 2;
     if (width <= 0 || height <= 0)
         return;
-    g_pRenderText->RenderText(
-        static_cast<int>(CSprite::GetXPos() / g_fScreenRate_x) + padding,
-        static_cast<int>(CSprite::GetYPos() / g_fScreenRate_y + m_fTextAddYPos) + verticalInset,
-        m_text.c_str(),
-        width, height,
-        RT3_SORT_CENTER_FIT);
+    g_pRenderText->RenderText(static_cast<int>(CSprite::GetXPos() / g_fScreenRate_x) + padding,
+                              static_cast<int>(CSprite::GetYPos() / g_fScreenRate_y + m_fTextAddYPos) + verticalInset,
+                              m_text.c_str(), width, height, RT3_SORT_CENTER_FIT);
 }
 
 void CButton::ReleaseText()
@@ -238,7 +230,7 @@ void CButton::ReleaseText()
     m_text.clear();
     m_textColors.fill(0);
     m_textColorCount = 0;
-    m_textColor = 0;
+    m_textColor      = 0;
 }
 
 void CButton::SetText(const wchar_t* pszText, DWORD* adwColor)
@@ -277,7 +269,7 @@ wchar_t* CButton::GetText() const
 void CButton::ApplyVisualState(int frameIndex)
 {
     const int clampedState = ClampStateIndex(frameIndex);
-    int spriteFrame = m_imageFrames[clampedState];
+    int       spriteFrame  = m_imageFrames[clampedState];
     if (spriteFrame < 0)
     {
         spriteFrame = m_imageFrames[BTN_UP];
@@ -301,7 +293,7 @@ void CButton::ApplyTextColorForState(int colorIndex)
     }
 
     const std::size_t index = static_cast<std::size_t>(resolvedIndex);
-    m_textColor = m_textColors[index];
+    m_textColor             = m_textColors[index];
 }
 
 bool CButton::HasCheckVisuals() const

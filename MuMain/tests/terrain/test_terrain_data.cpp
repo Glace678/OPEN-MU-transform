@@ -8,14 +8,14 @@ using namespace Data::Terrain;
 TEST_CASE("terrain mapping preserves both layers and alpha endpoints")
 {
     std::vector<std::uint8_t> bytes(MappingFileSize);
-    bytes[1] = 42;
-    bytes[MappingHeaderSize] = 7;
+    bytes[1]                                 = 42;
+    bytes[MappingHeaderSize]                 = 7;
     bytes[MappingHeaderSize + TileCount - 1] = 9;
-    bytes[MappingHeaderSize + TileCount] = 255;
+    bytes[MappingHeaderSize + TileCount]     = 255;
     bytes[MappingHeaderSize + 2 * TileCount] = 128;
-    bytes.back() = 255;
+    bytes.back()                             = 255;
     std::vector<std::uint8_t> first(TileCount), second(TileCount);
-    std::vector<float> alpha(TileCount);
+    std::vector<float>        alpha(TileCount);
 
     REQUIRE(ParseMapping(bytes, first, second, alpha) == 42);
     CHECK(first.front() == 7);
@@ -30,7 +30,7 @@ TEST_CASE("every truncated terrain mapping is rejected before output changes")
 {
     std::vector<std::uint8_t> bytes(MappingFileSize);
     std::vector<std::uint8_t> first(TileCount, 17), second(TileCount, 23);
-    std::vector<float> alpha(TileCount, 0.5f);
+    std::vector<float>        alpha(TileCount, 0.5f);
     for (std::size_t length = 0; length < MappingFileSize; ++length)
         REQUIRE(ParseMapping(std::span(bytes).first(length), first, second, alpha) == -1);
     CHECK(first.front() == 17);
@@ -46,7 +46,7 @@ TEST_CASE("terrain mapping checks destination capacity and permits legacy paddin
     std::vector<std::uint8_t> bytes(MappingFileSize + 8);
     bytes[1] = 5;
     std::vector<std::uint8_t> first(TileCount), second(TileCount);
-    std::vector<float> alpha(TileCount);
+    std::vector<float>        alpha(TileCount);
     CHECK(ParseMapping(bytes, std::span(first).first(TileCount - 1), second, alpha) == -1);
     CHECK(ParseMapping(bytes, first, std::span(second).first(TileCount - 1), alpha) == -1);
     CHECK(ParseMapping(bytes, first, second, std::span(alpha).first(TileCount - 1)) == -1);
@@ -56,22 +56,22 @@ TEST_CASE("terrain mapping checks destination capacity and permits legacy paddin
 TEST_CASE("terrain attributes support byte and little-endian word formats")
 {
     std::vector<std::uint16_t> walls(TileCount);
-    std::vector<std::uint8_t> bytes(ByteAttributeFileSize);
+    std::vector<std::uint8_t>  bytes(ByteAttributeFileSize);
     bytes[1] = 17;
-    bytes[2] = bytes[3] = 255;
+    bytes[2] = bytes[3]        = 255;
     bytes[AttributeHeaderSize] = 5;
-    bytes.back() = 127;
+    bytes.back()               = 127;
     REQUIRE(ParseAttributes(bytes, walls) == 17);
     CHECK(walls.front() == 5);
     CHECK(walls.back() == 127);
 
     bytes.assign(WordAttributeFileSize, 0);
     bytes[1] = 51;
-    bytes[2] = bytes[3] = 255;
-    bytes[AttributeHeaderSize] = 0x34;
-    bytes[AttributeHeaderSize + 1] = 0x12;
+    bytes[2] = bytes[3]              = 255;
+    bytes[AttributeHeaderSize]       = 0x34;
+    bytes[AttributeHeaderSize + 1]   = 0x12;
     bytes[WordAttributeFileSize - 2] = 0xCD;
-    bytes.back() = 0xAB;
+    bytes.back()                     = 0xAB;
     REQUIRE(ParseAttributes(bytes, walls) == 51);
     CHECK(walls.front() == 0x1234);
     CHECK(walls.back() == 0xABCD);
@@ -80,14 +80,14 @@ TEST_CASE("terrain attributes support byte and little-endian word formats")
 TEST_CASE("terrain attributes reject bad headers and incomplete payloads atomically")
 {
     std::vector<std::uint16_t> walls(TileCount, 0x4321);
-    std::vector<std::uint8_t> bytes(ByteAttributeFileSize);
+    std::vector<std::uint8_t>  bytes(ByteAttributeFileSize);
     bytes[2] = bytes[3] = 255;
     for (std::size_t length = 0; length < ByteAttributeFileSize; ++length)
         REQUIRE(ParseAttributes(std::span(bytes).first(length), walls) == -1);
-    for (const auto headerIndex : { 0, 2, 3 })
+    for (const auto headerIndex : {0, 2, 3})
     {
         const auto original = bytes[headerIndex];
-        bytes[headerIndex] = 1;
+        bytes[headerIndex]  = 1;
         CHECK(ParseAttributes(bytes, walls) == -1);
         bytes[headerIndex] = original;
     }

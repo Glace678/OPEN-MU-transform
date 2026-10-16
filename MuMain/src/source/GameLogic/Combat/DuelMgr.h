@@ -6,11 +6,11 @@
 
 struct DUEL_PLAYER_INFO
 {
-    short m_sIndex = 0;
+    short   m_sIndex = 0;
     wchar_t m_szID[MAX_USERNAME_SIZE + 1]{};
-    int m_iScore = 0;
-    float m_fHPRate = 0.0f;
-    float m_fSDRate = 0.0f;
+    int     m_iScore  = 0;
+    float   m_fHPRate = 0.0f;
+    float   m_fSDRate = 0.0f;
 };
 
 enum _DUEL_PLAYER_TYPE
@@ -22,8 +22,8 @@ enum _DUEL_PLAYER_TYPE
 
 struct DUEL_CHANNEL_INFO
 {
-    BOOL m_bEnable = FALSE;
-    BOOL m_bJoinable = FALSE;
+    BOOL    m_bEnable   = FALSE;
+    BOOL    m_bJoinable = FALSE;
     wchar_t m_szID1[MAX_USERNAME_SIZE + 1]{};
     wchar_t m_szID2[MAX_USERNAME_SIZE + 1]{};
 };
@@ -36,6 +36,7 @@ public:
     CDuelMgr();
     virtual ~CDuelMgr();
     void Reset();
+
 public:
     void EnableDuel(BOOL bEnable);
     BOOL IsDuelEnabled();
@@ -50,9 +51,9 @@ public:
     void SetSD(int iPlayerNum, int iRate);
 
     const wchar_t* GetDuelPlayerID(int iPlayerNum) const;
-    int GetScore(int iPlayerNum);
-    float GetHP(int iPlayerNum);
-    float GetSD(int iPlayerNum);
+    int            GetScore(int iPlayerNum);
+    float          GetHP(int iPlayerNum);
+    float          GetSD(int iPlayerNum);
 
     BOOL IsDuelPlayer(CHARACTER* pCharacter, int iPlayerNum, BOOL bIncludeSummon = TRUE);
     BOOL IsDuelPlayer(WORD wIndex, int iPlayerNum);
@@ -65,27 +66,27 @@ protected:
 
 public:
     void SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1, const wchar_t* pszID2);
-    BOOL IsDuelChannelEnabled(int iChannelIndex) { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_bEnable : FALSE; }
-    BOOL IsDuelChannelJoinable(int iChannelIndex) { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_bJoinable : FALSE; }
-    const wchar_t* GetDuelChannelUserID1(int iChannelIndex) const { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_szID1 : L""; }
-    const wchar_t* GetDuelChannelUserID2(int iChannelIndex) const { return (iChannelIndex >= 0 && iChannelIndex < MAX_DUEL_CHANNELS) ? m_DuelChannels[iChannelIndex].m_szID2 : L""; }
+    BOOL IsDuelChannelEnabled(int iChannelIndex) { return m_DuelChannels[iChannelIndex].m_bEnable; }
+    BOOL IsDuelChannelJoinable(int iChannelIndex) { return m_DuelChannels[iChannelIndex].m_bJoinable; }
+    const wchar_t* GetDuelChannelUserID1(int iChannelIndex) const { return m_DuelChannels[iChannelIndex].m_szID1; }
+    const wchar_t* GetDuelChannelUserID2(int iChannelIndex) const { return m_DuelChannels[iChannelIndex].m_szID2; }
 
     void SetCurrentChannel(int iChannel = -1) { m_iCurrentChannel = iChannel; }
-    int GetCurrentChannel() { return m_iCurrentChannel; }
+    int  GetCurrentChannel() { return m_iCurrentChannel; }
 
-    void RemoveAllDuelWatchUser();
-    void AddDuelWatchUser(const wchar_t* pszUserID);
-    void RemoveDuelWatchUser(const wchar_t* pszUserID);
+    void           RemoveAllDuelWatchUser();
+    void           AddDuelWatchUser(const wchar_t* pszUserID);
+    void           RemoveDuelWatchUser(const wchar_t* pszUserID);
     const wchar_t* GetDuelWatchUser(int iIndex) const;
-    int GetDuelWatchUserCount() const { return static_cast<int>(m_DuelWatchUserList.size()); }
+    int            GetDuelWatchUserCount() const { return static_cast<int>(m_DuelWatchUserList.size()); }
 
     BOOL GetFighterRegenerated() { return m_bRegenerated; }
     void SetFighterRegenerated(BOOL bFlag) { m_bRegenerated = bFlag; }
 
 protected:
-    std::array<DUEL_PLAYER_INFO, MAX_DUEL_PLAYERS> m_DuelPlayer{};
+    std::array<DUEL_PLAYER_INFO, MAX_DUEL_PLAYERS>   m_DuelPlayer{};
     std::array<DUEL_CHANNEL_INFO, MAX_DUEL_CHANNELS> m_DuelChannels{};
-    int m_iCurrentChannel;
+    int                                              m_iCurrentChannel;
 
     BOOL m_bRegenerated;
 

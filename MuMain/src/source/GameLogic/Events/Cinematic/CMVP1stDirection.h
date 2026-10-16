@@ -10,7 +10,7 @@
 class CMVP1STDirection
 {
 private:
-    bool	m_bTimerCheck;
+    bool m_bTimerCheck;
 
     void IsCryWolfDirectionTimer();
 
@@ -28,7 +28,7 @@ private:
     void QueueCameraMove(int x, int y, int z, float speed);
 
 public:
-    int		m_iCryWolfState;
+    int m_iCryWolfState;
 
     CMVP1STDirection();
     virtual ~CMVP1STDirection();
@@ -39,4 +39,4 @@ public:
     void CryWolfDirection();
 };
 
-#endif //_MVP1STINTERFACE_H_
+#endif  //_MVP1STINTERFACE_H_

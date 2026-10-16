@@ -31,4 +31,4 @@ typedef WORD  INTERNET_PORT;
 #define INTERNET_DEFAULT_FTP_PORT 21
 #endif
 
-#endif // _WIN32
+#endif  // _WIN32

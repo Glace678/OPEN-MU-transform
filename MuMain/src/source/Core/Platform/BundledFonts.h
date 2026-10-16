@@ -18,9 +18,9 @@ struct BundledFont
 };
 
 inline constexpr BundledFont kBundledFonts[] = {
-    { "Liberation Sans", "fonts/LiberationSans-Regular.ttf", "fonts/LiberationSans-Bold.ttf" },
-    { "DejaVu Sans",     "fonts/DejaVuSans.ttf",             "fonts/DejaVuSans-Bold.ttf" },
-    { "Noto Sans CJK SC", "fonts/NotoSansCJKsc-Regular.otf", "fonts/NotoSansCJKsc-Bold.otf" },
-    { "Noto Sans CJK JP", "fonts/NotoSansCJKjp-Regular.otf", "fonts/NotoSansCJKjp-Bold.otf" },
-    { "Noto Sans CJK TC", "fonts/NotoSansCJKtc-Regular.otf", "fonts/NotoSansCJKtc-Bold.otf" },
+    {"Liberation Sans", "fonts/LiberationSans-Regular.ttf", "fonts/LiberationSans-Bold.ttf"},
+    {"DejaVu Sans", "fonts/DejaVuSans.ttf", "fonts/DejaVuSans-Bold.ttf"},
+    {"Noto Sans CJK SC", "fonts/NotoSansCJKsc-Regular.otf", "fonts/NotoSansCJKsc-Bold.otf"},
+    {"Noto Sans CJK JP", "fonts/NotoSansCJKjp-Regular.otf", "fonts/NotoSansCJKjp-Bold.otf"},
+    {"Noto Sans CJK TC", "fonts/NotoSansCJKtc-Regular.otf", "fonts/NotoSansCJKtc-Bold.otf"},
 };

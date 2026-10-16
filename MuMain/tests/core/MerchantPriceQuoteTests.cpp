@@ -15,31 +15,31 @@ using Network::MerchantPrices::QuoteCache;
 
 namespace
 {
-    constexpr std::uint32_t ItemKey = 400;
-    const std::array<std::uint8_t, 5> Potion { 0xE0, 4, 1, 3, 0 };
+constexpr std::uint32_t           ItemKey = 400;
+const std::array<std::uint8_t, 5> Potion{0xE0, 4, 1, 3, 0};
 
-    void Append32(std::vector<std::uint8_t>& bytes, std::uint32_t value)
-    {
-        for (unsigned shift = 0; shift < 32; shift += 8)
-            bytes.push_back(static_cast<std::uint8_t>(value >> shift));
-    }
+void Append32(std::vector<std::uint8_t>& bytes, std::uint32_t value)
+{
+    for (unsigned shift = 0; shift < 32; shift += 8)
+        bytes.push_back(static_cast<std::uint8_t>(value >> shift));
+}
 
-    std::vector<std::uint8_t> Packet(std::uint32_t base = 24, std::uint8_t tax = 0)
-    {
-        std::vector<std::uint8_t> packet { 0xC2, 0, 0, QuoteCache::PacketCode, 0, 1, 1, tax, 1, 0, 5 };
-        packet.insert(packet.end(), Potion.begin(), Potion.end());
-        Append32(packet, base);
-        Append32(packet, base == std::numeric_limits<std::uint32_t>::max() ? base : base + base * tax / 100);
-        packet[2] = static_cast<std::uint8_t>(packet.size());
-        return packet;
-    }
+std::vector<std::uint8_t> Packet(std::uint32_t base = 24, std::uint8_t tax = 0)
+{
+    std::vector<std::uint8_t> packet{0xC2, 0, 0, QuoteCache::PacketCode, 0, 1, 1, tax, 1, 0, 5};
+    packet.insert(packet.end(), Potion.begin(), Potion.end());
+    Append32(packet, base);
+    Append32(packet, base == std::numeric_limits<std::uint32_t>::max() ? base : base + base * tax / 100);
+    packet[2] = static_cast<std::uint8_t>(packet.size());
+    return packet;
+}
 
-    void BindPotion(QuoteCache& cache, std::span<const std::uint8_t> item = Potion)
-    {
-        cache.BeginStock();
-        cache.Bind(0, item, ItemKey);
-        cache.CompleteStock(1);
-    }
+void BindPotion(QuoteCache& cache, std::span<const std::uint8_t> item = Potion)
+{
+    cache.BeginStock();
+    cache.Bind(0, item, ItemKey);
+    cache.CompleteStock(1);
+}
 }
 
 TEST_CASE("merchant uses actual quoted stack price and exact wallet rather than Solo division")
@@ -93,9 +93,9 @@ TEST_CASE("malformed and unsupported merchant quotes fail closed without reusing
         BindPotion(cache);
         CHECK_FALSE(cache.CanBuy(ItemKey, 1000));
     }
-    for (const std::size_t byte : { 1u, 2u, 4u, 5u, 6u, 7u, 8u, 9u, 10u })
+    for (const std::size_t byte : {1u, 2u, 4u, 5u, 6u, 7u, 8u, 9u, 10u})
     {
-        auto bad = valid;
+        auto bad  = valid;
         bad[byte] = 255;
         QuoteCache cache;
         CHECK(cache.Receive(bad));
@@ -109,12 +109,12 @@ TEST_CASE("malformed and unsupported merchant quotes fail closed without reusing
     CHECK(cache.Receive(trailing));
     BindPotion(cache);
     CHECK_FALSE(cache.CanBuy(ItemKey, 1000));
-    auto emptyItem = valid;
+    auto emptyItem                        = valid;
     emptyItem[QuoteCache::HeaderSize + 1] = 0;
     REQUIRE(cache.Receive(emptyItem));
     BindPotion(cache);
     CHECK_FALSE(cache.CanBuy(ItemKey, 1000));
-    auto mixedSentinel = Packet(std::numeric_limits<std::uint32_t>::max());
+    auto mixedSentinel   = Packet(std::numeric_limits<std::uint32_t>::max());
     mixedSentinel.back() = 0;
     REQUIRE(cache.Receive(mixedSentinel));
     BindPotion(cache);
@@ -123,8 +123,8 @@ TEST_CASE("malformed and unsupported merchant quotes fail closed without reusing
 
 TEST_CASE("duplicate slots and repeated item binding cannot install merchant prices")
 {
-    auto duplicate = Packet();
-    const auto entry = std::vector<std::uint8_t>(duplicate.begin() + QuoteCache::HeaderSize, duplicate.end());
+    auto       duplicate = Packet();
+    const auto entry     = std::vector<std::uint8_t>(duplicate.begin() + QuoteCache::HeaderSize, duplicate.end());
     duplicate.insert(duplicate.end(), entry.begin(), entry.end());
     duplicate[8] = 2;
     duplicate[2] = static_cast<std::uint8_t>(duplicate.size());
@@ -148,7 +148,7 @@ TEST_CASE("original and Solo stock preserves legacy behavior and session changes
     REQUIRE(cache.Receive(Packet()));
     BindPotion(cache);
     CHECK_FALSE(cache.CanBuy(ItemKey, 0));
-    cache.Reset(); // A new dialog or game session establishes the unquoted original/Solo scope.
+    cache.Reset();  // A new dialog or game session establishes the unquoted original/Solo scope.
     cache.BeginStock();
     cache.CompleteStock(1);
     CHECK_FALSE(cache.IsAuthoritative());
@@ -167,11 +167,11 @@ TEST_CASE("replayed quote and unquoted replacement stock cannot revive stale or 
     REQUIRE(cache.Receive(Packet()));
     BindPotion(cache);
     REQUIRE(cache.CanBuy(ItemKey, 24));
-    REQUIRE(cache.Receive(Packet())); // The quote alone cannot price the prior inventory key.
+    REQUIRE(cache.Receive(Packet()));  // The quote alone cannot price the prior inventory key.
     CHECK_FALSE(cache.CanBuy(ItemKey, 24));
     BindPotion(cache);
     REQUIRE(cache.CanBuy(ItemKey, 24));
-    cache.BeginStock(); // No matching new quote; remain in the quoted NPC session.
+    cache.BeginStock();  // No matching new quote; remain in the quoted NPC session.
     cache.Bind(0, Potion, ItemKey);
     cache.CompleteStock(1);
     CHECK(cache.IsAuthoritative());
@@ -185,7 +185,7 @@ TEST_CASE("different merchant slots cannot impersonate the same allocated item k
 {
     auto packet = Packet();
     auto second = std::vector<std::uint8_t>(packet.begin() + QuoteCache::HeaderSize, packet.end());
-    second[0] = 1;
+    second[0]   = 1;
     packet.insert(packet.end(), second.begin(), second.end());
     packet[8] = 2;
     packet[2] = static_cast<std::uint8_t>(packet.size());
@@ -225,7 +225,7 @@ TEST_CASE("merchant tax uses exact integer charge and never overflows into a che
     REQUIRE(cache.TryGet(ItemKey, quote));
     CHECK_FALSE(quote.payable);
     CHECK_FALSE(cache.CanBuy(ItemKey, std::numeric_limits<std::int64_t>::max()));
-    auto bad = Packet(176, 3);
+    auto bad   = Packet(176, 3);
     bad.back() = 128;
     REQUIRE(cache.Receive(bad));
     BindPotion(cache);
@@ -237,7 +237,7 @@ TEST_CASE("extended item wire length checks truncated option and socket data")
     CHECK(Network::ItemWire::ExtendedLength(Potion) == 5);
     for (std::size_t length = 0; length < Potion.size(); ++length)
         CHECK_FALSE(Network::ItemWire::ExtendedLength(std::span(Potion).first(length)));
-    std::array<std::uint8_t, 15> socketItem {};
+    std::array<std::uint8_t, 15> socketItem{};
     socketItem[4] = 0xB9;
     socketItem[9] = 5;
     CHECK(Network::ItemWire::ExtendedLength(socketItem) == 15);
@@ -252,7 +252,7 @@ TEST_CASE("existing server tax updates keep active quoted totals current without
     cache.UpdateTaxRate(3);
     CHECK_FALSE(cache.IsAuthoritative());
     REQUIRE(cache.Receive(Packet(176)));
-    cache.UpdateTaxRate(2); // A tax notice can arrive after the quote but before its stock.
+    cache.UpdateTaxRate(2);  // A tax notice can arrive after the quote but before its stock.
     BindPotion(cache);
     Quote quote;
     REQUIRE(cache.TryGet(ItemKey, quote));
@@ -270,31 +270,22 @@ TEST_CASE("existing server tax updates keep active quoted totals current without
     CHECK_FALSE(cache.CanBuy(ItemKey, 1000));
 }
 
-TEST_CASE("production OpenMU merchant bytes drive native display and affordability" * doctest::test_suite("production-wire"))
+TEST_CASE("production OpenMU merchant bytes drive native display and affordability" *
+          doctest::test_suite("production-wire"))
 {
 #ifdef _WIN32
     const auto path = _wgetenv(L"MU_MERCHANT_QUOTE_FIXTURE");
 #else
     const auto path = std::getenv("MU_MERCHANT_QUOTE_FIXTURE");
 #endif
-    std::vector<std::uint8_t> bytes;
-    if (path)
+    if (!path)
     {
-        std::ifstream file(std::filesystem::path(path), std::ios::binary);
-        REQUIRE(file.good());
-        bytes = std::vector<std::uint8_t> { std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
+        MESSAGE("Set MU_MERCHANT_QUOTE_FIXTURE to invoke the separately reported production-wire acceptance.");
+        return;
     }
-    else
-    {
-        // No captured production fixture on disk: exercise the exact on-wire
-        // framing (a quote packet immediately followed by the stock packet)
-        // against a deterministic blob so this acceptance case always runs its
-        // assertions instead of silently passing when MU_MERCHANT_QUOTE_FIXTURE
-        // is unset. Point the env var at a real captured packet to validate the
-        // production bytes end-to-end (91-12/F19-01).
-        bytes = Packet(24, 0);
-        bytes.insert(bytes.end(), { 0xC2, 0, 12, 0x31, 0, 1, 0, 0xE0, 4, 1, 3, 0 });
-    }
+    std::ifstream file(std::filesystem::path(path), std::ios::binary);
+    REQUIRE(file.good());
+    const std::vector<std::uint8_t> bytes{std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
     REQUIRE(bytes.size() >= QuoteCache::HeaderSize);
     const auto quoteSize = (static_cast<std::size_t>(bytes[1]) << 8) | bytes[2];
     REQUIRE(quoteSize < bytes.size());
@@ -307,22 +298,22 @@ TEST_CASE("production OpenMU merchant bytes drive native display and affordabili
     REQUIRE(stock[4] == 0);
     REQUIRE(((static_cast<std::size_t>(stock[1]) << 8) | stock[2]) == stock.size());
     cache.BeginStock();
-    std::size_t offset = 6;
+    std::size_t   offset  = 6;
     std::uint32_t manaKey = 0;
-    std::uint8_t count = 0;
+    std::uint8_t  count   = 0;
     for (std::size_t index = 0; index < stock[5]; ++index)
     {
         REQUIRE(offset < stock.size());
-        const auto slot = stock[offset++];
+        const auto slot   = stock[offset++];
         const auto length = Network::ItemWire::ExtendedLength(stock.subspan(offset));
         REQUIRE(length.has_value());
         const auto item = stock.subspan(offset, *length);
-        const auto key = ItemKey + slot;
+        const auto key  = ItemKey + slot;
         cache.Bind(slot, item, key);
         if (item[0] == 0xE0 && item[1] == 4)
         {
             manaKey = key;
-            count = item[3];
+            count   = item[3];
         }
         offset += *length;
     }

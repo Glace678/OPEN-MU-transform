@@ -13,10 +13,10 @@ using namespace SEASON3B;
 SEASON3B::CNewUIQuickCommandWindow::CNewUIQuickCommandWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = 0;
-    m_Pos.y = 0;
+    m_Pos.x     = 0;
+    m_Pos.y     = 0;
 
-    m_iSelectedIndex = -1;
+    m_iSelectedIndex          = -1;
     m_iSelectedCharacterIndex = -1;
 }
 
@@ -66,7 +66,7 @@ bool SEASON3B::CNewUIQuickCommandWindow::UpdateMouseEvent()
         return true;
     }
 
-    POINT pt = { m_Pos.x, m_Pos.y + 38 };
+    POINT pt = {m_Pos.x, m_Pos.y + 38};
 
     for (int i = 0; i < 5; ++i)
     {
@@ -83,50 +83,45 @@ bool SEASON3B::CNewUIQuickCommandWindow::UpdateMouseEvent()
     {
         switch (m_iSelectedIndex)
         {
-        case 0:
-        {
-            CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
-            g_pCommandWindow->CommandTrade(pCha);
-            CloseQuickCommand();
+            case 0: {
+                CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
+                g_pCommandWindow->CommandTrade(pCha);
+                CloseQuickCommand();
 
-            return false;
-        }
-        break;
-        case 1:
-        {
-            CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
-            g_pCommandWindow->CommandPurchase(pCha);
-            CloseQuickCommand();
+                return false;
+            }
+            break;
+            case 1: {
+                CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
+                g_pCommandWindow->CommandPurchase(pCha);
+                CloseQuickCommand();
 
-            return false;
-        }
-        break;
-        case 2:
-        {
-            CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
-            g_pCommandWindow->CommandParty(pCha->Key);
-            CloseQuickCommand();
+                return false;
+            }
+            break;
+            case 2: {
+                CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
+                g_pCommandWindow->CommandParty(pCha->Key);
+                CloseQuickCommand();
 
-            return false;
-        }
-        break;
-        case 3:
-        {
-            g_pCommandWindow->CommandFollow(m_iSelectedCharacterIndex);
-            CloseQuickCommand();
+                return false;
+            }
+            break;
+            case 3: {
+                g_pCommandWindow->CommandFollow(m_iSelectedCharacterIndex);
+                CloseQuickCommand();
 
-            return false;
-        }
-        break;
-        case 4:
-        {
-            CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
-            g_pCommandWindow->CommandDual(pCha);
-            CloseQuickCommand();
+                return false;
+            }
+            break;
+            case 4: {
+                CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
+                g_pCommandWindow->CommandDual(pCha);
+                CloseQuickCommand();
 
-            return false;
-        }
-        break;
+                return false;
+            }
+            break;
         }
     }
 
@@ -171,15 +166,13 @@ bool SEASON3B::CNewUIQuickCommandWindow::Update()
     {
         CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
 
-        if (wcscmp(pCha->ID, m_strID) != 0
-            || pCha->Object.Live == false
-            || pCha->Object.Kind != KIND_PLAYER)
+        if (wcscmp(pCha->ID, m_strID) != 0 || pCha->Object.Live == false || pCha->Object.Kind != KIND_PLAYER)
         {
             CloseQuickCommand();
         }
 
-        float fPos_x = pCha->Object.Position[0] - Hero->Object.Position[0];
-        float fPos_y = pCha->Object.Position[1] - Hero->Object.Position[1];
+        float fPos_x    = pCha->Object.Position[0] - Hero->Object.Position[0];
+        float fPos_y    = pCha->Object.Position[1] - Hero->Object.Position[1];
         float fDistance = sqrtf((fPos_x * fPos_x) + (fPos_y * fPos_y));
 
         if (fDistance > 300.f)
@@ -218,7 +211,10 @@ void SEASON3B::CNewUIQuickCommandWindow::RenderFrame()
 {
     float x, y, width, height;
 
-    x = m_Pos.x; y = m_Pos.y; width = 112.f; height = 140;
+    x      = m_Pos.x;
+    y      = m_Pos.y;
+    width  = 112.f;
+    height = 140;
 
     RenderImage(IMAGE_QUICKCOMMAND_BACK, x, y, width, height);
 
@@ -259,7 +255,7 @@ void SEASON3B::CNewUIQuickCommandWindow::RenderContents()
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
 
-    int iGlobalText[] = { 943, 1124, 944, 948, 949 };
+    int iGlobalText[] = {943, 1124, 944, 948, 949};
     for (int i = 0; i < 5; ++i)
     {
         if (m_iSelectedIndex == i)
@@ -302,13 +298,13 @@ float SEASON3B::CNewUIQuickCommandWindow::GetKeyEventOrder()
 
 void SEASON3B::CNewUIQuickCommandWindow::OpenningProcess()
 {
-    m_iSelectedIndex = -1;
+    m_iSelectedIndex          = -1;
     m_iSelectedCharacterIndex = -1;
 }
 
 void SEASON3B::CNewUIQuickCommandWindow::ClosingProcess()
 {
-    m_iSelectedIndex = -1;
+    m_iSelectedIndex          = -1;
     m_iSelectedCharacterIndex = -1;
 }
 
@@ -353,15 +349,7 @@ void SEASON3B::CNewUIQuickCommandWindow::CloseQuickCommand()
 
 void SEASON3B::CNewUIQuickCommandWindow::SetID(const wchar_t* strID)
 {
-    // MEM-9: the source (character name) can be up to 65 chars but m_strID holds 32;
-    // copy bounded (truncating) and guard against a null pointer.
-    if (strID == nullptr)
-    {
-        m_strID[0] = L'\0';
-        return;
-    }
-
-    wcsncpy_s(m_strID, strID, _TRUNCATE);
+    wcscpy(m_strID, strID);
 }
 
 void SEASON3B::CNewUIQuickCommandWindow::SetSelectedCharacterIndex(int iIndex)

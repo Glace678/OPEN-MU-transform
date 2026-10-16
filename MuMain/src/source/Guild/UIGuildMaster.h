@@ -13,8 +13,19 @@ class CUIManager;
 class CUIGuildInfo;
 class CUIGuildMaster;
 
-enum eCurrentMode { MODE_NONE, MODE_CREATE_GUILD, MODE_EDIT_GUILDMARK };
-enum eCurrentStep { STEP_MAIN, STEP_CREATE_GUILDINFO, STEP_EDIT_GUILD_MARK, STEP_CONFIRM_GUILDINFO };
+enum eCurrentMode
+{
+    MODE_NONE,
+    MODE_CREATE_GUILD,
+    MODE_EDIT_GUILDMARK
+};
+enum eCurrentStep
+{
+    STEP_MAIN,
+    STEP_CREATE_GUILDINFO,
+    STEP_EDIT_GUILD_MARK,
+    STEP_CONFIRM_GUILDINFO
+};
 
 class CUIGuildMaster : public CUIControl
 {
@@ -23,16 +34,16 @@ public:
     virtual ~CUIGuildMaster();
 
 protected:
-    bool			m_bOpened;
+    bool m_bOpened;
     // STEP_MAIN
-    CUIButton		m_CreateGuildButton;
-    CUIButton		m_EditGuildMarkButton;
+    CUIButton m_CreateGuildButton;
+    CUIButton m_EditGuildMarkButton;
 
-    CUIButton		m_NextButton;
-    CUIButton		m_PreviousButton;
+    CUIButton m_NextButton;
+    CUIButton m_PreviousButton;
 
-    DWORD			m_dwEditGuildMarkConfirmPopup;
-    DWORD			m_dwGuildRelationShipReplyPopup;
+    DWORD m_dwEditGuildMarkConfirmPopup;
+    DWORD m_dwGuildRelationShipReplyPopup;
 
 protected:
     BOOL IsValidGuildName(const wchar_t* szName);
@@ -55,13 +66,14 @@ protected:
     void RenderGuildMasterMain();
 
 public:
-    void ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType, BYTE  byTargetUserIndexH, BYTE byTargetUserIndexL);
+    void ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
+                                  BYTE byTargetUserIndexH, BYTE byTargetUserIndexL);
 
     virtual BOOL DoMouseAction();
     virtual void Render();
-    void Open();
-    bool IsOpen();
+    void         Open();
+    bool         IsOpen();
     virtual void Close();
 };
 
-#endif // !defined(AFX_UIGUILDMASTER_H__A1F8F21B_D41E_4688_A9E8_C5B29A6F3074__INCLUDED_)
+#endif  // !defined(AFX_UIGUILDMASTER_H__A1F8F21B_D41E_4688_A9E8_C5B29A6F3074__INCLUDED_)

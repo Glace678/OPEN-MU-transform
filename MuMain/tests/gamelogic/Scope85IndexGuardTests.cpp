@@ -18,7 +18,7 @@
 //   SCOPE85_MAX_CHARACTERS_CLIENT : Character/CharacterConstants.h
 //   SCOPE85_MAX_GUILDS            : GameLogic/Guild/GuildConstants.h
 #define SCOPE85_MAX_CHARACTERS_CLIENT 400
-#define SCOPE85_MAX_GUILDS             80
+#define SCOPE85_MAX_GUILDS            80
 
 // Mirrors src/source/UI/NewUI/Combat/NewUISiegeWarBase.h
 #define SCOPE85_MAX_COMMANDGROUP 7
@@ -30,38 +30,40 @@
 
 namespace
 {
-    // 85-02 predicate, verbatim from CSenatusInfo::GetNPCInfo / SetNPCInfo guards.
-    inline bool SenatusIndexValid(int npcNumber, int wireIndex)
-    {
-        // GATENPC_NUMBER=277, STATUENPC_NUMBER=283
-        if (npcNumber == 277) return wireIndex >= 1 && wireIndex <= SCOPE85_GATE_SLOTS;
-        if (npcNumber == 283) return wireIndex >= 1 && wireIndex <= SCOPE85_STATUE_SLOTS;
-        return false;
-    }
+// 85-02 predicate, verbatim from CSenatusInfo::GetNPCInfo / SetNPCInfo guards.
+inline bool SenatusIndexValid(int npcNumber, int wireIndex)
+{
+    // GATENPC_NUMBER=277, STATUENPC_NUMBER=283
+    if (npcNumber == 277)
+        return wireIndex >= 1 && wireIndex <= SCOPE85_GATE_SLOTS;
+    if (npcNumber == 283)
+        return wireIndex >= 1 && wireIndex <= SCOPE85_STATUE_SLOTS;
+    return false;
+}
 
-    // 85-03 predicate, verbatim from CNewUISiegeWarBase::SetMapInfo guard.
-    inline bool SiegeTeamValid(unsigned char byTeam)
-    {
-        return byTeam < SCOPE85_MAX_COMMANDGROUP;
-    }
+// 85-03 predicate, verbatim from CNewUISiegeWarBase::SetMapInfo guard.
+inline bool SiegeTeamValid(unsigned char byTeam)
+{
+    return byTeam < SCOPE85_MAX_COMMANDGROUP;
+}
 
-    // 85-07 predicate, verbatim from the guild dialog DeleteIndex guards.
-    inline bool GuildMemberIndexValid(int deleteIndex, int liveMemberCount)
-    {
-        return deleteIndex >= 0 && deleteIndex < liveMemberCount;
-    }
+// 85-07 predicate, verbatim from the guild dialog DeleteIndex guards.
+inline bool GuildMemberIndexValid(int deleteIndex, int liveMemberCount)
+{
+    return deleteIndex >= 0 && deleteIndex < liveMemberCount;
+}
 
-    // 85-08 predicate, verbatim from CPersonalShopItemBuyMsgBoxLayout::OkBtnDown.
-    inline bool ShopCharacterIndexValid(int idx)
-    {
-        return idx >= 0 && idx < SCOPE85_MAX_CHARACTERS_CLIENT;
-    }
+// 85-08 predicate, verbatim from CPersonalShopItemBuyMsgBoxLayout::OkBtnDown.
+inline bool ShopCharacterIndexValid(int idx)
+{
+    return idx >= 0 && idx < SCOPE85_MAX_CHARACTERS_CLIENT;
+}
 
-    // 85-09 predicate, verbatim from the chat-command m_parameterValues guards.
-    inline bool ChatParameterValueValid(size_t parameterIndex, size_t commandParamCount, size_t valueVectorSize)
-    {
-        return parameterIndex < commandParamCount && parameterIndex < valueVectorSize;
-    }
+// 85-09 predicate, verbatim from the chat-command m_parameterValues guards.
+inline bool ChatParameterValueValid(size_t parameterIndex, size_t commandParamCount, size_t valueVectorSize)
+{
+    return parameterIndex < commandParamCount && parameterIndex < valueVectorSize;
+}
 }
 
 TEST_SUITE("Scope85IndexGuards")
@@ -128,7 +130,7 @@ TEST_SUITE("Scope85IndexGuards")
     TEST_CASE("85-09 chat parameter page respects the value vector, not just the command")
     {
         const size_t commandParams = 5;
-        const size_t valueVector = 3;
+        const size_t valueVector   = 3;
 
         for (size_t i = 0; i < valueVector; ++i)
             CHECK(ChatParameterValueValid(i, commandParams, valueVector));

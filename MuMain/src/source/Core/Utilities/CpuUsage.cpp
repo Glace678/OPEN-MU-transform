@@ -13,47 +13,47 @@ public:
     {
         SYSTEM_INFO sysInfo;
         GetSystemInfo(&sysInfo);
-        m_numProcessors = sysInfo.dwNumberOfProcessors;
-        m_lastCheckTime = std::chrono::steady_clock::now();
+        m_numProcessors   = sysInfo.dwNumberOfProcessors;
+        m_lastCheckTime   = std::chrono::steady_clock::now();
         m_lastProcessTime = 0;
-        m_lastSystemTime = 0;
+        m_lastSystemTime  = 0;
     }
 
-    double GetUsage() 
+    double GetUsage()
     {
         // Get the current process times
         FILETIME creationTime, exitTime, kernelTime, userTime;
         if (!GetProcessTimes(GetCurrentProcess(), &creationTime, &exitTime, &kernelTime, &userTime))
         {
-            return 0.0; // Error
+            return 0.0;  // Error
         }
 
         // Convert process times to ULONGLONG
-        ULONGLONG currentKernelTime = FileTimeToULL(kernelTime);
-        ULONGLONG currentUserTime = FileTimeToULL(userTime);
+        ULONGLONG currentKernelTime  = FileTimeToULL(kernelTime);
+        ULONGLONG currentUserTime    = FileTimeToULL(userTime);
         ULONGLONG currentProcessTime = currentKernelTime + currentUserTime;
 
         // Get the current wall-clock time using std::chrono
-        auto now = std::chrono::steady_clock::now();
+        auto now             = std::chrono::steady_clock::now();
         auto elapsedWallTime = std::chrono::duration_cast<std::chrono::microseconds>(now - m_lastCheckTime).count();
 
         // First call: Initialize
         if (m_lastSystemTime == 0 || m_lastProcessTime == 0)
         {
-            m_lastSystemTime = elapsedWallTime;
+            m_lastSystemTime  = elapsedWallTime;
             m_lastProcessTime = currentProcessTime;
-            m_lastCheckTime = now;
-            return 0.0; // Not enough data to calculate usage
+            m_lastCheckTime   = now;
+            return 0.0;  // Not enough data to calculate usage
         }
 
         // Calculate elapsed times
-        ULONGLONG systemTimeElapsed = elapsedWallTime;
+        ULONGLONG systemTimeElapsed  = elapsedWallTime;
         ULONGLONG processTimeElapsed = currentProcessTime - m_lastProcessTime;
 
         // Update last recorded times
-        m_lastSystemTime = elapsedWallTime;
+        m_lastSystemTime  = elapsedWallTime;
         m_lastProcessTime = currentProcessTime;
-        m_lastCheckTime = now;
+        m_lastCheckTime   = now;
 
         // Avoid division by zero
         if (systemTimeElapsed == 0 || m_numProcessors == 0)
@@ -65,16 +65,16 @@ public:
         // captures: a mostly single-core-bound ~5-6ms/frame render workload was reporting
         // 51-72% of total logical-core capacity instead of the correct ~5-7%.
         constexpr double kFileTimeTicksPerMicrosecond = 10.0;
-        double processTimeElapsedUs = static_cast<double>(processTimeElapsed) / kFileTimeTicksPerMicrosecond;
+        double           processTimeElapsedUs = static_cast<double>(processTimeElapsed) / kFileTimeTicksPerMicrosecond;
 
         // Calculate CPU usage as a percentage
         return std::max<double>(0.0, (100.0 * processTimeElapsedUs) / (systemTimeElapsed * m_numProcessors));
     }
 
 private:
-    ULONGLONG m_lastSystemTime;
-    ULONGLONG m_lastProcessTime;
-    DWORD m_numProcessors;
+    ULONGLONG                             m_lastSystemTime;
+    ULONGLONG                             m_lastProcessTime;
+    DWORD                                 m_numProcessors;
     std::chrono::steady_clock::time_point m_lastCheckTime;
 
     ULONGLONG FileTimeToULL(const FILETIME& ft)
@@ -96,11 +96,10 @@ class CpuUsage::Impl
 {
 public:
     Impl()
-        : m_numProcessors(std::max(1u, std::thread::hardware_concurrency()))
-        , m_lastCheckTime(std::chrono::steady_clock::now())
-        , m_lastProcessTime(~0ULL)  // sentinel: "no baseline yet" (0 is a valid CPU time)
-    {
-    }
+        : m_numProcessors(std::max(1u, std::thread::hardware_concurrency())),
+          m_lastCheckTime(std::chrono::steady_clock::now()),
+          m_lastProcessTime(~0ULL)  // sentinel: "no baseline yet" (0 is a valid CPU time)
+    {}
 
     double GetUsage()
     {
@@ -108,13 +107,13 @@ public:
         if (getrusage(RUSAGE_SELF, &ru) != 0)
             return 0.0;
 
-        const unsigned long long currentProcessTime =
-            (static_cast<unsigned long long>(ru.ru_utime.tv_sec) +
-             static_cast<unsigned long long>(ru.ru_stime.tv_sec)) * 1000000ULL +
-            static_cast<unsigned long long>(ru.ru_utime.tv_usec) +
-            static_cast<unsigned long long>(ru.ru_stime.tv_usec);
+        const unsigned long long currentProcessTime = (static_cast<unsigned long long>(ru.ru_utime.tv_sec) +
+                                                       static_cast<unsigned long long>(ru.ru_stime.tv_sec)) *
+                                                          1000000ULL +
+                                                      static_cast<unsigned long long>(ru.ru_utime.tv_usec) +
+                                                      static_cast<unsigned long long>(ru.ru_stime.tv_usec);
 
-        const auto now = std::chrono::steady_clock::now();
+        const auto      now = std::chrono::steady_clock::now();
         const long long elapsedWallTime =
             std::chrono::duration_cast<std::chrono::microseconds>(now - m_lastCheckTime).count();
 
@@ -122,28 +121,28 @@ public:
         if (m_lastProcessTime == ~0ULL)
         {
             m_lastProcessTime = currentProcessTime;
-            m_lastCheckTime = now;
+            m_lastCheckTime   = now;
             return 0.0;
         }
 
         const unsigned long long processTimeElapsed = currentProcessTime - m_lastProcessTime;
-        m_lastProcessTime = currentProcessTime;
-        m_lastCheckTime = now;
+        m_lastProcessTime                           = currentProcessTime;
+        m_lastCheckTime                             = now;
 
         if (elapsedWallTime <= 0 || m_numProcessors == 0)
             return 0.0;
 
         return std::max<double>(0.0, (100.0 * processTimeElapsed) /
-                                     (static_cast<double>(elapsedWallTime) * m_numProcessors));
+                                         (static_cast<double>(elapsedWallTime) * m_numProcessors));
     }
 
 private:
-    unsigned int m_numProcessors;
+    unsigned int                          m_numProcessors;
     std::chrono::steady_clock::time_point m_lastCheckTime;
-    unsigned long long m_lastProcessTime;
+    unsigned long long                    m_lastProcessTime;
 };
 
-#endif // _WIN32
+#endif  // _WIN32
 
 CpuUsage* CpuUsage::Instance()
 {

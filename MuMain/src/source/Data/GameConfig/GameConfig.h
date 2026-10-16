@@ -13,36 +13,36 @@ class GameConfig
 public:
     static GameConfig& GetInstance();
 
-    void Load();
-    void Save();
-    bool IsSoloBalanceEnabled() const { return m_soloBalanceEnabled; }
+    void    Load();
+    void    Save();
+    bool    IsSoloBalanceEnabled() const { return m_soloBalanceEnabled; }
     int64_t ScaleSoloPrice(int64_t price) const;
 
     // Window
-    int  GetWindowWidth()  const { return m_windowWidth; }
+    int  GetWindowWidth() const { return m_windowWidth; }
     int  GetWindowHeight() const { return m_windowHeight; }
-    bool GetWindowMode()   const { return m_windowMode; }
+    bool GetWindowMode() const { return m_windowMode; }
 
     void SetWindowSize(int width, int height);
     void SetWindowMode(bool windowed);
 
     const Core::Time::FrameTimingSettings& GetFrameTimingSettings() const { return m_frameTimingSettings; }
-    void SetFrameTimingSettings(const Core::Time::FrameTimingSettings& settings);
+    void                                   SetFrameTimingSettings(const Core::Time::FrameTimingSettings& settings);
 
-    int GetRenderLevel() const { return m_renderLevel; }
+    int  GetRenderLevel() const { return m_renderLevel; }
     bool GetRenderAllEffects() const { return m_renderAllEffects; }
     void SetRenderQuality(int renderLevel, bool renderAllEffects);
 
     const Core::Input::GamepadSettings& GetGamepadSettings() const { return m_gamepadSettings; }
-    void SetGamepadSettings(const Core::Input::GamepadSettings& settings);
-    bool GetMobileLeftHanded() const { return m_mobileLeftHanded; }
+    void                                SetGamepadSettings(const Core::Input::GamepadSettings& settings);
+    bool                                GetMobileLeftHanded() const { return m_mobileLeftHanded; }
 
     const Core::Haptics::HapticSettings& GetHapticSettings() const { return m_hapticSettings; }
-    void SetHapticSettings(const Core::Haptics::HapticSettings& settings);
+    void                                 SetHapticSettings(const Core::Haptics::HapticSettings& settings);
 
     // Audio — volume 0 = off, >0 = on. No separate Enabled flag.
-    int  GetSoundVolume()  const { return m_soundVolume; }
-    int  GetMusicVolume()  const { return m_musicVolume; }
+    int GetSoundVolume() const { return m_soundVolume; }
+    int GetMusicVolume() const { return m_musicVolume; }
 
     void SetSoundVolume(int level);
     void SetMusicVolume(int level);
@@ -62,17 +62,17 @@ public:
     void ClearCredentials();
 
     std::wstring GetLanguageSelection() const { return m_languageSelection; }
-    void SetLanguageSelection(const std::wstring& lang);
+    void         SetLanguageSelection(const std::wstring& lang);
 
-    void SetEncryptedUsername(const std::wstring& encryptedUsername);
+    void         SetEncryptedUsername(const std::wstring& encryptedUsername);
     std::wstring GetEncryptedUsername() const { return m_encryptedUsername; }
 
-    void SetEncryptedPassword(const std::wstring& encryptedPassword);
+    void         SetEncryptedPassword(const std::wstring& encryptedPassword);
     std::wstring GetEncryptedPassword() const { return m_encryptedPassword; }
 
     // Connection
     std::wstring GetServerIP() const { return m_serverIP; }
-    int GetServerPort() const { return m_serverPort; }
+    int          GetServerPort() const { return m_serverPort; }
     std::wstring GetAccountPortalUrl() const { return m_accountPortalUrl; }
 
     void SetServerIP(const std::wstring& ip);
@@ -82,23 +82,23 @@ public:
     // accessors. Distinct from GetLanguageSelection above, which is the
     // legacy "Eng"/"Por"/"Spn" data-dir prefix used by .bmd asset loaders.
     std::wstring GetUILocale() const { return m_uiLocale; }
-    void SetUILocale(const std::wstring& locale);
+    void         SetUILocale(const std::wstring& locale);
 
     // UI font family name (GDI face name). Empty = platform default.
     std::wstring GetFontSelection() const { return m_fontSelection; }
-    void SetFontSelection(const std::wstring& font);
+    void         SetFontSelection(const std::wstring& font);
 
     // Chat commands - the favourites and the named templates of the command
     // window. They belong to the installation, not to a character.
     // A template is stored as "name|command|value|value|...".
     const std::vector<std::wstring>& GetChatCommandFavourites() const { return m_chatCommandFavourites; }
-    void SetChatCommandFavourites(const std::vector<std::wstring>& favourites);
+    void                             SetChatCommandFavourites(const std::vector<std::wstring>& favourites);
 
     const std::vector<std::wstring>& GetChatCommandTemplates() const { return m_chatCommandTemplates; }
-    void SetChatCommandTemplates(const std::vector<std::wstring>& templates);
+    void                             SetChatCommandTemplates(const std::vector<std::wstring>& templates);
 
     // Camera
-    int GetZoom() const { return m_zoom; }
+    int  GetZoom() const { return m_zoom; }
     void SetZoom(int zoom);
 
     // Tutorial: whether the onboarding has been completed on this install.
@@ -106,7 +106,7 @@ public:
     void SetTutorialCompleted(bool completed);
 
     // Helpers
-    static std::wstring BinaryToHex(const BYTE* data, DWORD size);
+    static std::wstring      BinaryToHex(const BYTE* data, DWORD size);
     static std::vector<BYTE> HexToBinary(const std::wstring& hex);
 
     void DecryptCredentials(wchar_t* outUser, wchar_t* outPass, size_t userBufSize, size_t passBufSize);
@@ -114,7 +114,7 @@ public:
 
 private:
     GameConfig();
-    GameConfig(const GameConfig&) = delete;
+    GameConfig(const GameConfig&)            = delete;
     GameConfig& operator=(const GameConfig&) = delete;
 
     std::filesystem::path m_configPath;
@@ -125,26 +125,26 @@ private:
     bool m_soloBalanceEnabled = false;
 
     Core::Time::FrameTimingSettings m_frameTimingSettings;
-    int m_renderLevel = 4;
-    bool m_renderAllEffects = true;
-    Core::Input::GamepadSettings m_gamepadSettings;
-    bool m_mobileLeftHanded = false;
-    Core::Haptics::HapticSettings m_hapticSettings;
+    int                             m_renderLevel      = 4;
+    bool                            m_renderAllEffects = true;
+    Core::Input::GamepadSettings    m_gamepadSettings;
+    bool                            m_mobileLeftHanded = false;
+    Core::Haptics::HapticSettings   m_hapticSettings;
 
-    int  m_soundVolume;
-    int  m_musicVolume;
+    int m_soundVolume;
+    int m_musicVolume;
 
     std::vector<std::wstring> m_chatCommandFavourites;
     std::vector<std::wstring> m_chatCommandTemplates;
 
-    bool m_rememberMe;
-    bool m_savePassword;
+    bool         m_rememberMe;
+    bool         m_savePassword;
     std::wstring m_languageSelection;
     std::wstring m_encryptedUsername;
     std::wstring m_encryptedPassword;
 
     std::wstring m_serverIP;
-    int m_serverPort;
+    int          m_serverPort;
     std::wstring m_accountPortalUrl;
 
     std::wstring m_uiLocale;
@@ -154,7 +154,7 @@ private:
 
     bool m_tutorialCompleted = false;
 
-    int ReadInt(const wchar_t* section, const wchar_t* key, int defaultValue);
+    int  ReadInt(const wchar_t* section, const wchar_t* key, int defaultValue);
     void WriteInt(const wchar_t* section, const wchar_t* key, int value);
 
     bool ReadBool(const wchar_t* section, const wchar_t* key, bool defaultValue);
@@ -163,7 +163,7 @@ private:
     std::vector<std::wstring> ReadStringList(const wchar_t* section, const wchar_t* keyPrefix);
     void WriteStringList(const wchar_t* section, const wchar_t* keyPrefix, const std::vector<std::wstring>& values);
     std::wstring ReadString(const wchar_t* section, const wchar_t* key, const std::wstring& defaultValue);
-    void WriteString(const wchar_t* section, const wchar_t* key, const std::wstring& value);
+    void         WriteString(const wchar_t* section, const wchar_t* key, const std::wstring& value);
 
     void RemoveObsoleteKey(const wchar_t* section, const wchar_t* key);
     void RemoveObsoleteSection(const wchar_t* section);

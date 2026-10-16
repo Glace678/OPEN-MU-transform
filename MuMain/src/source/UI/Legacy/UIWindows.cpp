@@ -715,7 +715,7 @@ void CUIWindowMgr::OpenMainWnd(int iPos_x, int iPos_y)
         {
             pWindow->SetSize(m_iMainWindowWidth, m_iMainWindowHeight);
             pWindow->SetBackPosition(m_bIsMainWindowMaximize, m_iMainWindowBackPos_y, m_iMainWindowBackHeight);
-            // Restore window list
+            // 윈도우 목록 복구
             RefreshMainWndChatRoomList();
             pWindow->Refresh();
             //			((CUIFriendWindow *)pWindow)->SetTabIndex(m_iLastFriendWindowTabIndex);
@@ -998,18 +998,16 @@ void CUIBaseWindow::Render()
 
     EnableAlphaTest();
 
-    if (m_iOptions != UIWINDOWSTYLE_NULL)
+    if (m_iOptions == UIWINDOWSTYLE_NULL);
+    else if (CheckOption(UIWINDOWSTYLE_FRAME))
     {
-        if (CheckOption(UIWINDOWSTYLE_FRAME))
-        {
-            SetLineColor(3);
-            RenderColor((float)m_iPos_x, (float)m_iPos_y + 5, (float)m_iWidth, (float)m_iHeight - 10);
-        }
-        else
-        {
-            SetLineColor(3);
-            RenderColor((float)m_iPos_x, (float)m_iPos_y + 5, (float)m_iWidth, (float)m_iHeight);
-        }
+        SetLineColor(3);
+        RenderColor((float)m_iPos_x, (float)m_iPos_y + 5, (float)m_iWidth, (float)m_iHeight - 10);
+    }
+    else
+    {
+        SetLineColor(3);
+        RenderColor((float)m_iPos_x, (float)m_iPos_y + 5, (float)m_iWidth, (float)m_iHeight);
     }
     EndRenderColor();
 
@@ -1364,6 +1362,18 @@ void CUIChatWindow::Init(const wchar_t* pszTitle, DWORD dwParentID)
     m_PalListBox.SetArrangeType(3, 75, 16);
     m_PalListBox.SetResizeType(2, 75, -16);
 
+    //	m_PalListBox.AddText(L"이름네자", 1, 1);
+    //	m_PalListBox.AddText(L"이름넉자", 1, 1);
+    //	m_PalListBox.AddText(L"이름수넷", 1, 1);
+    //	m_PalListBox.AddText(L"이름1자", 1, 1);
+    //	m_PalListBox.AddText(L"이름2자", 1, 1);
+    //	m_PalListBox.AddText(L"이름3넷", 1, 1);
+    //	m_PalListBox.AddText(L"이름4자", 1, 1);
+    //	m_PalListBox.AddText(L"이름5자", 1, 1);
+    //	m_PalListBox.AddText(L"이름6넷", 1, 1);
+    //	m_PalListBox.AddText(L"이름7넷", 1, 1);
+    //	m_PalListBox.AddText(L"이름8넷", 1, 1);
+    //	m_PalListBox.AddText(L"이름9넷", 1, 1);
 
     
 
@@ -1672,19 +1682,17 @@ BOOL CUIChatWindow::HandleMessage()
         case 2:
             if (m_TextInputBox.IsLocked() == FALSE && m_InvitePalListBox.GetSelectedText() != NULL)
             {
-                if (m_PalListBox.GetLineNum() > 1)
+                if (m_PalListBox.GetLineNum() <= 1);
+                else if (m_PalListBox.GetLineNum() >= 30)
                 {
-                    if (m_PalListBox.GetLineNum() >= 30)
-                    {
-                        AddChatText(255, I18N::Game::YouHaveReachedTheMaximumNumberOfFriendsYouCanList, 1, 0);
-                    }
-                    else
-                    {
-                        SocketClient->ToGameServer()->SendChatRoomInvitationRequest(
-                            m_InvitePalListBox.GetSelectedText()->m_szID,
-                            m_dwRoomNumber,
-                            GetUIID());
-                    }
+                    AddChatText(255, I18N::Game::YouHaveReachedTheMaximumNumberOfFriendsYouCanList, 1, 0);
+                }
+                else
+                {
+                    SocketClient->ToGameServer()->SendChatRoomInvitationRequest(
+                        m_InvitePalListBox.GetSelectedText()->m_szID,
+                        m_dwRoomNumber,
+                        GetUIID());
                 }
             }
             break;
@@ -2191,7 +2199,7 @@ void CUIPhotoViewer::Init(int iInitType)
 
     CreateCharacterPointer(&m_PhotoChar, MODEL_PLAYER, (Hero->PositionX), (Hero->PositionY), 0);
 
-    // Move
+    // 이동
     Vector(-300, -300, -300, m_PhotoChar.Object.Position);
 
     m_bIsInitialized = TRUE;
@@ -2276,7 +2284,7 @@ void CUIPhotoViewer::CopyPlayer()
         if (CompareItemEqual(&m_PhotoChar.Helper, &Hero->Helper) == FALSE)
             bChangeHelper = TRUE;
     }
-    else	// Transformed state
+    else	// 변신 상태
     {
         if (CompareItemEqual(&m_PhotoChar.BodyPart[BODYPART_HELM], &CharacterMachine->Equipment[EQUIPMENT_HELM],
             static_cast<int>(MODEL_BODY_HELM) + Hero->SkinIndex) == FALSE) bChangeArmor = TRUE;
@@ -2333,7 +2341,7 @@ void CUIPhotoViewer::CopyPlayer()
             memcpy(&m_PhotoChar.Helper, &Hero->Helper, sizeof(PART_t));
         }
     }
-    else	// Transformed state
+    else	// 변신 상태
     {
         if (bChangeArmor == TRUE)
         {
@@ -2394,7 +2402,7 @@ void CUIPhotoViewer::CopyPlayer()
         case 2:CreateMountSub(MODEL_UNICON, m_PhotoChar.Object.Position, &m_PhotoChar.Object, &m_PhotoHelper); break;
         case 3:CreateMountSub(MODEL_PEGASUS, m_PhotoChar.Object.Position, &m_PhotoChar.Object, &m_PhotoHelper); break;
         case 4:CreateMountSub(MODEL_DARK_HORSE, m_PhotoChar.Object.Position, &m_PhotoChar.Object, &m_PhotoHelper); break;
-        case 37:	//^ Fenrir letter related
+        case 37:	//^ 펜릴 편지 관련
             if (m_PhotoChar.Helper.ExcellentFlags == 0x01)
             {
                 CreateMountSub(MODEL_FENRIR_BLACK, m_PhotoChar.Object.Position, &m_PhotoChar.Object, &m_PhotoHelper);
@@ -2599,7 +2607,8 @@ void CUIPhotoViewer::Render()
         }
         else
         {
-            if (m_iSettingAnimation < AT_STAND1 || m_iSettingAnimation > AT_HEALING1)
+            if (m_iSettingAnimation >= AT_STAND1 && m_iSettingAnimation <= AT_HEALING1);
+            else
             {
                 m_bActionRepeatCheck = FALSE;
                 SetPhotoPose(AT_STAND1);
@@ -3412,14 +3421,12 @@ bool TestAlphabeticOrder(const wchar_t* pszText1, const wchar_t* pszText2, BOOL*
     int iLength = std::min<int>(wcslen(pszText1), wcslen(pszText2));
     for (int i = 0; i < iLength; ++i)
     {
-        if (pszText1[i] != pszText2[i])
-        {
-            if (pszText1[i] > pszText2[i]) return true;
-            return false;
-        }
+        if (pszText1[i] == pszText2[i]);
+        else if (pszText1[i] > pszText2[i]) return true;
+        else return false;
     }
     if (pbEqual != NULL) *pbEqual = TRUE;
-    return false;	// Exactly the same
+    return false;	// 완전히 동일
 }
 
 bool FriendListSortByID(const GUILDLIST_TEXT& lhs, const GUILDLIST_TEXT& rhs)
@@ -3644,11 +3651,11 @@ BOOL CUIFriendListTabWindow::HandleMessage()
         case 3:
             OpenSelectedFriendChat();
             break;
-        case 4:		// Write letter
+        case 4:		// 편지쓰기
         {
             wchar_t temp[MAX_TEXT_LENGTH + 1];
             mu_swprintf(temp, I18N::Game::WriteLetterCostDZen, g_cdwLetterCost);
-            dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_WRITELETTER, 100, 100, temp);	// "Write letter"
+            dwUIID = g_pWindowMgr->AddWindow(UIWNDTYPE_WRITELETTER, 100, 100, temp);	// "편지쓰기"
             if (dwUIID == 0) break;
             if (GetCurrentSelectedFriend() != NULL)
                 ((CUILetterWriteWindow*)g_pWindowMgr->GetWindow(dwUIID))->SetMailtoText((const wchar_t*)GetCurrentSelectedFriend());
@@ -3914,20 +3921,14 @@ void ReceiveChatRoomUserList(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveChatRoomChatText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, int Size)
+void ReceiveChatRoomChatText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
 {
     auto Data = (LPFS_CHAT_TEXT)ReceiveBuffer;
-    // G5-01: variable frame = Header + Index + MsgSize + Msg[MsgSize]. Validate the
-    // fixed head and the Msg[] source span against the real frame length before
-    // memcpy, and bound MsgSize by the destination buffer.
-    if (Size < (int)offsetof(FS_CHAT_TEXT, Msg)) return;
-    if (Data->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) return;
-    if (Size < (int)offsetof(FS_CHAT_TEXT, Msg) + (int)Data->MsgSize) return;
-
     auto* pChatWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwWindowUIID);
     if (pChatWindow == NULL) return;
 
     char temp[MAX_CHATROOM_TEXT_LENGTH] = { };
+    if (Data->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) return;
 
     memcpy(temp, Data->Msg, Data->MsgSize);
     BuxConvert((LPBYTE)temp, Data->MsgSize);
@@ -4003,15 +4004,7 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
         ReceiveChatRoomUserList(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x04:
-    {
-        // G5-01: validate the variable text frame against the real size before
-        // handing it off (sibling branches 0x02 #MG-14 / 0x0D #MG-13 already do).
-        if (Size < (int)offsetof(FS_CHAT_TEXT, Msg)) break;
-        auto pTxtHdr = (LPFS_CHAT_TEXT)ReceiveBuffer;
-        if (pTxtHdr->MsgSize >= MAX_CHATROOM_TEXT_LENGTH) break;
-        if (Size < (int)offsetof(FS_CHAT_TEXT, Msg) + (int)pTxtHdr->MsgSize) break;
-    }
-        ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer, Size);
+        ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer);
         break;
     case 0x0D:
         if (Size < (int)sizeof(FS_CHAT_TEXT)) break;  // #MG-13: reject short notice frame before writing Msg[99]
@@ -4589,7 +4582,7 @@ BOOL CUILetterBoxTabWindow::HandleMessage()
             DWORD dwLetterID = GetCurrentSelectedLetter()->m_dwLetterID;
             if (g_pWindowMgr->LetterReadCheck(dwLetterID) == FALSE)
             {
-                // Cache
+                // 캐시
                 if (g_pLetterList->GetLetterText(dwLetterID) == NULL)
                 {
                     SocketClient->ToGameServer()->SendLetterReadRequest(dwLetterID);
@@ -4657,10 +4650,8 @@ BOOL CUILetterBoxTabWindow::HandleMessage()
         {
             if (m_LetterListBox.HaveCheckedLine() == TRUE)
             {
-                // UI-5: local, not static - the pointers are borrowed from the
-                // list box (no ownership/deletes here), and a static deque could
-                // alias across window instances or re-entrant calls.
-                std::deque<LETTERLIST_TEXT*> letterlist;
+                static std::deque<LETTERLIST_TEXT*> letterlist;
+                letterlist.clear();
                 if (m_LetterListBox.GetCheckedLines(&letterlist) == 0) break;
                 for (std::deque<LETTERLIST_TEXT*>::iterator iter = letterlist.begin(); iter != letterlist.end(); ++iter)
                 {
@@ -4693,18 +4684,16 @@ void CUILetterBoxTabWindow::DoMouseActionSub()
     {
         if (CheckMouseIn(RPos_x(0), RPos_y(0), 10, 19) == TRUE)
         {
-            if (g_dwTopWindow == 0)
+            if (g_dwTopWindow != 0);
+            else if (m_bCheckAllState == FALSE)
             {
-                if (m_bCheckAllState == FALSE)
-                {
-                    PlayBuffer(SOUND_CLICK01);
-                    CheckAll(TRUE);
-                }
-                else
-                {
-                    PlayBuffer(SOUND_CLICK01);
-                    CheckAll(FALSE);
-                }
+                PlayBuffer(SOUND_CLICK01);
+                CheckAll(TRUE);
+            }
+            else
+            {
+                PlayBuffer(SOUND_CLICK01);
+                CheckAll(FALSE);
             }
             MouseLButton = FALSE;
         }
@@ -4981,7 +4970,8 @@ BOOL CUIFriendWindow::HandleMessage()
 
 void CUIFriendWindow::DoActionSub(BOOL bMessageOnly)
 {
-    if (GetState() != UISTATE_MOVE && GetState() != UISTATE_RESIZE)
+    if (GetState() == UISTATE_MOVE || GetState() == UISTATE_RESIZE);
+    else
     {
         switch (m_iTabIndex)
         {
@@ -5451,18 +5441,16 @@ void CUIFriendMenu::DoMouseActionSub()
                 SetFocus(g_hWnd);
                 PlayBuffer(SOUND_CLICK01);
                 MouseLButtonPop = FALSE;
-                if (g_pWindowMgr->GetWindow(*m_WindowListSelectIter) != NULL)
+                if (g_pWindowMgr->GetWindow(*m_WindowListSelectIter) == NULL);
+                else if (g_pWindowMgr->GetWindow(*m_WindowListSelectIter)->GetState() == UISTATE_HIDE ||
+                    g_pWindowMgr->GetTopNotMainWindowUIID() != *m_WindowListSelectIter)
                 {
-                    if (g_pWindowMgr->GetWindow(*m_WindowListSelectIter)->GetState() == UISTATE_HIDE ||
-                        g_pWindowMgr->GetTopNotMainWindowUIID() != *m_WindowListSelectIter)
-                    {
-                        g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, *m_WindowListSelectIter, 0);
-                        MouseLButton = false;
-                    }
-                    else
-                    {
-                        g_pWindowMgr->SendUIMessage(UI_MESSAGE_HIDE, *m_WindowListSelectIter, 0);
-                    }
+                    g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, *m_WindowListSelectIter, 0);
+                    MouseLButton = false;
+                }
+                else
+                {
+                    g_pWindowMgr->SendUIMessage(UI_MESSAGE_HIDE, *m_WindowListSelectIter, 0);
                 }
                 HideMenu();
             }

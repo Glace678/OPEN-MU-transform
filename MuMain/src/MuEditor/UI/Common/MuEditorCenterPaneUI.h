@@ -10,12 +10,12 @@ public:
     void Render(bool& showItemEditor, bool& showSkillEditor);
 
 private:
-    CMuEditorCenterPaneUI() = default;
-    CMuEditorCenterPaneUI(const CMuEditorCenterPaneUI&) = delete;
+    CMuEditorCenterPaneUI()                                        = default;
+    CMuEditorCenterPaneUI(const CMuEditorCenterPaneUI&)            = delete;
     CMuEditorCenterPaneUI& operator=(const CMuEditorCenterPaneUI&) = delete;
 };
 
 // Global accessor
 #define g_MuEditorCenterPaneUI CMuEditorCenterPaneUI::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

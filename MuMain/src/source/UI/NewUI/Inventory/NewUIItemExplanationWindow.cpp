@@ -1,4 +1,4 @@
-﻿// NewUIItemExplanationWindow.cpp: implementation of the CNewUIItemExplanationWindow class.
+﻿  // NewUIItemExplanationWindow.cpp: implementation of the CNewUIItemExplanationWindow class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -11,7 +11,7 @@
 #include "GameLogic/Items/CSItemOption.h"
 #include "I18N/All.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -20,8 +20,8 @@ using namespace SEASON3B;
 SEASON3B::CNewUIItemExplanationWindow::CNewUIItemExplanationWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = 0;
-    m_Pos.y = 0;
+    m_Pos.x     = 0;
+    m_Pos.y     = 0;
 }
 
 SEASON3B::CNewUIItemExplanationWindow::~CNewUIItemExplanationWindow()
@@ -90,19 +90,19 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
     EnableAlphaTest();
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    extern int ItemHelp;
+    extern int     ItemHelp;
     extern wchar_t TextList[50][100];
-    extern int TextListColor[50];
-    extern int TextBold[50];
-    extern int TextNum;
-    extern int g_iItemInfo[12][17];
+    extern int     TextListColor[50];
+    extern int     TextBold[50];
+    extern int     TextNum;
+    extern int     g_iItemInfo[12][17];
 
-    const auto layout = UI::Items::ItemExplanationLayout::ForWidth(WindowWidth);
-    int iInfoWidth = layout.infoWidth;
-    const int iLabelHeight = layout.labelHeight;
-    const int iDataHeight = layout.dataHeight;
+    const auto layout       = UI::Items::ItemExplanationLayout::ForWidth(WindowWidth);
+    int        iInfoWidth   = layout.infoWidth;
+    const int  iLabelHeight = layout.labelHeight;
+    const int  iDataHeight  = layout.dataHeight;
 
-    int iType = 0;
+    int iType    = 0;
     int TabSpace = 0;
 
     if (ItemHelp == ITEM_BOLT || ItemHelp == ITEM_ARROWS)
@@ -148,7 +148,7 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
     if (ItemHelp >= ITEM_BOOK_OF_SAHAMUTT && ItemHelp <= ITEM_STAFF + 29)
     {
         iType = 6;
-        TabSpace += int(800 / iInfoWidth);//20
+        TabSpace += int(800 / iInfoWidth);  //20
     }
 
     int iCurrMaxLevel = iMaxLevel;
@@ -167,12 +167,12 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
 
     wcscpy(TextList[TextNum], I18N::Game::ItemInfo);
     TextListColor[TextNum] = TEXT_COLOR_BLUE;
-    TextBold[TextNum] = true;
+    TextBold[TextNum]      = true;
     TextNum++;
 
     mu_swprintf(TextList[TextNum], L"%ls", p->Name);
     TextListColor[TextNum] = TEXT_COLOR_WHITE;
-    TextBold[TextNum] = true;
+    TextBold[TextNum]      = true;
     TextNum++;
 
     mu_swprintf(TextList[TextNum], L"\n");
@@ -222,14 +222,15 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
     int iInfoNum = (WindowWidth <= 800 ? 46 : 51);
     memset(TextList[TextNum], ' ', iInfoNum);
     TextList[TextNum][iInfoNum] = '\0';
-    TextListColor[TextNum] = TEXT_COLOR_WHITE;
-    TextBold[TextNum] = false;
+    TextListColor[TextNum]      = TEXT_COLOR_WHITE;
+    TextBold[TextNum]           = false;
     TextNum++;
 
     for (int Level = 0; Level <= iCurrMaxLevel - 1; ++Level)
     {
-        TextList[TextNum][0] = ' '; TextList[TextNum][1] = '\0';
-        TextBold[TextNum] = false;
+        TextList[TextNum][0] = ' ';
+        TextList[TextNum][1] = '\0';
+        TextBold[TextNum]    = false;
         TextNum++;
         TextListColor[TextNum] = TEXT_COLOR_WHITE;
     }
@@ -371,10 +372,6 @@ float SEASON3B::CNewUIItemExplanationWindow::GetKeyEventOrder()
     return 10.f;
 }
 
-void SEASON3B::CNewUIItemExplanationWindow::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIItemExplanationWindow::OpenningProcess() {}
 
-void SEASON3B::CNewUIItemExplanationWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIItemExplanationWindow::ClosingProcess() {}

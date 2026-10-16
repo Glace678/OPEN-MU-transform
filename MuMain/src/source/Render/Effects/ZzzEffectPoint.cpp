@@ -15,7 +15,7 @@
 #include "Network/Server/WSclient.h"
 #include "UI/NewUI/NewUISystem.h"
 
-PARTICLE  Points[MAX_POINTS];
+PARTICLE Points[MAX_POINTS];
 
 int g_iLatestPoint = -1;
 
@@ -36,17 +36,16 @@ void CreatePoint(vec3_t Position, int Value, vec3_t Color, float scale, bool bMo
             VectorCopy(Position, o->Position);
             o->Position[2] += 140.f;
             VectorCopy(Color, o->Angle);
-            o->bRepeatedly = bRepeatedly;
+            o->bRepeatedly       = bRepeatedly;
             o->fRepeatedlyHeight = RequestTerrainHeight(o->Position[0], o->Position[1]) + 140.0f;
-            o->Gravity = 10.f;
-            o->Scale = scale;
-            o->LifeTime = 0;
-            o->bEnableMove = bMove;
+            o->Gravity           = 10.f;
+            o->Scale             = scale;
+            o->LifeTime          = 0;
+            o->bEnableMove       = bMove;
             return;
         }
     }
 }
-
 
 void RenderNumberPoints(vec3_t Position, int Num, vec3_t Color, float Alpha, float Scale)
 {
@@ -68,7 +67,7 @@ void RenderNumberPoints(vec3_t Position, int Num, vec3_t Color, float Alpha, flo
     float sinTh = sinf((float)(ANGLE_TO_RAD * (g_Camera.Angle[2])));
     float cosTh = cosf((float)(ANGLE_TO_RAD * (g_Camera.Angle[2])));
 
-    for (unsigned int i = 0;i < Length;i++)
+    for (unsigned int i = 0; i < Length; i++)
     {
         float UV[4][2];
         float u = (float)(Text[i] - 48) * 16.f / 256.f;
@@ -98,15 +97,18 @@ void RenderPoints(BYTE byRenderOneMore)
         {
             if (byRenderOneMore == 1)
             {
-                if (o->Position[2] > 350.f) continue;
+                if (o->Position[2] > 350.f)
+                    continue;
             }
             else if (byRenderOneMore == 2)
             {
-                if (o->Position[2] <= 300.f) continue;
+                if (o->Position[2] <= 300.f)
+                    continue;
             }
             else if (o->bRepeatedly)
             {
-                if (o->Position[2] <= o->fRepeatedlyHeight) continue;
+                if (o->Position[2] <= o->fRepeatedlyHeight)
+                    continue;
             }
 
             if (o->Type > -1)
@@ -138,7 +140,7 @@ void MovePoints()
             {
                 if (o->bRepeatedly && o->Position[2] > o->fRepeatedlyHeight)
                 {
-                    o->Gravity = 10.0f;
+                    o->Gravity     = 10.0f;
                     o->bRepeatedly = false;
                 }
                 if (o->bEnableMove)
@@ -150,7 +152,7 @@ void MovePoints()
                     o->Live = false;
                 if (o->Type != -2)
                 {
-                    o->Scale -= 5.f * FPS_ANIMATION_FACTOR;//20.f;
+                    o->Scale -= 5.f * FPS_ANIMATION_FACTOR;  //20.f;
                     if (o->Scale < 15.f)
                         o->Scale = 15.f;
                 }

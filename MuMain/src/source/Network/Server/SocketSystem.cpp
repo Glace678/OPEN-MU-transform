@@ -9,22 +9,18 @@
 #include "UI/Legacy/UIControls.h"
 #include "Character/CharacterManager.h"
 
-using namespace SEASON4A;
-
-
+    using namespace SEASON4A;
 
 CSocketItemMgr g_SocketItemMgr;
 
 CSocketItemMgr::CSocketItemMgr()
 {
     m_iNumEquitSetBonusOptions = 0;
-    memset(m_SocketOptionInfo, 0, sizeof(m_SocketOptionInfo));
+    memset(m_SocketOptionInfo, 0, sizeof(SOCKET_OPTION_INFO) * MAX_SOCKET_OPTION);
     memset(&m_StatusBonus, 0, sizeof(SOCKET_OPTION_STATUS_BONUS));
 }
 
-CSocketItemMgr::~CSocketItemMgr()
-{
-}
+CSocketItemMgr::~CSocketItemMgr() {}
 
 BOOL CSocketItemMgr::IsSocketItem(const ITEM* pItem)
 {
@@ -40,39 +36,75 @@ BOOL CSocketItemMgr::IsSocketItem(int iItemType)
 {
     switch (iItemType)
     {
-    case ITEM_FLAMBERGE:
-    case ITEM_SWORD_BREAKER:
-    case ITEM_IMPERIAL_SWORD:
-    case ITEM_FROST_MACE:
-    case ITEM_ABSOLUTE_SCEPTER:
-    case ITEM_STINGER_BOW:
-    case ITEM_DEADLY_STAFF:
-    case ITEM_IMPERIAL_STAFF:
-    case ITEM_STAFF + 32:
-    case ITEM_CRIMSONGLORY:
-    case ITEM_SALAMANDER_SHIELD:
-    case ITEM_FROST_BARRIER:
-    case ITEM_GUARDIAN_SHIELD:
-    case ITEM_TITAN_HELM: case ITEM_TITAN_ARMOR: case ITEM_TITAN_PANTS: case ITEM_TITAN_GLOVES: case ITEM_TITAN_BOOTS:
-    case ITEM_BRAVE_HELM: case ITEM_BRAVE_ARMOR: case ITEM_BRAVE_PANTS: case ITEM_BRAVE_GLOVES: case ITEM_BRAVE_BOOTS:
-    case ITEM_HELM + 47: case ITEM_DESTROY_ARMOR: case ITEM_DESTROY_PANTS: case ITEM_DESTROY_GLOVES: case ITEM_DESTROY_BOOTS:
-    case ITEM_HELM + 48: case ITEM_PHANTOM_ARMOR: case ITEM_PHANTOM_PANTS: case ITEM_PHANTOM_GLOVES: case ITEM_PHANTOM_BOOTS:
-    case ITEM_SERAPHIM_HELM: case ITEM_SERAPHIM_ARMOR: case ITEM_SERAPHIM_PANTS: case ITEM_SERAPHIM_GLOVES: case ITEM_SERAPHIM_BOOTS:
-    case ITEM_FAITH_HELM: case ITEM_FAITH_ARMOR: case ITEM_FAITH_PANTS: case ITEM_FAITH_GLOVES: case ITEM_FAITH_BOOTS:
-    case ITEM_PAEWANG_MASK: case ITEM_PAEWANG_ARMOR: case ITEM_PAEWANG_PANTS: case ITEM_PAEWANG_GLOVES: case ITEM_PAEWANG_BOOTS:
-    case ITEM_HADES_HELM: case ITEM_HADES_ARMOR: case ITEM_HADES_PANTS: case ITEM_HADES_GLOVES: case ITEM_HADES_BOOTS:
-    case ITEM_HELM + 53: case ITEM_ARMOR + 53: case ITEM_PANTS + 53: case ITEM_GLOVES + 53: case ITEM_BOOTS + 53:
-        return TRUE;
-    default:
-        return FALSE;
+        case ITEM_FLAMBERGE:
+        case ITEM_SWORD_BREAKER:
+        case ITEM_IMPERIAL_SWORD:
+        case ITEM_FROST_MACE:
+        case ITEM_ABSOLUTE_SCEPTER:
+        case ITEM_STINGER_BOW:
+        case ITEM_DEADLY_STAFF:
+        case ITEM_IMPERIAL_STAFF:
+        case ITEM_STAFF + 32:
+        case ITEM_CRIMSONGLORY:
+        case ITEM_SALAMANDER_SHIELD:
+        case ITEM_FROST_BARRIER:
+        case ITEM_GUARDIAN_SHILED:
+        case ITEM_TITAN_HELM:
+        case ITEM_TITAN_ARMOR:
+        case ITEM_TITAN_PANTS:
+        case ITEM_TITAN_GLOVES:
+        case ITEM_TITAN_BOOTS:
+        case ITEM_BRAVE_HELM:
+        case ITEM_BRAVE_ARMOR:
+        case ITEM_BRAVE_PANTS:
+        case ITEM_BRAVE_GLOVES:
+        case ITEM_BRAVE_BOOTS:
+        case ITEM_HELM + 47:
+        case ITEM_DESTORY_ARMOR:
+        case ITEM_DESTORY_PANTS:
+        case ITEM_DESTORY_GLOVES:
+        case ITEM_DESTORY_BOOTS:
+        case ITEM_HELM + 48:
+        case ITEM_PHANTOM_ARMOR:
+        case ITEM_PHANTOM_PANTS:
+        case ITEM_PHANTOM_GLOVES:
+        case ITEM_PHANTOM_BOOTS:
+        case ITEM_SERAPHIM_HELM:
+        case ITEM_SERAPHIM_ARMOR:
+        case ITEM_SERAPHIM_PANTS:
+        case ITEM_SERAPHIM_GLOVES:
+        case ITEM_SERAPHIM_BOOTS:
+        case ITEM_FAITH_HELM:
+        case ITEM_FAITH_ARMOR:
+        case ITEM_FAITH_PANTS:
+        case ITEM_FAITH_GLOVES:
+        case ITEM_FAITH_BOOTS:
+        case ITEM_PAEWANG_MASK:
+        case ITEM_PAEWANG_ARMOR:
+        case ITEM_PAEWANG_PANTS:
+        case ITEM_PAEWANG_GLOVES:
+        case ITEM_PHAEWANG_BOOTS:
+        case ITEM_HADES_HELM:
+        case ITEM_HADES_ARMOR:
+        case ITEM_HADES_PANTS:
+        case ITEM_HADES_GLOVES:
+        case ITEM_HADES_BOOTS:
+        case ITEM_HELM + 53:
+        case ITEM_ARMOR + 53:
+        case ITEM_PANTS + 53:
+        case ITEM_GLOVES + 53:
+        case ITEM_BOOTS + 53:
+            return TRUE;
+        default:
+            return FALSE;
     }
     // 	return (pItem->SocketCount > 0);
 }
 
 int CSocketItemMgr::GetSocketCategory(int iSeedID)
 {
-    if (iSeedID == SOCKET_EMPTY) return SOCKET_EMPTY;
-    if (iSeedID < 0 || iSeedID >= MAX_SOCKET_OPTION) return SOCKET_EMPTY;
+    if (iSeedID == SOCKET_EMPTY)
+        return SOCKET_EMPTY;
 
     SOCKET_OPTION_INFO* pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][iSeedID];
     return pInfo->m_iOptionCategory;
@@ -85,27 +117,27 @@ int CSocketItemMgr::GetSeedShpereSeedID(const ITEM* pItem)
     if (pItem->Type >= ITEM_SEED_SPHERE_FIRE_1 && pItem->Type <= ITEM_SEED_SPHERE_EARTH_5)
     {
         int iCategoryIndex = (pItem->Type - (ITEM_SEED_SPHERE_FIRE_1)) % 6 + 1;
-        int iLevel = pItem->Level;
+        int iLevel         = pItem->Level;
         switch (iCategoryIndex)
         {
-        case 1:	// 0~9
-            bySocketSeedID = 0 + iLevel;
-            break;
-        case 2:	// 10~15
-            bySocketSeedID = 10 + iLevel;
-            break;
-        case 3:	// 16~20
-            bySocketSeedID = 16 + iLevel;
-            break;
-        case 4:	// 21~28
-            bySocketSeedID = 21 + iLevel;
-            break;
-        case 5:	// 29~33
-            bySocketSeedID = 29 + iLevel;
-            break;
-        case 6:	// 34~40
-            bySocketSeedID = 34 + iLevel;
-            break;
+            case 1:  // 0~9
+                bySocketSeedID = 0 + iLevel;
+                break;
+            case 2:  // 10~15
+                bySocketSeedID = 10 + iLevel;
+                break;
+            case 3:  // 16~20
+                bySocketSeedID = 16 + iLevel;
+                break;
+            case 4:  // 21~28
+                bySocketSeedID = 21 + iLevel;
+                break;
+            case 5:  // 29~33
+                bySocketSeedID = 29 + iLevel;
+                break;
+            case 6:  // 34~40
+                bySocketSeedID = 34 + iLevel;
+                break;
         }
     }
 
@@ -120,24 +152,28 @@ __int64 CSocketItemMgr::CalcSocketBonusItemValue(const ITEM* pItem, __int64 iOrg
     {
         iGoldResult += iOrgGold * (pItem->SocketCount * 0.8f);
 
-        ITEM TempSeedSphere{};
-        int socketCount = (pItem->SocketCount < MAX_SOCKETS) ? pItem->SocketCount : MAX_SOCKETS;
-        for (int i = 0; i < socketCount; ++i)
+        ITEM TempSeedSphere;
+        for (int i = 0; i < pItem->SocketCount; ++i)
         {
-            if (pItem->SocketSeedID[i] == SOCKET_EMPTY) continue;
-            if (pItem->SocketSeedID[i] < 0 || pItem->SocketSeedID[i] >= MAX_SOCKET_OPTION) continue;
-            int sphereLv = pItem->SocketSphereLv[i];
-            if (sphereLv < 1 || sphereLv > MAX_SPHERE_LEVEL) continue;
+            if (pItem->SocketSeedID[i] == SOCKET_EMPTY)
+                continue;
 
             int iSeedSphereType = 0;
-            if (pItem->SocketSeedID[i] >= 0 && pItem->SocketSeedID[i] <= 9) iSeedSphereType = 0;
-            else if (pItem->SocketSeedID[i] >= 10 && pItem->SocketSeedID[i] <= 15) iSeedSphereType = 1;
-            else if (pItem->SocketSeedID[i] >= 16 && pItem->SocketSeedID[i] <= 20) iSeedSphereType = 2;
-            else if (pItem->SocketSeedID[i] >= 21 && pItem->SocketSeedID[i] <= 28) iSeedSphereType = 3;
-            else if (pItem->SocketSeedID[i] >= 29 && pItem->SocketSeedID[i] <= 33) iSeedSphereType = 4;
-            else if (pItem->SocketSeedID[i] >= 34 && pItem->SocketSeedID[i] <= 40) iSeedSphereType = 5;
+            if (pItem->SocketSeedID[i] >= 0 && pItem->SocketSeedID[i] <= 9)
+                iSeedSphereType = 0;
+            else if (pItem->SocketSeedID[i] >= 10 && pItem->SocketSeedID[i] <= 15)
+                iSeedSphereType = 1;
+            else if (pItem->SocketSeedID[i] >= 16 && pItem->SocketSeedID[i] <= 20)
+                iSeedSphereType = 2;
+            else if (pItem->SocketSeedID[i] >= 21 && pItem->SocketSeedID[i] <= 28)
+                iSeedSphereType = 3;
+            else if (pItem->SocketSeedID[i] >= 29 && pItem->SocketSeedID[i] <= 33)
+                iSeedSphereType = 4;
+            else if (pItem->SocketSeedID[i] >= 34 && pItem->SocketSeedID[i] <= 40)
+                iSeedSphereType = 5;
 
-            TempSeedSphere.Type = ITEM_SEED_SPHERE_FIRE_1 + (sphereLv - 1) * MAX_SOCKET_TYPES + iSeedSphereType;
+            TempSeedSphere.Type =
+                ITEM_SEED_SPHERE_FIRE_1 + (pItem->SocketSphereLv[i] - 1) * MAX_SOCKET_TYPES + iSeedSphereType;
             iGoldResult += ItemValue(&TempSeedSphere, 0);
         }
     }
@@ -149,44 +185,41 @@ int CSocketItemMgr::CalcSocketOptionValue(int iOptionType, float fOptionValue)
 {
     switch (iOptionType)
     {
-    case 1:
-        return int(fOptionValue);
-    case 2:
-        return int(fOptionValue);
-    case 3:
-    {
-        WORD wLevel;
+        case 1:
+            return int(fOptionValue);
+        case 2:
+            return int(fOptionValue);
+        case 3: {
+            WORD wLevel;
 
-        if (gCharacterManager.IsMasterLevel(CharacterAttribute->Class) == true)
-            wLevel = CharacterAttribute->Level + Master_Level_Data.nMLevel;
-        else
-            wLevel = CharacterAttribute->Level;
+            if (gCharacterManager.IsMasterLevel(CharacterAttribute->Class) == true)
+                wLevel = CharacterAttribute->Level + Master_Level_Data.nMLevel;
+            else
+                wLevel = CharacterAttribute->Level;
 
-        return int((float)wLevel / fOptionValue);
-    }
-    case 4:
-    {
-        DWORD wLifeMax;
+            return int((float)wLevel / fOptionValue);
+        }
+        case 4: {
+            DWORD wLifeMax;
 
-        if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
-            wLifeMax = Master_Level_Data.wMaxLife;
-        else
-            wLifeMax = CharacterAttribute->LifeMax;
+            if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
+                wLifeMax = Master_Level_Data.wMaxLife;
+            else
+                wLifeMax = CharacterAttribute->LifeMax;
 
-        return int((float)wLifeMax / fOptionValue);
-    }
-    case 5:
-    {
-        DWORD wManaMax;
-        if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
-            wManaMax = Master_Level_Data.wMaxMana;
-        else
-            wManaMax = CharacterAttribute->ManaMax;
+            return int((float)wLifeMax / fOptionValue);
+        }
+        case 5: {
+            DWORD wManaMax;
+            if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
+                wManaMax = Master_Level_Data.wMaxMana;
+            else
+                wManaMax = CharacterAttribute->ManaMax;
 
-        return int((float)wManaMax / fOptionValue);
-    }
-    default:
-        return 0;
+            return int((float)wManaMax / fOptionValue);
+        }
+        default:
+            return 0;
     }
 }
 
@@ -194,21 +227,23 @@ void CSocketItemMgr::CalcSocketOptionValueText(wchar_t* pszOptionValueText, int 
 {
     switch (iOptionType)
     {
-    case 2:
-        mu_swprintf(pszOptionValueText, L"+%d%%", CalcSocketOptionValue(iOptionType, fOptionValue));
-        break;
-    default:
-        mu_swprintf(pszOptionValueText, L"+%d", CalcSocketOptionValue(iOptionType, fOptionValue));
-        break;
+        case 2:
+            mu_swprintf(pszOptionValueText, L"+%d%%", CalcSocketOptionValue(iOptionType, fOptionValue));
+            break;
+        default:
+            mu_swprintf(pszOptionValueText, L"+%d", CalcSocketOptionValue(iOptionType, fOptionValue));
+            break;
     }
 }
 
 void CSocketItemMgr::CreateSocketOptionText(wchar_t* pszOptionText, int iSeedID, int iSphereLv)
 {
-    if (pszOptionText == NULL) return;
-    if (iSeedID < 0 || iSeedID >= MAX_SOCKET_OPTION || iSphereLv < 1 || iSphereLv > MAX_SPHERE_LEVEL) return;
+    if (pszOptionText == NULL)
+        return;
 
-    wchar_t szOptionValueText[16] = { 0, };
+    wchar_t szOptionValueText[16] = {
+        0,
+    };
 
     SOCKET_OPTION_INFO* pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][iSeedID];
 
@@ -216,42 +251,50 @@ void CSocketItemMgr::CreateSocketOptionText(wchar_t* pszOptionText, int iSeedID,
 
     CalcSocketOptionValueText(szOptionValueText, pInfo->m_bOptionType, fOptionValue);
 
-    mu_swprintf(pszOptionText, L"%ls(%ls %ls)", I18N::Game::Lookup(2640 + pInfo->m_iOptionCategory - 1), pInfo->m_szOptionName, szOptionValueText);
+    mu_swprintf(pszOptionText, L"%ls(%ls %ls)", I18N::Game::Lookup(2640 + pInfo->m_iOptionCategory - 1),
+                pInfo->m_szOptionName, szOptionValueText);
 }
 
 extern int SkipNum;
 
 int CSocketItemMgr::AttachToolTipForSocketItem(const ITEM* pItem, int iTextNum)
 {
-    if (pItem->SocketCount == 0) return iTextNum;
+    if (pItem->SocketCount == 0)
+        return iTextNum;
 
-    mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+    mu_swprintf(TextList[iTextNum], L"\n");
+    ++iTextNum;
+    ++SkipNum;
     mu_swprintf(TextList[iTextNum], L"%ls %ls", I18N::Game::Socket, I18N::Game::ItemOptionInfo);
     TextListColor[iTextNum] = TEXT_COLOR_PURPLE;
-    TextBold[iTextNum] = false;
+    TextBold[iTextNum]      = false;
     ++iTextNum;
-    mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+    mu_swprintf(TextList[iTextNum], L"\n");
+    ++iTextNum;
+    ++SkipNum;
 
-    wchar_t szOptionText[64] = { 0, };
-    wchar_t szOptionValueText[16] = { 0, };
+    wchar_t szOptionText[64] = {
+        0,
+    };
+    wchar_t szOptionValueText[16] = {
+        0,
+    };
 
-    for (int i = 0; i < pItem->SocketCount && i < MAX_SOCKETS; ++i)
+    for (int i = 0; i < pItem->SocketCount; ++i)
     {
         if (pItem->SocketSeedID[i] == SOCKET_EMPTY)
         {
             mu_swprintf(szOptionText, I18N::Game::NoItemApplication);
             TextListColor[iTextNum] = TEXT_COLOR_GRAY;
         }
-        else if (pItem->SocketSeedID[i] < MAX_SOCKET_OPTION
-                 && pItem->SocketSphereLv[i] >= 1 && pItem->SocketSphereLv[i] <= MAX_SPHERE_LEVEL)
+        else if (pItem->SocketSeedID[i] < MAX_SOCKET_OPTION)
         {
             CreateSocketOptionText(szOptionText, pItem->SocketSeedID[i], pItem->SocketSphereLv[i]);
             TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         }
         else
         {
-            mu_swprintf(szOptionText, I18N::Game::NoItemApplication);
-            TextListColor[iTextNum] = TEXT_COLOR_GRAY;
+            assert(!"Socket index error");
         }
 
         mu_swprintf(TextList[iTextNum], I18N::Game::SocketDS, i + 1, szOptionText);
@@ -264,18 +307,22 @@ int CSocketItemMgr::AttachToolTipForSocketItem(const ITEM* pItem, int iTextNum)
         SOCKET_OPTION_INFO* pInfo = &m_SocketOptionInfo[SOT_MIX_SET_BONUS_OPTIONS][pItem->SocketSeedSetOption];
         if (pInfo && pInfo->m_iOptionValue[0] > 0)
         {
-            mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+            mu_swprintf(TextList[iTextNum], L"\n");
+            ++iTextNum;
+            ++SkipNum;
 
             mu_swprintf(TextList[iTextNum], L"%ls", I18N::Game::BonusSocketOption);
             TextListColor[iTextNum] = TEXT_COLOR_PURPLE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             ++iTextNum;
-            mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+            mu_swprintf(TextList[iTextNum], L"\n");
+            ++iTextNum;
+            ++SkipNum;
 
             CalcSocketOptionValueText(szOptionValueText, pInfo->m_bOptionType, (float)pInfo->m_iOptionValue[0]);
             mu_swprintf(TextList[iTextNum], L"%ls %ls", pInfo->m_szOptionName, szOptionValueText);
             TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             ++iTextNum;
         }
     }
@@ -291,38 +338,40 @@ int CSocketItemMgr::AttachToolTipForSeedSphereItem(const ITEM* pItem, int iTextN
         int iCategoryIndex = pItem->Type - (ITEM_SEED_FIRE) + 1;
         mu_swprintf(TextList[iTextNum], I18N::Game::ElementS, I18N::Game::Lookup(2640 + iCategoryIndex - 1));
         TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-        TextBold[iTextNum] = false;
+        TextBold[iTextNum]      = false;
         ++iTextNum;
 
-        mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+        mu_swprintf(TextList[iTextNum], L"\n");
+        ++iTextNum;
+        ++SkipNum;
 
         int iSocketSeedID = 0;
-        int iLevel = pItem->Level;
+        int iLevel        = pItem->Level;
         switch (iCategoryIndex)
         {
-        case 1:	// 0~9
-            iSocketSeedID = 0 + iLevel;
-            break;
-        case 2:	// 10~15
-            iSocketSeedID = 10 + iLevel;
-            break;
-        case 3:	// 16~20
-            iSocketSeedID = 16 + iLevel;
-            break;
-        case 4:	// 21~28
-            iSocketSeedID = 21 + iLevel;
-            break;
-        case 5:	// 29~33
-            iSocketSeedID = 29 + iLevel;
-            break;
-        case 6:	// 34~40
-            iSocketSeedID = 34 + iLevel;
-            break;
+            case 1:  // 0~9
+                iSocketSeedID = 0 + iLevel;
+                break;
+            case 2:  // 10~15
+                iSocketSeedID = 10 + iLevel;
+                break;
+            case 3:  // 16~20
+                iSocketSeedID = 16 + iLevel;
+                break;
+            case 4:  // 21~28
+                iSocketSeedID = 21 + iLevel;
+                break;
+            case 5:  // 29~33
+                iSocketSeedID = 29 + iLevel;
+                break;
+            case 6:  // 34~40
+                iSocketSeedID = 34 + iLevel;
+                break;
         }
         pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][iSocketSeedID];
         mu_swprintf(TextList[iTextNum], pInfo->m_szOptionName);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = false;
+        TextBold[iTextNum]      = false;
         ++iTextNum;
     }
     else if (pItem->Type >= ITEM_SPHERE_MONO && pItem->Type <= ITEM_SPHERE_5)
@@ -330,7 +379,7 @@ int CSocketItemMgr::AttachToolTipForSeedSphereItem(const ITEM* pItem, int iTextN
         int iSphereLevel = pItem->Type - (ITEM_SPHERE_MONO) + 1;
         mu_swprintf(TextList[iTextNum], I18N::Game::LevelD, iSphereLevel);
         TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-        TextBold[iTextNum] = false;
+        TextBold[iTextNum]      = false;
         ++iTextNum;
     }
     else if (pItem->Type >= ITEM_SEED_SPHERE_FIRE_1 && pItem->Type <= ITEM_SEED_SPHERE_EARTH_5)
@@ -338,45 +387,49 @@ int CSocketItemMgr::AttachToolTipForSeedSphereItem(const ITEM* pItem, int iTextN
         int iCategoryIndex = (pItem->Type - (ITEM_SEED_SPHERE_FIRE_1)) % 6 + 1;
         mu_swprintf(TextList[iTextNum], I18N::Game::ElementS, I18N::Game::Lookup(2640 + iCategoryIndex - 1));
         TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-        TextBold[iTextNum] = false;
+        TextBold[iTextNum]      = false;
         ++iTextNum;
 
-        mu_swprintf(TextList[iTextNum], L"\n"); ++iTextNum; ++SkipNum;
+        mu_swprintf(TextList[iTextNum], L"\n");
+        ++iTextNum;
+        ++SkipNum;
 
         int iSocketSeedID = 0;
-        int iLevel = pItem->Level;
+        int iLevel        = pItem->Level;
         switch (iCategoryIndex)
         {
-        case 1:	// 0~9
-            iSocketSeedID = 0 + iLevel;
-            break;
-        case 2:	// 10~15
-            iSocketSeedID = 10 + iLevel;
-            break;
-        case 3:	// 16~20
-            iSocketSeedID = 16 + iLevel;
-            break;
-        case 4:	// 21~28
-            iSocketSeedID = 21 + iLevel;
-            break;
-        case 5:	// 29~33
-            iSocketSeedID = 29 + iLevel;
-            break;
-        case 6:	// 34~40
-            iSocketSeedID = 34 + iLevel;
-            break;
+            case 1:  // 0~9
+                iSocketSeedID = 0 + iLevel;
+                break;
+            case 2:  // 10~15
+                iSocketSeedID = 10 + iLevel;
+                break;
+            case 3:  // 16~20
+                iSocketSeedID = 16 + iLevel;
+                break;
+            case 4:  // 21~28
+                iSocketSeedID = 21 + iLevel;
+                break;
+            case 5:  // 29~33
+                iSocketSeedID = 29 + iLevel;
+                break;
+            case 6:  // 34~40
+                iSocketSeedID = 34 + iLevel;
+                break;
         }
 
         pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][iSocketSeedID];
 
-        wchar_t szOptionValueText[16] = { 0, };
+        wchar_t szOptionValueText[16] = {
+            0,
+        };
 
         auto fOptionValue = (float)pInfo->m_iOptionValue[(pItem->Type - (ITEM_SEED_SPHERE_FIRE_1)) / 6];
         CalcSocketOptionValueText(szOptionValueText, pInfo->m_bOptionType, fOptionValue);
 
         mu_swprintf(TextList[iTextNum], L"%ls %ls", pInfo->m_szOptionName, szOptionValueText);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = false;
+        TextBold[iTextNum]      = false;
         ++iTextNum;
     }
 
@@ -397,33 +450,48 @@ void CSocketItemMgr::RenderToolTipForSocketSetOption(int iPos_x, int iPos_y)
 
         int PosX, PosY;
 
-        PosX = iPos_x + 95;//+60;
+        PosX = iPos_x + 95;  //+60;
         PosY = iPos_y + 40;
 
-        BYTE TextNum = 0;
-        BYTE SkipNum = 0;
+        BYTE TextNum  = 0;
+        BYTE SkipNum  = 0;
         BYTE setIndex = 0;
 
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum]      = false;
+        TextNum++;
+        SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum]      = false;
+        TextNum++;
+        SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum]      = false;
+        TextNum++;
+        SkipNum++;
 
         mu_swprintf(TextList[TextNum], I18N::Game::SocketPackageOption);
         TextListColor[TextNum] = TEXT_COLOR_PURPLE;
-        TextBold[TextNum] = true;
+        TextBold[TextNum]      = true;
         TextNum++;
 
-        wchar_t szOptionText[64] = { 0, };
-        wchar_t szOptionValueText[16] = { 0, };
+        wchar_t szOptionText[64] = {
+            0,
+        };
+        wchar_t szOptionValueText[16] = {
+            0,
+        };
         SOCKET_OPTION_INFO* pInfo = NULL;
         for (std::deque<DWORD>::iterator iter = m_EquipSetBonusList.begin(); iter != m_EquipSetBonusList.end(); ++iter)
         {
-            if (*iter >= (DWORD)MAX_SOCKET_OPTION) continue;
             pInfo = &m_SocketOptionInfo[SOT_EQUIP_SET_BONUS_OPTIONS][*iter];
             CalcSocketOptionValueText(szOptionValueText, pInfo->m_bOptionType, (float)pInfo->m_iOptionValue[0]);
             mu_swprintf(TextList[TextNum], L"%ls %ls", pInfo->m_szOptionName, szOptionValueText);
             TextListColor[TextNum] = TEXT_COLOR_BLUE;
-            TextBold[TextNum] = false;
+            TextBold[TextNum]      = false;
             TextNum++;
         }
 
@@ -435,44 +503,35 @@ void CSocketItemMgr::CheckSocketSetOption()
 {
     m_EquipSetBonusList.clear();
 
-    int iSeedSum[6] = { 0, 0, 0, 0, 0, 0 };
-    ITEM* pItem = NULL;
-    SOCKET_OPTION_INFO* pInfo = NULL;
+    int                 iSeedSum[6] = {0, 0, 0, 0, 0, 0};
+    ITEM*               pItem       = NULL;
+    SOCKET_OPTION_INFO* pInfo       = NULL;
 
     for (int i = 0; i < MAX_EQUIPMENT; ++i)
     {
         pItem = &CharacterMachine->Equipment[i];
-        int socketCount = (pItem->SocketCount < MAX_SOCKETS) ? pItem->SocketCount : MAX_SOCKETS;
-        for (int j = 0; j < socketCount; ++j)
+        for (int j = 0; j < pItem->SocketCount; ++j)
         {
-            int seedId = pItem->SocketSeedID[j];
-            if (seedId != SOCKET_EMPTY && seedId >= 0 && seedId < MAX_SOCKET_OPTION)
+            if (pItem->SocketSeedID[j] != SOCKET_EMPTY)
             {
-                pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][seedId];
-                int category = pInfo->m_iOptionCategory;
-                if (category >= 1 && category <= MAX_SOCKET_TYPES)
-                {
-                    ++iSeedSum[category - 1];
-                }
+                pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][pItem->SocketSeedID[j]];
+                ++iSeedSum[pInfo->m_iOptionCategory - 1];
             }
         }
     }
 
-    int bonusCount = (m_iNumEquitSetBonusOptions >= 0 && m_iNumEquitSetBonusOptions < MAX_SOCKET_OPTION)
-                     ? m_iNumEquitSetBonusOptions : 0;
-    for (int i = 0; i < bonusCount; ++i)
+    for (int i = 0; i < m_iNumEquitSetBonusOptions; ++i)
     {
-        bool matched = true;
+        int   icnt       = 0;
         BYTE* pbySetTest = m_SocketOptionInfo[SOT_EQUIP_SET_BONUS_OPTIONS][i].m_bySocketCheckInfo;
         for (int j = 0; j < 6; ++j)
         {
+            icnt = j;
             if (iSeedSum[j] < pbySetTest[j])
-            {
-                matched = false;
                 break;
-            }
         }
-        if (!matched) continue;
+        if (icnt < 6)
+            continue;
 
         m_EquipSetBonusList.push_back(m_SocketOptionInfo[SOT_EQUIP_SET_BONUS_OPTIONS][i].m_iOptionID);
     }
@@ -480,19 +539,11 @@ void CSocketItemMgr::CheckSocketSetOption()
 
 int CSocketItemMgr::GetSocketOptionValue(const ITEM* pItem, int iSocketIndex)
 {
-    if (iSocketIndex < 0 || iSocketIndex >= MAX_SOCKETS || iSocketIndex >= pItem->SocketCount)
-    {
-        return 0;
-    }
-
-    int seedId = pItem->SocketSeedID[iSocketIndex];
-    if (pItem->SocketCount > 0 && seedId != SOCKET_EMPTY && seedId >= 0 && seedId < MAX_SOCKET_OPTION)
+    if (pItem->SocketCount > 0 && pItem->SocketSeedID[iSocketIndex] != SOCKET_EMPTY)
     {
         SOCKET_OPTION_INFO* pInfo = NULL;
-        pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][seedId];
-        int sphereLv = pItem->SocketSphereLv[iSocketIndex];
-        if (sphereLv < 1 || sphereLv > MAX_SPHERE_LEVEL) return 0;
-        auto fOptionValue = (float)pInfo->m_iOptionValue[sphereLv - 1];
+        pInfo                     = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][pItem->SocketSeedID[iSocketIndex]];
+        auto fOptionValue         = (float)pInfo->m_iOptionValue[pItem->SocketSphereLv[iSocketIndex] - 1];
         return CalcSocketOptionValue(pInfo->m_bOptionType, fOptionValue);
     }
     else
@@ -506,97 +557,93 @@ void CSocketItemMgr::CalcSocketStatusBonus()
     memset(&m_StatusBonus, 0, sizeof(SOCKET_OPTION_STATUS_BONUS));
     m_StatusBonus.m_fDefenceRateBonus = 1.0f;
 
-    ITEM* pItem = NULL;
+    ITEM*               pItem = NULL;
     SOCKET_OPTION_INFO* pInfo = NULL;
 
     for (int i = 0; i < MAX_EQUIPMENT; ++i)
     {
         pItem = &CharacterMachine->Equipment[i];
 
-        if (!IsSocketItem(pItem)) continue;
+        if (!IsSocketItem(pItem))
+            continue;
 
-        int socketCount = (pItem->SocketCount < MAX_SOCKETS) ? pItem->SocketCount : MAX_SOCKETS;
-        for (int j = 0; j < socketCount; ++j)
+        for (int j = 0; j < pItem->SocketCount; ++j)
         {
-            int seedId = pItem->SocketSeedID[j];
-            if (seedId != SOCKET_EMPTY && seedId >= 0 && seedId < MAX_SOCKET_OPTION)
+            if (pItem->SocketSeedID[j] != SOCKET_EMPTY)
             {
-                pInfo = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][seedId];
-                int sphereLv = pItem->SocketSphereLv[j];
-                if (sphereLv < 1 || sphereLv > MAX_SPHERE_LEVEL) continue;
-                auto fOptionValue = (float)pInfo->m_iOptionValue[sphereLv - 1];
-                int iBonus = CalcSocketOptionValue(pInfo->m_bOptionType, fOptionValue);
+                pInfo             = &m_SocketOptionInfo[SOT_SOCKET_ITEM_OPTIONS][pItem->SocketSeedID[j]];
+                auto fOptionValue = (float)pInfo->m_iOptionValue[pItem->SocketSphereLv[j] - 1];
+                int  iBonus       = CalcSocketOptionValue(pInfo->m_bOptionType, fOptionValue);
 
                 switch (pInfo->m_iOptionID)
                 {
-                case SOPT_ATTACK_N_MAGIC_DAMAGE_BONUS_BY_LEVEL:
-                case SOPT_ATTACK_N_MAGIC_DAMAGE_BONUS:
-                    m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
-                    m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
-                    break;
-                case SOPT_ATTACK_SPEED_BONUS:
-                    m_StatusBonus.m_iAttackSpeedBonus += iBonus;
-                    break;
-                case SOPT_ATTACT_N_MAGIC_DAMAGE_MAX_BONUS:
-                    m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
-                    break;
-                case SOPT_ATTACK_N_MAGIC_DAMAGE_MIN_BONUS:
-                    m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
-                    break;
-                case SOPT_DEFENCE_RATE_BONUS:
-                    m_StatusBonus.m_fDefenceRateBonus *= 1.0f + iBonus * 0.01f;
-                    break;
-                case SOPT_DEFENCE_BONUS:
-                    m_StatusBonus.m_iDefenceBonus += iBonus;
-                    break;
-                case SOPT_SHIELD_DEFENCE_BONUS:
-                    m_StatusBonus.m_iShieldDefenceBonus += iBonus;
-                    break;
-                case SOPT_SKILL_DAMAGE_BONUS:
-                    m_StatusBonus.m_iSkillAttackDamageBonus += iBonus;
-                    break;
-                case SOPT_ATTACK_RATE_BONUS:
-                    m_StatusBonus.m_iAttackRateBonus += iBonus;
-                    break;
-                case SOPT_STRENGTH_BONUS:
-                    m_StatusBonus.m_iStrengthBonus += iBonus;
-                    break;
-                case SOPT_DEXTERITY_BONUS:
-                    m_StatusBonus.m_iDexterityBonus += iBonus;
-                    break;
-                case SOPT_VITALITY_BONUS:
-                    m_StatusBonus.m_iVitalityBonus += iBonus;
-                    break;
-                case SOPT_ENERGY_BONUS:
-                    m_StatusBonus.m_iEnergyBonus += iBonus;
-                    break;
+                    case SOPT_ATTACK_N_MAGIC_DAMAGE_BONUS_BY_LEVEL:
+                    case SOPT_ATTACK_N_MAGIC_DAMAGE_BONUS:
+                        m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
+                        m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
+                        break;
+                    case SOPT_ATTACK_SPEED_BONUS:
+                        m_StatusBonus.m_iAttackSpeedBonus += iBonus;
+                        break;
+                    case SOPT_ATTACT_N_MAGIC_DAMAGE_MAX_BONUS:
+                        m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
+                        break;
+                    case SOPT_ATTACK_N_MAGIC_DAMAGE_MIN_BONUS:
+                        m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
+                        break;
+                    case SOPT_DEFENCE_RATE_BONUS:
+                        m_StatusBonus.m_fDefenceRateBonus *= 1.0f + iBonus * 0.01f;
+                        break;
+                    case SOPT_DEFENCE_BONUS:
+                        m_StatusBonus.m_iDefenceBonus += iBonus;
+                        break;
+                    case SOPT_SHIELD_DEFENCE_BONUS:
+                        m_StatusBonus.m_iShieldDefenceBonus += iBonus;
+                        break;
+                    case SOPT_SKILL_DAMAGE_BONUS:
+                        m_StatusBonus.m_iSkillAttackDamageBonus += iBonus;
+                        break;
+                    case SOPT_ATTACK_RATE_BONUS:
+                        m_StatusBonus.m_iAttackRateBonus += iBonus;
+                        break;
+                    case SOPT_STRENGTH_BONUS:
+                        m_StatusBonus.m_iStrengthBonus += iBonus;
+                        break;
+                    case SOPT_DEXTERITY_BONUS:
+                        m_StatusBonus.m_iDexterityBonus += iBonus;
+                        break;
+                    case SOPT_VITALITY_BONUS:
+                        m_StatusBonus.m_iVitalityBonus += iBonus;
+                        break;
+                    case SOPT_ENERGY_BONUS:
+                        m_StatusBonus.m_iEnergyBonus += iBonus;
+                        break;
                 }
             }
         }
 
-        if (pItem->SocketSeedSetOption != SOCKET_EMPTY
-            && pItem->SocketSeedSetOption < MAX_SOCKET_OPTION)
+        if (pItem->SocketSeedSetOption != SOCKET_EMPTY)
         {
-            pInfo = &m_SocketOptionInfo[SOT_MIX_SET_BONUS_OPTIONS][pItem->SocketSeedSetOption];
+            pInfo      = &m_SocketOptionInfo[SOT_MIX_SET_BONUS_OPTIONS][pItem->SocketSeedSetOption];
             int iBonus = CalcSocketOptionValue(pInfo->m_bOptionType, (float)pInfo->m_iOptionValue[0]);
 
             switch (pInfo->m_iOptionID)
             {
-            case SBOPT_ATTACK_DAMAGE_BONUS:
-                m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
-                m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
-                break;
-            case SBOPT_SKILL_DAMAGE_BONUS:
-            case SBOPT_SKILL_DAMAGE_BONUS_2:
-                m_StatusBonus.m_iSkillAttackDamageBonus += iBonus;
-                break;
-            case SBOPT_MAGIC_POWER_BONUS:
-                m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
-                m_StatusBonus.m_iMagicPowerBonus += iBonus;
-                break;
-            case SBOPT_DEFENCE_BONUS:
-                m_StatusBonus.m_iDefenceBonus += iBonus;
-                break;
+                case SBOPT_ATTACK_DAMAGE_BONUS:
+                    m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
+                    m_StatusBonus.m_iAttackDamageMaxBonus += iBonus;
+                    break;
+                case SBOPT_SKILL_DAMAGE_BONUS:
+                case SBOPT_SKILL_DAMAGE_BONUS_2:
+                    m_StatusBonus.m_iSkillAttackDamageBonus += iBonus;
+                    break;
+                case SBOPT_MAGIC_POWER_BONUS:
+                    m_StatusBonus.m_iAttackDamageMinBonus += iBonus;
+                    m_StatusBonus.m_iMagicPowerBonus += iBonus;
+                    break;
+                case SBOPT_DEFENCE_BONUS:
+                    m_StatusBonus.m_iDefenceBonus += iBonus;
+                    break;
             }
         }
     }
@@ -610,7 +657,9 @@ void CSocketItemMgr::OpenSocketItemScript(const wchar_t* szFileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", szFileName);
         g_ErrorReport.Write(Text);
-        std::exit(EXIT_FAILURE);
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
     }
 
     int iSize = sizeof(SOCKET_OPTION_INFO_FILE);
@@ -618,23 +667,19 @@ void CSocketItemMgr::OpenSocketItemScript(const wchar_t* szFileName)
     {
         for (int i = 0; i < MAX_SOCKET_OPTION; ++i)
         {
-            SOCKET_OPTION_INFO_FILE current{};
-            if (fread(&current, iSize, 1, fp) != 1)
-            {
-                fclose(fp);
-                std::exit(EXIT_FAILURE);
-            }
+            SOCKET_OPTION_INFO_FILE current;
+            fread(&current, iSize, 1, fp);
             BuxConvert((BYTE*)&current, iSize);
 
-            auto target = &m_SocketOptionInfo[j][i];
-            target->m_iOptionCategory = current.m_iOptionCategory;
-            target->m_iOptionID = current.m_iOptionID;
-            target->m_bOptionType = current.m_bOptionType;
-            target->m_iOptionValue[0] = current.m_iOptionValue[0];
-            target->m_iOptionValue[1] = current.m_iOptionValue[1];
-            target->m_iOptionValue[2] = current.m_iOptionValue[2];
-            target->m_iOptionValue[3] = current.m_iOptionValue[3];
-            target->m_iOptionValue[4] = current.m_iOptionValue[4];
+            auto target                    = &m_SocketOptionInfo[j][i];
+            target->m_iOptionCategory      = current.m_iOptionCategory;
+            target->m_iOptionID            = current.m_iOptionID;
+            target->m_bOptionType          = current.m_bOptionType;
+            target->m_iOptionValue[0]      = current.m_iOptionValue[0];
+            target->m_iOptionValue[1]      = current.m_iOptionValue[1];
+            target->m_iOptionValue[2]      = current.m_iOptionValue[2];
+            target->m_iOptionValue[3]      = current.m_iOptionValue[3];
+            target->m_iOptionValue[4]      = current.m_iOptionValue[4];
             target->m_bySocketCheckInfo[0] = current.m_bySocketCheckInfo[0];
             target->m_bySocketCheckInfo[1] = current.m_bySocketCheckInfo[1];
             target->m_bySocketCheckInfo[2] = current.m_bySocketCheckInfo[2];
@@ -642,8 +687,7 @@ void CSocketItemMgr::OpenSocketItemScript(const wchar_t* szFileName)
             target->m_bySocketCheckInfo[4] = current.m_bySocketCheckInfo[4];
             target->m_bySocketCheckInfo[5] = current.m_bySocketCheckInfo[5];
 
-            // PROTO-8: fixed char[MAX_SOCKET_OPTION_NAME_LENGTH] file field.
-            CMultiLanguage::ConvertFromUtf8(target->m_szOptionName, current.m_szOptionName, MAX_SOCKET_OPTION_NAME_LENGTH);
+            CMultiLanguage::ConvertFromUtf8(target->m_szOptionName, current.m_szOptionName);
         }
     }
 
@@ -652,12 +696,8 @@ void CSocketItemMgr::OpenSocketItemScript(const wchar_t* szFileName)
     for (int i = 0; i < MAX_SOCKET_OPTION; ++i)
     {
         m_iNumEquitSetBonusOptions = i;
-        BYTE* pbySetTest = m_SocketOptionInfo[SOT_EQUIP_SET_BONUS_OPTIONS][i].m_bySocketCheckInfo;
-        if (pbySetTest[0] + pbySetTest[1] + pbySetTest[2] + pbySetTest[3] + pbySetTest[4] + pbySetTest[5] == 0) break;
-    }
-
-    if (m_iNumEquitSetBonusOptions < 0 || m_iNumEquitSetBonusOptions >= MAX_SOCKET_OPTION)
-    {
-        m_iNumEquitSetBonusOptions = 0;
+        BYTE* pbySetTest           = m_SocketOptionInfo[SOT_EQUIP_SET_BONUS_OPTIONS][i].m_bySocketCheckInfo;
+        if (pbySetTest[0] + pbySetTest[1] + pbySetTest[2] + pbySetTest[3] + pbySetTest[4] + pbySetTest[5] == 0)
+            break;
     }
 }

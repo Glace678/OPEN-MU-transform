@@ -15,8 +15,7 @@
 //
 // iOS is detected through Apple's TargetConditionals rather than __APPLE__
 // alone, so macOS keeps its desktop classification.
-#if defined(__ANDROID__) || defined(__OHOS__) \
-    || (defined(__APPLE__) && defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#if defined(__ANDROID__) || defined(__OHOS__) || (defined(__APPLE__) && defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
 #define MU_PLATFORM_MOBILE 1
 #else
 #define MU_PLATFORM_MOBILE 0

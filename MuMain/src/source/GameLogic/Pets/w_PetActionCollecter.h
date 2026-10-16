@@ -6,18 +6,19 @@
 #include "w_PetAction.h"
 #include "Render/Models/ZzzBMD.h"
 
-#define SEARCH_LENGTH 300.0f
-#define CIRCLE_STAND_RADIAN 50.0f
+#define SEARCH_LENGTH         300.0f
+#define CIRCLE_STAND_RADIAN   50.0f
 #define CIRCLE_GETITEM_RADIAN 50.0f
 
 typedef struct _RootingItem
 {
-    int itemIndex;
+    int    itemIndex;
     vec3_t position;
-}RootingItem;
+} RootingItem;
 
 class PetActionCollecter;
-using PetActionCollecterPtr = std::shared_ptr<PetActionCollecter>;class PetActionCollecter : public PetAction
+using PetActionCollecterPtr = std::shared_ptr<PetActionCollecter>;
+class PetActionCollecter : public PetAction
 {
 public:
     static PetActionCollecterPtr Make();
@@ -35,12 +36,12 @@ public:
     bool CompTimeControl(const DWORD& dwCompTime, DWORD& dwTime);
 
 public:
-    typedef std::list< RootingItem > ItemList;
+    typedef std::list<RootingItem> ItemList;
     enum ActionState
     {
-        eAction_Stand = 0,
-        eAction_Move = 1,
-        eAction_Get = 2,
+        eAction_Stand  = 0,
+        eAction_Move   = 1,
+        eAction_Get    = 2,
         eAction_Return = 3,
 
         eAction_End_NotUse,
@@ -49,11 +50,11 @@ public:
 private:
     PetActionCollecter();
     RootingItem m_RootItem;
-    bool m_isRooting;
-    DWORD m_dwSendDelayTime;
-    DWORD m_dwRootingTime;
-    DWORD m_dwRoundCountDelay;
+    bool        m_isRooting;
+    DWORD       m_dwSendDelayTime;
+    DWORD       m_dwRootingTime;
+    DWORD       m_dwRoundCountDelay;
     ActionState m_state;
-    double m_fRadWidthStand;
-    double m_fRadWidthGet;
+    double      m_fRadWidthStand;
+    double      m_fRadWidthGet;
 };

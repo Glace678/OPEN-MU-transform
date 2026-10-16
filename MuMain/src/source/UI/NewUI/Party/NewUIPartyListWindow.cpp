@@ -18,16 +18,16 @@ using namespace SEASON3B;
 CNewUIPartyListWindow::CNewUIPartyListWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_bActive = false;
-    m_iVal = 24;
+    m_Pos.x = m_Pos.y       = 0;
+    m_bActive               = false;
+    m_iVal                  = 24;
     m_iLimitUserIDHeight[0] = 48;
     m_iLimitUserIDHeight[1] = 58;
-    m_iSelectedCharacter = -1;
+    m_iSelectedCharacter    = -1;
 
     for (int i = 0; i < MAX_PARTYS; i++)
     {
-        m_iPartyListBGColor[i] = PARTY_LIST_BGCOLOR_DEFAULT;
+        m_iPartyListBGColor[i]      = PARTY_LIST_BGCOLOR_DEFAULT;
         m_bPartyMemberoutofSight[i] = false;
     }
 }
@@ -137,9 +137,11 @@ bool CNewUIPartyListWindow::BtnProcess()
         {
             m_iSelectedCharacter = i;
 
-            if (SelectedCharacter == -1) {
+            if (SelectedCharacter == -1)
+            {
                 CHARACTER* c = &CharactersClient[Party[i].index];
-                if (c && c != Hero) {
+                if (c && c != Hero)
+                {
                     UI::Chat::CreateChat(c->ID, L"", c);
                 }
             }
@@ -214,7 +216,8 @@ bool CNewUIPartyListWindow::Render()
         int iVal = i * m_iVal;
 
         glColor4f(0.f, 0.f, 0.f, 0.9f);
-        RenderColor(float(m_Pos.x + 2), float(m_Pos.y + 2 + iVal), PARTY_LIST_WINDOW_WIDTH - 3, PARTY_LIST_WINDOW_HEIGHT - 6);
+        RenderColor(float(m_Pos.x + 2), float(m_Pos.y + 2 + iVal), PARTY_LIST_WINDOW_WIDTH - 3,
+                    PARTY_LIST_WINDOW_HEIGHT - 6);
         EnableAlphaTest();
 
         if (Party[i].index == -1)
@@ -228,12 +231,13 @@ bool CNewUIPartyListWindow::Render()
             if (Party[i].index >= 0 && Party[i].index < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* pChar = &CharactersClient[Party[i].index];
-                OBJECT* pObj = &pChar->Object;
+                OBJECT*    pObj  = &pChar->Object;
 
                 if (g_isCharacterBuff(pObj, eBuff_Defense) == true)
                 {
                     glColor4f(0.2f, 1.f, 0.2f, 0.2f);
-                    RenderColor(m_Pos.x + 2, m_Pos.y + 2 + iVal, PARTY_LIST_WINDOW_WIDTH - 3, PARTY_LIST_WINDOW_HEIGHT - 6);
+                    RenderColor(m_Pos.x + 2, m_Pos.y + 2 + iVal, PARTY_LIST_WINDOW_WIDTH - 3,
+                                PARTY_LIST_WINDOW_HEIGHT - 6);
                     EnableAlphaTest();
                 }
             }
@@ -260,7 +264,8 @@ bool CNewUIPartyListWindow::Render()
             }
 
             RenderImage(IMAGE_PARTY_LIST_FLAG, m_Pos.x + 53, m_Pos.y + 3, 9, 10);
-            g_pRenderText->RenderText(m_Pos.x + 4, m_Pos.y + 4 + iVal, Party[i].Name, m_iLimitUserIDHeight[0], 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 4, m_Pos.y + 4 + iVal, Party[i].Name, m_iLimitUserIDHeight[0], 0,
+                                      RT3_SORT_LEFT);
         }
         else
         {
@@ -272,11 +277,12 @@ bool CNewUIPartyListWindow::Render()
             {
                 g_pRenderText->SetTextColor(RGBA(255, 255, 255, 255));
             }
-            g_pRenderText->RenderText(m_Pos.x + 4, m_Pos.y + 4 + iVal, Party[i].Name, m_iLimitUserIDHeight[1], 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 4, m_Pos.y + 4 + iVal, Party[i].Name, m_iLimitUserIDHeight[1], 0,
+                                      RT3_SORT_LEFT);
         }
 
-        int iStepHP = std::min<int>(10, Party[i].stepHP);
-        float fLife = ((float)iStepHP / (float)10) * (float)PARTY_LIST_HP_BAR_WIDTH;
+        int   iStepHP = std::min<int>(10, Party[i].stepHP);
+        float fLife   = ((float)iStepHP / (float)10) * (float)PARTY_LIST_HP_BAR_WIDTH;
         RenderImage(IMAGE_PARTY_LIST_HPBAR, m_Pos.x + 4, m_Pos.y + 16 + iVal, fLife, 3);
 
         if (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID))
@@ -296,18 +302,19 @@ void SEASON3B::CNewUIPartyListWindow::RenderPartyHPOnHead()
         return;
 
     float   Width = 38.f;
-    wchar_t    Text[100];
+    wchar_t Text[100];
 
     for (int j = 0; j < PartyNumber; ++j)
     {
         PARTY_t* p = &Party[j];
 
-        if (p->index <= -1) continue;
+        if (p->index <= -1)
+            continue;
 
         CHARACTER* c = &CharactersClient[p->index];
-        OBJECT* o = &c->Object;
-        vec3_t      Position;
-        int         ScreenX, ScreenY;
+        OBJECT*    o = &c->Object;
+        vec3_t     Position;
+        int        ScreenX, ScreenY;
 
         Vector(o->Position[0], o->Position[1], o->Position[2] + o->BoundingBoxMax[2] + 100.f, Position);
 
@@ -353,40 +360,23 @@ float CNewUIPartyListWindow::GetLayerDepth()
     return 5.4f;
 }
 
-void CNewUIPartyListWindow::OpenningProcess()
-{
-}
+void CNewUIPartyListWindow::OpenningProcess() {}
 
-void CNewUIPartyListWindow::ClosingProcess()
-{
-}
+void CNewUIPartyListWindow::ClosingProcess() {}
 
 bool CNewUIPartyListWindow::SelectCharacterInPartyList(PARTY_t* pMember)
 {
     auto HeroClass = gCharacterManager.GetBaseClass(Hero->Class);
 
-    if (HeroClass == CLASS_ELF
-        || HeroClass == CLASS_WIZARD
-        || HeroClass == CLASS_SUMMONER
-        )
+    if (HeroClass == CLASS_ELF || HeroClass == CLASS_WIZARD || HeroClass == CLASS_SUMMONER)
     {
         auto Skill = CharacterAttribute->Skill[Hero->CurrentSkill];
 
-        if (Skill == AT_SKILL_HEALING
-            || Skill == AT_SKILL_HEALING_STR
-            || Skill == AT_SKILL_DEFENSE
-            || Skill == AT_SKILL_DEFENSE_STR
-            || Skill == AT_SKILL_DEFENSE_MASTERY
-            || Skill == AT_SKILL_ATTACK
-            || Skill == AT_SKILL_ATTACK_STR
-            || Skill == AT_SKILL_ATTACK_MASTERY
-            || Skill == AT_SKILL_TELEPORT_ALLY
-            || Skill == AT_SKILL_SOUL_BARRIER
-            || Skill == AT_SKILL_SOUL_BARRIER_STR
-            || Skill == AT_SKILL_SOUL_BARRIER_PROFICIENCY
-            || Skill == AT_SKILL_ALICE_THORNS
-            || Skill == AT_SKILL_RECOVER
-            )
+        if (Skill == AT_SKILL_HEALING || Skill == AT_SKILL_HEALING_STR || Skill == AT_SKILL_DEFENSE ||
+            Skill == AT_SKILL_DEFENSE_STR || Skill == AT_SKILL_DEFENSE_MASTERY || Skill == AT_SKILL_ATTACK ||
+            Skill == AT_SKILL_ATTACK_STR || Skill == AT_SKILL_ATTACK_MASTERY || Skill == AT_SKILL_TELEPORT_ALLY ||
+            Skill == AT_SKILL_SOUL_BARRIER || Skill == AT_SKILL_SOUL_BARRIER_STR ||
+            Skill == AT_SKILL_SOUL_BARRIER_PROFICIENCY || Skill == AT_SKILL_ALICE_THORNS || Skill == AT_SKILL_RECOVER)
         {
             SelectedCharacter = pMember->index;
             return true;

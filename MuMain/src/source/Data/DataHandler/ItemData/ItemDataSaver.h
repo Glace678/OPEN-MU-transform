@@ -11,4 +11,4 @@ public:
     static bool Save(wchar_t* fileName, std::string* outChangeLog = nullptr);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

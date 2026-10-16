@@ -105,7 +105,7 @@ bool M31HuntingGround::MoveHuntingGroundObject(OBJECT* pObject)
     break;
     }
 
-    //. background music control
+    //. 배경음악 컨트롤
     if (::timeGetTime() - g_MusicStartStamp > 300000) {
         g_MusicStartStamp = ::timeGetTime();
         PlayBuffer(SOUND_BC_HUNTINGGROUND_AMBIENT);

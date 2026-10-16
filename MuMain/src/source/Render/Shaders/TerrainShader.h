@@ -3,7 +3,8 @@
 #include "stdafx.h"
 
 // TerrainShader handles multi-texture blended terrain rendering using VBOs.
-class TerrainShader {
+class TerrainShader
+{
 public:
     static TerrainShader& Instance();
 
@@ -32,13 +33,13 @@ public:
     void SyncAlphaRef();
 
     GLuint GetProgram() const { return m_Program; }
-    bool IsCreated() const { return m_Program != 0; }
+    bool   IsCreated() const { return m_Program != 0; }
 
 private:
     TerrainShader() = default;
     ~TerrainShader();
 
-    TerrainShader(const TerrainShader&) = delete;
+    TerrainShader(const TerrainShader&)            = delete;
     TerrainShader& operator=(const TerrainShader&) = delete;
 
     void CreateGL();
@@ -46,17 +47,17 @@ private:
     void BindGL();
 
     // ---- GL state ----
-    GLuint m_Program = 0;
+    GLuint m_Program    = 0;
     GLuint m_VertShader = 0;
     GLuint m_FragShader = 0;
 
-    GLint m_LocBaseTex = -1;
-    GLint m_LocOverlayTex = -1;
-    GLint m_LocWaterMove = -1;
-    GLint m_LocBaseIsWater = -1;
+    GLint m_LocBaseTex        = -1;
+    GLint m_LocOverlayTex     = -1;
+    GLint m_LocWaterMove      = -1;
+    GLint m_LocBaseIsWater    = -1;
     GLint m_LocOverlayIsWater = -1;
-    GLint m_LocAlphaRef = -1;
-    GLint m_LocBaseUVScale = -1;
+    GLint m_LocAlphaRef       = -1;
+    GLint m_LocBaseUVScale    = -1;
     GLint m_LocOverlayUVScale = -1;
 
     // Sentinel guaranteed to differ from any real g_AlphaRef value, forcing the first
@@ -72,6 +73,6 @@ private:
 
     // Dirty-check cache for SetUVScale, same reasoning as m_LastAlphaRef -- avoid a redundant
     // glUniform2f pair on the (common) case of consecutive tiles sharing both textures.
-    float m_LastBaseUVScale[2] = { -12345.0f, -12345.0f };
-    float m_LastOverlayUVScale[2] = { -12345.0f, -12345.0f };
+    float m_LastBaseUVScale[2]    = {-12345.0f, -12345.0f};
+    float m_LastOverlayUVScale[2] = {-12345.0f, -12345.0f};
 };

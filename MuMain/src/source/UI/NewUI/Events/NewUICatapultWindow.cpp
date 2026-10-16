@@ -11,7 +11,6 @@
 #include "Audio/DSPlaySound.h"
 #include "I18N/All.h"
 
-
 using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
@@ -34,7 +33,7 @@ void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Initialize()
 {
     SafeDeleteArray(m_pButton);
 
-    m_iType = 0;
+    m_iType  = 0;
     m_iIndex = -1;
 }
 
@@ -137,7 +136,7 @@ int SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::UpdateMouseEvent()
         {
             BtnSelected(i);
             m_iIndex = i;
-            iResult = i;
+            iResult  = i;
             break;
         }
     }
@@ -313,7 +312,7 @@ void SEASON3B::CNewUICatapultWindow::RenderButtons()
 
 void SEASON3B::CNewUICatapultWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = Core::Platform::MakePoint(fPos_x, fPos_y);
+    POINT ptOrigin  = Core::Platform::MakePoint(fPos_x, fPos_y);
     float fBoxWidth = fWidth;
 
     RenderImage(IMAGE_CATAPULT_TABLE_TOP_LEFT, ptOrigin.x + 12, ptOrigin.y - 4, 14, 14);
@@ -323,8 +322,8 @@ void SEASON3B::CNewUICatapultWindow::RenderOutlineUpper(float fPos_x, float fPos
 
 void SEASON3B::CNewUICatapultWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = Core::Platform::MakePoint(fPos_x, fPos_y);
-    float fBoxWidth = fWidth;
+    POINT ptOrigin   = Core::Platform::MakePoint(fPos_x, fPos_y);
+    float fBoxWidth  = fWidth;
     float fBoxHeight = fHeight;
 
     RenderImage(IMAGE_CATAPULT_TABLE_LEFT_PIXEL, ptOrigin.x + 12, ptOrigin.y + 9, 14, fBoxHeight);
@@ -341,7 +340,7 @@ float SEASON3B::CNewUICatapultWindow::GetLayerDepth()
 
 void SEASON3B::CNewUICatapultWindow::OpenningProcess()
 {
-    m_iType = 0;
+    m_iType   = 0;
     m_iNpcKey = 0;
     Vector(0.f, 0.f, 0.f, m_vCameraPos);
 
@@ -358,7 +357,7 @@ void SEASON3B::CNewUICatapultWindow::ClosingProcess()
 void SEASON3B::CNewUICatapultWindow::Init(int iKey, int iType)
 {
     m_iNpcKey = iKey;
-    m_iType = iType;
+    m_iType   = iType;
 
     if (m_iType == CATAPULT_ATTACK)
     {
@@ -372,25 +371,20 @@ void SEASON3B::CNewUICatapultWindow::Init(int iKey, int iType)
 
 void SEASON3B::CNewUICatapultWindow::DoFire(int iKey, int iResult, int iType, int iPositionX, int iPositionY)
 {
-    int iIndex = FindCharacterIndex(iKey);
-    if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
-    {
-        return;
-    }
-
-    CHARACTER* c = &CharactersClient[iIndex];
-    OBJECT* o = &c->Object;
+    int        iIndex = FindCharacterIndex(iKey);
+    CHARACTER* c      = &CharactersClient[iIndex];
+    OBJECT*    o      = &c->Object;
 
     SetAction(o, 1);
 
     BYTE bySubType = 0;
-    BYTE byKeyH = 0;
-    BYTE byKeyL = 0;
+    BYTE byKeyH    = 0;
+    BYTE byKeyL    = 0;
     if (iResult == 1)
     {
         bySubType = 1;
-        byKeyH = (BYTE)(iKey & 0xff);
-        byKeyL = (BYTE)(iKey >> 8);
+        byKeyH    = (BYTE)(iKey & 0xff);
+        byKeyL    = (BYTE)(iKey >> 8);
     }
     else if (iResult == 2)
     {
@@ -402,13 +396,13 @@ void SEASON3B::CNewUICatapultWindow::DoFire(int iKey, int iResult, int iType, in
     Vector(iPositionX * TERRAIN_SCALE, iPositionY * TERRAIN_SCALE, 100.f, vTargetPos);
     switch (iType)
     {
-    case 1:
-        CreateEffect(MODEL_FLY_BIG_STONE1, vPos, vTargetPos, o->Light, bySubType, &Hero->Object, 1, byKeyH, byKeyL);
-        break;
+        case 1:
+            CreateEffect(MODEL_FLY_BIG_STONE1, vPos, vTargetPos, o->Light, bySubType, &Hero->Object, 1, byKeyH, byKeyL);
+            break;
 
-    case 2:
-        CreateEffect(MODEL_FLY_BIG_STONE2, vPos, vTargetPos, o->Light, bySubType, &Hero->Object, 1, byKeyH, byKeyL);
-        break;
+        case 2:
+            CreateEffect(MODEL_FLY_BIG_STONE2, vPos, vTargetPos, o->Light, bySubType, &Hero->Object, 1, byKeyH, byKeyL);
+            break;
     }
 
     PlayBuffer(SOUND_BC_CATAPULT_ATTACK);
@@ -422,18 +416,18 @@ void SEASON3B::CNewUICatapultWindow::DoFireFixStartPosition(int iType, int iPosi
 
     switch (iType)
     {
-    case 1:
-        Vector(9200, 3000, 500.f, vPos);
-        CreateEffect(MODEL_FLY_BIG_STONE1, vPos, vTargetPos, Hero->Object.Light, 0, &Hero->Object, 1);
-        break;
+        case 1:
+            Vector(9200, 3000, 500.f, vPos);
+            CreateEffect(MODEL_FLY_BIG_STONE1, vPos, vTargetPos, Hero->Object.Light, 0, &Hero->Object, 1);
+            break;
 
-    case 2:
-        Vector(9400, 19000, 500.f, vPos);
-        CreateEffect(MODEL_FLY_BIG_STONE2, vPos, vTargetPos, Hero->Object.Light, 0, &Hero->Object, 1);
-        break;
+        case 2:
+            Vector(9400, 19000, 500.f, vPos);
+            CreateEffect(MODEL_FLY_BIG_STONE2, vPos, vTargetPos, Hero->Object.Light, 0, &Hero->Object, 1);
+            break;
     }
 
-    vec3_t vLight = { 1.f, 0.3f, 0.1f };
+    vec3_t vLight = {1.f, 0.3f, 0.1f};
     CreateEffect(BITMAP_SHOCK_WAVE, vTargetPos, Hero->Object.Angle, vLight, 6);
 
     PlayBuffer(SOUND_BC_CATAPULT_ATTACK);
@@ -516,7 +510,7 @@ bool SEASON3B::CNewUICatapultWindow::BtnProcess()
     }
 
     int iIndex = 0;
-    iIndex = m_BtnChoiceArea.UpdateMouseEvent();
+    iIndex     = m_BtnChoiceArea.UpdateMouseEvent();
 
     if (iIndex > -1)
     {

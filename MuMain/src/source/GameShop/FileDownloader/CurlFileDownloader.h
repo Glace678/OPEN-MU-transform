@@ -20,10 +20,6 @@ public:
     // null, is polled during the transfer and aborts it once it becomes
     // non-zero. Returns a WZResult using the same DL_/WZ_ codes as the WinINet
     // downloader so callers handle both paths identically.
-    static WZResult DownloadFile(const std::wstring& url,
-        const std::wstring& localPath,
-        const std::wstring& username,
-        const std::wstring& password,
-        bool passiveFtp,
-        const volatile int* pBreak);
+    static WZResult DownloadFile(const std::wstring& url, const std::wstring& localPath, const std::wstring& username,
+                                 const std::wstring& password, bool passiveFtp, const volatile int* pBreak);
 };

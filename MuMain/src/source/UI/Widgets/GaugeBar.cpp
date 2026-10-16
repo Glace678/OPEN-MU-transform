@@ -19,24 +19,21 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CGaugeBar::CGaugeBar()
-    : m_gaugeRect{0, 0, 0, 0}
-{
-}
+CGaugeBar::CGaugeBar() : m_gaugeRect{0, 0, 0, 0} {}
 
 CGaugeBar::~CGaugeBar()
 {
     Release();
 }
 
-void CGaugeBar::Create(int nGaugeWidth, int nGaugeHeight, int nGaugeTexID, const RECT* prcGauge, int nBackWidth, int nBackHeight, int nBackTexID, bool bShortenLeft, float fScaleX, float fScaleY)
+void CGaugeBar::Create(int nGaugeWidth, int nGaugeHeight, int nGaugeTexID, const RECT* prcGauge, int nBackWidth,
+                       int nBackHeight, int nBackTexID, bool bShortenLeft, float fScaleX, float fScaleY)
 {
     Release();
 
     const int nSizingDatums = bShortenLeft ? SPR_SIZING_DATUMS_LT : SPR_SIZING_DATUMS_RT;
 
-    m_sprGauge.Create(nGaugeWidth, nGaugeHeight, nGaugeTexID, 0, nullptr, 0, 0,
-        true, nSizingDatums, fScaleX, fScaleY);
+    m_sprGauge.Create(nGaugeWidth, nGaugeHeight, nGaugeTexID, 0, nullptr, 0, 0, true, nSizingDatums, fScaleX, fScaleY);
 
     if (prcGauge == nullptr)
     {
@@ -51,7 +48,8 @@ void CGaugeBar::Create(int nGaugeWidth, int nGaugeHeight, int nGaugeTexID, const
     if (nBackTexID >= 0)
     {
         m_backgroundSprite = std::make_unique<CSprite>();
-        m_backgroundSprite->Create(nBackWidth, nBackHeight, nBackTexID, 0, nullptr, 0, 0, false, SPR_SIZING_DATUMS_LT, fScaleX, fScaleY);
+        m_backgroundSprite->Create(nBackWidth, nBackHeight, nBackTexID, 0, nullptr, 0, 0, false, SPR_SIZING_DATUMS_LT,
+                                   fScaleX, fScaleY);
         m_responseSize.reset();
     }
     else if (nBackWidth > 0 && nBackHeight > 0)
@@ -79,8 +77,7 @@ void CGaugeBar::Release()
 void CGaugeBar::SetPosition(int nXCoord, int nYCoord)
 {
     // Base position is device-space; the gauge rect offsets are art units.
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CGaugeBar::SetPositionArt(float fXCoord, float fYCoord)
@@ -90,8 +87,7 @@ void CGaugeBar::SetPositionArt(float fXCoord, float fYCoord)
         m_backgroundSprite->SetPositionArt(fXCoord, fYCoord);
     }
 
-    m_sprGauge.SetPositionArt(fXCoord + m_gaugeRect.left,
-        fYCoord + m_gaugeRect.top);
+    m_sprGauge.SetPositionArt(fXCoord + m_gaugeRect.left, fYCoord + m_gaugeRect.top);
 
     // Stored device-space so the fallback hit-test math (which scales the art
     // rect by the effective scale) offsets consistently.
@@ -131,16 +127,15 @@ int CGaugeBar::GetHeight() const
 
 void CGaugeBar::SetValue(std::uint32_t dwNow, std::uint32_t dwTotal)
 {
-    const std::uint32_t safeTotal = std::max<std::uint32_t>(dwTotal, 1u);
+    const std::uint32_t safeTotal  = std::max<std::uint32_t>(dwTotal, 1u);
     const std::uint32_t clampedNow = std::min<std::uint32_t>(dwNow, safeTotal);
-    const int gaugeWidth = m_gaugeRect.right - m_gaugeRect.left;
+    const int           gaugeWidth = m_gaugeRect.right - m_gaugeRect.left;
 
     int nNowSize = static_cast<int>((static_cast<std::uint64_t>(clampedNow) * gaugeWidth) / safeTotal);
 
     if (IS_SIZING_DATUMS_R(m_sprGauge.GetSizingDatums()))
     {
-        nNowSize
-            += m_sprGauge.GetTexWidth() - gaugeWidth;
+        nNowSize += m_sprGauge.GetTexWidth() - gaugeWidth;
     }
 
     m_sprGauge.SetSizeArt(static_cast<float>(nNowSize), 0, X);
@@ -166,14 +161,14 @@ bool CGaugeBar::CursorInObject()
     if (m_responseSize)
     {
         Rect scaledRect{0, 0, m_responseSize->width, m_responseSize->height};
-        scaledRect = ScaleRect(scaledRect, fScaleX, fScaleY);
-        scaledRect = OffsetRect(scaledRect, m_nXPos, m_nYPos);
+        scaledRect           = ScaleRect(scaledRect, fScaleX, fScaleY);
+        scaledRect           = OffsetRect(scaledRect, m_nXPos, m_nYPos);
         const auto cursorPos = rInput.GetCursorPos();
         return Contains(scaledRect, cursorPos.x, cursorPos.y);
     }
 
-    Rect scaledRect = ScaleRect(m_gaugeRect, fScaleX, fScaleY);
-    scaledRect = OffsetRect(scaledRect, m_nXPos, m_nYPos);
+    Rect scaledRect      = ScaleRect(m_gaugeRect, fScaleX, fScaleY);
+    scaledRect           = OffsetRect(scaledRect, m_nXPos, m_nYPos);
     const auto cursorPos = rInput.GetCursorPos();
     return Contains(scaledRect, cursorPos.x, cursorPos.y);
 }
@@ -218,20 +213,13 @@ CGaugeBar::Rect CGaugeBar::ConvertRect(const RECT& source)
 
 CGaugeBar::Rect CGaugeBar::ScaleRect(const Rect& rect, float scaleX, float scaleY)
 {
-    return Rect{
-        static_cast<int>(rect.left * scaleX),
-        static_cast<int>(rect.top * scaleY),
-        static_cast<int>(rect.right * scaleX),
-        static_cast<int>(rect.bottom * scaleY)};
+    return Rect{static_cast<int>(rect.left * scaleX), static_cast<int>(rect.top * scaleY),
+                static_cast<int>(rect.right * scaleX), static_cast<int>(rect.bottom * scaleY)};
 }
 
 CGaugeBar::Rect CGaugeBar::OffsetRect(const Rect& rect, int offsetX, int offsetY)
 {
-    return Rect{
-        rect.left + offsetX,
-        rect.top + offsetY,
-        rect.right + offsetX,
-        rect.bottom + offsetY};
+    return Rect{rect.left + offsetX, rect.top + offsetY, rect.right + offsetX, rect.bottom + offsetY};
 }
 
 bool CGaugeBar::Contains(const Rect& rect, long x, long y)

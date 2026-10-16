@@ -18,4 +18,4 @@
 // and genuinely missing files still fail at open time.
 std::string MuResolvePath(const char* utf8Path);
 
-#endif // !_WIN32
+#endif  // !_WIN32

@@ -4,13 +4,12 @@
 
 // Memory utilities (SafeDelete / SafeDeleteArray inline templates)
 #include "Core/Utilities/MemoryMacros.h"
-#define DIRECTINPUT_VERSION	0x0500
+#define DIRECTINPUT_VERSION 0x0500
 
 ///////////////////////////////////////////////_Scene start_//////////////////////////////////////////////
 #include "Scenes/SceneConstants.h"
 
 #include "GameLogic/Pets/FenrirConstants.h"
-
 
 #include "UI/Shop/InGameShopConstants.h"
 

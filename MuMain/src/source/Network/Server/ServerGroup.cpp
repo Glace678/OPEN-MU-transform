@@ -3,9 +3,9 @@
 
 CServerGroup::CServerGroup()
 {
-    m_iSequence = 0;
+    m_iSequence    = 0;
     m_iServerIndex = 0;
-    m_iNumServer = 0;
+    m_iNumServer   = 0;
 
     for (int i = 0; i < MAX_SERVER_PER_GROUP; i++)
     {

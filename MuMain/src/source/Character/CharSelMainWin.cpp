@@ -24,96 +24,81 @@
 
 namespace
 {
-    constexpr int kCharacterSlotCount = 5;
-    constexpr int kButtonSpacing = 1;
-    constexpr int kInfoSpacing = 2;
-    constexpr int kInfoOffsetY = 5;
-    constexpr int kStatPanelBaseXOffset = 346;
-    constexpr int kStatPanelOffsetY = 24;
-    constexpr int kJobButtonsStartY = 131;
-    constexpr int kRageFighterButtonsY = 246;
-    constexpr int kSummonerRow = 3;
-    constexpr int kActionButtonsRowOffsetY = 325;
-    constexpr int kCancelButtonOffsetX = 400;
-    constexpr int kInputSpriteOffsetY = 317;
-    constexpr int kInputTextOffsetX = 78;
-    constexpr int kInputTextOffsetY = 21;
-    constexpr int kDescriptionSpriteOffsetY = 355;
-    constexpr int kDecorOffsetX = 22;
-    constexpr int kDecorOffsetY = 59;
-    constexpr int kAccountBlockMsgX = 320;
-    constexpr int kAccountBlockPrimaryY = 330;
-    constexpr int kAccountBlockSecondaryY = 348;
-    constexpr int kWindowAlpha = 143;
-    constexpr int kInfoSpriteHeight = 21;
-    constexpr int kButtonSourceWidth = 54;
-    constexpr int kButtonSourceHeight = 30;
-    constexpr int kDecoSourceWidth = 189;
-    constexpr int kDecoSourceHeight = 103;
+constexpr int kCharacterSlotCount       = 5;
+constexpr int kButtonSpacing            = 1;
+constexpr int kInfoSpacing              = 2;
+constexpr int kInfoOffsetY              = 5;
+constexpr int kStatPanelBaseXOffset     = 346;
+constexpr int kStatPanelOffsetY         = 24;
+constexpr int kJobButtonsStartY         = 131;
+constexpr int kRageFighterButtonsY      = 246;
+constexpr int kSummonerRow              = 3;
+constexpr int kActionButtonsRowOffsetY  = 325;
+constexpr int kCancelButtonOffsetX      = 400;
+constexpr int kInputSpriteOffsetY       = 317;
+constexpr int kInputTextOffsetX         = 78;
+constexpr int kInputTextOffsetY         = 21;
+constexpr int kDescriptionSpriteOffsetY = 355;
+constexpr int kDecorOffsetX             = 22;
+constexpr int kDecorOffsetY             = 59;
+constexpr int kAccountBlockMsgX         = 320;
+constexpr int kAccountBlockPrimaryY     = 330;
+constexpr int kAccountBlockSecondaryY   = 348;
+constexpr int kWindowAlpha              = 143;
+constexpr int kInfoSpriteHeight         = 21;
+constexpr int kButtonSourceWidth        = 54;
+constexpr int kButtonSourceHeight       = 30;
+constexpr int kDecoSourceWidth          = 189;
+constexpr int kDecoSourceHeight         = 103;
 
-    // Scene was authored at 800x600; map to the 640x480 art canvas.
-    constexpr float kCanvasS = (float)REFERENCE_WIDTH / 800.0f;
+// Scene was authored at 800x600; map to the 640x480 art canvas.
+constexpr float kCanvasS = (float)REFERENCE_WIDTH / 800.0f;
 
-    template <typename Predicate>
-    bool AnyCharacter(Predicate&& predicate)
-    {
-        return std::any_of(
-            CharactersClient,
-            CharactersClient + kCharacterSlotCount,
-            std::forward<Predicate>(predicate));
-    }
-
-    bool HasAccountBlockedCharacter()
-    {
-        return AnyCharacter([](const CHARACTER& character)
-        {
-            return character.Object.Live != 0
-                && (character.CtlCode & CTLCODE_10ACCOUNT_BLOCKITEM);
-        });
-    }
-
-    bool HasEmptyCharacterSlot()
-    {
-        return AnyCharacter([](const CHARACTER& character)
-        {
-            return character.Object.Live == 0;
-        });
-    }
-
-    bool HasLiveCharacter()
-    {
-        return AnyCharacter([](const CHARACTER& character)
-        {
-            return character.Object.Live != 0;
-        });
-    }
-
-    CHARACTER* GetSelectedCharacter()
-    {
-        if (SelectedHero < 0 || SelectedHero >= kCharacterSlotCount)
-            return nullptr;
-        return &CharactersClient[SelectedHero];
-    }
-
-    void RenderAccountBlockMessage()
-    {
-        g_pRenderText->SetTextColor(0, 0, 0, 255);
-        g_pRenderText->SetBgColor(255, 255, 0, 128);
-        const int msgX = int(kAccountBlockMsgX * kCanvasS);
-        const int primaryY = int(kAccountBlockPrimaryY * kCanvasS);
-        const int secondaryY = int(kAccountBlockSecondaryY * kCanvasS);
-        g_pRenderText->RenderText(msgX, primaryY, I18N::Game::ThisAccountIsItemBlocked, 0, 0, RT3_WRITE_CENTER);
-        g_pRenderText->RenderText(msgX, secondaryY, I18N::Game::PleaseCheckOnHttpMuonlineWebzenComSite, 0, 0, RT3_WRITE_CENTER);
-    }
-}
-
-CCharSelMainWin::CCharSelMainWin()
+template <typename Predicate> bool AnyCharacter(Predicate&& predicate)
 {
+    return std::any_of(CharactersClient, CharactersClient + kCharacterSlotCount, std::forward<Predicate>(predicate));
 }
 
-CCharSelMainWin::~CCharSelMainWin()
+bool HasAccountBlockedCharacter()
 {
+    return AnyCharacter([](const CHARACTER& character) {
+        return character.Object.Live != 0 && (character.CtlCode & CTLCODE_10ACCOUNT_BLOCKITEM);
+    });
 }
+
+bool HasEmptyCharacterSlot()
+{
+    return AnyCharacter([](const CHARACTER& character) { return character.Object.Live == 0; });
+}
+
+bool HasLiveCharacter()
+{
+    return AnyCharacter([](const CHARACTER& character) { return character.Object.Live != 0; });
+}
+
+CHARACTER* GetSelectedCharacter()
+{
+    if (SelectedHero < 0 || SelectedHero >= kCharacterSlotCount)
+        return nullptr;
+    return &CharactersClient[SelectedHero];
+}
+
+void RenderAccountBlockMessage()
+{
+    g_pRenderText->SetTextColor(0, 0, 0, 255);
+    g_pRenderText->SetBgColor(255, 255, 0, 128);
+    const int msgX       = int(kAccountBlockMsgX * kCanvasS);
+    const int primaryY   = int(kAccountBlockPrimaryY * kCanvasS);
+    const int secondaryY = int(kAccountBlockSecondaryY * kCanvasS);
+    g_pRenderText->RenderText(msgX, primaryY, I18N::Game::ThisAccountIsItemBlocked, 0, 0, RT3_WRITE_CENTER);
+    g_pRenderText->RenderText(msgX, secondaryY, I18N::Game::PleaseCheckOnHttpMuonlineWebzenComSite, 0, 0,
+                              RT3_WRITE_CENTER);
+}
+}
+
+CCharSelMainWin::CCharSelMainWin() {}
+
+CCharSelMainWin::~CCharSelMainWin() {}
 
 void CCharSelMainWin::Create()
 {
@@ -121,8 +106,8 @@ void CCharSelMainWin::Create()
     const int decoArtH = int(kDecoSourceHeight * kCanvasS);
     const int infoArtW = REFERENCE_WIDTH - int(266 * kCanvasS);
     const int infoArtH = int(kInfoSpriteHeight * kCanvasS);
-    const int btnArtW = int(kButtonSourceWidth * kCanvasS);
-    const int btnArtH = int(kButtonSourceHeight * kCanvasS);
+    const int btnArtW  = int(kButtonSourceWidth * kCanvasS);
+    const int btnArtH  = int(kButtonSourceHeight * kCanvasS);
 
     // Release previous children before creating their new texture resources.
     const int artWinW = btnArtW * CSMW_BTN_MAX + infoArtW + int(6 * kCanvasS);
@@ -157,8 +142,7 @@ void CCharSelMainWin::PreRelease()
 
 void CCharSelMainWin::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CCharSelMainWin::SetPositionArt(float fBaseArtX, float fBaseArtY)
@@ -167,28 +151,23 @@ void CCharSelMainWin::SetPositionArt(float fBaseArtX, float fBaseArtY)
     CWin::m_ptPos.x = int(fBaseArtX * CSprite::ResolutionScaleX());
     CWin::m_ptPos.y = int(fBaseArtY * CSprite::ResolutionScaleY());
 
-    const float rateX = CSprite::ResolutionScaleX();
-    const float rateY = CSprite::ResolutionScaleY();
+    const float rateX       = CSprite::ResolutionScaleX();
+    const float rateY       = CSprite::ResolutionScaleY();
     const float buttonWidth = m_aBtn[0].GetWidth() / rateX;
 
     m_aBtn[CSMW_BTN_CREATE].SetPositionArt(fBaseArtX, fBaseArtY);
-    m_aBtn[CSMW_BTN_MENU].SetPositionArt(
-        fBaseArtX + buttonWidth + kButtonSpacing * kCanvasS, fBaseArtY);
+    m_aBtn[CSMW_BTN_MENU].SetPositionArt(fBaseArtX + buttonWidth + kButtonSpacing * kCanvasS, fBaseArtY);
 
-    const float infoX = m_aBtn[CSMW_BTN_MENU].GetXPos() / rateX
-        + buttonWidth + kInfoSpacing * kCanvasS;
-    m_asprBack[CSMW_SPR_INFO].SetPositionArt(
-        infoX, fBaseArtY + kInfoOffsetY * kCanvasS);
+    const float infoX = m_aBtn[CSMW_BTN_MENU].GetXPos() / rateX + buttonWidth + kInfoSpacing * kCanvasS;
+    m_asprBack[CSMW_SPR_INFO].SetPositionArt(infoX, fBaseArtY + kInfoOffsetY * kCanvasS);
 
     const float windowRightX = fBaseArtX + CWin::GetWidth() / rateX;
-    const float decoWidth = m_asprBack[CSMW_SPR_DECO].GetWidth() / rateX;
-    m_asprBack[CSMW_SPR_DECO].SetPositionArt(
-        windowRightX - (decoWidth - kDecorOffsetX * kCanvasS),
-        fBaseArtY - kDecorOffsetY * kCanvasS);
+    const float decoWidth    = m_asprBack[CSMW_SPR_DECO].GetWidth() / rateX;
+    m_asprBack[CSMW_SPR_DECO].SetPositionArt(windowRightX - (decoWidth - kDecorOffsetX * kCanvasS),
+                                             fBaseArtY - kDecorOffsetY * kCanvasS);
 
     m_aBtn[CSMW_BTN_DELETE].SetPositionArt(windowRightX - buttonWidth, fBaseArtY);
-    m_aBtn[CSMW_BTN_CONNECT].SetPositionArt(
-        windowRightX - (buttonWidth * 2 + kButtonSpacing * kCanvasS), fBaseArtY);
+    m_aBtn[CSMW_BTN_CONNECT].SetPositionArt(windowRightX - (buttonWidth * 2 + kButtonSpacing * kCanvasS), fBaseArtY);
 }
 
 void CCharSelMainWin::Show(bool bShow)
@@ -208,8 +187,8 @@ bool CCharSelMainWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -285,27 +264,21 @@ void CCharSelMainWin::RenderControls()
 CCharSelMainWin::SpriteSnapshot CCharSelMainWin::DebugButtonSnapshot(int index) const
 {
     if (index < 0 || index >= CSMW_BTN_MAX)
-        return SpriteSnapshot{ 0, 0, 0, 0, 0.f, 0.f, 0.f };
+        return SpriteSnapshot{0, 0, 0, 0, 0.f, 0.f, 0.f};
 
     const CButton& button = m_aBtn[index];
-    return SpriteSnapshot{
-        button.GetXPos(), button.GetYPos(),
-        button.GetWidth(), button.GetHeight(),
-        button.GetScaleX(), button.GetScaleY(), button.GetScrHeight()
-    };
+    return SpriteSnapshot{button.GetXPos(),   button.GetYPos(),   button.GetWidth(),    button.GetHeight(),
+                          button.GetScaleX(), button.GetScaleY(), button.GetScrHeight()};
 }
 
 CCharSelMainWin::SpriteSnapshot CCharSelMainWin::DebugBackSpriteSnapshot(int index) const
 {
     if (index < 0 || index >= CSMW_SPR_MAX)
-        return SpriteSnapshot{ 0, 0, 0, 0, 0.f, 0.f, 0.f };
+        return SpriteSnapshot{0, 0, 0, 0, 0.f, 0.f, 0.f};
 
     const CSprite& sprite = m_asprBack[index];
-    return SpriteSnapshot{
-        sprite.GetXPos(), sprite.GetYPos(),
-        sprite.GetWidth(), sprite.GetHeight(),
-        sprite.GetScaleX(), sprite.GetScaleY(), sprite.GetScrHeight()
-    };
+    return SpriteSnapshot{sprite.GetXPos(),   sprite.GetYPos(),   sprite.GetWidth(),    sprite.GetHeight(),
+                          sprite.GetScaleX(), sprite.GetScaleY(), sprite.GetScrHeight()};
 }
 #endif
 

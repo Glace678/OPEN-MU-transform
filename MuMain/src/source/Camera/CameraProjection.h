@@ -24,8 +24,7 @@ public:
      * @param zNear Near clipping plane
      * @param zFar Far clipping plane
      */
-    static void SetupPerspective(CameraState& state, float fov, float aspect,
-                                  float zNear, float zFar);
+    static void SetupPerspective(CameraState& state, float fov, float aspect, float zNear, float zFar);
 
     /**
      * @brief Sets OpenGL viewport with Y-axis flip
@@ -50,8 +49,7 @@ public:
      * @param outTarget Output world direction vector
      * @param bFixView Use camera view far (true) or item view far (false)
      */
-    static void ScreenToWorldRay(const CameraState& state, int sx, int sy,
-                                  vec3_t outTarget, bool bFixView = true);
+    static void ScreenToWorldRay(const CameraState& state, int sx, int sy, vec3_t outTarget, bool bFixView = true);
 
     /**
      * @brief Projects world position to screen coordinates (reference)
@@ -63,8 +61,7 @@ public:
      * @param outX Output screen X (in 640×480 reference coordinates)
      * @param outY Output screen Y (in 640×480 reference coordinates)
      */
-    static void WorldToScreen(const CameraState& state, const vec3_t worldPos,
-                               int* outX, int* outY);
+    static void WorldToScreen(const CameraState& state, const vec3_t worldPos, int* outX, int* outY);
 
     /**
      * @brief Transforms position relative to camera (pixel coordinates)
@@ -77,8 +74,8 @@ public:
      * @param outX Output screen X (in actual pixels)
      * @param outY Output screen Y (in actual pixels)
      */
-    static void TransformPosition(const CameraState& state, const vec3_t position,
-                                   vec3_t outWorldPosition, int* outX, int* outY);
+    static void TransformPosition(const CameraState& state, const vec3_t position, vec3_t outWorldPosition, int* outX,
+                                  int* outY);
 
     /**
      * @brief Tests if a world position is visible in depth buffer

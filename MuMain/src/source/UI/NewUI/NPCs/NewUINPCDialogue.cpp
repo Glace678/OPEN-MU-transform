@@ -12,14 +12,14 @@
 
 using namespace SEASON3B;
 
-#define ND_NPC_MAX_LINE_PER_PAGE		7
-#define ND_SEL_TEXT_MAX_LINE_PER_PAGE	11
-#define ND_TEXT_GAP						15
+#define ND_NPC_MAX_LINE_PER_PAGE      7
+#define ND_SEL_TEXT_MAX_LINE_PER_PAGE 11
+#define ND_TEXT_GAP                   15
 
 CNewUINPCDialogue::CNewUINPCDialogue()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
+    m_Pos.x = m_Pos.y   = 0;
     m_dwContributePoint = 0;
 }
 
@@ -53,7 +53,7 @@ bool CNewUINPCDialogue::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_btnClose.ChangeButtonInfo(x + 13, y + 392, 36, 29);
     m_btnClose.ChangeToolTipText(&I18N::Game::Close388, true);
 
-    m_nSelTextCount = 0;
+    m_nSelTextCount  = 0;
     m_bQuestListMode = false;
 
     Show(false);
@@ -300,8 +300,7 @@ void CNewUINPCDialogue::RenderText()
     int i;
     for (i = 0; i < ND_NPC_MAX_LINE_PER_PAGE; ++i)
         g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 59 + (ND_TEXT_GAP * i),
-            m_aszNPCWords[i + ND_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage],
-            0, 0, RT3_SORT_LEFT);
+                                  m_aszNPCWords[i + ND_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage], 0, 0, RT3_SORT_LEFT);
 
     if (SEL_TEXTS_MODE == m_eLowerView)
     {
@@ -313,14 +312,14 @@ void CNewUINPCDialogue::RenderText()
 
         for (i = 0; i < m_anSelTextLinePerPage[m_nSelSelTextPage]; ++i)
             g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207 + (ND_TEXT_GAP * i),
-                m_aszSelTexts[nStartSelTextLine + i], 0, 0, RT3_SORT_LEFT);
+                                      m_aszSelTexts[nStartSelTextLine + i], 0, 0, RT3_SORT_LEFT);
     }
 }
 
 void CNewUINPCDialogue::RenderContributePoint()
 {
-    if ((543 == g_QuestMng.GetNPCIndex() && 1 == Hero->m_byGensInfluence)
-        || (544 == g_QuestMng.GetNPCIndex() && 2 == Hero->m_byGensInfluence))
+    if ((543 == g_QuestMng.GetNPCIndex() && 1 == Hero->m_byGensInfluence) ||
+        (544 == g_QuestMng.GetNPCIndex() && 2 == Hero->m_byGensInfluence))
     {
         RenderImage(IMAGE_ND_CONTRIBUTE_BG, m_Pos.x + 11, m_Pos.y + 27, 168.f, 18.f);
 
@@ -380,9 +379,9 @@ void CNewUINPCDialogue::ProcessOpening()
 
 bool CNewUINPCDialogue::ProcessClosing()
 {
-    m_dwCurDlgIndex = 0;
+    m_dwCurDlgIndex     = 0;
     m_dwContributePoint = 0;
-    m_bQuestListMode = false;
+    m_bQuestListMode    = false;
     SocketClient->ToGameServer()->SendCloseNpcRequest();
     ::PlayBuffer(SOUND_CLICK01);
     return true;
@@ -410,8 +409,7 @@ void CNewUINPCDialogue::SetCurNPCWords(int nQuestListCount)
     else
         pszSrc = g_QuestMng.GetNPCDlgNPCWords(m_dwCurDlgIndex);
 
-    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], ND_NPC_LINE_MAX, ND_WORDS_ROW_MAX,
-        pszSrc, 160);
+    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], ND_NPC_LINE_MAX, ND_WORDS_ROW_MAX, pszSrc, 160);
 
     if (1 > nLine)
         return;
@@ -438,19 +436,20 @@ void CNewUINPCDialogue::SetCurSelTexts()
 
     g_pRenderText->SetFont(g_hFont);
 
-    wchar_t szAnswer[2 * ND_WORDS_ROW_MAX];
+    wchar_t        szAnswer[2 * ND_WORDS_ROW_MAX];
     const wchar_t* pszAnswer;
-    int nSelTextLineSum = 0;
-    int i;
+    int            nSelTextLineSum = 0;
+    int            i;
     for (i = 0; i < QM_MAX_ND_ANSWER; ++i)
     {
         ::mu_swprintf(szAnswer, L"%d. ", i + 1);
         pszAnswer = g_QuestMng.GetNPCDlgAnswer(m_dwCurDlgIndex, i);
         if (NULL == pszAnswer)
             break;
-        ::wcsncat_s(szAnswer, _countof(szAnswer), pszAnswer, _TRUNCATE);   // 86-78: bounded, no stack overflow
+        ::wcscat(szAnswer, pszAnswer);
 
-        m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
+        m_anSelTextLine[i] =
+            ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
 
         nSelTextLineSum += m_anSelTextLine[i];
 
@@ -497,19 +496,6 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
 {
     _ASSERT(0 <= nIndexCount && nIndexCount <= ND_QUEST_INDEX_MAX_COUNT);
 
-    // The count comes from a server packet (WORD, up to 65535), but the destination array is a
-    // fixed 20-DWORD buffer. Clamp in Release as well (the assert above is compiled out there).
-    if (nIndexCount < 0)
-    {
-        nIndexCount = 0;
-    }
-    else if (nIndexCount > ND_QUEST_INDEX_MAX_COUNT)
-    {
-        g_ErrorReport.Write(L"SetQuestListText: quest count %d exceeds %d; clamping.\r\n",
-                            nIndexCount, ND_QUEST_INDEX_MAX_COUNT);
-        nIndexCount = ND_QUEST_INDEX_MAX_COUNT;
-    }
-
     ::memset(m_adwQuestIndex, 0, sizeof(DWORD) * ND_QUEST_INDEX_MAX_COUNT);
     ::memcpy(m_adwQuestIndex, adwSrcQuestIndex, sizeof(DWORD) * nIndexCount);
 
@@ -518,9 +504,9 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
     ::memset(m_aszSelTexts[0], 0, sizeof(wchar_t) * ND_SEL_TEXT_LINE_MAX * ND_WORDS_ROW_MAX);
     ::memset(m_anSelTextLine, 0, sizeof(int) * (ND_QUEST_INDEX_MAX_COUNT + 1));
 
-    wchar_t szSelText[2 * ND_WORDS_ROW_MAX];
+    wchar_t        szSelText[2 * ND_WORDS_ROW_MAX];
     const wchar_t* pszSelText;
-    int nSelTextRow = 0;
+    int            nSelTextRow = 0;
     g_pRenderText->SetFont(g_hFont);
     int i;
     for (i = 0; i < m_nSelTextCount; ++i)
@@ -538,10 +524,10 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
 
         if (NULL == pszSelText)
             break;
-        ::wcsncat_s(szSelText, _countof(szSelText), pszSelText, _TRUNCATE);   // 86-78: bounded, no stack overflow
+        ::wcscat(szSelText, pszSelText);
 
-        m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0],
-            2, ND_WORDS_ROW_MAX, szSelText, 160, false);
+        m_anSelTextLine[i] =
+            ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0], 2, ND_WORDS_ROW_MAX, szSelText, 160, false);
 
         nSelTextRow += m_anSelTextLine[i];
 
@@ -570,8 +556,8 @@ void CNewUINPCDialogue::ProcessSelTextResult()
         else
         {
             const DWORD dwSelectedQuest = m_adwQuestIndex[m_nSelSelText - 1];
-            const auto questNumber = static_cast<uint16_t>(LOWORD(dwSelectedQuest));
-            const auto questGroup = static_cast<uint16_t>(HIWORD(dwSelectedQuest));
+            const auto  questNumber     = static_cast<uint16_t>(LOWORD(dwSelectedQuest));
+            const auto  questGroup      = static_cast<uint16_t>(HIWORD(dwSelectedQuest));
             SocketClient->ToGameServer()->SendQuestSelectRequest(questNumber, questGroup, (BYTE)m_nSelSelText);
         }
     }
@@ -586,32 +572,32 @@ void CNewUINPCDialogue::ProcessSelTextResult()
         {
             switch (nAnswerResult)
             {
-            case 901:
-                SocketClient->ToGameServer()->SendAvailableQuestsRequest();
-                break;
+                case 901:
+                    SocketClient->ToGameServer()->SendAvailableQuestsRequest();
+                    break;
 
-            case 902:
-                SocketClient->ToGameServer()->SendNpcBuffRequest();
-                g_pNewUISystem->Hide(SEASON3B::INTERFACE_NPC_DIALOGUE);
-                break;
-            case 903:
-                SocketClient->ToGameServer()->SendGensJoinRequest(GensType::Duprian);
-                break;
-            case 904:
-                SocketClient->ToGameServer()->SendGensJoinRequest(GensType::Vanert);
-                break;
-            case 905:
-                SocketClient->ToGameServer()->SendGensLeaveRequest();
-                break;
-            case 906:
-                SocketClient->ToGameServer()->SendGensRewardRequest(GensType::Duprian);
-                break;
-            case 907:
-                SocketClient->ToGameServer()->SendGensRewardRequest(GensType::Vanert);
-                break;
+                case 902:
+                    SocketClient->ToGameServer()->SendNpcBuffRequest();
+                    g_pNewUISystem->Hide(SEASON3B::INTERFACE_NPC_DIALOGUE);
+                    break;
+                case 903:
+                    SocketClient->ToGameServer()->SendGensJoinRequest(GensType::Duprian);
+                    break;
+                case 904:
+                    SocketClient->ToGameServer()->SendGensJoinRequest(GensType::Vanert);
+                    break;
+                case 905:
+                    SocketClient->ToGameServer()->SendGensLeaveRequest();
+                    break;
+                case 906:
+                    SocketClient->ToGameServer()->SendGensRewardRequest(GensType::Duprian);
+                    break;
+                case 907:
+                    SocketClient->ToGameServer()->SendGensRewardRequest(GensType::Vanert);
+                    break;
 
-            default:
-                SetContents(999);
+                default:
+                    SetContents(999);
             }
         }
     }
@@ -644,31 +630,31 @@ void CNewUINPCDialogue::ProcessGensJoiningReceive(BYTE byResult, BYTE byInfluenc
 {
     switch (byResult)
     {
-    case GJEC_NONE_ERR:
-        Hero->m_byGensInfluence = byInfluence;
-        SetContents(5);
-        break;
-    case GJEC_REG_GENS_ERR:
-        SetContents(9);
-        break;
-    case GJEC_GENS_SECEDE_DAY_ERR:
-        SetContents(11);
-        break;
-    case GJEC_REG_GENS_LV_ERR:
-        SetContents(8);
-        break;
-    case GJEC_REG_GENS_NOT_EQL_GUILDMA_ERR:
-        SetContents(10);
-        break;
-    case GJEC_NONE_REG_GENS_GUILDMA_ERR:
-        SetContents(12);
-        break;
-    case GJEC_PARTY:
-        SetContents(18);
-        break;
-    case GJEC_GUILD_UNION_MASTER:
-        SetContents(19);
-        break;
+        case GJEC_NONE_ERR:
+            Hero->m_byGensInfluence = byInfluence;
+            SetContents(5);
+            break;
+        case GJEC_REG_GENS_ERR:
+            SetContents(9);
+            break;
+        case GJEC_GENS_SECEDE_DAY_ERR:
+            SetContents(11);
+            break;
+        case GJEC_REG_GENS_LV_ERR:
+            SetContents(8);
+            break;
+        case GJEC_REG_GENS_NOT_EQL_GUILDMA_ERR:
+            SetContents(10);
+            break;
+        case GJEC_NONE_REG_GENS_GUILDMA_ERR:
+            SetContents(12);
+            break;
+        case GJEC_PARTY:
+            SetContents(18);
+            break;
+        case GJEC_GUILD_UNION_MASTER:
+            SetContents(19);
+            break;
     }
 }
 
@@ -695,19 +681,19 @@ void CNewUINPCDialogue::ProcessGensSecessionReceive(BYTE byResult)
 {
     switch (byResult)
     {
-    case GSEC_NONE_ERR:
-        Hero->m_byGensInfluence = 0;
-        SetContents(16);
-        break;
-    case GSEC_IS_NOT_REG_GENS:
-        SetContents(15);
-        break;
-    case GSEC_GUILD_MASTER_CAN_NOT_SECEDE:
-        SetContents(14);
-        break;
-    case GSEC_IS_NOT_INFLUENCE_NPC:
-        SetContents(17);
-        break;
+        case GSEC_NONE_ERR:
+            Hero->m_byGensInfluence = 0;
+            SetContents(16);
+            break;
+        case GSEC_IS_NOT_REG_GENS:
+            SetContents(15);
+            break;
+        case GSEC_GUILD_MASTER_CAN_NOT_SECEDE:
+            SetContents(14);
+            break;
+        case GSEC_IS_NOT_INFLUENCE_NPC:
+            SetContents(17);
+            break;
     }
 }
 
@@ -715,26 +701,26 @@ void CNewUINPCDialogue::ProcessGensRewardReceive(BYTE byResult)
 {
     switch (byResult)
     {
-    case GENS_REWARD_CALL:
-        SetContents(20);
-        break;
-    case GENS_REWARD_TERM:
-        SetContents(21);
-        break;
-    case GENS_REWARD_TARGET:
-        SetContents(22);
-        break;
-    case GENS_REWARD_SPACE:
-        SetContents(23);
-        break;
-    case GENS_REWARD_ALREADY:
-        SetContents(24);
-        break;
-    case GENS_REWARD_DIFFERENT:
-        SetContents(17);
-        break;
-    case GENS_REWARD_NOT_REG:
-        SetContents(25);
-        break;
+        case GENS_REWARD_CALL:
+            SetContents(20);
+            break;
+        case GENS_REWARD_TERM:
+            SetContents(21);
+            break;
+        case GENS_REWARD_TARGET:
+            SetContents(22);
+            break;
+        case GENS_REWARD_SPACE:
+            SetContents(23);
+            break;
+        case GENS_REWARD_ALREADY:
+            SetContents(24);
+            break;
+        case GENS_REWARD_DIFFERENT:
+            SetContents(17);
+            break;
+        case GENS_REWARD_NOT_REG:
+            SetContents(25);
+            break;
     }
 }

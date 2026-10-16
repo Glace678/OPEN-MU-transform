@@ -40,8 +40,8 @@ bool CNewUIExchangeLuckyCoin::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BTN_EXIT, true);
-    m_BtnExit.ChangeButtonInfo(m_Pos.x + ((EXCHANGE_LUCKYCOIN_WINDOW_WIDTH / 2) - (MSGBOX_BTN_EMPTY_SMALL_WIDTH / 2)), m_Pos.y + 360,
-        MSGBOX_BTN_EMPTY_SMALL_WIDTH, MSGBOX_BTN_EMPTY_HEIGHT);
+    m_BtnExit.ChangeButtonInfo(m_Pos.x + ((EXCHANGE_LUCKYCOIN_WINDOW_WIDTH / 2) - (MSGBOX_BTN_EMPTY_SMALL_WIDTH / 2)),
+                               m_Pos.y + 360, MSGBOX_BTN_EMPTY_SMALL_WIDTH, MSGBOX_BTN_EMPTY_HEIGHT);
     m_BtnExit.ChangeText(&I18N::Game::Close388);
 
     // Exchange Button
@@ -75,8 +75,8 @@ void CNewUIExchangeLuckyCoin::Release()
 
 void CNewUIExchangeLuckyCoin::SetPos(int x, int y)
 {
-    m_Pos.x = x;
-    m_Pos.y = y;
+    m_Pos.x     = x;
+    m_Pos.y     = y;
     m_TextPos.x = m_Pos.x;
     m_TextPos.y = m_Pos.y + 80;
 
@@ -87,7 +87,8 @@ void CNewUIExchangeLuckyCoin::SetPos(int x, int y)
     for (int i = 0; i < MAX_EXCHANGE_BTN; i++)
     {
         int iVal = EXCHANGE_BTN_VAL * i;
-        m_BtnExchange[i].ChangeButtonInfo(m_FirstBtnPos.x, m_FirstBtnPos.y + iVal, MSGBOX_BTN_EMPTY_WIDTH, MSGBOX_BTN_EMPTY_HEIGHT);
+        m_BtnExchange[i].ChangeButtonInfo(m_FirstBtnPos.x, m_FirstBtnPos.y + iVal, MSGBOX_BTN_EMPTY_WIDTH,
+                                          MSGBOX_BTN_EMPTY_HEIGHT);
     }
 }
 
@@ -146,11 +147,15 @@ bool CNewUIExchangeLuckyCoin::Render()
 
 void CNewUIExchangeLuckyCoin::RenderFrame()
 {
-    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BACK, m_Pos.x, m_Pos.y, float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH), float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT));
+    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BACK, m_Pos.x, m_Pos.y, float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH),
+                float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT));
     RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_TOP, m_Pos.x, m_Pos.y, float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH), 64.f);
-    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_RIGHT, m_Pos.x + float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 45.f, float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f,
+                float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_RIGHT, m_Pos.x + float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH) - 21.f,
+                m_Pos.y + 64.f, 21.f, float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BOTTOM, m_Pos.x,
+                m_Pos.y + float(EXCHANGE_LUCKYCOIN_WINDOW_HEIGHT) - 45.f, float(EXCHANGE_LUCKYCOIN_WINDOW_WIDTH), 45.f);
 }
 
 void CNewUIExchangeLuckyCoin::RenderTexts()
@@ -161,17 +166,21 @@ void CNewUIExchangeLuckyCoin::RenderTexts()
 
     g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 25, I18N::Game::LuckyCoinExchange, 190, 0, RT3_SORT_CENTER);
 
-    g_pRenderText->RenderText(m_TextPos.x, m_Pos.y + 200, I18N::Game::Exchange1940, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_TextPos.x, m_Pos.y + 200, I18N::Game::Exchange1940, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetTextColor(255, 255, 0, 255);
-    g_pRenderText->RenderText(m_TextPos.x, m_TextPos.y, I18N::Game::Warning, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_TextPos.x, m_TextPos.y, I18N::Game::Warning, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     int iTextPosy = m_TextPos.y + (EXCHANGE_TEXT_VAL * 2);
-    g_pRenderText->RenderText(m_TextPos.x, iTextPosy, I18N::Game::ExchangedLuckyCoins, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_TextPos.x, iTextPosy, I18N::Game::ExchangedLuckyCoins, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH,
+                              0, RT3_SORT_CENTER);
     iTextPosy += EXCHANGE_TEXT_VAL;
-    g_pRenderText->RenderText(m_TextPos.x, iTextPosy, I18N::Game::WillNotBeReturned, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_TextPos.x, iTextPosy, I18N::Game::WillNotBeReturned, EXCHANGE_LUCKYCOIN_WINDOW_WIDTH, 0,
+                              RT3_SORT_CENTER);
 }
 
 void CNewUIExchangeLuckyCoin::RenderBtn()
@@ -261,8 +270,9 @@ void CNewUIExchangeLuckyCoin::LoadImages()
     LoadBitmap(L"Interface\\newui_item_back02-L.tga", IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_LEFT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back02-R.tga", IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_RIGHT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back03.tga", IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BOTTOM, GL_LINEAR);
-    LoadBitmap(L"Interface\\newui_btn_empty_small.tga", IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BTN_EXIT, GL_LINEAR);	// Exit Button
-    LoadBitmap(L"Interface\\newui_btn_empty.tga", IMAGE_EXCHANGE_LUCKYCOIN_EXCHANGE_BTN, GL_LINEAR);				// Exchange Button
+    LoadBitmap(L"Interface\\newui_btn_empty_small.tga", IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BTN_EXIT,
+               GL_LINEAR);                                                                            // Exit Button
+    LoadBitmap(L"Interface\\newui_btn_empty.tga", IMAGE_EXCHANGE_LUCKYCOIN_EXCHANGE_BTN, GL_LINEAR);  // Exchange Button
 }
 
 void CNewUIExchangeLuckyCoin::UnloadImages()
@@ -272,6 +282,6 @@ void CNewUIExchangeLuckyCoin::UnloadImages()
     DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_LEFT);
     DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_RIGHT);
     DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BOTTOM);
-    DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BTN_EXIT);		// Exit Button
-    DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_EXCHANGE_BTN);			// Exchange Button
+    DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_WINDOW_BTN_EXIT);  // Exit Button
+    DeleteBitmap(IMAGE_EXCHANGE_LUCKYCOIN_EXCHANGE_BTN);     // Exchange Button
 }

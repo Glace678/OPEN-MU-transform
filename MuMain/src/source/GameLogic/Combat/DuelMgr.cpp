@@ -27,12 +27,12 @@ CDuelMgr::~CDuelMgr()
 
 void CDuelMgr::Reset()
 {
-    m_bIsDuelEnabled = FALSE;
+    m_bIsDuelEnabled    = FALSE;
     m_bIsPetDuelEnabled = FALSE;
-    m_DuelPlayer = {};
-    m_DuelChannels = {};
-    m_iCurrentChannel = -1;
-    m_bRegenerated = FALSE;
+    m_DuelPlayer        = {};
+    m_DuelChannels      = {};
+    m_iCurrentChannel   = -1;
+    m_bRegenerated      = FALSE;
     RemoveAllDuelWatchUser();
 }
 
@@ -63,7 +63,6 @@ BOOL CDuelMgr::IsPetDuelEnabled()
 
 void CDuelMgr::SetDuelPlayer(int iPlayerNum, short sIndex, const wchar_t* pszID)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
     m_DuelPlayer[iPlayerNum].m_sIndex = sIndex;
     if (pszID != nullptr)
     {
@@ -78,61 +77,54 @@ void CDuelMgr::SetDuelPlayer(int iPlayerNum, short sIndex, const wchar_t* pszID)
 
 void CDuelMgr::SetHeroAsDuelPlayer(int iPlayerNum)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
     m_DuelPlayer[iPlayerNum].m_sIndex = Hero->Key;
     wcsncpy_s(m_DuelPlayer[iPlayerNum].m_szID, Hero->ID, MAX_USERNAME_SIZE);
 }
 
 void CDuelMgr::SetScore(int iPlayerNum, int iScore)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
     m_DuelPlayer[iPlayerNum].m_iScore = iScore;
 }
 
 void CDuelMgr::SetHP(int iPlayerNum, int iRate)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
     m_DuelPlayer[iPlayerNum].m_fHPRate = iRate * 0.01f;
 }
 
 void CDuelMgr::SetSD(int iPlayerNum, int iRate)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
     m_DuelPlayer[iPlayerNum].m_fSDRate = iRate * 0.01f;
 }
 
 const wchar_t* CDuelMgr::GetDuelPlayerID(int iPlayerNum) const
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return L"";
     return m_DuelPlayer[iPlayerNum].m_szID;
 }
 
 int CDuelMgr::GetScore(int iPlayerNum)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return 0;
     return m_DuelPlayer[iPlayerNum].m_iScore;
 }
 
 float CDuelMgr::GetHP(int iPlayerNum)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return 0.0f;
     return m_DuelPlayer[iPlayerNum].m_fHPRate;
 }
 
 float CDuelMgr::GetSD(int iPlayerNum)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return 0.0f;
     return m_DuelPlayer[iPlayerNum].m_fSDRate;
 }
 
 BOOL CDuelMgr::IsDuelPlayer(CHARACTER* pCharacter, int iPlayerNum, BOOL bIncludeSummon)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return FALSE;
-    if (pCharacter->Key == m_DuelPlayer[iPlayerNum].m_sIndex && wcsncmp(pCharacter->ID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
+    if (pCharacter->Key == m_DuelPlayer[iPlayerNum].m_sIndex &&
+        wcsncmp(pCharacter->ID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
     {
         return TRUE;
     }
-    else if (bIncludeSummon == TRUE && gCharacterManager.GetBaseClass(pCharacter->Class) == 0 && wcsncmp(pCharacter->OwnerID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
+    else if (bIncludeSummon == TRUE && gCharacterManager.GetBaseClass(pCharacter->Class) == 0 &&
+             wcsncmp(pCharacter->OwnerID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
     {
         return TRUE;
     }
@@ -142,20 +134,20 @@ BOOL CDuelMgr::IsDuelPlayer(CHARACTER* pCharacter, int iPlayerNum, BOOL bInclude
 
 BOOL CDuelMgr::IsDuelPlayer(WORD wIndex, int iPlayerNum)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return FALSE;
     return (m_DuelPlayer[iPlayerNum].m_sIndex == wIndex);
 }
 
 void CDuelMgr::SendDuelRequestAnswer(int iPlayerNum, BOOL bOK)
 {
-    if (iPlayerNum < 0 || iPlayerNum >= MAX_DUEL_PLAYERS) return;
-    SocketClient->ToGameServer()->SendDuelStartResponse(bOK, m_DuelPlayer[iPlayerNum].m_sIndex, m_DuelPlayer[iPlayerNum].m_szID);
+    SocketClient->ToGameServer()->SendDuelStartResponse(bOK, m_DuelPlayer[iPlayerNum].m_sIndex,
+                                                        m_DuelPlayer[iPlayerNum].m_szID);
 }
 
-void CDuelMgr::SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1, const wchar_t* pszID2)
+void CDuelMgr::SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1,
+                              const wchar_t* pszID2)
 {
-    auto& channel = m_DuelChannels[iChannelIndex];
-    channel.m_bEnable = bEnable;
+    auto& channel       = m_DuelChannels[iChannelIndex];
+    channel.m_bEnable   = bEnable;
     channel.m_bJoinable = bJoinable;
     if (pszID1 != nullptr)
     {
@@ -197,8 +189,7 @@ void CDuelMgr::RemoveDuelWatchUser(const wchar_t* pszUserID)
         return;
     }
 
-    const auto matcher = [pszUserID](const std::wstring& name)
-    {
+    const auto matcher = [pszUserID](const std::wstring& name) {
         return wcsncmp(name.c_str(), pszUserID, MAX_USERNAME_SIZE) == 0;
     };
 

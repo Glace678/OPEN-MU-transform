@@ -29,15 +29,15 @@ SEASON3B::CNewUINPCShop::~CNewUINPCShop()
 
 void SEASON3B::CNewUINPCShop::Init()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
     m_pNewInventoryCtrl = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_dwShopState = SHOP_STATE_BUYNSELL;
-    m_iTaxRate = 0;
-    m_bRepairShop = false;
-    m_bIsNPCShopOpen = false;
+    m_Pos.x = m_Pos.y  = 0;
+    m_dwShopState      = SHOP_STATE_BUYNSELL;
+    m_iTaxRate         = 0;
+    m_bRepairShop      = false;
+    m_bIsNPCShopOpen   = false;
     m_dwStandbyItemKey = 0;
-    m_bSellingItem = false;
+    m_bSellingItem     = false;
 }
 
 bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
@@ -49,7 +49,8 @@ bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_NPCSHOP, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 50, 8, 15))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 50, 8, 15))
     {
         SafeDelete(m_pNewInventoryCtrl);
         return false;
@@ -112,7 +113,7 @@ bool SEASON3B::CNewUINPCShop::UpdateMouseEvent()
 
             if ((m_bIsNPCShopOpen == true) && (pItem) && (SEASON3B::IsRelease(VK_LBUTTON)))
             {
-                int iIndex = (pItem->y * m_pNewInventoryCtrl->GetNumberOfColumn()) + pItem->x;
+                int           iIndex     = (pItem->y * m_pNewInventoryCtrl->GetNumberOfColumn()) + pItem->x;
                 GambleSystem& _gambleSys = GambleSystem::Instance();
 
                 if (_gambleSys.IsGambleShop())
@@ -163,36 +164,37 @@ void SEASON3B::CNewUINPCShop::RequestPurchase(ITEM* item, int index)
 {
     if (!Network::MerchantPrices::Cache().CanBuy(item->Key, CharacterMachine->Gold))
     {
-        if (Network::MerchantPrices::Quote quote; Network::MerchantPrices::Cache().TryGet(item->Key, quote)
-            && quote.payable && CharacterMachine->Gold < quote.totalPrice)
+        if (Network::MerchantPrices::Quote quote; Network::MerchantPrices::Cache().TryGet(item->Key, quote) &&
+                                                  quote.payable && CharacterMachine->Gold < quote.totalPrice)
             g_pSystemLogBox->AddText(I18N::Game::YouAreShortOfZen, SEASON3B::TYPE_ERROR_MESSAGE);
         return;
     }
-    std::int64_t base = 0;
-    std::int64_t total = 0;
-    const auto hasQuote = TryGetBuyingQuote(item, base, total);
-    const auto price = hasQuote ? std::max<std::int64_t>(1, total) : ItemValue(item, 0);
+    std::int64_t base     = 0;
+    std::int64_t total    = 0;
+    const auto   hasQuote = TryGetBuyingQuote(item, base, total);
+    const auto   price    = hasQuote ? std::max<std::int64_t>(1, total) : ItemValue(item, 0);
     SocketClient->ToGameServer()->SendBuyItemFromNpcRequest(index);
     BuyCost = static_cast<int>(price);
     g_ConsoleDebug->Write(MCD_SEND, L"0x32 [SendRequestBuy(%d)]", index);
 }
 
-bool SEASON3B::CNewUINPCShop::TryGetBuyingQuote(const ITEM* item, std::int64_t& basePrice, std::int64_t& totalPrice) const
+bool SEASON3B::CNewUINPCShop::TryGetBuyingQuote(const ITEM* item, std::int64_t& basePrice,
+                                                std::int64_t& totalPrice) const
 {
     if (!item || !m_pNewInventoryCtrl || m_pNewInventoryCtrl->FindItemByKey(item->Key) != item)
         return false;
     Network::MerchantPrices::Quote quote;
     if (!Network::MerchantPrices::Cache().TryGet(item->Key, quote) || !quote.payable)
         return false;
-    basePrice = quote.basePrice;
+    basePrice  = quote.basePrice;
     totalPrice = quote.totalPrice;
     return true;
 }
 
 bool SEASON3B::CNewUINPCShop::IsServerPricedItem(const ITEM* item) const
 {
-    return item && m_pNewInventoryCtrl && m_pNewInventoryCtrl->FindItemByKey(item->Key) == item
-        && Network::MerchantPrices::Cache().IsAuthoritative();
+    return item && m_pNewInventoryCtrl && m_pNewInventoryCtrl->FindItemByKey(item->Key) == item &&
+           Network::MerchantPrices::Cache().IsAuthoritative();
 }
 
 bool SEASON3B::CNewUINPCShop::UpdateKeyEvent()
@@ -364,18 +366,24 @@ bool SEASON3B::CNewUINPCShop::InventoryProcess()
 {
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
 
-    if (!m_pNewInventoryCtrl)	return false;
-    if (!pPickedItem)			return false;
+    if (!m_pNewInventoryCtrl)
+        return false;
+    if (!pPickedItem)
+        return false;
     ITEM* pItem = pPickedItem->GetItem();
 
-    if (IsSellingBan(pItem))	m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
-    else	m_pNewInventoryCtrl->SetSquareColorNormal(0.1f, 0.4f, 0.8f);
+    if (IsSellingBan(pItem))
+        m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
+    else
+        m_pNewInventoryCtrl->SetSquareColorNormal(0.1f, 0.4f, 0.8f);
 
-    if (SEASON3B::IsRelease(VK_LBUTTON) == true && m_pNewInventoryCtrl->CheckPtInRect(MouseX, MouseY) == true && m_bSellingItem == false)
+    if (SEASON3B::IsRelease(VK_LBUTTON) == true && m_pNewInventoryCtrl->CheckPtInRect(MouseX, MouseY) == true &&
+        m_bSellingItem == false)
     {
         if (CharacterMachine->Gold + ItemValue(pItem) > 2000000000)
         {
-            g_pSystemLogBox->AddText(I18N::Game::ExceededMaximumAmountOfZenYouCanPossess, SEASON3B::TYPE_SYSTEM_MESSAGE);
+            g_pSystemLogBox->AddText(I18N::Game::ExceededMaximumAmountOfZenYouCanPossess,
+                                     SEASON3B::TYPE_SYSTEM_MESSAGE);
 
             return true;
         }
@@ -466,9 +474,9 @@ void SEASON3B::CNewUINPCShop::ClosingProcess()
     Network::MerchantPrices::Cache().Reset();
     SocketClient->ToGameServer()->SendCloseNpcRequest();
 
-    m_dwShopState = SHOP_STATE_BUYNSELL;
-    m_iTaxRate = 0;
-    m_bRepairShop = false;
+    m_dwShopState      = SHOP_STATE_BUYNSELL;
+    m_iTaxRate         = 0;
+    m_bRepairShop      = false;
     m_dwStandbyItemKey = 0;
 
     m_bIsNPCShopOpen = false;

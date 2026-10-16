@@ -29,15 +29,14 @@ CSideHair::~CSideHair()
 
 namespace
 {
-    constexpr int HairMesh = 1;
+constexpr int HairMesh = 1;
 
-    bool HasVisibleHair(const BMD* model, const OBJECT* object)
-    {
-        return model != nullptr && object != nullptr && model->NumMeshs > HairMesh
-            && object->Alpha >= 0.01f
-            && object->HiddenMesh != -2 && object->BlendMesh != -2
-            && object->HiddenMesh != HairMesh && object->BlendMesh != HairMesh;
-    }
+bool HasVisibleHair(const BMD* model, const OBJECT* object)
+{
+    return model != nullptr && object != nullptr && model->NumMeshs > HairMesh && object->Alpha >= 0.01f &&
+           object->HiddenMesh != -2 && object->BlendMesh != -2 && object->HiddenMesh != HairMesh &&
+           object->BlendMesh != HairMesh;
+}
 }
 
 void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o, bool SkipTga)
@@ -55,7 +54,7 @@ void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* 
     if (mesh.NumTriangles <= 0)
         return;
     constexpr int EdgesPerTriangle = 3;
-    m_pEdges = new St_Edges[mesh.NumTriangles * EdgesPerTriangle];
+    m_pEdges                       = new St_Edges[mesh.NumTriangles * EdgesPerTriangle];
     DeterminateSilhouette(HairMesh, ppVertexTransformed, mesh.NumTriangles, mesh.Triangles, hasAlpha);
 }
 
@@ -66,14 +65,15 @@ void CSideHair::Destroy(void)
     Clear();
 }
 
-void CSideHair::Render(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], vec3_t ppLightTransformed[MAX_MESH][MAX_VERTICES])
+void CSideHair::Render(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES],
+                       vec3_t ppLightTransformed[MAX_MESH][MAX_VERTICES])
 {
     for (int i = 0; i < m_iNumEdge; ++i)
     {
         RenderLine(ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[0]],
-            ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]],
-            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[0]],
-            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[1]]);
+                   ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]],
+                   ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[0]],
+                   ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[1]]);
     }
 }
 
@@ -83,9 +83,9 @@ void CSideHair::RenderLine(vec3_t v1, vec3_t v2, vec3_t c1, vec3_t c2)
 
     glColor3f(1.f, 1.f, 1.f);
     VectorSubtract(v2, v1, d);
-    const float fLength = VectorLength(d);
-    float fTextureMove = 0.0f;
-    fTextureMove = (50.0f - fLength) * 0.5f / 50.0f;
+    const float fLength      = VectorLength(d);
+    float       fTextureMove = 0.0f;
+    fTextureMove             = (50.0f - fLength) * 0.5f / 50.0f;
 
     VectorCopy(v1, p1);
     VectorCopy(v2, p2);
@@ -106,9 +106,13 @@ void CSideHair::RenderLine(vec3_t v1, vec3_t v2, vec3_t c1, vec3_t c2)
     IR::Begin(GL_QUADS);
     PassthroughShader::Instance().SetUseTexture(true);
     IR::Color3f(1.f, 1.f, 1.f);
-    IR::TexCoord2f(0.f, 0.f + fTextureMove + fTextureV); IR::Vertex3f(p1[0] - vOrtho[0], p1[1] - vOrtho[1], p1[2] - vOrtho[2]);
-    IR::TexCoord2f(0.f, 1.f - fTextureMove + fTextureV); IR::Vertex3f(p2[0] - vOrtho[0], p2[1] - vOrtho[1], p2[2] - vOrtho[2]);
-    IR::TexCoord2f(1.f, 1.f - fTextureMove + fTextureV); IR::Vertex3f(p2[0] + vOrtho[0], p2[1] + vOrtho[1], p2[2] + vOrtho[2]);
-    IR::TexCoord2f(1.f, 0.f + fTextureMove + fTextureV); IR::Vertex3f(p1[0] + vOrtho[0], p1[1] + vOrtho[1], p1[2] + vOrtho[2]);
+    IR::TexCoord2f(0.f, 0.f + fTextureMove + fTextureV);
+    IR::Vertex3f(p1[0] - vOrtho[0], p1[1] - vOrtho[1], p1[2] - vOrtho[2]);
+    IR::TexCoord2f(0.f, 1.f - fTextureMove + fTextureV);
+    IR::Vertex3f(p2[0] - vOrtho[0], p2[1] - vOrtho[1], p2[2] - vOrtho[2]);
+    IR::TexCoord2f(1.f, 1.f - fTextureMove + fTextureV);
+    IR::Vertex3f(p2[0] + vOrtho[0], p2[1] + vOrtho[1], p2[2] + vOrtho[2]);
+    IR::TexCoord2f(1.f, 0.f + fTextureMove + fTextureV);
+    IR::Vertex3f(p1[0] + vOrtho[0], p1[1] + vOrtho[1], p1[2] + vOrtho[2]);
     IR::End();
 }

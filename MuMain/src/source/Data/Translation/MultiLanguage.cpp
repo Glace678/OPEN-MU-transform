@@ -82,7 +82,7 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         if (!terminatorInside)
         {
             int trailing = 0;
-            int i = maxSourceLength - 1;
+            int i        = maxSourceLength - 1;
             while (i >= 0 && (static_cast<unsigned char>(source[i]) & 0xC0) == 0x80)
             {
                 ++trailing;
@@ -91,15 +91,18 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
 
             if (i >= 0 && trailing > 0 && trailing <= 3)
             {
-                const unsigned char lead = static_cast<unsigned char>(source[i]);
-                int expectedContinuation = 0;
-                if ((lead & 0xE0) == 0xC0) expectedContinuation = 1;
-                else if ((lead & 0xF0) == 0xE0) expectedContinuation = 2;
-                else if ((lead & 0xF8) == 0xF0) expectedContinuation = 3;
+                const unsigned char lead                 = static_cast<unsigned char>(source[i]);
+                int                 expectedContinuation = 0;
+                if ((lead & 0xE0) == 0xC0)
+                    expectedContinuation = 1;
+                else if ((lead & 0xF0) == 0xE0)
+                    expectedContinuation = 2;
+                else if ((lead & 0xF8) == 0xF0)
+                    expectedContinuation = 3;
 
                 if (expectedContinuation > 0 && trailing < expectedContinuation)
                 {
-                    maxSourceLength = i; // drop the whole incomplete sequence
+                    maxSourceLength = i;  // drop the whole incomplete sequence
                 }
             }
         }
@@ -113,21 +116,11 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         return 0;
     }
 
-    // MEM-15: the convention at every call site is that the target holds one wchar per source
-    // byte window (both derived from the same fixed field). N ASCII bytes convert to N wchars,
-    // so writing the terminator would overflow by exactly one. Reserve that slot by converting
-    // at most (maxSourceLength - 1) characters. A NUL-terminated source (maxSourceLength <= 0)
-    // keeps the previous unbounded behavior.
-    int cchWideChar = maxSourceLength > 0 ? maxSourceLength - 1 : requiredChars;
-
     // Perform the conversion
-    int written = MultiByteToWideChar(
-        CP_UTF8,
-        0,
-        source,
-        maxSourceLength,    // read at most this many bytes
-        target,
-        cchWideChar         // always leave room for the terminator
+    int written = MultiByteToWideChar(CP_UTF8, 0, source,
+                                      maxSourceLength,  // read at most this many bytes
+                                      target,
+                                      requiredChars  // assume destination large enough
     );
 
     if (written <= 0)
@@ -162,7 +155,8 @@ int32_t CMultiLanguage::ConvertToUtf8(char* target, const wchar_t* source, int m
     {
         std::string tmp;
         tmp.resize(requiredBytesWithNull);
-        const int writtenWithNull = WideCharToMultiByte(CP_UTF8, 0, source, -1, tmp.data(), requiredBytesWithNull, nullptr, nullptr);
+        const int writtenWithNull =
+            WideCharToMultiByte(CP_UTF8, 0, source, -1, tmp.data(), requiredBytesWithNull, nullptr, nullptr);
         if (writtenWithNull <= 0)
         {
             target[0] = '\0';
@@ -170,8 +164,8 @@ int32_t CMultiLanguage::ConvertToUtf8(char* target, const wchar_t* source, int m
         }
 
         const int available = std::max<int>(0, maxSourceLength - 1);
-        const int srcLen = std::max<int>(0, writtenWithNull - 1);
-        const int copyLen = std::min<int>(srcLen, available);
+        const int srcLen    = std::max<int>(0, writtenWithNull - 1);
+        const int copyLen   = std::min<int>(srcLen, available);
 
         if (copyLen > 0)
         {
@@ -198,7 +192,6 @@ int32_t CMultiLanguage::ConvertToUtf8(char* target, const wchar_t* source, int m
     // When source length is -1, WinAPI includes the null terminator in 'written'.
     return written > 0 ? (written - 1) : 0;
 }
-
 
 WPARAM CMultiLanguage::ConvertFulltoHalfWidthChar(DWORD wParam)
 {

@@ -21,11 +21,11 @@ public:
     ~DefaultCamera() override = default;
 
     // ICamera interface
-    bool Update() override;
-    void Reset() override;
-    void OnActivate(const CameraState& previousState) override;
-    void OnDeactivate() override;
-    void ResetView() override;
+    bool        Update() override;
+    void        Reset() override;
+    void        OnActivate(const CameraState& previousState) override;
+    void        OnDeactivate() override;
+    void        ResetView() override;
     const char* GetName() const override { return "Default"; }
 
     // Phase 5: Scene-specific reset
@@ -41,8 +41,8 @@ public:
 
     // Phase 1: Configuration & Frustum Management
     const CameraConfig& GetConfig() const override { return m_Config; }
-    void SetConfig(const CameraConfig& config) override;
-    const Frustum& GetFrustum() const override { return m_Frustum; }
+    void                SetConfig(const CameraConfig& config) override;
+    const Frustum&      GetFrustum() const override { return m_Frustum; }
 
     bool ShouldCullObject(const vec3_t position, float radius) const override
     {
@@ -71,12 +71,12 @@ private:
 
     // Phase 1: Configuration and frustum
     CameraConfig m_Config;
-    Frustum m_Frustum;
+    Frustum      m_Frustum;
 
     // Phase 5: Scene transition tracking and Hero validity
-    int m_LastSceneFlag = -1;
-    bool m_bJustActivated = false;  // Skip first frame update to preserve inherited position
-    int m_FramesSinceActivation = 0;  // Count frames since activation to disable smoothing
+    int  m_LastSceneFlag         = -1;
+    bool m_bJustActivated        = false;  // Skip first frame update to preserve inherited position
+    int  m_FramesSinceActivation = 0;      // Count frames since activation to disable smoothing
     bool IsHeroValid() const;
 
     // Player-controlled zoom level for the third-person ladder.
@@ -98,11 +98,11 @@ private:
     void UpdateCustomCameraDistance();
     void UpdateCameraDistance();
     void SetCameraFOV();
-    void UpdateFrustum();  // Phase 1: Rebuild frustum from current state
+    void UpdateFrustum();             // Phase 1: Rebuild frustum from current state
     bool NeedsFrustumUpdate() const;  // Phase 5: Check if frustum needs rebuild
 
     // ResetForScene helpers: each loads the scene-specific config and initial transform.
-    void ApplyConfigToState();   // Apply m_Config to m_State (FOV/ViewFar/TopView)
+    void ApplyConfigToState();  // Apply m_Config to m_State (FOV/ViewFar/TopView)
     void InvalidateFrustumCache();
     void InitCharacterScene();
     void InitMainScene();
@@ -111,7 +111,7 @@ private:
     // Mount height offset — smooth lerp when mounting/dismounting
     float GetTargetMountOffset() const;
     float m_CurrentMountOffset = 0.0f;
-    int   m_LastMountType = -1;
+    int   m_LastMountType      = -1;
 
 #ifdef ENABLE_EDIT2
     void HandleEditorMode();
@@ -120,13 +120,13 @@ private:
     // Phase 5: Cache last frustum state + editor config to avoid unnecessary rebuilds
     mutable struct FrustumCache
     {
-        vec3_t Position = {};
-        vec3_t Angle = {};
-        float ViewFar = 0.0f;
-        float AspectRatio = 0.0f;
-        float EditorFOV = 0.0f;
-        float EditorFarPlane = 0.0f;
-        float EditorNearPlane = 0.0f;
-        float EditorTerrainCullRange = 0.0f;
+        vec3_t Position               = {};
+        vec3_t Angle                  = {};
+        float  ViewFar                = 0.0f;
+        float  AspectRatio            = 0.0f;
+        float  EditorFOV              = 0.0f;
+        float  EditorFarPlane         = 0.0f;
+        float  EditorNearPlane        = 0.0f;
+        float  EditorTerrainCullRange = 0.0f;
     } m_FrustumCache;
 };

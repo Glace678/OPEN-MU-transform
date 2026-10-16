@@ -11,8 +11,6 @@
 #include "Audio/DSPlaySound.h"
 #include "Engine/Object/ZzzOpenData.h"
 
-
-
 CGMSantaTownPtr CGMSantaTown::Make()
 {
     CGMSantaTownPtr santatown(new CGMSantaTown);
@@ -20,32 +18,29 @@ CGMSantaTownPtr CGMSantaTown::Make()
     return santatown;
 }
 
-CGMSantaTown::CGMSantaTown()
-{
-}
+CGMSantaTown::CGMSantaTown() {}
 
 CGMSantaTown::~CGMSantaTown()
 {
     Destroy();
 }
 
-void CGMSantaTown::Init()
-{
-}
+void CGMSantaTown::Init() {}
 
-void CGMSantaTown::Destroy()
-{
-}
+void CGMSantaTown::Destroy() {}
 
 bool CGMSantaTown::CreateObject(OBJECT* o)
 {
     switch (o->Type)
     {
-    case 21: case 18:
-    case 19: case 12: case 13:
-    case 25:
-        o->CollisionRange = -300;
-        return true;
+        case 21:
+        case 18:
+        case 19:
+        case 12:
+        case 13:
+        case 25:
+            o->CollisionRange = -300;
+            return true;
     }
 
     return false;
@@ -57,16 +52,16 @@ CHARACTER* CGMSantaTown::CreateMonster(int iType, int PosX, int PosY, int Key)
 
     switch (iType)
     {
-    case 465:
-        OpenNpc(MODEL_XMAS2008_SANTA_NPC);
-        pCharacter = CreateCharacter(Key, MODEL_XMAS2008_SANTA_NPC, PosX, PosY);
-        pCharacter->Object.Scale = 1.7f;
-        break;
-    case 467:
-        OpenNpc(MODEL_XMAS2008_SNOWMAN_NPC);
-        pCharacter = CreateCharacter(Key, MODEL_XMAS2008_SNOWMAN_NPC, PosX, PosY);
-        pCharacter->Object.Scale = 1.3f;
-        break;
+        case 465:
+            OpenNpc(MODEL_XMAS2008_SANTA_NPC);
+            pCharacter               = CreateCharacter(Key, MODEL_XMAS2008_SANTA_NPC, PosX, PosY);
+            pCharacter->Object.Scale = 1.7f;
+            break;
+        case 467:
+            OpenNpc(MODEL_XMAS2008_SNOWMAN_NPC);
+            pCharacter               = CreateCharacter(Key, MODEL_XMAS2008_SNOWMAN_NPC, PosX, PosY);
+            pCharacter->Object.Scale = 1.3f;
+            break;
     }
 
     return pCharacter;
@@ -79,20 +74,18 @@ bool CGMSantaTown::MoveObject(OBJECT* o)
 
     switch (o->Type)
     {
-    case 16:
-    {
-        o->Velocity = 0.06f;
-        return true;
-    }
-    break;
-    case 26:
-    case 27:
-    case 28:
-    {
-        o->HiddenMesh = -2;
-        return true;
-    }
-    break;
+        case 16: {
+            o->Velocity = 0.06f;
+            return true;
+        }
+        break;
+        case 26:
+        case 27:
+        case 28: {
+            o->HiddenMesh = -2;
+            return true;
+        }
+        break;
     }
 
     return false;
@@ -124,16 +117,19 @@ bool CGMSantaTown::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
 
     switch (o->Type)
     {
-    case 16:
-    {
-        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        Vector(0.0f, 0.5f, 0.5f, b->BodyLight);
-        b->RenderMesh(2, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+        case 16: {
+            b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            Vector(0.0f, 0.5f, 0.5f, b->BodyLight);
+            b->RenderMesh(2, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
 
-        return true;
-    }
+            return true;
+        }
     }
 
     return false;
@@ -143,36 +139,33 @@ bool CGMSantaTown::RenderObjectVisual(OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case 26:
-    {
-        float fLumi;
-        fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
-        vec3_t vLightFire;
-        Vector(fLumi * 0.8f, fLumi * 0.2f, fLumi * 0.0f, vLightFire);
-        CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
-        return true;
-    }
-    break;
-    case 27:
-    {
-        float fLumi;
-        fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
-        vec3_t vLightFire;
-        Vector(fLumi * 0.0f, fLumi * 0.2f, fLumi * 0.8f, vLightFire);
-        CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
-        return true;
-    }
-    break;
-    case 28:
-    {
-        float fLumi;
-        fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
-        vec3_t vLightFire;
-        Vector(fLumi * 0.0f, fLumi * 0.6f, fLumi * 0.6f, vLightFire);
-        CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
-        return true;
-    }
-    break;
+        case 26: {
+            float fLumi;
+            fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
+            vec3_t vLightFire;
+            Vector(fLumi * 0.8f, fLumi * 0.2f, fLumi * 0.0f, vLightFire);
+            CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
+            return true;
+        }
+        break;
+        case 27: {
+            float fLumi;
+            fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
+            vec3_t vLightFire;
+            Vector(fLumi * 0.0f, fLumi * 0.2f, fLumi * 0.8f, vLightFire);
+            CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
+            return true;
+        }
+        break;
+        case 28: {
+            float fLumi;
+            fLumi = (sinf(WorldTime * 0.005f) + 1.0f) * 0.1f + 0.9f;
+            vec3_t vLightFire;
+            Vector(fLumi * 0.0f, fLumi * 0.6f, fLumi * 0.6f, vLightFire);
+            CreateSprite(BITMAP_LIGHT, o->Position, 8.0f * o->Scale, vLightFire, o);
+            return true;
+        }
+        break;
     }
 
     return false;
@@ -189,29 +182,26 @@ bool CGMSantaTown::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
     return true;
 }
 
-void CGMSantaTown::RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
-{
-}
+void CGMSantaTown::RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon) {}
 
 bool CGMSantaTown::CreateSnow(PARTICLE* o)
 {
     if (IsSantaTown() == false)
         return false;
 
-    o->Type = BITMAP_LEAF1;
+    o->Type  = BITMAP_LEAF1;
     o->Scale = (float)(rand() % 10 + 5);
     // One-shot per-spawn trait (flake size for the particle's whole life): keep a
     // constant 10% at every refresh rate. rand_fps_check would shrink the large-flake
     // fraction as fps rises; the spawn rate itself is already fps-normalized.
     if (rand() % 10 == 0)
     {
-        o->Type = BITMAP_LEAF2;
+        o->Type  = BITMAP_LEAF2;
         o->Scale = 12.f;
     }
     Vector(Hero->Object.Position[0] + (float)(rand() % 1600 - 800),
-        Hero->Object.Position[1] + (float)(rand() % 1400 - 500),
-        Hero->Object.Position[2] + (float)(rand() % 200 + 200),
-        o->Position);
+           Hero->Object.Position[1] + (float)(rand() % 1400 - 500),
+           Hero->Object.Position[2] + (float)(rand() % 200 + 200), o->Position);
     Vector(-20.f, 0.f, 0.f, o->Angle);
     vec3_t Velocity;
     Vector(0.f, 0.f, -(float)(rand() % 8 + 4), Velocity);
@@ -276,9 +266,7 @@ bool CGMSantaTown::PlayMonsterSound(OBJECT* o)
     return false;
 }
 
-void CGMSantaTown::PlayObjectSound(OBJECT* o)
-{
-}
+void CGMSantaTown::PlayObjectSound(OBJECT* o) {}
 
 void CGMSantaTown::PlayBGM()
 {

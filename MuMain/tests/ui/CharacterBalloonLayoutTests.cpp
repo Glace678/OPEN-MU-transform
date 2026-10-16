@@ -16,11 +16,11 @@ TEST_CASE("long translated character labels cannot overlap adjacent panels")
 {
     for (float scale : {1.f, 1.5f, 2.f, 3.75f, 4.5f})
     {
-        const int gap = int(64 * scale);
-        const auto left = LayoutBalloon(int(640 * scale), 1080, scale, 2.25f,
-            int(290 * scale), 600, int(150 * scale), 22, gap);
-        const auto right = LayoutBalloon(int(640 * scale), 1080, scale, 2.25f,
-            int(354 * scale), 600, int(150 * scale), 22, gap);
+        const int  gap = int(64 * scale);
+        const auto left =
+            LayoutBalloon(int(640 * scale), 1080, scale, 2.25f, int(290 * scale), 600, int(150 * scale), 22, gap);
+        const auto right =
+            LayoutBalloon(int(640 * scale), 1080, scale, 2.25f, int(354 * scale), 600, int(150 * scale), 22, gap);
         CHECK(left.width <= gap - int(4 * scale));
         CHECK(left.centerX + (left.width + 1) / 2 < right.centerX - right.width / 2);
     }

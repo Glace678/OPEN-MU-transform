@@ -15,15 +15,15 @@ using namespace SEASON3B;
 
 SEASON3B::CNewUISiegeWarfare::CNewUISiegeWarfare()
 {
-    m_pNewUIMng = NULL;
-    m_pSiegeWarUI = NULL;
+    m_pNewUIMng        = NULL;
+    m_pSiegeWarUI      = NULL;
     m_iCurSiegeWarType = SIEGEWAR_TYPE_NONE;
-    m_byGuildStatus = G_NONE;
-    m_sGuildMarkIndex = -1;
+    m_byGuildStatus    = G_NONE;
+    m_sGuildMarkIndex  = -1;
 
-    m_iHour = 0;
-    m_iMinute = 0;
-    m_iSecond = 0;
+    m_iHour      = 0;
+    m_iMinute    = 0;
+    m_iSecond    = 0;
     m_dwSyncTime = 0;
 
     m_bCreated = true;
@@ -114,7 +114,7 @@ bool SEASON3B::CNewUISiegeWarfare::Update()
                 {
                     m_iSecond = 0;
                     m_iMinute = 0;
-                    m_iHour = 0;
+                    m_iHour   = 0;
                 }
                 else
                 {
@@ -156,18 +156,14 @@ float SEASON3B::CNewUISiegeWarfare::GetLayerDepth()
     return 1.6f;
 }
 
-void SEASON3B::CNewUISiegeWarfare::OpenningProcess()
-{
-}
+void SEASON3B::CNewUISiegeWarfare::OpenningProcess() {}
 
-void SEASON3B::CNewUISiegeWarfare::ClosingProcess()
-{
-}
+void SEASON3B::CNewUISiegeWarfare::ClosingProcess() {}
 
 void SEASON3B::CNewUISiegeWarfare::SetGuildData(const CHARACTER* pCharacter)
 {
     m_sGuildMarkIndex = pCharacter->GuildMarkIndex;
-    m_byGuildStatus = pCharacter->GuildStatus;
+    m_byGuildStatus   = pCharacter->GuildStatus;
 }
 
 bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
@@ -177,45 +173,43 @@ bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
         InitMiniMapUI();
     }
 
-    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3
-        || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-        || Hero->GuildStatus == G_PERSON)
+    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+          Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3 || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK) ||
+        Hero->GuildStatus == G_PERSON)
     {
         m_byGuildStatus = G_NONE;
     }
 
     switch (m_byGuildStatus)
     {
-    case G_NONE:
-    {
-        m_pSiegeWarUI = new CNewUISiegeWarObserver;		// Observer
-        m_iCurSiegeWarType = SIEGEWAR_TYPE_OBSERVER;
-        m_bCreated = false;
-    }break;
-    case G_MASTER:
-    {
-        if (m_sGuildMarkIndex >= 0 && m_sGuildMarkIndex < MAX_MARKS &&  // #21: validate index
-            (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == 0
-            || wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == 0))
-        {
-            m_pSiegeWarUI = new CNewUISiegeWarCommander;	// Commander
-            m_iCurSiegeWarType = SIEGEWAR_TYPE_COMMANDER;
+        case G_NONE: {
+            m_pSiegeWarUI      = new CNewUISiegeWarObserver;  // Observer
+            m_iCurSiegeWarType = SIEGEWAR_TYPE_OBSERVER;
+            m_bCreated         = false;
         }
-        else
-        {
-            m_pSiegeWarUI = new CNewUISiegeWarSoldier;	// Soldier
+        break;
+        case G_MASTER: {
+            if (m_sGuildMarkIndex >= 0 && m_sGuildMarkIndex < MAX_MARKS &&  // #21: validate index
+                (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == 0 ||
+                 wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == 0))
+            {
+                m_pSiegeWarUI      = new CNewUISiegeWarCommander;  // Commander
+                m_iCurSiegeWarType = SIEGEWAR_TYPE_COMMANDER;
+            }
+            else
+            {
+                m_pSiegeWarUI      = new CNewUISiegeWarSoldier;  // Soldier
+                m_iCurSiegeWarType = SIEGEWAR_TYPE_SOLDIER;
+            }
+            m_bCreated = true;
+        }
+        break;
+        default: {
+            m_pSiegeWarUI      = new CNewUISiegeWarSoldier;  // Soldier
             m_iCurSiegeWarType = SIEGEWAR_TYPE_SOLDIER;
+            m_bCreated         = true;
         }
-        m_bCreated = true;
-    }break;
-    default:
-    {
-        m_pSiegeWarUI = new CNewUISiegeWarSoldier;	// Soldier
-        m_iCurSiegeWarType = SIEGEWAR_TYPE_SOLDIER;
-        m_bCreated = true;
-    }break;
+        break;
     }
 
     m_pSiegeWarUI->LoadImages();
@@ -254,15 +248,15 @@ void SEASON3B::CNewUISiegeWarfare::InitMiniMapUI()
     SafeDelete(m_pSiegeWarUI);
 
     m_iCurSiegeWarType = SIEGEWAR_TYPE_NONE;
-    m_byGuildStatus = G_NONE;
-    m_sGuildMarkIndex = -1;
+    m_byGuildStatus    = G_NONE;
+    m_sGuildMarkIndex  = -1;
 }
 
-void  SEASON3B::CNewUISiegeWarfare::SetTime(BYTE byHour, BYTE byMinute)
+void SEASON3B::CNewUISiegeWarfare::SetTime(BYTE byHour, BYTE byMinute)
 {
-    m_iHour = (int)byHour;
-    m_iMinute = (int)byMinute;
-    m_iSecond = 60000;
+    m_iHour      = (int)byHour;
+    m_iMinute    = (int)byMinute;
+    m_iSecond    = 60000;
     m_dwSyncTime = GetTickCount();
 }
 

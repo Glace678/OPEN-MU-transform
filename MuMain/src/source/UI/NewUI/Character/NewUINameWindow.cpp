@@ -34,13 +34,13 @@ constexpr int GROUND_ITEM_LABEL_BUILD_BUDGET_PER_FRAME = 32;
 // horizontally compresses the bar (1.0 == original width).
 void DrawHealthBar(int centerX, int topY, float health, int steps, float scale)
 {
-    const float borderHeight = 2.f;                  // vertical inset (unscaled)
-    const float borderWidth = 2.f * scale;           // horizontal inset
-    const float stepSeparatorWidth = 1.f * scale;    // gap between segments
-    const float segmentSpan = 80.f * scale;          // total span of the segment track
-    const float widthPerStep = segmentSpan / steps;  // derived: fewer steps -> wider segments
-    const float stepsWidth = segmentSpan - 2.f * stepSeparatorWidth;
-    const float totalWidth = stepsWidth + borderWidth * 2.f;
+    const float borderHeight       = 2.f;                  // vertical inset (unscaled)
+    const float borderWidth        = 2.f * scale;          // horizontal inset
+    const float stepSeparatorWidth = 1.f * scale;          // gap between segments
+    const float segmentSpan        = 80.f * scale;         // total span of the segment track
+    const float widthPerStep       = segmentSpan / steps;  // derived: fewer steps -> wider segments
+    const float stepsWidth         = segmentSpan - 2.f * stepSeparatorWidth;
+    const float totalWidth         = stepsWidth + borderWidth * 2.f;
 
     const int x = centerX - (int)(totalWidth / 2);
     const int y = topY;
@@ -62,17 +62,14 @@ void DrawHealthBar(int centerX, int topY, float health, int steps, float scale)
     // HealthStatus < 0 is the "HP unknown" sentinel (server sends 0xFF -> -1, and
     // the field is initialized to -1), so render a full bar instead of an empty one.
     const float clampedHealth = (health < 0.f) ? 1.f : health;
-    const int stepHP = (int)(clampedHealth * steps);
+    const int   stepHP        = (int)(clampedHealth * steps);
 
     // Filled health segments.
     glColor3f(250.f / 255.f, 10.f / 255.f, 0.f);
     for (int k = 0; k < stepHP; ++k)
     {
-        RenderColor(
-            (float)(x + borderWidth + (k * widthPerStep)),
-            (float)(y + borderHeight),
-            widthPerStep - stepSeparatorWidth,
-            2.f);
+        RenderColor((float)(x + borderWidth + (k * widthPerStep)), (float)(y + borderHeight),
+                    widthPerStep - stepSeparatorWidth, 2.f);
     }
     DisableAlphaBlend();
 }
@@ -87,7 +84,7 @@ SEASON3B::CNewUINameWindow::CNewUINameWindow()
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
 
-    m_bShowItemName = false;
+    m_bShowItemName         = false;
     m_bShowMonsterHealthBar = false;
 }
 
@@ -172,7 +169,7 @@ void SEASON3B::CNewUINameWindow::RenderName()
         for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
         {
             CHARACTER* c = &CharactersClient[i];
-            OBJECT* o = &c->Object;
+            OBJECT*    o = &c->Object;
             if (o->Live && o->Kind == KIND_PLAYER)
             {
                 if (IsShopTitleVisible(c) == false)
@@ -188,14 +185,14 @@ void SEASON3B::CNewUINameWindow::RenderName()
     {
         return;
     }
-#endif//GUILD_WAR_EVENT
+#endif  //GUILD_WAR_EVENT
 
     if (SelectedItem != -1 || SelectedNpc != -1 || SelectedCharacter != -1)
     {
         if (SelectedNpc != -1)
         {
             CHARACTER* c = &CharactersClient[SelectedNpc];
-            OBJECT* o = &c->Object;
+            OBJECT*    o = &c->Object;
             UI::Chat::CreateChat(c->ID, L"", c);
         }
         else if (SelectedCharacter != -1)
@@ -219,14 +216,14 @@ void SEASON3B::CNewUINameWindow::RenderName()
 #ifdef ASG_ADD_GENS_SYSTEM
 #ifndef PBG_MOD_STRIFE_GENSMARKRENDER
                 if (!::IsStrifeMap(World) || Hero->m_byGensInfluence == c->m_byGensInfluence)
-#endif //PBG_MOD_STRIFE_GENSMARKRENDER
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif  //PBG_MOD_STRIFE_GENSMARKRENDER
+#endif  // ASG_ADD_GENS_SYSTEM
+            {
+                if (IsShopTitleVisible(c) == false)
                 {
-                    if (IsShopTitleVisible(c) == false)
-                    {
-                        UI::Chat::CreateChat(c->ID, L"", c);
-                    }
+                    UI::Chat::CreateChat(c->ID, L"", c);
                 }
+            }
         }
         else if (SelectedItem != -1)
         {
@@ -272,7 +269,7 @@ void SEASON3B::CNewUINameWindow::RenderMonsterHealthBars()
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
+        OBJECT*    o = &c->Object;
 
         if (!o->Live || !o->Visible || o->Alpha <= 0.f || c->Dead > 0 || o->Kind != KIND_MONSTER)
             continue;
@@ -280,7 +277,7 @@ void SEASON3B::CNewUINameWindow::RenderMonsterHealthBars()
         vec3_t Position;
         Vector(o->Position[0], o->Position[1], o->Position[2] + o->BoundingBoxMax[2] + 60.f, Position);
 
-        int ScreenX, ScreenY;
+        int    ScreenX, ScreenY;
         vec3_t transformPos;
         VectorTransform(Position, g_Camera.Matrix, transformPos);
         if (transformPos[2] >= 0)
@@ -288,9 +285,7 @@ void SEASON3B::CNewUINameWindow::RenderMonsterHealthBars()
 
         CameraProjection::WorldToScreen(g_Camera, Position, &ScreenX, &ScreenY);
 
-        if (ScreenX < -100 || ScreenY < -100
-            || ScreenX > (REFERENCE_WIDTH + 100)
-            || ScreenY > (REFERENCE_HEIGHT + 100))
+        if (ScreenX < -100 || ScreenY < -100 || ScreenX > (REFERENCE_WIDTH + 100) || ScreenY > (REFERENCE_HEIGHT + 100))
             continue;
 
         // Bar fixed at ~3/7 of the original width, with 8 segments so each one

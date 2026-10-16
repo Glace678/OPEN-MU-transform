@@ -3,16 +3,16 @@
 
 TEST_CASE("Text fitting keeps full labels inside both dimensions at supported window scales")
 {
-    for (float windowScale : { 1.f, 1.25f, 1.6f, 2.25f, 3.f, 4.5f })
+    for (float windowScale : {1.f, 1.25f, 1.6f, 2.25f, 3.f, 4.5f})
     {
-        for (float textWidth : { 20.f, 80.f, 400.f, 2000.f })
+        for (float textWidth : {20.f, 80.f, 400.f, 2000.f})
         {
-            for (float textHeight : { 12.f, 28.f, 64.f })
+            for (float textHeight : {12.f, 28.f, 64.f})
             {
-                const float width = 54.f * windowScale;
+                const float width  = 54.f * windowScale;
                 const float height = 18.f * windowScale;
-                const auto layout = Core::Text::FitTextInBox(textWidth * windowScale,
-                    textHeight * windowScale, width, height);
+                const auto  layout =
+                    Core::Text::FitTextInBox(textWidth * windowScale, textHeight * windowScale, width, height);
                 CHECK(layout.scale > 0.f);
                 CHECK(layout.scale <= 1.f);
                 CHECK(layout.offsetX >= -0.001f);

@@ -62,20 +62,20 @@ FrameTimingState g_frameTiming;
 #endif
 
 // External declarations
-extern int GrabScreen;
-extern int WaterTextureNumber;
-extern float g_Luminosity;
-extern int g_iNoMouseTime;
+extern int             GrabScreen;
+extern int             WaterTextureNumber;
+extern float           g_Luminosity;
+extern int             g_iNoMouseTime;
 extern CPhysicsManager g_PhysicsManager;
-extern EGameScene SceneFlag;
-extern CTimer* g_pTimer;
-extern DWORD g_dwMouseUseUIID;
-extern wchar_t GrabFileName[256];
-extern CHARACTER* Hero;
-extern int HeroTile;
-extern bool Destroy;
-extern double WorldTime;
-extern float FPS_ANIMATION_FACTOR;
+extern EGameScene      SceneFlag;
+extern CTimer*         g_pTimer;
+extern DWORD           g_dwMouseUseUIID;
+extern wchar_t         GrabFileName[256];
+extern CHARACTER*      Hero;
+extern int             HeroTile;
+extern bool            Destroy;
+extern double          WorldTime;
+extern float           FPS_ANIMATION_FACTOR;
 
 static bool g_bShowDebugInfo =
 #ifdef _DEBUG
@@ -89,13 +89,15 @@ static bool g_bShowFpsCounter = false;
 void SetShowDebugInfo(bool enabled)
 {
     g_bShowDebugInfo = enabled;
-    if (enabled) g_bShowFpsCounter = false;
+    if (enabled)
+        g_bShowFpsCounter = false;
 }
 
 void SetShowFpsCounter(bool enabled)
 {
     g_bShowFpsCounter = enabled;
-    if (enabled) g_bShowDebugInfo = false;
+    if (enabled)
+        g_bShowDebugInfo = false;
 }
 
 // GLP-01: independent of the two flags above -- $glstats can be shown alongside $details or
@@ -111,30 +113,30 @@ void SetShowGLStats(bool enabled)
 // Frame Statistics Tracker
 //=============================================================================
 
-static constexpr int FRAME_HISTORY_SIZE = 300;      // ~5 seconds at 60fps
-static constexpr float MIN_FRAME_TIME_MS = 0.5f;    // clamp to 2000fps max
-static constexpr double STATS_UPDATE_INTERVAL = 500.0; // ms between percentile recalculations
-static constexpr int MIN_FRAMES_FOR_STATS = 10;
-static constexpr float GRAPH_MAX_MS = 33.3f;        // graph Y-axis scale (30fps)
-static constexpr float THRESHOLD_60FPS_MS = 16.67f;  // 60 FPS threshold
-static constexpr float THRESHOLD_40FPS_MS = 25.0f;   // 40 FPS threshold
-static constexpr float DEBUG_TEXT_X = 10.0f;          // debug overlay X position
-static constexpr int DEBUG_TEXT_Y_START = 26;         // debug overlay Y start
-static constexpr int DEBUG_TEXT_LINE_HEIGHT = 10;     // line spacing
-static constexpr float DEBUG_GRAPH_WIDTH = 200.0f;    // frame graph width
-static constexpr float DEBUG_GRAPH_HEIGHT = 40.0f;    // frame graph height
-static constexpr float DEBUG_GRAPH_Y_OFFSET = 2.0f;   // gap between text and graph
+static constexpr int    FRAME_HISTORY_SIZE     = 300;    // ~5 seconds at 60fps
+static constexpr float  MIN_FRAME_TIME_MS      = 0.5f;   // clamp to 2000fps max
+static constexpr double STATS_UPDATE_INTERVAL  = 500.0;  // ms between percentile recalculations
+static constexpr int    MIN_FRAMES_FOR_STATS   = 10;
+static constexpr float  GRAPH_MAX_MS           = 33.3f;   // graph Y-axis scale (30fps)
+static constexpr float  THRESHOLD_60FPS_MS     = 16.67f;  // 60 FPS threshold
+static constexpr float  THRESHOLD_40FPS_MS     = 25.0f;   // 40 FPS threshold
+static constexpr float  DEBUG_TEXT_X           = 10.0f;   // debug overlay X position
+static constexpr int    DEBUG_TEXT_Y_START     = 26;      // debug overlay Y start
+static constexpr int    DEBUG_TEXT_LINE_HEIGHT = 10;      // line spacing
+static constexpr float  DEBUG_GRAPH_WIDTH      = 200.0f;  // frame graph width
+static constexpr float  DEBUG_GRAPH_HEIGHT     = 40.0f;   // frame graph height
+static constexpr float  DEBUG_GRAPH_Y_OFFSET   = 2.0f;    // gap between text and graph
 
-static float s_frameTimesMs[FRAME_HISTORY_SIZE] = {};
-static int s_frameIndex = 0;
-static int s_frameCount = 0;
-static double s_lastFrameTime = 0.0;
-static double s_highestFps = 0.0;
+static float  s_frameTimesMs[FRAME_HISTORY_SIZE] = {};
+static int    s_frameIndex                       = 0;
+static int    s_frameCount                       = 0;
+static double s_lastFrameTime                    = 0.0;
+static double s_highestFps                       = 0.0;
 
 // Percentile stats (updated periodically)
-static float s_avgFps = 0.0f;
-static float s_onePercentLow = 0.0f;
-static float s_slowestFrameFps = 0.0f;
+static float  s_avgFps          = 0.0f;
+static float  s_onePercentLow   = 0.0f;
+static float  s_slowestFrameFps = 0.0f;
 static double s_lastStatsUpdate = 0.0;
 
 static void LogFrameAudit(double now)
@@ -143,28 +145,28 @@ static void LogFrameAudit(double now)
         const char* value = std::getenv("MU_FRAME_AUDIT");
         return value && std::strcmp(value, "1") == 0;
     }();
-    static double lastLog = 0.0;
+    static double    lastLog         = 0.0;
     constexpr double AuditIntervalMs = 5000.0;
     if (!enabled || now - lastLog < AuditIntervalMs)
         return;
 
-    lastLog = now;
+    lastLog            = now;
     const auto& policy = GetEffectiveFramePolicy();
     g_ErrorReport.Write(
         L"> Frame audit: scene %d, requested %.3f, effective %.3f, actual %.3f, 1%% low %.3f, display %.3f Hz.\r\n",
-        static_cast<int>(SceneFlag), policy.requestedFrameRate, policy.effectiveFrameRate,
-        s_avgFps, s_onePercentLow, policy.displayRefreshRate.hertz);
+        static_cast<int>(SceneFlag), policy.requestedFrameRate, policy.effectiveFrameRate, s_avgFps, s_onePercentLow,
+        policy.displayRefreshRate.hertz);
 }
 
 void ResetFrameStats()
 {
     memset(s_frameTimesMs, 0, sizeof(s_frameTimesMs));
-    s_frameIndex = 0;
-    s_frameCount = 0;
-    s_lastFrameTime = 0.0;
-    s_highestFps = 0.0;
-    s_avgFps = 0.0f;
-    s_onePercentLow = 0.0f;
+    s_frameIndex      = 0;
+    s_frameCount      = 0;
+    s_lastFrameTime   = 0.0;
+    s_highestFps      = 0.0;
+    s_avgFps          = 0.0f;
+    s_onePercentLow   = 0.0f;
     s_slowestFrameFps = 0.0f;
     s_lastStatsUpdate = 0.0;
 }
@@ -175,13 +177,16 @@ static void UpdateFrameStats()
     if (s_lastFrameTime > 0.0)
     {
         double dt = now - s_lastFrameTime;
-        if (dt < MIN_FRAME_TIME_MS) dt = MIN_FRAME_TIME_MS;
+        if (dt < MIN_FRAME_TIME_MS)
+            dt = MIN_FRAME_TIME_MS;
         s_frameTimesMs[s_frameIndex] = static_cast<float>(dt);
-        s_frameIndex = (s_frameIndex + 1) % FRAME_HISTORY_SIZE;
-        if (s_frameCount < FRAME_HISTORY_SIZE) s_frameCount++;
+        s_frameIndex                 = (s_frameIndex + 1) % FRAME_HISTORY_SIZE;
+        if (s_frameCount < FRAME_HISTORY_SIZE)
+            s_frameCount++;
 
         double instantaneousFps = 1000.0 / dt;
-        if (instantaneousFps > s_highestFps) s_highestFps = instantaneousFps;
+        if (instantaneousFps > s_highestFps)
+            s_highestFps = instantaneousFps;
     }
     s_lastFrameTime = now;
 
@@ -196,15 +201,15 @@ static void UpdateFrameStats()
         std::sort(sorted, sorted + s_frameCount, std::greater<float>());
 
         // Average
-        float sum = std::accumulate(sorted, sorted + s_frameCount, 0.0f);
+        float sum   = std::accumulate(sorted, sorted + s_frameCount, 0.0f);
         float avgMs = sum / s_frameCount;
-        s_avgFps = (avgMs > 0.0f) ? 1000.0f / avgMs : 0.0f;
+        s_avgFps    = (avgMs > 0.0f) ? 1000.0f / avgMs : 0.0f;
 
         // 1% low: average of the slowest 1% of frames
-        int onePercCount = std::max(1, s_frameCount / 100);
-        float onePercSum = std::accumulate(sorted, sorted + onePercCount, 0.0f);
+        int   onePercCount = std::max(1, s_frameCount / 100);
+        float onePercSum   = std::accumulate(sorted, sorted + onePercCount, 0.0f);
         float onePercAvgMs = onePercSum / onePercCount;
-        s_onePercentLow = (onePercAvgMs > 0.0f) ? 1000.0f / onePercAvgMs : 0.0f;
+        s_onePercentLow    = (onePercAvgMs > 0.0f) ? 1000.0f / onePercAvgMs : 0.0f;
 
         // Slowest frame: the single slowest frame in the window
         s_slowestFrameFps = (sorted[0] > 0.0f) ? 1000.0f / sorted[0] : 0.0f;
@@ -220,11 +225,7 @@ void SetTargetFps(double targetFps)
 FrameStatisticsSnapshot GetFrameStatistics()
 {
     return {
-        FPS,
-        s_avgFps,
-        s_onePercentLow,
-        s_slowestFrameFps,
-        s_frameCount,
+        FPS, s_avgFps, s_onePercentLow, s_slowestFrameFps, s_frameCount,
     };
 }
 
@@ -242,8 +243,8 @@ static void GenerateScreenshotFilename(wchar_t* outFileName, wchar_t* outMessage
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
-    mu_swprintf(outFileName, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg",
-        st.wMonth, st.wDay, st.wHour, st.wMinute, GrabScreen);
+    mu_swprintf(outFileName, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg", st.wMonth, st.wDay, st.wHour, st.wMinute,
+                GrabScreen);
     mu_swprintf(outMessage, I18N::Game::SScreenshotSaved, outFileName);
 
     wchar_t lpszTemp[64];
@@ -282,7 +283,7 @@ static void HandleScreenshotCapture()
     }
 
     const bool addTimeStampToCapture = !Core::Input::IsKeyDown(VK_SHIFT);
-    wchar_t screenshotText[256];
+    wchar_t    screenshotText[256];
 
     GenerateScreenshotFilename(GrabFileName, screenshotText);
 
@@ -308,17 +309,17 @@ static void UpdateActiveScene()
 {
     switch (SceneFlag)
     {
-    case LOG_IN_SCENE:
-        NewMoveLogInScene();
-        break;
+        case LOG_IN_SCENE:
+            NewMoveLogInScene();
+            break;
 
-    case CHARACTER_SCENE:
-        NewMoveCharacterScene();
-        break;
+        case CHARACTER_SCENE:
+            NewMoveCharacterScene();
+            break;
 
-    case MAIN_SCENE:
-        MoveMainScene();
-        break;
+        case MAIN_SCENE:
+            MoveMainScene();
+            break;
     }
 }
 
@@ -343,7 +344,7 @@ void UpdateSceneState()
 static void UpdateLoginAndCharacterScenes()
 {
     double dDeltaTick = g_pTimer->GetTimeElapsed();
-    dDeltaTick = MIN(dDeltaTick, 200.0 * FPS_ANIMATION_FACTOR);
+    dDeltaTick        = MIN(dDeltaTick, 200.0 * FPS_ANIMATION_FACTOR);
 
     CInput::Instance().Update();
     CUIMng::Instance().Update(dDeltaTick);
@@ -356,9 +357,9 @@ static void UpdateLoginAndCharacterScenes()
  */
 static void UpdateWaterAnimation()
 {
-    constexpr int NumberOfWaterTextures = 32;
-    const double timePerFrame = 1000 / REFERENCE_FPS;
-    auto time_since_last_render = g_frameTiming.GetCurrentTime() - g_frameTiming.lastWaterChange;
+    constexpr int NumberOfWaterTextures  = 32;
+    const double  timePerFrame           = 1000 / REFERENCE_FPS;
+    auto          time_since_last_render = g_frameTiming.GetCurrentTime() - g_frameTiming.lastWaterChange;
     while (time_since_last_render > timePerFrame)
     {
         WaterTextureNumber++;
@@ -403,34 +404,34 @@ static void SetWorldClearColor()
 {
     // Convenience: build a 0-255 color at call site; dividing by 256 matches legacy values.
     constexpr float BYTE_TO_FLOAT = 1.f / 256.f;
-    auto rgb8 = [](int r, int g, int b) {
+    auto            rgb8          = [](int r, int g, int b) {
         SetClearAndFogColor(r * BYTE_TO_FLOAT, g * BYTE_TO_FLOAT, b * BYTE_TO_FLOAT);
     };
 
     const int world = gMapManager.WorldActive;
 
     if (world == WD_0LORENCIA)
-        rgb8(10, 20, 14);                              // Dark green
+        rgb8(10, 20, 14);  // Dark green
     else if (world == WD_2DEVIAS)
-        SetClearAndFogColor(0.75f, 0.85f, 1.0f);       // Light snowy blue
+        SetClearAndFogColor(0.75f, 0.85f, 1.0f);  // Light snowy blue
     else if (world == WD_10HEAVEN)
-        rgb8(3, 25, 44);                               // Blue
+        rgb8(3, 25, 44);  // Blue
     else if (world == WD_73NEW_LOGIN_SCENE || world == WD_74NEW_CHARACTER_SCENE)
-        SetClearAndFogColor(0.f, 0.f, 0.f);            // Black
+        SetClearAndFogColor(0.f, 0.f, 0.f);  // Black
     else if (gMapManager.InHellas(world))
-        rgb8(30, 40, 40);                              // Teal
+        rgb8(30, 40, 40);  // Teal
     else if (gMapManager.InChaosCastle())
-        SetClearAndFogColor(0.f, 0.f, 0.f);            // Black
+        SetClearAndFogColor(0.f, 0.f, 0.f);  // Black
     else if (gMapManager.InBattleCastle() && battleCastle::InBattleCastle2(Hero->Object.Position))
-        SetClearAndFogColor(0.f, 0.f, 0.f);            // Black
+        SetClearAndFogColor(0.f, 0.f, 0.f);  // Black
     else if (world >= WD_45CURSEDTEMPLE_LV1 && world <= WD_45CURSEDTEMPLE_LV6)
-        rgb8(9, 8, 33);                                // Dark purple
+        rgb8(9, 8, 33);  // Dark purple
     else if (world == WD_51HOME_6TH_CHAR)
-        rgb8(178, 178, 178);                           // Gray
+        rgb8(178, 178, 178);  // Gray
     else if (world == WD_65DOPPLEGANGER1)
-        rgb8(148, 179, 223);                           // Light blue
+        rgb8(148, 179, 223);  // Light blue
     else
-        SetClearAndFogColor(0.f, 0.f, 0.f);            // Black (default)
+        SetClearAndFogColor(0.f, 0.f, 0.f);  // Black (default)
 
     ClearColorAndDepthBuffers();
 }
@@ -481,7 +482,7 @@ static void RenderFrameGraph(float graphX, float graphY, float graphW, float gra
 
     // Flip Y for OpenGL (origin bottom-left)
     float glBottom = (float)WindowHeight - gy - gh;
-    float glTop = (float)WindowHeight - gy;
+    float glTop    = (float)WindowHeight - gy;
 
     DisableTexture2D();
     EnableBlend();
@@ -497,7 +498,7 @@ static void RenderFrameGraph(float graphX, float graphY, float graphW, float gra
     IR::End();
 
     float target60 = THRESHOLD_60FPS_MS / GRAPH_MAX_MS;
-    float lineY = glBottom + target60 * gh;
+    float lineY    = glBottom + target60 * gh;
     IR::Begin(GL_LINES);
     PassthroughShader::Instance().SetUseTexture(false);
     IR::Color4f(0.3f, 0.8f, 0.3f, 0.5f);
@@ -505,15 +506,15 @@ static void RenderFrameGraph(float graphX, float graphY, float graphW, float gra
     IR::Vertex2f(gx + gw, lineY);
     IR::End();
 
-    float barW = gw / FRAME_HISTORY_SIZE;
-    int oldest = (s_frameCount < FRAME_HISTORY_SIZE) ? 0 : s_frameIndex;
+    float barW   = gw / FRAME_HISTORY_SIZE;
+    int   oldest = (s_frameCount < FRAME_HISTORY_SIZE) ? 0 : s_frameIndex;
 
     IR::Begin(GL_QUADS);
     PassthroughShader::Instance().SetUseTexture(false);
     for (int i = 0; i < s_frameCount; i++)
     {
-        int idx = (oldest + i) % FRAME_HISTORY_SIZE;
-        float ms = s_frameTimesMs[idx];
+        int   idx  = (oldest + i) % FRAME_HISTORY_SIZE;
+        float ms   = s_frameTimesMs[idx];
         float norm = std::min(ms / GRAPH_MAX_MS, 1.0f);
         float barH = norm * gh;
 
@@ -555,20 +556,24 @@ static void RenderDebugInfo()
     g_pRenderText->SetTextColor(255, 255, 255, 200);
 
     int y = DEBUG_TEXT_Y_START;
-    mu_swprintf(szLine, L"FPS: %.1f  Avg: %.1f  Max: %.1f  Vsync: %d  CPU: %.1f%%",
-        FPS_AVG, s_avgFps, s_highestFps, IsVSyncEnabled(), CPU_AVG);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"FPS: %.1f  Avg: %.1f  Max: %.1f  Vsync: %d  CPU: %.1f%%", FPS_AVG, s_avgFps, s_highestFps,
+                IsVSyncEnabled(), CPU_AVG);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
-    mu_swprintf(szLine, L"1%% Low: %.1f  Slowest: %.1f  Frame: %.2fms",
-        s_onePercentLow, s_slowestFrameFps,
-        (s_avgFps > 0.0f) ? 1000.0f / s_avgFps : 0.0f);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"1%% Low: %.1f  Slowest: %.1f  Frame: %.2fms", s_onePercentLow, s_slowestFrameFps,
+                (s_avgFps > 0.0f) ? 1000.0f / s_avgFps : 0.0f);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     mu_swprintf(szLine, L"MousePos: %d %d %d", MouseX, MouseY, MouseLButtonPush);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
-    mu_swprintf(szLine, L"Camera3D: %.1f %.1f:%.1f:%.1f", g_Camera.FOV, g_Camera.Angle[0], g_Camera.Angle[1], g_Camera.Angle[2]);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"Camera3D: %.1f %.1f:%.1f:%.1f", g_Camera.FOV, g_Camera.Angle[0], g_Camera.Angle[1],
+                g_Camera.Angle[2]);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Compile-time build info: configuration, feature flags, compiler, arch,
     // and the binary's build timestamp. Useful for verifying which build is
@@ -591,11 +596,11 @@ static void RenderDebugInfo()
 #elif defined(__clang__)
         "Clang";
 #elif defined(_MSC_VER)
-        "MSVC";
+                "MSVC";
 #elif defined(__GNUC__)
-        "GCC";
+                "GCC";
 #else
-        "Unknown";
+                "Unknown";
 #endif
     constexpr const char* kArch =
 #if defined(_WIN64) || defined(__x86_64__) || defined(__aarch64__)
@@ -603,54 +608,58 @@ static void RenderDebugInfo()
 #else
         "x86";
 #endif
-    mu_swprintf(szLine, L"Build: %hs %hs %hs %hs  %hs %hs",
-             kBuildType, kEditor, kCompiler, kArch, __DATE__, __TIME__);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"Build: %hs %hs %hs %hs  %hs %hs", kBuildType, kEditor, kCompiler, kArch, __DATE__, __TIME__);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Runtime OS name and version (compile-time arch above doesn't capture which
     // OS build the binary is actually running on).
     mu_swprintf(szLine, L"OS: %ls", Core::Platform::GetOSVersionString().c_str());
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Active camera mode (cycled with F9).
     mu_swprintf(szLine, L"Camera: %hs", CameraModeToString(CameraManager::Instance().GetCurrentMode()));
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Per-pass frame timing (ms) — accumulated by FRAME_PROFILE scopes around the
     // major render passes in MainScene. Reset just below so next frame starts fresh.
     using FP = FrameProfiler::Pass;
-    mu_swprintf(szLine, L"Frame ms  T:%5.2f  O:%5.2f  C:%5.2f  I:%5.2f  E:%5.2f  Oth:%5.2f",
-             FrameProfiler::AccumulatorMs(FP::Terrain),
-             FrameProfiler::AccumulatorMs(FP::Objects),
-             FrameProfiler::AccumulatorMs(FP::Characters),
-             FrameProfiler::AccumulatorMs(FP::Items),
-             FrameProfiler::AccumulatorMs(FP::Effects),
-             FrameProfiler::AccumulatorMs(FP::Other)); // 1-frame-lagged: debug-overlay/reconnect-dialog render cost only now (Present split out below, DXP-23)
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(
+        szLine, L"Frame ms  T:%5.2f  O:%5.2f  C:%5.2f  I:%5.2f  E:%5.2f  Oth:%5.2f",
+        FrameProfiler::AccumulatorMs(FP::Terrain), FrameProfiler::AccumulatorMs(FP::Objects),
+        FrameProfiler::AccumulatorMs(FP::Characters), FrameProfiler::AccumulatorMs(FP::Items),
+        FrameProfiler::AccumulatorMs(FP::Effects),
+        FrameProfiler::AccumulatorMs(
+            FP::Other));  // 1-frame-lagged: debug-overlay/reconnect-dialog render cost only now (Present split out below, DXP-23)
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // DXP-23: UI = RenderMainSceneUI() self-time (was previously unmeasured, fell outside every
     // FRAME_PROFILE scope) -- this frame's own value, RenderCurrentScene() already ran above.
     // Present = PlatformSwapBuffers() self-time, split out of Other so a large reading
     // unambiguously points at GPU-stall wait rather than HUD render cost -- 1-frame-lagged like
     // Oth above, since the swap itself only happens after this function returns.
-    mu_swprintf(szLine, L"UI:%6.2f  Present:%6.2f",
-             FrameProfiler::AccumulatorMs(FP::UI),
-             FrameProfiler::AccumulatorMs(FP::Present));
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"UI:%6.2f  Present:%6.2f", FrameProfiler::AccumulatorMs(FP::UI),
+                FrameProfiler::AccumulatorMs(FP::Present));
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Move/update-phase cost of particle & effect simulation (UpdateGameEntities(), not the
     // render-side Effects pass above) — added to gauge whether MoveEffects()/MoveParticles()
     // are worth parallelizing on a worker thread pool (see feature-ffp-shader-port task memory).
-    mu_swprintf(szLine, L"MoveSim ms  MoveFx:%5.2f  MovePart:%5.2f",
-             FrameProfiler::AccumulatorMs(FP::MoveEffects),
-             FrameProfiler::AccumulatorMs(FP::MoveParticles));
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    mu_swprintf(szLine, L"MoveSim ms  MoveFx:%5.2f  MovePart:%5.2f", FrameProfiler::AccumulatorMs(FP::MoveEffects),
+                FrameProfiler::AccumulatorMs(FP::MoveParticles));
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // DXP-20 baseline: BMD::Transform() self-time (CPU skinning + per-vertex/normal loops),
     // summed across every body transformed this frame (subset of the Objects/Chars/Items passes
     // above, not additive with them). Judge the whole GPU-skinning task against this number.
     mu_swprintf(szLine, L"Skinning ms  Transform:%5.2f", FrameProfiler::AccumulatorMs(FP::Skinning));
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // TEMP diagnostic (2026-07-31, Devil Square FPS investigation) — splits the Characters
     // pass above into "waiting on the animation thread pool" vs "everything else" (actual
@@ -660,11 +669,12 @@ static void RenderDebugInfo()
     {
         extern size_t g_LastActiveCharacterCount;
         extern bool   g_LastAnimationWasParallel;
-        float charWaitMs = FrameProfiler::AccumulatorMs(FP::CharWait);
-        float charRenderMs = FrameProfiler::AccumulatorMs(FP::Characters) - charWaitMs;
+        float         charWaitMs   = FrameProfiler::AccumulatorMs(FP::CharWait);
+        float         charRenderMs = FrameProfiler::AccumulatorMs(FP::Characters) - charWaitMs;
         mu_swprintf(szLine, L"CharDbg  Active:%3d  Parallel:%d  Wait:%5.2f  Render:%5.2f",
-            (int)g_LastActiveCharacterCount, (int)g_LastAnimationWasParallel, charWaitMs, charRenderMs);
-        g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+                    (int)g_LastActiveCharacterCount, (int)g_LastAnimationWasParallel, charWaitMs, charRenderMs);
+        g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+        y += DEBUG_TEXT_LINE_HEIGHT;
     }
 
     // Frame time graph below text
@@ -701,13 +711,14 @@ static void RenderGLStats()
     // Right-hand column so this can be shown alongside $details' left-aligned overlay without
     // the two overlapping.
     const float x = DEBUG_TEXT_X + 260.0f;
-    int y = DEBUG_TEXT_Y_START;
+    int         y = DEBUG_TEXT_Y_START;
 
     using FP = FrameProfiler::Pass;
     using FC = FrameProfiler::Counter;
 
     mu_swprintf(szLine, L"GLStats  Pass       CPUms  GPUms     GL   Draw BufUpd(Orph)");
-    g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)x, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // One row per GL-call-bearing pass. The passes left out are the ones that genuinely issue no
     // GL calls of their own -- MoveEffects, MoveParticles (update-phase simulation), Skinning and
@@ -718,84 +729,73 @@ static void RenderGLStats()
     // The list had been copied from kGpuTimedPasses, where excluding Other IS correct (it has no
     // timestamp pair). Rows must sum to the printed totals below; if they don't, a pass is missing
     // from this list. Other's GPU-ms column reads 0 by design -- it is untimed, not free.
-    static constexpr FP kRows[] = {
-        FP::Terrain, FP::Objects, FP::Characters, FP::Items, FP::Effects,
-        FP::Sprites, FP::Particles, FP::Joints, FP::UI, FP::Overlay, FP::Other
-    };
+    static constexpr FP kRows[] = {FP::Terrain,   FP::Objects, FP::Characters, FP::Items,   FP::Effects, FP::Sprites,
+                                   FP::Particles, FP::Joints,  FP::UI,         FP::Overlay, FP::Other};
     for (FP pass : kRows)
     {
-        const int gpuIdx = FrameProfiler::GpuTimedIndex(pass);
-        const float gpuMs = (gpuIdx >= 0) ? FrameProfiler::GpuMs(pass) : 0.0f;
+        const int   gpuIdx = FrameProfiler::GpuTimedIndex(pass);
+        const float gpuMs  = (gpuIdx >= 0) ? FrameProfiler::GpuMs(pass) : 0.0f;
         // '!' marks a GPU reading that dropped entries at kMaxEntriesPerPass -- a truncated sum
         // must never be mistaken for a complete one.
         const char* truncFlag = (gpuIdx >= 0 && FrameProfiler::GpuMsTruncated(pass)) ? "!" : " ";
-        mu_swprintf(szLine, L"%-10hs %6.2f %6.2f%hs %5u %5u %5u(%u)",
-            FrameProfiler::kPassNames[(int)pass],
-            FrameProfiler::AccumulatorMs(pass),
-            gpuMs,
-            truncFlag,
-            FrameProfiler::CounterValue(pass, FC::GLCalls),
-            FrameProfiler::CounterValue(pass, FC::DrawCalls),
-            FrameProfiler::CounterValue(pass, FC::BufferUpdates),
-            FrameProfiler::CounterValue(pass, FC::BufferOrphans));
-        g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+        mu_swprintf(szLine, L"%-10hs %6.2f %6.2f%hs %5u %5u %5u(%u)", FrameProfiler::kPassNames[(int)pass],
+                    FrameProfiler::AccumulatorMs(pass), gpuMs, truncFlag,
+                    FrameProfiler::CounterValue(pass, FC::GLCalls), FrameProfiler::CounterValue(pass, FC::DrawCalls),
+                    FrameProfiler::CounterValue(pass, FC::BufferUpdates),
+                    FrameProfiler::CounterValue(pass, FC::BufferOrphans));
+        g_pRenderText->RenderText((int)x, y, szLine);
+        y += DEBUG_TEXT_LINE_HEIGHT;
     }
 
     // Frame totals -- includes binds/uniform writes, which aren't broken out per-row above
     // (would make the table too wide to read at a glance).
     mu_swprintf(szLine, L"Total  GL:%u  Draw:%u  BufUpd:%u(%u)  ProgBind:%u  TexBind:%u  UniWr:%u  UboSkip:%u",
-        FrameProfiler::CounterValue(FC::GLCalls),
-        FrameProfiler::CounterValue(FC::DrawCalls),
-        FrameProfiler::CounterValue(FC::BufferUpdates),
-        FrameProfiler::CounterValue(FC::BufferOrphans),
-        FrameProfiler::CounterValue(FC::ProgramBinds),
-        FrameProfiler::CounterValue(FC::TextureBinds),
-        FrameProfiler::CounterValue(FC::UniformWrites),
-        FrameProfiler::CounterValue(FC::UboSkips)); // GLP-10
-    g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+                FrameProfiler::CounterValue(FC::GLCalls), FrameProfiler::CounterValue(FC::DrawCalls),
+                FrameProfiler::CounterValue(FC::BufferUpdates), FrameProfiler::CounterValue(FC::BufferOrphans),
+                FrameProfiler::CounterValue(FC::ProgramBinds), FrameProfiler::CounterValue(FC::TextureBinds),
+                FrameProfiler::CounterValue(FC::UniformWrites),
+                FrameProfiler::CounterValue(FC::UboSkips));  // GLP-10
+    g_pRenderText->RenderText((int)x, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // ImmediateRenderer batching. Vtx/Draw is the headline: an IR batch is 6 vertices per quad
     // after decomposition, so ~6 means every sprite is still its own draw call and GLP-19's
     // batching is merging nothing. Anything well above that means runs are merging.
-    const uint32_t irDraws = FrameProfiler::CounterValue(FC::IRDraws);
+    const uint32_t irDraws    = FrameProfiler::CounterValue(FC::IRDraws);
     const uint32_t irVertices = FrameProfiler::CounterValue(FC::IRVertices);
-    const float vtxPerDraw = (irDraws > 0) ? ((float)irVertices / (float)irDraws) : 0.0f;
-    mu_swprintf(szLine, L"IR     Draw:%u  Vtx:%u  Vtx/Draw:%.1f",
-        irDraws, irVertices, vtxPerDraw);
-    g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    const float    vtxPerDraw = (irDraws > 0) ? ((float)irVertices / (float)irDraws) : 0.0f;
+    mu_swprintf(szLine, L"IR     Draw:%u  Vtx:%u  Vtx/Draw:%.1f", irDraws, irVertices, vtxPerDraw);
+    g_pRenderText->RenderText((int)x, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // What cut those batches short. The largest bucket is where a batching fix has to aim; a
     // breakdown dominated by Tex means draws are ordered so the texture keeps changing, which
     // is a scheduling problem rather than a batching one.
     mu_swprintf(szLine, L"IRbreak Tex:%u Blend:%u Depth:%u Prog:%u Uni:%u Mtx:%u Draw:%u Other:%u",
-        FrameProfiler::CounterValue(FC::IRBreakTexture),
-        FrameProfiler::CounterValue(FC::IRBreakBlend),
-        FrameProfiler::CounterValue(FC::IRBreakDepth),
-        FrameProfiler::CounterValue(FC::IRBreakProgram),
-        FrameProfiler::CounterValue(FC::IRBreakUniform),
-        FrameProfiler::CounterValue(FC::IRBreakMatrix),
-        FrameProfiler::CounterValue(FC::IRBreakDraw),
-        FrameProfiler::CounterValue(FC::IRBreakOther));
-    g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+                FrameProfiler::CounterValue(FC::IRBreakTexture), FrameProfiler::CounterValue(FC::IRBreakBlend),
+                FrameProfiler::CounterValue(FC::IRBreakDepth), FrameProfiler::CounterValue(FC::IRBreakProgram),
+                FrameProfiler::CounterValue(FC::IRBreakUniform), FrameProfiler::CounterValue(FC::IRBreakMatrix),
+                FrameProfiler::CounterValue(FC::IRBreakDraw), FrameProfiler::CounterValue(FC::IRBreakOther));
+    g_pRenderText->RenderText((int)x, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Per-pass batch quality for the three IR-heavy passes. GLP-24 split these out of Other
     // precisely because they were the frame's largest draw-call producers while invisible;
     // this is the same split for batching.
-    static constexpr FP kIRRows[] = { FP::Sprites, FP::Particles, FP::Joints, FP::UI };
+    static constexpr FP kIRRows[] = {FP::Sprites, FP::Particles, FP::Joints, FP::UI};
     for (FP pass : kIRRows)
     {
         const uint32_t passDraws = FrameProfiler::CounterValue(pass, FC::IRDraws);
-        if (passDraws == 0) continue;
+        if (passDraws == 0)
+            continue;
 
         const uint32_t passVertices = FrameProfiler::CounterValue(pass, FC::IRVertices);
-        mu_swprintf(szLine, L"  %-9hs Draw:%5u  Vtx/Draw:%5.1f  Tex:%u Blend:%u Draw:%u",
-            FrameProfiler::kPassNames[(int)pass],
-            passDraws,
-            (float)passVertices / (float)passDraws,
-            FrameProfiler::CounterValue(pass, FC::IRBreakTexture),
-            FrameProfiler::CounterValue(pass, FC::IRBreakBlend),
-            FrameProfiler::CounterValue(pass, FC::IRBreakDraw));
-        g_pRenderText->RenderText((int)x, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+        mu_swprintf(
+            szLine, L"  %-9hs Draw:%5u  Vtx/Draw:%5.1f  Tex:%u Blend:%u Draw:%u", FrameProfiler::kPassNames[(int)pass],
+            passDraws, (float)passVertices / (float)passDraws, FrameProfiler::CounterValue(pass, FC::IRBreakTexture),
+            FrameProfiler::CounterValue(pass, FC::IRBreakBlend), FrameProfiler::CounterValue(pass, FC::IRBreakDraw));
+        g_pRenderText->RenderText((int)x, y, szLine);
+        y += DEBUG_TEXT_LINE_HEIGHT;
     }
 
     g_pRenderText->SetFont(g_hFont);
@@ -877,82 +877,81 @@ static void PlayWorldAmbientSounds()
 {
     switch (gMapManager.WorldActive)
     {
-    case WD_0LORENCIA:
-                if (HeroTile == 4)
-                {
-                    StopBuffer(SOUND_WIND01, true);
-                    StopBuffer(SOUND_RAIN01, true);
-                }
-                else
-                {
-                    PlayBuffer(SOUND_WIND01, NULL, true);
-                    if (RainCurrent > 0)
-                        PlayBuffer(SOUND_RAIN01, NULL, true);
-                }
-                break;
-            case WD_1DUNGEON:
-                PlayBuffer(SOUND_DUNGEON01, NULL, true);
-                break;
-            case WD_2DEVIAS:
-                if (HeroTile == 3 || HeroTile >= 10)
-                    StopBuffer(SOUND_WIND01, true);
-                else
-                    PlayBuffer(SOUND_WIND01, NULL, true);
-                break;
-            case WD_3NORIA:
-                PlayBuffer(SOUND_WIND01, NULL, true);
-                if (rand_fps_check(512))
-                    PlayBuffer(SOUND_FOREST01);
-                break;
-            case WD_4LOSTTOWER:
-                PlayBuffer(SOUND_TOWER01, NULL, true);
-                break;
-            case WD_5UNKNOWN:
-                //PlayBuffer(SOUND_BOSS01,NULL,true);
-                break;
-            case WD_7ATLANSE:
-                PlayBuffer(SOUND_WATER01, NULL, true);
-                break;
-            case WD_8TARKAN:
-                PlayBuffer(SOUND_DESERT01, NULL, true);
-                break;
-            case WD_10HEAVEN:
-                PlayBuffer(SOUND_HEAVEN01, NULL, true);
-                if (rand_fps_check(100))
-                {
-                    //                PlayBuffer(SOUND_HEAVEN01);
-                }
-                else if (rand_fps_check(10))
-                {
-                    //                PlayBuffer(SOUND_THUNDERS02);
-                }
-                break;
-            case WD_58ICECITY_BOSS:
-                PlayBuffer(SOUND_WIND01, NULL, true);
-                break;
-            case WD_79UNITEDMARKETPLACE:
+        case WD_0LORENCIA:
+            if (HeroTile == 4)
+            {
+                StopBuffer(SOUND_WIND01, true);
+                StopBuffer(SOUND_RAIN01, true);
+            }
+            else
             {
                 PlayBuffer(SOUND_WIND01, NULL, true);
-                PlayBuffer(SOUND_RAIN01, NULL, true);
+                if (RainCurrent > 0)
+                    PlayBuffer(SOUND_RAIN01, NULL, true);
             }
             break;
+        case WD_1DUNGEON:
+            PlayBuffer(SOUND_DUNGEON01, NULL, true);
+            break;
+        case WD_2DEVIAS:
+            if (HeroTile == 3 || HeroTile >= 10)
+                StopBuffer(SOUND_WIND01, true);
+            else
+                PlayBuffer(SOUND_WIND01, NULL, true);
+            break;
+        case WD_3NORIA:
+            PlayBuffer(SOUND_WIND01, NULL, true);
+            if (rand_fps_check(512))
+                PlayBuffer(SOUND_FOREST01);
+            break;
+        case WD_4LOSTTOWER:
+            PlayBuffer(SOUND_TOWER01, NULL, true);
+            break;
+        case WD_5UNKNOWN:
+            //PlayBuffer(SOUND_BOSS01,NULL,true);
+            break;
+        case WD_7ATLANSE:
+            PlayBuffer(SOUND_WATER01, NULL, true);
+            break;
+        case WD_8TARKAN:
+            PlayBuffer(SOUND_DESERT01, NULL, true);
+            break;
+        case WD_10HEAVEN:
+            PlayBuffer(SOUND_HEAVEN01, NULL, true);
+            if (rand_fps_check(100))
+            {
+                //                PlayBuffer(SOUND_HEAVEN01);
+            }
+            else if (rand_fps_check(10))
+            {
+                //                PlayBuffer(SOUND_THUNDERS02);
+            }
+            break;
+        case WD_58ICECITY_BOSS:
+            PlayBuffer(SOUND_WIND01, NULL, true);
+            break;
+        case WD_79UNITEDMARKETPLACE: {
+            PlayBuffer(SOUND_WIND01, NULL, true);
+            PlayBuffer(SOUND_RAIN01, NULL, true);
+        }
+        break;
 #ifdef ASG_ADD_MAP_KARUTAN
-            case WD_80KARUTAN1:
+        case WD_80KARUTAN1:
+            PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
+            break;
+        case WD_81KARUTAN2:
+            if (HeroTile == 12)
+            {
+                StopBuffer(SOUND_KARUTAN_DESERT_ENV, true);
+                PlayBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, NULL, true);
+            }
+            else
+            {
+                StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
                 PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
-                break;
-            case WD_81KARUTAN2:
-                if (HeroTile == 12)
-                {
-                    StopBuffer(SOUND_KARUTAN_DESERT_ENV, true);
-                    PlayBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, NULL, true);
-                }
-                else
-                {
-                    StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
-                    PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
-                }
-                break;
-#endif	// ASG_ADD_MAP_KARUTAN
+            }
+            break;
+#endif  // ASG_ADD_MAP_KARUTAN
     }
 }
 
@@ -963,11 +962,14 @@ static void PlayWorldAmbientSounds()
  */
 static void StopInactiveAmbientSounds()
 {
-    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_2DEVIAS && gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_58ICECITY_BOSS && gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
+    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_2DEVIAS &&
+        gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_58ICECITY_BOSS &&
+        gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
     {
         StopBuffer(SOUND_WIND01, true);
     }
-    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.InDevilSquare() == false && gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
+    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.InDevilSquare() == false &&
+        gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
     {
         StopBuffer(SOUND_RAIN01, true);
     }
@@ -1012,7 +1014,7 @@ static void StopInactiveAmbientSounds()
         StopBuffer(SOUND_KARUTAN_INSECT_ENV, true);
     if (gMapManager.WorldActive != WD_81KARUTAN2)
         StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif  // ASG_ADD_MAP_KARUTAN
 }
 
 /**
@@ -1042,8 +1044,8 @@ static void ManageBackgroundMusic()
     {
         if (Hero->SafeZone)
         {
-            if ((Hero->PositionX) >= 205 && (Hero->PositionX) <= 214 &&
-                (Hero->PositionY) >= 13 && (Hero->PositionY) <= 31)
+            if ((Hero->PositionX) >= 205 && (Hero->PositionX) <= 214 && (Hero->PositionY) >= 13 &&
+                (Hero->PositionY) <= 31)
             {
                 PlayMp3(MUSIC_CHURCH);
             }
@@ -1078,52 +1080,66 @@ static void ManageBackgroundMusic()
         StopMp3(MUSIC_DUNGEON);
     }
 
-    if (gMapManager.WorldActive == WD_7ATLANSE) {
+    if (gMapManager.WorldActive == WD_7ATLANSE)
+    {
         PlayMp3(MUSIC_ATLANS);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ATLANS);
     }
 
-    if (gMapManager.WorldActive == WD_10HEAVEN) {
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
         PlayMp3(MUSIC_ICARUS);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ICARUS);
     }
 
-    if (gMapManager.WorldActive == WD_8TARKAN) {
+    if (gMapManager.WorldActive == WD_8TARKAN)
+    {
         PlayMp3(MUSIC_TARKAN);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_TARKAN);
     }
 
-    if (gMapManager.WorldActive == WD_4LOSTTOWER) {
+    if (gMapManager.WorldActive == WD_4LOSTTOWER)
+    {
         PlayMp3(MUSIC_LOSTTOWER_A);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_LOSTTOWER_A);
     }
 
-    if (gMapManager.InHellas(gMapManager.WorldActive)) {
+    if (gMapManager.InHellas(gMapManager.WorldActive))
+    {
         PlayMp3(MUSIC_KALIMA);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_KALIMA);
     }
 
-    if (gMapManager.WorldActive == WD_31HUNTING_GROUND) {
+    if (gMapManager.WorldActive == WD_31HUNTING_GROUND)
+    {
         PlayMp3(MUSIC_BC_HUNTINGGROUND);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_BC_HUNTINGGROUND);
     }
 
-    if (gMapManager.WorldActive == WD_33AIDA) {
+    if (gMapManager.WorldActive == WD_33AIDA)
+    {
         PlayMp3(MUSIC_BC_ADIA);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_BC_ADIA);
     }
 
@@ -1143,17 +1159,21 @@ static void ManageBackgroundMusic()
         g_CursedTemple->PlayBGM();
     }
 
-    if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR) {
+    if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
+    {
         PlayMp3(MUSIC_ELBELAND);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ELBELAND);
     }
 
-    if (gMapManager.WorldActive == WD_56MAP_SWAMP_OF_QUIET) {
+    if (gMapManager.WorldActive == WD_56MAP_SWAMP_OF_QUIET)
+    {
         PlayMp3(MUSIC_SWAMP_OF_QUIET);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_SWAMP_OF_QUIET);
     }
 
@@ -1168,7 +1188,7 @@ static void ManageBackgroundMusic()
     g_UnitedMarketPlace.PlayBGM();
 #ifdef ASG_ADD_MAP_KARUTAN
     g_Karutan1.PlayBGM();
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif  // ASG_ADD_MAP_KARUTAN
 }
 
 /**
@@ -1319,17 +1339,17 @@ void RenderScene(HDC hDC)
         g_Luminosity = sinf(WorldTime * 0.004f) * 0.15f + 0.6f;
         switch (SceneFlag)
         {
-        case WEBZEN_SCENE:
-            WebzenScene(hDC);
-            break;
-        case LOADING_SCENE:
-            LoadingScene(hDC);
-            break;
-        case LOG_IN_SCENE:
-        case CHARACTER_SCENE:
-        case MAIN_SCENE:
-            MainScene(hDC);
-            break;
+            case WEBZEN_SCENE:
+                WebzenScene(hDC);
+                break;
+            case LOADING_SCENE:
+                LoadingScene(hDC);
+                break;
+            case LOG_IN_SCENE:
+            case CHARACTER_SCENE:
+            case MAIN_SCENE:
+                MainScene(hDC);
+                break;
         }
 
         if (g_iNoMouseTime > 31)
@@ -1339,19 +1359,9 @@ void RenderScene(HDC hDC)
     }
     catch (const std::exception& e)
     {
-        // XC-8: twin of the MainScene DXP-16 handler. This used to be
-        // OutputDebugStringA-only, invisible without a debugger attached;
-        // RenderScene is the per-frame entry for the Loading/Login scenes
-        // too, so mirror it to g_ErrorReport as in MainScene.
+        // Log exception in RenderScene
         char errorMsg[256];
         sprintf_s(errorMsg, sizeof(errorMsg), "Exception in RenderScene: %s", e.what());
         OutputDebugStringA(errorMsg);
-        g_ErrorReport.Write(L"[RenderScene] std::exception: %hs\r\n", e.what());
-    }
-    catch (...)
-    {
-        // XC-8: pair with the std::exception catch above -- the twin MainScene
-        // handler already had this non-std (SEH/other) fallback.
-        g_ErrorReport.Write(L"[RenderScene] non-std exception (SEH/other)\r\n");
     }
 }

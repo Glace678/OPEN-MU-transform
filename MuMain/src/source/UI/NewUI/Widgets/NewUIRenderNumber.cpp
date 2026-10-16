@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "UI/NewUI/Widgets/NewUIRenderNumber.h"	// self
+#include "UI/NewUI/Widgets/NewUIRenderNumber.h"  // self
 
 SEASON3B::CNewUIRenderNumber* SEASON3B::CNewUIRenderNumber::GetInstance()
 {
@@ -42,7 +42,7 @@ float SEASON3B::CNewUIRenderNumber::RenderNumber(float x, float y, int iNum, flo
         return x;
     }
 
-    width = 12.f * (fScale - 0.3f);
+    width  = 12.f * (fScale - 0.3f);
     height = 16.f * (fScale - 0.3f);
 
     wchar_t strText[32];

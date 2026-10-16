@@ -6,17 +6,16 @@
 #include "QuestMng.h"
 #include "I18N/All.h"
 
-
-
 #include "Core/Platform/CrtDbg.h"
 
 #include "UI/NewUI/NewUISystem.h"
 #include "Core/Utilities/UsefulDef.h"
 
-#define	QM_NPCDIALOGUE_FILE			L"Data\\Local\\NPCDialogue.bmd"
-#define	QM_QUESTPROGRESS_FILE		L"Data\\Local\\QuestProgress.bmd"
+#define QM_NPCDIALOGUE_FILE   L"Data\\Local\\NPCDialogue.bmd"
+#define QM_QUESTPROGRESS_FILE L"Data\\Local\\QuestProgress.bmd"
 
-#define	QM_QUESTWORDS_FILE			std::wstring(L"Data\\Local\\"+g_strSelectedML+L"\\QuestWords_"+g_strSelectedML+L".bmd").c_str()
+#define QM_QUESTWORDS_FILE \
+    std::wstring(L"Data\\Local\\" + g_strSelectedML + L"\\QuestWords_" + g_strSelectedML + L".bmd").c_str()
 
 CQuestMng g_QuestMng;
 
@@ -26,9 +25,7 @@ CQuestMng::CQuestMng()
     m_szNPCName = nullptr;
 }
 
-CQuestMng::~CQuestMng()
-{
-}
+CQuestMng::~CQuestMng() {}
 
 void CQuestMng::LoadQuestScript()
 {
@@ -50,9 +47,9 @@ void CQuestMng::LoadNPCDialogueScript()
         return;
     }
 
-    const int nSize = sizeof(DWORD) + sizeof(SNPCDialogue);
-    BYTE abyBuffer[nSize];
-    DWORD dwIndex = 0;
+    const int    nSize = sizeof(DWORD) + sizeof(SNPCDialogue);
+    BYTE         abyBuffer[nSize];
+    DWORD        dwIndex = 0;
     SNPCDialogue sNPCDialogue;
 
     while (0 != ::fread(abyBuffer, nSize, 1, fp))
@@ -81,9 +78,9 @@ void CQuestMng::LoadQuestProgressScript()
         return;
     }
 
-    const int nSize = sizeof(DWORD) + sizeof(SQuestProgress);
-    BYTE abyBuffer[nSize];
-    DWORD dwIndex = 0;
+    const int      nSize = sizeof(DWORD) + sizeof(SQuestProgress);
+    BYTE           abyBuffer[nSize];
+    DWORD          dwIndex = 0;
     SQuestProgress sQuestProgress;
 
     while (0 != ::fread(abyBuffer, nSize, 1, fp))
@@ -115,12 +112,12 @@ void CQuestMng::LoadQuestWordsScript()
 #pragma pack(push, 1)
     struct SQuestWordsHeader
     {
-        int		m_nIndex;
-        short	m_nWordsLen;
+        int   m_nIndex;
+        short m_nWordsLen;
     };
 #pragma pack(pop)
 
-    int nSize = sizeof(SQuestWordsHeader);
+    int               nSize = sizeof(SQuestWordsHeader);
     SQuestWordsHeader sQuestWordsHeader;
 
     // Both buffers are reused for every record and must be cleared each time:
@@ -128,8 +125,8 @@ void CQuestMng::LoadQuestWordsScript()
     // record's tail bytes, and converting with a fixed 1024-byte source length
     // spliced that stale data onto the new string (invalid UTF-8 -> U+FFFD,
     // producing arbitrarily long strings that later overran UI stack buffers).
-    char rawWords[1024] { };
-    wchar_t szWords[1024] { };
+    char    rawWords[1024]{};
+    wchar_t szWords[1024]{};
 
     while (0 != ::fread(&sQuestWordsHeader, nSize, 1, fp))
     {
@@ -161,29 +158,16 @@ void CQuestMng::LoadQuestWordsScript()
 
 void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
 {
-    auto pRequestRewardPacket
-        = (LPPMSG_NPC_QUESTEXP_INFO)pbyRequestRewardPacket;
-    DWORD dwQuestIndex = pRequestRewardPacket->m_dwQuestIndex;
-    int i;
-
-    // The wire record (NPC_QUESTEXP_INFO) and the local SQuestRequestReward each
-    // hold exactly 5 request and 5 reward slots. A larger BYTE count would index
-    // past both arrays (and past the fixed-size packet), so reject the whole
-    // packet before mutating any existing quest state.
-    if (pRequestRewardPacket->m_byRequestCount > 5 || pRequestRewardPacket->m_byRewardCount > 5)
-    {
-        g_ErrorReport.Write(L"Quest %u: illegal request/reward count (%u/%u); dropping packet.\r\n",
-            dwQuestIndex, pRequestRewardPacket->m_byRequestCount, pRequestRewardPacket->m_byRewardCount);
-        return;
-    }
+    auto  pRequestRewardPacket = (LPPMSG_NPC_QUESTEXP_INFO)pbyRequestRewardPacket;
+    DWORD dwQuestIndex         = pRequestRewardPacket->m_dwQuestIndex;
+    int   i;
 
     const SQuestRequestReward* pOldRequestReward = GetRequestReward(dwQuestIndex);
     if (pOldRequestReward)
     {
         for (i = 0; i < pOldRequestReward->m_byRequestCount; ++i)
             g_pNewItemMng->DeleteItem(pOldRequestReward->m_aRequest[i].m_pItem);
-        BYTE byRewardCount
-            = pOldRequestReward->m_byGeneralRewardCount + pOldRequestReward->m_byRandRewardCount;
+        BYTE byRewardCount = pOldRequestReward->m_byGeneralRewardCount + pOldRequestReward->m_byRandRewardCount;
         for (i = 0; i < byRewardCount; ++i)
             g_pNewItemMng->DeleteItem(pOldRequestReward->m_aReward[i].m_pItem);
     }
@@ -191,8 +175,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     SQuestRequestReward sRequestReward;
     ::memset(&sRequestReward, 0, sizeof(SQuestRequestReward));
 
-    auto pRequestPacket
-        = (LPNPC_QUESTEXP_REQUEST_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO));
+    auto pRequestPacket = (LPNPC_QUESTEXP_REQUEST_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO));
 
     if (pRequestPacket->m_dwType == QUEST_REQUEST_NONE || pRequestRewardPacket->m_byRequestCount == 0)
     {
@@ -203,18 +186,22 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
         sRequestReward.m_byRequestCount = pRequestRewardPacket->m_byRequestCount;
         for (i = 0; i < sRequestReward.m_byRequestCount; ++i)
         {
-            sRequestReward.m_aRequest[i].m_dwType = pRequestPacket->m_dwType;
-            sRequestReward.m_aRequest[i].m_wIndex = pRequestPacket->m_wIndex;
+            sRequestReward.m_aRequest[i].m_dwType  = pRequestPacket->m_dwType;
+            sRequestReward.m_aRequest[i].m_wIndex  = pRequestPacket->m_wIndex;
             sRequestReward.m_aRequest[i].m_dwValue = pRequestPacket->m_dwValue;
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+            sRequestReward.m_aRequest[i].m_dwCurValue = pRequestPacket->m_dwCurValue;
+#else   // ASG_ADD_TIME_LIMIT_QUEST
             sRequestReward.m_aRequest[i].m_wCurValue = pRequestPacket->m_wCurValue;
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestPacket->m_dwType == QUEST_REQUEST_ITEM)
-                sRequestReward.m_aRequest[i].m_pItem
-                = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
+                sRequestReward.m_aRequest[i].m_pItem = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
             ++pRequestPacket;
         }
     }
 
-    auto pRewardPacket = (LPNPC_QUESTEXP_REWARD_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO) + sizeof(NPC_QUESTEXP_REQUEST_INFO) * 5);
+    auto pRewardPacket = (LPNPC_QUESTEXP_REWARD_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO) +
+                                                      sizeof(NPC_QUESTEXP_REQUEST_INFO) * 5);
 
     if (pRewardPacket->m_dwType == QUEST_REWARD_NONE || pRequestRewardPacket->m_byRewardCount == 0)
     {
@@ -224,8 +211,8 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     {
         sRequestReward.m_byRandGiveCount = pRequestRewardPacket->m_byRandRewardCount;
 
-        BYTE byGeneralCount = 0;
-        BYTE byRandCount = 0;
+        BYTE         byGeneralCount = 0;
+        BYTE         byRandCount    = 0;
         SQuestReward aTempRandReward[5];
         ::memset(aTempRandReward, 0, sizeof(SQuestReward) * 5);
 
@@ -233,21 +220,21 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
         {
             if (QUEST_REWARD_TYPE(pRewardPacket->m_dwType & 0xFFE0) == QUEST_REWARD_RANDOM)
             {
-                aTempRandReward[byRandCount].m_dwType = pRewardPacket->m_dwType & 0x1F;
-                aTempRandReward[byRandCount].m_wIndex = pRewardPacket->m_wIndex;
+                aTempRandReward[byRandCount].m_dwType  = pRewardPacket->m_dwType & 0x1F;
+                aTempRandReward[byRandCount].m_wIndex  = pRewardPacket->m_wIndex;
                 aTempRandReward[byRandCount].m_dwValue = pRewardPacket->m_dwValue;
                 if (aTempRandReward[byRandCount].m_dwType == QUEST_REWARD_ITEM)
-                    aTempRandReward[byRandCount].m_pItem
-                    = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    aTempRandReward[byRandCount].m_pItem = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
                 ++byRandCount;
             }
             else
             {
-                sRequestReward.m_aReward[byGeneralCount].m_dwType = pRewardPacket->m_dwType;
-                sRequestReward.m_aReward[byGeneralCount].m_wIndex = pRewardPacket->m_wIndex;
+                sRequestReward.m_aReward[byGeneralCount].m_dwType  = pRewardPacket->m_dwType;
+                sRequestReward.m_aReward[byGeneralCount].m_wIndex  = pRewardPacket->m_wIndex;
                 sRequestReward.m_aReward[byGeneralCount].m_dwValue = pRewardPacket->m_dwValue;
                 if (pRewardPacket->m_dwType == QUEST_REWARD_ITEM)
-                    sRequestReward.m_aReward[byGeneralCount].m_pItem = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    sRequestReward.m_aReward[byGeneralCount].m_pItem =
+                        g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
                 ++byGeneralCount;
             }
 
@@ -255,7 +242,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
         }
 
         sRequestReward.m_byGeneralRewardCount = byGeneralCount;
-        sRequestReward.m_byRandRewardCount = byRandCount;
+        sRequestReward.m_byRandRewardCount    = byRandCount;
 
         for (i = 0; i < sRequestReward.m_byRandRewardCount; ++i)
             sRequestReward.m_aReward[byGeneralCount++] = aTempRandReward[i];
@@ -457,16 +444,18 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
 {
     SQuestRequestReward* pRequestReward = &m_mapQuestRequestReward[dwQuestIndex];
 
-    if (pRequestReward->m_byRequestCount + pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount + 3 > nDestCount)
+    if (pRequestReward->m_byRequestCount + pRequestReward->m_byGeneralRewardCount +
+            pRequestReward->m_byRandRewardCount + 3 >
+        nDestCount)
         return false;
 
     ::memset(aDest, 0, sizeof(SRequestRewardText) * nDestCount);
 
-    int nLine = 0;
+    int  nLine            = 0;
     bool bRequestComplete = true;
-    int i;
+    int  i;
 
-    aDest[nLine].m_hFont = g_hFontBold;
+    aDest[nLine].m_hFont   = g_hFontBold;
     aDest[nLine].m_dwColor = ARGB(255, 179, 230, 77);
     wcscpy(aDest[nLine++].m_szText, I18N::Game::Requirements);
 
@@ -475,189 +464,255 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
     {
         pRequestInfo = &pRequestReward->m_aRequest[i];
 
-        aDest[nLine].m_hFont = g_hFont;
+        aDest[nLine].m_hFont          = g_hFont;
         aDest[nLine].m_eRequestReward = RRC_REQUEST;
-        aDest[nLine].m_dwType = pRequestInfo->m_dwType;
-        aDest[nLine].m_wIndex = pRequestInfo->m_wIndex;
-        aDest[nLine].m_pItem = pRequestInfo->m_pItem;
+        aDest[nLine].m_dwType         = pRequestInfo->m_dwType;
+        aDest[nLine].m_wIndex         = pRequestInfo->m_wIndex;
+        aDest[nLine].m_pItem          = pRequestInfo->m_pItem;
 
         switch (pRequestInfo->m_dwType)
         {
-        case QUEST_REQUEST_NONE:
-            aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-            wcscpy(aDest[nLine].m_szText, I18N::Game::None);
-            break;
-
-        case QUEST_REQUEST_MONSTER:
-            if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-            {
+            case QUEST_REQUEST_NONE:
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-            }
+                wcscpy(aDest[nLine].m_szText, I18N::Game::None);
+                break;
 
-            {
-                auto text = getMonsterName(int(pRequestInfo->m_wIndex));
-                mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestReqMonster,
-                    text,
-                    MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue),
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+            case QUEST_REQUEST_MONSTER:
+            case QUEST_REQUEST_ITEM:
+            case QUEST_REQUEST_LEVEL:
+            case QUEST_REQUEST_ZEN:
+            case QUEST_REQUEST_PVP_POINT:
+                if (pRequestInfo->m_dwCurValue < pRequestInfo->m_dwValue)
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                switch (pRequestInfo->m_dwType)
+                {
+                    case QUEST_REQUEST_MONSTER:
+                        ::mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu",
+                                      ::getMonsterName(int(pRequestInfo->m_wIndex)),
+                                      MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
+                                      pRequestInfo->m_dwValue);
+                        break;
+                    case QUEST_REQUEST_ITEM: {
+                        wchar_t szItemName[32];
+                ::GetItemName((int)pRequestInfo->m_pItem->Type,
+                    (pRequestInfo->m_pItem->Level, szItemName);
+                ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu/%lu", szItemName,
+                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
                     pRequestInfo->m_dwValue);
-            }
-            break;
-
-        case QUEST_REQUEST_SKILL:
-            if (0 == pRequestInfo->m_wCurValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestReqSkill,
-                SkillAttribute[pRequestInfo->m_wIndex].Name);
-            break;
-
-        case QUEST_REQUEST_ITEM:
-            if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            wchar_t szItemName[32];
-            ::GetItemName((int)pRequestInfo->m_pItem->Type, pRequestInfo->m_pItem->Level,
-                szItemName);
-            ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestReqItem, szItemName,
-                MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue),
-                pRequestInfo->m_dwValue);
-            break;
-
-        case QUEST_REQUEST_LEVEL:
-            if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestReqLevel,
-                pRequestInfo->m_dwValue, I18N::Game::Minimum);
-            break;
-
-        case QUEST_REQUEST_TUTORIAL:
-            if (pRequestInfo->m_wCurValue == 1)
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-            else
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-
-            switch (dwQuestIndex)
-            {
-            case 0x10009:
-                ::mu_swprintf(aDest[nLine].m_szText, L"%ls", I18N::Game::OpenCharacterStatsCWindow);
+                    }
+                    break;
+                    case QUEST_REQUEST_LEVEL:
+                        ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls", pRequestInfo->m_dwValue,
+                                      I18N::Game::Minimum);
+                        break;
+                    case QUEST_REQUEST_ZEN:
+                        ::mu_swprintf(aDest[nLine].m_szText, L"Zen : %lu", pRequestInfo->m_dwValue);
+                        break;
+                    case QUEST_REQUEST_PVP_POINT:
+                        mu_swprintf(aDest[nLine].m_szText, I18N::Game::EnemyGensMemberXLuLu,
+                                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
+                        break;
+                }
                 break;
-            case 0x1000F:
-                ::mu_swprintf(aDest[nLine].m_szText, L"%ls", I18N::Game::OpenInventoryIVWindow);
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+
+#ifndef ASG_ADD_TIME_LIMIT_QUEST
+            case QUEST_REQUEST_MONSTER:
+                if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+                }
+
+                {
+                    auto text = getMonsterName(int(pRequestInfo->m_wIndex));
+                    mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu", text,
+                                MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue),
+                                pRequestInfo->m_dwValue);
+                }
                 break;
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+
+            case QUEST_REQUEST_SKILL:
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                if (0 == pRequestInfo->m_dwCurValue)
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                if (0 == pRequestInfo->m_wCurValue)
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                ::mu_swprintf(aDest[nLine].m_szText, L"Skill: %ls", SkillAttribute[pRequestInfo->m_wIndex].Name);
+                break;
+
+#ifndef ASG_ADD_TIME_LIMIT_QUEST
+            case QUEST_REQUEST_ITEM:
+                if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                wchar_t szItemName[32];
+                ::GetItemName((int)pRequestInfo->m_pItem->Type, pRequestInfo->m_pItem->Level, szItemName);
+                ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu/%lu", szItemName,
+                              MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
+                break;
+
+            case QUEST_REQUEST_LEVEL:
+                if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls", pRequestInfo->m_dwValue, I18N::Game::Minimum);
+                break;
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+
+            case QUEST_REQUEST_TUTORIAL:
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_dwCurValue == 1)
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_wCurValue == 1)
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+                else
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+
+                switch (dwQuestIndex)
+                {
+                    case 0x10009:
+                        ::mu_swprintf(aDest[nLine].m_szText, L"%ls", I18N::Game::OpenCharacterStatsCWindow);
+                        break;
+                    case 0x1000F:
+                        ::mu_swprintf(aDest[nLine].m_szText, L"%ls", I18N::Game::OpenInventoryIVWindow);
+                        break;
+                }
+                break;
+
+            case QUEST_REQUEST_BUFF: {
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_dwCurValue == 0)
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_wCurValue == 0)
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                const BuffInfo buffinfo = g_BuffInfo((eBuffState)pRequestInfo->m_wIndex);
+                ::mu_swprintf(aDest[nLine].m_szText, L"Bonus: %ls", buffinfo.s_BuffName);
             }
             break;
 
-        case QUEST_REQUEST_BUFF:
-        {
-            if (pRequestInfo->m_wCurValue == 0)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            const BuffInfo buffinfo = g_BuffInfo((eBuffState)pRequestInfo->m_wIndex);
-            ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestReqBonus, buffinfo.s_BuffName);
-        }
-        break;
-
-        case QUEST_REQUEST_EVENT_MAP_MON_KILL:
-        case QUEST_REQUEST_EVENT_MAP_BLOOD_GATE:
-        case QUEST_REQUEST_EVENT_MAP_USER_KILL:
-        case QUEST_REQUEST_EVENT_MAP_DEVIL_POINT:
-        {
-            if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
-            }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
-
-            int nTextIndex = 0;
-            switch (pRequestInfo->m_dwType)
-            {
             case QUEST_REQUEST_EVENT_MAP_MON_KILL:
-                nTextIndex = 3074;
-                break;
             case QUEST_REQUEST_EVENT_MAP_BLOOD_GATE:
-                nTextIndex = 3077;
-                break;
             case QUEST_REQUEST_EVENT_MAP_USER_KILL:
-                nTextIndex = 3075;
-                break;
-            case QUEST_REQUEST_EVENT_MAP_DEVIL_POINT:
-                nTextIndex = 3079;
-                break;
-            }
-            DWORD curValue = MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue);
-            mu_swprintf(aDest[nLine].m_szText, I18N::Game::Lookup(nTextIndex), pRequestInfo->m_wIndex,
-                curValue, pRequestInfo->m_dwValue);
-        }
-        break;
+            case QUEST_REQUEST_EVENT_MAP_DEVIL_POINT: {
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_dwCurValue < pRequestInfo->m_dwValue)
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
 
-        case QUEST_REQUEST_EVENT_MAP_CLEAR_BLOOD:
-        case QUEST_REQUEST_EVENT_MAP_CLEAR_CHAOS:
-        case QUEST_REQUEST_EVENT_MAP_CLEAR_DEVIL:
-        case QUEST_REQUEST_EVENT_MAP_CLEAR_ILLUSION:
-        {
-            if (pRequestInfo->m_wCurValue == 0)
-            {
-                aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
-                bRequestComplete = false;
+                int nTextIndex = 0;
+                switch (pRequestInfo->m_dwType)
+                {
+                    case QUEST_REQUEST_EVENT_MAP_MON_KILL:
+                        nTextIndex = 3074;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_BLOOD_GATE:
+                        nTextIndex = 3077;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_USER_KILL:
+                        nTextIndex = 3075;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_DEVIL_POINT:
+                        nTextIndex = 3079;
+                        break;
+                }
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                DWORD curValue = MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue);
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                DWORD curValue = MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue);
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                mu_swprintf(aDest[nLine].m_szText, I18N::Game::Lookup(nTextIndex), pRequestInfo->m_wIndex, curValue,
+                            pRequestInfo->m_dwValue);
             }
-            else
-                aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+            break;
 
-            int nTextIndex = 0;
-            switch (pRequestInfo->m_dwType)
-            {
             case QUEST_REQUEST_EVENT_MAP_CLEAR_BLOOD:
-                nTextIndex = 3078;
-                break;
             case QUEST_REQUEST_EVENT_MAP_CLEAR_CHAOS:
-                nTextIndex = 3076;
-                break;
             case QUEST_REQUEST_EVENT_MAP_CLEAR_DEVIL:
-                nTextIndex = 3080;
-                break;
-            case QUEST_REQUEST_EVENT_MAP_CLEAR_ILLUSION:
-                nTextIndex = 3081;
-                break;
+            case QUEST_REQUEST_EVENT_MAP_CLEAR_ILLUSION: {
+#ifdef ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_dwCurValue == 0)
+#else   // ASG_ADD_TIME_LIMIT_QUEST
+                if (pRequestInfo->m_wCurValue == 0)
+#endif  // ASG_ADD_TIME_LIMIT_QUEST
+                {
+                    aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
+                    bRequestComplete       = false;
+                }
+                else
+                    aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
+
+                int nTextIndex = 0;
+                switch (pRequestInfo->m_dwType)
+                {
+                    case QUEST_REQUEST_EVENT_MAP_CLEAR_BLOOD:
+                        nTextIndex = 3078;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_CLEAR_CHAOS:
+                        nTextIndex = 3076;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_CLEAR_DEVIL:
+                        nTextIndex = 3080;
+                        break;
+                    case QUEST_REQUEST_EVENT_MAP_CLEAR_ILLUSION:
+                        nTextIndex = 3081;
+                        break;
+                }
+                mu_swprintf(aDest[nLine].m_szText, I18N::Game::Lookup(nTextIndex), pRequestInfo->m_wIndex);
             }
-            mu_swprintf(aDest[nLine].m_szText, I18N::Game::Lookup(nTextIndex), pRequestInfo->m_wIndex);
-        }
-        break;
+            break;
         }
         aDest[nLine].m_szText[QM_MAX_REQUEST_REWARD_TEXT_LEN - 1] = 0;
     }
 
-    BYTE byRewardCount;
+    BYTE          byRewardCount;
     SQuestReward* pRewardInfo;
     i = 0;
     int j;
@@ -666,61 +721,58 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         if (0 == j && pRequestReward->m_byGeneralRewardCount)
             ::wcscpy(aDest[nLine].m_szText, I18N::Game::Reward);
         else if (1 == j && pRequestReward->m_byRandRewardCount)
-            mu_swprintf(aDest[nLine].m_szText, I18N::Game::RandomRewardLuDifferentKinds, pRequestReward->m_byRandGiveCount);
+            mu_swprintf(aDest[nLine].m_szText, I18N::Game::RandomRewardLuDifferentKinds,
+                        pRequestReward->m_byRandGiveCount);
         else
             continue;
-        aDest[nLine].m_hFont = g_hFontBold;
+        aDest[nLine].m_hFont     = g_hFontBold;
         aDest[nLine++].m_dwColor = ARGB(255, 179, 230, 77);
 
-        byRewardCount = 0 == j
-            ? pRequestReward->m_byGeneralRewardCount
-            : pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount;
+        byRewardCount = 0 == j ? pRequestReward->m_byGeneralRewardCount
+                               : pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount;
         for (; i < byRewardCount; ++i, ++nLine)
         {
             pRewardInfo = &pRequestReward->m_aReward[i];
 
-            aDest[nLine].m_hFont = g_hFont;
-            aDest[nLine].m_dwColor = 0 == j ? ARGB(255, 223, 191, 103) : ARGB(255, 103, 103, 223);
+            aDest[nLine].m_hFont          = g_hFont;
+            aDest[nLine].m_dwColor        = 0 == j ? ARGB(255, 223, 191, 103) : ARGB(255, 103, 103, 223);
             aDest[nLine].m_eRequestReward = RRC_REWARD;
-            aDest[nLine].m_dwType = pRewardInfo->m_dwType;
-            aDest[nLine].m_wIndex = pRewardInfo->m_wIndex;
-            aDest[nLine].m_pItem = pRewardInfo->m_pItem;
+            aDest[nLine].m_dwType         = pRewardInfo->m_dwType;
+            aDest[nLine].m_wIndex         = pRewardInfo->m_wIndex;
+            aDest[nLine].m_pItem          = pRewardInfo->m_pItem;
 
             switch (pRewardInfo->m_dwType)
             {
-            case QUEST_REWARD_NONE:
-                ::wcscpy(aDest[nLine].m_szText, I18N::Game::None);
-                break;
+                case QUEST_REWARD_NONE:
+                    ::wcscpy(aDest[nLine].m_szText, I18N::Game::None);
+                    break;
 
-            case QUEST_REWARD_EXP:
-                ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestRewardExp, pRewardInfo->m_dwValue);
-                break;
+                case QUEST_REWARD_EXP:
+                    ::mu_swprintf(aDest[nLine].m_szText, L"Exp.: %lu", pRewardInfo->m_dwValue);
+                    break;
 
-            case QUEST_REWARD_ZEN:
-                ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestRewardZen, pRewardInfo->m_dwValue);
-                break;
+                case QUEST_REWARD_ZEN:
+                    ::mu_swprintf(aDest[nLine].m_szText, L"Zen: %lu", pRewardInfo->m_dwValue);
+                    break;
 
-            case QUEST_REWARD_ITEM:
-                wchar_t szItemName[32];
-                ::GetItemName((int)pRewardInfo->m_pItem->Type, pRewardInfo->m_pItem->Level,
-                    szItemName);
-                ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestRewardItem,
-                    szItemName, pRewardInfo->m_dwValue);
-                break;
+                case QUEST_REWARD_ITEM:
+                    wchar_t szItemName[32];
+                    ::GetItemName((int)pRewardInfo->m_pItem->Type, pRewardInfo->m_pItem->Level, szItemName);
+                    ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu", szItemName, pRewardInfo->m_dwValue);
+                    break;
 
-            case QUEST_REWARD_BUFF:
-            {
-                const BuffInfo buffinfo = g_BuffInfo((eBuffState)pRewardInfo->m_wIndex);
-                ::mu_swprintf(aDest[nLine].m_szText, I18N::Game::QuestRewardBuff, buffinfo.s_BuffName,
-                    pRewardInfo->m_dwValue, I18N::Game::Minute);
-            }
-            break;
+                case QUEST_REWARD_BUFF: {
+                    const BuffInfo buffinfo = g_BuffInfo((eBuffState)pRewardInfo->m_wIndex);
+                    ::mu_swprintf(aDest[nLine].m_szText, L"Bonus: %ls x %lu%ls", buffinfo.s_BuffName,
+                                  pRewardInfo->m_dwValue, I18N::Game::Minute);
+                }
+                break;
 
 #ifdef ASG_ADD_GENS_SYSTEM
-            case QUEST_REWARD_CONTRIBUTE:
-                mu_swprintf(aDest[nLine].m_szText, I18N::Game::ContributionLu, pRewardInfo->m_dwValue);
-                break;
-#endif	// ASG_ADD_GENS_SYSTEM
+                case QUEST_REWARD_CONTRIBUTE:
+                    mu_swprintf(aDest[nLine].m_szText, I18N::Game::ContributionLu, pRewardInfo->m_dwValue);
+                    break;
+#endif  // ASG_ADD_GENS_SYSTEM
             }
             aDest[nLine].m_szText[QM_MAX_REQUEST_REWARD_TEXT_LEN - 1] = 0;
         }
@@ -757,10 +809,6 @@ bool CQuestMng::IsQuestByEtc(DWORD dwQuestIndex)
 
 void CQuestMng::SetQuestIndexByEtcList(DWORD* adwSrcQuestIndex, int nIndexCount)
 {
-    // Bound the list: the count is a packet-controlled WORD; without a cap a crafted packet
-    // would allocate an unbounded vector. Mirrors the NPC dialogue's 20-entry quest list.
-    constexpr int MaxEtcQuestIndices = 20;
-
     m_listQuestIndexByEtc.clear();
 
     if (NULL == adwSrcQuestIndex)
@@ -768,16 +816,7 @@ void CQuestMng::SetQuestIndexByEtcList(DWORD* adwSrcQuestIndex, int nIndexCount)
 
     int i;
     for (i = 0; i < nIndexCount; ++i)
-    {
-        if (static_cast<int>(m_listQuestIndexByEtc.size()) >= MaxEtcQuestIndices)
-        {
-            g_ErrorReport.Write(L"SetQuestIndexByEtcList: quest count %d exceeds %d; truncating.\r\n",
-                                nIndexCount, MaxEtcQuestIndices);
-            break;
-        }
-
         m_listQuestIndexByEtc.push_back(adwSrcQuestIndex[i]);
-    }
 }
 
 bool CQuestMng::IsQuestIndexByEtcListEmpty()
@@ -790,9 +829,9 @@ void CQuestMng::SendQuestIndexByEtcSelection()
     if (IsQuestIndexByEtcListEmpty())
         return;
 
-    auto iter = m_listQuestIndexByEtc.begin();
+    auto       iter        = m_listQuestIndexByEtc.begin();
     const auto questNumber = static_cast<uint16_t>(LOWORD(*iter));
-    const auto questGroup = static_cast<uint16_t>(HIWORD(*iter));
+    const auto questGroup  = static_cast<uint16_t>(HIWORD(*iter));
     SocketClient->ToGameServer()->SendQuestSelectRequest(questNumber, questGroup, 0);
 }
 
@@ -826,8 +865,8 @@ void CQuestMng::SetCurQuestIndexList(DWORD* adwCurQuestIndex, int nIndexCount)
 
 void CQuestMng::AddCurQuestIndexList(DWORD dwQuestIndex)
 {
-    WORD wEP = HIWORD(dwQuestIndex);
-    WORD wQS = LOWORD(dwQuestIndex);
+    WORD wEP       = HIWORD(dwQuestIndex);
+    WORD wQS       = LOWORD(dwQuestIndex);
     bool bNotFound = true;
 
     DWordList::iterator iter;

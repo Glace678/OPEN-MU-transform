@@ -841,59 +841,53 @@ BOOL CUITextListBox<T>::DoMouseAction()
 
             if (m_bUseNewUIScrollBar == TRUE)
             {
-                if (GetLineNum() >= m_iNumRenderLine)
+                if (GetLineNum() < m_iNumRenderLine);
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarPos_y,
+                    m_fScrollBarWidth, m_fScrollBarHeight))
                 {
-                    if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarPos_y,
-                        m_fScrollBarWidth, m_fScrollBarHeight))
+                    if (GetState() == UISTATE_NORMAL && g_dwActiveUIID == 0)
                     {
-                        if (GetState() == UISTATE_NORMAL && g_dwActiveUIID == 0)
-                        {
-                            g_dwActiveUIID = GetUIID();
-                            SetState(UISTATE_SCROLL);
-                            m_fScrollBarClickPos_y = MouseY - m_fScrollBarPos_y;
-                        }
+                        g_dwActiveUIID = GetUIID();
+                        SetState(UISTATE_SCROLL);
+                        m_fScrollBarClickPos_y = MouseY - m_fScrollBarPos_y;
                     }
-                    else if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarRange_top,
-                        m_fScrollBarWidth, m_fScrollBarPos_y - m_fScrollBarRange_top))
+                }
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarRange_top,
+                    m_fScrollBarWidth, m_fScrollBarPos_y - m_fScrollBarRange_top))
+                {
+                    if (GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE);
+                    else if (m_bScrollBarClick == FALSE)
                     {
-                        if (!(GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE))
-                        {
-                            if (m_bScrollBarClick == FALSE)
-                            {
-                                Scrolling(-1 * m_iNumRenderLine);
-                                m_bScrollBarClick = TRUE;
-                            }
-                            else if (m_bScrollBarClick > 15)
-                            {
-                                Scrolling(-1 * m_iNumRenderLine);
-                            }
-                            else
-                            {
-                                if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
-                                    m_bScrollBarClick++;
-                            }
-                        }
+                        Scrolling(-1 * m_iNumRenderLine);
+                        m_bScrollBarClick = TRUE;
                     }
-                    else if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarPos_y + m_fScrollBarHeight,
-                        m_fScrollBarWidth, m_fScrollBarRange_bottom - m_fScrollBarPos_y - m_fScrollBarHeight))
+                    else if (m_bScrollBarClick > 15)
                     {
-                        if (!(GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE))
-                        {
-                            if (m_bScrollBarClick == FALSE)
-                            {
-                                Scrolling(m_iNumRenderLine);
-                                m_bScrollBarClick = TRUE;
-                            }
-                            else if (m_bScrollBarClick > 15)
-                            {
-                                Scrolling(m_iNumRenderLine);
-                            }
-                            else
-                            {
-                                if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
-                                    m_bScrollBarClick++;
-                            }
-                        }
+                        Scrolling(-1 * m_iNumRenderLine);
+                    }
+                    else
+                    {
+                        if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
+                            m_bScrollBarClick++;
+                    }
+                }
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - m_fScrollBarWidth, m_fScrollBarPos_y + m_fScrollBarHeight,
+                    m_fScrollBarWidth, m_fScrollBarRange_bottom - m_fScrollBarPos_y - m_fScrollBarHeight))
+                {
+                    if (GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE);
+                    else if (m_bScrollBarClick == FALSE)
+                    {
+                        Scrolling(m_iNumRenderLine);
+                        m_bScrollBarClick = TRUE;
+                    }
+                    else if (m_bScrollBarClick > 15)
+                    {
+                        Scrolling(m_iNumRenderLine);
+                    }
+                    else
+                    {
+                        if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
+                            m_bScrollBarClick++;
                     }
                 }
             }
@@ -938,59 +932,55 @@ BOOL CUITextListBox<T>::DoMouseAction()
                             m_bScrollBtnClick++;
                     }
                 }
-                if (GetLineNum() >= m_iNumRenderLine)
+                if (GetLineNum() < m_iNumRenderLine);
+
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarPos_y,
+                    m_fScrollBarWidth, m_fScrollBarHeight))
                 {
-                    if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarPos_y,
-                        m_fScrollBarWidth, m_fScrollBarHeight))
+                    if (GetState() == UISTATE_NORMAL && g_dwActiveUIID == 0)
                     {
-                        if (GetState() == UISTATE_NORMAL && g_dwActiveUIID == 0)
-                        {
-                            g_dwActiveUIID = GetUIID();
-                            SetState(UISTATE_SCROLL);
-                            m_fScrollBarClickPos_y = MouseY - m_fScrollBarPos_y;
-                        }
+                        g_dwActiveUIID = GetUIID();
+                        SetState(UISTATE_SCROLL);
+                        m_fScrollBarClickPos_y = MouseY - m_fScrollBarPos_y;
                     }
-                    else if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarRange_top,
-                        m_fScrollBarWidth, m_fScrollBarPos_y - m_fScrollBarRange_top))
+                }
+
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarRange_top,
+                    m_fScrollBarWidth, m_fScrollBarPos_y - m_fScrollBarRange_top))
+                {
+                    if (GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE);
+                    else if (m_bScrollBarClick == FALSE)
                     {
-                        if (!(GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE))
-                        {
-                            if (m_bScrollBarClick == FALSE)
-                            {
-                                Scrolling(-1 * m_iNumRenderLine);
-                                m_bScrollBarClick = TRUE;
-                            }
-                            else if (m_bScrollBarClick > 15)
-                            {
-                                Scrolling(-1 * m_iNumRenderLine);
-                            }
-                            else
-                            {
-                                if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
-                                    m_bScrollBarClick++;
-                            }
-                        }
+                        Scrolling(-1 * m_iNumRenderLine);
+                        m_bScrollBarClick = TRUE;
                     }
-                    else if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarPos_y + m_fScrollBarHeight,
-                        m_fScrollBarWidth, m_fScrollBarRange_bottom - m_fScrollBarPos_y - m_fScrollBarHeight))
+                    else if (m_bScrollBarClick > 15)
                     {
-                        if (!(GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE))
-                        {
-                            if (m_bScrollBarClick == FALSE)
-                            {
-                                Scrolling(m_iNumRenderLine);
-                                m_bScrollBarClick = TRUE;
-                            }
-                            else if (m_bScrollBarClick > 15)
-                            {
-                                Scrolling(m_iNumRenderLine);
-                            }
-                            else
-                            {
-                                if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
-                                    m_bScrollBarClick++;
-                            }
-                        }
+                        Scrolling(-1 * m_iNumRenderLine);
+                    }
+                    else
+                    {
+                        if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
+                            m_bScrollBarClick++;
+                    }
+                }
+                else if (::CheckMouseIn(m_iPos_x + m_iWidth - 19 + iNewTypePos_x, m_fScrollBarPos_y + m_fScrollBarHeight,
+                    m_fScrollBarWidth, m_fScrollBarRange_bottom - m_fScrollBarPos_y - m_fScrollBarHeight))
+                {
+                    if (GetParentUIID() > 0 && g_pWindowMgr->IsRenderFrame() == FALSE);
+                    else if (m_bScrollBarClick == FALSE)
+                    {
+                        Scrolling(m_iNumRenderLine);
+                        m_bScrollBarClick = TRUE;
+                    }
+                    else if (m_bScrollBarClick > 15)
+                    {
+                        Scrolling(m_iNumRenderLine);
+                    }
+                    else
+                    {
+                        if (GetParentUIID() == 0 || g_pWindowMgr->IsRenderFrame() == TRUE)
+                            m_bScrollBarClick++;
                     }
                 }
             }
@@ -1013,11 +1003,9 @@ BOOL CUITextListBox<T>::DoMouseAction()
             if (m_iNumRenderLine < 3) m_iNumRenderLine = 3;
             else if (m_iNumRenderLine > 30) m_iNumRenderLine = 30;
 
-            if (GetLineNum() >= m_iNumRenderLine)
-            {
-                if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-                    m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-            }
+            if (GetLineNum() < m_iNumRenderLine);
+            else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+                m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
         }
         else
         {
@@ -1163,11 +1151,9 @@ void CUIGuildListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE Server)
     SLSetSelectLine(0);
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 }
 
 void CUIGuildListBox::RenderInterface()
@@ -1499,7 +1485,7 @@ BOOL CUISimpleChatListBox::RenderDataLine(int iLineNumber)
     wchar_t Text[MAX_TEXT_LENGTH + 1] = { 0 };
 
     SIZE TextSize = { 0, 0 };
-    // Name
+    // 이름
     if (m_TextListIter->m_szID[0] != 0)
     {
         switch (m_TextListIter->m_iType)
@@ -1620,11 +1606,9 @@ void CUIChatPalListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE Server)
     RemoveText();
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.empty() == FALSE)
     {
@@ -1857,11 +1841,9 @@ void CUIWindowListBox::AddText(DWORD dwUIID, const wchar_t* pszTitle, int iStatu
 
     if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -2059,11 +2041,9 @@ void CUILetterListBox::AddText(const wchar_t* pszID, const wchar_t* pszText, con
 
     if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.empty() == FALSE)
     {
@@ -2378,7 +2358,7 @@ BOOL CUILetterTextListBox::RenderDataLine(int iLineNumber)
 {
     EnableAlphaTest();
     wchar_t Text[MAX_TEXT_LENGTH + 1] = { 0 };
-    // Content
+    // 내용
     g_pRenderText->SetTextColor(230, 220, 200, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
@@ -2429,11 +2409,9 @@ void CUISocketListBox::AddText(int iSocketIndex, const wchar_t* pszText)
 
     if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -2754,48 +2732,38 @@ void CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)
     SIZE FontDCSize = { (int)(REFERENCE_WIDTH * g_fScreenRate_x), (int)(REFERENCE_HEIGHT * g_fScreenRate_y) };
     int iPitch = ((FontDCSize.cx * 24 + 31) & ~31) >> 3;
 
-    const int srcSize = iPitch * FontDCSize.cy;
-    const int dstSize = LIMIT_WIDTH * 4 * LIMIT_HEIGHT;
-
     for (int y = 0; y < iHeight; ++y)
     {
         int SrcIndex = y * iPitch + iOffset;
         int DstIndex = y * LIMIT_WIDTH * 4;
         for (int x = 0; x < iWidth; ++x)
         {
-            // MEM-17: the pixel reads 3 source bytes (SrcIndex..SrcIndex+2) and writes 4 dest
-            // bytes; check the full ranges (>=, not >) instead of just the first byte of each.
-            if ((SrcIndex < 0) || (SrcIndex + 3 > srcSize) || (DstIndex < 0) || (DstIndex + 4 > dstSize))
+            if ((SrcIndex > iPitch * FontDCSize.cy) || (DstIndex > LIMIT_WIDTH * 4 * LIMIT_HEIGHT))
             {
 #ifdef _DEBUG
                 MU_DEBUG_BREAK();
 #endif // _DEBUG
                 return;
             }
-
-            unsigned int outPixel;
-            if (m_pFontBuffer[SrcIndex] == 255)	// we hit a white pixel, so here is Text
+            if (*(m_pFontBuffer + SrcIndex) == 255)	// we hit a white pixel, so here is Text
             {
-                outPixel = m_dwTextColor;
+                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = m_dwTextColor;
             }
-            else if (m_pFontBuffer[SrcIndex] != 0) // we hit a semi transparent pixel, so anti aliasing hit here
+            else if (*(m_pFontBuffer + SrcIndex) != 0) // we hit a semi transparent pixel, so anti aliasing hit here
             {
                 // The alpha channel is the highest 8 bits.
-                DWORD alpha = m_pFontBuffer[SrcIndex];
-                alpha += m_pFontBuffer[SrcIndex + 1];
-                alpha += m_pFontBuffer[SrcIndex + 2];
+                DWORD alpha = *(m_pFontBuffer + SrcIndex);
+                alpha += *(m_pFontBuffer + SrcIndex + 1);
+                alpha += *(m_pFontBuffer + SrcIndex + 2);
                 alpha /= 3;
                 alpha <<= 24;
                 alpha |= 0x00FFFFFF;
-                outPixel = m_dwTextColor & alpha;
+                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = m_dwTextColor & alpha;
             }
             else // it's a black pixel, so there is no text
             {
-                outPixel = 0; // Transparent
+                *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = 0; // Transparent
             }
-
-            // MEM-17: write via memcpy to avoid an unaligned unsigned int store / alias UB.
-            memcpy(pBitmapFont->Buffer + DstIndex, &outPixel, sizeof(outPixel));
 
             SrcIndex += 3; // RBG
             DstIndex += 4; // RGBA
@@ -4509,11 +4477,8 @@ void CUISlideHelp::ManageSlide()
         if (m_SlideQueueIter->first > m_dwCurrentSecond) break;
         else
         {
-            const bool expiredEmptySlide =
-                m_SlideQueueIter->second.m_iType == -1 &&
-                m_SlideQueueIter->first + 60 < m_dwCurrentSecond;
-            if (!expiredEmptySlide &&
-                AddSlideText(m_SlideQueueIter->second.m_pszText, m_SlideQueueIter->second.m_dwTextColor) == FALSE) break;
+            if (m_SlideQueueIter->second.m_iType == -1 && m_SlideQueueIter->first + 60 < m_dwCurrentSecond);
+            else if (AddSlideText(m_SlideQueueIter->second.m_pszText, m_SlideQueueIter->second.m_dwTextColor) == FALSE) break;
 
             SetScrollSpeed(m_SlideQueueIter->second.m_fSpeed);
             if (m_SlideQueueIter->second.m_bLastData == TRUE)
@@ -4610,23 +4575,13 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File not exist.", szFileName);
         g_ErrorReport.Write(Text);
+        MessageBox(g_hWnd, Text, nullptr, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return;
     }
 
-    // Value-initialise so a short/truncated read cannot leave fields or the
-    // fixed-size text arrays with indeterminate bytes (the conversion below
-    // relies on NUL termination via the -1 length).
-    SLIDEHELP SlideHelp{};
-    if (fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp) != 1)
-    {
-        fclose(fp);
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - Failed to read slide help data.", szFileName);
-        g_ErrorReport.Write(Text);
-        // Any previously loaded slides were cleared above; stay in that safe
-        // empty state rather than applying values from a partial record.
-        return;
-    }
+    SLIDEHELP SlideHelp;
+    fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp);
     BuxConvert((BYTE*)&SlideHelp, sizeof(SLIDEHELP));
     fclose(fp);
 
@@ -4641,7 +4596,6 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
         for (int j = 0; j < m_iTextNumber[i]; ++j)
         {
             auto charText = SlideHelp.SlideHelp[i].szSlideHelpText[j];
-            charText[255] = '\0';  // guarantee NUL termination for the -1-length conversion
             int iLength = MultiByteToWideChar(CP_UTF8, 0, charText, -1, 0, 0);
             auto pszText = new wchar_t[iLength + 1];
             MultiByteToWideChar(CP_UTF8, 0, charText, -1, pszText, iLength);
@@ -4755,11 +4709,9 @@ void CUIGuildNoticeListBox::AddText(const wchar_t* szContent)
     SLSetSelectLine(0);
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -4922,11 +4874,9 @@ void CUINewGuildMemberListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE S
 
     //	if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -5131,11 +5081,9 @@ void CUIUnionGuildListBox::AddText(BYTE* pGuildMark, const wchar_t* szGuildName,
 
     //	if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -5345,11 +5293,9 @@ void CUIUnmixgemList::AddText(int iIndex, BYTE cComType)
 
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     Sort();
 }
@@ -5511,11 +5457,9 @@ void CUIBCDeclareGuildListBox::AddText(const wchar_t* szGuildName, int nMarkCoun
 
     //	if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -5685,11 +5629,9 @@ void CUIBCGuildListBox::AddText(const wchar_t* szGuildName, BYTE byJoinSide, BYT
 
     //	if (m_iCurrentRenderEndLine != 0) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -5886,11 +5828,9 @@ void CUIMoveCommandListBox::AddText(int iIndex, const wchar_t* szMapName, const 
     SLSetSelectLine(0);
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 }
 
 void CUIMoveCommandListBox::SetNumRenderLine(int iLine)
@@ -6188,7 +6128,7 @@ void CUIQuestContentsListBox::RenderCoveredInterface()
     if (SLGetSelectLine() == m_TextList.end())
         return;
 
-    // Is it an item?
+    // 아이템인가?
     if (QUEST_REQUEST_ITEM == m_TextListIter->m_dwType
         || QUEST_REWARD_ITEM == m_TextListIter->m_dwType)
     {
@@ -6269,11 +6209,9 @@ void CUIInGameShopListBox::AddText(IGS_StorageItem& _StorageItem)
     if (GetLineNum() > m_iNumRenderLine)
         ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -6411,11 +6349,9 @@ void CUIBuyingListBox::AddText(const wchar_t* pszExplanationText)
     if (GetLineNum() > m_iNumRenderLine)
         ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -6566,11 +6502,9 @@ void CUIPackCheckBuyingListBox::AddText(IGS_SelectBuyItem& _Item)
     if (GetLineNum() > m_iNumRenderLine)
         ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);
@@ -6830,11 +6764,9 @@ void CUIExtraItemListBox::AddText(const wchar_t* pszPattern)
     SLSetSelectLine(0);
     if (GetLineNum() > m_iNumRenderLine) ++m_iCurrentRenderEndLine;
 
-    if (GetLineNum() >= m_iNumRenderLine)
-    {
-        if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
-            m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
-    }
+    if (GetLineNum() < m_iNumRenderLine);
+    else if (GetLineNum() - m_iCurrentRenderEndLine < m_iNumRenderLine)
+        m_iCurrentRenderEndLine = GetLineNum() - m_iNumRenderLine;
 
     if (m_TextList.size() == 1)
         SLSetSelectLine(1);

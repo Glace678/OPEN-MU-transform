@@ -47,8 +47,7 @@ TEST_SUITE("BuffScriptValidation")
     {
         // structSize * (count) would overflow uint32.
         CHECK_FALSE(IsValidRecordCount(2, std::numeric_limits<std::uint32_t>::max()));
-        CHECK_FALSE(IsValidRecordCount(MaximumBuffRecords,
-                                      std::numeric_limits<std::uint32_t>::max()));
+        CHECK_FALSE(IsValidRecordCount(MaximumBuffRecords, std::numeric_limits<std::uint32_t>::max()));
     }
 }
 
@@ -70,7 +69,7 @@ TEST_SUITE("MonsterScriptValidation")
     {
         CHECK_FALSE(IsValidRecordCount(-1, ModelEnd));
         CHECK_FALSE(IsValidRecordCount(ModelEnd + 1, ModelEnd));
-        CHECK_FALSE(IsValidRecordCount(1, 0));   // non-positive table
+        CHECK_FALSE(IsValidRecordCount(1, 0));  // non-positive table
         CHECK_FALSE(IsValidRecordCount(0, -10));
     }
 

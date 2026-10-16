@@ -7,7 +7,7 @@
 
 CPList::CPList()
 {
-    m_nCount = 0;
+    m_nCount    = 0;
     m_pNodeHead = m_pNodeTail = NULL;
 }
 
@@ -40,9 +40,9 @@ void* CPList::RemoveHead()
     if (::IsBadReadPtr(m_pNodeHead, sizeof(NODE)))
         return NULL;
 
-    NODE* pOldNode = m_pNodeHead;
+    NODE* pOldNode    = m_pNodeHead;
     void* returnValue = pOldNode->data;
-    m_pNodeHead = pOldNode->pNext;
+    m_pNodeHead       = pOldNode->pNext;
     if (m_pNodeHead != NULL)
         m_pNodeHead->pPrev = NULL;
     else
@@ -60,9 +60,9 @@ void* CPList::RemoveTail()
     if (::IsBadReadPtr(m_pNodeTail, sizeof(NODE)))
         return NULL;
 
-    NODE* pOldNode = m_pNodeTail;
+    NODE* pOldNode    = m_pNodeTail;
     void* returnValue = pOldNode->data;
-    m_pNodeTail = pOldNode->pPrev;
+    m_pNodeTail       = pOldNode->pPrev;
     if (m_pNodeTail != NULL)
         m_pNodeTail->pNext = NULL;
     else
@@ -127,12 +127,12 @@ void CPList::RemoveAll()
     NODE* pNode;
     while (NULL != m_pNodeHead)
     {
-        pNode = m_pNodeHead;
+        pNode       = m_pNodeHead;
         m_pNodeHead = m_pNodeHead->pNext;
         delete pNode;
     }
     m_pNodeTail = NULL;
-    m_nCount = 0;
+    m_nCount    = 0;
 }
 
 void* CPList::GetNext(NODE*& rPosition) const
@@ -245,7 +245,7 @@ void CPList::Swap(NODE* pNode1, NODE* pNode2)
         return;
 
     void* temp;
-    temp = pNode1->data;
+    temp         = pNode1->data;
     pNode1->data = pNode2->data;
     pNode2->data = temp;
 }
@@ -284,7 +284,7 @@ NODE* CPList::FindIndex(int nIndex) const
 
 NODE* CPList::NewNode(NODE* pPrev, NODE* pNext)
 {
-    NODE* pNode = new NODE;
+    NODE* pNode  = new NODE;
     pNode->pPrev = pPrev;
     pNode->pNext = pNext;
     m_nCount++;

@@ -1,4 +1,4 @@
-﻿// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
+// NewUICursedTempleSystem.cpp: implementation of the CNewUICursedTempleSystem class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -26,65 +26,63 @@
 #include "UI/NewUI/NewUISystem.h"
 #include "GameLogic/Skills/SkillManager.h"
 
-extern int TextNum;
+extern int     TextNum;
 extern wchar_t TextList[50][100];
-extern int  TextListColor[50];
+extern int     TextListColor[50];
 
 using namespace SEASON3B;
 
 namespace
 {
-    const int HolyItemNpc = 380;
-    const int AlliedNpc = 381;
-    const int IllusionNpc = 382;
-    const int AlliedHolyItemBoxNpc = 383;
-    const int IllusionHolyItemBoxNpc = 384;
+const int HolyItemNpc            = 380;
+const int AlliedNpc              = 381;
+const int IllusionNpc            = 382;
+const int AlliedHolyItemBoxNpc   = 383;
+const int IllusionHolyItemBoxNpc = 384;
 
-    const int	AXIS_X = 0;
-    const int	AXIS_Y = 1;
-    const float PROGRESSTIME = 10000.0f;
+const int   AXIS_X       = 0;
+const int   AXIS_Y       = 1;
+const float PROGRESSTIME = 10000.0f;
 
-    //#ifdef _DEBUG
-    const float posX[7] =
+//#ifdef _DEBUG
+const float posX[7] = {
+    146.0f, 192.0f, 200.0f, 138.0f, 128.0f, 210.0f, 170.0f,
+};
+
+const float posY[7] = {
+    42.0f, 128.0f, 116.0f, 54.0f, 126.0f, 44.0f, 84.0f,
+};
+//#endif //_DEBUG
+
+float MiniMapPos(float pointX, float pointY, float scale, int aXis)
+{
+    float minmapframeposX = 464.f, minmapframeposY = 299.f;
+
+    if (aXis == AXIS_X)
     {
-        146.0f, 192.0f, 200.0f, 138.0f, 128.0f, 210.0f, 170.0f,
-    };
-
-    const float posY[7] =
-    {
-        42.0f, 128.0f, 116.0f, 54.0f, 126.0f, 44.0f, 84.0f,
-    };
-    //#endif //_DEBUG
-
-    float MiniMapPos(float pointX, float pointY, float scale, int aXis)
-    {
-        float minmapframeposX = 464.f, minmapframeposY = 299.f;
-
-        if (aXis == AXIS_X)
-        {
-            float ridY = posY[6] - pointY;
-            return ((pointX - ridY) / scale) + minmapframeposX;
-        }
-        else
-        {
-            float ridX = posX[6] - pointX;
-            return (((125 - (pointY + ridX))) / scale) + minmapframeposY;
-        }
+        float ridY = posY[6] - pointY;
+        return ((pointX - ridY) / scale) + minmapframeposX;
     }
-
-    bool CreateCursedTempleSkillEffect(CHARACTER* c, int skillindex, int SubType)
+    else
     {
-        if (!c) return false;
+        float ridX = posX[6] - pointX;
+        return (((125 - (pointY + ridX))) / scale) + minmapframeposY;
+    }
+}
 
-        OBJECT* o = &c->Object;
-        BMD* b = &Models[o->Type];
+bool CreateCursedTempleSkillEffect(CHARACTER* c, int skillindex, int SubType)
+{
+    if (!c)
+        return false;
 
-        vec3_t vRelativePos, vtaWorldPos, vLight, vAngle;
+    OBJECT* o = &c->Object;
+    BMD*    b = &Models[o->Type];
 
-        switch (skillindex)
-        {
-        case AT_SKILL_CURSED_TEMPLE_PRODECTION:
-        {
+    vec3_t vRelativePos, vtaWorldPos, vLight, vAngle;
+
+    switch (skillindex)
+    {
+        case AT_SKILL_CURSED_TEMPLE_PRODECTION: {
             DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
 
             if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o))
@@ -95,9 +93,8 @@ namespace
                 CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, o->Light, 10, o);
             }
         }
-        return true;
-        case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
-        {
+            return true;
+        case AT_SKILL_CURSED_TEMPLE_RESTRAINT: {
             DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o);
 
             if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o))
@@ -126,14 +123,14 @@ namespace
 
                     if (rand() % 2 == 1)
                     {
-                        CreateJoint(BITMAP_JOINT_ENERGY, Position, vtaWorldPos, Angle, 44, o, 15.f, -1, 0, 0, -1, Light);
+                        CreateJoint(BITMAP_JOINT_ENERGY, Position, vtaWorldPos, Angle, 44, o, 15.f, -1, 0, 0, -1,
+                                    Light);
                     }
                 }
             }
         }
-        return true;
-        case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
-        {
+            return true;
+        case AT_SKILL_CURSED_TEMPLE_SUBLIMATION: {
             if (SubType == 0)
             {
                 Vector(300.f, 0.f, 0.f, vAngle);
@@ -209,31 +206,32 @@ namespace
                 CreateParticle(BITMAP_CLUD64, vtaWorldPos, o->Angle, vLight, 4, 1.f);
             }
         }
-        return true;
-        }
-        return false;
+            return true;
     }
+    return false;
+}
 
-    void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort, float fontboxwidth, bool isbold)
+void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort,
+              float fontboxwidth, bool isbold)
+{
+    if (isbold)
     {
-        if (isbold)
-        {
-            g_pRenderText->SetFont(g_hFontBold);
-        }
-        else
-        {
-            g_pRenderText->SetFont(g_hFont);
-        }
-
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
-
-        g_pRenderText->SetTextColor(textcolor);
-        g_pRenderText->SetBgColor(textbackcolor);
-        g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
+        g_pRenderText->SetFont(g_hFontBold);
     }
+    else
+    {
+        g_pRenderText->SetFont(g_hFont);
+    }
+
+    DWORD backuptextcolor     = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+
+    g_pRenderText->SetTextColor(textcolor);
+    g_pRenderText->SetBgColor(textbackcolor);
+    g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
 };
 
 bool SEASON3B::CNewUICursedTempleSystem::Create(CNewUIManager* pNewUIMng, int x, int y)
@@ -289,14 +287,22 @@ void SEASON3B::CNewUICursedTempleSystem::LoadImages()
     LoadBitmap(L"Interface\\newui_Bt_clearness_illusion.jpg", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPALPBTN, GL_LINEAR);
 
     //minimapicon
-    LoadBitmap(L"Interface\\newui_ctminmap_Relic.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_Hero.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_Relic.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_Hero.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
 
     //skill
     LoadBitmap(L"Interface\\newui_ctskillframe.tga", IMAGE_CURSEDTEMPLESYSTEM_SKILLFRAME, GL_LINEAR);
@@ -392,60 +398,60 @@ void SEASON3B::CNewUICursedTempleSystem::UnloadImages()
 
 void SEASON3B::CNewUICursedTempleSystem::ResetCursedTempleSystemInfo()
 {
-    m_EventMapTime = 0;
-    m_HolyItemPlayerIndex = 0xffff;
-    m_HolyItemPlayerPosX = 0;
-    m_HolyItemPlayerPosY = 0;
-    m_AlliedPoint = 0;
-    m_IllusionPoint = 0;
-    m_MyTeam = SEASON3A::eTeam_Count;
+    m_EventMapTime            = 0;
+    m_HolyItemPlayerIndex     = 0xffff;
+    m_HolyItemPlayerPosX      = 0;
+    m_HolyItemPlayerPosY      = 0;
+    m_AlliedPoint             = 0;
+    m_IllusionPoint           = 0;
+    m_MyTeam                  = SEASON3A::eTeam_Count;
     m_CursedTempleMyTeamCount = 0;
-    m_Scale = 2.5f;
-    m_Alph = 1.0f;
-    m_SkillPoint = 0;
-    m_IsTutorialStep = false;
-    m_TutorialStepState = 0;
-    m_TutorialStepTime = 0;
+    m_Scale                   = 2.5f;
+    m_Alph                    = 1.0f;
+    m_SkillPoint              = 0;
+    m_IsTutorialStep          = false;
+    m_TutorialStepState       = 0;
+    m_TutorialStepTime        = 0;
 
     EndScoreEffect();
 
     for (int i = 0; i < MAX_PARTYS; ++i)
     {
         m_CursedTempleMyTeam[i].wPartyUserIndex = 0xffff;
-        m_CursedTempleMyTeam[i].btX = 0;
-        m_CursedTempleMyTeam[i].btY = 0;
-        m_CursedTempleMyTeam[i].byMapNumber = 0xff;
+        m_CursedTempleMyTeam[i].btX             = 0;
+        m_CursedTempleMyTeam[i].btY             = 0;
+        m_CursedTempleMyTeam[i].byMapNumber     = 0xff;
     }
 }
 
 void SEASON3B::CNewUICursedTempleSystem::StartScoreEffect()
 {
     m_StartScoreEffectTime = 0;
-    m_ScoreEffectAlph = 0.0f;
-    m_ScoreEffectState = 0;
-    m_IsScoreEffect = true;
+    m_ScoreEffectAlph      = 0.0f;
+    m_ScoreEffectState     = 0;
+    m_IsScoreEffect        = true;
 }
 
 void SEASON3B::CNewUICursedTempleSystem::EndScoreEffect()
 {
     m_StartScoreEffectTime = 0;
-    m_ScoreEffectAlph = 0.0f;
-    m_ScoreEffectState = 0;
-    m_IsScoreEffect = false;
+    m_ScoreEffectAlph      = 0.0f;
+    m_ScoreEffectState     = 0;
+    m_IsScoreEffect        = false;
 }
 
 void SEASON3B::CNewUICursedTempleSystem::StartTutorialStep()
 {
-    m_IsTutorialStep = true;
+    m_IsTutorialStep    = true;
     m_TutorialStepState = 0;
-    m_TutorialStepTime = timeGetTime();
+    m_TutorialStepTime  = timeGetTime();
 }
 
 void SEASON3B::CNewUICursedTempleSystem::EndTutorialStep()
 {
-    m_IsTutorialStep = false;
+    m_IsTutorialStep    = false;
     m_TutorialStepState = 0;
-    m_TutorialStepTime = 0;
+    m_TutorialStepTime  = 0;
 }
 
 SEASON3A::eCursedTempleTeam SEASON3B::CNewUICursedTempleSystem::GetMyTeam()
@@ -491,9 +497,9 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckInventoryHolyItem(CHARACTER* c)
         if (m_HolyItemPlayerIndex == 0xffff)
             return false;
 
-        int holyitemcharacterindex = FindCharacterIndex(m_HolyItemPlayerIndex);
+        WORD holyitemcharacterindex = FindCharacterIndex(m_HolyItemPlayerIndex);
 
-        if (holyitemcharacterindex < 0 || holyitemcharacterindex >= MAX_CHARACTERS_CLIENT)
+        if (holyitemcharacterindex == MAX_CHARACTERS_CLIENT)
         {
             return false;
         }
@@ -511,13 +517,12 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckInventoryHolyItem(CHARACTER* c)
 
 bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DWORD npckey)
 {
-    std::list<DWORD>				progressnpcindexlist;
+    std::list<DWORD> progressnpcindexlist;
     progressnpcindexlist.push_back(HolyItemNpc);
     progressnpcindexlist.push_back(AlliedHolyItemBoxNpc);
     progressnpcindexlist.push_back(IllusionHolyItemBoxNpc);
 
-    for (auto iter = progressnpcindexlist.begin();
-         iter != progressnpcindexlist.end();)
+    for (auto iter = progressnpcindexlist.begin(); iter != progressnpcindexlist.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -527,8 +532,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DW
         {
             if (progressnpcindex == AlliedHolyItemBoxNpc || progressnpcindex == IllusionHolyItemBoxNpc)
             {
-                if (!(progressnpcindex == AlliedHolyItemBoxNpc && SEASON3A::eTeam_Allied == m_MyTeam)
-                    && !(progressnpcindex == IllusionHolyItemBoxNpc && SEASON3A::eTeam_Illusion == m_MyTeam))
+                if (!(progressnpcindex == AlliedHolyItemBoxNpc && SEASON3A::eTeam_Allied == m_MyTeam) &&
+                    !(progressnpcindex == IllusionHolyItemBoxNpc && SEASON3A::eTeam_Illusion == m_MyTeam))
                 {
                     return false;
                 }
@@ -536,7 +541,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DW
                 if (CheckInventoryHolyItem(Hero))
                 {
                     SEASON3B::CCursedTempleProgressMsgBox* pMsgBox = NULL;
-                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCursedTempleHolicItemSaveLayout), &pMsgBox);
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCursedTempleHolicItemSaveLayout),
+                                               &pMsgBox);
                     if (pMsgBox)
                     {
                         pMsgBox->SetNpcIndex(npckey);
@@ -583,13 +589,17 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckHeroSkillType(int operatortype)
 {
     if (operatortype == 0)
     {
-        if (Hero->m_CursedTempleCurSkill >= AT_SKILL_CURSED_TEMPLE_SUBLIMATION) return false;
-        else return true;
+        if (Hero->m_CursedTempleCurSkill >= AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+            return false;
+        else
+            return true;
     }
     else
     {
-        if (Hero->m_CursedTempleCurSkill <= AT_SKILL_CURSED_TEMPLE_PRODECTION) return false;
-        else return true;
+        if (Hero->m_CursedTempleCurSkill <= AT_SKILL_CURSED_TEMPLE_PRODECTION)
+            return false;
+        else
+            return true;
     }
 }
 
@@ -607,7 +617,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckDragonRender()
 
 bool SEASON3B::CNewUICursedTempleSystem::IsCursedTempleSkillKey(DWORD selectcharacterindex)
 {
-    if (Hero->m_CursedTempleCurSkillPacket) return false;
+    if (Hero->m_CursedTempleCurSkillPacket)
+        return false;
 
     return SEASON3B::IsRepeat(VK_SHIFT);
 }
@@ -667,45 +678,44 @@ bool SEASON3B::CNewUICursedTempleSystem::UpdateKeyEvent()
 
 void SEASON3B::CNewUICursedTempleSystem::UpdateScore()
 {
-    if (!m_IsScoreEffect) return;
+    if (!m_IsScoreEffect)
+        return;
 
     switch (m_ScoreEffectState)
     {
-    case 0:
-    {
-        m_ScoreEffectAlph += 0.015f;
-        if (1.0f < m_ScoreEffectAlph)
-        {
-            m_ScoreEffectState = 1;
-            m_ScoreEffectAlph = 1.0f;
-            m_StartScoreEffectTime = timeGetTime();
+        case 0: {
+            m_ScoreEffectAlph += 0.015f;
+            if (1.0f < m_ScoreEffectAlph)
+            {
+                m_ScoreEffectState     = 1;
+                m_ScoreEffectAlph      = 1.0f;
+                m_StartScoreEffectTime = timeGetTime();
+            }
         }
-    }
-    break;
-    case 1:
-    {
-        DWORD curTime = timeGetTime();
-        if (curTime - m_StartScoreEffectTime >= 5000)
-        {
-            m_ScoreEffectState = 2;
+        break;
+        case 1: {
+            DWORD curTime = timeGetTime();
+            if (curTime - m_StartScoreEffectTime >= 5000)
+            {
+                m_ScoreEffectState = 2;
+            }
         }
-    }
-    break;
-    case 2:
-    {
-        m_ScoreEffectAlph -= 0.015f;
-        if (0.0f > m_ScoreEffectAlph)
-        {
-            EndScoreEffect();
+        break;
+        case 2: {
+            m_ScoreEffectAlph -= 0.015f;
+            if (0.0f > m_ScoreEffectAlph)
+            {
+                EndScoreEffect();
+            }
         }
-    }
-    break;
+        break;
     }
 }
 
 void SEASON3B::CNewUICursedTempleSystem::UpdateTutorialStep()
 {
-    if (!m_IsTutorialStep) return;
+    if (!m_IsTutorialStep)
+        return;
 
     DWORD curTime = timeGetTime();
     if (curTime - m_TutorialStepTime >= 10000)
@@ -734,7 +744,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
     float Width, Height, fU, fV, x, y;
-    int iSkillIndex;
+    int   iSkillIndex;
 
     int CursedTempleCurSkillType = Hero->m_CursedTempleCurSkill;
 
@@ -749,12 +759,12 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
         iSkillIndex = IMAGE_NON_SKILL2;
     }
 
-    x = 512.f + 27.f;
-    y = 258.f - 58.f;
-    Width = 20.f;
+    x      = 512.f + 27.f;
+    y      = 258.f - 58.f;
+    Width  = 20.f;
     Height = 28.f;
-    fU = (8 + (CursedTempleCurSkillType - 210)) * (Width / 256.f);
-    fV = 0;
+    fU     = (8 + (CursedTempleCurSkillType - 210)) * (Width / 256.f);
+    fV     = 0;
     RenderBitmap(iSkillIndex, x, y, Width, Height, fU, fV, Width / 256.f, Height / 256.f);
 
     glColor4f(0.9f, 0.4f, 0.1f, m_Alph);
@@ -763,17 +773,22 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
     glColor4f(1.f, 1.f, 1.f, m_Alph);
     RenderNumber(x + 77.f, y + 8.f, m_SkillPoint, 1.f);
 
-    x = 512.f + 50; y = 201.f;
+    x = 512.f + 50;
+    y = 201.f;
     m_Button[CURSEDTEMPLERESULT_SKILLUP].SetPos(x, y);
     m_Button[CURSEDTEMPLERESULT_SKILLUP].ChangeAlpha(m_Alph);
     m_Button[CURSEDTEMPLERESULT_SKILLUP].Render();
 
-    x = 512.f + 50; y = 203.f + 11;
+    x = 512.f + 50;
+    y = 203.f + 11;
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].SetPos(x, y);
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].ChangeAlpha(m_Alph);
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].Render();
 
-    x = 512.f + 28; y = 258.f - 55.f; Width = 18; Height = 24;
+    x      = 512.f + 28;
+    y      = 258.f - 55.f;
+    Width  = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -783,25 +798,30 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
             TextList[i][0] = 0;
         }
 
-        wchar_t skillname[100] = { 0 };
+        wchar_t skillname[100];
+        memset(&skillname, 0, sizeof(char));
 
         SKILL_ATTRIBUTE* p = &SkillAttribute[CursedTempleCurSkillType];
-        // UI-2: copy bounded by the local buffer; p->Name is a fixed field and
-        // must not be assumed to fit or be terminated within this window.
-        wcsncpy(skillname, p->Name, _countof(skillname) - 1);
-        skillname[_countof(skillname) - 1] = L'\0';
+        wcscpy(skillname, p->Name);
         mu_swprintf(TextList[TextNum], L"%ls", skillname);
-        TextListColor[TextNum] = TEXT_COLOR_BLUE; TextNum++;
+        TextListColor[TextNum] = TEXT_COLOR_BLUE;
+        TextNum++;
 
-        mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextNum++;
 
-        mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::Lookup(2379 + (CursedTempleCurSkillType - AT_SKILL_CURSED_TEMPLE_PRODECTION)));
-        TextListColor[TextNum] = TEXT_COLOR_DARKBLUE; TextNum++;
+        mu_swprintf(TextList[TextNum], L"%ls",
+                    I18N::Game::Lookup(2379 + (CursedTempleCurSkillType - AT_SKILL_CURSED_TEMPLE_PRODECTION)));
+        TextListColor[TextNum] = TEXT_COLOR_DARKBLUE;
+        TextNum++;
 
         RenderTipTextList(x, y - 20, TextNum, 0);
     }
 
-    x = 512.f + 28 + 55; y = 258.f - 55.f; Width = 18; Height = 24;
+    x      = 512.f + 28 + 55;
+    y      = 258.f - 55.f;
+    Width  = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -818,7 +838,10 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
         RenderTipTextList(x, y - 20, TextNum, 0);
     }
 
-    x = 512.f + 28 + 77; y = 258.f - 55.f; Width = 18; Height = 24;
+    x      = 512.f + 28 + 77;
+    y      = 258.f - 55.f;
+    Width  = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -846,10 +869,16 @@ void SEASON3B::CNewUICursedTempleSystem::RenderGameTime()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    x = 506.f; y = 393.f; Width = 134.f; Height = 37.f;
+    x      = 506.f;
+    y      = 393.f;
+    Width  = 134.f;
+    Height = 37.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_GAMETIME, x, y, Width, Height, 0.f, 0.f, Width / 256.f, Height / 64.f);
 
-    x = 507.5f + (134.f / 2); y = 407.5f; Width = 3.f; Height = 9.0f;
+    x      = 507.5f + (134.f / 2);
+    y      = 407.5f;
+    Width  = 3.f;
+    Height = 9.0f;
     glColor4f(1.f, 0.6f, 0.3f, m_Alph);
     RenderBitmap(BITMAP_INTERFACE_EX + 44, x, y, Width, Height, 0.f, 0.f, Width / 4.f, Height / 16.f);
 
@@ -857,12 +886,14 @@ void SEASON3B::CNewUICursedTempleSystem::RenderGameTime()
     int second = m_EventMapTime % 60;
 
     glColor4f(0.f, 0.f, 0.f, m_Alph);
-    x = 507.5f + (134.f / 2); y = 404.5f;
+    x = 507.5f + (134.f / 2);
+    y = 404.5f;
     RenderNumber(x - 15.f, y, minute, 1.1f);
     RenderNumber(x + 20.f, y, second, 1.1f);
 
     glColor4f(1.f, 0.6f, 0.3f, m_Alph);
-    x = 507.5f + (134.f / 2); y = 404.5f;
+    x = 507.5f + (134.f / 2);
+    y = 404.5f;
     RenderNumber(x - 15.f, y, minute, 1.1f);
     RenderNumber(x + 20.f, y, second, 1.1f);
 
@@ -880,40 +911,50 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    x = 512.f; y = 232.f - 53.f; Width = 128.f; Height = 53.f;
+    x      = 512.f;
+    y      = 232.f - 53.f;
+    Width  = 128.f;
+    Height = 53.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SKILLFRAME, x, y, Width, Height, 0.f, 0.f, Width / 128.f, Height / 64.f);
 
-    x = 512.f; y = 263.f; Width = 128.f; Height = 128.f;
+    x      = 512.f;
+    y      = 263.f;
+    Width  = 128.f;
+    Height = 128.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAP, x, y, Width, Height, 0.f, 0.f, 1.f, 1.f);
 
-    x = 512.f; y = 232.f; Width = 128.f; Height = 165.f;
+    x      = 512.f;
+    y      = 232.f;
+    Width  = 128.f;
+    Height = 165.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPFRAME, x, y, Width, Height, 0.f, 0.f, Width / 128.f, Height / 256.f);
 
     float npc_x = MiniMapPos(138, 44, m_Scale, AXIS_X);
     float npc_y = MiniMapPos(138, 44, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC,
-        npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f, 9.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f,
+                 9.f / 16.f);
 
     npc_x = MiniMapPos(138, 58, m_Scale, AXIS_X);
     npc_y = MiniMapPos(138, 58, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM,
-        npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f, 8.f / 8.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM, npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f,
+                 8.f / 8.f);
 
     npc_x = MiniMapPos(192, 113, m_Scale, AXIS_X);
     npc_y = MiniMapPos(192, 113, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM,
-        npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f, 8.f / 8.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM, npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f,
+                 8.f / 8.f);
 
     npc_x = MiniMapPos(193, 126, m_Scale, AXIS_X);
     npc_y = MiniMapPos(193, 126, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC,
-        npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f, 9.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f,
+                 9.f / 16.f);
 
     for (int k = 0; k < m_CursedTempleMyTeamCount; ++k)
     {
         PMSG_CURSED_TAMPLE_PARTY_POS* p = &m_CursedTempleMyTeam[k];
 
-        if (p->wPartyUserIndex == 0xffff) continue;
+        if (p->wPartyUserIndex == 0xffff)
+            continue;
 
         if (p->wPartyUserIndex != Hero->Key && p->wPartyUserIndex != m_HolyItemPlayerIndex)
         {
@@ -922,24 +963,24 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
             if (m_MyTeam == SEASON3A::eTeam_Allied)
             {
-                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC,
-                    pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f, 7.f / 8.f, 7.f / 8.f);
+                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f,
+                             7.f / 8.f, 7.f / 8.f);
             }
             else
             {
-                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC,
-                    pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f, 7.f / 8.f, 7.f / 8.f);
+                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC, pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f,
+                             0.f, 7.f / 8.f, 7.f / 8.f);
             }
         }
     }
 
-    //  Relic location
+    //  성물 위치
     if (m_HolyItemPlayerIndex != 0xffff && m_HolyItemPlayerIndex != Hero->Key)
     {
         float holypcX = MiniMapPos(m_HolyItemPlayerPosX, m_HolyItemPlayerPosY, m_Scale, AXIS_X);
         float holypcY = MiniMapPos(m_HolyItemPlayerPosX, m_HolyItemPlayerPosY, m_Scale, AXIS_Y);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC,
-            holypcX - 5.f, holypcY - 5.f, 14.0f, 14.0f, 0.f, 0.f, 14.f / 16.f, 14.f / 16.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, holypcX - 5.f, holypcY - 5.f, 14.0f, 14.0f, 0.f,
+                     0.f, 14.f / 16.f, 14.f / 16.f);
     }
 
     m_Button[CURSEDTEMPLERESULT_ALPH].ChangeAlpha(m_Alph);
@@ -947,17 +988,17 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    // Hero
-    x = (Hero->PositionX);
-    y = (Hero->PositionY);
+    // 히어로
+    x            = (Hero->PositionX);
+    y            = (Hero->PositionY);
     float hero_x = MiniMapPos(x, y, m_Scale, AXIS_X);
     float hero_y = MiniMapPos(x, y, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO,
-        hero_x - 4, hero_y - 4, 11.0f, 11.0f, 0.f, 0.f, 11.f / 16.f, 11.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, hero_x - 4, hero_y - 4, 11.0f, 11.0f, 0.f, 0.f, 11.f / 16.f,
+                 11.f / 16.f);
 
-    // Alpha value
+    // 알파 값
     RenderNumber2D(517.f + 15.f, 246.f, static_cast<int>(m_Alph * 100), 8, 8);
-    // Score
+    // 점수
     RenderNumber2D(517.f + 66.f, 246.f, m_AlliedPoint, 8, 8);
     RenderNumber2D(517.f + 110.f, 246.f, m_IllusionPoint, 8, 8);
 
@@ -966,7 +1007,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     DisableAlphaBlend();
 
 #ifdef _DEBUG
-    // Needed when adjusting minimap coordinates..leave it...
+    // 미니맵 좌표 수정 할때 필요 하니..놔 둘것...
 /*
     for ( int j = 0; j < 7; ++j )
     {
@@ -977,54 +1018,59 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     }
     DisableAlphaBlend();
 */
-#endif //_DEBUG
+#endif  //_DEBUG
 }
 
 void SEASON3B::CNewUICursedTempleSystem::RenderScore()
 {
-    if (!m_IsScoreEffect) return;
+    if (!m_IsScoreEffect)
+        return;
 
     ::EnableAlphaTest();
     ::glColor4f(1.0f, 1.0f, 1.0f, m_ScoreEffectAlph);
 
-    // MU Allied Forces score
+    // 뮤연합군 점수
     if (m_AlliedPoint / 10 != 0)
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint / 10),
-            196, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10),
-            253, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint / 10), 196, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10), 253, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
     }
     else
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10),
-            224, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10), 224, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
     }
 
     // :
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS1 + (m_IllusionPoint / 10),
-        310, 168.f, 20.0f, 45.0f, 0.f, 0.f, 20.f / 32.f, 45.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS1 + (m_IllusionPoint / 10), 310, 168.f, 20.0f, 45.0f, 0.f, 0.f,
+                 20.f / 32.f, 45.f / 64.f);
 
-    // Illusion Order score
+    // 환영교단 점수
     if (m_IllusionPoint / 10 != 0)
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint / 10),
-            331, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10),
-            388, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint / 10), 331, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10), 388, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
     }
     else
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10),
-            358, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10), 358, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
     }
 
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_GAAIL, 232.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f, 36.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_GAAIL, 232.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f,
+                 36.f / 64.f);
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS0, 292.f, 123.f, 49.0f, 27.0f, 0.f, 0.f, 49.f / 64.f, 27.f / 32.f);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_GAAIL, 367.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f, 36.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_GAAIL, 367.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f,
+                 36.f / 64.f);
 
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT, 133.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f, 125.f / 128.f);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT, 445.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f, 125.f / 128.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT, 133.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f,
+                 125.f / 128.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT, 445.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f,
+                 125.f / 128.f);
 
     ::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     ::DisableAlphaBlend();
@@ -1032,7 +1078,8 @@ void SEASON3B::CNewUICursedTempleSystem::RenderScore()
 
 void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
 {
-    if (!m_IsTutorialStep) return;
+    if (!m_IsTutorialStep)
+        return;
 
     TextNum = 0;
     ZeroMemory(TextListColor, 20 * sizeof(int));
@@ -1044,41 +1091,56 @@ void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
     if (m_TutorialStepState == 0)
     {
         wcscpy(TextList[TextNum], I18N::Game::STEP1BattleBegins);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::TheStoneStatueAppearsRandomlyFromOneOfTheTwoLocations);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::TheSacredItemMayBeAchievedByClickingOnTheStoneStatue);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::BeCautiousOfTheFactThat);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
     else if (m_TutorialStepState == 1)
     {
         wcscpy(TextList[TextNum], I18N::Game::STEP2StorageOfTheSacredItem);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::ClickOnTheStorageOfThe);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::TheGoalIsToAchieveAsManyPointsAsPossibleWithinTheGivenPeriod);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::TheStoneStatueReappearsAfterTheStorageLookForTheStatue);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
     else if (m_TutorialStepState == 2)
     {
         wcscpy(TextList[TextNum], I18N::Game::STEP3OfficialSkills);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::YouMayAchieveTheKillPoints);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::MouseWheelButtonChangeSkillTypesShiftMouseRightClickUse);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], I18N::Game::ThereAre4TypesOfSkills);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
 
     ::EnableAlphaTest();
@@ -1091,7 +1153,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
 
 bool SEASON3B::CNewUICursedTempleSystem::Render()
 {
-    // Exception handling for abnormal map movement during the Illusion Temple event
+    // 환영사원 이벤트 도중 비정상적으로 맵 이동 됐을 경우를 위한 예외 처리
     if (gMapManager.IsCursedTemple() == false)
     {
         if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CURSEDTEMPLE_GAMESYSTEM) == true)
@@ -1102,9 +1164,8 @@ bool SEASON3B::CNewUICursedTempleSystem::Render()
         return true;
     }
 
-    if (!g_pCharacterInfoWindow->IsVisible() || !g_pMyInventory->IsVisible()
-        || !g_pGuildInfoWindow->IsVisible() || !g_pWindowMgr->IsVisible()
-        || !g_pPartyInfoWindow->IsVisible() || !g_pMyQuestInfoWindow->IsVisible())
+    if (!g_pCharacterInfoWindow->IsVisible() || !g_pMyInventory->IsVisible() || !g_pGuildInfoWindow->IsVisible() ||
+        !g_pWindowMgr->IsVisible() || !g_pPartyInfoWindow->IsVisible() || !g_pMyQuestInfoWindow->IsVisible())
     {
         RenderGameTime();
         RenderMiniMap();
@@ -1125,7 +1186,7 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
         return;
     }
 
-    // Skill use range
+    // 스킬 사용 거리
     int CursedTempleCurSkillType = c->m_CursedTempleCurSkill;
 
     int MaxKillCount = SkillAttribute[CursedTempleCurSkillType].KillCount;
@@ -1150,8 +1211,8 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
 
     bool checktile = true;
 
-    if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT
-        || CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+    if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT ||
+        CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
     {
         checktile = CheckTile(c, o, Distance);
     }
@@ -1160,8 +1221,8 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
     {
         CHARACTER* tc = NULL;
 
-        if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT
-            || CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+        if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT ||
+            CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
         {
             for (int i = 0; i < m_CursedTempleMyTeamCount; ++i)
             {
@@ -1196,25 +1257,26 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
             return;
         }
 
-        SocketClient->ToGameServer()->SendIllusionTempleSkillRequest(CursedTempleCurSkillType, static_cast<BYTE>(tc->Key), Distance);
+        SocketClient->ToGameServer()->SendIllusionTempleSkillRequest(CursedTempleCurSkillType,
+                                                                     static_cast<BYTE>(tc->Key), Distance);
         Hero->m_CursedTempleCurSkillPacket = true;
-        MouseRButtonPush = false;
+        MouseRButtonPush                   = false;
 
-        //Animation setting
+        //에니메이션 설정
         switch (CursedTempleCurSkillType)
         {
-        case AT_SKILL_CURSED_TEMPLE_PRODECTION:
-            SetAction(o, PLAYER_ATTACK_REMOVAL);
-            break;
-        case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
-            SetAction(o, PLAYER_ATTACK_REMOVAL);
-            break;
-        case AT_SKILL_CURSED_TEMPLE_TELEPORT:
-            SetAction(o, PLAYER_ATTACK_REMOVAL);
-            break;
-        case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
-            SetAction(o, PLAYER_ATTACK_REMOVAL);
-            break;
+            case AT_SKILL_CURSED_TEMPLE_PRODECTION:
+                SetAction(o, PLAYER_ATTACK_REMOVAL);
+                break;
+            case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
+                SetAction(o, PLAYER_ATTACK_REMOVAL);
+                break;
+            case AT_SKILL_CURSED_TEMPLE_TELEPORT:
+                SetAction(o, PLAYER_ATTACK_REMOVAL);
+                break;
+            case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
+                SetAction(o, PLAYER_ATTACK_REMOVAL);
+                break;
         }
     }
 }
@@ -1228,21 +1290,22 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
     WORD sourceobjkey = data->wSourceObjIndex;
     WORD targetobjkey = data->wTargetObjIndex;
 
-    int sourceobjindex = FindCharacterIndex(sourceobjkey);
-    int targetobjindex = FindCharacterIndex(targetobjkey);
+    WORD sourceobjindex = FindCharacterIndex(sourceobjkey);
+    WORD targetobjindex = FindCharacterIndex(targetobjkey);
 
-    if (sourceobjindex < 0 || targetobjindex < 0 || sourceobjindex >= MAX_CHARACTERS_CLIENT || targetobjindex >= MAX_CHARACTERS_CLIENT)
+    if (sourceobjindex == MAX_CHARACTERS_CLIENT || targetobjindex == MAX_CHARACTERS_CLIENT)
         return;
 
-    CHARACTER* sc = &CharactersClient[sourceobjindex];
-    OBJECT* sco = &sc->Object;
+    CHARACTER* sc  = &CharactersClient[sourceobjindex];
+    OBJECT*    sco = &sc->Object;
 
-    CHARACTER* tc = &CharactersClient[targetobjindex];
-    OBJECT* tco = &tc->Object;
+    CHARACTER* tc  = &CharactersClient[targetobjindex];
+    OBJECT*    tco = &tc->Object;
 
     if (data->MagicResult == 0)
     {
-        if (sc == Hero) Hero->m_CursedTempleCurSkillPacket = false;
+        if (sc == Hero)
+            Hero->m_CursedTempleCurSkillPacket = false;
         return;
     }
 
@@ -1260,48 +1323,48 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
 
     switch (magNumber)
     {
-    case AT_SKILL_CURSED_TEMPLE_PRODECTION:
-    {
-        // _buffwani_
-        g_CharacterRegisterBuff(tco, eBuff_CursedTempleProdection);
+        case AT_SKILL_CURSED_TEMPLE_PRODECTION: {
+            // _buffwani_
+            g_CharacterRegisterBuff(tco, eBuff_CursedTempleProdection);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+            if (sc != Hero)
+                SetAction(sco, PLAYER_ATTACK_REMOVAL);
 
-        effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_PRODECTION, 0);
-    }
-    break;
-    case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
-    {
-        tc->Movement = false;
+            effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_PRODECTION, 0);
+        }
+        break;
+        case AT_SKILL_CURSED_TEMPLE_RESTRAINT: {
+            tc->Movement = false;
 
-        SetPlayerStop(tc);
+            SetPlayerStop(tc);
 
-        g_CharacterRegisterBuff(tco, eDeBuff_CursedTempleRestraint);
+            g_CharacterRegisterBuff(tco, eDeBuff_CursedTempleRestraint);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+            if (sc != Hero)
+                SetAction(sco, PLAYER_ATTACK_REMOVAL);
 
-        sc->AttackTime = 1;
-        sc->TargetCharacter = targetobjindex;
-        sc->SkillSuccess = true;
-        sc->Skill = magNumber;
+            sc->AttackTime      = 1;
+            sc->TargetCharacter = targetobjindex;
+            sc->SkillSuccess    = true;
+            sc->Skill           = magNumber;
 
-        effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_RESTRAINT, 0);
-    }
-    break;
-    case AT_SKILL_CURSED_TEMPLE_TELEPORT:
-    {
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
-    }
-    break;
-    case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
-    {
-        SetAction(tco, PLAYER_SHOCK);
-        effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 0);
+            effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_RESTRAINT, 0);
+        }
+        break;
+        case AT_SKILL_CURSED_TEMPLE_TELEPORT: {
+            if (sc != Hero)
+                SetAction(sco, PLAYER_ATTACK_REMOVAL);
+        }
+        break;
+        case AT_SKILL_CURSED_TEMPLE_SUBLIMATION: {
+            SetAction(tco, PLAYER_SHOCK);
+            effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 0);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
-        effectresult = CreateCursedTempleSkillEffect(sc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 1);
-    }
-    break;
+            if (sc != Hero)
+                SetAction(sco, PLAYER_ATTACK_REMOVAL);
+            effectresult = CreateCursedTempleSkillEffect(sc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 1);
+        }
+        break;
     }
 }
 
@@ -1311,37 +1374,35 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempUnRegisterSkill(const 
 
     WORD magNumber = ((WORD)(data->MagicH) << 8) + data->MagicL;
 
-    WORD targetobjkey = data->wObjIndex;
-    int targetobjindex = FindCharacterIndex(targetobjkey);
+    WORD targetobjkey   = data->wObjIndex;
+    WORD targetobjindex = FindCharacterIndex(targetobjkey);
 
-    if (targetobjindex < 0 || targetobjindex >= MAX_CHARACTERS_CLIENT)
+    if (targetobjindex == MAX_CHARACTERS_CLIENT)
         return;
 
-    CHARACTER* tc = &CharactersClient[targetobjindex];
-    OBJECT* tco = &tc->Object;
+    CHARACTER* tc  = &CharactersClient[targetobjindex];
+    OBJECT*    tco = &tc->Object;
 
     switch (magNumber)
     {
-    case AT_SKILL_CURSED_TEMPLE_PRODECTION:
-    {
-        if (g_isCharacterBuff(tco, eBuff_CursedTempleProdection))
-        {
-            g_CharacterUnRegisterBuff(tco, eBuff_CursedTempleProdection);
+        case AT_SKILL_CURSED_TEMPLE_PRODECTION: {
+            if (g_isCharacterBuff(tco, eBuff_CursedTempleProdection))
+            {
+                g_CharacterUnRegisterBuff(tco, eBuff_CursedTempleProdection);
 
-            DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, tco);
+                DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, tco);
+            }
         }
-    }
-    break;
-    case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
-    {
-        if (g_isCharacterBuff(tco, eDeBuff_CursedTempleRestraint))
-        {
-            g_CharacterUnRegisterBuff(tco, eDeBuff_CursedTempleRestraint);
+        break;
+        case AT_SKILL_CURSED_TEMPLE_RESTRAINT: {
+            if (g_isCharacterBuff(tco, eDeBuff_CursedTempleRestraint))
+            {
+                g_CharacterUnRegisterBuff(tco, eDeBuff_CursedTempleRestraint);
 
-            DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, tco);
+                DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, tco);
+            }
         }
-    }
-    break;
+        break;
     }
 }
 
@@ -1357,9 +1418,9 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
     }
 
     m_HolyItemPlayerIndex = data->btUserIndex;
-    m_HolyItemPlayerPosX = data->btX;
-    m_HolyItemPlayerPosY = data->btY;
-    m_MyTeam = static_cast<SEASON3A::eCursedTempleTeam>(data->btMyTeam);
+    m_HolyItemPlayerPosX  = data->btX;
+    m_HolyItemPlayerPosY  = data->btY;
+    m_MyTeam              = static_cast<SEASON3A::eCursedTempleTeam>(data->btMyTeam);
 
     wchar_t message[200];
     memset(&message, 0, sizeof(char));
@@ -1370,7 +1431,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
         {
             PlayBuffer(SOUND_CURSEDTEMPLE_GAMESYSTEM4);
             StartScoreEffect();
-            g_pSystemLogBox->AddText(I18N::Game::TheAlliesAreAdvancingOnWeAreNotFarFromTheVictoryChargeOn, SEASON3B::TYPE_ERROR_MESSAGE);
+            g_pSystemLogBox->AddText(I18N::Game::TheAlliesAreAdvancingOnWeAreNotFarFromTheVictoryChargeOn,
+                                     SEASON3B::TYPE_ERROR_MESSAGE);
         }
         else if (m_IllusionPoint != data->btIllusionPoint)
         {
@@ -1395,7 +1457,7 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
         }
     }
 
-    m_AlliedPoint = data->btAlliedPoint;
+    m_AlliedPoint   = data->btAlliedPoint;
     m_IllusionPoint = data->btIllusionPoint;
 
     // #14: btPartyCount is attacker-controlled; reject a malformed packet
@@ -1416,9 +1478,9 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
             PMSG_CURSED_TAMPLE_PARTY_POS* p = &m_CursedTempleMyTeam[i];
 
             p->wPartyUserIndex = data2->wPartyUserIndex;
-            p->byMapNumber = data2->byMapNumber;
-            p->btX = data2->btX;
-            p->btY = data2->btY;
+            p->byMapNumber     = data2->byMapNumber;
+            p->btX             = data2->btX;
+            p->btY             = data2->btY;
         }
 
         Offset += sizeof(PMSG_CURSED_TAMPLE_PARTY_POS);

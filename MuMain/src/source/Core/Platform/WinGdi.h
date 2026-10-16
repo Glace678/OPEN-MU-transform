@@ -12,7 +12,7 @@
 
 #else  // ---- non-Windows ----------------------------------------------------
 
-#include <cwchar>                      // wcslen
+#include <cwchar>  // wcslen
 #include <string>
 #include "Core/Platform/WinCompat.h"  // WORD, DWORD, LONG, BYTE
 
@@ -23,16 +23,18 @@
 // The file header is read/written with sizeof == 14, so it must be packed (the
 // DWORD bfSize sits at offset 2, not 4).
 #pragma pack(push, 2)
-typedef struct tagBITMAPFILEHEADER {
+typedef struct tagBITMAPFILEHEADER
+{
     WORD  bfType;
     DWORD bfSize;
     WORD  bfReserved1;
     WORD  bfReserved2;
     DWORD bfOffBits;
-} BITMAPFILEHEADER, * LPBITMAPFILEHEADER, * PBITMAPFILEHEADER;
+} BITMAPFILEHEADER, *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
 #pragma pack(pop)
 
-typedef struct tagBITMAPINFOHEADER {
+typedef struct tagBITMAPINFOHEADER
+{
     DWORD biSize;
     LONG  biWidth;
     LONG  biHeight;
@@ -44,26 +46,29 @@ typedef struct tagBITMAPINFOHEADER {
     LONG  biYPelsPerMeter;
     DWORD biClrUsed;
     DWORD biClrImportant;
-} BITMAPINFOHEADER, * LPBITMAPINFOHEADER, * PBITMAPINFOHEADER;
+} BITMAPINFOHEADER, *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
-typedef struct tagRGBQUAD {
+typedef struct tagRGBQUAD
+{
     BYTE rgbBlue;
     BYTE rgbGreen;
     BYTE rgbRed;
     BYTE rgbReserved;
 } RGBQUAD;
 
-typedef struct tagBITMAPINFO {
+typedef struct tagBITMAPINFO
+{
     BITMAPINFOHEADER bmiHeader;
     RGBQUAD          bmiColors[1];
-} BITMAPINFO, * LPBITMAPINFO, * PBITMAPINFO;
+} BITMAPINFO, *LPBITMAPINFO, *PBITMAPINFO;
 
-typedef struct tagPALETTEENTRY {
+typedef struct tagPALETTEENTRY
+{
     BYTE peRed;
     BYTE peGreen;
     BYTE peBlue;
     BYTE peFlags;
-} PALETTEENTRY, * LPPALETTEENTRY, * PPALETTEENTRY;
+} PALETTEENTRY, *LPPALETTEENTRY, *PPALETTEENTRY;
 
 // ---- Font creation / text metrics / DIB text rasterization (wingdi.h) -------
 // The text is rendered through CUIRenderText, a Win32 GDI font-DC pipeline:
@@ -74,45 +79,44 @@ typedef struct tagPALETTEENTRY {
 // pitch rules, and TextOut draws antialiased glyphs into it.
 
 #ifndef FW_BOLD
-#define FW_BOLD               700
+#define FW_BOLD 700
 #endif
 #ifndef FW_NORMAL
-#define FW_NORMAL             400
+#define FW_NORMAL 400
 #endif
 #ifndef FW_SEMIBOLD
-#define FW_SEMIBOLD           600
+#define FW_SEMIBOLD 600
 #endif
 #ifndef CLEARTYPE_NATURAL_QUALITY
 #define CLEARTYPE_NATURAL_QUALITY 6
 #endif
 #ifndef DEFAULT_CHARSET
-#define DEFAULT_CHARSET       1
+#define DEFAULT_CHARSET 1
 #endif
 #ifndef OUT_DEFAULT_PRECIS
-#define OUT_DEFAULT_PRECIS    0
+#define OUT_DEFAULT_PRECIS 0
 #endif
 #ifndef CLIP_DEFAULT_PRECIS
-#define CLIP_DEFAULT_PRECIS   0
+#define CLIP_DEFAULT_PRECIS 0
 #endif
 #ifndef DEFAULT_QUALITY
-#define DEFAULT_QUALITY       0
+#define DEFAULT_QUALITY 0
 #endif
 #ifndef NONANTIALIASED_QUALITY
 #define NONANTIALIASED_QUALITY 3
 #endif
 #ifndef ANTIALIASED_QUALITY
-#define ANTIALIASED_QUALITY   4
+#define ANTIALIASED_QUALITY 4
 #endif
 #ifndef DEFAULT_PITCH
-#define DEFAULT_PITCH         0
+#define DEFAULT_PITCH 0
 #endif
 #ifndef FF_DONTCARE
-#define FF_DONTCARE           0
+#define FF_DONTCARE 0
 #endif
 
-HFONT CreateFontW(int cHeight, int cWidth, int cEscapement, int cOrientation,
-                  int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut,
-                  DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision,
+HFONT CreateFontW(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic,
+                  DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision,
                   DWORD iQuality, DWORD iPitchAndFamily, LPCWSTR pszFaceName);
 #ifndef CreateFont
 #define CreateFont CreateFontW
@@ -140,10 +144,13 @@ HDC     CreateCompatibleDC(HDC hdc);
 BOOL    DeleteDC(HDC hdc);
 
 // SelectObject returns the previously selected object of the same kind.
-HGDIOBJ SelectObject(HDC hdc, HGDIOBJ h);
-HGDIOBJ SelectObject(HDC hdc, HBITMAP h);
-HGDIOBJ SelectObject(HDC hdc, HFONT h);
-inline HGDIOBJ GetStockObject(int) { return nullptr; }
+HGDIOBJ        SelectObject(HDC hdc, HGDIOBJ h);
+HGDIOBJ        SelectObject(HDC hdc, HBITMAP h);
+HGDIOBJ        SelectObject(HDC hdc, HFONT h);
+inline HGDIOBJ GetStockObject(int)
+{
+    return nullptr;
+}
 
 BOOL     TextOut(HDC hdc, int x, int y, LPCWSTR lpString, int c);
 COLORREF SetBkColor(HDC hdc, COLORREF color);
@@ -154,4 +161,4 @@ COLORREF SetTextColor(HDC hdc, COLORREF color);
 // font is created. Implemented in GdiText.cpp.
 std::string MuFontDiagnostics();
 
-#endif // _WIN32
+#endif  // _WIN32

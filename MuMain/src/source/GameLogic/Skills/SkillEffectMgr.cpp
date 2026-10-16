@@ -21,9 +21,7 @@ CSkillEffectMgr::CSkillEffectMgr()
     DeleteAllEffects();
 }
 
-CSkillEffectMgr::~CSkillEffectMgr()
-{
-}
+CSkillEffectMgr::~CSkillEffectMgr() {}
 
 OBJECT* CSkillEffectMgr::GetEffect(int iIndex)
 {
@@ -32,33 +30,59 @@ OBJECT* CSkillEffectMgr::GetEffect(int iIndex)
     return m_SkillEffects + iIndex;
 }
 
-BOOL CSkillEffectMgr::IsSkillEffect(int Type, vec3_t Position, vec3_t Angle,
-    vec3_t Light, int SubType, OBJECT* Owner, short PKKey, WORD SkillIndex, WORD Skill, WORD SkillSerialNum,
-    float Scale, short int sTargetIndex)
+BOOL CSkillEffectMgr::IsSkillEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int SubType, OBJECT* Owner,
+                                    short PKKey, WORD SkillIndex, WORD Skill, WORD SkillSerialNum, float Scale,
+                                    short int sTargetIndex)
 {
     if (Owner != &Hero->Object)
         return FALSE;
 
     switch (Type)
     {
-    case BITMAP_BOSS_LASER:
-    case MODEL_SKILL_BLAST:
-    case MODEL_DARK_SCREAM:
-    case BITMAP_SWORD_FORCE:
-        return TRUE;
-    case MODEL_SKILL_INFERNO:
-        if (SubType < 2) return TRUE;
-        break;
-    case MODEL_CIRCLE:
-        if (SubType == 0) return TRUE;
-        break;
-    case BITMAP_FLAME:
-        if (SubType == 0) return TRUE;
-        break;
-    case MODEL_STORM:
-        if (SubType == 0) return TRUE;
-        break;
+        case BITMAP_BOSS_LASER:
+        case MODEL_SKILL_BLAST:
+        case MODEL_DARK_SCREAM:
+        case BITMAP_SWORD_FORCE:
+            return TRUE;
+        case MODEL_SKILL_INFERNO:
+            if (SubType < 2)
+                return TRUE;
+            break;
+        case MODEL_CIRCLE:
+            if (SubType == 0)
+                return TRUE;
+            break;
+        case BITMAP_FLAME:
+            if (SubType == 0)
+                return TRUE;
+            break;
+        case MODEL_STORM:
+            if (SubType == 0)
+                return TRUE;
+            break;
 
+            //     case MODEL_ARROW_DOUBLE:
+            // 		if(SubType==1) return TRUE;
+            // 		break;
+            // 	case MODEL_ARROW:
+            // 		if( SubType!=3 && SubType!=4 ) return TRUE;
+            // 		break;
+            // 	case MODEL_ARROW_BEST_CROSSBOW :
+            // 	case MODEL_ARROW_STEEL:
+            // 	case MODEL_ARROW_THUNDER:
+            // 	case MODEL_ARROW_LASER:
+            // 	case MODEL_ARROW_V:
+            // 	case MODEL_ARROW_SAW:
+            // 	case MODEL_ARROW_NATURE:
+            // 	case MODEL_ARROW_WING:
+            //     case MODEL_LACEARROW:
+            // 	case MODEL_ARROW_SPARK:
+            // 	case MODEL_ARROW_RING:
+            // 	case MODEL_ARROW_BOMB:
+            // 	case MODEL_ARROW_DARKSTINGER:
+            // 	case MODEL_ARROW_GAMBLE:
+            // 	case MODEL_ARROW_DRILL:
+            // 		return TRUE;
     }
     return FALSE;
 }
@@ -117,7 +141,7 @@ void CSkillEffectMgr::DeleteAllEffects()
     for (int i = 0; i < MAX_SKILL_EFFECTS; i++)
     {
         EffectDestructor(m_SkillEffects + i);
-        m_SkillEffects[i].Live = false;
+        m_SkillEffects[i].Live  = false;
         m_SkillEffects[i].Owner = NULL;
     }
 }

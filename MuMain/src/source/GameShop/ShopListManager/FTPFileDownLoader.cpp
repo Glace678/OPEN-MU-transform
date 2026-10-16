@@ -14,17 +14,23 @@
 
 #include <iterator>
 
-namespace {
+namespace
+{
 // #12: a script entry must be a bare basename. Reject path separators,
 // parent-directory traversal, drive letters and UNC roots so a hostile
 // server manifest cannot escape the versioned local/remote base dir.
 bool IsSafeScriptName(const std::wstring& name)
 {
-    if (name.empty()) return false;
-    if (name.find(L"..") != std::wstring::npos) return false;
-    if (name.find(L'/') != std::wstring::npos) return false;
-    if (name.find(L'\\') != std::wstring::npos) return false;
-    if (name.size() >= 2 && name[1] == L':') return false;  // drive letter X:
+    if (name.empty())
+        return false;
+    if (name.find(L"..") != std::wstring::npos)
+        return false;
+    if (name.find(L'/') != std::wstring::npos)
+        return false;
+    if (name.find(L'\\') != std::wstring::npos)
+        return false;
+    if (name.size() >= 2 && name[1] == L':')
+        return false;  // drive letter X:
     return true;
 }
 }  // namespace
@@ -57,16 +63,16 @@ std::wstring BuildFtpUrl(const std::wstring& host, unsigned short port, const st
 
     return L"ftp://" + host + L":" + std::to_wstring(port) + L"/" + path;
 }
-} // namespace
-#endif // _WIN32
+}  // namespace
+#endif  // _WIN32
 
-CFTPFileDownLoader::CFTPFileDownLoader() // OK
+CFTPFileDownLoader::CFTPFileDownLoader()  // OK
 {
-    this->m_Break = 0;
+    this->m_Break           = 0;
     this->m_pFileDownloader = NULL;
 }
 
-CFTPFileDownLoader::~CFTPFileDownLoader() // OK
+CFTPFileDownLoader::~CFTPFileDownLoader()  // OK
 {
 #ifdef _WIN32
     // The WinInet FileDownloader is excluded off Windows (issue #462); the
@@ -76,34 +82,31 @@ CFTPFileDownLoader::~CFTPFileDownLoader() // OK
 #endif
 }
 
-WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
-    std::wstring strServerIP,
-    unsigned short PortNum,
-    std::wstring strUserName,
-    std::wstring strPWD,
-    std::wstring strRemotepath,
-    std::wstring strlocalpath,
-    bool bPassiveMode,
-    CListVersionInfo Version,
-    std::vector<std::wstring>	vScriptFiles) // OK
+WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring strServerIP, unsigned short PortNum,
+                                           std::wstring strUserName, std::wstring strPWD, std::wstring strRemotepath,
+                                           std::wstring strlocalpath, bool bPassiveMode, CListVersionInfo Version,
+                                           std::vector<std::wstring> vScriptFiles)  // OK
 {
-    WZResult result;
+    static WZResult result;
 
 #ifndef _WIN32
     // Off Windows the WinINet FileDownloader is replaced by libcurl (issue #462).
-    result.SetSuccessResult();
+    result.BuildSuccessResult();
 
-    wchar_t versionDir[MAX_PATH] = { 0 };
+    wchar_t versionDir[MAX_PATH] = {0};
     StringCchPrintf(versionDir, std::size(versionDir), L"%03d.%04d.%03d", Version.Zone, Version.year, Version.yearId);
 
     const std::wstring remoteBase = strRemotepath + versionDir + L"/";
-    const std::wstring localBase = strlocalpath + versionDir + L"/";
+    const std::wstring localBase  = strlocalpath + versionDir + L"/";
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); ++it)
     {
-        if (!IsSafeScriptName(*it)) { continue; }
+        if (!IsSafeScriptName(*it))
+        {
+            continue;
+        }
         const std::wstring localPath = localBase + (*it);
-        const std::wstring url = BuildFtpUrl(strServerIP, PortNum, remoteBase + (*it));
+        const std::wstring url       = BuildFtpUrl(strServerIP, PortNum, remoteBase + (*it));
 
         result = CurlFileDownloader::DownloadFile(url, localPath, strUserName, strPWD, bPassiveMode, &this->m_Break);
 
@@ -121,10 +124,10 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
     return result;
 #else
-    result.SetSuccessResult();
+    result.BuildSuccessResult();
 
     DownloadServerInfo ServerInfo;
-    DownloadFileInfo FileInfo;
+    DownloadFileInfo   FileInfo;
 
     ServerInfo.SetPassiveMode(bPassiveMode);
     ServerInfo.SetOverWrite(1);
@@ -132,7 +135,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
     ServerInfo.SetConnectTimeout(3000);
     ServerInfo.SetServerInfo((TCHAR*)strServerIP.c_str(), PortNum, (TCHAR*)strUserName.c_str(), (TCHAR*)strPWD.c_str());
 
-    wchar_t Buffer[MAX_PATH] = { 0 };
+    wchar_t Buffer[MAX_PATH] = {0};
 
     StringCchPrintf(Buffer, std::size(Buffer), L"%03d.%04d.%03d", Version.Zone, Version.year, Version.yearId);
 
@@ -143,7 +146,10 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); it++)
     {
-        if (!IsSafeScriptName(*it)) { continue; }
+        if (!IsSafeScriptName(*it))
+        {
+            continue;
+        }
         std::wstring lPath = strlocalpath + (*it);
         std::wstring rPath = strRemotepath + (*it);
 
@@ -168,10 +174,10 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
     }
 
     return result;
-#endif // _WIN32
+#endif  // _WIN32
 }
 
-void	CFTPFileDownLoader::Break() // OK
+void CFTPFileDownLoader::Break()  // OK
 {
     this->m_Break = 1;
 #ifdef _WIN32
@@ -180,7 +186,7 @@ void	CFTPFileDownLoader::Break() // OK
 #endif
 }
 
-BOOL CFTPFileDownLoader::CreateFolder(std::wstring strFilePath) // OK
+BOOL CFTPFileDownLoader::CreateFolder(std::wstring strFilePath)  // OK
 {
     if (GetFileAttributes(strFilePath.c_str()) == INVALID_FILE_ATTRIBUTES)
     {

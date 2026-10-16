@@ -26,32 +26,49 @@ inline bool DXP_GLColorShouldSkipRealCall()
 
 inline void DXP_GLColor3f(GLfloat r, GLfloat g, GLfloat b)
 {
-    g_CurrentColor[0] = r; g_CurrentColor[1] = g; g_CurrentColor[2] = b;
-    if (!DXP_GLColorShouldSkipRealCall()) ::glColor3f(r, g, b);
+    g_CurrentColor[0] = r;
+    g_CurrentColor[1] = g;
+    g_CurrentColor[2] = b;
+    if (!DXP_GLColorShouldSkipRealCall())
+        ::glColor3f(r, g, b);
 }
 
 inline void DXP_GLColor3fv(const GLfloat* v)
 {
-    g_CurrentColor[0] = v[0]; g_CurrentColor[1] = v[1]; g_CurrentColor[2] = v[2];
-    if (!DXP_GLColorShouldSkipRealCall()) ::glColor3fv(v);
+    g_CurrentColor[0] = v[0];
+    g_CurrentColor[1] = v[1];
+    g_CurrentColor[2] = v[2];
+    if (!DXP_GLColorShouldSkipRealCall())
+        ::glColor3fv(v);
 }
 
 inline void DXP_GLColor3ub(GLubyte r, GLubyte g, GLubyte b)
 {
-    g_CurrentColor[0] = r / 255.f; g_CurrentColor[1] = g / 255.f; g_CurrentColor[2] = b / 255.f;
-    if (!DXP_GLColorShouldSkipRealCall()) ::glColor3ub(r, g, b);
+    g_CurrentColor[0] = r / 255.f;
+    g_CurrentColor[1] = g / 255.f;
+    g_CurrentColor[2] = b / 255.f;
+    if (!DXP_GLColorShouldSkipRealCall())
+        ::glColor3ub(r, g, b);
 }
 
 inline void DXP_GLColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
-    g_CurrentColor[0] = r; g_CurrentColor[1] = g; g_CurrentColor[2] = b; g_CurrentColor[3] = a;
-    if (!DXP_GLColorShouldSkipRealCall()) ::glColor4f(r, g, b, a);
+    g_CurrentColor[0] = r;
+    g_CurrentColor[1] = g;
+    g_CurrentColor[2] = b;
+    g_CurrentColor[3] = a;
+    if (!DXP_GLColorShouldSkipRealCall())
+        ::glColor4f(r, g, b, a);
 }
 
 inline void DXP_GLColor4ub(GLubyte r, GLubyte g, GLubyte b, GLubyte a)
 {
-    g_CurrentColor[0] = r / 255.f; g_CurrentColor[1] = g / 255.f; g_CurrentColor[2] = b / 255.f; g_CurrentColor[3] = a / 255.f;
-    if (!DXP_GLColorShouldSkipRealCall()) ::glColor4ub(r, g, b, a);
+    g_CurrentColor[0] = r / 255.f;
+    g_CurrentColor[1] = g / 255.f;
+    g_CurrentColor[2] = b / 255.f;
+    g_CurrentColor[3] = a / 255.f;
+    if (!DXP_GLColorShouldSkipRealCall())
+        ::glColor4ub(r, g, b, a);
 }
 
 #define glColor3f(r, g, b)     DXP_GLColor3f(r, g, b)

@@ -11,11 +11,11 @@ CNewUIEmpireGuardianTimer::CNewUIEmpireGuardianTimer()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_dTime = 600000;
-    m_iType = 1;
-    m_iDay = EG_MONDAY;//EG_DAY_MAP_LIST::EG_MONDAY;
-    m_iZone = 1;
-    m_iMonsterCount = 0;
+    m_dTime           = 600000;
+    m_iType           = 1;
+    m_iDay            = EG_MONDAY;  //EG_DAY_MAP_LIST::EG_MONDAY;
+    m_iZone           = 1;
+    m_iMonsterCount   = 0;
 }
 
 CNewUIEmpireGuardianTimer::~CNewUIEmpireGuardianTimer()
@@ -82,7 +82,8 @@ bool CNewUIEmpireGuardianTimer::Render()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    RenderImage(IMAGE_EMPIREGUARDIAN_TIMER_WINDOW, m_Pos.x, m_Pos.y, float(TIMER_WINDOW_WIDTH), float(TIMER_WINDOW_HEIGHT));
+    RenderImage(IMAGE_EMPIREGUARDIAN_TIMER_WINDOW, m_Pos.x, m_Pos.y, float(TIMER_WINDOW_WIDTH),
+                float(TIMER_WINDOW_HEIGHT));
 
     wchar_t szText[256] = {};
     g_pRenderText->SetFont(g_hFont);
@@ -93,16 +94,18 @@ bool CNewUIEmpireGuardianTimer::Render()
 
     switch (m_iType)
     {
-    case 0:
-    case 1:
-        g_pRenderText->SetTextColor(10, 200, 10, 255);
-        g_pRenderText->RenderText(m_Pos.x + (TIMER_WINDOW_WIDTH / 2) - 55, m_Pos.y + 38, I18N::Game::StandbyTime, 110, 0, RT3_SORT_CENTER);
-        break;
-    case 2:
-        g_pRenderText->SetTextColor(255, 150, 0, 255);
-        mu_swprintf(szText, L"%ls (%ls)", I18N::Game::TimeLeft, I18N::Game::RemainingMonsters);
-        g_pRenderText->RenderText(m_Pos.x + (TIMER_WINDOW_WIDTH / 2) - 55, m_Pos.y + 38, szText, 110, 0, RT3_SORT_CENTER);
-        break;
+        case 0:
+        case 1:
+            g_pRenderText->SetTextColor(10, 200, 10, 255);
+            g_pRenderText->RenderText(m_Pos.x + (TIMER_WINDOW_WIDTH / 2) - 55, m_Pos.y + 38, I18N::Game::StandbyTime,
+                                      110, 0, RT3_SORT_CENTER);
+            break;
+        case 2:
+            g_pRenderText->SetTextColor(255, 150, 0, 255);
+            mu_swprintf(szText, L"%ls (%ls)", I18N::Game::TimeLeft, I18N::Game::RemainingMonsters);
+            g_pRenderText->RenderText(m_Pos.x + (TIMER_WINDOW_WIDTH / 2) - 55, m_Pos.y + 38, szText, 110, 0,
+                                      RT3_SORT_CENTER);
+            break;
     }
 
     int iSecond = m_dTime / 1000;
@@ -140,13 +143,9 @@ float CNewUIEmpireGuardianTimer::GetLayerDepth()
     return 1.2f;
 }
 
-void CNewUIEmpireGuardianTimer::OpenningProcess()
-{
-}
+void CNewUIEmpireGuardianTimer::OpenningProcess() {}
 
-void CNewUIEmpireGuardianTimer::ClosingProcess()
-{
-}
+void CNewUIEmpireGuardianTimer::ClosingProcess() {}
 
 void CNewUIEmpireGuardianTimer::LoadImages()
 {

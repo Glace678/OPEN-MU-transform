@@ -40,7 +40,7 @@ inline int SafeAppendTextLine(int textNum, const wchar_t* text, int color = 0, i
         row[0] = L'\0';
 
     TextListColor[textNum] = color;
-    TextBold[textNum] = (bold != 0);
+    TextBold[textNum]      = (bold != 0);
     return textNum + 1;
 }
 

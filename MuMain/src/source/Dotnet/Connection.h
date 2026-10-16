@@ -8,7 +8,6 @@
 #include "PacketFunctions_ConnectServer.h"
 #include "PacketFunctions_ClientToServer.h"
 
-#include <atomic>
 #include <cwchar>
 
 #ifdef _WIN32
@@ -61,9 +60,9 @@ inline void* get_munique_client_library_handle()
     // Not const-qualified return: dlsym() takes a non-const void* handle.
     static void* const handle = []() -> void* {
 #ifdef __APPLE__
-        std::array<char, 4096> executableBuffer {};
-        uint32_t bufferSize = static_cast<uint32_t>(executableBuffer.size());
-        std::string executablePath;
+        std::array<char, 4096> executableBuffer{};
+        uint32_t               bufferSize = static_cast<uint32_t>(executableBuffer.size());
+        std::string            executablePath;
         if (_NSGetExecutablePath(executableBuffer.data(), &bufferSize) == 0)
         {
             executablePath.assign(executableBuffer.data());
@@ -77,12 +76,10 @@ inline void* get_munique_client_library_handle()
             }
         }
 #else
-        std::array<char, 4096> executableBuffer {};
-        const ssize_t length = ::readlink(
-            "/proc/self/exe", executableBuffer.data(), executableBuffer.size() - 1);
-        const std::string executablePath = length > 0
-            ? std::string(executableBuffer.data(), static_cast<size_t>(length))
-            : std::string();
+        std::array<char, 4096> executableBuffer{};
+        const ssize_t     length = ::readlink("/proc/self/exe", executableBuffer.data(), executableBuffer.size() - 1);
+        const std::string executablePath =
+            length > 0 ? std::string(executableBuffer.data(), static_cast<size_t>(length)) : std::string();
 #endif
         const std::string::size_type slash = executablePath.find_last_of('/');
         if (slash != std::string::npos)
@@ -106,8 +103,7 @@ namespace DotNetBridge
 void ReportDotNetError(const char* detail);
 bool IsManagedLibraryAvailable();
 
-template<typename T>
-T LoadManagedSymbol(const char* name)
+template <typename T> T LoadManagedSymbol(const char* name)
 {
     if (!IsManagedLibraryAvailable())
     {
@@ -132,35 +128,28 @@ private:
     static void OnPacketReceivedS(int32_t handle, int32_t size, BYTE* data);
     static void OnDisconnectedS(int32_t handle);
 
-    PacketFunctions_ChatServer* _chatServer = { };
-    PacketFunctions_ConnectServer* _connectServer = { };
-    PacketFunctions_ClientToServer* _gameServer = { };
+    PacketFunctions_ChatServer*     _chatServer    = {};
+    PacketFunctions_ConnectServer*  _connectServer = {};
+    PacketFunctions_ClientToServer* _gameServer    = {};
 
-    // PROTO-12: read on the main thread, written from managed callback threads
-    // (OnDisconnected), so it must be atomic.
-    std::atomic<int32_t> _handle{0};
-    void(*_packetHandler)(int32_t, const BYTE*, int32_t);
+    int32_t _handle;
+    void (*_packetHandler)(int32_t, const BYTE*, int32_t);
 
-    // Called from the static managed callbacks with the bridge mutex held.
     void OnDisconnected();
     void OnPacketReceived(const BYTE* data, const int32_t length);
 
 public:
-    Connection(const wchar_t* host, int32_t port, bool isEncrypted, void(*packetHandler)(int32_t, const BYTE*, int32_t));
+    Connection(const wchar_t* host, int32_t port, bool isEncrypted,
+               void (*packetHandler)(int32_t, const BYTE*, int32_t));
     ~Connection();
 
     bool IsConnected();
     void Send(const BYTE* data, const int32_t length);
     void Close();
 
-    // PLAT-5: synchronous teardown - managed disconnect, erase the bridge map
-    // entry (waiting out any callback in flight), delete PacketFunctions.
-    // Idempotent. The object may be delete'd immediately after this returns.
-    void SynchronousShutdown();
-
     int32_t GetHandle() const { return _handle; }
 
-    PacketFunctions_ChatServer* ToChatServer() const { return _chatServer; }
-    PacketFunctions_ConnectServer* ToConnectServer() const { return _connectServer; }
+    PacketFunctions_ChatServer*     ToChatServer() const { return _chatServer; }
+    PacketFunctions_ConnectServer*  ToConnectServer() const { return _connectServer; }
     PacketFunctions_ClientToServer* ToGameServer() const { return _gameServer; }
 };

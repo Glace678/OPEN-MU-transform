@@ -8,35 +8,30 @@
 #include "UIManager.h"
 #include "UIGuardsMan.h"
 
-
 #include "GameLogic/Items/MixMgr.h"
 
-extern DWORD		g_dwActiveUIID;
+extern DWORD g_dwActiveUIID;
 
-
-
-extern int   ShopInventoryStartX;
-extern int   ShopInventoryStartY;
+extern int ShopInventoryStartX;
+extern int ShopInventoryStartY;
 
 CSenatusInfo g_SenatusInfo;
 
 CSenatusInfo::CSenatusInfo()
 {
-    m_iCurrGate = 0;
+    m_iCurrGate   = 0;
     m_iCurrStatue = 0;
     memset(m_GateInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
-    memset(m_StatueInfo, 0, sizeof(PMSG_NPCDBLIST) * 4);
+    memset(m_StatueInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
 
-    m_iChaosTaxRate = 0;
-    m_iNormalTaxRate = 0;
+    m_iChaosTaxRate     = 0;
+    m_iNormalTaxRate    = 0;
     m_iRealTaxRateChaos = 0;
     m_iRealTaxRateStore = 0;
-    m_i64CastleMoney = 0;
+    m_i64CastleMoney    = 0;
 }
 
-CSenatusInfo::~CSenatusInfo()
-{
-}
+CSenatusInfo::~CSenatusInfo() {}
 
 int CSenatusInfo::GetRepairCost(LPPMSG_NPCDBLIST pInfo)
 {
@@ -52,17 +47,25 @@ int CSenatusInfo::GetHP(int nType, int nLevel)
 {
     if (nType == GATENPC_NUMBER)
     {
-        if (nLevel == 0)		return GATELEVEL_HP_0;
-        else if (nLevel == 1)	return GATELEVEL_HP_1;
-        else if (nLevel == 2)	return GATELEVEL_HP_2;
-        else					return GATELEVEL_HP_3;
+        if (nLevel == 0)
+            return GATELEVEL_HP_0;
+        else if (nLevel == 1)
+            return GATELEVEL_HP_1;
+        else if (nLevel == 2)
+            return GATELEVEL_HP_2;
+        else
+            return GATELEVEL_HP_3;
     }
     else if (nType == STATUENPC_NUMBER)
     {
-        if (nLevel == 0)		return STATUELEVEL_HP_0;
-        else if (nLevel == 1)	return STATUELEVEL_HP_1;
-        else if (nLevel == 2)	return STATUELEVEL_HP_2;
-        else					return STATUELEVEL_HP_3;
+        if (nLevel == 0)
+            return STATUELEVEL_HP_0;
+        else if (nLevel == 1)
+            return STATUELEVEL_HP_1;
+        else if (nLevel == 2)
+            return STATUELEVEL_HP_2;
+        else
+            return STATUELEVEL_HP_3;
     }
     else
         return -1;
@@ -128,17 +131,25 @@ int CSenatusInfo::GetDefense(int nType, int nLevel)
 {
     if (nType == GATENPC_NUMBER)
     {
-        if (nLevel == 0)		return GATELEVEL_DEFENSE_0;
-        else if (nLevel == 1)	return GATELEVEL_DEFENSE_1;
-        else if (nLevel == 2)	return GATELEVEL_DEFENSE_2;
-        else					return GATELEVEL_DEFENSE_3;
+        if (nLevel == 0)
+            return GATELEVEL_DEFENSE_0;
+        else if (nLevel == 1)
+            return GATELEVEL_DEFENSE_1;
+        else if (nLevel == 2)
+            return GATELEVEL_DEFENSE_2;
+        else
+            return GATELEVEL_DEFENSE_3;
     }
     else if (nType == STATUENPC_NUMBER)
     {
-        if (nLevel == 0)		return STATUELEVEL_DEFENSE_0;
-        else if (nLevel == 1)	return STATUELEVEL_DEFENSE_1;
-        else if (nLevel == 2)	return STATUELEVEL_DEFENSE_2;
-        else					return STATUELEVEL_DEFENSE_3;
+        if (nLevel == 0)
+            return STATUELEVEL_DEFENSE_0;
+        else if (nLevel == 1)
+            return STATUELEVEL_DEFENSE_1;
+        else if (nLevel == 2)
+            return STATUELEVEL_DEFENSE_2;
+        else
+            return STATUELEVEL_DEFENSE_3;
     }
     else
         return -1;
@@ -190,10 +201,14 @@ int CSenatusInfo::GetRecover(int nType, int nLevel)
     }
     else if (nType == STATUENPC_NUMBER)
     {
-        if (nLevel == 0)		return STATUELEVEL_RECOVER_0;
-        else if (nLevel == 1)	return STATUELEVEL_RECOVER_1;
-        else if (nLevel == 2)	return STATUELEVEL_RECOVER_2;
-        else					return STATUELEVEL_RECOVER_3;
+        if (nLevel == 0)
+            return STATUELEVEL_RECOVER_0;
+        else if (nLevel == 1)
+            return STATUELEVEL_RECOVER_1;
+        else if (nLevel == 2)
+            return STATUELEVEL_RECOVER_2;
+        else
+            return STATUELEVEL_RECOVER_3;
     }
     else
         return -1;
@@ -234,56 +249,65 @@ void CSenatusInfo::DoGateRepairAction()
 {
     if (GetCurrGateInfo().btNpcLive == 0)
     {
-        SocketClient->ToGameServer()->SendCastleSiegeDefenseBuyRequest(GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex);
+        SocketClient->ToGameServer()->SendCastleSiegeDefenseBuyRequest(GetCurrGateInfo().iNpcNumber,
+                                                                       GetCurrGateInfo().iNpcIndex);
     }
     else
     {
-        SocketClient->ToGameServer()->SendCastleSiegeDefenseRepairRequest(GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex);
+        SocketClient->ToGameServer()->SendCastleSiegeDefenseRepairRequest(GetCurrGateInfo().iNpcNumber,
+                                                                          GetCurrGateInfo().iNpcIndex);
     }
 }
 
 void CSenatusInfo::DoGateUpgradeHPAction()
 {
     int nHPLevel = g_SenatusInfo.GetHPLevel(&GetCurrGateInfo());
-    int nNextHP = g_SenatusInfo.GetHP(GetCurrGateInfo().iNpcNumber, nHPLevel + 1);
-    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex, NPCUPGRADE_HP, nNextHP);
+    int nNextHP  = g_SenatusInfo.GetHP(GetCurrGateInfo().iNpcNumber, nHPLevel + 1);
+    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(
+        GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex, NPCUPGRADE_HP, nNextHP);
 }
 
 void CSenatusInfo::DoGateUpgradeDefenseAction()
 {
     int nLevel = g_SenatusInfo.GetDefenseLevel(&GetCurrGateInfo()) + 1;
-    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex, NPCUPGRADE_DEFENSE, nLevel);
+    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(
+        GetCurrGateInfo().iNpcNumber, GetCurrGateInfo().iNpcIndex, NPCUPGRADE_DEFENSE, nLevel);
 }
 
 void CSenatusInfo::DoStatueRepairAction()
 {
     if (GetCurrStatueInfo().btNpcLive == 0)
     {
-        SocketClient->ToGameServer()->SendCastleSiegeDefenseBuyRequest(GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex);
+        SocketClient->ToGameServer()->SendCastleSiegeDefenseBuyRequest(GetCurrStatueInfo().iNpcNumber,
+                                                                       GetCurrStatueInfo().iNpcIndex);
     }
     else
     {
-        SocketClient->ToGameServer()->SendCastleSiegeDefenseRepairRequest(GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex);
+        SocketClient->ToGameServer()->SendCastleSiegeDefenseRepairRequest(GetCurrStatueInfo().iNpcNumber,
+                                                                          GetCurrStatueInfo().iNpcIndex);
     }
 }
 
 void CSenatusInfo::DoStatueUpgradeHPAction()
 {
     int nHPLevel = g_SenatusInfo.GetHPLevel(&GetCurrStatueInfo());
-    int nNextHP = g_SenatusInfo.GetHP(GetCurrStatueInfo().iNpcNumber, nHPLevel + 1);
-    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_HP, nNextHP);
+    int nNextHP  = g_SenatusInfo.GetHP(GetCurrStatueInfo().iNpcNumber, nHPLevel + 1);
+    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(
+        GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_HP, nNextHP);
 }
 
 void CSenatusInfo::DoStatueUpgradeDefenseAction()
 {
     int nLevel = g_SenatusInfo.GetDefenseLevel(&GetCurrStatueInfo()) + 1;
-    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_DEFENSE, nLevel);
+    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(
+        GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_DEFENSE, nLevel);
 }
 
 void CSenatusInfo::DoStatueUpgradeRecoverAction()
 {
     int nLevel = g_SenatusInfo.GetRecoverLevel(&GetCurrStatueInfo()) + 1;
-    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_RECOVER, nLevel);
+    SocketClient->ToGameServer()->SendCastleSiegeDefenseUpgradeRequest(
+        GetCurrStatueInfo().iNpcNumber, GetCurrStatueInfo().iNpcIndex, NPCUPGRADE_RECOVER, nLevel);
 }
 
 void CSenatusInfo::DoApplyTaxAction()
@@ -299,40 +323,18 @@ void CSenatusInfo::DoWithdrawAction(DWORD dwMoney)
 
 void CSenatusInfo::SetNPCInfo(LPPMSG_NPCDBLIST pInfo)
 {
-    // 85-02: network-supplied iNpcIndex is range-guarded before indexing; an illegal
-    // index is dropped so memcpy can never overrun m_GateInfo/m_StatueInfo.
-    // Valid domains: Gate 1..6, Statue 1..4 (1-based wire index).
     if (pInfo->iNpcNumber == GATENPC_NUMBER)
-    {
-        if (pInfo->iNpcIndex < 1 || pInfo->iNpcIndex > (int)_countof(m_GateInfo))
-            return;
         memcpy(&m_GateInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
-    }
-    else if (pInfo->iNpcNumber == STATUENPC_NUMBER)
-    {
-        if (pInfo->iNpcIndex < 1 || pInfo->iNpcIndex > (int)_countof(m_StatueInfo))
-            return;
+    if (pInfo->iNpcNumber == STATUENPC_NUMBER)
         memcpy(&m_StatueInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
-    }
 }
 
 LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 {
-    // 85-02: single entry-point range guard. Unknown type or out-of-range index
-    // returns NULL so callers (BuyNewNPC / WSclient table lookup) safely reject
-    // instead of dereferencing an out-of-bounds or null pointer.
     if (iNpcNumber == GATENPC_NUMBER)
-    {
-        if (iNpcIndex < 1 || iNpcIndex > (int)_countof(m_GateInfo))
-            return NULL;
         return &m_GateInfo[iNpcIndex - 1];
-    }
     else if (iNpcNumber == STATUENPC_NUMBER)
-    {
-        if (iNpcIndex < 1 || iNpcIndex > (int)_countof(m_StatueInfo))
-            return NULL;
         return &m_StatueInfo[iNpcIndex - 1];
-    }
     else
         return NULL;
 }
@@ -340,18 +342,16 @@ LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 void CSenatusInfo::BuyNewNPC(int iNpcNumber, int iNpcIndex)
 {
     LPPMSG_NPCDBLIST pNPCInfo = GetNPCInfo(iNpcNumber, iNpcIndex);
-    if (pNPCInfo == NULL)
-        return; // 85-02: reject illegal/unknown NPC index; no null-pointer memset/write.
     memset(pNPCInfo, 0, sizeof(PMSG_NPCDBLIST));
 
-    pNPCInfo->btNpcLive = 1;
+    pNPCInfo->btNpcLive   = 1;
     pNPCInfo->iNpcDfLevel = 0;
-    if (iNpcNumber == GATENPC_NUMBER)	// gate
+    if (iNpcNumber == GATENPC_NUMBER)  // gate
         pNPCInfo->iNpcHp = pNPCInfo->iNpcMaxHp = GATELEVEL_HP_0;
     else
         pNPCInfo->iNpcHp = pNPCInfo->iNpcMaxHp = STATUELEVEL_HP_0;
-    pNPCInfo->iNpcNumber = iNpcNumber;
-    pNPCInfo->iNpcIndex = iNpcIndex;
+    pNPCInfo->iNpcNumber  = iNpcNumber;
+    pNPCInfo->iNpcIndex   = iNpcIndex;
     pNPCInfo->iNpcDfLevel = 0;
     pNPCInfo->iNpcRgLevel = 0;
 }
@@ -360,27 +360,29 @@ void CSenatusInfo::SetTaxInfo(LPPMSG_ANS_TAXMONEYINFO pInfo)
 {
     m_iChaosTaxRate = m_iRealTaxRateChaos = pInfo->btTaxRateChaos;
     m_iNormalTaxRate = m_iRealTaxRateStore = pInfo->btTaxRateStore;
-    BYTE* pMoney = (BYTE*)&m_i64CastleMoney;
-    *pMoney++ = pInfo->btMoney8;
-    *pMoney++ = pInfo->btMoney7;
-    *pMoney++ = pInfo->btMoney6;
-    *pMoney++ = pInfo->btMoney5;
-    *pMoney++ = pInfo->btMoney4;
-    *pMoney++ = pInfo->btMoney3;
-    *pMoney++ = pInfo->btMoney2;
-    *pMoney++ = pInfo->btMoney1;
+    BYTE* pMoney                           = (BYTE*)&m_i64CastleMoney;
+    *pMoney++                              = pInfo->btMoney8;
+    *pMoney++                              = pInfo->btMoney7;
+    *pMoney++                              = pInfo->btMoney6;
+    *pMoney++                              = pInfo->btMoney5;
+    *pMoney++                              = pInfo->btMoney4;
+    *pMoney++                              = pInfo->btMoney3;
+    *pMoney++                              = pInfo->btMoney2;
+    *pMoney++                              = pInfo->btMoney1;
 }
 
 void CSenatusInfo::ChangeTaxInfo(LPPMSG_ANS_TAXRATECHANGE pInfo)
 {
     if (pInfo->btTaxType == 1)
     {
-        m_iRealTaxRateChaos = (pInfo->btTaxRate1 << 24) | (pInfo->btTaxRate2 << 16) | (pInfo->btTaxRate3 << 8) | (pInfo->btTaxRate4);
+        m_iRealTaxRateChaos =
+            (pInfo->btTaxRate1 << 24) | (pInfo->btTaxRate2 << 16) | (pInfo->btTaxRate3 << 8) | (pInfo->btTaxRate4);
         m_iChaosTaxRate = m_iRealTaxRateChaos;
     }
     else if (pInfo->btTaxType == 2)
     {
-        m_iRealTaxRateStore = (pInfo->btTaxRate1 << 24) | (pInfo->btTaxRate2 << 16) | (pInfo->btTaxRate3 << 8) | (pInfo->btTaxRate4);
+        m_iRealTaxRateStore =
+            (pInfo->btTaxRate1 << 24) | (pInfo->btTaxRate2 << 16) | (pInfo->btTaxRate3 << 8) | (pInfo->btTaxRate4);
         m_iNormalTaxRate = m_iRealTaxRateStore;
     }
     else
@@ -390,32 +392,36 @@ void CSenatusInfo::ChangeTaxInfo(LPPMSG_ANS_TAXRATECHANGE pInfo)
 void CSenatusInfo::ChangeCastleMoney(LPPMSG_ANS_MONEYDRAWOUT pInfo)
 {
     BYTE* pMoney = (BYTE*)&m_i64CastleMoney;
-    *pMoney++ = pInfo->btMoney8;
-    *pMoney++ = pInfo->btMoney7;
-    *pMoney++ = pInfo->btMoney6;
-    *pMoney++ = pInfo->btMoney5;
-    *pMoney++ = pInfo->btMoney4;
-    *pMoney++ = pInfo->btMoney3;
-    *pMoney++ = pInfo->btMoney2;
-    *pMoney++ = pInfo->btMoney1;
+    *pMoney++    = pInfo->btMoney8;
+    *pMoney++    = pInfo->btMoney7;
+    *pMoney++    = pInfo->btMoney6;
+    *pMoney++    = pInfo->btMoney5;
+    *pMoney++    = pInfo->btMoney4;
+    *pMoney++    = pInfo->btMoney3;
+    *pMoney++    = pInfo->btMoney2;
+    *pMoney++    = pInfo->btMoney1;
 }
 
 void CSenatusInfo::PlusChaosTaxRate(int iValue)
 {
     m_iChaosTaxRate += iValue;
-    if (m_iChaosTaxRate > MAX_TAX_RATE) m_iChaosTaxRate = MAX_TAX_RATE;
-    else if (m_iChaosTaxRate < MIN_TAX_RATE) m_iChaosTaxRate = MIN_TAX_RATE;
+    if (m_iChaosTaxRate > MAX_TAX_RATE)
+        m_iChaosTaxRate = MAX_TAX_RATE;
+    else if (m_iChaosTaxRate < MIN_TAX_RATE)
+        m_iChaosTaxRate = MIN_TAX_RATE;
 }
 
 void CSenatusInfo::PlusNormalTaxRate(int iValue)
 {
     m_iNormalTaxRate += iValue;
-    if (m_iNormalTaxRate > MAX_NORMAL_TAX_RATE) m_iNormalTaxRate = MAX_NORMAL_TAX_RATE;
-    else if (m_iNormalTaxRate < MIN_TAX_RATE) m_iNormalTaxRate = MIN_TAX_RATE;
+    if (m_iNormalTaxRate > MAX_NORMAL_TAX_RATE)
+        m_iNormalTaxRate = MAX_NORMAL_TAX_RATE;
+    else if (m_iNormalTaxRate < MIN_TAX_RATE)
+        m_iNormalTaxRate = MIN_TAX_RATE;
 }
 
 void CSenatusInfo::RollbackTaxRates()
 {
-    m_iChaosTaxRate = m_iRealTaxRateChaos;
+    m_iChaosTaxRate  = m_iRealTaxRateChaos;
     m_iNormalTaxRate = m_iRealTaxRateStore;
 }

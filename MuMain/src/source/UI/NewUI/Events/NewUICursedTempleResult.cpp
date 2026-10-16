@@ -25,26 +25,27 @@ using namespace SEASON3B;
 
 namespace
 {
-    void DrawText(const wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort, float fontboxwidth, bool isbold)
+void DrawText(const wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort,
+              float fontboxwidth, bool isbold)
+{
+    if (isbold)
     {
-        if (isbold)
-        {
-            g_pRenderText->SetFont(g_hFontBold);
-        }
-        else
-        {
-            g_pRenderText->SetFont(g_hFont);
-        }
-
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
-
-        g_pRenderText->SetTextColor(textcolor);
-        g_pRenderText->SetBgColor(textbackcolor);
-        g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
+        g_pRenderText->SetFont(g_hFontBold);
     }
+    else
+    {
+        g_pRenderText->SetFont(g_hFont);
+    }
+
+    DWORD backuptextcolor     = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+
+    g_pRenderText->SetTextColor(textcolor);
+    g_pRenderText->SetBgColor(textbackcolor);
+    g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
 };
 
 bool SEASON3B::CNewUICursedTempleResult::Create(CNewUIManager* pNewUIMng, int x, int y)
@@ -64,7 +65,8 @@ bool SEASON3B::CNewUICursedTempleResult::Create(CNewUIManager* pNewUIMng, int x,
     return true;
 }
 
-SEASON3B::CNewUICursedTempleResult::CNewUICursedTempleResult() : m_pNewUIMng(NULL), m_ResultEffectAlph(0.f), m_WinState(0)
+SEASON3B::CNewUICursedTempleResult::CNewUICursedTempleResult()
+    : m_pNewUIMng(NULL), m_ResultEffectAlph(0.f), m_WinState(0)
 {
     Initialize();
 }
@@ -107,7 +109,8 @@ void SEASON3B::CNewUICursedTempleResult::SetButtonInfo()
     float x;
     x = m_Pos.x + (CURSEDTEMPLE_RESULT_WINDOW_WIDTH / 2) - (54 / 2);
 
-    m_Button[CURSEDTEMPLERESULT_CLOSE].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL, true);
+    m_Button[CURSEDTEMPLERESULT_CLOSE].ChangeButtonImgState(
+        true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL, true);
     m_Button[CURSEDTEMPLERESULT_CLOSE].ChangeButtonInfo(x, m_Pos.y + CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - 37, 54, 23);
     m_Button[CURSEDTEMPLERESULT_CLOSE].ChangeText(&I18N::Game::Close388);
 }
@@ -139,9 +142,7 @@ void SEASON3B::CNewUICursedTempleResult::UpdateResult()
     }
 }
 
-void SEASON3B::CNewUICursedTempleResult::OpenningProcess()
-{
-}
+void SEASON3B::CNewUICursedTempleResult::OpenningProcess() {}
 
 void SEASON3B::CNewUICursedTempleResult::ClosingProcess()
 {
@@ -209,23 +210,35 @@ void SEASON3B::CNewUICursedTempleResult::RenderFrame()
 {
     float x, y, width, height;
 
-    x = GetPos().x; y = GetPos().y + 2.f, width = CURSEDTEMPLE_RESULT_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH; height = CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
+    x = GetPos().x;
+    y = GetPos().y + 2.f, width = CURSEDTEMPLE_RESULT_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH;
+    height = CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK, x, y, width, height);
 
-    x = GetPos().x; y = GetPos().y, width = MSGBOX_WIDTH; height = MSGBOX_TOP_HEIGHT;
+    x = GetPos().x;
+    y = GetPos().y, width = MSGBOX_WIDTH;
+    height = MSGBOX_TOP_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_TOP_TITLEBAR, x, y, width, height);
 
-    x = GetPos().x; y += MSGBOX_TOP_HEIGHT; width = MSGBOX_WIDTH; height = MSGBOX_MIDDLE_HEIGHT;
+    x = GetPos().x;
+    y += MSGBOX_TOP_HEIGHT;
+    width  = MSGBOX_WIDTH;
+    height = MSGBOX_MIDDLE_HEIGHT;
     for (int i = 0; i < 11; ++i)
     {
         RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_MIDDLE, x, y, width, height);
         y += height;
     }
 
-    x = GetPos().x; width = MSGBOX_WIDTH; height = MSGBOX_BOTTOM_HEIGHT;
+    x      = GetPos().x;
+    width  = MSGBOX_WIDTH;
+    height = MSGBOX_BOTTOM_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_BOTTOM, x, y, width, height);
 
-    x = GetPos().x; y = GetPos().y + CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - 77; width = MSGBOX_LINE_WIDTH; height = MSGBOX_LINE_HEIGHT;
+    x      = GetPos().x;
+    y      = GetPos().y + CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - 77;
+    width  = MSGBOX_LINE_WIDTH;
+    height = MSGBOX_LINE_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_LINE, x, y, width, height);
     y = GetPos().y + 45;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_LINE, x, y, width, height);
@@ -236,7 +249,8 @@ void SEASON3B::CNewUICursedTempleResult::RenderButtons()
     m_Button[CURSEDTEMPLERESULT_CLOSE].Render();
 }
 
-void SEASON3B::CNewUICursedTempleResult::RenderTextLine(const CursedTempleGameResult& resultinfo, int x, int y, DWORD color, DWORD backcolor)
+void SEASON3B::CNewUICursedTempleResult::RenderTextLine(const CursedTempleGameResult& resultinfo, int x, int y,
+                                                        DWORD color, DWORD backcolor)
 {
     wchar_t Text[200];
 
@@ -274,14 +288,17 @@ void SEASON3B::CNewUICursedTempleResult::RenderText()
 
     memset(&Text, 0, sizeof(wchar_t) * 200);
     mu_swprintf(Text, I18N::Game::HeroList);
-    DrawText(Text, m_Pos.x, m_Pos.y + 13, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH, false);
+    DrawText(Text, m_Pos.x, m_Pos.y + 13, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH,
+             false);
 
     memset(&Text, 0, sizeof(wchar_t) * 200);
-    mu_swprintf(Text, L"  %ls           %ls        %ls     %ls    %ls", I18N::Game::Camp, I18N::Game::Character, I18N::Game::Class, I18N::Game::EXP, I18N::Game::Point);
-    DrawText(Text, m_Pos.x, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH, false);
+    mu_swprintf(Text, L"  %ls           %ls        %ls     %ls    %ls", I18N::Game::Camp, I18N::Game::Character,
+                I18N::Game::Class, I18N::Game::EXP, I18N::Game::Point);
+    DrawText(Text, m_Pos.x, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH,
+             false);
 
     int i = 0;
-    for (auto iter = m_AlliedTeamGameResult.begin(); iter != m_AlliedTeamGameResult.end(); )
+    for (auto iter = m_AlliedTeamGameResult.begin(); iter != m_AlliedTeamGameResult.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -297,7 +314,7 @@ void SEASON3B::CNewUICursedTempleResult::RenderText()
     }
 
     i = 0;
-    for (auto emiter = m_IllusionTeamGameResult.begin(); emiter != m_IllusionTeamGameResult.end(); )
+    for (auto emiter = m_IllusionTeamGameResult.begin(); emiter != m_IllusionTeamGameResult.end();)
     {
         auto curiter = emiter;
         ++emiter;
@@ -314,7 +331,8 @@ void SEASON3B::CNewUICursedTempleResult::RenderText()
 
     memset(&Text, 0, sizeof(wchar_t) * 200);
     mu_swprintf(Text, I18N::Game::YouMayBeCompensatedByClickingOnTheCloseButton);
-    DrawText(Text, m_Pos.x, m_Pos.y + CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - 55, 0xFF0000FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH, false);
+    DrawText(Text, m_Pos.x, m_Pos.y + CURSEDTEMPLE_RESULT_WINDOW_HEIGHT - 55, 0xFF0000FF, 0x00000000, RT3_SORT_CENTER,
+             CURSEDTEMPLE_RESULT_WINDOW_WIDTH, false);
 }
 
 bool SEASON3B::CNewUICursedTempleResult::Render()
@@ -336,9 +354,9 @@ void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYT
 {
     auto data = (LPPMSG_CURSED_TEMPLE_RESULT)ReceiveBuffer;
 
-    int	alliedPoint = data->btAlliedPoint;
-    int	illusionPoint = data->btIllusionPoint;
-    int userCount = data->btUserCount;
+    int alliedPoint   = data->btAlliedPoint;
+    int illusionPoint = data->btIllusionPoint;
+    int userCount     = data->btUserCount;
 
     if (m_MyTeam == SEASON3A::eTeam_Allied)
     {
@@ -347,7 +365,8 @@ void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYT
         else
             m_WinState = 2;
 
-        if (2 > alliedPoint) m_WinState = 2;
+        if (2 > alliedPoint)
+            m_WinState = 2;
     }
     else
     {
@@ -356,7 +375,8 @@ void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYT
         else
             m_WinState = 2;
 
-        if (2 > illusionPoint) m_WinState = 2;
+        if (2 > illusionPoint)
+            m_WinState = 2;
     }
 
     int Offset = sizeof(PMSG_CURSED_TEMPLE_RESULT);
@@ -370,8 +390,8 @@ void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYT
 
         TempData.s_mapnumber = (short)data2->byMapNumber;
 
-        TempData.s_team = static_cast<SEASON3A::eCursedTempleTeam>(data2->btTeam);
-        TempData.s_class = gCharacterManager.ChangeServerClassTypeToClientClassType(data2->btClass);
+        TempData.s_team   = static_cast<SEASON3A::eCursedTempleTeam>(data2->btTeam);
+        TempData.s_class  = gCharacterManager.ChangeServerClassTypeToClientClassType(data2->btClass);
         TempData.s_addexp = data2->nAddExp;
 
         if (TempData.s_team == SEASON3A::eTeam_Allied)

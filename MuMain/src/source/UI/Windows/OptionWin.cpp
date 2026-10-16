@@ -17,19 +17,12 @@
 #include "UI/NewUI/NewUISystem.h"
 #include "I18N/All.h"
 
-#define	OW_BTN_GAP		25
-#define	OW_SLD_GAP		48
+#define OW_BTN_GAP 25
+#define OW_SLD_GAP 48
 
+COptionWin::COptionWin() {}
 
-
-
-COptionWin::COptionWin()
-{
-}
-
-COptionWin::~COptionWin()
-{
-}
+COptionWin::~COptionWin() {}
 
 void COptionWin::Create()
 {
@@ -39,14 +32,11 @@ void COptionWin::Create()
     m_Size.cx = int(REFERENCE_WIDTH * CSprite::ResolutionScaleX());
     m_Size.cy = int(REFERENCE_HEIGHT * CSprite::ResolutionScaleY());
 
-    SImgInfo aiiBack[WE_BG_MAX] =
-    {
-        { BITMAP_SYS_WIN, 0, 0, 128, 128 },
-        { BITMAP_OPTION_WIN, 0, 0, 213, 65 },
-        { BITMAP_SYS_WIN + 2, 0, 0, 213, 43 },
-        { BITMAP_SYS_WIN + 3, 0, 0, 5, 8 },
-        { BITMAP_SYS_WIN + 4, 0, 0, 5, 8 }
-    };
+    SImgInfo aiiBack[WE_BG_MAX] = {{BITMAP_SYS_WIN, 0, 0, 128, 128},
+                                   {BITMAP_OPTION_WIN, 0, 0, 213, 65},
+                                   {BITMAP_SYS_WIN + 2, 0, 0, 213, 43},
+                                   {BITMAP_SYS_WIN + 3, 0, 0, 5, 8},
+                                   {BITMAP_SYS_WIN + 4, 0, 0, 5, 8}};
     m_winBack.Create(aiiBack, 1, 30);
     m_winBack.SetLine(30);
 
@@ -56,15 +46,15 @@ void COptionWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    DWORD adwBtnClr[4] = { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0 };
+    DWORD adwBtnClr[4] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0};
     m_aBtn[OW_BTN_CLOSE].Create(108, 30, BITMAP_TEXT_BTN, 4, 2, 1);
     m_aBtn[OW_BTN_CLOSE].SetText(I18N::Game::Close388, adwBtnClr);
     CWin::RegisterButton(&m_aBtn[OW_BTN_CLOSE]);
 
-    SImgInfo iiThumb = { BITMAP_SLIDER, 0, 0, 13, 13 };
-    SImgInfo iiBack = { BITMAP_SLIDER + 2, 0, 0, 98, 13 };
-    SImgInfo iiGauge = { BITMAP_SLIDER + 1, 0, 0, 4, 7 };
-    RECT rcGauge = { 3, 3, 95, 10 };
+    SImgInfo iiThumb = {BITMAP_SLIDER, 0, 0, 13, 13};
+    SImgInfo iiBack  = {BITMAP_SLIDER + 2, 0, 0, 98, 13};
+    SImgInfo iiGauge = {BITMAP_SLIDER + 1, 0, 0, 4, 7};
+    RECT     rcGauge = {3, 3, 95, 10};
 
     for (int i = 0; i < OW_SLD_MAX; ++i)
         m_aSlider[i].Create(&iiThumb, &iiBack, &iiGauge, &rcGauge);
@@ -73,7 +63,7 @@ void COptionWin::Create()
     m_aSlider[OW_SLD_RENDER_LV].SetSlideRange(4);
 
     SetPosition((rInput.GetScreenWidth() - m_winBack.GetWidth()) / 2,
-        (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
+                (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
 
     UpdateDisplay();
 }
@@ -96,23 +86,18 @@ void COptionWin::SetPosition(int nXCoord, int nYCoord)
     const float winArtY = m_winBack.GetYPos() / CSprite::ResolutionScaleY();
     const float winArtW = m_winBack.GetWidth() / CSprite::ResolutionScaleX();
 
-    float nBtnPosX = winArtX + 52.0f;
-    float nBtnGap = (float)OW_BTN_GAP
-        + m_aBtn[0].GetHeight() / CSprite::ResolutionScaleY();
+    float nBtnPosX       = winArtX + 52.0f;
+    float nBtnGap        = (float)OW_BTN_GAP + m_aBtn[0].GetHeight() / CSprite::ResolutionScaleY();
     float nBtnPosBaseTop = winArtY + 52.0f;
     for (int i = 0; i <= OW_BTN_SLIDE_HELP; ++i)
         m_aBtn[i].SetPositionArt(nBtnPosX, nBtnPosBaseTop + i * nBtnGap);
 
     m_aBtn[OW_BTN_CLOSE].SetPositionArt(
-        winArtX + (winArtW - m_aBtn[OW_BTN_CLOSE].GetWidth()
-            / CSprite::ResolutionScaleX()) / 2.0f,
-        winArtY + 301.0f);
+        winArtX + (winArtW - m_aBtn[OW_BTN_CLOSE].GetWidth() / CSprite::ResolutionScaleX()) / 2.0f, winArtY + 301.0f);
 
-    float nSldGap = (float)OW_SLD_GAP
-        + m_aSlider[0].GetHeight() / CSprite::ResolutionScaleY();
-    float nSldPosBaseTop = m_aBtn[OW_BTN_SLIDE_HELP].GetYPos()
-        / CSprite::ResolutionScaleY()
-        + m_aBtn[0].GetHeight() / CSprite::ResolutionScaleY() + OW_SLD_GAP;
+    float nSldGap        = (float)OW_SLD_GAP + m_aSlider[0].GetHeight() / CSprite::ResolutionScaleY();
+    float nSldPosBaseTop = m_aBtn[OW_BTN_SLIDE_HELP].GetYPos() / CSprite::ResolutionScaleY() +
+                           m_aBtn[0].GetHeight() / CSprite::ResolutionScaleY() + OW_SLD_GAP;
     for (int i = 0; i < OW_SLD_MAX; ++i)
         m_aSlider[i].SetPositionArt(nBtnPosX, nSldPosBaseTop + i * nSldGap);
 }
@@ -135,8 +120,8 @@ bool COptionWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -207,20 +192,20 @@ void COptionWin::RenderControls()
     g_pRenderText->SetTextColor(CLRDW_WHITE);
     g_pRenderText->SetBgColor(0);
     g_pRenderText->RenderText(int(m_winBack.GetXPos() / g_fScreenRate_x),
-        int(m_winBack.GetYPos() / g_fScreenRate_y) + 10,
-        I18N::Game::Option385, m_winBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
+                              int(m_winBack.GetYPos() / g_fScreenRate_y) + 10, I18N::Game::Option385,
+                              m_winBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
 
-    const wchar_t* apszBtnText[3] =
-    { I18N::Game::AutomaticAttack, I18N::Game::BeepSoundForWhispering, I18N::Game::SlideHelp };
+    const wchar_t* apszBtnText[3] = {I18N::Game::AutomaticAttack, I18N::Game::BeepSoundForWhispering,
+                                     I18N::Game::SlideHelp};
     for (int i = 0; i <= OW_BTN_SLIDE_HELP; ++i)
     {
         g_pRenderText->RenderText(int(m_aBtn[i].GetXPos() / g_fScreenRate_x) + 24,
-            int(m_aBtn[i].GetYPos() / g_fScreenRate_y) + 4, apszBtnText[i]);
+                                  int(m_aBtn[i].GetYPos() / g_fScreenRate_y) + 4, apszBtnText[i]);
     }
 
-    int nTextPosY;
-    const wchar_t* apszSldText[OW_SLD_MAX] = { I18N::Game::Volume, I18N::Game::EffectLimitation };
-    int anVal[OW_SLD_MAX] = { g_pOption->GetVolumeLevel(), g_pOption->GetRenderLevel() * 2 + 5 };
+    int            nTextPosY;
+    const wchar_t* apszSldText[OW_SLD_MAX] = {I18N::Game::Volume, I18N::Game::EffectLimitation};
+    int            anVal[OW_SLD_MAX]       = {g_pOption->GetVolumeLevel(), g_pOption->GetRenderLevel() * 2 + 5};
 
     wchar_t szVal[3];
 

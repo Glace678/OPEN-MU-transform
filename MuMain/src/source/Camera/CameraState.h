@@ -14,31 +14,31 @@ public:
     ~CameraState() = default;
 
     // ========== Transform ==========
-    vec3_t Position;              // Camera world position
-    vec3_t Angle;                 // Euler angles [pitch, yaw, roll] in degrees
-    float Matrix[3][4];           // Cached transform matrix
+    vec3_t Position;      // Camera world position
+    vec3_t Angle;         // Euler angles [pitch, yaw, roll] in degrees
+    float  Matrix[3][4];  // Cached transform matrix
 
     // ========== View Frustum ==========
-    float ViewNear;               // Near clipping plane
-    float ViewFar;                // Far clipping plane
-    float FOV;                    // Field of view (degrees)
-    bool TopViewEnable;           // Top-down orthographic view
+    float ViewNear;       // Near clipping plane
+    float ViewFar;        // Far clipping plane
+    float FOV;            // Field of view (degrees)
+    bool  TopViewEnable;  // Top-down orthographic view
 
     // ========== Camera Behavior ==========
-    float Distance;               // Current distance from target
-    float DistanceTarget;         // Target distance (smooth interpolation)
-    short ZoomLevel;              // Camera zoom level (0-5)
+    float Distance;        // Current distance from target
+    float DistanceTarget;  // Target distance (smooth interpolation)
+    short ZoomLevel;       // Camera zoom level (0-5)
 
     // Custom camera distance (for special terrain)
     float CustomDistance;
 
     // ========== Projection Cache ==========
     // These are computed by CameraProjection and cached here
-    float PerspectiveX;           // Perspective factor X
-    float PerspectiveY;           // Perspective factor Y
-    int ScreenCenterX;            // Screen center X (pixels)
-    int ScreenCenterY;            // Screen center Y (pixels)
-    int ScreenCenterYFlip;        // Screen center Y flipped
+    float PerspectiveX;       // Perspective factor X
+    float PerspectiveY;       // Perspective factor Y
+    int   ScreenCenterX;      // Screen center X (pixels)
+    int   ScreenCenterY;      // Screen center Y (pixels)
+    int   ScreenCenterYFlip;  // Screen center Y flipped
 
     /**
      * @brief Updates the cached transform matrix from position and angle

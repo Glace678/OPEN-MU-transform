@@ -23,14 +23,13 @@ void ApplyDataRoot(int argc, char* argv[])
             continue;
         }
 
-        std::error_code error;
+        std::error_code             error;
         const std::filesystem::path dataRoot = std::filesystem::u8path(argv[argumentIndex + 1]);
         std::filesystem::current_path(dataRoot, error);
         if (error)
         {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                "Failed to set Android data root to '%s': %s",
-                argv[argumentIndex + 1], error.message().c_str());
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to set Android data root to '%s': %s",
+                         argv[argumentIndex + 1], error.message().c_str());
         }
         else
         {
@@ -40,14 +39,13 @@ void ApplyDataRoot(int argc, char* argv[])
             // per-install config even if SDL_SetHint ran before this point.
             if (SDL_setenv_unsafe("MU_CONFIG_FILE", configPath.c_str(), 1) != 0)
             {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                    "Failed to set MU_CONFIG_FILE to '%s'", configPath.c_str());
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to set MU_CONFIG_FILE to '%s'", configPath.c_str());
             }
         }
         return;
     }
 }
-} // namespace
+}  // namespace
 
 int main(int argc, char* argv[])
 {

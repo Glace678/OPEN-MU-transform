@@ -33,7 +33,7 @@
 #include "GameLogic/NPCs/npcBreeder.h"
 #include "GameLogic/Pets/GIPetManager.h"
 #include "Character/CSParts.h"
-#include "UI/Legacy/UIMapName.h"	// rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Events/Event.h"
@@ -48,21 +48,19 @@
 #include "GameLogic/Combat/DuelMgr.h"
 
 // File-scope editor state still owned by ZzzInterface.cpp (no shared header yet).
-extern int MonsterKey;
-extern int EditFlag;
-extern int SelectMonster, SelectModel, SelectMapping, SelectColor, SelectWall;
-extern float SelectMappingAngle, WallAngle;
-extern int BrushSize;
-extern bool EnableRandomObject;
+extern int     MonsterKey;
+extern int     EditFlag;
+extern int     SelectMonster, SelectModel, SelectMapping, SelectColor, SelectWall;
+extern float   SelectMappingAngle, WallAngle;
+extern int     BrushSize;
+extern bool    EnableRandomObject;
 extern OBJECT* PickObject;
-extern vec3_t PickObjectAngle;
-extern float PickObjectHeight;
-extern bool PickObjectLockHeight;
+extern vec3_t  PickObjectAngle;
+extern float   PickObjectHeight;
+extern bool    PickObjectLockHeight;
 
 namespace Editor
 {
-constexpr int kEditorPickHotspot = 100;
-
 void EditObjects()
 {
     if (EditFlag == EDIT_MONSTER)
@@ -70,10 +68,12 @@ void EditObjects()
         if (MouseLButtonPush)
         {
             MouseLButtonPush = false;
-            bool Success = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
+            bool Success     = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
             if (Success)
             {
-                CHARACTER* c = CreateMonster((EMonsterType)MonsterScript[SelectMonster].Type, (BYTE)(CollisionPosition[0] / TERRAIN_SCALE), (BYTE)(CollisionPosition[1] / TERRAIN_SCALE), MonsterKey++);
+                CHARACTER* c   = CreateMonster((EMonsterType)MonsterScript[SelectMonster].Type,
+                                               (BYTE)(CollisionPosition[0] / TERRAIN_SCALE),
+                                               (BYTE)(CollisionPosition[1] / TERRAIN_SCALE), MonsterKey++);
                 c->Object.Kind = KIND_EDIT;
             }
         }
@@ -91,11 +91,11 @@ void EditObjects()
         if (MouseRButtonPush)
         {
             MouseRButtonPush = false;
-            bool Success = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
+            bool Success     = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
             if (Success)
             {
-                OBJECT* o = CreateObject(SelectModel, CollisionPosition, PickObjectAngle);
-                int Scale = (int)TERRAIN_SCALE;
+                OBJECT* o      = CreateObject(SelectModel, CollisionPosition, PickObjectAngle);
+                int     Scale  = (int)TERRAIN_SCALE;
                 o->Position[0] = (float)((int)o->Position[0] / Scale + 0.5f) * Scale;
                 o->Position[1] = (float)((int)o->Position[1] / Scale + 0.5f) * Scale;
             }
@@ -105,7 +105,7 @@ void EditObjects()
             MouseLButtonPush = false;
             if (!PickObject)
             {
-                if (MouseX < kEditorPickHotspot && MouseY < kEditorPickHotspot)
+                if (MouseX < 100 && MouseY < 100)
                 {
                     PickObject = CreateObject(SelectModel, MouseTarget, PickObjectAngle);
                 }
@@ -113,7 +113,8 @@ void EditObjects()
                 {
                     PickObject = CollisionDetectObjects(PickObject);
                     if (PickObject)
-                        PickObjectHeight = PickObject->Position[2] - RequestTerrainHeight(PickObject->Position[0], PickObject->Position[1]);
+                        PickObjectHeight = PickObject->Position[2] -
+                                           RequestTerrainHeight(PickObject->Position[0], PickObject->Position[1]);
                 }
             }
         }
@@ -127,7 +128,7 @@ void EditObjects()
                     VectorCopy(CollisionPosition, PickObject->Position);
                     if (PickObjectLockHeight)
                     {
-                        int Scale = (int)TERRAIN_SCALE / 2;
+                        int Scale               = (int)TERRAIN_SCALE / 2;
                         PickObject->Position[0] = (float)((int)PickObject->Position[0] / Scale * Scale);
                         PickObject->Position[1] = (float)((int)PickObject->Position[1] / Scale * Scale);
                     }
@@ -150,7 +151,7 @@ void EditObjects()
                     PickObject->Scale += 0.02f * FPS_ANIMATION_FACTOR;
                 if (Core::Input::IsKeyDown('F'))
                     PickObject->Scale -= 0.02f * FPS_ANIMATION_FACTOR;
-                if (MouseX >= REFERENCE_WIDTH - kEditorPickHotspot && MouseY < kEditorPickHotspot)
+                if (MouseX >= REFERENCE_WIDTH - 100 && MouseY < 100)
                 {
                     DeleteObject(PickObject, &ObjectBlock[PickObject->Block]);
                     PickObject = NULL;
@@ -170,8 +171,9 @@ void EditObjects()
                         Position[0] += (float)(rand() % 2000 - 1000);
                         Position[1] += (float)(rand() % 2000 - 1000);
                         Position[2] = RequestTerrainHeight(Position[0], Position[1]);
-                        Angle[2] = (float)(rand() % 360);
-                        CreateObject(PickObject->Type, Position, Angle, PickObject->Scale + (float)(rand() % 16 - 8) * 0.01f);
+                        Angle[2]    = (float)(rand() % 360);
+                        CreateObject(PickObject->Type, Position, Angle,
+                                     PickObject->Scale + (float)(rand() % 16 - 8) * 0.01f);
                     }
                 }
                 DeleteObject(PickObject, &ObjectBlock[PickObject->Block]);
@@ -202,30 +204,30 @@ void EditObjects()
         {
             switch (SelectColor)
             {
-            case 0:
-                Vector(0.1f, 0.1f, 0.1f, Light);
-                break;
-            case 1:
-                Vector(-0.1f, -0.1f, -0.1f, Light);
-                break;
-            case 2:
-                Vector(0.05f, -0.05f, -0.05f, Light);
-                break;
-            case 3:
-                Vector(0.05f, 0.05f, -0.05f, Light);
-                break;
-            case 4:
-                Vector(-0.05f, 0.05f, -0.05f, Light);
-                break;
-            case 5:
-                Vector(-0.05f, 0.05f, 0.05f, Light);
-                break;
-            case 6:
-                Vector(-0.05f, -0.05f, 0.05f, Light);
-                break;
-            case 7:
-                Vector(0.05f, -0.05f, 0.05f, Light);
-                break;
+                case 0:
+                    Vector(0.1f, 0.1f, 0.1f, Light);
+                    break;
+                case 1:
+                    Vector(-0.1f, -0.1f, -0.1f, Light);
+                    break;
+                case 2:
+                    Vector(0.05f, -0.05f, -0.05f, Light);
+                    break;
+                case 3:
+                    Vector(0.05f, 0.05f, -0.05f, Light);
+                    break;
+                case 4:
+                    Vector(-0.05f, 0.05f, -0.05f, Light);
+                    break;
+                case 5:
+                    Vector(-0.05f, 0.05f, 0.05f, Light);
+                    break;
+                case 6:
+                    Vector(-0.05f, -0.05f, 0.05f, Light);
+                    break;
+                case 7:
+                    Vector(0.05f, -0.05f, 0.05f, Light);
+                    break;
             }
             AddTerrainLightClip(CollisionPosition[0], CollisionPosition[1], Light, BrushSize + 1, TerrainLight);
             CreateTerrainLight();
@@ -245,7 +247,10 @@ void EditObjects()
                     int Index5 = TERRAIN_INDEX_REPEAT(x, y + 1);
                     for (int i = 0; i < 3; i++)
                     {
-                        TerrainLight[Index1][i] = (TerrainLight[Index1][i] + TerrainLight[Index2][i] + TerrainLight[Index3][i] + TerrainLight[Index4][i] + TerrainLight[Index5][i]) * 0.2f;
+                        TerrainLight[Index1][i] =
+                            (TerrainLight[Index1][i] + TerrainLight[Index2][i] + TerrainLight[Index3][i] +
+                             TerrainLight[Index4][i] + TerrainLight[Index5][i]) *
+                            0.2f;
                     }
                 }
             }
@@ -267,8 +272,8 @@ void EditObjects()
                 }
             }
         }
-        int x = (int)SelectXF;
-        int y = (int)SelectYF;
+        int x      = (int)SelectXF;
+        int y      = (int)SelectYF;
         int Index1 = TERRAIN_INDEX_REPEAT(x, y);
         int Index2 = TERRAIN_INDEX_REPEAT(x + 1, y);
         int Index3 = TERRAIN_INDEX_REPEAT(x + 1, y + 1);
@@ -300,10 +305,14 @@ void EditObjects()
                     TerrainMappingAlpha[Index2] += 0.1f;
                     TerrainMappingAlpha[Index3] += 0.1f;
                     TerrainMappingAlpha[Index4] += 0.1f;
-                    if (TerrainMappingAlpha[Index1] > 1.f) TerrainMappingAlpha[Index1] = 1.f;
-                    if (TerrainMappingAlpha[Index2] > 1.f) TerrainMappingAlpha[Index2] = 1.f;
-                    if (TerrainMappingAlpha[Index3] > 1.f) TerrainMappingAlpha[Index3] = 1.f;
-                    if (TerrainMappingAlpha[Index4] > 1.f) TerrainMappingAlpha[Index4] = 1.f;
+                    if (TerrainMappingAlpha[Index1] > 1.f)
+                        TerrainMappingAlpha[Index1] = 1.f;
+                    if (TerrainMappingAlpha[Index2] > 1.f)
+                        TerrainMappingAlpha[Index2] = 1.f;
+                    if (TerrainMappingAlpha[Index3] > 1.f)
+                        TerrainMappingAlpha[Index3] = 1.f;
+                    if (TerrainMappingAlpha[Index4] > 1.f)
+                        TerrainMappingAlpha[Index4] = 1.f;
                 }
             }
             if (MouseRButton)

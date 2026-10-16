@@ -9,7 +9,8 @@
 // Character Selection State
 //=============================================================================
 
-class CharacterSelectionState {
+class CharacterSelectionState
+{
 private:
     int selectedIndex = -1;
 
@@ -17,31 +18,25 @@ public:
     static constexpr int NO_SELECTION = -1;
 
     // Check if a character is currently selected
-    bool HasSelection() const {
-        return selectedIndex >= 0 && selectedIndex < MAX_CHARACTERS_PER_ACCOUNT;
-    }
+    bool HasSelection() const { return selectedIndex >= 0 && selectedIndex < MAX_CHARACTERS_PER_ACCOUNT; }
 
     // Select a character by index (validates bounds)
-    void SelectCharacter(int index) {
-        if (index >= 0 && index < MAX_CHARACTERS_PER_ACCOUNT) {
+    void SelectCharacter(int index)
+    {
+        if (index >= 0 && index < MAX_CHARACTERS_PER_ACCOUNT)
+        {
             selectedIndex = index;
         }
     }
 
     // Clear the current selection
-    void ClearSelection() {
-        selectedIndex = NO_SELECTION;
-    }
+    void ClearSelection() { selectedIndex = NO_SELECTION; }
 
     // Get the selected character index (-1 if none)
-    int GetSelectedIndex() const {
-        return selectedIndex;
-    }
+    int GetSelectedIndex() const { return selectedIndex; }
 
     // Legacy accessor for backward compatibility (allows direct modification)
-    int& GetLegacyReference() {
-        return selectedIndex;
-    }
+    int& GetLegacyReference() { return selectedIndex; }
 };
 
 // Global character selection state
@@ -55,30 +50,33 @@ extern int& SelectedHero;
 // Scene Initialization State
 //=============================================================================
 
-class SceneInitializationState {
+class SceneInitializationState
+{
 private:
-    bool initLogIn = false;
-    bool initLoading = false;
+    bool initLogIn          = false;
+    bool initLoading        = false;
     bool initCharacterScene = false;
-    bool initMainScene = false;
-    bool enableMainRender = false;
+    bool initMainScene      = false;
+    bool enableMainRender   = false;
 
 public:
     // Reset all initialization flags
-    void ResetAll() {
-        initLogIn = false;
-        initLoading = false;
+    void ResetAll()
+    {
+        initLogIn          = false;
+        initLoading        = false;
         initCharacterScene = false;
-        initMainScene = false;
-        enableMainRender = false;
+        initMainScene      = false;
+        enableMainRender   = false;
     }
 
     // Reset flags when disconnecting from server
-    void ResetForDisconnect() {
-        initLogIn = false;
+    void ResetForDisconnect()
+    {
+        initLogIn          = false;
         initCharacterScene = false;
-        initMainScene = false;
-        enableMainRender = false;
+        initMainScene      = false;
+        enableMainRender   = false;
         // Note: initLoading is not reset on disconnect
     }
 
@@ -109,7 +107,7 @@ bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash);
 bool CheckAbuseNameFilter(wchar_t* Text);
 bool CheckName();
 BOOL CheckOptionMouseClick(int iOptionPos_y, BOOL bPlayClickSound = TRUE);
-int SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int iMaxLine, int iLineSize);
+int  SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int iMaxLine, int iLineSize);
 void SetEffectVolumeLevel(int level);
 
 // Rendering utilities

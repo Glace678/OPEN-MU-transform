@@ -10,11 +10,8 @@ enum class UIFontPlatform
     Portable,
 };
 
-inline constexpr std::wstring_view SelectUIFontFamily(
-    std::wstring_view configuredFamily,
-    std::wstring_view uiLocale,
-    std::wstring_view dataLanguage,
-    UIFontPlatform platform)
+inline constexpr std::wstring_view SelectUIFontFamily(std::wstring_view configuredFamily, std::wstring_view uiLocale,
+                                                      std::wstring_view dataLanguage, UIFontPlatform platform)
 {
     if (!configuredFamily.empty())
         return configuredFamily;
@@ -30,4 +27,4 @@ inline constexpr std::wstring_view SelectUIFontFamily(
 
     return platform == UIFontPlatform::Windows ? L"Tahoma" : L"DejaVu Sans";
 }
-} // namespace Core::Platform::Fonts
+}  // namespace Core::Platform::Fonts

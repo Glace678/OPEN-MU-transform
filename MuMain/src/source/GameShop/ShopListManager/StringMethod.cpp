@@ -12,17 +12,14 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "StringMethod.h"
 
-CStringMethod::CStringMethod() // OK
-{
-}
+CStringMethod::CStringMethod()  // OK
+{}
 
-CStringMethod::~CStringMethod() // OK
-{
-}
+CStringMethod::~CStringMethod()  // OK
+{}
 
-void CStringMethod::ConvertStringToDateTime(tm& datetime, std::wstring strdata) // OK
+void CStringMethod::ConvertStringToDateTime(tm& datetime, std::wstring strdata)  // OK
 {
-    memset(&datetime, 0, sizeof(datetime));
     if (strdata.length() >= 4)
     {
         datetime.tm_year = _wtoi(strdata.substr(0, 4).c_str()) - 1900;

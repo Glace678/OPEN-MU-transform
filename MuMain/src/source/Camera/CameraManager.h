@@ -82,31 +82,31 @@ private:
     ~CameraManager();
 
     // Singleton (no copy/move)
-    CameraManager(const CameraManager&) = delete;
+    CameraManager(const CameraManager&)            = delete;
     CameraManager& operator=(const CameraManager&) = delete;
 
     CameraMode m_CurrentMode;
-    ICamera* m_pActiveCamera;
-    bool m_ZoomLocked = true;  // F10 toggles; default = locked
+    ICamera*   m_pActiveCamera;
+    bool       m_ZoomLocked = true;  // F10 toggles; default = locked
 
     // Camera instances
     std::unique_ptr<ICamera> m_pDefaultCamera;
     std::unique_ptr<ICamera> m_pOrbitalCamera;
 #ifdef _EDITOR
     std::unique_ptr<ICamera> m_pFreeFlyCamera;
-    ICamera* m_pSpectatedCamera = nullptr;  // Camera being spectated while in FreeFly mode
+    ICamera*                 m_pSpectatedCamera = nullptr;  // Camera being spectated while in FreeFly mode
 
     // Saved g_Camera state for the spectated camera, so its Update() sees its own
     // previous state instead of FreeFly's values (which would corrupt yaw, distance, etc.)
     struct SpectatedState
     {
-        vec3_t Position = {};
-        vec3_t Angle = {};
-        float FOV = 0.0f;
-        float ViewFar = 0.0f;
-        float Distance = 0.0f;
-        float DistanceTarget = 0.0f;
-        bool HasData = false;
+        vec3_t Position       = {};
+        vec3_t Angle          = {};
+        float  FOV            = 0.0f;
+        float  ViewFar        = 0.0f;
+        float  Distance       = 0.0f;
+        float  DistanceTarget = 0.0f;
+        bool   HasData        = false;
     } m_Spectated;
 
     void SaveGlobalToSpectated();
@@ -119,6 +119,6 @@ private:
 public:
 #ifdef _EDITOR
     ICamera* GetSpectatedCamera() const { return m_pSpectatedCamera; }
-    bool GetSpectatedCameraState(vec3_t outPos, vec3_t outAngle) const;
+    bool     GetSpectatedCameraState(vec3_t outPos, vec3_t outAngle) const;
 #endif
 };

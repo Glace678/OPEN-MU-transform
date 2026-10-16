@@ -7,7 +7,6 @@
 #include "UI/NewUI/HUD/NewUIGensRanking.h"
 #include "UI/NewUI/NewUISystem.h"
 
-
 using namespace SEASON3B;
 
 #define TEMP_MAX_TEXT_LENGTH 1024
@@ -34,20 +33,20 @@ CNewUIGensRanking::~CNewUIGensRanking()
 void CNewUIGensRanking::Init()
 {
     m_nContribution = 0;
-    memset(m_szRanking, 0, sizeof(m_szRanking));
+    memset(m_szRanking, 0, sizeof(char) * TEAMNAME_LENTH);
 
     m_Pos.x = 0;
     m_Pos.y = 0;
 
-    memset(m_szGensTeam, 0, sizeof(m_szGensTeam));
+    memset(m_szGensTeam, 0, sizeof(char) * TEAMNAME_LENTH);
 
-    m_byGensInfluence = GENSTYPE_NONE;
+    m_byGensInfluence   = GENSTYPE_NONE;
     m_ptRenderMarkPos.x = 0;
     m_ptRenderMarkPos.y = 0;
 
     m_nNextContribution = 0;
 
-    memset(m_szTitleName, 0, sizeof(m_szTitleName));
+    memset(m_szTitleName, 0, sizeof(char) * TITLENAME_END * MAX_TITLELENGTH);
     SetTitleName();
 }
 
@@ -125,16 +124,20 @@ void CNewUIGensRanking::RenderFrame()
     RenderMark(m_Pos.x + 13 + (85 - 50) * 0.5f, m_Pos.y + 60 + (88 - 69) * 0.5f, m_byGensInfluence);
     RenderInfoFrame(m_Pos.x + 13, m_Pos.y + 250, 168, 140);
 
-    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + 60 + 3, GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
-    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + GENSRANKTEXTBACK_HEIGHT + 60 + 6, GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
+    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + 60 + 3, GENSRANKTEXTBACK_WIDTH,
+                GENSRANKTEXTBACK_HEIGHT);
+    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + GENSRANKTEXTBACK_HEIGHT + 60 + 6,
+                GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
 }
 
-void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth, int iTitleHeight)
+void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth,
+                                        int iTitleHeight)
 {
     EnableAlphaTest();
     glColor4f(0.f, 0.f, 0.f, 0.6f);
     RenderColor(float(iPosX + 3), float(iPosY + 2), float(iTitleWidth - 8), float(iTitleHeight));
-    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7), float(iHeight - iTitleHeight - 7));
+    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7),
+                float(iHeight - iTitleHeight - 7));
     EndRenderColor();
 
     RenderImage(IMAGE_GENSINFO_TOP_LEFT, iPosX, iPosY, 14, 14);
@@ -146,7 +149,8 @@ void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iH
     RenderImage(IMAGE_GENSINFO_TOP_PIXEL, iPosX + 6, iPosY, iTitleWidth - 12, 14);
     RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iTitleWidth - 14, iPosY + 6, 14, iTitleHeight - 6);
     RenderImage(IMAGE_GENSINFO_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6, 14);
-    RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14, iHeight - iTitleHeight - 14);
+    RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14,
+                iHeight - iTitleHeight - 14);
     RenderImage(IMAGE_GENSINFO_BOTTOM_PIXEL, iPosX + 6, iPosY + iHeight - 14, iWidth - 12, 14);
     RenderImage(IMAGE_GENSINFO_LEFT_PIXEL, iPosX, iPosY + 6, 14, iHeight - 14);
 }
@@ -154,8 +158,8 @@ void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iH
 void CNewUIGensRanking::RenderTexts()
 {
     wchar_t szText[TEMP_MAX_TEXT_LENGTH];
-    float _x = GetPos().x;
-    float _y = GetPos().y + 15;
+    float   _x = GetPos().x;
+    float   _y = GetPos().y + 15;
 
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -206,13 +210,15 @@ void CNewUIGensRanking::RenderTexts()
 
     wchar_t _szTempText[TEMP_MAX_TEXT_LENGTH];
     wchar_t _szText[NUM_LINE_CMB][MAX_TEXT_LENGTH];
-    int _TextLineCnt = 0;
-    float _fWidth = 180, _fHeight = 15;
+    int     _TextLineCnt = 0;
+    float   _fWidth = 180, _fHeight = 15;
 
     if (GetNextContribution() > 0)
     {
-        mu_swprintf(_szTempText, I18N::Game::TheAmountOfContributionNeededForPromotionToTheNextRankIsD, GetNextContribution());
-        _TextLineCnt = ::DivideStringByPixel(&_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, _szTempText, 140, true, '#');
+        mu_swprintf(_szTempText, I18N::Game::TheAmountOfContributionNeededForPromotionToTheNextRankIsD,
+                    GetNextContribution());
+        _TextLineCnt =
+            ::DivideStringByPixel(&_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, _szTempText, 140, true, '#');
         for (int j = 0; j < _TextLineCnt; ++j)
             g_pRenderText->RenderText(_x + 20, _y + (j * _fHeight) + 20, _szText[j], _fWidth, 0, RT3_SORT_LEFT);
     }
@@ -287,8 +293,8 @@ bool CNewUIGensRanking::UpdateMouseEvent()
     {
         if (SEASON3B::IsPress(VK_RBUTTON))
         {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }
@@ -434,10 +440,7 @@ bool CNewUIGensRanking::SetGensTeamName(const wchar_t* _pTeamName)
 {
     if (_pTeamName)
     {
-        // UI-2: destination holds TEAMNAME_LENTH characters; truncate instead
-        // of overflowing when the caller passes a longer team name.
-        wcsncpy(m_szGensTeam, _pTeamName, TEAMNAME_LENTH - 1);
-        m_szGensTeam[TEAMNAME_LENTH - 1] = L'\0';
+        wcscpy(m_szGensTeam, _pTeamName);
         return true;
     }
     return false;
@@ -450,7 +453,9 @@ wchar_t* CNewUIGensRanking::GetGensTeamName()
 
 void CNewUIGensRanking::SetTitleName()
 {
-    wchar_t _szTempText[256] = { 0, };
+    wchar_t _szTempText[256] = {
+        0,
+    };
     mu_swprintf(_szTempText, I18N::Game::GrandDukeDukeMarquisCountViscount);
     ::DivideStringByPixel(&m_szTitleName[0][0], TITLENAME_END, MAX_TITLELENGTH, _szTempText, 240, true, '#');
 }
@@ -463,7 +468,8 @@ wchar_t* CNewUIGensRanking::GetTitleName(BYTE _index)
         return m_szTitleName[TITLENAME_END - 1];
 }
 
-void CNewUIGensRanking::RanderMark(float x, float y, GENS_TYPE gensType, BYTE rankIndex, IMAGE_AREA imageArea, float yOffset)
+void CNewUIGensRanking::RanderMark(float x, float y, GENS_TYPE gensType, BYTE rankIndex, IMAGE_AREA imageArea,
+                                   float yOffset)
 {
     if (gensType == GENSTYPE_NONE)
     {
@@ -472,27 +478,27 @@ void CNewUIGensRanking::RanderMark(float x, float y, GENS_TYPE gensType, BYTE ra
 
     int imageType = (gensType == GENSTYPE_DUPRIAN) ? IMAGE_NEWMARK_DUPRIAN : IMAGE_NEWMARK_BARNERT;
 
-    float _width = GENSMARK_WIDTH;
-    float _height = GENSMARK_HEIGHT;
-    BITMAP_t* texture = Bitmaps.GetTexture(imageType);
-    float imageWidth = texture->Width;
-    float imageHeight = texture->Height;
+    float     _width      = GENSMARK_WIDTH;
+    float     _height     = GENSMARK_HEIGHT;
+    BITMAP_t* texture     = Bitmaps.GetTexture(imageType);
+    float     imageWidth  = texture->Width;
+    float     imageHeight = texture->Height;
 
     if (imageArea == MARK_BOOLEAN)
     {
-        _width = GENSMARK_WIDTH * m_fBooleanSize;
-        _height = GENSMARK_HEIGHT * m_fBooleanSize;
-        imageWidth = texture->Width * m_fBooleanSize;
+        _width      = GENSMARK_WIDTH * m_fBooleanSize;
+        _height     = GENSMARK_HEIGHT * m_fBooleanSize;
+        imageWidth  = texture->Width * m_fBooleanSize;
         imageHeight = texture->Height * m_fBooleanSize;
-        y = (yOffset - y - _height) / 2 + y;
-        x = (float)(x - _width + 1);
+        y           = (yOffset - y - _height) / 2 + y;
+        x           = (float)(x - _width + 1);
     }
 
-    int imageIndex = GetImageIndex(rankIndex);
+    int   imageIndex  = GetImageIndex(rankIndex);
     float columnIndex = imageIndex % 5;
-    float rowIndex = imageIndex / 5;
-    float u = columnIndex * _width / imageWidth;
-    float v = rowIndex * _height / imageHeight;
+    float rowIndex    = imageIndex / 5;
+    float u           = columnIndex * _width / imageWidth;
+    float v           = rowIndex * _height / imageHeight;
 
     RenderBitmap(imageType, x, y, _width, _height, u, v, _width / imageWidth, _height / imageHeight);
 }
@@ -511,4 +517,4 @@ int CNewUIGensRanking::GetImageIndex(BYTE rankIndex)
 
     return TITLENAME_END - rankIndex;
 }
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING

@@ -11,50 +11,45 @@
 #include "UIWindows.h"
 #ifdef ASG_ADD_GENS_SYSTEM
 #include "Engine/Object/ZzzInventory.h"
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif  // ASG_ADD_GENS_SYSTEM
 
+#define UIMN_SHOW_TIME       5000
+#define UIMN_ALPHA_VARIATION 0.015f
 
-
-
-#define	UIMN_SHOW_TIME			5000
-#define	UIMN_ALPHA_VARIATION	0.015f
-
-#define	UIMN_IMG_WIDTH			166.0f
-#define	UIMN_IMG_HEIGHT			90.0f
+#define UIMN_IMG_WIDTH  166.0f
+#define UIMN_IMG_HEIGHT 90.0f
 
 #ifdef ASG_ADD_GENS_SYSTEM
-#define UIMN_STRIFE_HEIGHT		28.0f
-#endif	// ASG_ADD_GENS_SYSTEM
+#define UIMN_STRIFE_HEIGHT 28.0f
+#endif  // ASG_ADD_GENS_SYSTEM
 
-#define	UIMN_IMG_POS_X		((::GetScreenWidth() * g_fScreenRate_x - UIMN_IMG_WIDTH) / 2.0f)
-#define	UIMN_IMG_POS_Y		(220.0f * g_fScreenRate_y)
+#define UIMN_IMG_POS_X ((::GetScreenWidth() * g_fScreenRate_x - UIMN_IMG_WIDTH) / 2.0f)
+#define UIMN_IMG_POS_Y (220.0f * g_fScreenRate_y)
 
 #ifdef ASG_ADD_GENS_SYSTEM
-#define UIMN_STRIFE_POS_Y	(UIMN_IMG_POS_Y - UIMN_STRIFE_HEIGHT)
-#endif	// ASG_ADD_GENS_SYSTEM
+#define UIMN_STRIFE_POS_Y (UIMN_IMG_POS_Y - UIMN_STRIFE_HEIGHT)
+#endif  // ASG_ADD_GENS_SYSTEM
 
 CUIMapName::CUIMapName()
 {
     InitImgPathMap();
 }
 
-CUIMapName::~CUIMapName()
-{
-}
+CUIMapName::~CUIMapName() {}
 
 void CUIMapName::InitImgPathMap()
 {
     std::wstring strFolderName = L"Local\\" + g_strSelectedML + L"\\ImgsMapName\\";
 
-    m_mapImgPath[0] = strFolderName + L"lorencia.tga";
-    m_mapImgPath[1] = strFolderName + L"dungeun.tga";
-    m_mapImgPath[2] = strFolderName + L"devias.tga";
-    m_mapImgPath[3] = strFolderName + L"noria.tga";
-    m_mapImgPath[4] = strFolderName + L"losttower.tga";
-    m_mapImgPath[6] = strFolderName + L"stadium.tga";
-    m_mapImgPath[7] = strFolderName + L"atlans.tga";
-    m_mapImgPath[8] = strFolderName + L"tarcan.tga";
-    m_mapImgPath[9] = strFolderName + L"devilsquare.tga";
+    m_mapImgPath[0]  = strFolderName + L"lorencia.tga";
+    m_mapImgPath[1]  = strFolderName + L"dungeun.tga";
+    m_mapImgPath[2]  = strFolderName + L"devias.tga";
+    m_mapImgPath[3]  = strFolderName + L"noria.tga";
+    m_mapImgPath[4]  = strFolderName + L"losttower.tga";
+    m_mapImgPath[6]  = strFolderName + L"stadium.tga";
+    m_mapImgPath[7]  = strFolderName + L"atlans.tga";
+    m_mapImgPath[8]  = strFolderName + L"tarcan.tga";
+    m_mapImgPath[9]  = strFolderName + L"devilsquare.tga";
     m_mapImgPath[10] = strFolderName + L"Icarus.tga";
     m_mapImgPath[11] = strFolderName + L"bloodcastle.tga";
     m_mapImgPath[12] = strFolderName + L"bloodcastle.tga";
@@ -120,25 +115,25 @@ void CUIMapName::InitImgPathMap()
 #ifdef ASG_ADD_MAP_KARUTAN
     m_mapImgPath[80] = strFolderName + L"MapName_Karutan.tga";
     m_mapImgPath[81] = strFolderName + L"MapName_Karutan.tga";
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif  // ASG_ADD_MAP_KARUTAN
 }
 
 void CUIMapName::Init()
 {
-    m_eState = HIDE;
-    m_nOldWorld = -1;
-    m_dwOldTime = ::timeGetTime();
+    m_eState         = HIDE;
+    m_nOldWorld      = -1;
+    m_dwOldTime      = ::timeGetTime();
     m_dwDeltaTickSum = 0;
-    m_fAlpha = 1.0f;
+    m_fAlpha         = 1.0f;
 #ifdef ASG_ADD_GENS_SYSTEM
     m_bStrife = false;
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif  // ASG_ADD_GENS_SYSTEM
 }
 
 void CUIMapName::ShowMapName()
 {
-    m_eState = FADEIN;
-    m_fAlpha = 0.2f;
+    m_eState         = FADEIN;
+    m_fAlpha         = 0.2f;
     m_dwDeltaTickSum = 0;
 
     if (gMapManager.WorldActive == WD_40AREA_FOR_GM)
@@ -159,43 +154,43 @@ void CUIMapName::ShowMapName()
 
 #ifdef ASG_ADD_GENS_SYSTEM
         m_bStrife = ::IsStrifeMap(gMapManager.WorldActive);
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif  // ASG_ADD_GENS_SYSTEM
     }
 }
 
 void CUIMapName::Update()
 {
-    DWORD dwNowTime = ::timeGetTime();
+    DWORD dwNowTime   = ::timeGetTime();
     DWORD dwDeltaTick = dwNowTime - m_dwOldTime;
 
     switch (m_eState)
     {
-    case FADEIN:
-        m_fAlpha += UIMN_ALPHA_VARIATION * FPS_ANIMATION_FACTOR;
-        if (1.0f <= m_fAlpha)
-        {
-            m_eState = SHOW;
-            m_fAlpha = 1.0f;
-        }
-        break;
+        case FADEIN:
+            m_fAlpha += UIMN_ALPHA_VARIATION * FPS_ANIMATION_FACTOR;
+            if (1.0f <= m_fAlpha)
+            {
+                m_eState = SHOW;
+                m_fAlpha = 1.0f;
+            }
+            break;
 
-    case SHOW:
-        m_dwDeltaTickSum += dwDeltaTick;
-        if (m_dwDeltaTickSum > UIMN_SHOW_TIME)
-        {
-            m_eState = FADEOUT;
-            m_dwDeltaTickSum = 0;
-        }
-        break;
+        case SHOW:
+            m_dwDeltaTickSum += dwDeltaTick;
+            if (m_dwDeltaTickSum > UIMN_SHOW_TIME)
+            {
+                m_eState         = FADEOUT;
+                m_dwDeltaTickSum = 0;
+            }
+            break;
 
-    case FADEOUT:
-        m_fAlpha -= UIMN_ALPHA_VARIATION * FPS_ANIMATION_FACTOR;
-        if (0.0f >= m_fAlpha)
-        {
-            m_eState = HIDE;
-            m_fAlpha = 0.0f;
-        }
-        break;
+        case FADEOUT:
+            m_fAlpha -= UIMN_ALPHA_VARIATION * FPS_ANIMATION_FACTOR;
+            if (0.0f >= m_fAlpha)
+            {
+                m_eState = HIDE;
+                m_fAlpha = 0.0f;
+            }
+            break;
     }
 
     m_dwOldTime = dwNowTime;
@@ -213,11 +208,11 @@ void CUIMapName::Render()
 
 #ifdef ASG_ADD_GENS_SYSTEM
     if (m_bStrife)
-        ::RenderBitmap(BITMAP_INTERFACE_EX + 47, UIMN_IMG_POS_X, UIMN_STRIFE_POS_Y,
-            UIMN_IMG_WIDTH, UIMN_STRIFE_HEIGHT, 0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_STRIFE_HEIGHT / 32.0f, false, false);
-#endif	// ASG_ADD_GENS_SYSTEM
-    ::RenderBitmap(BITMAP_INTERFACE_EX + 45, UIMN_IMG_POS_X, UIMN_IMG_POS_Y,
-        UIMN_IMG_WIDTH, UIMN_IMG_HEIGHT, 0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_IMG_HEIGHT / 128.0f, false, false);
+        ::RenderBitmap(BITMAP_INTERFACE_EX + 47, UIMN_IMG_POS_X, UIMN_STRIFE_POS_Y, UIMN_IMG_WIDTH, UIMN_STRIFE_HEIGHT,
+                       0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_STRIFE_HEIGHT / 32.0f, false, false);
+#endif  // ASG_ADD_GENS_SYSTEM
+    ::RenderBitmap(BITMAP_INTERFACE_EX + 45, UIMN_IMG_POS_X, UIMN_IMG_POS_Y, UIMN_IMG_WIDTH, UIMN_IMG_HEIGHT, 0.0f,
+                   0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_IMG_HEIGHT / 128.0f, false, false);
 
     ::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     ::DisableAlphaBlend();

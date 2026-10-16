@@ -1,26 +1,23 @@
-﻿//////////////////////////////////////////////////////////////////////////
+﻿  //////////////////////////////////////////////////////////////////////////
 //  UIGuardsMan.cpp
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-
 
 #include "Guild/UIGuildInfo.h"
 #include "UIGuardsMan.h"
 #include "UI/NewUI/Inventory/NewUIMyInventory.h"
 #include "UI/NewUI/NewUISystem.h"
 
-CUIGuardsMan g_GuardsMan;
+    CUIGuardsMan g_GuardsMan;
 
 CUIGuardsMan::CUIGuardsMan()
 {
-    m_dwRegMark = 0;
+    m_dwRegMark  = 0;
     m_eRegStatus = REG_STATUS_NONE;
 }
 
-CUIGuardsMan::~CUIGuardsMan()
-{
-}
+CUIGuardsMan::~CUIGuardsMan() {}
 
 bool CUIGuardsMan::IsSufficentDeclareLevel()
 {
@@ -42,11 +39,11 @@ DWORD CUIGuardsMan::GetMyMarkCount()
     DWORD dwResult = 0;
 
     SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl = g_pMyInventory->GetInventoryCtrl();
-    ITEM* pItem = NULL;
+    ITEM*                          pItem             = NULL;
 
     for (int i = 0; i < (int)pNewInventoryCtrl->GetNumberOfItems(); ++i)
     {
-        pItem = pNewInventoryCtrl->GetItem(i);
+        pItem          = pNewInventoryCtrl->GetItem(i);
         int nItemLevel = pItem->Level;
         if (pItem->Type == ITEM_POTION + 21 && nItemLevel == 3)
         {
@@ -60,11 +57,11 @@ DWORD CUIGuardsMan::GetMyMarkCount()
 int CUIGuardsMan::GetMyMarkSlotIndex()
 {
     SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl = g_pMyInventory->GetInventoryCtrl();
-    ITEM* pItem = NULL;
+    ITEM*                          pItem             = NULL;
 
     for (int i = 0; i < (int)pNewInventoryCtrl->GetNumberOfItems(); ++i)
     {
-        pItem = pNewInventoryCtrl->GetItem(i);
+        pItem          = pNewInventoryCtrl->GetItem(i);
         int nItemLevel = pItem->Level;
         if (pItem->Type == ITEM_POTION + 21 && nItemLevel == 3)
         {

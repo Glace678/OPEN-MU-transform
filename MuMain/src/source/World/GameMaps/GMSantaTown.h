@@ -13,25 +13,25 @@ public:
     static CGMSantaTownPtr Make();
     virtual ~CGMSantaTown();
 
-public:	// Object
+public:  // Object
     virtual bool CreateObject(OBJECT* o);
     virtual bool MoveObject(OBJECT* o);
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
 
-public:	// Character
+public:  // Character
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
+    virtual bool       MoveMonsterVisual(OBJECT* o, BMD* b);
+    virtual void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
-public: // Sound
+public:  // Sound
     virtual bool PlayMonsterSound(OBJECT* o);
     virtual void PlayObjectSound(OBJECT* o);
-    void PlayBGM();
+    void         PlayBGM();
 
 public:
     void Init();

@@ -6,77 +6,82 @@
 #include "UI/NewUI/NewUIManager.h"
 
 HWND g_hWnd = nullptr;
-int MouseX = 0, MouseY = 0;
+int  MouseX = 0, MouseY = 0;
 bool MouseLButton = false, MouseLButtonPush = false, MouseLButtonPop = false;
 bool MouseRButton = false, MouseRButtonPush = false, MouseRButtonPop = false;
 
 namespace
 {
-    using namespace SEASON3B;
-    struct ObservedEvent { bool down; int x; int y; };
-    std::vector<ObservedEvent> events;
+using namespace SEASON3B;
+struct ObservedEvent
+{
+    bool down;
+    int  x;
+    int  y;
+};
+std::vector<ObservedEvent> events;
 
-    CALLBACK_RESULT Down(CNewUIMessageBoxBase*, const leaf::xstreambuf&)
+CALLBACK_RESULT Down(CNewUIMessageBoxBase*, const leaf::xstreambuf&)
+{
+    events.push_back({true, MouseX, MouseY});
+    return CALLBACK_CONTINUE;
+}
+CALLBACK_RESULT Up(CNewUIMessageBoxBase*, const leaf::xstreambuf&)
+{
+    events.push_back({false, MouseX, MouseY});
+    return CALLBACK_CONTINUE;
+}
+
+class TestMessage : public CNewUIMessageBoxBase
+{
+public:
+    TestMessage()
     {
-        events.push_back({true, MouseX, MouseY});
-        return CALLBACK_CONTINUE;
+        Create(10, 20, 100, 80);
+        AddCallbackFunc(Down, MSGBOX_EVENT_MOUSE_LBUTTON_DOWN);
+        AddCallbackFunc(Up, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
+        AddCallbackFunc(Down, MSGBOX_EVENT_MOUSE_RBUTTON_DOWN);
+        AddCallbackFunc(Up, MSGBOX_EVENT_MOUSE_RBUTTON_UP);
     }
-    CALLBACK_RESULT Up(CNewUIMessageBoxBase*, const leaf::xstreambuf&)
+    bool Update() override { return true; }
+    bool Render() override { return true; }
+};
+
+// Force allocator address reuse so queue identity is tested deterministically.
+class ReusedMessage : public TestMessage
+{
+public:
+    static void* operator new(std::size_t size)
     {
-        events.push_back({false, MouseX, MouseY});
-        return CALLBACK_CONTINUE;
+        alignas(std::max_align_t) static std::array<std::byte, 1024> memory{};
+        REQUIRE(size <= memory.size());
+        return memory.data();
     }
+    static void operator delete(void*) noexcept {}
+};
 
-    class TestMessage : public CNewUIMessageBoxBase
+struct Fixture
+{
+    CNewUIManager        ui;
+    CNewUIMessageBoxMng& manager = *CNewUIMessageBoxMng::GetInstance();
+    Fixture()
     {
-    public:
-        TestMessage()
-        {
-            Create(10, 20, 100, 80);
-            AddCallbackFunc(Down, MSGBOX_EVENT_MOUSE_LBUTTON_DOWN);
-            AddCallbackFunc(Up, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
-            AddCallbackFunc(Down, MSGBOX_EVENT_MOUSE_RBUTTON_DOWN);
-            AddCallbackFunc(Up, MSGBOX_EVENT_MOUSE_RBUTTON_UP);
-        }
-        bool Update() override { return true; }
-        bool Render() override { return true; }
-    };
-
-    // Force allocator address reuse so queue identity is tested deterministically.
-    class ReusedMessage : public TestMessage
+        events.clear();
+        MouseLButton = MouseLButtonPush = MouseLButtonPop = false;
+        MouseRButton = MouseRButtonPush = MouseRButtonPop = false;
+        REQUIRE(manager.Create(&ui));
+    }
+    ~Fixture() { manager.Release(); }
+    template <class T = TestMessage> T* Add()
     {
-    public:
-        static void* operator new(std::size_t size)
-        {
-            alignas(std::max_align_t) static std::array<std::byte, 1024> memory{};
-            REQUIRE(size <= memory.size());
-            return memory.data();
-        }
-        static void operator delete(void*) noexcept {}
-    };
-
-    struct Fixture
+        return manager.NewMessageBox(CNewUIMessageBoxFactory::TContainer<T>());
+    }
+    void Frame()
     {
-        CNewUIManager ui;
-        CNewUIMessageBoxMng& manager = *CNewUIMessageBoxMng::GetInstance();
-        Fixture()
-        {
-            events.clear();
-            MouseLButton = MouseLButtonPush = MouseLButtonPop = false;
-            MouseRButton = MouseRButtonPush = MouseRButtonPop = false;
-            REQUIRE(manager.Create(&ui));
-        }
-        ~Fixture() { manager.Release(); }
-        template<class T = TestMessage> T* Add()
-        {
-            return manager.NewMessageBox(CNewUIMessageBoxFactory::TContainer<T>());
-        }
-        void Frame()
-        {
-            manager.UpdateMouseEvent();
-            manager.Update();
-        }
-    };
+        manager.UpdateMouseEvent();
+        manager.Update();
+    }
+};
 }
 
 TEST_CASE("message box manager delivers a coalesced first tap using captured edge coordinates")
@@ -106,7 +111,7 @@ TEST_CASE("message box manager delivers a coalesced first tap using captured edg
 TEST_CASE("message box manager does not transfer pending contact to a replacement")
 {
     Fixture fixture;
-    auto* first = fixture.Add();
+    auto*   first = fixture.Add();
     fixture.manager.RecordPointerButton(true, true, 17, 24);
     fixture.manager.RecordPointerButton(true, false, 17, 24);
     fixture.Frame();
@@ -120,7 +125,7 @@ TEST_CASE("message box manager does not transfer pending contact to a replacemen
 TEST_CASE("message box manager stale queued events cannot target an allocator reused popup")
 {
     Fixture fixture;
-    auto* first = fixture.Add<ReusedMessage>();
+    auto*   first = fixture.Add<ReusedMessage>();
     fixture.manager.RecordPointerButton(true, true, 17, 24);
     fixture.manager.RecordPointerButton(true, false, 17, 24);
     fixture.manager.UpdateMouseEvent();
@@ -157,7 +162,7 @@ TEST_CASE("message box manager ignores a bare release and a held popup opener")
     fixture.Add();
     fixture.manager.RecordPointerButton(true, false, 17, 24);
     MouseLButton = MouseLButtonPush = false;
-    MouseLButtonPop = true;
+    MouseLButtonPop                 = true;
     fixture.Frame();
     CHECK(events.empty());
     fixture.manager.RecordPointerButton(true, false, 17, 24);
@@ -179,7 +184,7 @@ TEST_CASE("message box manager mobile latch and secondary button do not duplicat
     MouseRButton = MouseRButtonPush = true;
     fixture.Frame();
     MouseRButton = MouseRButtonPush = false;
-    MouseRButtonPop = true;
+    MouseRButtonPop                 = true;
     fixture.Frame();
     fixture.Frame();
     fixture.Frame();
@@ -214,13 +219,15 @@ TEST_CASE("message box manager idle creation with a stale push accepts a new rea
 TEST_CASE("message box manager callback replacement cannot cascade to the same address")
 {
     Fixture fixture;
-    auto* first = fixture.Add<ReusedMessage>();
-    first->AddCallbackFunc([](CNewUIMessageBoxBase* owner, const leaf::xstreambuf&) {
-        auto& manager = *CNewUIMessageBoxMng::GetInstance();
-        manager.DeleteMessageBox(owner);
-        manager.NewMessageBox(CNewUIMessageBoxFactory::TContainer<ReusedMessage>());
-        return CALLBACK_CONTINUE;
-    }, MSGBOX_EVENT_MOUSE_LBUTTON_DOWN);
+    auto*   first = fixture.Add<ReusedMessage>();
+    first->AddCallbackFunc(
+        [](CNewUIMessageBoxBase* owner, const leaf::xstreambuf&) {
+            auto& manager = *CNewUIMessageBoxMng::GetInstance();
+            manager.DeleteMessageBox(owner);
+            manager.NewMessageBox(CNewUIMessageBoxFactory::TContainer<ReusedMessage>());
+            return CALLBACK_CONTINUE;
+        },
+        MSGBOX_EVENT_MOUSE_LBUTTON_DOWN);
     fixture.manager.RecordPointerButton(true, true, 17, 24);
     fixture.manager.RecordPointerButton(true, false, 17, 24);
     fixture.manager.UpdateMouseEvent();

@@ -36,16 +36,16 @@ CNewUIInGameShop::~CNewUIInGameShop()
 
 void CNewUIInGameShop::Init()
 {
-    m_ItemAngle = false;
-    m_bLoadBanner = false;
-    m_bBannerLink = false;
-    m_iStorageTotalItemCnt = 0;
-    m_iStorageCurrentPageItemCnt = 0;
-    m_iStorageTotalPage = 0;
-    m_iStorageCurrentPage = 0;
-    m_iSelectedStorageItemIndex = 0;
+    m_ItemAngle                         = false;
+    m_bLoadBanner                       = false;
+    m_bBannerLink                       = false;
+    m_iStorageTotalItemCnt              = 0;
+    m_iStorageCurrentPageItemCnt        = 0;
+    m_iStorageTotalPage                 = 0;
+    m_iStorageCurrentPage               = 0;
+    m_iSelectedStorageItemIndex         = 0;
     m_iStorageCurrentPageReceiveItemCnt = 0;
-    m_bRequestCurrentPage = false;
+    m_bRequestCurrentPage               = false;
 }
 
 void CNewUIInGameShop::Release()
@@ -74,7 +74,7 @@ bool CNewUIInGameShop::Create(CNewUIManager* pNewUIMng, int x, int y)
     SetPos(x, y);
     LoadImages();
     SetBtnInfo();
-    Show(false);	//Set visible() to false
+    Show(false);  //visible()을 flase로
 
     return true;
 }
@@ -105,41 +105,55 @@ void CNewUIInGameShop::RenderFrame()
 
     int iSizeCategory = g_InGameShopSystem->GetSizeCategoriesAsSelectedZone();
 
-    if (iSizeCategory <= 0)
+    if (iSizeCategory < 0)
         return;
 
     // Category Deco Middle Render
     POINT CategoryDecoMiddlePos;
-    CategoryDecoMiddlePos.x = m_CategoryButton.GetPos(0).x + (IMAGE_IGS_CATEGORY_BTN_WIDTH / 2) - (IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH / 2);
+    CategoryDecoMiddlePos.x =
+        m_CategoryButton.GetPos(0).x + (IMAGE_IGS_CATEGORY_BTN_WIDTH / 2) - (IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH / 2);
 
     for (int i = 0; i < iSizeCategory - 1; i++)
     {
         CategoryDecoMiddlePos.y = m_CategoryButton.GetPos(i).y + IMAGE_IGS_CATEGORY_BTN_HEIGHT - 1;
 
-        RenderImage(IMAGE_IGS_CATEGORY_DECO_MIDDLE, CategoryDecoMiddlePos.x, CategoryDecoMiddlePos.y, IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH, IMAGE_IGS_CATEGORY_DECO_MIDDLE_HEIGHT);
+        RenderImage(IMAGE_IGS_CATEGORY_DECO_MIDDLE, CategoryDecoMiddlePos.x, CategoryDecoMiddlePos.y,
+                    IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH, IMAGE_IGS_CATEGORY_DECO_MIDDLE_HEIGHT);
     }
 
     // Category Deco Down Render
-    RenderImage(IMAGE_IGS_CATEGORY_DECO_DOWN, m_Pos.x, m_CategoryButton.GetPos(iSizeCategory - 1).y - 10, IMAGE_IGS_CATEGORY_DECO_DOWN_WIDTH, IMAGE_IGS_CATEGORY_DECO_DOWN_HEIGHT);
+    RenderImage(IMAGE_IGS_CATEGORY_DECO_DOWN, m_Pos.x, m_CategoryButton.GetPos(iSizeCategory - 1).y - 10,
+                IMAGE_IGS_CATEGORY_DECO_DOWN_WIDTH, IMAGE_IGS_CATEGORY_DECO_DOWN_HEIGHT);
 
     for (int cnt = g_InGameShopSystem->GetSizePackageAsDisplayPackage(); cnt < INGAMESHOP_DISPLAY_ITEMLIST_SIZE; cnt++)
     {
-        RenderImage(IMAGE_IGS_ITEMBOX_LOGO, m_Pos.x + IMAGE_IGS_ITEMBOX_LOGO_POS_X + ((cnt % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X), m_Pos.y + IMAGE_IGS_ITEMBOX_LOGO_POS_Y + ((cnt / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y), IMAGE_IGS_ITEMBOX_LOGO_SIZE, IMAGE_IGS_ITEMBOX_LOGO_SIZE);
+        RenderImage(IMAGE_IGS_ITEMBOX_LOGO,
+                    m_Pos.x + IMAGE_IGS_ITEMBOX_LOGO_POS_X +
+                        ((cnt % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X),
+                    m_Pos.y + IMAGE_IGS_ITEMBOX_LOGO_POS_Y +
+                        ((cnt / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y),
+                    IMAGE_IGS_ITEMBOX_LOGO_SIZE, IMAGE_IGS_ITEMBOX_LOGO_SIZE);
     }
 
-    RenderImage(IMAGE_IGS_STORAGE_PAGE, m_Pos.x + IMAGE_IGS_STORAGE_PAGE_POS_X, m_Pos.y + IMAGE_IGS_STORAGE_PAGE_POS_Y, IMGAE_IGS_STORAGE_PAGE_WIDTH, IMGAE_IGS_STORAGE_PAGE_HEIGHT);
+    RenderImage(IMAGE_IGS_STORAGE_PAGE, m_Pos.x + IMAGE_IGS_STORAGE_PAGE_POS_X, m_Pos.y + IMAGE_IGS_STORAGE_PAGE_POS_Y,
+                IMGAE_IGS_STORAGE_PAGE_WIDTH, IMGAE_IGS_STORAGE_PAGE_HEIGHT);
 }
 
 void CNewUIInGameShop::RenderTexts()
 {
-    wchar_t szText[256] = { 0, };
-    wchar_t szValue[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
+    wchar_t szValue[256] = {
+        0,
+    };
 
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
     mu_swprintf(szText, Hero->ID);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CHAR_NAME_POS_X, m_Pos.y + TEXT_IGS_CHAR_NAME_POS_Y, szText, TEXT_IGS_CHAR_NAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CHAR_NAME_POS_X, m_Pos.y + TEXT_IGS_CHAR_NAME_POS_Y, szText,
+                              TEXT_IGS_CHAR_NAME_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetFont(g_hFont);
 
     // Display Item
@@ -148,54 +162,74 @@ void CNewUIInGameShop::RenderTexts()
         CShopPackage* pPackage = g_InGameShopSystem->GetDisplayPackage(i);
         // Package
         g_pRenderText->SetTextColor(255, 255, 255, 255);
-        g_pRenderText->RenderText(m_Pos.x + IGS_PACKAGE_NAME_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X), m_Pos.y + IGS_PACKAGE_NAME_POS_Y + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y), pPackage->PackageProductName, IGS_PACKAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(
+            m_Pos.x + IGS_PACKAGE_NAME_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X),
+            m_Pos.y + IGS_PACKAGE_NAME_POS_Y + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y),
+            pPackage->PackageProductName, IGS_PACKAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
         // Package
         ConvertGold(pPackage->Price, szValue);
         mu_swprintf(szText, L"%ls %ls", szValue, pPackage->PricUnitName);
         g_pRenderText->SetTextColor(255, 238, 161, 255);
-        g_pRenderText->RenderText(m_Pos.x + IGS_PACKAGE_NAME_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X), m_Pos.y + IGS_PACKAGE_PRICE_POS_Y + 53 + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y), szText, IGS_PACKAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(
+            m_Pos.x + IGS_PACKAGE_NAME_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X),
+            m_Pos.y + IGS_PACKAGE_PRICE_POS_Y + 53 + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y),
+            szText, IGS_PACKAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
     }
     g_pRenderText->SetTextColor(255, 238, 161, 255);
 
     //CreditCard
     ConvertGold(g_InGameShopSystem->GetCashCreditCard(), szValue);
     mu_swprintf(szText, I18N::Game::MyWCoinS, L"");
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_CASH_POS_Y, szText, TEXT_IGS_CASH_WIDTH, 0, RT3_SORT_LEFT);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_CASH_POS_Y, szValue, TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_CASH_POS_Y, szText, TEXT_IGS_CASH_WIDTH,
+                              0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_CASH_POS_Y, szValue,
+                              TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
 
     //Prepaid
     ConvertGold(g_InGameShopSystem->GetCashPrepaid(), szValue);
     mu_swprintf(szText, I18N::Game::MyWCoinPS, L"");
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_MILEAGE_POS_Y, szText, TEXT_IGS_CASH_WIDTH, 0, RT3_SORT_LEFT);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_MILEAGE_POS_Y, szValue, TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_MILEAGE_POS_Y, szText,
+                              TEXT_IGS_CASH_WIDTH, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_MILEAGE_POS_Y, szValue,
+                              TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
 
     ConvertGold(g_InGameShopSystem->GetTotalMileage(), szValue, 1);
     mu_swprintf(szText, I18N::Game::GoblinPointsS, L"");
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_POINT_POS_Y, szText, TEXT_IGS_CASH_WIDTH, 0, RT3_SORT_LEFT);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_POINT_POS_Y, szValue, TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X, m_Pos.y + TEXT_IGS_POINT_POS_Y, szText,
+                              TEXT_IGS_CASH_WIDTH, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CASH_POS_X + 50, m_Pos.y + TEXT_IGS_POINT_POS_Y, szValue,
+                              TEXT_IGS_CASH_WIDTH - 56, 0, RT3_SORT_RIGHT);
 
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
 
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_NAME_POS_X, m_Pos.y + TEXT_IGS_STORAGE_NAME_POS_Y, I18N::Game::ItemName, TEXT_IGS_STORAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_NAME_POS_X, m_Pos.y + TEXT_IGS_STORAGE_NAME_POS_Y,
+                              I18N::Game::ItemName, TEXT_IGS_STORAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
 
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_TIME_POS_X, m_Pos.y + TEXT_IGS_STORAGE_NAME_POS_Y, I18N::Game::Duration, TEXT_IGS_STORAGE_TIME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_TIME_POS_X, m_Pos.y + TEXT_IGS_STORAGE_NAME_POS_Y,
+                              I18N::Game::Duration, TEXT_IGS_STORAGE_TIME_WIDTH, 0, RT3_SORT_CENTER);
 
     // Page Info
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 23, m_Pos.y + TEXT_IGS_PAGE_POS_Y, L"/", 10, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 23, m_Pos.y + TEXT_IGS_PAGE_POS_Y, L"/", 10, 0,
+                              RT3_SORT_CENTER);
 
     mu_swprintf(szText, L"%d", g_InGameShopSystem->GetSelectPage());
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 5, m_Pos.y + TEXT_IGS_PAGE_POS_Y, szText, 15, 0, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 5, m_Pos.y + TEXT_IGS_PAGE_POS_Y, szText, 15, 0,
+                              RT3_SORT_RIGHT);
 
     mu_swprintf(szText, L"%d", g_InGameShopSystem->GetTotalPages());
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 36, m_Pos.y + TEXT_IGS_PAGE_POS_Y, szText, 15, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_PAGE_POS_X + 36, m_Pos.y + TEXT_IGS_PAGE_POS_Y, szText, 15, 0,
+                              RT3_SORT_LEFT);
 
     // Storage Page Info
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 35, m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, L"/", 10, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 35,
+                              m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, L"/", 10, 0, RT3_SORT_CENTER);
     mu_swprintf(szText, L"%d", m_iStorageCurrentPage);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 12, m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, szText, 20, 0, RT3_SORT_RIGHT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 12,
+                              m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, szText, 20, 0, RT3_SORT_RIGHT);
     mu_swprintf(szText, L"%d", m_iStorageTotalPage);
-    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 48, m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, szText, 20, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_STORAGE_PAGE_INFO_POS_X + 48,
+                              m_Pos.y + TEXT_IGS_STORAGE_PAGE_INFO_POS_Y, szText, 20, 0, RT3_SORT_LEFT);
 
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 #if defined(FOR_WORK) && defined(_DEBUG)
@@ -211,8 +245,8 @@ void CNewUIInGameShop::RenderTexts()
     ScriptVer = g_InGameShopSystem->GetCurrentBannerVer();
     mu_swprintf(szText, L"Banner Ver. %d.%d.%d", ScriptVer.Zone, ScriptVer.year, ScriptVer.yearId);
     g_pRenderText->RenderText(m_Pos.x + 12, m_Pos.y + 408, szText, 150, 0, RT3_SORT_LEFT);
-#endif // FOR_WORK
-#endif //KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // FOR_WORK
+#endif  //KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 }
 
 void CNewUIInGameShop::RenderButtons()
@@ -249,10 +283,10 @@ bool CNewUIInGameShop::IsInGameShopRect(float _x, float _y)
 
     RECT _TempRT;
 
-    _TempRT.top = 0;
+    _TempRT.top    = 0;
     _TempRT.bottom = IMAGE_IGS_BACK_HEIGHT;
-    _TempRT.left = 0;
-    _TempRT.right = IMAGE_IGS_BACK_WIDTH;
+    _TempRT.left   = 0;
+    _TempRT.right  = IMAGE_IGS_BACK_WIDTH;
 
     if (_x >= _TempRT.left && _x < _TempRT.right && _y < _TempRT.bottom && _y >= _TempRT.top)
         return true;
@@ -264,10 +298,10 @@ bool CNewUIInGameShop::IsInGameShopRect(float _x, float _y)
 
 void CNewUIInGameShop::SetConvertInvenCoord(WORD _ItemType, float _Width, float _Height)
 {
-    ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[_ItemType];
-    float _TempWidth = pItemAttr->Width * 20.0f;
-    float _TempHeight = pItemAttr->Height * 20.0f;
-    float _fCoodX = 0, _fCoodY = 0;
+    ITEM_ATTRIBUTE* pItemAttr   = &ItemAttribute[_ItemType];
+    float           _TempWidth  = pItemAttr->Width * 20.0f;
+    float           _TempHeight = pItemAttr->Height * 20.0f;
+    float           _fCoodX = 0, _fCoodY = 0;
 
     if (_ItemType == ITEM_WING_OF_STORM)
     {
@@ -279,15 +313,15 @@ void CNewUIInGameShop::SetConvertInvenCoord(WORD _ItemType, float _Width, float 
         _fCoodY = -10.0f;
     }
 
-    m_fRePos.x = (_Width / 2) - (_TempWidth / 2) + _fCoodX;
-    m_fRePos.y = (_Height / 2) - (_TempHeight / 2) + _fCoodY;
+    m_fRePos.x  = (_Width / 2) - (_TempWidth / 2) + _fCoodX;
+    m_fRePos.y  = (_Height / 2) - (_TempHeight / 2) + _fCoodY;
     m_fReSize.x = _TempWidth;
     m_fReSize.y = _TempHeight;
 }
 void CNewUIInGameShop::SetRateScale(int _ItemType)
 {
-    const float _fRate_Value = 0.703f;
-    ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[_ItemType];
+    const float     _fRate_Value = 0.703f;
+    ITEM_ATTRIBUTE* pItemAttr    = &ItemAttribute[_ItemType];
 
     if (_ItemType == ITEM_WING_OF_STORM)
     {
@@ -343,14 +377,12 @@ void CNewUIInGameShop::RenderDisplayItems()
     {
         float aspect = (float)WindowWidth / (float)WindowHeight;
         float fovRad = 2.0f * 0.5f * Q_PI / 180.0f;
-        float f = 1.0f / tanf(fovRad);
-        float zNear = RENDER_ITEMVIEW_NEAR;
-        float zFar  = RENDER_ITEMVIEW_FAR;
+        float f      = 1.0f / tanf(fovRad);
+        float zNear  = RENDER_ITEMVIEW_NEAR;
+        float zFar   = RENDER_ITEMVIEW_FAR;
         float cpuProj[16];
         BuildPerspectiveProjection(f, aspect, zNear, zFar, cpuProj);
-        float cpuView[16] = {
-            1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f
-        };
+        float cpuView[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
 
         GlobalUBO::Instance().SetProj(cpuProj);
         GlobalUBO::Instance().SetView(cpuView);
@@ -358,8 +390,7 @@ void CNewUIInGameShop::RenderDisplayItems()
         // g_Camera.Matrix (3x4 row-major, same layout CameraProjection::GetOpenGLMatrix() used to
         // produce from a GL_MODELVIEW_MATRIX read) is identity here, matching cpuView above.
         static const float s_IdentityCameraMatrix[3][4] = {
-            {1.f,0.f,0.f,0.f}, {0.f,1.f,0.f,0.f}, {0.f,0.f,1.f,0.f}
-        };
+            {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}};
         memcpy(g_Camera.Matrix, s_IdentityCameraMatrix, sizeof(g_Camera.Matrix));
     }
     EnableDepthTest();
@@ -372,7 +403,7 @@ void CNewUIInGameShop::RenderDisplayItems()
         int iPosX = IGS_ITEMRENDER_POS_X_STANDAD + (IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X * (i % IGS_NUM_ITEMS_WIDTH));
         int iPosY = IGS_ITEMRENDER_POS_Y_STANDAD + (IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y * (i / IGS_NUM_ITEMS_HEIGHT));
         RenderItem3D(iPosX, iPosY, IGS_ITEMRENDER_POS_WIDTH, IGS_ITEMRENDER_POS_HEIGHT,
-            g_InGameShopSystem->GetPackageItemCode(i), g_InGameShopSystem->GetPackageItemLevel(i), 0, 0, true);
+                     g_InGameShopSystem->GetPackageItemCode(i), g_InGameShopSystem->GetPackageItemLevel(i), 0, 0, true);
     }
 
     UpdateMousePositionn();
@@ -406,9 +437,9 @@ bool CNewUIInGameShop::BtnProcess()
 
     if (m_ListBoxTabButton.UpdateMouseEvent() != -1)
     {
-        char szCode = GetCurrentStorageCode();
+        char szCode                 = GetCurrentStorageCode();
         m_iSelectedStorageItemIndex = 0;
-        m_bRequestCurrentPage = true;
+        m_bRequestCurrentPage       = true;
         SocketClient->ToGameServer()->SendCashShopStorageListRequest(1, szCode);
         return true;
     }
@@ -478,20 +509,21 @@ bool CNewUIInGameShop::BtnProcess()
 
         IGS_StorageItem* pSelectItem = m_StorageItemListBox.GetSelectedText();
 
-        if (iStorageIndex == IGS_SAFEKEEPING_LISTBOX)					// Storage
+        if (iStorageIndex == IGS_SAFEKEEPING_LISTBOX)  // 보관함
         {
             CMsgBoxIGSStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSStorageItemInfoLayout), &pMsgBox);
-            pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode, pSelectItem->m_szType,
-                pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
+            pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
+                                pSelectItem->m_szType, pSelectItem->m_szName, pSelectItem->m_szNum,
+                                pSelectItem->m_szPeriod);
         }
-        else if (iStorageIndex == IGS_PRESENTBOX_LISTBOX)				// Gift storage
+        else if (iStorageIndex == IGS_PRESENTBOX_LISTBOX)  // 선물 보관함
         {
             CMsgBoxIGSGiftStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSGiftStorageItemInfoLayout), &pMsgBox);
             pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
-                pSelectItem->m_szType, pSelectItem->m_szSendUserName, pSelectItem->m_szMessage,
-                pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
+                                pSelectItem->m_szType, pSelectItem->m_szSendUserName, pSelectItem->m_szMessage,
+                                pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
         }
         return true;
     }
@@ -542,16 +574,19 @@ bool CNewUIInGameShop::BtnProcess()
 void CNewUIInGameShop::SetBtnInfo()
 {
     m_CloseButton.ChangeButtonImgState(true, IMAGE_IGS_EXIT_BTN, false);
-    m_CloseButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_EXIT_BTN_POS_X, m_Pos.y + IMAGE_IGS_EXIT_BTN_POS_Y, IMAGE_IGS_EXIT_BTN_WIDTH, IMAGE_IGS_EXIT_BTN_HEIGHT);
+    m_CloseButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_EXIT_BTN_POS_X, m_Pos.y + IMAGE_IGS_EXIT_BTN_POS_Y,
+                                   IMAGE_IGS_EXIT_BTN_WIDTH, IMAGE_IGS_EXIT_BTN_HEIGHT);
     m_CloseButton.ChangeToolTipText(&I18N::Game::Close388, true);
     m_ListBoxTabButton.CreateRadioGroup(IGS_TOTAL_LISTBOX, IMAGE_IGS_LEFT_TAB);
-    m_ListBoxTabButton.ChangeRadioButtonInfo(true, m_Pos.x + IMAGE_IGS_TAB_BTN_POS_X, m_Pos.y + IMAGE_IGS_TAB_BTN_POS_Y, IMAGE_IGS_TAB_BTN_WIDTH, IMAGE_IGS_TAB_BTN_HEIGHT, IMAGE_IGS_TAB_BTN_DISTANCE);
+    m_ListBoxTabButton.ChangeRadioButtonInfo(true, m_Pos.x + IMAGE_IGS_TAB_BTN_POS_X, m_Pos.y + IMAGE_IGS_TAB_BTN_POS_Y,
+                                             IMAGE_IGS_TAB_BTN_WIDTH, IMAGE_IGS_TAB_BTN_HEIGHT,
+                                             IMAGE_IGS_TAB_BTN_DISTANCE);
     m_ListBoxTabButton.ChangeButtonState(SEASON3B::BUTTON_STATE_DOWN, 0);
     m_ListBoxTabButton.ChangeButtonState(IGS_SAFEKEEPING_LISTBOX, BITMAP_UNKNOWN, SEASON3B::BUTTON_STATE_UP, 0);
     m_ListBoxTabButton.ChangeButtonState(IGS_PRESENTBOX_LISTBOX, BITMAP_UNKNOWN, SEASON3B::BUTTON_STATE_UP, 0);
     m_ListBoxTabButton.ChangeButtonState(IGS_PRESENTBOX_LISTBOX, IMAGE_IGS_RIGHT_TAB, SEASON3B::BUTTON_STATE_DOWN, 0);
 
-   std::wstring strText;
+    std::wstring            strText;
     std::list<std::wstring> TextList;
     strText = I18N::Game::Storage;
     TextList.push_back(strText);
@@ -564,42 +599,55 @@ void CNewUIInGameShop::SetBtnInfo()
     for (int i = 0; i < INGAMESHOP_DISPLAY_ITEMLIST_SIZE; i++)
     {
         m_ViewDetailButton[i].ChangeButtonImgState(true, IMAGE_IGS_VIEWDETAIL_BTN, true, false, true);
-        m_ViewDetailButton[i].ChangeButtonInfo(IMAGE_IGS_VIEWDETAIL_BTN_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X), IMAGE_IGS_VIEWDETAIL_BTN_POS_Y + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y), IMAGE_IGS_VIEWDETAIL_BTN_WIDTH, IMAGE_IGS_VIEWDETAIL_BTN_HEIGHT);
+        m_ViewDetailButton[i].ChangeButtonInfo(
+            IMAGE_IGS_VIEWDETAIL_BTN_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X),
+            IMAGE_IGS_VIEWDETAIL_BTN_POS_Y + ((i / IGS_NUM_ITEMS_HEIGHT) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_Y),
+            IMAGE_IGS_VIEWDETAIL_BTN_WIDTH, IMAGE_IGS_VIEWDETAIL_BTN_HEIGHT);
         m_ViewDetailButton[i].MoveTextPos(0, -1);
         m_ViewDetailButton[i].ChangeText(&I18N::Game::Buy1124);
     }
 
     m_CashGiftButton.ChangeButtonImgState(true, IMAGE_IGS_ITEMGIFT_BTN, true);
-    m_CashGiftButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_ITEMGIFT_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y, IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
+    m_CashGiftButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_ITEMGIFT_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y,
+                                      IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
     m_CashGiftButton.ChangeToolTipText(&I18N::Game::SendWCoin);
     m_CashChargeButton.ChangeButtonImgState(true, IMAGE_IGS_CASHGIFT_BTN, true);
-    m_CashChargeButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_CASHGIFT_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y, IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
-    m_CashChargeButton.ChangeToolTipText(GameConfig::GetInstance().IsSoloBalanceEnabled()
-        ? &I18N::Game::SoloShopExchange : &I18N::Game::RechargeWCoin);
+    m_CashChargeButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_CASHGIFT_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y,
+                                        IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
+    m_CashChargeButton.ChangeToolTipText(
+        GameConfig::GetInstance().IsSoloBalanceEnabled() ? &I18N::Game::SoloShopExchange : &I18N::Game::RechargeWCoin);
 
     m_CashRefreshButton.ChangeButtonImgState(true, IMAGE_IGS_REFRESH_BTN, true);
-    m_CashRefreshButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_REFRESH_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y, IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
+    m_CashRefreshButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_REFRESH_BTN_POS_X, m_Pos.y + IMAGE_IGS_ICON_BTN_POS_Y,
+                                         IMAGE_IGS_ICON_BTN_WIDTH, IMAGE_IGS_ICON_BTN_HEIGHT);
     m_CashRefreshButton.ChangeToolTipText(&I18N::Game::UpdateInformation);
 
     m_UseButton.ChangeButtonImgState(true, IMAGE_IGS_VIEWDETAIL_BTN, true, false, true);
-    m_UseButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_USE_BTN_POS_X, m_Pos.y + IMAGE_IGS_USE_BTN_POS_Y, IMAGE_IGS_VIEWDETAIL_BTN_WIDTH, IMAGE_IGS_VIEWDETAIL_BTN_HEIGHT);
+    m_UseButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_USE_BTN_POS_X, m_Pos.y + IMAGE_IGS_USE_BTN_POS_Y,
+                                 IMAGE_IGS_VIEWDETAIL_BTN_WIDTH, IMAGE_IGS_VIEWDETAIL_BTN_HEIGHT);
     m_UseButton.MoveTextPos(0, -1);
     m_UseButton.ChangeText(&I18N::Game::Use);
 
     m_PrevButton.ChangeButtonImgState(true, IMAGE_IGS_PAGE_LEFT, true);
-    m_PrevButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_PAGE_LEFT_POS_X, m_Pos.y + IMAGE_IGS_PAGE_BUTTON_POS_Y, IMAGE_IGS_PAGE_BTN_WIDTH, IMAGE_IGS_PAGE_BTN_HEIGHT);
+    m_PrevButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_PAGE_LEFT_POS_X, m_Pos.y + IMAGE_IGS_PAGE_BUTTON_POS_Y,
+                                  IMAGE_IGS_PAGE_BTN_WIDTH, IMAGE_IGS_PAGE_BTN_HEIGHT);
 
     // next
     m_NextButton.ChangeButtonImgState(true, IMAGE_IGS_PAGE_RIGHT, true);
-    m_NextButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_PAGE_RIGHT_POS_X, m_Pos.y + IMAGE_IGS_PAGE_BUTTON_POS_Y, IMAGE_IGS_PAGE_BTN_WIDTH, IMAGE_IGS_PAGE_BTN_HEIGHT);
+    m_NextButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_PAGE_RIGHT_POS_X, m_Pos.y + IMAGE_IGS_PAGE_BUTTON_POS_Y,
+                                  IMAGE_IGS_PAGE_BTN_WIDTH, IMAGE_IGS_PAGE_BTN_HEIGHT);
 
     // Storage Page prev
     m_StoragePrevButton.ChangeButtonImgState(true, IMAGE_IGS_STORAGE_PAGE_LEFT, true);
-    m_StoragePrevButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_STORAGE_PAGE_LEFT_POS_X - 12, m_Pos.y + IMAGE_IGS_STORAGE_PAGE_BTN_POS_Y - 3, IMGAE_IGS_STORAGE_PAGE_BTN_WIDTH, IMGAE_IGS_STORAGE_PAGE_BTN_HEIGHT);
+    m_StoragePrevButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_STORAGE_PAGE_LEFT_POS_X - 12,
+                                         m_Pos.y + IMAGE_IGS_STORAGE_PAGE_BTN_POS_Y - 3,
+                                         IMGAE_IGS_STORAGE_PAGE_BTN_WIDTH, IMGAE_IGS_STORAGE_PAGE_BTN_HEIGHT);
 
     // Storage Page next
     m_StorageNextButton.ChangeButtonImgState(true, IMAGE_IGS_STORAGE_PAGE_RIGHT, true);
-    m_StorageNextButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_STORAGE_PAGE_RIGHT_POS_X + 10, m_Pos.y + IMAGE_IGS_STORAGE_PAGE_BTN_POS_Y - 3, IMGAE_IGS_STORAGE_PAGE_BTN_WIDTH, IMGAE_IGS_STORAGE_PAGE_BTN_HEIGHT);
+    m_StorageNextButton.ChangeButtonInfo(m_Pos.x + IMAGE_IGS_STORAGE_PAGE_RIGHT_POS_X + 10,
+                                         m_Pos.y + IMAGE_IGS_STORAGE_PAGE_BTN_POS_Y - 3,
+                                         IMGAE_IGS_STORAGE_PAGE_BTN_WIDTH, IMGAE_IGS_STORAGE_PAGE_BTN_HEIGHT);
 }
 
 bool CNewUIInGameShop::Update()
@@ -627,8 +675,8 @@ bool CNewUIInGameShop::UpdateMouseEvent()
 
         if (SEASON3B::IsPress(VK_RBUTTON))
         {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }
@@ -665,12 +713,14 @@ bool CNewUIInGameShop::IsInGameShopOpen()
     if (Hero->Movement)
         return false;
 
-    if (!(Hero->SafeZone) && !(WD_0LORENCIA == gMapManager.WorldActive && WD_3NORIA == gMapManager.WorldActive && WD_2DEVIAS == gMapManager.WorldActive && WD_51HOME_6TH_CHAR == gMapManager.WorldActive))
+    if (!(Hero->SafeZone) && !(WD_0LORENCIA == gMapManager.WorldActive && WD_3NORIA == gMapManager.WorldActive &&
+                               WD_2DEVIAS == gMapManager.WorldActive && WD_51HOME_6TH_CHAR == gMapManager.WorldActive))
     {
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
         pMsgBox->Initialize(I18N::Game::Error, I18N::Game::YouCanOnlyOpenMUItemShopInATownOrSafeZone);
-        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::YouCanOnlyOpenMUItemShopInATownOrSafeZone);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>",
+                              I18N::Game::YouCanOnlyOpenMUItemShopInATownOrSafeZone);
         return false;
     }
 
@@ -679,7 +729,8 @@ bool CNewUIInGameShop::IsInGameShopOpen()
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
         pMsgBox->Initialize(I18N::Game::Error, I18N::Game::CannotOpenMUItemShopPleaseReconnectToTheGame);
-        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>", I18N::Game::CannotOpenMUItemShopPleaseReconnectToTheGame);
+        g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - false <%ls>",
+                              I18N::Game::CannotOpenMUItemShopPleaseReconnectToTheGame);
         return false;
     }
     g_ConsoleDebug->Write(MCD_NORMAL, L"InGameShopStatue.Txt Return - true");
@@ -713,8 +764,7 @@ void CNewUIInGameShop::InitBanner(wchar_t* pszFileName, wchar_t* pszBannerURL)
     {
         m_bLoadBanner = true;
 
-        // MEM-11: server-provided URL, copy bounded into the fixed member.
-        wcsncpy_s(m_szBannerURL, pszBannerURL ? pszBannerURL : L"", _TRUNCATE);
+        wcscpy(m_szBannerURL, pszBannerURL);
     }
 }
 
@@ -723,7 +773,8 @@ void CNewUIInGameShop::RenderBanner()
     if (m_bLoadBanner == false)
         return;
 
-    RenderImage(IMAGE_IGS_BANNER, IMAGE_IGS_BANNER_POS_X, IMAGE_IGS_BANNER_POS_Y, IMAGE_IGS_BANNER_WIDTH, IMAGE_IGS_BANNER_HEIGHT);
+    RenderImage(IMAGE_IGS_BANNER, IMAGE_IGS_BANNER_POS_X, IMAGE_IGS_BANNER_POS_Y, IMAGE_IGS_BANNER_WIDTH,
+                IMAGE_IGS_BANNER_HEIGHT);
 }
 
 bool CNewUIInGameShop::UpdateBanner()
@@ -731,8 +782,8 @@ bool CNewUIInGameShop::UpdateBanner()
     if (m_bLoadBanner == false || m_bBannerLink == false)
         return false;
 
-    if ((SEASON3B::IsPress(VK_LBUTTON))
-        && (SEASON3B::CheckMouseIn(IMAGE_IGS_BANNER_POS_X, IMAGE_IGS_BANNER_POS_Y, IMAGE_IGS_BANNER_WIDTH, IMAGE_IGS_BANNER_HEIGHT)))
+    if ((SEASON3B::IsPress(VK_LBUTTON)) && (SEASON3B::CheckMouseIn(IMAGE_IGS_BANNER_POS_X, IMAGE_IGS_BANNER_POS_Y,
+                                                                   IMAGE_IGS_BANNER_WIDTH, IMAGE_IGS_BANNER_HEIGHT)))
     {
         leaf::OpenExplorer(m_szBannerURL);
         return true;
@@ -778,7 +829,8 @@ void CNewUIInGameShop::InitZoneBtn()
 
     m_ZoneButton.UnRegisterRadioButton();
     m_ZoneButton.CreateRadioGroup(g_InGameShopSystem->GetSizeZones(), IMAGE_IGS_ZONE_BTN);
-    m_ZoneButton.ChangeRadioButtonInfo(true, m_Pos.x + IMAGE_IGS_ZONE_BTN_POS_X, m_Pos.y + IMAGE_IGS_ZONE_BTN_POS_Y, IMAGE_IGS_ZONE_BTN_WIDTH, IMAGE_IGS_ZONE_BTN_HEIGHT);
+    m_ZoneButton.ChangeRadioButtonInfo(true, m_Pos.x + IMAGE_IGS_ZONE_BTN_POS_X, m_Pos.y + IMAGE_IGS_ZONE_BTN_POS_Y,
+                                       IMAGE_IGS_ZONE_BTN_WIDTH, IMAGE_IGS_ZONE_BTN_HEIGHT);
     m_ZoneButton.SetFont(g_hFontBold);
     m_ZoneButton.ChangeRadioText(g_InGameShopSystem->GetZoneName());
     m_ZoneButton.ChangeFrame(0);
@@ -792,30 +844,37 @@ void CNewUIInGameShop::InitCategoryBtn()
         return;
 
     m_CategoryButton.UnRegisterRadioButton();
-    m_CategoryButton.CreateRadioGroup(g_InGameShopSystem->GetSizeCategoriesAsSelectedZone(), IMAGE_IGS_CATEGORY_BTN, true);
-    m_CategoryButton.ChangeRadioButtonInfo(false, m_Pos.x + IMAGE_IGS_CATEGORY_BTN_POS_X, m_Pos.y + IMAGE_IGS_CATEGORY_BTN_POS_Y, IMAGE_IGS_CATEGORY_BTN_WIDTH, IMAGE_IGS_CATEGORY_BTN_HEIGHT, IMAGE_IGS_CATEGORY_BTN_DISTANCE);
+    m_CategoryButton.CreateRadioGroup(g_InGameShopSystem->GetSizeCategoriesAsSelectedZone(), IMAGE_IGS_CATEGORY_BTN,
+                                      true);
+    m_CategoryButton.ChangeRadioButtonInfo(false, m_Pos.x + IMAGE_IGS_CATEGORY_BTN_POS_X,
+                                           m_Pos.y + IMAGE_IGS_CATEGORY_BTN_POS_Y, IMAGE_IGS_CATEGORY_BTN_WIDTH,
+                                           IMAGE_IGS_CATEGORY_BTN_HEIGHT, IMAGE_IGS_CATEGORY_BTN_DISTANCE);
     m_CategoryButton.ChangeButtonState(SEASON3B::BUTTON_STATE_DOWN, 2);
     m_CategoryButton.SetFont(g_hFontBold);
     m_CategoryButton.ChangeRadioText(g_InGameShopSystem->GetCategoryName());
     m_CategoryButton.ChangeFrame(0);
 }
 
-void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int iStorageGroupCode, int iProductSeq, int iPriceSeq, int iCashPoint, wchar_t chItemType, wchar_t* pszUserName /* = NULL */, wchar_t* pszMessage /* = NULL */)
+void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int iStorageGroupCode, int iProductSeq,
+                                      int iPriceSeq, int iCashPoint, wchar_t chItemType,
+                                      wchar_t* pszUserName /* = NULL */, wchar_t* pszMessage /* = NULL */)
 {
-    int iValue = -1;
-    wchar_t szText[MAX_TEXT_LENGTH] = { '\0', };
+    int     iValue                  = -1;
+    wchar_t szText[MAX_TEXT_LENGTH] = {
+        '\0',
+    };
     IGS_StorageItem Item;
 
-    Item.m_bIsSelected = FALSE;
-    Item.m_iStorageSeq = iStorageSeq;
-    Item.m_iStorageItemSeq = iStorageItemSeq;
+    Item.m_bIsSelected       = FALSE;
+    Item.m_iStorageSeq       = iStorageSeq;
+    Item.m_iStorageItemSeq   = iStorageItemSeq;
     Item.m_iStorageGroupCode = iStorageGroupCode;
-    Item.m_iProductSeq = iProductSeq;
-    Item.m_iPriceSeq = iPriceSeq;
-    Item.m_iCashPoint = iCashPoint;
-    Item.m_iNum = 1;
-    Item.m_szType = chItemType;
-    Item.m_wItemCode = -1;
+    Item.m_iProductSeq       = iProductSeq;
+    Item.m_iPriceSeq         = iPriceSeq;
+    Item.m_iCashPoint        = iCashPoint;
+    Item.m_iNum              = 1;
+    Item.m_szType            = chItemType;
+    Item.m_wItemCode         = -1;
 
     if (pszUserName == NULL)
     {
@@ -823,8 +882,7 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
     }
     else
     {
-        // MEM-11: server-parsed user name, copy bounded into the fixed member.
-        wcsncpy_s(Item.m_szSendUserName, pszUserName, _TRUNCATE);
+        wcscpy(Item.m_szSendUserName, pszUserName);
     }
 
     if (pszMessage == NULL)
@@ -833,13 +891,14 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
     }
     else
     {
-        // MEM-11: server-parsed message, copy bounded into the fixed member.
-        wcsncpy_s(Item.m_szMessage, pszMessage, _TRUNCATE);
+        wcscpy(Item.m_szMessage, pszMessage);
     }
 
     if (chItemType == 'C' || chItemType == 'c')
     {
-        wchar_t szValue[MAX_TEXT_LENGTH] = { '\0', };
+        wchar_t szValue[MAX_TEXT_LENGTH] = {
+            '\0',
+        };
         ConvertGold(iCashPoint, szValue);
         // Name
         mu_swprintf(Item.m_szName, I18N::Game::WCoinSCoins, szValue);
@@ -856,12 +915,15 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
         if (iPriceSeq > 0)
         {
             // Name
-            if (g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue, Item.m_szName) == false)
+            if (g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq,
+                                                               CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue,
+                                                               Item.m_szName) == false)
             {
                 mu_swprintf(Item.m_szName, L"aaa");
             }
 
-            g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq,
+                                                           CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM, iValue, szText);
             if (iValue > 0)
             {
                 mu_swprintf(Item.m_szNum, L"%d %ls", iValue, szText);
@@ -873,7 +935,8 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
             }
 
             // Period
-            g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromPriceSeq(
+                iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
             if (iValue > 0)
             {
                 mu_swprintf(Item.m_szPeriod, L"%d %ls", iValue, szText);
@@ -883,16 +946,19 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                 mu_swprintf(Item.m_szPeriod, L"-");
             }
 
-            g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMCODE, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromPriceSeq(
+                iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMCODE, iValue, szText);
             Item.m_wItemCode = iValue;
         }
         else
         {
-            if (g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue, Item.m_szName) == false)
+            if (g_InGameShopSystem->GetProductInfoFromProductSeq(
+                    iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue, Item.m_szName) == false)
                 return;
 
             // Num
-            g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM,
+                                                             iValue, szText);
             if (iValue > 0)
             {
                 mu_swprintf(Item.m_szNum, L"%d %ls", iValue, szText);
@@ -904,7 +970,8 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
             }
 
             // Period
-            g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromProductSeq(
+                iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
             if (iValue > 0)
             {
                 mu_swprintf(Item.m_szPeriod, L"%d %ls", iValue, szText);
@@ -914,7 +981,8 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                 mu_swprintf(Item.m_szPeriod, L"-");
             }
 
-            g_InGameShopSystem->GetProductInfoFromProductSeq(iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMCODE, iValue, szText);
+            g_InGameShopSystem->GetProductInfoFromProductSeq(
+                iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMCODE, iValue, szText);
             Item.m_wItemCode = iValue;
         }
     }
@@ -942,10 +1010,10 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
 
 void CNewUIInGameShop::ClearAllStorageItem()
 {
-    m_iStorageTotalItemCnt = 0;
-    m_iStorageCurrentPageItemCnt = 0;
-    m_iStorageTotalPage = 0;
-    m_iStorageCurrentPage = 0;
+    m_iStorageTotalItemCnt              = 0;
+    m_iStorageCurrentPageItemCnt        = 0;
+    m_iStorageTotalPage                 = 0;
+    m_iStorageCurrentPage               = 0;
     m_iStorageCurrentPageReceiveItemCnt = 0;
     m_StorageItemListBox.Clear();
 }
@@ -954,9 +1022,9 @@ void CNewUIInGameShop::InitStorage(int iTotalItemCnt, int iCurrentPageItemCnt, i
 {
     ClearAllStorageItem();
 
-    m_iStorageTotalItemCnt = iTotalItemCnt;
+    m_iStorageTotalItemCnt       = iTotalItemCnt;
     m_iStorageCurrentPageItemCnt = iCurrentPageItemCnt;
-    m_iStorageTotalPage = iTotalPage;
+    m_iStorageTotalPage          = iTotalPage;
 
     if (m_iStorageTotalPage > 0)
     {
@@ -980,15 +1048,15 @@ char CNewUIInGameShop::GetCurrentStorageCode()
     char szCode;
     switch (m_ListBoxTabButton.GetCurButtonIndex())
     {
-    case IGS_SAFEKEEPING_LISTBOX:
-        szCode = 'S';
-        break;
-    case IGS_PRESENTBOX_LISTBOX:
-        szCode = 'G';
-        break;
-    default:
-        szCode = 'Z';
-        break;
+        case IGS_SAFEKEEPING_LISTBOX:
+            szCode = 'S';
+            break;
+        case IGS_PRESENTBOX_LISTBOX:
+            szCode = 'G';
+            break;
+        default:
+            szCode = 'Z';
+            break;
     }
     return szCode;
 }
@@ -997,9 +1065,9 @@ void CNewUIInGameShop::StoragePrevPage()
 {
     if (m_iStorageCurrentPage > 1)
     {
-        char szCode = GetCurrentStorageCode();
+        char szCode                 = GetCurrentStorageCode();
         m_iSelectedStorageItemIndex = 0;
-        m_bRequestCurrentPage = true;
+        m_bRequestCurrentPage       = true;
         SocketClient->ToGameServer()->SendCashShopStorageListRequest(m_iStorageCurrentPage - 1, szCode);
     }
 }
@@ -1008,17 +1076,17 @@ void CNewUIInGameShop::StorageNextPage()
 {
     if (m_iStorageCurrentPage < m_iStorageTotalPage)
     {
-        char szCode = GetCurrentStorageCode();
+        char szCode                 = GetCurrentStorageCode();
         m_iSelectedStorageItemIndex = 0;
-        m_bRequestCurrentPage = true;
+        m_bRequestCurrentPage       = true;
         SocketClient->ToGameServer()->SendCashShopStorageListRequest(m_iStorageCurrentPage + 1, szCode);
     }
 }
 
 void CNewUIInGameShop::UpdateStorageItemList()
 {
-    char szCode = GetCurrentStorageCode();
-    int iSelectLineIndex = m_StorageItemListBox.SLGetSelectLineNum();
+    char szCode           = GetCurrentStorageCode();
+    int  iSelectLineIndex = m_StorageItemListBox.SLGetSelectLineNum();
     m_bRequestCurrentPage = true;
 
     if ((m_iStorageCurrentPageItemCnt == 1) && (m_iStorageTotalPage > 1))
@@ -1087,4 +1155,4 @@ void CNewUIInGameShop::UnloadImages()
     DeleteBitmap(IMAGE_IGS_STORAGE_PAGE_RIGHT);
 }
 
-#endif //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+#endif  //PBG_ADD_INGAMESHOP_UI_ITEMSHOP

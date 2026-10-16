@@ -5,22 +5,22 @@
 
 typedef struct _ITEM_ADD_OPTION
 {
-    BYTE	m_byOption1;
-    WORD	m_byValue1;
+    BYTE m_byOption1;
+    WORD m_byValue1;
 
-    BYTE	m_byOption2;
-    WORD	m_byValue2;
+    BYTE m_byOption2;
+    WORD m_byValue2;
 
-    BYTE	m_Type;
-    DWORD	m_Time;
+    BYTE  m_Type;
+    DWORD m_Time;
 
     _ITEM_ADD_OPTION()
     {
         m_byOption1 = 0;
-        m_byValue1 = 0;
+        m_byValue1  = 0;
 
         m_byOption2 = 0;
-        m_byValue2 = 0;
+        m_byValue2  = 0;
 
         m_Type = 0;
         m_Time = 0;
@@ -29,17 +29,17 @@ typedef struct _ITEM_ADD_OPTION
 
 typedef struct _ITEM_ADD_OPTION_RESULT
 {
-    int				m_Width;
-    int				m_Height;
-    int				m_Count;
-    int				m_Type;
+    int m_Width;
+    int m_Height;
+    int m_Count;
+    int m_Type;
 
     _ITEM_ADD_OPTION_RESULT()
     {
-        m_Width = 0;
+        m_Width  = 0;
         m_Height = 0;
-        m_Count = 0;
-        m_Type = 0;
+        m_Count  = 0;
+        m_Type   = 0;
     }
     bool IsSuccess()
     {
@@ -60,7 +60,7 @@ public:
 public:
     void GetItemAddOtioninfoText(std::vector<std::wstring>& outtextlist, int type);
 
-public://inline
+public:  //inline
     const ITEM_ADD_OPTION& GetItemAddOtioninfo(int type);
 
 private:
@@ -72,8 +72,7 @@ private:
     ITEM_ADD_OPTION m_Temp;
 };
 
-inline
-const ITEM_ADD_OPTION& ItemAddOptioninfo::GetItemAddOtioninfo(int type)
+inline const ITEM_ADD_OPTION& ItemAddOptioninfo::GetItemAddOtioninfo(int type)
 {
     return m_ItemAddOption[type];
 }

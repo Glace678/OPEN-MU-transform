@@ -34,127 +34,127 @@
 #include "Character/CharacterManager.h"
 #include "UI/NewUI/NewUISystem.h"
 
-bool bCheckNPC = false;
-extern  int  g_iMessageTextStart;
-extern  char g_cMessageTextCurrNum;
-extern  char g_cMessageTextNum;
-extern  int g_iNumLineMessageBoxCustom;
-extern  wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
-extern  int g_iCurrentDialogScript;
-extern  int g_iNumAnswer;
-extern  wchar_t g_lpszDialogAnswer[MAX_ANSWER_FOR_DIALOG][NUM_LINE_DA][MAX_LENGTH_CMB];
+bool           bCheckNPC = false;
+extern int     g_iMessageTextStart;
+extern char    g_cMessageTextCurrNum;
+extern char    g_cMessageTextNum;
+extern int     g_iNumLineMessageBoxCustom;
+extern wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
+extern int     g_iCurrentDialogScript;
+extern int     g_iNumAnswer;
+extern wchar_t g_lpszDialogAnswer[MAX_ANSWER_FOR_DIALOG][NUM_LINE_DA][MAX_LENGTH_CMB];
 
 namespace
 {
-    constexpr std::uint8_t QUEST_STATE_INVALID = 0xFF;
-    constexpr std::uint8_t QUEST_STATE_MASK = 0x03;
-    constexpr std::uint8_t QUEST_STATES_PER_ENTRY = 4;
-    constexpr std::uint8_t QUEST_STATE_BIT_WIDTH = 2;
-    constexpr int QUEST_MONSTER_SLOT_COUNT = 5;
-    constexpr int QUEST_MONSTER_INFO_STRIDE = 2;
+constexpr std::uint8_t QUEST_STATE_INVALID       = 0xFF;
+constexpr std::uint8_t QUEST_STATE_MASK          = 0x03;
+constexpr std::uint8_t QUEST_STATES_PER_ENTRY    = 4;
+constexpr std::uint8_t QUEST_STATE_BIT_WIDTH     = 2;
+constexpr int          QUEST_MONSTER_SLOT_COUNT  = 5;
+constexpr int          QUEST_MONSTER_INFO_STRIDE = 2;
 
-    struct QuestStateSlot
+struct QuestStateSlot
+{
+    std::size_t  byteIndex{};
+    std::uint8_t bitShift{};
+};
+
+QuestStateSlot MakeQuestStateSlot(int questIndex)
+{
+    QuestStateSlot slot{};
+    if (questIndex < 0)
     {
-        std::size_t byteIndex {};
-        std::uint8_t bitShift {};
-    };
-
-    QuestStateSlot MakeQuestStateSlot(int questIndex)
-    {
-        QuestStateSlot slot {};
-        if (questIndex < 0)
-        {
-            return slot;
-        }
-
-        slot.byteIndex = static_cast<std::size_t>(questIndex) / QUEST_STATES_PER_ENTRY;
-        slot.bitShift = static_cast<std::uint8_t>((questIndex % QUEST_STATES_PER_ENTRY) * QUEST_STATE_BIT_WIDTH);
         return slot;
     }
 
-    std::uint8_t ExtractQuestState(const std::uint8_t* questList, std::size_t storageSize, int questIndex)
+    slot.byteIndex = static_cast<std::size_t>(questIndex) / QUEST_STATES_PER_ENTRY;
+    slot.bitShift  = static_cast<std::uint8_t>((questIndex % QUEST_STATES_PER_ENTRY) * QUEST_STATE_BIT_WIDTH);
+    return slot;
+}
+
+std::uint8_t ExtractQuestState(const std::uint8_t* questList, std::size_t storageSize, int questIndex)
+{
+    if (questList == nullptr)
     {
-        if (questList == nullptr)
-        {
-            return QUEST_STATE_INVALID;
-        }
-
-        const auto slot = MakeQuestStateSlot(questIndex);
-        if (slot.byteIndex >= storageSize)
-        {
-            return QUEST_STATE_INVALID;
-        }
-
-        return (questList[slot.byteIndex] >> slot.bitShift) & QUEST_STATE_MASK;
+        return QUEST_STATE_INVALID;
     }
 
-    void StoreQuestState(std::uint8_t* questList, std::size_t storageSize, int questIndex, std::uint8_t state)
+    const auto slot = MakeQuestStateSlot(questIndex);
+    if (slot.byteIndex >= storageSize)
     {
-        if (questList == nullptr)
-        {
-            return;
-        }
-
-        const auto slot = MakeQuestStateSlot(questIndex);
-        if (slot.byteIndex >= storageSize)
-        {
-            return;
-        }
-
-        questList[slot.byteIndex] &= ~(QUEST_STATE_MASK << slot.bitShift);
-        questList[slot.byteIndex] |= ((state & QUEST_STATE_MASK) << slot.bitShift);
+        return QUEST_STATE_INVALID;
     }
 
-    std::size_t ComputeQuestListByteCount(int questCount)
-    {
-        if (questCount <= 0)
-        {
-            return 0;
-        }
+    return (questList[slot.byteIndex] >> slot.bitShift) & QUEST_STATE_MASK;
+}
 
-        return static_cast<std::size_t>(
-            (questCount + (QUEST_STATES_PER_ENTRY - 1)) / QUEST_STATES_PER_ENTRY);
+void StoreQuestState(std::uint8_t* questList, std::size_t storageSize, int questIndex, std::uint8_t state)
+{
+    if (questList == nullptr)
+    {
+        return;
     }
 
-    struct QuestAttributeFile
+    const auto slot = MakeQuestStateSlot(questIndex);
+    if (slot.byteIndex >= storageSize)
     {
-        short   shQuestConditionNum;
-        short   shQuestRequestNum;
-        WORD	wNpcType;
+        return;
+    }
 
-        char strQuestName[32];
+    questList[slot.byteIndex] &= ~(QUEST_STATE_MASK << slot.bitShift);
+    questList[slot.byteIndex] |= ((state & QUEST_STATE_MASK) << slot.bitShift);
+}
 
-        QUEST_CLASS_ACT     QuestAct[MAX_QUEST_CONDITION];
-        QUEST_CLASS_REQUEST QuestRequest[MAX_QUEST_REQUEST];
-    };
+std::size_t ComputeQuestListByteCount(int questCount)
+{
+    if (questCount <= 0)
+    {
+        return 0;
+    }
+
+    return static_cast<std::size_t>((questCount + (QUEST_STATES_PER_ENTRY - 1)) / QUEST_STATES_PER_ENTRY);
+}
+
+struct QuestAttributeFile
+{
+    short shQuestConditionNum;
+    short shQuestRequestNum;
+    WORD  wNpcType;
+
+    char strQuestName[32];
+
+    QUEST_CLASS_ACT     QuestAct[MAX_QUEST_CONDITION];
+    QUEST_CLASS_REQUEST QuestRequest[MAX_QUEST_REQUEST];
+};
 }
 
 static CSQuest g_csQuestSingleton;
 
-
 namespace
 {
-    // Re-runs ShowDialogText for the currently-displayed dialog page so the
-    // cached split-lines buffers pick up the new locale's NPC text and reply
-    // labels. No-op when no dialog is open (g_iCurrentDialogScript < 0).
-    void RefreshDialogTextOnLocaleChange(void* /*ctx*/) noexcept
+// Re-runs ShowDialogText for the currently-displayed dialog page so the
+// cached split-lines buffers pick up the new locale's NPC text and reply
+// labels. No-op when no dialog is open (g_iCurrentDialogScript < 0).
+void RefreshDialogTextOnLocaleChange(void* /*ctx*/) noexcept
+{
+    if (g_iCurrentDialogScript < 0)
+        return;
+    try
     {
-        if (g_iCurrentDialogScript < 0) return;
-        try
-        {
-            g_csQuest.ShowDialogText(g_iCurrentDialogScript);
-        }
-        catch (...)
-        {
-            // ShowDialogText only manipulates fixed-size buffers; swallow
-            // any unexpected exception to honour the noexcept observer
-            // contract.
-        }
+        g_csQuest.ShowDialogText(g_iCurrentDialogScript);
+    }
+    catch (...)
+    {
+        // ShowDialogText only manipulates fixed-size buffers; swallow
+        // any unexpected exception to honour the noexcept observer
+        // contract.
     }
 }
+}
 
-CSQuest::CSQuest(void) : m_byClass(255), m_byCurrQuestIndex(0), m_byCurrQuestIndexWnd(0),
-m_byStartQuestList(0), m_shCurrPage(0), m_byViewQuest(QUEST_VIEW_NONE), m_byQuestType(TYPE_QUEST), m_iStartX(REFERENCE_WIDTH - 190), m_iStartY(0)
+CSQuest::CSQuest(void)
+    : m_byClass(255), m_byCurrQuestIndex(0), m_byCurrQuestIndexWnd(0), m_byStartQuestList(0), m_shCurrPage(0),
+      m_byViewQuest(QUEST_VIEW_NONE), m_byQuestType(TYPE_QUEST), m_iStartX(REFERENCE_WIDTH - 190), m_iStartY(0)
 {
     I18N::RegisterLocaleObserver(&RefreshDialogTextOnLocaleChange, nullptr);
 }
@@ -176,11 +176,11 @@ bool CSQuest::IsInit(void)
 
 void CSQuest::clearQuest(void)
 {
-    m_byClass = 255;
-    m_shCurrPage = 0;
-    m_byViewQuest = QUEST_VIEW_NONE;
-    m_byStartQuestList = 0;
-    m_byCurrQuestIndex = 0;
+    m_byClass             = 255;
+    m_shCurrPage          = 0;
+    m_byViewQuest         = QUEST_VIEW_NONE;
+    m_byStartQuestList    = 0;
+    m_byCurrQuestIndex    = 0;
     m_byCurrQuestIndexWnd = 0;
     m_byQuestList.fill(0);
     m_byEventCount.fill(0);
@@ -257,7 +257,7 @@ bool CSQuest::OpenQuestScript(const wchar_t* filename)
 
     m_Quest.fill({});
 
-    const auto recordSize = sizeof(QuestAttributeFile);
+    const auto                recordSize = sizeof(QuestAttributeFile);
     std::vector<std::uint8_t> buffer(recordSize);
 
     for (auto& quest : m_Quest)
@@ -271,11 +271,9 @@ bool CSQuest::OpenQuestScript(const wchar_t* filename)
         auto* current = reinterpret_cast<QuestAttributeFile*>(buffer.data());
 
         quest.shQuestConditionNum = current->shQuestConditionNum;
-        quest.shQuestRequestNum = current->shQuestRequestNum;
-        quest.wNpcType = current->wNpcType;
-        // PROTO-8: fixed char field, no NUL guarantee.
-        CMultiLanguage::ConvertFromUtf8(quest.strQuestName, current->strQuestName,
-            static_cast<int>(sizeof(current->strQuestName)));
+        quest.shQuestRequestNum   = current->shQuestRequestNum;
+        quest.wNpcType            = current->wNpcType;
+        CMultiLanguage::ConvertFromUtf8(quest.strQuestName, current->strQuestName);
 
         std::memcpy(quest.QuestAct, current->QuestAct, sizeof quest.QuestAct);
         std::memcpy(quest.QuestRequest, current->QuestRequest, sizeof quest.QuestRequest);
@@ -288,7 +286,7 @@ void CSQuest::setQuestLists(const std::uint8_t* byList, int num, CLASS_TYPE Clas
 {
     if (Class != -1)
     {
-        m_bOnce = true;
+        m_bOnce   = true;
         bCheckNPC = false;
 
         m_byClass = gCharacterManager.GetBaseClass(Class);
@@ -329,16 +327,7 @@ void CSQuest::setQuestLists(const std::uint8_t* byList, int num, CLASS_TYPE Clas
         }
     }
 
-    // The scan loops stop at the first unfinished quest; if every quest is
-    // already complete i == num, which can equal (or approach) MAX_QUESTS.
-    // The index addresses the fixed-size m_Quest array through GetQuest(), so
-    // clamp it below MAX_QUESTS instead of letting it run out of bounds.
-    if (i >= MAX_QUESTS)
-    {
-        i = MAX_QUESTS - 1;
-    }
-
-    m_byCurrQuestIndex = i;
+    m_byCurrQuestIndex    = i;
     m_byCurrQuestIndexWnd = i;
 
     Hero->byExtensionSkill = 0;
@@ -355,7 +344,7 @@ void CSQuest::setQuestList(int index, int result)
         return;
     }
 
-    m_byCurrQuestIndex = static_cast<std::uint8_t>(index);
+    m_byCurrQuestIndex    = static_cast<std::uint8_t>(index);
     m_byCurrQuestIndexWnd = std::max<std::uint8_t>(static_cast<std::uint8_t>(index), m_byCurrQuestIndexWnd);
 
     // Server protocol 0xA1/0xA2: 'result' is the complete byte holding the packed states
@@ -373,7 +362,7 @@ void CSQuest::setQuestList(int index, int result)
     }
 }
 
-short   CSQuest::FindQuestContext(QUEST_ATTRIBUTE* pQuest, int index)
+short CSQuest::FindQuestContext(QUEST_ATTRIBUTE* pQuest, int index)
 {
     for (int i = 0; i < pQuest->shQuestConditionNum; ++i)
     {
@@ -383,19 +372,13 @@ short   CSQuest::FindQuestContext(QUEST_ATTRIBUTE* pQuest, int index)
         }
     }
 
-    if (m_byCurrQuestIndex == 0)
-    {
-        m_shCurrPage = 0;
-        return m_shCurrPage;
-    }
-
     m_byCurrQuestIndex--;
     CheckQuestState();
 
     return m_shCurrPage;
 }
 
-bool    CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
+bool CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
 {
     int iRequestType;
     for (int i = 0; i < pQuest->shQuestConditionNum; ++i)
@@ -411,7 +394,7 @@ bool    CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
                     {
                         if (getQuestState2(pQuest->QuestRequest[j].wCompleteQuestIndex) != QUEST_END)
                         {
-                            m_shCurrPage = pQuest->QuestRequest[j].shErrorText;
+                            m_shCurrPage  = pQuest->QuestRequest[j].shErrorText;
                             m_byCurrState = QUEST_ERROR;
                             return false;
                         }
@@ -422,7 +405,7 @@ bool    CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
 
                         if (pQuest->QuestRequest[j].wLevelMin > level)
                         {
-                            m_shCurrPage = pQuest->QuestRequest[j].shErrorText;
+                            m_shCurrPage  = pQuest->QuestRequest[j].shErrorText;
                             m_byCurrState = QUEST_ERROR;
                             return false;
                         }
@@ -433,7 +416,7 @@ bool    CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
 
                         if (pQuest->QuestRequest[j].wLevelMax < level)
                         {
-                            m_shCurrPage = pQuest->QuestRequest[j].shErrorText;
+                            m_shCurrPage  = pQuest->QuestRequest[j].shErrorText;
                             m_byCurrState = QUEST_ERROR;
                             return false;
                         }
@@ -444,17 +427,19 @@ bool    CSQuest::CheckRequestCondition(QUEST_ATTRIBUTE* pQuest, bool bLastCheck)
                         {
                             DWORD gold = CharacterMachine->Gold;
 
-                            m_dwNeedZen = static_cast<DWORD>(GameConfig::GetInstance().ScaleSoloPrice(pQuest->QuestRequest[j].dwZen));
+                            m_dwNeedZen = static_cast<DWORD>(
+                                GameConfig::GetInstance().ScaleSoloPrice(pQuest->QuestRequest[j].dwZen));
                             if (m_dwNeedZen > gold)
                             {
-                                m_shCurrPage = pQuest->QuestRequest[j].shErrorText;
+                                m_shCurrPage  = pQuest->QuestRequest[j].shErrorText;
                                 m_byCurrState = QUEST_ERROR;
                                 return false;
                             }
                         }
                         else
                         {
-                            m_dwNeedZen = static_cast<DWORD>(GameConfig::GetInstance().ScaleSoloPrice(pQuest->QuestRequest[j].dwZen));
+                            m_dwNeedZen = static_cast<DWORD>(
+                                GameConfig::GetInstance().ScaleSoloPrice(pQuest->QuestRequest[j].dwZen));
                         }
                     }
                 }
@@ -472,45 +457,41 @@ bool CSQuest::CheckActCondition(QUEST_ATTRIBUTE* pQuest)
         {
             switch (pQuest->QuestAct[i].byQuestType)
             {
-            case QUEST_ITEM:
-            {
-                int itemType
-                    = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX)
-                    + pQuest->QuestAct[i].byItemSubType;
-                int itemLevel = -1;
-                int itemNum = pQuest->QuestAct[i].byItemNum;
+                case QUEST_ITEM: {
+                    int itemType = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX) + pQuest->QuestAct[i].byItemSubType;
+                    int itemLevel = -1;
+                    int itemNum   = pQuest->QuestAct[i].byItemNum;
 
-                itemLevel = pQuest->QuestAct[i].byItemLevel;
+                    itemLevel = pQuest->QuestAct[i].byItemLevel;
 
-                if (FindQuestItemsInInven(itemType, itemNum, itemLevel))
-                {
-                    m_shCurrPage = FindQuestContext(pQuest, 1);
-                    return false;
-                }
-            }
-            break;
-
-            case QUEST_MONSTER:
-            {
-                bool bFind = false;
-
-                for (int j = 0; j < QUEST_MONSTER_SLOT_COUNT; ++j)
-                {
-                    if (m_anKillMobType[j] == int(pQuest->QuestAct[i].wItemType)
-                        && m_anKillMobCount[j] >= int(pQuest->QuestAct[i].byItemNum))
+                    if (FindQuestItemsInInven(itemType, itemNum, itemLevel))
                     {
-                        bFind = true;
-                        break;
+                        m_shCurrPage = FindQuestContext(pQuest, 1);
+                        return false;
                     }
                 }
+                break;
 
-                if (!bFind)
-                {
-                    m_shCurrPage = FindQuestContext(pQuest, 1);
-                    return false;
+                case QUEST_MONSTER: {
+                    bool bFind = false;
+
+                    for (int j = 0; j < QUEST_MONSTER_SLOT_COUNT; ++j)
+                    {
+                        if (m_anKillMobType[j] == int(pQuest->QuestAct[i].wItemType) &&
+                            m_anKillMobCount[j] >= int(pQuest->QuestAct[i].byItemNum))
+                        {
+                            bFind = true;
+                            break;
+                        }
+                    }
+
+                    if (!bFind)
+                    {
+                        m_shCurrPage = FindQuestContext(pQuest, 1);
+                        return false;
+                    }
                 }
-            }
-            break;
+                break;
             }
         }
     }
@@ -519,8 +500,8 @@ bool CSQuest::CheckActCondition(QUEST_ATTRIBUTE* pQuest)
 
 std::uint8_t CSQuest::getQuestState(int questIndex)
 {
-    const int targetIndex = (questIndex < 0) ? m_byCurrQuestIndex : questIndex;
-    const auto state = ExtractQuestState(m_byQuestList.data(), m_byQuestList.size(), targetIndex);
+    const int          targetIndex     = (questIndex < 0) ? m_byCurrQuestIndex : questIndex;
+    const auto         state           = ExtractQuestState(m_byQuestList.data(), m_byQuestList.size(), targetIndex);
     const std::uint8_t normalizedState = (state == QUEST_STATE_INVALID) ? 0 : state;
 
     if (questIndex == -1)
@@ -543,13 +524,11 @@ std::uint8_t CSQuest::CheckQuestState(std::uint8_t state)
     {
         if (m_bOnce)
         {
-            m_bOnce = false;
+            m_bOnce   = false;
             m_byClass = gCharacterManager.GetBaseClass(Hero->Class);
         }
     }
 
-    if (m_byCurrQuestIndex >= MAX_QUESTS)
-        m_byCurrQuestIndex = 0;
     QUEST_ATTRIBUTE* lpQuest = &m_Quest[m_byCurrQuestIndex];
     //    m_byCurrState = m_byQuestList[m_byCurrQuestIndex];
 
@@ -563,30 +542,27 @@ std::uint8_t CSQuest::CheckQuestState(std::uint8_t state)
     }
     switch (m_byCurrState)
     {
-    case QUEST_NO:
-    {
-        if (CheckRequestCondition(lpQuest))
-        {
-            m_shCurrPage = FindQuestContext(lpQuest, 0);
+        case QUEST_NO: {
+            if (CheckRequestCondition(lpQuest))
+            {
+                m_shCurrPage = FindQuestContext(lpQuest, 0);
+            }
         }
-    }
-    break;
+        break;
 
-    case QUEST_ING:
-    {
-        if (CheckActCondition(lpQuest))
-        {
-            m_shCurrPage = FindQuestContext(lpQuest, 2);
-            m_byCurrState = QUEST_ITEM;
+        case QUEST_ING: {
+            if (CheckActCondition(lpQuest))
+            {
+                m_shCurrPage  = FindQuestContext(lpQuest, 2);
+                m_byCurrState = QUEST_ITEM;
+            }
         }
-    }
-    break;
+        break;
 
-    case QUEST_END:
-    {
-        m_shCurrPage = FindQuestContext(lpQuest, 3);
-    }
-    break;
+        case QUEST_END: {
+            m_shCurrPage = FindQuestContext(lpQuest, 3);
+        }
+        break;
     }
 
     return m_byCurrState;
@@ -596,21 +572,20 @@ void CSQuest::ShowDialogText(int iDialogIndex)
 {
     g_iCurrentDialogScript = iDialogIndex;
 
-    const wchar_t* text = I18N::Dialog::Lookup(iDialogIndex);
-    g_iNumLineMessageBoxCustom = SeparateTextIntoLines(
-        text, g_lpszMessageBoxCustom[0], NUM_LINE_CMB, MAX_LENGTH_CMB);
+    const wchar_t* text        = I18N::Dialog::Lookup(iDialogIndex);
+    g_iNumLineMessageBoxCustom = SeparateTextIntoLines(text, g_lpszMessageBoxCustom[0], NUM_LINE_CMB, MAX_LENGTH_CMB);
 
-    wchar_t lpszAnswer[MAX_LENGTH_ANSWER + 8] {};
+    wchar_t lpszAnswer[MAX_LENGTH_ANSWER + 8]{};
     g_iNumAnswer = 0;
     std::memset(g_lpszDialogAnswer, 0, sizeof g_lpszDialogAnswer);
 
-    const auto& entry = GameLogic::Quests::Dialog::GetEntry(iDialogIndex);
-    int iTextSize = 0;
+    const auto& entry     = GameLogic::Quests::Dialog::GetEntry(iDialogIndex);
+    int         iTextSize = 0;
 
     for (int i = 0; i < entry.numAnswer; ++i)
     {
-        const wchar_t* answerText = I18N::Dialog::Lookup(
-            GameLogic::Quests::Dialog::DialogAnswerLegacyId(iDialogIndex, i));
+        const wchar_t* answerText =
+            I18N::Dialog::Lookup(GameLogic::Quests::Dialog::DialogAnswerLegacyId(iDialogIndex, i));
         mu_swprintf_s(lpszAnswer, std::size(lpszAnswer), L"%d) %ls", i + 1, answerText);
         int iNumLine = SeparateTextIntoLines(lpszAnswer, g_lpszDialogAnswer[i][0], NUM_LINE_DA, MAX_LENGTH_CMB);
         if (iNumLine < NUM_LINE_DA - 1)
@@ -640,7 +615,7 @@ void CSQuest::ShowQuestPreviewWindow(int index)
     m_byViewQuest = QUEST_VIEW_PREVIEW;
 
     const std::uint8_t previousIndex = m_byCurrQuestIndex;
-    m_byCurrQuestIndex = m_byCurrQuestIndexWnd;
+    m_byCurrQuestIndex               = m_byCurrQuestIndexWnd;
 
     CheckQuestState();
     ShowDialogText(m_shCurrPage);
@@ -675,42 +650,39 @@ bool CSQuest::BeQuestItem(void)
             {
                 switch (pQuest->QuestAct[i].byQuestType)
                 {
-                case QUEST_ITEM:
-                {
-                    bCompleteItem = true;
+                    case QUEST_ITEM: {
+                        bCompleteItem = true;
 
-                    int itemType
-                        = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX)
-                        + pQuest->QuestAct[i].byItemSubType;
-                    int itemLevel = -1;
-                    int itemNum = pQuest->QuestAct[i].byItemNum;
+                        int itemType =
+                            (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX) + pQuest->QuestAct[i].byItemSubType;
+                        int itemLevel = -1;
+                        int itemNum   = pQuest->QuestAct[i].byItemNum;
 
-                    itemLevel = pQuest->QuestAct[i].byItemLevel;
-                    if (FindQuestItemsInInven(itemType, itemNum, itemLevel))
-                    {
-                        return false;
-                    }
-                }
-                break;
-                case QUEST_MONSTER:
-                {
-                    bCompleteItem = true;
-                    bool bFind = false;
-
-                    for (int j = 0; j < QUEST_MONSTER_SLOT_COUNT; ++j)
-                    {
-                        if (m_anKillMobType[j] == int(pQuest->QuestAct[i].wItemType)
-                            && m_anKillMobCount[j] >= int(pQuest->QuestAct[i].byItemNum))
+                        itemLevel = pQuest->QuestAct[i].byItemLevel;
+                        if (FindQuestItemsInInven(itemType, itemNum, itemLevel))
                         {
-                            bFind = true;
-                            break;
+                            return false;
                         }
                     }
+                    break;
+                    case QUEST_MONSTER: {
+                        bCompleteItem = true;
+                        bool bFind    = false;
 
-                    if (!bFind)
-                        return false;
-                }
-                break;
+                        for (int j = 0; j < QUEST_MONSTER_SLOT_COUNT; ++j)
+                        {
+                            if (m_anKillMobType[j] == int(pQuest->QuestAct[i].wItemType) &&
+                                m_anKillMobCount[j] >= int(pQuest->QuestAct[i].byItemNum))
+                            {
+                                bFind = true;
+                                break;
+                            }
+                        }
+
+                        if (!bFind)
+                            return false;
+                    }
+                    break;
                 }
             }
         }
@@ -723,9 +695,9 @@ int CSQuest::FindQuestItemsInInven(int nType, int nCount, int nLevel)
 {
     SEASON3B::CNewUIInventoryCtrl* pInvenCtrl = g_pMyInventory->GetInventoryCtrl();
 
-    int nItemsInInven = pInvenCtrl->GetNumberOfItems();
-    ITEM* pItem = nullptr;
-    int nFindItemCount = 0;
+    int   nItemsInInven  = pInvenCtrl->GetNumberOfItems();
+    ITEM* pItem          = nullptr;
+    int   nFindItemCount = 0;
 
     for (int i = 0; i < nItemsInInven; ++i)
     {
@@ -781,7 +753,7 @@ void CSQuest::SetKillMobInfo(const int* anKillMobInfo)
     for (int i = 0; i < QUEST_MONSTER_SLOT_COUNT; ++i)
     {
         const int typeIndex = i * QUEST_MONSTER_INFO_STRIDE;
-        m_anKillMobType[i] = anKillMobInfo[typeIndex];
+        m_anKillMobType[i]  = anKillMobInfo[typeIndex];
         m_anKillMobCount[i] = anKillMobInfo[typeIndex + 1];
     }
 }
@@ -799,7 +771,7 @@ void CSQuest::RenderDevilSquare(void)
 
 void CSQuest::RenderBloodCastle(void)
 {
-    wchar_t Text[100] {};
+    wchar_t Text[100]{};
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(230, 230, 230, 255);
     g_pRenderText->SetBgColor(20, 20, 20, 255);
@@ -807,7 +779,8 @@ void CSQuest::RenderBloodCastle(void)
 
     g_pRenderText->SetTextColor(223, 191, 103, 255);
     g_pRenderText->SetBgColor(0);
-    mu_swprintf_s(Text, std::size(Text), I18N::Game::DSSSchedule, BLOODCASTLE_QUEST_NUM, I18N::Game::BloodCastle, I18N::Game::Quest);
+    mu_swprintf_s(Text, std::size(Text), I18N::Game::DSSSchedule, BLOODCASTLE_QUEST_NUM, I18N::Game::BloodCastle,
+                  I18N::Game::Quest);
     g_pRenderText->RenderText(m_iStartX + 95, m_iStartY + 80, Text, 0, 0, RT3_WRITE_CENTER);
     g_pRenderText->SetTextColor(255, 230, 210, 255);
     g_pRenderText->RenderText(m_iStartX + 85, m_iStartY + 100, I18N::Game::Lookup(877), 0, 0, RT3_WRITE_CENTER);

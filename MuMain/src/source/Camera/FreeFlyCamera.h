@@ -25,18 +25,18 @@ public:
     ~FreeFlyCamera() override = default;
 
     // ICamera interface
-    bool Update() override;
-    void Reset() override;
-    void OnActivate(const CameraState& previousState) override;
-    void OnDeactivate() override;
+    bool        Update() override;
+    void        Reset() override;
+    void        OnActivate(const CameraState& previousState) override;
+    void        OnDeactivate() override;
     const char* GetName() const override { return "FreeFly"; }
-    void InheritFOV(float hFov);
-    void SnapToPosition(const vec3_t pos, float yaw, float pitch);
+    void        InheritFOV(float hFov);
+    void        SnapToPosition(const vec3_t pos, float yaw, float pitch);
 
     // Configuration & Frustum Management
     const CameraConfig& GetConfig() const override { return m_Config; }
-    void SetConfig(const CameraConfig& config) override;
-    const Frustum& GetFrustum() const override { return m_Frustum; }
+    void                SetConfig(const CameraConfig& config) override;
+    const Frustum&      GetFrustum() const override { return m_Frustum; }
 
     bool ShouldCullObject(const vec3_t position, float radius) const override
     {
@@ -62,21 +62,21 @@ private:
 
     // Configuration and frustum
     CameraConfig m_Config;
-    Frustum m_Frustum;
+    Frustum      m_Frustum;
 
     // Transform
     vec3_t m_Position;
-    float m_Yaw;                  // Horizontal rotation (degrees)
-    float m_Pitch;                // Vertical rotation (degrees)
+    float  m_Yaw;    // Horizontal rotation (degrees)
+    float  m_Pitch;  // Vertical rotation (degrees)
 
     // Movement
-    static constexpr float BASE_SPEED = 125.0f;
+    static constexpr float BASE_SPEED        = 125.0f;
     static constexpr float SPRINT_MULTIPLIER = 3.0f;
 
     // Input state
     bool m_bLooking;
-    int m_LastMouseX;
-    int m_LastMouseY;
+    int  m_LastMouseX;
+    int  m_LastMouseY;
 
     // State preservation across toggles
     bool m_bHasSavedState = false;
@@ -94,4 +94,4 @@ private:
     void UpdateFrustum();
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

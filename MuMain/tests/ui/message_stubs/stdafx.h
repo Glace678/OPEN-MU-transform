@@ -9,16 +9,38 @@
 #include <queue>
 #include <vector>
 
-template <class T> inline void SafeDelete(T*& pointer) { if (pointer != nullptr) { delete pointer; pointer = nullptr; } }
-template <class T> inline void SafeDeleteArray(T*& pointer) { if (pointer != nullptr) { delete[] pointer; pointer = nullptr; } }
+template <class T> inline void SafeDelete(T*& pointer)
+{
+    if (pointer != nullptr)
+    {
+        delete pointer;
+        pointer = nullptr;
+    }
+}
+template <class T> inline void SafeDeleteArray(T*& pointer)
+{
+    if (pointer != nullptr)
+    {
+        delete[] pointer;
+        pointer = nullptr;
+    }
+}
 
 using vec3_t = float[3];
-inline void Vector(float x, float y, float z, vec3_t value) { value[0] = x; value[1] = y; value[2] = z; }
-inline void VectorCopy(const vec3_t from, vec3_t to) { std::copy_n(from, 3, to); }
-inline constexpr int REFERENCE_WIDTH = 640;
+inline void Vector(float x, float y, float z, vec3_t value)
+{
+    value[0] = x;
+    value[1] = y;
+    value[2] = z;
+}
+inline void VectorCopy(const vec3_t from, vec3_t to)
+{
+    std::copy_n(from, 3, to);
+}
+inline constexpr int REFERENCE_WIDTH  = 640;
 inline constexpr int REFERENCE_HEIGHT = 480;
 
 extern HWND g_hWnd;
-extern int MouseX, MouseY;
+extern int  MouseX, MouseY;
 extern bool MouseLButton, MouseLButtonPush, MouseLButtonPop;
 extern bool MouseRButton, MouseRButtonPush, MouseRButtonPop;

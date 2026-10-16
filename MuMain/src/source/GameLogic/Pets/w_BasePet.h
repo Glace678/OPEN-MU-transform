@@ -5,10 +5,12 @@
 #include "Core/Time/Timer.h"
 
 class PetObject;
-using PetObjectPtr = std::shared_ptr<PetObject>;class PetObject
+using PetObjectPtr = std::shared_ptr<PetObject>;
+class PetObject
 {
 public:
-    enum ActionType {
+    enum ActionType
+    {
         eAction_Stand = 0,
         eAction_Move,
         eAction_Attack,
@@ -24,10 +26,10 @@ public:
 
 public:
     OBJECT* GetObject() { return m_obj; }
-    bool IsSameOwner(OBJECT* Owner);
-    bool IsSameObject(OBJECT* Owner, int itemType);
-    void SetActions(ActionType type, std::weak_ptr<PetAction> action, float speed);
-    void SetCommand(int targetKey, ActionType cmdType);
+    bool    IsSameOwner(OBJECT* Owner);
+    bool    IsSameObject(OBJECT* Owner, int itemType);
+    void    SetActions(ActionType type, std::weak_ptr<PetAction> action, float speed);
+    void    SetCommand(int targetKey, ActionType cmdType);
 
     void SetScale(float scale = 0.0f);
     void SetBlendMesh(int blendMesh = -1);
@@ -50,19 +52,19 @@ private:
     PetObject();
 
 public:
-    typedef std::map< ActionType, std::weak_ptr<PetAction> > ActionMap;
-    typedef std::map< ActionType, float > SpeedMap;
+    typedef std::map<ActionType, std::weak_ptr<PetAction>> ActionMap;
+    typedef std::map<ActionType, float>                    SpeedMap;
 
 private:
     ActionMap m_actionMap;
-    SpeedMap m_speedMap;
+    SpeedMap  m_speedMap;
 
     CHARACTER* m_pOwner;
-    OBJECT* m_obj;
-    int m_targetKey;
-    int m_itemType;
+    OBJECT*    m_obj;
+    int        m_targetKey;
+    int        m_itemType;
 
-    CTimer* m_timer = nullptr;
+    CTimer* m_timer;
 
     ActionType m_moveType;
     ActionType m_oldMoveType;

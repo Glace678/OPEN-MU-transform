@@ -47,7 +47,7 @@ bool SEASON3B::CNewUIMiniMap::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_MINIMAP_INTERFACE + 6, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 610, 3, 85, 85);
-    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);	// 1002 "ݱ"
+    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);  // 1002 "�ݱ�"
 
     SetPos(x, y);
 
@@ -63,8 +63,8 @@ bool SEASON3B::CNewUIMiniMap::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_Lenth[3].y = 1400;
     m_Lenth[4].y = 1600;
     m_Lenth[5].y = 1800;
-    m_MiniPos = 0;
-    m_bSuccess = false;
+    m_MiniPos    = 0;
+    m_bSuccess   = false;
     return true;
 }
 
@@ -78,9 +78,7 @@ float SEASON3B::CNewUIMiniMap::GetLayerDepth()
     return 8.1f;
 }
 
-void SEASON3B::CNewUIMiniMap::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIMiniMap::OpenningProcess() {}
 
 void SEASON3B::CNewUIMiniMap::Release()
 {
@@ -138,37 +136,43 @@ bool SEASON3B::CNewUIMiniMap::Render()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    auto Ty = (float)(((float)Hero->PositionX / 256.f) * m_Lenth[m_MiniPos].y);
-    auto Tx = (float)(((float)Hero->PositionY / 256.f) * m_Lenth[m_MiniPos].x);
+    auto  Ty = (float)(((float)Hero->PositionX / 256.f) * m_Lenth[m_MiniPos].y);
+    auto  Tx = (float)(((float)Hero->PositionY / 256.f) * m_Lenth[m_MiniPos].x);
     float Ty1;
     float Tx1;
-    float uvxy = (41.7f / 64.f);
+    float uvxy      = (41.7f / 64.f);
     float uvxy_Line = 8.f / 8.f;
-    float Ui_wid = 35.f;
-    float Ui_Hig = 6.f;
-    float Rot_Loc = 45.f;
-    int i = 0;
+    float Ui_wid    = 35.f;
+    float Ui_Hig    = 6.f;
+    float Rot_Loc   = 45.f;
+    int   i         = 0;
 
-    RenderBitRotate(IMAGE_MINIMAP_INTERFACE, m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x, m_Lenth[m_MiniPos].y, Rot);
+    RenderBitRotate(IMAGE_MINIMAP_INTERFACE, m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x,
+                    m_Lenth[m_MiniPos].y, Rot);
 
-    int NpcWidth = 15;
+    int NpcWidth  = 15;
     int NpcWidthP = 30;
     for (i = 0; i < MAX_MINI_MAP_DATA; i++)
     {
         if (m_Mini_Map_Data[i].Kind > 0)
         {
-            Ty1 = (float)(((float)m_Mini_Map_Data[i].Location[0] / 256.f) * m_Lenth[m_MiniPos].y);
-            Tx1 = (float)(((float)m_Mini_Map_Data[i].Location[1] / 256.f) * m_Lenth[m_MiniPos].x);
+            Ty1     = (float)(((float)m_Mini_Map_Data[i].Location[0] / 256.f) * m_Lenth[m_MiniPos].y);
+            Tx1     = (float)(((float)m_Mini_Map_Data[i].Location[1] / 256.f) * m_Lenth[m_MiniPos].x);
             Rot_Loc = (float)m_Mini_Map_Data[i].Rotation;
 
-            if (m_Mini_Map_Data[i].Kind == 1) //npc
+            if (m_Mini_Map_Data[i].Kind == 1)  //npc
             {
-                if (!(gMapManager.WorldActive == WD_34CRYWOLF_1ST && m_OccupationState > 0) || (m_Mini_Map_Data[i].Location[0] == 228 && m_Mini_Map_Data[i].Location[1] == 48 && gMapManager.WorldActive == WD_34CRYWOLF_1ST))
-                    RenderPointRotate(IMAGE_MINIMAP_INTERFACE + 5, Tx1, Ty1, NpcWidth, NpcWidth, m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x, m_Lenth[m_MiniPos].y, Rot, Rot_Loc, 17.5f / 32.f, 17.5f / 32.f, i);
+                if (!(gMapManager.WorldActive == WD_34CRYWOLF_1ST && m_OccupationState > 0) ||
+                    (m_Mini_Map_Data[i].Location[0] == 228 && m_Mini_Map_Data[i].Location[1] == 48 &&
+                     gMapManager.WorldActive == WD_34CRYWOLF_1ST))
+                    RenderPointRotate(IMAGE_MINIMAP_INTERFACE + 5, Tx1, Ty1, NpcWidth, NpcWidth,
+                                      m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x,
+                                      m_Lenth[m_MiniPos].y, Rot, Rot_Loc, 17.5f / 32.f, 17.5f / 32.f, i);
             }
-            else
-                if (m_Mini_Map_Data[i].Kind == 2)
-                    RenderPointRotate(IMAGE_MINIMAP_INTERFACE + 4, Tx1, Ty1, NpcWidthP, NpcWidthP, m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x, m_Lenth[m_MiniPos].y, Rot, Rot_Loc, 17.5f / 32.f, 17.5f / 32.f, 100 + i);
+            else if (m_Mini_Map_Data[i].Kind == 2)
+                RenderPointRotate(IMAGE_MINIMAP_INTERFACE + 4, Tx1, Ty1, NpcWidthP, NpcWidthP,
+                                  m_Lenth[m_MiniPos].x - Tx, m_Lenth[m_MiniPos].y - Ty, m_Lenth[m_MiniPos].x,
+                                  m_Lenth[m_MiniPos].y, Rot, Rot_Loc, 17.5f / 32.f, 17.5f / 32.f, 100 + i);
         }
         else
             break;
@@ -184,14 +188,17 @@ bool SEASON3B::CNewUIMiniMap::Render()
     }
     for (i = 0; i < 20; i++)
     {
-        RenderBitmapRotate(IMAGE_MINIMAP_INTERFACE + 2, (Ui_Hig / 2.f), i * (Ui_wid - 3.f), Ui_wid, Ui_Hig, -90.f, 0.f, 0.f, uvxy, uvxy_Line);
-        RenderBitmapRotate(IMAGE_MINIMAP_INTERFACE + 2, REFERENCE_WIDTH - (Ui_Hig / 2.f), i * (Ui_wid - 3.f), Ui_wid, Ui_Hig, 90.f, 0.f, 0.f, uvxy, uvxy_Line);
+        RenderBitmapRotate(IMAGE_MINIMAP_INTERFACE + 2, (Ui_Hig / 2.f), i * (Ui_wid - 3.f), Ui_wid, Ui_Hig, -90.f, 0.f,
+                           0.f, uvxy, uvxy_Line);
+        RenderBitmapRotate(IMAGE_MINIMAP_INTERFACE + 2, REFERENCE_WIDTH - (Ui_Hig / 2.f), i * (Ui_wid - 3.f), Ui_wid,
+                           Ui_Hig, 90.f, 0.f, 0.f, uvxy, uvxy_Line);
     }
 
     RenderImage(IMAGE_MINIMAP_INTERFACE + 1, 0, 0, Ui_wid, Ui_wid, 0.f, 0.f, uvxy, uvxy);
     RenderImage(IMAGE_MINIMAP_INTERFACE + 1, REFERENCE_WIDTH - Ui_wid, 0, Ui_wid, Ui_wid, uvxy, 0.f, -uvxy, uvxy);
     RenderImage(IMAGE_MINIMAP_INTERFACE + 1, 0, 430 - Ui_wid, Ui_wid, Ui_wid, 0.f, uvxy, uvxy, -uvxy);
-    RenderImage(IMAGE_MINIMAP_INTERFACE + 1, REFERENCE_WIDTH - Ui_wid, 430 - Ui_wid, Ui_wid, Ui_wid, uvxy, uvxy, -uvxy, -uvxy);
+    RenderImage(IMAGE_MINIMAP_INTERFACE + 1, REFERENCE_WIDTH - Ui_wid, 430 - Ui_wid, Ui_wid, Ui_wid, uvxy, uvxy, -uvxy,
+                -uvxy);
 
     m_BtnExit.Render(true);
 
@@ -209,7 +216,7 @@ bool SEASON3B::CNewUIMiniMap::Update()
 void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
 {
     wchar_t Fname[300];
-    int i = 0;
+    int     i = 0;
     mu_swprintf(Fname, L"Data\\%ls\\mini_map.ozt", Filename);
     FILE* pFile = _wfopen(Fname, L"rb");
 
@@ -226,7 +233,8 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
         LoadBitmap(Fname, IMAGE_MINIMAP_INTERFACE, GL_LINEAR);
     }
 
-    mu_swprintf(Fname, L"Data\\Local\\%ls\\Minimap\\Minimap_%ls_%ls.bmd", g_strSelectedML.c_str(), Filename, g_strSelectedML.c_str());
+    mu_swprintf(Fname, L"Data\\Local\\%ls\\Minimap\\Minimap_%ls_%ls.bmd", g_strSelectedML.c_str(), Filename,
+                g_strSelectedML.c_str());
 
     for (i = 0; i < MAX_MINI_MAP_DATA; i++)
     {
@@ -237,32 +245,21 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
 
     if (fp != NULL)
     {
-        int Size = sizeof(MINI_MAP_FILE);
-        const size_t dataSize = (Size * MAX_MINI_MAP_DATA) + 45;
-        BYTE* Buffer = new BYTE[dataSize];
+        int   Size   = sizeof(MINI_MAP_FILE);
+        BYTE* Buffer = new BYTE[Size * MAX_MINI_MAP_DATA + 45];
+        fread(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 1, fp);
 
         DWORD dwCheckSum;
-        // UI-3: a short file would leave uninitialized heap bytes that later
-        // records would read and display (or checksum against). Fail closed.
-        if (fread(Buffer, dataSize, 1, fp) != 1
-            || fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
-        {
-            fclose(fp);
-            delete[] Buffer;
-            wchar_t Text[256];
-            mu_swprintf(Text, L"%ls - File truncated.", Fname);
-            g_ErrorReport.Write(Text);
-            return;
-        }
+        fread(&dwCheckSum, sizeof(DWORD), 1, fp);
         fclose(fp);
 
-        if (dwCheckSum != GenerateCheckSum2(Buffer, dataSize, 0x2BC1))
+        if (dwCheckSum != GenerateCheckSum2(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 0x2BC1))
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File corrupted.", Fname);
             g_ErrorReport.Write(Text);
-            delete[] Buffer;
-            return;
+            MessageBox(g_hWnd, Text, NULL, MB_OK);
+            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         }
         else
         {
@@ -273,13 +270,12 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
                 BuxConvert(pSeek, Size);
                 //memcpy(&(m_Mini_Map_Data[i]), pSeek, Size);
 
-                MINI_MAP_FILE current{ };
-                auto target = &(m_Mini_Map_Data[i]);
+                MINI_MAP_FILE current{};
+                auto          target = &(m_Mini_Map_Data[i]);
                 memcpy(&current, pSeek, Size);
                 memcpy(target, pSeek, Size);
 
-                // PROTO-14: bounded by the fixed Name field in MINI_MAP_FILE.
-                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name, MAX_MINIMAP_NAME);
+                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name);
                 /*int wchars_num = MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, NULL, 0);
                 MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, target->Name, wchars_num);
                 target->Name[wchars_num] = L'\0';*/
@@ -335,12 +331,14 @@ bool SEASON3B::CNewUIMiniMap::Check_Btn(int mx, int my)
     {
         if (m_Mini_Map_Data[i].Kind > 0)
         {
-            if (mx > m_Btn_Loc[i][0] && mx < (m_Btn_Loc[i][0] + m_Btn_Loc[i][2]) && my > m_Btn_Loc[i][1] && my < (m_Btn_Loc[i][1] + m_Btn_Loc[i][3]))
+            if (mx > m_Btn_Loc[i][0] && mx < (m_Btn_Loc[i][0] + m_Btn_Loc[i][2]) && my > m_Btn_Loc[i][1] &&
+                my < (m_Btn_Loc[i][1] + m_Btn_Loc[i][3]))
             {
                 SIZE Fontsize;
                 m_TooltipText = (std::wstring)m_Mini_Map_Data[i].Name;
                 g_pRenderText->SetFont(g_hFont);
-                GetTextExtentPoint32(g_pRenderText->GetFontDC(), m_TooltipText.c_str(), m_TooltipText.size(), &Fontsize);
+                GetTextExtentPoint32(g_pRenderText->GetFontDC(), m_TooltipText.c_str(), m_TooltipText.size(),
+                                     &Fontsize);
 
                 Fontsize.cx = Fontsize.cx / ((float)WindowWidth / REFERENCE_WIDTH);
                 Fontsize.cy = Fontsize.cy / ((float)WindowHeight / REFERENCE_HEIGHT);
@@ -350,7 +348,7 @@ bool SEASON3B::CNewUIMiniMap::Check_Btn(int mx, int my)
 
                 y = m_Btn_Loc[i][1] - (Fontsize.cy + 2);
 
-                DWORD backuptextcolor = g_pRenderText->GetTextColor();
+                DWORD backuptextcolor     = g_pRenderText->GetTextColor();
                 DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
                 g_pRenderText->SetTextColor(RGBA(255, 255, 255, 255));

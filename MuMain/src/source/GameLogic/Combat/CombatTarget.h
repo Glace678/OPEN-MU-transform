@@ -6,5 +6,5 @@ class CHARACTER;
 // cursor) and records it on the character. Extracted from ZzzInterface.cpp.
 namespace GameLogic::Combat
 {
-    bool CheckTarget(CHARACTER* c);
+bool CheckTarget(CHARACTER* c);
 }

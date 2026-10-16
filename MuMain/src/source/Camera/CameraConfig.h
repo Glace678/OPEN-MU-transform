@@ -10,10 +10,10 @@
 /// aspect separately (g_fScreenRate_x/y) which is the intended behavior there.
 inline float HFovToVFov(float hFovDeg, float /*aspectRatio*/)
 {
-    constexpr float PI = 3.14159265358979323846f;
+    constexpr float PI               = 3.14159265358979323846f;
     constexpr float REFERENCE_ASPECT = 4.0f / 3.0f;
-    float hHalfRad = hFovDeg * 0.5f * PI / 180.0f;
-    float vHalfRad = atanf(tanf(hHalfRad) / REFERENCE_ASPECT);
+    float           hHalfRad         = hFovDeg * 0.5f * PI / 180.0f;
+    float           vHalfRad         = atanf(tanf(hHalfRad) / REFERENCE_ASPECT);
     return vHalfRad * 2.0f * 180.0f / PI;
 }
 
@@ -43,11 +43,11 @@ constexpr float RENDER_DISTANCE_MULTIPLIER = 1.4f;
  */
 namespace CharacterSceneCamera
 {
-    constexpr float POSITION_X = 9758.93f;
-    constexpr float POSITION_Y = 18913.11f;
-    constexpr float POSITION_Z = 675.5f;
-    constexpr float ANGLE_PITCH = -84.5f;  // Angle[0]
-    constexpr float ANGLE_ROLL  = -75.0f;  // Angle[2]
+constexpr float POSITION_X  = 9758.93f;
+constexpr float POSITION_Y  = 18913.11f;
+constexpr float POSITION_Z  = 675.5f;
+constexpr float ANGLE_PITCH = -84.5f;  // Angle[0]
+constexpr float ANGLE_ROLL  = -75.0f;  // Angle[2]
 }
 
 /**
@@ -113,20 +113,12 @@ struct CameraConfig
 
     bool operator==(const CameraConfig& other) const
     {
-        return hFov == other.hFov &&
-               nearPlane == other.nearPlane &&
-               farPlane == other.farPlane &&
-               aspectRatio == other.aspectRatio &&
-               terrainCullRange == other.terrainCullRange &&
-               objectCullRange == other.objectCullRange &&
-               fogStart == other.fogStart &&
-               fogEnd == other.fogEnd;
+        return hFov == other.hFov && nearPlane == other.nearPlane && farPlane == other.farPlane &&
+               aspectRatio == other.aspectRatio && terrainCullRange == other.terrainCullRange &&
+               objectCullRange == other.objectCullRange && fogStart == other.fogStart && fogEnd == other.fogEnd;
     }
 
-    bool operator!=(const CameraConfig& other) const
-    {
-        return !(*this == other);
-    }
+    bool operator!=(const CameraConfig& other) const { return !(*this == other); }
 
     // ========== Preset Configurations ==========
 
@@ -150,12 +142,12 @@ struct CameraConfig
         // values here would CPU-cull objects that the GPU still renders,
         // making them vanish as they approach the camera.
         config.nearPlane = 20.0f;
-        config.farPlane = 3000.0f;
+        config.farPlane  = 3000.0f;
         // Use RENDER_DISTANCE_MULTIPLIER to ensure terrain culling matches rendering/picking distance
         config.terrainCullRange = 3000.0f * RENDER_DISTANCE_MULTIPLIER;  // = 4200.0f
-        config.objectCullRange = 3000.0f;
-        config.fogStart = config.farPlane * 1.0f;
-        config.fogEnd = config.farPlane * 1.25f;
+        config.objectCullRange  = 3000.0f;
+        config.fogStart         = config.farPlane * 1.0f;
+        config.fogEnd           = config.farPlane * 1.25f;
         return config;
     }
 
@@ -178,11 +170,11 @@ struct CameraConfig
         // Match the projection's near plane (g_Camera.ViewNear = 20). Higher
         // values here would CPU-cull objects the GPU still renders — visible
         // in zoomed-in orbital where the camera sits ~200 units from hero.
-        config.nearPlane = 20.0f;
-        config.farPlane = 3800.0f;  // Direct value — RENDER_DISTANCE_MULTIPLIER already applied in BeginOpengl()
+        config.nearPlane       = 20.0f;
+        config.farPlane        = 3800.0f;  // Direct value — RENDER_DISTANCE_MULTIPLIER already applied in BeginOpengl()
         config.objectCullRange = 3800.0f;
-        config.fogStart = config.farPlane * 1.0f;
-        config.fogEnd = config.farPlane * 1.25f;
+        config.fogStart        = config.farPlane * 1.0f;
+        config.fogEnd          = config.farPlane * 1.25f;
         config.terrainCullRange = config.farPlane * RENDER_DISTANCE_MULTIPLIER;
         return config;
     }
@@ -200,13 +192,13 @@ struct CameraConfig
     static CameraConfig ForLoginScene()
     {
         CameraConfig config;
-        config.hFov = 90.0f;
-        config.nearPlane = 10.0f;
-        config.farPlane = 20000.0f;
+        config.hFov             = 90.0f;
+        config.nearPlane        = 10.0f;
+        config.farPlane         = 20000.0f;
         config.terrainCullRange = 20000.0f;
-        config.objectCullRange = 20000.0f;
-        config.fogStart = config.farPlane * 1.0f;
-        config.fogEnd = config.farPlane * 1.25f;
+        config.objectCullRange  = 20000.0f;
+        config.fogStart         = config.farPlane * 1.0f;
+        config.fogEnd           = config.farPlane * 1.25f;
         return config;
     }
 
@@ -223,13 +215,13 @@ struct CameraConfig
     static CameraConfig ForCharacterScene()
     {
         CameraConfig config;
-        config.hFov = 40.0f;  // ~30° vFOV on 4:3, matches original character scene
-        config.nearPlane = 10.0f;
-        config.farPlane = 4100.0f;
+        config.hFov             = 40.0f;  // ~30° vFOV on 4:3, matches original character scene
+        config.nearPlane        = 10.0f;
+        config.farPlane         = 4100.0f;
         config.terrainCullRange = 4100.0f;
-        config.objectCullRange = 4100.0f;
-        config.fogStart = config.farPlane * 1.0f;
-        config.fogEnd = config.farPlane * 1.25f;
+        config.objectCullRange  = 4100.0f;
+        config.fogStart         = config.farPlane * 1.0f;
+        config.fogEnd           = config.farPlane * 1.25f;
         return config;
     }
 };

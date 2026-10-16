@@ -23,8 +23,8 @@
 extern ITEM_ATTRIBUTE* ItemAttribute;
 
 // Comparison function - uses field metadata (NO MACROS!)
-static void CompareItems(const ITEM_ATTRIBUTE& oldItem, const ITEM_ATTRIBUTE& newItem,
-                        std::stringstream& changes, bool& changed)
+static void CompareItems(const ITEM_ATTRIBUTE& oldItem, const ITEM_ATTRIBUTE& newItem, std::stringstream& changes,
+                         bool& changed)
 {
     // Compare Name field (wide string)
     if (wcscmp(oldItem.Name, newItem.Name) != 0)
@@ -39,39 +39,26 @@ static void CompareItems(const ITEM_ATTRIBUTE& oldItem, const ITEM_ATTRIBUTE& ne
     }
 
     // Compare all simple fields - just a loop, no macros!
-    CompareAllFieldsByMetadata(oldItem, newItem,
-                               ItemComparisonMetadata::SIMPLE_FIELDS,
-                               changes, changed);
+    CompareAllFieldsByMetadata(oldItem, newItem, ItemComparisonMetadata::SIMPLE_FIELDS, changes, changed);
 
     // Compare all array fields - another simple loop!
-    CompareAllFieldsByMetadata(oldItem, newItem,
-                               ItemComparisonMetadata::ARRAY_FIELDS,
-                               changes, changed);
+    CompareAllFieldsByMetadata(oldItem, newItem, ItemComparisonMetadata::ARRAY_FIELDS, changes, changed);
 }
 
 bool ItemDataSaver::Save(wchar_t* fileName, std::string* outChangeLog)
 {
     // Create standard save config with item-specific parameters
     auto config = CreateStandardSaveConfig<ITEM_ATTRIBUTE, ITEM_ATTRIBUTE_FILE>(
-        fileName,
-        MAX_ITEM,
-        ItemAttribute,
-        [](ITEM_ATTRIBUTE_FILE& dest, const ITEM_ATTRIBUTE& src) {
-            CopyItemAttributeToDestination(dest, src);
-        },
-        [](ITEM_ATTRIBUTE& dest, const ITEM_ATTRIBUTE_FILE& src) {
-            CopyItemAttributeFromSource(dest, src);
-        },
+        fileName, MAX_ITEM, ItemAttribute,
+        [](ITEM_ATTRIBUTE_FILE& dest, const ITEM_ATTRIBUTE& src) { CopyItemAttributeToDestination(dest, src); },
+        [](ITEM_ATTRIBUTE& dest, const ITEM_ATTRIBUTE_FILE& src) { CopyItemAttributeFromSource(dest, src); },
         CompareItems,
-        [](int index, const ITEM_ATTRIBUTE& item) {
-            return ChangeTracker::GetNameUtf8(index, item, MAX_ITEM_NAME);
-        },
+        [](int index, const ITEM_ATTRIBUTE& item) { return ChangeTracker::GetNameUtf8(index, item, MAX_ITEM_NAME); },
         0xE2F1,  // Item-specific checksum key
-        outChangeLog
-    );
+        outChangeLog);
 
     // Add legacy format support for backwards compatibility with old Item.bmd files
-    config.legacyFileStructSize = sizeof(ITEM_ATTRIBUTE_FILE_LEGACY);
+    config.legacyFileStructSize  = sizeof(ITEM_ATTRIBUTE_FILE_LEGACY);
     config.convertFromFileLegacy = [](ITEM_ATTRIBUTE& dest, BYTE* buffer, size_t size) {
         ITEM_ATTRIBUTE_FILE_LEGACY legacyStruct;
         memcpy(&legacyStruct, buffer, sizeof(legacyStruct));
@@ -94,4 +81,4 @@ bool ItemDataSaver::Save(wchar_t* fileName, std::string* outChangeLog)
     return result;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

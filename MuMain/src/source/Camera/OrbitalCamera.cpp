@@ -16,50 +16,46 @@
 #endif
 
 // External globals
-extern int MouseWheel;
+extern int  MouseWheel;
 extern bool MouseMButton;
 extern bool MouseMButtonPush;
-extern int MouseX;
-extern int MouseY;
+extern int  MouseX;
+extern int  MouseY;
 // Hero is declared in ZzzCharacter.h as CHARACTER*
 
 #ifdef _EDITOR
 // DevEditor per-camera config override (global scope required for extern "C").
 extern "C" bool DevEditor_IsCameraOverrideEnabled(const char* cameraName);
 extern "C" void DevEditor_ApplyCameraOverride(const char* cameraName, CameraConfig* cfg);
-extern "C" bool DevEditor_GetOrbitalHullTrapezoid(float* outFarDist, float* outFarWidth,
-                                                  float* outNearDist, float* outNearWidth);
+extern "C" bool DevEditor_GetOrbitalHullTrapezoid(float* outFarDist, float* outFarWidth, float* outNearDist,
+                                                  float* outNearWidth);
 #endif
 
 namespace
 {
-    // Match the natural-pyramid near-edge width used by ZzzLodTerrain's Orbital
-    // path so FreeFly-spectator hull equals the active-render hull.
-    constexpr float NATURAL_NEAR_HALF_WIDTH = 400.0f;
+// Match the natural-pyramid near-edge width used by ZzzLodTerrain's Orbital
+// path so FreeFly-spectator hull equals the active-render hull.
+constexpr float NATURAL_NEAR_HALF_WIDTH = 400.0f;
 
-    // Fallback orbit-origin parameters used by non-MainScene activation.
-    // We synthesize a "static camera" and ray-cast from it to find where to
-    // place the orbit pivot at the character's Z height.
-    constexpr float NON_CHAR_STATIC_CAM_HEIGHT_OFFSET = 300.0f;   // above the character
-    constexpr float NON_CHAR_STATIC_CAM_PITCH = -45.0f;
+// Fallback orbit-origin parameters used by non-MainScene activation.
+// We synthesize a "static camera" and ray-cast from it to find where to
+// place the orbit pivot at the character's Z height.
+constexpr float NON_CHAR_STATIC_CAM_HEIGHT_OFFSET = 300.0f;  // above the character
+constexpr float NON_CHAR_STATIC_CAM_PITCH         = -45.0f;
 
-    // Sanity-check ranges for ray-cast intersection t values (world units).
-    constexpr float ORBIT_ORIGIN_MAX_T = 5000.0f;
-    constexpr float LOOKAT_MAX_T = 2000.0f;
+// Sanity-check ranges for ray-cast intersection t values (world units).
+constexpr float ORBIT_ORIGIN_MAX_T = 5000.0f;
+constexpr float LOOKAT_MAX_T       = 2000.0f;
 }
 
 OrbitalCamera::OrbitalCamera(CameraState& state)
-    : m_State(state)
-    , m_pDefaultCamera(std::make_unique<DefaultCamera>(state))
-    , m_Config(CameraConfig::ForMainSceneOrbitalCamera())  // OrbitalCamera defaults to extended visibility
-    , m_bInitialOffsetSet(false)
-    , m_BaseYaw(0.0f)
-    , m_BasePitch(0.0f)
-    , m_DeltaYaw(0.0f)
-    , m_DeltaPitch(0.0f)
-    , m_Radius((float)GameConfig::GetInstance().GetZoom())
-    , m_LastSceneFlag(-1)  // Phase 5: Initialize to invalid scene
-    , m_bJustActivated(false)  // Initialize activation flag
+    : m_State(state), m_pDefaultCamera(std::make_unique<DefaultCamera>(state)),
+      m_Config(CameraConfig::ForMainSceneOrbitalCamera())  // OrbitalCamera defaults to extended visibility
+      ,
+      m_bInitialOffsetSet(false), m_BaseYaw(0.0f), m_BasePitch(0.0f), m_DeltaYaw(0.0f), m_DeltaPitch(0.0f),
+      m_Radius((float)GameConfig::GetInstance().GetZoom()), m_LastSceneFlag(-1)  // Phase 5: Initialize to invalid scene
+      ,
+      m_bJustActivated(false)  // Initialize activation flag
 {
     IdentityVector3D(m_Target);
     IdentityVector3D(m_InitialCameraOffset);
@@ -70,12 +66,12 @@ OrbitalCamera::OrbitalCamera(CameraState& state)
 
 void OrbitalCamera::Reset()
 {
-    m_BaseYaw = 0.0f;
-    m_BasePitch = 0.0f;
-    m_DeltaYaw = 0.0f;
-    m_DeltaPitch = 0.0f;
-    m_Radius = (float)GameConfig::GetInstance().GetZoom();
-    m_Input.Rotating = false;
+    m_BaseYaw           = 0.0f;
+    m_BasePitch         = 0.0f;
+    m_DeltaYaw          = 0.0f;
+    m_DeltaPitch        = 0.0f;
+    m_Radius            = (float)GameConfig::GetInstance().GetZoom();
+    m_Input.Rotating    = false;
     m_bInitialOffsetSet = false;
     // Phase 5: Reset scene tracking to force config reload
     m_LastSceneFlag = -1;
@@ -87,9 +83,9 @@ void OrbitalCamera::ResetView()
     // F11: drop the player's accumulated rotation and zoom radius back to
     // defaults. Yaw/pitch base stays as-is so the camera's "anchor angle"
     // for this orbit isn't lost — only the user-driven deltas are zeroed.
-    m_DeltaYaw = 0.0f;
+    m_DeltaYaw   = 0.0f;
     m_DeltaPitch = 0.0f;
-    m_Radius = DEFAULT_RADIUS;
+    m_Radius     = DEFAULT_RADIUS;
     UpdateConfigForView();
     UpdateFrustum();
 }
@@ -109,9 +105,9 @@ void OrbitalCamera::ResetForScene(EGameScene scene)
             ApplyConfigToState();
 
             // Reset orbital parameters for new scene
-            m_DeltaYaw = 0.0f;
-            m_DeltaPitch = 0.0f;
-            m_Radius = (float)GameConfig::GetInstance().GetZoom();
+            m_DeltaYaw          = 0.0f;
+            m_DeltaPitch        = 0.0f;
+            m_Radius            = (float)GameConfig::GetInstance().GetZoom();
             m_bInitialOffsetSet = false;
             break;
 
@@ -151,27 +147,26 @@ void OrbitalCamera::LoadConfigForScene(EGameScene scene)
 void OrbitalCamera::ApplyConfigToState()
 {
     extern unsigned int WindowWidth, WindowHeight;
-    float aspect = (float)WindowWidth / (float)WindowHeight;
-    m_State.ViewFar = m_Config.farPlane;
-    m_State.FOV = HFovToVFov(m_Config.hFov, aspect);
-    m_State.TopViewEnable = false;
+    float               aspect = (float)WindowWidth / (float)WindowHeight;
+    m_State.ViewFar            = m_Config.farPlane;
+    m_State.FOV                = HFovToVFov(m_Config.hFov, aspect);
+    m_State.TopViewEnable      = false;
 }
 
 void OrbitalCamera::OnActivate(const CameraState& previousState)
 {
     extern EGameScene SceneFlag;
 
-    CAMERA_LOG("[CAM] OrbitalCamera::OnActivate - Scene=%d, PrevPos=(%.1f,%.1f,%.1f), PrevAngle=(%.1f,%.1f,%.1f), PrevDist=%.0f",
-               (int)SceneFlag,
-               previousState.Position[0], previousState.Position[1], previousState.Position[2],
-               previousState.Angle[0], previousState.Angle[1], previousState.Angle[2],
-               previousState.Distance);
+    CAMERA_LOG(
+        "[CAM] OrbitalCamera::OnActivate - Scene=%d, PrevPos=(%.1f,%.1f,%.1f), PrevAngle=(%.1f,%.1f,%.1f), PrevDist=%.0f",
+        (int)SceneFlag, previousState.Position[0], previousState.Position[1], previousState.Position[2],
+        previousState.Angle[0], previousState.Angle[1], previousState.Angle[2], previousState.Distance);
 
     // Step 1: Load config (don't use ResetForScene — it would call UpdateTarget with wrong pos)
     LoadConfigForScene(SceneFlag);
     ApplyConfigToState();
-    CAMERA_LOG("[CAM]   Config: Far=%.0f, hFOV=%.1f, TerrainCull=%.0f",
-               m_Config.farPlane, m_Config.hFov, m_Config.terrainCullRange);
+    CAMERA_LOG("[CAM]   Config: Far=%.0f, hFOV=%.1f, TerrainCull=%.0f", m_Config.farPlane, m_Config.hFov,
+               m_Config.terrainCullRange);
 
     // Step 2: Update target to Hero/Character position
     UpdateTarget();
@@ -182,9 +177,8 @@ void OrbitalCamera::OnActivate(const CameraState& previousState)
     {
         VectorCopy(previousState.Position, m_State.Position);
         VectorCopy(previousState.Angle, m_State.Angle);
-        CAMERA_LOG("[CAM]   MainScene: Inherited Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)",
-                   m_State.Position[0], m_State.Position[1], m_State.Position[2],
-                   m_State.Angle[0], m_State.Angle[1], m_State.Angle[2]);
+        CAMERA_LOG("[CAM]   MainScene: Inherited Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)", m_State.Position[0],
+                   m_State.Position[1], m_State.Position[2], m_State.Angle[0], m_State.Angle[1], m_State.Angle[2]);
     }
     else
     {
@@ -192,7 +186,7 @@ void OrbitalCamera::OnActivate(const CameraState& previousState)
     }
 
     // Step 4: Compute look-at point and initialize orbital parameters from it
-    m_DeltaYaw = 0.0f;
+    m_DeltaYaw   = 0.0f;
     m_DeltaPitch = 0.0f;
 
     vec3_t lookAtPoint;
@@ -240,9 +234,9 @@ void OrbitalCamera::CalculateOrbitOriginForStaticScene(EGameScene scene, const C
     vec3_t staticCameraPos, staticCameraAngle;
     if (scene == CHARACTER_SCENE)
     {
-        staticCameraPos[0] = CharacterSceneCamera::POSITION_X;
-        staticCameraPos[1] = CharacterSceneCamera::POSITION_Y;
-        staticCameraPos[2] = CharacterSceneCamera::POSITION_Z;
+        staticCameraPos[0]   = CharacterSceneCamera::POSITION_X;
+        staticCameraPos[1]   = CharacterSceneCamera::POSITION_Y;
+        staticCameraPos[2]   = CharacterSceneCamera::POSITION_Z;
         staticCameraAngle[0] = CharacterSceneCamera::ANGLE_PITCH;
         staticCameraAngle[1] = 0.0f;
         staticCameraAngle[2] = CharacterSceneCamera::ANGLE_ROLL;
@@ -259,12 +253,12 @@ void OrbitalCamera::CalculateOrbitOriginForStaticScene(EGameScene scene, const C
 
     float Matrix[3][4];
     AngleMatrix(staticCameraAngle, Matrix);
-    vec3_t forward = { Matrix[1][0], Matrix[1][1], Matrix[1][2] };
+    vec3_t forward = {Matrix[1][0], Matrix[1][1], Matrix[1][2]};
     VectorNormalize(forward);
 
     // Ray from static camera to the character's Z plane
     float targetZ = m_Target[2];
-    float t = (targetZ - staticCameraPos[2]) / forward[2];
+    float t       = (targetZ - staticCameraPos[2]) / forward[2];
 
     vec3_t orbitOrigin;
     if (t > 0.0f && t < ORBIT_ORIGIN_MAX_T)
@@ -284,10 +278,10 @@ void OrbitalCamera::CalculateOrbitOriginForStaticScene(EGameScene scene, const C
     VectorCopy(previousState.Angle, m_State.Angle);
     VectorCopy(orbitOrigin, m_Target);
 
-    CAMERA_LOG("[CAM]   CharScene: StaticCam=(%.1f,%.1f,%.1f), CalcOrigin=(%.1f,%.1f,%.1f), InheritedPos=(%.1f,%.1f,%.1f)",
-               staticCameraPos[0], staticCameraPos[1], staticCameraPos[2],
-               orbitOrigin[0], orbitOrigin[1], orbitOrigin[2],
-               m_State.Position[0], m_State.Position[1], m_State.Position[2]);
+    CAMERA_LOG(
+        "[CAM]   CharScene: StaticCam=(%.1f,%.1f,%.1f), CalcOrigin=(%.1f,%.1f,%.1f), InheritedPos=(%.1f,%.1f,%.1f)",
+        staticCameraPos[0], staticCameraPos[1], staticCameraPos[2], orbitOrigin[0], orbitOrigin[1], orbitOrigin[2],
+        m_State.Position[0], m_State.Position[1], m_State.Position[2]);
 }
 
 void OrbitalCamera::CalculateLookAtPoint(EGameScene scene, vec3_t outLookAt) const
@@ -303,11 +297,11 @@ void OrbitalCamera::CalculateLookAtPoint(EGameScene scene, vec3_t outLookAt) con
     // to find what point the camera was actually looking at.
     float Matrix[3][4];
     AngleMatrix(m_State.Angle, Matrix);
-    vec3_t forward = { Matrix[1][0], Matrix[1][1], Matrix[1][2] };
+    vec3_t forward = {Matrix[1][0], Matrix[1][1], Matrix[1][2]};
     VectorNormalize(forward);
 
     float targetZ = m_Target[2];
-    float t = (targetZ - m_State.Position[2]) / forward[2];
+    float t       = (targetZ - m_State.Position[2]) / forward[2];
 
     if (t > 0.0f && t < LOOKAT_MAX_T)
     {
@@ -340,35 +334,33 @@ void OrbitalCamera::InitializeOrbitalFromCurrentState(const vec3_t lookAtPoint, 
     m_InitialCameraOffset[0] = m_State.Position[0] - m_Target[0];
     m_InitialCameraOffset[1] = m_State.Position[1] - m_Target[1];
     m_InitialCameraOffset[2] = m_State.Position[2] - m_Target[2];
-    m_bInitialOffsetSet = true;
+    m_bInitialOffsetSet      = true;
 
     // Diagnostic distances for logging (horizontal matches DefaultCamera's distance convention)
-    float dx = m_InitialCameraOffset[0];
-    float dy = m_InitialCameraOffset[1];
+    float dx                 = m_InitialCameraOffset[0];
+    float dy                 = m_InitialCameraOffset[1];
     float horizontalDistance = sqrtf(dx * dx + dy * dy);
-    float fullDistance = sqrtf(
-        m_InitialCameraOffset[0] * m_InitialCameraOffset[0] +
-        m_InitialCameraOffset[1] * m_InitialCameraOffset[1] +
-        m_InitialCameraOffset[2] * m_InitialCameraOffset[2]);
+    float fullDistance       = sqrtf(m_InitialCameraOffset[0] * m_InitialCameraOffset[0] +
+                                     m_InitialCameraOffset[1] * m_InitialCameraOffset[1] +
+                                     m_InitialCameraOffset[2] * m_InitialCameraOffset[2]);
 
     // Load radius from config so zoom persists across activations
     m_Radius = (float)GameConfig::GetInstance().GetZoom();
     m_Radius = std::clamp(m_Radius, MIN_RADIUS, MAX_RADIUS);
 
-    CAMERA_LOG("[CAM]   LookAtPoint: (%.1f,%.1f,%.1f), Target (Hero): (%.1f,%.1f,%.1f)",
-               lookAtPoint[0], lookAtPoint[1], lookAtPoint[2],
-               m_Target[0], m_Target[1], m_Target[2]);
-    CAMERA_LOG("[CAM]   InitialOffset (to Target): (%.1f,%.1f,%.1f)",
-               m_InitialCameraOffset[0], m_InitialCameraOffset[1], m_InitialCameraOffset[2]);
-    CAMERA_LOG("[CAM]   HorizontalDist=%.1f, FullDist=%.1f, m_Radius=%.1f, prevDist=%.1f",
-               horizontalDistance, fullDistance, m_Radius, previousState.Distance);
+    CAMERA_LOG("[CAM]   LookAtPoint: (%.1f,%.1f,%.1f), Target (Hero): (%.1f,%.1f,%.1f)", lookAtPoint[0], lookAtPoint[1],
+               lookAtPoint[2], m_Target[0], m_Target[1], m_Target[2]);
+    CAMERA_LOG("[CAM]   InitialOffset (to Target): (%.1f,%.1f,%.1f)", m_InitialCameraOffset[0],
+               m_InitialCameraOffset[1], m_InitialCameraOffset[2]);
+    CAMERA_LOG("[CAM]   HorizontalDist=%.1f, FullDist=%.1f, m_Radius=%.1f, prevDist=%.1f", horizontalDistance,
+               fullDistance, m_Radius, previousState.Distance);
 }
 
 void OrbitalCamera::SyncStateToGlobalCamera()
 {
     VectorCopy(m_State.Position, g_Camera.Position);
     VectorCopy(m_State.Angle, g_Camera.Angle);
-    g_Camera.FOV = m_State.FOV;
+    g_Camera.FOV     = m_State.FOV;
     g_Camera.ViewFar = m_Config.farPlane;
 }
 
@@ -407,9 +399,10 @@ bool OrbitalCamera::Update()
     else
     {
         // First frame after activation - skip DefaultCamera update to preserve inherited state
-        CAMERA_LOG("[CAM] OrbitalCamera: Skipping DefaultCamera update on first frame. Current Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)",
-                   m_State.Position[0], m_State.Position[1], m_State.Position[2],
-                   m_State.Angle[0], m_State.Angle[1], m_State.Angle[2]);
+        CAMERA_LOG(
+            "[CAM] OrbitalCamera: Skipping DefaultCamera update on first frame. Current Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)",
+            m_State.Position[0], m_State.Position[1], m_State.Position[2], m_State.Angle[0], m_State.Angle[1],
+            m_State.Angle[2]);
         m_bJustActivated = false;  // Clear flag for next frame
     }
 
@@ -462,8 +455,8 @@ bool OrbitalCamera::Update()
         g_pRenderText->SetTextColor(255, 255, 0, 255);  // Yellow text
         g_pRenderText->SetBgColor(0, 0, 0, 180);        // Semi-transparent black background
 
-        wchar_t debugText[256];
-        int yPos = 10;
+        wchar_t   debugText[256];
+        int       yPos       = 10;
         const int lineHeight = 15;
 
         // Camera type and scene
@@ -482,14 +475,14 @@ bool OrbitalCamera::Update()
         yPos += lineHeight;
 
         // Near plane and culling
-        swprintf(debugText, 256, L"Config.nearPlane: %.0f | Config.terrainCullRange: %.0f",
-                 m_Config.nearPlane, m_Config.terrainCullRange);
+        swprintf(debugText, 256, L"Config.nearPlane: %.0f | Config.terrainCullRange: %.0f", m_Config.nearPlane,
+                 m_Config.terrainCullRange);
         g_pRenderText->RenderText(10, yPos, debugText);
         yPos += lineHeight;
 
         // Orbital-specific values
-        swprintf(debugText, 256, L"Radius: %.0f | DeltaYaw: %.1f | DeltaPitch: %.1f",
-                 m_Radius, m_DeltaYaw, m_DeltaPitch);
+        swprintf(debugText, 256, L"Radius: %.0f | DeltaYaw: %.1f | DeltaPitch: %.1f", m_Radius, m_DeltaYaw,
+                 m_DeltaPitch);
         g_pRenderText->RenderText(10, yPos, debugText);
         yPos += lineHeight;
 
@@ -499,7 +492,7 @@ bool OrbitalCamera::Update()
     }
 #endif
 
-    return false; // Camera not locked
+    return false;  // Camera not locked
 }
 
 void OrbitalCamera::HandleInput()
@@ -509,7 +502,7 @@ void OrbitalCamera::HandleInput()
     if (MouseWheel != 0)
     {
         const int wheel = MouseWheel;
-        MouseWheel = 0;
+        MouseWheel      = 0;
 
         if (!CameraManager::Instance().IsZoomLocked())
         {
@@ -537,7 +530,7 @@ void OrbitalCamera::HandleInput()
         if (!m_Input.Rotating)
         {
             // Button just pressed - record starting position
-            m_Input.Rotating = true;
+            m_Input.Rotating   = true;
             m_Input.LastMouseX = MouseX;
             m_Input.LastMouseY = MouseY;
         }
@@ -631,17 +624,16 @@ void OrbitalCamera::ComputeCameraTransform()
         m_InitialCameraOffset[0] = relativeX;
         m_InitialCameraOffset[1] = relativeY;
         m_InitialCameraOffset[2] = relativeZ;
-        m_bInitialOffsetSet = true;
+        m_bInitialOffsetSet      = true;
     }
 
     // m_Radius is the absolute camera-to-target distance in world units.
     // Normalize the captured direction and scale to m_Radius so the camera
     // sits exactly that far from m_Target — no hidden ratio.
-    float initialLen = sqrtf(
-        m_InitialCameraOffset[0] * m_InitialCameraOffset[0] +
-        m_InitialCameraOffset[1] * m_InitialCameraOffset[1] +
-        m_InitialCameraOffset[2] * m_InitialCameraOffset[2]);
-    float dirScale = (initialLen > 0.001f) ? (m_Radius / initialLen) : 1.0f;
+    float initialLen = sqrtf(m_InitialCameraOffset[0] * m_InitialCameraOffset[0] +
+                             m_InitialCameraOffset[1] * m_InitialCameraOffset[1] +
+                             m_InitialCameraOffset[2] * m_InitialCameraOffset[2]);
+    float dirScale   = (initialLen > 0.001f) ? (m_Radius / initialLen) : 1.0f;
 
     float scaledX = m_InitialCameraOffset[0] * dirScale;
     float scaledY = m_InitialCameraOffset[1] * dirScale;
@@ -654,15 +646,15 @@ void OrbitalCamera::ComputeCameraTransform()
     float rotatedZ = scaledZ;
 
     // Apply vertical pitch rotation
-    float horizontalDist = sqrtf(rotatedX * rotatedX + rotatedY * rotatedY);
-    float totalDist = sqrtf(rotatedX * rotatedX + rotatedY * rotatedY + rotatedZ * rotatedZ);
+    float horizontalDist   = sqrtf(rotatedX * rotatedX + rotatedY * rotatedY);
+    float totalDist        = sqrtf(rotatedX * rotatedX + rotatedY * rotatedY + rotatedZ * rotatedZ);
     float currentElevation = atan2f(rotatedZ, horizontalDist);
 
     // Calculate additional height offset when zooming in close
     // This makes the camera focus on character's head/upper body instead of feet
     // Increased from 80 to 150 to center character on screen (was showing feet at center)
     const float CAMERA_HEIGHT_OFFSET = 150.0f;
-    const float maxHeightOffset = 270.0f;  // Increased proportionally
+    const float maxHeightOffset      = 270.0f;  // Increased proportionally
 
     float zoomFactor = 0.0f;
     if (m_Radius < DEFAULT_RADIUS)  // Only add extra offset when zooming in from default
@@ -673,24 +665,24 @@ void OrbitalCamera::ComputeCameraTransform()
 
     // Calculate the target offset for current zoom level
     float targetHeightOffset = CAMERA_HEIGHT_OFFSET + ((maxHeightOffset - CAMERA_HEIGHT_OFFSET) * zoomFactor);
-    float additionalOffset = targetHeightOffset - CAMERA_HEIGHT_OFFSET;
+    float additionalOffset   = targetHeightOffset - CAMERA_HEIGHT_OFFSET;
 
     // Check if requested pitch would hit ground or ceiling constraints
-    float pitchRad = m_DeltaPitch * (M_PI / 180.0f);
-    float requestedElevation = currentElevation + pitchRad;
+    float pitchRad              = m_DeltaPitch * (M_PI / 180.0f);
+    float requestedElevation    = currentElevation + pitchRad;
     float requestedVerticalDist = totalDist * sinf(requestedElevation);
-    float requestedZ = m_Target[2] + requestedVerticalDist + additionalOffset;
+    float requestedZ            = m_Target[2] + requestedVerticalDist + additionalOffset;
 
-    const float minCameraHeight = 50.0f;
-    float finalElevation = requestedElevation;
-    float effectivePitchDelta = m_DeltaPitch;
+    const float minCameraHeight     = 50.0f;
+    float       finalElevation      = requestedElevation;
+    float       effectivePitchDelta = m_DeltaPitch;
 
     // Clamp to prevent looking too far down (below minimum height)
     if (requestedZ < m_Target[2] + minCameraHeight)
     {
         // Calculate maximum downward elevation that keeps us above minimum height
         float maxRelativeZ = minCameraHeight - additionalOffset;
-        finalElevation = asinf(std::clamp(maxRelativeZ / totalDist, -1.0f, 1.0f));
+        finalElevation     = asinf(std::clamp(maxRelativeZ / totalDist, -1.0f, 1.0f));
 
         // Calculate effective pitch delta
         effectivePitchDelta = (finalElevation - currentElevation) * (180.0f / M_PI);
@@ -702,13 +694,13 @@ void OrbitalCamera::ComputeCameraTransform()
     const float maxElevationRad = 90.0f * (M_PI / 180.0f);  // ~90 degrees maximum
     if (finalElevation > maxElevationRad)
     {
-        finalElevation = maxElevationRad;
+        finalElevation      = maxElevationRad;
         effectivePitchDelta = (finalElevation - currentElevation) * (180.0f / M_PI);
     }
 
     // Apply the final (possibly clamped) elevation
     float newHorizontalDist = totalDist * cosf(finalElevation);
-    float newVerticalDist = totalDist * sinf(finalElevation);
+    float newVerticalDist   = totalDist * sinf(finalElevation);
 
     float xyScale = (horizontalDist > 0.001f) ? (newHorizontalDist / horizontalDist) : 1.0f;
     rotatedX *= xyScale;
@@ -732,7 +724,7 @@ void OrbitalCamera::ComputeCameraTransform()
     m_State.UpdateMatrix();
 
     // Update distance properties
-    m_State.Distance = m_Radius;
+    m_State.Distance       = m_Radius;
     m_State.DistanceTarget = m_Radius;
 
     // Sync ViewFar and fog distances with current zoom level
@@ -750,7 +742,7 @@ void OrbitalCamera::SetConfig(const CameraConfig& config)
 
 void OrbitalCamera::UpdateConfigForView()
 {
-    float zoomRatio = m_Radius / DEFAULT_RADIUS;
+    float        zoomRatio  = m_Radius / DEFAULT_RADIUS;
     CameraConfig baseConfig = CameraConfig::ForMainSceneOrbitalCamera();
 
     float zoomScale;
@@ -771,7 +763,7 @@ void OrbitalCamera::UpdateConfigForView()
 
     // Sync g_Camera.ViewFar so BeginOpengl uses the updated far plane for
     // projection and percentage-based fog (fog = ViewFar * 80%/90%).
-    m_State.ViewFar = m_Config.farPlane;
+    m_State.ViewFar  = m_Config.farPlane;
     g_Camera.ViewFar = m_Config.farPlane;
 
     // Restore orbital's FOV. The internal m_pDefaultCamera->Update() call in
@@ -782,7 +774,7 @@ void OrbitalCamera::UpdateConfigForView()
     if (WindowHeight > 0)
     {
         float aspect = (float)WindowWidth / (float)WindowHeight;
-        m_State.FOV = HFovToVFov(m_Config.hFov, aspect);
+        m_State.FOV  = HFovToVFov(m_Config.hFov, aspect);
     }
 
     // Keep cull ranges in lockstep with farPlane. Previously objectCullRange was
@@ -807,9 +799,9 @@ void OrbitalCamera::UpdateFrustum()
     // Forward (view -Z) in world space = R^T * (0,0,-1), Up (view +Y) = R^T * (0,1,0).
     vec3_t forward, up;
 
-    float a0 = m_State.Angle[0] * (Q_PI / 180.0f);  // X rotation (pitch)
-    float a1 = m_State.Angle[1] * (Q_PI / 180.0f);  // Y rotation (usually 0)
-    float a2 = m_State.Angle[2] * (Q_PI / 180.0f);  // Z rotation (yaw)
+    float a0  = m_State.Angle[0] * (Q_PI / 180.0f);  // X rotation (pitch)
+    float a1  = m_State.Angle[1] * (Q_PI / 180.0f);  // Y rotation (usually 0)
+    float a2  = m_State.Angle[2] * (Q_PI / 180.0f);  // Z rotation (yaw)
     float sa0 = sinf(a0), ca0 = cosf(a0);
     float sa1 = sinf(a1), ca1 = cosf(a1);
     float sa2 = sinf(a2), ca2 = cosf(a2);
@@ -829,42 +821,34 @@ void OrbitalCamera::UpdateFrustum()
     // MainScene uses height=432 (480-48 for UI bar), CharacterScene uses 430, etc.
     extern unsigned int WindowWidth;
     extern unsigned int WindowHeight;
-    extern EGameScene SceneFlag;
-    extern int GetScreenWidth();
+    extern EGameScene   SceneFlag;
+    extern int          GetScreenWidth();
 
-    int refWidth = REFERENCE_WIDTH;
+    int refWidth  = REFERENCE_WIDTH;
     int refHeight = REFERENCE_HEIGHT;
     if (SceneFlag == MAIN_SCENE)
     {
-        refWidth = GetScreenWidth();
-        refHeight = g_Camera.TopViewEnable ? REFERENCE_HEIGHT : (REFERENCE_HEIGHT - HUD_BOTTOM_BAR_HEIGHT);
+        refWidth  = GetScreenWidth();
+        refHeight = g_Camera.TopViewEnable ? REFERENCE_HEIGHT : (REFERENCE_HEIGHT - 48);
     }
     else if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
     {
         refHeight = 430;
     }
-    float viewportWidth = (float)(refWidth * WindowWidth) / (float)REFERENCE_WIDTH;
+    float viewportWidth  = (float)(refWidth * WindowWidth) / (float)REFERENCE_WIDTH;
     float viewportHeight = (float)(refHeight * WindowHeight) / (float)REFERENCE_HEIGHT;
-    float aspectRatio = viewportWidth / viewportHeight;
+    float aspectRatio    = viewportWidth / viewportHeight;
 
     // Override was already applied at the top of this function (if enabled).
-    float effectiveFarPlane = m_Config.farPlane;
+    float effectiveFarPlane         = m_Config.farPlane;
     float effectiveTerrainCullRange = m_Config.terrainCullRange;
 
     // Use g_Camera.FOV (= m_State.FOV) directly — same vFov that BeginOpengl passes
     // to gluPerspective. Combined with viewport aspect, this matches the GL projection exactly.
     float vFov = m_State.FOV;
 
-    m_Frustum.BuildFromCamera(
-        m_State.Position,
-        forward,
-        up,
-        vFov,
-        aspectRatio,
-        m_Config.nearPlane,
-        effectiveFarPlane,
-        effectiveTerrainCullRange
-    );
+    m_Frustum.BuildFromCamera(m_State.Position, forward, up, vFov, aspectRatio, m_Config.nearPlane, effectiveFarPlane,
+                              effectiveTerrainCullRange);
 
     // Inject Orbital's actual 2D terrain-cull hull into m_Frustum so FreeFly
     // spectator (which reads Frustum::Get2DX/Y) sees exactly what Orbital's
@@ -886,12 +870,12 @@ void OrbitalCamera::UpdateFrustum()
 #endif
         {
             const float tanHalfV = tanf(vFov * 0.5f * Q_PI / 180.0f);
-            hullFarDist   = effectiveTerrainCullRange;
-            hullFarHalfW  = tanHalfV * effectiveTerrainCullRange * aspectRatio;
-            hullNearDist  = 0.0f;
-            hullNearHalfW = NATURAL_NEAR_HALF_WIDTH;
+            hullFarDist          = effectiveTerrainCullRange;
+            hullFarHalfW         = tanHalfV * effectiveTerrainCullRange * aspectRatio;
+            hullNearDist         = 0.0f;
+            hullNearHalfW        = NATURAL_NEAR_HALF_WIDTH;
         }
-        const float hullFarHalfH  = hullFarHalfW  / aspectRatio;
+        const float hullFarHalfH  = hullFarHalfW / aspectRatio;
         const float hullNearHalfH = hullNearHalfW / aspectRatio;
 
         // Build the SAME rotation matrix BeginOpengl produces (Ry(A1) * Rx(A0) * Rz(A2))
@@ -905,27 +889,27 @@ void OrbitalCamera::UpdateFrustum()
             const float s0 = sinf(a0), c0 = cosf(a0);
             const float s1 = sinf(a1), c1 = cosf(a1);
             const float s2 = sinf(a2), c2 = cosf(a2);
-            mat[0][0] =  c1 * c2 + s1 * s0 * s2;
+            mat[0][0] = c1 * c2 + s1 * s0 * s2;
             mat[0][1] = -c1 * s2 + s1 * s0 * c2;
-            mat[0][2] =  s1 * c0;
-            mat[1][0] =  c0 * s2;
-            mat[1][1] =  c0 * c2;
+            mat[0][2] = s1 * c0;
+            mat[1][0] = c0 * s2;
+            mat[1][1] = c0 * c2;
             mat[1][2] = -s0;
             mat[2][0] = -s1 * c2 + c1 * s0 * s2;
-            mat[2][1] =  s1 * s2 + c1 * s0 * c2;
-            mat[2][2] =  c1 * c0;
+            mat[2][1] = s1 * s2 + c1 * s0 * c2;
+            mat[2][2] = c1 * c0;
             mat[0][3] = mat[1][3] = mat[2][3] = 0.0f;
         }
 
         vec3_t viewPts[8];
-        Vector(-hullNearHalfW,  hullNearHalfH, -hullNearDist, viewPts[0]);
-        Vector( hullNearHalfW,  hullNearHalfH, -hullNearDist, viewPts[1]);
-        Vector( hullNearHalfW, -hullNearHalfH, -hullNearDist, viewPts[2]);
+        Vector(-hullNearHalfW, hullNearHalfH, -hullNearDist, viewPts[0]);
+        Vector(hullNearHalfW, hullNearHalfH, -hullNearDist, viewPts[1]);
+        Vector(hullNearHalfW, -hullNearHalfH, -hullNearDist, viewPts[2]);
         Vector(-hullNearHalfW, -hullNearHalfH, -hullNearDist, viewPts[3]);
-        Vector(-hullFarHalfW,   hullFarHalfH,  -hullFarDist,  viewPts[4]);
-        Vector( hullFarHalfW,   hullFarHalfH,  -hullFarDist,  viewPts[5]);
-        Vector( hullFarHalfW,  -hullFarHalfH,  -hullFarDist,  viewPts[6]);
-        Vector(-hullFarHalfW,  -hullFarHalfH,  -hullFarDist,  viewPts[7]);
+        Vector(-hullFarHalfW, hullFarHalfH, -hullFarDist, viewPts[4]);
+        Vector(hullFarHalfW, hullFarHalfH, -hullFarDist, viewPts[5]);
+        Vector(hullFarHalfW, -hullFarHalfH, -hullFarDist, viewPts[6]);
+        Vector(-hullFarHalfW, -hullFarHalfH, -hullFarDist, viewPts[7]);
 
         float hx[8], hy[8];
         for (int i = 0; i < 8; i++)

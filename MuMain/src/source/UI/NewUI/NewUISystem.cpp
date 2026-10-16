@@ -6,23 +6,22 @@
 #include "GameLogic/Items/PersonalShopTitleImp.h"
 #include "World/MapInfra/MapManager.h"
 
-
 using namespace SEASON3B;
 
 namespace
 {
-    constexpr int kLayoutBaseX = 640;
-    constexpr int kLayoutPanelWidth = 190;
+constexpr int kLayoutBaseX      = 640;
+constexpr int kLayoutPanelWidth = 190;
 
-    constexpr int PanelColumnX(int columns)
-    {
-        return kLayoutBaseX - (kLayoutPanelWidth * columns);
-    }
+constexpr int PanelColumnX(int columns)
+{
+    return kLayoutBaseX - (kLayoutPanelWidth * columns);
+}
 
-    bool IsHeroPositionLayoutInterface(DWORD dwKey)
+bool IsHeroPositionLayoutInterface(DWORD dwKey)
+{
+    switch (dwKey)
     {
-        switch (dwKey)
-        {
         case INTERFACE_INVENTORY:
         case INTERFACE_INVENTORY_EXT:
         case INTERFACE_STORAGE:
@@ -36,103 +35,89 @@ namespace
             return true;
         default:
             return false;
-        }
     }
+}
 }
 
 CNewUISystem::CNewUISystem()
 {
-    // All interface pointers must start null so Release()/SafeDelete never deletes
-    // an uninitialized pointer when Create() fails partway through or before it runs.
-    m_pNewUIMng = nullptr;
-    m_pNewUI3DRenderMng = nullptr;
-    m_pNewUIHotKey = nullptr;
-    m_pNewChatLogWindow = nullptr;
-    m_pNewSystemLogWindow = nullptr;
-    m_pNewSlideWindow = nullptr;
-    m_pNewGuildMakeWindow = nullptr;
-    m_pNewFriendWindow = nullptr;
-    m_pNewMainFrameWindow = nullptr;
-    m_pNewSkillList = nullptr;
-    m_pNewChatInputBox = nullptr;
-    m_pNewItemMng = nullptr;
-    m_pNewMyInventory = nullptr;
-    m_pNewMyInventoryExt = nullptr;
-    m_pNewNPCShop = nullptr;
-    m_pNewPetInfoWindow = nullptr;
-    m_pNewMixInventory = nullptr;
-    m_pNewCastleWindow = nullptr;
-    m_pNewGuardWindow = nullptr;
-    m_pNewGatemanWindow = nullptr;
-    m_pNewGateSwitchWindow = nullptr;
-    m_pNewStorageInventory = nullptr;
-    m_pNewStorageInventoryExt = nullptr;
-    m_pNewGuildInfoWindow = nullptr;
-    m_pNewMyShopInventory = nullptr;
-    m_pNewPurchaseShopInventory = nullptr;
-    m_pNewCharacterInfoWindow = nullptr;
-    m_pNewMyQuestInfoWindow = nullptr;
-    m_pNewPartyInfoWindow = nullptr;
-    m_pNewPartyListWindow = nullptr;
-    m_pNewNPCQuest = nullptr;
-    m_pNewEnterBloodCastle = nullptr;
-    m_pNewEnterDevilSquare = nullptr;
-    m_pNewBloodCastle = nullptr;
-    m_pNewTrade = nullptr;
-    m_pNewKanturu2ndEnterNpc = nullptr;
-    m_pNewCatapultWindow = nullptr;
-    m_pNewChaosCastleTime = nullptr;
-    m_pNewBattleSoccerScore = nullptr;
-    m_pNewCommandWindow = nullptr;
-    m_pNewWindowMenu = nullptr;
-    m_pNewOptionWindow = nullptr;
-    m_pNewHeroPositionInfo = nullptr;
-    m_pNewHelpWindow = nullptr;
-    m_pNewChatCommandWindow = nullptr;
-    m_pNewItemExplanationWindow = nullptr;
-    m_pNewSetItemExplanation = nullptr;
-    m_pNewQuickCommandWindow = nullptr;
-    m_pNewMoveCommandWindow = nullptr;
-    m_pNewSiegeWarfare = nullptr;
-    m_pNewItemEnduranceInfo = nullptr;
-    m_pNewBuffWindow = nullptr;
-    m_pNewCryWolfInterface = nullptr;
-    m_pNewMaster_Level_Interface = nullptr;
+    m_pNewUIMng                    = nullptr;
+    m_pNewUIHotKey                 = nullptr;
+    m_pNewChatLogWindow            = nullptr;
+    m_pNewSystemLogWindow          = nullptr;
+    m_pNewSlideWindow              = nullptr;
+    m_pNewGuildMakeWindow          = nullptr;
+    m_pNewFriendWindow             = nullptr;
+    m_pNewMainFrameWindow          = nullptr;
+    m_pNewSkillList                = nullptr;
+    m_pNewChatInputBox             = nullptr;
+    m_pNewItemMng                  = nullptr;
+    m_pNewMyInventory              = nullptr;
+    m_pNewMyInventoryExt           = nullptr;
+    m_pNewNPCShop                  = nullptr;
+    m_pNewPetInfoWindow            = nullptr;
+    m_pNewMixInventory             = nullptr;
+    m_pNewCastleWindow             = nullptr;
+    m_pNewGuardWindow              = nullptr;
+    m_pNewGatemanWindow            = nullptr;
+    m_pNewGateSwitchWindow         = nullptr;
+    m_pNewStorageInventory         = nullptr;
+    m_pNewStorageInventoryExt      = nullptr;
+    m_pNewGuildInfoWindow          = nullptr;
+    m_pNewMyShopInventory          = nullptr;
+    m_pNewCharacterInfoWindow      = nullptr;
+    m_pNewPartyInfoWindow          = nullptr;
+    m_pNewPartyListWindow          = nullptr;
+    m_pNewNPCQuest                 = nullptr;
+    m_pNewEnterBloodCastle         = nullptr;
+    m_pNewEnterDevilSquare         = nullptr;
+    m_pNewBloodCastle              = nullptr;
+    m_pNewTrade                    = nullptr;
+    m_pNewKanturu2ndEnterNpc       = nullptr;
+    m_pNewCatapultWindow           = nullptr;
+    m_pNewChaosCastleTime          = nullptr;
+    m_pNewBattleSoccerScore        = nullptr;
+    m_pNewCommandWindow            = nullptr;
+    m_pNewWindowMenu               = nullptr;
+    m_pNewOptionWindow             = nullptr;
+    m_pNewHeroPositionInfo         = nullptr;
+    m_pNewHelpWindow               = nullptr;
+    m_pNewChatCommandWindow        = nullptr;
+    m_pNewItemExplanationWindow    = nullptr;
+    m_pNewSetItemExplanation       = nullptr;
+    m_pNewQuickCommandWindow       = nullptr;
+    m_pNewMoveCommandWindow        = nullptr;
+    m_pNewSiegeWarfare             = nullptr;
+    m_pNewItemEnduranceInfo        = nullptr;
+    m_pNewBuffWindow               = nullptr;
+    m_pNewCryWolfInterface         = nullptr;
+    m_pNewMaster_Level_Interface   = nullptr;
     m_pNewCursedTempleResultWindow = nullptr;
-    m_pNewCursedTempleWindow = nullptr;
-    m_pNewCursedTempleEnterWindow = nullptr;
-    m_pNewGoldBowman = nullptr;
-    m_pNewGoldBowmanLena = nullptr;
-    m_pNewLuckyCoinRegistration = nullptr;
-    m_pNewExchangeLuckyCoinWindow = nullptr;
-    m_pNewDuelWatchWindow = nullptr;
-    m_pNewDuelWatchMainFrameWindow = nullptr;
-    m_pNewUIMuHelperSkillList = nullptr;
-    m_pNewUIMuHelper = nullptr;
-    m_pNewUIMuHelperExt = nullptr;
+    m_pNewCursedTempleWindow       = nullptr;
+    m_pNewCursedTempleEnterWindow  = nullptr;
+    m_pNewGoldBowman               = nullptr;
+    m_pNewGoldBowmanLena           = nullptr;
+    m_pNewLuckyCoinRegistration    = nullptr;
+    m_pNewExchangeLuckyCoinWindow  = nullptr;
+    m_pNewDuelWatchWindow          = nullptr;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = nullptr;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-    m_pNewDoppelGangerWindow = nullptr;
-    m_pNewDoppelGangerFrame = nullptr;
-    m_pNewNPCDialogue = nullptr;
-    m_pNewQuestProgress = nullptr;
-    m_pNewQuestProgressByEtc = nullptr;
-    m_pNewEmpireGuardianNPC = nullptr;
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+    m_pNewDoppelGangerWindow  = nullptr;
+    m_pNewDoppelGangerFrame   = nullptr;
+    m_pNewNPCDialogue         = nullptr;
+    m_pNewQuestProgress       = nullptr;
+    m_pNewQuestProgressByEtc  = nullptr;
+    m_pNewEmpireGuardianNPC   = nullptr;
     m_pNewEmpireGuardianTimer = nullptr;
-    m_pNewMiniMap = nullptr;
+    m_pNewMiniMap             = nullptr;
 #ifdef PBG_MOD_STAMINA_UI
     m_pNewUIStamina = NULL;
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
     m_pNewGensRanking = nullptr;
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING
     m_pNewUnitedMarketPlaceWindow = nullptr;
-    m_pNewKanturuInfoWindow = nullptr;
-    m_pNewDuelWindow = nullptr;
-    m_pNewNameWindow = nullptr;
-    m_pNewDuelWatchUserListWindow = nullptr;
-    m_pNewUILuckyItemWnd = nullptr;
 }
 
 CNewUISystem::~CNewUISystem()
@@ -184,7 +169,8 @@ void CNewUISystem::Release()
     SafeDelete(m_pNewSystemLogWindow);
     SafeDelete(m_pNewUI3DRenderMng);
 
-    if (m_pNewUIMng) m_pNewUIMng->RemoveAllUIObjs();  // #MG-27: null-safe if Create failed
+    if (m_pNewUIMng)
+        m_pNewUIMng->RemoveAllUIObjs();  // #MG-27: null-safe if Create failed
 
     SafeDelete(m_pNewUIMng);
 }
@@ -486,7 +472,7 @@ bool CNewUISystem::LoadMainSceneInterface()
     m_pNewInGameShop = new CNewUIInGameShop;
     if (m_pNewInGameShop->Create(m_pNewUIMng, 0, 0) == false)
         return false;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
     m_pNewDoppelGangerWindow = new CNewUIDoppelGangerWindow;
     if (m_pNewDoppelGangerWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng, PanelColumnX(1), 0) == false)
@@ -520,7 +506,7 @@ bool CNewUISystem::LoadMainSceneInterface()
     m_pNewUIStamina = new CNewUIStamina;
     if (m_pNewUIStamina->Create(m_pNewUIMng, 640, 480) == false)
         return false;
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
 
     m_pNewGensRanking = new CNewUIGensRanking;
     if (m_pNewGensRanking->Create(m_pNewUIMng, 640, 480) == false)
@@ -584,7 +570,6 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewNPCShop);
     SafeDelete(m_pNewPetInfoWindow);
     SafeDelete(m_pNewMyInventory);
-    SafeDelete(m_pNewMyInventoryExt);  // was leaked on unload (matches the storage-extension fix)
     SafeDelete(m_pNewFriendWindow);
     SafeDelete(m_pNewChatInputBox);
     SafeDelete(m_pNewNameWindow);
@@ -618,7 +603,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewDuelWatchUserListWindow);
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     SafeDelete(m_pNewInGameShop);
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
     SafeDelete(m_pNewDoppelGangerWindow);
     SafeDelete(m_pNewDoppelGangerFrame);
     SafeDelete(m_pNewNPCDialogue);
@@ -630,16 +615,12 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewItemMng);
 #ifdef PBG_MOD_STAMINA_UI
     SafeDelete(m_pNewUIStamina);
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
     SafeDelete(m_pNewGensRanking);
     SafeDelete(m_pNewUnitedMarketPlaceWindow);
-    // MuHelper trio were allocated in LoadMainSceneInterface but never released.
-    SafeDelete(m_pNewUIMuHelperSkillList);
-    SafeDelete(m_pNewUIMuHelperExt);
-    SafeDelete(m_pNewUIMuHelper);
-    // The lucky-item window is allocated in LoadMainSceneInterface; always release it
-    // (the LEM_FIX macro gating this was never defined, leaking the window).
+#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     SafeDelete(m_pNewUILuckyItemWnd);
+#endif  // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
 
     ReleasePersonalItemTable();
 }
@@ -661,12 +642,12 @@ bool CNewUISystem::HasVisibleGamepadInterface()
         return false;
     }
 
-    const UI::Input::LayerState layerState{
-        g_MessageBox && !g_MessageBox->IsEmpty(),
-        m_pNewSkillList && m_pNewSkillList->IsSelectionOpen(),
-        PartyNumber > 0, gMapManager.InBattleCastle()};
+    const UI::Input::LayerState layerState{g_MessageBox && !g_MessageBox->IsEmpty(),
+                                           m_pNewSkillList && m_pNewSkillList->IsSelectionOpen(), PartyNumber > 0,
+                                           gMapManager.InBattleCastle()};
     for (int key = INTERFACE_BEGIN + 1; key < INTERFACE_END; ++key)
-        if (IsVisible(key) && UI::Input::BlocksWorldInput(key, layerState)) return true;
+        if (IsVisible(key) && UI::Input::BlocksWorldInput(key, layerState))
+            return true;
 
     return false;
 }
@@ -681,7 +662,7 @@ void CNewUISystem::Show(DWORD dwKey)
 #ifdef PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     if (g_pInGameShop->IsInGameShop())
         return;
-#endif //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+#endif  //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     if (!m_pNewUIMng)
     {
         return;
@@ -1108,9 +1089,9 @@ void CNewUISystem::Show(DWORD dwKey)
         g_pInGameShop->OpeningProcess();
 #ifndef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, true);
-#endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
+#endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
     else if (dwKey == INTERFACE_DOPPELGANGER_NPC)
     {
         m_pNewDoppelGangerWindow->OpeningProcess();
@@ -1337,8 +1318,7 @@ void CNewUISystem::Hide(DWORD dwKey)
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
         m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
     }
-    else if (dwKey == INTERFACE_MYSHOP_INVENTORY
-        || dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
+    else if (dwKey == INTERFACE_MYSHOP_INVENTORY || dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
     {
         if (dwKey == INTERFACE_MYSHOP_INVENTORY)
         {
@@ -1550,7 +1530,7 @@ void CNewUISystem::Hide(DWORD dwKey)
         g_pInGameShop->ClosingProcess();
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, false);
     }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
     else if (dwKey == INTERFACE_DOPPELGANGER_NPC)
     {
         m_pNewDoppelGangerWindow->ClosingProcess();
@@ -1644,8 +1624,7 @@ void CNewUISystem::HideAllGroupA()
     Hide(INTERFACE_INVENTORY);
     Hide(INTERFACE_CHARACTER);
 
-    DWORD dwGroupA[] =
-    {
+    DWORD dwGroupA[] = {
         //SEASON3B::INTERFACE_INVENTORY,
         //SEASON3B::INTERFACE_CHARACTER,
         //SEASON3B::INTERFACE_WINDOW_MENU,
@@ -1680,10 +1659,10 @@ void CNewUISystem::HideAllGroupA()
         INTERFACE_EMPIREGUARDIAN_NPC,
 #ifdef PBG_MOD_STAMINA_UI
         SEASON3B::INTERFACE_STAMINA_GAUGE,
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
         INTERFACE_GENSRANKING,
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING
         INTERFACE_UNITEDMARKETPLACE_NPC_JULIA,
 
         SEASON3B::INTERFACE_LUCKYITEMWND,
@@ -1706,8 +1685,7 @@ void CNewUISystem::HideAllGroupB()
     Hide(INTERFACE_INVENTORY);
     Hide(INTERFACE_CHARACTER);
 
-    DWORD dwGroupB[] =
-    {
+    DWORD dwGroupB[] = {
         //SEASON3B::INTERFACE_FRIEND,
         //SEASON3B::INTERFACE_INVENTORY,
         //SEASON3B::INTERFACE_CHARACTER,
@@ -1742,10 +1720,10 @@ void CNewUISystem::HideAllGroupB()
         INTERFACE_EMPIREGUARDIAN_NPC,
 #ifdef PBG_MOD_STAMINA_UI
         SEASON3B::INTERFACE_STAMINA_GAUGE,
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
         INTERFACE_GENSRANKING,
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING
         INTERFACE_UNITEDMARKETPLACE_NPC_JULIA,
         SEASON3B::INTERFACE_LUCKYITEMWND,
 
@@ -1762,8 +1740,7 @@ void CNewUISystem::HideAllGroupB()
 }
 void CNewUISystem::HideGroupBeforeOpenInterface()
 {
-    DWORD dwGroupC[] =
-    {
+    DWORD dwGroupC[] = {
         INTERFACE_PARTY,
         INTERFACE_COMMAND,
         INTERFACE_COMMAND_LIST,
@@ -1821,12 +1798,8 @@ bool CNewUISystem::ShouldHideHeroPositionInfo()
         return false;
     }
 
-    return IsVisible(INTERFACE_CHARACTER)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_MYSHOP_INVENTORY)
-        || IsVisible(INTERFACE_NPCSHOP)
-        || IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_TRADE);
+    return IsVisible(INTERFACE_CHARACTER) || IsVisible(INTERFACE_STORAGE) || IsVisible(INTERFACE_MYSHOP_INVENTORY) ||
+           IsVisible(INTERFACE_NPCSHOP) || IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_TRADE);
 }
 
 void CNewUISystem::Enable(DWORD dwKey)
@@ -1873,15 +1846,14 @@ bool CNewUISystem::HandleFrameCornerClose(const POINT& winPos, DWORD dwKey)
     // every window. One place to tune for every window that uses this frame.
     constexpr int X_OFFSET = 169, Y_OFFSET = 7, WIDTH = 13, HEIGHT = 12;
 
-    if (IsPress(VK_LBUTTON)
-        && CheckMouseIn(winPos.x + X_OFFSET, winPos.y + Y_OFFSET, WIDTH, HEIGHT))
+    if (IsPress(VK_LBUTTON) && CheckMouseIn(winPos.x + X_OFFSET, winPos.y + Y_OFFSET, WIDTH, HEIGHT))
     {
         Hide(dwKey);
         // Clear the raw button state: world movement reads MouseLButtonPush
         // directly (not the UI consume result), so without this the click falls
         // through and walks the character.
-        MouseLButton = false;
-        MouseLButtonPop = false;
+        MouseLButton     = false;
+        MouseLButtonPop  = false;
         MouseLButtonPush = false;
         return true;
     }
@@ -1933,10 +1905,8 @@ CNewUIHotKey* CNewUISystem::GetNewUIHotKey() const
 
 bool CNewUISystem::IsImpossibleSendMoveInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) ||
+        IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1946,15 +1916,12 @@ bool CNewUISystem::IsImpossibleSendMoveInterface()
 
 bool CNewUISystem::IsImpossibleTradeInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_INGAMESHOP)
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) || IsVisible(INTERFACE_STORAGE) ||
+        IsVisible(INTERFACE_INGAMESHOP)
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
         || IsVisible(INTERFACE_INGAMESHOP)
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1964,15 +1931,12 @@ bool CNewUISystem::IsImpossibleTradeInterface()
 
 bool CNewUISystem::IsImpossibleDuelInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_INGAMESHOP)
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) || IsVisible(INTERFACE_STORAGE) ||
+        IsVisible(INTERFACE_INGAMESHOP)
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
         || IsVisible(INTERFACE_INGAMESHOP)
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1982,35 +1946,18 @@ bool CNewUISystem::IsImpossibleDuelInterface()
 
 bool CNewUISystem::IsImpossibleHideInterface(DWORD dwKey)
 {
-    if (dwKey == INTERFACE_MAINFRAME
-        || dwKey == INTERFACE_SKILL_LIST
-        || dwKey == INTERFACE_SLIDEWINDOW
-        || dwKey == INTERFACE_MESSAGEBOX
-        || dwKey == INTERFACE_CHATLOGWINDOW
-        || dwKey == INTERFACE_SYSTEMLOGWINDOW
-        || dwKey == INTERFACE_PARTY_INFO_WINDOW
-        || dwKey == INTERFACE_KANTURU_INFO
-        || dwKey == INTERFACE_BLOODCASTLE_TIME
-        || dwKey == INTERFACE_CHAOSCASTLE_TIME
-        || dwKey == INTERFACE_BATTLE_SOCCER_SCORE
-        || dwKey == INTERFACE_DUEL_WINDOW
-        || dwKey == INTERFACE_CRYWOLF
-        || dwKey == INTERFACE_HERO_POSITION_INFO
-        || dwKey == INTERFACE_NAME_WINDOW
-        || dwKey == INTERFACE_SIEGEWARFARE
-        || dwKey == INTERFACE_ITEM_TOOLTIP
-        || dwKey == INTERFACE_HOTKEY
-        || dwKey == INTERFACE_CURSEDTEMPLE_GAMESYSTEM
-        || dwKey == INTERFACE_ITEM_ENDURANCE_INFO
-        || dwKey == INTERFACE_BUFF_WINDOW
-        || (dwKey >= INTERFACE_3DRENDERING_CAMERA_BEGIN && dwKey <= INTERFACE_3DRENDERING_CAMERA_END)
-        || dwKey == INTERFACE_DUELWATCH_MAINFRAME
-        || dwKey == INTERFACE_DUELWATCH_USERLIST
-        || dwKey == INTERFACE_DOPPELGANGER_FRAME
-        || dwKey == INTERFACE_GOLD_BOWMAN
-        || dwKey == INTERFACE_GOLD_BOWMAN_LENA
-        || dwKey == INTERFACE_EMPIREGUARDIAN_TIMER
-        )
+    if (dwKey == INTERFACE_MAINFRAME || dwKey == INTERFACE_SKILL_LIST || dwKey == INTERFACE_SLIDEWINDOW ||
+        dwKey == INTERFACE_MESSAGEBOX || dwKey == INTERFACE_CHATLOGWINDOW || dwKey == INTERFACE_SYSTEMLOGWINDOW ||
+        dwKey == INTERFACE_PARTY_INFO_WINDOW || dwKey == INTERFACE_KANTURU_INFO ||
+        dwKey == INTERFACE_BLOODCASTLE_TIME || dwKey == INTERFACE_CHAOSCASTLE_TIME ||
+        dwKey == INTERFACE_BATTLE_SOCCER_SCORE || dwKey == INTERFACE_DUEL_WINDOW || dwKey == INTERFACE_CRYWOLF ||
+        dwKey == INTERFACE_HERO_POSITION_INFO || dwKey == INTERFACE_NAME_WINDOW || dwKey == INTERFACE_SIEGEWARFARE ||
+        dwKey == INTERFACE_ITEM_TOOLTIP || dwKey == INTERFACE_HOTKEY || dwKey == INTERFACE_CURSEDTEMPLE_GAMESYSTEM ||
+        dwKey == INTERFACE_ITEM_ENDURANCE_INFO || dwKey == INTERFACE_BUFF_WINDOW ||
+        (dwKey >= INTERFACE_3DRENDERING_CAMERA_BEGIN && dwKey <= INTERFACE_3DRENDERING_CAMERA_END) ||
+        dwKey == INTERFACE_DUELWATCH_MAINFRAME || dwKey == INTERFACE_DUELWATCH_USERLIST ||
+        dwKey == INTERFACE_DOPPELGANGER_FRAME || dwKey == INTERFACE_GOLD_BOWMAN ||
+        dwKey == INTERFACE_GOLD_BOWMAN_LENA || dwKey == INTERFACE_EMPIREGUARDIAN_TIMER)
     {
         return true;
     }
@@ -2449,7 +2396,7 @@ CNewUIInGameShop* CNewUISystem::GetUI_pNewInGameShop() const
 {
     return m_pNewInGameShop;
 }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
 CNewUIDoppelGangerWindow* CNewUISystem::GetUI_pNewDoppelGangerWindow() const
 {
@@ -2491,14 +2438,14 @@ CNewUIStamina* SEASON3B::CNewUISystem::GetUI_pNewUIStamina() const
 {
     return m_pNewUIStamina;
 }
-#endif //PBG_MOD_STAMINA_UI
+#endif  //PBG_MOD_STAMINA_UI
 
 #ifdef PBG_ADD_GENSRANKING
 CNewUIGensRanking* CNewUISystem::GetUI_NewGensRanking() const
 {
     return m_pNewGensRanking;
 }
-#endif //PBG_ADD_GENSRANKING
+#endif  //PBG_ADD_GENSRANKING
 
 CNewUIUnitedMarketPlaceWindow* CNewUISystem::GetUI_pNewUnitedMarketPlaceWindow() const
 {

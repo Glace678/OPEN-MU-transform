@@ -14,19 +14,19 @@ CNewUIScrollBar::CNewUIScrollBar()
 
     m_iScrollBarPickGap = 0;
 
-    m_iScrollBarMovePixel = 1;
-    m_iScrollBarHeightPixel = 0;
-    m_iScrollBarMiddleNum = 0;
+    m_iScrollBarMovePixel            = 1;
+    m_iScrollBarHeightPixel          = 0;
+    m_iScrollBarMiddleNum            = 0;
     m_iScrollBarMiddleRemainderPixel = 0;
 
     m_iScrollBtnMouseEvent = SCROLLBAR_MOUSEBTN_NORMAL;
-    m_bScrollBtnActive = false;
+    m_bScrollBtnActive     = false;
 
     m_fPercentOfSize = 1.0f;
 
     m_iBeginPos = 0;
-    m_iCurPos = 0;
-    m_iMaxPos = 1;
+    m_iCurPos   = 0;
+    m_iMaxPos   = 1;
 }
 
 CNewUIScrollBar::~CNewUIScrollBar()
@@ -91,7 +91,7 @@ void CNewUIScrollBar::SetPos(int x, int y)
 
     m_iScrollBarHeightPixel = m_iHeight;
 
-    m_iScrollBarMiddleNum = (m_iScrollBarHeightPixel - (SCROLLBAR_TOP_HEIGHT * 2)) / SCROLLBAR_MIDDLE_HEIGHT;
+    m_iScrollBarMiddleNum            = (m_iScrollBarHeightPixel - (SCROLLBAR_TOP_HEIGHT * 2)) / SCROLLBAR_MIDDLE_HEIGHT;
     m_iScrollBarMiddleRemainderPixel = (m_iScrollBarHeightPixel - (SCROLLBAR_TOP_HEIGHT * 2)) % SCROLLBAR_MIDDLE_HEIGHT;
 }
 
@@ -100,7 +100,7 @@ bool CNewUIScrollBar::UpdateBtnEvent()
     if (IsRelease(VK_LBUTTON))
     {
         m_iScrollBtnMouseEvent = SCROLLBAR_MOUSEBTN_NORMAL;
-        m_iScrollBarPickGap = 0;
+        m_iScrollBarPickGap    = 0;
         return true;
     }
 
@@ -108,7 +108,7 @@ bool CNewUIScrollBar::UpdateBtnEvent()
     {
         if (IsPress(VK_LBUTTON) && m_bScrollBtnActive == true)
         {
-            m_iScrollBarPickGap = MouseY - m_ptScrollBtnPos.y;
+            m_iScrollBarPickGap    = MouseY - m_ptScrollBtnPos.y;
             m_iScrollBtnMouseEvent = SCROLLBAR_MOUSEBTN_CLICKED;
             return false;
         }
@@ -163,16 +163,19 @@ bool CNewUIScrollBar::Render()
 
     for (int i = 0; i < m_iScrollBarMiddleNum; i++)
     {
-        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x,
-            m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (i * SCROLLBAR_MIDDLE_HEIGHT), SCROLLBAR_TOP_WIDTH, SCROLLBAR_MIDDLE_HEIGHT);
+        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x, m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (i * SCROLLBAR_MIDDLE_HEIGHT),
+                    SCROLLBAR_TOP_WIDTH, SCROLLBAR_MIDDLE_HEIGHT);
     }
 
     if (m_iScrollBarMiddleRemainderPixel > 0)
     {
-        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x, m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (m_iScrollBarMiddleNum * SCROLLBAR_MIDDLE_HEIGHT), SCROLLBAR_TOP_WIDTH, m_iScrollBarMiddleRemainderPixel);
+        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x,
+                    m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (m_iScrollBarMiddleNum * SCROLLBAR_MIDDLE_HEIGHT),
+                    SCROLLBAR_TOP_WIDTH, m_iScrollBarMiddleRemainderPixel);
     }
 
-    RenderImage(IMAGE_SCROLL_BOTTOM, m_ptPos.x, m_ptPos.y + m_iHeight - SCROLLBAR_TOP_HEIGHT, SCROLLBAR_TOP_WIDTH, SCROLLBAR_TOP_HEIGHT);
+    RenderImage(IMAGE_SCROLL_BOTTOM, m_ptPos.x, m_ptPos.y + m_iHeight - SCROLLBAR_TOP_HEIGHT, SCROLLBAR_TOP_WIDTH,
+                SCROLLBAR_TOP_HEIGHT);
 
     if (m_bScrollBtnActive == true)
     {
@@ -180,13 +183,11 @@ bool CNewUIScrollBar::Render()
         {
             glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
         }
-        RenderImage(IMAGE_SCROLLBAR_ON, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y,
-            SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
+        RenderImage(IMAGE_SCROLLBAR_ON, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y, SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
     }
     else
     {
-        RenderImage(IMAGE_SCROLLBAR_OFF, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y,
-            SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
+        RenderImage(IMAGE_SCROLLBAR_OFF, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y, SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
     }
     DisableAlphaBlend();
     return true;

@@ -9,14 +9,14 @@ using UI::Notices::LocalizeServerNotice;
 TEST_CASE("Simplified Chinese translates scheduled event countdowns")
 {
     I18N::SetLocale("zh-CN");
-    CHECK(LocalizeServerNotice(L"Blood Castle entrance is open and closes in 1 minute(s).")
-        == L"血色城堡入口已开放，将于 1 分钟后关闭。");
-    CHECK(LocalizeServerNotice(L"Chaos Castle entrance is open and closes in 5 minute(s).")
-        == L"赤色要塞入口已开放，将于 5 分钟后关闭。");
-    CHECK(LocalizeServerNotice(L"Devil Square entrance is open and closes in 120 minute(s).")
-        == L"恶魔广场入口已开放，将于 120 分钟后关闭。");
-    CHECK(LocalizeServerNotice(L"Blood Castle entrance is open and closes in 0 minute(s).")
-        == L"血色城堡入口已开放，将于 0 分钟后关闭。");
+    CHECK(LocalizeServerNotice(L"Blood Castle entrance is open and closes in 1 minute(s).") ==
+          L"血色城堡入口已开放，将于 1 分钟后关闭。");
+    CHECK(LocalizeServerNotice(L"Chaos Castle entrance is open and closes in 5 minute(s).") ==
+          L"赤色要塞入口已开放，将于 5 分钟后关闭。");
+    CHECK(LocalizeServerNotice(L"Devil Square entrance is open and closes in 120 minute(s).") ==
+          L"恶魔广场入口已开放，将于 120 分钟后关闭。");
+    CHECK(LocalizeServerNotice(L"Blood Castle entrance is open and closes in 0 minute(s).") ==
+          L"血色城堡入口已开放，将于 0 分钟后关闭。");
 }
 
 TEST_CASE("Simplified Chinese translates event closures and happy hour")
@@ -32,12 +32,11 @@ TEST_CASE("Simplified Chinese translates event closures and happy hour")
 TEST_CASE("Custom and malformed notices remain verbatim")
 {
     I18N::SetLocale("zh-CN");
-    for (const auto* text : {
-        L"", L"欢迎来到服务器！", L"Blood Castle guild recruiting!",
-        L"Chaos Castle entrance is open and closes in soon minute(s).",
-        L"Chaos Castle entrance is open and closes in -1 minute(s).",
-        L"Chaos Castle entrance is open and closes in  minute(s).",
-        L"Blood Castle entrance closed. Custom server message" })
+    for (const auto* text : {L"", L"欢迎来到服务器！", L"Blood Castle guild recruiting!",
+                             L"Chaos Castle entrance is open and closes in soon minute(s).",
+                             L"Chaos Castle entrance is open and closes in -1 minute(s).",
+                             L"Chaos Castle entrance is open and closes in  minute(s).",
+                             L"Blood Castle entrance closed. Custom server message"})
     {
         CHECK(LocalizeServerNotice(text) == text);
     }

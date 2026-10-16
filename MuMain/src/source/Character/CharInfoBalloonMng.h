@@ -2,7 +2,7 @@
 // File: CharInfoBalloonMng.h
 //
 // Desc: interface for the CCharInfoBalloonMng class.
-//		 Character info balloon management class.(Used in the character selection scene)
+//		 캐릭터 정보 풍선 관리 클래스.(캐릭터 선택씬에서 쓰임)
 //
 // producer: Ahn Sang-Kyu
 //*****************************************************************************
@@ -19,9 +19,9 @@
 class CCharInfoBalloonMng
 {
 protected:
-    static constexpr std::size_t kBalloonCount = 5;
+    static constexpr std::size_t                kBalloonCount = 5;
     std::array<CCharInfoBalloon, kBalloonCount> m_charInfoBalloons{};
-    bool m_isInitialized{ false };
+    bool                                        m_isInitialized{false};
 
 public:
     CCharInfoBalloonMng() = default;
@@ -33,4 +33,4 @@ public:
     void UpdateDisplay();
 };
 
-#endif // !defined(AFX_CHARINFOBALLOONMNG_H__37129186_F7FE_4FBC_87BD_189E01191E8F__INCLUDED_)
+#endif  // !defined(AFX_CHARINFOBALLOONMNG_H__37129186_F7FE_4FBC_87BD_189E01191E8F__INCLUDED_)

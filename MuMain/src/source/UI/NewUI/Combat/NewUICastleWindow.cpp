@@ -29,11 +29,14 @@ using namespace SEASON3B;
 CNewUICastleWindow::CNewUICastleWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_iNumCurOpenTab = TAB_GATE_MANAGING;
+    m_Pos.x = m_Pos.y    = 0;
+    m_iNumCurOpenTab     = TAB_GATE_MANAGING;
     m_iCurrMsgBoxRequest = CASTLE_MSGREQ_NULL;
 }
-CNewUICastleWindow::~CNewUICastleWindow() { Release(); }
+CNewUICastleWindow::~CNewUICastleWindow()
+{
+    Release();
+}
 
 bool CNewUICastleWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
@@ -115,15 +118,15 @@ bool CNewUICastleWindow::UpdateMouseEvent()
 {
     switch (m_iNumCurOpenTab)
     {
-    case TAB_GATE_MANAGING:
-        UpdateGateManagingTab();
-        break;
-    case TAB_STATUE_MANAGING:
-        UpdateStatueManagingTab();
-        break;
-    case TAB_TAX_MANAGING:
-        UpdateTaxManagingTab();
-        break;
+        case TAB_GATE_MANAGING:
+            UpdateGateManagingTab();
+            break;
+        case TAB_STATUE_MANAGING:
+            UpdateStatueManagingTab();
+            break;
+        case TAB_TAX_MANAGING:
+            UpdateTaxManagingTab();
+            break;
     }
 
     if (true == BtnProcess())
@@ -181,15 +184,15 @@ bool CNewUICastleWindow::Render()
 
     switch (m_iNumCurOpenTab)
     {
-    case TAB_GATE_MANAGING:
-        RenderGateManagingTab();
-        break;
-    case TAB_STATUE_MANAGING:
-        RenderStatueManagingTab();
-        break;
-    case TAB_TAX_MANAGING:
-        RenderTaxManagingTab();
-        break;
+        case TAB_GATE_MANAGING:
+            RenderGateManagingTab();
+            break;
+        case TAB_STATUE_MANAGING:
+            RenderStatueManagingTab();
+            break;
+        case TAB_TAX_MANAGING:
+            RenderTaxManagingTab();
+            break;
     }
 
     m_BtnExit.Render();
@@ -279,7 +282,9 @@ void CNewUICastleWindow::RenderFrame()
     RenderImage(IMAGE_CASTLEWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_CASTLEWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -307,7 +312,7 @@ bool CNewUICastleWindow::BtnProcess()
 
 void CNewUICastleWindow::UpdateGateManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 + 6 + 12 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55 + 6 + 12};
 
     if (MouseLButtonPush)
     {
@@ -328,8 +333,10 @@ void CNewUICastleWindow::UpdateGateManagingTab()
         }
     }
 
-    SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    SEASON3B::CNewUICommonMessageBox* pMsgBox     = NULL;
+    wchar_t                           szText[256] = {
+        0,
+    };
     if (m_BtnBuy.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_BUY_GATE);
@@ -385,7 +392,7 @@ void CNewUICastleWindow::UpdateGateManagingTab()
 
 void CNewUICastleWindow::UpdateStatueManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 + 6 + 12 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55 + 6 + 12};
 
     if (MouseLButtonPush)
     {
@@ -402,14 +409,17 @@ void CNewUICastleWindow::UpdateStatueManagingTab()
         }
     }
 
-    SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    SEASON3B::CNewUICommonMessageBox* pMsgBox     = NULL;
+    wchar_t                           szText[256] = {
+        0,
+    };
     if (m_BtnBuy.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_BUY_STATUE);
         SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCastleMsgBoxLayout), &pMsgBox);
         pMsgBox->AddMsg(I18N::Game::ToPurchaseSelectedStatue);
-        mu_swprintf(szText, I18N::Game::DZenIsRequired, g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
+        mu_swprintf(szText, I18N::Game::DZenIsRequired,
+                    g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
         InsertComma(szText, g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
         pMsgBox->AddMsg(szText);
         pMsgBox->AddMsg(I18N::Game::WouldYouLikeToPurchase);
@@ -419,7 +429,8 @@ void CNewUICastleWindow::UpdateStatueManagingTab()
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_REPAIR_STATUE);
         SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCastleMsgBoxLayout), &pMsgBox);
         pMsgBox->AddMsg(I18N::Game::ToRepairSelectedStatue);
-        mu_swprintf(szText, I18N::Game::DZenIsRequired, g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
+        mu_swprintf(szText, I18N::Game::DZenIsRequired,
+                    g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
         InsertComma(szText, g_SenatusInfo.GetRepairCost(&g_SenatusInfo.GetCurrStatueInfo()));
         pMsgBox->AddMsg(szText);
         pMsgBox->AddMsg(I18N::Game::WouldYouLikeToRepair);
@@ -476,8 +487,10 @@ void CNewUICastleWindow::UpdateStatueManagingTab()
 
 void CNewUICastleWindow::UpdateTaxManagingTab()
 {
-    SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    SEASON3B::CNewUICommonMessageBox* pMsgBox     = NULL;
+    wchar_t                           szText[256] = {
+        0,
+    };
     if (m_BtnApplyTax.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_APPLY_TAX);
@@ -513,7 +526,7 @@ void CNewUICastleWindow::UpdateTaxManagingTab()
 
 void CNewUICastleWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = Core::Platform::MakePoint(fPos_x, fPos_y);
+    POINT ptOrigin  = Core::Platform::MakePoint(fPos_x, fPos_y);
     float fBoxWidth = fWidth;
 
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_TOP_LEFT, ptOrigin.x + 12, ptOrigin.y - 4, 14, 14);
@@ -526,8 +539,8 @@ void CNewUICastleWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fW
 
 void CNewUICastleWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = Core::Platform::MakePoint(fPos_x, fPos_y);
-    float fBoxWidth = fWidth;
+    POINT ptOrigin   = Core::Platform::MakePoint(fPos_x, fPos_y);
+    float fBoxWidth  = fWidth;
     float fBoxHeight = fHeight;
 
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_LEFT_PIXEL, ptOrigin.x + 12, ptOrigin.y + 9, 14, fBoxHeight);
@@ -535,20 +548,22 @@ void CNewUICastleWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fW
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 15, ptOrigin.y + 3, fBoxWidth - 2, 14);
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_LEFT, ptOrigin.x + 12, ptOrigin.y + fBoxHeight + 3, 14, 14);
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_RIGHT, ptOrigin.x + fBoxWidth + 4, ptOrigin.y + fBoxHeight + 3, 14, 14);
-    RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21, 14);
+    RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21,
+                14);
 }
 
 void CNewUICastleWindow::RenderGateManagingTab()
 {
     LPPMSG_NPCDBLIST pNPCInfo = &g_SenatusInfo.GetCurrGateInfo();
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT            ptOrigin = {m_Pos.x, m_Pos.y + 55};
 
     g_pRenderText->SetFont(g_hFontBold);
 
     ptOrigin.y += 6;
     RenderOutlineUpper(ptOrigin.x, ptOrigin.y, 160, 165);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::PurchaseAndRepair, 190, 0, RT3_SORT_CENTER);
-    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f, 165.f / 256.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f,
+                 165.f / 256.f);
     RenderOutlineLower(ptOrigin.x, ptOrigin.y, 160, 165);
 
     ptOrigin.y += 12;
@@ -642,7 +657,7 @@ void CNewUICastleWindow::RenderGateManagingTab()
 
 void CNewUICastleWindow::RenderStatueManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT            ptOrigin = {m_Pos.x, m_Pos.y + 55};
     LPPMSG_NPCDBLIST pNPCInfo = &g_SenatusInfo.GetCurrStatueInfo();
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -650,7 +665,8 @@ void CNewUICastleWindow::RenderStatueManagingTab()
     ptOrigin.y += 6;
     RenderOutlineUpper(ptOrigin.x, ptOrigin.y, 160, 165);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::PurchaseAndRepair, 190, 0, RT3_SORT_CENTER);
-    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f, 165.f / 256.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f,
+                 165.f / 256.f);
     RenderOutlineLower(ptOrigin.x, ptOrigin.y, 160, 165);
 
     ptOrigin.y += 12;
@@ -761,7 +777,7 @@ void CNewUICastleWindow::RenderStatueManagingTab()
 
 void CNewUICastleWindow::RenderTaxManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55};
     g_pRenderText->SetTextColor(0xFFFFFFFF);
     g_pRenderText->SetBgColor(0);
 
@@ -790,7 +806,8 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     ptOrigin.y += 23;
     g_pRenderText->SetFont(g_hFont);
 
-    mu_swprintf(szTemp, I18N::Game::ChaosCombinationGoblinDD, g_SenatusInfo.GetRealTaxRateChaos(), g_SenatusInfo.GetChaosTaxRate());
+    mu_swprintf(szTemp, I18N::Game::ChaosCombinationGoblinDD, g_SenatusInfo.GetRealTaxRateChaos(),
+                g_SenatusInfo.GetChaosTaxRate());
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 175, 0, RT3_SORT_CENTER);
     ptOrigin.y += 25;
 
@@ -827,8 +844,7 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     g_pRenderText->RenderText(ptOrigin.x + 15, ptOrigin.y, I18N::Game::AndEtc, 160, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 10;
-    RenderBitmap(IMAGE_CASTLEWINDOW_LINE, ptOrigin.x + 1, ptOrigin.y,
-        188.f, 21, 0.f, 0.f, 188 / 256.f, 21 / 32.f);
+    RenderBitmap(IMAGE_CASTLEWINDOW_LINE, ptOrigin.x + 1, ptOrigin.y, 188.f, 21, 0.f, 0.f, 188 / 256.f, 21 / 32.f);
 
     g_pRenderText->SetTextColor(0xFFFFFFFF);
 
@@ -860,19 +876,19 @@ void CNewUICastleWindow::RenderTaxManagingTab()
 
 void CNewUICastleWindow::RenderCastleItem(int nPosX, int nPosY, LPPMSG_NPCDBLIST pInfo)
 {
-    const int nHPBlockSize = 24 / (g_SenatusInfo.GetMaxHPLevel() + 1);
+    const int nHPBlockSize      = 24 / (g_SenatusInfo.GetMaxHPLevel() + 1);
     const int nDefenseBlockSize = 24 / (g_SenatusInfo.GetMaxDefenseLevel() + 1);
     const int nRecoverBlockSize = 24 / (g_SenatusInfo.GetMaxRecoverLevel() + 1);
 
-    if (g_SenatusInfo.IsGate(pInfo))
+    if (g_SenatusInfo.IsGate(pInfo))  // ����
     {
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         if (pInfo->btNpcLive)
         {
-            int nHP = g_SenatusInfo.GetHPLevel(pInfo);
-            int nDefense = g_SenatusInfo.GetDefenseLevel(pInfo);
-            float fHPRate = pInfo->iNpcHp / (float)pInfo->iNpcMaxHp;
+            int   nHP      = g_SenatusInfo.GetHPLevel(pInfo);
+            int   nDefense = g_SenatusInfo.GetDefenseLevel(pInfo);
+            float fHPRate  = pInfo->iNpcHp / (float)pInfo->iNpcMaxHp;
 
             DisableAlphaBlend();
 
@@ -901,10 +917,10 @@ void CNewUICastleWindow::RenderCastleItem(int nPosX, int nPosY, LPPMSG_NPCDBLIST
 
         if (pInfo->btNpcLive)
         {
-            int nHP = g_SenatusInfo.GetHPLevel(pInfo);
-            int nDefense = g_SenatusInfo.GetDefenseLevel(pInfo);
-            int nRecover = g_SenatusInfo.GetRecoverLevel(pInfo);
-            float fHPRate = pInfo->iNpcHp / (float)pInfo->iNpcMaxHp;
+            int   nHP      = g_SenatusInfo.GetHPLevel(pInfo);
+            int   nDefense = g_SenatusInfo.GetDefenseLevel(pInfo);
+            int   nRecover = g_SenatusInfo.GetRecoverLevel(pInfo);
+            float fHPRate  = pInfo->iNpcHp / (float)pInfo->iNpcMaxHp;
 
             DisableAlphaBlend();
 
@@ -937,8 +953,8 @@ void CNewUICastleWindow::InsertComma(wchar_t* pszText, DWORD dwNumber)
     wcscpy_s(szTemp, 256, pszText);
     wchar_t* pszTextBegin = szTemp;
     wchar_t* pszTextFound = wcsstr(szTemp, szNumber);
-    wchar_t* pszTextNext = pszTextFound + wcslen(szNumber);
-    *pszTextFound = '\0';
+    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
+    *pszTextFound         = '\0';
     ConvertGold(dwNumber, szNumber);
 
     mu_swprintf(pszText, L"%ls%ls%ls", pszTextBegin, szNumber, pszTextNext);
@@ -953,8 +969,8 @@ void CNewUICastleWindow::InsertComma64(wchar_t* pszText, __int64 iNumber)
     wcscpy_s(szTemp, 256, pszText);
     wchar_t* pszTextBegin = szTemp;
     wchar_t* pszTextFound = wcsstr(szTemp, szNumber);
-    wchar_t* pszTextNext = pszTextFound + wcslen(szNumber);
-    *pszTextFound = '\0';
+    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
+    *pszTextFound         = '\0';
     ConvertGold64(iNumber, szNumber);
 
     mu_swprintf(pszText, L"%ls%ls%ls", pszTextBegin, szNumber, pszTextNext);

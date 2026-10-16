@@ -9,7 +9,8 @@
 // Frame Timing State
 //=============================================================================
 
-class FrameTimingState : public Core::Time::FrameClock {
+class FrameTimingState : public Core::Time::FrameClock
+{
 public:
     double lastWaterChange = 0.0;
 };
@@ -26,7 +27,7 @@ void RenderScene(HDC Hdc);
 void MainScene(HDC hDC);
 
 // FPS management (legacy - use g_frameTiming instead)
-void SetTargetFps(double targetFps);
+void   SetTargetFps(double targetFps);
 double GetTargetFps();
 
 // Debug overlay controls
@@ -36,11 +37,11 @@ void ResetFrameStats();
 
 struct FrameStatisticsSnapshot
 {
-    double actualFps = 0.0;
-    double averageFps = 0.0;
+    double actualFps        = 0.0;
+    double averageFps       = 0.0;
     double onePercentLowFps = 0.0;
-    double slowestFrameFps = 0.0;
-    int sampleCount = 0;
+    double slowestFrameFps  = 0.0;
+    int    sampleCount      = 0;
 };
 
 FrameStatisticsSnapshot GetFrameStatistics();

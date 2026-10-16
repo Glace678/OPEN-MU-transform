@@ -16,9 +16,8 @@
 typedef DWORD FOURCC;
 
 // Build a four-character-code from four chars (little-endian, as on disk).
-#define mmioFOURCC(c0, c1, c2, c3)                                       \
-    ((DWORD)(BYTE)(c0)        | ((DWORD)(BYTE)(c1) << 8) |               \
-     ((DWORD)(BYTE)(c2) << 16) | ((DWORD)(BYTE)(c3) << 24))
+#define mmioFOURCC(c0, c1, c2, c3) \
+    ((DWORD)(BYTE)(c0) | ((DWORD)(BYTE)(c1) << 8) | ((DWORD)(BYTE)(c2) << 16) | ((DWORD)(BYTE)(c3) << 24))
 
 #ifndef FOURCC_RIFF
 #define FOURCC_RIFF mmioFOURCC('R', 'I', 'F', 'F')
@@ -43,18 +42,21 @@ typedef DWORD FOURCC;
 // Wave-format structs map directly onto file bytes, so pack them tightly:
 // sizeof(PCMWAVEFORMAT) must be 16 and sizeof(WAVEFORMATEX) 18.
 #pragma pack(push, 1)
-typedef struct waveformat_tag {
+typedef struct waveformat_tag
+{
     WORD  wFormatTag;
     WORD  nChannels;
     DWORD nSamplesPerSec;
     DWORD nAvgBytesPerSec;
     WORD  nBlockAlign;
 } WAVEFORMAT;
-typedef struct pcmwaveformat_tag {
+typedef struct pcmwaveformat_tag
+{
     WAVEFORMAT wf;
     WORD       wBitsPerSample;
 } PCMWAVEFORMAT;
-typedef struct tWAVEFORMATEX {
+typedef struct tWAVEFORMATEX
+{
     WORD  wFormatTag;
     WORD  nChannels;
     DWORD nSamplesPerSec;
@@ -66,13 +68,14 @@ typedef struct tWAVEFORMATEX {
 #pragma pack(pop)
 
 // In-memory RIFF chunk descriptor (no packing needed).
-typedef struct _MMCKINFO {
+typedef struct _MMCKINFO
+{
     FOURCC ckid;          // chunk id
     DWORD  cksize;        // chunk size (bytes after the 8-byte header)
     FOURCC fccType;       // form/list type (for RIFF/LIST chunks)
     DWORD  dwDataOffset;  // file offset of the chunk data
     DWORD  dwFlags;
-} MMCKINFO, * LPMMCKINFO;
+} MMCKINFO, *LPMMCKINFO;
 
 typedef void* HMMIO;
 
@@ -86,4 +89,4 @@ int   mmioWrite(HMMIO hmmio, const char* pch, int cch);
 int   mmioDescend(HMMIO hmmio, MMCKINFO* lpck, const MMCKINFO* lpckParent, UINT wFlags);
 int   mmioAscend(HMMIO hmmio, MMCKINFO* lpck, UINT wFlags);
 
-#endif // _WIN32
+#endif  // _WIN32

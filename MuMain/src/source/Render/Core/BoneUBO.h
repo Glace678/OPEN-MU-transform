@@ -8,7 +8,8 @@ constexpr int GPU_MAX_BONES = 200;
 // DXP-14 increment 3: backed by RHI::CreateUniformBlock/UpdateUniformBlock instead of raw GL
 // calls (same mechanical, GL-behavior-preserving migration GlobalUBO/SceneUBO got in increment
 // 1) -- BMDMeshShader's BoneMatrices cbuffer depends on it existing under both backends.
-class BoneUBO {
+class BoneUBO
+{
 public:
     static BoneUBO& Instance();
 
@@ -31,14 +32,14 @@ private:
     BoneUBO() = default;
     ~BoneUBO();
 
-    BoneUBO(const BoneUBO&) = delete;
+    BoneUBO(const BoneUBO&)            = delete;
     BoneUBO& operator=(const BoneUBO&) = delete;
 
     RHI::BufferHandle m_UBOHandle;
     // GLP-11: 3x vec4 affine rows per bone (row-major, straight from BoneTransform), not a
     // column-major mat4 -- the GPU no longer needs the constant (0,0,0,1) 4th row shipped to it.
-    float  m_BoneRows[GPU_MAX_BONES * 12]; // std140 vec4[3*GPU_MAX_BONES]
+    float m_BoneRows[GPU_MAX_BONES * 12];  // std140 vec4[3*GPU_MAX_BONES]
 
     const void*  m_LastUploadedPtr     = nullptr;
-    unsigned int m_LastUploadedVersion = 0xFFFFFFFFu; // sentinel: never matches a real version
+    unsigned int m_LastUploadedVersion = 0xFFFFFFFFu;  // sentinel: never matches a real version
 };

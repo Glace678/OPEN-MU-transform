@@ -18,7 +18,7 @@
 #include "../MuEditor/Core/MuEditorCore.h"
 #endif
 
-extern int MouseX, MouseY;
+extern int  MouseX, MouseY;
 extern bool g_bWndActive;
 
 bool SEASON3B::CreateOkMessageBox(const std::wstring& strMsg, DWORD dwColor, float fPriority)
@@ -58,21 +58,22 @@ void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, fl
 
     float u, v, uw, vh;
 
-    u = 0.5f / (float)pImage->Width;
-    v = 0.5f / (float)pImage->Height;
+    u  = 0.5f / (float)pImage->Width;
+    v  = 0.5f / (float)pImage->Height;
     uw = (width - 0.5f) / (float)pImage->Width;
     vh = (height - 0.5f) / (float)pImage->Height;
 
     RenderBitmap(uiImageType, x, y, width, height, u, v, uw - u, vh - v);
 }
 
-void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv, float uw, float vh, DWORD color)
+void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv,
+                           float uw, float vh, DWORD color)
 {
     RenderColorBitmap(uiImageType, x, y, width, height, su, sv, uw, vh, color);
 }
 
-void SEASON3B::RenderImageStretch(GLuint uiImageType, float x, float y, float width, float height,
-                                  float sx, float sy, float sw, float sh, DWORD color)
+void SEASON3B::RenderImageStretch(GLuint uiImageType, float x, float y, float width, float height, float sx, float sy,
+                                  float sw, float sh, DWORD color)
 {
     BITMAP_t* pImage = &Bitmaps[uiImageType];
 
@@ -91,21 +92,22 @@ void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, fl
     BITMAP_t* pImage = &Bitmaps[uiImageType];
 
     float u, v, uw, vh;
-    u = ((su + 0.5f) / (float)pImage->Width);
-    v = ((sv + 0.5f) / (float)pImage->Height);
+    u  = ((su + 0.5f) / (float)pImage->Width);
+    v  = ((sv + 0.5f) / (float)pImage->Height);
     uw = (width - 0.5f) / (float)pImage->Width - (0.5f / (float)pImage->Width);
     vh = (height - 0.5f) / (float)pImage->Height - (0.5f / (float)pImage->Height);
 
     RenderBitmap(uiImageType, x, y, width, height, u, v, uw, vh);
 }
 
-void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv, DWORD color)
+void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv,
+                           DWORD color)
 {
     BITMAP_t* pImage = &Bitmaps[uiImageType];
 
     float u, v, uw, vh;
-    u = ((su + 0.5f) / (float)pImage->Width);
-    v = ((sv + 0.5f) / (float)pImage->Height);
+    u  = ((su + 0.5f) / (float)pImage->Width);
+    v  = ((sv + 0.5f) / (float)pImage->Height);
     uw = (width - 0.5f) / (float)pImage->Width - (0.5f / (float)pImage->Width);
     vh = (height - 0.5f) / (float)pImage->Height - (0.5f / (float)pImage->Height);
 
@@ -142,9 +144,7 @@ SEASON3B::CNewKeyInput::CNewKeyInput()
     Init();
 }
 
-SEASON3B::CNewKeyInput::~CNewKeyInput()
-{
-}
+SEASON3B::CNewKeyInput::~CNewKeyInput() {}
 
 void SEASON3B::CNewKeyInput::Init()
 {
@@ -187,7 +187,7 @@ void SEASON3B::CNewKeyInput::ScanAsyncKeyState()
             return;
         }
     }
-#endif // _EDITOR
+#endif  // _EDITOR
 
     for (int key = 0; key < 256; key++)
     {
@@ -204,7 +204,7 @@ void SEASON3B::CNewKeyInput::ScanAsyncKeyState()
                 m_pInputInfo[key].byKeyState = KEY_REPEAT;
             }
         }
-        else // Key is not currently pressed
+        else  // Key is not currently pressed
         {
             if (m_pInputInfo[key].byKeyState == KEY_REPEAT || m_pInputInfo[key].byKeyState == KEY_PRESS)
             {
@@ -218,7 +218,8 @@ void SEASON3B::CNewKeyInput::ScanAsyncKeyState()
         }
     }
 
-    if (IsPress(VK_RETURN) && IsEnterPressed() == false) {
+    if (IsPress(VK_RETURN) && IsEnterPressed() == false)
+    {
         m_pInputInfo[VK_RETURN].byKeyState = KEY_NONE;
     }
     SetEnterPressed(false);
@@ -229,7 +230,7 @@ bool SEASON3B::CNewKeyInput::IsNone(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif  // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_NONE) ? true : false;
 }
 
@@ -238,7 +239,7 @@ bool SEASON3B::CNewKeyInput::IsRelease(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif  // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_RELEASE) ? true : false;
 }
 
@@ -247,7 +248,7 @@ bool SEASON3B::CNewKeyInput::IsPress(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif  // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_PRESS) ? true : false;
 }
 
@@ -256,7 +257,7 @@ bool SEASON3B::CNewKeyInput::IsRepeat(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif  // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_REPEAT) ? true : false;
 }
 

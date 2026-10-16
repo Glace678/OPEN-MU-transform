@@ -6,10 +6,10 @@
 class CKanturuDirection
 {
 public:
-    int		m_iKanturuState;
-    int		m_iMayaState;
-    int		m_iNightmareState;
-    bool	m_bKanturuDirection;
+    int  m_iKanturuState;
+    int  m_iMayaState;
+    int  m_iNightmareState;
+    bool m_bKanturuDirection;
 
     CKanturuDirection();
     virtual ~CKanturuDirection();
@@ -28,15 +28,15 @@ public:
 private:
     struct DirectionTarget
     {
-        int x;
-        int y;
-        int z;
+        int   x;
+        int   y;
+        int   z;
         float distance;
     };
 
-    bool	m_bMayaDie;
-    bool	m_bMayaAppear;
-    bool	m_bDirectionEnd;
+    bool m_bMayaDie;
+    bool m_bMayaAppear;
+    bool m_bDirectionEnd;
 
     void GetKanturuMayaState(std::uint8_t DetailState);
     void GetKanturuNightmareState(std::uint8_t DetailState);
@@ -65,4 +65,4 @@ private:
     void ApplyDirectionTarget(const DirectionTarget& target);
 };
 
-#endif //_KANTURUDIRECTION_H_
+#endif  //_KANTURUDIRECTION_H_

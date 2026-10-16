@@ -6,23 +6,23 @@
 
 namespace Network::Server
 {
-    enum class ResultOperation
-    {
-        JoinServer,
-        CreateCharacter,
-        DeleteCharacter,
-        Party,
-        GuildJoin,
-        GuildLeave,
-        GuildCreate,
-        LegacyQuest,
-        QuestComplete,
-    };
+enum class ResultOperation
+{
+    JoinServer,
+    CreateCharacter,
+    DeleteCharacter,
+    Party,
+    GuildJoin,
+    GuildLeave,
+    GuildCreate,
+    LegacyQuest,
+    QuestComplete,
+};
 
-    constexpr bool IsSuccessfulResult(ResultOperation operation, std::uint8_t result)
+constexpr bool IsSuccessfulResult(ResultOperation operation, std::uint8_t result)
+{
+    switch (operation)
     {
-        switch (operation)
-        {
         case ResultOperation::Party:
             // This response only reports errors plus 5 = successfully left party.
             return result == 5;
@@ -38,17 +38,14 @@ namespace Network::Server
         case ResultOperation::GuildCreate:
         case ResultOperation::QuestComplete:
             return result == 1;
-        }
-
-        return false;
     }
 
-    constexpr Core::Haptics::HapticEvent HapticForResult(
-        ResultOperation operation,
-        std::uint8_t result)
-    {
-        return IsSuccessfulResult(operation, result)
-            ? Core::Haptics::HapticEvent::Confirmed
-            : Core::Haptics::HapticEvent::OperationFailed;
-    }
+    return false;
+}
+
+constexpr Core::Haptics::HapticEvent HapticForResult(ResultOperation operation, std::uint8_t result)
+{
+    return IsSuccessfulResult(operation, result) ? Core::Haptics::HapticEvent::Confirmed
+                                                 : Core::Haptics::HapticEvent::OperationFailed;
+}
 }

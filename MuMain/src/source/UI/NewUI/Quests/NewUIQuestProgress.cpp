@@ -13,9 +13,9 @@
 
 using namespace SEASON3B;
 
-#define QP_NPC_MAX_LINE_PER_PAGE	7
-#define QP_TEXT_GAP					15
-#define QP_LIST_BOX_LINE_NUM		12
+#define QP_NPC_MAX_LINE_PER_PAGE 7
+#define QP_TEXT_GAP              15
+#define QP_LIST_BOX_LINE_NUM     12
 
 CNewUIQuestProgress::CNewUIQuestProgress()
 {
@@ -141,7 +141,7 @@ bool CNewUIQuestProgress::ProcessBtns()
         if (m_btnComplete.UpdateMouseEvent())
         {
             const auto questNumber = static_cast<uint16_t>(LOWORD(m_dwCurQuestIndex));
-            const auto questGroup = static_cast<uint16_t>(HIWORD(m_dwCurQuestIndex));
+            const auto questGroup  = static_cast<uint16_t>(HIWORD(m_dwCurQuestIndex));
             SocketClient->ToGameServer()->SendQuestCompletionRequest(questNumber, questGroup);
             PlayBuffer(SOUND_CLICK01);
             m_bCanClick = false;
@@ -176,7 +176,7 @@ bool CNewUIQuestProgress::UpdateSelTextMouseEvent()
             if (SEASON3B::IsRelease(VK_LBUTTON))
             {
                 const auto questNumber = static_cast<uint16_t>(LOWORD(m_dwCurQuestIndex));
-                const auto questGroup = static_cast<uint16_t>(HIWORD(m_dwCurQuestIndex));
+                const auto questGroup  = static_cast<uint16_t>(HIWORD(m_dwCurQuestIndex));
                 SocketClient->ToGameServer()->SendQuestProceedRequest(questNumber, questGroup, m_nSelAnswer);
                 PlayBuffer(SOUND_CLICK01);
                 m_bCanClick = false;
@@ -274,17 +274,16 @@ void CNewUIQuestProgress::RenderText()
     g_pRenderText->SetTextColor(230, 230, 230, 255);
     g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 12, I18N::Game::Quest, QP_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetTextColor(36, 242, 252, 255);
-    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 27, g_QuestMng.GetSubject(m_dwCurQuestIndex), QP_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 27, g_QuestMng.GetSubject(m_dwCurQuestIndex), QP_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetTextColor(255, 255, 10, 255);
-    g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 51, g_QuestMng.GetNPCName(),
-        0, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 51, g_QuestMng.GetNPCName(), 0, 0, RT3_SORT_LEFT);
 
     if (REQUEST_REWARD_MODE != m_eLowerView)
     {
         g_pRenderText->SetTextColor(255, 185, 10, 255);
-        g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207, CharacterAttribute->Name,
-            0, 0, RT3_SORT_LEFT);
+        g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207, CharacterAttribute->Name, 0, 0, RT3_SORT_LEFT);
     }
 
     g_pRenderText->SetFont(g_hFont);
@@ -292,18 +291,17 @@ void CNewUIQuestProgress::RenderText()
     int i;
     for (i = 0; i < QP_NPC_MAX_LINE_PER_PAGE; ++i)
         g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 66 + (QP_TEXT_GAP * i),
-            m_aszNPCWords[i + QP_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage],
-            0, 0, RT3_SORT_LEFT);
+                                  m_aszNPCWords[i + QP_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage], 0, 0, RT3_SORT_LEFT);
 
     if (PLAYER_WORDS_MODE == m_eLowerView)
     {
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         for (i = 0; i < 2; ++i)
-            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 222 + (QP_TEXT_GAP * i),
-                m_aszPlayerWords[i], 0, 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 222 + (QP_TEXT_GAP * i), m_aszPlayerWords[i], 0, 0,
+                                      RT3_SORT_LEFT);
         for (; i < QP_PLAYER_LINE_MAX; ++i)
-            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 225 + (QP_TEXT_GAP * i),
-                m_aszPlayerWords[i], 0, 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 225 + (QP_TEXT_GAP * i), m_aszPlayerWords[i], 0, 0,
+                                      RT3_SORT_LEFT);
     }
 }
 
@@ -398,8 +396,8 @@ void CNewUIQuestProgress::SetCurNPCWords()
     memset(m_aszNPCWords, 0, sizeof m_aszNPCWords);
 
     g_pRenderText->SetFont(g_hFont);
-    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0],
-        QP_NPC_LINE_MAX, QP_WORDS_ROW_MAX, g_QuestMng.GetNPCWords(m_dwCurQuestIndex), 160);
+    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], QP_NPC_LINE_MAX, QP_WORDS_ROW_MAX,
+                                      g_QuestMng.GetNPCWords(m_dwCurQuestIndex), 160);
 
     if (1 > nLine)
         return;
@@ -418,11 +416,12 @@ void CNewUIQuestProgress::SetCurPlayerWords()
 
     g_pRenderText->SetFont(g_hFont);
 
-    ::DivideStringByPixel(&m_aszPlayerWords[0][0], 2, QP_WORDS_ROW_MAX, g_QuestMng.GetPlayerWords(m_dwCurQuestIndex), 160);
+    ::DivideStringByPixel(&m_aszPlayerWords[0][0], 2, QP_WORDS_ROW_MAX, g_QuestMng.GetPlayerWords(m_dwCurQuestIndex),
+                          160);
 
     wchar_t szAnswer[2 * QP_WORDS_ROW_MAX];
-    int nPlayerWordsRow = 2;
-    int i;
+    int     nPlayerWordsRow = 2;
+    int     i;
     for (i = 0; i < QM_MAX_ANSWER; ++i)
     {
         mu_swprintf(szAnswer, L"%d.", i + 1);
@@ -433,7 +432,8 @@ void CNewUIQuestProgress::SetCurPlayerWords()
         wcsncat(szAnswer, pszAnswer, std::size(szAnswer) - prefixLength - 1);
         szAnswer[std::size(szAnswer) - 1] = L'\0';
 
-        m_anAnswerLine[i] = ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QP_WORDS_ROW_MAX, szAnswer, 160, false);
+        m_anAnswerLine[i] =
+            ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QP_WORDS_ROW_MAX, szAnswer, 160, false);
 
         nPlayerWordsRow += m_anAnswerLine[i];
 
@@ -447,8 +447,7 @@ void CNewUIQuestProgress::SetCurRequestReward()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    const SQuestRequestReward* pQuestRequestReward
-        = g_QuestMng.GetRequestReward(m_dwCurQuestIndex);
+    const SQuestRequestReward* pQuestRequestReward = g_QuestMng.GetRequestReward(m_dwCurQuestIndex);
     if (NULL == pQuestRequestReward)
         return;
 

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "GameLogic/Combat/SkillExecution.h"
 
 #include <thread>
@@ -121,7 +121,6 @@ namespace MUHelper
         m_bPetActivated = false;
 
         m_iLoopCounter = 0;
-        m_iConsecutiveExceptions = 0;
 
         m_bActive = true;
         g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Started");
@@ -198,36 +197,10 @@ namespace MUHelper
             Attack();
 
             RepairEquipments();
-
-            // XC-9: a clean tick resets the failure streak.
-            m_iConsecutiveExceptions = 0;
-        }
-        catch (const std::bad_alloc& e)
-        {
-            // XC-9: classify rather than swallow everything. A bad_alloc can
-            // leave m_iCurrentTarget/m_iComboState desynced mid-Regroup/Attack.
-            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] bad_alloc: %hs", e.what());
-            if (++m_iConsecutiveExceptions >= MaximumConsecutiveExceptions)
-            {
-                g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] %d consecutive exceptions; stopping.", m_iConsecutiveExceptions);
-                TriggerStop();
-            }
-        }
-        catch (const std::exception& e)
-        {
-            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] Exception occurred: %hs", e.what());
-            if (++m_iConsecutiveExceptions >= MaximumConsecutiveExceptions)
-            {
-                g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] %d consecutive exceptions; stopping.", m_iConsecutiveExceptions);
-                TriggerStop();
-            }
         }
         catch (...)
         {
-            // XC-9: unknown failure (SEH-derived etc.) -- do not keep looping
-            // with an unknown helper state; stop immediately.
-            g_ConsoleDebug->Write(MCD_ERROR, L"[MU Helper] Non-std exception occurred; stopping.");
-            TriggerStop();
+            g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Exception occurred. Ignoring...");
         }
     }
 
@@ -405,7 +378,7 @@ namespace MUHelper
         for (const int& iMonsterId : setTargets)
         {
             int iIndex = FindCharacterIndex(iMonsterId);
-            if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+            if (iIndex == MAX_CHARACTERS_CLIENT)
             {
                 DeleteTarget(iMonsterId);
                 continue;
@@ -957,7 +930,7 @@ namespace MUHelper
                 if (iTarget != -1)
                 {
                     const int iCharIndex = FindCharacterIndex(iTarget);
-                    if (iCharIndex >= 0 && iCharIndex < MAX_CHARACTERS_CLIENT)
+                    if (iCharIndex != MAX_CHARACTERS_CLIENT)
                     {
                         CHARACTER* pCurrentTarget = &CharactersClient[iCharIndex];
                         if (pCurrentTarget->Dead > 0 || !IsMonster(pCurrentTarget))
@@ -981,7 +954,7 @@ namespace MUHelper
                 }
 
                 const int iCharIndex = FindCharacterIndex(iTarget);
-                if (iCharIndex < 0 || iCharIndex >= MAX_CHARACTERS_CLIENT)
+                if (iCharIndex == MAX_CHARACTERS_CLIENT)
                 {
                     DeleteTarget(iTarget);
                     return 0;
@@ -1071,7 +1044,7 @@ namespace MUHelper
         }
 
         const int iCharIndex = FindCharacterIndex(iTarget);
-        if (iCharIndex < 0 || iCharIndex >= MAX_CHARACTERS_CLIENT)
+        if (iCharIndex == MAX_CHARACTERS_CLIENT)
         {
             DeleteTarget(iTarget);
             return 0;
@@ -1262,13 +1235,6 @@ namespace MUHelper
             }
         }
 
-        // C2-02: clamp the current item index against Items[].
-        if (m_iCurrentItem < 0 || m_iCurrentItem >= MAX_ITEMS)
-        {
-            m_iCurrentItem = MAX_ITEMS;
-            return 1;
-        }
-
         ITEM_t* pDrop = &Items[m_iCurrentItem];
 
         if (!pDrop->Object.Live)
@@ -1308,11 +1274,6 @@ namespace MUHelper
 
     bool CMuHelper::ShouldObtainItem(int iItemId)
     {
-        // C2-02: clamp against Items[] before dereferencing.
-        if (iItemId < 0 || iItemId >= MAX_ITEMS)
-        {
-            return false;
-        }
         ITEM_t* pDrop = &Items[iItemId];
         ITEM* pItem = &pDrop->Item;
 
@@ -1343,13 +1304,6 @@ namespace MUHelper
 
     void CMuHelper::AddItem(int iItemId, POINT posWhere)
     {
-        // C2-02: Items[] is indexed by the server-supplied id; ignore ids that
-        // would fall outside the table so the auto-pickup paths never read
-        // Items[] out of bounds.
-        if (iItemId < 0 || iItemId >= MAX_ITEMS)
-        {
-            return;
-        }
         _itemsLock.lock();
         m_setItems.insert(iItemId);
         _itemsLock.unlock();
@@ -1381,11 +1335,6 @@ namespace MUHelper
 
         for (const int& iItemId : setItems)
         {
-            // C2-02: clamp against Items[] before reading its position.
-            if (iItemId < 0 || iItemId >= MAX_ITEMS)
-            {
-                continue;
-            }
             if (!ShouldObtainItem(iItemId))
             {
                 continue;

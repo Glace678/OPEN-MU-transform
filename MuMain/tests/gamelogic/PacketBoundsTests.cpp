@@ -14,7 +14,7 @@
 
 #include "doctest.h"
 
-#include "GameLogic/SystemLimits.h"   // MAX_SKILLS (real macro)
+#include "GameLogic/SystemLimits.h"  // MAX_SKILLS (real macro)
 
 #include <cstdint>
 
@@ -29,30 +29,32 @@
 //                               SetQuestListText clamps the server WORD count into [0,20])
 #define PKTBOUND_MAX_CHARACTERS_CLIENT 400
 #define PKTBOUND_ABILITY_SLOTS         3
-#define PKTBOUND_QUEST_INDEX_COUNT      20
+#define PKTBOUND_QUEST_INDEX_COUNT     20
 
 namespace
 {
-    // ZzzCharacter.cpp:1600 / SkillCast.cpp:858 guard, verbatim predicate.
-    inline bool CharacterIndexValid(int wireIndex)
-    {
-        return wireIndex >= 0 && wireIndex < PKTBOUND_MAX_CHARACTERS_CLIENT;
-    }
+// ZzzCharacter.cpp:1600 / SkillCast.cpp:858 guard, verbatim predicate.
+inline bool CharacterIndexValid(int wireIndex)
+{
+    return wireIndex >= 0 && wireIndex < PKTBOUND_MAX_CHARACTERS_CLIENT;
+}
 
-    // ReceiveHelperItem (WSclient.cpp:7675) guard, verbatim predicate.
-    // Data->Index is an attacker-controlled BYTE; AbilityTime only has 3 slots.
-    inline bool AbilityIndexValid(unsigned char wireIndex)
-    {
-        return wireIndex <= 2;
-    }
+// ReceiveHelperItem (WSclient.cpp:7675) guard, verbatim predicate.
+// Data->Index is an attacker-controlled BYTE; AbilityTime only has 3 slots.
+inline bool AbilityIndexValid(unsigned char wireIndex)
+{
+    return wireIndex <= 2;
+}
 
-    // SetQuestListText (NewUINPCDialogue.cpp:502-511) clamp, verbatim.
-    inline int QuestIndexCountClamped(int wireCount)
-    {
-        if (wireCount < 0) return 0;
-        if (wireCount > PKTBOUND_QUEST_INDEX_COUNT) return PKTBOUND_QUEST_INDEX_COUNT;
-        return wireCount;
-    }
+// SetQuestListText (NewUINPCDialogue.cpp:502-511) clamp, verbatim.
+inline int QuestIndexCountClamped(int wireCount)
+{
+    if (wireCount < 0)
+        return 0;
+    if (wireCount > PKTBOUND_QUEST_INDEX_COUNT)
+        return PKTBOUND_QUEST_INDEX_COUNT;
+    return wireCount;
+}
 }
 
 TEST_SUITE("PacketBounds")
@@ -74,7 +76,7 @@ TEST_SUITE("PacketBounds")
         CHECK(CharacterIndexValid(PKTBOUND_MAX_CHARACTERS_CLIENT - 1));
 
         // Red baseline: without the guard these land outside CharactersClient[400].
-        CHECK_FALSE(CharacterIndexValid(-1));        // FindCharacterIndex miss sentinel
+        CHECK_FALSE(CharacterIndexValid(-1));  // FindCharacterIndex miss sentinel
         CHECK_FALSE(CharacterIndexValid(PKTBOUND_MAX_CHARACTERS_CLIENT));
         CHECK_FALSE(CharacterIndexValid(99999));
     }

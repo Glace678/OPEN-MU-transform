@@ -26,7 +26,7 @@ void CommonDataSaver::SplitPath(const wchar_t* fileName, std::wstring& outDir, s
         return;
     }
 
-    outDir = full.substr(0, pos + 1);
+    outDir      = full.substr(0, pos + 1);
     outBaseName = full.substr(pos + 1);
 }
 
@@ -55,7 +55,8 @@ bool CommonDataSaver::MatchesBackupPattern(const wchar_t* fileName, const WIN32_
 
     // Must end with ".bak"
     const std::wstring suffix = L".bak";
-    if (candidate.size() < suffix.size() || candidate.compare(candidate.size() - suffix.size(), suffix.size(), suffix) != 0)
+    if (candidate.size() < suffix.size() ||
+        candidate.compare(candidate.size() - suffix.size(), suffix.size(), suffix) != 0)
         return false;
 
     // Must have "_Y" somewhere after the number (helps avoid matching other random *.bak)
@@ -66,7 +67,8 @@ bool CommonDataSaver::MatchesBackupPattern(const wchar_t* fileName, const WIN32_
 }
 
 // --- helper: build backup name with number + local date/time
-bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber, wchar_t* outBackupName, size_t outBackupNameChars)
+bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber, wchar_t* outBackupName,
+                                      size_t outBackupNameChars)
 {
     if (!fileName || !outBackupName || outBackupNameChars == 0)
         return false;
@@ -79,22 +81,15 @@ bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber,
 
     // Example:
     // "<dir><base>_N02_Y2026M01D25h00m45s03.bak"
-    int written = _snwprintf_s(
-        outBackupName,
-        outBackupNameChars,
-        _TRUNCATE,
-        L"%ls%ls_N%02d_Y%04dM%02dD%02dh%02dm%02ds%02d.bak",
-        dir.c_str(),
-        base.c_str(),
-        backupNumber,
-        st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute, st.wSecond
-    );
+    int written = _snwprintf_s(outBackupName, outBackupNameChars, _TRUNCATE,
+                               L"%ls%ls_N%02d_Y%04dM%02dD%02dh%02dm%02ds%02d.bak", dir.c_str(), base.c_str(),
+                               backupNumber, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
     return written > 0;
 }
 
-bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outTempBackupName, size_t outTempBackupNameChars)
+bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outTempBackupName,
+                                          size_t outTempBackupNameChars)
 {
     if (!fileName || !outTempBackupName || outTempBackupNameChars == 0)
         return false;
@@ -110,17 +105,10 @@ bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outT
 
     // Example:
     // "<dir><base>_TMP_Y2026_M01_D25_h00_m45_s03_1234_56.bak"
-    int written = _snwprintf_s(
-        outTempBackupName,
-        outTempBackupNameChars,
-        _TRUNCATE,
-        L"%ls%ls_TMP_Y%04d_M%02d_D%02d_h%02d_m%02d_s%02d_%lu_%lu.bak",
-        dir.c_str(),
-        base.c_str(),
-        st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute, st.wSecond,
-        (unsigned long)pid, (unsigned long)tid
-    );
+    int written =
+        _snwprintf_s(outTempBackupName, outTempBackupNameChars, _TRUNCATE,
+                     L"%ls%ls_TMP_Y%04d_M%02d_D%02d_h%02d_m%02d_s%02d_%lu_%lu.bak", dir.c_str(), base.c_str(), st.wYear,
+                     st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, (unsigned long)pid, (unsigned long)tid);
 
     return written > 0;
 }
@@ -134,14 +122,14 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
 
     struct BackupEntry
     {
-        std::wstring path;   // full path for DeleteFileW
-        FILETIME lastWrite{};
+        std::wstring path;  // full path for DeleteFileW
+        FILETIME     lastWrite{};
     };
 
     std::vector<BackupEntry> backups;
 
     WIN32_FIND_DATAW fd{};
-    HANDLE hFind = FindFirstFileW(pattern.c_str(), &fd);
+    HANDLE           hFind = FindFirstFileW(pattern.c_str(), &fd);
     if (hFind == INVALID_HANDLE_VALUE)
         return;
 
@@ -154,7 +142,7 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
             continue;
 
         // Build full path for deletion
-        backups.push_back(BackupEntry{ dir + fd.cFileName, fd.ftLastWriteTime });
+        backups.push_back(BackupEntry{dir + fd.cFileName, fd.ftLastWriteTime});
 
     } while (FindNextFileW(hFind, &fd));
 
@@ -164,9 +152,8 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
     // Keep room for the new final one: <= MaxBackups - 1.
     while ((int)backups.size() > MaxBackups - 1)
     {
-        auto oldestIt = std::min_element(backups.begin(), backups.end(),
-            [](const BackupEntry& a, const BackupEntry& b)
-            {
+        auto oldestIt =
+            std::min_element(backups.begin(), backups.end(), [](const BackupEntry& a, const BackupEntry& b) {
                 return CompareFileTime(&a.lastWrite, &b.lastWrite) < 0;
             });
 
@@ -194,7 +181,7 @@ int CommonDataSaver::GetNextBackupNumber(const wchar_t* fileName)
     const std::wstring pattern = dir + base + L"_N*.bak";
 
     WIN32_FIND_DATAW fd{};
-    HANDLE hFind = FindFirstFileW(pattern.c_str(), &fd);
+    HANDLE           hFind = FindFirstFileW(pattern.c_str(), &fd);
     if (hFind == INVALID_HANDLE_VALUE)
         return 1;
 
@@ -210,11 +197,11 @@ int CommonDataSaver::GetNextBackupNumber(const wchar_t* fileName)
 
         // Parse digits after "<base>_N" until first non-digit
         const std::wstring candidate = fd.cFileName;
-        const std::wstring prefix = base + L"_N";
+        const std::wstring prefix    = base + L"_N";
 
-        size_t i = prefix.size();
-        long long n = 0;
-        bool hasDigits = false;
+        size_t    i         = prefix.size();
+        long long n         = 0;
+        bool      hasDigits = false;
 
         while (i < candidate.size())
         {
@@ -223,7 +210,7 @@ int CommonDataSaver::GetNextBackupNumber(const wchar_t* fileName)
                 break;
 
             hasDigits = true;
-            n = (n * 10) + (ch - L'0');
+            n         = (n * 10) + (ch - L'0');
             ++i;
         }
 
@@ -276,7 +263,7 @@ bool CommonDataSaver::CreateBackup(const wchar_t* fileName)
     wchar_t finalBackupName[1024]{};
     if (!BuildBackupName(fileName, backupNumber, finalBackupName, _countof(finalBackupName)))
     {
-        DeleteFileW(tempBackupName); // don’t leave junk behind
+        DeleteFileW(tempBackupName);  // don’t leave junk behind
         return false;
     }
 
@@ -292,4 +279,4 @@ bool CommonDataSaver::CreateBackup(const wchar_t* fileName)
     return true;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

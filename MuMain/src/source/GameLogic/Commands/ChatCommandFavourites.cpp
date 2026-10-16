@@ -21,8 +21,8 @@ bool Toggle(const std::wstring& command)
         return false;
     }
 
-    auto favourites = GameConfig::GetInstance().GetChatCommandFavourites();
-    const auto found = std::find(favourites.begin(), favourites.end(), command);
+    auto       favourites     = GameConfig::GetInstance().GetChatCommandFavourites();
+    const auto found          = std::find(favourites.begin(), favourites.end(), command);
     const bool isFavouriteNow = found == favourites.end();
     if (isFavouriteNow)
     {

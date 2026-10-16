@@ -9,23 +9,23 @@
 
 #include "UI/Widgets/Win.h"
 
-#define	WINEX_BGSIDE_HEIGHT		8
+#define WINEX_BGSIDE_HEIGHT 8
 
-#define	WE_BG_CENTER	0
-#define WE_BG_TOP		1
-#define	WE_BG_BOTTOM	2
-#define	WE_BG_LEFT		3
-#define	WE_BG_RIGHT		4
-#define	WE_BG_MAX		5
+#define WE_BG_CENTER 0
+#define WE_BG_TOP    1
+#define WE_BG_BOTTOM 2
+#define WE_BG_LEFT   3
+#define WE_BG_RIGHT  4
+#define WE_BG_MAX    5
 
 class CWinEx : public CWin
 {
 protected:
-    int			m_nBgSideMax;
-    int			m_nBgSideMin;
-    int			m_nBgSideNow;
+    int m_nBgSideMax;
+    int m_nBgSideMin;
+    int m_nBgSideNow;
 
-    int			m_nBasisY;
+    int m_nBasisY;
 
 public:
     CWinEx();
@@ -35,7 +35,7 @@ public:
     void Release();
     void SetPosition(int nXCoord, int nYCoord);
     void SetPositionArt(float fXCoord, float fYCoord);
-    int SetLine(int nLine);
+    int  SetLine(int nLine);
     void SetSize(int nHeight);
     bool CursorInWin(int nArea);
     void Show(bool bShow);
@@ -43,7 +43,7 @@ public:
 
 protected:
     void CheckAdditionalState();
-    int GetSideTextureHeight() const;
+    int  GetSideTextureHeight() const;
 };
 
-#endif // !defined(AFX_WINEX_H__9E5A6837_4907_4DD0_95E8_14FFD2BF57DC__INCLUDED_)
+#endif  // !defined(AFX_WINEX_H__9E5A6837_4907_4DD0_95E8_14FFD2BF57DC__INCLUDED_)

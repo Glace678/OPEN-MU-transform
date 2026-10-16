@@ -21,38 +21,37 @@ CShadowVolume::CShadowVolume()
     Clear();
 }
 
-CShadowVolume::~CShadowVolume()
-{
-}
+CShadowVolume::~CShadowVolume() {}
 
 void CShadowVolume::Clear(void)
 {
     m_pVertices = NULL;
-    m_iNumEdge = 0;
-    m_pEdges = NULL;
+    m_iNumEdge  = 0;
+    m_pEdges    = NULL;
 }
 
 void CShadowVolume::AddEdgeFast(short nV1, short nV2, short nMesh, int iTriangle, int Edge, Triangle_t* pTriangles)
 {
-    Triangle_t* pTriangle = &pTriangles[iTriangle];
-    short EdgeTriangleIndex = pTriangle->EdgeTriangleIndex[Edge];
+    Triangle_t* pTriangle         = &pTriangles[iTriangle];
+    short       EdgeTriangleIndex = pTriangle->EdgeTriangleIndex[Edge];
     if (EdgeTriangleIndex == -1 || pTriangles[EdgeTriangleIndex].Front == false)
     {
         m_pEdges[m_iNumEdge].m_nVertexIndex[0] = nV1;
         m_pEdges[m_iNumEdge].m_nVertexIndex[1] = nV2;
-        m_pEdges[m_iNumEdge].m_nMesh = nMesh;
+        m_pEdges[m_iNumEdge].m_nMesh           = nMesh;
         m_pEdges[m_iNumEdge].m_nNormalIndex[0] = pTriangle->NormalIndex[Edge];
         m_pEdges[m_iNumEdge].m_nNormalIndex[1] = pTriangle->NormalIndex[(Edge + 1) % 3];
         m_iNumEdge++;
     }
 }
 
-void CShadowVolume::DeterminateSilhouette(short nMesh, vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], short nNumTriangles, Triangle_t* pTriangles, bool Tga)
+void CShadowVolume::DeterminateSilhouette(short nMesh, vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES],
+                                          short nNumTriangles, Triangle_t* pTriangles, bool Tga)
 {
     for (int iTriangle = 0; iTriangle < nNumTriangles; ++iTriangle)
     {
-        Triangle_t* pTriangle = &pTriangles[iTriangle];
-        short* pnVertexIndex = pTriangle->VertexIndex;
+        Triangle_t* pTriangle     = &pTriangles[iTriangle];
+        short*      pnVertexIndex = pTriangle->VertexIndex;
 
         vec3_t* pVertex[3];
         pVertex[0] = &ppVertexTransformed[nMesh][pnVertexIndex[0]];

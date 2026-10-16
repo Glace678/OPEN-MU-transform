@@ -18,12 +18,12 @@
 
 #include "Character/CharacterManager.h"
 
-int	DeleteIndex = 0;
-int AppointStatus = 0;
+int     DeleteIndex   = 0;
+int     AppointStatus = 0;
 wchar_t DeleteID[100];
 
 extern CUIPopup* g_pUIPopup;
-extern MARK_t GuildMark[MAX_MARKS];
+extern MARK_t    GuildMark[MAX_MARKS];
 
 using namespace SEASON3B;
 
@@ -31,7 +31,7 @@ void RenderText(wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD 
 {
     g_pRenderText->SetFont(g_hFont);
 
-    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextcolor     = g_pRenderText->GetTextColor();
     DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
     g_pRenderText->SetTextColor(color);
@@ -57,14 +57,14 @@ SEASON3B::CNewUIGuildInfoWindow::CNewUIGuildInfoWindow() : m_Button(NULL)
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_nCurrentTab = static_cast<int>(GuildConstants::GuildTab::MEMBERS);
-    m_EventState = EVENT_NONE;
-    m_Loc = 0;
-    m_BackUp = 0;
-    m_CurrentListPos = 0;
-    m_Loc_Bk = 0;
-    m_Tot_Notice = 0;
-    m_dwPopupID = 0;
+    m_nCurrentTab     = static_cast<int>(GuildConstants::GuildTab::MEMBERS);
+    m_EventState      = EVENT_NONE;
+    m_Loc             = 0;
+    m_BackUp          = 0;
+    m_CurrentListPos  = 0;
+    m_Loc_Bk          = 0;
+    m_Tot_Notice      = 0;
+    m_dwPopupID       = 0;
 
     m_bRequestUnionList = false;
 }
@@ -261,7 +261,7 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Btn()
                         if (GUILDLIST_TEXT* pText = m_GuildMember.GetSelectedText())
                         {
                             AppointStatus = (GUILD_STATUS)pText->m_GuildStatus;
-                            DeleteIndex = GetGuildMemberIndex(pText->m_szID);
+                            DeleteIndex   = GetGuildMemberIndex(pText->m_szID);
                             SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CGuild_ToPerson_PositionLayout));
                         }
                     }
@@ -276,10 +276,11 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Btn()
                 {
                     if (GUILDLIST_TEXT* pText = m_GuildMember.GetSelectedText())
                     {
-                        AppointStatus = (GUILD_STATUS)pText->m_GuildStatus;
-                        DeleteIndex = GetGuildMemberIndex(pText->m_szID);
+                        AppointStatus                   = (GUILD_STATUS)pText->m_GuildStatus;
+                        DeleteIndex                     = GetGuildMemberIndex(pText->m_szID);
                         CNewUICommonMessageBox* pMsgBox = NULL;
-                        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CGuildPerson_Cancel_Position_MsgBoxLayout), &pMsgBox);
+                        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CGuildPerson_Cancel_Position_MsgBoxLayout),
+                                                   &pMsgBox);
                         if (pMsgBox != NULL)
                         {
                             wchar_t strText[256];
@@ -312,14 +313,16 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Btn()
         {
             if (Hero->GuildStatus == G_MASTER)
             {
-                const bool isUnionMaster = wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[Hero->GuildMarkIndex].UnionName) == 0;
+                const bool isUnionMaster =
+                    wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[Hero->GuildMarkIndex].UnionName) == 0;
                 if (isUnionMaster)
                 {
                     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CUnionGuild_Out_MsgBoxLayout));
                 }
                 else
                 {
-                    SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Alliance, GuildRequestType::Leave, Hero->Key);
+                    SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(
+                        GuildRelationshipType::Alliance, GuildRequestType::Leave, Hero->Key);
                 }
             }
         }
@@ -334,34 +337,32 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Mouse(int mx, int my)
         for (int i = 0; i < 3; i++)
         {
             int Tab_Pos = i * 56;
-            if (mx > (m_Pos.x + 12 + Tab_Pos) && mx < (m_Pos.x + 12 + Tab_Pos + 56) && my > m_Pos.y && my < (m_Pos.y + 90))
+            if (mx > (m_Pos.x + 12 + Tab_Pos) && mx < (m_Pos.x + 12 + Tab_Pos + 56) && my > m_Pos.y &&
+                my < (m_Pos.y + 90))
             {
                 if (m_nCurrentTab != i)
                 {
-                    m_BackUp = 0;
-                    m_Loc = 0;
+                    m_BackUp         = 0;
+                    m_Loc            = 0;
                     m_CurrentListPos = 0;
                 }
                 m_nCurrentTab = i;
                 switch (m_nCurrentTab)
                 {
-                case static_cast<int>(GuildConstants::GuildTab::INFO):
-                    break;
-                case static_cast<int>(GuildConstants::GuildTab::MEMBERS):
-                {
-                    SocketClient->ToGameServer()->SendGuildListRequest();
-                }
-                break;
-                case static_cast<int>(GuildConstants::GuildTab::UNION):
-                {
-                    if (m_bRequestUnionList == false
-                        && GuildMark[Hero->GuildMarkIndex].UnionName[0] != 0)
-                    {
-                        SocketClient->ToGameServer()->SendRequestAllianceList();
-                        m_bRequestUnionList = true;
+                    case static_cast<int>(GuildConstants::GuildTab::INFO):
+                        break;
+                    case static_cast<int>(GuildConstants::GuildTab::MEMBERS): {
+                        SocketClient->ToGameServer()->SendGuildListRequest();
                     }
-                }
-                break;
+                    break;
+                    case static_cast<int>(GuildConstants::GuildTab::UNION): {
+                        if (m_bRequestUnionList == false && GuildMark[Hero->GuildMarkIndex].UnionName[0] != 0)
+                        {
+                            SocketClient->ToGameServer()->SendRequestAllianceList();
+                            m_bRequestUnionList = true;
+                        }
+                    }
+                    break;
                 }
                 return false;
             }
@@ -369,7 +370,8 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Mouse(int mx, int my)
     }
     if (m_nCurrentTab == 0)
     {
-        if (SEASON3B::CheckMouseIn(m_Pos.x + 163, m_Pos.y + 262 + m_Loc, 18, 33 + m_Loc) == true && m_EventState == EVENT_NONE)
+        if (SEASON3B::CheckMouseIn(m_Pos.x + 163, m_Pos.y + 262 + m_Loc, 18, 33 + m_Loc) == true &&
+            m_EventState == EVENT_NONE)
         {
             m_EventState = EVENT_SCROLL_BTN_DOWN;
             if (m_BackUp == 0)
@@ -381,7 +383,9 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Mouse(int mx, int my)
     }
     else if (m_nCurrentTab == 1)
     {
-        if ((MouseX > m_Pos.x + 166 && MouseX < (m_Pos.x + 181) && MouseY > m_Pos.y + 125 + m_Loc && MouseY < (m_Pos.y + 175 + m_Loc)) && m_EventState == EVENT_NONE)
+        if ((MouseX > m_Pos.x + 166 && MouseX < (m_Pos.x + 181) && MouseY > m_Pos.y + 125 + m_Loc &&
+             MouseY < (m_Pos.y + 175 + m_Loc)) &&
+            m_EventState == EVENT_NONE)
         {
             m_EventState = EVENT_SCROLL_BTN_DOWN;
             if (m_BackUp == 0)
@@ -428,16 +432,16 @@ bool SEASON3B::CNewUIGuildInfoWindow::Render()
 
         switch (m_nCurrentTab)
         {
-        case static_cast<int>(GuildConstants::GuildTab::INFO):
-            Render_Guild_History();
-            break;
-        case static_cast<int>(GuildConstants::GuildTab::MEMBERS):
-            Render_Guild_Enum();
-            RenderScrollBar();
-            break;
-        case static_cast<int>(GuildConstants::GuildTab::UNION):
-            Render_Guild_Info();
-            break;
+            case static_cast<int>(GuildConstants::GuildTab::INFO):
+                Render_Guild_History();
+                break;
+            case static_cast<int>(GuildConstants::GuildTab::MEMBERS):
+                Render_Guild_Enum();
+                RenderScrollBar();
+                break;
+            case static_cast<int>(GuildConstants::GuildTab::UNION):
+                Render_Guild_Info();
+                break;
         }
         Render_Text();
 
@@ -460,7 +464,7 @@ void SEASON3B::CNewUIGuildInfoWindow::RenderFrame()
 
 void SEASON3B::CNewUIGuildInfoWindow::RenderNoneGuild()
 {
-    POINT ptOrigin = { m_Pos.x + 15, m_Pos.y + 38 };
+    POINT ptOrigin = {m_Pos.x + 15, m_Pos.y + 38};
     ptOrigin.x += 10;
     ptOrigin.y += 8;
 
@@ -485,17 +489,18 @@ void SEASON3B::CNewUIGuildInfoWindow::RenderNoneGuild()
 void SEASON3B::CNewUIGuildInfoWindow::RenderTabButton()
 {
     RenderImage(IMAGE_GUILDINFO_TAB_LIST, m_Pos.x + GuildConstants::UILayout::TAB_START_X,
-        m_Pos.y + GuildConstants::UILayout::TAB_START_Y, 166.f, GuildConstants::UILayout::TAB_HEIGHT);
+                m_Pos.y + GuildConstants::UILayout::TAB_START_Y, 166.f, GuildConstants::UILayout::TAB_HEIGHT);
     int Tab_Pos = m_nCurrentTab * GuildConstants::UILayout::TAB_WIDTH;
     RenderImage(IMAGE_GUILDINFO_TAB_POINT, m_Pos.x + GuildConstants::UILayout::TAB_START_X + Tab_Pos,
-        m_Pos.y + GuildConstants::UILayout::TAB_START_Y, static_cast<float>(GuildConstants::UILayout::TAB_WIDTH),
-        static_cast<float>(GuildConstants::UILayout::TAB_HEIGHT));
+                m_Pos.y + GuildConstants::UILayout::TAB_START_Y,
+                static_cast<float>(GuildConstants::UILayout::TAB_WIDTH),
+                static_cast<float>(GuildConstants::UILayout::TAB_HEIGHT));
 }
 
 void SEASON3B::CNewUIGuildInfoWindow::Render_Text()
 {
     wchar_t Text[300];
-    POINT ptOrigin;
+    POINT   ptOrigin;
     mu_swprintf(Text, I18N::Game::Guild);
     RenderText(Text, m_Pos.x, m_Pos.y + 12, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
     ptOrigin.x = m_Pos.x + 35;
@@ -512,8 +517,9 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Text()
         glColor4f(1.f, 1.f, 1.f, 1.f);
     }
     mu_swprintf(Text, I18N::Game::Guild);
-    RenderText(Text, m_Pos.x + 13 + (static_cast<int>(GuildConstants::GuildTab::INFO) * GuildConstants::UILayout::TAB_WIDTH),
-        m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
+    RenderText(Text,
+               m_Pos.x + 13 + (static_cast<int>(GuildConstants::GuildTab::INFO) * GuildConstants::UILayout::TAB_WIDTH),
+               m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
     glColor4f(0.6f, 0.6f, 0.6f, 1.f);
 
     if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::MEMBERS))
@@ -521,8 +527,10 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Text()
         glColor4f(1.f, 1.f, 1.f, 1.f);
     }
     mu_swprintf(Text, I18N::Game::Members);
-    RenderText(Text, m_Pos.x + 13 + (static_cast<int>(GuildConstants::GuildTab::MEMBERS) * GuildConstants::UILayout::TAB_WIDTH),
-        m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
+    RenderText(Text,
+               m_Pos.x + 13 +
+                   (static_cast<int>(GuildConstants::GuildTab::MEMBERS) * GuildConstants::UILayout::TAB_WIDTH),
+               m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
     glColor4f(0.6f, 0.6f, 0.6f, 1.f);
 
     if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::UNION))
@@ -530,8 +538,9 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Text()
         glColor4f(1.f, 1.f, 1.f, 1.f);
     }
     mu_swprintf(Text, I18N::Game::Alliance);
-    RenderText(Text, m_Pos.x + 13 + (static_cast<int>(GuildConstants::GuildTab::UNION) * GuildConstants::UILayout::TAB_WIDTH),
-        m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
+    RenderText(Text,
+               m_Pos.x + 13 + (static_cast<int>(GuildConstants::GuildTab::UNION) * GuildConstants::UILayout::TAB_WIDTH),
+               m_Pos.y + 76, GuildConstants::UILayout::TAB_WIDTH, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
     glColor4f(0.6f, 0.6f, 0.6f, 1.f);
 
     if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::INFO))
@@ -585,35 +594,40 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Text()
         RenderText(Text, m_Pos.x + 22, Nm_Loc, 80, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
 
         Nm_Loc += 13;
-        mu_swprintf(Text, L"%ls : %ls", I18N::Game::HostilityGuild, m_RivalGuildName[0] ? m_RivalGuildName : I18N::Game::None);
+        mu_swprintf(Text, L"%ls : %ls", I18N::Game::HostilityGuild,
+                    m_RivalGuildName[0] ? m_RivalGuildName : I18N::Game::None);
         RenderText(Text, m_Pos.x + 22, Nm_Loc, 0, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
     }
     else if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::MEMBERS))
     {
         glColor4f(1.f, 1.f, 1.f, 1.f);
-        RenderText((wchar_t*)I18N::Game::Name, m_Pos.x + 24, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
-        RenderText((wchar_t*)I18N::Game::Position, m_Pos.x + 89, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
-        RenderText((wchar_t*)I18N::Game::Server, m_Pos.x + 126, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
+        RenderText((wchar_t*)I18N::Game::Name, m_Pos.x + 24, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000,
+                   RT3_SORT_LEFT);
+        RenderText((wchar_t*)I18N::Game::Position, m_Pos.x + 89, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000,
+                   RT3_SORT_LEFT);
+        RenderText((wchar_t*)I18N::Game::Server, m_Pos.x + 126, m_Pos.y + 112, 40, 0, 0xFFFFFFFF, 0x00000000,
+                   RT3_SORT_LEFT);
 
         m_GuildMember.SetSize(GuildConstants::UILayout::MEMBER_BOX_WIDTH, GuildConstants::UILayout::MEMBER_BOX_HEIGHT);
         m_GuildMember.SetPosition(m_Pos.x + 13, m_Pos.y + 123 + m_GuildMember.GetHeight());
         m_GuildMember.Render();
     }
-    else
-        if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::UNION))
+    else if (m_nCurrentTab == static_cast<int>(GuildConstants::GuildTab::UNION))
+    {
+        //BUTTON_UNION_CREATE
+        glColor4f(1.f, 1.f, 1.f, 1.f);
+        m_Button[BUTTON_UNION_CREATE].SetPos(m_Pos.x + 30, m_Pos.y + 230);
+        m_Button[BUTTON_UNION_OUT].SetPos(m_Pos.x + 100, m_Pos.y + 230);
+        m_Button[BUTTON_UNION_CREATE].ChangeText(&I18N::Game::DisbandAlliance);
+        m_Button[BUTTON_UNION_OUT].ChangeText(&I18N::Game::DisbandGuildAlliance);
+        if (GuildMark[Hero->GuildMarkIndex].UnionName[0] != 0)
         {
-            //BUTTON_UNION_CREATE
-            glColor4f(1.f, 1.f, 1.f, 1.f);
-            m_Button[BUTTON_UNION_CREATE].SetPos(m_Pos.x + 30, m_Pos.y + 230);
-            m_Button[BUTTON_UNION_OUT].SetPos(m_Pos.x + 100, m_Pos.y + 230);
-            m_Button[BUTTON_UNION_CREATE].ChangeText(&I18N::Game::DisbandAlliance);
-            m_Button[BUTTON_UNION_OUT].ChangeText(&I18N::Game::DisbandGuildAlliance);
-            if (GuildMark[Hero->GuildMarkIndex].UnionName[0] != 0)
-            {
-                RenderText((wchar_t*)I18N::Game::NAME, m_Pos.x + 34, m_Pos.y + 115, 40, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
-                RenderText((wchar_t*)I18N::Game::Members, m_Pos.x + 140, m_Pos.y + 115, 40, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_LEFT);
-            }
+            RenderText((wchar_t*)I18N::Game::NAME, m_Pos.x + 34, m_Pos.y + 115, 40, 0, 0xFFFFFFFF, 0x00000000,
+                       RT3_SORT_LEFT);
+            RenderText((wchar_t*)I18N::Game::Members, m_Pos.x + 140, m_Pos.y + 115, 40, 0, 0xFFFFFFFF, 0x00000000,
+                       RT3_SORT_LEFT);
         }
+    }
 }
 
 void SEASON3B::CNewUIGuildInfoWindow::Render_Guild_History()
@@ -677,13 +691,11 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Guild_History()
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    RenderImage(IMAGE_GUILDINFO_SCROLL_TOP, m_Pos.x + 167,
-        262, 7, 3);
+    RenderImage(IMAGE_GUILDINFO_SCROLL_TOP, m_Pos.x + 167, 262, 7, 3);
 
     for (int i = 0; i < 7; i++)
     {
-        RenderImage(IMAGE_GUILDINFO_SCROLL_MIDDLE, m_Pos.x + 167,
-            261 + (float)(i * 10 + 4), 7, 15);
+        RenderImage(IMAGE_GUILDINFO_SCROLL_MIDDLE, m_Pos.x + 167, 261 + (float)(i * 10 + 4), 7, 15);
     }
 
     RenderImage(IMAGE_GUILDINFO_SCROLL_BOTTOM, m_Pos.x + 167, 338, 7, 3);
@@ -694,14 +706,13 @@ void SEASON3B::CNewUIGuildInfoWindow::Render_Guild_History()
         m_Loc = (MouseY - m_BackUp);
         if (m_Loc < 0)
             m_Loc = 0;
-        else
-            if (m_Loc > 49)
-                m_Loc = 49;
+        else if (m_Loc > 49)
+            m_Loc = 49;
 
         if (m_Loc != m_Loc_Bk)
         {
             int Loc_Scroll = ((float)(m_Tot_Notice - m_GuildNotice.GetBoxSize()) / (float)49) * (float)m_Loc;
-            Line = Loc_Scroll - m_CurrentListPos;
+            Line           = Loc_Scroll - m_CurrentListPos;
             m_CurrentListPos += Line;
             m_Loc_Bk = m_Loc;
         }
@@ -737,14 +748,13 @@ void SEASON3B::CNewUIGuildInfoWindow::RenderScrollBar()
         m_Loc = (MouseY - m_BackUp);
         if (m_Loc < 0)
             m_Loc = 0;
-        else
-            if (m_Loc > 200)
-                m_Loc = 200;
+        else if (m_Loc > 200)
+            m_Loc = 200;
 
         if (m_Loc != m_Loc_Bk)
         {
             int Loc_Scroll = ((float)(g_nGuildMemberCount - m_GuildMember.GetBoxSize()) / (float)200) * (float)m_Loc;
-            Line = Loc_Scroll - m_CurrentListPos;
+            Line           = Loc_Scroll - m_CurrentListPos;
             m_CurrentListPos += Line;
             m_Loc_Bk = m_Loc;
         }
@@ -761,7 +771,7 @@ void SEASON3B::CNewUIGuildInfoWindow::RenderScrollBar()
 
 void SEASON3B::CNewUIGuildInfoWindow::Render_Guild_Info()
 {
-    POINT ptOrigin = { m_Pos.x + 15, m_Pos.y + 98 };
+    POINT ptOrigin = {m_Pos.x + 15, m_Pos.y + 98};
 
     if (GuildMark[Hero->GuildMarkIndex].UnionName[0] == 0)
     {
@@ -926,8 +936,9 @@ void SEASON3B::CNewUIGuildInfoWindow::UnloadImages()
 
 void SEASON3B::CNewUIGuildInfoWindow::AddGuildNotice(wchar_t* szText)
 {
-    wchar_t szTemp[GuildConstants::UILayout::TEXT_MAX_LINES][MAX_TEXT_LENGTH + 1] = { {0}, {0}, {0}, {0}, {0} };
-    CutText3(szText, szTemp[0], GuildConstants::UILayout::TEXT_SPLIT_WIDTH, GuildConstants::UILayout::TEXT_MAX_LINES, MAX_TEXT_LENGTH + 1);
+    wchar_t szTemp[GuildConstants::UILayout::TEXT_MAX_LINES][MAX_TEXT_LENGTH + 1] = {{0}, {0}, {0}, {0}, {0}};
+    CutText3(szText, szTemp[0], GuildConstants::UILayout::TEXT_SPLIT_WIDTH, GuildConstants::UILayout::TEXT_MAX_LINES,
+             MAX_TEXT_LENGTH + 1);
 
     for (int i = 0; i < GuildConstants::UILayout::TEXT_MAX_LINES; ++i)
     {
@@ -978,26 +989,24 @@ int SEASON3B::CNewUIGuildInfoWindow::GetUnionCount()
     return m_UnionListBox.GetTextCount();
 }
 
-void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
-    BYTE  byTargetUserIndexH, BYTE byTargetUserIndexL)
+void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType,
+                                                               GuildRequestType byRequestType, BYTE byTargetUserIndexH,
+                                                               BYTE byTargetUserIndexL)
 {
     if (!g_MessageBox->IsEmpty())
     {
         SocketClient->ToGameServer()->SendGuildRelationshipChangeResponse(
-            byRelationShipType,
-            byRequestType,
-            0x00,
-            MAKEWORD(byTargetUserIndexH, byTargetUserIndexL));
+            byRelationShipType, byRequestType, 0x00, MAKEWORD(byTargetUserIndexH, byTargetUserIndexL));
     }
     else
     {
-        m_MessageInfo.s_byRelationShipType = byRelationShipType;
+        m_MessageInfo.s_byRelationShipType        = byRelationShipType;
         m_MessageInfo.s_byRelationShipRequestType = byRequestType;
-        m_MessageInfo.s_byTargetUserIndexH = byTargetUserIndexH;
-        m_MessageInfo.s_byTargetUserIndexL = byTargetUserIndexL;
+        m_MessageInfo.s_byTargetUserIndexH        = byTargetUserIndexH;
+        m_MessageInfo.s_byTargetUserIndexL        = byTargetUserIndexL;
 
         int nCharKey = MAKEWORD(m_MessageInfo.s_byTargetUserIndexL, m_MessageInfo.s_byTargetUserIndexH);
-        int nIndex = FindCharacterIndex(nCharKey);
+        int nIndex   = FindCharacterIndex(nCharKey);
         if (nIndex < 0 || nIndex >= MAX_CHARACTERS_CLIENT)
             return;
         CHARACTER* pPlayer = &CharactersClient[nIndex];
@@ -1013,7 +1022,7 @@ void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(GuildRelationship
                 mu_swprintf(szText[1], I18N::Game::ReceivedARegistrationRequest);
                 mu_swprintf(szText[2], I18N::Game::Approve);
             }
-            else										// Break Off
+            else  // Break Off
             {
                 mu_swprintf(szText[0], I18N::Game::FromSForAGuildAlliance, pPlayer->ID);
                 mu_swprintf(szText[1], I18N::Game::ReceivedAWithdrawalRequest);

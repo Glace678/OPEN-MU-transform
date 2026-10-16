@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Core/Input/KeyState.h"
 #include "Input/Selection.h"
-#include "Character/CharacterManager.h" // gCharacterManager
+#include "Character/CharacterManager.h"  // gCharacterManager
 
 // Includes mirror ZzzInterface.cpp, the unit this was extracted from.
 #include "Core/Platform/Imm.h"
@@ -32,7 +32,7 @@
 #include "GameLogic/NPCs/npcBreeder.h"
 #include "GameLogic/Pets/GIPetManager.h"
 #include "Character/CSParts.h"
-#include "UI/Legacy/UIMapName.h"	// rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Events/Event.h"
@@ -57,43 +57,32 @@ namespace Input::Selection
 {
 namespace
 {
-    int s_lastGamepadTarget = -1;
+int s_lastGamepadTarget = -1;
 
-    bool TryProjectGamepadTarget(int index, int& outScreenX, int& outScreenY)
+bool TryProjectGamepadTarget(int index, int& outScreenX, int& outScreenY)
+{
+    if (SceneFlag != MAIN_SCENE || CharactersClient == nullptr || Hero == nullptr || index < 0 ||
+        index >= MAX_CHARACTERS_CLIENT)
     {
-        if (SceneFlag != MAIN_SCENE
-            || CharactersClient == nullptr
-            || Hero == nullptr
-            || index < 0
-            || index >= MAX_CHARACTERS_CLIENT)
-        {
-            return false;
-        }
-
-        CHARACTER* character = &CharactersClient[index];
-        OBJECT* object = &character->Object;
-        constexpr BYTE TargetKinds = KIND_MONSTER | KIND_EDIT | KIND_PLAYER;
-        if (character == Hero
-            || !object->Live
-            || !object->Visible
-            || object->Alpha <= 0.0f
-            || character->Dead != 0
-            || !character->m_bIsSelected
-            || (TargetKinds & object->Kind) != object->Kind
-            || g_isCharacterBuff(object, eBuff_CrywolfNPCHide))
-        {
-            return false;
-        }
-
-        vec3_t targetPoint;
-        VectorCopy(object->Position, targetPoint);
-        targetPoint[2] += 120.0f;
-        CameraProjection::WorldToScreen(g_Camera, targetPoint, &outScreenX, &outScreenY);
-        return outScreenX >= 0
-            && outScreenX < GetScreenWidth()
-            && outScreenY >= 0
-            && outScreenY < 429;
+        return false;
     }
+
+    CHARACTER*     character   = &CharactersClient[index];
+    OBJECT*        object      = &character->Object;
+    constexpr BYTE TargetKinds = KIND_MONSTER | KIND_EDIT | KIND_PLAYER;
+    if (character == Hero || !object->Live || !object->Visible || object->Alpha <= 0.0f || character->Dead != 0 ||
+        !character->m_bIsSelected || (TargetKinds & object->Kind) != object->Kind ||
+        g_isCharacterBuff(object, eBuff_CrywolfNPCHide))
+    {
+        return false;
+    }
+
+    vec3_t targetPoint;
+    VectorCopy(object->Position, targetPoint);
+    targetPoint[2] += 120.0f;
+    CameraProjection::WorldToScreen(g_Camera, targetPoint, &outScreenX, &outScreenY);
+    return outScreenX >= 0 && outScreenX < GetScreenWidth() && outScreenY >= 0 && outScreenY < 429;
+}
 }
 
 bool CycleGamepadTarget(int& outScreenX, int& outScreenY)
@@ -110,7 +99,7 @@ bool CycleGamepadTarget(int& outScreenX, int& outScreenY)
             continue;
 
         s_lastGamepadTarget = index;
-        SelectedCharacter = index;
+        SelectedCharacter   = index;
         return true;
     }
 
@@ -169,17 +158,27 @@ int SelectCharacter(BYTE Kind)
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
+        OBJECT*    o = &c->Object;
         if ((Kind & o->Kind) == o->Kind && o->Live && o->Visible && o->Alpha > 0.f)
         {
             o->LightEnable = true;
             switch (c->Level)
             {
-            case 0:Vector(0.2f, 0.2f, 0.2f, o->Light); break;
-            case 1:Vector(-0.4f, -0.4f, -0.4f, o->Light); break;
-            case 2:Vector(0.2f, -0.6f, -0.6f, o->Light); break;
-            case 3:Vector(1.5f, 1.5f, 1.5f, o->Light); break;
-            case 4:Vector(0.3f, 0.2f, -0.5f, o->Light); break;
+                case 0:
+                    Vector(0.2f, 0.2f, 0.2f, o->Light);
+                    break;
+                case 1:
+                    Vector(-0.4f, -0.4f, -0.4f, o->Light);
+                    break;
+                case 2:
+                    Vector(0.2f, -0.6f, -0.6f, o->Light);
+                    break;
+                case 3:
+                    Vector(1.5f, 1.5f, 1.5f, o->Light);
+                    break;
+                case 4:
+                    Vector(0.3f, 0.2f, -0.5f, o->Light);
+                    break;
             }
             if (c->PK >= PVP_MURDERER2)
             {
@@ -189,24 +188,26 @@ int SelectCharacter(BYTE Kind)
     }
     vec3_t Light;
     Vector(0.8f, 0.8f, 0.8f, Light);
-    int iSelected = -1;
+    int   iSelected    = -1;
     float fNearestDist = 1000000000000.0f;
 
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
+        OBJECT*    o = &c->Object;
 
         if (o->Live && o->Visible && o->Alpha > 0.f && c->Dead == 0 && !g_isCharacterBuff(o, eBuff_CrywolfNPCHide))
         {
-            if (o->Kind == KIND_PLAYER)		//. bug fixed by soyaviper
+            if (o->Kind == KIND_PLAYER)  //. bug fixed by soyaviper
             {
                 for (int j = 0; j < PartyNumber; ++j)
                 {
                     PARTY_t* p = &Party[j];
 
-                    if (p->index != -2) continue;
-                    if (p->index > -1) continue;
+                    if (p->index != -2)
+                        continue;
+                    if (p->index > -1)
+                        continue;
 
                     int length = std::max<int>(wcslen(p->Name), std::max<int>(1, wcslen(c->ID)));
 
@@ -266,17 +267,19 @@ int SelectCharacter(BYTE Kind)
                         BOOL bCanTalk = TRUE;
                         if (gMapManager.WorldActive == WD_0LORENCIA || gMapManager.WorldActive == WD_2DEVIAS)
                         {
-                            int Index = ((int)o->Position[1] / (int)TERRAIN_SCALE) * 256 + ((int)o->Position[0] / (int)TERRAIN_SCALE);
+                            int Index = ((int)o->Position[1] / (int)TERRAIN_SCALE) * 256 +
+                                        ((int)o->Position[0] / (int)TERRAIN_SCALE);
                             if ((gMapManager.WorldActive == WD_0LORENCIA && TerrainMappingLayer1[Index] == 4) ||
                                 (gMapManager.WorldActive == WD_2DEVIAS && TerrainMappingLayer1[Index] == 3))
                             {
-                                if (TerrainMappingLayer1[Index] != HeroTile && (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 11))
+                                if (TerrainMappingLayer1[Index] != HeroTile &&
+                                    (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 11))
                                     bCanTalk = FALSE;
                             }
                         }
                         if (bCanTalk == TRUE)
                         {
-                            iSelected = i;
+                            iSelected    = i;
                             fNearestDist = fNewDist;
                         }
                     }
@@ -289,7 +292,8 @@ int SelectCharacter(BYTE Kind)
     {
         PARTY_t* p = &Party[j];
 
-        if (p->index >= 0) continue;
+        if (p->index >= 0)
+            continue;
 
         int length = std::max<int>(wcslen(p->Name), std::max<int>(1, wcslen(Hero->ID)));
 
@@ -311,7 +315,7 @@ int SelectOperate()
     for (int i = 0; i < MAX_OPERATES; i++)
     {
         OPERATE* n = &Operates[i];
-        OBJECT* o = n->Owner;
+        OBJECT*  o = n->Owner;
         if (n->Live && o->Visible && o->HiddenMesh == -1)
         {
             float* Light = &o->Light[0];
@@ -324,7 +328,7 @@ int SelectOperate()
     for (int i = 0; i < MAX_OPERATES; i++)
     {
         OPERATE* n = &Operates[i];
-        OBJECT* o = n->Owner;
+        OBJECT*  o = n->Owner;
         if (n->Live && o->Visible)
         {
             float* Light = &o->Light[0];
@@ -347,7 +351,7 @@ void SelectObjects()
         if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_CLIENT)
         {
             SelectedCharacter = -1;
-            Attacking = -1;
+            Attacking         = -1;
         }
         else
         {
@@ -356,7 +360,7 @@ void SelectObjects()
             if (sc->Dead > 0 || sc->Object.Kind != KIND_MONSTER)
             {
                 SelectedCharacter = -1;
-                Attacking = -1;
+                Attacking         = -1;
             }
 
             if (Attacking != -1)
@@ -375,14 +379,15 @@ void SelectObjects()
     else
     {
         SelectedCharacter = -1;
-        Attacking = -1;
+        Attacking         = -1;
     }
 
-    SelectedItem = -1;
-    SelectedNpc = -1;
+    SelectedItem    = -1;
+    SelectedNpc     = -1;
     SelectedOperate = -1;
 
-    if (!MouseOnWindow && false == g_pNewUISystem->CheckMouseUse() && SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), 429))
+    if (!MouseOnWindow && false == g_pNewUISystem->CheckMouseUse() &&
+        SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), 429))
     {
         if (Core::Input::IsKeyDown(VK_MENU))
         {
@@ -415,23 +420,16 @@ void SelectObjects()
             CKind_1 = KIND_MONSTER | KIND_EDIT;
             CKind_2 = KIND_PLAYER;
 
-            if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_WIZARD)
+            if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF ||
+                gCharacterManager.GetBaseClass(Hero->Class) == CLASS_WIZARD)
             {
                 auto Skill = CharacterAttribute->Skill[Hero->CurrentSkill];
 
-                if (Skill == AT_SKILL_HEALING
-                    || Skill == AT_SKILL_HEALING_STR
-                    || Skill == AT_SKILL_DEFENSE
-                    || Skill == AT_SKILL_DEFENSE_STR
-                    || Skill == AT_SKILL_DEFENSE_MASTERY
-                    || Skill == AT_SKILL_ATTACK
-                    || Skill == AT_SKILL_ATTACK_STR
-                    || Skill == AT_SKILL_ATTACK_MASTERY
-                    || Skill == AT_SKILL_TELEPORT_ALLY
-                    || Skill == AT_SKILL_SOUL_BARRIER
-                    || Skill == AT_SKILL_SOUL_BARRIER_STR
-                    || Skill == AT_SKILL_SOUL_BARRIER_PROFICIENCY
-                    )
+                if (Skill == AT_SKILL_HEALING || Skill == AT_SKILL_HEALING_STR || Skill == AT_SKILL_DEFENSE ||
+                    Skill == AT_SKILL_DEFENSE_STR || Skill == AT_SKILL_DEFENSE_MASTERY || Skill == AT_SKILL_ATTACK ||
+                    Skill == AT_SKILL_ATTACK_STR || Skill == AT_SKILL_ATTACK_MASTERY ||
+                    Skill == AT_SKILL_TELEPORT_ALLY || Skill == AT_SKILL_SOUL_BARRIER ||
+                    Skill == AT_SKILL_SOUL_BARRIER_STR || Skill == AT_SKILL_SOUL_BARRIER_PROFICIENCY)
                 {
                     CKind_1 = KIND_PLAYER;
                     CKind_2 = KIND_MONSTER | KIND_EDIT;

@@ -34,19 +34,19 @@ private:
     CMuEditorCore();
     ~CMuEditorCore();
 
-    bool m_bEditorMode;
-    bool m_bInitialized;
-    bool m_bFrameStarted;
-    bool m_bShowItemEditor;
-    bool m_bShowSkillEditor;
-    bool m_bShowDevEditor;
-    bool m_bShowConsole;
-    bool m_bHoveringUI;
-    bool m_bPreviousFrameHoveringUI;  // Store previous frame's hover state for input blocking
+    bool         m_bEditorMode;
+    bool         m_bInitialized;
+    bool         m_bFrameStarted;
+    bool         m_bShowItemEditor;
+    bool         m_bShowSkillEditor;
+    bool         m_bShowDevEditor;
+    bool         m_bShowConsole;
+    bool         m_bHoveringUI;
+    bool         m_bPreviousFrameHoveringUI;  // Store previous frame's hover state for input blocking
     SDL_Gamepad* m_pActiveGamepad;
 };
 
 // Global accessor
 #define g_MuEditorCore CMuEditorCore::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

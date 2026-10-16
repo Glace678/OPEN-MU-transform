@@ -15,16 +15,20 @@ BoneUBO::~BoneUBO()
 
 void BoneUBO::Create()
 {
-    if (m_UBOHandle.IsValid()) return;
+    if (m_UBOHandle.IsValid())
+        return;
 
     memset(m_BoneRows, 0, sizeof(m_BoneRows));
 
     // Initialize with identity transforms -- row form: row0=(1,0,0,0), row1=(0,1,0,0),
     // row2=(0,0,1,0) (the implicit 4th row (0,0,0,1) that made these identity as a mat4 is now
     // the shader's job to supply, not this buffer's).
-    for (int i = 0; i < GPU_MAX_BONES; i++) {
+    for (int i = 0; i < GPU_MAX_BONES; i++)
+    {
         float* m = m_BoneRows + i * 12;
-        m[0] = 1.0f; m[5] = 1.0f; m[10] = 1.0f;
+        m[0]     = 1.0f;
+        m[5]     = 1.0f;
+        m[10]    = 1.0f;
     }
 
     // Binding Slot 2 (Slot 1 reserved for SceneUBO fog) -- unchanged from the pre-RHI binding.
@@ -34,7 +38,8 @@ void BoneUBO::Create()
 
 void BoneUBO::Destroy()
 {
-    if (m_UBOHandle.IsValid()) {
+    if (m_UBOHandle.IsValid())
+    {
         RHI::DestroyUniformBlock(m_UBOHandle);
         m_UBOHandle = {};
     }
@@ -42,7 +47,8 @@ void BoneUBO::Destroy()
 
 void BoneUBO::Bind()
 {
-    if (!m_UBOHandle.IsValid()) Create();
+    if (!m_UBOHandle.IsValid())
+        Create();
     // RHI::CreateUniformBlock already bound this handle to slot 2 at creation, and
     // RHI_GL's uniform-block binding point (unlike a texture unit) isn't clobbered by
     // anything else that could bind in between -- nothing left to (re)do here.
@@ -50,16 +56,20 @@ void BoneUBO::Bind()
 
 void BoneUBO::UploadBones(const void* boneTransforms, int numBones, unsigned int version)
 {
-    if (!m_UBOHandle.IsValid()) Create();
-    if (!m_UBOHandle.IsValid() || !boneTransforms || numBones <= 0) return;
+    if (!m_UBOHandle.IsValid())
+        Create();
+    if (!m_UBOHandle.IsValid() || !boneTransforms || numBones <= 0)
+        return;
 
     // Same object's palette as last call (e.g. the next equipped armor piece on the same
     // character) — already uploaded, skip the repack + GPU upload.
-    if (boneTransforms == m_LastUploadedPtr && version == m_LastUploadedVersion) return;
-    m_LastUploadedPtr = boneTransforms;
+    if (boneTransforms == m_LastUploadedPtr && version == m_LastUploadedVersion)
+        return;
+    m_LastUploadedPtr     = boneTransforms;
     m_LastUploadedVersion = version;
 
-    if (numBones > GPU_MAX_BONES) numBones = GPU_MAX_BONES;
+    if (numBones > GPU_MAX_BONES)
+        numBones = GPU_MAX_BONES;
 
     // GLP-11: BoneTransform is float[MAX_BONES][3][4] -- row-major 3x4 affine, already exactly
     // the layout the vec4[3*N] palette wants (row i of bone b is 4 contiguous floats). No

@@ -30,11 +30,11 @@ int& SelectedHero = g_characterSelection.GetLegacyReference();
 SceneInitializationState g_sceneInit;
 
 // Legacy global references (for backward compatibility)
-bool& InitLogIn = g_sceneInit.GetInitLogIn();
-bool& InitLoading = g_sceneInit.GetInitLoading();
+bool& InitLogIn          = g_sceneInit.GetInitLogIn();
+bool& InitLoading        = g_sceneInit.GetInitLoading();
 bool& InitCharacterScene = g_sceneInit.GetInitCharacterScene();
-bool& InitMainScene = g_sceneInit.GetInitMainScene();
-bool& EnableMainRender = g_sceneInit.GetEnableMainRender();
+bool& InitMainScene      = g_sceneInit.GetInitMainScene();
+bool& EnableMainRender   = g_sceneInit.GetEnableMainRender();
 
 //=============================================================================
 // Scene Common Utilities
@@ -56,33 +56,33 @@ bool& EnableMainRender = g_sceneInit.GetEnableMainRender();
 #include "UI/Legacy/UIMng.h"
 
 // External variable declarations (defined in ZzzScene.cpp or other files)
-extern wchar_t AbuseFilter[][20];
-extern wchar_t AbuseNameFilter[][20];
-extern int AbuseFilterNumber;
-extern int AbuseNameFilterNumber;
-extern wchar_t InputText[12][256];
-extern int InputGold;
-extern int AskYesOrNo;
-extern ITEM PickItem;
-extern ITEM TargetItem;
-extern int ErrorMessage;
-extern bool MouseLButtonPush;
-extern int MouseUpdateTime;
-extern int MouseUpdateTimeMax;
+extern wchar_t          AbuseFilter[][20];
+extern wchar_t          AbuseNameFilter[][20];
+extern int              AbuseFilterNumber;
+extern int              AbuseNameFilterNumber;
+extern wchar_t          InputText[12][256];
+extern int              InputGold;
+extern int              AskYesOrNo;
+extern ITEM             PickItem;
+extern ITEM             TargetItem;
+extern int              ErrorMessage;
+extern bool             MouseLButtonPush;
+extern int              MouseUpdateTime;
+extern int              MouseUpdateTimeMax;
 extern SKILL_ATTRIBUTE* SkillAttribute;
-extern bool g_bEnterPressed;
+extern bool             g_bEnterPressed;
 
 // External variables from ZzzScene.cpp
-extern int g_iMessageTextStart;
-extern char g_cMessageTextCurrNum;
-extern char g_cMessageTextNum;
-extern int g_iNumLineMessageBoxCustom;
-extern wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
-extern int g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
-extern int g_iCustomMessageBoxButton_Cancel[NUM_PAR_BUTTON_CMB];
-extern int g_iCancelSkillTarget;
-extern bool g_bTimeCheck;
-extern int g_iBackupTime;
+extern int        g_iMessageTextStart;
+extern char       g_cMessageTextCurrNum;
+extern char       g_cMessageTextNum;
+extern int        g_iNumLineMessageBoxCustom;
+extern wchar_t    g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
+extern int        g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
+extern int        g_iCustomMessageBoxButton_Cancel[NUM_PAR_BUTTON_CMB];
+extern int        g_iCancelSkillTarget;
+extern bool       g_bTimeCheck;
+extern int        g_iBackupTime;
 extern EGameScene SceneFlag;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,9 +99,9 @@ bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash)
         }
     }
 
-    int icntText = 0;
+    int     icntText = 0;
     wchar_t TmpText[2048];
-    int textLength = wcslen(Text);
+    int     textLength = wcslen(Text);
     for (int i = 0; i < textLength; ++i)
     {
         if (Text[i] != 32)
@@ -124,9 +124,9 @@ bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash)
 
 bool CheckAbuseNameFilter(wchar_t* Text)
 {
-    int icntText = 0;
+    int     icntText = 0;
     wchar_t TmpText[256];
-    int textLength = wcslen(Text);
+    int     textLength = wcslen(Text);
     for (int i = 0; i < textLength; ++i)
     {
         if (Text[i] != 32)
@@ -149,10 +149,10 @@ bool CheckAbuseNameFilter(wchar_t* Text)
 
 bool CheckName()
 {
-    if (CheckAbuseNameFilter(InputText[0]) || CheckAbuseFilter(InputText[0]) ||
-        FindText(InputText[0], L" ") || FindText(InputText[0], L"　") ||
-        FindText(InputText[0], L".") || FindText(InputText[0], L"·") || FindText(InputText[0], L"∼") ||
-        FindText(InputText[0], L"Webzen") || FindText(InputText[0], L"WebZen") || FindText(InputText[0], L"webzen") || FindText(InputText[0], L"WEBZEN") ||
+    if (CheckAbuseNameFilter(InputText[0]) || CheckAbuseFilter(InputText[0]) || FindText(InputText[0], L" ") ||
+        FindText(InputText[0], L"　") || FindText(InputText[0], L".") || FindText(InputText[0], L"·") ||
+        FindText(InputText[0], L"∼") || FindText(InputText[0], L"Webzen") || FindText(InputText[0], L"WebZen") ||
+        FindText(InputText[0], L"webzen") || FindText(InputText[0], L"WEBZEN") ||
         FindText(InputText[0], I18N::Game::Operation) || FindText(InputText[0], I18N::Game::WEBZEN))
         return true;
     return false;
@@ -166,10 +166,11 @@ BOOL CheckOptionMouseClick(int iOptionPos_y, BOOL bPlayClickSound)
 {
     if (CheckMouseIn((REFERENCE_WIDTH - 120) / 2, 30 + iOptionPos_y, 120, 22) && MouseLButtonPush)
     {
-        MouseLButtonPush = false;
-        MouseUpdateTime = 0;
+        MouseLButtonPush   = false;
+        MouseUpdateTime    = 0;
         MouseUpdateTimeMax = 6;
-        if (bPlayClickSound == TRUE) PlayBuffer(SOUND_CLICK01);
+        if (bPlayClickSound == TRUE)
+            PlayBuffer(SOUND_CLICK01);
         return TRUE;
     }
     return FALSE;
@@ -214,9 +215,8 @@ void RenderInfomation3D()
 {
     bool Success = false;
 
-    if (((ErrorMessage == MESSAGE_TRADE_CHECK || ErrorMessage == MESSAGE_CHECK) && AskYesOrNo == 1)
-        || ErrorMessage == MESSAGE_USE_STATE
-        || ErrorMessage == MESSAGE_USE_STATE2)
+    if (((ErrorMessage == MESSAGE_TRADE_CHECK || ErrorMessage == MESSAGE_CHECK) && AskYesOrNo == 1) ||
+        ErrorMessage == MESSAGE_USE_STATE || ErrorMessage == MESSAGE_USE_STATE2)
     {
         Success = true;
     }
@@ -250,14 +250,12 @@ void RenderInfomation3D()
         {
             float aspect = (float)WindowWidth / (float)WindowHeight;
             float fovRad = 1.f * 0.5f * Q_PI / 180.0f;
-            float f = 1.0f / tanf(fovRad);
-            float zNear = g_Camera.ViewNear;
-            float zFar  = g_Camera.ViewFar;
+            float f      = 1.0f / tanf(fovRad);
+            float zNear  = g_Camera.ViewNear;
+            float zFar   = g_Camera.ViewFar;
             float cpuProj[16];
             BuildPerspectiveProjection(f, aspect, zNear, zFar, cpuProj);
-            float cpuView[16] = {
-                1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f
-            };
+            float cpuView[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
 
             GlobalUBO::Instance().SetProj(cpuProj);
             GlobalUBO::Instance().SetView(cpuView);
@@ -265,8 +263,7 @@ void RenderInfomation3D()
             // g_Camera.Matrix (3x4 row-major, same layout CameraProjection::GetOpenGLMatrix() used
             // to produce from a GL_MODELVIEW_MATRIX read) is identity here, matching cpuView above.
             static const float s_IdentityCameraMatrix[3][4] = {
-                {1.f,0.f,0.f,0.f}, {0.f,1.f,0.f,0.f}, {0.f,0.f,1.f,0.f}
-            };
+                {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}};
             memcpy(g_Camera.Matrix, s_IdentityCameraMatrix, sizeof(g_Camera.Matrix));
         }
         EnableDepthTest();
@@ -284,21 +281,24 @@ void RenderInfomation3D()
             y = 60 + 55;
         }
 
-        Width = 40.f; Height = 60.f;
+        Width           = 40.f;
+        Height          = 60.f;
         int iRenderType = ErrorMessage;
         if (AskYesOrNo == 5)
             iRenderType = MESSAGE_USE_STATE;
         switch (iRenderType)
         {
-        case MESSAGE_USE_STATE:
-        case MESSAGE_USE_STATE2:
-        case MESSAGE_PERSONALSHOP_WARNING:
-            RenderItem3D(x, y, Width, Height, TargetItem.Type, TargetItem.Level, TargetItem.ExcellentFlags, TargetItem.AncientDiscriminator, true);
-            break;
+            case MESSAGE_USE_STATE:
+            case MESSAGE_USE_STATE2:
+            case MESSAGE_PERSONALSHOP_WARNING:
+                RenderItem3D(x, y, Width, Height, TargetItem.Type, TargetItem.Level, TargetItem.ExcellentFlags,
+                             TargetItem.AncientDiscriminator, true);
+                break;
 
-        default:
-            RenderItem3D(x, y, Width, Height, PickItem.Type, PickItem.Level, PickItem.ExcellentFlags, PickItem.AncientDiscriminator, true);
-            break;
+            default:
+                RenderItem3D(x, y, Width, Height, PickItem.Type, PickItem.Level, PickItem.ExcellentFlags,
+                             PickItem.AncientDiscriminator, true);
+                break;
         }
 
         UpdateMousePositionn();
@@ -326,16 +326,28 @@ void RenderInfomation()
  */
 static void SetupItemUseStateMessage(int num, int index, int message)
 {
-    wchar_t Name[50] = { 0, };
+    wchar_t Name[50] = {
+        0,
+    };
     if (TargetItem.Type == ITEM_FRUITS)
     {
         switch (TargetItem.Level)
         {
-        case 0:swprintf_s(Name, 50, L"%ls", I18N::Game::ENG); break;
-        case 1:swprintf_s(Name, 50, L"%ls", I18N::Game::STA); break;
-        case 2:swprintf_s(Name, 50, L"%ls", I18N::Game::AGI); break;
-        case 3:swprintf_s(Name, 50, L"%ls", I18N::Game::STR); break;
-        case 4:swprintf_s(Name, 50, L"%ls", I18N::Game::Command); break;
+            case 0:
+                swprintf_s(Name, 50, L"%ls", I18N::Game::ENG);
+                break;
+            case 1:
+                swprintf_s(Name, 50, L"%ls", I18N::Game::STA);
+                break;
+            case 2:
+                swprintf_s(Name, 50, L"%ls", I18N::Game::AGI);
+                break;
+            case 3:
+                swprintf_s(Name, 50, L"%ls", I18N::Game::STR);
+                break;
+            case 4:
+                swprintf_s(Name, 50, L"%ls", I18N::Game::Command);
+                break;
         }
     }
 
@@ -376,8 +388,9 @@ static void SetupChaosCastleCheckMessage(int num, int index)
     g_iNumLineMessageBoxCustom = 0;
     for (int i = 0; i < num; ++i)
     {
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(I18N::Game::Lookup(index + i),
-            g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], NUM_LINE_CMB, MAX_LENGTH_CMB);
+        g_iNumLineMessageBoxCustom +=
+            SeparateTextIntoLines(I18N::Game::Lookup(index + i), g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom],
+                                  NUM_LINE_CMB, MAX_LENGTH_CMB);
     }
 }
 
@@ -388,42 +401,45 @@ static void SetupGemIntegrationMessage()
 {
     wchar_t tBuf[MAX_GLOBAL_TEXT_STRING];
     wchar_t tLines[2][30];
-    for (int t = 0; t < 2; ++t) memset(tLines[t], 0, 20);
+    for (int t = 0; t < 2; ++t)
+        memset(tLines[t], 0, 20);
     g_iNumLineMessageBoxCustom = 0;
 
     if (COMGEM::isComMode())
     {
         if (COMGEM::m_cGemType == 0)
-            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToCombineSXD, I18N::Game::JewelOfBless, COMGEM::m_cCount);
+            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToCombineSXD, I18N::Game::JewelOfBless,
+                       COMGEM::m_cCount);
         else
-            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToCombineSXD, I18N::Game::JewelOfSoul, COMGEM::m_cCount);
+            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToCombineSXD, I18N::Game::JewelOfSoul,
+                       COMGEM::m_cCount);
 
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf,
-            tLines[g_iNumLineMessageBoxCustom], 2, 30);
+        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf, tLines[g_iNumLineMessageBoxCustom], 2, 30);
 
         for (int t = 0; t < 2; ++t)
             wcscpy_s(g_lpszMessageBoxCustom[t], MAX_LENGTH_CMB, tLines[t]);
 
-        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB,
-            I18N::Game::CombinationCostDZen, COMGEM::m_iValue);
+        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB, I18N::Game::CombinationCostDZen,
+                   COMGEM::m_iValue);
         ++g_iNumLineMessageBoxCustom;
     }
     else
     {
         int t_GemLevel = COMGEM::GetUnMixGemLevel() + 1;
         if (COMGEM::m_cGemType == 0)
-            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToDisbandSD, I18N::Game::JewelOfBless, t_GemLevel);
+            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToDisbandSD, I18N::Game::JewelOfBless,
+                       t_GemLevel);
         else
-            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToDisbandSD, I18N::Game::JewelOfSoul, t_GemLevel);
+            swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, I18N::Game::AreYouSureToDisbandSD, I18N::Game::JewelOfSoul,
+                       t_GemLevel);
 
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf,
-            tLines[g_iNumLineMessageBoxCustom], 2, 30);
+        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf, tLines[g_iNumLineMessageBoxCustom], 2, 30);
 
         for (int t = 0; t < 2; ++t)
             wcscpy_s(g_lpszMessageBoxCustom[t], MAX_LENGTH_CMB, tLines[t]);
 
-        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB,
-            I18N::Game::DissolvingCostDZen, COMGEM::m_iValue);
+        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB, I18N::Game::DissolvingCostDZen,
+                   COMGEM::m_iValue);
         ++g_iNumLineMessageBoxCustom;
     }
 }
@@ -436,7 +452,7 @@ static void SetupCancelSkillMessage(int index)
     wchar_t tBuf[MAX_GLOBAL_TEXT_STRING];
     swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, L"%ls%ls", SkillAttribute[index].Name, I18N::Game::WouldYouLikeToCancel);
     g_iNumLineMessageBoxCustom = SeparateTextIntoLines(tBuf, g_lpszMessageBoxCustom[0], 2, MAX_LENGTH_CMB);
-    g_iCancelSkillTarget = index;
+    g_iCancelSkillTarget       = index;
 }
 
 /**
@@ -458,8 +474,8 @@ static void ConfigureMessageBoxButtons(int message)
 {
     ZeroMemory(g_iCustomMessageBoxButton, NUM_BUTTON_CMB * NUM_PAR_BUTTON_CMB * sizeof(int));
 
-    int iOkButton[5] = { 1,  21, 90, 70, 21 };
-    int iCancelButton[5] = { 3, 120, 90, 70, 21 };
+    int iOkButton[5]     = {1, 21, 90, 70, 21};
+    int iCancelButton[5] = {3, 120, 90, 70, 21};
 
     if (message == MESSAGE_USE_STATE2)
     {
@@ -482,7 +498,7 @@ static void ConfigureMessageBoxButtons(int message)
 
     if (message == MESSAGE_CHAOS_CASTLE_CHECK)
     {
-        iOkButton[2] = 120;
+        iOkButton[2]     = 120;
         iCancelButton[2] = 120;
     }
 
@@ -540,7 +556,7 @@ bool GetTimeCheck(int DelayTime)
     if (g_bTimeCheck)
     {
         g_iBackupTime = PresentTime;
-        g_bTimeCheck = false;
+        g_bTimeCheck  = false;
     }
 
     if (g_iBackupTime + DelayTime <= PresentTime)
@@ -551,10 +567,12 @@ bool GetTimeCheck(int DelayTime)
     return false;
 }
 
-bool IsEnterPressed() {
+bool IsEnterPressed()
+{
     return g_bEnterPressed;
 }
 
-void SetEnterPressed(bool enterpressed) {
+void SetEnterPressed(bool enterpressed)
+{
     g_bEnterPressed = enterpressed;
 }

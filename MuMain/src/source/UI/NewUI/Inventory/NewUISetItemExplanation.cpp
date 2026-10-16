@@ -18,8 +18,8 @@ using namespace SEASON3B;
 SEASON3B::CNewUISetItemExplanation::CNewUISetItemExplanation()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = 0;
-    m_Pos.y = 0;
+    m_Pos.x     = 0;
+    m_Pos.y     = 0;
 }
 
 SEASON3B::CNewUISetItemExplanation::~CNewUISetItemExplanation()
@@ -105,10 +105,6 @@ float SEASON3B::CNewUISetItemExplanation::GetKeyEventOrder()
     return 10.f;
 }
 
-void SEASON3B::CNewUISetItemExplanation::OpenningProcess()
-{
-}
+void SEASON3B::CNewUISetItemExplanation::OpenningProcess() {}
 
-void SEASON3B::CNewUISetItemExplanation::ClosingProcess()
-{
-}
+void SEASON3B::CNewUISetItemExplanation::ClosingProcess() {}

@@ -3,51 +3,57 @@
 #include "Core/Platform/PathResolve.h"
 
 #include <dirent.h>
-#include <strings.h>   // strcasecmp
-#include <unistd.h>    // access
+#include <strings.h>  // strcasecmp
+#include <unistd.h>   // access
 
 namespace
 {
-    // True if `dir`/`name` exists verbatim. Avoids emitting a leading "//"
-    // (POSIX gives a double leading slash an implementation-defined meaning)
-    // when dir is "/" or already ends in a separator.
-    bool EntryExists(const std::string& dir, const std::string& name)
-    {
-        std::string full;
-        if (dir.empty())            full = name;
-        else if (dir.back() == '/') full = dir + name;
-        else                        full = dir + "/" + name;
-        return ::access(full.c_str(), F_OK) == 0;
-    }
+// True if `dir`/`name` exists verbatim. Avoids emitting a leading "//"
+// (POSIX gives a double leading slash an implementation-defined meaning)
+// when dir is "/" or already ends in a separator.
+bool EntryExists(const std::string& dir, const std::string& name)
+{
+    std::string full;
+    if (dir.empty())
+        full = name;
+    else if (dir.back() == '/')
+        full = dir + name;
+    else
+        full = dir + "/" + name;
+    return ::access(full.c_str(), F_OK) == 0;
+}
 
-    // Scans `dir` for an entry matching `name` case-insensitively; on a match
-    // replaces `name` with the entry's actual spelling and returns true.
-    bool FindCaseInsensitive(const std::string& dir, std::string& name)
+// Scans `dir` for an entry matching `name` case-insensitively; on a match
+// replaces `name` with the entry's actual spelling and returns true.
+bool FindCaseInsensitive(const std::string& dir, std::string& name)
+{
+    DIR* d = ::opendir(dir.empty() ? "." : dir.c_str());
+    if (!d)
+        return false;
+    bool found = false;
+    while (const dirent* entry = ::readdir(d))
     {
-        DIR* d = ::opendir(dir.empty() ? "." : dir.c_str());
-        if (!d) return false;
-        bool found = false;
-        while (const dirent* entry = ::readdir(d))
+        if (::strcasecmp(entry->d_name, name.c_str()) == 0)
         {
-            if (::strcasecmp(entry->d_name, name.c_str()) == 0)
-            {
-                name = entry->d_name;
-                found = true;
-                break;
-            }
+            name  = entry->d_name;
+            found = true;
+            break;
         }
-        ::closedir(d);
-        return found;
     }
+    ::closedir(d);
+    return found;
+}
 }
 
 std::string MuResolvePath(const char* utf8Path)
 {
-    if (!utf8Path) return {};
+    if (!utf8Path)
+        return {};
 
     std::string path(utf8Path);
     for (char& c : path)
-        if (c == '\\') c = '/';
+        if (c == '\\')
+            c = '/';
 
     // The common case: the normalized path exists as spelled.
     if (::access(path.c_str(), F_OK) == 0)
@@ -57,21 +63,20 @@ std::string MuResolvePath(const char* utf8Path)
     // been resolved so far. `resolved` holds "" for a relative path so the
     // first component is looked up in the working directory.
     std::string resolved;
-    size_t pos = 0;
+    size_t      pos = 0;
     if (!path.empty() && path[0] == '/')
     {
         resolved = "/";
-        pos = 1;
+        pos      = 1;
     }
 
     while (pos < path.size())
     {
-        const size_t sep = path.find('/', pos);
-        const size_t end = (sep == std::string::npos) ? path.size() : sep;
-        std::string component = path.substr(pos, end - pos);
+        const size_t sep       = path.find('/', pos);
+        const size_t end       = (sep == std::string::npos) ? path.size() : sep;
+        std::string  component = path.substr(pos, end - pos);
 
-        if (!component.empty() && component != "." && component != ".." &&
-            !EntryExists(resolved, component))
+        if (!component.empty() && component != "." && component != ".." && !EntryExists(resolved, component))
         {
             FindCaseInsensitive(resolved, component);
         }
@@ -85,4 +90,4 @@ std::string MuResolvePath(const char* utf8Path)
     return resolved;
 }
 
-#endif // !_WIN32
+#endif  // !_WIN32

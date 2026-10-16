@@ -42,4 +42,4 @@ private:
 
 #define g_MuItemEditorUI CMuItemEditorUI::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

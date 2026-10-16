@@ -1,4 +1,4 @@
-﻿//*****************************************************************************
+﻿  //*****************************************************************************
 // File: MsgWin.cpp
 //*****************************************************************************
 
@@ -21,21 +21,15 @@
 #include "Render/Textures/ZzzOpenglUtil.h"
 #include "Scenes/SceneCommon.h"
 
-#define	MW_OK		0
-#define	MW_CANCEL	1
+#define MW_OK     0
+#define MW_CANCEL 1
 
-
-
-extern int g_iChatInputType;
+    extern int          g_iChatInputType;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
 
-CMsgWin::CMsgWin()
-{
-}
+CMsgWin::CMsgWin() {}
 
-CMsgWin::~CMsgWin()
-{
-}
+CMsgWin::~CMsgWin() {}
 
 void CMsgWin::Create()
 {
@@ -54,12 +48,12 @@ void CMsgWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    memset(m_aszMsg, 0, sizeof(m_aszMsg));
+    memset(m_aszMsg[0], 0, sizeof(char) * MW_MSG_LINE_MAX * MW_MSG_ROW_MAX);
 
-    m_eType = MWT_NON;
-    m_nMsgLine = 0;
-    m_nMsgCode = -1;
-    m_nGameExit = -1;
+    m_eType         = MWT_NON;
+    m_nMsgLine      = 0;
+    m_nMsgCode      = -1;
+    m_nGameExit     = -1;
     m_dDeltaTickSum = 0.0;
 }
 
@@ -83,26 +77,25 @@ void CMsgWin::SetCtrlPosition()
 
     switch (m_eType)
     {
-    case MWT_BTN_CANCEL:
-        m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 149, nBtnArtYPos);
-        break;
-    case MWT_BTN_OK:
-        m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 149, nBtnArtYPos);
-        break;
-    case MWT_BTN_BOTH:
-        m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 98, nBtnArtYPos);
-        m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 200, nBtnArtYPos);
-        break;
-    case MWT_STR_INPUT:
-        m_sprInput.SetPositionArt(nBaseArtPos + 32, nBtnArtYPos + 4);
-        m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 209, nBtnArtYPos);
-        m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 264, nBtnArtYPos);
-        if (m_nMsgCode == MESSAGE_DELETE_CHARACTER_RESIDENT)
-            if (g_iChatInputType == 1)
-                g_pSinglePasswdInputBox->SetPosition(
-                    static_cast<int>(nBaseArtPos + 32 + 10),
-                    static_cast<int>(nBtnArtYPos + 4 + 8));
-        break;
+        case MWT_BTN_CANCEL:
+            m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 149, nBtnArtYPos);
+            break;
+        case MWT_BTN_OK:
+            m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 149, nBtnArtYPos);
+            break;
+        case MWT_BTN_BOTH:
+            m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 98, nBtnArtYPos);
+            m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 200, nBtnArtYPos);
+            break;
+        case MWT_STR_INPUT:
+            m_sprInput.SetPositionArt(nBaseArtPos + 32, nBtnArtYPos + 4);
+            m_aBtn[MW_OK].SetPositionArt(nBaseArtPos + 209, nBtnArtYPos);
+            m_aBtn[MW_CANCEL].SetPositionArt(nBaseArtPos + 264, nBtnArtYPos);
+            if (m_nMsgCode == MESSAGE_DELETE_CHARACTER_RESIDENT)
+                if (g_iChatInputType == 1)
+                    g_pSinglePasswdInputBox->SetPosition(static_cast<int>(nBaseArtPos + 32 + 10),
+                                                         static_cast<int>(nBtnArtYPos + 4 + 8));
+            break;
     }
 }
 
@@ -114,30 +107,30 @@ void CMsgWin::Show(bool bShow)
 
     switch (m_eType)
     {
-    case MWT_BTN_CANCEL:
-        m_aBtn[MW_OK].Show(false);
-        m_aBtn[MW_CANCEL].Show(bShow);
-        m_sprInput.Show(false);
-        break;
-    case MWT_BTN_OK:
-        m_aBtn[MW_OK].Show(bShow);
-        m_aBtn[MW_CANCEL].Show(false);
-        m_sprInput.Show(false);
-        break;
-    case MWT_BTN_BOTH:
-        m_aBtn[MW_OK].Show(bShow);
-        m_aBtn[MW_CANCEL].Show(bShow);
-        m_sprInput.Show(false);
-        break;
-    case MWT_STR_INPUT:
-        m_aBtn[MW_OK].Show(bShow);
-        m_aBtn[MW_CANCEL].Show(bShow);
-        m_sprInput.Show(bShow);
-        break;
-    default:
-        m_aBtn[MW_OK].Show(false);
-        m_aBtn[MW_CANCEL].Show(false);
-        m_sprInput.Show(false);
+        case MWT_BTN_CANCEL:
+            m_aBtn[MW_OK].Show(false);
+            m_aBtn[MW_CANCEL].Show(bShow);
+            m_sprInput.Show(false);
+            break;
+        case MWT_BTN_OK:
+            m_aBtn[MW_OK].Show(bShow);
+            m_aBtn[MW_CANCEL].Show(false);
+            m_sprInput.Show(false);
+            break;
+        case MWT_BTN_BOTH:
+            m_aBtn[MW_OK].Show(bShow);
+            m_aBtn[MW_CANCEL].Show(bShow);
+            m_sprInput.Show(false);
+            break;
+        case MWT_STR_INPUT:
+            m_aBtn[MW_OK].Show(bShow);
+            m_aBtn[MW_CANCEL].Show(bShow);
+            m_sprInput.Show(bShow);
+            break;
+        default:
+            m_aBtn[MW_OK].Show(false);
+            m_aBtn[MW_CANCEL].Show(false);
+            m_sprInput.Show(false);
     }
 }
 
@@ -148,8 +141,8 @@ bool CMsgWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -230,8 +223,8 @@ void CMsgWin::RenderControls()
             nTextPosY = int((m_sprBack.GetYPos() + 38) / g_fScreenRate_y);
         else
             nTextPosY = int((m_sprBack.GetYPos() + 54) / g_fScreenRate_y);
-        g_pRenderText->RenderText(nTextPosX, nTextPosY, m_aszMsg[0],
-            m_sprBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(nTextPosX, nTextPosY, m_aszMsg[0], m_sprBack.GetWidth() / g_fScreenRate_x, 0,
+                                  RT3_SORT_CENTER);
     }
     else if (2 == m_nMsgLine)
     {
@@ -258,9 +251,8 @@ void CMsgWin::RenderControls()
         else if (g_iChatInputType == 0)
         {
             InputTextWidth = 100;
-            ::RenderInputText(
-                int(m_sprInput.GetXPos() / g_fScreenRate_x) + 10,
-                int(m_sprInput.GetYPos() / g_fScreenRate_y) + 8, 0, 0);
+            ::RenderInputText(int(m_sprInput.GetXPos() / g_fScreenRate_x) + 10,
+                              int(m_sprInput.GetYPos() / g_fScreenRate_y) + 8, 0, 0);
             InputTextWidth = 256;
         }
     }
@@ -288,154 +280,154 @@ void CMsgWin::SetMsg(MSG_WIN_TYPE eType, std::wstring lpszMsg, std::wstring lpsz
 
 void CMsgWin::PopUp(int nMsgCode, wchar_t* pszMsg)
 {
-    CUIMng& rUIMng = CUIMng::Instance();
-    std::wstring lpszMsg = L"";
+    CUIMng&      rUIMng   = CUIMng::Instance();
+    std::wstring lpszMsg  = L"";
     std::wstring lpszMsg2 = L"";
-    MSG_WIN_TYPE eType = MWT_BTN_OK;
-    m_nMsgCode = nMsgCode;
+    MSG_WIN_TYPE eType    = MWT_BTN_OK;
+    m_nMsgCode            = nMsgCode;
     wchar_t szTempMsg[128];
 
     switch (m_nMsgCode)
     {
-    case MESSAGE_FREE_MSG_NOT_BTN:
-        lpszMsg = pszMsg;
-        eType = MWT_NON;
-        break;
-    case MESSAGE_GAME_END_COUNTDOWN:
-        m_nGameExit = 5;
-        mu_swprintf(szTempMsg, I18N::Game::YouWillExitGameInDSeconds, m_nGameExit);
-        lpszMsg = szTempMsg;
-        eType = MWT_NON;
-        break;
-    case MESSAGE_WAIT:
-        lpszMsg = I18N::Game::PleaseWait;
-        eType = MWT_NON;
-        break;
-    case MESSAGE_SERVER_BUSY:
-    case RECEIVE_LOG_IN_FAIL_SERVER_BUSY:
-        lpszMsg = I18N::Game::TheServerIsFull;
-        break;
-    case RECEIVE_JOIN_SERVER_WAITING:
-        rUIMng.ShowWin(&rUIMng.m_ServerSelWin);
-        lpszMsg = I18N::Game::TheServerIsFull;
-        break;
-    case MESSAGE_SERVER_LOST:
-        lpszMsg = I18N::Game::YouAreDisconnectedFromTheServer;
-        break;
-    case MESSAGE_VERSION:
-    case RECEIVE_LOG_IN_FAIL_VERSION:
-        lpszMsg = I18N::Game::NewVersionOfGameIsRequired;
-        lpszMsg2 = I18N::Game::PleaseDownloadTheNewVersion;
-        break;
-    case MESSAGE_INPUT_ID:
-        lpszMsg = I18N::Game::EnterYourAccount;
-        break;
-    case MESSAGE_INPUT_PASSWORD:
-        lpszMsg = I18N::Game::EnterYourPassword;
-        break;
-    case RECEIVE_LOG_IN_FAIL_ID:
-        lpszMsg = I18N::Game::YourAccountIsInvalid;
-        break;
-    case RECEIVE_LOG_IN_FAIL_PASSWORD:
-        lpszMsg = I18N::Game::PasswordIsIncorrect;
-        break;
-    case RECEIVE_LOG_IN_FAIL_ID_CONNECTED:
-        lpszMsg = I18N::Game::YourAccountIsAlreadyConnected;
-        break;
-    case RECEIVE_LOG_IN_FAIL_ID_BLOCK:
-    case MESSAGE_DELETE_CHARACTER_ID_BLOCK:
-        lpszMsg = I18N::Game::ThisAccountIsBlocked;
-        break;
-    case RECEIVE_LOG_IN_FAIL_CONNECT:
-        lpszMsg = I18N::Game::ConnectionError;
-        break;
-    case RECEIVE_LOG_IN_FAIL_ERROR:
-        lpszMsg = I18N::Game::ConnectionClosedDueTo3FailedAttempts;
-        break;
-    case RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO:
-        lpszMsg = I18N::Game::NoChargeInfo;
-        break;
-    case RECEIVE_LOG_IN_FAIL_USER_TIME1:
-        lpszMsg = I18N::Game::YourIndividualSubscriptionTermIsOver;
-        break;
-    case RECEIVE_LOG_IN_FAIL_USER_TIME2:
-        lpszMsg = I18N::Game::YourIndividualSubscriptionTimeIsOver;
-        break;
-    case RECEIVE_LOG_IN_FAIL_PC_TIME1:
-        lpszMsg = I18N::Game::SubscriptionTermIsOverOnYourIP;
-        break;
-    case RECEIVE_LOG_IN_FAIL_PC_TIME2:
-        lpszMsg = I18N::Game::SubscriptionTimeIsOverOnYourIP;
-        break;
-    case RECEIVE_LOG_IN_FAIL_ONLY_OVER_15:
-        lpszMsg = I18N::Game::OnlyPlayersAge18AndOverArePermittedToConnectToThisServer;
-        break;
-    case RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL:
-        lpszMsg = I18N::Game::PleasePurchaseGoldChannelTicketToEnter;
-        break;
-    case RECEIVE_LOG_IN_FAIL_POINT_DATE:
-        lpszMsg = I18N::Game::PointNoMoreDates;
-        break;
-    case RECEIVE_LOG_IN_FAIL_POINT_HOUR:
-        lpszMsg = I18N::Game::PointNoMorePointsLeft;
-        break;
-    case RECEIVE_LOG_IN_FAIL_INVALID_IP:
-        lpszMsg = I18N::Game::YourIPIsNotAllowedToConnect;
-        break;
-    case MESSAGE_DELETE_CHARACTER_GUILDWARNING:
-        lpszMsg = I18N::Game::YouCanTDeleteTheCharacterThatBelongsToTheGuild;
-        break;
-    case MESSAGE_DELETE_CHARACTER_WARNING:
-        mu_swprintf(szTempMsg, I18N::Game::CharacterLevelAboveDCannotBeDeleted, CHAR_DEL_LIMIT_LV);
-        lpszMsg = szTempMsg;
-        break;
-    case MESSAGE_DELETE_CHARACTER_CONFIRM:
-        mu_swprintf(szTempMsg, I18N::Game::WouldYouLikeToDeleteSCharacter, CharactersClient[SelectedHero].ID);
-        lpszMsg = szTempMsg;
-        eType = MWT_BTN_BOTH;
-        break;
-    case MESSAGE_DELETE_CHARACTER_RESIDENT:
-        lpszMsg = I18N::Game::PleaseEnterYourWEBZENCOMPassword;
-        eType = MWT_STR_INPUT;
-        InitResidentNumInput();
-        break;
-    case MESSAGE_DELETE_CHARACTER_ITEM_BLOCK:
-        lpszMsg = I18N::Game::TheCharacterIsItemBlocked;
-        break;
-    case MESSAGE_STORAGE_RESIDENTWRONG:
-        lpszMsg = I18N::Game::ThePasswordYouHaveEnteredIsIncorrect;
-        break;
-    case MESSAGE_DELETE_CHARACTER_SUCCESS:
-        CharactersClient[SelectedHero].Object.Live = false;
-        DeleteMount(&CharactersClient[SelectedHero].Object);
-        SelectedHero = -1;
-        rUIMng.m_CharSelMainWin.UpdateDisplay();
-        rUIMng.m_CharInfoBalloonMng.UpdateDisplay();
-        lpszMsg = I18N::Game::CharacterWasDeletedSuccessfully;
-        break;
-    case MESSAGE_BLOCKED_CHARACTER:
-        lpszMsg = I18N::Game::ThisIsABlockedCharacter;
-        break;
-    case MESSAGE_MIN_LENGTH:
-        lpszMsg = I18N::Game::TypeMoreThan4Letters;
-        break;
-    case MESSAGE_ID_SPACE_ERROR:
-        lpszMsg = I18N::Game::ItContainsProhibitedWords;
-        break;
-    case MESSAGE_SPECIAL_NAME:
-        lpszMsg = I18N::Game::CannotUseSymbols;
-        break;
-    case RECEIVE_CREATE_CHARACTER_FAIL:
-        rUIMng.ShowWin(&rUIMng.m_CharMakeWin);
-        lpszMsg = I18N::Game::IncorrectCharacterNameWasEnteredOrSameCharacterNameExists;
-        break;
-    case RECEIVE_CREATE_CHARACTER_FAIL2:
-        rUIMng.ShowWin(&rUIMng.m_CharMakeWin);
-        lpszMsg = I18N::Game::NoMoreCharactersCanBeCreated;
-        break;
-    default:
-        m_nMsgCode = -1;
-        return;
+        case MESSAGE_FREE_MSG_NOT_BTN:
+            lpszMsg = pszMsg;
+            eType   = MWT_NON;
+            break;
+        case MESSAGE_GAME_END_COUNTDOWN:
+            m_nGameExit = 5;
+            mu_swprintf(szTempMsg, I18N::Game::YouWillExitGameInDSeconds, m_nGameExit);
+            lpszMsg = szTempMsg;
+            eType   = MWT_NON;
+            break;
+        case MESSAGE_WAIT:
+            lpszMsg = I18N::Game::PleaseWait;
+            eType   = MWT_NON;
+            break;
+        case MESSAGE_SERVER_BUSY:
+        case RECEIVE_LOG_IN_FAIL_SERVER_BUSY:
+            lpszMsg = I18N::Game::TheServerIsFull;
+            break;
+        case RECEIVE_JOIN_SERVER_WAITING:
+            rUIMng.ShowWin(&rUIMng.m_ServerSelWin);
+            lpszMsg = I18N::Game::TheServerIsFull;
+            break;
+        case MESSAGE_SERVER_LOST:
+            lpszMsg = I18N::Game::YouAreDisconnectedFromTheServer;
+            break;
+        case MESSAGE_VERSION:
+        case RECEIVE_LOG_IN_FAIL_VERSION:
+            lpszMsg  = I18N::Game::NewVersionOfGameIsRequired;
+            lpszMsg2 = I18N::Game::PleaseDownloadTheNewVersion;
+            break;
+        case MESSAGE_INPUT_ID:
+            lpszMsg = I18N::Game::EnterYourAccount;
+            break;
+        case MESSAGE_INPUT_PASSWORD:
+            lpszMsg = I18N::Game::EnterYourPassword;
+            break;
+        case RECEIVE_LOG_IN_FAIL_ID:
+            lpszMsg = I18N::Game::YourAccountIsInvalid;
+            break;
+        case RECEIVE_LOG_IN_FAIL_PASSWORD:
+            lpszMsg = I18N::Game::PasswordIsIncorrect;
+            break;
+        case RECEIVE_LOG_IN_FAIL_ID_CONNECTED:
+            lpszMsg = I18N::Game::YourAccountIsAlreadyConnected;
+            break;
+        case RECEIVE_LOG_IN_FAIL_ID_BLOCK:
+        case MESSAGE_DELETE_CHARACTER_ID_BLOCK:
+            lpszMsg = I18N::Game::ThisAccountIsBlocked;
+            break;
+        case RECEIVE_LOG_IN_FAIL_CONNECT:
+            lpszMsg = I18N::Game::ConnectionError;
+            break;
+        case RECEIVE_LOG_IN_FAIL_ERROR:
+            lpszMsg = I18N::Game::ConnectionClosedDueTo3FailedAttempts;
+            break;
+        case RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO:
+            lpszMsg = I18N::Game::NoChargeInfo;
+            break;
+        case RECEIVE_LOG_IN_FAIL_USER_TIME1:
+            lpszMsg = I18N::Game::YourIndividualSubscriptionTermIsOver;
+            break;
+        case RECEIVE_LOG_IN_FAIL_USER_TIME2:
+            lpszMsg = I18N::Game::YourIndividualSubscriptionTimeIsOver;
+            break;
+        case RECEIVE_LOG_IN_FAIL_PC_TIME1:
+            lpszMsg = I18N::Game::SubscriptionTermIsOverOnYourIP;
+            break;
+        case RECEIVE_LOG_IN_FAIL_PC_TIME2:
+            lpszMsg = I18N::Game::SubscriptionTimeIsOverOnYourIP;
+            break;
+        case RECEIVE_LOG_IN_FAIL_ONLY_OVER_15:
+            lpszMsg = I18N::Game::OnlyPlayersAge18AndOverArePermittedToConnectToThisServer;
+            break;
+        case RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL:
+            lpszMsg = I18N::Game::PleasePurchaseGoldChannelTicketToEnter;
+            break;
+        case RECEIVE_LOG_IN_FAIL_POINT_DATE:
+            lpszMsg = I18N::Game::PointNoMoreDates;
+            break;
+        case RECEIVE_LOG_IN_FAIL_POINT_HOUR:
+            lpszMsg = I18N::Game::PointNoMorePointsLeft;
+            break;
+        case RECEIVE_LOG_IN_FAIL_INVALID_IP:
+            lpszMsg = I18N::Game::YourIPIsNotAllowedToConnect;
+            break;
+        case MESSAGE_DELETE_CHARACTER_GUILDWARNING:
+            lpszMsg = I18N::Game::YouCanTDeleteTheCharacterThatBelongsToTheGuild;
+            break;
+        case MESSAGE_DELETE_CHARACTER_WARNING:
+            mu_swprintf(szTempMsg, I18N::Game::CharacterLevelAboveDCannotBeDeleted, CHAR_DEL_LIMIT_LV);
+            lpszMsg = szTempMsg;
+            break;
+        case MESSAGE_DELETE_CHARACTER_CONFIRM:
+            mu_swprintf(szTempMsg, I18N::Game::WouldYouLikeToDeleteSCharacter, CharactersClient[SelectedHero].ID);
+            lpszMsg = szTempMsg;
+            eType   = MWT_BTN_BOTH;
+            break;
+        case MESSAGE_DELETE_CHARACTER_RESIDENT:
+            lpszMsg = I18N::Game::PleaseEnterYourWEBZENCOMPassword;
+            eType   = MWT_STR_INPUT;
+            InitResidentNumInput();
+            break;
+        case MESSAGE_DELETE_CHARACTER_ITEM_BLOCK:
+            lpszMsg = I18N::Game::TheCharacterIsItemBlocked;
+            break;
+        case MESSAGE_STORAGE_RESIDENTWRONG:
+            lpszMsg = I18N::Game::ThePasswordYouHaveEnteredIsIncorrect;
+            break;
+        case MESSAGE_DELETE_CHARACTER_SUCCESS:
+            CharactersClient[SelectedHero].Object.Live = false;
+            DeleteMount(&CharactersClient[SelectedHero].Object);
+            SelectedHero = -1;
+            rUIMng.m_CharSelMainWin.UpdateDisplay();
+            rUIMng.m_CharInfoBalloonMng.UpdateDisplay();
+            lpszMsg = I18N::Game::CharacterWasDeletedSuccessfully;
+            break;
+        case MESSAGE_BLOCKED_CHARACTER:
+            lpszMsg = I18N::Game::ThisIsABlockedCharacter;
+            break;
+        case MESSAGE_MIN_LENGTH:
+            lpszMsg = I18N::Game::TypeMoreThan4Letters;
+            break;
+        case MESSAGE_ID_SPACE_ERROR:
+            lpszMsg = I18N::Game::ItContainsProhibitedWords;
+            break;
+        case MESSAGE_SPECIAL_NAME:
+            lpszMsg = I18N::Game::CannotUseSymbols;
+            break;
+        case RECEIVE_CREATE_CHARACTER_FAIL:
+            rUIMng.ShowWin(&rUIMng.m_CharMakeWin);
+            lpszMsg = I18N::Game::IncorrectCharacterNameWasEnteredOrSameCharacterNameExists;
+            break;
+        case RECEIVE_CREATE_CHARACTER_FAIL2:
+            rUIMng.ShowWin(&rUIMng.m_CharMakeWin);
+            lpszMsg = I18N::Game::NoMoreCharactersCanBeCreated;
+            break;
+        default:
+            m_nMsgCode = -1;
+            return;
     }
 
     SetMsg(eType, lpszMsg, lpszMsg2);
@@ -449,61 +441,61 @@ void CMsgWin::ManageOKClick()
 
     switch (m_nMsgCode)
     {
-    case RECEIVE_LOG_IN_FAIL_VERSION:
-    case MESSAGE_SERVER_LOST:
-        ::PostMessage(g_hWnd, WM_CLOSE, 0, 0);
-        break;
-    case MESSAGE_VERSION:
-    case RECEIVE_LOG_IN_FAIL_ERROR:
-    case MESSAGE_INPUT_ID:
-    case RECEIVE_LOG_IN_FAIL_ID:
-    case RECEIVE_LOG_IN_FAIL_ID_CONNECTED:
-    case RECEIVE_LOG_IN_FAIL_SERVER_BUSY:
-    case RECEIVE_LOG_IN_FAIL_ID_BLOCK:
-    case RECEIVE_LOG_IN_FAIL_CONNECT:
-    case RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO:
-    case RECEIVE_LOG_IN_FAIL_USER_TIME1:
-    case RECEIVE_LOG_IN_FAIL_USER_TIME2:
-    case RECEIVE_LOG_IN_FAIL_PC_TIME1:
-    case RECEIVE_LOG_IN_FAIL_PC_TIME2:
-    case RECEIVE_LOG_IN_FAIL_ONLY_OVER_15:
-    case RECEIVE_LOG_IN_FAIL_POINT_DATE:
-    case RECEIVE_LOG_IN_FAIL_POINT_HOUR:
-    case RECEIVE_LOG_IN_FAIL_INVALID_IP:
-    case RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL:
-        rUIMng.ShowWin(&rUIMng.m_LoginWin);
-        CUIMng::Instance().m_LoginWin.GetUsernameInputBox()->GiveFocus(TRUE);
-        CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
-        break;
-    case MESSAGE_INPUT_PASSWORD:
-    case RECEIVE_LOG_IN_FAIL_PASSWORD:
-        rUIMng.ShowWin(&rUIMng.m_LoginWin);
-        CUIMng::Instance().m_LoginWin.GetPasswordInputBox()->GiveFocus(TRUE);
-        CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
-        break;
-    case MESSAGE_DELETE_CHARACTER_CONFIRM:
-        PopUp(MESSAGE_DELETE_CHARACTER_RESIDENT);
-        break;
-    case MESSAGE_DELETE_CHARACTER_RESIDENT:
-        RequestDeleteCharacter();
-        PopUp(MESSAGE_WAIT);
-        break;
+        case RECEIVE_LOG_IN_FAIL_VERSION:
+        case MESSAGE_SERVER_LOST:
+            ::PostMessage(g_hWnd, WM_CLOSE, 0, 0);
+            break;
+        case MESSAGE_VERSION:
+        case RECEIVE_LOG_IN_FAIL_ERROR:
+        case MESSAGE_INPUT_ID:
+        case RECEIVE_LOG_IN_FAIL_ID:
+        case RECEIVE_LOG_IN_FAIL_ID_CONNECTED:
+        case RECEIVE_LOG_IN_FAIL_SERVER_BUSY:
+        case RECEIVE_LOG_IN_FAIL_ID_BLOCK:
+        case RECEIVE_LOG_IN_FAIL_CONNECT:
+        case RECEIVE_LOG_IN_FAIL_NO_PAYMENT_INFO:
+        case RECEIVE_LOG_IN_FAIL_USER_TIME1:
+        case RECEIVE_LOG_IN_FAIL_USER_TIME2:
+        case RECEIVE_LOG_IN_FAIL_PC_TIME1:
+        case RECEIVE_LOG_IN_FAIL_PC_TIME2:
+        case RECEIVE_LOG_IN_FAIL_ONLY_OVER_15:
+        case RECEIVE_LOG_IN_FAIL_POINT_DATE:
+        case RECEIVE_LOG_IN_FAIL_POINT_HOUR:
+        case RECEIVE_LOG_IN_FAIL_INVALID_IP:
+        case RECEIVE_LOG_IN_FAIL_CHARGED_CHANNEL:
+            rUIMng.ShowWin(&rUIMng.m_LoginWin);
+            CUIMng::Instance().m_LoginWin.GetUsernameInputBox()->GiveFocus(TRUE);
+            CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
+            break;
+        case MESSAGE_INPUT_PASSWORD:
+        case RECEIVE_LOG_IN_FAIL_PASSWORD:
+            rUIMng.ShowWin(&rUIMng.m_LoginWin);
+            CUIMng::Instance().m_LoginWin.GetPasswordInputBox()->GiveFocus(TRUE);
+            CurrentProtocolState = RECEIVE_JOIN_SERVER_SUCCESS;
+            break;
+        case MESSAGE_DELETE_CHARACTER_CONFIRM:
+            PopUp(MESSAGE_DELETE_CHARACTER_RESIDENT);
+            break;
+        case MESSAGE_DELETE_CHARACTER_RESIDENT:
+            RequestDeleteCharacter();
+            PopUp(MESSAGE_WAIT);
+            break;
     }
 }
 
 void CMsgWin::ManageCancelClick()
 {
     CUIMng& rUIMng = CUIMng::Instance();
-    m_nMsgCode = -1;
+    m_nMsgCode     = -1;
     rUIMng.HideWin(this);
 }
 
 void CMsgWin::InitResidentNumInput()
 {
     ::ClearInput();
-    InputEnable = true;
-    InputNumber = 1;
-    InputTextMax[0] = g_iLengthAuthorityCode;
+    InputEnable      = true;
+    InputNumber      = 1;
+    InputTextMax[0]  = g_iLengthAuthorityCode;
     InputTextHide[0] = 1;
 
     if (g_iChatInputType == 1)
@@ -524,7 +516,7 @@ void CMsgWin::RequestDeleteCharacter()
         g_pSinglePasswdInputBox->SetText(NULL);
         g_pSinglePasswdInputBox->SetState(UISTATE_HIDE);
     }
-    InputEnable = false;
+    InputEnable          = false;
     CurrentProtocolState = REQUEST_DELETE_CHARACTER;
     SocketClient->ToGameServer()->SendDeleteCharacter(CharactersClient[SelectedHero].ID, InputText[0]);
 }

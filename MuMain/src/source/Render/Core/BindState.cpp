@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BindState.h"
 #include "Render/Core/GLProcAddress.h"
-#include "Render/Core/ImmediateRenderer.h" // GLP-19 -- IR::Flush() before any bind changes
+#include "Render/Core/ImmediateRenderer.h"  // GLP-19 -- IR::Flush() before any bind changes
 #include "Core/Utilities/FrameProfiler.h"
 #include <SDL3/SDL.h>
 
@@ -9,9 +9,9 @@
 #define APIENTRY
 #endif
 
-typedef void (APIENTRY* PFNGLUSEPROGRAMPROC)(GLuint);
-typedef void (APIENTRY* PFNGLBINDVERTEXARRAYPROC)(GLuint);
-typedef void (APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
+typedef void(APIENTRY* PFNGLUSEPROGRAMPROC)(GLuint);
+typedef void(APIENTRY* PFNGLBINDVERTEXARRAYPROC)(GLuint);
+typedef void(APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
 
 static PFNGLUSEPROGRAMPROC      fn_glUseProgram      = nullptr;
 static PFNGLBINDVERTEXARRAYPROC fn_glBindVertexArray = nullptr;
@@ -23,7 +23,8 @@ static PFNGLACTIVETEXTUREPROC   fn_glActiveTexture   = nullptr;
 static bool LoadBindStateFunctions()
 {
     static bool loaded = false;
-    if (loaded) return true;
+    if (loaded)
+        return true;
 
     fn_glUseProgram      = (PFNGLUSEPROGRAMPROC)MuGL::GetProcAddress("glUseProgram");
     fn_glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)MuGL::GetProcAddress("glBindVertexArray");
@@ -44,8 +45,8 @@ static GLuint s_lastVAO     = 0;
 
 // Texture id cache is keyed per slot -- BMDMeshShader alone uses slots 0-3 (base/chrome1/metal/
 // chrome2); sized with headroom.
-static const int kMaxCachedTextureSlots = 8;
-static GLuint    s_lastTexture[kMaxCachedTextureSlots] = { 0 };
+static const int kMaxCachedTextureSlots                = 8;
+static GLuint    s_lastTexture[kMaxCachedTextureSlots] = {0};
 
 // GLP-05: matches GL's post-context-creation default (GL_TEXTURE0, i.e. slot 0).
 static GLint s_lastActiveSlot = 0;
@@ -60,8 +61,10 @@ static GLint s_lastActiveSlot = 0;
 // pending flag before submitting, so the inner call returns immediately.
 void BindProgram(GLuint program)
 {
-    if (program == s_lastProgram) return;
-    if (!LoadBindStateFunctions()) return;
+    if (program == s_lastProgram)
+        return;
+    if (!LoadBindStateFunctions())
+        return;
     IR::Flush(IR::FlushCause::Program);
     fn_glUseProgram(program);
     s_lastProgram = program;
@@ -75,14 +78,16 @@ void UnbindAllShaders()
 
 void BindTexture2D(int slot, GLuint texture)
 {
-    if (!LoadBindStateFunctions()) return;
+    if (!LoadBindStateFunctions())
+        return;
 
     // GLP-19 -- see BindProgram(). Computed up front because the real texture comparison below
     // sits after the active-slot switch, and both change what a pending IR batch would sample.
     {
         const bool slotChanges = (slot != s_lastActiveSlot);
         const bool texChanges  = !(slot >= 0 && slot < kMaxCachedTextureSlots && s_lastTexture[slot] == texture);
-        if (slotChanges || texChanges) IR::Flush(IR::FlushCause::Texture);
+        if (slotChanges || texChanges)
+            IR::Flush(IR::FlushCause::Texture);
     }
 
     // GLP-05: BindState is now the complete monopoly on the active texture unit, not just
@@ -93,22 +98,27 @@ void BindTexture2D(int slot, GLuint texture)
     // wrongly skip the unit switch and bind the wrong texture to the wrong unit (see DXP-22's
     // "infinity shadow" for what that class of bug looks like in practice). If you are adding a
     // texture bind anywhere, route it through BindTexture2D -- do not call glActiveTexture directly.
-    if (slot != s_lastActiveSlot) {
+    if (slot != s_lastActiveSlot)
+    {
         fn_glActiveTexture(GL_TEXTURE0 + slot);
         s_lastActiveSlot = slot;
     }
 
-    if (slot >= 0 && slot < kMaxCachedTextureSlots && s_lastTexture[slot] == texture) return;
+    if (slot >= 0 && slot < kMaxCachedTextureSlots && s_lastTexture[slot] == texture)
+        return;
     glBindTexture(GL_TEXTURE_2D, texture);
-    if (slot >= 0 && slot < kMaxCachedTextureSlots) s_lastTexture[slot] = texture;
+    if (slot >= 0 && slot < kMaxCachedTextureSlots)
+        s_lastTexture[slot] = texture;
     FrameProfiler::CountGLCall(FrameProfiler::Counter::TextureBinds);
 }
 
 void BindVAO(GLuint vao)
 {
-    if (vao == s_lastVAO) return;
-    if (!LoadBindStateFunctions()) return;
-    IR::Flush(IR::FlushCause::Other); // GLP-19 -- see BindProgram(); safe to re-enter, Flush() clears its flag first
+    if (vao == s_lastVAO)
+        return;
+    if (!LoadBindStateFunctions())
+        return;
+    IR::Flush(IR::FlushCause::Other);  // GLP-19 -- see BindProgram(); safe to re-enter, Flush() clears its flag first
     fn_glBindVertexArray(vao);
     s_lastVAO = vao;
     FrameProfiler::CountGLCall();
@@ -126,7 +136,8 @@ void InvalidateProgramCache()
 
 void InvalidateTextureCache()
 {
-    for (int i = 0; i < kMaxCachedTextureSlots; ++i) s_lastTexture[i] = kInvalidCacheSentinel;
+    for (int i = 0; i < kMaxCachedTextureSlots; ++i)
+        s_lastTexture[i] = kInvalidCacheSentinel;
 }
 
 void InvalidateVAOCache()

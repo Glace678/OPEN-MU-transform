@@ -19,10 +19,7 @@
 #include "../MuEditor/UI/Console/MuEditorConsoleUI.h"
 
 CMuSkillEditorUI::CMuSkillEditorUI()
-    : m_selectedRow(-1)
-    , m_bFreezeColumns(false)
-    , m_bShowHoverTooltip(false)
-    , m_pTable(nullptr)
+    : m_selectedRow(-1), m_bFreezeColumns(false), m_bShowHoverTooltip(false), m_pTable(nullptr)
 {
     memset(m_szSkillSearchBuffer, 0, sizeof(m_szSkillSearchBuffer));
     m_pTable = new CSkillEditorTable();
@@ -31,19 +28,17 @@ CMuSkillEditorUI::CMuSkillEditorUI()
     m_columnVisibility["Index"] = true;  // Special column (not in metadata)
 
     // Get all fields from metadata and set default visibility
-    const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-    const int fieldCount = GetSkillFieldCount();
+    const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+    const int                   fieldCount = GetSkillFieldCount();
 
     // Define commonly used fields that should be visible by default
     static const std::unordered_set<std::string> defaultVisibleFields = {
-        "Name", "Level", "Damage", "Mana", "Distance",
-        "Delay", "Energy", "Strength", "Dexterity"
-    };
+        "Name", "Level", "Damage", "Mana", "Distance", "Delay", "Energy", "Strength", "Dexterity"};
 
     for (int i = 0; i < fieldCount; ++i)
     {
         // Check if field is in the default visible set
-        bool defaultVisible = defaultVisibleFields.count(fields[i].name) > 0;
+        bool defaultVisible                = defaultVisibleFields.count(fields[i].name) > 0;
         m_columnVisibility[fields[i].name] = defaultVisible;
     }
 
@@ -83,21 +78,20 @@ void CMuSkillEditorUI::Render(bool& showEditor)
     ImGuiIO& io = ImGui::GetIO();
 
     // Calculate available space between toolbar and console
-    float availableTop = TOOLBAR_HEIGHT;
+    float availableTop    = TOOLBAR_HEIGHT;
     float availableBottom = io.DisplaySize.y - CONSOLE_HEIGHT;
     float availableHeight = availableBottom - availableTop;
 
     // Set initial window size and constraints
-    ImGui::SetNextWindowSizeConstraints(
-        ImVec2(400, 300),  // Min size
-        ImVec2(io.DisplaySize.x, availableHeight)  // Max size
+    ImGui::SetNextWindowSizeConstraints(ImVec2(400, 300),                          // Min size
+                                        ImVec2(io.DisplaySize.x, availableHeight)  // Max size
     );
 
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     if (ImGui::Begin(I18N::Editor::SkillEditor, &showEditor, flags))
     {
         // Clamp window position to stay within bounds
-        ImVec2 windowPos = ImGui::GetWindowPos();
+        ImVec2 windowPos  = ImGui::GetWindowPos();
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         // Clamp to keep window between toolbar and console
@@ -121,9 +115,10 @@ void CMuSkillEditorUI::Render(bool& showEditor)
         }
 
         // Check if hovering this window OR any popup
-        bool isHovering = ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup) ||
-                         ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) ||
-                         ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId);
+        bool isHovering =
+            ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup) ||
+            ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) ||
+            ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId);
 
         if (isHovering)
         {
@@ -163,7 +158,8 @@ void CMuSkillEditorUI::Render(bool& showEditor)
 void CMuSkillEditorUI::RenderSearchBar()
 {
     ImGui::SetNextItemWidth(200);
-    ImGui::InputTextWithHint("##SkillSearch", I18N::Editor::SearchSkills, m_szSkillSearchBuffer, sizeof(m_szSkillSearchBuffer));
+    ImGui::InputTextWithHint("##SkillSearch", I18N::Editor::SearchSkills, m_szSkillSearchBuffer,
+                             sizeof(m_szSkillSearchBuffer));
 }
 
 void CMuSkillEditorUI::RenderColumnVisibilityMenu()
@@ -201,8 +197,8 @@ void CMuSkillEditorUI::RenderColumnVisibilityMenu()
         ImGui::Checkbox(I18N::Editor::Index, &m_columnVisibility["Index"]);
 
         // All metadata fields
-        const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-        const int fieldCount = GetSkillFieldCount();
+        const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+        const int                   fieldCount = GetSkillFieldCount();
 
         for (int i = 0; i < fieldCount; ++i)
         {
@@ -233,4 +229,4 @@ void CMuSkillEditorUI::LoadColumnPreferences()
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

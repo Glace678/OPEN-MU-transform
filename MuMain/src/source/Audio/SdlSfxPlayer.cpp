@@ -49,17 +49,17 @@ float DsVolumeToGain(long volume)
 
 struct SfxEntry
 {
-    MIX_Audio* audio = nullptr;
-    std::array<MIX_Track*, MAX_CHANNEL> tracks {};
-    int activeChannel = 0;
-    int maxChannels = 0;
+    MIX_Audio*                          audio = nullptr;
+    std::array<MIX_Track*, MAX_CHANNEL> tracks{};
+    int                                 activeChannel = 0;
+    int                                 maxChannels   = 0;
 };
 
 class SdlSfxManager
 {
 public:
     HRESULT Initialize();
-    void Shutdown();
+    void    Shutdown();
 
     void SetEnabled(bool enabled);
     bool IsEnabled() const noexcept;
@@ -68,8 +68,8 @@ public:
     HRESULT ReleaseBuffer(ESound bufferId);
 
     HRESULT PlayBuffer(ESound bufferId, bool looped);
-    void StopBuffer(ESound bufferId);
-    void StopAll();
+    void    StopBuffer(ESound bufferId);
+    void    StopAll();
 
     void SetVolume(ESound bufferId, long volume);
     void SetMasterVolume(long volume);
@@ -81,11 +81,11 @@ private:
     void SetGainInternal(SfxEntry& entry, float gain);
     bool IsValidBufferIndex(int bufferId) const noexcept;
 
-    mutable std::mutex mutex_;
-    MIX_Mixer* mixer_ = nullptr;
-    std::array<SfxEntry, MAX_BUFFER> entries_ {};
-    bool enableSound_ = false;
-    float masterGain_ = 1.0f;
+    mutable std::mutex               mutex_;
+    MIX_Mixer*                       mixer_ = nullptr;
+    std::array<SfxEntry, MAX_BUFFER> entries_{};
+    bool                             enableSound_ = false;
+    float                            masterGain_  = 1.0f;
 };
 
 SdlSfxManager& Manager()
@@ -116,7 +116,7 @@ void SdlSfxManager::Shutdown()
     std::lock_guard lock(mutex_);
 
     ReleaseAllBuffers();
-    mixer_ = nullptr;  // owned by AudioPlayer, which shuts down after us
+    mixer_       = nullptr;  // owned by AudioPlayer, which shuts down after us
     enableSound_ = false;
 }
 
@@ -147,7 +147,7 @@ HRESULT SdlSfxManager::LoadWaveFile(ESound bufferId, const wchar_t* filename, in
     const int clampedChannels = std::clamp(maxChannel, 1, MAX_CHANNEL);
 
     std::lock_guard lock(mutex_);
-    auto& entry = entries_[bufferId];
+    auto&           entry = entries_[bufferId];
     if (entry.maxChannels > 0)
     {
         return S_FALSE;
@@ -155,7 +155,7 @@ HRESULT SdlSfxManager::LoadWaveFile(ESound bufferId, const wchar_t* filename, in
 
     // Sound paths are Windows-spelled wide strings (backslashes, mixed case);
     // convert to UTF-8 and resolve against the case-sensitive filesystem.
-    char path[4096] = { 0 };
+    char path[4096] = {0};
     if (WideCharToMultiByte(CP_UTF8, 0, filename, -1, path, sizeof(path) - 1, nullptr, nullptr) == 0)
     {
         return E_INVALIDARG;
@@ -180,7 +180,7 @@ HRESULT SdlSfxManager::LoadWaveFile(ESound bufferId, const wchar_t* filename, in
             {
                 MIX_DestroyTrack(track);
             }
-            entry.audio = audio;
+            entry.audio       = audio;
             entry.maxChannels = channel;  // release only the tracks created so far
             ResetEntry(entry);
             return E_FAIL;
@@ -190,9 +190,9 @@ HRESULT SdlSfxManager::LoadWaveFile(ESound bufferId, const wchar_t* filename, in
         entry.tracks[channel] = track;
     }
 
-    entry.audio = audio;
+    entry.audio         = audio;
     entry.activeChannel = 0;
-    entry.maxChannels = clampedChannels;
+    entry.maxChannels   = clampedChannels;
     return S_OK;
 }
 
@@ -229,14 +229,14 @@ HRESULT SdlSfxManager::PlayBuffer(ESound bufferId, bool looped)
     }
 
     std::lock_guard lock(mutex_);
-    auto& entry = entries_[bufferId];
+    auto&           entry = entries_[bufferId];
     if (entry.maxChannels == 0)
     {
         return E_FAIL;
     }
 
     const int currentChannel = entry.activeChannel % entry.maxChannels;
-    entry.activeChannel = (entry.activeChannel + 1) % entry.maxChannels;
+    entry.activeChannel      = (entry.activeChannel + 1) % entry.maxChannels;
 
     MIX_Track* track = entry.tracks[currentChannel];
     if (track == nullptr)
@@ -343,7 +343,7 @@ void SdlSfxManager::ResetEntry(SfxEntry& entry)
     }
 
     entry.activeChannel = 0;
-    entry.maxChannels = 0;
+    entry.maxChannels   = 0;
 }
 
 void SdlSfxManager::StopEntryTracks(SfxEntry& entry)
@@ -374,7 +374,7 @@ bool SdlSfxManager::IsValidBufferIndex(int bufferId) const noexcept
 {
     return bufferId >= 0 && bufferId < MAX_BUFFER;
 }
-} // namespace
+}  // namespace
 
 HRESULT InitDirectSound(HWND)
 {
@@ -443,4 +443,4 @@ void SetMasterVolume(long volume)
     Manager().SetMasterVolume(volume);
 }
 
-#endif // !_WIN32
+#endif  // !_WIN32

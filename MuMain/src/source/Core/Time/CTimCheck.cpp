@@ -1,18 +1,11 @@
 #include "stdafx.h"
 #include "CTimCheck.h"
 
-namespace
-{
-    CTimeCheck g_timeCheckInstance;
-}
+static CTimeCheck CTime;
 
-CTimeCheck::CTimeCheck()
-{
-}
+CTimeCheck::CTimeCheck() {}
 
-CTimeCheck::~CTimeCheck()
-{
-}
+CTimeCheck::~CTimeCheck() {}
 
 int CTimeCheck::CheckIndex(int index)
 {
@@ -24,9 +17,9 @@ int CTimeCheck::CheckIndex(int index)
 
     TimeCheck T;
 
-    T.iIndex = index;
+    T.iIndex      = index;
     T.iBackupTime = 0;
-    T.bTimeCheck = true;
+    T.bTimeCheck  = true;
 
     stl_Time.push_back(T);
 
@@ -42,7 +35,7 @@ bool CTimeCheck::GetTimeCheck(int index, int DelayTime)
     if (stl_Time[I].bTimeCheck)
     {
         stl_Time[I].iBackupTime = presentTime;
-        stl_Time[I].bTimeCheck = false;
+        stl_Time[I].bTimeCheck  = false;
     }
 
     if (stl_Time[I].iBackupTime + DelayTime <= presentTime)

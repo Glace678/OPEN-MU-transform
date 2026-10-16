@@ -38,22 +38,22 @@
 #endif
 
 // External declarations
-extern EGameScene SceneFlag;
-extern int ErrorMessage;
-extern CHARACTER CharacterView;
-extern int SelectedCharacter;
-extern int g_iKeyPadEnable;
-extern int g_iChatInputType;
+extern EGameScene       SceneFlag;
+extern int              ErrorMessage;
+extern CHARACTER        CharacterView;
+extern int              SelectedCharacter;
+extern int              g_iKeyPadEnable;
+extern int              g_iChatInputType;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
-extern BOOL g_bIMEBlock;
-extern DWORD g_dwBKConv;
-extern DWORD g_dwBKSent;
-extern HWND g_hWnd;
-extern CErrorReport g_ErrorReport;
-extern double WorldTime;
-extern int MouseX;
-extern int MouseY;
-extern vec3_t MouseTarget;
+extern BOOL             g_bIMEBlock;
+extern DWORD            g_dwBKConv;
+extern DWORD            g_dwBKSent;
+extern HWND             g_hWnd;
+extern CErrorReport     g_ErrorReport;
+extern double           WorldTime;
+extern int              MouseX;
+extern int              MouseY;
+extern vec3_t           MouseTarget;
 
 // Forward declaration
 BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString);
@@ -72,12 +72,12 @@ void StartGame()
         {
             CharacterAttribute->Level = CharactersClient[SelectedHero].Level;
             CharacterAttribute->Class = CharactersClient[SelectedHero].Class;
-            CharacterAttribute->Skin = CharactersClient[SelectedHero].Skin;
+            CharacterAttribute->Skin  = CharactersClient[SelectedHero].Skin;
             ::wcscpy_s(CharacterAttribute->Name, MAX_USERNAME_SIZE + 1, CharactersClient[SelectedHero].ID);
 
             ::ReleaseCharacterSceneData();
             InitLoading = false;
-            SceneFlag = LOADING_SCENE;
+            SceneFlag   = LOADING_SCENE;
         }
     }
 }
@@ -87,17 +87,17 @@ void CreateCharacterScene()
     g_pNewUIMng->ResetActiveUIObj();
 
     EnableMainRender = true;
-    MouseOnWindow = false;
-    ErrorMessage = 0;
+    MouseOnWindow    = false;
+    ErrorMessage     = 0;
 
     gMapManager.WorldActive = WD_74NEW_CHARACTER_SCENE;
 
-    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
+    gMapManager.LoadWorld(gMapManager.WorldActive);
     OpenCharacterSceneData();
 
     CreateCharacterPointer(&CharacterView, MODEL_FACE + 1, 0, 0);
-    CharacterView.Class = CLASS_KNIGHT;
-    CharacterView.SkinIndex = gCharacterManager.GetSkinModelIndex(CLASS_KNIGHT);
+    CharacterView.Class       = CLASS_KNIGHT;
+    CharacterView.SkinIndex   = gCharacterManager.GetSkinModelIndex(CLASS_KNIGHT);
     CharacterView.Object.Kind = 0;
 
     SelectedHero = -1;
@@ -114,26 +114,26 @@ void CreateCharacterScene()
 
     g_pNewUISystem->HideAll();
 
-    g_iKeyPadEnable = 0;
+    g_iKeyPadEnable  = 0;
     GuildInputEnable = false;
-    TabInputEnable = false;
-    GoldInputEnable = false;
-    InputEnable = true;
+    TabInputEnable   = false;
+    GoldInputEnable  = false;
+    InputEnable      = true;
     ClearInput();
-    InputIndex = 0;
+    InputIndex     = 0;
     InputTextWidth = 90;
-    InputNumber = 1;
+    InputNumber    = 1;
 
     for (int i = 0; i < MAX_WHISPER; i++)
     {
         g_pChatListBox->AddText(L"", L"", SEASON3B::TYPE_WHISPER_MESSAGE);
     }
 
-    HIMC hIMC = ImmGetContext(g_hWnd);
+    HIMC  hIMC = ImmGetContext(g_hWnd);
     DWORD Conversion, Sentence;
 
     Conversion = IME_CMODE_NATIVE;
-    Sentence = IME_SMODE_NONE;
+    Sentence   = IME_SMODE_NONE;
 
     g_bIMEBlock = FALSE;
     RestoreIMEStatus();
@@ -177,7 +177,7 @@ void NewMoveCharacterScene()
     ThePetProcess().UpdatePets();
 
 #if defined _DEBUG || defined FOR_WORK
-    std::wstring lpszTemp = { 0 };
+    std::wstring lpszTemp = {0};
     if (::Util_CheckOption(::GetCommandLine(), L'c', lpszTemp))
     {
         SelectedHero = ::_wtoi(lpszTemp.c_str());
@@ -190,9 +190,9 @@ void NewMoveCharacterScene()
 
     if (rInput.IsKeyDown(VK_RETURN))
     {
-        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow()
-            || rUIMng.m_SysMenuWin.IsShow() || rUIMng.m_OptionWin.IsShow())
-            && SelectedHero > -1 && SelectedHero < MAX_CHARACTERS_PER_ACCOUNT)
+        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow() || rUIMng.m_SysMenuWin.IsShow() ||
+              rUIMng.m_OptionWin.IsShow()) &&
+            SelectedHero > -1 && SelectedHero < MAX_CHARACTERS_PER_ACCOUNT)
         {
             ::PlayBuffer(SOUND_CLICK01);
 
@@ -246,7 +246,7 @@ static void SetupCharacterSceneViewport(int& outWidth, int& outHeight)
 
     glColor3f(1.f, 1.f, 1.f);
     outHeight = REFERENCE_HEIGHT;
-    outWidth = GetScreenWidth();
+    outWidth  = GetScreenWidth();
 
     SetClearColor(0.f, 0.f, 0.f, 1.f);
     BeginOpengl(0, 25, REFERENCE_WIDTH, 430);
@@ -328,8 +328,8 @@ static void RenderSelectedCharacterEffects()
 
     // Aurora luminance pulses between (BASE - AMPLITUDE) and (BASE + AMPLITUDE)
     // with period ~2π / FREQUENCY ms.
-    constexpr float AURORA_FREQUENCY = 0.0015f;
-    constexpr float AURORA_AMPLITUDE = 0.3f;
+    constexpr float AURORA_FREQUENCY      = 0.0015f;
+    constexpr float AURORA_AMPLITUDE      = 0.3f;
     constexpr float AURORA_BASE_LUMINANCE = 0.5f;
 
     vec3_t vLight;

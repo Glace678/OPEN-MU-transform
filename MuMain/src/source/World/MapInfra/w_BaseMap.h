@@ -15,7 +15,7 @@ public:
 public:
     virtual bool LoadMapData() { return false; }
 
-public:	// Object
+public:  // Object
     virtual bool CreateObject(OBJECT* o) { return false; }
     virtual bool MoveObject(OBJECT* o) { return false; }
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b) { return false; }
@@ -24,22 +24,22 @@ public:	// Object
 
     virtual void RenderFrontSideVisual() {}
 
-public:	// Character
+public:  // Character
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key) { return NULL; }
-    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b) { return false; }
-    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b) {}
-    virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b) { return false; }
-    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b) { return false; }
-    virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o) { return false; }
+    virtual bool       MoveMonsterVisual(OBJECT* o, BMD* b) { return false; }
+    virtual void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b) {}
+    virtual bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b) { return false; }
+    virtual bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b) { return false; }
+    virtual bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o) { return false; }
 
-public: // Weather
+public:  // Weather
     virtual bool CreateWeather(PARTICLE* o) { return false; }
 
-public: // Sound
+public:  // Sound
     virtual bool PlayMonsterSound(OBJECT* o) { return false; }
     virtual void PlayObjectSound(OBJECT* o) {}
 
-public: // Server Message
+public:  // Server Message
     virtual bool ReceiveMapMessage(BYTE code, BYTE subcode, BYTE* ReceiveBuffer) { return false; }
 
 public:
@@ -58,20 +58,27 @@ public:
         return false;
     }
 
-    ENUM_WORLD FindMapIndex(int index = 0) {
-        if (m_MapTypes.size() == 0 || index >= (int)m_MapTypes.size()) return NUM_WD;
-        else return m_MapTypes[index];
+    ENUM_WORLD FindMapIndex(int index = 0)
+    {
+        if (m_MapTypes.size() == 0 || index >= (int)m_MapTypes.size())
+            return NUM_WD;
+        else
+            return m_MapTypes[index];
     }
 
 public:
     const bool IsCurrentMap(int type) { return isMapIndex(static_cast<ENUM_WORLD>(type)); }
 
 public:
-    void AddMapIndex(ENUM_WORLD type) { if (!isMapIndex(type)) m_MapTypes.push_back(type); }
+    void AddMapIndex(ENUM_WORLD type)
+    {
+        if (!isMapIndex(type))
+            m_MapTypes.push_back(type);
+    }
 
 public:
-    typedef std::vector<ENUM_WORLD>	WorldVector;
+    typedef std::vector<ENUM_WORLD> WorldVector;
 
 private:
-    WorldVector		m_MapTypes;
+    WorldVector m_MapTypes;
 };

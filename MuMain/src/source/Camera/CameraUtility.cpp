@@ -17,8 +17,8 @@ extern float g_fSpecialHeight;
 // each binding once per press instead of on every tick.
 namespace
 {
-    bool s_bF9KeyPressed  = false;  // F9  — cycle camera mode
-    bool s_bF11KeyPressed = false;  // F11 — reset active view
+bool s_bF9KeyPressed  = false;  // F9  — cycle camera mode
+bool s_bF11KeyPressed = false;  // F11 — reset active view
 }
 
 /**

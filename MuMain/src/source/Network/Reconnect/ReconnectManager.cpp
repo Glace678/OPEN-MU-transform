@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include <algorithm>
 #include "ReconnectManager.h"
 
 #include "Core/Platform/WinSock.h"  // GetAddrInfoW + BSD-socket shims for the reachability probe
@@ -7,70 +6,35 @@
 #include <cmath>
 #include <cwchar>
 
-#include "Network/Server/WSclient.h"   // SocketClient, CreateSocket, DeleteSocket,
-                                       // ResetClientToLoginScene, protocol states
-#include "Network/IncomingPacketQueue.h" // drain stale frames after re-creating the socket
-#include "Scenes/SceneCore.h"          // SceneFlag, szServerIpAddress, g_ServerPort
-#include "Scenes/SceneCommon.h"        // SelectedHero, MAX_CHARACTERS_PER_ACCOUNT
-#include "Scenes/CharacterScene.h"     // StartGame
-#include "Engine/Object/ZzzCharacter.h"// CharactersClient
-#include "UI/Legacy/UIMng.h"           // CUIMng, m_LoginWin
-#include "MUHelper/MuHelper.h"         // MUHelper::g_MuHelper
+#include "Network/Server/WSclient.h"     // SocketClient, CreateSocket, DeleteSocket,
+                                         // ResetClientToLoginScene, protocol states
+#include "Scenes/SceneCore.h"            // SceneFlag, szServerIpAddress, g_ServerPort
+#include "Scenes/SceneCommon.h"          // SelectedHero, MAX_CHARACTERS_PER_ACCOUNT
+#include "Scenes/CharacterScene.h"       // StartGame
+#include "Engine/Object/ZzzCharacter.h"  // CharactersClient
+#include "UI/Legacy/UIMng.h"             // CUIMng, m_LoginWin
+#include "MUHelper/MuHelper.h"           // MUHelper::g_MuHelper
 
 // Timing (milliseconds). WorldTime is the wall-clock ms timer the rest of the
 // client uses for timeouts (see ZzzAI.cpp).
 namespace
 {
-    constexpr double PROBE_INTERVAL_MS = 5000.0;    // gap between reachability probes
-    constexpr double PROBE_TIMEOUT_MS = 2000.0;     // allow a probe this long to connect
-    constexpr double CONNECT_TIMEOUT_MS = 10000.0;  // wait for the server hello
-    constexpr double LOGIN_TIMEOUT_MS = 10000.0;    // login -> character list
-    constexpr double RETRY_INTERVAL_MS = 5000.0;    // gap between re-login retries
-    constexpr int STEP_COUNT = 4;                   // progress-bar steps
+constexpr double PROBE_INTERVAL_MS  = 5000.0;   // gap between reachability probes
+constexpr double PROBE_TIMEOUT_MS   = 2000.0;   // allow a probe this long to connect
+constexpr double CONNECT_TIMEOUT_MS = 10000.0;  // wait for the server hello
+constexpr double LOGIN_TIMEOUT_MS   = 10000.0;  // login -> character list
+constexpr double RETRY_INTERVAL_MS  = 5000.0;   // gap between re-login retries
+constexpr int    STEP_COUNT         = 4;        // progress-bar steps
 
-    const uintptr_t NO_PROBE = static_cast<uintptr_t>(~0ull);  // == INVALID_SOCKET
-
-    // XC-5: balance this manager's one-time WSAStartup with WSACleanup at
-    // process exit instead of leaking the process-level Winsock reference.
-    // Winsock is reference-counted, so this only undoes our own startup call.
-    class WinsockLifetime
-    {
-    public:
-        void EnsureStarted()
-        {
-            if (!this->m_started)
-            {
-                WSADATA wsaData;
-                if (WSAStartup(MAKEWORD(2, 2), &wsaData) == 0)
-                {
-                    this->m_started = true;
-                }
-            }
-        }
-
-        bool IsStarted() const { return this->m_started; }
-
-        ~WinsockLifetime()
-        {
-            if (this->m_started)
-            {
-                WSACleanup();
-            }
-        }
-
-    private:
-        bool m_started = false;
-    };
-
-    WinsockLifetime g_winsockLifetime;
+const uintptr_t NO_PROBE = static_cast<uintptr_t>(~0ull);  // == INVALID_SOCKET
 }
 
-extern double WorldTime;
-extern int LogIn;
+extern double  WorldTime;
+extern int     LogIn;
 extern wchar_t LogInID[MAX_USERNAME_SIZE + 1];
-extern BYTE Version[SIZE_PROTOCOLVERSION];
-extern BYTE Serial[SIZE_PROTOCOLSERIAL + 1];
-extern BOOL g_bGameServerConnected;
+extern BYTE    Version[SIZE_PROTOCOLVERSION];
+extern BYTE    Serial[SIZE_PROTOCOLSERIAL + 1];
+extern BOOL    g_bGameServerConnected;
 
 ReconnectManager& ReconnectManager::Instance()
 {
@@ -116,11 +80,11 @@ void ReconnectManager::CacheCharacter(const wchar_t* characterName)
 
 void ReconnectManager::ClearSession()
 {
-    m_hasSession = false;
-    std::fill(std::begin(m_serverIp), std::end(m_serverIp), L'\0');
-    std::fill(std::begin(m_username), std::end(m_username), L'\0');
-    std::fill(std::begin(m_password), std::end(m_password), L'\0');
-    std::fill(std::begin(m_characterName), std::end(m_characterName), L'\0');
+    m_hasSession       = false;
+    m_serverIp[0]      = L'\0';
+    m_username[0]      = L'\0';
+    m_password[0]      = L'\0';
+    m_characterName[0] = L'\0';
 }
 
 void ReconnectManager::RequestBegin()
@@ -168,7 +132,7 @@ void ReconnectManager::Begin()
     // reconnect hijacks the game-server socket we open below, so the first
     // attempt connects to the wrong endpoint and only the retry recovers.
     szServerIpAddress = m_serverIp;
-    g_ServerPort = m_serverPort;
+    g_ServerPort      = m_serverPort;
 
     // Tear the live session down to a clean login state.
     ResetClientToLoginScene();
@@ -187,12 +151,6 @@ void ReconnectManager::Begin()
 
     if (IsSocketAlive())
     {
-        // PROTO-10: ResetClientToLoginScene() cleared the queue before the new
-        // socket existed; frames delivered through the old handle in that window
-        // would survive into the new session. Clear once more against the new
-        // socket so only the fresh handshake is processed.
-        Network::IncomingPacketQueue::Instance().Clear();
-
         g_bGameServerConnected = TRUE;
         EnterPhase(Phase::Connecting);
         return;
@@ -229,7 +187,7 @@ void ReconnectManager::Update()
                 // screen. m_beginPending defers it: the main loop calls Begin()
                 // each frame and it fires once the flag is set.
                 m_abortAfterTeardown = true;
-                m_beginPending = true;
+                m_beginPending       = true;
             }
             else
             {
@@ -246,13 +204,26 @@ void ReconnectManager::Update()
 
     switch (m_phase)
     {
-    case Phase::Probing:        UpdateProbing();       break;
-    case Phase::Connecting:     UpdateConnecting();    break;
-    case Phase::LoggingIn:      UpdateLoggingIn();     break;
-    case Phase::SelectingChar:  UpdateSelectingChar(); break;
-    case Phase::Joining:        UpdateJoining();       break;
-    case Phase::Retrying:       UpdateRetrying();      break;
-    default:                                           break;
+        case Phase::Probing:
+            UpdateProbing();
+            break;
+        case Phase::Connecting:
+            UpdateConnecting();
+            break;
+        case Phase::LoggingIn:
+            UpdateLoggingIn();
+            break;
+        case Phase::SelectingChar:
+            UpdateSelectingChar();
+            break;
+        case Phase::Joining:
+            UpdateJoining();
+            break;
+        case Phase::Retrying:
+            UpdateRetrying();
+            break;
+        default:
+            break;
     }
 }
 
@@ -278,11 +249,12 @@ void ReconnectManager::UpdateProbing()
 
 void ReconnectManager::StartProbe()
 {
-    g_winsockLifetime.EnsureStarted();
-    if (!g_winsockLifetime.IsStarted())
+    static bool s_wsaInitialised = false;
+    if (!s_wsaInitialised)
     {
-        EnterPhase(Phase::Probing);  // XC-5: Winsock unavailable; reset timer and retry
-        return;
+        WSADATA wsaData;
+        WSAStartup(MAKEWORD(2, 2), &wsaData);
+        s_wsaInitialised = true;
     }
 
     const SOCKET probe = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -293,8 +265,8 @@ void ReconnectManager::StartProbe()
     }
 
     // Resolve the cached address - works for both an IPv4 literal and a hostname.
-    addrinfoW hints = {};
-    hints.ai_family = AF_INET;
+    addrinfoW hints   = {};
+    hints.ai_family   = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
@@ -307,7 +279,7 @@ void ReconnectManager::StartProbe()
     }
 
     sockaddr_in addr = *reinterpret_cast<sockaddr_in*>(resolved->ai_addr);
-    addr.sin_port = htons(m_serverPort);
+    addr.sin_port    = htons(m_serverPort);
     FreeAddrInfoW(resolved);
 
     u_long nonBlocking = 1;
@@ -315,7 +287,7 @@ void ReconnectManager::StartProbe()
 
     connect(probe, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));  // WSAEWOULDBLOCK expected
 
-    m_probeSocket = static_cast<uintptr_t>(probe);
+    m_probeSocket    = static_cast<uintptr_t>(probe);
     m_probeStartTime = WorldTime;
 }
 
@@ -336,8 +308,8 @@ void ReconnectManager::PollProbe()
 
     if (FD_ISSET(probe, &writeSet))
     {
-        int soError = 0;
-        socklen_t len = sizeof(soError);
+        int       soError = 0;
+        socklen_t len     = sizeof(soError);
         getsockopt(probe, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&soError), &len);
         CloseProbe();
 
@@ -461,7 +433,7 @@ void ReconnectManager::UpdateJoining()
         }
 
         m_active = false;
-        m_phase = Phase::Idle;
+        m_phase  = Phase::Idle;
         return;
     }
 
@@ -479,28 +451,13 @@ void ReconnectManager::UpdateRetrying()
         return;
     }
 
-    // PROTO-10: if the socket is in fact alive (the earlier dead-socket check
-    // raced or misreported), do NOT delete it and replay the join sequence -
-    // the server would see a duplicate login on a live connection. Let the
-    // existing connection continue through the normal handshake phases.
-    if (IsSocketAlive())
-    {
-        g_ErrorReport.Write(L"Reconnect retry: socket still alive; resuming handshake instead of reconnecting.\r\n");
-        EnterPhase(Phase::Connecting);
-        return;
-    }
-
     // Already torn down (Begin ran once); just re-open the socket and let the
     // Connecting phase re-drive the login. Reset the protocol state so the
     // server hello is treated as a fresh login rather than a map change.
-    LogIn = 0;
+    LogIn                = 0;
     CurrentProtocolState = REQUEST_JOIN_SERVER;
     DeleteSocket();
     CreateSocket(m_serverIp, m_serverPort);
-
-    // Same stale-frame window as in Begin(): drain anything queued against the
-    // old handle before the new connection starts processing.
-    Network::IncomingPacketQueue::Instance().Clear();
 
     if (IsSocketAlive())
     {
@@ -524,7 +481,7 @@ bool ReconnectManager::TrySelectCachedCharacter()
         if (wcscmp(CharactersClient[i].ID, m_characterName) == 0)
         {
             SelectedHero = i;
-            StartGame();   // -> LOADING_SCENE -> MAIN_SCENE (sends SelectCharacter)
+            StartGame();  // -> LOADING_SCENE -> MAIN_SCENE (sends SelectCharacter)
             return true;
         }
     }
@@ -534,11 +491,11 @@ bool ReconnectManager::TrySelectCachedCharacter()
 
 void ReconnectManager::Abort()
 {
-    m_active = false;
-    m_beginPending = false;
-    m_cancelRequested = false;
+    m_active             = false;
+    m_beginPending       = false;
+    m_cancelRequested    = false;
     m_abortAfterTeardown = false;
-    m_phase = Phase::Idle;
+    m_phase              = Phase::Idle;
     CloseProbe();
 
     // Begin() already released the in-game data, so this only needs to land on a
@@ -546,15 +503,15 @@ void ReconnectManager::Abort()
     // runs from Update() (scene-update phase), so the light scene reset is safe.
     DeleteSocket();
     g_sceneInit.ResetForDisconnect();
-    SceneFlag = LOG_IN_SCENE;
-    LogIn = 0;
+    SceneFlag            = LOG_IN_SCENE;
+    LogIn                = 0;
     CurrentProtocolState = REQUEST_JOIN_SERVER;
     CreateSocket(szServerIpAddress, g_ServerPort);
 }
 
 void ReconnectManager::EnterPhase(Phase phase)
 {
-    m_phase = phase;
+    m_phase          = phase;
     m_phaseStartTime = WorldTime;
 }
 
@@ -577,15 +534,22 @@ int ReconnectManager::GetStepIndex() const
 {
     switch (m_phase)
     {
-    // Probing/Retrying/Connecting share a step so the bar doesn't jump forward
-    // and snap back when a connect attempt fails and retries.
-    case Phase::Probing:        return 1;
-    case Phase::Retrying:       return 1;
-    case Phase::Connecting:     return 1;
-    case Phase::LoggingIn:      return 2;
-    case Phase::SelectingChar:  return 3;
-    case Phase::Joining:        return 4;
-    default:                    return 0;
+        // Probing/Retrying/Connecting share a step so the bar doesn't jump forward
+        // and snap back when a connect attempt fails and retries.
+        case Phase::Probing:
+            return 1;
+        case Phase::Retrying:
+            return 1;
+        case Phase::Connecting:
+            return 1;
+        case Phase::LoggingIn:
+            return 2;
+        case Phase::SelectingChar:
+            return 3;
+        case Phase::Joining:
+            return 4;
+        default:
+            return 0;
     }
 }
 

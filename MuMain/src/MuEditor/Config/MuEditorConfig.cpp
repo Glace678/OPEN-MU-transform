@@ -14,10 +14,7 @@ CMuEditorConfig& CMuEditorConfig::GetInstance()
     return instance;
 }
 
-CMuEditorConfig::CMuEditorConfig()
-    : m_language("en")
-{
-}
+CMuEditorConfig::CMuEditorConfig() : m_language("en") {}
 
 std::string CMuEditorConfig::Trim(const std::string& str)
 {
@@ -33,7 +30,7 @@ void CMuEditorConfig::Load()
 {
     std::ifstream file(m_configPath);
     if (!file.is_open())
-        return; // File doesn't exist yet, use defaults
+        return;  // File doesn't exist yet, use defaults
 
     std::string currentSection;
     std::string line;
@@ -57,7 +54,7 @@ void CMuEditorConfig::Load()
         size_t pos = line.find('=');
         if (pos != std::string::npos)
         {
-            std::string key = Trim(line.substr(0, pos));
+            std::string key   = Trim(line.substr(0, pos));
             std::string value = Trim(line.substr(pos + 1));
 
             if (currentSection == "General")
@@ -139,4 +136,4 @@ void CMuEditorConfig::SetColumnVisibility(const std::string& columnName, bool vi
     m_columnVisibility[columnName] = visible;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

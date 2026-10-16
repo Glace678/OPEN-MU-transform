@@ -15,20 +15,19 @@
 #include <filesystem>
 #include <fstream>
 
-CBannerInfoList::CBannerInfoList() // OK
+CBannerInfoList::CBannerInfoList()  // OK
 {
     this->Clear();
 }
 
-CBannerInfoList::~CBannerInfoList() // OK
-{
-}
+CBannerInfoList::~CBannerInfoList()  // OK
+{}
 
 WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strScriptFileName, bool bDonwLoad)
 {
-    WZResult result;
+    static WZResult result;
 
-    result.SetSuccessResult();
+    result.BuildSuccessResult();
 
     std::wifstream ifs;
 
@@ -40,7 +39,7 @@ WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strSc
     {
         this->Clear();
 
-        wchar_t buff[1024] = { 0 };
+        wchar_t buff[1024] = {0};
 
         while (true)
         {
@@ -65,26 +64,26 @@ WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strSc
     return result;
 }
 
-void CBannerInfoList::Clear() // OK
+void CBannerInfoList::Clear()  // OK
 {
     this->m_BannerInfos.clear();
 }
 
-int CBannerInfoList::GetSize() // OK
+int CBannerInfoList::GetSize()  // OK
 {
     return this->m_BannerInfos.size();
 }
 
-void CBannerInfoList::Append(CBannerInfo banner) // OK
+void CBannerInfoList::Append(CBannerInfo banner)  // OK
 {
     this->m_BannerInfos.insert(std::make_pair(banner.BannerSeq, banner));
 }
 
-void CBannerInfoList::SetFirst() // OK
+void CBannerInfoList::SetFirst()  // OK
 {
     this->m_BannerInfoIter = this->m_BannerInfos.begin();
 }
-bool CBannerInfoList::GetNext(CBannerInfo& banner) // OK
+bool CBannerInfoList::GetNext(CBannerInfo& banner)  // OK
 {
     if (this->m_BannerInfoIter == this->m_BannerInfos.end())
         return 0;

@@ -16,9 +16,8 @@
 #include "Core/Platform/WinCompat.h"  // UINT, DWORD, INT, LPCWSTR, LPWSTR, BOOL
 
 UINT  GetPrivateProfileIntW(LPCWSTR lpAppName, LPCWSTR lpKeyName, INT nDefault, LPCWSTR lpFileName);
-DWORD GetPrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpDefault,
-                               LPWSTR lpReturnedString, DWORD nSize, LPCWSTR lpFileName);
-BOOL  WritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString,
-                                 LPCWSTR lpFileName);
+DWORD GetPrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpDefault, LPWSTR lpReturnedString,
+                               DWORD nSize, LPCWSTR lpFileName);
+BOOL  WritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString, LPCWSTR lpFileName);
 
-#endif // _WIN32
+#endif  // _WIN32

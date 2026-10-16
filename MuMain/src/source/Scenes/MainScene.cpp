@@ -59,58 +59,40 @@ extern "C" bool DevEditor_IsCameraFogOverrideEnabled(const char* cameraName);
 extern "C" bool DevEditor_GetCameraFogOverrideValue(const char* cameraName);
 #endif
 
-extern HWND g_hWnd;
+extern HWND         g_hWnd;
 extern CErrorReport g_ErrorReport;
-extern float EarthQuake;
-extern int CheckSkill;
-extern int MouseY;
-extern int LoadingWorld;
-extern DWORD g_dwKeyFocusUIID;
-extern int ErrorMessage;
-extern int HeroTile;
-extern CHARACTER* Hero;
-extern CUIManager* g_pUIManager;
-extern CUIMapName* g_pUIMapName;
-extern int MouseX;
-extern vec3_t MouseTarget;
-extern int EditFlag;
+extern float        EarthQuake;
+extern int          CheckSkill;
+extern int          MouseY;
+extern int          LoadingWorld;
+extern DWORD        g_dwKeyFocusUIID;
+extern int          ErrorMessage;
+extern int          HeroTile;
+extern CHARACTER*   Hero;
+extern CUIManager*  g_pUIManager;
+extern CUIMapName*  g_pUIMapName;
+extern int          MouseX;
+extern vec3_t       MouseTarget;
+extern int          EditFlag;
 
 static bool RequireLeavesEffect()
 {
     return (gMapManager.WorldActive == WD_0LORENCIA && HeroTile != 4) ||
            (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) ||
-           gMapManager.WorldActive == WD_3NORIA ||
-           gMapManager.WorldActive == WD_7ATLANSE ||
-           gMapManager.InDevilSquare() ||
-           gMapManager.WorldActive == WD_10HEAVEN ||
-           gMapManager.InChaosCastle() ||
-           gMapManager.InBattleCastle() ||
-           M31HuntingGround::IsInHuntingGround() ||
-           M33Aida::IsInAida() ||
-           M34CryWolf1st::IsCyrWolf1st() ||
-           gMapManager.WorldActive == WD_42CHANGEUP3RD_2ND ||
-           IsIceCity() ||
-           IsSantaTown() ||
-           gMapManager.IsPKField() ||
-           IsDoppelGanger2() ||
-           gMapManager.IsEmpireGuardian1() ||
-           gMapManager.IsEmpireGuardian2() ||
-           gMapManager.IsEmpireGuardian3() ||
-           gMapManager.IsEmpireGuardian4() ||
+           gMapManager.WorldActive == WD_3NORIA || gMapManager.WorldActive == WD_7ATLANSE ||
+           gMapManager.InDevilSquare() || gMapManager.WorldActive == WD_10HEAVEN || gMapManager.InChaosCastle() ||
+           gMapManager.InBattleCastle() || M31HuntingGround::IsInHuntingGround() || M33Aida::IsInAida() ||
+           M34CryWolf1st::IsCyrWolf1st() || gMapManager.WorldActive == WD_42CHANGEUP3RD_2ND || IsIceCity() ||
+           IsSantaTown() || gMapManager.IsPKField() || IsDoppelGanger2() || gMapManager.IsEmpireGuardian1() ||
+           gMapManager.IsEmpireGuardian2() || gMapManager.IsEmpireGuardian3() || gMapManager.IsEmpireGuardian4() ||
            IsUnitedMarketPlace();
 }
 
 static bool ShouldRenderLeaves()
 {
-    return (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) ||
-           IsIceCity() ||
-           IsSantaTown() ||
-           gMapManager.IsPKField() ||
-           IsDoppelGanger2() ||
-           gMapManager.IsEmpireGuardian1() ||
-           gMapManager.IsEmpireGuardian2() ||
-           gMapManager.IsEmpireGuardian3() ||
-           gMapManager.IsEmpireGuardian4() ||
+    return (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) || IsIceCity() || IsSantaTown() ||
+           gMapManager.IsPKField() || IsDoppelGanger2() || gMapManager.IsEmpireGuardian1() ||
+           gMapManager.IsEmpireGuardian2() || gMapManager.IsEmpireGuardian3() || gMapManager.IsEmpireGuardian4() ||
            IsUnitedMarketPlace();
 }
 
@@ -130,7 +112,8 @@ static void InitializeMainScene()
 {
     g_pMainFrame->ResetSkillHotKey();
 
-    g_ConsoleDebug->Write(MCD_NORMAL, L"Join the game with the following character: %ls", CharactersClient[SelectedHero].ID);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"Join the game with the following character: %ls",
+                          CharactersClient[SelectedHero].ID);
     g_ErrorReport.Write(L"> Character selected <%d> \"%ls\"\r\n", SelectedHero + 1, CharactersClient[SelectedHero].ID);
 
     InitMainScene = true;
@@ -138,7 +121,6 @@ static void InitializeMainScene()
     g_ConsoleDebug->Write(MCD_SEND, L"SendRequestJoinMapServer");
 
     CurrentProtocolState = REQUEST_JOIN_MAP_SERVER;
-    MarkJoinMapRequestSent(); // PROTO-9
     SocketClient->ToGameServer()->SendSelectCharacter(CharactersClient[SelectedHero].ID);
 
     // Remember which character is in play so auto-reconnect can re-select it.
@@ -149,12 +131,12 @@ static void InitializeMainScene()
     g_Camera.Angle[2] = -45.f;
 
     ClearInput();
-    InputEnable = false;
-    TabInputEnable = false;
-    InputTextWidth = 256;
+    InputEnable     = false;
+    TabInputEnable  = false;
+    InputTextWidth  = 256;
     InputTextMax[0] = 42;
     InputTextMax[1] = 10;
-    InputNumber = 2;
+    InputNumber     = 2;
     for (int i = 0; i < MAX_WHISPER; i++)
     {
         g_pChatListBox->AddText(L"", L"", SEASON3B::TYPE_WHISPER_MESSAGE);
@@ -204,8 +186,8 @@ static void InitializeSceneFrame()
     InitTerrainLight();
 
     CheckInventory = NULL;
-    CheckSkill = -1;
-    MouseOnWindow = false;
+    CheckSkill     = -1;
+    MouseOnWindow  = false;
 }
 
 /**
@@ -232,9 +214,7 @@ static void UpdateUIAndInput()
     g_pPartyManager->Update();
     g_pNewUISystem->Update();
 
-    if (MouseLButton == true &&
-        false == g_pNewUISystem->CheckMouseUse() &&
-        g_dwMouseUseUIID == 0 &&
+    if (MouseLButton == true && false == g_pNewUISystem->CheckMouseUse() && g_dwMouseUseUIID == 0 &&
         g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHATINPUTBOX) == false)
     {
         g_pWindowMgr->SetWindowsEnable(FALSE);
@@ -290,16 +270,22 @@ static void UpdateGameEntities()
     MoveMounts();
     ThePetProcess().UpdatePets();
     MovePoints();
-    { FRAME_PROFILE(MoveEffects); MoveEffects(); }
+    {
+        FRAME_PROFILE(MoveEffects);
+        MoveEffects();
+    }
     MoveJoints();
-    { FRAME_PROFILE(MoveParticles); MoveParticles(); }
+    {
+        FRAME_PROFILE(MoveParticles);
+        MoveParticles();
+    }
     MovePointers();
 
     g_Direction.CheckDirection();
 
 #ifdef ENABLE_EDIT
     Editor::EditObjects();
-#endif //ENABLE_EDIT
+#endif  //ENABLE_EDIT
 }
 
 /**
@@ -326,10 +312,6 @@ void MoveMainScene()
     {
         EnableMainRender = true;
     }
-
-    // PROTO-9: recover from an unanswered join-map request instead of sitting
-    // on the loading screen forever. Runs while the world is still disabled.
-    CheckJoinMapRequestTimeout();
 
     if (EnableMainRender == false)
     {
@@ -389,7 +371,7 @@ static void SetupMainSceneViewport(int& outWidth, int& outHeight, BYTE& outByWat
     {
         if (battleCastle::InBattleCastle2(Hero->Object.Position))
         {
-            vec3_t Color = { 0.f, 0.f, 0.f };
+            vec3_t Color = {0.f, 0.f, 0.f};
             battleCastle::StartFog(Color);
         }
         // Don't disable fog - let BeginOpengl() handle it based on FogEnable
@@ -406,31 +388,73 @@ void SetDisableEffects(bool disabled)
 }
 
 // DXP-23 diagnostic toggles, finer-grained bisection -- see MainScene.h doc comments.
-static bool g_bDisableSpritesDebug = false;
-static bool g_bDisableParticlesDebug = false;
+static bool g_bDisableSpritesDebug           = false;
+static bool g_bDisableParticlesDebug         = false;
 static bool g_bDisableSkillEffectModelsDebug = false;
-static bool g_bDisableBoidsDebug = false;
+static bool g_bDisableBoidsDebug             = false;
 
-void SetDisableSprites(bool disabled) { g_bDisableSpritesDebug = disabled; }
-void SetDisableParticles(bool disabled) { g_bDisableParticlesDebug = disabled; }
-void SetDisableSkillEffectModels(bool disabled) { g_bDisableSkillEffectModelsDebug = disabled; }
-void SetDisableBoids(bool disabled) { g_bDisableBoidsDebug = disabled; }
-bool IsSpritesDisabledDebug() { return g_bDisableSpritesDebug; }
-bool IsParticlesDisabledDebug() { return g_bDisableParticlesDebug; }
-bool IsSkillEffectModelsDisabledDebug() { return g_bDisableSkillEffectModelsDebug; }
-bool IsBoidsDisabledDebug() { return g_bDisableBoidsDebug; }
+void SetDisableSprites(bool disabled)
+{
+    g_bDisableSpritesDebug = disabled;
+}
+void SetDisableParticles(bool disabled)
+{
+    g_bDisableParticlesDebug = disabled;
+}
+void SetDisableSkillEffectModels(bool disabled)
+{
+    g_bDisableSkillEffectModelsDebug = disabled;
+}
+void SetDisableBoids(bool disabled)
+{
+    g_bDisableBoidsDebug = disabled;
+}
+bool IsSpritesDisabledDebug()
+{
+    return g_bDisableSpritesDebug;
+}
+bool IsParticlesDisabledDebug()
+{
+    return g_bDisableParticlesDebug;
+}
+bool IsSkillEffectModelsDisabledDebug()
+{
+    return g_bDisableSkillEffectModelsDebug;
+}
+bool IsBoidsDisabledDebug()
+{
+    return g_bDisableBoidsDebug;
+}
 
 static bool g_bDisableWingShadowDebug = false;
-void SetDisableWingShadow(bool disabled) { g_bDisableWingShadowDebug = disabled; }
-bool IsWingShadowDisabledDebug() { return g_bDisableWingShadowDebug; }
+void        SetDisableWingShadow(bool disabled)
+{
+    g_bDisableWingShadowDebug = disabled;
+}
+bool IsWingShadowDisabledDebug()
+{
+    return g_bDisableWingShadowDebug;
+}
 
 static bool g_bDisableJointsDebug = false;
-void SetDisableJoints(bool disabled) { g_bDisableJointsDebug = disabled; }
-bool IsJointsDisabledDebug() { return g_bDisableJointsDebug; }
+void        SetDisableJoints(bool disabled)
+{
+    g_bDisableJointsDebug = disabled;
+}
+bool IsJointsDisabledDebug()
+{
+    return g_bDisableJointsDebug;
+}
 
 static bool g_bDisableWingExtraLayersDebug = false;
-void SetDisableWingExtraLayers(bool disabled) { g_bDisableWingExtraLayersDebug = disabled; }
-bool IsWingExtraLayersDisabledDebug() { return g_bDisableWingExtraLayersDebug; }
+void        SetDisableWingExtraLayers(bool disabled)
+{
+    g_bDisableWingExtraLayersDebug = disabled;
+}
+bool IsWingExtraLayersDisabledDebug()
+{
+    return g_bDisableWingExtraLayersDebug;
+}
 
 /**
  * @brief Renders all 3D game entities (terrain, objects, characters, effects).
@@ -443,16 +467,16 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
 {
 #ifdef _EDITOR
     // DevEditor render toggle checks
-    bool renderTerrain = DevEditor_ShouldRenderTerrain();
-    bool renderStatic = DevEditor_ShouldRenderStaticObjects();
-    bool renderEffects = DevEditor_ShouldRenderEffects() && !g_bDisableEffectsDebug;
-    bool renderDroppedItems = DevEditor_ShouldRenderDroppedItems();
+    bool renderTerrain        = DevEditor_ShouldRenderTerrain();
+    bool renderStatic         = DevEditor_ShouldRenderStaticObjects();
+    bool renderEffects        = DevEditor_ShouldRenderEffects() && !g_bDisableEffectsDebug;
+    bool renderDroppedItems   = DevEditor_ShouldRenderDroppedItems();
     bool renderWeatherEffects = DevEditor_ShouldRenderWeatherEffects();
 #else
-    bool renderTerrain = true;
-    bool renderStatic = true;
-    bool renderEffects = !g_bDisableEffectsDebug;
-    bool renderDroppedItems = true;
+    bool renderTerrain        = true;
+    bool renderStatic         = true;
+    bool renderEffects        = !g_bDisableEffectsDebug;
+    bool renderDroppedItems   = true;
     bool renderWeatherEffects = true;
 #endif
 
@@ -461,25 +485,34 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         if (gMapManager.WorldActive == WD_39KANTURU_3RD)
         {
             if (!g_Direction.m_CKanturu.IsMayaScene())
-                // GLP-16 GPU-ms investigation: CPU-only scope -- GpuTimerBegin/End for this pass
-                // are now called manually, tightly around the real draw submission inside
-                // ZzzLodTerrain.cpp's FlushTerrainBuckets(), not around this whole CPU-heavy
-                // gather+sort+flush call. See FrameProfiler.h's Scope class comment for why.
-                { FRAME_PROFILE_CPU_ONLY(Terrain); RenderTerrain(false); }
-        }
-        else
-            if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.WorldActive != -1)
+            // GLP-16 GPU-ms investigation: CPU-only scope -- GpuTimerBegin/End for this pass
+            // are now called manually, tightly around the real draw submission inside
+            // ZzzLodTerrain.cpp's FlushTerrainBuckets(), not around this whole CPU-heavy
+            // gather+sort+flush call. See FrameProfiler.h's Scope class comment for why.
             {
-                if ((gMapManager.IsPKField() || IsDoppelGanger2()) && renderStatic)
-                {
-                    FRAME_PROFILE(Objects); RenderObjects();
-                }
-                { FRAME_PROFILE_CPU_ONLY(Terrain); RenderTerrain(false); }
+                FRAME_PROFILE_CPU_ONLY(Terrain);
+                RenderTerrain(false);
             }
+        }
+        else if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.WorldActive != -1)
+        {
+            if ((gMapManager.IsPKField() || IsDoppelGanger2()) && renderStatic)
+            {
+                FRAME_PROFILE(Objects);
+                RenderObjects();
+            }
+            {
+                FRAME_PROFILE_CPU_ONLY(Terrain);
+                RenderTerrain(false);
+            }
+        }
     }
 
     if (!gMapManager.IsPKField() && !IsDoppelGanger2() && renderStatic)
-        { FRAME_PROFILE(Objects); RenderObjects(); }
+    {
+        FRAME_PROFILE(Objects);
+        RenderObjects();
+    }
 
     if (renderEffects)
     {
@@ -487,17 +520,24 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         RenderBoids();
     }
 
-    { FRAME_PROFILE(Characters); RenderCharactersClient(); }
+    {
+        FRAME_PROFILE(Characters);
+        RenderCharactersClient();
+    }
 
     if (EditFlag != EDIT_NONE && renderTerrain)
     {
         // Dev-editor path: takes the non-shader (IR-based) fallback, which never reaches
         // FlushTerrainBuckets()'s manual GpuTimerBegin/End -- Terrain GPU ms will read stale/0 in
         // this mode, CPU ms is unaffected. Not worth instrumenting a debug-only path for.
-        FRAME_PROFILE_CPU_ONLY(Terrain); RenderTerrain(true);
+        FRAME_PROFILE_CPU_ONLY(Terrain);
+        RenderTerrain(true);
     }
     if (!g_Camera.TopViewEnable && renderDroppedItems)
-        { FRAME_PROFILE(Items); RenderItems(); }
+    {
+        FRAME_PROFILE(Items);
+        RenderItems();
+    }
 
     RenderFishs();
     RenderMount();
@@ -512,9 +552,15 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         RenderBoids(true);
 
     if (renderStatic)
-        { FRAME_PROFILE(Objects); RenderObjects_AfterCharacter(); }
+    {
+        FRAME_PROFILE(Objects);
+        RenderObjects_AfterCharacter();
+    }
 
-    { FRAME_PROFILE(Joints); RenderJoints(byWaterMap); }
+    {
+        FRAME_PROFILE(Joints);
+        RenderJoints(byWaterMap);
+    }
 
     if (renderEffects)
     {
@@ -533,8 +579,14 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
     // GLP-24: these two were the frame's largest GL producers and fell outside every FRAME_PROFILE
     // scope (the Effects scope closes above), so they were attributed to Other, which the $glstats
     // overlay never printed.
-    { FRAME_PROFILE(Sprites); RenderSprites(); }
-    { FRAME_PROFILE(Particles); RenderParticles(); }
+    {
+        FRAME_PROFILE(Sprites);
+        RenderSprites();
+    }
+    {
+        FRAME_PROFILE(Particles);
+        RenderParticles();
+    }
 
     if (IsWaterTerrain() == false)
     {
@@ -555,16 +607,29 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         // Water maps run a full second pass, so Joints/Effects/Sprites/Particles are each entered
         // twice per frame here. CPU ms accumulates across entries; GPU ms needs FrameProfiler's
         // multi-entry query pairs (GLP-24) to do the same rather than reporting only this one.
-        { FRAME_PROFILE(Joints); RenderJoints(byWaterMap); }
-        { FRAME_PROFILE(Effects); RenderEffects(true); RenderBlurs(); }
+        {
+            FRAME_PROFILE(Joints);
+            RenderJoints(byWaterMap);
+        }
+        {
+            FRAME_PROFILE(Effects);
+            RenderEffects(true);
+            RenderBlurs();
+        }
         CheckSprites();
         BeginSprite();
 
         if (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10)
             RenderLeaves();
 
-        { FRAME_PROFILE(Sprites); RenderSprites(byWaterMap); }
-        { FRAME_PROFILE(Particles); RenderParticles(byWaterMap); }
+        {
+            FRAME_PROFILE(Sprites);
+            RenderSprites(byWaterMap);
+        }
+        {
+            FRAME_PROFILE(Particles);
+            RenderParticles(byWaterMap);
+        }
         RenderPoints(byWaterMap);
 
         EndSprite();
@@ -606,7 +671,7 @@ static void RenderMainSceneUI()
 
 #ifdef ENABLE_EDIT
     RenderDebugWindow();
-#endif //ENABLE_EDIT
+#endif  //ENABLE_EDIT
 
     EndBitmap();
     BeginBitmap();
@@ -645,8 +710,10 @@ bool RenderMainScene()
     if (ICamera* active = CameraManager::Instance().GetActiveCamera())
     {
         const char* name = active->GetName();
-        if (strcmp(name, "Default") == 0)       FogEnable = false;
-        else if (strcmp(name, "Orbital") == 0)  FogEnable = true;
+        if (strcmp(name, "Default") == 0)
+            FogEnable = false;
+        else if (strcmp(name, "Orbital") == 0)
+            FogEnable = true;
     }
 
 #ifdef _EDITOR
@@ -660,8 +727,8 @@ bool RenderMainScene()
 #endif
 
     vec3_t cameraPos;
-    int width, height;
-    BYTE byWaterMap;
+    int    width, height;
+    BYTE   byWaterMap;
 
     // Determine camera position
     if (MoveMainCamera() == true)
@@ -694,9 +761,13 @@ bool RenderMainScene()
     // DEBUG: Render mouse ray as a visible line (magenta) from MousePosition to MouseTarget
     {
         GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
-        GLboolean tex2d = GL_FALSE;
+        GLboolean tex2d     = GL_FALSE;
         glDisable(GL_DEPTH_TEST);
-        if (!g_CoreProfile) { tex2d = glIsEnabled(GL_TEXTURE_2D); glDisable(GL_TEXTURE_2D); }
+        if (!g_CoreProfile)
+        {
+            tex2d = glIsEnabled(GL_TEXTURE_2D);
+            glDisable(GL_TEXTURE_2D);
+        }
         glLineWidth(2.0f);
 
         IR::Begin(GL_LINES);
@@ -718,8 +789,10 @@ bool RenderMainScene()
 
         glLineWidth(1.0f);
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        if (depthTest) glEnable(GL_DEPTH_TEST);
-        if (!g_CoreProfile && tex2d) glEnable(GL_TEXTURE_2D);
+        if (depthTest)
+            glEnable(GL_DEPTH_TEST);
+        if (!g_CoreProfile && tex2d)
+            glEnable(GL_TEXTURE_2D);
     }
 
     // DEBUG: Log ray state on left click (debounced to one log per click)
@@ -732,12 +805,9 @@ bool RenderMainScene()
             extern int MouseX, MouseY;
             CAMERA_LOG("[RAY] Click: Mouse=(%d,%d) Pos=(%.0f,%.0f,%.0f) Target=(%.0f,%.0f,%.0f) "
                        "CamPos=(%.0f,%.0f,%.0f) PerspX=%.6f PerspY=%.6f CenterX=%d CenterY=%d FOV=%.1f ViewFar=%.0f",
-                       MouseX, MouseY,
-                       MousePosition[0], MousePosition[1], MousePosition[2],
-                       MouseTarget[0], MouseTarget[1], MouseTarget[2],
-                       g_Camera.Position[0], g_Camera.Position[1], g_Camera.Position[2],
-                       g_Camera.PerspectiveX, g_Camera.PerspectiveY,
-                       g_Camera.ScreenCenterX, g_Camera.ScreenCenterY,
+                       MouseX, MouseY, MousePosition[0], MousePosition[1], MousePosition[2], MouseTarget[0],
+                       MouseTarget[1], MouseTarget[2], g_Camera.Position[0], g_Camera.Position[1], g_Camera.Position[2],
+                       g_Camera.PerspectiveX, g_Camera.PerspectiveY, g_Camera.ScreenCenterX, g_Camera.ScreenCenterY,
                        g_Camera.FOV, g_Camera.ViewFar);
         }
         if (!MouseLButtonPush)
@@ -745,7 +815,10 @@ bool RenderMainScene()
     }
 #endif
 
-    { FRAME_PROFILE(UI); RenderMainSceneUI(); }
+    {
+        FRAME_PROFILE(UI);
+        RenderMainSceneUI();
+    }
 
     EndOpengl();
 

@@ -1,4 +1,4 @@
-﻿// NewUISiegeWarSoldier.cpp: implementation of the NewUISiegeWarSoldier class.
+﻿  // NewUISiegeWarSoldier.cpp: implementation of the NewUISiegeWarSoldier class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -9,19 +9,15 @@
 
 #include "Engine/Object/ZzzCharacter.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CNewUISiegeWarSoldier::CNewUISiegeWarSoldier()
-{
-}
+CNewUISiegeWarSoldier::CNewUISiegeWarSoldier() {}
 
-CNewUISiegeWarSoldier::~CNewUISiegeWarSoldier()
-{
-}
+CNewUISiegeWarSoldier::~CNewUISiegeWarSoldier() {}
 
 //---------------------------------------------------------------------------------------------
 // OnCreate
@@ -32,9 +28,7 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnCreate(int x, int y)
 
 //---------------------------------------------------------------------------------------------
 // OnRelease
-void SEASON3B::CNewUISiegeWarSoldier::OnRelease()
-{
-}
+void SEASON3B::CNewUISiegeWarSoldier::OnRelease() {}
 
 //---------------------------------------------------------------------------------------------
 // OnUpdate
@@ -54,7 +48,7 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnRender()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    // All characters' positions
+    // 모든 캐릭터의 위치
     RenderCharPosInMiniMap();
 
     DisableAlphaBlend();
@@ -62,7 +56,7 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnRender()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, m_fMiniMapAlpha);
 
-    // Command icon on the map
+    // 지도상의 명령 Icon
     RenderCmdIconInMiniMap();
 
     DisableAlphaBlend();
@@ -72,22 +66,21 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnRender()
 
 //---------------------------------------------------------------------------------------------
 // OnCreate
-void SEASON3B::CNewUISiegeWarSoldier::OnSetPos(int x, int y)
-{
-}
+void SEASON3B::CNewUISiegeWarSoldier::OnSetPos(int x, int y) {}
 
 //---------------------------------------------------------------------------------------------
 // RenderCharPosInMiniMap
-// Render all characters on the minimap
+// 미니맵에 모든 캐릭터를 렌더
 void SEASON3B::CNewUISiegeWarSoldier::RenderCharPosInMiniMap()
 {
     float fPosX, fPosY;
 
-    // Render player on the minimap
+    // 미니멥에 플레이어 렌더
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
         CHARACTER* c = &CharactersClient[i];
-        if (c != NULL && c->Object.Live && c != Hero && (c->Object.Kind == KIND_PLAYER || c->Object.Kind == KIND_MONSTER || c->Object.Kind == KIND_NPC))
+        if (c != NULL && c->Object.Live && c != Hero &&
+            (c->Object.Kind == KIND_PLAYER || c->Object.Kind == KIND_MONSTER || c->Object.Kind == KIND_NPC))
         {
             OBJECT* o = &c->Object;
 
@@ -140,12 +133,8 @@ bool SEASON3B::CNewUISiegeWarSoldier::OnBtnProcess()
 
 //---------------------------------------------------------------------------------------------
 // OnLoadImages
-void SEASON3B::CNewUISiegeWarSoldier::OnLoadImages()
-{
-}
+void SEASON3B::CNewUISiegeWarSoldier::OnLoadImages() {}
 
 //---------------------------------------------------------------------------------------------
 // OnUnloadImages
-void SEASON3B::CNewUISiegeWarSoldier::OnUnloadImages()
-{
-}
+void SEASON3B::CNewUISiegeWarSoldier::OnUnloadImages() {}

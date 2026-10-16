@@ -16,61 +16,60 @@
 
 #include <iterator>
 
-WZResult::WZResult() // OK
+WZResult::WZResult()  // OK
 {
     this->SetSuccessResult();
 }
 
-WZResult::~WZResult() // OK
-{
-}
+WZResult::~WZResult()  // OK
+{}
 
-BOOL WZResult::IsSuccess() // OK
+BOOL WZResult::IsSuccess()  // OK
 {
     return !this->m_dwErrorCode && !this->m_dwWindowErrorCode;
 }
 
-DWORD  WZResult::GetErrorCode() // OK
+DWORD WZResult::GetErrorCode()  // OK
 {
     return this->m_dwErrorCode;
 }
 
-wchar_t* WZResult::GetErrorMessage() // OK
+wchar_t* WZResult::GetErrorMessage()  // OK
 {
     return this->m_szErrorMessage;
 }
 
-DWORD  WZResult::GetWindowErrorCode() // OK
+DWORD WZResult::GetWindowErrorCode()  // OK
 {
     return this->m_dwWindowErrorCode;
 }
 
-WZResult& WZResult::operator=(const WZResult& a2) // OK
+WZResult& WZResult::operator=(const WZResult& a2)  // OK
 {
-    this->m_dwErrorCode = a2.m_dwErrorCode;
+    this->m_dwErrorCode       = a2.m_dwErrorCode;
     this->m_dwWindowErrorCode = a2.m_dwWindowErrorCode;
     StringCchCopy(this->m_szErrorMessage, std::size(this->m_szErrorMessage), a2.m_szErrorMessage);
     return *this;
 }
 
-void WZResult::SetResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...) // OK
+void WZResult::SetResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...)  // OK
 {
     va_list va;
 
     va_start(va, szFormat);
-    this->m_dwErrorCode = dwErrorCode;
+    this->m_dwErrorCode       = dwErrorCode;
     this->m_dwWindowErrorCode = dwWindowErrorCode;
     StringCchVPrintf(this->m_szErrorMessage, std::size(this->m_szErrorMessage), szFormat, va);
 }
 
-void WZResult::SetSuccessResult() // OK
+void WZResult::SetSuccessResult()  // OK
 {
-    this->m_dwErrorCode = WZ_SUCCESS;
+    this->m_dwErrorCode       = WZ_SUCCESS;
     this->m_dwWindowErrorCode = ERROR_SUCCESS;
     StringCchCopy(this->m_szErrorMessage, std::size(this->m_szErrorMessage), L"Success");
 }
 
-WZResult WZResult::BuildSuccessResult() // OK
+WZResult WZResult::BuildSuccessResult()  // OK
 {
     WZResult result;
 
@@ -79,11 +78,11 @@ WZResult WZResult::BuildSuccessResult() // OK
     return result;
 }
 
-WZResult WZResult::BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...) // OK
+WZResult WZResult::BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...)  // OK
 {
     WZResult result;
-    wchar_t Buffer[MAX_ERROR_MESSAGE];
-    va_list args;
+    wchar_t  Buffer[MAX_ERROR_MESSAGE];
+    va_list  args;
 
     va_start(args, szFormat);
 

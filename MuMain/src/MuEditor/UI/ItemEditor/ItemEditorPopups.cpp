@@ -36,4 +36,4 @@ void CItemEditorPopups::RenderAll()
     RenderSimplePopup("Export S6E3 Failed", I18N::Editor::FailedToExportAsLegacyFormat);
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

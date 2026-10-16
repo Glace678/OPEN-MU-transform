@@ -19,17 +19,16 @@ extern CTimer* g_pTimer;
 #if defined(__ANDROID__) || defined(__OHOS__)
 namespace
 {
-    void LogMobileInput(CInput& input)
-    {
-        const char* diagnostics = std::getenv("MU_INPUT_DIAGNOSTICS");
-        if (diagnostics == nullptr || std::strcmp(diagnostics, "1") != 0
-            || (!SEASON3B::IsPress(VK_LBUTTON) && !SEASON3B::IsRelease(VK_LBUTTON)))
-            return;
-        SDL_Log("[Input] cursor=%ld,%ld screen=%ld,%ld focus=%d down=%d up=%d",
-            input.GetCursorX(), input.GetCursorY(),
+void LogMobileInput(CInput& input)
+{
+    const char* diagnostics = std::getenv("MU_INPUT_DIAGNOSTICS");
+    if (diagnostics == nullptr || std::strcmp(diagnostics, "1") != 0 ||
+        (!SEASON3B::IsPress(VK_LBUTTON) && !SEASON3B::IsRelease(VK_LBUTTON)))
+        return;
+    SDL_Log("[Input] cursor=%ld,%ld screen=%ld,%ld focus=%d down=%d up=%d", input.GetCursorX(), input.GetCursorY(),
             static_cast<long>(input.GetScreenWidth()), static_cast<long>(input.GetScreenHeight()),
             GetActiveWindow() != nullptr, input.IsLBtnDn(), input.IsLBtnUp());
-    }
+}
 }
 #endif
 
@@ -54,8 +53,8 @@ bool CInput::Create(HWND hWnd, long lScreenWidth, long lScreenHeight)
         return false;
 #endif
 
-    m_hWnd = hWnd;
-    m_lScreenWidth = lScreenWidth;
+    m_hWnd          = hWnd;
+    m_lScreenWidth  = lScreenWidth;
     m_lScreenHeight = lScreenHeight;
 
     ::GetCursorPos(&m_ptCursor);
@@ -92,7 +91,7 @@ void CInput::Update()
 
     if (m_bHasCursorOverride)
     {
-        m_ptCursor = m_ptCursorOverride;
+        m_ptCursor           = m_ptCursorOverride;
         m_bHasCursorOverride = false;
     }
     else
@@ -122,22 +121,21 @@ void CInput::Update()
             if (dAbsTime - m_dBtn0LastClickTime <= m_dDoubleClickTime && m_bFormerBtn0Dn)
             {
                 m_bRBtnDn = m_bRBtnHeldDn = m_bRBtnDbl = true;
-                m_bRBtnUp = false;
-                m_bFormerBtn0Dn = false;
+                m_bRBtnUp                              = false;
+                m_bFormerBtn0Dn                        = false;
             }
             else
             {
                 m_bRBtnDn = m_bRBtnHeldDn = true;
                 m_bRBtnUp = m_bRBtnDbl = false;
-                m_bFormerBtn0Dn = true;
+                m_bFormerBtn0Dn        = true;
             }
             m_dBtn0LastClickTime = dAbsTime;
         }
-        else if ((SEASON3B::IsRelease(VK_LBUTTON) || SEASON3B::IsNone(VK_LBUTTON))
-            && m_bRBtnHeldDn)
+        else if ((SEASON3B::IsRelease(VK_LBUTTON) || SEASON3B::IsNone(VK_LBUTTON)) && m_bRBtnHeldDn)
         {
             m_bRBtnDn = m_bRBtnHeldDn = m_bRBtnDbl = false;
-            m_bRBtnUp = true;
+            m_bRBtnUp                              = true;
         }
 
         if (SEASON3B::IsPress(VK_RBUTTON))
@@ -146,22 +144,21 @@ void CInput::Update()
             if (dAbsTime - m_dBtn1LastClickTime <= m_dDoubleClickTime && m_bFormerBtn1Dn)
             {
                 m_bLBtnDn = m_bLBtnHeldDn = m_bLBtnDbl = true;
-                m_bLBtnUp = false;
-                m_bFormerBtn1Dn = false;
+                m_bLBtnUp                              = false;
+                m_bFormerBtn1Dn                        = false;
             }
             else
             {
                 m_bLBtnDn = m_bLBtnHeldDn = true;
                 m_bLBtnUp = m_bLBtnDbl = false;
-                m_bFormerBtn1Dn = true;
+                m_bFormerBtn1Dn        = true;
             }
             m_dBtn1LastClickTime = dAbsTime;
         }
-        else if ((SEASON3B::IsRelease(VK_RBUTTON) || SEASON3B::IsNone(VK_RBUTTON))
-            && m_bLBtnHeldDn)
+        else if ((SEASON3B::IsRelease(VK_RBUTTON) || SEASON3B::IsNone(VK_RBUTTON)) && m_bLBtnHeldDn)
         {
             m_bLBtnDn = m_bLBtnHeldDn = m_bLBtnDbl = false;
-            m_bLBtnUp = true;
+            m_bLBtnUp                              = true;
         }
     }
     else
@@ -172,22 +169,21 @@ void CInput::Update()
             if (dAbsTime - m_dBtn0LastClickTime <= m_dDoubleClickTime && m_bFormerBtn0Dn)
             {
                 m_bLBtnDn = m_bLBtnHeldDn = m_bLBtnDbl = true;
-                m_bLBtnUp = false;
-                m_bFormerBtn0Dn = false;
+                m_bLBtnUp                              = false;
+                m_bFormerBtn0Dn                        = false;
             }
             else
             {
                 m_bLBtnDn = m_bLBtnHeldDn = true;
                 m_bLBtnUp = m_bLBtnDbl = false;
-                m_bFormerBtn0Dn = true;
+                m_bFormerBtn0Dn        = true;
             }
             m_dBtn0LastClickTime = dAbsTime;
         }
-        else if ((SEASON3B::IsRelease(VK_LBUTTON) || SEASON3B::IsNone(VK_LBUTTON))
-            && m_bLBtnHeldDn)
+        else if ((SEASON3B::IsRelease(VK_LBUTTON) || SEASON3B::IsNone(VK_LBUTTON)) && m_bLBtnHeldDn)
         {
             m_bLBtnDn = m_bLBtnHeldDn = m_bLBtnDbl = false;
-            m_bLBtnUp = true;
+            m_bLBtnUp                              = true;
         }
 
         if (SEASON3B::IsPress(VK_RBUTTON))
@@ -196,22 +192,21 @@ void CInput::Update()
             if (dAbsTime - m_dBtn1LastClickTime <= m_dDoubleClickTime && m_bFormerBtn1Dn)
             {
                 m_bRBtnDn = m_bRBtnHeldDn = m_bRBtnDbl = true;
-                m_bRBtnUp = false;
-                m_bFormerBtn1Dn = false;
+                m_bRBtnUp                              = false;
+                m_bFormerBtn1Dn                        = false;
             }
             else
             {
                 m_bRBtnDn = m_bRBtnHeldDn = true;
                 m_bRBtnUp = m_bRBtnDbl = false;
-                m_bFormerBtn1Dn = true;
+                m_bFormerBtn1Dn        = true;
             }
             m_dBtn1LastClickTime = dAbsTime;
         }
-        else if ((SEASON3B::IsRelease(VK_RBUTTON) || SEASON3B::IsNone(VK_RBUTTON))
-            && m_bRBtnHeldDn)
+        else if ((SEASON3B::IsRelease(VK_RBUTTON) || SEASON3B::IsNone(VK_RBUTTON)) && m_bRBtnHeldDn)
         {
             m_bRBtnDn = m_bRBtnHeldDn = m_bRBtnDbl = false;
-            m_bRBtnUp = true;
+            m_bRBtnUp                              = true;
         }
     }
 
@@ -220,23 +215,22 @@ void CInput::Update()
         dAbsTime = g_pTimer->GetAbsTime();
         if (dAbsTime - m_dBtn2LastClickTime <= m_dDoubleClickTime && m_bFormerBtn2Dn)
         {
-            m_bMBtnDbl = true;
+            m_bMBtnDbl      = true;
             m_bFormerBtn2Dn = false;
         }
         else
         {
             m_bFormerBtn2Dn = true;
-            m_bMBtnDbl = false;
+            m_bMBtnDbl      = false;
         }
         m_bMBtnDn = m_bMBtnHeldDn = true;
-        m_bMBtnUp = false;
-        m_dBtn2LastClickTime = dAbsTime;
+        m_bMBtnUp                 = false;
+        m_dBtn2LastClickTime      = dAbsTime;
     }
-    else if ((SEASON3B::IsRelease(VK_MBUTTON) || SEASON3B::IsNone(VK_MBUTTON))
-        && m_bMBtnHeldDn)
+    else if ((SEASON3B::IsRelease(VK_MBUTTON) || SEASON3B::IsNone(VK_MBUTTON)) && m_bMBtnHeldDn)
     {
         m_bMBtnDn = m_bMBtnHeldDn = m_bMBtnDbl = false;
-        m_bMBtnUp = true;
+        m_bMBtnUp                              = true;
     }
 
     bool forceAcceptanceFocus = false;

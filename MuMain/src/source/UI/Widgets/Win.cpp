@@ -7,9 +7,7 @@
 #include "Core/Input/Input.h"
 #include "UI/Widgets/Button.h"
 
-CWin::CWin() : m_psprBg(NULL)
-{
-}
+CWin::CWin() : m_psprBg(NULL) {}
 
 CWin::~CWin()
 {
@@ -34,10 +32,10 @@ void CWin::Create(int nWidth, int nHeight, int nTexID, bool bTile)
     m_ptPos.x = m_ptPos.y = 0;
     m_ptHeld = m_ptTemp = m_ptPos;
     // Position and hit testing use device pixels, like SetSizeArt and SetSize.
-    m_Size.cx = int(nWidth * CSprite::ResolutionScaleX());
-    m_Size.cy = int(nHeight * CSprite::ResolutionScaleY());
+    m_Size.cx  = int(nWidth * CSprite::ResolutionScaleX());
+    m_Size.cy  = int(nHeight * CSprite::ResolutionScaleY());
     m_bDocking = m_bActive = m_bShow = false;
-    m_nState = WS_NORMAL;
+    m_nState                         = WS_NORMAL;
 }
 
 void CWin::Release()
@@ -67,8 +65,7 @@ void CWin::SetSizeArt(float fWidth, float fHeight, CHANGE_PRAM eChangedPram)
 
 void CWin::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CWin::SetPositionArt(float fXCoord, float fYCoord)
@@ -96,37 +93,35 @@ bool CWin::CursorInWin(int nArea)
     if (!m_bShow)
         return false;
 
-    CInput& rInput = CInput::Instance();
-    RECT rc = { 0, 0, 0, 0 };
-    NODE* position;
+    CInput&  rInput = CInput::Instance();
+    RECT     rc     = {0, 0, 0, 0};
+    NODE*    position;
     CButton* pBtn;
 
     switch (nArea)
     {
-    case WA_ALL:
-        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx,
-            m_ptPos.y + m_Size.cy);
-        if (::PtInRect(&rc, rInput.GetCursorPos()))
-            return true;
-        break;
-
-    case WA_MOVE:
-        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx,
-            m_ptPos.y + 26);
-        if (::PtInRect(&rc, rInput.GetCursorPos()))
-            return true;
-        break;
-    case WA_BUTTON:
-        position = m_BtnList.GetHeadPosition();
-        while (position)
-        {
-            pBtn = (CButton*)m_BtnList.GetNext(position);
-            if (pBtn->CursorInObject())
+        case WA_ALL:
+            ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx, m_ptPos.y + m_Size.cy);
+            if (::PtInRect(&rc, rInput.GetCursorPos()))
                 return true;
-        }
-        if (CursorInButtonlike())
-            return true;
-        break;
+            break;
+
+        case WA_MOVE:
+            ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx, m_ptPos.y + 26);
+            if (::PtInRect(&rc, rInput.GetCursorPos()))
+                return true;
+            break;
+        case WA_BUTTON:
+            position = m_BtnList.GetHeadPosition();
+            while (position)
+            {
+                pBtn = (CButton*)m_BtnList.GetNext(position);
+                if (pBtn->CursorInObject())
+                    return true;
+            }
+            if (CursorInButtonlike())
+                return true;
+            break;
     }
 
     return false;
@@ -135,7 +130,7 @@ bool CWin::CursorInWin(int nArea)
 void CWin::ActiveBtns(bool bActive)
 {
     CButton* pBtn;
-    NODE* position = m_BtnList.GetHeadPosition();
+    NODE*    position = m_BtnList.GetHeadPosition();
     while (position)
     {
         pBtn = (CButton*)m_BtnList.GetNext(position);
@@ -165,7 +160,7 @@ void CWin::Update(double dDeltaTick)
     if (m_nState == WS_NORMAL)
     {
         CButton* pBtn;
-        NODE* position = m_BtnList.GetHeadPosition();
+        NODE*    position = m_BtnList.GetHeadPosition();
         while (position)
         {
             pBtn = (CButton*)m_BtnList.GetNext(position);
@@ -218,7 +213,7 @@ void CWin::RegisterButton(CButton* pBtn)
 void CWin::RenderButtons()
 {
     CButton* pBtn;
-    NODE* position = m_BtnList.GetHeadPosition();
+    NODE*    position = m_BtnList.GetHeadPosition();
     while (position)
     {
         pBtn = (CButton*)m_BtnList.GetNext(position);

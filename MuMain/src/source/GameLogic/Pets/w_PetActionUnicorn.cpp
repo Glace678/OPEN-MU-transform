@@ -21,20 +21,18 @@ PetActionUnicorn::PetActionUnicorn()
 {
     m_isRooting = false;
 
-    m_dwSendDelayTime = 0;
-    m_dwRootingTime = 0;
+    m_dwSendDelayTime   = 0;
+    m_dwRootingTime     = 0;
     m_dwRoundCountDelay = 0;
-    m_state = eAction_Stand;
+    m_state             = eAction_Stand;
 
     m_fRadWidthStand = 0.0f;
-    m_fRadWidthGet = 0.0f;
+    m_fRadWidthGet   = 0.0f;
 
     m_speed = 0;
 }
 
-PetActionUnicorn::~PetActionUnicorn()
-{
-}
+PetActionUnicorn::~PetActionUnicorn() {}
 
 bool PetActionUnicorn::Release(OBJECT* obj, CHARACTER* Owner)
 {
@@ -45,14 +43,16 @@ bool PetActionUnicorn::Release(OBJECT* obj, CHARACTER* Owner)
 
 bool PetActionUnicorn::Model(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    if (NULL == obj || NULL == Owner) return FALSE;
+    if (NULL == obj || NULL == Owner)
+        return FALSE;
 
     return false;
 }
 
 bool PetActionUnicorn::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    if (NULL == obj || NULL == Owner) return FALSE;
+    if (NULL == obj || NULL == Owner)
+        return FALSE;
 
     FindZen(obj);
 
@@ -66,13 +66,13 @@ bool PetActionUnicorn::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double
         m_speed = obj->Velocity;
     }
 
-    float FlyRange = 10.0f;
+    float  FlyRange = 10.0f;
     vec3_t targetPos, Range, Direction;
-    bool _isMove = false;
+    bool   _isMove = false;
 
     float fRadHeight = ((2 * Q_PI) / 15000.0f) * fmodf(tick, 15000);
     m_fRadWidthStand = ((2 * Q_PI) / 4000.0f) * fmodf(tick, 4000);
-    m_fRadWidthGet = ((2 * Q_PI) / 2000.0f) * fmodf(tick, 2000);
+    m_fRadWidthGet   = ((2 * Q_PI) / 2000.0f) * fmodf(tick, 2000);
 
     obj->Position[2] = obj->Owner->Position[2] + (200.0f * obj->Owner->Scale);
 
@@ -86,158 +86,152 @@ bool PetActionUnicorn::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double
 
         VectorCopy(obj->Owner->Angle, obj->Angle);
 
-        m_state = eAction_Stand;
+        m_state     = eAction_Stand;
         m_isRooting = false;
     }
 
     switch (m_state)
     {
-    case eAction_Stand:
-    {
-        /*/
+        case eAction_Stand: {
+            /*/
                     targetPos[0] = obj->Owner->Position[0] + (sinf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN * 3);
                     targetPos[1] = obj->Owner->Position[1] + (cosf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN * 3);
         /*/
-        targetPos[0] = obj->Owner->Position[0];
-        targetPos[1] = obj->Owner->Position[1];
-        //*/
-        targetPos[2] = obj->Owner->Position[2];
+            targetPos[0] = obj->Owner->Position[0];
+            targetPos[1] = obj->Owner->Position[1];
+            //*/
+            targetPos[2] = obj->Owner->Position[2];
 
-        VectorSubtract(targetPos, obj->Position, Range);
-        //------------------------------//
-        Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
+            VectorSubtract(targetPos, obj->Position, Range);
+            //------------------------------//
+            Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
 
-        if (80.0f >= FlyRange)
-        {
-            float Angle = CreateAngle2D(obj->Position, targetPos); //test
-            obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 8.0f * FPS_ANIMATION_FACTOR);
+            if (80.0f >= FlyRange)
+            {
+                float Angle   = CreateAngle2D(obj->Position, targetPos);  //test
+                obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 8.0f * FPS_ANIMATION_FACTOR);
+            }
+
+            AngleMatrix(obj->Angle, obj->Matrix);
+            VectorRotate(obj->Direction, obj->Matrix, Direction);
+            VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
+
+            //	float Speed = ( FlyRange >= Distance ) ?  0 : (float)log(Distance) * 2.3f;
+            float Speed = (FlyRange * FlyRange >= Distance) ? 0 : (float)log(Distance) * 2.3f;
+
+            obj->Direction[0] = 0.0f;
+            obj->Direction[1] = -Speed;
+            obj->Direction[2] = 0.0f;
+
+            if (Speed == 0)
+            {
+                obj->Velocity = m_speed * 0.35f;
+            }
+            else
+            {
+                obj->Velocity = m_speed * 1.2f;
+            }
         }
+        break;
 
-        AngleMatrix(obj->Angle, obj->Matrix);
-        VectorRotate(obj->Direction, obj->Matrix, Direction);
-        VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
+        case eAction_Move: {
+            if (!m_isRooting)
+            {
+                m_isRooting = false;
+                m_state     = eAction_Return;
+                break;
+            }
 
-        //	float Speed = ( FlyRange >= Distance ) ?  0 : (float)log(Distance) * 2.3f;
-        float Speed = (FlyRange * FlyRange >= Distance) ? 0 : (float)log(Distance) * 2.3f;
+            targetPos[0] = m_RootItem.position[0] + (sinf(m_fRadWidthGet) * CIRCLE_STAND_RADIAN);
+            targetPos[1] = m_RootItem.position[1] + (cosf(m_fRadWidthGet) * CIRCLE_STAND_RADIAN);
+            targetPos[2] = m_RootItem.position[2];  // + 70 + (sinf(fRadHeight) * 70.0f);
 
-        obj->Direction[0] = 0.0f;
-        obj->Direction[1] = -Speed;
-        obj->Direction[2] = 0.0f;
+            VectorSubtract(targetPos, obj->Position, Range);
 
-        if (Speed == 0)
-        {
-            obj->Velocity = m_speed * 0.35f;
+            Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
+            if (Distance >= FlyRange)
+            {
+                float Angle   = CreateAngle2D(obj->Position, targetPos);  //test
+                obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 20.0f * FPS_ANIMATION_FACTOR);
+            }
+
+            AngleMatrix(obj->Angle, obj->Matrix);
+            VectorRotate(obj->Direction, obj->Matrix, Direction);
+            VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
+
+            float Speed = (20.0f >= Distance) ? 0 : (float)log(Distance) * 2.5f;
+
+            obj->Direction[0] = 0.0f;
+            obj->Direction[1] = -Speed;
+            obj->Direction[2] = 0.0f;
+
+            if (0 == Speed || CompTimeControl(100000, m_dwRootingTime))
+            {
+                m_dwSendDelayTime = GetTickCount();
+                m_dwRootingTime   = GetTickCount();
+                m_state           = eAction_Get;
+            }
+
+            obj->Velocity = m_speed;
         }
-        else
-        {
-            obj->Velocity = m_speed * 1.2f;
+        break;
+
+        case eAction_Get: {
+            if (!m_isRooting || SEARCH_LENGTH < Distance || CompTimeControl(3000, m_dwRootingTime))
+            {
+                m_isRooting     = false;
+                m_dwRootingTime = GetTickCount();
+                m_state         = eAction_Return;
+                break;
+            }
+
+            //------------------------------//
+            VectorCopy(m_RootItem.position, targetPos);
+
+            float Angle   = CreateAngle2D(obj->Position, targetPos);
+            obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 10.0f * FPS_ANIMATION_FACTOR);
+            //------------------------------//
+
+            if (CompTimeControl(1000, m_dwSendDelayTime) && &Hero->Object == obj->Owner && SendGetItem == -1)
+            {
+                SendGetItem = m_RootItem.itemIndex;
+                SocketClient->ToGameServer()->SendPickupItemRequest(m_RootItem.itemIndex);
+            }
+            obj->Velocity = m_speed;
         }
-    }
-    break;
+        break;
 
-    case eAction_Move:
-    {
-        if (!m_isRooting)
-        {
-            m_isRooting = false;
-            m_state = eAction_Return;
-            break;
+        case eAction_Return: {
+            targetPos[0] = obj->Owner->Position[0] + (sinf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN);
+            targetPos[1] = obj->Owner->Position[1] + (cosf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN);
+            targetPos[2] = obj->Owner->Position[2];  // + 70 + (sinf(fRadHeight) * 70.0f);
+
+            VectorSubtract(targetPos, obj->Position, Range);
+
+            Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
+            if (Distance >= FlyRange)
+            {
+                float Angle   = CreateAngle2D(obj->Position, targetPos);
+                obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 20.0f * FPS_ANIMATION_FACTOR);
+            }
+
+            AngleMatrix(obj->Angle, obj->Matrix);
+            VectorRotate(obj->Direction, obj->Matrix, Direction);
+            VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
+
+            float Speed = (FlyRange >= Distance) ? 0 : (float)log(Distance) * 2.5f;
+
+            obj->Direction[0] = 0.0f;
+            obj->Direction[1] = -Speed;
+            obj->Direction[2] = 0.0f;
+
+            if (0 == Speed || CompTimeControl(3000, m_dwRootingTime))
+            {
+                m_state = eAction_Stand;
+            }
+            obj->Velocity = m_speed;
         }
-
-        targetPos[0] = m_RootItem.position[0] + (sinf(m_fRadWidthGet) * CIRCLE_STAND_RADIAN);
-        targetPos[1] = m_RootItem.position[1] + (cosf(m_fRadWidthGet) * CIRCLE_STAND_RADIAN);
-        targetPos[2] = m_RootItem.position[2];// + 70 + (sinf(fRadHeight) * 70.0f);
-
-        VectorSubtract(targetPos, obj->Position, Range);
-
-        Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
-        if (Distance >= FlyRange)
-        {
-            float Angle = CreateAngle2D(obj->Position, targetPos); //test
-            obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 20.0f * FPS_ANIMATION_FACTOR);
-        }
-
-        AngleMatrix(obj->Angle, obj->Matrix);
-        VectorRotate(obj->Direction, obj->Matrix, Direction);
-        VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
-
-        float Speed = (20.0f >= Distance) ? 0 : (float)log(Distance) * 2.5f;
-
-        obj->Direction[0] = 0.0f;
-        obj->Direction[1] = -Speed;
-        obj->Direction[2] = 0.0f;
-
-        if (0 == Speed || CompTimeControl(100000, m_dwRootingTime))
-        {
-            m_dwSendDelayTime = GetTickCount();
-            m_dwRootingTime = GetTickCount();
-            m_state = eAction_Get;
-        }
-
-        obj->Velocity = m_speed;
-    }
-    break;
-
-    case eAction_Get:
-    {
-        if (!m_isRooting || SEARCH_LENGTH < Distance || CompTimeControl(3000, m_dwRootingTime))
-        {
-            m_isRooting = false;
-            m_dwRootingTime = GetTickCount();
-            m_state = eAction_Return;
-            break;
-        }
-
-        //------------------------------//
-        VectorCopy(m_RootItem.position, targetPos);
-
-        float Angle = CreateAngle2D(obj->Position, targetPos);
-        obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 10.0f * FPS_ANIMATION_FACTOR);
-        //------------------------------//
-
-        if (CompTimeControl(1000, m_dwSendDelayTime)
-            && &Hero->Object == obj->Owner
-            && SendGetItem == -1)
-        {
-            SendGetItem = m_RootItem.itemIndex;
-            SocketClient->ToGameServer()->SendPickupItemRequest(m_RootItem.itemIndex);
-        }
-        obj->Velocity = m_speed;
-    }
-    break;
-
-    case eAction_Return:
-    {
-        targetPos[0] = obj->Owner->Position[0] + (sinf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN);
-        targetPos[1] = obj->Owner->Position[1] + (cosf(m_fRadWidthStand) * CIRCLE_STAND_RADIAN);
-        targetPos[2] = obj->Owner->Position[2];// + 70 + (sinf(fRadHeight) * 70.0f);
-
-        VectorSubtract(targetPos, obj->Position, Range);
-
-        Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
-        if (Distance >= FlyRange)
-        {
-            float Angle = CreateAngle2D(obj->Position, targetPos);
-            obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 20.0f * FPS_ANIMATION_FACTOR);
-        }
-
-        AngleMatrix(obj->Angle, obj->Matrix);
-        VectorRotate(obj->Direction, obj->Matrix, Direction);
-        VectorAddScaled(obj->Position, Direction, obj->Position, FPS_ANIMATION_FACTOR);
-
-        float Speed = (FlyRange >= Distance) ? 0 : (float)log(Distance) * 2.5f;
-
-        obj->Direction[0] = 0.0f;
-        obj->Direction[1] = -Speed;
-        obj->Direction[2] = 0.0f;
-
-        if (0 == Speed || CompTimeControl(3000, m_dwRootingTime))
-        {
-            m_state = eAction_Stand;
-        }
-        obj->Velocity = m_speed;
-    }
-    break;
+        break;
     }
 
     return TRUE;
@@ -245,15 +239,17 @@ bool PetActionUnicorn::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double
 
 bool PetActionUnicorn::Effect(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    if (NULL == obj || NULL == Owner) return FALSE;
+    if (NULL == obj || NULL == Owner)
+        return FALSE;
 
-    BMD* b = &Models[obj->Type];
+    BMD*   b = &Models[obj->Type];
     vec3_t Position, vRelativePos, Light;
 
     VectorCopy(obj->Position, b->BodyOrigin);
     Vector(0.f, 0.f, 0.f, vRelativePos);
 
-    b->Animation(BoneTransform, obj->AnimationFrame, obj->PriorAnimationFrame, obj->PriorAction, obj->Angle, obj->HeadAngle);
+    b->Animation(BoneTransform, obj->AnimationFrame, obj->PriorAnimationFrame, obj->PriorAction, obj->Angle,
+                 obj->HeadAngle);
 
     Vector(0.f, 0.f, 0.f, vRelativePos);
     b->TransformPosition(BoneTransform[11], vRelativePos, Position, false);
@@ -284,13 +280,14 @@ bool PetActionUnicorn::Effect(OBJECT* obj, CHARACTER* Owner, int targetKey, doub
 
 bool PetActionUnicorn::Sound(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    if (NULL == obj || NULL == Owner) return FALSE;
+    if (NULL == obj || NULL == Owner)
+        return FALSE;
 
     switch (m_state)
     {
-    case eAction_Return:
-        PlayBuffer(SOUND_DROP_GOLD01);
-        break;
+        case eAction_Return:
+            PlayBuffer(SOUND_DROP_GOLD01);
+            break;
     }
 
     return TRUE;
@@ -298,10 +295,11 @@ bool PetActionUnicorn::Sound(OBJECT* obj, CHARACTER* Owner, int targetKey, doubl
 
 void PetActionUnicorn::FindZen(OBJECT* obj)
 {
-    if (NULL == obj || true == m_isRooting) return;
+    if (NULL == obj || true == m_isRooting)
+        return;
 
     float dx, dy, dl;
-    bool sameItem = false;
+    bool  sameItem = false;
 
     for (int i = 0; i < MAX_ITEMS; i++)
     {
@@ -325,7 +323,7 @@ void PetActionUnicorn::FindZen(OBJECT* obj)
 
             if (!m_isRooting)
             {
-                m_isRooting = true;
+                m_isRooting          = true;
                 m_RootItem.itemIndex = i;
                 VectorCopy(_item->Position, m_RootItem.position);
             }

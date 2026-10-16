@@ -1,11 +1,10 @@
 #ifdef CSK_DEBUG_MAP_PATHFINDING
 #define SHOW_PATH_INFO
 extern bool g_bShowPath;
-#endif // CSK_DEBUG_MAP_PATHFINDING
+#endif  // CSK_DEBUG_MAP_PATHFINDING
 
 #include <math.h>
 #include "Core/Utilities/BaseCls.h"
-
 
 class PATH
 {
@@ -17,69 +16,64 @@ public:
     void SetMapDimensions(int iWidth, int iHeight, WORD* pbyMap);
 
 private:
-    int	m_iWidth, m_iHeight;
-    int m_iSize;
+    int   m_iWidth, m_iHeight;
+    int   m_iSize;
     WORD* m_pbyMap;
 
 private:
-    int m_iNumPath;
+    int  m_iNumPath;
     BYTE m_xPath[MAX_COUNT_PATH];
     BYTE m_yPath[MAX_COUNT_PATH];
+
 public:
-    int GetPath(void) { return (std::min<int>(m_iNumPath, MAX_PATH_FIND)); }
+    int   GetPath(void) { return (std::min<int>(m_iNumPath, MAX_PATH_FIND)); }
     BYTE* GetPathX(void) { return (m_xPath + MAX_COUNT_PATH - m_iNumPath); }
     BYTE* GetPathY(void) { return (m_yPath + MAX_COUNT_PATH - m_iNumPath); }
 
-    int GetIndex(int xPos, int yPos) { return (xPos + yPos * m_iWidth); }
-    void GetXYPos(int iIndex, int* pxPos, int* pyPos) { *pxPos = iIndex % m_iWidth; *pyPos = iIndex / m_iWidth; }
+    int  GetIndex(int xPos, int yPos) { return (xPos + yPos * m_iWidth); }
+    void GetXYPos(int iIndex, int* pxPos, int* pyPos)
+    {
+        *pxPos = iIndex % m_iWidth;
+        *pyPos = iIndex / m_iWidth;
+    }
     BOOL CheckXYPos(int xPos, int yPos) { return (xPos >= 0 && yPos >= 0 && xPos < m_iWidth && yPos < m_iHeight); }
     static int s_iDir[8][2];
 
 private:
-    EPathNodeState* m_pbyClosed;
-    int m_iMinClosed, m_iMaxClosed;
-    int* m_piCostToStart;
-    int* m_pxPrev;
-    int* m_pyPrev;
+    EPathNodeState*  m_pbyClosed;
+    int              m_iMinClosed, m_iMaxClosed;
+    int*             m_piCostToStart;
+    int*             m_pxPrev;
+    int*             m_pyPrev;
     CBTree<int, int> m_btOpenNodes;
 
     void Clear(void);
     bool AddClearPos(int iIndex);
     void Init(void);
-    int GetNewNodeToTest(void);
+    int  GetNewNodeToTest(void);
 
 public:
-    bool FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance = 0.0f);
+    bool FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value,
+                  float fDistance = 0.0f);
 
 private:
-    bool FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, float fDistance);
     void SetEndNodes(bool bErrorCheck, int iWall, int xEnd, int yEnd, float fDistance);
-    int CalculateCostToStartAddition(int xDir, int yDir);
-    int EstimateCostToGoal(int xStart, int yStart, int xNew, int yNew);
+    int  CalculateCostToStartAddition(int xDir, int yDir);
+    int  EstimateCostToGoal(int xStart, int yStart, int xNew, int yNew);
     bool GeneratePath(int xStart, int yStart, int xEnd, int yEnd);
 
 #ifdef SHOW_PATH_INFO
 public:
     BYTE GetClosedStatus(int iIndex) { return (m_pbyClosed[iIndex]); }
-#endif // SHOW_PATH_INFO
+#endif  // SHOW_PATH_INFO
 };
 
 inline PATH::PATH()
 {
-    // S7-M3: fully self-consistent init. Previously only the heap arrays were NULL-ed while
-    // m_iWidth/m_iHeight/m_iSize/m_pbyMap/m_iNumPath/m_iMinClosed/m_iMaxClosed stayed uninitialized;
-    // a FindPath before SetMapDimensions would read garbage bounds and dereference the NULL arrays.
-    m_iWidth = 0;
-    m_iHeight = 0;
-    m_iSize = 0;
-    m_pbyMap = NULL;
-    m_iNumPath = 0;
-    m_pbyClosed = NULL;
+    m_pbyClosed     = NULL;
     m_piCostToStart = NULL;
-    m_pxPrev = NULL;
-    m_pyPrev = NULL;
-    m_iMinClosed = MAX_INT_FORPATH;
-    m_iMaxClosed = -1;
+    m_pxPrev        = NULL;
+    m_pyPrev        = NULL;
 }
 
 inline PATH::~PATH()
@@ -117,20 +111,16 @@ inline void PATH::SetMapDimensions(int iWidth, int iHeight, WORD* pbyMap)
 {
     Clear();
 
-    m_iWidth = iWidth;
+    m_iWidth  = iWidth;
     m_iHeight = iHeight;
-    m_pbyMap = pbyMap;
-    m_iSize = m_iWidth * m_iHeight;
+    m_pbyMap  = pbyMap;
+    m_iSize   = m_iWidth * m_iHeight;
 
-    m_pbyClosed = new EPathNodeState[m_iSize];
+    m_pbyClosed     = new EPathNodeState[m_iSize];
     m_piCostToStart = new int[m_iSize];
-    m_pxPrev = new int[m_iSize];
-    m_pyPrev = new int[m_iSize];
+    m_pxPrev        = new int[m_iSize];
+    m_pyPrev        = new int[m_iSize];
     ZeroMemory(m_pbyClosed, m_iSize * sizeof(BYTE));
-    // The parent arrays are read by GeneratePath's backtrace, so give them a
-    // deterministic (in-bounds, self/zero) state from the moment they exist.
-    ZeroMemory(m_pxPrev, m_iSize * sizeof(int));
-    ZeroMemory(m_pyPrev, m_iSize * sizeof(int));
 }
 
 inline bool PATH::AddClearPos(int iIndex)
@@ -161,11 +151,11 @@ inline void PATH::Init(void)
 inline int PATH::GetNewNodeToTest(void)
 {
     CBNode<int, int>* pResult = NULL;
-    CBNode<int, int>* pNode = m_btOpenNodes.FindHead();
+    CBNode<int, int>* pNode   = m_btOpenNodes.FindHead();
     while (pNode)
     {
         pResult = pNode;
-        pNode = m_btOpenNodes.GetLeft(pNode);
+        pNode   = m_btOpenNodes.GetLeft(pNode);
     }
 
     int iIndex = -1;
@@ -177,45 +167,8 @@ inline int PATH::GetNewNodeToTest(void)
     return iIndex;
 }
 
-inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance)
-{
-    // The open list must be empty before control returns so a failed search
-    // (which can return early below) cannot leak stale nodes into the next call.
-    // When Value is set the destination attribute is temporarily cleared so the
-    // search can finish on an occupied tile; restore it unconditionally so the
-    // terrain attribute is never permanently rewritten to 0 (MU-E-5).
-    bool mutatedEnd = false;
-    int iEndIndexForValue = -1;
-    if (Value && 0.0f == fDistance)
-    {
-        const int iEndIndex = GetIndex(xEnd, yEnd);
-        if (iEndIndex >= 0 && iEndIndex < m_iSize)
-        {
-            iEndIndexForValue = iEndIndex;
-            mutatedEnd = true;
-        }
-    }
-
-    bool found = false;
-    WORD savedAttribute = 0;
-    if (mutatedEnd)
-    {
-        savedAttribute = m_pbyMap[iEndIndexForValue];
-        m_pbyMap[iEndIndexForValue] = 0;
-    }
-
-    found = FindPathImpl(xStart, yStart, xEnd, yEnd, bErrorCheck, iWall, fDistance);
-
-    if (mutatedEnd)
-    {
-        m_pbyMap[iEndIndexForValue] = savedAttribute;
-    }
-
-    m_btOpenNodes.RemoveAll();
-    return found;
-}
-
-inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, float fDistance)
+inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value,
+                           float fDistance)
 {
     Init();
 
@@ -230,6 +183,11 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
         if (iEndIndex < 0 || iEndIndex >= m_iSize)
         {
             return false;
+        }
+
+        if (Value == true)
+        {
+            m_pbyMap[iEndIndex] = 0;
         }
 
         if (bErrorCheck && (iWall <= m_pbyMap[iEndIndex] && (m_pbyMap[GetIndex(xEnd, yEnd)] & TW_ACTION) != TW_ACTION))
@@ -249,8 +207,8 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
     }
 
     int iCostToGoalOfNearest = MAX_INT_FORPATH;
-    int xNearest = xStart;
-    int yNearest = yStart;
+    int xNearest             = xStart;
+    int yNearest             = yStart;
 
     int iStartIndex = GetIndex(xStart, yStart);
     if (iStartIndex < 0 || iStartIndex >= m_iSize)
@@ -293,8 +251,8 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
                 if (iNewCost < m_piCostToStart[iIndex])
                 {
                     m_piCostToStart[iIndex] = iNewCost;
-                    m_pxPrev[iIndex] = xNear;
-                    m_pyPrev[iIndex] = yNear;
+                    m_pxPrev[iIndex]        = xNear;
+                    m_pyPrev[iIndex]        = yNear;
                 }
             }
         }
@@ -314,12 +272,15 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
             {
                 continue;
             }
-            int iNewIndex = GetIndex(xNew, yNew);
+            int iNewIndex      = GetIndex(xNew, yNew);
             int byMapAttribute = m_pbyMap[iNewIndex];
 
-            if ((byMapAttribute & TW_ACTION) == TW_ACTION) byMapAttribute -= TW_ACTION;
-            if ((byMapAttribute & TW_HEIGHT) == TW_HEIGHT) byMapAttribute -= TW_HEIGHT;
-            if ((byMapAttribute & TW_CAMERA_UP) == TW_CAMERA_UP) byMapAttribute -= TW_CAMERA_UP;
+            if ((byMapAttribute & TW_ACTION) == TW_ACTION)
+                byMapAttribute -= TW_ACTION;
+            if ((byMapAttribute & TW_HEIGHT) == TW_HEIGHT)
+                byMapAttribute -= TW_HEIGHT;
+            if ((byMapAttribute & TW_CAMERA_UP) == TW_CAMERA_UP)
+                byMapAttribute -= TW_CAMERA_UP;
 
             if (!(PATH_INTESTLIST & m_pbyClosed[iNewIndex]) && iWall > byMapAttribute)
             {
@@ -338,8 +299,8 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
             if (iCostToGoal < iCostToGoalOfNearest)
             {
                 iCostToGoalOfNearest = iCostToGoal;
-                xNearest = xTest;
-                yNearest = yTest;
+                xNearest             = xTest;
+                yNearest             = yTest;
             }
         }
     }
@@ -356,12 +317,6 @@ inline bool PATH::FindPathImpl(int xStart, int yStart, int xEnd, int yEnd, bool 
 
 inline void PATH::SetEndNodes(bool bErrorCheck, int iWall, int xEnd, int yEnd, float fDistance)
 {
-    // A negative search radius is meaningless and would invert the iteration bounds; clamp it.
-    if (fDistance < 0.0f)
-    {
-        fDistance = 0.0f;
-    }
-
     int iDistance = (int)fDistance;
     for (int j = -iDistance; j <= iDistance; j++)
     {
@@ -466,8 +421,8 @@ inline bool PATH::GeneratePath(int xStart, int yStart, int xEnd, int yEnd)
         }
 
         int iIndex = GetIndex(xCurrent, yCurrent);
-        xCurrent = m_pxPrev[iIndex];
-        yCurrent = m_pyPrev[iIndex];
+        xCurrent   = m_pxPrev[iIndex];
+        yCurrent   = m_pyPrev[iIndex];
     }
 
     return (false);
@@ -477,14 +432,34 @@ inline POINT MovePoint(EPathDirection direction, POINT position)
 {
     switch (direction)
     {
-    case EPathDirection::WEST:       position.x--; position.y--; break;
-    case EPathDirection::SOUTHWEST:  position.y--; break;
-    case EPathDirection::SOUTH:      position.x++; position.y--; break;
-    case EPathDirection::SOUTHEAST:  position.x++; break;
-    case EPathDirection::EAST:       position.x++; position.y++; break;
-    case EPathDirection::NORTHEAST:  position.y++; break;
-    case EPathDirection::NORTH:      position.x--; position.y++; break;
-    case EPathDirection::NORTHWEST:  position.x--; break;
+        case EPathDirection::WEST:
+            position.x--;
+            position.y--;
+            break;
+        case EPathDirection::SOUTHWEST:
+            position.y--;
+            break;
+        case EPathDirection::SOUTH:
+            position.x++;
+            position.y--;
+            break;
+        case EPathDirection::SOUTHEAST:
+            position.x++;
+            break;
+        case EPathDirection::EAST:
+            position.x++;
+            position.y++;
+            break;
+        case EPathDirection::NORTHEAST:
+            position.y++;
+            break;
+        case EPathDirection::NORTH:
+            position.x--;
+            position.y++;
+            break;
+        case EPathDirection::NORTHWEST:
+            position.x--;
+            break;
     }
     return position;
 }

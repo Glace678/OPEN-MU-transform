@@ -16,19 +16,16 @@
 
 #include <iterator>
 
-CShopPackage::CShopPackage() // OK
+CShopPackage::CShopPackage()  // OK
 {
     this->LeftCount = -1;
     this->ProductSeqList.clear();
     this->PriceSeqList.clear();
-    this->ProductSeqIter = this->ProductSeqList.end();
-    this->PriceSeqIter = this->PriceSeqList.end();
 }
-CShopPackage::~CShopPackage() // OK
-{
-}
+CShopPackage::~CShopPackage()  // OK
+{}
 
-bool	CShopPackage::SetPackage(std::wstring strdata) // OK
+bool CShopPackage::SetPackage(std::wstring strdata)  // OK
 {
     if (strdata.empty())
         return 0;
@@ -39,37 +36,37 @@ bool	CShopPackage::SetPackage(std::wstring strdata) // OK
         return 0;
 
     this->ProductDisplaySeq = _wtoi(token.nextToken().c_str());
-    this->ViewOrder = _wtoi(token.nextToken().c_str());
+    this->ViewOrder         = _wtoi(token.nextToken().c_str());
     this->PackageProductSeq = _wtoi(token.nextToken().c_str());
     StringCchCopy(this->PackageProductName, std::size(this->PackageProductName), token.nextToken().c_str());
     this->PackageProductType = _wtoi(token.nextToken().c_str());
-    this->Price = _wtoi(token.nextToken().c_str());
+    this->Price              = _wtoi(token.nextToken().c_str());
     StringCchCopy(this->Description, std::size(this->Description), token.nextToken().c_str());
     StringCchCopy(this->Caution, std::size(this->Caution), token.nextToken().c_str());
     this->SalesFlag = _wtoi(token.nextToken().c_str());
-    this->GiftFlag = _wtoi(token.nextToken().c_str());
+    this->GiftFlag  = _wtoi(token.nextToken().c_str());
     CStringMethod::ConvertStringToDateTime(this->StartDate, token.nextToken());
     CStringMethod::ConvertStringToDateTime(this->EndDate, token.nextToken());
-    this->CapsuleFlag = _wtoi(token.nextToken().c_str());
+    this->CapsuleFlag  = _wtoi(token.nextToken().c_str());
     this->CapsuleCount = _wtoi(token.nextToken().c_str());
     StringCchCopy(this->ProductCashName, std::size(this->ProductCashName), token.nextToken().c_str());
     StringCchCopy(this->PricUnitName, std::size(this->PricUnitName), token.nextToken().c_str());
-    this->DeleteFlag = _wtoi(token.nextToken().c_str());
-    this->EventFlag = _wtoi(token.nextToken().c_str());
+    this->DeleteFlag    = _wtoi(token.nextToken().c_str());
+    this->EventFlag     = _wtoi(token.nextToken().c_str());
     this->ProductAmount = _wtoi(token.nextToken().c_str());
     this->SetProductSeqList(token.nextToken());
     StringCchCopy(this->InGamePackageID, std::size(this->InGamePackageID), token.nextToken().c_str());
     this->ProductCashSeq = _wtoi(token.nextToken().c_str());
-    this->PriceCount = _wtoi(token.nextToken().c_str());
+    this->PriceCount     = _wtoi(token.nextToken().c_str());
     this->SetPriceSeqList(token.nextToken());
     this->DeductMileageFlag = _wtoi(token.nextToken().c_str()) != 0;
-    this->CashType = _wtoi(token.nextToken().c_str());
-    this->CashTypeFlag = _wtoi(token.nextToken().c_str());
+    this->CashType          = _wtoi(token.nextToken().c_str());
+    this->CashTypeFlag      = _wtoi(token.nextToken().c_str());
 
     return 1;
 }
 
-void	CShopPackage::SetLeftCount(int nCount) // OK
+void CShopPackage::SetLeftCount(int nCount)  // OK
 {
     this->LeftCount = nCount;
 }
@@ -80,17 +77,17 @@ void CShopPackage::SetSingleProduct(int productId)
     PriceSeqList.assign(1, productId);
 }
 
-int		CShopPackage::GetProductCount() // OK
+int CShopPackage::GetProductCount()  // OK
 {
     return static_cast<int>(this->ProductSeqList.size());
 }
 
-void	CShopPackage::SetProductSeqFirst() // OK
+void CShopPackage::SetProductSeqFirst()  // OK
 {
     this->ProductSeqIter = this->ProductSeqList.begin();
 }
 
-bool	CShopPackage::GetProductSeqFirst(int& ProductSeq) // OK
+bool CShopPackage::GetProductSeqFirst(int& ProductSeq)  // OK
 {
     this->ProductSeqIter = this->ProductSeqList.begin();
 
@@ -101,7 +98,7 @@ bool	CShopPackage::GetProductSeqFirst(int& ProductSeq) // OK
     return 1;
 }
 
-bool	CShopPackage::GetProductSeqNext(int& ProductSeq) // OK
+bool CShopPackage::GetProductSeqNext(int& ProductSeq)  // OK
 {
     if (this->ProductSeqIter == this->ProductSeqList.end())
         return 0;
@@ -110,17 +107,17 @@ bool	CShopPackage::GetProductSeqNext(int& ProductSeq) // OK
     return 1;
 }
 
-int		CShopPackage::GetPriceCount()
+int CShopPackage::GetPriceCount()
 {
     return static_cast<int>(this->PriceSeqList.size());
 }
 
-void	CShopPackage::SetPriceSeqFirst()
+void CShopPackage::SetPriceSeqFirst()
 {
     this->PriceSeqIter = this->PriceSeqList.begin();
 }
 
-bool	CShopPackage::GetPriceSeqFirst(int& PriceSeq) // OK
+bool CShopPackage::GetPriceSeqFirst(int& PriceSeq)  // OK
 {
     this->PriceSeqIter = this->PriceSeqList.begin();
 
@@ -131,7 +128,7 @@ bool	CShopPackage::GetPriceSeqFirst(int& PriceSeq) // OK
     return 1;
 }
 
-bool	CShopPackage::GetPriceSeqNext(int& PriceSeq) // OK
+bool CShopPackage::GetPriceSeqNext(int& PriceSeq)  // OK
 {
     if (this->PriceSeqIter == this->PriceSeqList.end())
         return 0;
@@ -140,7 +137,7 @@ bool	CShopPackage::GetPriceSeqNext(int& PriceSeq) // OK
     return 1;
 }
 
-void	CShopPackage::SetProductSeqList(std::wstring strdata) // OK
+void CShopPackage::SetProductSeqList(std::wstring strdata)  // OK
 {
     CStringToken token(strdata, L"|");
 
@@ -148,13 +145,14 @@ void	CShopPackage::SetProductSeqList(std::wstring strdata) // OK
     {
         std::wstring data = token.nextToken();
 
-        if (data.empty()) break;
+        if (data.empty())
+            break;
 
         this->ProductSeqList.push_back(_wtoi(data.c_str()));
     }
 }
 
-void	CShopPackage::SetPriceSeqList(std::wstring strdata) // OK
+void CShopPackage::SetPriceSeqList(std::wstring strdata)  // OK
 {
     CStringToken token(strdata, L"|");
 
@@ -162,7 +160,8 @@ void	CShopPackage::SetPriceSeqList(std::wstring strdata) // OK
     {
         std::wstring data = token.nextToken();
 
-        if (data.empty()) break;
+        if (data.empty())
+            break;
 
         this->PriceSeqList.push_back(_wtoi(data.c_str()));
     }

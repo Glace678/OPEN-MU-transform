@@ -22,4 +22,4 @@
  */
 void RenderFrustumWireframe(const Frustum& frustum);
 
-#endif // _EDITOR
+#endif  // _EDITOR

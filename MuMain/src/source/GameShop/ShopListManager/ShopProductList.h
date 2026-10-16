@@ -9,7 +9,7 @@ public:
     ~CShopProductList(void);
 
     void Clear();
-    int GetSize();
+    int  GetSize();
 
     virtual void Append(CShopProduct product);
 
@@ -23,11 +23,11 @@ public:
     bool GetPriceSeqNext(CShopProduct& product);
 
 protected:
-    int	PriceSeqKey;
-    std::multimap<int, CShopProduct> m_Products;
-    std::multimap<int, CShopProduct>::iterator m_ProductIter;
-    std::multimap<int, CShopProduct>::iterator m_ProductSeqIter;
-    std::multimap<int, CShopProduct>::iterator m_PriceSeqIter;
+    int                                                                                               PriceSeqKey;
+    std::multimap<int, CShopProduct>                                                                  m_Products;
+    std::multimap<int, CShopProduct>::iterator                                                        m_ProductIter;
+    std::multimap<int, CShopProduct>::iterator                                                        m_ProductSeqIter;
+    std::multimap<int, CShopProduct>::iterator                                                        m_PriceSeqIter;
     std::pair<std::multimap<int, CShopProduct>::iterator, std::multimap<int, CShopProduct>::iterator> m_ProductRange;
     std::pair<std::multimap<int, CShopProduct>::iterator, std::multimap<int, CShopProduct>::iterator> m_PriceRange;
 };

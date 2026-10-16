@@ -24,8 +24,8 @@ bool ItemDataExportS6E3::SaveLegacy(wchar_t* fileName)
         return false;
     }
 
-    auto Buffer = std::make_unique<BYTE[]>(Size * MAX_ITEM);
-    BYTE* pSeek = Buffer.get();
+    auto  Buffer = std::make_unique<BYTE[]>(Size * MAX_ITEM);
+    BYTE* pSeek  = Buffer.get();
 
     // Convert ItemAttribute to ITEM_ATTRIBUTE_FILE_LEGACY format
     for (int i = 0; i < MAX_ITEM; i++)
@@ -41,9 +41,9 @@ bool ItemDataExportS6E3::SaveLegacy(wchar_t* fileName)
 
     // Configure I/O
     DataFileIO::IOConfig config;
-    config.itemSize = Size;
-    config.itemCount = MAX_ITEM;
-    config.checksumKey = 0xE2F1;
+    config.itemSize      = Size;
+    config.itemCount     = MAX_ITEM;
+    config.checksumKey   = 0xE2F1;
     config.encryptRecord = [](BYTE* data, int size) { BuxConvert(data, size); };
 
     // Encrypt buffer
@@ -57,4 +57,4 @@ bool ItemDataExportS6E3::SaveLegacy(wchar_t* fileName)
     return success;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

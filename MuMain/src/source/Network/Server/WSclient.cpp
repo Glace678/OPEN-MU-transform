@@ -43,7 +43,6 @@
 #include "Network/Server/SoloCashShopPackets.h"
 #include "Network/Server/MerchantPricePackets.h"
 #include "Network/Server/ItemWireLayout.h"
-#include "Network/Server/PacketDispatchPolicy.h"
 #include "Data/GameConfig/GameConfig.h"
 #include "GameLogic/NPCs/npcGateSwitch.h"
 #include "GameLogic/Items/CComGem.h"
@@ -421,19 +420,10 @@ void DeleteSocket()
 {
     // Returning to the connect server must stop game-only heartbeat packets.
     g_bGameServerConnected = FALSE;
-
-    Connection* oldConnection = SocketClient;
-    SocketClient = nullptr;
-
-    if (oldConnection)
+    if (SocketClient)
     {
-        // PLAT-5: Close() + drop-pointer used to leak the Connection and its
-        // three PacketFunctions on every disconnect/server switch/reconnect.
-        // SynchronousShutdown disconnects the managed socket, erases the bridge
-        // map entry (waiting out in-flight callbacks), and frees the packet
-        // function objects before we delete the Connection itself.
-        oldConnection->SynchronousShutdown();
-        delete oldConnection;
+        SocketClient->Close();
+        SocketClient = nullptr;
     }
 }
 
@@ -613,11 +603,7 @@ void ReceiveServerConnect(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_SERVER_ADDRESS)ReceiveBuffer;
     wchar_t IP[16];
-
-    // PROTO-8: IP is a fixed char[15] field with no NUL guarantee; bound the
-    // conversion to the field size instead of strlen past the packet.
-    CMultiLanguage::ConvertFromUtf8(IP, Data->IP, sizeof(Data->IP));
-    IP[sizeof(Data->IP)] = L'\0';
+    CMultiLanguage::ConvertFromUtf8(IP, Data->IP);
     Network::Login::LocalAutoLogin::Instance().ServerAddressReceived(IP);
 
     g_ErrorReport.Write(L"[ReceiveServerConnect]");
@@ -962,19 +948,8 @@ int SummonLife = 0;
 
 extern void StopMusic();
 
-// PROTO-13: definitions live further down (next to the trade handlers);
-// declared here so InitGame can reset them on every session teardown.
-extern BOOL g_bPacketAfter_EquipmentItem;
-extern BYTE g_byPacketAfter_EquipmentItem[256];
-
 void InitGame()
 {
-    // PROTO-13: drop the delayed trade-exit/equipment packet cached for the
-    // previous session. Otherwise the first frame in a new map can replay the
-    // old packet against the newly connected character.
-    g_bPacketAfter_EquipmentItem = FALSE;
-    memset(g_byPacketAfter_EquipmentItem, 0, sizeof(g_byPacketAfter_EquipmentItem));
-
     Network::MerchantPrices::Cache().Reset();
     EnableUse = 0;
     SendGetItem = -1;
@@ -1054,69 +1029,6 @@ void InitGame()
     g_pGuildInfoWindow->NoticeClear();
 }
 
-// PROTO-9: join-map request timeout state.
-static DWORD g_dwJoinMapRequestTick = 0;
-
-void MarkJoinMapRequestSent()
-{
-    g_dwJoinMapRequestTick = GetTickCount();
-}
-
-// Tear the world session down locally and return to character selection
-// (mirror of ReceiveLogOut case 1).
-void ReturnToCharacterSelection()
-{
-    StopMusic();
-    AllStopSound();
-
-    SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
-
-    ReleaseMainData();
-    CryWolfMVPInit();
-
-    SceneFlag = CHARACTER_SCENE;
-    CurrentProtocolState = REQUEST_CHARACTERS_LIST;
-    if (SocketClient != nullptr)
-    {
-        SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
-    }
-
-    g_sceneInit.ResetForDisconnect();
-    CurrentProtocolState = REQUEST_JOIN_SERVER;
-    InitGame();
-}
-
-// PROTO-9: if the server never answers the join-map request, the loading
-// screen used to freeze forever. After 10 seconds, tell the server we are
-// leaving and fall back to character selection.
-void CheckJoinMapRequestTimeout()
-{
-    if (CurrentProtocolState != REQUEST_JOIN_MAP_SERVER || g_dwJoinMapRequestTick == 0)
-    {
-        return;
-    }
-
-    constexpr DWORD JoinMapTimeoutMs = 10000;
-    if (GetTickCount() - g_dwJoinMapRequestTick < JoinMapTimeoutMs)
-    {
-        return;
-    }
-
-    g_ErrorReport.Write(L"Join map server timed out after %u ms, returning to character selection.\r\n", JoinMapTimeoutMs);
-    g_dwJoinMapRequestTick = 0;
-
-    if (SocketClient != nullptr)
-    {
-        SocketClient->ToGameServer()->SendLogOut(LogOutType::BackToCharacterSelection);
-    }
-
-    ReturnToCharacterSelection();
-
-    g_pWindowMgr->Reset();
-    g_pFriendList->ClearFriendList();
-    g_pLetterList->ClearLetterList();
-}
-
 BOOL ReceiveLogOut(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
     LogOut = false;
@@ -1131,7 +1043,21 @@ BOOL ReceiveLogOut(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         PostMessage(g_hWnd, WM_DESTROY, 0, 0);
         break;
     case 1:
-        ReturnToCharacterSelection();
+        StopMusic();
+        AllStopSound();
+
+        SEASON3B::CNewUIInventoryCtrl::BackupPickedItem();
+
+        ReleaseMainData();
+        CryWolfMVPInit();
+
+        SceneFlag = CHARACTER_SCENE;
+        CurrentProtocolState = REQUEST_CHARACTERS_LIST;
+        SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
+
+        g_sceneInit.ResetForDisconnect();
+        CurrentProtocolState = REQUEST_JOIN_SERVER;
+        InitGame();
         break;
     case 2:
         if (SceneFlag == MAIN_SCENE)
@@ -1277,15 +1203,8 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
     CharacterAttribute->MaxAttackSpeed = Data->MaxAttackSpeed;
     CharacterMachine->Gold = Data->Gold;
 
-    int OldWorld = gMapManager.WorldActive;
     gMapManager.WorldActive = Data->Map;
-    if (!gMapManager.LoadWorld(gMapManager.WorldActive))
-    {
-        // Roll back: a failed world load must not leave WorldActive pointing at a map
-        // whose terrain/obstacle data was never actually loaded.
-        gMapManager.WorldActive = OldWorld;
-        return FALSE;
-    }
+    gMapManager.LoadWorld(gMapManager.WorldActive);
 
     if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
     {
@@ -1373,9 +1292,8 @@ BOOL ReceiveJoinMapServer(std::span<const BYTE> ReceiveBuffer)
 
     CreateMyGensInfluenceGroundEffect();
 
-    const bool isDoppelgangerWorld =
-        gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4;
-    if (!isDoppelgangerWorld)
+    if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
+    else
     {
         wchar_t Text[256];
         mu_swprintf(Text, I18N::Game::WelcomeTo, gMapManager.GetMapName(gMapManager.WorldActive));
@@ -1538,11 +1456,7 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         int OldWorld = gMapManager.WorldActive;
 
         gMapManager.WorldActive = Data->Map;
-        if (!gMapManager.LoadWorld(gMapManager.WorldActive))
-        {
-            gMapManager.WorldActive = OldWorld;
-            return;
-        }
+        gMapManager.LoadWorld(gMapManager.WorldActive);
 
         if ((gMapManager.InChaosCastle(OldWorld) == true && OldWorld != gMapManager.WorldActive)
             || gMapManager.InChaosCastle() == true)
@@ -1602,68 +1516,32 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x04 [ReceiveRevival]");
 }
 
-void ReceiveMagicList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveMagicList(const BYTE* ReceiveBuffer)
 {
     int Master_Skill_Bool = -1;
     int Skill_Bool = -1;
 
     auto Data = (LPPHEADER_MAGIC_LIST_COUNT)ReceiveBuffer;
     int Offset = sizeof(PHEADER_MAGIC_LIST_COUNT);
-
-    // Bounds for the per-record body: each record is sizeof(PRECEIVE_MAGIC_LIST) bytes.
-    const int RecordSize = sizeof(PRECEIVE_MAGIC_LIST);
-    auto RecordFits = [&](int recordIndex) -> bool
+    if (Data->Value == 0xFF)
     {
-        const long End = static_cast<long>(Offset) + (static_cast<long>(recordIndex) + 1) * RecordSize;
-        return End <= static_cast<long>(Size);
-    };
-
-    if (Data->Value == 0xFF || Data->Value == 0xFE)
-    {
-        if (!RecordFits(0))
-        {
-            g_ErrorReport.Write(L"ReceiveMagicList: single-skill packet too short (%d bytes).\r\n", Size);
-            return;
-        }
-
         auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-        if (Data2->Index >= MAX_SKILLS || Data2->Type >= MAX_SKILLS)
-        {
-            g_ErrorReport.Write(L"ReceiveMagicList: out-of-range skill index=%u type=%u.\r\n",
-                                static_cast<unsigned>(Data2->Index), static_cast<unsigned>(Data2->Type));
-            return;
-        }
-
-        if (Data->Value == 0xFF)
-        {
-            CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
-            CharacterAttribute->SkillLevel[Data2->Index] = 0;
-        }
-        else
-        {
-            CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
-            CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
-        }
+        CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+        CharacterAttribute->SkillLevel[Data2->Index] = 0;
+    }
+    else if (Data->Value == 0xFE)
+    {
+        auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
+        CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+        CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
     }
     else if (Data->ListType == 0x02)
     {
         for (int i = 0; i < Data->Value; ++i)
         {
-            if (!RecordFits(i))
-            {
-                g_ErrorReport.Write(L"ReceiveMagicList: list-remove packet truncated at record %d/%u (size %d).\r\n",
-                                    i, static_cast<unsigned>(Data->Value), Size);
-                break;
-            }
-
             auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            if (Data2->Index < MAX_SKILLS)
-            {
-                CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
-                CharacterAttribute->SkillLevel[Data2->Index] = 0;
-            }
-
-            Offset += RecordSize;
+            CharacterAttribute->Skill[Data2->Index] = AT_SKILL_UNDEFINED;
+            CharacterAttribute->SkillLevel[Data2->Index] = 0;
         }
     }
     else
@@ -1675,26 +1553,10 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer, int Size)
         }
         for (int i = 0; i < Data->Value; i++)
         {
-            if (!RecordFits(i))
-            {
-                g_ErrorReport.Write(L"ReceiveMagicList: list packet truncated at record %d/%u (size %d).\r\n",
-                                    i, static_cast<unsigned>(Data->Value), Size);
-                break;
-            }
-
             auto Data2 = (LPPRECEIVE_MAGIC_LIST)(ReceiveBuffer + Offset);
-            if (Data2->Index < MAX_SKILLS && Data2->Type < MAX_SKILLS)
-            {
-                CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
-                CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
-            }
-            else
-            {
-                g_ErrorReport.Write(L"ReceiveMagicList: out-of-range index=%u type=%u.\r\n",
-                                    static_cast<unsigned>(Data2->Index), static_cast<unsigned>(Data2->Type));
-            }
-
-            Offset += RecordSize;
+            CharacterAttribute->Skill[Data2->Index] = (ActionSkillType)Data2->Type;
+            CharacterAttribute->SkillLevel[Data2->Index] = Data2->Level;
+            Offset += sizeof(PRECEIVE_MAGIC_LIST);
         }
 
         if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD)
@@ -1716,13 +1578,10 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer, int Size)
         if (SkillType != 0)
         {
             CharacterAttribute->SkillNumber++;
-            if (SkillType >= 0 && SkillType < MAX_SKILLS)
+            BYTE SkillUseType = SkillAttribute[SkillType].SkillUseType;
+            if (SkillUseType == SKILL_USE_TYPE_MASTER)
             {
-                BYTE SkillUseType = SkillAttribute[SkillType].SkillUseType;
-                if (SkillUseType == SKILL_USE_TYPE_MASTER)
-                {
-                    CharacterAttribute->SkillMasterNumber++;
-                }
+                CharacterAttribute->SkillMasterNumber++;
             }
         }
     }
@@ -1765,7 +1624,7 @@ void ReceiveMagicList(const BYTE* ReceiveBuffer, int Size)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x11 [ReceiveMagicList]");
 }
 
-void Receive_Master_SetSkillList(PMSG_MASTER_SKILL_LIST_SEND* lpMsg, int Size)
+void Receive_Master_SetSkillList(PMSG_MASTER_SKILL_LIST_SEND* lpMsg)
 {
     auto interface = CNewUISystem::GetInstance()->GetUI_NewMasterLevelInterface();
     interface->SetMasterType(Hero->Class);
@@ -1773,22 +1632,7 @@ void Receive_Master_SetSkillList(PMSG_MASTER_SKILL_LIST_SEND* lpMsg, int Size)
 
     memset(CharacterAttribute->MasterSkillInfo, 0, sizeof(CharacterAttribute->MasterSkillInfo));
 
-    // PROTO-6: count is a C2 DWORD and cannot be trusted as the loop bound;
-    // only parse records that actually fit in the received packet.
-    int recordCount = 0;
-    if (Size >= static_cast<int>(sizeof(PMSG_MASTER_SKILL_LIST_SEND)))
-    {
-        const long availableRecords = (static_cast<long>(Size) - sizeof(PMSG_MASTER_SKILL_LIST_SEND))
-            / static_cast<long>(sizeof(PMSG_MASTER_SKILL_LIST));
-        recordCount = static_cast<int>(std::min<long>(lpMsg->count, std::max<long>(0, availableRecords)));
-    }
-
-    if (recordCount != static_cast<int>(lpMsg->count))
-    {
-        g_ErrorReport.Write(L"Receive_Master_SetSkillList: declared %d records, %d fit in packet; ignoring remainder.\r\n", lpMsg->count, recordCount);
-    }
-
-    for (int n = 0; n < recordCount; n++)
+    for (int n = 0; n < lpMsg->count; n++)
     {
         auto lpInfo = (PMSG_MASTER_SKILL_LIST*)(((BYTE*)lpMsg) + sizeof(PMSG_MASTER_SKILL_LIST_SEND) + (sizeof(PMSG_MASTER_SKILL_LIST) * n));
         interface->SetMasterSkillTreeInfo(lpInfo->SkillIndex, lpInfo->SkillLevel, lpInfo->MainValue, lpInfo->NextValue);
@@ -2043,7 +1887,7 @@ void ReceiveTradeInventoryExtended(std::span<const BYTE> ReceiveBuffer)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x31 [ReceiveTradeInventoryExtended]");
 }
 
-void ReceiveChat(const BYTE* ReceiveBuffer, int Size)
+void ReceiveChat(const BYTE* ReceiveBuffer)
 {
     if (SceneFlag == LOG_IN_SCENE)
     {
@@ -2052,67 +1896,39 @@ void ReceiveChat(const BYTE* ReceiveBuffer, int Size)
     }
     else
     {
-        // PROTO-5: match the whisper path -- validate the packet and its
-        // declared size before touching fields, and convert exactly the
-        // message bytes instead of relying on strlen semantics.
-        constexpr int MinimumChatPacketSize = sizeof(PBMSG_HEADER) + MAX_USERNAME_SIZE + 1;
-        if (Size < MinimumChatPacketSize)
-        {
-            g_ErrorReport.Write(L"Rejected chat packet shorter than %d bytes.\r\n", MinimumChatPacketSize);
-            return;
-        }
-
         auto Data = (LPPCHATING)ReceiveBuffer;
-
-        const int messageSize = static_cast<int>(Data->Header.Size) - MAX_USERNAME_SIZE - static_cast<int>(sizeof(PBMSG_HEADER));
-        if (messageSize <= 0 || messageSize > MAX_CHAT_SIZE)
-        {
-            g_ErrorReport.Write(L"Rejected chat packet with invalid message size %d.\r\n", messageSize);
-            return;
-        }
-
-        if (Size < MinimumChatPacketSize + (messageSize - 1))
-        {
-            g_ErrorReport.Write(L"Rejected truncated chat packet with declared %d message bytes but only %d available.\r\n", messageSize, Size - MinimumChatPacketSize + 1);
-            return;
-        }
 
         wchar_t ID[MAX_USERNAME_SIZE + 1] {};
         CMultiLanguage::ConvertFromUtf8(ID, Data->ID, MAX_USERNAME_SIZE);
         ID[MAX_USERNAME_SIZE] = L'\0';
 
+        const auto messageSize = Data->Header.Size - MAX_USERNAME_SIZE - sizeof(PBMSG_HEADER);
         wchar_t Text[MAX_CHAT_SIZE + 1] {};
-        CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText, messageSize);
-        Text[messageSize] = L'\0';
+        CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText);
+        Text[MAX_CHAT_SIZE] = L'\0';
 
         if (Text[0] == L'~')
         {
             for (int i = 0; i < messageSize - 1; i++)
                 Text[i] = Text[i + 1];
-            Text[messageSize - 1] = L'\0';
             g_pChatListBox->AddText(ID, Text, SEASON3B::TYPE_PARTY_MESSAGE);
         }
         else if (Text[0] == L'@' && Text[1] == L'@')
         {
             for (int i = 0; i < messageSize - 2; i++)
                 Text[i] = Text[i + 2];
-            Text[messageSize - 2] = L'\0';
             g_pChatListBox->AddText(ID, Text, SEASON3B::TYPE_UNION_MESSAGE);
         }
         else if (Text[0] == L'@')
         {
             for (int i = 0; i < messageSize - 1; i++)
                 Text[i] = Text[i + 1];
-            Text[messageSize - 1] = L'\0';
             g_pChatListBox->AddText(ID, Text, SEASON3B::TYPE_GUILD_MESSAGE);
         }
         else if (Text[0] == L'$')
         {
-            // PROTO-5: prefix is one char but the shift was 2, so the loop
-            // bound must be messageSize-2 (like the '@@' branch), not -1.
-            for (int i = 0; i < messageSize - 2; i++)
+            for (int i = 0; i < messageSize - 1; i++)
                 Text[i] = Text[i + 2];
-            Text[messageSize - 2] = L'\0';
             g_pChatListBox->AddText(ID, Text, SEASON3B::TYPE_GENS_MESSAGE);
         }
         else if (Text[0] == L'#')
@@ -2234,9 +2050,6 @@ void ReceiveChatKey(const BYTE* ReceiveBuffer)
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
 
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
-
     if (Hero->GuildStatus == G_MASTER && wcscmp(CharactersClient[Index].ID, L"길드 마스터") == 0)
     {
         g_pNewUISystem->Show(SEASON3B::INTERFACE_NPCGUILDMASTER);
@@ -2261,13 +2074,7 @@ void ReceiveNotice(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_NOTICE)ReceiveBuffer;
     wchar_t Text[256]{};
-
-    // PROTO-8: Notice is a fixed char[256] field with no NUL guarantee.
-    // Bound the source to 256 bytes (ConvertFromUtf8 reserves the NUL slot, so
-    // at most 255 wchars land in Text[256]); the old strlen-based call read
-    // past the packet and could overflow Text by the terminating wchar.
-    CMultiLanguage::ConvertFromUtf8(Text, Data->Notice, sizeof(Data->Notice));
-    Text[255] = L'\0';
+    CMultiLanguage::ConvertFromUtf8(Text, Data->Notice);
 
     if (Data->Result == 0)
     {
@@ -2329,11 +2136,7 @@ void ReceiveMoveCharacter(std::span<const BYTE> ReceiveBuffer)
     }
 
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
+    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
     OBJECT* o = &c->Object;
 
     if (c->Dead > 0 || !o->Live)
@@ -2399,11 +2202,7 @@ void ReceiveMovePosition(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_MOVE_POSITION)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
+    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
 
     OBJECT* o = &c->Object;
     if (o->Type == MODEL_BALL)
@@ -2481,11 +2280,7 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
             int OldWorld = gMapManager.WorldActive;
 
             gMapManager.WorldActive = Data->Map;
-            if (!gMapManager.LoadWorld(gMapManager.WorldActive))
-            {
-                gMapManager.WorldActive = OldWorld;
-                return FALSE;
-            }
+            gMapManager.LoadWorld(gMapManager.WorldActive);
 
             if (gMapManager.WorldActive == WD_34CRYWOLF_1ST)
             {
@@ -2532,9 +2327,8 @@ BOOL ReceiveTeleport(const BYTE* ReceiveBuffer, BOOL bEncrypted)
                     o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 30.f;
             }
 
-            const bool isDoppelgangerWorld =
-                gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4;
-            if (!isDoppelgangerWorld)
+            if (gMapManager.WorldActive >= WD_65DOPPLEGANGER1 && gMapManager.WorldActive <= WD_68DOPPLEGANGER4);
+            else
             {
                 wchar_t Text[256];
                 mu_swprintf(Text, I18N::Game::WelcomeTo, gMapManager.GetMapName(gMapManager.WorldActive));
@@ -2622,11 +2416,7 @@ void ReceiveChangePlayer(std::span<const BYTE> ReceiveBuffer)
 
     int Key = Data->Key;
 
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
+    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
     OBJECT* o = &c->Object;
 
     int Type = ((Data->ItemGroup & 0xF) * MAX_ITEM_INDEX) | Data->ItemNumber;
@@ -2970,14 +2760,6 @@ void ReceiveCreatePlayerViewportExtended(std::span<const BYTE> ReceiveBuffer)
         for (int j = 0; j < Data->s_BuffCount; ++j)
         {
             auto buff = static_cast<eBuffState>(buffs[j]);
-
-            // PROTO-7: never feed an out-of-range byte into RegisterBuff and the
-            // battle formation table index.
-            if (buff == eBuffNone || buff >= eBuff_Count)
-            {
-                continue;
-            }
-
             RegisterBuff(buff, o);
             battleCastle::SettingBattleFormation(c, buff);
             g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(buff));
@@ -3019,12 +2801,9 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
         wchar_t characterName[MAX_USERNAME_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(characterName, Data2->ID, MAX_USERNAME_SIZE);
 
-        CHARACTER* pCha = nullptr;
+        CHARACTER* pCha;
         int iIndex = FindCharacterIndex(Key);
-        if (iIndex >= 0 && iIndex < MAX_CHARACTERS_CLIENT)
-        {
-            pCha = &CharactersClient[iIndex];
-        }
+        pCha = &CharactersClient[iIndex];
 
         short sBackUpGuildMarkIndex = -1;
         BYTE byBackUpGuildStatus = 0;
@@ -3034,7 +2813,7 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
         BYTE byEtcPart = 0;
         BYTE byBackupCtlcode = 0;
 
-        if (pCha != nullptr)
+        if (iIndex != MAX_CHARACTERS_CLIENT)
         {
             sBackUpGuildMarkIndex = pCha->GuildMarkIndex;
             byBackUpGuildStatus = pCha->GuildStatus;
@@ -3086,17 +2865,8 @@ void ReceiveCreateTransformViewport(std::span<const BYTE> ReceiveBuffer)
 
             for (int j = 0; j < Data2->s_BuffCount; ++j)
             {
-                const auto buff = static_cast<eBuffState>(Data2->s_BuffEffectState[j]);
-
-                // PROTO-7: filter out-of-range buff bytes before the table
-                // indexing below.
-                if (buff == eBuffNone || buff >= eBuff_Count)
-                {
-                    continue;
-                }
-
-                RegisterBuff(buff, o);
-                battleCastle::SettingBattleFormation(c, buff);
+                RegisterBuff(static_cast<eBuffState>(Data2->s_BuffEffectState[j]), o);
+                battleCastle::SettingBattleFormation(c, static_cast<eBuffState>(Data2->s_BuffEffectState[j]));
 
                 g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(Data2->s_BuffEffectState[j]));
             }
@@ -3218,40 +2988,13 @@ void AppearMonster(CHARACTER* c)
     }
 }
 
-void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer, int Size)
+void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(PWHEADER_DEFAULT_WORD)))
-    {
-        return;
-    }
-
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-
-    // PROTO-6: fixed record size with zero buff bytes, i.e. everything up to
-    // and including the s_BuffCount byte.
-    const int MinRecordSize = static_cast<int>(sizeof(PCREATE_MONSTER)) - MAX_BUFF_SLOT_INDEX;
-
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
-        // PROTO-6: the fixed prefix (through s_BuffCount) must be present
-        // before any field or the count itself may be read.
-        if (Offset + MinRecordSize > Size)
-        {
-            break;
-        }
-
         auto Data2 = (LPPCREATE_MONSTER)(ReceiveBuffer + Offset);
-
-        // PROTO-6: s_BuffCount is server-controlled; clamp before indexing
-        // the fixed s_BuffEffectState array and computing the stride.
-        const int buffCount = std::min<int>(MAX_BUFF_SLOT_INDEX, Data2->s_BuffCount);
-        const int recordSize = MinRecordSize + buffCount;
-        if (Offset + recordSize > Size)
-        {
-            break;
-        }
-
         WORD Key = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
 
         BYTE bMyMob = (Data2->TypeH) & 0x80;
@@ -3277,19 +3020,11 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer, int Size)
             MUHelper::g_MuHelper.AddTarget(Key, false);
         }
 
-        for (int j = 0; j < buffCount; ++j)
+        for (int j = 0; j < Data2->s_BuffCount; ++j)
         {
-            const auto buff = static_cast<eBuffState>(Data2->s_BuffEffectState[j]);
+            RegisterBuff(static_cast<eBuffState>(Data2->s_BuffEffectState[j]), o);
 
-            // PROTO-7: skip out-of-range buff bytes.
-            if (buff == eBuffNone || buff >= eBuff_Count)
-            {
-                continue;
-            }
-
-            RegisterBuff(buff, o);
-
-            g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(buff));
+            g_ConsoleDebug->Write(MCD_RECEIVE, L"ID : %ls, Buff : %d", c->ID, static_cast<int>(Data2->s_BuffEffectState[j]));
         }
 
         float fAngle = 45.0f;
@@ -3381,42 +3116,17 @@ void ReceiveCreateMonsterViewport(const BYTE* ReceiveBuffer, int Size)
             c->Movement = false;
         }
 
-        // PROTO-6: advance by the validated clamped record size.
-        Offset += recordSize;
+        Offset += (sizeof(PCREATE_MONSTER) - (sizeof(BYTE) * (MAX_BUFF_SLOT_INDEX - Data2->s_BuffCount)));
     }
 }
 
-void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer, int Size)
+void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(PWHEADER_DEFAULT_WORD)))
-    {
-        return;
-    }
-
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
-
-    // PROTO-6: PCREATE_SUMMON has additional fields before s_BuffCount, so
-    // recompute the fixed prefix for this record.
-    const int MinRecordSize = static_cast<int>(sizeof(PCREATE_SUMMON)) - MAX_BUFF_SLOT_INDEX;
-
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
-        // PROTO-6: fixed prefix (through s_BuffCount) must be fully present.
-        if (Offset + MinRecordSize > Size)
-        {
-            break;
-        }
-
         auto Data2 = (LPPCREATE_SUMMON)(ReceiveBuffer + Offset);
-
-        // PROTO-6: clamp s_BuffCount before indexing the buff array/stride.
-        const int buffCount = std::min<int>(MAX_BUFF_SLOT_INDEX, Data2->s_BuffCount);
-        const int recordSize = MinRecordSize + buffCount;
-        if (Offset + recordSize > Size)
-        {
-            break;
-        }
         WORD Key = ((WORD)(Data2->KeyH) << 8) + Data2->KeyL;
         auto Type = (EMonsterType)(((WORD)(Data2->TypeH) << 8) + Data2->TypeL);
         int CreateFlag = (Key >> 15);
@@ -3437,17 +3147,9 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer, int Size)
 
         OBJECT* o = &c->Object;
 
-        for (int j = 0; j < buffCount; ++j)
+        for (int j = 0; j < Data2->s_BuffCount; ++j)
         {
-            const auto buff = static_cast<eBuffState>(Data2->s_BuffEffectState[j]);
-
-            // PROTO-7: skip out-of-range buff bytes.
-            if (buff == eBuffNone || buff >= eBuff_Count)
-            {
-                continue;
-            }
-
-            RegisterBuff(buff, o);
+            RegisterBuff(static_cast<eBuffState>(Data2->s_BuffEffectState[j]), o);
         }
 
         c->Object.Angle[2] = ((float)(Data2->Path >> 4) - 1.f) * 45.f;
@@ -3489,28 +3191,18 @@ void ReceiveCreateSummonViewport(const BYTE* ReceiveBuffer, int Size)
             c->Movement = true;
         }
 
-        // PROTO-6: advance by the validated clamped record size.
-        Offset += recordSize;
+        Offset += (sizeof(PCREATE_SUMMON) - (sizeof(BYTE) * (MAX_BUFF_SLOT_INDEX - Data2->s_BuffCount)));
     }
 
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x1F [ReceiveCreateSummonViewport(%d)]", Data->Value);
 }
 
-void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer, int Size)
+void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer)
 {
-    if (Size < (int)sizeof(PHEADER_DEFAULT))
-    {
-        return;
-    }
-
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     int Offset = sizeof(PHEADER_DEFAULT);
     for (int i = 0; i < Data->Value; i++)
     {
-        if (Offset + (int)sizeof(PDELETE_CHARACTER) > Size)
-        {
-            break;
-        }
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
 
         if (Switch_Info != nullptr)
@@ -3542,16 +3234,13 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer, int Size)
         }
 
         iIndex = FindCharacterIndex(Key);
-        if (iIndex >= 0 && iIndex < MAX_CHARACTERS_CLIENT)
+        CHARACTER* pCha = &CharactersClient[iIndex];
+
+        int buffSize = g_CharacterBuffSize((&pCha->Object));
+
+        for (int k = 0; k < buffSize; k++)
         {
-            CHARACTER* pCha = &CharactersClient[iIndex];
-
-            int buffSize = g_CharacterBuffSize((&pCha->Object));
-
-            for (int k = 0; k < buffSize; k++)
-            {
-                UnRegisterBuff(g_CharacterBuff((&pCha->Object), k), &pCha->Object);
-            }
+            UnRegisterBuff(g_CharacterBuff((&pCha->Object), k), &pCha->Object);
         }
 
         DeleteCharacter(Key);
@@ -3566,11 +3255,8 @@ void ReceiveDeleteCharacterViewport(const BYTE* ReceiveBuffer, int Size)
 }
 int AttackPlayer = 0;
 
-void ReceiveDamage(const BYTE* ReceiveBuffer, int Size)
+void ReceiveDamage(const BYTE* ReceiveBuffer)
 {
-    // N2-03: second length check beyond the dispatch gate.
-    if (Size < static_cast<int>(sizeof(PRECEIVE_DAMAGE)))
-        return;
     auto Data = (LPPRECEIVE_DAMAGE)ReceiveBuffer;
     int Damage = ((int)(Data->DamageH) << 8) + Data->DamageL;
     if (CharacterAttribute->Life >= Damage)
@@ -3580,7 +3266,7 @@ void ReceiveDamage(const BYTE* ReceiveBuffer, int Size)
 
     int ShieldDamage = ((int)(Data->ShieldDamageH) << 8) + Data->ShieldDamageL;
     if (CharacterAttribute->Shield >= ShieldDamage)
-        CharacterAttribute->Shield -= ShieldDamage;
+        CharacterAttribute->Shield = ShieldDamage;
     else
         CharacterAttribute->Shield = 0;
 
@@ -3878,8 +3564,6 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
     Key &= 0x7FFF;
 
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
     
@@ -3921,7 +3605,7 @@ void ReceiveAttackDamageExtended(const BYTE* ReceiveBuffer)
     }
     else
     {
-        c->ShieldStatus = static_cast<float>(Data->ShieldStatus) / 250.f;
+        c->ShieldStatus = static_cast<float>(Data->HealthStatus) / 250.f;
     }
 
     if (gMapManager.InChaosCastle())
@@ -3959,19 +3643,14 @@ void ReceiveAction(const BYTE* ReceiveBuffer, int Size)
     auto Data = (LPPRECEIVE_ACTION)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
-    int Index = FindCharacterIndexSafe(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-    {
-        return;
-    }
-
+    int Index = FindCharacterIndex(Key);
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
 
     int iTargetKey, iTargetIndex;
 
     iTargetKey = ((int)(Data->TargetKeyH) << 8) + Data->TargetKeyL;
-    iTargetIndex = FindCharacterIndexSafe(iTargetKey);
+    iTargetIndex = FindCharacterIndex(iTargetKey);
 
     if (!c->SafeZone && c->Helper.Type == MODEL_DARK_HORSE_ITEM)
     {
@@ -4205,11 +3884,7 @@ void ReceiveSkillStatus(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPMSG_VIEWSKILLSTATE)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
+    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
     OBJECT* o = &c->Object;
 
     if (Data->State == 1) // add
@@ -4280,12 +3955,7 @@ void ReceiveMagicFinish(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPHEADER_DEFAULT_VALUE_KEY)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
-    OBJECT* o = &c->Object;
+    OBJECT* o = &CharactersClient[FindCharacterIndex(Key)].Object;
 
     switch ((ActionSkillType)Data->Value) // todo: is this correct? Data->Value is a byte, but ActionSkillType is an int
     {
@@ -4502,7 +4172,7 @@ BOOL ReceiveMonsterSkill(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT || TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
+    if (TargetIndex == MAX_CHARACTERS_CLIENT)
         return (TRUE);
     AttackPlayer = Index;
 
@@ -4559,7 +4229,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT || TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
+    if (TargetIndex == MAX_CHARACTERS_CLIENT)
         return (TRUE);
 
     AttackPlayer = Index;
@@ -4799,7 +4469,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         PlayBuffer(SOUND_SKILL_SWORD4);
         break;
 
-    case AT_SKILL_SLASH://slash
+    case AT_SKILL_SLASH://베기
     case AT_SKILL_SLASH_STR:
         if (sc->SwordCount % 2 == 0)
         {
@@ -4821,7 +4491,7 @@ BOOL ReceiveMagic(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
         PlayBuffer(SOUND_SKILL_SWORD4);
         break;
 
-    case AT_SKILL_IMPALE:	// spear thrust
+    case AT_SKILL_IMPALE:	// 창찌르기
         if (sc->Helper.Type == MODEL_HORN_OF_FENRIR)
             SetAction(so, PLAYER_FENRIR_ATTACK_SPEAR);
         else
@@ -5576,11 +5246,7 @@ BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
 
-    CHARACTER* sc = FindCharacterByKey(Key); // PROTO-1
-    if (sc == nullptr)
-    {
-        return FALSE;
-    }
+    CHARACTER* sc = &CharactersClient[FindCharacterIndex(Key)];
     OBJECT* so = &sc->Object;
 
     sc->Skill = MagicNumber;
@@ -5988,20 +5654,11 @@ BOOL ReceiveMagicContinue(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
 }
 
 // ChainLightning
-void ReceiveChainMagic(const BYTE* ReceiveBuffer, int Size)
+void ReceiveChainMagic(const BYTE* ReceiveBuffer)
 {
-    if (Size < (int)sizeof(PRECEIVE_CHAIN_MAGIC))
-    {
-        return;
-    }
-
     auto pPacketData = (LPPRECEIVE_CHAIN_MAGIC)ReceiveBuffer;
 
-    CHARACTER* pSourceChar = FindCharacterByKey(pPacketData->wUserIndex); // PROTO-1
-    if (pSourceChar == nullptr)
-    {
-        return;
-    }
+    CHARACTER* pSourceChar = &CharactersClient[FindCharacterIndex(pPacketData->wUserIndex)];
     OBJECT* pSourceObject = &pSourceChar->Object;
     OBJECT* pTempObject = nullptr;
 
@@ -6030,19 +5687,8 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer, int Size)
     int iOffset = sizeof(PRECEIVE_CHAIN_MAGIC);
     for (int i = 0; i < (int)(pPacketData->byCount); i++)
     {
-        if (iOffset + (int)sizeof(PRECEIVE_CHAIN_MAGIC_OBJECT) > Size)
-        {
-            break;
-        }
         auto pPacketData2 = (LPPRECEIVE_CHAIN_MAGIC_OBJECT)(ReceiveBuffer + iOffset);
-        CHARACTER* pTargetChar = FindCharacterByKey(pPacketData2->wTargetIndex); // PROTO-1
-        if (pTargetChar == nullptr)
-        {
-            // Keep the chain advancing through a gap instead of pointing the
-            // effect at a ghost object.
-            iOffset += sizeof(PRECEIVE_CHAIN_MAGIC_OBJECT);
-            continue;
-        }
+        CHARACTER* pTargetChar = &CharactersClient[FindCharacterIndex(pPacketData2->wTargetIndex)];
         OBJECT* pTargetObject = &pTargetChar->Object;
 
         if (pTempObject != pTargetObject && pTargetObject != nullptr && pTargetObject->Live == true)
@@ -6064,19 +5710,10 @@ void ReceiveChainMagic(const BYTE* ReceiveBuffer, int Size)
 
 void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
 {
-    if (Size < (int)sizeof(PRECEIVE_MAGIC_POSITIONS))
-    {
-        return;
-    }
-
     auto Data = (LPPRECEIVE_MAGIC_POSITIONS)ReceiveBuffer;
     int SourceKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
     WORD MagicNumber = ((WORD)(Data->MagicH) << 8) + Data->MagicL;
     int Index = FindCharacterIndex(SourceKey);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT) // PROTO-1
-    {
-        return;
-    }
     AttackPlayer = Index;
 
     CHARACTER* c = &CharactersClient[Index];
@@ -6090,18 +5727,9 @@ void ReceiveMagicPosition(const BYTE* ReceiveBuffer, int Size)
     int Offset = sizeof(PRECEIVE_MAGIC_POSITIONS);
     for (int i = 0; i < Data->Count; i++)
     {
-        if (Offset + (int)sizeof(PRECEIVE_MAGIC_POSITION) > Size)
-        {
-            break;
-        }
         auto Data2 = (LPPRECEIVE_MAGIC_POSITION)(ReceiveBuffer + Offset);
         int TargetKey = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
-        CHARACTER* tc = FindCharacterByKey(TargetKey); // PROTO-1
-        if (tc == nullptr)
-        {
-            Offset += sizeof(PRECEIVE_MAGIC_POSITION);
-            continue;
-        }
+        CHARACTER* tc = &CharactersClient[FindCharacterIndex(TargetKey)];
         OBJECT* to = &tc->Object;
         if (rand_fps_check(2))
             SetPlayerShock(tc, tc->Hit);
@@ -6126,11 +5754,7 @@ void ReceiveSkillCount(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_EX_SKILL_COUNT)ReceiveBuffer;
     int TargetKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* tc = FindCharacterByKey(TargetKey); // PROTO-1
-    if (tc == nullptr)
-    {
-        return;
-    }
+    CHARACTER* tc = &CharactersClient[FindCharacterIndex(TargetKey)];
     OBJECT* to = &tc->Object;
 
     switch (Data->m_byType)
@@ -6154,8 +5778,6 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     Key &= 0x7FFF;
 
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return FALSE;
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
     vec3_t Light;
@@ -6234,8 +5856,6 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     auto killerId = Data->KillerObjectId;
 
     int Index = FindCharacterIndex(killedId);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return FALSE;
     CHARACTER* killedObject = &CharactersClient[Index];
     OBJECT* o = &killedObject->Object;
     vec3_t Light;
@@ -6264,15 +5884,15 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     {
     case eExperienceType_MaxLevelReached:
         // TODO: show message "You already reached maximum Level."
-        g_pSystemLogBox->AddText(I18N::Game::AlreadyReachedMaximumLevel, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(L"You already reached maximum Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     case eExperienceType_MaxMasterLevelReached:
         // TODO: show message "You already reached maximum master Level."
-        g_pSystemLogBox->AddText(I18N::Game::AlreadyReachedMaximumMasterLevel, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(L"You already reached maximum master Level.", SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     case eExperienceType_MonsterLevelTooLowForMasterExperience:
         // TODO: You need to kill stronger monsters to gain master experience.
-        g_pSystemLogBox->AddText(I18N::Game::NeedToKillStrongerMonstersForMasterExp, SEASON3B::TYPE_SYSTEM_MESSAGE);
+        g_pSystemLogBox->AddText(L"You need to kill stronger monsters to gain master experience.", SEASON3B::TYPE_SYSTEM_MESSAGE);
         return TRUE;
     }
 
@@ -6383,8 +6003,6 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -6430,15 +6048,12 @@ void ReceiveDie(const BYTE* ReceiveBuffer, int Size)
         {
             int TKey = ((int)(Data->TKeyH) << 8) + Data->TKeyL;
             int TIndex = FindCharacterIndex(TKey);
-            if (TIndex >= 0 && TIndex < MAX_CHARACTERS_CLIENT)
-            {
-                CHARACTER* tc = &CharactersClient[TIndex];
-                OBJECT* to = &tc->Object;
+            CHARACTER* tc = &CharactersClient[TIndex];
+            OBJECT* to = &tc->Object;
 
-                o->Angle[2] = CreateAngle2D(o->Position, to->Position);
+            o->Angle[2] = CreateAngle2D(o->Position, to->Position);
 
-                VectorCopy(o->Angle, o->HeadAngle);
-            }
+            VectorCopy(o->Angle, o->HeadAngle);
         }
     }
 
@@ -6522,31 +6137,18 @@ void ReceiveCreateItemViewportExtended(std::span<const BYTE> ReceiveBuffer)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x20 [ReceiveCreateItemViewport]");
 }
 
-void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer, int Size)
+void ReceiveDeleteItemViewport(const BYTE* ReceiveBuffer)
 {
-    if (Size < (int)sizeof(PWHEADER_DEFAULT_WORD))
-    {
-        return;
-    }
-
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; i++)
     {
-        if (Offset + (int)sizeof(PDELETE_CHARACTER) > Size)
-        {
-            break;
-        }
         auto Data2 = (LPPDELETE_CHARACTER)(ReceiveBuffer + Offset);
         int Key = ((int)(Data2->KeyH) << 8) + Data2->KeyL;
-        Offset += sizeof(PDELETE_CHARACTER);
-
-        // A malformed/out-of-range key must not delete item slot 0; skip it.
         if (Key < 0 || Key >= MAX_ITEMS)
-        {
-            continue;
-        }
+            Key = 0;
         Items[Key].Object.Live = false;
+        Offset += sizeof(PDELETE_CHARACTER);
 
         MUHelper::g_MuHelper.DeleteItem(Key);
     }
@@ -6595,7 +6197,7 @@ void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)
 
             wchar_t szMessage[128];
             int backupGold = CharacterMachine->Gold;
-            CharacterMachine->Gold = (((DWORD)Data2->Money[0]) << 24) + (((DWORD)Data2->Money[1]) << 16) + (((DWORD)Data2->Money[2]) << 8) + ((DWORD)Data2->Money[3]);
+            CharacterMachine->Gold = (Data2->Money[0] << 24) + (Data2->Money[1] << 16) + (Data2->Money[2] << 8) + (Data2->Money[3]);
 
             int getGold = CharacterMachine->Gold - backupGold;
 
@@ -6909,9 +6511,9 @@ BOOL ReceiveTalk(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         g_MixRecipeMgr.SetMixType(SEASON3A::MIXTYPE_GOBLIN_NORMAL);
         g_pNewUISystem->Show(SEASON3B::INTERFACE_MIXINVENTORY);
         //BYTE *pbyChaosRate = ( &Data->Value) + 1;
-        //int iDummyRate[6];	// odds received from the server but unused and discarded
+        //int iDummyRate[6];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림
         //for ( int i = 0; i < 6; ++i)
-        //	iDummyRate[i] = ( int)pbyChaosRate[i];	// odds received from the server but unused and discarded(script used)
+        //	iDummyRate[i] = ( int)pbyChaosRate[i];	// 광장표 확률을 서버에서 받으나 사용하지 않고 버림(스크립트사용)
         break;
 
     case 4:
@@ -7206,7 +6808,7 @@ void ReceiveMixExtended(std::span<const BYTE> ReceiveBuffer)
             g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
             break;
             // 			case SEASON3A::MIXTYPE_TRAINER:
-            // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// resurrection failed
+            // 				wprintf(szText, I18N::Game::ResurrectionFailed);	// 부활 실패
             // 				g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
             // 				break;
         case SEASON3A::MIXTYPE_OSBOURNE:
@@ -7582,11 +7184,7 @@ void ReceivePK(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_PK)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
-    CHARACTER* c = FindCharacterByKey(Key); // PROTO-1
-    if (c == nullptr)
-    {
-        return;
-    }
+    CHARACTER* c = &CharactersClient[FindCharacterIndex(Key)];
     c->PK = Data->PK;
 
 #ifdef PK_ATTACK_TESTSERVER_LOG
@@ -7673,15 +7271,6 @@ void ReceiveDurability(const BYTE* ReceiveBuffer)
 BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
     auto Data = (LPPRECEIVE_HELPER_ITEM)ReceiveBuffer;
-
-    // Data->Index is attacker-controlled; AbilityTime has only 3 slots, so validate before writing.
-    if (Data->Index > 2)
-    {
-        g_ErrorReport.Write(L"ReceiveHelperItem: invalid ability index %u (must be 0..2).\r\n",
-                            static_cast<unsigned>(Data->Index));
-        return FALSE;
-    }
-
     CharacterAttribute->AbilityTime[Data->Index] = Data->Time * REFERENCE_FPS;
     switch (Data->Index)
     {
@@ -7702,11 +7291,8 @@ BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
     return (TRUE);
 }
 
-void ReceiveWeather(const BYTE* ReceiveBuffer, int Size)
+void ReceiveWeather(const BYTE* ReceiveBuffer)
 {
-    // N2-03: second length check beyond the dispatch gate.
-    if (Size < static_cast<int>(sizeof(PHEADER_DEFAULT)))
-        return;
     auto Data = (LPPHEADER_DEFAULT)ReceiveBuffer;
     int Weather = (Data->Value >> 4);
     if (Weather == 0)
@@ -7715,11 +7301,8 @@ void ReceiveWeather(const BYTE* ReceiveBuffer, int Size)
         RainTarget = (Data->Value & 15) * 6;
 }
 
-void ReceiveEvent(const BYTE* ReceiveBuffer, int Size)
+void ReceiveEvent(const BYTE* ReceiveBuffer)
 {
-    // N2-03: second length check beyond the dispatch gate.
-    if (Size < static_cast<int>(sizeof(PHEADER_EVENT)))
-        return;
     auto Data = (LPPHEADER_EVENT)ReceiveBuffer;
 
     switch (Data->m_byNumber)
@@ -7736,11 +7319,8 @@ void ReceiveEvent(const BYTE* ReceiveBuffer, int Size)
     DeleteBoids();
 }
 
-void ReceiveSummonLife(const BYTE* ReceiveBuffer, int Size)
+void ReceiveSummonLife(const BYTE* ReceiveBuffer)
 {
-    // N2-03: second length check beyond the dispatch gate.
-    if (Size < static_cast<int>(sizeof(PHEADER_DEFAULT_SUBCODE)))
-        return;
     auto Data = (LPPHEADER_DEFAULT_SUBCODE)ReceiveBuffer;
     SummonLife = Data->Value;
 }
@@ -7813,22 +7393,11 @@ void ReceiveTradeExit(const BYTE* ReceiveBuffer)
 
 void ReceivePing(const BYTE* ReceiveBuffer)
 {
-    // PROTO-11: a ping already dequeued when DeleteSocket() nulls SocketClient
-    // would dereference null (access violations are not caught by the
-    // std::exception guard). A late ping needs no reply, so just drop it.
-    if (SocketClient == nullptr)
-    {
-        return;
-    }
-
     SocketClient->ToGameServer()->SendPingResponse();
 }
 
-void ReceiveStorageGold(const BYTE* ReceiveBuffer, int Size)
+void ReceiveStorageGold(const BYTE* ReceiveBuffer)
 {
-    // N2-03: second length check beyond the dispatch gate.
-    if (Size < static_cast<int>(sizeof(PRECEIVE_STORAGE_GOLD)))
-        return;
     auto Data = (LPPRECEIVE_STORAGE_GOLD)ReceiveBuffer;
     if (Data->Result)
     {
@@ -7884,7 +7453,7 @@ void ReceivePartyResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceivePartyList(const BYTE* ReceiveBuffer, int Size)
+void ReceivePartyList(const BYTE* ReceiveBuffer)
 {
     auto Data = (LPPRECEIVE_PARTY_LISTS)ReceiveBuffer;
     if (Data->Count > MAX_PARTYS)
@@ -7892,21 +7461,9 @@ void ReceivePartyList(const BYTE* ReceiveBuffer, int Size)
         Data->Count = MAX_PARTYS;
     }
     int Offset = sizeof(PRECEIVE_PARTY_LISTS);
-    const int RecordSize = sizeof(PRECEIVE_PARTY_LIST);
     PartyNumber = Data->Count;
     for (int i = 0; i < Data->Count; i++)
     {
-        if (Offset + RecordSize > Size)
-        {
-            // Remaining entries are cleared below and the count is corrected so the UI
-            // does not read uninitialized Party slots for the truncated members.
-            g_ErrorReport.Write(L"ReceivePartyList: packet truncated at member %d/%u (size %d).\r\n",
-                                 i, Data->Count, Size);
-            PartyNumber = static_cast<BYTE>(i);
-            Data->Count = static_cast<BYTE>(i);
-            break;
-        }
-
         auto Data2 = (LPPRECEIVE_PARTY_LIST)(ReceiveBuffer + Offset);
         PARTY_t* p = &Party[i];
         CMultiLanguage::ConvertFromUtf8(p->Name, Data2->ID, MAX_USERNAME_SIZE);
@@ -7917,7 +7474,7 @@ void ReceivePartyList(const BYTE* ReceiveBuffer, int Size)
         p->y = Data2->y;
         p->currHP = Data2->currHP;
         p->maxHP = Data2->maxHP;
-        Offset += RecordSize;
+        Offset += sizeof(PRECEIVE_PARTY_LIST);
     }
 
     for (int i = Data->Count; i < MAX_PARTYS; i++)
@@ -7929,32 +7486,12 @@ void ReceivePartyList(const BYTE* ReceiveBuffer, int Size)
     g_ConsoleDebug->Write(MCD_RECEIVE, L"0x42 [ReceivePartyList(partynum : %d)]", Data->Count);
 }
 
-void ReceivePartyInfo(const BYTE* ReceiveBuffer, int Size)
+void ReceivePartyInfo(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(PRECEIVE_PARTY_INFOS)))
-    {
-        return;
-    }
-
     auto Data = (LPPRECEIVE_PARTY_INFOS)ReceiveBuffer;
-
-    // PROTO-6: Party only holds MAX_PARTYS entries; a Count above that used to
-    // write stepHP past the array. Match ReceivePartyList's clamp.
-    if (Data->Count > MAX_PARTYS)
-    {
-        g_ErrorReport.Write(L"ReceivePartyInfo: Count %d exceeds MAX_PARTYS %d; clamped.\r\n", Data->Count, MAX_PARTYS);
-        Data->Count = MAX_PARTYS;
-    }
-
     int Offset = sizeof(PRECEIVE_PARTY_INFOS);
     for (int i = 0; i < Data->Count; i++)
     {
-        // PROTO-6: stop on a truncated body instead of reading records OOB.
-        if (Offset + static_cast<int>(sizeof(PRECEIVE_PARTY_INFO)) > Size)
-        {
-            break;
-        }
-
         auto Data2 = (LPPRECEIVE_PARTY_INFO)(ReceiveBuffer + Offset);
         wchar_t stepHP = Data2->value & 0xf;
 
@@ -8000,8 +7537,6 @@ void ReceivePartyGetItem(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_GETITEMINFO_FOR_PARTY)ReceiveBuffer;
     int Key = ((int)(Data->KeyH) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
     CHARACTER* c = &CharactersClient[Index];
     if (Hero == c) return;
 
@@ -8031,17 +7566,9 @@ void ReceiveGuild(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
     GuildPlayerKey = ((int)(Data->KeyH) << 8) + Data->KeyL;
 
-    // PROTO-1: the requester can have left the viewport before this packet
-    // (normal during teleport races); don't read the name off a ghost slot.
-    const CHARACTER* guildRequester = FindCharacterByKey(GuildPlayerKey);
-    if (guildRequester == nullptr)
-    {
-        return;
-    }
-
     SEASON3B::CNewUICommonMessageBox* pMsgBox;
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CGuildRequestMsgBoxLayout), &pMsgBox);
-    pMsgBox->AddMsg(guildRequester->ID);
+    pMsgBox->AddMsg(CharactersClient[FindCharacterIndex(GuildPlayerKey)].ID);
     pMsgBox->AddMsg(I18N::Game::YouHaveReceivedAnOfferToJoinAGuild);
 }
 
@@ -8067,24 +7594,9 @@ void ReceiveGuildResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveGuildList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveGuildList(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(PRECEIVE_GUILD_LISTS)))
-    {
-        return;
-    }
-
     auto Data = (LPPRECEIVE_GUILD_LISTS)ReceiveBuffer;
-
-    // PROTO-2: GuildList holds MAX_GUILDS entries; a Count above that must be
-    // rejected instead of being written straight into g_nGuildMemberCount and
-    // used as the loop bound.
-    if (Data->Count > MAX_GUILDS)
-    {
-        g_ErrorReport.Write(L"ReceiveGuildList: Count %d exceeds MAX_GUILDS %d, packet dropped.\r\n", Data->Count, MAX_GUILDS);
-        return;
-    }
-
     int Offset = sizeof(PRECEIVE_GUILD_LISTS);
 
     g_nGuildMemberCount = Data->Count;
@@ -8098,14 +7610,6 @@ void ReceiveGuildList(const BYTE* ReceiveBuffer, int Size)
     g_pGuildInfoWindow->SetRivalGuildName(rivalGuildName);
     for (int i = 0; i < Data->Count; i++)
     {
-        // PROTO-2: every record must lie fully inside the packet; a short body
-        // truncates the list instead of reading past the end.
-        if (Offset + static_cast<int>(sizeof(PRECEIVE_GUILD_LIST)) > Size)
-        {
-            g_nGuildMemberCount = i;
-            break;
-        }
-
         auto Data2 = (LPPRECEIVE_GUILD_LIST)(ReceiveBuffer + Offset);
         GUILD_LIST_t* p = &GuildList[i];
         CMultiLanguage::ConvertFromUtf8(p->Name, Data2->ID, MAX_USERNAME_SIZE);
@@ -8173,8 +7677,6 @@ void ReceiveDeleteGuildViewport(const BYTE* ReceiveBuffer)
     auto Data = (LPPHEADER_DEFAULT_KEY)ReceiveBuffer;
     int Key = ((int)(Data->KeyH & 0x7f) << 8) + Data->KeyL;
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
     CHARACTER* c = &CharactersClient[Index];
 
     c->GuildStatus = -1;
@@ -8375,35 +7877,17 @@ void ReceiveGuildWarScore(const BYTE* ReceiveBuffer)
     GuildWarScore[1] = Data->Score2;
 }
 
-void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer, int Size)
+void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(PWHEADER_DEFAULT_WORD)))
-    {
-        return;
-    }
-
     auto Data = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
     for (int i = 0; i < Data->Value; ++i)
     {
-        // PROTO-6: each record must lie fully inside the packet.
-        if (Offset + static_cast<int>(sizeof(PRECEIVE_GUILD_ID)) > Size)
-        {
-            break;
-        }
-
         auto Data2 = (LPPRECEIVE_GUILD_ID)(ReceiveBuffer + Offset);
         int GuildKey = Data2->GuildKey;
         int Key = ((int)(Data2->KeyH & 0x7f) << 8) + Data2->KeyL;
-
-        // PROTO-1/6: a viewport race can drop the character before this packet;
-        // skip the record instead of writing guild state into a ghost slot.
-        CHARACTER* c = FindCharacterByKey(Key);
-        if (c == nullptr)
-        {
-            Offset += sizeof(PRECEIVE_GUILD_ID);
-            continue;
-        }
+        int Index = FindCharacterIndex(Key);
+        CHARACTER* c = &CharactersClient[Index];
 
         c->GuildStatus = Data2->GuildStatus;
         c->GuildType = Data2->GuildType;
@@ -8440,21 +7924,16 @@ void ReceiveGuildIDViewport(const BYTE* ReceiveBuffer, int Size)
     }
 }
 
-void ReceiveGuildInfo(const BYTE* ReceiveBuffer, int Size)
+void ReceiveGuildInfo(const BYTE* ReceiveBuffer)
 {
-    // C2-03 / N2-03: require the whole fixed struct; Mark[32] is its last
-    // field, so this guarantees SetGuildMark reads Mark[0..31] in bounds.
-    if (Size < static_cast<int>(sizeof(PPRECEIVE_GUILDINFO)))
-        return;
     auto Data = (LPPPRECEIVE_GUILDINFO)ReceiveBuffer;
     int Index = g_GuildCache.SetGuildMark(Data->GuildKey, Data->UnionName, Data->GuildName, Data->Mark);
 }
 
-// Guild rank appointment/change/release result
+// 길드직책을 임명/변경/해제 결과
 void ReceiveGuildAssign(const BYTE* ReceiveBuffer)
 {
-    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING];
-    wcscpy(szTemp, I18N::Game::InvalidGuildAssign);
+    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildAssign";
     auto pData = (LPPRECEIVE_GUILD_ASSIGN)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
@@ -8507,8 +7986,7 @@ void ReceiveGuildRelationShip(const BYTE* ReceiveBuffer)
 
 void ReceiveGuildRelationShipResult(const BYTE* ReceiveBuffer)
 {
-    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING];
-    wcscpy(szTemp, I18N::Game::InvalidGuildRelationShipResult);
+    wchar_t szTemp[MAX_GLOBAL_TEXT_STRING] = L"Invalid GuildRelationShipResult";
     auto pData = (LPPMSG_GUILD_RELATIONSHIP_RESULT)ReceiveBuffer;
     if (pData->byResult == 0x01)
     {
@@ -8620,66 +8098,34 @@ void ReceiveBanUnionGuildResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer, int Size)
+void ReceiveUnionViewportNotify(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_UNION_VIEWPORT_NOTIFY_COUNT)ReceiveBuffer;
     int Offset = sizeof(PMSG_UNION_VIEWPORT_NOTIFY_COUNT);
-    const int RecordSize = sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
     for (int i = 0; i < pData->byCount; ++i)
     {
-        if (Offset + RecordSize > Size)
-        {
-            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: packet truncated at record %d/%u (size %d).\r\n",
-                                i, pData->byCount, Size);
-            break;
-        }
-
         auto pData2 = (LPPMSG_UNION_VIEWPORT_NOTIFY)(ReceiveBuffer + Offset);
         int nGuildMarkIndex = g_GuildCache.GetGuildMarkIndex(pData2->nGuildKey);
-        if (nGuildMarkIndex == GuildConstants::INVALID_MARK_INDEX)
-        {
-            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: unknown guild key %u (no cached mark); skipping record.\r\n",
-                                static_cast<unsigned>(pData2->nGuildKey));
-            Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
-            continue;
-        }
-
         CMultiLanguage::ConvertFromUtf8(GuildMark[nGuildMarkIndex].UnionName, pData2->szUnionName, MAX_GUILDNAME);
 
         int nCharKey = MAKEWORD(pData2->byKeyL, pData2->byKeyH);
 
         int nCharIndex = FindCharacterIndex(nCharKey);
-        if (nCharIndex < 0 || nCharIndex >= MAX_CHARACTERS_CLIENT)
-        {
-            g_ErrorReport.Write(L"ReceiveUnionViewportNotify: unknown character key %u; skipping record.\r\n",
-                                static_cast<unsigned>(nCharKey));
-            Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
-            continue;
-        }
-
         CharactersClient[nCharIndex].GuildRelationShip = pData2->byGuildRelationShip;
 
         Offset += sizeof(PMSG_UNION_VIEWPORT_NOTIFY);
     }
 }
 
-void ReceiveUnionList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveUnionList(const BYTE* ReceiveBuffer)
 {
     auto pData = (LPPMSG_UNIONLIST_COUNT)ReceiveBuffer;
     g_pGuildInfoWindow->UnionGuildClear();
     if (pData->byResult == 1)
     {
         int Offset = sizeof(PMSG_UNIONLIST_COUNT);
-        const int RecordSize = sizeof(PMSG_UNIONLIST);
         for (int i = 0; i < pData->byCount; ++i)
         {
-            if (Offset + RecordSize > Size)
-            {
-                g_ErrorReport.Write(L"ReceiveUnionList: packet truncated at record %d/%u (size %d).\r\n",
-                                     i, pData->byCount, Size);
-                break;
-            }
-
             auto pData2 = (LPPMSG_UNIONLIST)(ReceiveBuffer + Offset);
 
             BYTE tmp[64];
@@ -8696,7 +8142,7 @@ void ReceiveUnionList(const BYTE* ReceiveBuffer, int Size)
 
             g_pGuildInfoWindow->AddUnionList(tmp, guildName, pData2->byMemberCount);
 
-            Offset += RecordSize;
+            Offset += sizeof(PMSG_UNIONLIST);
         }
     }
 }
@@ -9800,9 +9246,7 @@ void ReceiveCreateShopTitleViewport(const BYTE* ReceiveBuffer)
 
             if (pPlayer == Hero)
             {
-                // UI-2: bounded copy into the MAX_SHOPTITLE+1 global.
-                wcsncpy(g_szPersonalShopTitle, szShopTitle, MAX_SHOPTITLE);
-                g_szPersonalShopTitle[MAX_SHOPTITLE] = L'\0';
+                wcscpy(g_szPersonalShopTitle, szShopTitle);
                 g_pMyShopInventory->SetTitle(szShopTitle);
                 g_pMyShopInventory->ChangePersonal(true);
             }
@@ -9970,10 +9414,8 @@ void ReceivePersonalShopItemList(std::span<const BYTE> ReceiveBuffer)
 
         int key = MAKEWORD(Header->byIndexL, Header->byIndexH);
         int index = FindCharacterIndex(key);
-        if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
-        {
-            g_pPurchaseShopInventory->ChangeShopCharacterIndex(index);
-        }
+
+        g_pPurchaseShopInventory->ChangeShopCharacterIndex(index);
     }
     else
     {
@@ -10031,9 +9473,7 @@ void ReceiveRefreshItemList(std::span<const BYTE> ReceiveBuffer)
         g_bEnablePersonalShop = true;
         wchar_t shopName[MAX_SHOPTITLE + 1]{};
         CMultiLanguage::ConvertFromUtf8(shopName, Header->szShopTitle, MAX_SHOPTITLE);
-        // UI-2: bounded copy into the MAX_SHOPTITLE+1 global.
-        wcsncpy(g_szPersonalShopTitle, shopName, MAX_SHOPTITLE);
-        g_szPersonalShopTitle[MAX_SHOPTITLE] = L'\0';
+        wcscpy(g_szPersonalShopTitle, shopName);
         AddShopTitle(key, Hero, shopName);
         g_pMyShopInventory->ChangeTitle(shopName);
     }
@@ -10229,26 +9669,14 @@ void ReceiveDisplayEffectViewport(const BYTE* ReceiveBuffer)
 
 int g_iMaxLetterCount = 0;
 
-void ReceiveFriendList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveFriendList(const BYTE* ReceiveBuffer)
 {
-    if (Size < static_cast<int>(sizeof(FS_FRIEND_LIST_HEADER)))
-    {
-        return;
-    }
-
     g_pWindowMgr->Reset();
     auto Header = (LPFS_FRIEND_LIST_HEADER)ReceiveBuffer;
     int iMoveOffset = sizeof(FS_FRIEND_LIST_HEADER);
     wchar_t szName[MAX_USERNAME_SIZE + 1] = { 0 };
     for (int i = 0; i < Header->Count; ++i)
     {
-        // PROTO-3: each record must lie fully inside the packet; a short or
-        // count-inflated friend list stops here instead of reading OOB.
-        if (iMoveOffset + static_cast<int>(sizeof(FS_FRIEND_LIST_DATA)) > Size)
-        {
-            break;
-        }
-
         auto Data = (LPFS_FRIEND_LIST_DATA)(ReceiveBuffer + iMoveOffset);
         CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
         szName[MAX_USERNAME_SIZE] = '\0';
@@ -10259,7 +9687,7 @@ void ReceiveFriendList(const BYTE* ReceiveBuffer, int Size)
     g_pFriendList->Sort(1);
     g_pWindowMgr->RefreshMainWndPalList();
 
-    // Chat server alive
+    // 채팅 서버 살아남
     g_pWindowMgr->SetServerEnable(TRUE);
     if (g_iChatInputType == 0)
     {
@@ -10399,9 +9827,14 @@ void ReceiveFriendStateChange(const BYTE* ReceiveBuffer)
     if (dwChatRoomUIID > 0)
     {
         auto* pWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwChatRoomUIID);
-        if (pWindow != nullptr)
+        if (pWindow == nullptr);
+        else if (Data->Server >= 0xFD/* || Data->Server == 0xFB*/)
         {
-            pWindow->Lock(Data->Server >= 0xFD/* || Data->Server == 0xFB*/);
+            pWindow->Lock(TRUE);
+        }
+        else
+        {
+            pWindow->Lock(FALSE);
         }
     }
 }
@@ -10512,11 +9945,9 @@ void ReceiveLetterText(std::span<const BYTE> ReceiveBuffer, bool isCached)
 
     if (!isCached)
     {
-        // Cache it if you can :) PROTO-3: never copy more than the fixed
-        // FS_LETTER_TEXT record (header + 1000 bytes) into the heap object.
+        // Cache it if you can :)
         auto CopiedData = new FS_LETTER_TEXT();
-        const size_t copySize = std::min(ReceiveBuffer.size(), sizeof(FS_LETTER_TEXT));
-        memcpy(CopiedData, ReceiveBuffer.data(), copySize);
+        memcpy(CopiedData, ReceiveBuffer.data(), ReceiveBuffer.size());
         g_pLetterList->CacheLetterText(Data->Index, CopiedData);
     }
 
@@ -10543,13 +9974,9 @@ void ReceiveLetterText(std::span<const BYTE> ReceiveBuffer, bool isCached)
     }
 
     auto* pWindow = (CUILetterReadWindow*)g_pWindowMgr->GetWindow(dwUIID);
-    // PROTO-3: only the bytes actually present after the header may be read;
-    // reading a fixed 1000 past a truncated body is an OOB read.
-    auto body = ReceiveBuffer.subspan(sizeof(FS_LETTER_TEXT_HEADER));
-    const int bodyLength = std::min<int>(MAX_LETTERTEXT_LENGTH, static_cast<int>(body.size()));
-    const auto* pLetterText = reinterpret_cast<const char*>(body.data());
-    wchar_t letterText[MAX_LETTERTEXT_LENGTH + 1] = { };
-    CMultiLanguage::ConvertFromUtf8(letterText, pLetterText, bodyLength);
+    auto* pLetterText = (char*)ReceiveBuffer.subspan(sizeof(FS_LETTER_TEXT_HEADER)).data();
+    wchar_t letterText[1000 + 1] = { };
+    CMultiLanguage::ConvertFromUtf8(letterText, pLetterText, MAX_LETTERTEXT_LENGTH);
     letterText[MAX_LETTERTEXT_LENGTH] = '\0';
     pWindow->SetLetter(pLetterHead, letterText);
 
@@ -10935,8 +10362,6 @@ void ReceiveQuestPrize(const BYTE* ReceiveBuffer)
     WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     Key &= 0x7FFF;
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
 
     switch (Data->m_byReparation)
     {
@@ -11101,42 +10526,26 @@ void ReceiveQuestLimitResult(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveQuestByItemUseEP(const BYTE* ReceiveBuffer, int Size)
+void ReceiveQuestByItemUseEP(const BYTE* ReceiveBuffer)
 {
-    // Need the quest-list header plus exactly one DWORD payload entry.
-    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST) + (int)sizeof(DWORD))
-        return;
     DWORD* pdwQuestIndex = (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST));
     SendQuestSelection(*pdwQuestIndex, 0);
 }
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
 
-void ReceiveQuestByEtcEPList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveQuestByEtcEPList(const BYTE* ReceiveBuffer)
 {
-    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST))
-        return;
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
-    // Never read more DWORD entries than the packet actually carries.
-    int nIndexCount = (int)pData->m_wQuestCount;
-    int avail = ((int)Size - (int)sizeof(PMSG_NPCTALK_QUESTLIST)) / (int)sizeof(DWORD);
-    if (nIndexCount > avail)
-        nIndexCount = (avail > 0) ? avail : 0;
     g_QuestMng.SetQuestIndexByEtcList((DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)),
-        nIndexCount);
+        pData->m_wQuestCount);
 }
 
-void ReceiveQuestByNPCEPList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveQuestByNPCEPList(const BYTE* ReceiveBuffer)
 {
-    if (Size < (int)sizeof(PMSG_NPCTALK_QUESTLIST))
-        return;
     auto pData = (LPPMSG_NPCTALK_QUESTLIST)ReceiveBuffer;
-    int nIndexCount = (int)pData->m_wQuestCount;
-    int avail = ((int)Size - (int)sizeof(PMSG_NPCTALK_QUESTLIST)) / (int)sizeof(DWORD);
-    if (nIndexCount > avail)
-        nIndexCount = (avail > 0) ? avail : 0;
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE))
         g_pNPCDialogue->ProcessQuestListReceive(
-            (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), nIndexCount);
+            (DWORD*)(ReceiveBuffer + sizeof(PMSG_NPCTALK_QUESTLIST)), pData->m_wQuestCount);
 }
 
 void ReceiveQuestQSSelSentence(const BYTE* ReceiveBuffer)
@@ -11260,8 +10669,6 @@ void ReceiveOtherPlayerGensInfluenceViewport(const BYTE* ReceiveBuffer)
         auto Data2 = (LPPMSG_GENS_MEMBER_VIEWPORT_INFO)(ReceiveBuffer + nOffset);
         int nKey = ((int)(Data2->m_byNumberH & 0x7f) << 8) + Data2->m_byNumberL;
         int nIndex = FindCharacterIndex(nKey);
-        if (nIndex < 0 || nIndex >= MAX_CHARACTERS_CLIENT)
-            continue;
         CHARACTER* c = &CharactersClient[nIndex];
 
         c->m_byGensInfluence = Data2->m_byInfluence;
@@ -11494,8 +10901,6 @@ void ReceivePetAttack(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_PET_ATTACK)ReceiveBuffer;
     WORD Key = ((WORD)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     int  index = FindCharacterIndex(Key);
-    if (index < 0 || index >= MAX_CHARACTERS_CLIENT)
-        return;
     CHARACTER* sc = &CharactersClient[index];
 
     Key = ((WORD)(Data->m_byTKeyH) << 8) + Data->m_byTKeyL;
@@ -11763,12 +11168,6 @@ void ReceiveBCNPCRepair(const BYTE* ReceiveBuffer)
     {
         LPPMSG_NPCDBLIST pNPCInfo = nullptr;
         pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
-        if (!pNPCInfo)
-        {
-            g_ErrorReport.Write(L"ReceiveBCNPCRepair: GetNPCInfo null (npc %u idx %u); skipping.\r\n",
-                Data->iNpcNumber, Data->iNpcIndex);
-            break;
-        }
         pNPCInfo->iNpcHp = Data->iNpcHP;
         pNPCInfo->iNpcMaxHp = Data->iNpcMaxHP;
     }
@@ -11794,12 +11193,6 @@ void ReceiveBCNPCUpgrade(const BYTE* ReceiveBuffer)
     {
         LPPMSG_NPCDBLIST pNPCInfo = nullptr;
         pNPCInfo = g_SenatusInfo.GetNPCInfo(Data->iNpcNumber, Data->iNpcIndex);
-        if (!pNPCInfo)
-        {
-            g_ErrorReport.Write(L"ReceiveBCNPCUpgrade: GetNPCInfo null (npc %u idx %u); skipping.\r\n",
-                Data->iNpcNumber, Data->iNpcIndex);
-            break;
-        }
         if (Data->iNpcUpType == 1)
             pNPCInfo->iNpcDfLevel = Data->iNpcUpValue;
         else if (Data->iNpcUpType == 2)
@@ -11933,18 +11326,8 @@ void ReceiveHuntZoneEnter(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveBCNPCList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveBCNPCList(const BYTE* ReceiveBuffer)
 {
-    // N2-01: the fixed header (incl. btResult + iCount) must fully fit before we
-    // cast and read iCount; a short malicious packet must not read past the heap
-    // buffer.
-    if (Size < static_cast<int>(sizeof(PMSG_ANS_NPCDBLIST)))
-    {
-        g_ErrorReport.Write(L"ReceiveBCNPCList: size %d < header %d, packet dropped.\r\n",
-            Size, (int)sizeof(PMSG_ANS_NPCDBLIST));
-        return;
-    }
-
     auto Data = (LPPMSG_ANS_NPCDBLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_NPCDBLIST);
 
@@ -11955,22 +11338,8 @@ void ReceiveBCNPCList(const BYTE* ReceiveBuffer, int Size)
         break;
     case 1:
     {
-        // N2-01: iCount is a signed INT from the wire; reject negatives and cap
-        // the loop. Per-record length is re-checked below so a truncated body
-        // truncates the list instead of over-reading.
-        constexpr int kMaxNpcListRecords = 512;
-        if (Data->iCount < 0 || Data->iCount > kMaxNpcListRecords)
-        {
-            g_ErrorReport.Write(L"ReceiveBCNPCList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
-            break;
-        }
         for (int i = 0; i < Data->iCount; ++i)
         {
-            if (Offset + static_cast<int>(sizeof(PMSG_NPCDBLIST)) > Size)
-            {
-                g_ErrorReport.Write(L"ReceiveBCNPCList: record %d overruns packet, truncated.\r\n", i);
-                break;
-            }
             auto pNpcInfo = (LPPMSG_NPCDBLIST)(ReceiveBuffer + Offset);
             g_SenatusInfo.SetNPCInfo(pNpcInfo);
             Offset += sizeof(PMSG_NPCDBLIST);
@@ -11983,16 +11352,8 @@ void ReceiveBCNPCList(const BYTE* ReceiveBuffer, int Size)
     }
 }
 
-void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer)
 {
-    // N2-01: fixed header must fit before reading iCount; see ReceiveBCNPCList.
-    if (Size < static_cast<int>(sizeof(PMSG_ANS_CSREGGUILDLIST)))
-    {
-        g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: size %d < header %d, packet dropped.\r\n",
-            Size, (int)sizeof(PMSG_ANS_CSREGGUILDLIST));
-        return;
-    }
-
     auto Data = (LPPMSG_ANS_CSREGGUILDLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_CSREGGUILDLIST);
 
@@ -12004,19 +11365,8 @@ void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer, int Size)
     case 1:
     {
         g_pGuardWindow->ClearDeclareGuildList();
-        constexpr int kMaxDeclareGuildRecords = 64;
-        if (Data->iCount < 0 || Data->iCount > kMaxDeclareGuildRecords)
-        {
-            g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
-            break;
-        }
         for (int i = 0; i < Data->iCount; ++i)
         {
-            if (Offset + static_cast<int>(sizeof(PMSG_CSREGGUILDLIST)) > Size)
-            {
-                g_ErrorReport.Write(L"ReceiveBCDeclareGuildList: record %d overruns packet, truncated.\r\n", i);
-                break;
-            }
             auto pData2 = (LPPMSG_CSREGGUILDLIST)(ReceiveBuffer + Offset);
 
             // WTF - why not just use an int?
@@ -12039,16 +11389,8 @@ void ReceiveBCDeclareGuildList(const BYTE* ReceiveBuffer, int Size)
     }
 }
 
-void ReceiveBCGuildList(const BYTE* ReceiveBuffer, int Size)
+void ReceiveBCGuildList(const BYTE* ReceiveBuffer)
 {
-    // N2-01: fixed header must fit before reading iCount; see ReceiveBCNPCList.
-    if (Size < static_cast<int>(sizeof(PMSG_ANS_CSATTKGUILDLIST)))
-    {
-        g_ErrorReport.Write(L"ReceiveBCGuildList: size %d < header %d, packet dropped.\r\n",
-            Size, (int)sizeof(PMSG_ANS_CSATTKGUILDLIST));
-        return;
-    }
-
     auto Data = (LPPMSG_ANS_CSATTKGUILDLIST)ReceiveBuffer;
     int Offset = sizeof(PMSG_ANS_CSATTKGUILDLIST);
 
@@ -12060,19 +11402,8 @@ void ReceiveBCGuildList(const BYTE* ReceiveBuffer, int Size)
     case 1:
     {
         g_pGuardWindow->ClearGuildList();
-        constexpr int kMaxAttackGuildRecords = 64;
-        if (Data->iCount < 0 || Data->iCount > kMaxAttackGuildRecords)
-        {
-            g_ErrorReport.Write(L"ReceiveBCGuildList: iCount %d out of range, packet dropped.\r\n", Data->iCount);
-            break;
-        }
         for (int i = 0; i < Data->iCount; ++i)
         {
-            if (Offset + static_cast<int>(sizeof(PMSG_CSATTKGUILDLIST)) > Size)
-            {
-                g_ErrorReport.Write(L"ReceiveBCGuildList: record %d overruns packet, truncated.\r\n", i);
-                break;
-            }
             auto pData2 = (LPPMSG_CSATTKGUILDLIST)(ReceiveBuffer + Offset);
             wchar_t guildName[MAX_GUILDNAME + 1]{};
             CMultiLanguage::ConvertFromUtf8(guildName, pData2->szGuildName, MAX_GUILDNAME);
@@ -12103,12 +11434,8 @@ void ReceiveGateState(const BYTE* ReceiveBuffer)
         break;
 
     case 1:
-        // Only open the gate window when the Key resolved to a valid client
-        // character; DoInterfaceOpen leaves the global Key untouched otherwise.
-        if (npcGateSwitch::DoInterfaceOpen(Key))
-        {
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
-        }
+        npcGateSwitch::DoInterfaceOpen(Key);
+        g_pNewUISystem->Show(SEASON3B::INTERFACE_GATESWITCH);
         break;
 
     case 2:
@@ -12135,8 +11462,6 @@ void ReceiveGateCurrentState(const BYTE* ReceiveBuffer)
     auto Data = (LPPRECEIVE_GATE_CURRENT_STATE)ReceiveBuffer;
     int Key = ((int)(Data->m_byKeyH) << 8) + Data->m_byKeyL;
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -12161,10 +11486,6 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
 
     int iKey = ((int)(pData->m_byIndexH) << 8) + pData->m_byIndexL;
     int iIndex = FindCharacterIndex(iKey);
-    if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
-    {
-        return;
-    }
 
     CHARACTER* CrownSwitch = &CharactersClient[iIndex];
 
@@ -12203,10 +11524,6 @@ void ReceiveCrownSwitchState(const BYTE* ReceiveBuffer)
     {
         int iKey = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
         int iIndex = FindCharacterIndex(iKey);
-        if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
-        {
-            break;
-        }
         CHARACTER* pCha = &CharactersClient[iIndex];
         wchar_t strText[256];
 
@@ -12308,12 +11625,9 @@ void ReceiveCrownState(const BYTE* ReceiveBuffer)
 
         int Index = FindCharacterIndexByMonsterIndex(216);
 
-        if (Index >= 0 && Index < MAX_CHARACTERS_CLIENT)
-        {
-            OBJECT* o = &CharactersClient[Index].Object;
+        OBJECT* o = &CharactersClient[Index].Object;
 
-            g_CharacterRegisterBuff(o, eBuff_CastleCrown);
-        }
+        g_CharacterRegisterBuff(o, eBuff_CastleCrown);
     }
     break;
 
@@ -12323,12 +11637,9 @@ void ReceiveCrownState(const BYTE* ReceiveBuffer)
 
         int Index = FindCharacterIndexByMonsterIndex(216);
 
-        if (Index >= 0 && Index < MAX_CHARACTERS_CLIENT)
-        {
-            OBJECT* o = &CharactersClient[Index].Object;
+        OBJECT* o = &CharactersClient[Index].Object;
 
-            g_CharacterClearBuff(o);
-        }
+        g_CharacterClearBuff(o);
     }
     break;
 
@@ -12489,8 +11800,6 @@ void ReceiveBuildTime(const BYTE* ReceiveBuffer)
     auto pData = (LPPRECEIVE_MONSTER_BUILD_TIME)ReceiveBuffer;
     int Key = ((int)(pData->m_byKeyH) << 8) + pData->m_byKeyL;
     int Index = FindCharacterIndex(Key);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
-        return;
 
     CHARACTER* c = &CharactersClient[Index];
     OBJECT* o = &c->Object;
@@ -12616,15 +11925,7 @@ void ReceivePreviewPort(std::span<const BYTE> ReceiveBuffer)
 
             for (int j = 0; j < pData2->s_BuffCount; ++j)
             {
-                const auto buff = static_cast<eBuffState>(pData2->s_BuffEffectState[j]);
-
-                // PROTO-7: skip out-of-range buff bytes.
-                if (buff == eBuffNone || buff >= eBuff_Count)
-                {
-                    continue;
-                }
-
-                RegisterBuff(buff, o);
+                RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
             }
 
             c->PositionX = pData2->m_byPosX;
@@ -12652,15 +11953,7 @@ void ReceivePreviewPort(std::span<const BYTE> ReceiveBuffer)
 
             for (int j = 0; j < pData2->s_BuffCount; ++j)
             {
-                const auto buff = static_cast<eBuffState>(pData2->s_BuffEffectState[j]);
-
-                // PROTO-7: skip out-of-range buff bytes.
-                if (buff == eBuffNone || buff >= eBuff_Count)
-                {
-                    continue;
-                }
-
-                RegisterBuff(buff, o);
+                RegisterBuff(static_cast<eBuffState>(pData2->s_BuffEffectState[j]), o);
             }
 
             c->PositionX = pData2->m_byPosX;
@@ -12709,7 +12002,7 @@ void ReceiveGuildCommand(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer, int Size)
+void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer)
 {
     if (g_pSiegeWarfare->GetCurSiegeWarType() != TYPE_GUILD_COMMANDER)
         return;
@@ -12718,47 +12011,31 @@ void ReceiveGuildMemberLocation(const BYTE* ReceiveBuffer, int Size)
 
     auto pData = (LPPWHEADER_DEFAULT_WORD2)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD2);
-    const int RecordSize = sizeof(PRECEIVE_MEMBER_LOCATION);
 
     for (int i = 0; i < pData->Value; i++)
     {
-        if (Offset + RecordSize > Size)
-        {
-            g_ErrorReport.Write(L"ReceiveGuildMemberLocation: packet truncated at record %d/%u (size %d).\r\n",
-                                i, pData->Value, Size);
-            break;
-        }
-
         auto pData2 = (LPPRECEIVE_MEMBER_LOCATION)(ReceiveBuffer + Offset);
 
         g_pSiegeWarfare->SetGuildMemberLocation(0, pData2->m_byX, pData2->m_byY);
 
-        Offset += RecordSize;
+        Offset += sizeof(PRECEIVE_MEMBER_LOCATION);
     }
 }
 
-void ReceiveGuildNpcLocation(const BYTE* ReceiveBuffer, int Size)
+void ReceiveGuildNpcLocation(const BYTE* ReceiveBuffer)
 {
     if (g_pSiegeWarfare->GetCurSiegeWarType() != TYPE_GUILD_COMMANDER)
         return;
 
     auto pData = (LPPWHEADER_DEFAULT_WORD)ReceiveBuffer;
     int Offset = sizeof(PWHEADER_DEFAULT_WORD);
-    const int RecordSize = sizeof(PRECEIVE_NPC_LOCATION);
 
     for (int i = 0; i < pData->Value; i++)
     {
-        if (Offset + RecordSize > Size)
-        {
-            g_ErrorReport.Write(L"ReceiveGuildNpcLocation: packet truncated at record %d/%u (size %d).\r\n",
-                                i, pData->Value, Size);
-            break;
-        }
-
         auto pData2 = (LPPRECEIVE_NPC_LOCATION)(ReceiveBuffer + Offset);
         g_pSiegeWarfare->SetGuildMemberLocation(pData2->m_byType + 1, pData2->m_byX, pData2->m_byY);
 
-        Offset += RecordSize;
+        Offset += sizeof(PRECEIVE_NPC_LOCATION);
     }
 }
 
@@ -14072,17 +13349,8 @@ BOOL ReceiveStraightAttack(const BYTE* ReceiveBuffer, int Size, BOOL bEncrypted)
     TargetKey &= 0x7FFF;
     int Index = FindCharacterIndex(SourceKey);
     int TargetIndex = FindCharacterIndex(TargetKey);
-    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+    if (TargetIndex == MAX_CHARACTERS_CLIENT && AttackNumber != AT_SKILL_DARKSIDE && AttackNumber != AT_SKILL_DARKSIDE_STR)
         return (TRUE);
-
-    if (TargetIndex < 0 || TargetIndex >= MAX_CHARACTERS_CLIENT)
-    {
-        // A missing target is only tolerated for self-cast dark-side skills; they act on the caster.
-        if (AttackNumber != AT_SKILL_DARKSIDE && AttackNumber != AT_SKILL_DARKSIDE_STR)
-            return (TRUE);
-
-        TargetIndex = Index;
-    }
 
     AttackPlayer = Index;
     CHARACTER* sc = &CharactersClient[Index];
@@ -14144,9 +13412,6 @@ void ReceiveDarkside(const BYTE* ReceiveBuffer)
     }
 }
 
-// NET-01 / P0#10: running count of packets dropped by the dispatch-layer gate.
-static int g_DroppedShortPackets = 0;
-
 static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 {
     constexpr int MinimumC1PacketSize = 4;
@@ -14175,20 +13440,6 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 
         HeadCode = ReceiveBuffer[3];
     }
-
-    // NET-01 / P0#10 (89-01): centralised dispatch-layer minimum-length gate.
-    // Before entering the opcode switch -- and before any handler casts the
-    // buffer to a fixed struct -- enforce the minimum bytes the dispatcher itself
-    // needs to safely read SubCode/Value for this HeadCode. Short/illegal packets
-    // are dropped in full and counted; no handler runs. Runtime branch, not assert.
-    const int minimumDispatchBytes = PacketDispatchPolicy::MinimumDispatchBytes(bIsC1C3 != 0, HeadCode);
-    if (Size < minimumDispatchBytes)
-    {
-        ++g_DroppedShortPackets;
-        g_ErrorReport.Write(L"Rejected packet HeadCode 0x%02x: size %d < minimum %d (dispatch gate).\r\n",
-            HeadCode, Size, minimumDispatchBytes);
-        return;
-    }
     switch (HeadCode)
     {
     case 0xF1:
@@ -14204,14 +13455,6 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             switch (Data->Value)
             {
             case 0x20:
-                // PROTO-9: only honor a login success as the answer to a login
-                // we actually sent; a replayed packet during reconnect races
-                // must not re-arm the state (and CheckHack's keepalive timer).
-                if (CurrentProtocolState != REQUEST_LOG_IN)
-                {
-                    g_ErrorReport.Write(L"Ignored replayed 0xF1/0x01 login success in protocol state %d.\r\n", CurrentProtocolState);
-                    break;
-                }
                 CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
                 LogIn = 2;
                 CheckHack();
@@ -14220,12 +13463,6 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
                 CUIMng::Instance().PopUpMsgWin(RECEIVE_LOG_IN_FAIL_PASSWORD);
                 break;
             case 0x01:
-                // PROTO-9: same pre-state requirement as 0x20.
-                if (CurrentProtocolState != REQUEST_LOG_IN)
-                {
-                    g_ErrorReport.Write(L"Ignored replayed 0xF1/0x01 login success in protocol state %d.\r\n", CurrentProtocolState);
-                    break;
-                }
                 CurrentProtocolState = RECEIVE_LOG_IN_SUCCESS;
                 LogIn = 2;
                 CheckHack();
@@ -14381,13 +13618,13 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 
             break;
         case 0x07: //receive damage
-            ReceiveDamage(ReceiveBuffer, Size);
+            ReceiveDamage(ReceiveBuffer);
             break;
         case 0x08:
             ReceivePK(ReceiveBuffer);
             break;
         case 0x11:
-            ReceiveMagicList(ReceiveBuffer, Size);
+            ReceiveMagicList(ReceiveBuffer);
             break;
         case 0x13:
             // not really in use in OpenMU
@@ -14397,7 +13634,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceiveModifyItemExtended(received_span);
             break;
         case 0x20:
-            ReceiveSummonLife(ReceiveBuffer, Size);
+            ReceiveSummonLife(ReceiveBuffer);
             break;
         case 0x22:
             ReceiveWTTimeLeft(ReceiveBuffer);
@@ -14432,7 +13669,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             Receive_Master_LevelGetSkill(ReceiveBuffer);
             break;
         case 0x53:
-            Receive_Master_SetSkillList((PMSG_MASTER_SKILL_LIST_SEND*)ReceiveBuffer, Size);
+            Receive_Master_SetSkillList((PMSG_MASTER_SKILL_LIST_SEND*)ReceiveBuffer);
             break;
         }
         break;
@@ -14465,7 +13702,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     }
     case 0x00://chat
-        ReceiveChat(ReceiveBuffer, Size);
+        ReceiveChat(ReceiveBuffer);
         break;
     case 0x01://chat
         ReceiveChatKey(ReceiveBuffer);
@@ -14478,7 +13715,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     case 0x0B:
         AddDebugText(ReceiveBuffer, Size);
-        ReceiveEvent(ReceiveBuffer, Size);
+        ReceiveEvent(ReceiveBuffer);
         break;
     case 0x0C:
         //AddDebugText(ReceiveBuffer,Size);
@@ -14488,7 +13725,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveNotice(ReceiveBuffer);
         break;
     case 0x0f:
-        ReceiveWeather(ReceiveBuffer, Size);
+        ReceiveWeather(ReceiveBuffer);
         break;
     case PACKET_MOVE: //move character
         ReceiveMoveCharacter(received_span);
@@ -14502,11 +13739,11 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     case 0x13: //create monsters
         //AddDebugText(ReceiveBuffer,Size);
-        ReceiveCreateMonsterViewport(ReceiveBuffer, Size);
+        ReceiveCreateMonsterViewport(ReceiveBuffer);
         break;
     case 0x1F: //create monsters
         //AddDebugText(ReceiveBuffer,Size);
-        ReceiveCreateSummonViewport(ReceiveBuffer, Size);
+        ReceiveCreateSummonViewport(ReceiveBuffer);
         break;
     case 0x45: //create monsters
         //AddDebugText(ReceiveBuffer,Size);
@@ -14514,7 +13751,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     case 0x14: //delete characters & monsters
         //AddDebugText(ReceiveBuffer,Size);
-        ReceiveDeleteCharacterViewport(ReceiveBuffer, Size);
+        ReceiveDeleteCharacterViewport(ReceiveBuffer);
         break;
     case 0x20: //create item
         ReceiveCreateItemViewportExtended(received_span);
@@ -14523,7 +13760,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveCreateMoney(received_span);
         break;
     case 0x21://delete item
-        ReceiveDeleteItemViewport(ReceiveBuffer, Size);
+        ReceiveDeleteItemViewport(ReceiveBuffer);
         break;
     case 0x22://get item
         ReceiveGetItem(received_span);
@@ -14680,13 +13917,13 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceivePartyResult(ReceiveBuffer);
         break;
     case 0x42:
-        ReceivePartyList(ReceiveBuffer, Size);
+        ReceivePartyList(ReceiveBuffer);
         break;
     case 0x43:
         ReceivePartyLeave(ReceiveBuffer);
         break;
     case 0x44:
-        ReceivePartyInfo(ReceiveBuffer, Size);
+        ReceivePartyInfo(ReceiveBuffer);
         break;
     case 0x46:
         ReceiveSetAttribute(ReceiveBuffer);
@@ -14704,7 +13941,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveGuildResult(ReceiveBuffer);
         break;
     case 0x52:
-        ReceiveGuildList(ReceiveBuffer, Size);
+        ReceiveGuildList(ReceiveBuffer);
         break;
     case 0x53:
         ReceiveGuildLeave(ReceiveBuffer);
@@ -14719,10 +13956,10 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceiveCreateGuildResult(ReceiveBuffer);
         break;
     case 0x65:
-        ReceiveGuildIDViewport(ReceiveBuffer, Size);
+        ReceiveGuildIDViewport(ReceiveBuffer);
         break;
     case 0x66:
-        ReceiveGuildInfo(ReceiveBuffer, Size);
+        ReceiveGuildInfo(ReceiveBuffer);
         break;
     case 0x5D:
         ReceiveDeleteGuildViewport(ReceiveBuffer);
@@ -14763,10 +14000,10 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     }
     break;
     case 0x67:
-        ReceiveUnionViewportNotify(ReceiveBuffer, Size);
+        ReceiveUnionViewportNotify(ReceiveBuffer);
         break;
     case 0xE9:
-        ReceiveUnionList(ReceiveBuffer, Size);
+        ReceiveUnionList(ReceiveBuffer);
         break;
     case 0xBC:
     {
@@ -14790,7 +14027,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         ReceivePing(ReceiveBuffer);
         break;
     case 0x81:
-        ReceiveStorageGold(ReceiveBuffer, Size);
+        ReceiveStorageGold(ReceiveBuffer);
         break;
     case 0x82:
         ReceiveStorageExit(ReceiveBuffer);
@@ -14910,14 +14147,14 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             break;
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
         case 0x03:
-            ReceiveQuestByEtcEPList(ReceiveBuffer, Size);
+            ReceiveQuestByEtcEPList(ReceiveBuffer);
             break;
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
         case 0x04:
-            ReceiveQuestByItemUseEP(ReceiveBuffer, Size);
+            ReceiveQuestByItemUseEP(ReceiveBuffer);
 #endif	// ASG_ADD_TIME_LIMIT_QUEST
         case 0x0A:
-            ReceiveQuestByNPCEPList(ReceiveBuffer, Size);
+            ReceiveQuestByNPCEPList(ReceiveBuffer);
             break;
         case 0x0B:
             ReceiveQuestQSSelSentence(ReceiveBuffer);
@@ -15265,19 +14502,19 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
     break;
 
     case 0xB3:
-        ReceiveBCNPCList(ReceiveBuffer, Size);
+        ReceiveBCNPCList(ReceiveBuffer);
         break;
     case 0xB4:
-        ReceiveBCDeclareGuildList(ReceiveBuffer, Size);
+        ReceiveBCDeclareGuildList(ReceiveBuffer);
         break;
     case 0xB5:
-        ReceiveBCGuildList(ReceiveBuffer, Size);
+        ReceiveBCGuildList(ReceiveBuffer);
         break;
     case 0xB6:
-        ReceiveGuildMemberLocation(ReceiveBuffer, Size);
+        ReceiveGuildMemberLocation(ReceiveBuffer);
         break;
     case 0xBB:
-        ReceiveGuildNpcLocation(ReceiveBuffer, Size);
+        ReceiveGuildNpcLocation(ReceiveBuffer);
         break;
     case 0xB7:
     {
@@ -15420,7 +14657,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         break;
     }
     case 0xC0:
-        ReceiveFriendList(ReceiveBuffer, Size);
+        ReceiveFriendList(ReceiveBuffer);
         break;
     case 0xC1:
         ReceiveAddFriendResult(ReceiveBuffer);
@@ -15559,7 +14796,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceiveCursedTempleState(ReceiveBuffer);
             break;
         case 0x0a:
-            ReceiveChainMagic(ReceiveBuffer, Size);
+            ReceiveChainMagic(ReceiveBuffer);
             break;
         case 0x0B:
             ReceiveRegistedLuckyCoin(ReceiveBuffer);
@@ -15714,29 +14951,8 @@ void ProcessPacketCallback(const PacketInfo* Packet)
     {
         ProcessPacket(Packet->ReceiveBuffer.get(), Packet->Size);
     }
-    catch (const std::exception& e)
+    catch (const std::exception&)
     {
-        // XC-7: this is the core server-to-client data path. The old empty
-        // catch discarded handler exceptions silently, so client and server
-        // protocol states could diverge with no trace. Record the failure
-        // with the packet type/size; expected boundary-guard exceptions are
-        // at least observable then.
-        const BYTE* buffer = Packet->ReceiveBuffer.get();
-        BYTE packetType = 0;
-        if (buffer != nullptr && Packet->Size >= 3)
-        {
-            const bool bIsC1C3 = buffer[0] % 2 == 1;
-            if (bIsC1C3)
-            {
-                packetType = buffer[2];
-            }
-            else if (Packet->Size >= 4)
-            {
-                packetType = buffer[3];
-            }
-        }
-
-        g_ErrorReport.Write(L"[Packet] handler exception: %hs, packet type=0x%02X size=%d\r\n", e.what(), packetType, Packet->Size);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿// ChangeRingManager.cpp: implementation of the CChangeRingManager class.
+﻿  // ChangeRingManager.cpp: implementation of the CChangeRingManager class.
 //////////////////////////////////////////////////////////////////////
 
 // common
@@ -14,10 +14,9 @@
 #include <algorithm>
 #include <array>
 
-namespace
+    namespace
 {
-    template <typename Container, typename T>
-    constexpr bool Contains(const Container& container, const T& value)
+    template <typename Container, typename T> constexpr bool Contains(const Container& container, const T& value)
     {
         for (const auto& item : container)
         {
@@ -45,12 +44,8 @@ namespace
     };
 
     constexpr std::array<int, 6> kDarkCloakModels{
-        MODEL_HALLOWEEN,
-        MODEL_XMAS_EVENT_CHANGE_GIRL,
-        MODEL_GM_CHARACTER,
-        MODEL_XMAS2008_SNOWMAN,
-        MODEL_PANDA,
-        MODEL_SKELETON_CHANGED,
+        MODEL_HALLOWEEN, MODEL_XMAS_EVENT_CHANGE_GIRL, MODEL_GM_CHARACTER, MODEL_XMAS2008_SNOWMAN,
+        MODEL_PANDA,     MODEL_SKELETON_CHANGED,
     };
 
     constexpr std::array<short, 8> kChangeRingTypes{
@@ -74,13 +69,9 @@ namespace
     };
 }
 
-CChangeRingManager::CChangeRingManager()
-{
-}
+CChangeRingManager::CChangeRingManager() {}
 
-CChangeRingManager::~CChangeRingManager()
-{
-}
+CChangeRingManager::~CChangeRingManager() {}
 
 void CChangeRingManager::LoadItemModel()
 {

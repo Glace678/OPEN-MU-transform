@@ -15,10 +15,10 @@
 #define RENDER_CLOTH
 #define ADD_COLLISION
 
-#define RATE_SHORT_SHOULDER		( 0.6f)
+#define RATE_SHORT_SHOULDER (0.6f)
 
-float CPhysicsVertex::s_Gravity = 9.8f;
-float CPhysicsVertex::s_fMass = 0.0025f;
+float CPhysicsVertex::s_Gravity    = 9.8f;
+float CPhysicsVertex::s_fMass      = 0.0025f;
 float CPhysicsVertex::s_fInvOfMass = 400.0f;
 
 CPhysicsVertex::CPhysicsVertex()
@@ -26,9 +26,7 @@ CPhysicsVertex::CPhysicsVertex()
     Clear();
 }
 
-CPhysicsVertex::~CPhysicsVertex()
-{
-}
+CPhysicsVertex::~CPhysicsVertex() {}
 
 void CPhysicsVertex::Clear(void)
 {
@@ -42,7 +40,9 @@ void CPhysicsVertex::Clear(void)
 
 void CPhysicsVertex::Init(float fXPos, float fYPos, float fZPos, BOOL bFixed)
 {
-    m_vPos[0] = fXPos; m_vPos[1] = fYPos; m_vPos[2] = fZPos;
+    m_vPos[0] = fXPos;
+    m_vPos[1] = fYPos;
+    m_vPos[2] = fZPos;
     if (bFixed)
     {
         m_byState |= PVS_FIXEDPOS;
@@ -59,7 +59,7 @@ void CPhysicsVertex::UpdateForce(unsigned int iKey, DWORD dwType, float fWind)
 
     float fGravityRate = 1.0f;
 
-    int iTemp = std::min<int>(std::max<int>(0, 5 - iKey), 4);
+    int  iTemp = std::min<int>(std::max<int>(0, 5 - iKey), 4);
     auto fRand = (float)(iTemp == 0 ? 0 : iTemp + 2);
 #ifndef DISABLE_WIND
     for (int i = 0; i < 3; ++i)
@@ -73,39 +73,40 @@ void CPhysicsVertex::UpdateForce(unsigned int iKey, DWORD dwType, float fWind)
     }
 #endif
 
-    switch (PCT_MASK_ELASTIC & dwType)	// m_dwType
+    switch (PCT_MASK_ELASTIC & dwType)  // m_dwType
     {
-    case PCT_RUBBER:
-        m_vForce[2] += fRand * (fWind + 0.1f) * 1.f * FPS_ANIMATION_FACTOR;
-        break;
-    case PCT_RUBBER2:
-        m_vForce[2] += fRand * (fWind) * FPS_ANIMATION_FACTOR;
-        break;
+        case PCT_RUBBER:
+            m_vForce[2] += fRand * (fWind + 0.1f) * 1.f * FPS_ANIMATION_FACTOR;
+            break;
+        case PCT_RUBBER2:
+            m_vForce[2] += fRand * (fWind)*FPS_ANIMATION_FACTOR;
+            break;
     }
 
     switch (PCT_MASK_ELASTIC_EXT & dwType)
     {
-    case PCT_ELASTIC_HALLOWEEN:
-        m_vForce[0] += -(fRand * fWind * 0.5f * FPS_ANIMATION_FACTOR);
-        m_vForce[2] += fRand * (fWind + 0.1f) * 0.5f * (float)sinf(WorldTime * 0.003f) * 5.0f * FPS_ANIMATION_FACTOR;
-        m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 50.0f * FPS_ANIMATION_FACTOR;
-        break;
-    case PCT_ELASTIC_RAGE_L:
-        m_vForce[0] += -(fRand * fWind * 0.8f * FPS_ANIMATION_FACTOR);
-        break;
-    case PCT_ELASTIC_RAGE_R:
-        m_vForce[0] -= -(fRand * fWind * 0.8f * FPS_ANIMATION_FACTOR);
-        break;
+        case PCT_ELASTIC_HALLOWEEN:
+            m_vForce[0] += -(fRand * fWind * 0.5f * FPS_ANIMATION_FACTOR);
+            m_vForce[2] +=
+                fRand * (fWind + 0.1f) * 0.5f * (float)sinf(WorldTime * 0.003f) * 5.0f * FPS_ANIMATION_FACTOR;
+            m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 50.0f * FPS_ANIMATION_FACTOR;
+            break;
+        case PCT_ELASTIC_RAGE_L:
+            m_vForce[0] += -(fRand * fWind * 0.8f * FPS_ANIMATION_FACTOR);
+            break;
+        case PCT_ELASTIC_RAGE_R:
+            m_vForce[0] -= -(fRand * fWind * 0.8f * FPS_ANIMATION_FACTOR);
+            break;
     }
 
-    switch (PCT_MASK_WEIGHT & dwType)	// m_dwType
+    switch (PCT_MASK_WEIGHT & dwType)  // m_dwType
     {
-    case PCT_HEAVY:
-        m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 180.0f * FPS_ANIMATION_FACTOR;
-        break;
-    default:
-        m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 100.0f * FPS_ANIMATION_FACTOR;
-        break;
+        case PCT_HEAVY:
+            m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 180.0f * FPS_ANIMATION_FACTOR;
+            break;
+        default:
+            m_vForce[2] -= s_Gravity * fGravityRate * s_fMass * 100.0f * FPS_ANIMATION_FACTOR;
+            break;
     }
 }
 
@@ -156,7 +157,7 @@ BOOL CPhysicsVertex::KeepLength(CPhysicsVertex* pVertex2, float* pfLength)
     }
 
     vec3_t vDistance;
-    float fDistance = std::max<float>(0.001f, GetDistance(pVertex2, &vDistance));
+    float  fDistance = std::max<float>(0.001f, GetDistance(pVertex2, &vDistance));
 
     if (fDistance > pfLength[1] * 20.0f)
     {
@@ -180,7 +181,7 @@ BOOL CPhysicsVertex::KeepLength(CPhysicsVertex* pVertex2, float* pfLength)
 void CPhysicsVertex::AddOneTimeMoveToKeepLength(CPhysicsVertex* pVertex2, float fLength)
 {
     vec3_t vDistance;
-    float fDistance = std::max<float>(0.001f, GetDistance(pVertex2, &vDistance));
+    float  fDistance = std::max<float>(0.001f, GetDistance(pVertex2, &vDistance));
     VectorScale(vDistance, (fDistance - fLength) * 0.5f / fDistance, vDistance);
     VectorSubtract(m_vOneTimeMove, vDistance, m_vOneTimeMove);
     VectorAdd(pVertex2->m_vOneTimeMove, vDistance, pVertex2->m_vOneTimeMove);
@@ -204,7 +205,7 @@ void CPhysicsVertex::DoOneTimeMove(void)
         }
         VectorAdd(m_vPos, m_vOneTimeMove, m_vPos);
         m_vOneTimeMove[0] = m_vOneTimeMove[1] = m_vOneTimeMove[2] = 0.0f;
-        m_iCountOneTimeMove = 0;
+        m_iCountOneTimeMove                                       = 0;
     }
 }
 
@@ -219,9 +220,7 @@ CPhysicsCollision::CPhysicsCollision()
     Clear();
 }
 
-CPhysicsCollision::~CPhysicsCollision()
-{
-}
+CPhysicsCollision::~CPhysicsCollision() {}
 
 void CPhysicsCollision::Clear(void)
 {
@@ -247,18 +246,14 @@ void CPhysicsCollision::GetCenterBeforeTransform(vec3_t vCenter)
     memcpy(vCenter, m_vCenterBeforeTransform, sizeof(vec3_t));
 }
 
-void CPhysicsCollision::ProcessCollision(CPhysicsVertex* pVertex)
-{
-}
+void CPhysicsCollision::ProcessCollision(CPhysicsVertex* pVertex) {}
 
 CPhysicsColSphere::CPhysicsColSphere()
 {
     Clear();
 }
 
-CPhysicsColSphere::~CPhysicsColSphere()
-{
-}
+CPhysicsColSphere::~CPhysicsColSphere() {}
 
 void CPhysicsColSphere::Clear(void)
 {
@@ -271,8 +266,8 @@ void CPhysicsColSphere::Init(float fXPos, float fYPos, float fZPos, float fRadiu
     m_vCenterBeforeTransform[0] = fXPos;
     m_vCenterBeforeTransform[1] = fYPos;
     m_vCenterBeforeTransform[2] = fZPos;
-    m_fRadius = fRadius;
-    m_iBone = iBone;
+    m_fRadius                   = fRadius;
+    m_iBone                     = iBone;
 }
 
 void CPhysicsColSphere::ProcessCollision(CPhysicsVertex* pVertex)
@@ -299,40 +294,40 @@ CPhysicsCloth::CPhysicsCloth()
     Clear();
 }
 
-CPhysicsCloth::~CPhysicsCloth()
-{
-}
+CPhysicsCloth::~CPhysicsCloth() {}
 
 void CPhysicsCloth::Clear(void)
 {
-    m_oOwner = NULL;
-    m_iBone = 0;
+    m_oOwner    = NULL;
+    m_iBone     = 0;
     m_iTexFront = m_iTexBack = 0;
-    m_dwType = 0;
+    m_dwType                 = 0;
     m_fxPos = m_fyPos = m_fzPos = 0.0f;
     m_fWidth = m_fHeight = 1.0f;
     m_fUnitWidth = m_fUnitHeight = 1.0f;
 
-    m_iNumHor = 0;
-    m_iNumVer = 0;
+    m_iNumHor      = 0;
+    m_iNumVer      = 0;
     m_iNumVertices = 0;
-    m_pVertices = NULL;
-    m_iNumLink = 0;
-    m_pLink = NULL;
+    m_pVertices    = NULL;
+    m_iNumLink     = 0;
+    m_pLink        = NULL;
 
     m_byWindMax = 1;
     m_byWindMin = 1;
 }
 
-BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float fzPos, int iNumHor, int iNumVer, float fWidth, float fHeight, int iTexFront, int iTexBack, DWORD dwType)
+BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float fzPos, int iNumHor, int iNumVer,
+                           float fWidth, float fHeight, int iTexFront, int iTexBack, DWORD dwType)
 {
     assert(iNumHor > 1 && iNumVer > 1);
-    if (iNumHor <= 1 || iNumVer <= 1) return FALSE;
+    if (iNumHor <= 1 || iNumVer <= 1)
+        return FALSE;
 
-    m_oOwner = o;
-    m_iBone = iBone;
+    m_oOwner    = o;
+    m_iBone     = iBone;
     m_iTexFront = iTexFront;
-    m_iTexBack = iTexBack;
+    m_iTexBack  = iTexBack;
     m_dwType |= dwType;
     m_fxPos = fxPos;
     m_fyPos = fyPos;
@@ -350,19 +345,19 @@ BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float
         m_pLink = NULL;
     }
 
-    m_fWidth = fWidth;
-    m_fHeight = fHeight;
-    m_iNumHor = iNumHor;
-    m_iNumVer = iNumVer;
+    m_fWidth       = fWidth;
+    m_fHeight      = fHeight;
+    m_iNumHor      = iNumHor;
+    m_iNumVer      = iNumVer;
     m_iNumVertices = m_iNumHor * m_iNumVer;
-    m_pVertices = new CPhysicsVertex[m_iNumVertices];
+    m_pVertices    = new CPhysicsVertex[m_iNumVertices];
 
     m_iNumLink = 2 * ((m_iNumHor - 1) * m_iNumVer + m_iNumHor * (m_iNumVer - 1));
-    m_pLink = new St_PhysicsLink[m_iNumLink];
+    m_pLink    = new St_PhysicsLink[m_iNumLink];
 
-    m_fUnitWidth = m_fWidth / (float)(m_iNumHor - 1);
+    m_fUnitWidth  = m_fWidth / (float)(m_iNumHor - 1);
     m_fUnitHeight = m_fHeight / (float)(m_iNumVer - 1);
-    int iLink = 0;
+    int   iLink   = 0;
     float Matrix[3][4];
     AngleMatrix(m_oOwner->Angle, Matrix);
     if (m_oOwner->BoneTransform)
@@ -377,19 +372,19 @@ BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float
 
     for (int j = 0; j < m_iNumVer; ++j)
     {
-        float fWidth = m_fWidth;
-        float fUnitWidth = m_fUnitWidth;
+        float fWidth      = m_fWidth;
+        float fUnitWidth  = m_fUnitWidth;
         float fUnitHeight = m_fUnitHeight;
 
         switch (m_dwType & PCT_MASK_SHAPE_EXT)
         {
-        case PCT_SHORT_SHOULDER:
-            fWidth *= RATE_SHORT_SHOULDER + (1.0f - RATE_SHORT_SHOULDER) * (float)j / (float)(m_iNumVer - 1);
-            fUnitWidth = fWidth / (float)(m_iNumHor - 1);
-            break;
-        case PCT_CYLINDER:
-            bCylinder = true;
-            break;
+            case PCT_SHORT_SHOULDER:
+                fWidth *= RATE_SHORT_SHOULDER + (1.0f - RATE_SHORT_SHOULDER) * (float)j / (float)(m_iNumVer - 1);
+                fUnitWidth = fWidth / (float)(m_iNumHor - 1);
+                break;
+            case PCT_CYLINDER:
+                bCylinder = true;
+                break;
         }
 
         for (int i = 0; i < m_iNumHor; ++i)
@@ -413,15 +408,14 @@ BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float
             }
             switch (PCT_MASK_SHAPE & m_dwType)
             {
-            case PCT_CURVED:
-            {
-                float fMove = 2.0f * (float)fabs((float)i / (float)(m_iNumHor - 1) - 0.5f);
-                vPos[1] -= 10.0f * fMove * fMove;
-            }
-            break;
-            case PCT_STICKED:
-                vPos[1] = 0.0f;
+                case PCT_CURVED: {
+                    float fMove = 2.0f * (float)fabs((float)i / (float)(m_iNumHor - 1) - 0.5f);
+                    vPos[1] -= 10.0f * fMove * fMove;
+                }
                 break;
+                case PCT_STICKED:
+                    vPos[1] = 0.0f;
+                    break;
             }
             NotifyVertexPos(iVertex, vPos);
 
@@ -437,16 +431,16 @@ BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float
             m_pVertices[iVertex].Init(vPos2[0], vPos2[1], vPos2[2]);
         }
     }
-    BYTE byVerLinkStyle = 0;
+    BYTE byVerLinkStyle   = 0;
     BYTE byCrossLinkStyle = 0;
     switch (PCT_MASK_ELASTIC & m_dwType)
     {
-    case PCT_RUBBER:
-        break;
-    default:
-        byVerLinkStyle |= PLS_STRICTDISTANCE;
-        byCrossLinkStyle |= PLS_LOOSEDISTANCE;
-        break;
+        case PCT_RUBBER:
+            break;
+        default:
+            byVerLinkStyle |= PLS_STRICTDISTANCE;
+            byCrossLinkStyle |= PLS_LOOSEDISTANCE;
+            break;
     }
 
     for (int j = 0; j < m_iNumVer; ++j)
@@ -454,7 +448,7 @@ BOOL CPhysicsCloth::Create(OBJECT* o, int iBone, float fxPos, float fyPos, float
         for (int i = 0; i < m_iNumHor; ++i)
         {
             vec3_t vTemp;
-            int iVertex = m_iNumHor * j + i;
+            int    iVertex = m_iNumHor * j + i;
             if (j < m_iNumVer - 1)
             {
                 float fDist = m_pVertices[iVertex].GetDistance(&m_pVertices[iVertex + m_iNumHor], &vTemp);
@@ -505,26 +499,26 @@ void CPhysicsCloth::SetFixedVertices(float Matrix[3][4])
     bool bCylinder = false;
     for (int iVertex = 0; iVertex < m_iNumHor; ++iVertex)
     {
-        float fWidth = m_fWidth;
+        float fWidth     = m_fWidth;
         float fUnitWidth = m_fUnitWidth;
         switch (PCT_MASK_SHAPE_EXT & m_dwType)
         {
-        case PCT_SHORT_SHOULDER:
-            fWidth *= RATE_SHORT_SHOULDER;
-            fUnitWidth = fWidth / (float)(m_iNumHor - 1);
-            break;
-        case PCT_CYLINDER:
-            bCylinder = true;
-            break;
+            case PCT_SHORT_SHOULDER:
+                fWidth *= RATE_SHORT_SHOULDER;
+                fUnitWidth = fWidth / (float)(m_iNumHor - 1);
+                break;
+            case PCT_CYLINDER:
+                bCylinder = true;
+                break;
         }
 
-        vec3_t vPos = { (fUnitWidth * (float)iVertex) - 0.5f * fWidth, 10.0f, 0.0f };
+        vec3_t vPos = {(fUnitWidth * (float)iVertex) - 0.5f * fWidth, 10.0f, 0.0f};
 
         vPos[0] += m_fxPos;
         if (bCylinder)
         {
             float fPosY = sinf((float)iVertex / (float)(m_iNumHor - 1) * Q_PI) * 130.0f;
-            vPos[1] = fPosY - 110.0f;
+            vPos[1]     = fPosY - 110.0f;
         }
         else
         {
@@ -534,18 +528,18 @@ void CPhysicsCloth::SetFixedVertices(float Matrix[3][4])
 
         switch (PCT_MASK_SHAPE_EXT2 & m_dwType)
         {
-        case PCT_SHAPE_HALLOWEEN:
-            vPos[0] += 5.f;
-            vPos[1] += 10.f;
-            break;
+            case PCT_SHAPE_HALLOWEEN:
+                vPos[0] += 5.f;
+                vPos[1] += 10.f;
+                break;
         }
 
         switch (PCT_MASK_SHAPE & m_dwType)
         {
-        case PCT_CURVED:
-            float fMove = 2.0f * (float)fabs((float)iVertex / (float)(m_iNumHor - 1) - 0.5f);
-            vPos[1] -= 10.0f * fMove * fMove;
-            break;
+            case PCT_CURVED:
+                float fMove = 2.0f * (float)fabs((float)iVertex / (float)(m_iNumHor - 1) - 0.5f);
+                vPos[1] -= 10.0f * fMove * fMove;
+                break;
         }
 
         vec3_t vTemp;
@@ -560,14 +554,15 @@ void CPhysicsCloth::SetFixedVertices(float Matrix[3][4])
     }
 }
 
-void CPhysicsCloth::SetLink(int iLink, int iVertex1, int iVertex2, float fDistanceSmall, float fDistanceLarge, BYTE byStyle)
+void CPhysicsCloth::SetLink(int iLink, int iVertex1, int iVertex2, float fDistanceSmall, float fDistanceLarge,
+                            BYTE byStyle)
 {
-    auto& link = m_pLink[iLink];
+    auto& link          = m_pLink[iLink];
     link.m_nVertices[0] = iVertex1;
     link.m_nVertices[1] = iVertex2;
     link.m_fDistance[0] = fDistanceSmall;
     link.m_fDistance[1] = fDistanceLarge;
-    link.m_byStyle = byStyle;
+    link.m_byStyle      = byStyle;
 }
 
 BOOL CPhysicsCloth::Move2(float fTime, int iCount)
@@ -587,21 +582,21 @@ BOOL CPhysicsCloth::Move(float fTime)
 {
     switch (PCT_MASK_ELASTIC & m_dwType)
     {
-    case PCT_RUBBER2:
-        m_fWind = ((rand() % m_byWindMax + m_byWindMin) / 100.f);
-        break;
-    default:
-        if (gMapManager.WorldActive == 55)
-            m_fWind = (float)(rand() % 40 + 10) / 50.0f;
-        else
-            m_fWind = CPhysicsManager::s_fWind;
-        break;
+        case PCT_RUBBER2:
+            m_fWind = ((rand() % m_byWindMax + m_byWindMin) / 100.f);
+            break;
+        default:
+            if (gMapManager.WorldActive == 55)
+                m_fWind = (float)(rand() % 40 + 10) / 50.0f;
+            else
+                m_fWind = CPhysicsManager::s_fWind;
+            break;
     }
     switch (PCT_MASK_SHAPE_EXT & m_dwType)
     {
-    case PCT_CYLINDER:
-        m_fWind = (float)(rand() % 10 + 25) / 50.0f;
-        break;
+        case PCT_CYLINDER:
+            m_fWind = (float)(rand() % 10 + 25) / 50.0f;
+            break;
     }
 
     if (m_oOwner == NULL)
@@ -633,7 +628,9 @@ void CPhysicsCloth::InitForces(void)
 
     for (int iVertex = 0; iVertex < m_iNumVertices; ++iVertex)
     {
-        m_pVertices[iVertex].UpdateForce(abs(iSeed % m_iNumHor - iVertex % m_iNumHor) + abs(iSeed / m_iNumHor - iVertex / m_iNumHor), m_dwType, m_fWind);
+        m_pVertices[iVertex].UpdateForce(abs(iSeed % m_iNumHor - iVertex % m_iNumHor) +
+                                             abs(iSeed / m_iNumHor - iVertex / m_iNumHor),
+                                         m_dwType, m_fWind);
     }
 }
 
@@ -648,8 +645,8 @@ void CPhysicsCloth::MoveVertices(float fTime)
         {
             CPhysicsVertex* pVertex1 = &m_pVertices[pLink->m_nVertices[0]];
             CPhysicsVertex* pVertex2 = &m_pVertices[pLink->m_nVertices[1]];
-            vec3_t vDistance;
-            float fDistance = std::max<float>(0.001f, pVertex1->GetDistance(pVertex2, &vDistance));
+            vec3_t          vDistance;
+            float           fDistance = std::max<float>(0.001f, pVertex1->GetDistance(pVertex2, &vDistance));
             if (fDistance > pLink->m_fDistance[1] + 0.01f)
             {
                 vec3_t vForce;
@@ -663,22 +660,21 @@ void CPhysicsCloth::MoveVertices(float fTime)
                     }
                     switch (PCT_MASK_ELASTIC & m_dwType)
                     {
-                    case PCT_RUBBER:
-                        vForce[i] *= 3.0f;
-                        break;
+                        case PCT_RUBBER:
+                            vForce[i] *= 3.0f;
+                            break;
                     }
 
                     switch (PCT_MASK_ELASTIC_EXT & m_dwType)
                     {
-                    case PCT_ELASTIC_HALLOWEEN:
-                        vForce[i] *= 2.0f;
+                        case PCT_ELASTIC_HALLOWEEN:
+                            vForce[i] *= 2.0f;
+                            break;
+                        case PCT_ELASTIC_RAGE_L:
+                        case PCT_ELASTIC_RAGE_R: {
+                            vForce[i] *= 1.0f;
+                        }
                         break;
-                    case PCT_ELASTIC_RAGE_L:
-                    case PCT_ELASTIC_RAGE_R:
-                    {
-                        vForce[i] *= 1.0f;
-                    }
-                    break;
                     }
                 }
                 pVertex1->AddToForce(-vForce[0], -vForce[1], -vForce[2]);
@@ -741,8 +737,7 @@ BOOL CPhysicsCloth::PreventFromStretching(void)
     for (int iLink = 0; iLink < m_iNumLink; ++iLink)
     {
         St_PhysicsLink* pLink = &m_pLink[iLink];
-        if (pLink->m_nVertices[1] >= m_iNumHor &&
-            (pLink->m_byStyle & PLS_STRICTDISTANCE))
+        if (pLink->m_nVertices[1] >= m_iNumHor && (pLink->m_byStyle & PLS_STRICTDISTANCE))
         {
             CPhysicsVertex* pVertex1 = &m_pVertices[pLink->m_nVertices[0]];
             CPhysicsVertex* pVertex2 = &m_pVertices[pLink->m_nVertices[1]];
@@ -765,23 +760,23 @@ void CPhysicsCloth::Render(vec3_t* pvColor, int iLevel)
     {
         for (int i = 0; i < m_iNumHor; ++i)
         {
-            int iVertex = m_iNumHor * j + i;
-            vec3_t* pvPos = &pvRenderPos[iVertex];
+            int     iVertex = m_iNumHor * j + i;
+            vec3_t* pvPos   = &pvRenderPos[iVertex];
             m_pVertices[iVertex].GetPosition(pvPos);
         }
     }
 
     switch (PCT_MASK_DRAW & m_dwType)
     {
-    case PCT_MASK_BLIT:
-        DisableAlphaBlend();
-        break;
-    case PCT_MASK_ALPHA:
-        EnableAlphaTest();
-        break;
-    case PCT_MASK_BLEND:
-        EnableAlphaBlend();
-        break;
+        case PCT_MASK_BLIT:
+            DisableAlphaBlend();
+            break;
+        case PCT_MASK_ALPHA:
+            EnableAlphaTest();
+            break;
+        case PCT_MASK_BLEND:
+            EnableAlphaBlend();
+            break;
     }
 
     vec3_t vFaceColor;
@@ -802,13 +797,13 @@ void CPhysicsCloth::Render(vec3_t* pvColor, int iLevel)
         float  Lum2;
         vec3_t Light;
         int    iOffset = 0;
-        float  fScale = 0.f;
+        float  fScale  = 0.f;
         for (int i = 0; i < m_iNumHor; i++)
         {
             for (int j = 0; j < m_iNumVer; j++)
             {
                 fScale = i * 0.2f + 0.4f;
-                Lum2 = Lum * (m_iNumHor - i) / 5.f;
+                Lum2   = Lum * (m_iNumHor - i) / 5.f;
 
                 Vector(Lum2, Lum2, Lum2, Light);
                 CreateSprite(BITMAP_LIGHT, pvRenderPos[iOffset], fScale, Light, NULL);
@@ -834,17 +829,17 @@ void CPhysicsCloth::Render(vec3_t* pvColor, int iLevel)
 
 void CPhysicsCloth::RenderFace(BOOL bFront, int iTexture, vec3_t* pvRenderPos, const float* color)
 {
-    BindTexture(iTexture);	//BITMAP_ROBE
+    BindTexture(iTexture);  //BITMAP_ROBE
 
     // Cloth vertices are rebuilt by physics simulation every frame, so IR:: (CPU submit
     // per frame) is the right tool here — no VBO needed. Color is threaded through
     // explicitly (set once, right after Begin()) since the legacy path relies on ambient
     // glColor state that IR:: doesn't share.
-    auto EmitVertex = [&](int xVertex, int yVertex)
-    {
-        int iVertex = m_iNumHor * yVertex + xVertex;
-        vec3_t* pvPos = &pvRenderPos[iVertex];
-        IR::TexCoord2f((float)xVertex / (float)(m_iNumHor - 1), std::min<float>(0.99f, (float)yVertex / (float)(m_iNumVer - 1)));
+    auto EmitVertex = [&](int xVertex, int yVertex) {
+        int     iVertex = m_iNumHor * yVertex + xVertex;
+        vec3_t* pvPos   = &pvRenderPos[iVertex];
+        IR::TexCoord2f((float)xVertex / (float)(m_iNumHor - 1),
+                       std::min<float>(0.99f, (float)yVertex / (float)(m_iNumVer - 1)));
         IR::Vertex3f((*pvPos)[0], (*pvPos)[1], (*pvPos)[2]);
     };
 
@@ -913,9 +908,7 @@ void CPhysicsCloth::ProcessCollision(void)
 #endif
 }
 
-CPhysicsClothMesh::CPhysicsClothMesh()
-{
-}
+CPhysicsClothMesh::CPhysicsClothMesh() {}
 
 CPhysicsClothMesh::~CPhysicsClothMesh()
 {
@@ -932,12 +925,12 @@ extern float BoneScale;
 BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, DWORD dwType, int iBMDType)
 {
     m_oOwner = o;
-    m_iMesh = iMesh;
-    m_iBone = iBone;
+    m_iMesh  = iMesh;
+    m_iBone  = iBone;
     m_dwType |= dwType;
 
     m_iBMDType = (iBMDType == -1) ? m_oOwner->Type : iBMDType;
-    BMD* b = &Models[m_iBMDType];
+    BMD* b     = &Models[m_iBMDType];
     assert(iMesh < b->NumMeshs);
     Mesh_t* pMesh = &b->Meshs[m_iMesh];
 
@@ -954,31 +947,31 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, DWORD dwType, in
     }
 
     m_iNumVertices = pMesh->NumVertices;
-    m_pVertices = new CPhysicsVertex[m_iNumVertices];
+    m_pVertices    = new CPhysicsVertex[m_iNumVertices];
 
     m_iNumLink = pMesh->NumTriangles * 3 * 2;
-    m_pLink = new St_PhysicsLink[m_iNumLink];
+    m_pLink    = new St_PhysicsLink[m_iNumLink];
 
-    float(*BoneMatrix)[3][4] = m_oOwner->BoneTransform;
+    float (*BoneMatrix)[3][4] = m_oOwner->BoneTransform;
 
-    b->EnsureCpuVertices(m_iMesh); // DXP-20 inc4: creation-time full-mesh read, not a per-frame consumer
+    b->EnsureCpuVertices(m_iMesh);  // DXP-20 inc4: creation-time full-mesh read, not a per-frame consumer
 
     for (int iVertex = 0; iVertex < m_iNumVertices; ++iVertex)
     {
-        Vertex_t* v = &pMesh->Vertices[iVertex];
-        float* vPos = VertexTransform[m_iMesh][iVertex];
+        Vertex_t* v    = &pMesh->Vertices[iVertex];
+        float*    vPos = VertexTransform[m_iMesh][iVertex];
         m_pVertices[iVertex].Init(vPos[0], vPos[1], vPos[2], (v->Node == m_iBone));
     }
 
-    int iLink = 0;
+    int    iLink = 0;
     vec3_t vTemp;
     for (int iTri = 0; iTri < pMesh->NumTriangles; iTri++)
     {
         Triangle_t* tp = &pMesh->Triangles[iTri];
         for (int i = 0; i < 3; ++i)
         {
-            int iV1 = tp->VertexIndex[i];
-            int iV2 = tp->VertexIndex[(i + 1) % 3];
+            int   iV1   = tp->VertexIndex[i];
+            int   iV2   = tp->VertexIndex[(i + 1) % 3];
             float fDist = m_pVertices[iV1].GetDistance(&m_pVertices[iV2], &vTemp);
 
             BYTE byLinkType = PLS_STRICTDISTANCE;
@@ -993,7 +986,7 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, DWORD dwType, in
 
             SetLink(iLink++, iV1, iV2, fDist * 0.5f, fDist, PLS_SPRING | byLinkType);
 
-            int iV3 = tp->VertexIndex[(i + 2) % 3];
+            int iV3    = tp->VertexIndex[(i + 2) % 3];
             int iMatch = FindMatchVertex(pMesh, iV1, iV2, iV3);
             if (iMatch > 0)
             {
@@ -1010,14 +1003,17 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, DWORD dwType, in
     return (TRUE);
 }
 
-BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, float fyPos, float fzPos, int iNumHor, int iNumVer, float fWidth, float fHeight, int iTexFront, int TexBack, DWORD dwType, int iBMDType)
+BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, float fyPos, float fzPos, int iNumHor,
+                               int iNumVer, float fWidth, float fHeight, int iTexFront, int TexBack, DWORD dwType,
+                               int iBMDType)
 {
     m_iBMDType = (iBMDType == -1) ? m_oOwner->Type : iBMDType;
 
     m_iMesh = iMesh;
 
     m_dwType |= PCT_OPT_MESHPROG;
-    if (!CPhysicsCloth::Create(o, iBone, fxPos, fyPos, fzPos, iNumHor, iNumVer, fWidth, fHeight, iTexFront, TexBack, dwType))
+    if (!CPhysicsCloth::Create(o, iBone, fxPos, fyPos, fzPos, iNumHor, iNumVer, fWidth, fHeight, iTexFront, TexBack,
+                               dwType))
     {
         return (FALSE);
     }
@@ -1029,14 +1025,14 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, flo
     for (int j = 0; j < pMesh->NumTriangles; j++)
     {
         int iRight = j % 2;
-        int xQuad = (j / 2) % (m_iNumHor - 1);
-        int yQuad = (j / 2) / (m_iNumHor - 1);
+        int xQuad  = (j / 2) % (m_iNumHor - 1);
+        int yQuad  = (j / 2) / (m_iNumHor - 1);
 
         Triangle_t* tp = &pMesh->Triangles[j];
-        int x;
-        int y;
-        int xDim[6] = { 0, 1, 0, 1, 1, 0 };
-        int yDim[6] = { 0, 0, 1, 0, 1, 1 };
+        int         x;
+        int         y;
+        int         xDim[6] = {0, 1, 0, 1, 1, 0};
+        int         yDim[6] = {0, 0, 1, 0, 1, 1};
         for (int i = 0; i < 3; ++i)
         {
             x = xDim[iRight * 3 + i] + xQuad;
@@ -1055,8 +1051,8 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, flo
             tp->TexCoordIndex[i] = tp->VertexIndex[i];
 
             TexCoord_t* texp = &pMesh->TexCoords[tp->TexCoordIndex[i]];
-            texp->TexCoordU = (float)x / (float)(m_iNumHor - 1);
-            texp->TexCoordV = (float)y / (float)(m_iNumVer - 1);
+            texp->TexCoordU  = (float)x / (float)(m_iNumHor - 1);
+            texp->TexCoordV  = (float)y / (float)(m_iNumVer - 1);
         }
     }
 
@@ -1104,7 +1100,7 @@ void CPhysicsClothMesh::SetFixedVertices(float Matrix[3][4])
         return;
     }
 
-    BMD* b = &Models[m_iBMDType];
+    BMD*    b     = &Models[m_iBMDType];
     Mesh_t* pMesh = &b->Meshs[m_iMesh];
 
     // DXP-20 inc4: the only per-frame skinned-data read on the cloth path -- touches just the
@@ -1127,10 +1123,10 @@ void CPhysicsClothMesh::NotifyVertexPos(int iVertex, vec3_t vPos)
 {
     if (m_dwType & PCT_OPT_MESHPROG)
     {
-        BMD* b = &Models[m_iBMDType];
+        BMD*    b     = &Models[m_iBMDType];
         Mesh_t* pMesh = &b->Meshs[m_iMesh];
 
-        Vertex_t* v = &pMesh->Vertices[iVertex];
+        Vertex_t* v    = &pMesh->Vertices[iVertex];
         v->Position[0] = vPos[2];
         v->Position[1] = -vPos[1];
         v->Position[2] = vPos[0];
@@ -1176,8 +1172,8 @@ void CPhysicsClothMesh::Render(vec3_t* pvColor, int iLevel)
     Models[m_iBMDType].MarkCpuVerticesExternallyWritten(m_iMesh);
 }
 
-float CPhysicsManager::s_fWind = 0.0f;
-vec3_t CPhysicsManager::s_vWind = { 0.0f, 0.0f, 0.0f };
+float  CPhysicsManager::s_fWind = 0.0f;
+vec3_t CPhysicsManager::s_vWind = {0.0f, 0.0f, 0.0f};
 
 CPhysicsManager::CPhysicsManager()
 {
@@ -1189,9 +1185,7 @@ CPhysicsManager::~CPhysicsManager()
     RemoveAll();
 }
 
-void CPhysicsManager::Clear(void)
-{
-}
+void CPhysicsManager::Clear(void) {}
 
 void CPhysicsManager::Move(float fTime)
 {

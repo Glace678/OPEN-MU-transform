@@ -2,11 +2,11 @@
 //
 //  npcGateSwitch.h
 //
-//  Gate switch handling
+//  성문 스위치 처리
 //
-//  Date : 2004/12/09
+//  날  짜 : 2004/12/09
 //
-//  Author : Cho Kyu-ha.
+//  작성자 : 조규하.
 //
 //////////////////////////////////////////////////////////////////////////
 #ifndef __NPC_GATE_SWITCH_H__
@@ -16,20 +16,20 @@
 //  INCLUDE.
 //////////////////////////////////////////////////////////////////////////
 
-namespace   npcGateSwitch
+namespace npcGateSwitch
 {
-    //////////////////////////////////////////////////////////////////////////
-    //  FUNCTION.
-    //////////////////////////////////////////////////////////////////////////
-    void    GateOpen(CHARACTER* c, OBJECT* o);
-    void    GateClose(CHARACTER* c, OBJECT* o);
-    bool    DoInterfaceOpen(int Key);
-    void    ProcessState(int Key, BYTE GateOnOff, BYTE State);
+//////////////////////////////////////////////////////////////////////////
+//  FUNCTION.
+//////////////////////////////////////////////////////////////////////////
+void GateOpen(CHARACTER* c, OBJECT* o);
+void GateClose(CHARACTER* c, OBJECT* o);
+void DoInterfaceOpen(int Key);
+void ProcessState(int Key, BYTE GateOnOff, BYTE State);
 
-    void	SendToggleGate();	// Send gate close/open packet
-    bool	IsGateOpened();		// Is the gate open?
+void SendToggleGate();  // 성문 닫기/열기 패킷 전송
+bool IsGateOpened();    // 성문이 열려 있나
 };
 
 using namespace npcGateSwitch;
 
-#endif// __NPC_GATE_SWITCH_H__
+#endif  // __NPC_GATE_SWITCH_H__

@@ -12,9 +12,7 @@ CGuildCache::CGuildCache()
     Reset();
 }
 
-CGuildCache::~CGuildCache()
-{
-}
+CGuildCache::~CGuildCache() {}
 
 void CGuildCache::Reset()
 {
@@ -67,7 +65,8 @@ int CGuildCache::SetGuildMark(int nGuildKey, char* UnionName, char* GuildName, B
         for (int i = 0; i < GuildConstants::GUILD_MARK_SIZE; ++i)
         {
             if (i % 2 == 0)
-                GuildMark[nIndex].Mark[i] = (Mark[i / 2] >> GuildConstants::MARK_NIBBLE_SHIFT) & GuildConstants::MARK_NIBBLE_MASK;
+                GuildMark[nIndex].Mark[i] =
+                    (Mark[i / 2] >> GuildConstants::MARK_NIBBLE_SHIFT) & GuildConstants::MARK_NIBBLE_MASK;
             else
                 GuildMark[nIndex].Mark[i] = Mark[i / 2] & GuildConstants::MARK_NIBBLE_MASK;
         }

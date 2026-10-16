@@ -17,7 +17,7 @@ SEASON3B::CNewUIWindowMenu::CNewUIWindowMenu()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_iSelectedIndex = -1;
+    m_iSelectedIndex  = -1;
 }
 
 SEASON3B::CNewUIWindowMenu::~CNewUIWindowMenu()
@@ -61,7 +61,7 @@ void SEASON3B::CNewUIWindowMenu::SetPos(int x, int y)
 
 bool SEASON3B::CNewUIWindowMenu::UpdateMouseEvent()
 {
-    POINT pt = { m_Pos.x, m_Pos.y + 20 };
+    POINT pt = {m_Pos.x, m_Pos.y + 20};
 
     for (int i = 0; i < MENU_MAX_INDEX; ++i)
     {
@@ -78,61 +78,55 @@ bool SEASON3B::CNewUIWindowMenu::UpdateMouseEvent()
     {
         switch (m_iSelectedIndex)
         {
-        case 0:
-        {
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
-            SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSystemMenuMsgBoxLayout));
-            return false;
-        }
-        break;
-        case 1:
-        {
-            if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_HELP))
-            {
-                g_pHelp->AutoUpdateIndex();
-            }
-            else
-            {
-                g_pNewUISystem->Show(SEASON3B::INTERFACE_HELP);
-            }
-            return false;
-        }
-        break;
-        case 2:
-        {
-            g_pNewUISystem->Show(SEASON3B::INTERFACE_GUILDINFO);
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
-            return false;
-        }
-        break;
-        case 3:
-        {
-            g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MOVEMAP);
-            return false;
-        }
-        break;
-        case 4:
-        {
-            g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
-            if (g_pNewUIMiniMap->m_bSuccess == false)
-            {
-                g_pNewUISystem->Hide(SEASON3B::INTERFACE_MINI_MAP);
-            }
-            else
-                g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MINI_MAP);
-            return false;
-        }
-        break;
-        case 5:
-        {
-            if (g_pNewUIGensRanking->SetGensInfo())
-            {
-                g_pNewUISystem->Show(SEASON3B::INTERFACE_GENSRANKING);
+            case 0: {
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
+                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSystemMenuMsgBoxLayout));
+                return false;
             }
-            return false;
-        }
-        break;
+            break;
+            case 1: {
+                if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_HELP))
+                {
+                    g_pHelp->AutoUpdateIndex();
+                }
+                else
+                {
+                    g_pNewUISystem->Show(SEASON3B::INTERFACE_HELP);
+                }
+                return false;
+            }
+            break;
+            case 2: {
+                g_pNewUISystem->Show(SEASON3B::INTERFACE_GUILDINFO);
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
+                return false;
+            }
+            break;
+            case 3: {
+                g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MOVEMAP);
+                return false;
+            }
+            break;
+            case 4: {
+                g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
+                if (g_pNewUIMiniMap->m_bSuccess == false)
+                {
+                    g_pNewUISystem->Hide(SEASON3B::INTERFACE_MINI_MAP);
+                }
+                else
+                    g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MINI_MAP);
+                return false;
+            }
+            break;
+            case 5: {
+                if (g_pNewUIGensRanking->SetGensInfo())
+                {
+                    g_pNewUISystem->Show(SEASON3B::INTERFACE_GENSRANKING);
+                    g_pNewUISystem->Hide(SEASON3B::INTERFACE_WINDOW_MENU);
+                }
+                return false;
+            }
+            break;
         }
     }
 
@@ -188,7 +182,10 @@ void SEASON3B::CNewUIWindowMenu::RenderFrame()
 {
     float x, y, width, height;
 
-    x = m_Pos.x; y = m_Pos.y; width = 112.f; height = 105 + (MENU_MAX_INDEX - 4) * 20;
+    x      = m_Pos.x;
+    y      = m_Pos.y;
+    width  = 112.f;
+    height = 105 + (MENU_MAX_INDEX - 4) * 20;
 
     RenderBitmap(IMAGE_WINDOW_MENU_BACK, x, y, width, height, 0.f, 0.f, width / 256.f, height / 512.f);
 
@@ -223,8 +220,8 @@ void SEASON3B::CNewUIWindowMenu::RenderTexts()
     g_pRenderText->SetBgColor(0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
 
-    int iTextNumber[] = { 1741, 1742, 364, 1743,3055,3103 };
-    float y = m_Pos.y + 20.f;
+    int   iTextNumber[] = {1741, 1742, 364, 1743, 3055, 3103};
+    float y             = m_Pos.y + 20.f;
     for (int i = 0; i < MENU_MAX_INDEX; ++i)
     {
         if (m_iSelectedIndex == i)
@@ -271,9 +268,7 @@ void SEASON3B::CNewUIWindowMenu::OpenningProcess()
     m_iSelectedIndex = -1;
 }
 
-void SEASON3B::CNewUIWindowMenu::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIWindowMenu::ClosingProcess() {}
 
 void SEASON3B::CNewUIWindowMenu::LoadImages()
 {

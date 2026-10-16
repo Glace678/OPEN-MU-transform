@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.24)
 get_filename_component(REPO_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 
+# Contract checks compare source *semantics*, not formatting. Collapse every
+# whitespace run (including newlines) so that clang-format re-wrapping /
+# alignment (e.g. one-line "if" statements, aligned assignments) cannot cause
+# a spurious contract failure.
+function(normalize_ws text out)
+    string(REGEX REPLACE "[ \t\r\n]+" " " normalized "${text}")
+    string(STRIP "${normalized}" normalized)
+    set(${out} "${normalized}" PARENT_SCOPE)
+endfunction()
+
 function(assert_contains text needle context)
-    string(FIND "${text}" "${needle}" position)
+    normalize_ws("${text}" text_n)
+    normalize_ws("${needle}" needle_n)
+    string(FIND "${text_n}" "${needle_n}" position)
     if(position LESS 0)
         message(FATAL_ERROR "${context}: missing ${needle}")
     endif()
@@ -17,6 +29,7 @@ function(read_section path start finish output)
     endif()
     math(EXPR length "${last} - ${first}")
     string(SUBSTRING "${contents}" ${first} ${length} section)
+    normalize_ws("${section}" section)
     set(${output} "${section}" PARENT_SCOPE)
 endfunction()
 
@@ -39,7 +52,8 @@ assert_contains("${state_code}" "FirstLoad = 0" "Restored focus must not trigger
 assert_contains("${state_code}" "state.initialFocusPending ? 1 : 0" "Keep original first-render state")
 assert_contains("${state_code}" "m_prevUsername, _countof(m_prevUsername), state.previousUsername" "Keep account edit baseline")
 assert_contains("${state_code}" "m_prevPassword, _countof(m_prevPassword), state.previousPassword" "Keep password edit baseline")
-if(state_code MATCHES "GameConfig|Encrypt|Decrypt|Save\\(|Log\\(|fopen|fprintf|Write\\(")
+normalize_ws("${state_code}" state_code_ws)
+if(state_code_ws MATCHES "GameConfig|Encrypt|Decrypt|Save\\(|Log\\(|fopen|fprintf|Write\\(")
     message(FATAL_ERROR "Resize state must not read/write persisted credentials or log field contents")
 endif()
 

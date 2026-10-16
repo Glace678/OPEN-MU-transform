@@ -19,7 +19,7 @@ int editor_fwprintf(FILE* stream, const wchar_t* format, ...);
 #endif
 
 // Replace standard functions with our versions
-#define wprintf editor_wprintf
+#define wprintf  editor_wprintf
 #define fwprintf editor_fwprintf
 
-#endif // _EDITOR
+#endif  // _EDITOR

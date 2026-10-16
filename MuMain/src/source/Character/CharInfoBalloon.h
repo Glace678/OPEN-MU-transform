@@ -18,10 +18,10 @@ class CCharInfoBalloon : public CSprite
 {
 protected:
     CHARACTER* m_pCharInfo;
-    DWORD		m_dwNameColor;
-    wchar_t		m_szName[64];
-    wchar_t		m_szGuild[64];
-    wchar_t		m_szClass[64];
+    DWORD      m_dwNameColor;
+    wchar_t    m_szName[64];
+    wchar_t    m_szGuild[64];
+    wchar_t    m_szClass[64];
 
 public:
     CCharInfoBalloon();
@@ -34,15 +34,15 @@ public:
 
 private:
     void MeasureLines(int& width, int& height);
-    int NearestNeighborDistance(int centerArtX) const;
+    int  NearestNeighborDistance(int centerArtX) const;
     void UpdateLayout();
     void RenderLines();
-    int m_textTop = 0;
-    int m_lineHeight = 0;
+    int  m_textTop    = 0;
+    int  m_lineHeight = 0;
     // Re-runs SetInfo() on locale change so the cached guild / class
     // strings displayed over the character flip to the new language
     // without waiting for the next character refresh.
     static void OnLocaleChanged(void* ctx) noexcept;
 };
 
-#endif // !defined(AFX_CHARINFOBALLOON_H__DC2BBC6F_834B_4738_AB09_361BF8484977__INCLUDED_)
+#endif  // !defined(AFX_CHARINFOBALLOON_H__DC2BBC6F_834B_4738_AB09_361BF8484977__INCLUDED_)

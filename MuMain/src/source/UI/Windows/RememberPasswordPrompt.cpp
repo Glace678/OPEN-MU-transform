@@ -15,7 +15,7 @@ UI::Login::RememberPasswordChoice g_Choice = UI::Login::RememberPasswordChoice::
 class CRememberPasswordMsgBoxLayout : public SEASON3B::TMsgBoxLayout<SEASON3B::CNewUICommonMessageBox>
 {
 public:
-    bool SetLayout() override;
+    bool                             SetLayout() override;
     static SEASON3B::CALLBACK_RESULT OnOk(SEASON3B::CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
     static SEASON3B::CALLBACK_RESULT OnCancel(SEASON3B::CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam);
 };
@@ -39,7 +39,8 @@ bool CRememberPasswordMsgBoxLayout::SetLayout()
     return true;
 }
 
-SEASON3B::CALLBACK_RESULT CRememberPasswordMsgBoxLayout::OnOk(SEASON3B::CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf&)
+SEASON3B::CALLBACK_RESULT CRememberPasswordMsgBoxLayout::OnOk(SEASON3B::CNewUIMessageBoxBase* pOwner,
+                                                              const leaf::xstreambuf&)
 {
     g_Choice = UI::Login::RememberPasswordChoice::Ok;
     PlayBuffer(SOUND_CLICK01);
@@ -47,14 +48,15 @@ SEASON3B::CALLBACK_RESULT CRememberPasswordMsgBoxLayout::OnOk(SEASON3B::CNewUIMe
     return SEASON3B::CALLBACK_BREAK;
 }
 
-SEASON3B::CALLBACK_RESULT CRememberPasswordMsgBoxLayout::OnCancel(SEASON3B::CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf&)
+SEASON3B::CALLBACK_RESULT CRememberPasswordMsgBoxLayout::OnCancel(SEASON3B::CNewUIMessageBoxBase* pOwner,
+                                                                  const leaf::xstreambuf&)
 {
     g_Choice = UI::Login::RememberPasswordChoice::Cancel;
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, SEASON3B::MSGBOX_EVENT_DESTROY);
     return SEASON3B::CALLBACK_BREAK;
 }
-} // namespace
+}  // namespace
 
 namespace UI::Login
 {
@@ -73,4 +75,4 @@ void ClearRememberPasswordChoice()
 {
     g_Choice = RememberPasswordChoice::None;
 }
-} // namespace UI::Login
+}  // namespace UI::Login

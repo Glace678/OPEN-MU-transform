@@ -4,16 +4,15 @@
 
 #include "UI/NewUI/NewUISystem.h"
 
-
 using namespace SEASON3B;
 
 namespace
 {
-    int GetAvailableExtensionCount()
-    {
-        return CharacterAttribute ?
-            std::clamp<int>(CharacterAttribute->InventoryExtensions, 0, MAX_INVENTORY_EXT_COUNT) : 0;
-    }
+int GetAvailableExtensionCount()
+{
+    return CharacterAttribute ? std::clamp<int>(CharacterAttribute->InventoryExtensions, 0, MAX_INVENTORY_EXT_COUNT)
+                              : 0;
+}
 }
 CNewUIInventoryExtension::CNewUIInventoryExtension()
 {
@@ -47,7 +46,8 @@ bool CNewUIInventoryExtension::Create(CNewUIManager* pNewUIMng, int x, int y)
         m_extension = new CNewUIInventoryCtrl();
 
         const int indexOffset = MAX_MY_INVENTORY_INDEX + i * MAX_INVENTORY_EXT_ONE;
-        if (false == m_extension->Create(STORAGE_TYPE::INVENTORY, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 45 + HEIGHT_PER_EXT * i, COLUMN_INVENTORY, ROW_INVENTORY_EXT, indexOffset))
+        if (false == m_extension->Create(STORAGE_TYPE::INVENTORY, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                         y + 45 + HEIGHT_PER_EXT * i, COLUMN_INVENTORY, ROW_INVENTORY_EXT, indexOffset))
         {
             SafeDelete(m_extension);
             return false;
@@ -127,8 +127,8 @@ bool CNewUIInventoryExtension::UpdateMouseEvent()
     {
         if (IsPress(VK_RBUTTON))
         {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }
@@ -283,7 +283,7 @@ CNewUIInventoryCtrl* CNewUIInventoryExtension::TryGetExtensionByInventoryIndex(i
 {
     if (iIndex < MAX_MY_INVENTORY_INDEX)
         return nullptr;
-    const auto index = iIndex - MAX_MY_INVENTORY_INDEX;
+    const auto index          = iIndex - MAX_MY_INVENTORY_INDEX;
     const auto extensionIndex = index / MAX_INVENTORY_EXT_ONE;
     if (extensionIndex >= 0 && extensionIndex < MAX_INVENTORY_EXT_COUNT)
     {
@@ -323,8 +323,7 @@ void CNewUIInventoryExtension::DeleteItem(int iIndex) const
 
         if (const auto pPickedItem = CNewUIInventoryCtrl::GetPickedItem())
         {
-            if (GetOwnerOf(pPickedItem)
-                && pPickedItem->GetSourceLinealPos() == iIndex)
+            if (GetOwnerOf(pPickedItem) && pPickedItem->GetSourceLinealPos() == iIndex)
             {
                 CNewUIInventoryCtrl::DeletePickedItem();
             }
@@ -388,7 +387,8 @@ CNewUIInventoryCtrl* CNewUIInventoryExtension::GetOwnerOf(const CNewUIPickedItem
 
 CNewUIInventoryCtrl* CNewUIInventoryExtension::FindTouchControlAt(int x, int y) const
 {
-    if (!IsVisible()) return nullptr;
+    if (!IsVisible())
+        return nullptr;
     for (int index = 0; index < GetAvailableExtensionCount(); ++index)
         if (m_extensions[index] && m_extensions[index]->IsVisible() && m_extensions[index]->CheckPtInRect(x, y))
             return m_extensions[index];
@@ -398,6 +398,7 @@ CNewUIInventoryCtrl* CNewUIInventoryExtension::FindTouchControlAt(int x, int y) 
 CNewUIInventoryCtrl* CNewUIInventoryExtension::FindTouchControlByIndex(int index) const
 {
     const int extension = (index - MAX_MY_INVENTORY_INDEX) / MAX_INVENTORY_EXT_ONE;
-    if (index < MAX_MY_INVENTORY_INDEX || extension >= GetAvailableExtensionCount()) return nullptr;
+    if (index < MAX_MY_INVENTORY_INDEX || extension >= GetAvailableExtensionCount())
+        return nullptr;
     return TryGetExtensionByInventoryIndex(index);
 }

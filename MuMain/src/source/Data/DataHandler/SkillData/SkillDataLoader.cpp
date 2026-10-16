@@ -16,7 +16,7 @@
 
 // External references
 extern SKILL_ATTRIBUTE* SkillAttribute;
-extern HWND g_hWnd;
+extern HWND             g_hWnd;
 
 bool SkillDataLoader::Load(wchar_t* fileName)
 {
@@ -25,7 +25,7 @@ bool SkillDataLoader::Load(wchar_t* fileName)
     {
         wchar_t errorMsg[256];
         mu_swprintf(errorMsg, L"Skill file not found: %ls", fileName);
-        DataFileIO::ShowDataFileError(errorMsg);
+        DataFileIO::ShowErrorAndExit(errorMsg);
         return false;
     }
 
@@ -34,13 +34,13 @@ bool SkillDataLoader::Load(wchar_t* fileName)
     long fileSize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    const int LegacySize = sizeof(SKILL_ATTRIBUTE_FILE_LEGACY);
-    const int NewSize = sizeof(SKILL_ATTRIBUTE_FILE);
+    const int  LegacySize         = sizeof(SKILL_ATTRIBUTE_FILE_LEGACY);
+    const int  NewSize            = sizeof(SKILL_ATTRIBUTE_FILE);
     const long expectedLegacySize = LegacySize * MAX_SKILLS + sizeof(DWORD);
-    const long expectedNewSize = NewSize * MAX_SKILLS + sizeof(DWORD);
+    const long expectedNewSize    = NewSize * MAX_SKILLS + sizeof(DWORD);
 
     bool isLegacyFormat = (fileSize == expectedLegacySize);
-    bool success = false;
+    bool success        = false;
 
 #ifdef _EDITOR
     if (isLegacyFormat)
@@ -82,27 +82,26 @@ bool SkillDataLoader::Load(wchar_t* fileName)
     return success;
 }
 
-template<typename TFileFormat>
-bool SkillDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
+template <typename TFileFormat> bool SkillDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
 {
     const int Size = sizeof(TFileFormat);
 
     // Configure I/O
     DataFileIO::IOConfig config;
-    config.itemSize = Size;
-    config.itemCount = MAX_SKILLS;
-    config.checksumKey = 0x5A18;
+    config.itemSize      = Size;
+    config.itemCount     = MAX_SKILLS;
+    config.checksumKey   = 0x5A18;
     config.decryptRecord = [](BYTE* data, int size) { BuxConvert(data, size); };
 
     // Read buffer and checksum
     DWORD dwCheckSum;
-    auto buffer = DataFileIO::ReadBuffer(fp, config, &dwCheckSum);
+    auto  buffer = DataFileIO::ReadBuffer(fp, config, &dwCheckSum);
     if (!buffer)
     {
         std::wstring errorMsg = L"Failed to read skill file (";
         errorMsg += formatName;
         errorMsg += L").";
-        DataFileIO::ShowDataFileError(errorMsg.c_str());
+        DataFileIO::ShowErrorAndExit(errorMsg.c_str());
         return false;
     }
 
@@ -112,7 +111,7 @@ bool SkillDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
         std::wstring errorMsg = L"Skill file corrupted (";
         errorMsg += formatName;
         errorMsg += L").";
-        DataFileIO::ShowDataFileError(errorMsg.c_str());
+        DataFileIO::ShowErrorAndExit(errorMsg.c_str());
         return false;
     }
 

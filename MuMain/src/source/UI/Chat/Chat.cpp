@@ -2,8 +2,8 @@
 #include "Core/Text/TextLineWrap.h"
 #include "UI/Chat/Chat.h"
 #include <cmath>
-#include "Character/CharacterManager.h" // gCharacterManager
-#include "Camera/CameraProjection.h" // CameraProjection
+#include "Character/CharacterManager.h"  // gCharacterManager
+#include "Camera/CameraProjection.h"     // CameraProjection
 
 // Includes mirror ZzzInterface.cpp, the unit these were extracted from.
 #include "Core/Platform/Imm.h"
@@ -36,7 +36,7 @@
 #include "GameLogic/NPCs/npcBreeder.h"
 #include "GameLogic/Pets/GIPetManager.h"
 #include "Character/CSParts.h"
-#include "UI/Legacy/UIMapName.h"	// rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Events/Event.h"
@@ -54,20 +54,20 @@ namespace UI::Chat
 {
 typedef struct
 {
-    wchar_t   ID[32];
-    wchar_t      Union[30];
-    wchar_t      Guild[30];
-    wchar_t      szShopTitle[16];
-    char      Color;
-    char      GuildColor;
-    float       IDLifeTime;
-    wchar_t   Text[2][256];
-    float       LifeTime[2];
+    wchar_t    ID[32];
+    wchar_t    Union[30];
+    wchar_t    Guild[30];
+    wchar_t    szShopTitle[16];
+    char       Color;
+    char       GuildColor;
+    float      IDLifeTime;
+    wchar_t    Text[2][256];
+    float      LifeTime[2];
     CHARACTER* Owner;
-    int       x, y;
-    int       Width;
-    int       Height;
-    vec3_t    Position;
+    int        x, y;
+    int        Width;
+    int        Height;
+    vec3_t     Position;
 } CHAT;
 
 #define MAX_CHAT 120
@@ -87,11 +87,12 @@ int MeasureChatLineHeight()
 void SetBooleanPosition(CHAT* c)
 {
     const int lineHeight = MeasureChatLineHeight();
-    BOOL bResult[5];
-    SIZE Size[5];
+    BOOL      bResult[5];
+    SIZE      Size[5];
     memset(&Size[0], 0, sizeof(SIZE) * 5);
 
-    if (g_isCharacterBuff((&c->Owner->Object), eBuff_GMEffect) || (c->Owner->CtlCode == CTLCODE_20OPERATOR) || (c->Owner->CtlCode == CTLCODE_08OPERATOR))
+    if (g_isCharacterBuff((&c->Owner->Object), eBuff_GMEffect) || (c->Owner->CtlCode == CTLCODE_20OPERATOR) ||
+        (c->Owner->CtlCode == CTLCODE_08OPERATOR))
     {
         g_pRenderText->SetFont(g_hFontBold);
         bResult[0] = GetTextExtentPoint32(g_pRenderText->GetFontDC(), c->ID, lstrlen(c->ID), &Size[0]);
@@ -110,7 +111,8 @@ void SetBooleanPosition(CHAT* c)
     Size[0].cx += 3;
 
     if (c->LifeTime[1] > 0)
-        c->Width = std::max<int>(std::max<int>(std::max<int>(Size[0].cx, Size[1].cx), std::max<int>(Size[2].cx, Size[3].cx)), Size[4].cx);
+        c->Width = std::max<int>(
+            std::max<int>(std::max<int>(Size[0].cx, Size[1].cx), std::max<int>(Size[2].cx, Size[3].cx)), Size[4].cx);
 
     else if (c->LifeTime[0] > 0)
         c->Width = std::max<int>(std::max<int>(Size[0].cx, Size[1].cx), std::max<int>(Size[3].cx, Size[4].cx));
@@ -118,14 +120,15 @@ void SetBooleanPosition(CHAT* c)
         c->Width = std::max<int>(std::max<int>(Size[0].cx, Size[3].cx), Size[4].cx);
     const int chatLines = c->LifeTime[1] > 0 ? 2 : (c->LifeTime[0] > 0 ? 1 : 0);
     const int nameLines = (c->IDLifeTime > 0 ? 1 : 0) + (c->Union[0] ? 1 : 0) + (c->Guild[0] ? 1 : 0);
-    c->Height = lineHeight * (chatLines + nameLines);
+    c->Height           = lineHeight * (chatLines + nameLines);
 
     if (lstrlen(c->szShopTitle) > 0)
     {
         SIZE sizeT[2];
         g_pRenderText->SetFont(g_hFontBold);
 
-        if (GetTextExtentPoint32(g_pRenderText->GetFontDC(), c->szShopTitle, lstrlen(c->szShopTitle), &sizeT[0]) && GetTextExtentPoint32(g_pRenderText->GetFontDC(), I18N::Game::Store, wcslen(I18N::Game::Store), &sizeT[1]))
+        if (GetTextExtentPoint32(g_pRenderText->GetFontDC(), c->szShopTitle, lstrlen(c->szShopTitle), &sizeT[0]) &&
+            GetTextExtentPoint32(g_pRenderText->GetFontDC(), I18N::Game::Store, wcslen(I18N::Game::Store), &sizeT[1]))
         {
             if (c->Width < sizeT[0].cx + sizeT[1].cx)
                 c->Width = sizeT[0].cx + sizeT[1].cx;
@@ -140,17 +143,31 @@ void SetPlayerColor(BYTE PK)
 {
     switch (PK)
     {
-    case 0:g_pRenderText->SetTextColor(150, 255, 240, 255); break;//npc
-    case 1:g_pRenderText->SetTextColor(100, 120, 255, 255); break;
-    case 2:g_pRenderText->SetTextColor(140, 180, 255, 255); break;
-    case 3:g_pRenderText->SetTextColor(200, 220, 255, 255); break;//normal
-    case 4:g_pRenderText->SetTextColor(255, 150, 60, 255); break; //pk1
-    case 5:g_pRenderText->SetTextColor(255, 80, 30, 255); break;  //pk2
-    default:g_pRenderText->SetTextColor(255, 0, 0, 255); break;    //pk3
+        case 0:
+            g_pRenderText->SetTextColor(150, 255, 240, 255);
+            break;  //npc
+        case 1:
+            g_pRenderText->SetTextColor(100, 120, 255, 255);
+            break;
+        case 2:
+            g_pRenderText->SetTextColor(140, 180, 255, 255);
+            break;
+        case 3:
+            g_pRenderText->SetTextColor(200, 220, 255, 255);
+            break;  //normal
+        case 4:
+            g_pRenderText->SetTextColor(255, 150, 60, 255);
+            break;  //pk1
+        case 5:
+            g_pRenderText->SetTextColor(255, 80, 30, 255);
+            break;  //pk2
+        default:
+            g_pRenderText->SetTextColor(255, 0, 0, 255);
+            break;  //pk3
     }
 }
 
-	// ※
+// ※
 
 const int ciSystemColor = 240;
 
@@ -161,7 +178,8 @@ void RenderBoolean(int x, int y, CHAT* c)
         return;
     }
 
-    if (c->Owner != Hero && battleCastle::IsBattleCastleStart() == true && g_isCharacterBuff((&c->Owner->Object), eBuff_Cloaking))
+    if (c->Owner != Hero && battleCastle::IsBattleCastleStart() == true &&
+        g_isCharacterBuff((&c->Owner->Object), eBuff_Cloaking))
     {
         if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK))
         {
@@ -196,9 +214,9 @@ void RenderBoolean(int x, int y, CHAT* c)
     EnableAlphaTest();
     glColor3f(1.f, 1.f, 1.f);
 
-    POINT RenderPos = { x, y };
-    SIZE RenderBoxSize = { c->Width, c->Height };
-    const int iLineHeight = MeasureChatLineHeight();
+    POINT     RenderPos     = {x, y};
+    SIZE      RenderBoxSize = {c->Width, c->Height};
+    const int iLineHeight   = MeasureChatLineHeight();
 
     if (IsShopInViewport(c->Owner))
     {
@@ -207,17 +225,20 @@ void RenderBoolean(int x, int y, CHAT* c)
         g_pRenderText->SetBgColor(GetShopBGColor(c->Owner));
 
         g_pRenderText->SetTextColor(GetShopTextColor(c->Owner));
-        g_pRenderText->RenderText(RenderPos.x, RenderPos.y, I18N::Game::Store, 0, iLineHeight, RT3_SORT_LEFT, &TextSize);
+        g_pRenderText->RenderText(RenderPos.x, RenderPos.y, I18N::Game::Store, 0, iLineHeight, RT3_SORT_LEFT,
+                                  &TextSize);
         RenderPos.x += TextSize.cx;
 
         g_pRenderText->SetTextColor(GetShopText2Color(c->Owner));
-        g_pRenderText->RenderText(RenderPos.x, RenderPos.y, c->szShopTitle, RenderBoxSize.cx - TextSize.cx, iLineHeight, RT3_SORT_LEFT, &TextSize);
+        g_pRenderText->RenderText(RenderPos.x, RenderPos.y, c->szShopTitle, RenderBoxSize.cx - TextSize.cx, iLineHeight,
+                                  RT3_SORT_LEFT, &TextSize);
         g_pRenderText->SetFont(g_hFont);
 
         RenderPos.x = x;
         RenderPos.y += iLineHeight;
     }
-    else if (::IsStrifeMap(gMapManager.WorldActive) && Hero->m_byGensInfluence != c->Owner->m_byGensInfluence && !::IsGMCharacter())
+    else if (::IsStrifeMap(gMapManager.WorldActive) && Hero->m_byGensInfluence != c->Owner->m_byGensInfluence &&
+             !::IsGMCharacter())
     {
         if (!c->Owner->GensContributionPoints)
             return;
@@ -227,21 +248,26 @@ void RenderBoolean(int x, int y, CHAT* c)
             int tempX = (int)(c->x + c->Width * 0.5f + 20.0f);
             switch (c->Owner->m_byGensInfluence)
             {
-            case 1:
-                g_pNewUIGensRanking->RanderMark(tempX, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence, c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
-                return;
-            case 2:
-                g_pNewUIGensRanking->RanderMark(tempX, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence, c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
-                return;
-            default:
-                break;
+                case 1:
+                    g_pNewUIGensRanking->RanderMark(
+                        tempX, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence,
+                        c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
+                    return;
+                case 2:
+                    g_pNewUIGensRanking->RanderMark(
+                        tempX, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence,
+                        c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
+                    return;
+                default:
+                    break;
             }
         }
     }
 
     bool bGmMode = false;
 
-    if (g_isCharacterBuff((&c->Owner->Object), eBuff_GMEffect) || (c->Owner->CtlCode == CTLCODE_20OPERATOR) || (c->Owner->CtlCode == CTLCODE_08OPERATOR))
+    if (g_isCharacterBuff((&c->Owner->Object), eBuff_GMEffect) || (c->Owner->CtlCode == CTLCODE_20OPERATOR) ||
+        (c->Owner->CtlCode == CTLCODE_08OPERATOR))
     {
         bGmMode = true;
         g_pRenderText->SetBgColor(30, 30, 30, 200);
@@ -284,10 +310,9 @@ void RenderBoolean(int x, int y, CHAT* c)
         SetPlayerColor(c->Color);
     }
 
-    if (c->x <= MouseX && MouseX < (int)(c->x + c->Width * REFERENCE_WIDTH / WindowWidth) &&
-        c->y <= MouseY && MouseY < (int)(c->y + c->Height * REFERENCE_HEIGHT / WindowHeight) &&
-        InputEnable && Hero->SafeZone && wcscmp(c->ID, Hero->ID) != 0 &&
-        (DWORD)WorldTime % 24 < 12)
+    if (c->x <= MouseX && MouseX < (int)(c->x + c->Width * REFERENCE_WIDTH / WindowWidth) && c->y <= MouseY &&
+        MouseY < (int)(c->y + c->Height * REFERENCE_HEIGHT / WindowHeight) && InputEnable && Hero->SafeZone &&
+        wcscmp(c->ID, Hero->ID) != 0 && (DWORD)WorldTime % 24 < 12)
     {
         unsigned int Temp = g_pRenderText->GetBgColor();
         g_pRenderText->SetBgColor(g_pRenderText->GetTextColor());
@@ -317,7 +342,7 @@ void RenderBoolean(int x, int y, CHAT* c)
         g_pRenderText->SetBgColor(50, 0, 0, 150);
 
     DWORD dwTextColor[2];
-    BYTE byAlpha[2] = { 255, 255 };
+    BYTE  byAlpha[2] = {255, 255};
     if ((c->LifeTime[0] > 0 && c->LifeTime[0] < 10))
         byAlpha[0] = 128;
     if ((c->LifeTime[1] > 0 && c->LifeTime[1] < 10))
@@ -352,30 +377,34 @@ void RenderBoolean(int x, int y, CHAT* c)
     if (KIND_PLAYER == c->Owner->Object.Kind && MODEL_PLAYER == c->Owner->Object.Type)
     {
         const int nGensMarkHeight = 18;
-        int nGensMarkPosY = (RenderPos.y - y - nGensMarkHeight) / 2 + y;
+        int       nGensMarkPosY   = (RenderPos.y - y - nGensMarkHeight) / 2 + y;
 
         if (c->LifeTime[1] > 0)
             RenderPos.y -= iLineHeight;
 
         if (1 == c->Owner->m_byGensInfluence)
-            g_pNewUIGensRanking->RanderMark(x, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence, c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
+            g_pNewUIGensRanking->RanderMark(x, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence,
+                                            c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN,
+                                            (float)RenderPos.y);
         else if (2 == c->Owner->m_byGensInfluence)
-            g_pNewUIGensRanking->RanderMark(x, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence, c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN, (float)RenderPos.y);
+            g_pNewUIGensRanking->RanderMark(x, y, (SEASON3B::CNewUIGensRanking::GENS_TYPE)c->Owner->m_byGensInfluence,
+                                            c->Owner->GensRanking, SEASON3B::CNewUIGensRanking::MARK_BOOLEAN,
+                                            (float)RenderPos.y);
     }
 }
 void AddChat(CHAT* c, const wchar_t* chat_text, int flag)
 {
-    float Time = 0;
-    int Length = (int)wcslen(chat_text);
+    float Time   = 0;
+    int   Length = (int)wcslen(chat_text);
     switch (flag)
     {
-    case 0:
-        Time = Length * 2 + 160;
-        break;
-    case 1:
-        Time = 1000;
-        g_pChatListBox->AddText(c->ID, chat_text, SEASON3B::TYPE_CHAT_MESSAGE);
-        break;
+        case 0:
+            Time = Length * 2 + 160;
+            break;
+        case 1:
+            Time = 1000;
+            g_pChatListBox->AddText(c->ID, chat_text, SEASON3B::TYPE_CHAT_MESSAGE);
+            break;
     }
 
     if (Length >= 20)
@@ -409,7 +438,8 @@ void AddGuildName(CHAT* c, CHARACTER* Owner)
         GetShopTitleSummary(Owner, summary);
         wcscpy(c->szShopTitle, summary.c_str());
     }
-    else {
+    else
+    {
         c->szShopTitle[0] = '\0';
     }
 
@@ -420,19 +450,22 @@ void AddGuildName(CHAT* c, CHARACTER* Owner)
         if (Owner->GuildRelationShip == GR_UNIONMASTER)
         {
             if (Owner->GuildStatus == G_MASTER)
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::AllianceMaster);
+                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                            I18N::Game::AllianceMaster);
             else
                 mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::Alliance);
         }
         else if (Owner->GuildRelationShip == GR_RIVAL)
         {
             if (Owner->GuildStatus == G_MASTER)
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::OpposingMaster);
+                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                            I18N::Game::OpposingMaster);
             else
                 mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::Oppose);
         }
         else if (Owner->GuildRelationShip == GR_RIVALUNION)
-            mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::OpposingAllianceMaster);
+            mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                        I18N::Game::OpposingAllianceMaster);
         else
             mu_swprintf(c->Union, L"<%ls>", GuildMark[Owner->GuildMarkIndex].UnionName);
     }
@@ -457,14 +490,15 @@ void AddGuildName(CHAT* c, CHARACTER* Owner)
     else
     {
         c->GuildColor = 0;
-        c->Guild[0] = 0;
+        c->Guild[0]   = 0;
     }
 }
 
 void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Owner, int Flag, int SetColor)
 {
     OBJECT* o = &Owner->Object;
-    if (!o->Live || !o->Visible) return;
+    if (!o->Live || !o->Visible)
+        return;
 
     int Color;
     if (SetColor != -1)
@@ -510,7 +544,7 @@ void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Ow
             c->Color = Color;
             // The slot is considered free only on the name and first line;
             // a stale second line could still have a positive lifetime.
-            c->Text[1][0] = L'\0';
+            c->Text[1][0]  = L'\0';
             c->LifeTime[1] = 0;
             AddGuildName(c, Owner);
             if (wcslen(chat_text) == 0)
@@ -529,7 +563,8 @@ void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Ow
 int CreateChat(wchar_t* character_name, const wchar_t* chat_text, OBJECT* Owner, int Flag, int SetColor)
 {
     OBJECT* o = Owner;
-    if (!o->Live || !o->Visible) return 0;
+    if (!o->Live || !o->Visible)
+        return 0;
 
     int Color = 0;
 
@@ -545,10 +580,10 @@ int CreateChat(wchar_t* character_name, const wchar_t* chat_text, OBJECT* Owner,
         {
             c->Owner = NULL;
             wcscpy(c->ID, character_name);
-            c->Color = Color;
-            c->GuildColor = 0;
-            c->Guild[0] = 0;
-            c->Text[1][0] = L'\0';
+            c->Color       = Color;
+            c->GuildColor  = 0;
+            c->Guild[0]    = 0;
+            c->Text[1][0]  = L'\0';
             c->LifeTime[1] = 0;
             AddChat(c, chat_text, 0);
             c->LifeTime[0] = Flag;
@@ -566,7 +601,7 @@ void AssignChat(wchar_t* character_name, const wchar_t* chat_text, int flag)
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
+        OBJECT*    o = &c->Object;
         if (o->Live && o->Kind == KIND_PLAYER)
         {
             if (wcscmp(c->ID, character_name) == 0)
@@ -580,7 +615,7 @@ void AssignChat(wchar_t* character_name, const wchar_t* chat_text, int flag)
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
-        OBJECT* o = &c->Object;
+        OBJECT*    o = &c->Object;
         if (o->Live && o->Kind == KIND_MONSTER)
         {
             if (wcscmp(c->ID, character_name) == 0)
@@ -600,24 +635,25 @@ void MoveChat()
         if (c->IDLifeTime > 0)
             c->IDLifeTime -= FPS_ANIMATION_FACTOR;
         if (c->LifeTime[0] > 0)
-            c->LifeTime[0]-=FPS_ANIMATION_FACTOR;
+            c->LifeTime[0] -= FPS_ANIMATION_FACTOR;
         if (c->LifeTime[1] > 0)
-            c->LifeTime[1]-=FPS_ANIMATION_FACTOR;
+            c->LifeTime[1] -= FPS_ANIMATION_FACTOR;
         if (c->Owner != NULL && (!c->Owner->Object.Live || !c->Owner->Object.Visible))
         {
-            c->IDLifeTime = 0;
+            c->IDLifeTime  = 0;
             c->LifeTime[0] = 0;
             c->LifeTime[1] = 0;
         }
-        if (c->LifeTime[0] > 0) {
+        if (c->LifeTime[0] > 0)
+        {
             DisableShopTitleDraw(c->Owner);
         }
-        if (c->Owner != NULL && c->LifeTime[0] <= 0) {
+        if (c->Owner != NULL && c->LifeTime[0] <= 0)
+        {
             EnableShopTitleDraw(c->Owner);
         }
     }
 }
-
 
 void RenderBooleans()
 {
@@ -629,7 +665,7 @@ void RenderBooleans()
         if (ci->IDLifeTime > 0 || ci->LifeTime[0] > 0)
         {
             vec3_t Position;
-            int ScreenX, ScreenY;
+            int    ScreenX, ScreenY;
             if (ci->Owner != NULL)
             {
                 OBJECT* o = &ci->Owner->Object;
@@ -655,7 +691,7 @@ void RenderBooleans()
         }
     }
 
-    for (int i = 0; i < MAX_CHAT; i++)		//. Bubble sorting
+    for (int i = 0; i < MAX_CHAT; i++)  //. Bubble sorting
     {
         CHAT* ci = &Chat[i];
         if (ci->IDLifeTime > 0 || ci->LifeTime[0] > 0)
@@ -665,8 +701,8 @@ void RenderBooleans()
                 CHAT* cj = &Chat[j];
                 if (i != j && (cj->IDLifeTime > 0 || cj->LifeTime[0] > 0))
                 {
-                    if (ci->x + ci->Width > cj->x && ci->x<cj->x + cj->Width &&
-                        ci->y + ci->Height>cj->y && ci->y < cj->y + cj->Height)
+                    if (ci->x + ci->Width > cj->x && ci->x < cj->x + cj->Width && ci->y + ci->Height > cj->y &&
+                        ci->y < cj->y + cj->Height)
                     {
                         if (ci->y < cj->y + cj->Height / 2)
                             ci->y = cj->y - ci->Height;
@@ -684,10 +720,14 @@ void RenderBooleans()
         if (ci->IDLifeTime > 0 || ci->LifeTime[0] > 0)
         {
             //. Fit to screen
-            if (ci->x < 0) ci->x = 0;
-            if (ci->x >= (int)WindowWidth - ci->Width) ci->x = WindowWidth - ci->Width;
-            if (ci->y < 0) ci->y = 0;
-            if (ci->y >= (int)WindowHeight - ci->Height) ci->y = WindowHeight - ci->Height;
+            if (ci->x < 0)
+                ci->x = 0;
+            if (ci->x >= (int)WindowWidth - ci->Width)
+                ci->x = WindowWidth - ci->Width;
+            if (ci->y < 0)
+                ci->y = 0;
+            if (ci->y >= (int)WindowHeight - ci->Height)
+                ci->y = WindowHeight - ci->Height;
             RenderBoolean(ci->x, ci->y, ci);
         }
     }

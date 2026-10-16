@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////
+﻿  //////////////////////////////////////////////////////////////////////////
 //  CSChaosCastle.cpp
 //////////////////////////////////////////////////////////////////////////
 
@@ -24,16 +24,16 @@
 #include <array>
 #include <cstdint>
 
-extern int g_iChatInputType;
-extern int g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
-extern  int g_iActionObjectType;
-extern  int g_iActionWorld;
-extern  int g_iActionTime;
-extern  float g_fActionObjectVelocity;
+    extern int g_iChatInputType;
+extern int     g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
+extern int     g_iActionObjectType;
+extern int     g_iActionWorld;
+extern int     g_iActionTime;
+extern float   g_fActionObjectVelocity;
 
 namespace
 {
-using CastleArea = std::array<int, 4>;
+using CastleArea    = std::array<int, 4>;
 using CastleAreaSet = std::array<CastleArea, 4>;
 
 constexpr CastleAreaSet gChaosCastleLimitArea1{{
@@ -58,28 +58,28 @@ constexpr CastleAreaSet gChaosCastleLimitArea3{{
 }};
 
 constexpr std::array<const CastleAreaSet*, 9> kCastleLimitAreas{{
-    &gChaosCastleLimitArea1, // 0
-    nullptr,                 // 1
-    nullptr,                 // 2
-    &gChaosCastleLimitArea2, // 3
-    nullptr,                 // 4
-    nullptr,                 // 5
-    &gChaosCastleLimitArea3, // 6
-    nullptr,                 // 7
-    nullptr,                 // 8
+    &gChaosCastleLimitArea1,  // 0
+    nullptr,                  // 1
+    nullptr,                  // 2
+    &gChaosCastleLimitArea2,  // 3
+    nullptr,                  // 4
+    nullptr,                  // 5
+    &gChaosCastleLimitArea3,  // 6
+    nullptr,                  // 7
+    nullptr,                  // 8
 }};
 
 enum class CastleLevel : std::uint8_t
 {
-    Zero = 0,
-    One = 1,
-    Two = 2,
-    Three = 3,
-    Four = 4,
-    Five = 5,
-    Six = 6,
-    Seven = 7,
-    Eight = 8,
+    Zero    = 0,
+    One     = 1,
+    Two     = 2,
+    Three   = 3,
+    Four    = 4,
+    Five    = 5,
+    Six     = 6,
+    Seven   = 7,
+    Eight   = 8,
     Invalid = 255,
 };
 
@@ -91,7 +91,7 @@ constexpr std::uint8_t LevelValue(CastleLevel level)
 constexpr int kActionTriggerTime = 30;
 
 CastleLevel g_currentCastleLevel = CastleLevel::Invalid;
-bool g_actionMatch = true;
+bool        g_actionMatch        = true;
 
 const CastleAreaSet* SelectLimitArea(CastleLevel level)
 {
@@ -109,28 +109,29 @@ bool IsWithinLimitArea(const CastleAreaSet& areas, int xi, int yi)
         return xi >= area[0] && xi <= area[2] && yi >= area[1] && yi <= area[3];
     });
 }
-} // namespace
+}  // namespace
 
-void    ClearChaosCastleHelper(CHARACTER* c)
+void ClearChaosCastleHelper(CHARACTER* c)
 {
-    c->Wing.Type = -1;
-    c->Wing.Level = 0;
-    c->Helper.Type = -1;
-    c->Helper.Level = 0;
-    c->Weapon[0].Type = -1;
-    c->Weapon[0].Level = 0;
+    c->Wing.Type                = -1;
+    c->Wing.Level               = 0;
+    c->Helper.Type              = -1;
+    c->Helper.Level             = 0;
+    c->Weapon[0].Type           = -1;
+    c->Weapon[0].Level          = 0;
     c->Weapon[0].ExcellentFlags = 0;
-    c->Weapon[1].Type = -1;
-    c->Weapon[1].Level = 0;
+    c->Weapon[1].Type           = -1;
+    c->Weapon[1].Level          = 0;
     c->Weapon[1].ExcellentFlags = 0;
 #ifdef LJW_FIX_MANY_FLAG_DISAPPEARED_PROBREM
     c->EtcPart = PARTS_NONE;
 #endif
 }
 
-void    ChangeChaosCastleUnit(CHARACTER* c)
+void ChangeChaosCastleUnit(CHARACTER* c)
 {
-    if (gMapManager.InChaosCastle() == false) return;
+    if (gMapManager.InChaosCastle() == false)
+        return;
 
     ClearChaosCastleHelper(c);
 
@@ -149,26 +150,27 @@ void    ChangeChaosCastleUnit(CHARACTER* c)
 
     if (Class == CLASS_KNIGHT || Class == CLASS_DARK || Class == CLASS_DARK_LORD || Class == CLASS_RAGEFIGHTER)
     {
-        c->Weapon[0].Type = MODEL_SWORD_OF_DESTRUCTION;
+        c->Weapon[0].Type  = MODEL_SWORD_OF_DESTRUCTION;
         c->Weapon[0].Level = 0;
-        c->Weapon[1].Type = MODEL_SWORD_OF_DESTRUCTION;
+        c->Weapon[1].Type  = MODEL_SWORD_OF_DESTRUCTION;
         c->Weapon[1].Level = 0;
     }
     else if (Class == CLASS_ELF)
     {
-        c->Weapon[0].Type = MODEL_GREAT_REIGN_CROSSBOW;
+        c->Weapon[0].Type  = MODEL_GREAT_REIGN_CROSSBOW;
         c->Weapon[0].Level = 0;
     }
     else if (Class == CLASS_WIZARD || Class == CLASS_SUMMONER)
     {
-        c->Weapon[0].Type = MODEL_LEGENDARY_STAFF;
+        c->Weapon[0].Type  = MODEL_LEGENDARY_STAFF;
         c->Weapon[0].Level = 0;
     }
 }
 
 bool MoveChaosCastleObjectSetting(int& objCount, int object)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     if (rand_fps_check(10) && object)
     {
@@ -200,14 +202,14 @@ bool MoveChaosCastleObject(OBJECT* o, int& object, int& visibleObject)
             visibleObject++;
             if (g_actionMatch)
             {
-                o->LifeTime = 10;
-                o->PKKey = 1;
+                o->LifeTime   = 10;
+                o->PKKey      = 1;
                 g_actionMatch = false;
             }
             else if (objectCount)
             {
                 o->LifeTime = 10;
-                o->PKKey = 0;
+                o->PKKey    = 0;
                 objectCount--;
                 if (objectCount == 0)
                 {
@@ -225,118 +227,120 @@ bool MoveChaosCastleObject(OBJECT* o, int& object, int& visibleObject)
 
 bool MoveChaosCastleAllObject(OBJECT* o)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     vec3_t Position;
 
     switch (o->Type)
     {
-    case    24:
-    case    25:
-    case    26:
-    case    27:
-    case    28:
-    case    29:
-        if (g_currentCastleLevel == CastleLevel::Seven)
-        {
-            if (g_iActionTime >= kActionTriggerTime)
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+            if (g_currentCastleLevel == CastleLevel::Seven)
             {
-                vec3_t Light = { 1.f, 1.f, 1.f };
+                if (g_iActionTime >= kActionTriggerTime)
+                {
+                    vec3_t Light = {1.f, 1.f, 1.f};
 
-                Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
-                Position[1] = o->Position[1];
-                Position[2] = Hero->Object.Position[2];
-                CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
+                    Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
+                    Position[1] = o->Position[1];
+                    Position[2] = Hero->Object.Position[2];
+                    CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
 
-                EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
+                    EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
+                }
+                else if (g_iActionTime <= 0)
+                {
+                    o->HiddenMesh        = -2;
+                    g_currentCastleLevel = CastleLevel::Eight;
+
+                    ClearActionObject();
+                }
+                else
+                {
+                    o->Position[2] =
+                        o->StartPosition[2] - ((kActionTriggerTime - g_iActionTime) * g_fActionObjectVelocity);
+                    g_fActionObjectVelocity += 0.4f;
+                }
             }
-            else if (g_iActionTime <= 0)
+            break;
+
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+            if (g_currentCastleLevel == CastleLevel::Four)
             {
-                o->HiddenMesh = -2;
-                g_currentCastleLevel = CastleLevel::Eight;
+                if (g_iActionTime >= kActionTriggerTime)
+                {
+                    vec3_t Light = {1.f, 1.f, 1.f};
 
-                ClearActionObject();
+                    Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
+                    Position[1] = o->Position[1];
+                    Position[2] = Hero->Object.Position[2];
+                    CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
+
+                    EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
+                }
+                else if (g_iActionTime <= 0)
+                {
+                    o->HiddenMesh        = -2;
+                    g_currentCastleLevel = CastleLevel::Five;
+
+                    ClearActionObject();
+                }
+                else
+                {
+                    o->Position[2] = o->StartPosition[2] - ((30 - g_iActionTime) * g_fActionObjectVelocity);
+                    g_fActionObjectVelocity += 0.4f;
+                }
             }
-            else
+            break;
+
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+            if (g_currentCastleLevel == CastleLevel::One)
             {
-                o->Position[2] = o->StartPosition[2] - ((kActionTriggerTime - g_iActionTime) * g_fActionObjectVelocity);
-                g_fActionObjectVelocity += 0.4f;
+                if (g_iActionTime >= kActionTriggerTime)
+                {
+                    vec3_t Light = {1.f, 1.f, 1.f};
+
+                    Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
+                    Position[1] = o->Position[1];
+                    Position[2] = Hero->Object.Position[2];
+                    CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
+
+                    EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
+                }
+                else if (g_iActionTime <= 0)
+                {
+                    o->HiddenMesh        = -2;
+                    g_currentCastleLevel = CastleLevel::Two;
+
+                    ClearActionObject();
+                }
+                else
+                {
+                    o->Position[2] = o->StartPosition[2] - ((30 - g_iActionTime) * g_fActionObjectVelocity);
+                    g_fActionObjectVelocity += 0.4f;
+                }
             }
-        }
-        break;
-
-    case    30:
-    case    31:
-    case    32:
-    case    33:
-    case    34:
-    case    35:
-        if (g_currentCastleLevel == CastleLevel::Four)
-        {
-            if (g_iActionTime >= kActionTriggerTime)
-            {
-                vec3_t Light = { 1.f, 1.f, 1.f };
-
-                Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
-                Position[1] = o->Position[1];
-                Position[2] = Hero->Object.Position[2];
-                CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
-
-                EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
-            }
-            else if (g_iActionTime <= 0)
-            {
-                o->HiddenMesh = -2;
-                g_currentCastleLevel = CastleLevel::Five;
-
-                ClearActionObject();
-            }
-            else
-            {
-                o->Position[2] = o->StartPosition[2] - ((30 - g_iActionTime) * g_fActionObjectVelocity);
-                g_fActionObjectVelocity += 0.4f;
-            }
-        }
-        break;
-
-    case    0:
-    case    1:
-    case    2:
-    case    3:
-    case    4:
-    case    5:
-    case    13:
-    case    14:
-    case    15:
-    case    16:
-    case    17:
-        if (g_currentCastleLevel == CastleLevel::One)
-        {
-            if (g_iActionTime >= kActionTriggerTime)
-            {
-                vec3_t Light = { 1.f, 1.f, 1.f };
-
-                Position[0] = o->Position[0] + Random::RangeFloat(-150, 149);
-                Position[1] = o->Position[1];
-                Position[2] = Hero->Object.Position[2];
-                CreateParticle(BITMAP_SMOKE + 4, Position, o->Angle, Light, 0, 1.5f);
-
-                EarthQuake = Random::RangeFloat(-3, -1) * 0.1f;
-            }
-            else if (g_iActionTime <= 0)
-            {
-                o->HiddenMesh = -2;
-                g_currentCastleLevel = CastleLevel::Two;
-
-                ClearActionObject();
-            }
-            else
-            {
-                o->Position[2] = o->StartPosition[2] - ((30 - g_iActionTime) * g_fActionObjectVelocity);
-                g_fActionObjectVelocity += 0.4f;
-            }
-        }
-        break;
+            break;
     }
 
     return true;
@@ -344,29 +348,30 @@ bool MoveChaosCastleAllObject(OBJECT* o)
 
 bool CreateChaosCastleObject(OBJECT* o)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     switch (o->Type)
     {
-    case    18:
-    case    19:
-    case    20:
-    case    21:
-    case    24:
-    case    25:
-    case    26:
-    case    27:
-    case    28:
-    case    29:
-    case    30:
-    case    31:
-    case    32:
-    case    33:
-    case    34:
-    case    35:
-        o->HiddenMesh = -2;
-        VectorCopy(o->Position, o->StartPosition);
-        break;
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+            o->HiddenMesh = -2;
+            VectorCopy(o->Position, o->StartPosition);
+            break;
     }
 
     return true;
@@ -374,187 +379,190 @@ bool CreateChaosCastleObject(OBJECT* o)
 
 bool RenderChaosCastleVisual(OBJECT* o, BMD* b)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     vec3_t p, Position;
 
     switch (o->Type)
     {
-    case    6:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 10; ++i)
+        case 6:
+            if (o->HiddenMesh != -2)
             {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 0, o->Scale, o);
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 0, o->Scale, o);
+                }
             }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    7:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 10; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 1, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    8:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 10; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 2, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    9:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 5; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 3, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    10:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 5; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 4, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    11:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.05f, 0.05f, 0.1f, Light);
-            for (int i = 0; i < 5; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 5, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    12:
-        if (o->HiddenMesh != -2)
-        {
-            vec3_t  Light;
-            Vector(0.3f, 0.3f, 0.3f, Light);
-            for (int i = 0; i < 7; ++i)
-            {
-                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 7, o->Scale, o);
-            }
-        }
-        o->HiddenMesh = -2;
-        break;
-
-    case    18:
-    case    19:
-    case    20:
-    case    21:
-        if (g_currentCastleLevel == CastleLevel::Seven || g_currentCastleLevel == CastleLevel::Eight)
-        {
-            o->HiddenMesh = -1;
-        }
-        else
-        {
             o->HiddenMesh = -2;
-        }
-        break;
+            break;
 
-    case    24:
-    case    25:
-    case    26:
-    case    27:
-    case    28:
-    case    29:
-        if (g_currentCastleLevel == CastleLevel::Four || g_currentCastleLevel == CastleLevel::Five)
-        {
-            o->HiddenMesh = -1;
-        }
-        else if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Eight))
-        {
-            o->HiddenMesh = -2;
-        }
-        break;
-
-    case    30:
-    case    31:
-    case    32:
-    case    33:
-    case    34:
-    case    35:
-        if (g_currentCastleLevel == CastleLevel::One || g_currentCastleLevel == CastleLevel::Two)
-        {
-            o->HiddenMesh = -1;
-        }
-        else if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Five))
-        {
-            o->HiddenMesh = -2;
-        }
-        break;
-
-    case    0:
-    case    1:
-    case    2:
-    case    3:
-        if (o->PKKey && o->HiddenMesh != -2)
-        {
-            Vector(0.f, 0.f, 0.f, p);
-            b->TransformPosition(BoneTransform[1], p, Position);
-            if ((int)o->LifeTime == 10)
+        case 7:
+            if (o->HiddenMesh != -2)
             {
-                CreateJoint(BITMAP_JOINT_THUNDER + 1, Position, Position, o->Angle, 2, NULL, 60.f + Random::RangeFloat(0, 9));
-
-                int randValue = Random::RangeInt(0, 1);
-                PlayBuffer(static_cast<ESound>(SOUND_CHAOS_THUNDER01 + randValue));
-                o->LifeTime = 9.9f;
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 1, o->Scale, o);
+                }
             }
+            o->HiddenMesh = -2;
+            break;
 
-            if (o->LifeTime < 5)
+        case 8:
+            if (o->HiddenMesh != -2)
             {
-                o->PKKey = 0;
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 2, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 9:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 5; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 3, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 10:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 5; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 4, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 11:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t Light;
+                Vector(0.05f, 0.05f, 0.1f, Light);
+                for (int i = 0; i < 5; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 5, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 12:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t Light;
+                Vector(0.3f, 0.3f, 0.3f, Light);
+                for (int i = 0; i < 7; ++i)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 7, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+            if (g_currentCastleLevel == CastleLevel::Seven || g_currentCastleLevel == CastleLevel::Eight)
+            {
+                o->HiddenMesh = -1;
             }
             else
             {
-                o->LifeTime -= FPS_ANIMATION_FACTOR;
+                o->HiddenMesh = -2;
             }
-        }
-    case    4:
-    case    5:
-    case    13:
-    case    14:
-    case    15:
-    case    16:
-    case    17:
-        if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Two) && g_currentCastleLevel != CastleLevel::Invalid)
-        {
-            o->HiddenMesh = -2;
-        }
-        break;
+            break;
+
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+            if (g_currentCastleLevel == CastleLevel::Four || g_currentCastleLevel == CastleLevel::Five)
+            {
+                o->HiddenMesh = -1;
+            }
+            else if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Eight))
+            {
+                o->HiddenMesh = -2;
+            }
+            break;
+
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+            if (g_currentCastleLevel == CastleLevel::One || g_currentCastleLevel == CastleLevel::Two)
+            {
+                o->HiddenMesh = -1;
+            }
+            else if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Five))
+            {
+                o->HiddenMesh = -2;
+            }
+            break;
+
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            if (o->PKKey && o->HiddenMesh != -2)
+            {
+                Vector(0.f, 0.f, 0.f, p);
+                b->TransformPosition(BoneTransform[1], p, Position);
+                if ((int)o->LifeTime == 10)
+                {
+                    CreateJoint(BITMAP_JOINT_THUNDER + 1, Position, Position, o->Angle, 2, NULL,
+                                60.f + Random::RangeFloat(0, 9));
+
+                    int randValue = Random::RangeInt(0, 1);
+                    PlayBuffer(static_cast<ESound>(SOUND_CHAOS_THUNDER01 + randValue));
+                    o->LifeTime = 9.9f;
+                }
+
+                if (o->LifeTime < 5)
+                {
+                    o->PKKey = 0;
+                }
+                else
+                {
+                    o->LifeTime -= FPS_ANIMATION_FACTOR;
+                }
+            }
+        case 4:
+        case 5:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+            if (LevelValue(g_currentCastleLevel) >= LevelValue(CastleLevel::Two) &&
+                g_currentCastleLevel != CastleLevel::Invalid)
+            {
+                o->HiddenMesh = -2;
+            }
+            break;
     }
 
     return true;
@@ -575,8 +583,8 @@ void RenderTerrainVisual(int xi, int yi)
 
     if (IsWithinLimitArea(*areaSet, xi, yi))
     {
-        vec3_t Light = { 1.f, 1.f, 1.f };
-        vec3_t Angle = { 0.f, 0.f, 0.f };
+        vec3_t Light = {1.f, 1.f, 1.f};
+        vec3_t Angle = {0.f, 0.f, 0.f};
         vec3_t Position;
 
         Position[0] = (xi * TERRAIN_SCALE) + Random::RangeFloat(-15, 14);

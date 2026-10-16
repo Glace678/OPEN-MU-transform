@@ -17,26 +17,37 @@ CGlobalBitmap Bitmaps;
 
 bool WriteJpeg(wchar_t* filename, int Width, int Height, unsigned char* Buffer, int quality, bool bottomUp)
 {
-    const auto fileCloser = [](FILE* fp) { if (fp != nullptr) { fclose(fp); } };
+    const auto fileCloser = [](FILE* fp) {
+        if (fp != nullptr)
+        {
+            fclose(fp);
+        }
+    };
     std::unique_ptr<FILE, decltype(fileCloser)> outfile(_wfopen(filename, L"wb"), fileCloser);
     if (!outfile)
     {
         return false;
     }
 
-    const auto jpegDestroyer = [](tjhandle handle) { if (handle != nullptr) { tjDestroy(handle); } };
+    const auto jpegDestroyer = [](tjhandle handle) {
+        if (handle != nullptr)
+        {
+            tjDestroy(handle);
+        }
+    };
     std::unique_ptr<void, decltype(jpegDestroyer)> handle(tjInitCompress(), jpegDestroyer);
     if (!handle)
     {
         return false;
     }
 
-    const auto maxSize = tjBufSize(Width, Height, TJSAMP_444);
+    const auto                 maxSize = tjBufSize(Width, Height, TJSAMP_444);
     std::vector<unsigned char> outputBuffer(maxSize);
-    unsigned long jpegSize = maxSize;
-    unsigned char* jpegPtr = outputBuffer.data();
-    const int flags = (bottomUp ? TJFLAG_BOTTOMUP : 0) | TJFLAG_NOREALLOC;
-    const auto result = tjCompress2(handle.get(), Buffer, Width, 0, Height, TJPF_RGB, &jpegPtr, &jpegSize, TJSAMP_444, quality, flags);
+    unsigned long              jpegSize = maxSize;
+    unsigned char*             jpegPtr  = outputBuffer.data();
+    const int                  flags    = (bottomUp ? TJFLAG_BOTTOMUP : 0) | TJFLAG_NOREALLOC;
+    const auto                 result =
+        tjCompress2(handle.get(), Buffer, Width, 0, Height, TJPF_RGB, &jpegPtr, &jpegSize, TJSAMP_444, quality, flags);
 
     if (result != 0)
     {
@@ -62,7 +73,7 @@ std::wstring NormalizeExtension(const wchar_t* Ext)
     }
     return result;
 }
-} // namespace
+}  // namespace
 
 void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer, int Size)
 {
@@ -71,13 +82,18 @@ void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer,
         return;
     }
 
-    const bool hasExternalBuffer = (PakBuffer != nullptr && Size > 0);
+    const bool                 hasExternalBuffer = (PakBuffer != nullptr && Size > 0);
     std::vector<unsigned char> localBuffer;
     if (!hasExternalBuffer)
     {
         std::wstring openFileName = L"Data2\\";
         openFileName += filename;
-        const auto fileCloser = [](FILE* f) { if (f != nullptr) { fclose(f); } };
+        const auto fileCloser = [](FILE* f) {
+            if (f != nullptr)
+            {
+                fclose(f);
+            }
+        };
         std::unique_ptr<FILE, decltype(fileCloser)> fp(_wfopen(openFileName.c_str(), L"rb"), fileCloser);
         if (!fp)
         {
@@ -98,8 +114,8 @@ void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer,
         }
     }
 
-    const unsigned char* buffer = hasExternalBuffer ? PakBuffer : localBuffer.data();
-    const size_t bufferSize = hasExternalBuffer ? static_cast<size_t>(Size) : localBuffer.size();
+    const unsigned char* buffer     = hasExternalBuffer ? PakBuffer : localBuffer.data();
+    const size_t         bufferSize = hasExternalBuffer ? static_cast<size_t>(Size) : localBuffer.size();
     if (buffer == nullptr || bufferSize == 0 || bufferSize < static_cast<size_t>(HeaderSize))
     {
         return;
@@ -107,9 +123,9 @@ void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer,
 
     std::vector<unsigned char> header(buffer, buffer + HeaderSize);
 
-    std::wstring newFileName = filename;
-    const auto normalizedExt = NormalizeExtension(Ext);
-    const auto dotPos = newFileName.find_last_of(L'.');
+    std::wstring newFileName   = filename;
+    const auto   normalizedExt = NormalizeExtension(Ext);
+    const auto   dotPos        = newFileName.find_last_of(L'.');
     if (dotPos != std::wstring::npos)
     {
         newFileName = newFileName.substr(0, dotPos);
@@ -119,7 +135,12 @@ void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer,
     std::wstring saveFileName = L"Data\\";
     saveFileName += newFileName;
 
-    const auto fileCloser = [](FILE* f) { if (f != nullptr) { fclose(f); } };
+    const auto fileCloser = [](FILE* f) {
+        if (f != nullptr)
+        {
+            fclose(f);
+        }
+    };
     std::unique_ptr<FILE, decltype(fileCloser)> fp(_wfopen(saveFileName.c_str(), L"wb"), fileCloser);
     if (!fp)
     {
@@ -127,7 +148,7 @@ void SaveImage(int HeaderSize, wchar_t* Ext, wchar_t* filename, BYTE* PakBuffer,
     }
 
     const auto headerWritten = fwrite(header.data(), 1, HeaderSize, fp.get());
-    const auto dataWritten = fwrite(buffer, 1, bufferSize, fp.get());
+    const auto dataWritten   = fwrite(buffer, 1, bufferSize, fp.get());
     if (headerWritten != static_cast<size_t>(HeaderSize) || dataWritten != bufferSize)
     {
         return;
@@ -142,7 +163,7 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
     }
 
     std::wstring newFileName = filename;
-    const auto dotPos = newFileName.find_last_of(L'.');
+    const auto   dotPos      = newFileName.find_last_of(L'.');
     if (dotPos != std::wstring::npos)
     {
         newFileName = newFileName.substr(0, dotPos);
@@ -158,6 +179,8 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         mu_swprintf(Text, L"%ls - File not exist.", fileName.c_str());
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -171,9 +194,9 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
 
     constexpr long JpegHeaderSize = 24;
     fseek(compressedFile, JpegHeaderSize, SEEK_SET);
-    const auto jpegSize = fileSize - JpegHeaderSize;
+    const auto                 jpegSize = fileSize - JpegHeaderSize;
     std::vector<unsigned char> jpegBuf(static_cast<size_t>(jpegSize));
-    const auto bytesRead = fread(jpegBuf.data(), 1, jpegBuf.size(), compressedFile);
+    const auto                 bytesRead = fread(jpegBuf.data(), 1, jpegBuf.size(), compressedFile);
     fclose(compressedFile);
     if (bytesRead != static_cast<size_t>(jpegSize))
     {
@@ -181,9 +204,9 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         return false;
     }
 
-    int jpegWidth = 0;
-    int jpegHeight = 0;
-    int jpegSubsamp = TJSAMP_444;
+    int jpegWidth      = 0;
+    int jpegHeight     = 0;
+    int jpegSubsamp    = TJSAMP_444;
     int jpegColorspace = TJCS_RGB;
 
     auto tjhandle = tjInitDecompress();
@@ -192,7 +215,8 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
         return false;
     }
 
-    auto result = tjDecompressHeader3(tjhandle, jpegBuf.data(), jpegBuf.size(), &jpegWidth, &jpegHeight, &jpegSubsamp, &jpegColorspace);
+    auto result = tjDecompressHeader3(tjhandle, jpegBuf.data(), jpegBuf.size(), &jpegWidth, &jpegHeight, &jpegSubsamp,
+                                      &jpegColorspace);
     if (result != 0)
     {
         tjDestroy(tjhandle);
@@ -201,23 +225,17 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
 
     if (jpegWidth != TERRAIN_SIZE || jpegHeight != TERRAIN_SIZE)
     {
-        g_ErrorReport.Write(
-            L"OZJ '%ls' has unsupported size %dx%d; expected %dx%d.\r\n",
-            fileName.c_str(),
-            jpegWidth,
-            jpegHeight,
-            TERRAIN_SIZE,
-            TERRAIN_SIZE);
+        g_ErrorReport.Write(L"OZJ '%ls' has unsupported size %dx%d; expected %dx%d.\r\n", fileName.c_str(), jpegWidth,
+                            jpegHeight, TERRAIN_SIZE, TERRAIN_SIZE);
         tjDestroy(tjhandle);
         return false;
     }
 
-    const size_t channels = 3;
-    const size_t bufferSize = static_cast<size_t>(jpegWidth)
-        * static_cast<size_t>(jpegHeight)
-        * channels;
+    const size_t               channels   = 3;
+    const size_t               bufferSize = static_cast<size_t>(jpegWidth) * static_cast<size_t>(jpegHeight) * channels;
     std::vector<unsigned char> buffer(bufferSize);
-    result = tjDecompress2(tjhandle, jpegBuf.data(), jpegBuf.size(), buffer.data(), jpegWidth, 0, jpegHeight, TJPF_RGB, TJFLAG_BOTTOMUP);
+    result = tjDecompress2(tjhandle, jpegBuf.data(), jpegBuf.size(), buffer.data(), jpegWidth, 0, jpegHeight, TJPF_RGB,
+                           TJFLAG_BOTTOMUP);
     tjDestroy(tjhandle);
     if (result != 0)
     {
@@ -233,12 +251,15 @@ bool OpenJpegBuffer(wchar_t* filename, float* BufferFloat)
 }
 
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
-bool LoadBitmap(const wchar_t* szFileName, GLuint uiTextureIndex, GLuint uiFilter, GLuint uiWrapMode, bool bCheck, bool bFullPath)
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+bool LoadBitmap(const wchar_t* szFileName, GLuint uiTextureIndex, GLuint uiFilter, GLuint uiWrapMode, bool bCheck,
+                bool bFullPath)
+#else   // KJH_ADD_INGAMESHOP_UI_SYSTEM
 bool LoadBitmap(const wchar_t* szFileName, GLuint uiTextureIndex, GLuint uiFilter, GLuint uiWrapMode, bool bCheck)
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 {
-    wchar_t szFullPath[256] = { 0, };
+    wchar_t szFullPath[256] = {
+        0,
+    };
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (bFullPath == true)
     {
@@ -249,20 +270,22 @@ bool LoadBitmap(const wchar_t* szFileName, GLuint uiTextureIndex, GLuint uiFilte
     {
         mu_swprintf(szFullPath, L"Data\\%ls", szFileName);
     }
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else   // KJH_ADD_INGAMESHOP_UI_SYSTEM
     mu_swprintf(szFullPath, L"Data\\%ls", szFileName);
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (bCheck)
     {
         if (false == Bitmaps.LoadImage(uiTextureIndex, szFullPath, uiFilter, uiWrapMode))
         {
-            wchar_t szErrorMsg[256] = { 0, };
+            wchar_t szErrorMsg[256] = {
+                0,
+            };
             mu_swprintf(szErrorMsg, L"LoadBitmap Failed: %ls", szFullPath);
 #ifdef FOR_WORK
             PopUpErrorCheckMsgBox(szErrorMsg);
-#else // FOR_WORK
+#else   // FOR_WORK
             PopUpErrorCheckMsgBox(szErrorMsg, true);
-#endif // FOR_WORK
+#endif  // FOR_WORK
             return false;
         }
         return true;
@@ -275,7 +298,9 @@ void DeleteBitmap(GLuint uiTextureIndex, bool bForce)
 }
 void PopUpErrorCheckMsgBox(const wchar_t* szErrorMsg, bool bForceDestroy)
 {
-    wchar_t szMsg[1024] = { 0, };
+    wchar_t szMsg[1024] = {
+        0,
+    };
     wcsncpy(szMsg, szErrorMsg, std::size(szMsg) - 1);
     szMsg[std::size(szMsg) - 1] = L'\0';
 

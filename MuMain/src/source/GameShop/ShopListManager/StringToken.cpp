@@ -12,7 +12,7 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "StringToken.h"
 
-CStringToken::CStringToken() // OK
+CStringToken::CStringToken()  // OK
 {
     this->data.clear();
     this->delimiter.clear();
@@ -20,20 +20,19 @@ CStringToken::CStringToken() // OK
     //this->index = this->tokens.begin();
 }
 
-CStringToken::~CStringToken() // OK
-{
-}
+CStringToken::~CStringToken()  // OK
+{}
 
-CStringToken::CStringToken(const std::wstring& dataLine, const std::wstring& delim) // OK
+CStringToken::CStringToken(const std::wstring& dataLine, const std::wstring& delim)  // OK
 {
-    this->data = dataLine;
+    this->data      = dataLine;
     this->delimiter = delim;
     this->tokens.clear();
     this->index = this->tokens.begin();
     this->split();
 }
 
-size_t CStringToken::countTokens() // OK
+size_t CStringToken::countTokens()  // OK
 {
     return this->tokens.size();
 }
@@ -43,7 +42,7 @@ bool CStringToken::hasMoreTokens()
     return this->index != this->tokens.end();
 }
 
-std::wstring CStringToken::nextToken() // OK
+std::wstring CStringToken::nextToken()  // OK
 {
     std::wstring result;
 
@@ -61,10 +60,10 @@ std::wstring CStringToken::nextToken() // OK
     return result;
 }
 
-void CStringToken::split() // OK
+void CStringToken::split()  // OK
 {
     std::size_t first_not = this->data.find_first_not_of(this->delimiter, 0);
-    std::size_t first = this->data.find_first_of(this->delimiter, first_not);
+    std::size_t first     = this->data.find_first_of(this->delimiter, first_not);
 
     while (first != std::wstring::npos || first_not != std::wstring::npos)
     {
@@ -75,13 +74,13 @@ void CStringToken::split() // OK
         this->IsNullString(first);
 
         first_not = this->data.find_first_not_of(this->delimiter, first);
-        first = this->data.find_first_of(this->delimiter, first_not);
+        first     = this->data.find_first_of(this->delimiter, first_not);
     }
 
     this->index = this->tokens.begin();
 }
 
-void CStringToken::IsNullString(std::wstring::size_type pos) // OK
+void CStringToken::IsNullString(std::wstring::size_type pos)  // OK
 {
     std::wstring search = this->data.substr(pos + 1, this->delimiter.length());
 

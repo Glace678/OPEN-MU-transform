@@ -5,7 +5,8 @@
 #include "w_BuffScriptLoader.h"
 
 class BuffStateSystem;
-using BuffStateSystemPtr = std::shared_ptr<BuffStateSystem>;class BuffStateSystem
+using BuffStateSystemPtr = std::shared_ptr<BuffStateSystem>;
+class BuffStateSystem
 {
 public:
     static BuffStateSystemPtr Make();
@@ -13,8 +14,8 @@ public:
     virtual ~BuffStateSystem();
 
 public:
-    BuffScriptLoader& GetBuffInfo();
-    BuffTimeControl& GetBuffTimeControl();
+    BuffScriptLoader&      GetBuffInfo();
+    BuffTimeControl&       GetBuffTimeControl();
     BuffStateValueControl& GetBuffStateValueControl();
 
 private:
@@ -22,27 +23,24 @@ private:
     void Destroy();
 
 private:
-    BuffScriptLoaderPtr				m_BuffInfo;
-    BuffTimeControlPtr				m_BuffTimeControl;
-    BuffStateValueControlPtr		m_BuffStateValueControl;
+    BuffScriptLoaderPtr      m_BuffInfo;
+    BuffTimeControlPtr       m_BuffTimeControl;
+    BuffStateValueControlPtr m_BuffStateValueControl;
 };
 
-inline
-BuffScriptLoader& BuffStateSystem::GetBuffInfo()
+inline BuffScriptLoader& BuffStateSystem::GetBuffInfo()
 {
     assert(m_BuffInfo);
     return *m_BuffInfo;
 }
 
-inline
-BuffTimeControl& BuffStateSystem::GetBuffTimeControl()
+inline BuffTimeControl& BuffStateSystem::GetBuffTimeControl()
 {
     assert(m_BuffTimeControl);
     return *m_BuffTimeControl;
 }
 
-inline
-BuffStateValueControl& BuffStateSystem::GetBuffStateValueControl()
+inline BuffStateValueControl& BuffStateSystem::GetBuffStateValueControl()
 {
     assert(m_BuffStateValueControl);
     return *m_BuffStateValueControl;

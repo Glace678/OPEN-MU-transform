@@ -14,9 +14,7 @@
 // External references
 extern ITEM_ATTRIBUTE* ItemAttribute;
 
-CItemDataHandler::CItemDataHandler()
-{
-}
+CItemDataHandler::CItemDataHandler() {}
 
 CItemDataHandler& CItemDataHandler::GetInstance()
 {

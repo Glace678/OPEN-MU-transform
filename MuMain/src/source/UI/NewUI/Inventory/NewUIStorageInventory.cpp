@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿  //*****************************************************************************
 // File: NewUIStorageInventory.cpp
 //*****************************************************************************
 
@@ -13,18 +13,18 @@
 
 #ifdef KJH_PBG_ADD_INGAMESHOP_SYSTEM
 #include "GameShop/MsgBoxIGSCommon.h"
-#endif // KJH_PBG_ADD_INGAMESHOP_SYSTEM
+#endif  // KJH_PBG_ADD_INGAMESHOP_SYSTEM
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 CNewUIStorageInventory::CNewUIStorageInventory()
 {
-    m_pNewUIMng = nullptr;
+    m_pNewUIMng         = nullptr;
     m_pNewInventoryCtrl = nullptr;
-    m_Pos.x = m_Pos.y = 0;
+    m_Pos.x = m_Pos.y         = 0;
     m_nBackupSourceInvenIndex = -1;
 }
 
@@ -35,15 +35,15 @@ CNewUIStorageInventory::~CNewUIStorageInventory()
 
 bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
-    if (nullptr == pNewUIMng || nullptr == g_pNewUI3DRenderMng
-        || nullptr == g_pNewItemMng)
+    if (nullptr == pNewUIMng || nullptr == g_pNewUI3DRenderMng || nullptr == g_pNewItemMng)
         return false;
 
     m_pNewUIMng = pNewUIMng;
     m_pNewUIMng->AddUIObj(INTERFACE_STORAGE, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::VAULT, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 36, 8, 15))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::VAULT, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 36, 8, 15))
     {
         SafeDelete(m_pNewInventoryCtrl);
         return false;
@@ -53,7 +53,7 @@ bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     LoadImages();
 
-    constexpr int anToolTipText[MAX_BTN] = { 235, 236, 242 };
+    constexpr int anToolTipText[MAX_BTN] = {235, 236, 242};
     for (int i = BTN_INSERT_ZEN; i < MAX_BTN; ++i)
     {
         m_abtn[i].ChangeButtonImgState(true, IMAGE_STORAGE_BTN_INSERT_ZEN + i);
@@ -95,7 +95,7 @@ void CNewUIStorageInventory::SetPos(int x, int y)
     }
 
     constexpr int xOffsetPerButton = 37;
-    constexpr int xFirstButton = 13;
+    constexpr int xFirstButton     = 13;
     for (int i = BTN_INSERT_ZEN; i < MAX_BTN; ++i)
     {
         m_abtn[i].ChangeButtonInfo(x + xFirstButton + i * xOffsetPerButton, y + 391, 36, 29);
@@ -118,8 +118,8 @@ bool CNewUIStorageInventory::UpdateMouseEvent()
     {
         if (IsPress(VK_RBUTTON))
         {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }
@@ -202,25 +202,22 @@ void CNewUIStorageInventory::RenderBackImage()
 void CNewUIStorageInventory::RenderText()
 {
     wchar_t szTemp[128];
-    int nTempZen;
+    int     nTempZen;
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetBgColor(0);
 
-    mu_swprintf(
-        szTemp, L"%ls (%ls)", I18N::Game::Storage, I18N::Game::Lookup(m_bLock ? 241 : 240));
+    mu_swprintf(szTemp, L"%ls (%ls)", I18N::Game::Storage, I18N::Game::Lookup(m_bLock ? 241 : 240));
     if (m_bLock)
         g_pRenderText->SetTextColor(240, 32, 32, 255);
     else
         g_pRenderText->SetTextColor(216, 216, 216, 255);
-    g_pRenderText->RenderText(
-        m_Pos.x, m_Pos.y + 11, szTemp, STORAGE_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 11, szTemp, STORAGE_WIDTH, 0, RT3_SORT_CENTER);
 
     nTempZen = CharacterMachine->StorageGold;
     ConvertGold(nTempZen, szTemp);
     g_pRenderText->SetTextColor(getGoldColor(nTempZen));
-    g_pRenderText->RenderText(
-        m_Pos.x + 168, m_Pos.y + 342 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + 168, m_Pos.y + 342 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
 
     g_pRenderText->SetTextColor(240, 64, 64, 255);
     g_pRenderText->RenderText(m_Pos.x + 10 + 15, m_Pos.y + 342 + 29, I18N::Game::StorageFee);
@@ -341,11 +338,10 @@ void CNewUIStorageInventory::ProcessInventoryCtrl()
 
             if (nDstIndex >= 0 && m_pNewInventoryCtrl->CanMove(nDstIndex, pItemObj))
             {
-                const int nSrcIndex = pPickedItem->GetSourceLinealPos();
+                const int  nSrcIndex         = pPickedItem->GetSourceLinealPos();
                 const auto sourceStorageType = pPickedItem->GetSourceStorageType();
                 const auto targetStorageType = m_pNewInventoryCtrl->GetStorageType();
-                SendRequestEquipmentItem(sourceStorageType, nSrcIndex,
-                    pItemObj, targetStorageType, nDstIndex);
+                SendRequestEquipmentItem(sourceStorageType, nSrcIndex, pItemObj, targetStorageType, nDstIndex);
             }
         }
         else
@@ -383,9 +379,7 @@ void CNewUIStorageInventory::ProcessStorageItemAutoMove()
         {
             SetItemAutoMove(true);
 
-            int nSrcIndex
-                = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn()
-                + pItemObj->x;
+            int nSrcIndex = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn() + pItemObj->x;
             SendRequestItemToMyInven(pItemObj, nSrcIndex, nDstIndex);
 
             PlayBuffer(SOUND_GET_ITEM01);
@@ -443,8 +437,7 @@ void CNewUIStorageInventory::SendRequestItemToMyInven(ITEM* pItemObj, int nStora
 {
     if (!IsStorageLocked() || IsCorrectPassword())
     {
-        SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex,
-            pItemObj, STORAGE_TYPE::INVENTORY, nInvenIndex);
+        SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY, nInvenIndex);
     }
     else
     {
@@ -452,8 +445,7 @@ void CNewUIStorageInventory::SendRequestItemToMyInven(ITEM* pItemObj, int nStora
         if (!IsItemAutoMove())
             g_pPickedItem->HidePickedItem();
 
-        CreateMessageBox(
-            MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
+        CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
     }
 }
 
@@ -466,7 +458,7 @@ void CNewUIStorageInventory::SendRequestItemToStorage(ITEM* pItemObj, int nInven
         CMsgBoxIGSCommon* pMsgBox = nullptr;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
         pMsgBox->Initialize(I18N::Game::Error, I18N::Game::TheseItemsCannotBeStoredInTheInventory);
-#endif // KJH_PBG_ADD_INGAMESHOP_SYSTEM
+#endif  // KJH_PBG_ADD_INGAMESHOP_SYSTEM
 
         g_pSystemLogBox->AddText(I18N::Game::TheseItemsCannotBeStoredInTheInventory, TYPE_ERROR_MESSAGE);
         CNewUIInventoryCtrl::BackupPickedItem();
@@ -476,8 +468,7 @@ void CNewUIStorageInventory::SendRequestItemToStorage(ITEM* pItemObj, int nInven
     }
     else
     {
-        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex,
-            pItemObj, STORAGE_TYPE::VAULT, nStorageIndex);
+        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex, pItemObj, STORAGE_TYPE::VAULT, nStorageIndex);
     }
 }
 
@@ -527,34 +518,34 @@ void CNewUIStorageInventory::SetItemAutoMove(bool bItemAutoMove, int nSourceInve
 
     if (bItemAutoMove)
     {
-        m_nBackupMouseX = MouseX;
-        m_nBackupMouseY = MouseY;
+        m_nBackupMouseX           = MouseX;
+        m_nBackupMouseY           = MouseY;
         m_nBackupSourceInvenIndex = nSourceInvenIndex;
     }
     else
     {
         m_nBackupMouseX = m_nBackupMouseY = 0;
-        m_nBackupSourceInvenIndex = -1;
+        m_nBackupSourceInvenIndex         = -1;
     }
 }
 
 void CNewUIStorageInventory::InitBackupItemInfo()
 {
-    m_bTakeZen = false;
-    m_nBackupTakeZen = 0;
-    m_nBackupInvenIndex = -1;
+    m_bTakeZen                = false;
+    m_nBackupTakeZen          = 0;
+    m_nBackupInvenIndex       = -1;
     m_nBackupSourceInvenIndex = -1;
 }
 
 void CNewUIStorageInventory::SetBackupTakeZen(int nZen)
 {
-    m_bTakeZen = true;
+    m_bTakeZen       = true;
     m_nBackupTakeZen = nZen;
 }
 
 void CNewUIStorageInventory::SetBackupInvenIndex(int nInvenIndex)
 {
-    m_bTakeZen = false;
+    m_bTakeZen          = false;
     m_nBackupInvenIndex = nInvenIndex;
 }
 
@@ -575,73 +566,64 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
 {
     switch (byStatus)
     {
-    case 0:
-        LockStorage(false);
-        SetCorrectPassword(false);
-        break;
+        case 0:
+            LockStorage(false);
+            SetCorrectPassword(false);
+            break;
 
-    case 1:
-        LockStorage(true);
-        SetCorrectPassword(false);
-        break;
+        case 1:
+            LockStorage(true);
+            SetCorrectPassword(false);
+            break;
 
-    case 10:
-        CreateOkMessageBox(I18N::Game::IncorrectPassword);
-        CNewUIInventoryCtrl::BackupPickedItem();
-        ProcessStorageItemAutoMoveFailure();
-        break;
+        case 10:
+            CreateOkMessageBox(I18N::Game::IncorrectPassword);
+            CNewUIInventoryCtrl::BackupPickedItem();
+            ProcessStorageItemAutoMoveFailure();
+            break;
 
-    case 11:
-        CreateOkMessageBox(I18N::Game::InventoryIsAlreadyLocked);
-        break;
+        case 11:
+            CreateOkMessageBox(I18N::Game::InventoryIsAlreadyLocked);
+            break;
 
-    case 12:
-        if (IsStorageLocked() && !IsCorrectPassword())
-        {
-            if (m_bTakeZen)
+        case 12:
+            if (IsStorageLocked() && !IsCorrectPassword())
             {
-                SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(VaultMoneyMoveDirection::VaultToInventory, GetBackupTakeZen());
-                InitBackupItemInfo();
-            }
-            else
-            {
-                ITEM* pItemObj;
-                int nStorageIndex;
-
-                if (IsItemAutoMove())
+                if (m_bTakeZen)
                 {
-                    pItemObj = m_pNewInventoryCtrl->FindItemAtPt(
-                        m_nBackupMouseX, m_nBackupMouseY);
-                    // 86-34: FindItemAtPt can miss on an empty cell; never deref null.
-                    if (pItemObj == nullptr)
-                        break;
-                    nStorageIndex
-                        = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn()
-                        + pItemObj->x;
+                    SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(VaultMoneyMoveDirection::VaultToInventory,
+                                                                            GetBackupTakeZen());
+                    InitBackupItemInfo();
                 }
                 else
                 {
-                    // 86-34: g_pPickedItem is null when nothing is actually picked.
-                    if (g_pPickedItem == nullptr)
-                        break;
-                    nStorageIndex = g_pPickedItem->GetSourceLinealPos();
-                    pItemObj = g_pPickedItem->GetItem();
+                    ITEM* pItemObj;
+                    int   nStorageIndex;
+
+                    if (IsItemAutoMove())
+                    {
+                        pItemObj      = m_pNewInventoryCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
+                        nStorageIndex = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn() + pItemObj->x;
+                    }
+                    else
+                    {
+                        nStorageIndex = g_pPickedItem->GetSourceLinealPos();
+                        pItemObj      = g_pPickedItem->GetItem();
+                    }
+
+                    SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY,
+                                             GetBackupInvenIndex());
+
+                    InitBackupItemInfo();
                 }
-
-                SendRequestEquipmentItem(
-                    STORAGE_TYPE::VAULT, nStorageIndex,
-                    pItemObj, STORAGE_TYPE::INVENTORY, GetBackupInvenIndex());
-
-                InitBackupItemInfo();
             }
-        }
-        LockStorage(true);
-        SetCorrectPassword(true);
-        break;
+            LockStorage(true);
+            SetCorrectPassword(true);
+            break;
 
-    case 13:
-        CreateOkMessageBox(I18N::Game::ThePasswordYouHaveEnteredIsIncorrect);
-        break;
+        case 13:
+            CreateOkMessageBox(I18N::Game::ThePasswordYouHaveEnteredIsIncorrect);
+            break;
     }
 }
 
@@ -649,8 +631,7 @@ void CNewUIStorageInventory::ProcessToReceiveStorageItems(int nIndex, std::span<
 {
     CNewUIInventoryCtrl::DeletePickedItem();
 
-    if (nIndex >= 0 && nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn()
-        * m_pNewInventoryCtrl->GetNumberOfRow()))
+    if (nIndex >= 0 && nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn() * m_pNewInventoryCtrl->GetNumberOfRow()))
     {
         if (IsItemAutoMove())
         {
@@ -658,14 +639,15 @@ void CNewUIStorageInventory::ProcessToReceiveStorageItems(int nIndex, std::span<
             {
                 g_pMyInventory->DeleteItem(m_nBackupSourceInvenIndex);
             }
-            else if (m_nBackupSourceInvenIndex >= MAX_MY_INVENTORY_INDEX && m_nBackupSourceInvenIndex < MAX_MY_INVENTORY_EX_INDEX)
+            else if (m_nBackupSourceInvenIndex >= MAX_MY_INVENTORY_INDEX &&
+                     m_nBackupSourceInvenIndex < MAX_MY_INVENTORY_EX_INDEX)
             {
                 g_pMyInventoryExt->DeleteItem(m_nBackupSourceInvenIndex);
             }
             else
             {
                 CNewUIInventoryCtrl* pMyInvenCtrl = g_pMyInventory->GetInventoryCtrl();
-                ITEM* pItemObj = pMyInvenCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
+                ITEM*                pItemObj     = pMyInvenCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
                 g_pMyInventory->GetInventoryCtrl()->RemoveItem(pItemObj);
             }
 

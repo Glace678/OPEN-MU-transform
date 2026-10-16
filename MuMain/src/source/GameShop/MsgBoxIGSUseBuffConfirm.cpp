@@ -17,10 +17,10 @@ CMsgBoxIGSUseBuffConfirm::CMsgBoxIGSUseBuffConfirm()
         m_szDescription[i][0] = '\0';
     }
 
-    m_iStorageSeq = 0;
+    m_iStorageSeq     = 0;
     m_iStorageItemSeq = 0;
-    m_wItemCode = -1;
-    m_szItemType = '\0';
+    m_wItemCode       = -1;
+    m_szItemType      = '\0';
 }
 
 CMsgBoxIGSUseBuffConfirm::~CMsgBoxIGSUseBuffConfirm()
@@ -34,7 +34,9 @@ bool CMsgBoxIGSUseBuffConfirm::Create(float fPriority)
 
     SetAddCallbackFunc();
 
-    CNewUIMessageBoxBase::Create((IMAGE_IGS_WINDOW_WIDTH / 2) - (IMAGE_IGS_FRAME_WIDTH / 2), (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2), IMAGE_IGS_FRAME_WIDTH, IMAGE_IGS_FRAME_HEIGHT, fPriority);
+    CNewUIMessageBoxBase::Create((IMAGE_IGS_WINDOW_WIDTH / 2) - (IMAGE_IGS_FRAME_WIDTH / 2),
+                                 (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2), IMAGE_IGS_FRAME_WIDTH,
+                                 IMAGE_IGS_FRAME_HEIGHT, fPriority);
 
     SetButtonInfo();
 
@@ -43,18 +45,22 @@ bool CMsgBoxIGSUseBuffConfirm::Create(float fPriority)
     return true;
 }
 
-void CMsgBoxIGSUseBuffConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, WORD wItemCode, wchar_t szItemType, wchar_t* pszItemName, wchar_t* pszBuffName)
+void CMsgBoxIGSUseBuffConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, WORD wItemCode, wchar_t szItemType,
+                                          wchar_t* pszItemName, wchar_t* pszBuffName)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
-    m_iStorageSeq = iStorageSeq;
+    m_iStorageSeq     = iStorageSeq;
     m_iStorageItemSeq = iStorageItemSeq;
-    m_wItemCode = wItemCode;
-    m_szItemType = szItemType;
+    m_wItemCode       = wItemCode;
+    m_szItemType      = szItemType;
     wcscpy(m_szCurrentBuffName, pszBuffName);
 
     mu_swprintf(szText, I18N::Game::UsingTheSItemWillNegate, pszItemName, pszBuffName, pszItemName);
-    m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH, szText, IGS_TEXT_DIVIDE_WIDTH, false, '#');
+    m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH, szText,
+                                              IGS_TEXT_DIVIDE_WIDTH, false, '#');
 }
 
 void CMsgBoxIGSUseBuffConfirm::Release()
@@ -106,11 +112,13 @@ CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::LButtonUp(class CNewUIMessageBoxBase* 
     return CALLBACK_CONTINUE;
 }
 
-CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::OKButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::OKButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                       const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSUseBuffConfirm*>(pOwner);
 
-    SocketClient->ToGameServer()->SendCashShopStorageItemConsumeRequest(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_szItemType);
+    SocketClient->ToGameServer()->SendCashShopStorageItemConsumeRequest(
+        pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_szItemType);
     SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
 
     PlayBuffer(SOUND_CLICK01);
@@ -119,7 +127,8 @@ CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::OKButtonDown(class CNewUIMessageBoxBas
     return CALLBACK_BREAK;
 }
 
-CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::CancelButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::CancelButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                           const leaf::xstreambuf&     xParam)
 {
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -136,11 +145,13 @@ void CMsgBoxIGSUseBuffConfirm::SetAddCallbackFunc()
 
 void CMsgBoxIGSUseBuffConfirm::SetButtonInfo()
 {
-    m_BtnOk.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_OK_POS_X, GetPos().y + IGS_BTN_POS_Y, IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
+    m_BtnOk.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_OK_POS_X, GetPos().y + IGS_BTN_POS_Y, IMAGE_IGS_BTN_WIDTH,
+                    IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnOk.MoveTextPos(0, -1);
     m_BtnOk.SetText(I18N::Game::OK);
 
-    m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y, IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
+    m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
+                        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnCancel.MoveTextPos(0, -1);
     m_BtnCancel.SetText(I18N::Game::Cancel);
 }
@@ -157,7 +168,8 @@ void CMsgBoxIGSUseBuffConfirm::RenderFrame()
     for (int i = 0; i < m_iMiddleCount; ++i)
     {
         RenderImage(IMAGE_IGS_LEFTLINE, GetPos().x, iY, IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
-        RenderImage(IMAGE_IGS_RIGHTLINE, GetPos().x + IMAGE_IGS_FRAME_WIDTH - IMAGE_IGS_LINE_WIDTH, iY, IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
+        RenderImage(IMAGE_IGS_RIGHTLINE, GetPos().x + IMAGE_IGS_FRAME_WIDTH - IMAGE_IGS_LINE_WIDTH, iY,
+                    IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
         iY += IMAGE_IGS_LINE_HEIGHT;
     }
 
@@ -170,18 +182,23 @@ void CMsgBoxIGSUseBuffConfirm::RenderTexts()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
 
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, I18N::Game::BuffItemUseConfirmation, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, I18N::Game::BuffItemUseConfirmation,
+                              IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
 
     // Decription
     for (int i = 0; i < m_iDesciptionLine; ++i)
     {
-        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_DESCRIPTION_POS_X, GetPos().y + IGS_TEXT_DESCRIPTION_POS_Y + (i * IGS_TEXT_DESCRIPTION_INTERVAL), m_szDescription[i], IGS_TEXT_DESCRIPTION_WIDTH, 0, RT3_SORT_LEFT);
+        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_DESCRIPTION_POS_X,
+                                  GetPos().y + IGS_TEXT_DESCRIPTION_POS_Y + (i * IGS_TEXT_DESCRIPTION_INTERVAL),
+                                  m_szDescription[i], IGS_TEXT_DESCRIPTION_WIDTH, 0, RT3_SORT_LEFT);
     }
 
 #if defined(FOR_WORK) && defined(_DEBUG)
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     g_pRenderText->SetTextColor(255, 0, 0, 255);
     mu_swprintf(szText, L"m_iStorageSeq : %d", m_iStorageSeq);
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 10, szText, 150, 0, RT3_SORT_LEFT);
@@ -191,7 +208,7 @@ void CMsgBoxIGSUseBuffConfirm::RenderTexts()
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 30, szText, 150, 0, RT3_SORT_LEFT);
     mu_swprintf(szText, L"m_szItemType : %c", m_szItemType);
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 40, szText, 150, 0, RT3_SORT_LEFT);
-#endif // FOR_WORK
+#endif  // FOR_WORK
 }
 
 void CMsgBoxIGSUseBuffConfirm::RenderButtons()
@@ -232,4 +249,4 @@ bool CMsgBoxIGSUseBuffConfirmLayout::SetLayout()
     return true;
 }
 
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM

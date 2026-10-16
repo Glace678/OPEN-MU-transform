@@ -8,17 +8,16 @@
 // External window dimensions
 extern unsigned int WindowWidth;
 extern unsigned int WindowHeight;
-extern int OpenglWindowX;
-extern int OpenglWindowY;
-extern int OpenglWindowWidth;
-extern int OpenglWindowHeight;
+extern int          OpenglWindowX;
+extern int          OpenglWindowY;
+extern int          OpenglWindowWidth;
+extern int          OpenglWindowHeight;
 
 // Actual viewport dimensions (distinct from OpenglWindowWidth/Height which are full window)
-static int s_ViewportWidth = 0;
+static int s_ViewportWidth  = 0;
 static int s_ViewportHeight = 0;
 
-void CameraProjection::SetupPerspective(CameraState& state, float fov, float aspect,
-                                          float zNear, float zFar)
+void CameraProjection::SetupPerspective(CameraState& state, float fov, float aspect, float zNear, float zFar)
 {
     // GL perspective is fed to GlobalUBO from a CPU closed form by BeginOpengl() (DXP-07b) --
     // this function only maintains the CPU screen-center/perspective-factor cache below.
@@ -26,23 +25,23 @@ void CameraProjection::SetupPerspective(CameraState& state, float fov, float asp
     // Use actual viewport dimensions (set by SetViewport) for screen center and
     // perspective. This accounts for the game viewport being narrower/shorter than
     // the full window when UI panels (inventory, NPC shop, etc.) are open.
-    int vpWidth = s_ViewportWidth > 0 ? s_ViewportWidth : OpenglWindowWidth;
+    int vpWidth  = s_ViewportWidth > 0 ? s_ViewportWidth : OpenglWindowWidth;
     int vpHeight = s_ViewportHeight > 0 ? s_ViewportHeight : OpenglWindowHeight;
 
-    state.ScreenCenterX = OpenglWindowX + vpWidth / 2;
-    state.ScreenCenterY = OpenglWindowY + vpHeight / 2;
+    state.ScreenCenterX     = OpenglWindowX + vpWidth / 2;
+    state.ScreenCenterY     = OpenglWindowY + vpHeight / 2;
     state.ScreenCenterYFlip = WindowHeight - state.ScreenCenterY;
 
-    float fovRad = fov * 0.5f * Q_PI / 180.0f;
+    float fovRad       = fov * 0.5f * Q_PI / 180.0f;
     state.PerspectiveX = tanf(fovRad) / (float)(vpWidth / 2) * aspect;
     state.PerspectiveY = tanf(fovRad) / (float)(vpHeight / 2);
 }
 
 void CameraProjection::SetViewport(int x, int y, int width, int height)
 {
-    OpenglWindowX = x;
-    OpenglWindowY = y;
-    s_ViewportWidth = width;
+    OpenglWindowX    = x;
+    OpenglWindowY    = y;
+    s_ViewportWidth  = width;
     s_ViewportHeight = height;
 
     // GL's viewport origin is bottom-left, so glViewport needs y flipped to
@@ -51,8 +50,7 @@ void CameraProjection::SetViewport(int x, int y, int width, int height)
     glViewport(x, flippedY, width, height);
 }
 
-void CameraProjection::ScreenToWorldRay(const CameraState& state, int sx, int sy,
-                                         vec3_t outTarget, bool bFixView)
+void CameraProjection::ScreenToWorldRay(const CameraState& state, int sx, int sy, vec3_t outTarget, bool bFixView)
 {
     // Convert reference coordinates to actual pixels
     sx = sx * WindowWidth / REFERENCE_WIDTH;
@@ -74,8 +72,7 @@ void CameraProjection::ScreenToWorldRay(const CameraState& state, int sx, int sy
     VectorAdd(MousePosition, p2, outTarget);
 }
 
-void CameraProjection::WorldToScreen(const CameraState& state, const vec3_t worldPos,
-                                      int* outX, int* outY)
+void CameraProjection::WorldToScreen(const CameraState& state, const vec3_t worldPos, int* outX, int* outY)
 {
     vec3_t transformPos;
     VectorTransform(worldPos, state.Matrix, transformPos);
@@ -89,8 +86,8 @@ void CameraProjection::WorldToScreen(const CameraState& state, const vec3_t worl
     *outY = *outY * REFERENCE_HEIGHT / (int)WindowHeight;
 }
 
-void CameraProjection::TransformPosition(const CameraState& state, const vec3_t position,
-                                          vec3_t outWorldPosition, int* outX, int* outY)
+void CameraProjection::TransformPosition(const CameraState& state, const vec3_t position, vec3_t outWorldPosition,
+                                         int* outX, int* outY)
 {
     vec3_t temp;
     VectorSubtract(position, state.Position, temp);
@@ -104,12 +101,11 @@ void CameraProjection::TransformPosition(const CameraState& state, const vec3_t 
 bool CameraProjection::TestDepthBuffer(const CameraState& state, const vec3_t position)
 {
     vec3_t worldPosition;
-    int x, y;
+    int    x, y;
     TransformPosition(state, position, worldPosition, &x, &y);
 
     // Check if within viewport
-    if (x < OpenglWindowX || y < OpenglWindowY ||
-        x >= OpenglWindowX + OpenglWindowWidth ||
+    if (x < OpenglWindowX || y < OpenglWindowY || x >= OpenglWindowX + OpenglWindowWidth ||
         y >= OpenglWindowY + OpenglWindowHeight)
     {
         return false;
@@ -124,9 +120,9 @@ bool CameraProjection::TestDepthBuffer(const CameraState& state, const vec3_t po
     // This evaluates to 0 at the near plane and 1 at the far plane. The
     // earlier approximation (1 - n/-z + n/f) was off by n/f at the near plane,
     // which can cause false occlusion for objects very close to the camera.
-    const float n = state.ViewNear;
-    const float f = state.ViewFar;
-    const float z_eye = worldPosition[2];  // negative for points in front of camera
+    const float n        = state.ViewNear;
+    const float f        = state.ViewFar;
+    const float z_eye    = worldPosition[2];  // negative for points in front of camera
     const float expected = (f / (f - n)) * (1.0f + n / z_eye);
 
     return (depth >= expected);

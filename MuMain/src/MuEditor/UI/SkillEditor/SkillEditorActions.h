@@ -38,4 +38,4 @@ private:
     static std::string GetFieldValueAsString(const SKILL_ATTRIBUTE& skill, const SkillFieldDescriptor& desc);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

@@ -30,17 +30,6 @@ char AppointType;
 
 using namespace SEASON3B;
 
-namespace
-{
-    // The text-entry layouts only work with a text-input owner. Every such
-    // ProcessOk/ReturnDown starts with this cast and must bail out when the
-    // owner is another box type (UI-7).
-    CNewUITextInputMsgBox* AsTextInputBox(CNewUIMessageBoxBase* pOwner)
-    {
-        return dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
-    }
-}
-
 SEASON3B::CNewUITextInputMsgBox::CNewUITextInputMsgBox()
 {
     m_pInputBox = NULL;
@@ -149,7 +138,7 @@ void SEASON3B::CNewUITextInputMsgBox::SetButtonInfo()
 
 CALLBACK_RESULT SEASON3B::CNewUITextInputMsgBox::LButtonUp(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     if (pMsgBox)
     {
         switch (pMsgBox->GetMsgBoxType())
@@ -501,11 +490,7 @@ SEASON3B::CNewUIKeyPadMsgBox::~CNewUIKeyPadMsgBox()
 
 bool SEASON3B::CNewUIKeyPadMsgBox::Create(DWORD dwType, int iInputLimit)
 {
-    // UI-1/UI-6: every downstream use (SetCheckInputText's copy, IsAllSameNumber,
-    // KeyPadInput, the render width) trusts this value, and the check buffer only
-    // holds MAX_KEYPADINPUT characters. Clamp once here; 0/negative limits are
-    // meaningless, so floor at 1.
-    m_iInputLimit = std::clamp(iInputLimit, 1, MAX_KEYPADINPUT);
+    m_iInputLimit = iInputLimit;
 
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::LButtonUp, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::KeyPadBtnDown, MSGBOX_EVENT_USER_CUSTOM_KEYPAD_INPUT);
@@ -661,18 +646,7 @@ const wchar_t* SEASON3B::CNewUIKeyPadMsgBox::GetInputText()
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetCheckInputText(const wchar_t* strInput)
 {
-    // UI-1: #MG-21 compared by wide chars but copied m_iInputLimit chars into a
-    // buffer of MAX_KEYPADINPUT+1 based on a limit the caller could set higher.
-    // Copy bounded by the destination capacity (m_iInputLimit is now clamped to
-    // it anyway), null-guard, and force termination so memcmp can't run off.
-    if (strInput == nullptr)
-    {
-        m_strCheckKeyPadInput[0] = L'\0';
-        return;
-    }
-
-    wcsncpy(m_strCheckKeyPadInput, strInput, MAX_KEYPADINPUT);  // #MG-21: wide-char copy
-    m_strCheckKeyPadInput[MAX_KEYPADINPUT] = L'\0';
+    memcpy(m_strCheckKeyPadInput, strInput, m_iInputLimit * sizeof(wchar_t));  // #MG-21: compare by wide chars, not bytes
 }
 
 bool SEASON3B::CNewUIKeyPadMsgBox::IsCheckInput()
@@ -705,13 +679,6 @@ bool SEASON3B::CNewUIKeyPadMsgBox::IsAllSameNumber()
 
 void SEASON3B::CNewUIKeyPadMsgBox::KeyPadInput(int iInput)
 {
-    // UI-6: never append past the declared limit (which also bounds the
-    // comparison window); this stops the wcscat overflowing the input buffer.
-    if (GetInputSize() >= m_iInputLimit)
-    {
-        return;
-    }
-
     wchar_t strInput[4] = { 0, };
     mu_swprintf(strInput, L"%d", iInput);
     wcscat(m_strKeyPadInput, strInput);
@@ -1593,7 +1560,7 @@ void SEASON3B::CGemIntegrationUnityMsgBox::SetButtonInfo()
     for (int k = 0; k < (int)COMGEM::eCOMTYPE_END; k++)
     {
         cButton.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY, x + 50.0f, y + (height + 10.0f) * k, MSGBOX_BTN_EMPTY_WIDTH + 20, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY);
-        // 1808 "%d items combined (%d zen cost)"
+        // 1808 "%d개 조합(%d젠 소요)"
         const int fee = static_cast<int>(GameConfig::GetInstance().ScaleSoloPrice(500000 * (k + 1)));
         mu_swprintf(szTemp, I18N::Game::CombineDDZenIsRequired, 10 * (k + 1), fee);
         cButton.SetText(szTemp);
@@ -2488,7 +2455,7 @@ CALLBACK_RESULT SEASON3B::CSystemMenuMsgBox::ChooseCharacterBtnDown(class CNewUI
     g_ErrorReport.Write(L"> Menu - Join with another character. ");
     g_ErrorReport.WriteCurrentTime();
 
-    //  Save data set in-game.
+    //  게임내에서 설정한 데이터 저장.
     SaveOptions();
     SaveMacro(L"Data\\Macro.txt");
 
@@ -4411,7 +4378,7 @@ void CCherryBlossomMsgBox::SetButtonInfo()
     x = GetPos().x + msgboxhalfwidth - btnhalfwidth;
     y = GetPos().y + GetSize().cy - (MSGBOX_BTN_EMPTY_HEIGHT + MSGBOX_BTN_BOTTOM_BLANK);
     m_BtnExit.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_SMALL, x, y, width, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY_SMALL);
-    // 1002 "Close"
+    // 1002 "닫기"
     m_BtnExit.SetText(I18N::Game::Close388);
 }
 
@@ -4484,12 +4451,7 @@ bool SEASON3B::CTradeZenMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CTradeZenMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4556,12 +4518,7 @@ CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::OkBtnDown(class CNewUIMessage
 
 CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4629,12 +4586,7 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::OkBtnDown(class CNewUIMessage
 
 CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4705,11 +4657,7 @@ bool SEASON3B::CPersonalShopItemValueMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CPersonalShopItemValueMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
 
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
 
@@ -4856,13 +4804,7 @@ bool SEASON3B::CPersonalShopNameMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CPersonalShopNameMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    // UI-7: guard the dynamic_cast before dereferencing.
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4872,10 +4814,7 @@ CALLBACK_RESULT SEASON3B::CPersonalShopNameMsgBoxLayout::ProcessOk(class CNewUIM
 
     if (IsCorrectShopTitle(strText))
     {
-        // UI-2: the input box can hold MAX_TEXT_LENGTH chars; the global shop
-        // title only holds MAX_SHOPTITLE+1, so truncate and force termination.
-        wcsncpy(g_szPersonalShopTitle, strText, MAX_SHOPTITLE);
-        g_szPersonalShopTitle[MAX_SHOPTITLE] = L'\0';
+        wcscpy(g_szPersonalShopTitle, strText);
     }
     else
     {
@@ -4930,12 +4869,7 @@ bool SEASON3B::CCastleWithdrawMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -4959,12 +4893,7 @@ CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMe
 
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
-    if (pMsgBox == nullptr)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
     wchar_t strText[MAX_TEXT_LENGTH] = { 0, };
     pMsgBox->GetInputBoxText(strText);
     if (wcslen(strText) == 0)
@@ -5213,13 +5142,12 @@ CALLBACK_RESULT SEASON3B::CStorageLockMsgBoxLayout::ReturnDown(class CNewUIMessa
 
 CALLBACK_RESULT SEASON3B::CStorageLockMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
 
     if (pMsgBox == nullptr)
     {
         return CALLBACK_CONTINUE;
     }
-
 
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
     // fills up to its default length, so the old [20] buffer overflowed the
@@ -5328,13 +5256,12 @@ bool SEASON3B::CStorageUnlockMsgBoxLayout::SetLayout()
 
 CALLBACK_RESULT SEASON3B::CStorageUnlockMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
 
     if (pMsgBox == nullptr)
     {
         return CALLBACK_CONTINUE;
     }
-
 
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
     // fills up to its default length, so the old [20] buffer overflowed the
@@ -6616,7 +6543,7 @@ void SEASON3B::CElpisMsgBox::RenderTexts()
     g_pRenderText->RenderText(fPos_x, fPos_y + 0 * 18, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 15;
-    g_pRenderText->SetTextColor(220, 183, 131, 255);	// Gold
+    g_pRenderText->SetTextColor(220, 183, 131, 255);	// 황금색
 
     switch (m_iMessageType)
     {
@@ -7078,7 +7005,7 @@ void SEASON3B::CResetCharacterPointMsgBox::SetButtonInfo()
     x = GetPos().x + msgboxhalfwidth - btnhalfwidth;
     y = GetPos().y + 105;
     m_ResetCharacterPointBtn.SetInfo(CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY, x, y, width, height, CNewUIMessageBoxButton::MSGBOX_BTN_SIZE_EMPTY);
-    m_ResetCharacterPointBtn.SetText(I18N::Game::StatReInitialization); // "Reset stats"
+    m_ResetCharacterPointBtn.SetText(I18N::Game::StatReInitialization); // "스탯 초기화"
 
     width = MSGBOX_BTN_EMPTY_SMALL_WIDTH;
     btnhalfwidth = width / 2.f;
@@ -7255,20 +7182,11 @@ CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ReturnDown(class CNew
 
 CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto* pMsgBox = AsTextInputBox(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
 
     if (pMsgBox == nullptr)
     {
         return CALLBACK_CONTINUE;
-    }
-
-    // 85-07: captured guild index can be -1 (member not found) or stale after a
-    // list refresh; reject before reading GuildList[].Name out of bounds.
-    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
-    {
-        PlayBuffer(SOUND_CLICK01);
-        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
-        return CALLBACK_BREAK;
     }
 
     // Sized like the other GetInputBoxText callers (MAX_TEXT_LENGTH): GetText
@@ -7487,14 +7405,9 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
     m_MsgDataList.clear();
 
     wchar_t strText[256];
-    // 85-07: this renders every frame while the guild list can refresh underneath;
-    // resolve the member name through a bounds-checked pointer so a stale/-1 index
-    // never reads GuildList[] out of range. OK/Cancel buttons still render.
-    const wchar_t* pszGuildMemberName =
-        (DeleteIndex >= 0 && DeleteIndex < g_nGuildMemberCount) ? GuildList[DeleteIndex].Name : L"";
     if (COMGEM::m_cGemType == COMGEM::CELE)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, pszGuildMemberName, I18N::Game::AssistM);
+        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::AssistM);
         AppointType = SUBGUILDMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7508,7 +7421,7 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
 
     if (COMGEM::m_cGemType == COMGEM::SOUL)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, pszGuildMemberName, I18N::Game::BattleM);
+        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::BattleM);
         AppointType = BATTLEMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7571,14 +7484,6 @@ CALLBACK_RESULT SEASON3B::CGuild_ToPerson_Position::SoulBtnDown(class CNewUIMess
 
 CALLBACK_RESULT SEASON3B::CGuild_ToPerson_Position::OkBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    // 85-07: guard the captured index before reading GuildList[].Name and sending.
-    if (DeleteIndex < 0 || DeleteIndex >= g_nGuildMemberCount)
-    {
-        COMGEM::Exit();
-        PlayBuffer(SOUND_CLICK01);
-        g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
-        return CALLBACK_BREAK;
-    }
     COMGEM::Exit();
     SocketClient->ToGameServer()->SendGuildRoleAssignRequest(
         AppointType,

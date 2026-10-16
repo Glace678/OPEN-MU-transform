@@ -14,29 +14,29 @@ public:
     bool IsBuffTime(eBuffTimeType bufftype);
 
 public:
-    void GetBuffStringTime(eBuffState bufftype, std::wstring& timeText);
-    void GetBuffStringTime(DWORD type, std::wstring& timeText, bool issecond = true);
+    void        GetBuffStringTime(eBuffState bufftype, std::wstring& timeText);
+    void        GetBuffStringTime(DWORD type, std::wstring& timeText, bool issecond = true);
     const DWORD GetBuffTime(DWORD type);
-    void GetStringTime(DWORD time, std::wstring& timeText, bool isSecond = true);
+    void        GetStringTime(DWORD time, std::wstring& timeText, bool isSecond = true);
 
 private:
     eBuffTimeType CheckBuffTimeType(eBuffState bufftype);
-    DWORD GetBuffEventTime(eBuffTimeType bufftimetype);
-    DWORD GetBuffMaxTime(eBuffState bufftype, DWORD curbufftime = 0);
-    bool CheckBuffTime(DWORD type);
+    DWORD         GetBuffEventTime(eBuffTimeType bufftimetype);
+    DWORD         GetBuffMaxTime(eBuffState bufftype, DWORD curbufftime = 0);
+    bool          CheckBuffTime(DWORD type);
     BuffTimeControl();
 
 private:
     struct BuffTimeInfo
     {
         eBuffState s_BuffType;
-        DWORD    s_CurBuffTime;
-        DWORD    s_EventBuffTime;
+        DWORD      s_CurBuffTime;
+        DWORD      s_EventBuffTime;
 
         BuffTimeInfo() : s_BuffType(eBuffNone), s_CurBuffTime(0), s_EventBuffTime(0) {}
     };
-    typedef std::map<DWORD, BuffTimeInfo>		BuffTimeInfoMap;
+    typedef std::map<DWORD, BuffTimeInfo> BuffTimeInfoMap;
 
 private:
-    BuffTimeInfoMap		m_BuffTimeList;
+    BuffTimeInfoMap m_BuffTimeList;
 };

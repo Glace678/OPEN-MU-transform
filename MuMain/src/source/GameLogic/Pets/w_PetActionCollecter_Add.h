@@ -10,7 +10,8 @@
 #pragma once
 
 class PetActionCollecterAdd;
-using PetActionCollecterAddPtr = std::shared_ptr<PetActionCollecterAdd>;class PetActionCollecterAdd : public PetAction
+using PetActionCollecterAddPtr = std::shared_ptr<PetActionCollecterAdd>;
+class PetActionCollecterAdd : public PetAction
 {
 public:
     static PetActionCollecterAddPtr Make();
@@ -28,12 +29,12 @@ public:
     bool CompTimeControl(const DWORD& dwCompTime, DWORD& dwTime);
 
 public:
-    typedef std::list< RootingItem > ItemList;
+    typedef std::list<RootingItem> ItemList;
     enum ActionState
     {
-        eAction_Stand = 0,
-        eAction_Move = 1,
-        eAction_Get = 2,
+        eAction_Stand  = 0,
+        eAction_Move   = 1,
+        eAction_Get    = 2,
         eAction_Return = 3,
 
         eAction_End_NotUse,
@@ -46,11 +47,11 @@ protected:
 
     //ItemList m_ItemList;
     RootingItem m_RootItem;
-    bool m_isRooting;
+    bool        m_isRooting;
 
-    DWORD m_dwSendDelayTime;
-    DWORD m_dwRootingTime;
-    DWORD m_dwRoundCountDelay;
+    DWORD       m_dwSendDelayTime;
+    DWORD       m_dwRootingTime;
+    DWORD       m_dwRoundCountDelay;
     ActionState m_state;
 
     double m_fRadWidthStand;
@@ -58,10 +59,11 @@ protected:
 
     //test
 };
-#endif //PJH_ADD_PANDA_PET
+#endif  //PJH_ADD_PANDA_PET
 
 class PetActionCollecterSkeleton;
-using PetActionCollecterSkeletonPtr = std::shared_ptr<PetActionCollecterSkeleton>;class PetActionCollecterSkeleton : public PetActionCollecterAdd
+using PetActionCollecterSkeletonPtr = std::shared_ptr<PetActionCollecterSkeleton>;
+class PetActionCollecterSkeleton : public PetActionCollecterAdd
 {
 public:
     static PetActionCollecterSkeletonPtr Make();

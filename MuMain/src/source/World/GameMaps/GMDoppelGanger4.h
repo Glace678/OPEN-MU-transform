@@ -5,7 +5,8 @@
 #include "World/MapInfra/w_BaseMap.h"
 
 class CGMDoppelGanger4;
-using CGMDoppelGanger4Ptr = std::shared_ptr<CGMDoppelGanger4>;class CGMDoppelGanger4 : public BaseMap
+using CGMDoppelGanger4Ptr = std::shared_ptr<CGMDoppelGanger4>;
+class CGMDoppelGanger4 : public BaseMap
 {
 public:
     static CGMDoppelGanger4Ptr Make();
@@ -20,11 +21,11 @@ public:
 
 public:
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
+    virtual bool       MoveMonsterVisual(OBJECT* o, BMD* b);
+    virtual void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public:
     virtual bool PlayMonsterSound(OBJECT* o);

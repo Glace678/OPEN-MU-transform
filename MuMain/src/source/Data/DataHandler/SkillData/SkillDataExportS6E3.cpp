@@ -23,8 +23,8 @@ bool SkillDataExportS6E3::SaveLegacy(wchar_t* fileName)
         return false;
     }
 
-    auto Buffer = std::make_unique<BYTE[]>(Size * MAX_SKILLS);
-    BYTE* pSeek = Buffer.get();
+    auto  Buffer = std::make_unique<BYTE[]>(Size * MAX_SKILLS);
+    BYTE* pSeek  = Buffer.get();
 
     // Convert SKILL_ATTRIBUTE to SKILL_ATTRIBUTE_FILE_LEGACY format
     for (int i = 0; i < MAX_SKILLS; i++)
@@ -40,9 +40,9 @@ bool SkillDataExportS6E3::SaveLegacy(wchar_t* fileName)
 
     // Configure I/O
     DataFileIO::IOConfig config;
-    config.itemSize = Size;
-    config.itemCount = MAX_SKILLS;
-    config.checksumKey = 0x5A18;
+    config.itemSize      = Size;
+    config.itemCount     = MAX_SKILLS;
+    config.checksumKey   = 0x5A18;
     config.encryptRecord = [](BYTE* data, int size) { BuxConvert(data, size); };
 
     // Encrypt buffer
@@ -56,4 +56,4 @@ bool SkillDataExportS6E3::SaveLegacy(wchar_t* fileName)
     return success;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

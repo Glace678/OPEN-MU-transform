@@ -34,17 +34,17 @@
 #include "UI/NewUI/Dialogs/NewUICommonMessageBox.h"
 
 // External declarations
-extern int DeleteGuildIndex;
-extern EGameScene SceneFlag;
-extern int g_iChatInputType;
+extern int              DeleteGuildIndex;
+extern EGameScene       SceneFlag;
+extern int              g_iChatInputType;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
-extern float g_fMULogoAlpha;
-extern wchar_t m_Username[MAX_USERNAME_SIZE + 1];
-extern CHARACTER* Hero;
-extern double WorldTime;
-extern HFONT g_hFont;
-extern wchar_t m_ExeVersion[11];
-extern HWND g_hWnd;
+extern float            g_fMULogoAlpha;
+extern wchar_t          m_Username[MAX_USERNAME_SIZE + 1];
+extern CHARACTER*       Hero;
+extern double           WorldTime;
+extern HFONT            g_hFont;
+extern wchar_t          m_ExeVersion[11];
+extern HWND             g_hWnd;
 
 #ifdef _EDITOR
 extern "C" float DevEditor_GetLoginTerrainDist();
@@ -53,31 +53,30 @@ extern "C" float DevEditor_GetLoginTerrainDist();
 //=============================================================================
 // LoginScene Camera State (local to this file)
 //=============================================================================
-namespace {
+namespace
+{
 
-struct LoginCameraState {
-    int walkCut = 0;
-    int currentCount = -1;
-    int currentNumber = 0;
-    int currentWalkType = 0;
-    vec3_t currentPosition = {0, 0, 0};
-    vec3_t currentAngle = {0, 0, 0};
-    float currentWalkDelta[6] = {0, 0, 0, 0, 0, 0};
+struct LoginCameraState
+{
+    int    walkCut             = 0;
+    int    currentCount        = -1;
+    int    currentNumber       = 0;
+    int    currentWalkType     = 0;
+    vec3_t currentPosition     = {0, 0, 0};
+    vec3_t currentAngle        = {0, 0, 0};
+    float  currentWalkDelta[6] = {0, 0, 0, 0, 0, 0};
 
     // Predefined camera animation paths (6 paths × 6 values each)
     static constexpr float WALK_PATHS[6][6] = {
-        {0.f, -1000.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {200.f, -800.f, 250.f, -87.f, 0.f, -10.f}
-    };
+        {0.f, -1000.f, 500.f, -80.f, 0.f, 0.f}, {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f}, {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f}, {200.f, -800.f, 250.f, -87.f, 0.f, -10.f}};
 
-    void Reset() {
-        currentCount = -1;
-        walkCut = 0;
-        currentNumber = 0;
+    void Reset()
+    {
+        currentCount    = -1;
+        walkCut         = 0;
+        currentNumber   = 0;
         currentWalkType = 0;
     }
 };
@@ -99,21 +98,21 @@ struct MobileTapGate
 {
     static constexpr double GRACE_SECONDS = 0.6;
 
-    bool armed = false;
+    bool   armed            = false;
     double armedAtWorldTime = 0.0;
 
     void Arm(double nowWorldTime)
     {
         if (!armed)
         {
-            armed = true;
+            armed            = true;
             armedAtWorldTime = nowWorldTime;
         }
     }
 
     void Reset()
     {
-        armed = false;
+        armed            = false;
         armedAtWorldTime = 0.0;
     }
 
@@ -148,11 +147,13 @@ constexpr int MOBILE_TAP_PROMPT_Y = 352;
 // Accessor functions for external use
 //=============================================================================
 
-int GetLoginCameraCount() {
+int GetLoginCameraCount()
+{
     return g_loginCamera.currentCount;
 }
 
-int GetLoginCameraWalkCut() {
+int GetLoginCameraWalkCut()
+{
     return g_loginCamera.walkCut;
 }
 
@@ -168,7 +169,7 @@ void DeleteCharacter()
     }
 
     int characterToDelete = SelectedHero;
-    SelectedHero = -1;
+    SelectedHero          = -1;
 
     if (g_iChatInputType == 1)
     {
@@ -207,15 +208,17 @@ static void InitializeLoginCamera()
     for (int i = 0; i < 3; i++)
     {
         g_loginCamera.currentPosition[i] = LoginCameraState::WALK_PATHS[0][i];
-        g_loginCamera.currentAngle[i] = LoginCameraState::WALK_PATHS[0][i + 3];
+        g_loginCamera.currentAngle[i]    = LoginCameraState::WALK_PATHS[0][i + 3];
     }
-    g_loginCamera.currentNumber = 1;
+    g_loginCamera.currentNumber   = 1;
     g_loginCamera.currentWalkType = 1;
 
     for (int i = 0; i < 3; i++)
     {
-        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
-        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+        g_loginCamera.currentWalkDelta[i] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
     }
 }
 
@@ -226,8 +229,10 @@ static void CalculateWalkDelta()
 {
     for (int i = 0; i < 3; i++)
     {
-        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
-        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+        g_loginCamera.currentWalkDelta[i] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
     }
 }
 
@@ -238,12 +243,12 @@ static void SelectNextWaypoint()
 {
     if (SceneFlag == LOG_IN_SCENE)
     {
-        g_loginCamera.currentNumber = rand() % 4 + 1;
+        g_loginCamera.currentNumber   = rand() % 4 + 1;
         g_loginCamera.currentWalkType = rand() % 2;
     }
     else
     {
-        g_loginCamera.currentNumber = 5;
+        g_loginCamera.currentNumber   = 5;
         g_loginCamera.currentWalkType = 0;
     }
 }
@@ -256,7 +261,7 @@ static void UpdateCameraWaypoint()
     g_loginCamera.currentCount++;
 
     bool shouldTransition = (g_loginCamera.walkCut == 0 && g_loginCamera.currentCount >= 40) ||
-                           (g_loginCamera.walkCut > 0 && g_loginCamera.currentCount >= 128);
+                            (g_loginCamera.walkCut > 0 && g_loginCamera.currentCount >= 128);
 
     if (shouldTransition)
     {
@@ -288,14 +293,16 @@ static void UpdateCameraWaypoint()
 static void InterpolateCameraMovement()
 {
     constexpr int SMOOTH_EASING_FACTOR = 6;
-    const int target = g_loginCamera.currentNumber;
+    const int     target               = g_loginCamera.currentNumber;
 
     if (g_loginCamera.currentWalkType == 0)
     {
         for (int i = 0; i < 3; i++)
         {
-            g_loginCamera.currentPosition[i] += (LoginCameraState::WALK_PATHS[target][i] - g_loginCamera.currentPosition[i]) / SMOOTH_EASING_FACTOR;
-            g_loginCamera.currentAngle[i]    += (LoginCameraState::WALK_PATHS[target][i + 3] - g_loginCamera.currentAngle[i]) / SMOOTH_EASING_FACTOR;
+            g_loginCamera.currentPosition[i] +=
+                (LoginCameraState::WALK_PATHS[target][i] - g_loginCamera.currentPosition[i]) / SMOOTH_EASING_FACTOR;
+            g_loginCamera.currentAngle[i] +=
+                (LoginCameraState::WALK_PATHS[target][i + 3] - g_loginCamera.currentAngle[i]) / SMOOTH_EASING_FACTOR;
         }
     }
     else
@@ -303,7 +310,7 @@ static void InterpolateCameraMovement()
         for (int i = 0; i < 3; i++)
         {
             g_loginCamera.currentPosition[i] += g_loginCamera.currentWalkDelta[i];
-            g_loginCamera.currentAngle[i]    += g_loginCamera.currentWalkDelta[i + 3];
+            g_loginCamera.currentAngle[i] += g_loginCamera.currentWalkDelta[i + 3];
         }
     }
 }
@@ -334,10 +341,10 @@ void MoveCamera()
 
 void CreateLogInScene()
 {
-    EnableMainRender = true;
+    EnableMainRender        = true;
     gMapManager.WorldActive = WD_73NEW_LOGIN_SCENE;
 
-    if (!gMapManager.LoadWorld(gMapManager.WorldActive)) return;
+    gMapManager.LoadWorld(gMapManager.WorldActive);
 
     OpenLogoSceneData();
 
@@ -348,20 +355,22 @@ void CreateLogInScene()
         CreateSocket(szServerIpAddress, g_ServerPort);
 
     GuildInputEnable = false;
-    TabInputEnable = false;
-    GoldInputEnable = false;
-    InputEnable = true;
+    TabInputEnable   = false;
+    GoldInputEnable  = false;
+    InputEnable      = true;
     ClearInput();
 
     if (g_iChatInputType == 0)
     {
         wcscpy_s(InputText[0], 256, m_Username);
-        InputLength[0] = wcslen(InputText[0]);
+        InputLength[0]  = wcslen(InputText[0]);
         InputTextMax[0] = MAX_USERNAME_SIZE;
-        if (InputLength[0] == 0)	InputIndex = 0;
-        else InputIndex = 1;
+        if (InputLength[0] == 0)
+            InputIndex = 0;
+        else
+            InputIndex = 1;
     }
-    InputNumber = 2;
+    InputNumber      = 2;
     InputTextHide[1] = 1;
 
     // FIX: Enable tour mode with offset correction
@@ -434,7 +443,7 @@ void NewMoveLogInScene()
             // account characters, otherwise a fast reply can be cleared again.
             ReleaseLogoSceneData();
 
-            SceneFlag = CHARACTER_SCENE;
+            SceneFlag            = CHARACTER_SCENE;
             CurrentProtocolState = REQUEST_CHARACTERS_LIST;
             SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
         }
@@ -445,7 +454,8 @@ void NewMoveLogInScene()
 
 bool NewRenderLogInScene(HDC hDC)
 {
-    if (!InitLogIn) return false;
+    if (!InitLogIn)
+        return false;
 
     FogEnable = true;
 
@@ -466,7 +476,7 @@ bool NewRenderLogInScene(HDC hDC)
     glColor3f(1.f, 1.f, 1.f);
 
     Height = REFERENCE_HEIGHT;
-    Width = GetScreenWidth();
+    Width  = GetScreenWidth();
     SetClearColor(0.f, 0.f, 0.f, 1.f);
 
     // Set ViewFar BEFORE BeginOpengl so the projection matrix covers the full render distance
@@ -510,7 +520,8 @@ bool NewRenderLogInScene(HDC hDC)
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
         g_fMULogoAlpha += Core::Time::ScaleLinearStep(0.02f, FPS_ANIMATION_FACTOR);
-        if (g_fMULogoAlpha > 10.0f) g_fMULogoAlpha = 10.0f;
+        if (g_fMULogoAlpha > 10.0f)
+            g_fMULogoAlpha = 10.0f;
 
         EnableAlphaBlend();
         glColor4f(g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f);
@@ -520,7 +531,7 @@ bool NewRenderLogInScene(HDC hDC)
         RenderBitmap(BITMAP_LOG_IN + 16, 320.0f - 128.0f * 0.8f, 25.0f, 256.0f * 0.8f, 128.0f * 0.8f);
     }
 
-    SIZE Size;
+    SIZE    Size;
     wchar_t Text[100];
 
     g_pRenderText->SetFont(g_hFont);
@@ -532,7 +543,8 @@ bool NewRenderLogInScene(HDC hDC)
 
     wcscpy_s(Text, 100, I18N::Game::CCopyright2001Webzen);
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), Text, lstrlen(Text), &Size);
-    g_pRenderText->RenderText(335 - Size.cx * REFERENCE_WIDTH / WindowWidth, REFERENCE_HEIGHT - Size.cy * REFERENCE_HEIGHT / WindowHeight - 1, Text);
+    g_pRenderText->RenderText(335 - Size.cx * REFERENCE_WIDTH / WindowWidth,
+                              REFERENCE_HEIGHT - Size.cy * REFERENCE_HEIGHT / WindowHeight - 1, Text);
 
     wcscpy_s(Text, 100, I18N::Game::AllRightsReserved);
 
@@ -551,16 +563,17 @@ bool NewRenderLogInScene(HDC hDC)
     // WorldTime so it blinks at the same rate regardless of frame rate.
     if (g_mobileTapGate.armed)
     {
-        const float pulse = 0.5f + 0.5f * sinf(static_cast<float>(WorldTime) * 3.0f);
-        const BYTE promptAlpha = static_cast<BYTE>(110 + 145 * pulse);
+        const float pulse       = 0.5f + 0.5f * sinf(static_cast<float>(WorldTime) * 3.0f);
+        const BYTE  promptAlpha = static_cast<BYTE>(110 + 145 * pulse);
 
         g_pRenderText->SetFont(g_hFont);
         g_pRenderText->SetTextColor(255, 255, 255, promptAlpha);
         g_pRenderText->SetBgColor(0, 0, 0, static_cast<BYTE>(90 * pulse + 30));
 
-        g_pRenderText->RenderText(
-            0, MOBILE_TAP_PROMPT_Y, I18N::Game::TapToStart,
-            REFERENCE_WIDTH, 0, RT3_SORT_CENTER);
+        const char* tapLocale     = I18N::GetCurrentLocale();
+        const bool  chinesePrompt = tapLocale != nullptr && strncmp(tapLocale, "zh", 2) == 0;
+        g_pRenderText->RenderText(0, MOBILE_TAP_PROMPT_Y, chinesePrompt ? L"点击屏幕开始" : L"Tap to Start",
+                                  REFERENCE_WIDTH, 0, RT3_SORT_CENTER);
 
         g_pRenderText->SetTextColor(255, 255, 255, 255);
         g_pRenderText->SetBgColor(0, 0, 0, 128);

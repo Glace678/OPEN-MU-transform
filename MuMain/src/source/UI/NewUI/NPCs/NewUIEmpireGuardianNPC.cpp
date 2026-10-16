@@ -1,4 +1,4 @@
-﻿// CNewUIEmpireGuardianNPC.cpp: implementation of the CNewUIEmpireGuardianNPC class.
+﻿  // CNewUIEmpireGuardianNPC.cpp: implementation of the CNewUIEmpireGuardianNPC class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -10,13 +10,13 @@
 #include "Audio/DSPlaySound.h"
 #include "UI/Legacy/UIControls.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 CNewUIEmpireGuardianNPC::CNewUIEmpireGuardianNPC()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_bCanClick = true;
+    m_bCanClick       = true;
 }
 
 CNewUIEmpireGuardianNPC::~CNewUIEmpireGuardianNPC()
@@ -118,7 +118,7 @@ bool CNewUIEmpireGuardianNPC::Render()
     glColor4f(1.f, 1.f, 1.f, 1.f);
     RenderFrame();
 
-    POINT Position = { m_Pos.x + (NPC_WINDOW_WIDTH / 2), m_Pos.y };
+    POINT Position = {m_Pos.x + (NPC_WINDOW_WIDTH / 2), m_Pos.y};
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
@@ -144,9 +144,12 @@ bool CNewUIEmpireGuardianNPC::Render()
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(220, 220, 220, 255);
-    g_pRenderText->RenderText(Position.x - 100, Position.y + 280, I18N::Game::TheRound7MapSundayCanOnly, 200, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(Position.x - 100, Position.y + 300, I18N::Game::BeAccessedIfYouHaveA, 200, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(Position.x - 100, Position.y + 320, I18N::Game::CompleteSecromicon2837, 200, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(Position.x - 100, Position.y + 280, I18N::Game::TheRound7MapSundayCanOnly, 200, 0,
+                              RT3_SORT_CENTER);
+    g_pRenderText->RenderText(Position.x - 100, Position.y + 300, I18N::Game::BeAccessedIfYouHaveA, 200, 0,
+                              RT3_SORT_CENTER);
+    g_pRenderText->RenderText(Position.x - 100, Position.y + 320, I18N::Game::CompleteSecromicon2837, 200, 0,
+                              RT3_SORT_CENTER);
     CutStr(I18N::Game::YouCanOnlyEnterAsAMemberOfAParty, szTextOut[0], 155, 2, 300);
     g_pRenderText->RenderText(m_Pos.x, Position.y + 340, szTextOut[0], 200, 0, RT3_SORT_CENTER);
     g_pRenderText->RenderText(m_Pos.x, Position.y + 360, szTextOut[1], 200, 0, RT3_SORT_CENTER);
@@ -182,13 +185,9 @@ float CNewUIEmpireGuardianNPC::GetLayerDepth()
     return 1.2f;
 }
 
-void CNewUIEmpireGuardianNPC::OpenningProcess()
-{
-}
+void CNewUIEmpireGuardianNPC::OpenningProcess() {}
 
-void CNewUIEmpireGuardianNPC::ClosingProcess()
-{
-}
+void CNewUIEmpireGuardianNPC::ClosingProcess() {}
 
 void CNewUIEmpireGuardianNPC::LoadImages()
 {
@@ -222,12 +221,14 @@ void CNewUIEmpireGuardianNPC::RenderFrame()
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_TOP, m_Pos.x, m_Pos.y, float(NPC_WINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_LEFT, m_Pos.x, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_RIGHT, m_Pos.x + NPC_WINDOW_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_EMPIREGUARDIAN_NPC_BOTTOM, m_Pos.x, m_Pos.y + NPC_WINDOW_HEIGHT - 45, float(NPC_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_EMPIREGUARDIAN_NPC_BOTTOM, m_Pos.x, m_Pos.y + NPC_WINDOW_HEIGHT - 45, float(NPC_WINDOW_WIDTH),
+                45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(220, 220, 220, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
-    g_pRenderText->RenderText(m_Pos.x + (NPC_WINDOW_WIDTH / 2) - 55, m_Pos.y + 13, I18N::Game::JerintTheAssistant, 110, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + (NPC_WINDOW_WIDTH / 2) - 55, m_Pos.y + 13, I18N::Game::JerintTheAssistant, 110,
+                              0, RT3_SORT_CENTER);
 }
 
 void CNewUIEmpireGuardianNPC::Render3D()
@@ -237,9 +238,9 @@ void CNewUIEmpireGuardianNPC::Render3D()
 
 void CNewUIEmpireGuardianNPC::RenderItem3D()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
-    int nItemType = ITEM_GAIONS_ORDER;
+    int nItemType  = ITEM_GAIONS_ORDER;
     int nItemLevel = 0;
 
     ::RenderItem3D(ptOrigin.x + (190 - 20) / 2, ptOrigin.y + 70, 20.0f, 27.0f, nItemType, nItemLevel, 0, 0, false);

@@ -25,7 +25,7 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     {
         std::wstringstream ss;
         ss << fileName << L" - File not exist.";
-        DataFileIO::ShowDataFileError(ss.str().c_str());
+        DataFileIO::ShowErrorAndExit(ss.str().c_str());
         return false;
     }
 
@@ -34,14 +34,14 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     long fileSize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    const int LegacySize = sizeof(ITEM_ATTRIBUTE_FILE_LEGACY);
-    const int NewSize = sizeof(ITEM_ATTRIBUTE_FILE);
+    const int  LegacySize         = sizeof(ITEM_ATTRIBUTE_FILE_LEGACY);
+    const int  NewSize            = sizeof(ITEM_ATTRIBUTE_FILE);
     const long expectedLegacySize = LegacySize * MAX_ITEM + sizeof(DWORD);
-    const long expectedNewSize = NewSize * MAX_ITEM + sizeof(DWORD);
+    const long expectedNewSize    = NewSize * MAX_ITEM + sizeof(DWORD);
 
     bool isLegacyFormat = (fileSize == expectedLegacySize);
-    bool isNewFormat = (fileSize == expectedNewSize);
-    bool success = false;
+    bool isNewFormat    = (fileSize == expectedNewSize);
+    bool success        = false;
 
     // #32: reject a file whose size matches neither known exact format; a
     // truncated or oversized blob must not be parsed against MAX_ITEM.
@@ -91,26 +91,25 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     return success;
 }
 
-template<typename TFileFormat>
-bool ItemDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
+template <typename TFileFormat> bool ItemDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
 {
     const int Size = sizeof(TFileFormat);
 
     // Configure I/O
     DataFileIO::IOConfig config;
-    config.itemSize = Size;
-    config.itemCount = MAX_ITEM;
-    config.checksumKey = 0xE2F1;
+    config.itemSize      = Size;
+    config.itemCount     = MAX_ITEM;
+    config.checksumKey   = 0xE2F1;
     config.decryptRecord = [](BYTE* data, int size) { BuxConvert(data, size); };
 
     // Read buffer and checksum
     DWORD dwCheckSum;
-    auto buffer = DataFileIO::ReadBuffer(fp, config, &dwCheckSum);
+    auto  buffer = DataFileIO::ReadBuffer(fp, config, &dwCheckSum);
     if (!buffer)
     {
         std::wstringstream ss;
         ss << L"Failed to read item file (" << formatName << L").";
-        DataFileIO::ShowDataFileError(ss.str().c_str());
+        DataFileIO::ShowErrorAndExit(ss.str().c_str());
         return false;
     }
 
@@ -119,7 +118,7 @@ bool ItemDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
     {
         std::wstringstream ss;
         ss << L"Item file corrupted (" << formatName << L").";
-        DataFileIO::ShowDataFileError(ss.str().c_str());
+        DataFileIO::ShowErrorAndExit(ss.str().c_str());
         return false;
     }
 

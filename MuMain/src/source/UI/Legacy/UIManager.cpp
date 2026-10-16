@@ -17,14 +17,14 @@
 #include "UI/NewUI/Dialogs/NewUICustomMessageBox.h"
 #include "UI/NewUI/NPCs/NewUINPCShop.h"
 
-extern int g_iKeyPadEnable;
-extern int g_iChatInputType;
+extern int   g_iKeyPadEnable;
+extern int   g_iChatInputType;
 extern DWORD g_dwMouseUseUIID;
 
-CUIGateKeeper* g_pUIGateKeeper = NULL;
-JewelHarmonyInfo* g_pUIJewelHarmonyinfo = NULL;
-ItemAddOptioninfo* g_pItemAddOptioninfo = NULL;
-CUIPopup* g_pUIPopup = NULL;
+CUIGateKeeper*     g_pUIGateKeeper       = NULL;
+JewelHarmonyInfo*  g_pUIJewelHarmonyinfo = NULL;
+ItemAddOptioninfo* g_pItemAddOptioninfo  = NULL;
+CUIPopup*          g_pUIPopup            = NULL;
 
 extern int g_iCancelSkillTarget;
 extern int TextNum;
@@ -32,38 +32,38 @@ extern int g_iItemInfo[16][17];
 
 namespace SEASON3B
 {
-	int& MouseY = ::MouseY;
-	int& g_iCancelSkillTarget = ::g_iCancelSkillTarget;
-	wchar_t (&TextList)[50][100] = ::TextList;
-	int (&TextListColor)[50] = ::TextListColor;
-	int (&TextBold)[50] = ::TextBold;
-	int& TextNum = ::TextNum;
-	int (&g_iItemInfo)[16][17] = ::g_iItemInfo;
-	int& ItemHelp = ::ItemHelp;
-	JewelHarmonyInfo*& g_pUIJewelHarmonyinfo = ::g_pUIJewelHarmonyinfo;
-	int& SelectedCharacter = ::SelectedCharacter;
+int& MouseY                              = ::MouseY;
+int& g_iCancelSkillTarget                = ::g_iCancelSkillTarget;
+wchar_t (&TextList)[50][100]             = ::TextList;
+int (&TextListColor)[50]                 = ::TextListColor;
+int (&TextBold)[50]                      = ::TextBold;
+int& TextNum                             = ::TextNum;
+int (&g_iItemInfo)[16][17]               = ::g_iItemInfo;
+int&               ItemHelp              = ::ItemHelp;
+JewelHarmonyInfo*& g_pUIJewelHarmonyinfo = ::g_pUIJewelHarmonyinfo;
+int&               SelectedCharacter     = ::SelectedCharacter;
 }
 
-extern int   ShopInventoryStartX;
-extern int   ShopInventoryStartY;
+extern int ShopInventoryStartX;
+extern int ShopInventoryStartY;
 
 extern bool g_bTradeEndByOppenent;
 extern bool LogOut;
 
-bool HeroInventoryEnable = false;
-bool GuildListEnable = false;
-bool EnableGuildInterface = false;
-bool StorageInventoryEnable = false;
-bool MixInventoryEnable = false;
-bool g_bPersonalShopWnd = false;
+bool HeroInventoryEnable     = false;
+bool GuildListEnable         = false;
+bool EnableGuildInterface    = false;
+bool StorageInventoryEnable  = false;
+bool MixInventoryEnable      = false;
+bool g_bPersonalShopWnd      = false;
 bool g_bServerDivisionEnable = false;
 
 CUIManager::CUIManager()
 {
-    g_pUIGateKeeper = new CUIGateKeeper;
-    g_pUIPopup = new CUIPopup;
+    g_pUIGateKeeper       = new CUIGateKeeper;
+    g_pUIPopup            = new CUIPopup;
     g_pUIJewelHarmonyinfo = JewelHarmonyInfo::MakeInfo();
-    g_pItemAddOptioninfo = ItemAddOptioninfo::MakeInfo();
+    g_pItemAddOptioninfo  = ItemAddOptioninfo::MakeInfo();
 
     Init();
 }
@@ -95,16 +95,17 @@ POINT CUIManager::RenderWindowBase(int nHeight, int nOriginY)
     if (nOriginY == -1)
     {
         fPosY = 130 - nHeight / 2;
-        if (fPosY < 40.0f)		fPosY = 40.0f;
+        if (fPosY < 40.0f)
+            fPosY = 40.0f;
     }
     else
         fPosY = nOriginY;
-    POINT ptPos = { static_cast<LONG>(fPosX), static_cast<LONG>(fPosY) };
+    POINT ptPos = {static_cast<LONG>(fPosX), static_cast<LONG>(fPosY)};
 
     RenderBitmap(BITMAP_INTERFACE + 22, fPosX, fPosY, nWidth, 5, 0.f, 0.f, nWidth / 256.f, 5.f / 8.f);
     fPosY += 5;
 
-    int nBodyHeight = nHeight - 10;
+    int nBodyHeight   = nHeight - 10;
     int nPatternCount = nBodyHeight / 40;
     for (int i = 0; i < nPatternCount; ++i)
     {
@@ -115,7 +116,8 @@ POINT CUIManager::RenderWindowBase(int nHeight, int nOriginY)
     if (nBodyHeight > nPatternCount * 40)
     {
         float fRate = (float)(nBodyHeight - nPatternCount * 40) / 40.0f;
-        RenderBitmap(BITMAP_INTERFACE + 21, fPosX, fPosY, nWidth, 40 * fRate, 0.f, 0.f, nWidth / 256.f, (40.f / 64.f) * fRate);
+        RenderBitmap(BITMAP_INTERFACE + 21, fPosX, fPosY, nWidth, 40 * fRate, 0.f, 0.f, nWidth / 256.f,
+                     (40.f / 64.f) * fRate);
         fPosY += 40 * fRate;
     }
 
@@ -146,13 +148,9 @@ bool CUIManager::IsInputEnable()
     return true;
 }
 
-void CUIManager::UpdateInput()
-{
-}
+void CUIManager::UpdateInput() {}
 
-void CUIManager::Render()
-{
-}
+void CUIManager::Render() {}
 
 void CUIManager::CloseAll()
 {
@@ -176,28 +174,28 @@ bool CUIManager::IsOpen(DWORD dwInterface)
 {
     if (dwInterface == 0)
     {
-        for (DWORD openInterface = INTERFACE_FRIEND; openInterface < INTERFACE_MAX_COUNT; ++openInterface)
+        for (DWORD dwInterface = INTERFACE_FRIEND; dwInterface < INTERFACE_MAX_COUNT; ++dwInterface)
         {
-            if (IsOpen(openInterface))
+            if (IsOpen(dwInterface))
                 return true;
         }
-        return false;
     }
 
     switch (dwInterface)
     {
-    case INTERFACE_INVENTORY:
-        return HeroInventoryEnable;
-    case INTERFACE_STORAGE:
-        return StorageInventoryEnable;
-    case INTERFACE_PERSONALSHOPSALE:
-    case INTERFACE_PERSONALSHOPPURCHASE:
-        return g_bPersonalShopWnd;
-    case INTERFACE_SERVERDIVISION:
-        return g_bServerDivisionEnable;
-    default:
-        return false;
+        case INTERFACE_INVENTORY:
+            return HeroInventoryEnable;
+        case INTERFACE_STORAGE:
+            return StorageInventoryEnable;
+        case INTERFACE_PERSONALSHOPSALE:
+        case INTERFACE_PERSONALSHOPPURCHASE:
+            return g_bPersonalShopWnd;
+        case INTERFACE_SERVERDIVISION:
+            return g_bServerDivisionEnable;
+        default:
+            return false;
     }
+    return false;
 }
 
 bool CUIManager::IsCanOpen(DWORD dwInterfaceFlag)
@@ -220,7 +218,7 @@ void CUIManager::GetInsertInterface(std::list<DWORD>& outflag, DWORD insertflag)
 
 void CUIManager::GetDeleteInterface(std::list<DWORD>& outflag, DWORD deleteflag)
 {
-    for (auto iter = outflag.begin(); iter != outflag.end(); )
+    for (auto iter = outflag.begin(); iter != outflag.end();)
     {
         auto Tempiter = iter;
         ++iter;
@@ -251,66 +249,64 @@ bool CUIManager::Open(DWORD dwInterface, DWORD dwExtraData)
 
     switch (dwInterface)
     {
-    case INTERFACE_INVENTORY:
-    {
-        bool bResult = CloseInterface(closeinterfaceflag);
-        if (bResult)
-        {
-            HeroInventoryEnable = true;
-        }
-    }
-    break;
-    case INTERFACE_PERSONALSHOPSALE:
-    {
-        GetDeleteInterface(closeinterfaceflag, INTERFACE_INVENTORY);
-
-        bool bResult = CloseInterface(closeinterfaceflag);
-        if (bResult)
-        {
-            Open(INTERFACE_INVENTORY);
-
-            if (g_iPShopWndType != PSHOPWNDTYPE_NONE) {
-                g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
-                SocketClient->ToGameServer()->SendInventoryRequest();
+        case INTERFACE_INVENTORY: {
+            bool bResult = CloseInterface(closeinterfaceflag);
+            if (bResult)
+            {
+                HeroInventoryEnable = true;
             }
-
-            CreatePersonalItemTable();
-
-            g_bPersonalShopWnd = true;
-            g_iPShopWndType = PSHOPWNDTYPE_SALE;
         }
-    }
-    break;
-    case INTERFACE_PERSONALSHOPPURCHASE:
-    {
-        bool bResult = CloseInterface(closeinterfaceflag);
-        if (bResult)
-        {
-            Open(INTERFACE_INVENTORY);
+        break;
+        case INTERFACE_PERSONALSHOPSALE: {
+            GetDeleteInterface(closeinterfaceflag, INTERFACE_INVENTORY);
 
-            if (g_iPShopWndType != PSHOPWNDTYPE_NONE) {
-                g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
-                SocketClient->ToGameServer()->SendInventoryRequest();
+            bool bResult = CloseInterface(closeinterfaceflag);
+            if (bResult)
+            {
+                Open(INTERFACE_INVENTORY);
+
+                if (g_iPShopWndType != PSHOPWNDTYPE_NONE)
+                {
+                    g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
+                    SocketClient->ToGameServer()->SendInventoryRequest();
+                }
+
+                CreatePersonalItemTable();
+
+                g_bPersonalShopWnd = true;
+                g_iPShopWndType    = PSHOPWNDTYPE_SALE;
             }
-            CreatePersonalItemTable();
+        }
+        break;
+        case INTERFACE_PERSONALSHOPPURCHASE: {
+            bool bResult = CloseInterface(closeinterfaceflag);
+            if (bResult)
+            {
+                Open(INTERFACE_INVENTORY);
 
-            g_bPersonalShopWnd = true;
-            g_iPShopWndType = PSHOPWNDTYPE_PURCHASE;
+                if (g_iPShopWndType != PSHOPWNDTYPE_NONE)
+                {
+                    g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
+                    SocketClient->ToGameServer()->SendInventoryRequest();
+                }
+                CreatePersonalItemTable();
+
+                g_bPersonalShopWnd = true;
+                g_iPShopWndType    = PSHOPWNDTYPE_PURCHASE;
+            }
         }
-    }
-    break;
-    case INTERFACE_SERVERDIVISION:
-    {
-        bool bResult = CloseInterface(closeinterfaceflag);
-        if (bResult)
-        {
-            g_bServerDivisionEnable = true;
-            g_bServerDivisionAccept = false;
+        break;
+        case INTERFACE_SERVERDIVISION: {
+            bool bResult = CloseInterface(closeinterfaceflag);
+            if (bResult)
+            {
+                g_bServerDivisionEnable = true;
+                g_bServerDivisionAccept = false;
+            }
         }
-    }
-    break;
-    default:
-        return false;
+        break;
+        default:
+            return false;
     }
 
     PlayBuffer(SOUND_CLICK01);
@@ -321,62 +317,60 @@ bool CUIManager::Open(DWORD dwInterface, DWORD dwExtraData)
 
 bool CUIManager::Close(DWORD dwInterface, DWORD dwExtraData)
 {
-    if (!IsOpen(dwInterface))		return false;
+    if (!IsOpen(dwInterface))
+        return false;
 
     switch (dwInterface)
     {
-    case INTERFACE_INVENTORY:
-    {
-        bool bResult = true;
-        if (bResult)
-        {
-            std::list<DWORD> closeinterfaceflag;
+        case INTERFACE_INVENTORY: {
+            bool bResult = true;
+            if (bResult)
+            {
+                std::list<DWORD> closeinterfaceflag;
 
-            GetInsertInterface(closeinterfaceflag, INTERFACE_TRADE);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_STORAGE);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_GUILDSTORAGE);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_MIXINVENTORY);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_PERSONALSHOPSALE);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_NPCBREEDER);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_NPCSHOP);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_SENATUS);
-            GetInsertInterface(closeinterfaceflag, INTERFACE_REFINERY);
-            bResult = CloseInterface(closeinterfaceflag, dwExtraData);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_TRADE);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_STORAGE);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_GUILDSTORAGE);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_MIXINVENTORY);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_PERSONALSHOPSALE);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_NPCBREEDER);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_NPCSHOP);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_SENATUS);
+                GetInsertInterface(closeinterfaceflag, INTERFACE_REFINERY);
+                bResult = CloseInterface(closeinterfaceflag, dwExtraData);
+                if (bResult)
+                {
+                    std::list<DWORD> closeflag;
+                    GetInsertInterface(closeflag, dwInterface);
+                    CloseInterface(closeflag, dwExtraData);
+                }
+            }
+        }
+        break;
+        case INTERFACE_STORAGE:
+        case INTERFACE_GUILDSTORAGE:
+        case INTERFACE_MIXINVENTORY:
+        case INTERFACE_TRADE:
+        case INTERFACE_NPCBREEDER:
+        case INTERFACE_NPCSHOP:
+        case INTERFACE_GUARDSMAN: {
+            std::list<DWORD> closeinterfaceflag;
+            GetInsertInterface(closeinterfaceflag, dwInterface);
+            bool bResult = CloseInterface(closeinterfaceflag, dwExtraData);
             if (bResult)
             {
                 std::list<DWORD> closeflag;
-                GetInsertInterface(closeflag, dwInterface);
+                GetInsertInterface(closeflag, INTERFACE_INVENTORY);
                 CloseInterface(closeflag, dwExtraData);
             }
         }
-    }
-    break;
-    case INTERFACE_STORAGE:
-    case INTERFACE_GUILDSTORAGE:
-    case INTERFACE_MIXINVENTORY:
-    case INTERFACE_TRADE:
-    case INTERFACE_NPCBREEDER:
-    case INTERFACE_NPCSHOP:
-    case INTERFACE_GUARDSMAN:
-    {
-        std::list<DWORD> closeinterfaceflag;
-        GetInsertInterface(closeinterfaceflag, dwInterface);
-        bool bResult = CloseInterface(closeinterfaceflag, dwExtraData);
-        if (bResult)
-        {
-            std::list<DWORD> closeflag;
-            GetInsertInterface(closeflag, INTERFACE_INVENTORY);
-            CloseInterface(closeflag, dwExtraData);
+        break;
+        default: {
+            std::list<DWORD> closeinterfaceflag;
+            GetInsertInterface(closeinterfaceflag, dwInterface);
+            CloseInterface(closeinterfaceflag, dwExtraData);
         }
-    }
-    break;
-    default:
-    {
-        std::list<DWORD> closeinterfaceflag;
-        GetInsertInterface(closeinterfaceflag, dwInterface);
-        CloseInterface(closeinterfaceflag, dwExtraData);
-    }
-    break;
+        break;
     }
 
     PlayBuffer(SOUND_CLICK01);

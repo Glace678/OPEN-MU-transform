@@ -9,27 +9,27 @@ typedef struct MIX_Mixer MIX_Mixer;
 
 namespace AudioPlayer
 {
-    // Music volume levels are stored as a 0..MaxVolumeLevel scale in
-    // the project's config; SDL_mixer expects a 0.0..1.0 gain.
-    constexpr int MinVolumeLevel = 0;
-    constexpr int MaxVolumeLevel = 10;
-    constexpr int DefaultVolumeLevel = 5;
+// Music volume levels are stored as a 0..MaxVolumeLevel scale in
+// the project's config; SDL_mixer expects a 0.0..1.0 gain.
+constexpr int MinVolumeLevel     = 0;
+constexpr int MaxVolumeLevel     = 10;
+constexpr int DefaultVolumeLevel = 5;
 
-    // Initialize SDL audio + the mixer device, then apply the saved
-    // music volume from GameConfig.  Safe to call once at startup.
-    void Initialize();
+// Initialize SDL audio + the mixer device, then apply the saved
+// music volume from GameConfig.  Safe to call once at startup.
+void Initialize();
 
-    // Tear the mixer down.  Safe to call even if Initialize() failed.
-    void Shutdown();
+// Tear the mixer down.  Safe to call even if Initialize() failed.
+void Shutdown();
 
-    // Apply a music volume on the project's 0..10 scale.  Out-of-range
-    // values fall back to DefaultVolumeLevel.
-    void SetMusicVolume(int level);
+// Apply a music volume on the project's 0..10 scale.  Out-of-range
+// values fall back to DefaultVolumeLevel.
+void SetMusicVolume(int level);
 
-    int ClampVolume(int level);
+int ClampVolume(int level);
 
-    // The shared SDL mixer device, so other audio consumers (the sound-effect
-    // backend) reuse it instead of opening a second device.  Null before
-    // Initialize(), after Shutdown(), or when initialization failed.
-    MIX_Mixer* GetMixer();
+// The shared SDL mixer device, so other audio consumers (the sound-effect
+// backend) reuse it instead of opening a second device.  Null before
+// Initialize(), after Shutdown(), or when initialization failed.
+MIX_Mixer* GetMixer();
 }

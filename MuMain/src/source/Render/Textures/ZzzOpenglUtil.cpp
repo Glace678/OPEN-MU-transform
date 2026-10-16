@@ -24,7 +24,6 @@
 #include "Render/Core/BindState.h"
 #include "Render/Shaders/PassthroughShader.h"
 #include "Core/Utilities/Log/ErrorReport.h"
-#include "Render/Textures/DayHistoryValidation.h"
 
 #ifdef _EDITOR
 extern "C" bool DevEditor_IsCameraOverrideEnabled(const char* cameraName);
@@ -81,23 +80,17 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     }dayHistory;
 
     FILE* fp;
-    dayHistory days[100] = {};
+    dayHistory days[100];
     int   count = 0;
     WORD  num = 0;
     bool  sameName = false;
     bool  update = true;
-    bool  readError = false;
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
         if (fread(&num, sizeof(WORD), 1, fp) != 1) num = 0;  // #20: reject unreadable header
 
-        // XC-6: the table holds exactly MaximumHistoryEntries records
-        // (days[0..MaximumHistoryEntries-1]). A corrupt header
-        // (>MaximumHistoryEntries) resets; a full table is valid only for
-        // in-place updates, never for appending (the old "num > 100" guard let
-        // days[100] be written when a full file met a new ID).
-        if (!DayHistoryValidation::IsStoredCountValid(num))
+        if (num > 100)
         {
             num = 0;
         }
@@ -105,15 +98,9 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
         {
             for (int i = 0; i < num; ++i)
             {
-                // XC-6: the ID field is wchar_t -- the record is
-                // (MAX_USERNAME_SIZE+1) wchars, not bytes. Old files written by
-                // the byte-sized version desync here and fall into readError.
-                if (fread(days[i].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
+                if (fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
                     fread(&days[i].date, sizeof(WORD), 1, fp) != 1)
-                {
-                    readError = true;  // #20: truncated/corrupt record
-                    break;
-                }
+                    break;  // #20: truncated/corrupt record
                 days[i].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
 
                 if (!wcscmp(days[i].ID, Name))
@@ -128,13 +115,6 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
                 }
                 count++;
             }
-
-            if (readError)
-            {
-                // Drop the unreadable tail instead of writing it back as
-                // uninitialized records.
-                num = static_cast<WORD>(count);
-            }
         }
         fclose(fp);
     }
@@ -143,38 +123,18 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     {
         if (!sameName)
         {
-            // XC-6: appending at num == MaximumHistoryEntries would write
-            // days[MaximumHistoryEntries] out of bounds; skip persistence and
-            // return the default result. Bound lives in DayHistoryValidation.h
-            // so it can be unit tested.
-            if (!DayHistoryValidation::IsAppendPositionValid(num))
-            {
-                g_ErrorReport.Write(L"[dconfig] history table is full (100 entries); '%ls' not recorded.\r\n", Name);
-                return update;
-            }
-
-            // XC-6: ID is a wchar field -- copy as wchars with a hard bound
-            // instead of a byte-sized memcpy (which left half the field
-            // uninitialized and leaked that memory when written to disk).
-            wcsncpy(days[num].ID, Name, MAX_USERNAME_SIZE);
-            days[num].ID[MAX_USERNAME_SIZE] = L'\0';
+            memcpy(days[num].ID, Name, (MAX_USERNAME_SIZE + 1) * sizeof(char));
             days[num].date = day;
 
             num++;
         }
 
         fp = _wfopen(L"dconfig.ini", L"wb");
-        if (fp == nullptr) // XC-3: report the open failure; fwrite on null is undefined behavior.
-        {
-            g_ErrorReport.Write(L"[dconfig] cannot open dconfig.ini for writing.\r\n");
-            return update;
-        }
 
         fwrite(&num, sizeof(WORD), 1, fp);
         for (int i = 0; i < num; ++i)
         {
-            // XC-6: write the full wchar record (matches the wchar-sized read).
-            fwrite(days[i].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp);
+            fwrite(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp);
             fwrite(&days[i].date, sizeof(WORD), 1, fp);
         }
 
@@ -757,41 +717,10 @@ void BeginOpengl(int x, int y, int Width, int Height)
 {
     IR::Flush(); // GLP-19 -- viewport + perspective change below; see BeginBitmap()
 
-    // L4 widescreen viewport mapping.
-    //
-    // The ref viewport (x,y,Width,Height) describes the game area in 640x480 ref
-    // coords. Width == REFERENCE_WIDTH means the game spans the full reference
-    // width; Width < REFERENCE_WIDTH means a side panel (inventory/char/etc.) is
-    // open and the game area is only the LEFT ref portion.
-    if (Width >= REFERENCE_WIDTH)
-    {
-        // No side panel: L4 widescreen pillarbox. Uniform *contain* scale
-        // preserves the ref aspect (640:432) and centers horizontally. Using
-        // min(scaleY,scaleX) instead of height-only scale prevents left/right
-        // crop on portrait (tall) windows. Old independent X/Y stretch widened
-        // the 3D view past its designed aspect; the far-terrain LOD mesh (built
-        // for that aspect) then exposed its edge as a vertical color/ghost band
-        // along the window top.
-        const float scaleY = (float)WindowHeight / (float)REFERENCE_HEIGHT;
-        const float scaleX = (float)WindowWidth  / (float)Width;
-        const float scale  = (scaleY < scaleX) ? scaleY : scaleX;
-        Width  = (int)(Width  * scale);
-        Height = (int)(Height * scale);
-        x = (int)(x * scale) + (WindowWidth - Width) / 2;
-        y = (int)(y * scale);
-    }
-    else
-    {
-        // Side panel open: restore the OLD left-aligned non-uniform mapping so
-        // the 3D viewport stays in the LEFT available region and never slides
-        // into / overlaps the right-side panel. (Centering here was the P1
-        // regression: on 4:3 1024x768 with inventory open it pushed the viewport
-        // to [152,872], overlapping the panel [720,1024] by 152px.)
-        x = x * WindowWidth / REFERENCE_WIDTH;
-        y = y * WindowHeight / REFERENCE_HEIGHT;
-        Width  = Width  * WindowWidth / REFERENCE_WIDTH;
-        Height = Height * WindowHeight / REFERENCE_HEIGHT;
-    }
+    x = x * WindowWidth / REFERENCE_WIDTH;
+    y = y * WindowHeight / REFERENCE_HEIGHT;
+    Width = Width * WindowWidth / REFERENCE_WIDTH;
+    Height = Height * WindowHeight / REFERENCE_HEIGHT;
 
     glViewport2(x, y, Width, Height);
 

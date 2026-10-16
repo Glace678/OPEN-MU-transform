@@ -1,7 +1,7 @@
 /*******************************************************************************
-*	Author : Jin Hyejin
-*	Date : 2009.06.10
-*	Contents : Miscellaneous methods
+*	작 성 자 : 진혜진
+*	작 성 일 : 2009.06.10
+*	내    용 : 기타 메소드
 *******************************************************************************/
 
 #pragma once
@@ -9,33 +9,32 @@
 class Path
 {
 public:
-
-    //					Get the module's full path
+    //					모듈 전체 경로 가져오기
     static TCHAR* GetCurrentFullPath(TCHAR* szPath);
-    //					Get the module's directory
+    //					모듈 디렉토리 가져오기
     static TCHAR* GetCurrentDirectory(TCHAR* szPath);
-    //					Get the module's file name
+    //					모듈 파일 이름 가져오기
     static TCHAR* GetCurrentFileName(TCHAR* szPath);
 
-    //					Build a folder string: appends "\\" to the end.
+    //					폴더 문자열 만들기 : 맨 뒤에 "\\" 붙여준다.
     static TCHAR* SetDirString(TCHAR* szPath);
-    //					Build a folder string: removes the trailing "\\"
+    //					폴더 문자열 만들기 : 맨 뒤에 "\\" 제거
     static TCHAR* ClearDirString(TCHAR* szPath);
 
-    //					Build a folder string: path with the file name removed
+    //					폴더 문자열 만들기 : 파일명 제거한 경로
     static TCHAR* GetDirectory(TCHAR* szPath);
-    //					Build a file string: file name with the path removed
+    //					파일 문자열 만들기 : 패스 제거한 파일 명
     static TCHAR* GetFileName(TCHAR* szPath);
 
-    //					Change slash to backslash
+    //					/ => \\ 로 변경
     static TCHAR* ChangeSlashToBackSlash(TCHAR* szPath);
-    //					Change backslash to slash
+    //					\\ => / 로 변경
     static TCHAR* ChangeBackSlashToSlash(TCHAR* szPath);
 
-    //					Read the last line from a file
-    static BOOL			ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
-    //					Write a line to a new file
-    static BOOL			WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
-    //					Create the directory for a file path
-    static BOOL			CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
+    //					파일에서 마지막 줄 읽어오기
+    static BOOL ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
+    //					새 파일에 한줄 쓰기
+    static BOOL WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
+    //					파일 경로 디렉토리 생성
+    static BOOL CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
 };

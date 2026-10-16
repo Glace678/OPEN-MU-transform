@@ -140,11 +140,12 @@ bool CNewUIDuelWatchWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT   ptOrigin = {m_Pos.x, m_Pos.y + 50};
     wchar_t szText[256];
 
     g_pRenderText->SetFont(g_hFontBold);
-    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SelectAnColosseumYouDLikeToWatch, 190, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SelectAnColosseumYouDLikeToWatch, 190, 0,
+                              RT3_SORT_CENTER);
 
     RenderImage(IMAGE_DUELWATCHWINDOW_LINE, m_Pos.x + 1, m_Pos.y + 130, 188.f, 21.f);
     RenderImage(IMAGE_DUELWATCHWINDOW_LINE, m_Pos.x + 1, m_Pos.y + 130 + 90, 188.f, 21.f);
@@ -170,8 +171,10 @@ bool CNewUIDuelWatchWindow::Render()
             g_pRenderText->SetTextColor(255, 50, 50, 255);
             g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 35, L"VS", 190, 0, RT3_SORT_CENTER);
             g_pRenderText->SetTextColor(255, 255, 255, 255);
-            g_pRenderText->RenderText(ptOrigin.x + 20, ptOrigin.y + 35, g_DuelMgr.GetDuelChannelUserID1(i), 70, 0, RT3_SORT_CENTER);
-            g_pRenderText->RenderText(ptOrigin.x + 100, ptOrigin.y + 35, g_DuelMgr.GetDuelChannelUserID2(i), 70, 0, RT3_SORT_CENTER);
+            g_pRenderText->RenderText(ptOrigin.x + 20, ptOrigin.y + 35, g_DuelMgr.GetDuelChannelUserID1(i), 70, 0,
+                                      RT3_SORT_CENTER);
+            g_pRenderText->RenderText(ptOrigin.x + 100, ptOrigin.y + 35, g_DuelMgr.GetDuelChannelUserID2(i), 70, 0,
+                                      RT3_SORT_CENTER);
         }
         else
         {
@@ -192,9 +195,7 @@ bool CNewUIDuelWatchWindow::Render()
     return true;
 }
 
-void CNewUIDuelWatchWindow::OpeningProcess()
-{
-}
+void CNewUIDuelWatchWindow::OpeningProcess() {}
 
 void CNewUIDuelWatchWindow::ClosingProcess()
 {
@@ -236,7 +237,9 @@ void CNewUIDuelWatchWindow::RenderFrame()
     RenderImage(IMAGE_DUELWATCHWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_DUELWATCHWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 

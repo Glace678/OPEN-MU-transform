@@ -17,7 +17,7 @@ CNewUIPetInfoWindow::CNewUIPetInfoWindow()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_iNumCurOpenTab = TAB_TYPE_DARKHORSE;
+    m_iNumCurOpenTab  = TAB_TYPE_DARKHORSE;
     CalcDamage(m_iNumCurOpenTab);
     m_EventState = EVENT_NONE;
 }
@@ -73,7 +73,7 @@ void CNewUIPetInfoWindow::InitButtons()
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_PETINFO_BTN_EXIT, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
-    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);	// 1002 "ݱ"
+    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);  // 1002 "�ݱ�"
 }
 
 void CNewUIPetInfoWindow::SetPos(int x, int y)
@@ -126,8 +126,10 @@ bool CNewUIPetInfoWindow::Render()
     RenderImage(IMAGE_PETINFO_BACK, m_Pos.x, m_Pos.y, float(PETINFOWINDOW_WIDTH), float(PETINFOWINDOW_HEIGHT));
     RenderImage(IMAGE_PETINFO_TOP, m_Pos.x, m_Pos.y, float(PETINFOWINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_PETINFO_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PETINFO_RIGHT, m_Pos.x + float(PETINFOWINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PETINFO_BOTTOM, m_Pos.x, m_Pos.y + float(PETINFOWINDOW_HEIGHT) - 45.f, float(PETINFOWINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_PETINFO_RIGHT, m_Pos.x + float(PETINFOWINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_PETINFO_BOTTOM, m_Pos.x, m_Pos.y + float(PETINFOWINDOW_HEIGHT) - 45.f, float(PETINFOWINDOW_WIDTH),
+                45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->RenderText(m_Pos.x + 60, m_Pos.y + 13, I18N::Game::Pet, 70, 0, RT3_SORT_CENTER);
@@ -138,40 +140,40 @@ bool CNewUIPetInfoWindow::Render()
 
     switch (m_iNumCurOpenTab)
     {
-    case TAB_TYPE_DARKHORSE:
-    {
-        pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
+        case TAB_TYPE_DARKHORSE: {
+            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
 
-        if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
-        {
-            g_pRenderText->SetTextColor(0xFF0000FF);
-            g_pRenderText->SetFont(g_hFontBold);
-            wchar_t szText[256] = { 0, };
-            mu_swprintf(szText, I18N::Game::NoS, I18N::Game::DarkHorse);
-            g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, szText, 160, 30, RT3_SORT_CENTER);
+            if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+            {
+                g_pRenderText->SetTextColor(0xFF0000FF);
+                g_pRenderText->SetFont(g_hFontBold);
+                wchar_t szText[256] = {
+                    0,
+                };
+                mu_swprintf(szText, I18N::Game::NoS, I18N::Game::DarkHorse);
+                g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, szText, 160, 30, RT3_SORT_CENTER);
+            }
+            else
+            {
+                RenderDarkHorseInfo(pPetInfo);
+            }
         }
-        else
-        {
-            RenderDarkHorseInfo(pPetInfo);
-        }
-    }
-    break;
-    case TAB_TYPE_DARKSPIRIT:
-    {
-        pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+        break;
+        case TAB_TYPE_DARKSPIRIT: {
+            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
 
-        if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
-        {
-            g_pRenderText->SetTextColor(0xFF0000FF);
-            g_pRenderText->SetFont(g_hFontBold);
-            g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, I18N::Game::NoPet, 160, 30, RT3_SORT_CENTER);
+            if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+            {
+                g_pRenderText->SetTextColor(0xFF0000FF);
+                g_pRenderText->SetFont(g_hFontBold);
+                g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, I18N::Game::NoPet, 160, 30, RT3_SORT_CENTER);
+            }
+            else
+            {
+                RenderDarkSpiritInfo(pPetInfo);
+            }
         }
-        else
-        {
-            RenderDarkSpiritInfo(pPetInfo);
-        }
-    }
-    break;
+        break;
     }
 
     // Exit Button
@@ -184,7 +186,9 @@ bool CNewUIPetInfoWindow::Render()
 
 bool CNewUIPetInfoWindow::RenderDarkHorseInfo(PET_INFO* pPetInfo)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -220,7 +224,9 @@ bool CNewUIPetInfoWindow::RenderDarkHorseInfo(PET_INFO* pPetInfo)
 
 bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -251,8 +257,7 @@ bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
     RenderImage(IMAGE_PETINFO_LIFE, iGBox1PosX + 9, iGBox1PosY + 42, iHP, 8);
     mu_swprintf(szText, I18N::Game::ExpDD, pPetInfo->m_dwExp1, pPetInfo->m_dwExp2);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 59, szText, 0, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::DmgRateDDD, m_aiDamage[0], m_aiDamage[1],
-        pPetInfo->m_wAttackSuccess);
+    mu_swprintf(szText, I18N::Game::DmgRateDDD, m_aiDamage[0], m_aiDamage[1], pPetInfo->m_wAttackSuccess);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 72, szText, 0, 0, RT3_SORT_CENTER);
     mu_swprintf(szText, I18N::Game::AttackSpeedD, pPetInfo->m_wAttackSpeed);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 85, szText, 0, 0, RT3_SORT_CENTER);
@@ -271,20 +276,23 @@ bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
     RenderImage(IMAGE_PETINFO_SKILL, iGBox2PosX + 17, iGBox2PosY + 154, 19.f, 27.f, 61.f, 0.f);
 
     g_pRenderText->RenderText(iGBox2PosX + 52, iGBox2PosY + 45, I18N::Game::BasicAction, 0, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(iGBox2PosX + 52, iGBox2PosY + 85, I18N::Game::RandomAutomaticAttack, 0, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(iGBox2PosX + 52, iGBox2PosY + 85, I18N::Game::RandomAutomaticAttack, 0, 0,
+                              RT3_SORT_CENTER);
     g_pRenderText->RenderText(iGBox2PosX + 52, iGBox2PosY + 125, I18N::Game::AttackWithOwner, 0, 0, RT3_SORT_CENTER);
     g_pRenderText->RenderText(iGBox2PosX + 52, iGBox2PosY + 165, I18N::Game::AttackTarget, 0, 0, RT3_SORT_CENTER);
     return true;
 }
 
-void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth/* =60 */, int iTitleHeight/* =20  */)
+void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth /* =60 */,
+                                         int iTitleHeight /* =20  */)
 {
     EnableAlphaTest();
 
     glColor4f(0.f, 0.f, 0.f, 0.9f);
     RenderColor(float(iPosX + 3), float(iPosY + 2), float(iTitleWidth - 8), float(iTitleHeight));
     glColor4f(0.f, 0.f, 0.f, 0.6f);
-    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7), float(iHeight - iTitleHeight - 7));
+    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7),
+                float(iHeight - iTitleHeight - 7));
 
     EndRenderColor();
 
@@ -296,8 +304,10 @@ void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int i
 
     RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + 6, iPosY, iTitleWidth - 12, 14);
     RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iTitleWidth - 14, iPosY + 6, 14, iTitleHeight - 6);
-    RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6, 14);
-    RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14, iHeight - iTitleHeight - 14);
+    RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6,
+                14);
+    RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14,
+                iHeight - iTitleHeight - 14);
     RenderImage(IMAGE_PETINFO_TABLE_BOTTOM_PIXEL, iPosX + 6, iPosY + iHeight - 14, iWidth - 12, 14);
     RenderImage(IMAGE_PETINFO_TABLE_LEFT_PIXEL, iPosX, iPosY + 6, 14, iHeight - 14);
 }
@@ -328,40 +338,39 @@ void CNewUIPetInfoWindow::CalcDamage(int iNumTapButton)
 
     switch (iNumTapButton)
     {
-    case TAB_TYPE_DARKHORSE:
-    {
-        int iSkillDamage[2];
-        int master_boost = 0;
-        gCharacterManager.GetSkillDamage(AT_SKILL_EARTHSHAKE, &iSkillDamage[0], &iSkillDamage[1]);
-        auto masterLevelUi = SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMasterLevelInterface();
-        if (masterLevelUi != nullptr)
-        {
-            master_boost = static_cast<int>(CharacterAttribute->MasterSkillInfo[AT_SKILL_EARTHSHAKE_STR].GetSkillValue());
+        case TAB_TYPE_DARKHORSE: {
+            int iSkillDamage[2];
+            int master_boost = 0;
+            gCharacterManager.GetSkillDamage(AT_SKILL_EARTHSHAKE, &iSkillDamage[0], &iSkillDamage[1]);
+            auto masterLevelUi = SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMasterLevelInterface();
+            if (masterLevelUi != nullptr)
+            {
+                master_boost =
+                    static_cast<int>(CharacterAttribute->MasterSkillInfo[AT_SKILL_EARTHSHAKE_STR].GetSkillValue());
+            }
+
+            pPetInfo      = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
+            m_aiDamage[0] = pPetInfo->m_wDamageMin + iSkillDamage[0] + master_boost;
+            m_aiDamage[1] = pPetInfo->m_wDamageMax + iSkillDamage[1] + master_boost;
         }
+        break;
+        case TAB_TYPE_DARKSPIRIT: {
+            m_fAddDamagePercent = 0.f;
+            m_aiDamage[0]       = 0;
+            m_aiDamage[1]       = 0;
 
-        pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
-        m_aiDamage[0] = pPetInfo->m_wDamageMin + iSkillDamage[0] + master_boost;
-        m_aiDamage[1] = pPetInfo->m_wDamageMax + iSkillDamage[1] + master_boost;
-    }
-    break;
-    case TAB_TYPE_DARKSPIRIT:
-    {
-        m_fAddDamagePercent = 0.f;
-        m_aiDamage[0] = 0;
-        m_aiDamage[1] = 0;
+            if (CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type != -1)
+            {
+                m_fAddDamagePercent = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].MagicPower;
+            }
 
-        if (CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type != -1)
-        {
-            m_fAddDamagePercent = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].MagicPower;
+            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+
+            m_fAddDamagePercent /= 100.f;
+            m_aiDamage[0] = pPetInfo->m_wDamageMin + (int)(pPetInfo->m_wDamageMin * m_fAddDamagePercent);
+            m_aiDamage[1] = pPetInfo->m_wDamageMax + (int)(pPetInfo->m_wDamageMax * m_fAddDamagePercent);
         }
-
-        pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
-
-        m_fAddDamagePercent /= 100.f;
-        m_aiDamage[0] = pPetInfo->m_wDamageMin + (int)(pPetInfo->m_wDamageMin * m_fAddDamagePercent);
-        m_aiDamage[1] = pPetInfo->m_wDamageMax + (int)(pPetInfo->m_wDamageMax * m_fAddDamagePercent);
-    }
-    break;
+        break;
     }
 }
 
@@ -427,6 +436,4 @@ void CNewUIPetInfoWindow::OpenningProcess()
     CalcDamage(m_iNumCurOpenTab);
 }
 
-void CNewUIPetInfoWindow::ClosingProcess()
-{
-}
+void CNewUIPetInfoWindow::ClosingProcess() {}

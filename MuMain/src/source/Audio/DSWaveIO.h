@@ -14,7 +14,7 @@ class waveIO
 public:
     enum class Mode : std::uint8_t
     {
-        Input = 0,
+        Input  = 0,
         Output = 1
     };
 
@@ -23,7 +23,7 @@ public:
     explicit waveIO(bool legacyMode);
     ~waveIO();
 
-    waveIO(const waveIO&) = delete;
+    waveIO(const waveIO&)            = delete;
     waveIO& operator=(const waveIO&) = delete;
 
     bool LoadWaveHeader(const wchar_t* filename);
@@ -31,9 +31,9 @@ public:
     bool CloseWaveFile();
 
     WAVEFORMATEX GetWaveFormatEx() const { return m_wfex; }
-    bool ReadWaveData(char* buffer, int bufferSize);
-    bool WriteWaveData(const char* buffer, int bufferSize);
-    int GetDataSize() const { return m_DataSize; }
+    bool         ReadWaveData(char* buffer, int bufferSize);
+    bool         WriteWaveData(const char* buffer, int bufferSize);
+    int          GetDataSize() const { return m_DataSize; }
 
 private:
     bool IsInputMode() const noexcept;

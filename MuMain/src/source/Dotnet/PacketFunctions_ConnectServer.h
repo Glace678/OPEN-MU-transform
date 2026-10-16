@@ -1,4 +1,4 @@
-﻿// <copyright file="PacketFunctions.h" company="MUnique">
+﻿  // <copyright file="PacketFunctions.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -20,13 +20,12 @@
 #include "PacketFunctions_CommonEnums.h"
 #include "PacketFunctions_ConnectServer_Enums.h"
 
-/// <summary>
-/// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
-/// </summary>
-class PacketFunctions_ConnectServer : public PacketFunctions_ConnectServer_Custom
+    /// <summary>
+    /// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
+    /// </summary>
+    class PacketFunctions_ConnectServer : public PacketFunctions_ConnectServer_Custom
 {
 public:
-
     /// <summary>
     /// Sends a ConnectionInfoRequest075 to this connection.
     /// </summary>

@@ -4,7 +4,7 @@
 #include "Render/Core/RenderConfig.h"
 #include "Render/Core/BindState.h"
 #include "Render/Core/GLProcAddress.h"
-#include "Render/Core/ImmediateRenderer.h" // GLP-19 -- IR::Flush() on real state change
+#include "Render/Core/ImmediateRenderer.h"  // GLP-19 -- IR::Flush() on real state change
 #include "Core/Utilities/FrameProfiler.h"
 #include "Core/Utilities/Log/ErrorReport.h"
 #include <SDL3/SDL.h>
@@ -17,80 +17,73 @@
 #define APIENTRY
 #endif
 
-typedef GLuint (APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
-typedef void   (APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
-typedef void   (APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef GLuint (APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
-typedef void   (APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef void   (APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
-typedef GLint  (APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
-typedef GLuint (APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
-typedef void   (APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
-typedef void   (APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
-typedef void   (APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
+typedef GLuint(APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
+typedef void(APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+typedef void(APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef GLuint(APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
+typedef void(APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
+typedef void(APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef void(APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
+typedef GLint(APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
+typedef GLuint(APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
+typedef void(APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
+typedef void(APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
+typedef void(APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
+typedef void(APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
 
-static PFNGLCREATESHADERPROC       fn_glCreateShader       = nullptr;
-static PFNGLSHADERSOURCEPROC       fn_glShaderSource        = nullptr;
-static PFNGLCOMPILESHADERPROC      fn_glCompileShader       = nullptr;
-static PFNGLGETSHADERIVPROC        fn_glGetShaderiv         = nullptr;
-static PFNGLGETSHADERINFOLOGPROC   fn_glGetShaderInfoLog    = nullptr;
-static PFNGLCREATEPROGRAMPROC      fn_glCreateProgram       = nullptr;
-static PFNGLATTACHSHADERPROC       fn_glAttachShader        = nullptr;
-static PFNGLLINKPROGRAMPROC        fn_glLinkProgram         = nullptr;
-static PFNGLGETPROGRAMIVPROC       fn_glGetProgramiv        = nullptr;
-static PFNGLGETPROGRAMINFOLOGPROC  fn_glGetProgramInfoLog   = nullptr;
-static PFNGLDELETESHADERPROC       fn_glDeleteShader        = nullptr;
-static PFNGLDELETEPROGRAMPROC      fn_glDeleteProgram       = nullptr;
-static PFNGLGETUNIFORMLOCATIONPROC fn_glGetUniformLocation  = nullptr;
+static PFNGLCREATESHADERPROC         fn_glCreateShader         = nullptr;
+static PFNGLSHADERSOURCEPROC         fn_glShaderSource         = nullptr;
+static PFNGLCOMPILESHADERPROC        fn_glCompileShader        = nullptr;
+static PFNGLGETSHADERIVPROC          fn_glGetShaderiv          = nullptr;
+static PFNGLGETSHADERINFOLOGPROC     fn_glGetShaderInfoLog     = nullptr;
+static PFNGLCREATEPROGRAMPROC        fn_glCreateProgram        = nullptr;
+static PFNGLATTACHSHADERPROC         fn_glAttachShader         = nullptr;
+static PFNGLLINKPROGRAMPROC          fn_glLinkProgram          = nullptr;
+static PFNGLGETPROGRAMIVPROC         fn_glGetProgramiv         = nullptr;
+static PFNGLGETPROGRAMINFOLOGPROC    fn_glGetProgramInfoLog    = nullptr;
+static PFNGLDELETESHADERPROC         fn_glDeleteShader         = nullptr;
+static PFNGLDELETEPROGRAMPROC        fn_glDeleteProgram        = nullptr;
+static PFNGLGETUNIFORMLOCATIONPROC   fn_glGetUniformLocation   = nullptr;
 static PFNGLGETUNIFORMBLOCKINDEXPROC fn_glGetUniformBlockIndex = nullptr;
-static PFNGLUNIFORMBLOCKBINDINGPROC fn_glUniformBlockBinding = nullptr;
-static PFNGLUNIFORM1IPROC          fn_glUniform1i           = nullptr;
-static PFNGLUNIFORM1FPROC          fn_glUniform1f           = nullptr;
-static PFNGLACTIVETEXTUREPROC      fn_glActiveTexture       = nullptr;
+static PFNGLUNIFORMBLOCKBINDINGPROC  fn_glUniformBlockBinding  = nullptr;
+static PFNGLUNIFORM1IPROC            fn_glUniform1i            = nullptr;
+static PFNGLUNIFORM1FPROC            fn_glUniform1f            = nullptr;
+static PFNGLACTIVETEXTUREPROC        fn_glActiveTexture        = nullptr;
 
 static bool LoadGLShaderFunctions()
 {
     static bool loaded = false;
-    if (loaded) return true;
+    if (loaded)
+        return true;
 
-    fn_glCreateShader       = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
-    fn_glShaderSource        = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
-    fn_glCompileShader       = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
-    fn_glGetShaderiv         = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
-    fn_glGetShaderInfoLog    = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
-    fn_glCreateProgram       = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
-    fn_glAttachShader        = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
-    fn_glLinkProgram         = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
-    fn_glGetProgramiv        = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
-    fn_glGetProgramInfoLog   = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
-    fn_glDeleteShader        = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
-    fn_glDeleteProgram       = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
-    fn_glGetUniformLocation  = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
+    fn_glCreateShader         = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
+    fn_glShaderSource         = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
+    fn_glCompileShader        = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
+    fn_glGetShaderiv          = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
+    fn_glGetShaderInfoLog     = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
+    fn_glCreateProgram        = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
+    fn_glAttachShader         = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
+    fn_glLinkProgram          = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
+    fn_glGetProgramiv         = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
+    fn_glGetProgramInfoLog    = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
+    fn_glDeleteShader         = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
+    fn_glDeleteProgram        = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
+    fn_glGetUniformLocation   = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
     fn_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)MuGL::GetNativeProcAddress("glGetUniformBlockIndex");
-    fn_glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
-    fn_glUniform1i           = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
-    fn_glUniform1f           = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
-    fn_glActiveTexture       = (PFNGLACTIVETEXTUREPROC)MuGL::GetProcAddress("glActiveTexture");
+    fn_glUniformBlockBinding  = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
+    fn_glUniform1i            = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
+    fn_glUniform1f            = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
+    fn_glActiveTexture        = (PFNGLACTIVETEXTUREPROC)MuGL::GetProcAddress("glActiveTexture");
 
-    loaded = (fn_glCreateShader != nullptr &&
-              fn_glShaderSource != nullptr &&
-              fn_glCompileShader != nullptr &&
-              fn_glGetShaderiv != nullptr &&
-              fn_glCreateProgram != nullptr &&
-              fn_glAttachShader != nullptr &&
-              fn_glLinkProgram != nullptr &&
-              fn_glGetProgramiv != nullptr &&
-              fn_glDeleteShader != nullptr &&
-              fn_glDeleteProgram != nullptr &&
-              fn_glGetUniformLocation != nullptr &&
-              fn_glUniform1i != nullptr &&
+    loaded = (fn_glCreateShader != nullptr && fn_glShaderSource != nullptr && fn_glCompileShader != nullptr &&
+              fn_glGetShaderiv != nullptr && fn_glCreateProgram != nullptr && fn_glAttachShader != nullptr &&
+              fn_glLinkProgram != nullptr && fn_glGetProgramiv != nullptr && fn_glDeleteShader != nullptr &&
+              fn_glDeleteProgram != nullptr && fn_glGetUniformLocation != nullptr && fn_glUniform1i != nullptr &&
               fn_glUniform1f != nullptr);
     return loaded;
 }
@@ -203,8 +196,10 @@ void PassthroughShader::Unbind()
 
 void PassthroughShader::CreateGL()
 {
-    if (m_Program != 0) return;
-    if (!LoadGLShaderFunctions()) return;
+    if (m_Program != 0)
+        return;
+    if (!LoadGLShaderFunctions())
+        return;
 
     // Compile Vertex Shader
     m_VertShader = fn_glCreateShader(GL_VERTEX_SHADER);
@@ -213,9 +208,11 @@ void PassthroughShader::CreateGL()
 
     GLint compiled = 0;
     fn_glGetShaderiv(m_VertShader, GL_COMPILE_STATUS, &compiled);
-    if (!compiled) {
-        char infoLog[512] = {};
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
+    if (!compiled)
+    {
+        char infoLog[512];
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
         SDL_Log("[PassthroughShader] Vertex compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         m_VertShader = 0;
@@ -228,9 +225,11 @@ void PassthroughShader::CreateGL()
     fn_glCompileShader(m_FragShader);
 
     fn_glGetShaderiv(m_FragShader, GL_COMPILE_STATUS, &compiled);
-    if (!compiled) {
-        char infoLog[512] = {};
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
+    if (!compiled)
+    {
+        char infoLog[512];
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
         SDL_Log("[PassthroughShader] Fragment compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         fn_glDeleteShader(m_FragShader);
@@ -246,9 +245,11 @@ void PassthroughShader::CreateGL()
 
     GLint linked = 0;
     fn_glGetProgramiv(m_Program, GL_LINK_STATUS, &linked);
-    if (!linked) {
-        char infoLog[512] = {};
-        if (fn_glGetProgramInfoLog) fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
+    if (!linked)
+    {
+        char infoLog[512];
+        if (fn_glGetProgramInfoLog)
+            fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
         SDL_Log("[PassthroughShader] Program link error: %s", infoLog);
         fn_glDeleteProgram(m_Program);
         InvalidateProgramCache();
@@ -259,67 +260,101 @@ void PassthroughShader::CreateGL()
     }
 
     // Bind GlobalMatrices uniform block to binding point 0
-    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr) {
+    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr)
+    {
         GLuint blockIdx = fn_glGetUniformBlockIndex(m_Program, "GlobalMatrices");
-        if (blockIdx != GL_INVALID_INDEX) {
+        if (blockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, blockIdx, 0);
         }
     }
 
     // Bind SceneData uniform block to binding point 1
-    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr) {
+    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr)
+    {
         GLuint sceneBlockIdx = fn_glGetUniformBlockIndex(m_Program, "SceneData");
-        if (sceneBlockIdx != GL_INVALID_INDEX) {
+        if (sceneBlockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, sceneBlockIdx, 1);
         }
     }
 
     // Resolve uniform locations
-    m_LocTex        = fn_glGetUniformLocation(m_Program, "u_Tex");
-    m_LocUseTexture = fn_glGetUniformLocation(m_Program, "u_UseTexture");
-    m_LocUseFog     = fn_glGetUniformLocation(m_Program, "u_UseFog");
-    m_LocAlphaRef   = fn_glGetUniformLocation(m_Program, "u_AlphaRef");
+    m_LocTex           = fn_glGetUniformLocation(m_Program, "u_Tex");
+    m_LocUseTexture    = fn_glGetUniformLocation(m_Program, "u_UseTexture");
+    m_LocUseFog        = fn_glGetUniformLocation(m_Program, "u_UseFog");
+    m_LocAlphaRef      = fn_glGetUniformLocation(m_Program, "u_AlphaRef");
     m_LocTexCombineAdd = fn_glGetUniformLocation(m_Program, "u_TexCombineAdd");
 
     // Default sampler to texture unit 0, texture enabled, fog disabled, alpha test disabled for 2D UI
     BindProgram(m_Program);
-    if (m_LocTex != -1) { fn_glUniform1i(m_LocTex, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocUseTexture != -1) { fn_glUniform1i(m_LocUseTexture, 1); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocUseFog != -1) { fn_glUniform1i(m_LocUseFog, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocAlphaRef != -1) { fn_glUniform1f(m_LocAlphaRef, -1.0f); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_LocTex != -1)
+    {
+        fn_glUniform1i(m_LocTex, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocUseTexture != -1)
+    {
+        fn_glUniform1i(m_LocUseTexture, 1);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocUseFog != -1)
+    {
+        fn_glUniform1i(m_LocUseFog, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocAlphaRef != -1)
+    {
+        fn_glUniform1f(m_LocAlphaRef, -1.0f);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
     m_LastAlphaRef = -1.0f;
-    if (m_LocTexCombineAdd != -1) { fn_glUniform1i(m_LocTexCombineAdd, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_LocTexCombineAdd != -1)
+    {
+        fn_glUniform1i(m_LocTexCombineAdd, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
     // Tri-state sentinels reset to "unset" (not matched to the values just uploaded above) so the
     // first SetUseTexture/SetUseFog/SetTexCombineAdd call after (re)creation always re-uploads,
     // regardless of what the caller happens to request first.
-    m_LastUseTexture = -1;
-    m_LastUseFog = -1;
+    m_LastUseTexture    = -1;
+    m_LastUseFog        = -1;
     m_LastTexCombineAdd = -1;
     BindProgram(0);
 
-    g_ErrorReport.Write(L"[PassthroughShader] Created program ID %d, u_Tex loc %d, u_UseTexture loc %d\r\n", m_Program, m_LocTex, m_LocUseTexture);
+    g_ErrorReport.Write(L"[PassthroughShader] Created program ID %d, u_Tex loc %d, u_UseTexture loc %d\r\n", m_Program,
+                        m_LocTex, m_LocUseTexture);
 }
 
 void PassthroughShader::DestroyGL()
 {
-    if (m_Program != 0) {
+    if (m_Program != 0)
+    {
         BindProgram(0);
-        if (m_VertShader) fn_glDeleteShader(m_VertShader);
-        if (m_FragShader) fn_glDeleteShader(m_FragShader);
-        if (fn_glDeleteProgram) { fn_glDeleteProgram(m_Program); InvalidateProgramCache(); }
+        if (m_VertShader)
+            fn_glDeleteShader(m_VertShader);
+        if (m_FragShader)
+            fn_glDeleteShader(m_FragShader);
+        if (fn_glDeleteProgram)
+        {
+            fn_glDeleteProgram(m_Program);
+            InvalidateProgramCache();
+        }
         m_Program = m_VertShader = m_FragShader = 0;
     }
 }
 
 void PassthroughShader::BindGL()
 {
-    if (m_Program != 0) {
+    if (m_Program != 0)
+    {
         BindProgram(m_Program);
 
         // Every IR::Begin() calls Bind(), so this is per-draw granularity for free. Dirty-checked
         // so unchanged alpha-test state (the common case) costs one float compare, not a glUniform1f.
-        if (m_LocAlphaRef != -1 && fn_glUniform1f != nullptr && g_AlphaRef != m_LastAlphaRef) {
-            IR::Flush(IR::FlushCause::Uniform); // GLP-19 -- alpha-test threshold is batch state; see SetUseTexture
+        if (m_LocAlphaRef != -1 && fn_glUniform1f != nullptr && g_AlphaRef != m_LastAlphaRef)
+        {
+            IR::Flush(IR::FlushCause::Uniform);  // GLP-19 -- alpha-test threshold is batch state; see SetUseTexture
             fn_glUniform1f(m_LocAlphaRef, g_AlphaRef);
             FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
             m_LastAlphaRef = g_AlphaRef;
@@ -334,14 +369,15 @@ void PassthroughShader::SetTexture(GLuint texID, int slot)
     // GLP-05: no raw glActiveTexture(GL_TEXTURE0) restore anymore -- BindState now owns the
     // active texture unit as part of its bind-state monopoly (see BindState.cpp's BindTexture2D).
     BindTexture2D(slot, texID);
-    CachTexture = -1; // Invalidate engine texture cache
+    CachTexture = -1;  // Invalidate engine texture cache
 }
 
 void PassthroughShader::SetUseTexture(bool use)
 {
     Bind();
     const int v = use ? 1 : 0;
-    if (m_LocUseTexture != -1 && fn_glUniform1i != nullptr && v != m_LastUseTexture) {
+    if (m_LocUseTexture != -1 && fn_glUniform1i != nullptr && v != m_LastUseTexture)
+    {
         // GLP-19: flush BEFORE the uniform changes, so any batch IR has accumulated is drawn with
         // the value it was submitted under. This one hook covers all 17 call sites in the tree that
         // override SetUseTexture(false) right after IR::Begin() -- none of them need to change.
@@ -356,8 +392,9 @@ void PassthroughShader::SetUseFog(bool use)
 {
     Bind();
     const int v = use ? 1 : 0;
-    if (m_LocUseFog != -1 && fn_glUniform1i != nullptr && v != m_LastUseFog) {
-        IR::Flush(IR::FlushCause::Uniform); // GLP-19 -- see SetUseTexture
+    if (m_LocUseFog != -1 && fn_glUniform1i != nullptr && v != m_LastUseFog)
+    {
+        IR::Flush(IR::FlushCause::Uniform);  // GLP-19 -- see SetUseTexture
         fn_glUniform1i(m_LocUseFog, v);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastUseFog = v;
@@ -368,7 +405,8 @@ void PassthroughShader::SetTexCombineAdd(bool add)
 {
     Bind();
     const int v = add ? 1 : 0;
-    if (m_LocTexCombineAdd != -1 && fn_glUniform1i != nullptr && v != m_LastTexCombineAdd) {
+    if (m_LocTexCombineAdd != -1 && fn_glUniform1i != nullptr && v != m_LastTexCombineAdd)
+    {
         fn_glUniform1i(m_LocTexCombineAdd, v);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastTexCombineAdd = v;

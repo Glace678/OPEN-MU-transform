@@ -19,21 +19,20 @@
 #ifdef _WIN32
 #include <urlmon.h>
 
-#pragma comment(lib,"Urlmon.lib")
+#pragma comment(lib, "Urlmon.lib")
 #endif
 
-CBannerInfo::CBannerInfo() // OK
+CBannerInfo::CBannerInfo()  // OK
 {
     memset(this->BannerName, 0, sizeof(this->BannerName));
     memset(this->BannerImageURL, 0, sizeof(this->BannerImageURL));
     memset(this->BannerImagePath, 0, sizeof(this->BannerImagePath));
     memset(this->BannerLinkURL, 0, sizeof(this->BannerLinkURL));
 }
-CBannerInfo::~CBannerInfo() // OK
-{
-}
+CBannerInfo::~CBannerInfo()  // OK
+{}
 
-bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool bDonwLoad) // OK
+bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool bDonwLoad)  // OK
 {
     if (strdata.empty())
         return 0;
@@ -49,7 +48,7 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
 
     StringCchCopy(this->BannerImageURL, std::size(this->BannerImageURL), Token.nextToken().c_str());
 
-    this->BannerOrder = _wtoi(Token.nextToken().c_str());
+    this->BannerOrder     = _wtoi(Token.nextToken().c_str());
     this->BannerDirection = _wtoi(Token.nextToken().c_str());
 
     CStringMethod::ConvertStringToDateTime(this->BannerStartDate, Token.nextToken());
@@ -58,7 +57,7 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
     StringCchCopy(this->BannerLinkURL, std::size(this->BannerLinkURL), Token.nextToken().c_str());
 
     std::wstring url = this->BannerImageURL;
-    std::size_t pos = url.rfind(L"/", std::wstring::npos);
+    std::size_t  pos = url.rfind(L"/", std::wstring::npos);
 
     if (pos != std::wstring::npos)
     {
@@ -66,13 +65,14 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
 
         // #13: only a bare basename may be materialized under strDirPath;
         // reject traversal/separator components from a hostile image URL.
-        if (sub.empty() || sub.find(L"..") != std::wstring::npos ||
-            sub.find(L'/') != std::wstring::npos || sub.find(L'\\') != std::wstring::npos)
+        if (sub.empty() || sub.find(L"..") != std::wstring::npos || sub.find(L'/') != std::wstring::npos ||
+            sub.find(L'\\') != std::wstring::npos)
         {
             return 1;
         }
 
-        StringCchPrintf(this->BannerImagePath, std::size(this->BannerImagePath), L"%ls%ls", strDirPath.c_str(), sub.c_str());
+        StringCchPrintf(this->BannerImagePath, std::size(this->BannerImagePath), L"%ls%ls", strDirPath.c_str(),
+                        sub.c_str());
 
         if (bDonwLoad || GetFileAttributes(this->BannerImagePath) == INVALID_FILE_ATTRIBUTES)
         {

@@ -15,30 +15,25 @@
 #include "SceneCommon.h"
 #include "UI/NewUI/Dialogs/ReconnectDialog.h"
 
-
 #ifdef _EDITOR
 #include "Core/MuEditorCore.h"
 #endif
 
-CLoadingScene::CLoadingScene()
-{
-}
+CLoadingScene::CLoadingScene() {}
 
-CLoadingScene::~CLoadingScene()
-{
-}
+CLoadingScene::~CLoadingScene() {}
 
 void CLoadingScene::Create()
 {
     // Loading artwork is a tiled 800x600 canvas; map it into the 640x480
     // reference art space and let the resolution scale handle window sizing.
-    constexpr float kCanvasSX = (float)REFERENCE_WIDTH / 800.0f;  // 0.8
-    constexpr float kCanvasSY = (float)REFERENCE_HEIGHT / 600.0f; // 0.8
+    constexpr float kCanvasSX = (float)REFERENCE_WIDTH / 800.0f;   // 0.8
+    constexpr float kCanvasSY = (float)REFERENCE_HEIGHT / 600.0f;  // 0.8
 
-    const int tileW = int(400 * kCanvasSX);
-    const int mainH = int(512 * kCanvasSY);
-    const int stripH = int(88 * kCanvasSY);
-    const int anHeight[LDS_BACK_MAX] = { mainH, mainH, stripH, stripH };
+    const int tileW                  = int(400 * kCanvasSX);
+    const int mainH                  = int(512 * kCanvasSY);
+    const int stripH                 = int(88 * kCanvasSY);
+    const int anHeight[LDS_BACK_MAX] = {mainH, mainH, stripH, stripH};
     for (int i = 0; i < LDS_BACK_MAX; ++i)
     {
         m_asprBack[i].Create(tileW, anHeight[i], BITMAP_TITLE + i);
@@ -65,8 +60,8 @@ void CLoadingScene::Render()
 }
 
 // External variables
-extern int LoadingWorld;
-extern bool FogEnable;
+extern int        LoadingWorld;
+extern bool       FogEnable;
 extern EGameScene SceneFlag;
 
 void LoadingScene(HDC hDC)

@@ -20,22 +20,22 @@ void CameraState::Reset()
     memset(Matrix, 0, sizeof(Matrix));
 
     // View frustum
-    ViewNear = 20.0f;
-    ViewFar = 2000.0f;
-    FOV = 55.0f;
+    ViewNear      = 20.0f;
+    ViewFar       = 2000.0f;
+    FOV           = 55.0f;
     TopViewEnable = false;
 
     // Camera behavior
-    Distance = 1000.0f;
+    Distance       = 1000.0f;
     DistanceTarget = 1000.0f;
-    ZoomLevel = 0;
+    ZoomLevel      = 0;
     CustomDistance = 0.0f;
 
     // Projection cache
-    PerspectiveX = 0.0f;
-    PerspectiveY = 0.0f;
-    ScreenCenterX = 0;
-    ScreenCenterY = 0;
+    PerspectiveX      = 0.0f;
+    PerspectiveY      = 0.0f;
+    ScreenCenterX     = 0;
+    ScreenCenterY     = 0;
     ScreenCenterYFlip = 0;
 }
 

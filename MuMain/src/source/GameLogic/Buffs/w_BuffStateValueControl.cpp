@@ -33,9 +33,7 @@ void BuffStateValueControl::Initialize()
     }
 }
 
-void BuffStateValueControl::Destroy()
-{
-}
+void BuffStateValueControl::Destroy() {}
 
 eBuffValueLoadType BuffStateValueControl::CheckValue(eBuffState bufftype)
 {
@@ -55,18 +53,19 @@ void BuffStateValueControl::SetValue(eBuffState bufftype, BuffStateValueInfo& va
 
     if (eBuffValueLoad_ItemAddOption == loadtype)
     {
-        const BuffInfo buffinfo = g_BuffInfo(bufftype);
-        const ITEM_ADD_OPTION& Item_data = g_pItemAddOptioninfo->GetItemAddOtioninfo(ITEMINDEX(buffinfo.s_ItemType, buffinfo.s_ItemIndex));
+        const BuffInfo         buffinfo = g_BuffInfo(bufftype);
+        const ITEM_ADD_OPTION& Item_data =
+            g_pItemAddOptioninfo->GetItemAddOtioninfo(ITEMINDEX(buffinfo.s_ItemType, buffinfo.s_ItemIndex));
 
         valueinfo.s_Value1 = Item_data.m_byValue1;
         valueinfo.s_Value2 = Item_data.m_byValue2;
-        valueinfo.s_Time = Item_data.m_Time;
+        valueinfo.s_Value2 = Item_data.m_Time;
     }
     else
     {
         valueinfo.s_Value1 = 0;
         valueinfo.s_Value2 = 0;
-        valueinfo.s_Time = 0;
+        valueinfo.s_Value2 = 0;
     }
 }
 

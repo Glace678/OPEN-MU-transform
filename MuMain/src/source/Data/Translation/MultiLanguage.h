@@ -16,8 +16,8 @@ public:
     CMultiLanguage(std::wstring strSelectedML);
     ~CMultiLanguage() { ms_Singleton = 0; };
 
-    BYTE GetLanguage();				// Getters
-    
+    BYTE GetLanguage();  // Getters
+
     WPARAM ConvertFulltoHalfWidthChar(DWORD wParam);
 
     static int32_t ConvertFromUtf8(wchar_t* target, const char* source, int maxSourceLength = -1);

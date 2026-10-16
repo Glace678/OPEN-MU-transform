@@ -45,4 +45,4 @@ private:
 
 #define g_MuSkillEditorUI CMuSkillEditorUI::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

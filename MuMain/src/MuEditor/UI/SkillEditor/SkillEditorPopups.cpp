@@ -36,4 +36,4 @@ void CSkillEditorPopups::RenderPopups()
     RenderSimplePopup("Export CSV Failed", I18N::Editor::FailedToExportSkillAttributesAsCSV);
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

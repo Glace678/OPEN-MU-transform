@@ -6,10 +6,10 @@
 // progress bar, and a Cancel button. A no-op when no reconnect is in progress.
 namespace UI::Reconnect
 {
-    // Captures the current (clean) game frame into a texture. Called at the
-    // moment of disconnect so the brief re-login phase - when the world is torn
-    // down and can't render - shows the frozen game instead of a black screen.
-    void CaptureBackground();
+// Captures the current (clean) game frame into a texture. Called at the
+// moment of disconnect so the brief re-login phase - when the world is torn
+// down and can't render - shows the frozen game instead of a black screen.
+void CaptureBackground();
 
-    void RenderDialog();
+void RenderDialog();
 }

@@ -12,4 +12,4 @@
 #define KIND_PET     64
 #define KIND_TMP     128
 #define MAX_OPERATES 200
-#define MAX_ITEMS 1000
+#define MAX_ITEMS    1000

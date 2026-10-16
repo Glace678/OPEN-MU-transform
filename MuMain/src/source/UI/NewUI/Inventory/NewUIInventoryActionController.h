@@ -25,9 +25,11 @@ public:
 
 private:
     bool HandlePickedItemPlacement(CNewUIInventoryCtrl* targetControl) const;
-    bool TryApplyJewel(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem, int iSourceIndex, int iTargetIndex) const;
+    bool TryApplyJewel(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem,
+                       int iSourceIndex, int iTargetIndex) const;
     bool TryStackItem(CNewUIInventoryCtrl* targetControl, ITEM* pPickItem, int iSourceIndex, int iTargetIndex) const;
-    bool TryMoveItem(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem, int iSourceIndex, int iTargetIndex) const;
+    bool TryMoveItem(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem,
+                     int iSourceIndex, int iTargetIndex) const;
 
     bool HandleRepairClick(CNewUIInventoryCtrl* targetControl) const;
 
@@ -42,7 +44,8 @@ private:
     int  FindAlternateEquipSlot(int nOriginalSlot, ITEM* pItem) const;
     bool IsSlotOccupied(int nSlot) const;
 
-    bool ApplyJewels(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem, int iSourceIndex, int iTargetIndex) const;
+    bool ApplyJewels(CNewUIInventoryCtrl* targetControl, CNewUIPickedItem* pPickedItem, ITEM* pPickItem,
+                     int iSourceIndex, int iTargetIndex) const;
     bool TryStackItems(CNewUIInventoryCtrl* targetControl, ITEM* pPickItem, int iSourceIndex, int iTargetIndex) const;
     bool RepairItemAtMousePoint(CNewUIInventoryCtrl* targetControl) const;
     bool TryConsumeItem(CNewUIInventoryCtrl* targetControl, ITEM* pItem, int iIndex) const;
@@ -51,6 +54,6 @@ private:
     IInventoryActionContext* m_pContext;
 };
 
-} // namespace SEASON3B
+}  // namespace SEASON3B
 
-#endif // !defined(AFX_NEWUIINVENTORYACTIONCONTROLLER_H__INCLUDED_)
+#endif  // !defined(AFX_NEWUIINVENTORYACTIONCONTROLLER_H__INCLUDED_)

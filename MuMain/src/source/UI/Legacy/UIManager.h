@@ -8,9 +8,9 @@
 #include "UIJewelHarmony.h"
 #include "GameLogic/Items/ItemAddOptioninfo.h"
 
-extern CUIGateKeeper* g_pUIGateKeeper;
-extern CUIPopup* g_pUIPopup;
-extern JewelHarmonyInfo* g_pUIJewelHarmonyinfo;
+extern CUIGateKeeper*     g_pUIGateKeeper;
+extern CUIPopup*          g_pUIPopup;
+extern JewelHarmonyInfo*  g_pUIJewelHarmonyinfo;
 extern ItemAddOptioninfo* g_pItemAddOptioninfo;
 class CUIManager;
 extern CUIManager* g_pUIManager;
@@ -61,18 +61,19 @@ public:
 protected:
     bool IsCanOpen(DWORD dwInterfaceFlag);
     bool CloseInterface(std::list<DWORD>& dwInterfaceFlag, DWORD dwExtraData = 0);
+
 public:
-    void Init();
+    void  Init();
     POINT RenderWindowBase(int nHeight, int nOriginY = -1);
-    bool PressKey(int nKey);
-    bool IsInputEnable();
-    void UpdateInput();
-    void Render();
-    void CloseAll();
-    bool IsOpen(DWORD dwInterface);
-    bool Open(DWORD dwInterface, DWORD dwExtraData = 0);
-    bool Close(DWORD dwInterface, DWORD dwExtraData = 0);
-    void GetInterfaceAll(std::list<DWORD>& outflag);
-    void GetInsertInterface(std::list<DWORD>& outflag, DWORD insertflag);
-    void GetDeleteInterface(std::list<DWORD>& outflag, DWORD deleteflag);
+    bool  PressKey(int nKey);
+    bool  IsInputEnable();
+    void  UpdateInput();
+    void  Render();
+    void  CloseAll();
+    bool  IsOpen(DWORD dwInterface);
+    bool  Open(DWORD dwInterface, DWORD dwExtraData = 0);
+    bool  Close(DWORD dwInterface, DWORD dwExtraData = 0);
+    void  GetInterfaceAll(std::list<DWORD>& outflag);
+    void  GetInsertInterface(std::list<DWORD>& outflag, DWORD insertflag);
+    void  GetDeleteInterface(std::list<DWORD>& outflag, DWORD deleteflag);
 };

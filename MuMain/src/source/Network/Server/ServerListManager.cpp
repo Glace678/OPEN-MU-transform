@@ -9,9 +9,9 @@
 
 CServerListManager::CServerListManager()
 {
-    m_iTotalServer = 0;
+    m_iTotalServer          = 0;
     m_szSelectServerName[0] = '\0';
-    m_iSelectServerIndex = -1;
+    m_iSelectServerIndex    = -1;
 }
 
 CServerListManager::~CServerListManager()
@@ -54,20 +54,20 @@ void CServerListManager::LoadServerListScript()
 #pragma pack(push, 1)
     typedef struct _SERVER_GROUP_INFO
     {
-        WORD	m_wIndex;
-        char	m_szName[SLM_MAX_SERVER_NAME_LENGTH];
-        BYTE	m_byPos;
-        BYTE	m_bySequence;
-        BYTE	m_abyNonPVP[SLM_MAX_SERVER_COUNT];
-        short	m_nDescriptLen;
+        WORD  m_wIndex;
+        char  m_szName[SLM_MAX_SERVER_NAME_LENGTH];
+        BYTE  m_byPos;
+        BYTE  m_bySequence;
+        BYTE  m_abyNonPVP[SLM_MAX_SERVER_COUNT];
+        short m_nDescriptLen;
     } SERVER_GROUP_INFO;
 #pragma pack(pop)
 
-    int nSize = sizeof(SERVER_GROUP_INFO);
+    int               nSize = sizeof(SERVER_GROUP_INFO);
     SERVER_GROUP_INFO sServerGroupScript;
-    char szDescript[1024];
-    SServerGroupInfo sServerGroupInfo;
-    int i;
+    char              szDescript[1024];
+    SServerGroupInfo  sServerGroupInfo;
+    int               i;
 
     while (0 != ::fread(&sServerGroupScript, nSize, 1, fp))
     {
@@ -76,7 +76,8 @@ void CServerListManager::LoadServerListScript()
         const int descriptionLength = sServerGroupScript.m_nDescriptLen;
         if (descriptionLength < 0 || descriptionLength > static_cast<int>(sizeof(szDescript)))
         {
-            g_ErrorReport.Write(L"Rejected ServerList.bmd entry with invalid description length %d.\r\n", descriptionLength);
+            g_ErrorReport.Write(L"Rejected ServerList.bmd entry with invalid description length %d.\r\n",
+                                descriptionLength);
             break;
         }
 
@@ -87,14 +88,13 @@ void CServerListManager::LoadServerListScript()
         }
 
         BuxConvert((BYTE*)szDescript, descriptionLength);
-        wchar_t wideDescription[1024] {};
+        wchar_t wideDescription[1024]{};
         CMultiLanguage::ConvertFromUtf8(wideDescription, szDescript, descriptionLength);
         sServerGroupInfo.m_strDescript = wideDescription;
 
-        // PROTO-8: fixed char[SLM_MAX_SERVER_NAME_LENGTH] file field.
-        CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName, SLM_MAX_SERVER_NAME_LENGTH);
+        CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName);
 
-        sServerGroupInfo.m_byPos = sServerGroupScript.m_byPos;
+        sServerGroupInfo.m_byPos      = sServerGroupScript.m_byPos;
         sServerGroupInfo.m_bySequence = sServerGroupScript.m_bySequence;
         for (i = 0; i < SLM_MAX_SERVER_COUNT; ++i)
             sServerGroupInfo.m_abyNonPVP[i] = sServerGroupScript.m_abyNonPVP[i];
@@ -116,8 +116,10 @@ const SServerGroupInfo* CServerListManager::GetServerGroupInfoInScript(WORD wSer
 
 CServerGroup* CServerListManager::GetOrCreateServerGroup(int serverGroupIndex)
 {
-    const auto existing = std::find_if(m_mapServerGroup.begin(), m_mapServerGroup.end(),
-        [serverGroupIndex](const auto& entry) { return entry.second->m_iServerIndex == serverGroupIndex; });
+    const auto existing =
+        std::find_if(m_mapServerGroup.begin(), m_mapServerGroup.end(), [serverGroupIndex](const auto& entry) {
+            return entry.second->m_iServerIndex == serverGroupIndex;
+        });
     if (existing != m_mapServerGroup.end())
         return existing->second;
 
@@ -127,7 +129,7 @@ CServerGroup* CServerListManager::GetOrCreateServerGroup(int serverGroupIndex)
     const auto [entry, inserted] = m_mapServerGroup.emplace(group->m_iSequence, group.get());
     if (!inserted)
         return nullptr;
-    return group.release(); // The map owns groups until Release().
+    return group.release();  // The map owns groups until Release().
 }
 
 void CServerListManager::InsertServerGroup(int iConnectIndex, int iServerPercent)
@@ -147,12 +149,12 @@ bool CServerListManager::MakeServerGroup(IN int iServerGroupIndex, OUT CServerGr
     if (NULL == pServerGroupInfo)
         return false;
 
-    wcsncpy_s(pServerGroup->m_szName, pServerGroupInfo->m_szName, _TRUNCATE);
-    wcsncpy_s(pServerGroup->m_szDescription, _countof(pServerGroup->m_szDescription), pServerGroupInfo->m_strDescript.c_str(), _TRUNCATE);
-    pServerGroup->m_iSequence = (int)pServerGroupInfo->m_bySequence;
-    pServerGroup->m_iWidthPos = (int)pServerGroupInfo->m_byPos;
+    ::wcscpy(pServerGroup->m_szName, pServerGroupInfo->m_szName);
+    ::wcscpy(pServerGroup->m_szDescription, pServerGroupInfo->m_strDescript.c_str());
+    pServerGroup->m_iSequence    = (int)pServerGroupInfo->m_bySequence;
+    pServerGroup->m_iWidthPos    = (int)pServerGroupInfo->m_byPos;
     pServerGroup->m_iServerIndex = iServerGroupIndex;
-    pServerGroup->m_bPvPServer = true;
+    pServerGroup->m_bPvPServer   = true;
     int i;
     for (i = 0; i < SLM_MAX_SERVER_COUNT; ++i)
     {
@@ -168,12 +170,12 @@ bool CServerListManager::MakeServerGroup(IN int iServerGroupIndex, OUT CServerGr
 
 void CServerListManager::InsertServer(CServerGroup* pServerGroup, int iConnectIndex, int iServerPercent)
 {
-    auto* pServerInfo = new CServerInfo;
-    pServerInfo->m_iSequence = pServerGroup->GetServerSize();
-    pServerInfo->m_iIndex = (iConnectIndex % MAX_SERVER_PER_GROUP) + 1;
+    auto* pServerInfo            = new CServerInfo;
+    pServerInfo->m_iSequence     = pServerGroup->GetServerSize();
+    pServerInfo->m_iIndex        = (iConnectIndex % MAX_SERVER_PER_GROUP) + 1;
     pServerInfo->m_iConnectIndex = iConnectIndex;
-    pServerInfo->m_iPercent = iServerPercent;
-    pServerInfo->m_byNonPvP = pServerGroup->m_abyNonPvpServer[pServerInfo->m_iIndex - 1];
+    pServerInfo->m_iPercent      = iServerPercent;
+    pServerInfo->m_byNonPvP      = pServerGroup->m_abyNonPvpServer[pServerInfo->m_iIndex - 1];
 
     int iTextIndex;
     if (iServerPercent >= 128)
@@ -191,25 +193,25 @@ void CServerListManager::InsertServer(CServerGroup* pServerGroup, int iConnectIn
 
     switch (pServerInfo->m_byNonPvP)
     {
-    case 0:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, I18N::Game::Lookup(iTextIndex));
-        break;
+        case 0:
+            mu_swprintf(pServerInfo->m_bName, L"%ls-%d %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                        I18N::Game::Lookup(iTextIndex));
+            break;
 
-    case 1:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Non-PVP) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, I18N::Game::Lookup(iTextIndex));
-        break;
+        case 1:
+            mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Non-PVP) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                        I18N::Game::Lookup(iTextIndex));
+            break;
 
-    case 2:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold PVP) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, I18N::Game::Lookup(iTextIndex));
-        break;
+        case 2:
+            mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold PVP) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                        I18N::Game::Lookup(iTextIndex));
+            break;
 
-    case 3:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, I18N::Game::Lookup(iTextIndex));
-        break;
+        case 3:
+            mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                        I18N::Game::Lookup(iTextIndex));
+            break;
     }
 
     pServerGroup->InsertServerInfo(pServerInfo);
@@ -258,9 +260,9 @@ CServerGroup* CServerListManager::GetServerGroupByBtnPos(int iBtnPos)
 
 void CServerListManager::SetSelectServerInfo(wchar_t* pszName, int iIndex, BYTE byNonPvP)
 {
-    wcsncpy_s(m_szSelectServerName, _countof(m_szSelectServerName), pszName, _TRUNCATE);
+    wcscpy(m_szSelectServerName, pszName);
     m_iSelectServerIndex = iIndex;
-    m_byNonPvP = byNonPvP;
+    m_byNonPvP           = byNonPvP;
 }
 
 wchar_t* CServerListManager::GetSelectServerName()
@@ -272,7 +274,6 @@ int CServerListManager::GetSelectServerIndex()
 {
     return m_iSelectServerIndex;
 }
-
 
 BYTE CServerListManager::GetNonPVPInfo()
 {

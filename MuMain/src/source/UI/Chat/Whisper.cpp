@@ -1,84 +1,84 @@
 #include "stdafx.h"
 #include "UI/Chat/Whisper.h"
 
-#include "Engine/Object/ZzzInfomation.h"     // CharacterAttribute
-#include "UI/NewUI/NewUISystem.h"            // g_pSystemLogBox
-#include "UI/NewUI/HUD/NewUIChatLogWindow.h" // SEASON3B::TYPE_SYSTEM_MESSAGE
-#include "UI/Legacy/UIControls.h"            // g_pRenderText
+#include "Engine/Object/ZzzInfomation.h"      // CharacterAttribute
+#include "UI/NewUI/NewUISystem.h"             // g_pSystemLogBox
+#include "UI/NewUI/HUD/NewUIChatLogWindow.h"  // SEASON3B::TYPE_SYSTEM_MESSAGE
+#include "UI/Legacy/UIControls.h"             // g_pRenderText
 #include "I18N/All.h"
 
 namespace
 {
-    constexpr int WHISPER_ID_SLOTS = 10;
+constexpr int WHISPER_ID_SLOTS = 10;
 
-    int     WhisperID_Num = 0;
-    wchar_t WhisperRegistID[MAX_USERNAME_SIZE + 1][WHISPER_ID_SLOTS];
+int     WhisperID_Num = 0;
+wchar_t WhisperRegistID[MAX_USERNAME_SIZE + 1][WHISPER_ID_SLOTS];
 }
 
 namespace UI::Chat::Whisper
 {
-    bool CheckLevel(int requiredLevel, wchar_t* targetId)
+bool CheckLevel(int requiredLevel, wchar_t* targetId)
+{
+    int level = CharacterAttribute->Level;
+
+    if (level >= requiredLevel)
+        return true;
+
+    for (int i = 0; i < WHISPER_ID_SLOTS; ++i)
     {
-        int level = CharacterAttribute->Level;
-
-        if (level >= requiredLevel)
+        if (wcscmp(targetId, WhisperRegistID[i]) == 0)
+        {
             return true;
+        }
+    }
 
+    g_pSystemLogBox->AddText(I18N::Game::YouCanUseTheWhisperCommandAtCharacterLevel6, SEASON3B::TYPE_SYSTEM_MESSAGE);
+
+    return false;
+}
+
+void Register(int requiredLevel, wchar_t* targetId)
+{
+    int level = CharacterAttribute->Level;
+
+    if (level < requiredLevel)
+    {
+        bool noMatch = true;
         for (int i = 0; i < WHISPER_ID_SLOTS; ++i)
         {
             if (wcscmp(targetId, WhisperRegistID[i]) == 0)
             {
-                return true;
+                noMatch = false;
+                break;
             }
         }
 
-        g_pSystemLogBox->AddText(I18N::Game::YouCanUseTheWhisperCommandAtCharacterLevel6, SEASON3B::TYPE_SYSTEM_MESSAGE);
-
-        return false;
-    }
-
-    void Register(int requiredLevel, wchar_t* targetId)
-    {
-        int level = CharacterAttribute->Level;
-
-        if (level < requiredLevel)
+        if (noMatch)
         {
-            bool noMatch = true;
-            for (int i = 0; i < WHISPER_ID_SLOTS; ++i)
-            {
-                if (wcscmp(targetId, WhisperRegistID[i]) == 0)
-                {
-                    noMatch = false;
-                    break;
-                }
-            }
+            wcsncpy(WhisperRegistID[WhisperID_Num], targetId, MAX_USERNAME_SIZE);
+            WhisperRegistID[WhisperID_Num][MAX_USERNAME_SIZE] = L'\0';  // #16: bounded copy + NUL
+            WhisperID_Num++;
 
-            if (noMatch)
+            if (WhisperID_Num >= WHISPER_ID_SLOTS)
             {
-                wcsncpy(WhisperRegistID[WhisperID_Num], targetId, MAX_USERNAME_SIZE);
-                WhisperRegistID[WhisperID_Num][MAX_USERNAME_SIZE] = L'\0';  // #16: bounded copy + NUL
-                WhisperID_Num++;
-
-                if (WhisperID_Num >= WHISPER_ID_SLOTS)
-                {
-                    WhisperID_Num = 0;
-                }
+                WhisperID_Num = 0;
             }
         }
     }
+}
 
-    void Clear()
-    {
-        ZeroMemory(WhisperRegistID, sizeof(wchar_t) * (MAX_USERNAME_SIZE + 1) * WHISPER_ID_SLOTS);  // #16: wchar_t not char
-    }
+void Clear()
+{
+    ZeroMemory(WhisperRegistID, sizeof(wchar_t) * (MAX_USERNAME_SIZE + 1) * WHISPER_ID_SLOTS);  // #16: wchar_t not char
+}
 
-    void RenderList()
+void RenderList()
+{
+    for (int i = 0; i < WHISPER_ID_SLOTS; ++i)
     {
-        for (int i = 0; i < WHISPER_ID_SLOTS; ++i)
-        {
-            g_pRenderText->SetTextColor(255, 255, 255, 255);
-            g_pRenderText->SetBgColor(0, 0, 0, 255);
-            g_pRenderText->RenderText(100, 100 + (i * 10), WhisperRegistID[i]);
-        }
+        g_pRenderText->SetTextColor(255, 255, 255, 255);
+        g_pRenderText->SetBgColor(0, 0, 0, 255);
+        g_pRenderText->RenderText(100, 100 + (i * 10), WhisperRegistID[i]);
     }
+}
 }

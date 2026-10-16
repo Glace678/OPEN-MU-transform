@@ -5,7 +5,8 @@
 #include "World/MapInfra/w_BaseMap.h"
 
 class CGMDoppelGanger2;
-using CGMDoppelGanger2Ptr = std::shared_ptr<CGMDoppelGanger2>;class CGMDoppelGanger2 : public BaseMap
+using CGMDoppelGanger2Ptr = std::shared_ptr<CGMDoppelGanger2>;
+class CGMDoppelGanger2 : public BaseMap
 {
 public:
     static CGMDoppelGanger2Ptr Make();
@@ -17,16 +18,17 @@ public:
     virtual bool RenderObjectVisual(OBJECT* o, BMD* b);
     virtual bool RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
     virtual void RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon = 0);
+
 public:
     bool CreateFireSpark(PARTICLE* o);
 
 public:
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
+    virtual bool       MoveMonsterVisual(OBJECT* o, BMD* b);
+    virtual void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public:
     virtual bool PlayMonsterSound(OBJECT* o);

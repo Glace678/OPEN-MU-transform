@@ -53,10 +53,10 @@
     X(Resistance[7], Resistance, 7, Byte, 60.0f, Resistance7)
 
 // Helper macro to convert TypeEnum to actual C++ type
-#define FIELD_TYPE_Bool bool
-#define FIELD_TYPE_Byte BYTE
-#define FIELD_TYPE_Word WORD
-#define FIELD_TYPE_Int int
+#define FIELD_TYPE_Bool  bool
+#define FIELD_TYPE_Byte  BYTE
+#define FIELD_TYPE_Word  WORD
+#define FIELD_TYPE_Int   int
 #define FIELD_TYPE_DWord DWORD
 
 // Generate struct field declarations from X-macro. The i18nName parameter

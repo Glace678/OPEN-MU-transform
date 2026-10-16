@@ -8,15 +8,14 @@ using namespace Core::Input;
 
 namespace
 {
-    struct Owner
-    {
-    };
+struct Owner
+{};
 }
 
 TEST_CASE("FocusRegistry registers valid nodes once per frame")
 {
     FocusRegistry registry;
-    Owner owner;
+    Owner         owner;
 
     CHECK_FALSE(registry.Register(&owner, 1, 0, 0, 10, 10));
     registry.BeginFrame();
@@ -25,13 +24,7 @@ TEST_CASE("FocusRegistry registers valid nodes once per frame")
     CHECK_FALSE(registry.Register(nullptr, 2, 0, 0, 10, 10));
     CHECK_FALSE(registry.Register(&owner, 2, 0, 0, 0, 10));
     CHECK_FALSE(registry.Register(&owner, 3, 0, 0, 10, 10, false));
-    CHECK_FALSE(registry.Register(
-        &owner,
-        4,
-        std::numeric_limits<float>::quiet_NaN(),
-        0,
-        10,
-        10));
+    CHECK_FALSE(registry.Register(&owner, 4, std::numeric_limits<float>::quiet_NaN(), 0, 10, 10));
     registry.EndFrame();
 
     REQUIRE(registry.Size() == 1);
@@ -46,11 +39,11 @@ TEST_CASE("FocusRegistry registers valid nodes once per frame")
 TEST_CASE("FocusRegistry navigates by direction and geometric proximity")
 {
     FocusRegistry registry;
-    Owner center;
-    Owner nearRight;
-    Owner diagonalRight;
-    Owner below;
-    Owner left;
+    Owner         center;
+    Owner         nearRight;
+    Owner         diagonalRight;
+    Owner         below;
+    Owner         left;
 
     registry.BeginFrame();
     registry.Register(&center, 0, 95, 95, 10, 10);
@@ -78,8 +71,8 @@ TEST_CASE("FocusRegistry navigates by direction and geometric proximity")
 TEST_CASE("FocusRegistry preserves identity when registration order changes")
 {
     FocusRegistry registry;
-    Owner first;
-    Owner second;
+    Owner         first;
+    Owner         second;
 
     registry.BeginFrame();
     registry.Register(&first, 10, 0, 0, 10, 10);
@@ -101,9 +94,9 @@ TEST_CASE("FocusRegistry preserves identity when registration order changes")
 TEST_CASE("FocusRegistry falls back near the vanished node")
 {
     FocusRegistry registry;
-    Owner vanished;
-    Owner near;
-    Owner far;
+    Owner         vanished;
+    Owner         near;
+    Owner         far;
 
     registry.BeginFrame();
     registry.Register(&vanished, 1, 90, 90, 20, 20);
@@ -126,8 +119,8 @@ TEST_CASE("FocusRegistry falls back near the vanished node")
 TEST_CASE("FocusRegistry can seed focus from the pointer position")
 {
     FocusRegistry registry;
-    Owner first;
-    Owner second;
+    Owner         first;
+    Owner         second;
 
     registry.BeginFrame();
     registry.Register(&first, 1, 0, 0, 20, 20);

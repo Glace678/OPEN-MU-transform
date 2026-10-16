@@ -19,14 +19,14 @@ public:
     // Data Access
     ITEM_ATTRIBUTE* GetItemAttributes();
     ITEM_ATTRIBUTE* GetItemAttribute(int index);
-    int GetItemCount() const;
+    int             GetItemCount() const;
 
 private:
     CItemDataHandler();
     ~CItemDataHandler() = default;
 
     // Prevent copying
-    CItemDataHandler(const CItemDataHandler&) = delete;
+    CItemDataHandler(const CItemDataHandler&)            = delete;
     CItemDataHandler& operator=(const CItemDataHandler&) = delete;
 };
 

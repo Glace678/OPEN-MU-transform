@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Terrain Լ
+// Terrain ���� �Լ�
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -156,6 +156,8 @@ int OpenTerrainAttribute(wchar_t* FileName)
         mu_swprintf(text, L"%ls could not be read.", FileName);
         g_ErrorReport.Write(text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return -1;
     }
 
@@ -209,6 +211,8 @@ bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
     const BYTE Version = 0;
@@ -343,22 +347,8 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
         fseek(fp, 0, SEEK_END);
         int EncBytes = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        if (EncBytes <= 0)
-        {
-            // MEM-3: a missing/empty file must not end up (uninitialized) in the encryption.
-            fclose(fp);
-            return false;
-        }
-
         auto* EncData = new unsigned char[EncBytes];
-        if (fread(EncData, 1, EncBytes, fp) != static_cast<size_t>(EncBytes))
-        {
-            // Short read: avoid feeding uninitialized trailing bytes into MapFileEncrypt.
-            fclose(fp);
-            delete[] EncData;
-            return false;
-        }
-
+        fread(EncData, 1, EncBytes, fp);
         fclose(fp);
 
         int DataBytes = MapFileEncrypt(NULL, EncData, EncBytes);
@@ -367,12 +357,8 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
         delete[] EncData;
 
         fp = _wfopen(FileName, L"wb");
-        if (fp != NULL)
-        {
-            fwrite(Data, DataBytes, 1, fp);
-            fclose(fp);
-        }
-
+        fwrite(Data, DataBytes, 1, fp);
+        fclose(fp);
         delete[] Data;
     }
     return true;
@@ -571,27 +557,19 @@ void SaveTerrainLight(wchar_t* FileName)
     delete[] Buffer;
 }
 
-bool CreateTerrain(wchar_t* FileName, bool bNew)
+void CreateTerrain(wchar_t* FileName, bool bNew)
 {
     ActiveTerrain = true;
-    bool loaded;
     if (bNew)
     {
-        loaded = OpenTerrainHeightNew(FileName);
+        OpenTerrainHeightNew(FileName);
     }
     else
     {
-        loaded = OpenTerrainHeight(FileName);
-    }
-
-    if (!loaded)
-    {
-        ActiveTerrain = false;
-        return false;
+        OpenTerrainHeight(FileName);
     }
 
     CreateSun();
-    return true;
 }
 
 unsigned char BMPHeader[1080];
@@ -609,8 +587,7 @@ bool OpenTerrainHeight(wchar_t* filename)
 
     wchar_t NewFileName[256];
 
-    // MEM-2: bound the copy so NewFileName[256] can never be written.
-    for (int i = 0; i < (int)wcslen(filename) && i < 255; i++)
+    for (int i = 0; i < (int)wcslen(filename); i++)
     {
         NewFileName[i] = filename[i];
         NewFileName[i + 1] = 0;
@@ -630,6 +607,8 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -640,6 +619,8 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to seek in %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -652,6 +633,8 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, fileSize, RequiredSize);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -662,6 +645,8 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to rewind %ls.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -676,6 +661,8 @@ bool OpenTerrainHeight(wchar_t* filename)
         mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %d bytes, got %zu).", FileName, Size, readBytes);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
@@ -717,13 +704,6 @@ void SaveTerrainHeight(wchar_t* name)
         }
     }
     FILE* fp = _wfopen(name, L"wb");
-    if (fp == nullptr) // XC-3: fail-closed -- fwrite on a null FILE is undefined behavior.
-    {
-        g_ErrorReport.Write(L"[Terrain] SaveTerrainHeight: cannot open '%ls' for writing.\r\n", name);
-        delete[] Buffer;
-        return;
-    }
-
     fwrite(BMPHeader, 1080, 1, fp);
 
     for (int i = 0; i < 256; i++) fwrite(Buffer + (255 - i) * 256, 256, 1, fp);
@@ -737,8 +717,7 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
     wchar_t FileName[256];
     wchar_t NewFileName[256];
 
-    // MEM-2: bound the copy so NewFileName[256] can never be written.
-    for (int i = 0; i < (int)wcslen(strFilename) && i < 255; ++i)
+    for (int i = 0; i < (int)wcslen(strFilename); ++i)
     {
         NewFileName[i] = strFilename[i];
         NewFileName[i + 1] = 0;
@@ -747,68 +726,29 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
             break;
     }
 
-    wcscpy_s(FileName, L"Data\\");
-    wcscat_s(FileName, NewFileName);
-    wcscat_s(FileName, L"OZB");
+    wcscpy(FileName, L"Data\\");
+    wcscat(FileName, NewFileName);
+    wcscat(FileName, L"OZB");
 
     FILE* fp = _wfopen(FileName, L"rb");
     if (!fp)
     {
         wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
+        mu_swprintf(Text, L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
-    if (fseek(fp, 0, SEEK_END) != 0)
-    {
-        fclose(fp);
-        wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"Failed to seek in %ls.", FileName);
-        g_ErrorReport.Write(Text);
-        g_ErrorReport.Write(L"\r\n");
-        return false;
-    }
-
-    long iBytes = ftell(fp);
-
-    // 4 prefix bytes + BITMAPFILEHEADER + BITMAPINFOHEADER + one 3-byte pixel per terrain cell.
-    const long RequiredSize = 4 + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (TERRAIN_SIZE * TERRAIN_SIZE * 3);
-
-    // MEM-1: reject a missing/negative size and truncated files before allocating/copying.
-    if (iBytes < 0 || iBytes < RequiredSize)
-    {
-        fclose(fp);
-        wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, iBytes, RequiredSize);
-        g_ErrorReport.Write(Text);
-        g_ErrorReport.Write(L"\r\n");
-        return false;
-    }
-
-    if (fseek(fp, 0, SEEK_SET) != 0)
-    {
-        fclose(fp);
-        wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"Failed to rewind %ls.", FileName);
-        g_ErrorReport.Write(Text);
-        g_ErrorReport.Write(L"\r\n");
-        return false;
-    }
+    fseek(fp, 0, SEEK_END);
+    int iBytes = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
 
     BYTE* pbyData = new BYTE[iBytes];
-    size_t readBytes = fread(pbyData, 1, iBytes, fp);
+    fread(pbyData, 1, iBytes, fp);
     fclose(fp);
-    if (readBytes != static_cast<size_t>(iBytes))
-    {
-        delete[] pbyData;
-        wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %ld bytes, got %zu).", FileName, iBytes, readBytes);
-        g_ErrorReport.Write(Text);
-        g_ErrorReport.Write(L"\r\n");
-        return false;
-    }
 
     DWORD dwCurPos = 0;
     dwCurPos += 4;
@@ -2733,25 +2673,8 @@ void CreateFrustrum2D(vec3_t Position)
                 refHeight = REFERENCE_HEIGHT - 48;
             else if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
                 refHeight = 430;
-            // L4 widescreen: match BeginOpengl()'s viewport mapping 1:1 so the
-            // terrain hull aspect equals the real 3D viewport. Branched on the
-            // same Width>=REFERENCE_WIDTH test BeginOpengl uses:
-            //  - no side panel: uniform contain scale = min(scaleY, scaleX)
-            //  - side panel open: old non-uniform left-aligned mapping
-            float vpW, vpH;
-            if (refWidth >= REFERENCE_WIDTH)
-            {
-                float scaleY = (float)WindowHeight / (float)REFERENCE_HEIGHT;
-                float scaleX = (float)WindowWidth  / (float)refWidth;
-                float scale  = (scaleY < scaleX) ? scaleY : scaleX;
-                vpW = (float)refWidth  * scale;
-                vpH = (float)refHeight * scale;
-            }
-            else
-            {
-                vpW = (float)refWidth  * WindowWidth  / REFERENCE_WIDTH;
-                vpH = (float)refHeight * WindowHeight / REFERENCE_HEIGHT;
-            }
+            float vpW = (float)(refWidth * WindowWidth) / (float)REFERENCE_WIDTH;
+            float vpH = (float)(refHeight * WindowHeight) / (float)REFERENCE_HEIGHT;
             float aspect = vpW / vpH;
 
 #ifdef _EDITOR

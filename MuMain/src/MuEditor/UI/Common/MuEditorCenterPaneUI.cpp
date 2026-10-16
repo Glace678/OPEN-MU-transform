@@ -28,4 +28,4 @@ void CMuEditorCenterPaneUI::Render(bool& showItemEditor, bool& showSkillEditor)
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

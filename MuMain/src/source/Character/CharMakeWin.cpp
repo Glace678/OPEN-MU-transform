@@ -29,122 +29,112 @@
 
 namespace
 {
-    constexpr std::array<DWORD, BTN_IMG_MAX> kJobButtonColors{
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY,
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY
-    };
+constexpr std::array<DWORD, BTN_IMG_MAX> kJobButtonColors{CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY,
+                                                          CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY};
 
-    constexpr std::array<int, MAX_CLASS> kClassButtonTextIds{
-        20, 21, 22, 23, 24, 1687, 3150
-    };
+constexpr std::array<int, MAX_CLASS> kClassButtonTextIds{20, 21, 22, 23, 24, 1687, 3150};
 
-    constexpr std::size_t kMinCharacterNameLength = 4;
+constexpr std::size_t kMinCharacterNameLength = 4;
 
-    constexpr int kSummonerDescriptionTextId = 1690;
-    constexpr int kRageFighterDescriptionTextId = 3152;
-    constexpr int kDefaultDescriptionBase = 1705;
+constexpr int kSummonerDescriptionTextId    = 1690;
+constexpr int kRageFighterDescriptionTextId = 3152;
+constexpr int kDefaultDescriptionBase       = 1705;
 
-    constexpr int kStatLabelBaseId = 1701;
-    constexpr int kStatLineSpacing = 17;
-    constexpr int kStatYOffset = 10;
-    constexpr int kStatValueOffset = 54;
-    constexpr int kStatTextOffsetX = 22;
-    constexpr int kDarkLordStatHeight = 96;
-    constexpr int kDefaultStatHeight = 80;
-    constexpr const wchar_t* kDarkLordLeadershipStatValue = L"25";
-    constexpr int kDarkLordLeadershipTextId = 1738;
+constexpr int            kStatLabelBaseId             = 1701;
+constexpr int            kStatLineSpacing             = 17;
+constexpr int            kStatYOffset                 = 10;
+constexpr int            kStatValueOffset             = 54;
+constexpr int            kStatTextOffsetX             = 22;
+constexpr int            kDarkLordStatHeight          = 96;
+constexpr int            kDefaultStatHeight           = 80;
+constexpr const wchar_t* kDarkLordLeadershipStatValue = L"25";
+constexpr int            kDarkLordLeadershipTextId    = 1738;
 
-    constexpr int kJobButtonStartY = 131;
-    constexpr int kJobButtonSummonerRow = 3;
-    constexpr int kJobButtonRageFighterY = 246;
-    constexpr int kOkButtonOffsetY = 325;
-    constexpr int kCancelButtonOffsetX = 400;
-    constexpr int kInputSpriteOffsetY = 317;
-    constexpr int kInputTextOffsetX = 78;
-    constexpr int kInputTextOffsetY = 21;
-    constexpr int kDescSpriteOffsetY = 355;
-    constexpr int kStatSpriteOffsetY = 24;
-    constexpr int kStatPanelBaseXOffset = 346;
-    constexpr int kDescriptionTextOffsetX = 10;
-    constexpr int kDescriptionTextOffsetY = 12;
-    constexpr int kDescriptionLineSpacing = 19;
+constexpr int kJobButtonStartY        = 131;
+constexpr int kJobButtonSummonerRow   = 3;
+constexpr int kJobButtonRageFighterY  = 246;
+constexpr int kOkButtonOffsetY        = 325;
+constexpr int kCancelButtonOffsetX    = 400;
+constexpr int kInputSpriteOffsetY     = 317;
+constexpr int kInputTextOffsetX       = 78;
+constexpr int kInputTextOffsetY       = 21;
+constexpr int kDescSpriteOffsetY      = 355;
+constexpr int kStatSpriteOffsetY      = 24;
+constexpr int kStatPanelBaseXOffset   = 346;
+constexpr int kDescriptionTextOffsetX = 10;
+constexpr int kDescriptionTextOffsetY = 12;
+constexpr int kDescriptionLineSpacing = 19;
 
-    struct ClassStats
+struct ClassStats
+{
+    std::array<const wchar_t*, 4> values;
+};
+
+constexpr std::array<ClassStats, MAX_CLASS> kClassStatTable{{
+    ClassStats{{L"18", L"18", L"15", L"30"}},  // Knight
+    ClassStats{{L"28", L"20", L"25", L"10"}},  // Wizard
+    ClassStats{{L"22", L"25", L"20", L"15"}},  // Elf
+    ClassStats{{L"26", L"26", L"26", L"26"}},  // Magic Gladiator
+    ClassStats{{L"26", L"20", L"20", L"15"}},  // Dark Lord
+    ClassStats{{L"21", L"21", L"18", L"23"}},  // Summoner
+    ClassStats{{L"32", L"27", L"25", L"20"}},  // Rage Fighter
+}};
+
+struct ClassRenderParameters
+{
+    bool  overrideAngle;
+    float angleX;
+    float angleY;
+    float angleZ;
+    float scale;
+    float positionOffsetX;
+    float positionOffsetZ;
+};
+
+constexpr ClassRenderParameters GetRenderParameters(CLASS_TYPE classType)
+{
+    switch (classType)
     {
-        std::array<const wchar_t*, 4> values;
-    };
-
-    constexpr std::array<ClassStats, MAX_CLASS> kClassStatTable{ {
-        ClassStats{ { L"18", L"18", L"15", L"30" } }, // Knight
-        ClassStats{ { L"28", L"20", L"25", L"10" } }, // Wizard
-        ClassStats{ { L"22", L"25", L"20", L"15" } }, // Elf
-        ClassStats{ { L"26", L"26", L"26", L"26" } }, // Magic Gladiator
-        ClassStats{ { L"26", L"20", L"20", L"15" } }, // Dark Lord
-        ClassStats{ { L"21", L"21", L"18", L"23" } }, // Summoner
-        ClassStats{ { L"32", L"27", L"25", L"20" } }, // Rage Fighter
-    } };
-
-    struct ClassRenderParameters
-    {
-        bool overrideAngle;
-        float angleX;
-        float angleY;
-        float angleZ;
-        float scale;
-        float positionOffsetX;
-        float positionOffsetZ;
-    };
-
-    constexpr ClassRenderParameters GetRenderParameters(CLASS_TYPE classType)
-    {
-        switch (classType)
-        {
         case CLASS_KNIGHT:
-            return { true, 0.0f, 0.0f, -12.0f, 6.05f, 0.0f, 0.0f };
+            return {true, 0.0f, 0.0f, -12.0f, 6.05f, 0.0f, 0.0f};
         case CLASS_WIZARD:
-            return { true, 0.0f, 0.0f, -40.0f, 5.9f, 0.0f, 0.0f };
+            return {true, 0.0f, 0.0f, -40.0f, 5.9f, 0.0f, 0.0f};
         case CLASS_ELF:
-            return { true, 8.0f, 0.0f, 5.0f, 9.1f, 4.8f, 0.0f };
+            return {true, 8.0f, 0.0f, 5.0f, 9.1f, 4.8f, 0.0f};
         case CLASS_DARK:
-            return { true, 8.0f, 0.0f, -13.0f, 6.0f, 0.0f, 1.8f };
+            return {true, 8.0f, 0.0f, -13.0f, 6.0f, 0.0f, 1.8f};
         case CLASS_DARK_LORD:
-            return { true, 8.0f, 0.0f, -18.0f, 6.0f, 0.0f, 0.0f };
+            return {true, 8.0f, 0.0f, -18.0f, 6.0f, 0.0f, 0.0f};
         case CLASS_SUMMONER:
-            return { true, 2.0f, 0.0f, 2.0f, 9.1f, 4.8f, 4.0f };
+            return {true, 2.0f, 0.0f, 2.0f, 9.1f, 4.8f, 4.0f};
         case CLASS_RAGEFIGHTER:
-            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 9.8f, -7.5f };
+            return {false, 0.0f, 0.0f, 0.0f, 6.0f, 9.8f, -7.5f};
         default:
-            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 0.0f, 0.0f };
-        }
-    }
-
-    constexpr int ResolveDescriptionTextId(CLASS_TYPE selectedClass)
-    {
-        if (selectedClass == CLASS_SUMMONER)
-            return kSummonerDescriptionTextId;
-        if (selectedClass == CLASS_RAGEFIGHTER)
-            return kRageFighterDescriptionTextId;
-        return kDefaultDescriptionBase + selectedClass;
+            return {false, 0.0f, 0.0f, 0.0f, 6.0f, 0.0f, 0.0f};
     }
 }
 
-#define	CMW_OK		0
-#define	CMW_CANCEL	1
+constexpr int ResolveDescriptionTextId(CLASS_TYPE selectedClass)
+{
+    if (selectedClass == CLASS_SUMMONER)
+        return kSummonerDescriptionTextId;
+    if (selectedClass == CLASS_RAGEFIGHTER)
+        return kRageFighterDescriptionTextId;
+    return kDefaultDescriptionBase + selectedClass;
+}
+}
 
+#define CMW_OK     0
+#define CMW_CANCEL 1
 
-
-extern int g_iChatInputType;
+extern int              g_iChatInputType;
 extern CUITextInputBox* g_pSingleTextInputBox;
 
 void MoveCharacterCamera(vec3_t Origin, vec3_t Position, vec3_t Angle);
 
-CCharMakeWin::CCharMakeWin()
-{
-}
+CCharMakeWin::CCharMakeWin() {}
 
-CCharMakeWin::~CCharMakeWin()
-{
-}
+CCharMakeWin::~CCharMakeWin() {}
 
 void CCharMakeWin::Create()
 {
@@ -183,8 +173,7 @@ void CCharMakeWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    std::fill(&m_aszJobDesc[0][0],
-        &m_aszJobDesc[0][0] + (CMW_DESC_LINE_MAX * CMW_DESC_ROW_MAX), L'\0');
+    std::fill(&m_aszJobDesc[0][0], &m_aszJobDesc[0][0] + (CMW_DESC_LINE_MAX * CMW_DESC_ROW_MAX), L'\0');
     m_nDescLine = 0;
 
     m_nSelJob = CLASS_KNIGHT;
@@ -202,8 +191,7 @@ void CCharMakeWin::PreRelease()
 
 void CCharMakeWin::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CCharMakeWin::SetPositionArt(float fArtX, float fArtY)
@@ -218,7 +206,7 @@ void CCharMakeWin::SetPositionArt(float fArtX, float fArtY)
     m_asprBack[CMW_SPR_STAT].SetPositionArt(baseX, fArtY + kStatSpriteOffsetY);
 
     const float buttonHeight = m_abtnJob[0].GetHeight() / rateY;
-    float baseY = fArtY + kJobButtonStartY;
+    float       baseY        = fArtY + kJobButtonStartY;
 
     for (int classIndex = 0; classIndex < 3; ++classIndex)
         m_abtnJob[classIndex].SetPositionArt(baseX, baseY + classIndex * buttonHeight);
@@ -242,9 +230,8 @@ void CCharMakeWin::SetPositionArt(float fArtX, float fArtY)
 
     if (g_iChatInputType == 1)
     {
-        g_pSingleTextInputBox->SetPosition(
-            m_asprBack[CMW_SPR_INPUT].GetXPos() / rateX + kInputTextOffsetX,
-            m_asprBack[CMW_SPR_INPUT].GetYPos() / rateY + kInputTextOffsetY);
+        g_pSingleTextInputBox->SetPosition(m_asprBack[CMW_SPR_INPUT].GetXPos() / rateX + kInputTextOffsetX,
+                                           m_asprBack[CMW_SPR_INPUT].GetYPos() / rateY + kInputTextOffsetY);
     }
 
     m_asprBack[CMW_SPR_DESC].SetPositionArt(fArtX, fArtY + kDescSpriteOffsetY);
@@ -267,8 +254,8 @@ void CCharMakeWin::Show(bool bShow)
     {
         InputTextWidth = 73;
         ClearInput();
-        InputEnable = true;
-        InputNumber = 1;
+        InputEnable     = true;
+        InputNumber     = 1;
         InputTextMax[0] = MAX_USERNAME_SIZE;
         if (g_iChatInputType == 1)
         {
@@ -296,8 +283,8 @@ bool CCharMakeWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -314,19 +301,16 @@ void CCharMakeWin::UpdateDisplay()
         if (!g_CharCardEnable.bCharacterEnable[i])
             m_abtnJob[i + CLASS_DARK].SetEnable(false);
     }
-#else //PBG_ADD_CHARACTERCARD
+#else   //PBG_ADD_CHARACTERCARD
     m_abtnJob[CLASS_SUMMONER].SetEnable(true);
-#endif //PBG_ADD_CHARACTERCARD
+#endif  //PBG_ADD_CHARACTERCARD
 
     const bool isDarkLord = (m_nSelJob == CLASS_DARK_LORD);
     m_asprBack[CMW_SPR_STAT].SetSize(0, isDarkLord ? kDarkLordStatHeight : kDefaultStatHeight, Y);
 
     const int descriptionTextId = ResolveDescriptionTextId(m_nSelJob);
-    m_nDescLine = ::SeparateTextIntoLines(
-        I18N::Game::Lookup(descriptionTextId),
-        m_aszJobDesc[0],
-        CMW_DESC_LINE_MAX,
-        CMW_DESC_ROW_MAX);
+    m_nDescLine = ::SeparateTextIntoLines(I18N::Game::Lookup(descriptionTextId), m_aszJobDesc[0], CMW_DESC_LINE_MAX,
+                                          CMW_DESC_ROW_MAX);
 
     SelectCreateCharacter();
 }
@@ -416,54 +400,39 @@ void CCharMakeWin::RenderControls()
     g_pRenderText->SetTextColor(CLRDW_WHITE);
     g_pRenderText->SetBgColor(0);
 
-    const float rateX = CSprite::ResolutionScaleX();
-    const float rateY = CSprite::ResolutionScaleY();
-    const auto& stats = kClassStatTable[static_cast<std::size_t>(m_nSelJob)];
-    const int statBaseX = m_asprBack[CMW_SPR_STAT].GetXPos() / rateX + kStatTextOffsetX;
+    const float rateX     = CSprite::ResolutionScaleX();
+    const float rateY     = CSprite::ResolutionScaleY();
+    const auto& stats     = kClassStatTable[static_cast<std::size_t>(m_nSelJob)];
+    const int   statBaseX = m_asprBack[CMW_SPR_STAT].GetXPos() / rateX + kStatTextOffsetX;
     for (std::size_t statIndex = 0; statIndex < stats.values.size(); ++statIndex)
     {
         const int statScreenY =
-            m_asprBack[CMW_SPR_STAT].GetYPos() / rateY
-                + kStatYOffset + static_cast<int>(statIndex) * kStatLineSpacing;
+            m_asprBack[CMW_SPR_STAT].GetYPos() / rateY + kStatYOffset + static_cast<int>(statIndex) * kStatLineSpacing;
 
         g_pRenderText->SetTextColor(CLRDW_ORANGE);
-        g_pRenderText->RenderText(
-            statBaseX + kStatValueOffset,
-            statScreenY,
-            stats.values[statIndex]);
+        g_pRenderText->RenderText(statBaseX + kStatValueOffset, statScreenY, stats.values[statIndex]);
 
         g_pRenderText->SetTextColor(CLRDW_WHITE);
-        g_pRenderText->RenderText(
-            statBaseX,
-            statScreenY,
-            I18N::Game::Lookup(kStatLabelBaseId + static_cast<int>(statIndex)));
+        g_pRenderText->RenderText(statBaseX, statScreenY,
+                                  I18N::Game::Lookup(kStatLabelBaseId + static_cast<int>(statIndex)));
     }
 
     if (m_nSelJob == CLASS_DARK_LORD)
     {
-        const int leadershipY =
-            m_asprBack[CMW_SPR_STAT].GetYPos() / rateY
-                + kStatYOffset + 4 * kStatLineSpacing;
+        const int leadershipY = m_asprBack[CMW_SPR_STAT].GetYPos() / rateY + kStatYOffset + 4 * kStatLineSpacing;
 
         g_pRenderText->SetTextColor(CLRDW_ORANGE);
-        g_pRenderText->RenderText(
-            statBaseX + kStatValueOffset,
-            leadershipY,
-            kDarkLordLeadershipStatValue);
+        g_pRenderText->RenderText(statBaseX + kStatValueOffset, leadershipY, kDarkLordLeadershipStatValue);
         g_pRenderText->SetTextColor(CLRDW_WHITE);
-        g_pRenderText->RenderText(
-            statBaseX,
-            leadershipY,
-            I18N::Game::Lookup(kDarkLordLeadershipTextId));
+        g_pRenderText->RenderText(statBaseX, leadershipY, I18N::Game::Lookup(kDarkLordLeadershipTextId));
     }
 
     for (int lineIndex = 0; lineIndex < m_nDescLine; ++lineIndex)
     {
-        g_pRenderText->RenderText(
-            m_asprBack[CMW_SPR_DESC].GetXPos() / rateX + kDescriptionTextOffsetX,
-            m_asprBack[CMW_SPR_DESC].GetYPos() / rateY
-                + kDescriptionTextOffsetY + lineIndex * kDescriptionLineSpacing,
-            m_aszJobDesc[lineIndex]);
+        g_pRenderText->RenderText(m_asprBack[CMW_SPR_DESC].GetXPos() / rateX + kDescriptionTextOffsetX,
+                                  m_asprBack[CMW_SPR_DESC].GetYPos() / rateY + kDescriptionTextOffsetY +
+                                      lineIndex * kDescriptionLineSpacing,
+                                  m_aszJobDesc[lineIndex]);
     }
 
     g_pRenderText->SetFont(g_hFont);
@@ -474,10 +443,8 @@ void CCharMakeWin::RenderControls()
     {
         const float rateX = CSprite::ResolutionScaleX();
         const float rateY = CSprite::ResolutionScaleY();
-        ::RenderInputText(
-            m_asprBack[CMW_SPR_INPUT].GetXPos() / rateX + 78,
-            m_asprBack[CMW_SPR_INPUT].GetYPos() / rateY + 21,
-            0);
+        ::RenderInputText(m_asprBack[CMW_SPR_INPUT].GetXPos() / rateX + 78,
+                          m_asprBack[CMW_SPR_INPUT].GetYPos() / rateY + 21, 0);
     }
 }
 
@@ -498,7 +465,7 @@ void CCharMakeWin::UpdateCreateCharacter()
 void CCharMakeWin::RenderCreateCharacter()
 {
     OBJECT* o = &CharacterView.Object;
-    vec3_t Position, Angle;
+    vec3_t  Position, Angle;
 
     Vector(1.0f, 1.0f, 1.0f, o->Light);
     Vector(10, -500.f, 48.f, Position);

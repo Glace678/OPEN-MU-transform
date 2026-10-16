@@ -1,4 +1,4 @@
-﻿// NewUISiegeWarCommander.cpp: implementation of the CNewUISiegeWarCommander class.
+﻿  // NewUISiegeWarCommander.cpp: implementation of the CNewUISiegeWarCommander class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -8,23 +8,21 @@
 
 #include "Engine/Object/ZzzCharacter.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 SEASON3B::CNewUISiegeWarCommander::CNewUISiegeWarCommander()
 {
     memset(&m_BtnCommandGroupPos, 0, sizeof(POINT));
     memset(&m_BtnCommandPos, 0, sizeof(POINT));
 
-    m_iCurSelectBtnGroup = -1;
+    m_iCurSelectBtnGroup   = -1;
     m_iCurSelectBtnCommand = -1;
-    m_bMouseInMiniMap = false;
+    m_bMouseInMiniMap      = false;
 
     m_vGuildMemberLocationBuffer.reserve(1600);
 }
 
-SEASON3B::CNewUISiegeWarCommander::~CNewUISiegeWarCommander()
-{
-}
+SEASON3B::CNewUISiegeWarCommander::~CNewUISiegeWarCommander() {}
 
 bool SEASON3B::CNewUISiegeWarCommander::OnCreate(int x, int y)
 {
@@ -86,13 +84,14 @@ bool SEASON3B::CNewUISiegeWarCommander::OnUpdateMouseEvent()
             GuildCommander SelectCmd;
             memset(&SelectCmd, 0, sizeof(GuildCommander));
 
-            SelectCmd.byTeam = m_iCurSelectBtnGroup;
-            SelectCmd.byCmd = m_iCurSelectBtnCommand;
-            SelectCmd.byX = (MouseX + m_MiniMapScaleOffset.x - m_MiniMapPos.x) * m_iMiniMapScale;
-            SelectCmd.byY = 256 - (MouseY + m_MiniMapScaleOffset.y - m_MiniMapPos.y) * m_iMiniMapScale;
+            SelectCmd.byTeam     = m_iCurSelectBtnGroup;
+            SelectCmd.byCmd      = m_iCurSelectBtnCommand;
+            SelectCmd.byX        = (MouseX + m_MiniMapScaleOffset.x - m_MiniMapPos.x) * m_iMiniMapScale;
+            SelectCmd.byY        = 256 - (MouseY + m_MiniMapScaleOffset.y - m_MiniMapPos.y) * m_iMiniMapScale;
             SelectCmd.byLifeTime = 100;
 
-            SocketClient->ToGameServer()->SendCastleGuildCommand(SelectCmd.byTeam, SelectCmd.byX, SelectCmd.byY, SelectCmd.byCmd);
+            SocketClient->ToGameServer()->SendCastleGuildCommand(SelectCmd.byTeam, SelectCmd.byX, SelectCmd.byY,
+                                                                 SelectCmd.byCmd);
 
             m_iCurSelectBtnCommand = -1;
 
@@ -165,14 +164,17 @@ void SEASON3B::CNewUISiegeWarCommander::OnSetPos(int x, int y)
 
 void SEASON3B::CNewUISiegeWarCommander::InitCmdGroupBtn()
 {
-    int iVal = 0;
-    wchar_t sztext[255] = { 0, };
+    int     iVal        = 0;
+    wchar_t sztext[255] = {
+        0,
+    };
 
     for (int i = 0; i < MAX_COMMANDGROUP; i++)
     {
         iVal = i * MINIMAP_BTN_GROUP_HEIGHT;
         m_BtnCommandGroup[i].ChangeButtonImgState(true, IMAGE_MINIMAP_BTN_GROUP, true);
-        m_BtnCommandGroup[i].ChangeButtonInfo(m_BtnCommandGroupPos.x, m_BtnCommandGroupPos.y + iVal, MINIMAP_BTN_GROUP_WIDTH, MINIMAP_BTN_GROUP_HEIGHT);
+        m_BtnCommandGroup[i].ChangeButtonInfo(m_BtnCommandGroupPos.x, m_BtnCommandGroupPos.y + iVal,
+                                              MINIMAP_BTN_GROUP_WIDTH, MINIMAP_BTN_GROUP_HEIGHT);
         mu_swprintf(sztext, L"%d", i + 1);
         m_BtnCommandGroup[i].ChangeText(sztext);
     }
@@ -193,7 +195,8 @@ void SEASON3B::CNewUISiegeWarCommander::RenderCharPosInMiniMap()
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
     {
         CHARACTER* c = &CharactersClient[i];
-        if (c != NULL && c->Object.Live && c != Hero && (c->Object.Kind == KIND_PLAYER || c->Object.Kind == KIND_MONSTER || c->Object.Kind == KIND_NPC))
+        if (c != NULL && c->Object.Live && c != Hero &&
+            (c->Object.Kind == KIND_PLAYER || c->Object.Kind == KIND_MONSTER || c->Object.Kind == KIND_NPC))
         {
             OBJECT* o = &c->Object;
 
@@ -222,30 +225,32 @@ void SEASON3B::CNewUISiegeWarCommander::RenderCharPosInMiniMap()
 
 void SEASON3B::CNewUISiegeWarCommander::RenderGuildMemberPosInMiniMap()
 {
-    std::vector<VisibleUnitLocation>::iterator   UnitIterator;
-    POINT Pos;
+    std::vector<VisibleUnitLocation>::iterator UnitIterator;
+    POINT                                      Pos;
     memset(&Pos, 0, sizeof(POINT));
 
-    for (UnitIterator = m_vGuildMemberLocationBuffer.begin(); UnitIterator != m_vGuildMemberLocationBuffer.end(); ++UnitIterator)
+    for (UnitIterator = m_vGuildMemberLocationBuffer.begin(); UnitIterator != m_vGuildMemberLocationBuffer.end();
+         ++UnitIterator)
     {
         switch (UnitIterator->bIndex)
         {
-        case 0:
-            glColor4f(0.f, 1.f, 0.f, m_fMiniMapAlpha);
-            break;
+            case 0:
+                glColor4f(0.f, 1.f, 0.f, m_fMiniMapAlpha);
+                break;
 
-        case 1:
-            glColor4f(0.f, 1.f, 1.f, m_fMiniMapAlpha);
-            break;
+            case 1:
+                glColor4f(0.f, 1.f, 1.f, m_fMiniMapAlpha);
+                break;
 
-        case 2:
-            glColor4f(1.f, 1.f, 0.f, m_fMiniMapAlpha);
-            break;
+            case 2:
+                glColor4f(1.f, 1.f, 0.f, m_fMiniMapAlpha);
+                break;
         }
         Pos.x = (UnitIterator->x) / m_iMiniMapScale - m_MiniMapScaleOffset.x + m_MiniMapPos.x;
         Pos.y = (256 - UnitIterator->y) / m_iMiniMapScale - m_MiniMapScaleOffset.y + m_MiniMapPos.y;
 
-        if (Pos.x<m_MiniMapPos.x || Pos.x>m_MiniMapPos.x + 128 || Pos.y<m_MiniMapPos.y || Pos.y>m_MiniMapPos.y + 128)
+        if (Pos.x < m_MiniMapPos.x || Pos.x > m_MiniMapPos.x + 128 || Pos.y < m_MiniMapPos.y ||
+            Pos.y > m_MiniMapPos.y + 128)
         {
             continue;
         }
@@ -256,8 +261,10 @@ void SEASON3B::CNewUISiegeWarCommander::RenderGuildMemberPosInMiniMap()
 
 void SEASON3B::CNewUISiegeWarCommander::RenderCmdIconAtMouse()
 {
-    int iWidth, iHeight, textureWidth;
-    wchar_t szText[256] = { 0, };
+    int     iWidth, iHeight, textureWidth;
+    wchar_t szText[256] = {
+        0,
+    };
 
     if (!GetCommandIconSize(m_iCurSelectBtnCommand, iWidth, iHeight, textureWidth))
         return;
@@ -283,25 +290,46 @@ void SEASON3B::CNewUISiegeWarCommander::RenderCmdBtn()
     {
         for (int i = 0; i < MINIMAP_CMD_MAX; i++)
         {
-            m_BtnCommand[i].ChangeButtonInfo(m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH, m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) + (i * MINIMAP_BTN_GROUP_HEIGHT), MINIMAP_BTN_COMMAND_WIDTH, MINIMAP_BTN_COMMAND_HEIGHT);
+            m_BtnCommand[i].ChangeButtonInfo(m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH,
+                                             m_BtnCommandGroupPos.y +
+                                                 (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) +
+                                                 (i * MINIMAP_BTN_GROUP_HEIGHT),
+                                             MINIMAP_BTN_COMMAND_WIDTH, MINIMAP_BTN_COMMAND_HEIGHT);
             m_BtnCommand[i].ChangeAlpha(m_fMiniMapAlpha);
             m_BtnCommand[i].Render();
         }
-        RenderImage(IMAGE_COMMAND_ATTACK, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8, m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) + 5, COMMAND_ATTACK_WIDTH, COMMAND_ATTACK_HEIGHT);
-        RenderImage(IMAGE_COMMAND_DEFENCE, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8, m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) + MINIMAP_BTN_GROUP_HEIGHT + 3, COMMAND_DEFENCE_WIDTH, COMMAND_DEFENCE_HEIGHT);
-        RenderImage(IMAGE_COMMAND_WAIT, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 10, m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) + (2 * MINIMAP_BTN_GROUP_HEIGHT) + 5, COMMAND_WAIT_WIDTH, COMMAND_WAIT_HEIGHT);
+        RenderImage(IMAGE_COMMAND_ATTACK, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8,
+                    m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) + 5,
+                    COMMAND_ATTACK_WIDTH, COMMAND_ATTACK_HEIGHT);
+        RenderImage(IMAGE_COMMAND_DEFENCE, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8,
+                    m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) +
+                        MINIMAP_BTN_GROUP_HEIGHT + 3,
+                    COMMAND_DEFENCE_WIDTH, COMMAND_DEFENCE_HEIGHT);
+        RenderImage(IMAGE_COMMAND_WAIT, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 10,
+                    m_BtnCommandGroupPos.y + (m_iCurSelectBtnGroup * MINIMAP_BTN_GROUP_HEIGHT) +
+                        (2 * MINIMAP_BTN_GROUP_HEIGHT) + 5,
+                    COMMAND_WAIT_WIDTH, COMMAND_WAIT_HEIGHT);
     }
     else
     {
         for (int i = 0; i < MINIMAP_CMD_MAX; i++)
         {
-            m_BtnCommand[i].ChangeButtonInfo(m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH, m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + (i * MINIMAP_BTN_GROUP_HEIGHT), MINIMAP_BTN_COMMAND_WIDTH, MINIMAP_BTN_COMMAND_HEIGHT);
+            m_BtnCommand[i].ChangeButtonInfo(m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH,
+                                             m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) +
+                                                 (i * MINIMAP_BTN_GROUP_HEIGHT),
+                                             MINIMAP_BTN_COMMAND_WIDTH, MINIMAP_BTN_COMMAND_HEIGHT);
             m_BtnCommand[i].ChangeAlpha(m_fMiniMapAlpha);
             m_BtnCommand[i].Render();
         }
-        RenderImage(IMAGE_COMMAND_ATTACK, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8, m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + 5, COMMAND_ATTACK_WIDTH, COMMAND_ATTACK_HEIGHT);
-        RenderImage(IMAGE_COMMAND_DEFENCE, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8, m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + MINIMAP_BTN_GROUP_HEIGHT + 3, COMMAND_DEFENCE_WIDTH, COMMAND_DEFENCE_HEIGHT);
-        RenderImage(IMAGE_COMMAND_WAIT, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 10, m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + (2 * MINIMAP_BTN_GROUP_HEIGHT) + 5, COMMAND_WAIT_WIDTH, COMMAND_WAIT_HEIGHT);
+        RenderImage(IMAGE_COMMAND_ATTACK, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8,
+                    m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + 5, COMMAND_ATTACK_WIDTH,
+                    COMMAND_ATTACK_HEIGHT);
+        RenderImage(IMAGE_COMMAND_DEFENCE, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 8,
+                    m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + MINIMAP_BTN_GROUP_HEIGHT + 3,
+                    COMMAND_DEFENCE_WIDTH, COMMAND_DEFENCE_HEIGHT);
+        RenderImage(IMAGE_COMMAND_WAIT, m_BtnCommandGroupPos.x + MINIMAP_BTN_GROUP_WIDTH + 10,
+                    m_BtnCommandGroupPos.y + (4 * MINIMAP_BTN_GROUP_HEIGHT) + (2 * MINIMAP_BTN_GROUP_HEIGHT) + 5,
+                    COMMAND_WAIT_WIDTH, COMMAND_WAIT_HEIGHT);
     }
 }
 
@@ -332,7 +360,7 @@ void SEASON3B::CNewUISiegeWarCommander::ClearGuildMemberLocation(void)
 
 void SEASON3B::CNewUISiegeWarCommander::SetGuildMemberLocation(BYTE type, int x, int y)
 {
-    VisibleUnitLocation vLocation = { type, (BYTE)x, (BYTE)y };
+    VisibleUnitLocation vLocation = {type, (BYTE)x, (BYTE)y};
 
     m_vGuildMemberLocationBuffer.push_back(vLocation);
 }

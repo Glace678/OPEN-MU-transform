@@ -32,34 +32,32 @@ std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& sk
 
     switch (desc.type)
     {
-    case ESkillFieldType::Bool:
-        // Read as BYTE (the on-disk field is Win32 BOOL/BYTE, not C++ bool) to avoid UB.
-        ss << (*reinterpret_cast<const BYTE*>(fieldPtr) ? 1 : 0);
-        break;
+        case ESkillFieldType::Bool:
+            ss << (*reinterpret_cast<const bool*>(fieldPtr) ? 1 : 0);
+            break;
 
-    case ESkillFieldType::Byte:
-        ss << (int)*reinterpret_cast<const BYTE*>(fieldPtr);
-        break;
+        case ESkillFieldType::Byte:
+            ss << (int)*reinterpret_cast<const BYTE*>(fieldPtr);
+            break;
 
-    case ESkillFieldType::Word:
-        ss << *reinterpret_cast<const WORD*>(fieldPtr);
-        break;
+        case ESkillFieldType::Word:
+            ss << *reinterpret_cast<const WORD*>(fieldPtr);
+            break;
 
-    case ESkillFieldType::Int:
-        ss << *reinterpret_cast<const int*>(fieldPtr);
-        break;
+        case ESkillFieldType::Int:
+            ss << *reinterpret_cast<const int*>(fieldPtr);
+            break;
 
-    case ESkillFieldType::DWord:
-        ss << *reinterpret_cast<const DWORD*>(fieldPtr);
-        break;
+        case ESkillFieldType::DWord:
+            ss << *reinterpret_cast<const DWORD*>(fieldPtr);
+            break;
 
-    case ESkillFieldType::WCharArray:
-    {
-        char buffer[256]{};
-        ConvertSkillName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
-        ss << buffer;
-        break;
-    }
+        case ESkillFieldType::WCharArray: {
+            char buffer[256];
+            ConvertSkillName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
+            ss << buffer;
+            break;
+        }
     }
 
     return ss.str();
@@ -69,9 +67,9 @@ std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& sk
 
 std::string CSkillEditorActions::GetCSVHeader()
 {
-    std::stringstream ss;
-    const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-    const int fieldCount = GetSkillFieldCount();
+    std::stringstream           ss;
+    const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+    const int                   fieldCount = GetSkillFieldCount();
 
     ss << "Index";
     for (int i = 0; i < fieldCount; ++i)
@@ -84,16 +82,16 @@ std::string CSkillEditorActions::GetCSVHeader()
 
 std::string CSkillEditorActions::ExportSkillToReadable(int skillIndex, SKILL_ATTRIBUTE& skill)
 {
-    std::stringstream ss;
-    const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-    const int fieldCount = GetSkillFieldCount();
+    std::stringstream           ss;
+    const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+    const int                   fieldCount = GetSkillFieldCount();
 
     ss << "Skill " << skillIndex << ":\n";
 
     for (int i = 0; i < fieldCount; ++i)
     {
         const char* displayName = GetSkillFieldDisplayName(fields[i]);
-        std::string value = GetFieldValueAsString(skill, fields[i]);
+        std::string value       = GetFieldValueAsString(skill, fields[i]);
         ss << "  " << displayName << ": " << value << "\n";
     }
 
@@ -102,9 +100,9 @@ std::string CSkillEditorActions::ExportSkillToReadable(int skillIndex, SKILL_ATT
 
 std::string CSkillEditorActions::ExportSkillToCSV(int skillIndex, SKILL_ATTRIBUTE& skill)
 {
-    std::stringstream ss;
-    const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-    const int fieldCount = GetSkillFieldCount();
+    std::stringstream           ss;
+    const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+    const int                   fieldCount = GetSkillFieldCount();
 
     ss << skillIndex;
     for (int i = 0; i < fieldCount; ++i)
@@ -136,7 +134,8 @@ void CSkillEditorActions::RenderSaveButton()
     if (ImGui::Button(I18N::Editor::SaveSkills))
     {
         wchar_t fileName[256];
-        swprintf_s(fileName, _countof(fileName), L"Data\\Local\\%ls\\Skill_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+        swprintf_s(fileName, _countof(fileName), L"Data\\Local\\%ls\\Skill_%ls.bmd", g_strSelectedML.c_str(),
+                   g_strSelectedML.c_str());
 
         std::string changeLog;
         if (g_SkillDataHandler.Save(fileName, &changeLog))
@@ -176,9 +175,8 @@ void CSkillEditorActions::RenderExportLegacyButton()
 
         if (g_SkillDataHandler.ExportAsS6E3(fileName))
         {
-            std::string filename_str = "Skill_" +
-                std::string(g_strSelectedML.begin(), g_strSelectedML.end()) +
-                "_Legacy.bmd";
+            std::string filename_str =
+                "Skill_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_Legacy.bmd";
             g_MuEditorConsoleUI.LogEditor("Exported skills as legacy format (32-byte names): " + filename_str);
             ImGui::OpenPopup("Export S6E3 Success");
         }
@@ -204,8 +202,7 @@ void CSkillEditorActions::RenderExportCSVButton()
 
         if (g_SkillDataHandler.ExportToCsv(fileName))
         {
-            std::string filename_str = "Skills_" +
-                std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + ".csv";
+            std::string filename_str = "Skills_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + ".csv";
             g_MuEditorConsoleUI.LogEditor("Exported skills as CSV: " + filename_str);
             ImGui::OpenPopup("Export CSV Success");
         }
@@ -233,4 +230,4 @@ void CSkillEditorActions::RenderAllButtons()
     RenderExportCSVButton();
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

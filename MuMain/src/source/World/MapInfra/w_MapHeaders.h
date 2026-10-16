@@ -4,8 +4,7 @@
 #include "World/MapInfra/w_MapProcess.h"
 #include "World/MapInfra/MapManager.h"
 
-template<typename T>
-T& TheWorld(int type)
+template <typename T> T& TheWorld(int type)
 {
     return dynamic_cast<T&>(TheMapProcess().GetMap(type));
 }
@@ -45,7 +44,7 @@ T& TheWorld(int type)
 #ifdef ASG_ADD_MAP_KARUTAN
 #include "World/GameMaps/GMKarutan1.h"
 #define g_Karutan1 TheWorld<CGMKarutan1>(WD_80KARUTAN1)
-#endif // ASG_ADD_MAP_KARUTAN
+#endif  // ASG_ADD_MAP_KARUTAN
 
 #include "World/GameMaps/GMNewTown.h"
 
@@ -53,7 +52,7 @@ T& TheWorld(int type)
 #define g_PKField TheWorld<CGM_PK_Field>(WD_63PK_FIELD)
 
 #include "World/GameMaps/GM_Raklion.h"
-#define g_Raklion	TheWorld<SEASON4A::CGM_Raklion>(WD_57ICECITY)
+#define g_Raklion TheWorld<SEASON4A::CGM_Raklion>(WD_57ICECITY)
 
 #include "World/GameMaps/GMSantaTown.h"
 #define g_SantaTown TheWorld<CGMSantaTown>(WD_62SANTA_TOWN)

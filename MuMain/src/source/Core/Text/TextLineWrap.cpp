@@ -14,56 +14,64 @@ namespace
 // U+00FF but render at single width.
 bool IsFullWidthCharacter(wchar_t c)
 {
-    return (c >= 0x1100 && c <= 0x115F)   // Hangul Jamo
-        || (c >= 0x2E80 && c <= 0x9FFF)   // CJK radicals / ideographs / kana
-        || (c >= 0xA000 && c <= 0xA4CF)   // Yi
-        || (c >= 0xAC00 && c <= 0xD7A3)   // Hangul syllables
-        || (c >= 0xF900 && c <= 0xFAFF)   // CJK compatibility ideographs
-        || (c >= 0xFE30 && c <= 0xFE4F)   // CJK compatibility forms
-        || (c >= 0xFF00 && c <= 0xFF60)   // full-width Latin / punctuation
-        || (c >= 0xFFE0 && c <= 0xFFE6);  // full-width signs
+    return (c >= 0x1100 && c <= 0x115F)      // Hangul Jamo
+           || (c >= 0x2E80 && c <= 0x9FFF)   // CJK radicals / ideographs / kana
+           || (c >= 0xA000 && c <= 0xA4CF)   // Yi
+           || (c >= 0xAC00 && c <= 0xD7A3)   // Hangul syllables
+           || (c >= 0xF900 && c <= 0xFAFF)   // CJK compatibility ideographs
+           || (c >= 0xFE30 && c <= 0xFE4F)   // CJK compatibility forms
+           || (c >= 0xFF00 && c <= 0xFF60)   // full-width Latin / punctuation
+           || (c >= 0xFFE0 && c <= 0xFFE6);  // full-width signs
 }
 }
 
 int SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int iMaxLine, int iLineSize)
 {
-    if (!lpszText || !lpszSeparated || iMaxLine <= 0 || iLineSize <= 0) return 0;
+    if (!lpszText || !lpszSeparated || iMaxLine <= 0 || iLineSize <= 0)
+        return 0;
 
-    int iLine = 0;
-    const int iVisualLimit = iLineSize - 1;
-    const wchar_t* lpSeek = lpszText;
+    int            iLine               = 0;
+    const int      iVisualLimit        = iLineSize - 1;
+    const wchar_t* lpSeek              = lpszText;
     const wchar_t* lpLastSpaceInSource = nullptr;
-    wchar_t* lpDstInCurrentRow = nullptr;
+    wchar_t*       lpDstInCurrentRow   = nullptr;
 
-    int iCurrentWidth = 0;
-    wchar_t* lpWrite = lpszSeparated;
+    int      iCurrentWidth = 0;
+    wchar_t* lpWrite       = lpszSeparated;
 
-    while (*lpSeek && iLine < iMaxLine) {
+    while (*lpSeek && iLine < iMaxLine)
+    {
         int iCharWidth = IsFullWidthCharacter(*lpSeek) ? 2 : 1;
 
-        if (*lpSeek == L' ') {
+        if (*lpSeek == L' ')
+        {
             lpLastSpaceInSource = lpSeek;
-            lpDstInCurrentRow = lpWrite;
+            lpDstInCurrentRow   = lpWrite;
         }
 
-        if (iCurrentWidth + iCharWidth > iVisualLimit) {
+        if (iCurrentWidth + iCharWidth > iVisualLimit)
+        {
             // Wrap at the preceding space whenever one was seen on this line.
             // Works for the overflow being half-width or full-width — important
             // for mixed strings like "Hello 你好" where the CJK char triggers
             // the overflow but breaking at the space gives cleaner output.
-            if (lpLastSpaceInSource && *lpSeek != L' ') {
+            if (lpLastSpaceInSource && *lpSeek != L' ')
+            {
                 *lpDstInCurrentRow = L'\0';
-                lpSeek = lpLastSpaceInSource + 1;
+                lpSeek             = lpLastSpaceInSource + 1;
             }
-            else {
+            else
+            {
                 // Forward-progress guard: at the start of a line with no space
                 // to wrap at, a character whose width exceeds the visual limit
                 // would otherwise loop forever (iLine increments, lpSeek does
                 // not). Place the character on its own row anyway — when there
                 // is room for any payload — and advance past it so the loop
                 // makes progress.
-                if (iCurrentWidth == 0) {
-                    if (iLineSize > 1) {
+                if (iCurrentWidth == 0)
+                {
+                    if (iLineSize > 1)
+                    {
                         *lpWrite++ = *lpSeek;
                     }
                     ++lpSeek;
@@ -72,14 +80,16 @@ int SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int i
             }
 
             iLine++;
-            if (iLine >= iMaxLine) break;
+            if (iLine >= iMaxLine)
+                break;
 
-            lpWrite = lpszSeparated + (iLine * iLineSize);
-            iCurrentWidth = 0;
+            lpWrite             = lpszSeparated + (iLine * iLineSize);
+            iCurrentWidth       = 0;
             lpLastSpaceInSource = nullptr;
-            lpDstInCurrentRow = nullptr;
+            lpDstInCurrentRow   = nullptr;
 
-            while (*lpSeek == L' ') lpSeek++;
+            while (*lpSeek == L' ')
+                lpSeek++;
             continue;
         }
 
@@ -87,7 +97,8 @@ int SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int i
         iCurrentWidth += iCharWidth;
     }
 
-    if (iLine < iMaxLine) {
+    if (iLine < iMaxLine)
+    {
         *lpWrite = L'\0';
         return iLine + 1;
     }
@@ -113,7 +124,8 @@ std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth
     return WrapTextToWidth(text, maxWidth, measureWidth, 0);
 }
 
-std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth, const MeasureTextWidth& measureWidth, int firstLineInset)
+std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth, const MeasureTextWidth& measureWidth,
+                                          int firstLineInset)
 {
     std::vector<std::wstring> lines;
     if (text.empty() || maxWidth <= 0 || !measureWidth)
@@ -186,7 +198,7 @@ namespace
 std::wstring NormalizeParagraphs(const wchar_t* text, bool indentParagraphs, wchar_t paragraphSeparator)
 {
     std::wstring normalized;
-    bool paragraphStart = true;
+    bool         paragraphStart = true;
     for (const wchar_t* cursor = text; *cursor != L'\0'; ++cursor)
     {
         if (*cursor == paragraphSeparator || *cursor == L'\n')
@@ -207,8 +219,9 @@ std::wstring NormalizeParagraphs(const wchar_t* text, bool indentParagraphs, wch
 }
 }
 
-int WrapTextToBuffer(const wchar_t* text, wchar_t* output, int rows, int columns,
-    int maxWidth, const MeasureTextWidth& measureWidth, bool indentParagraphs, wchar_t paragraphSeparator, int firstLineInset)
+int WrapTextToBuffer(const wchar_t* text, wchar_t* output, int rows, int columns, int maxWidth,
+                     const MeasureTextWidth& measureWidth, bool indentParagraphs, wchar_t paragraphSeparator,
+                     int firstLineInset)
 {
     if (text == nullptr || output == nullptr || rows <= 0 || columns <= 1 || maxWidth <= 0 || !measureWidth)
         return 0;
@@ -233,8 +246,8 @@ int WrapTextToBuffer(const wchar_t* text, wchar_t* output, int rows, int columns
 
 void CutText(const wchar_t* Text, wchar_t* Text1, wchar_t* Text2, size_t maxLength)
 {
-    auto sourceText = std::wstring(Text);
-    auto halfLength = sourceText.length() / 2;
+    auto   sourceText  = std::wstring(Text);
+    auto   halfLength  = sourceText.length() / 2;
     size_t splitOffset = sourceText.find_last_of(L' ', halfLength);
 
     if (splitOffset == std::wstring::npos)

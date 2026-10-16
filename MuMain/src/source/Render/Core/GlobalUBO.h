@@ -8,7 +8,8 @@
 // DXP-14: backed by RHI::CreateUniformBlock/UpdateUniformBlock instead of raw GL calls, so
 // this class works unchanged under both backends (RHI_D3D11's HLSL cbuffer mirrors the same
 // std140 layout -- see PassthroughShader.cpp's GlobalMatrices cbuffer).
-class GlobalUBO {
+class GlobalUBO
+{
 public:
     static GlobalUBO& Instance();
 
@@ -32,10 +33,10 @@ public:
     // DXP-07d: CPU-side mirrors of the current matrices, for shadow-compare consumers
     // (e.g. ZzzBMD.cpp's GetCurrentMVP()) that need to check their own GL reads against what
     // GlobalUBO already has on the render thread, without re-deriving proj*view*model themselves.
-    const float* GetView()  const { return m_View; }
-    const float* GetProj()  const { return m_Proj; }
+    const float* GetView() const { return m_View; }
+    const float* GetProj() const { return m_Proj; }
     const float* GetModel() const { return m_Model; }
-    const float* GetMVP()   const { return m_MVP; }
+    const float* GetMVP() const { return m_MVP; }
 
     bool IsCreated() const { return m_UBOHandle.IsValid(); }
 
@@ -43,16 +44,16 @@ private:
     GlobalUBO() = default;
     ~GlobalUBO();
 
-    GlobalUBO(const GlobalUBO&) = delete;
+    GlobalUBO(const GlobalUBO&)            = delete;
     GlobalUBO& operator=(const GlobalUBO&) = delete;
 
     RHI::BufferHandle m_UBOHandle;
 
-    float m_View[16]  = { 1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f };
-    float m_Proj[16]  = { 1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f };
-    float m_Model[16] = { 1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f };
-    float m_MVP[16]   = { 1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f };
-    float m_Time[4]   = { 0.f, 0.f, 0.f, 0.f };
+    float m_View[16]  = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
+    float m_Proj[16]  = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
+    float m_Model[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
+    float m_MVP[16]   = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
+    float m_Time[4]   = {0.f, 0.f, 0.f, 0.f};
 
     float m_ModelStack[8][16];
     int   m_ModelStackDepth = 0;

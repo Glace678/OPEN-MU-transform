@@ -16,7 +16,7 @@ using namespace SEASON3B;
 CNewUIHeroPositionInfo::CNewUIHeroPositionInfo()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
+    m_Pos.x = m_Pos.y   = 0;
     m_CurHeroPosition.x = m_CurHeroPosition.y = 0;
 }
 
@@ -44,50 +44,14 @@ bool CNewUIHeroPositionInfo::Create(CNewUIManager* pNewUIMng, int x, int y)
     SetPos(x, y);
     LoadImages();
 
-    SetButtonInfo(
-        &m_BtnConfig,
-        IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 3,
-        x + WidenX + 41,
-        y,
-        18,
-        13,
-        1,
-        0,
-        1,
-        1u,
-        nullptr,
-        &I18N::Game::OfficialMUHelperSetting,
-        0);
+    SetButtonInfo(&m_BtnConfig, IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 3, x + WidenX + 41, y, 18, 13, 1, 0, 1, 1u,
+                  nullptr, &I18N::Game::OfficialMUHelperSetting, 0);
 
-    SetButtonInfo(
-        &m_BtnStart,
-        IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 4,
-        x + WidenX + 59,
-        y,
-        18,
-        13,
-        1,
-        0,
-        1,
-        1u,
-        nullptr,
-        &I18N::Game::StartOfficialMUHelper,
-        0);
+    SetButtonInfo(&m_BtnStart, IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 4, x + WidenX + 59, y, 18, 13, 1, 0, 1, 1u,
+                  nullptr, &I18N::Game::StartOfficialMUHelper, 0);
 
-    SetButtonInfo(
-        &m_BtnStop,
-        IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 5,
-        x + WidenX + 59,
-        y,
-        18,
-        13,
-        1,
-        0,
-        1,
-        1u,
-        nullptr,
-        &I18N::Game::StopOfficialMUHelper,
-        0);
+    SetButtonInfo(&m_BtnStop, IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 5, x + WidenX + 59, y, 18, 13, 1, 0, 1, 1u,
+                  nullptr, &I18N::Game::StopOfficialMUHelper, 0);
 
     MoveTextTipPos(&m_BtnConfig, -20, 9);
     MoveTextTipPos(&m_BtnStart, -20, 9);
@@ -177,11 +141,14 @@ bool CNewUIHeroPositionInfo::Render()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW, m_Pos.x, m_Pos.y, float(HERO_POSITION_INFO_BASEA_WINDOW_WIDTH), float(HERO_POSITION_INFO_BASE_WINDOW_HEIGHT));
+    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW, m_Pos.x, m_Pos.y, float(HERO_POSITION_INFO_BASEA_WINDOW_WIDTH),
+                float(HERO_POSITION_INFO_BASE_WINDOW_HEIGHT));
 
-    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 1, m_Pos.x + HERO_POSITION_INFO_BASEA_WINDOW_WIDTH, m_Pos.y, float(WidenX), float(HERO_POSITION_INFO_BASE_WINDOW_HEIGHT), 0.1f, 0.f, 22.4f / 32.f, 25.f / 32.f);
+    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 1, m_Pos.x + HERO_POSITION_INFO_BASEA_WINDOW_WIDTH, m_Pos.y,
+                float(WidenX), float(HERO_POSITION_INFO_BASE_WINDOW_HEIGHT), 0.1f, 0.f, 22.4f / 32.f, 25.f / 32.f);
 
-    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 2, m_Pos.x + HERO_POSITION_INFO_BASEA_WINDOW_WIDTH + WidenX, m_Pos.y, 73.f, 20.f);
+    RenderImage(IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 2, m_Pos.x + HERO_POSITION_INFO_BASEA_WINDOW_WIDTH + WidenX,
+                m_Pos.y, 73.f, 20.f);
     //--
     m_BtnConfig.Render();
 
@@ -197,21 +164,19 @@ void CNewUIHeroPositionInfo::RenderPositionText()
 {
     // The middle texture's borders are at rows 1 and 14; the rest of its
     // 25-pixel height is shadow/transparent padding, not the text panel.
-    constexpr float textPanelTop = 2.f;
-    constexpr float textPanelHeight = 12.f;
-    constexpr int textInset = 10;
-    constexpr int textWidthExtension = 20;
-    wchar_t text[255]{};
-    mu_swprintf_s(text, L"%ls (%d, %d)", gMapManager.GetMapName(gMapManager.WorldActive),
-        m_CurHeroPosition.x, m_CurHeroPosition.y);
+    constexpr float textPanelTop       = 2.f;
+    constexpr float textPanelHeight    = 12.f;
+    constexpr int   textInset          = 10;
+    constexpr int   textWidthExtension = 20;
+    wchar_t         text[255]{};
+    mu_swprintf_s(text, L"%ls (%d, %d)", gMapManager.GetMapName(gMapManager.WorldActive), m_CurHeroPosition.x,
+                  m_CurHeroPosition.y);
 
     SIZE textSize{};
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), text, lstrlen(text), &textSize);
     const float textHeight = textSize.cy / g_fScreenRate_y;
-    const int textY = static_cast<int>(std::lround(
-        m_Pos.y + textPanelTop + (textPanelHeight - textHeight) / 2.f));
-    g_pRenderText->RenderText(m_Pos.x + textInset, textY, text,
-        WidenX + textWidthExtension, 0, RT3_SORT_CENTER);
+    const int   textY = static_cast<int>(std::lround(m_Pos.y + textPanelTop + (textPanelHeight - textHeight) / 2.f));
+    g_pRenderText->RenderText(m_Pos.x + textInset, textY, text, WidenX + textWidthExtension, 0, RT3_SORT_CENTER);
 }
 
 float CNewUIHeroPositionInfo::GetLayerDepth()
@@ -219,13 +184,9 @@ float CNewUIHeroPositionInfo::GetLayerDepth()
     return 4.3f;
 }
 
-void CNewUIHeroPositionInfo::OpenningProcess()
-{
-}
+void CNewUIHeroPositionInfo::OpenningProcess() {}
 
-void CNewUIHeroPositionInfo::ClosingProcess()
-{
-}
+void CNewUIHeroPositionInfo::ClosingProcess() {}
 
 void CNewUIHeroPositionInfo::SetCurHeroPosition(int x, int y)
 {
@@ -250,13 +211,18 @@ void CNewUIHeroPositionInfo::UnloadImages()
     DeleteBitmap(IMAGE_HERO_POSITION_INFO_BASE_WINDOW + 2);
 }
 
-void CNewUIHeroPositionInfo::SetButtonInfo(CNewUIButton* m_Btn, int imgindex, int x, int y, int sx, int sy, bool overflg, bool isimgwidth, bool bClickEffect, bool MoveTxt, const wchar_t* const* btnameSlot, const wchar_t* const* tooltipSlot, bool istoppos)
+void CNewUIHeroPositionInfo::SetButtonInfo(CNewUIButton* m_Btn, int imgindex, int x, int y, int sx, int sy,
+                                           bool overflg, bool isimgwidth, bool bClickEffect, bool MoveTxt,
+                                           const wchar_t* const* btnameSlot, const wchar_t* const* tooltipSlot,
+                                           bool istoppos)
 {
     m_Btn->ChangeButtonImgState(1, imgindex, overflg, isimgwidth, bClickEffect);
     m_Btn->ChangeButtonInfo(x, y, sx, sy);
 
-    if (btnameSlot != nullptr) m_Btn->ChangeText(btnameSlot);
-    if (tooltipSlot != nullptr) m_Btn->ChangeToolTipText(tooltipSlot, istoppos);
+    if (btnameSlot != nullptr)
+        m_Btn->ChangeText(btnameSlot);
+    if (tooltipSlot != nullptr)
+        m_Btn->ChangeToolTipText(tooltipSlot, istoppos);
 
     if (MoveTxt)
     {

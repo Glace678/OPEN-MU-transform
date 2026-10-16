@@ -4,7 +4,7 @@
 
 TEST_CASE("item explanation supports resized and high-resolution game windows")
 {
-    for (int width : { 0, 320, 640, 799, 800, 960, 1024, 1280, 1366, 1920, 2560, 3840 })
+    for (int width : {0, 320, 640, 799, 800, 960, 1024, 1280, 1366, 1920, 2560, 3840})
     {
         const auto layout = UI::Items::ItemExplanationLayout::ForWidth(width);
         CHECK(layout.infoWidth > 0);

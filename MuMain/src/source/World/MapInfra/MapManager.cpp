@@ -137,12 +137,7 @@ void CMapManager::Load() // OK
                 mu_swprintf(FileName, L"wt0%d.jpg", i);
             else
                 mu_swprintf(FileName, L"wt%d.jpg", i);
-            // MEM-18: never write through GetTexture's miss placeholder;
-            // only rename when the water bitmap actually loaded above.
-            if (BITMAP_t* waterBitmap = Bitmaps.FindTexture(BITMAP_WATER + i))
-            {
-                wcscpy_s(waterBitmap->FileName, FileName);
-            }
+            wcscpy(Bitmaps[BITMAP_WATER + i].FileName, FileName);
         }
         break;
     case WD_8TARKAN:
@@ -553,7 +548,7 @@ void CMapManager::Load() // OK
     case WD_41CHANGEUP3RD_1ST:
         LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
         LoadBitmap(L"Effect\\firered.jpg", BITMAP_FIRE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
-        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  spark.
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  불씨.
 
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE1, L"Data\\Sound\\w42\\cage01.wav", 1);
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE2, L"Data\\Sound\\w42\\cage02.wav", 1);
@@ -1133,7 +1128,6 @@ void CMapManager::Load() // OK
             gLoadData.OpenTexture(i, DirName);
         }
 
-        // Models[] indices below are per-map object slots loaded positionally above.
         if (this->WorldActive == WD_1DUNGEON)
         {
             Models[40].Actions[1].PlaySpeed = 0.4f;
@@ -1179,18 +1173,8 @@ void CMapManager::Load() // OK
     }
 }
 
-bool CMapManager::LoadWorld(int Map)
+void CMapManager::LoadWorld(int Map)
 {
-    // 87-128: reject an out-of-range server map before tearing down the old
-    // world, so a corrupt/malicious Map value leaves the current world intact
-    // instead of deleting every object and then failing mid-load.
-    if (Map < 0 || Map >= NUM_WD)
-    {
-        g_ErrorReport.Write(L"[LoadWorld] rejected out-of-range map");
-        g_ErrorReport.Write(L"\r\n");
-        return false;
-    }
-
     if (Map == 32 && this->WorldActive == 32)
     {
         Map = this->WorldActive = 9;
@@ -1244,16 +1228,15 @@ bool CMapManager::LoadWorld(int Map)
 
     int iResult = OpenTerrainMapping(FileName);
 
-    // -1 means the file is missing/unreadable (F06); any mismatch with the
-    // expected world number means corrupt data. Both must abort the map load
-    // instead of continuing on stale/empty terrain layers.
-    if (iResult != iMapWorld)
+    if (iMapWorld != iResult && -1 != iResult)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return false;
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
     }
 
     if (this->WorldActive == WD_73NEW_LOGIN_SCENE)
@@ -1308,50 +1291,39 @@ bool CMapManager::LoadWorld(int Map)
             mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
         }
     iResult = OpenTerrainAttribute(FileName);
-    if (iResult == -1)
-    {
-        // S7-H2: state-specific EncTerrain{base*10+N}.att variant files (CryWolf /
-        // Kanturu3rd / BattleCastle war-occupied states) are optional. If the variant file
-        // is absent/unreadable in this resource set (-1), fall back to the base
-        // EncTerrain{base}.att instead of aborting the whole map load (the strict check
-        // below must not reject a missing variant the way the old -1 exemption silently did).
-        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
-        iResult = OpenTerrainAttribute(FileName);
-    }
-    if (iResult != iMapWorld)
+    if (iMapWorld != iResult && -1 != iResult)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return false;
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
     }
 
     mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.obj", WorldName, iMapWorld);
 
     iResult = OpenObjectsEnc(FileName);
-    if (iResult != iMapWorld)
+    if (iMapWorld != iResult && -1 != iResult)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file corrupted or could not be read.", FileName);
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
-        return false;
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
     }
 
     mu_swprintf(FileName, L"%ls\\TerrainHeight.bmp", WorldName);
-    bool terrainLoaded;
     if (IsTerrainHeightExtMap(this->WorldActive) == true)
     {
-        terrainLoaded = CreateTerrain(FileName, true);
+        CreateTerrain(FileName, true);
     }
     else
     {
-        terrainLoaded = CreateTerrain(FileName);
-    }
-    if (!terrainLoaded)
-    {
-        return false;
+        CreateTerrain(FileName);
     }
 
     if (gMapManager.InBattleCastle())
@@ -1536,7 +1508,6 @@ bool CMapManager::LoadWorld(int Map)
     }
 
     CreateTerrainVBO();
-    return true;
 }
 
 void CMapManager::DeleteObjects()
@@ -1844,9 +1815,5 @@ const wchar_t* CMapManager::GetMapName(int iMap)
     {
         return (I18N::Game::Karutan);
     }
-    // iMap is server/network-driven. Bound it to the world-id range so an out of
-    // range value (incl. negative) cannot drive the legacy-id lookup; unknown
-    // ids resolve to Lookup's built-in fallback instead.
-    const int legacyId = (iMap >= 0 && iMap < NUM_WD) ? (30 + iMap) : -1;
-    return (I18N::Game::Lookup(legacyId));
+    return (I18N::Game::Lookup(30 + iMap));
 }

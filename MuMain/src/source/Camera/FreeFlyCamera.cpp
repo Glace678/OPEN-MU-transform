@@ -10,67 +10,62 @@
 #include "Render/Textures/ZzzOpenglUtil.h"
 
 // External globals
-extern bool MouseRButton;
-extern int MouseX;
-extern int MouseY;
-extern float FPS_ANIMATION_FACTOR;
+extern bool        MouseRButton;
+extern int         MouseX;
+extern int         MouseY;
+extern float       FPS_ANIMATION_FACTOR;
 extern CameraState g_Camera;
 
 namespace
 {
-    // Degrees the camera rotates per pixel of mouse delta while right-clicking.
-    constexpr float MOUSE_LOOK_SENSITIVITY = 0.3f;
+// Degrees the camera rotates per pixel of mouse delta while right-clicking.
+constexpr float MOUSE_LOOK_SENSITIVITY = 0.3f;
 
-    // Full rotation in degrees, used to wrap yaw into [0, 360).
-    constexpr float FULL_ROTATION_DEG = 360.0f;
+// Full rotation in degrees, used to wrap yaw into [0, 360).
+constexpr float FULL_ROTATION_DEG = 360.0f;
 
-    // Compute the camera forward vector from yaw/pitch in degrees.
-    // Matches the OpenGL rendering direction: glRotatef(pitch, 1,0,0) then glRotatef(yaw, 0,0,1).
-    inline void ComputeForwardVector(float yawDeg, float pitchDeg, vec3_t outForward)
-    {
-        float yawRad = yawDeg * (Q_PI / 180.0f);
-        float pitchRad = pitchDeg * (Q_PI / 180.0f);
-        outForward[0] = -sinf(yawRad) * sinf(pitchRad);
-        outForward[1] = -cosf(yawRad) * sinf(pitchRad);
-        outForward[2] = -cosf(pitchRad);
-    }
+// Compute the camera forward vector from yaw/pitch in degrees.
+// Matches the OpenGL rendering direction: glRotatef(pitch, 1,0,0) then glRotatef(yaw, 0,0,1).
+inline void ComputeForwardVector(float yawDeg, float pitchDeg, vec3_t outForward)
+{
+    float yawRad   = yawDeg * (Q_PI / 180.0f);
+    float pitchRad = pitchDeg * (Q_PI / 180.0f);
+    outForward[0]  = -sinf(yawRad) * sinf(pitchRad);
+    outForward[1]  = -cosf(yawRad) * sinf(pitchRad);
+    outForward[2]  = -cosf(pitchRad);
+}
 
-    // Compute the right vector (perpendicular to forward in the XY plane).
-    inline void ComputeRightVectorXY(float yawDeg, float& outRightX, float& outRightY)
-    {
-        float yawRad = yawDeg * (Q_PI / 180.0f);
-        outRightX = cosf(yawRad);
-        outRightY = -sinf(yawRad);
-    }
+// Compute the right vector (perpendicular to forward in the XY plane).
+inline void ComputeRightVectorXY(float yawDeg, float& outRightX, float& outRightY)
+{
+    float yawRad = yawDeg * (Q_PI / 180.0f);
+    outRightX    = cosf(yawRad);
+    outRightY    = -sinf(yawRad);
+}
 }
 
 FreeFlyCamera::FreeFlyCamera(CameraState& state)
-    : m_State(state)
-    , m_Yaw(0.0f)
-    , m_Pitch(0.0f)
-    , m_bLooking(false)
-    , m_LastMouseX(0)
-    , m_LastMouseY(0)
+    : m_State(state), m_Yaw(0.0f), m_Pitch(0.0f), m_bLooking(false), m_LastMouseX(0), m_LastMouseY(0)
 {
     IdentityVector3D(m_Position);
 
     // Extended config for editor spectator mode
     // Large far plane ensures terrain within the spectated camera's view is always
     // rendered, even when FreeFly is far away from the spectated camera position
-    m_Config.hFov = 90.0f;
-    m_Config.nearPlane = 10.0f;
-    m_Config.farPlane = 25000.0f;
+    m_Config.hFov             = 90.0f;
+    m_Config.nearPlane        = 10.0f;
+    m_Config.farPlane         = 25000.0f;
     m_Config.terrainCullRange = 25000.0f;
-    m_Config.objectCullRange = 25000.0f;
-    m_Config.fogStart = 20000.0f;
-    m_Config.fogEnd = 25000.0f;
+    m_Config.objectCullRange  = 25000.0f;
+    m_Config.fogStart         = 20000.0f;
+    m_Config.fogEnd           = 25000.0f;
 }
 
 void FreeFlyCamera::Reset()
 {
     IdentityVector3D(m_Position);
-    m_Yaw = 0.0f;
-    m_Pitch = 0.0f;
+    m_Yaw      = 0.0f;
+    m_Pitch    = 0.0f;
     m_bLooking = false;
 }
 
@@ -86,7 +81,7 @@ void FreeFlyCamera::OnActivate(const CameraState& previousState)
     VectorCopy(previousState.Position, m_Position);
 
     // Inherit angles directly — no negation so the view direction matches exactly
-    m_Yaw = previousState.Angle[2];
+    m_Yaw   = previousState.Angle[2];
     m_Pitch = previousState.Angle[0];
     m_Pitch = std::clamp(m_Pitch, MIN_PITCH, MAX_PITCH);
 }
@@ -99,13 +94,13 @@ void FreeFlyCamera::InheritFOV(float hFov)
 void FreeFlyCamera::SnapToPosition(const vec3_t pos, float yaw, float pitch)
 {
     VectorCopy(pos, m_Position);
-    m_Yaw = yaw;
+    m_Yaw   = yaw;
     m_Pitch = std::clamp(pitch, MIN_PITCH, MAX_PITCH);
 }
 
 void FreeFlyCamera::OnDeactivate()
 {
-    m_bLooking = false;
+    m_bLooking       = false;
     m_bHasSavedState = true;  // Position/yaw/pitch preserved in member vars
 }
 
@@ -124,7 +119,7 @@ bool FreeFlyCamera::Update()
     // Sync to g_Camera so BeginOpengl uses FreeFly's viewpoint
     VectorCopy(m_State.Position, g_Camera.Position);
     VectorCopy(m_State.Angle, g_Camera.Angle);
-    g_Camera.FOV = m_State.FOV;
+    g_Camera.FOV     = m_State.FOV;
     g_Camera.ViewFar = m_State.ViewFar;
 
     return false;
@@ -137,7 +132,7 @@ void FreeFlyCamera::HandleInput()
     {
         if (!m_bLooking)
         {
-            m_bLooking = true;
+            m_bLooking   = true;
             m_LastMouseX = MouseX;
             m_LastMouseY = MouseY;
         }
@@ -168,18 +163,24 @@ void FreeFlyCamera::HandleInput()
 void FreeFlyCamera::ReadMovementInput(float& outForward, float& outStrafe, float& outVertical)
 {
     // Arrow keys for XY movement (avoids WASD conflict with game UI)
-    outForward = 0.0f;
-    outStrafe = 0.0f;
+    outForward  = 0.0f;
+    outStrafe   = 0.0f;
     outVertical = 0.0f;
 
-    if (Core::Input::IsKeyDown(VK_UP))    outForward += 1.0f;
-    if (Core::Input::IsKeyDown(VK_DOWN))  outForward -= 1.0f;
-    if (Core::Input::IsKeyDown(VK_LEFT))  outStrafe -= 1.0f;
-    if (Core::Input::IsKeyDown(VK_RIGHT)) outStrafe += 1.0f;
+    if (Core::Input::IsKeyDown(VK_UP))
+        outForward += 1.0f;
+    if (Core::Input::IsKeyDown(VK_DOWN))
+        outForward -= 1.0f;
+    if (Core::Input::IsKeyDown(VK_LEFT))
+        outStrafe -= 1.0f;
+    if (Core::Input::IsKeyDown(VK_RIGHT))
+        outStrafe += 1.0f;
 
     // PageUp/PageDown for vertical movement
-    if (Core::Input::IsKeyDown(VK_PRIOR)) outVertical += 1.0f;
-    if (Core::Input::IsKeyDown(VK_NEXT)) outVertical -= 1.0f;
+    if (Core::Input::IsKeyDown(VK_PRIOR))
+        outVertical += 1.0f;
+    if (Core::Input::IsKeyDown(VK_NEXT))
+        outVertical -= 1.0f;
 }
 
 void FreeFlyCamera::HandleMovement()
@@ -228,13 +229,13 @@ void FreeFlyCamera::ComputeCameraTransform()
     m_State.UpdateMatrix();
 
     // Set other state
-    m_State.Distance = 0.0f;  // No target
+    m_State.Distance       = 0.0f;  // No target
     m_State.DistanceTarget = 0.0f;
-    m_State.ViewFar = m_Config.farPlane;
+    m_State.ViewFar        = m_Config.farPlane;
     {
         extern unsigned int WindowWidth, WindowHeight;
-        float aspect = (float)WindowWidth / (float)WindowHeight;
-        m_State.FOV = HFovToVFov(m_Config.hFov, aspect);
+        float               aspect = (float)WindowWidth / (float)WindowHeight;
+        m_State.FOV                = HFovToVFov(m_Config.hFov, aspect);
     }
 
     // Build frustum for correct culling from FreeFly viewpoint
@@ -248,7 +249,7 @@ void FreeFlyCamera::UpdateFrustum()
     VectorNormalize(forward);
 
     // Orthonormal basis: build right from forward × world up, then real up from right × forward
-    vec3_t worldUp = { 0.0f, 0.0f, 1.0f };
+    vec3_t worldUp = {0.0f, 0.0f, 1.0f};
     vec3_t right;
     CrossProduct(forward, worldUp, right);
     VectorNormalize(right);
@@ -256,19 +257,11 @@ void FreeFlyCamera::UpdateFrustum()
     VectorNormalize(worldUp);
 
     extern unsigned int WindowWidth, WindowHeight;
-    float aspectRatio = (float)WindowWidth / (float)WindowHeight;
-    float vFov = HFovToVFov(m_Config.hFov, aspectRatio);
+    float               aspectRatio = (float)WindowWidth / (float)WindowHeight;
+    float               vFov        = HFovToVFov(m_Config.hFov, aspectRatio);
 
-    m_Frustum.BuildFromCamera(
-        m_State.Position,
-        forward,
-        worldUp,
-        vFov,
-        aspectRatio,
-        m_Config.nearPlane,
-        m_Config.farPlane,
-        m_Config.terrainCullRange
-    );
+    m_Frustum.BuildFromCamera(m_State.Position, forward, worldUp, vFov, aspectRatio, m_Config.nearPlane,
+                              m_Config.farPlane, m_Config.terrainCullRange);
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

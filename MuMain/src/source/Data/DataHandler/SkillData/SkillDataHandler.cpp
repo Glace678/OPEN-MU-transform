@@ -16,9 +16,7 @@
 // External references
 extern SKILL_ATTRIBUTE* SkillAttribute;
 
-CSkillDataHandler::CSkillDataHandler()
-{
-}
+CSkillDataHandler::CSkillDataHandler() {}
 
 CSkillDataHandler& CSkillDataHandler::GetInstance()
 {

@@ -13,59 +13,59 @@
 #define APIENTRY
 #endif
 
-typedef GLuint (APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
-typedef void   (APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
-typedef void   (APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
-typedef GLuint (APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
-typedef void   (APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
-typedef GLint  (APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
-typedef GLuint (APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
-typedef void   (APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
-typedef void   (APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
-typedef void   (APIENTRY* PFNGLUNIFORM3FVPROC)(GLint, GLsizei, const GLfloat*);
-typedef void   (APIENTRY* PFNGLUNIFORMMATRIX4FVPROC)(GLint, GLsizei, GLboolean, const GLfloat*);
-typedef void   (APIENTRY* PFNGLGENVERTEXARRAYSPROC)(GLsizei, GLuint*);
-typedef void   (APIENTRY* PFNGLDELETEVERTEXARRAYSPROC)(GLsizei, const GLuint*);
-typedef void   (APIENTRY* PFNGLVERTEXATTRIBPOINTERPROC)(GLuint, GLint, GLenum, GLboolean, GLsizei, const void*);
-typedef void   (APIENTRY* PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGENBUFFERSPROC)(GLsizei, GLuint*);
-typedef void   (APIENTRY* PFNGLBINDBUFFERPROC)(GLenum, GLuint);
-typedef void   (APIENTRY* PFNGLBUFFERDATAPROC)(GLenum, GLsizeiptr, const void*, GLenum);
-typedef void   (APIENTRY* PFNGLBUFFERSUBDATAPROC)(GLenum, GLintptr, GLsizeiptr, const void*);
-typedef void   (APIENTRY* PFNGLDELETEBUFFERSPROC)(GLsizei, const GLuint*);
+typedef GLuint(APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
+typedef void(APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+typedef void(APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
+typedef GLuint(APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
+typedef void(APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
+typedef void(APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
+typedef GLint(APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
+typedef GLuint(APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
+typedef void(APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
+typedef void(APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
+typedef void(APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
+typedef void(APIENTRY* PFNGLUNIFORM3FVPROC)(GLint, GLsizei, const GLfloat*);
+typedef void(APIENTRY* PFNGLUNIFORMMATRIX4FVPROC)(GLint, GLsizei, GLboolean, const GLfloat*);
+typedef void(APIENTRY* PFNGLGENVERTEXARRAYSPROC)(GLsizei, GLuint*);
+typedef void(APIENTRY* PFNGLDELETEVERTEXARRAYSPROC)(GLsizei, const GLuint*);
+typedef void(APIENTRY* PFNGLVERTEXATTRIBPOINTERPROC)(GLuint, GLint, GLenum, GLboolean, GLsizei, const void*);
+typedef void(APIENTRY* PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGENBUFFERSPROC)(GLsizei, GLuint*);
+typedef void(APIENTRY* PFNGLBINDBUFFERPROC)(GLenum, GLuint);
+typedef void(APIENTRY* PFNGLBUFFERDATAPROC)(GLenum, GLsizeiptr, const void*, GLenum);
+typedef void(APIENTRY* PFNGLBUFFERSUBDATAPROC)(GLenum, GLintptr, GLsizeiptr, const void*);
+typedef void(APIENTRY* PFNGLDELETEBUFFERSPROC)(GLsizei, const GLuint*);
 
-static PFNGLCREATESHADERPROC       fn_glCreateShader       = nullptr;
-static PFNGLSHADERSOURCEPROC       fn_glShaderSource        = nullptr;
-static PFNGLCOMPILESHADERPROC      fn_glCompileShader       = nullptr;
-static PFNGLGETSHADERIVPROC        fn_glGetShaderiv         = nullptr;
-static PFNGLCREATEPROGRAMPROC      fn_glCreateProgram       = nullptr;
-static PFNGLATTACHSHADERPROC       fn_glAttachShader        = nullptr;
-static PFNGLLINKPROGRAMPROC        fn_glLinkProgram         = nullptr;
-static PFNGLGETPROGRAMIVPROC       fn_glGetProgramiv        = nullptr;
-static PFNGLDELETESHADERPROC       fn_glDeleteShader        = nullptr;
-static PFNGLDELETEPROGRAMPROC      fn_glDeleteProgram       = nullptr;
-static PFNGLGETUNIFORMLOCATIONPROC fn_glGetUniformLocation  = nullptr;
-static PFNGLGETUNIFORMBLOCKINDEXPROC fn_glGetUniformBlockIndex = nullptr;
-static PFNGLUNIFORMBLOCKBINDINGPROC  fn_glUniformBlockBinding  = nullptr;
-static PFNGLUNIFORM1IPROC          fn_glUniform1i           = nullptr;
-static PFNGLUNIFORM1FPROC          fn_glUniform1f           = nullptr;
-static PFNGLUNIFORM3FVPROC         fn_glUniform3fv          = nullptr;
-static PFNGLUNIFORMMATRIX4FVPROC   fn_glUniformMatrix4fv    = nullptr;
-static PFNGLGENVERTEXARRAYSPROC          fn_glGenVertexArrays          = nullptr;
-static PFNGLDELETEVERTEXARRAYSPROC       fn_glDeleteVertexArrays       = nullptr;
-static PFNGLVERTEXATTRIBPOINTERPROC      fn_glVertexAttribPointer      = nullptr;
-static PFNGLENABLEVERTEXATTRIBARRAYPROC  fn_glEnableVertexAttribArray  = nullptr;
-static PFNGLGENBUFFERSPROC               fn_glGenBuffers               = nullptr;
-static PFNGLBINDBUFFERPROC               fn_glBindBuffer               = nullptr;
-static PFNGLBUFFERDATAPROC               fn_glBufferData               = nullptr;
-static PFNGLBUFFERSUBDATAPROC            fn_glBufferSubData            = nullptr;
-static PFNGLDELETEBUFFERSPROC            fn_glDeleteBuffers            = nullptr;
+static PFNGLCREATESHADERPROC            fn_glCreateShader            = nullptr;
+static PFNGLSHADERSOURCEPROC            fn_glShaderSource            = nullptr;
+static PFNGLCOMPILESHADERPROC           fn_glCompileShader           = nullptr;
+static PFNGLGETSHADERIVPROC             fn_glGetShaderiv             = nullptr;
+static PFNGLCREATEPROGRAMPROC           fn_glCreateProgram           = nullptr;
+static PFNGLATTACHSHADERPROC            fn_glAttachShader            = nullptr;
+static PFNGLLINKPROGRAMPROC             fn_glLinkProgram             = nullptr;
+static PFNGLGETPROGRAMIVPROC            fn_glGetProgramiv            = nullptr;
+static PFNGLDELETESHADERPROC            fn_glDeleteShader            = nullptr;
+static PFNGLDELETEPROGRAMPROC           fn_glDeleteProgram           = nullptr;
+static PFNGLGETUNIFORMLOCATIONPROC      fn_glGetUniformLocation      = nullptr;
+static PFNGLGETUNIFORMBLOCKINDEXPROC    fn_glGetUniformBlockIndex    = nullptr;
+static PFNGLUNIFORMBLOCKBINDINGPROC     fn_glUniformBlockBinding     = nullptr;
+static PFNGLUNIFORM1IPROC               fn_glUniform1i               = nullptr;
+static PFNGLUNIFORM1FPROC               fn_glUniform1f               = nullptr;
+static PFNGLUNIFORM3FVPROC              fn_glUniform3fv              = nullptr;
+static PFNGLUNIFORMMATRIX4FVPROC        fn_glUniformMatrix4fv        = nullptr;
+static PFNGLGENVERTEXARRAYSPROC         fn_glGenVertexArrays         = nullptr;
+static PFNGLDELETEVERTEXARRAYSPROC      fn_glDeleteVertexArrays      = nullptr;
+static PFNGLVERTEXATTRIBPOINTERPROC     fn_glVertexAttribPointer     = nullptr;
+static PFNGLENABLEVERTEXATTRIBARRAYPROC fn_glEnableVertexAttribArray = nullptr;
+static PFNGLGENBUFFERSPROC              fn_glGenBuffers              = nullptr;
+static PFNGLBINDBUFFERPROC              fn_glBindBuffer              = nullptr;
+static PFNGLBUFFERDATAPROC              fn_glBufferData              = nullptr;
+static PFNGLBUFFERSUBDATAPROC           fn_glBufferSubData           = nullptr;
+static PFNGLDELETEBUFFERSPROC           fn_glDeleteBuffers           = nullptr;
 
 // ===========================================================================
 // GLSL Planar Shadow Vertex Shader (DXP-06: 330 core, explicit attribute + u_MVP,
@@ -149,46 +149,47 @@ CPlanarShadowShader& CPlanarShadowShader::Instance()
     return s_instance;
 }
 
-CPlanarShadowShader::CPlanarShadowShader()  {}
-CPlanarShadowShader::~CPlanarShadowShader() { Shutdown(); }
+CPlanarShadowShader::CPlanarShadowShader() {}
+CPlanarShadowShader::~CPlanarShadowShader()
+{
+    Shutdown();
+}
 
 bool CPlanarShadowShader::LoadGLFunctions()
 {
-    fn_glCreateShader       = (PFNGLCREATESHADERPROC)      MuGL::GetProcAddress("glCreateShader");
-    fn_glShaderSource       = (PFNGLSHADERSOURCEPROC)      MuGL::GetProcAddress("glShaderSource");
-    fn_glCompileShader      = (PFNGLCOMPILESHADERPROC)     MuGL::GetProcAddress("glCompileShader");
-    fn_glGetShaderiv        = (PFNGLGETSHADERIVPROC)       MuGL::GetProcAddress("glGetShaderiv");
-    fn_glCreateProgram      = (PFNGLCREATEPROGRAMPROC)     MuGL::GetProcAddress("glCreateProgram");
-    fn_glAttachShader       = (PFNGLATTACHSHADERPROC)      MuGL::GetProcAddress("glAttachShader");
-    fn_glLinkProgram        = (PFNGLLINKPROGRAMPROC)       MuGL::GetProcAddress("glLinkProgram");
-    fn_glGetProgramiv       = (PFNGLGETPROGRAMIVPROC)      MuGL::GetProcAddress("glGetProgramiv");
-    fn_glDeleteShader       = (PFNGLDELETESHADERPROC)      MuGL::GetProcAddress("glDeleteShader");
-    fn_glDeleteProgram      = (PFNGLDELETEPROGRAMPROC)     MuGL::GetProcAddress("glDeleteProgram");
-    fn_glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
-    fn_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)MuGL::GetNativeProcAddress("glGetUniformBlockIndex");
-    fn_glUniformBlockBinding  = (PFNGLUNIFORMBLOCKBINDINGPROC) MuGL::GetNativeProcAddress("glUniformBlockBinding");
-    fn_glUniform1i          = (PFNGLUNIFORM1IPROC)         MuGL::GetProcAddress("glUniform1i");
-    fn_glUniform1f          = (PFNGLUNIFORM1FPROC)         MuGL::GetProcAddress("glUniform1f");
-    fn_glUniform3fv         = (PFNGLUNIFORM3FVPROC)        MuGL::GetProcAddress("glUniform3fv");
-    fn_glUniformMatrix4fv   = (PFNGLUNIFORMMATRIX4FVPROC)  MuGL::GetProcAddress("glUniformMatrix4fv");
-    fn_glGenVertexArrays          = (PFNGLGENVERTEXARRAYSPROC)MuGL::GetProcAddress("glGenVertexArrays");
-    fn_glDeleteVertexArrays       = (PFNGLDELETEVERTEXARRAYSPROC)MuGL::GetProcAddress("glDeleteVertexArrays");
-    fn_glVertexAttribPointer      = (PFNGLVERTEXATTRIBPOINTERPROC)MuGL::GetProcAddress("glVertexAttribPointer");
-    fn_glEnableVertexAttribArray  = (PFNGLENABLEVERTEXATTRIBARRAYPROC)MuGL::GetProcAddress("glEnableVertexAttribArray");
-    fn_glGenBuffers               = (PFNGLGENBUFFERSPROC)MuGL::GetProcAddress("glGenBuffers");
-    fn_glBindBuffer               = (PFNGLBINDBUFFERPROC)MuGL::GetProcAddress("glBindBuffer");
-    fn_glBufferData               = (PFNGLBUFFERDATAPROC)MuGL::GetProcAddress("glBufferData");
-    fn_glBufferSubData            = (PFNGLBUFFERSUBDATAPROC)MuGL::GetProcAddress("glBufferSubData");
-    fn_glDeleteBuffers            = (PFNGLDELETEBUFFERSPROC)MuGL::GetProcAddress("glDeleteBuffers");
+    fn_glCreateShader            = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
+    fn_glShaderSource            = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
+    fn_glCompileShader           = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
+    fn_glGetShaderiv             = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
+    fn_glCreateProgram           = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
+    fn_glAttachShader            = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
+    fn_glLinkProgram             = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
+    fn_glGetProgramiv            = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
+    fn_glDeleteShader            = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
+    fn_glDeleteProgram           = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
+    fn_glGetUniformLocation      = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
+    fn_glGetUniformBlockIndex    = (PFNGLGETUNIFORMBLOCKINDEXPROC)MuGL::GetNativeProcAddress("glGetUniformBlockIndex");
+    fn_glUniformBlockBinding     = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
+    fn_glUniform1i               = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
+    fn_glUniform1f               = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
+    fn_glUniform3fv              = (PFNGLUNIFORM3FVPROC)MuGL::GetProcAddress("glUniform3fv");
+    fn_glUniformMatrix4fv        = (PFNGLUNIFORMMATRIX4FVPROC)MuGL::GetProcAddress("glUniformMatrix4fv");
+    fn_glGenVertexArrays         = (PFNGLGENVERTEXARRAYSPROC)MuGL::GetProcAddress("glGenVertexArrays");
+    fn_glDeleteVertexArrays      = (PFNGLDELETEVERTEXARRAYSPROC)MuGL::GetProcAddress("glDeleteVertexArrays");
+    fn_glVertexAttribPointer     = (PFNGLVERTEXATTRIBPOINTERPROC)MuGL::GetProcAddress("glVertexAttribPointer");
+    fn_glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)MuGL::GetProcAddress("glEnableVertexAttribArray");
+    fn_glGenBuffers              = (PFNGLGENBUFFERSPROC)MuGL::GetProcAddress("glGenBuffers");
+    fn_glBindBuffer              = (PFNGLBINDBUFFERPROC)MuGL::GetProcAddress("glBindBuffer");
+    fn_glBufferData              = (PFNGLBUFFERDATAPROC)MuGL::GetProcAddress("glBufferData");
+    fn_glBufferSubData           = (PFNGLBUFFERSUBDATAPROC)MuGL::GetProcAddress("glBufferSubData");
+    fn_glDeleteBuffers           = (PFNGLDELETEBUFFERSPROC)MuGL::GetProcAddress("glDeleteBuffers");
 
-    return fn_glCreateShader && fn_glShaderSource && fn_glCompileShader && fn_glGetShaderiv &&
-           fn_glCreateProgram && fn_glAttachShader && fn_glLinkProgram && fn_glGetProgramiv &&
-           fn_glGetUniformLocation && fn_glGetUniformBlockIndex &&
-           fn_glUniformBlockBinding && fn_glUniform1i && fn_glUniform1f && fn_glUniform3fv &&
-           fn_glUniformMatrix4fv && fn_glGenVertexArrays &&
-           fn_glDeleteVertexArrays && fn_glVertexAttribPointer && fn_glEnableVertexAttribArray &&
-           fn_glGenBuffers && fn_glBindBuffer && fn_glBufferData && fn_glBufferSubData &&
-           fn_glDeleteBuffers;
+    return fn_glCreateShader && fn_glShaderSource && fn_glCompileShader && fn_glGetShaderiv && fn_glCreateProgram &&
+           fn_glAttachShader && fn_glLinkProgram && fn_glGetProgramiv && fn_glGetUniformLocation &&
+           fn_glGetUniformBlockIndex && fn_glUniformBlockBinding && fn_glUniform1i && fn_glUniform1f &&
+           fn_glUniform3fv && fn_glUniformMatrix4fv && fn_glGenVertexArrays && fn_glDeleteVertexArrays &&
+           fn_glVertexAttribPointer && fn_glEnableVertexAttribArray && fn_glGenBuffers && fn_glBindBuffer &&
+           fn_glBufferData && fn_glBufferSubData && fn_glDeleteBuffers;
 }
 
 bool CPlanarShadowShader::CompileShaders()
@@ -199,7 +200,8 @@ bool CPlanarShadowShader::CompileShaders()
     fn_glShaderSource(m_hVertexShader, 1, &g_szPlanarVert, nullptr);
     fn_glCompileShader(m_hVertexShader);
     fn_glGetShaderiv(m_hVertexShader, GL_COMPILE_STATUS, &ok);
-    if (!ok) {
+    if (!ok)
+    {
         // GLP-11: this class previously failed silently here -- every other shader class
         // (BMDMeshShader/TerrainShader/PassthroughShader) logs a compile failure via SDL_Log;
         // this one had neither that nor a success log, making "did the shader actually
@@ -213,7 +215,8 @@ bool CPlanarShadowShader::CompileShaders()
     fn_glShaderSource(m_hFragmentShader, 1, &g_szPlanarFrag, nullptr);
     fn_glCompileShader(m_hFragmentShader);
     fn_glGetShaderiv(m_hFragmentShader, GL_COMPILE_STATUS, &ok);
-    if (!ok) {
+    if (!ok)
+    {
         g_ErrorReport.Write(L"[PlanarShadowShader] Fragment shader compilation failed\r\n");
         return false;
     }
@@ -223,7 +226,8 @@ bool CPlanarShadowShader::CompileShaders()
     fn_glAttachShader(m_hProgram, m_hFragmentShader);
     fn_glLinkProgram(m_hProgram);
     fn_glGetProgramiv(m_hProgram, GL_LINK_STATUS, &ok);
-    if (!ok) {
+    if (!ok)
+    {
         g_ErrorReport.Write(L"[PlanarShadowShader] Program link failed\r\n");
         return false;
     }
@@ -239,9 +243,11 @@ bool CPlanarShadowShader::CompileShaders()
 
     // Bind BoneMatrices to binding point 2 -- same slot BMDMeshShader/BoneUBO use, so the caller's
     // one BoneUBO::UploadBones() call per body feeds this program too.
-    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr) {
+    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr)
+    {
         GLuint boneBlockIdx = fn_glGetUniformBlockIndex(m_hProgram, "BoneMatrices");
-        if (boneBlockIdx != GL_INVALID_INDEX) {
+        if (boneBlockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_hProgram, boneBlockIdx, 2);
         }
     }
@@ -252,7 +258,8 @@ bool CPlanarShadowShader::CompileShaders()
 
 void CPlanarShadowShader::CreateBuffers()
 {
-    if (m_VAO != 0) return;
+    if (m_VAO != 0)
+        return;
 
     fn_glGenVertexArrays(1, &m_VAO);
     BindVAO(m_VAO);
@@ -273,11 +280,13 @@ void CPlanarShadowShader::CreateBuffers()
 
 void CPlanarShadowShader::DestroyBuffers()
 {
-    if (m_VBO != 0 && fn_glDeleteBuffers) {
+    if (m_VBO != 0 && fn_glDeleteBuffers)
+    {
         fn_glDeleteBuffers(1, &m_VBO);
         m_VBO = 0;
     }
-    if (m_VAO != 0 && fn_glDeleteVertexArrays) {
+    if (m_VAO != 0 && fn_glDeleteVertexArrays)
+    {
         fn_glDeleteVertexArrays(1, &m_VAO);
         m_VAO = 0;
         InvalidateVAOCache();
@@ -310,16 +319,30 @@ void CPlanarShadowShader::Draw(const float* vertices, int vertexCount)
     DrawGL(vertices, vertexCount);
 }
 
-void CPlanarShadowShader::DrawGPUSkinned(GLuint vao, int baseCorner, int vertexCount, const float* skinOrigin, float skinScale)
+void CPlanarShadowShader::DrawGPUSkinned(GLuint vao, int baseCorner, int vertexCount, const float* skinOrigin,
+                                         float skinScale)
 {
-    if (!m_bActive || vao == 0 || vertexCount <= 0) return;
+    if (!m_bActive || vao == 0 || vertexCount <= 0)
+        return;
 
-    const float zeroOrigin[3] = { 0.f, 0.f, 0.f };
-    const float* origin = skinOrigin ? skinOrigin : zeroOrigin;
+    const float  zeroOrigin[3] = {0.f, 0.f, 0.f};
+    const float* origin        = skinOrigin ? skinOrigin : zeroOrigin;
 
-    if (m_locUseGPUSkin != -1) { fn_glUniform1i(m_locUseGPUSkin, 1); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locSkinOrigin != -1) { fn_glUniform3fv(m_locSkinOrigin, 1, origin); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locSkinScale  != -1) { fn_glUniform1f(m_locSkinScale, skinScale); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_locUseGPUSkin != -1)
+    {
+        fn_glUniform1i(m_locUseGPUSkin, 1);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locSkinOrigin != -1)
+    {
+        fn_glUniform3fv(m_locSkinOrigin, 1, origin);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locSkinScale != -1)
+    {
+        fn_glUniform1f(m_locSkinScale, skinScale);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
 
     BindVAO(vao);
     glDrawArrays(GL_TRIANGLES, baseCorner, vertexCount);
@@ -329,10 +352,15 @@ void CPlanarShadowShader::DrawGPUSkinned(GLuint vao, int baseCorner, int vertexC
 
 bool CPlanarShadowShader::InitGL()
 {
-    if (m_bInitialized) return m_bSupported;
+    if (m_bInitialized)
+        return m_bSupported;
     m_bInitialized = true;
     m_bSupported   = false;
-    if (!LoadGLFunctions() || !CompileShaders()) { ShutdownGL(); return false; }
+    if (!LoadGLFunctions() || !CompileShaders())
+    {
+        ShutdownGL();
+        return false;
+    }
     CreateBuffers();
     m_bSupported = true;
     return true;
@@ -340,9 +368,15 @@ bool CPlanarShadowShader::InitGL()
 
 void CPlanarShadowShader::ShutdownGL()
 {
-    if (m_hProgram       && fn_glDeleteProgram) { fn_glDeleteProgram(m_hProgram); InvalidateProgramCache(); }
-    if (m_hVertexShader  && fn_glDeleteShader)  fn_glDeleteShader(m_hVertexShader);
-    if (m_hFragmentShader&& fn_glDeleteShader)  fn_glDeleteShader(m_hFragmentShader);
+    if (m_hProgram && fn_glDeleteProgram)
+    {
+        fn_glDeleteProgram(m_hProgram);
+        InvalidateProgramCache();
+    }
+    if (m_hVertexShader && fn_glDeleteShader)
+        fn_glDeleteShader(m_hVertexShader);
+    if (m_hFragmentShader && fn_glDeleteShader)
+        fn_glDeleteShader(m_hFragmentShader);
     DestroyBuffers();
 
     m_hProgram        = 0;
@@ -354,17 +388,42 @@ void CPlanarShadowShader::ShutdownGL()
 
 bool CPlanarShadowShader::BeginGL(const float* bodyOrigin, const float mvp[16], float sx, float sy, float alpha)
 {
-    if (!IsSupported() || !m_hProgram) return false;
+    if (!IsSupported() || !m_hProgram)
+        return false;
 
     m_bActive = true;
     BindProgram(m_hProgram);
 
-    if (m_locBodyOrigin  != -1) { fn_glUniform3fv(m_locBodyOrigin, 1, bodyOrigin); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locSx          != -1) { fn_glUniform1f(m_locSx, sx); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locSy          != -1) { fn_glUniform1f(m_locSy, sy); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locShadowAlpha != -1) { fn_glUniform1f(m_locShadowAlpha, alpha); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locMVP         != -1) { fn_glUniformMatrix4fv(m_locMVP, 1, GL_FALSE, mvp); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_locUseGPUSkin  != -1) { fn_glUniform1i(m_locUseGPUSkin, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_locBodyOrigin != -1)
+    {
+        fn_glUniform3fv(m_locBodyOrigin, 1, bodyOrigin);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locSx != -1)
+    {
+        fn_glUniform1f(m_locSx, sx);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locSy != -1)
+    {
+        fn_glUniform1f(m_locSy, sy);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locShadowAlpha != -1)
+    {
+        fn_glUniform1f(m_locShadowAlpha, alpha);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locMVP != -1)
+    {
+        fn_glUniformMatrix4fv(m_locMVP, 1, GL_FALSE, mvp);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_locUseGPUSkin != -1)
+    {
+        fn_glUniform1i(m_locUseGPUSkin, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -376,7 +435,8 @@ bool CPlanarShadowShader::BeginGL(const float* bodyOrigin, const float mvp[16], 
 
 void CPlanarShadowShader::EndGL()
 {
-    if (!IsSupported() || !m_bActive) return;
+    if (!IsSupported() || !m_bActive)
+        return;
 
     glDisable(GL_POLYGON_OFFSET_FILL);
     BindProgram(0);
@@ -385,9 +445,14 @@ void CPlanarShadowShader::EndGL()
 
 void CPlanarShadowShader::DrawGL(const float* vertices, int vertexCount)
 {
-    if (!m_bActive || m_VAO == 0 || m_VBO == 0 || vertexCount <= 0) return;
+    if (!m_bActive || m_VAO == 0 || m_VBO == 0 || vertexCount <= 0)
+        return;
 
-    if (m_locUseGPUSkin != -1) { fn_glUniform1i(m_locUseGPUSkin, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_locUseGPUSkin != -1)
+    {
+        fn_glUniform1i(m_locUseGPUSkin, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
 
     const size_t neededSize = (size_t)vertexCount * 3 * sizeof(float);
 
@@ -395,7 +460,8 @@ void CPlanarShadowShader::DrawGL(const float* vertices, int vertexCount)
 
     // Auto-grow buffer if vertex data exceeds current VBO capacity (same orphan-or-grow pattern
     // as ImmediateRenderer.cpp).
-    if (neededSize > m_VBOCapacity) {
+    if (neededSize > m_VBOCapacity)
+    {
         m_VBOCapacity = neededSize * 2;
         fn_glBufferData(GL_ARRAY_BUFFER, m_VBOCapacity, nullptr, GL_STREAM_DRAW);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::BufferUpdates);
@@ -411,4 +477,3 @@ void CPlanarShadowShader::DrawGL(const float* vertices, int vertexCount)
     FrameProfiler::CountGLCall(FrameProfiler::Counter::DrawCalls);
     BindVAO(0);
 }
-

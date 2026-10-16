@@ -23,14 +23,14 @@ public:
     // Data Access
     SKILL_ATTRIBUTE* GetSkillAttributes();
     SKILL_ATTRIBUTE* GetSkillAttribute(int index);
-    int GetSkillCount() const;
+    int              GetSkillCount() const;
 
 private:
     CSkillDataHandler();
     ~CSkillDataHandler() = default;
 
     // Prevent copying
-    CSkillDataHandler(const CSkillDataHandler&) = delete;
+    CSkillDataHandler(const CSkillDataHandler&)            = delete;
     CSkillDataHandler& operator=(const CSkillDataHandler&) = delete;
 };
 

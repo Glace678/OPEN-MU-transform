@@ -6,50 +6,52 @@
 #include "Render/RHI/RHI.h"
 #include "Render/Core/RenderConfig.h"
 
-namespace RHI_GL_Impl {
-    const RHI::Caps& GetCaps();
+namespace RHI_GL_Impl
+{
+const RHI::Caps& GetCaps();
 
-    bool Init(void* nativeWindowHandle, int width, int height);
-    void Shutdown();
-    void BeginFrame();
-    void EndFrame();
-    void SetViewport(int x, int y, int w, int h);
-    void OnResize(int width, int height);
-    void Clear(bool color, bool depth, float r, float g, float b, float a);
+bool Init(void* nativeWindowHandle, int width, int height);
+void Shutdown();
+void BeginFrame();
+void EndFrame();
+void SetViewport(int x, int y, int w, int h);
+void OnResize(int width, int height);
+void Clear(bool color, bool depth, float r, float g, float b, float a);
 
-    RHI::BufferHandle CreateVertexBuffer(const void* initialData, size_t sizeBytes, RHI::BufferUsage usage);
-    RHI::BufferHandle CreateIndexBuffer(const void* initialData, size_t sizeBytes, RHI::BufferUsage usage);
-    void UpdateBuffer(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
-    size_t AppendBuffer(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
-    void DestroyBuffer(RHI::BufferHandle handle);
+RHI::BufferHandle CreateVertexBuffer(const void* initialData, size_t sizeBytes, RHI::BufferUsage usage);
+RHI::BufferHandle CreateIndexBuffer(const void* initialData, size_t sizeBytes, RHI::BufferUsage usage);
+void              UpdateBuffer(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
+size_t            AppendBuffer(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
+void              DestroyBuffer(RHI::BufferHandle handle);
 
-    RHI::BufferHandle CreateUniformBlock(size_t sizeBytes, int bindingSlot);
-    void UpdateUniformBlock(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
-    void DestroyUniformBlock(RHI::BufferHandle handle);
+RHI::BufferHandle CreateUniformBlock(size_t sizeBytes, int bindingSlot);
+void              UpdateUniformBlock(RHI::BufferHandle handle, const void* data, size_t sizeBytes);
+void              DestroyUniformBlock(RHI::BufferHandle handle);
 
-    RHI::TextureHandle CreateTexture(const RHI::TextureDesc& desc, const void* initialPixelsRGBA);
-    void UpdateTexture(RHI::TextureHandle handle, int x, int y, int w, int h, const void* pixelsRGBA);
-    void DestroyTexture(RHI::TextureHandle handle);
-    void BindTexture(RHI::TextureHandle handle, int slot);
+RHI::TextureHandle CreateTexture(const RHI::TextureDesc& desc, const void* initialPixelsRGBA);
+void               UpdateTexture(RHI::TextureHandle handle, int x, int y, int w, int h, const void* pixelsRGBA);
+void               DestroyTexture(RHI::TextureHandle handle);
+void               BindTexture(RHI::TextureHandle handle, int slot);
 
-    void SetBlendMode(RHI::BlendMode mode);
-    void SetDepthTestEnabled(bool enabled);
-    void SetCullEnabled(bool enabled);
-    void SetDepthWriteEnabled(bool enabled);
-    void SetFogEnabled(bool enabled);
-    void SetPolygonOffset(bool enabled, float factor, float units);
+void SetBlendMode(RHI::BlendMode mode);
+void SetDepthTestEnabled(bool enabled);
+void SetCullEnabled(bool enabled);
+void SetDepthWriteEnabled(bool enabled);
+void SetFogEnabled(bool enabled);
+void SetPolygonOffset(bool enabled, float factor, float units);
 
-    void BindVertexBuffer(RHI::BufferHandle handle, RHI::VertexLayout layout);
-    void BindIndexBuffer(RHI::BufferHandle handle);
+void BindVertexBuffer(RHI::BufferHandle handle, RHI::VertexLayout layout);
+void BindIndexBuffer(RHI::BufferHandle handle);
 
-    void Draw(RHI::Topology topology, uint32_t vertexCount, uint32_t firstVertex);
-    void DrawIndexed(RHI::Topology topology, uint32_t indexCount, uint32_t firstIndex);
+void Draw(RHI::Topology topology, uint32_t vertexCount, uint32_t firstVertex);
+void DrawIndexed(RHI::Topology topology, uint32_t indexCount, uint32_t firstIndex);
 
-    bool ReadDepthPixel(int x, int y, float* outDepth);
-    bool ReadColorFramebuffer(int x, int y, int w, int h, void* outRGB);
+bool ReadDepthPixel(int x, int y, float* outDepth);
+bool ReadColorFramebuffer(int x, int y, int w, int h, void* outRGB);
 }
 
-namespace RHI {
+namespace RHI
+{
 
 const Caps& GetCaps()
 {
@@ -211,4 +213,4 @@ bool ReadColorFramebuffer(int x, int y, int w, int h, void* outRGB)
     return RHI_GL_Impl::ReadColorFramebuffer(x, y, w, h, outRGB);
 }
 
-} // namespace RHI
+}  // namespace RHI

@@ -4,43 +4,40 @@
 #include <algorithm>
 #include <cmath>
 
-namespace Core::Input
+    namespace Core::Input
 {
     namespace
     {
-        // Per-control pressed state of a raw snapshot, used by the remap
-        // capture. GamepadButton::Guide has no remappable GamepadControl.
-        std::array<bool, static_cast<std::size_t>(GamepadControl::Count)>
-            SnapshotControlStates(const GamepadSnapshot& snapshot, const GamepadSettings& settings)
-        {
-            std::array<bool, static_cast<std::size_t>(GamepadControl::Count)> active{};
-            auto set = [&active](GamepadControl control, bool down)
-            {
-                active[static_cast<std::size_t>(control)] = down;
-            };
+    // Per-control pressed state of a raw snapshot, used by the remap
+    // capture. GamepadButton::Guide has no remappable GamepadControl.
+    std::array<bool, static_cast<std::size_t>(GamepadControl::Count)>
+    SnapshotControlStates(const GamepadSnapshot& snapshot, const GamepadSettings& settings)
+    {
+        std::array<bool, static_cast<std::size_t>(GamepadControl::Count)> active{};
+        auto set = [&active](GamepadControl control, bool down) { active[static_cast<std::size_t>(control)] = down; };
 
-            set(GamepadControl::South, snapshot.buttons[static_cast<std::size_t>(GamepadButton::South)]);
-            set(GamepadControl::East, snapshot.buttons[static_cast<std::size_t>(GamepadButton::East)]);
-            set(GamepadControl::West, snapshot.buttons[static_cast<std::size_t>(GamepadButton::West)]);
-            set(GamepadControl::North, snapshot.buttons[static_cast<std::size_t>(GamepadButton::North)]);
-            set(GamepadControl::Back, snapshot.buttons[static_cast<std::size_t>(GamepadButton::Back)]);
-            set(GamepadControl::Start, snapshot.buttons[static_cast<std::size_t>(GamepadButton::Start)]);
-            set(GamepadControl::LeftStick, snapshot.buttons[static_cast<std::size_t>(GamepadButton::LeftStick)]
-                || std::hypot(snapshot.leftX, snapshot.leftY) > settings.stickDeadZone);
-            set(GamepadControl::RightStick, snapshot.buttons[static_cast<std::size_t>(GamepadButton::RightStick)]
-                || std::hypot(snapshot.rightX, snapshot.rightY) > settings.stickDeadZone);
-            set(GamepadControl::LeftShoulder, snapshot.buttons[static_cast<std::size_t>(GamepadButton::LeftShoulder)]);
-            set(GamepadControl::RightShoulder, snapshot.buttons[static_cast<std::size_t>(GamepadButton::RightShoulder)]);
-            set(GamepadControl::DpadUp, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadUp)]);
-            set(GamepadControl::DpadDown, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadDown)]);
-            set(GamepadControl::DpadLeft, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadLeft)]);
-            set(GamepadControl::DpadRight, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadRight)]);
-            // Require a deliberate half-pull of an analog trigger rather than
-            // the tiny dead-zone threshold used while playing.
-            set(GamepadControl::LeftTrigger, snapshot.leftTrigger > std::max(0.5f, settings.triggerDeadZone));
-            set(GamepadControl::RightTrigger, snapshot.rightTrigger > std::max(0.5f, settings.triggerDeadZone));
-            return active;
-        }
+        set(GamepadControl::South, snapshot.buttons[static_cast<std::size_t>(GamepadButton::South)]);
+        set(GamepadControl::East, snapshot.buttons[static_cast<std::size_t>(GamepadButton::East)]);
+        set(GamepadControl::West, snapshot.buttons[static_cast<std::size_t>(GamepadButton::West)]);
+        set(GamepadControl::North, snapshot.buttons[static_cast<std::size_t>(GamepadButton::North)]);
+        set(GamepadControl::Back, snapshot.buttons[static_cast<std::size_t>(GamepadButton::Back)]);
+        set(GamepadControl::Start, snapshot.buttons[static_cast<std::size_t>(GamepadButton::Start)]);
+        set(GamepadControl::LeftStick, snapshot.buttons[static_cast<std::size_t>(GamepadButton::LeftStick)] ||
+                                           std::hypot(snapshot.leftX, snapshot.leftY) > settings.stickDeadZone);
+        set(GamepadControl::RightStick, snapshot.buttons[static_cast<std::size_t>(GamepadButton::RightStick)] ||
+                                            std::hypot(snapshot.rightX, snapshot.rightY) > settings.stickDeadZone);
+        set(GamepadControl::LeftShoulder, snapshot.buttons[static_cast<std::size_t>(GamepadButton::LeftShoulder)]);
+        set(GamepadControl::RightShoulder, snapshot.buttons[static_cast<std::size_t>(GamepadButton::RightShoulder)]);
+        set(GamepadControl::DpadUp, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadUp)]);
+        set(GamepadControl::DpadDown, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadDown)]);
+        set(GamepadControl::DpadLeft, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadLeft)]);
+        set(GamepadControl::DpadRight, snapshot.buttons[static_cast<std::size_t>(GamepadButton::DpadRight)]);
+        // Require a deliberate half-pull of an analog trigger rather than
+        // the tiny dead-zone threshold used while playing.
+        set(GamepadControl::LeftTrigger, snapshot.leftTrigger > std::max(0.5f, settings.triggerDeadZone));
+        set(GamepadControl::RightTrigger, snapshot.rightTrigger > std::max(0.5f, settings.triggerDeadZone));
+        return active;
+    }
     }
 
     GamepadService& GamepadService::Instance()
@@ -49,14 +46,10 @@ namespace Core::Input
         return instance;
     }
 
-    GamepadService::GamepadService()
-        : m_haptics(m_backend)
-    {
-    }
+    GamepadService::GamepadService() : m_haptics(m_backend) {}
 
-    bool GamepadService::Initialize(
-        const GamepadSettings& gamepadSettings,
-        const Core::Haptics::HapticSettings& hapticSettings)
+    bool GamepadService::Initialize(const GamepadSettings&               gamepadSettings,
+                                    const Core::Haptics::HapticSettings& hapticSettings)
     {
 #if MU_PLATFORM_MOBILE
         // Touch-only builds: controllers are disabled by construction. The
@@ -68,31 +61,33 @@ namespace Core::Input
         m_mapper.SetSettings(gamepadSettings);
 #endif
         m_haptics.SetSettings(hapticSettings);
-        m_initialized = m_backend.Initialize();
-        m_lastDeviceId = m_backend.GetActiveDeviceId();
+        m_initialized           = m_backend.Initialize();
+        m_lastDeviceId          = m_backend.GetActiveDeviceId();
         m_inputOwnershipChanged = false;
         return m_initialized;
     }
 
     void GamepadService::Shutdown()
     {
-        if (!m_initialized) return;
+        if (!m_initialized)
+            return;
         m_haptics.Stop();
         m_backend.Shutdown();
-        m_initialized = false;
-        m_previousUpdateMs = 0.0;
-        m_lastDeviceId = 0;
+        m_initialized           = false;
+        m_previousUpdateMs      = 0.0;
+        m_lastDeviceId          = 0;
         m_inputOwnershipChanged = false;
-        m_frame = {};
+        m_frame                 = {};
     }
 
     void GamepadService::HandleEvent(const SDL_Event& event)
     {
 #if MU_PLATFORM_MOBILE
-        (void)event; // touch-only build: no controller events are consumed
+        (void)event;  // touch-only build: no controller events are consumed
         return;
 #else
-        if (!m_initialized) return;
+        if (!m_initialized)
+            return;
 
         const SDL_JoystickID previousDeviceId = m_backend.GetActiveDeviceId();
         m_backend.HandleEvent(event);
@@ -106,12 +101,8 @@ namespace Core::Input
 #endif
     }
 
-    const GamepadFrameState& GamepadService::Update(
-        InputContext context,
-        double nowMs,
-        float pointerWidth,
-        float pointerHeight,
-        bool acceptInput)
+    const GamepadFrameState& GamepadService::Update(InputContext context, double nowMs, float pointerWidth,
+                                                    float pointerHeight, bool acceptInput)
     {
 #if MU_PLATFORM_MOBILE
         (void)context;
@@ -124,15 +115,12 @@ namespace Core::Input
         m_haptics.Update(nowMs);
         return m_frame;
 #else
-        const double deltaSeconds = m_previousUpdateMs > 0.0
-            ? std::clamp((nowMs - m_previousUpdateMs) / 1000.0, 0.0, 0.1)
-            : 0.0;
+        const double deltaSeconds =
+            m_previousUpdateMs > 0.0 ? std::clamp((nowMs - m_previousUpdateMs) / 1000.0, 0.0, 0.1) : 0.0;
         m_previousUpdateMs = nowMs;
 
-        const GamepadSnapshot snapshot = m_initialized
-            ? m_backend.Poll()
-            : GamepadSnapshot{};
-        const SDL_JoystickID deviceId = m_backend.GetActiveDeviceId();
+        const GamepadSnapshot snapshot = m_initialized ? m_backend.Poll() : GamepadSnapshot{};
+        const SDL_JoystickID  deviceId = m_backend.GetActiveDeviceId();
         if (deviceId != m_lastDeviceId)
         {
             m_inputOwnershipChanged = true;
@@ -141,13 +129,8 @@ namespace Core::Input
             m_lastDeviceId = deviceId;
         }
         const GamepadFrameState previousFrame = m_frame;
-        m_frame = m_mapper.Update(
-            snapshot,
-            context,
-            deltaSeconds,
-            pointerWidth,
-            pointerHeight,
-            m_focused && acceptInput);
+        m_frame =
+            m_mapper.Update(snapshot, context, deltaSeconds, pointerWidth, pointerHeight, m_focused && acceptInput);
         if (m_focused && acceptInput && m_gamepadEnabled)
         {
             PublishInputFeedback(previousFrame, nowMs);
@@ -217,11 +200,11 @@ namespace Core::Input
     void GamepadService::SetGamepadSettings(const GamepadSettings& settings)
     {
 #if MU_PLATFORM_MOBILE
-        (void)settings; // controllers do not exist on touch-only builds
+        (void)settings;  // controllers do not exist on touch-only builds
         return;
 #else
-        const bool ownershipChanged = settings.enabled != m_gamepadEnabled
-            || settings.bindings != m_mapper.GetSettings().bindings;
+        const bool ownershipChanged =
+            settings.enabled != m_gamepadEnabled || settings.bindings != m_mapper.GetSettings().bindings;
         m_gamepadEnabled = settings.enabled;
         m_mapper.SetSettings(settings);
         if (ownershipChanged)
@@ -241,7 +224,7 @@ namespace Core::Input
 
     bool GamepadService::ConsumeInputOwnershipChanged()
     {
-        const bool changed = m_inputOwnershipChanged;
+        const bool changed      = m_inputOwnershipChanged;
         m_inputOwnershipChanged = false;
         return changed;
     }
@@ -281,17 +264,16 @@ namespace Core::Input
         if (!snapshot.connected)
             return;
 
-        const auto active = SnapshotControlStates(snapshot, m_mapper.GetSettings());
-        const std::size_t cancelIndex = static_cast<std::size_t>(m_controlCaptureCancel);
-        const bool anythingActive = std::any_of(
-            active.begin(), active.end(), [](bool down) { return down; });
+        const auto        active         = SnapshotControlStates(snapshot, m_mapper.GetSettings());
+        const std::size_t cancelIndex    = static_cast<std::size_t>(m_controlCaptureCancel);
+        const bool        anythingActive = std::any_of(active.begin(), active.end(), [](bool down) { return down; });
 
         if (m_controlCaptureState == ControlCaptureState::WaitingNeutral)
         {
             if (!anythingActive)
             {
                 m_controlCaptureActive = active;
-                m_controlCaptureState = ControlCaptureState::Armed;
+                m_controlCaptureState  = ControlCaptureState::Armed;
             }
             return;
         }
@@ -308,7 +290,7 @@ namespace Core::Input
         {
             if (active[i] && !m_controlCaptureActive[i] && i != cancelIndex)
             {
-                m_capturedControl = static_cast<GamepadControl>(i);
+                m_capturedControl     = static_cast<GamepadControl>(i);
                 m_controlCaptureState = ControlCaptureState::Inactive;
                 return;
             }

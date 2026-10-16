@@ -1,4 +1,4 @@
-// NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
+﻿  // NewUILuckyItemWnd.cpp: implementation of the CNewUILuckyItemWnd class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -18,31 +18,26 @@
 #include "Audio/DSPlaySound.h"
 #include "GameLogic/Items/MixMgr.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 CNewUILuckyItemWnd::CNewUILuckyItemWnd()
 {
-    memset(m_szSubject, 0, sizeof(m_szSubject)); // P4: was hardcoded 255 bytes but m_szSubject is wchar_t[255] = 510 bytes
-    m_eType = eLuckyItemType_None;
+    memset(m_szSubject, 0, 255);
+    m_eType           = eLuckyItemType_None;
     m_nMixEffectTimer = 0;
-    // 86-44: assigned only in OpeningProcess()/GetResult(); init so Render/Result before activation
-    // never reads garbage (m_nTextMaxLine as loop bound over m_sText[20], m_eEnd/m_eWndAction as switch keys).
-    m_nTextMaxLine = 0;
-    m_eEnd = eLuckyItem_None;
-    m_eWndAction = eLuckyItem_None;
 }
 
 CNewUILuckyItemWnd::~CNewUILuckyItemWnd()
 {
-    // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE was never defined anywhere, so this cleanup
-    // was compiled out entirely. Always release to avoid leaking the inventory control.
+#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     Release();
+#endif  // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
 }
 
 void CNewUILuckyItemWnd::SetFrame(void)
 {
-    float	fLineY = m_ptPos.y + m_sImgList[eFrame_T].s_fHgt;
-    float	fBottomY = fLineY + m_sImgList[eFrame_L].s_fHgt;
-    float	fLineX_R = m_ptPos.x + m_fSizeX - m_sImgList[eFrame_L].s_fWid;
+    float fLineY   = m_ptPos.y + m_sImgList[eFrame_T].s_fHgt;
+    float fBottomY = fLineY + m_sImgList[eFrame_L].s_fHgt;
+    float fLineX_R = m_ptPos.x + m_fSizeX - m_sImgList[eFrame_L].s_fWid;
 
     for (int i = 0; i < eFrame_END; i++)
     {
@@ -50,7 +45,7 @@ void CNewUILuckyItemWnd::SetFrame(void)
     }
 
     m_sFrame[eFrame_BG].s_ptPos = m_ptPos;
-    m_sFrame[eFrame_T].s_ptPos = m_ptPos;
+    m_sFrame[eFrame_T].s_ptPos  = m_ptPos;
 
     m_sFrame[eFrame_L].s_ptPos.x = m_ptPos.x;
     m_sFrame[eFrame_L].s_ptPos.y = fLineY;
@@ -64,19 +59,22 @@ void CNewUILuckyItemWnd::SetFrame(void)
 
 int CNewUILuckyItemWnd::GetLuckyItemRate(int _nType)
 {
-    if (_nType == eLuckyItemType_Trade)		return 100;
-    if (_nType == eLuckyItemType_Refinery)	return 50;
+    if (_nType == eLuckyItemType_Trade)
+        return 100;
+    if (_nType == eLuckyItemType_Refinery)
+        return 50;
 
     return 0;
 }
 
 void CNewUILuckyItemWnd::Render_Frame(void)
 {
-    int	i = 0;
+    int i = 0;
 
     for (i = 0; i < eFrame_END; i++)
     {
-        RenderImage(m_sFrame[i].s_Img.s_nImgIndex, m_sFrame[i].s_ptPos.x, m_sFrame[i].s_ptPos.y, m_sFrame[i].s_Img.s_fWid, m_sFrame[i].s_Img.s_fHgt);
+        RenderImage(m_sFrame[i].s_Img.s_nImgIndex, m_sFrame[i].s_ptPos.x, m_sFrame[i].s_ptPos.y,
+                    m_sFrame[i].s_Img.s_fWid, m_sFrame[i].s_Img.s_fHgt);
     }
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -96,12 +94,15 @@ void CNewUILuckyItemWnd::Render_Frame(void)
     float fTextY = m_ptPos.y + 18.0f + 190;
     for (i = 0; i < m_nTextMaxLine; i++)
     {
-        if (m_sText[i].s_nTextIndex < 0)	break;
-        if (m_sText[i].s_nTextIndex == 0)	continue;
+        if (m_sText[i].s_nTextIndex < 0)
+            break;
+        if (m_sText[i].s_nTextIndex == 0)
+            continue;
 
         g_pRenderText->SetFont(g_hFont);
         g_pRenderText->SetTextColor(m_sText[i].s_dwColor);
-        g_pRenderText->RenderText(m_ptPos.x + 10, fTextY + 11.0f * i, I18N::Game::Lookup(m_sText[i].s_nTextIndex), m_fSizeX - 20, 0, m_sText[i].s_nLine);
+        g_pRenderText->RenderText(m_ptPos.x + 10, fTextY + 11.0f * i, I18N::Game::Lookup(m_sText[i].s_nTextIndex),
+                                  m_fSizeX - 20, 0, m_sText[i].s_nLine);
     }
 }
 
@@ -110,10 +111,10 @@ STORAGE_TYPE CNewUILuckyItemWnd::SetMoveAction()
     m_eWndAction = eLuckyItem_Move;
     switch (m_eType)
     {
-    case eLuckyItemType_Trade:
-        return STORAGE_TYPE::LUCKYITEM_TRADE;
-    case eLuckyItemType_Refinery:
-        return STORAGE_TYPE::LUCKYITEM_REFINERY;
+        case eLuckyItemType_Trade:
+            return STORAGE_TYPE::LUCKYITEM_TRADE;
+        case eLuckyItemType_Refinery:
+            return STORAGE_TYPE::LUCKYITEM_REFINERY;
     }
 
     return STORAGE_TYPE::UNDEFINED;
@@ -144,7 +145,6 @@ void CNewUILuckyItemWnd::UI2DEffectCallback(LPVOID pClass, DWORD dwParamA, DWORD
 
 void CNewUILuckyItemWnd::RenderMixEffect()
 {
-    if (!m_pNewInventoryCtrl) return; // 86-37: Create-failure/SafeDelete path
     if (m_nMixEffectTimer <= 0)
     {
         return;
@@ -157,11 +157,8 @@ void CNewUILuckyItemWnd::RenderMixEffect()
     EnableAlphaBlend();
     for (int i = 0; i < (int)m_pNewInventoryCtrl->GetNumberOfItems(); ++i)
     {
-        ITEM* pItem = m_pNewInventoryCtrl->GetItem(i);
-        if (!pItem) continue; // 86-37: sparse item list -> GetItem(i) may be null
-        if (pItem->Type < 0 || pItem->Type >= MAX_ITEM) continue; // 86-37: bounds guard for ItemAttribute[Type]
-        int iWidth = ItemAttribute[pItem->Type].Width;
-        int iHeight = ItemAttribute[pItem->Type].Height;
+        int iWidth  = ItemAttribute[m_pNewInventoryCtrl->GetItem(i)->Type].Width;
+        int iHeight = ItemAttribute[m_pNewInventoryCtrl->GetItem(i)->Type].Height;
 
         for (int h = 0; h < iHeight; ++h)
         {
@@ -169,13 +166,13 @@ void CNewUILuckyItemWnd::RenderMixEffect()
             {
                 glColor3f((float)(rand() % 6 + 6) * 0.1f, (float)(rand() % 4 + 4) * 0.1f, 0.2f);
                 float Rotate = (float)((int)(WorldTime) % 100) * 20.f;
-                float Scale = 5.f + (rand() % 10);
-                float x = m_pNewInventoryCtrl->GetPos().x +
-                    (pItem->x + w) * INVENTORY_SQUARE_WIDTH +
-                    (rand() % INVENTORY_SQUARE_WIDTH);
+                float Scale  = 5.f + (rand() % 10);
+                float x      = m_pNewInventoryCtrl->GetPos().x +
+                          (m_pNewInventoryCtrl->GetItem(i)->x + w) * INVENTORY_SQUARE_WIDTH +
+                          (rand() % INVENTORY_SQUARE_WIDTH);
                 float y = m_pNewInventoryCtrl->GetPos().y +
-                    (pItem->y + h) * INVENTORY_SQUARE_WIDTH +
-                    (rand() % INVENTORY_SQUARE_WIDTH);
+                          (m_pNewInventoryCtrl->GetItem(i)->y + h) * INVENTORY_SQUARE_WIDTH +
+                          (rand() % INVENTORY_SQUARE_WIDTH);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, 0);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, Rotate);
                 RenderBitmapRotate(BITMAP_SHINY + 1, x, y, Scale * 3.f, Scale * 3.f, Rotate);
@@ -188,68 +185,70 @@ void CNewUILuckyItemWnd::RenderMixEffect()
 
 void CNewUILuckyItemWnd::GetResult(BYTE _byResult, int _nIndex, std::span<const BYTE> pbyItemPacket)
 {
-    int		nDefault = -1;
-    int		nMessage = nDefault;
-    int		nPlaySound = nDefault;
-    int		nAddInven = -1;
-    bool	bInitInven = false;
+    int  nDefault   = -1;
+    int  nMessage   = nDefault;
+    int  nPlaySound = nDefault;
+    int  nAddInven  = -1;
+    bool bInitInven = false;
 
     SEASON3B::CNewUIInventoryCtrl::DeletePickedItem();
 
     switch (m_eWndAction)
     {
-    case eLuckyItem_Move:
-        bInitInven = true;
-        nAddInven = _nIndex;
-        break;
-    case eLuckyItem_Act:
-        if (_byResult == 1)
-        {
+        case eLuckyItem_Move:
             bInitInven = true;
-            nAddInven = _nIndex;
-            nPlaySound = SOUND_JEWEL01;
-            m_nMixEffectTimer = 50;
-        }
-        else
-        {
-            if (m_eType == eLuckyItemType_Trade)
+            nAddInven  = _nIndex;
+            break;
+        case eLuckyItem_Act:
+            if (_byResult == 1)
             {
-                nMessage = 3303;
+                bInitInven        = true;
+                nAddInven         = _nIndex;
+                nPlaySound        = SOUND_JEWEL01;
+                m_nMixEffectTimer = 50;
             }
-            else if (m_eType == eLuckyItemType_Refinery)
+            else
             {
-                bInitInven = true;
+                if (m_eType == eLuckyItemType_Trade)
+                {
+                    nMessage = 3303;
+                }
+                else if (m_eType == eLuckyItemType_Refinery)
+                {
+                    bInitInven = true;
+                }
             }
-        }
 
-        m_eEnd = eLuckyItem_End;
-        SetFrame_Text(m_eEnd);
-        break;
+            m_eEnd = eLuckyItem_End;
+            SetFrame_Text(m_eEnd);
+            break;
     }
 
-    if (nMessage > nDefault)	g_pChatListBox->AddText(L"", I18N::Game::Lookup(nMessage), SEASON3B::TYPE_ERROR_MESSAGE);
-    if (nPlaySound > nDefault)	PlayBuffer(static_cast<ESound>(nPlaySound));
-    if (bInitInven)			g_pLuckyItemWnd->Process_InventoryCtrl_DeleteItem(-1);
-    if (nAddInven > nDefault)	Process_InventoryCtrl_InsertItem(nAddInven, pbyItemPacket);
+    if (nMessage > nDefault)
+        g_pChatListBox->AddText(L"", I18N::Game::Lookup(nMessage), SEASON3B::TYPE_ERROR_MESSAGE);
+    if (nPlaySound > nDefault)
+        PlayBuffer(static_cast<ESound>(nPlaySound));
+    if (bInitInven)
+        g_pLuckyItemWnd->Process_InventoryCtrl_DeleteItem(-1);
+    if (nAddInven > nDefault)
+        Process_InventoryCtrl_InsertItem(nAddInven, pbyItemPacket);
 
     m_eWndAction = eLuckyItem_None;
 }
 
 void CNewUILuckyItemWnd::LoadImg(void)
 {
-    float	fSizeX = m_fSizeX;
-    float	fSizeY = m_fSizeY;
-    float	fTop = 64.0f;
-    float	fBottom = 45.0f;
-    float	fLineX = 21.0f;
-    float	fLineY = fSizeY - fTop - fBottom;
+    float fSizeX  = m_fSizeX;
+    float fSizeY  = m_fSizeY;
+    float fTop    = 64.0f;
+    float fBottom = 45.0f;
+    float fLineX  = 21.0f;
+    float fLineY  = fSizeY - fTop - fBottom;
 
-    const wchar_t* szFileName[] = { L"Interface\\newui_msgbox_back.jpg",
-                             L"Interface\\newui_item_back04.tga",
-                             L"Interface\\newui_item_back02-L.tga",
-                             L"Interface\\newui_item_back02-R.tga",
-                             L"Interface\\newui_item_back03.tga",
-                             L"Interface\\newui_bt_mix.tga",
+    const wchar_t* szFileName[] = {
+        L"Interface\\newui_msgbox_back.jpg",   L"Interface\\newui_item_back04.tga",
+        L"Interface\\newui_item_back02-L.tga", L"Interface\\newui_item_back02-R.tga",
+        L"Interface\\newui_item_back03.tga",   L"Interface\\newui_bt_mix.tga",
     };
 
     m_sImgList[eFrame_BG].Set(CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK, fSizeX, fSizeY);
@@ -274,7 +273,8 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_LUCKYITEMWND, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::LUCKYITEM_TRADE, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 110, 8, 4))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::LUCKYITEM_TRADE, g_pNewUI3DRenderMng, g_pNewItemMng, this,
+                                             x + 15, y + 110, 8, 4))
     {
         SafeDelete(m_pNewInventoryCtrl);
         return false;
@@ -287,10 +287,10 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
     LoadImg();
     SetFrame();
 
-    float	fWidth = 0.0f;
-    float	fHeight = 0.0f;
+    float fWidth  = 0.0f;
+    float fHeight = 0.0f;
 
-    fWidth = m_sImgList[eImgList_MixBtn].s_fWid;
+    fWidth  = m_sImgList[eImgList_MixBtn].s_fWid;
     fHeight = m_sImgList[eImgList_MixBtn].s_fHgt;
     m_BtnMix.ChangeButtonImgState(true, m_sImgList[eImgList_MixBtn].s_nImgIndex, false);
     m_BtnMix.ChangeButtonInfo(m_ptPos.x + (m_fSizeX - fWidth) * 0.5f, m_ptPos.y + 380, fWidth, fHeight);
@@ -298,8 +298,8 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
     for (int i = 0; i < LUCKYITEMMAXLINE; i++)
     {
         m_sText[i].s_nTextIndex = -1;
-        m_sText[i].s_dwColor = 0;
-        m_sText[i].s_nLine = false;
+        m_sText[i].s_dwColor    = 0;
+        m_sText[i].s_nLine      = false;
     }
 
     Show(false);
@@ -309,9 +309,9 @@ bool CNewUILuckyItemWnd::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUILuckyItemWnd::Release()
 {
-    // Always release the inventory control (the LEM_FIX macro was never defined,
-    // which had compiled this safe-delete out and left a dangling pointer).
+#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     SafeDelete(m_pNewInventoryCtrl);
+#endif  // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     if (m_pNewUIMng)
     {
         m_pNewUIMng->RemoveUIObj(this);
@@ -324,30 +324,31 @@ void CNewUILuckyItemWnd::OpeningProcess(void)
     for (int i = 0; i < LUCKYITEMMAXLINE; i++)
     {
         m_sText[i].s_nTextIndex = -1;
-        m_sText[i].s_dwColor = 0;
-        m_sText[i].s_nLine = false;
+        m_sText[i].s_dwColor    = 0;
+        m_sText[i].s_nLine      = false;
     }
     m_nTextMaxLine = 0;
-    m_eEnd = eLuckyItem_None;
+    m_eEnd         = eLuckyItem_None;
     switch (m_eType)
     {
-    case eLuckyItemType_Trade:
-        mu_swprintf(m_szSubject, L"%ls", I18N::Game::ExchangeLuckyItem);
-        AddText(3291, 0xFF0000FF, RT3_SORT_LEFT), AddText(0), AddText(0), AddText(3292), AddText(3293), AddText(3294);
-        AddText(0), AddText(0);
-        AddText(2223, 0xFF00FFFF);
-        AddText(0);
-        AddText(3295, 0xFF0000FF), AddText(3296, 0xFF0000FF);
-        m_BtnMix.ChangeToolTipText(&I18N::Game::Combining, true); // Combine
-        break;
-    case eLuckyItemType_Refinery:
-        mu_swprintf(m_szSubject, L"%ls", I18N::Game::RefineLuckyItem);
-        AddText(2346, 0xFF0000FF, RT3_SORT_LEFT), AddText(0), AddText(0);
-        AddText(3300), AddText(3301);
-        AddText(0), AddText(0), AddText(0);
-        AddText(3302, 0xFF0000FF);
-        m_BtnMix.ChangeToolTipText(&I18N::Game::Refine, true); // Refine
-        break;
+        case eLuckyItemType_Trade:
+            mu_swprintf(m_szSubject, L"%ls", I18N::Game::ExchangeLuckyItem);
+            AddText(3291, 0xFF0000FF, RT3_SORT_LEFT), AddText(0), AddText(0), AddText(3292), AddText(3293),
+                AddText(3294);
+            AddText(0), AddText(0);
+            AddText(2223, 0xFF00FFFF);
+            AddText(0);
+            AddText(3295, 0xFF0000FF), AddText(3296, 0xFF0000FF);
+            m_BtnMix.ChangeToolTipText(&I18N::Game::Combining, true);  // 조합
+            break;
+        case eLuckyItemType_Refinery:
+            mu_swprintf(m_szSubject, L"%ls", I18N::Game::RefineLuckyItem);
+            AddText(2346, 0xFF0000FF, RT3_SORT_LEFT), AddText(0), AddText(0);
+            AddText(3300), AddText(3301);
+            AddText(0), AddText(0), AddText(0);
+            AddText(3302, 0xFF0000FF);
+            m_BtnMix.ChangeToolTipText(&I18N::Game::Refine, true);  // 제련
+            break;
     }
 }
 
@@ -355,27 +356,31 @@ void CNewUILuckyItemWnd::SetFrame_Text(eLUCKYITEM _eType)
 {
     switch (_eType)
     {
-    case eLuckyItem_End:
-        for (int i = 0; i < LUCKYITEMMAXLINE; i++)
-        {
-            m_sText[i].s_nTextIndex = -1;
-            m_sText[i].s_dwColor = 0;
-            m_sText[i].s_nLine = false;
-        }
-        m_nTextMaxLine = 0;
-        AddText(0);
-        if (m_eType == eLuckyItemType_Trade)			AddText(1888);
-        else if (m_eType == eLuckyItemType_Refinery) {}
-        break;
+        case eLuckyItem_End:
+            for (int i = 0; i < LUCKYITEMMAXLINE; i++)
+            {
+                m_sText[i].s_nTextIndex = -1;
+                m_sText[i].s_dwColor    = 0;
+                m_sText[i].s_nLine      = false;
+            }
+            m_nTextMaxLine = 0;
+            AddText(0);
+            if (m_eType == eLuckyItemType_Trade)
+                AddText(1888);
+            else if (m_eType == eLuckyItemType_Refinery)
+            {
+            }
+            break;
     }
 }
 
 void CNewUILuckyItemWnd::AddText(int _nGlobalTextIndex, DWORD _dwColor, int _nLine)
 {
-    if (m_nTextMaxLine >= LUCKYITEMMAXLINE)	return;
+    if (m_nTextMaxLine >= LUCKYITEMMAXLINE)
+        return;
     m_sText[m_nTextMaxLine].s_nTextIndex = _nGlobalTextIndex;
-    m_sText[m_nTextMaxLine].s_dwColor = _dwColor;
-    m_sText[m_nTextMaxLine].s_nLine = _nLine;
+    m_sText[m_nTextMaxLine].s_dwColor    = _dwColor;
+    m_sText[m_nTextMaxLine].s_nLine      = _nLine;
     m_nTextMaxLine++;
 }
 
@@ -383,7 +388,8 @@ bool CNewUILuckyItemWnd::ClosingProcess(void)
 {
     if (GetInventoryCtrl()->GetNumberOfItems() > 0 || CNewUIInventoryCtrl::GetPickedItem() != NULL)
     {
-        g_pChatListBox->AddText(L"", I18N::Game::CloseInventoryAfterMovingYourItemsInTheInventory, SEASON3B::TYPE_ERROR_MESSAGE);
+        g_pChatListBox->AddText(L"", I18N::Game::CloseInventoryAfterMovingYourItemsInTheInventory,
+                                SEASON3B::TYPE_ERROR_MESSAGE);
         return false;
     }
 
@@ -416,7 +422,8 @@ void CNewUILuckyItemWnd::Process_InventoryCtrl_DeleteItem(int iIndex)
 
 bool CNewUILuckyItemWnd::Check_LuckyItem_InWnd(void)
 {
-    if (GetInventoryCtrl()->GetNumberOfItems() > 0)	return true;
+    if (GetInventoryCtrl()->GetNumberOfItems() > 0)
+        return true;
     return false;
 }
 
@@ -424,12 +431,14 @@ bool CNewUILuckyItemWnd::Check_LuckyItem(ITEM* _pItem)
 {
     switch (m_eType)
     {
-    case eLuckyItemType_Trade:
-        if (Check_LuckyItem_Trade(_pItem))		return true;
-        break;
-    case eLuckyItemType_Refinery:
-        if (Check_LuckyItem_Refinery(_pItem))	return true;
-        break;
+        case eLuckyItemType_Trade:
+            if (Check_LuckyItem_Trade(_pItem))
+                return true;
+            break;
+        case eLuckyItemType_Refinery:
+            if (Check_LuckyItem_Refinery(_pItem))
+                return true;
+            break;
     }
 
     return false;
@@ -437,18 +446,24 @@ bool CNewUILuckyItemWnd::Check_LuckyItem(ITEM* _pItem)
 
 bool CNewUILuckyItemWnd::Check_LuckyItem_Trade(ITEM* _pItem)
 {
-    if (_pItem->Type >= ITEM_HELPER + 135 && _pItem->Type <= ITEM_HELPER + 145)		return true;
+    if (_pItem->Type >= ITEM_HELPER + 135 && _pItem->Type <= ITEM_HELPER + 145)
+        return true;
 
     return false;
 }
 
 bool CNewUILuckyItemWnd::Check_LuckyItem_Refinery(ITEM* _pItem)
 {
-    if (_pItem->Type >= ITEM_ARMOR + 62 && _pItem->Type <= ITEM_ARMOR + 72)		return true;
-    else if (_pItem->Type >= ITEM_HELM + 62 && _pItem->Type <= ITEM_HELM + 72)		return true;
-    else if (_pItem->Type >= ITEM_BOOTS + 62 && _pItem->Type <= ITEM_BOOTS + 72)		return true;
-    else if (_pItem->Type >= ITEM_GLOVES + 62 && _pItem->Type <= ITEM_GLOVES + 72)	return true;
-    else if (_pItem->Type >= ITEM_PANTS + 62 && _pItem->Type <= ITEM_PANTS + 72)		return true;
+    if (_pItem->Type >= ITEM_ARMOR + 62 && _pItem->Type <= ITEM_ARMOR + 72)
+        return true;
+    else if (_pItem->Type >= ITEM_HELM + 62 && _pItem->Type <= ITEM_HELM + 72)
+        return true;
+    else if (_pItem->Type >= ITEM_BOOTS + 62 && _pItem->Type <= ITEM_BOOTS + 72)
+        return true;
+    else if (_pItem->Type >= ITEM_GLOVES + 62 && _pItem->Type <= ITEM_GLOVES + 72)
+        return true;
+    else if (_pItem->Type >= ITEM_PANTS + 62 && _pItem->Type <= ITEM_PANTS + 72)
+        return true;
 
     return false;
 }
@@ -456,11 +471,13 @@ bool CNewUILuckyItemWnd::Check_LuckyItem_Refinery(ITEM* _pItem)
 bool CNewUILuckyItemWnd::Process_InventoryCtrl(void)
 {
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
-    if (!m_pNewInventoryCtrl)	return false;
-    if (!pPickedItem)			return false;
+    if (!m_pNewInventoryCtrl)
+        return false;
+    if (!pPickedItem)
+        return false;
 
     ITEM* pItemObj = pPickedItem->GetItem();
-    bool	bAct = Check_LuckyItem(pItemObj);
+    bool  bAct     = Check_LuckyItem(pItemObj);
 
     if (!bAct || Check_LuckyItem_InWnd())
     {
@@ -532,9 +549,9 @@ bool CNewUILuckyItemWnd::Process_BTN_Action(void)
     }
 #ifdef LEM_FIX_LUCKYITEM_SLOTCHECK
     if (g_pMyInventory->FindEmptySlot(4, 4) == -1)
-#else // LEM_FIX_LUCKYITEM_SLOTCHECK
+#else   // LEM_FIX_LUCKYITEM_SLOTCHECK
     if (g_pMyInventory->GetInventoryCtrl()->FindEmptySlot(4, 4) == -1)
-#endif // LEM_FIX_LUCKYITEM_SLOTCHECK
+#endif  // LEM_FIX_LUCKYITEM_SLOTCHECK
     {
         g_pChatListBox->AddText(L"", I18N::Game::InventorySpaceIsInsufficient, SEASON3B::TYPE_ERROR_MESSAGE);
         return false;
@@ -559,8 +576,8 @@ bool CNewUILuckyItemWnd::UpdateMouseEvent(void)
     {
         if (SEASON3B::IsPress(VK_RBUTTON))
         {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }

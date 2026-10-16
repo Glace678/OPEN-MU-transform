@@ -18,7 +18,7 @@ public:
 
     // General settings
     std::string GetLanguage() const;
-    void SetLanguage(const std::string& language);
+    void        SetLanguage(const std::string& language);
 
     // Item Editor column visibility settings
     bool GetColumnVisibility(const std::string& columnName, bool defaultValue = false) const;
@@ -30,7 +30,10 @@ public:
 
     // Skill Editor column visibility settings
     const std::map<std::string, bool>& GetSkillEditorColumnVisibility() const { return m_skillEditorColumnVisibility; }
-    void SetSkillEditorColumnVisibility(const std::map<std::string, bool>& visibility) { m_skillEditorColumnVisibility = visibility; }
+    void                               SetSkillEditorColumnVisibility(const std::map<std::string, bool>& visibility)
+    {
+        m_skillEditorColumnVisibility = visibility;
+    }
 
 private:
     CMuEditorConfig();
@@ -39,8 +42,8 @@ private:
     const char* m_configPath = "MuEditor/MuEditor.ini";
 
     // Settings storage
-    std::string m_language;
-    std::map<std::string, bool> m_columnVisibility;  // Item Editor columns
+    std::string                 m_language;
+    std::map<std::string, bool> m_columnVisibility;             // Item Editor columns
     std::map<std::string, bool> m_skillEditorColumnVisibility;  // Skill Editor columns
 
     // Helper functions for INI parsing
@@ -49,4 +52,4 @@ private:
 
 #define g_MuEditorConfig CMuEditorConfig::GetInstance()
 
-#endif // _EDITOR
+#endif  // _EDITOR

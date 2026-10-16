@@ -6,36 +6,26 @@
 
 CKeyGenerator g_KeyGenerator;
 
-static int KEY_GENERATE_FILTER[MAX_KEY_GENERATOR_FILTER][4] =
-{
-    { 321,	37531879,	8734,	32 },		// 0
-    { 873,	64374332,	3546,	87 },
-    { 537,	24798765,	5798,	32 },
-    { 654,	32498765,	3573,	73 },
-    { 546,	98465432,	6459,	12 },		// 4
-    { 987,	24654876,	5616,	54 },
-    { 357,	34599876,	8764,	98 },
-    { 665,	78641332,	6547,	54 },
-    { 813,	85132165,	8421,	98 },
-    { 454,	57684216,	6875,	45 }
-};
+static int KEY_GENERATE_FILTER[MAX_KEY_GENERATOR_FILTER][4] = {
+    {321, 37531879, 8734, 32},                                                                                   // 0
+    {873, 64374332, 3546, 87}, {537, 24798765, 5798, 32}, {654, 32498765, 3573, 73}, {546, 98465432, 6459, 12},  // 4
+    {987, 24654876, 5616, 54}, {357, 34599876, 8764, 98}, {665, 78641332, 6547, 54}, {813, 85132165, 8421, 98},
+    {454, 57684216, 6875, 45}};
 
-CKeyGenerator::CKeyGenerator()
-{
-}
+CKeyGenerator::CKeyGenerator() {}
 
-CKeyGenerator::~CKeyGenerator()
-{
-}
+CKeyGenerator::~CKeyGenerator() {}
 
 DWORD CKeyGenerator::GenerateKeyValue(DWORD dwKeyValue)
 {
     DWORD dwRegenerateKeyValue = 0;
-    BYTE btNumericValue = 0;
+    BYTE  btNumericValue       = 0;
 
     btNumericValue = dwKeyValue % MAX_KEY_GENERATOR_FILTER;
 
-    dwRegenerateKeyValue = dwKeyValue * KEY_GENERATE_FILTER[btNumericValue][0] + KEY_GENERATE_FILTER[btNumericValue][1] - KEY_GENERATE_FILTER[btNumericValue][2] / KEY_GENERATE_FILTER[btNumericValue][3];
+    dwRegenerateKeyValue = dwKeyValue * KEY_GENERATE_FILTER[btNumericValue][0] +
+                           KEY_GENERATE_FILTER[btNumericValue][1] -
+                           KEY_GENERATE_FILTER[btNumericValue][2] / KEY_GENERATE_FILTER[btNumericValue][3];
     return dwRegenerateKeyValue;
 }
 

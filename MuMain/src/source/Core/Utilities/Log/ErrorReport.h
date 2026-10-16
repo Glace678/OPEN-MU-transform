@@ -1,14 +1,14 @@
 #pragma once
 
-#define MAX_LENGTH_CPUNAME	( 128)
-#define MAX_LENGTH_OSINFO	( 128)
-#define MAX_DXVERSION		( 128)
+#define MAX_LENGTH_CPUNAME (128)
+#define MAX_LENGTH_OSINFO  (128)
+#define MAX_DXVERSION      (128)
 
 typedef struct
 {
     wchar_t m_lpszCPU[MAX_LENGTH_CPUNAME];
     wchar_t m_lpszOS[MAX_LENGTH_OSINFO];
-    int m_iMemorySize;
+    int     m_iMemorySize;
 
     wchar_t m_lpszDxVersion[MAX_DXVERSION];
 } ER_SystemInfo;
@@ -22,18 +22,22 @@ public:
     void Clear(void);
 
 protected:
-    HANDLE m_hFile;
+    HANDLE  m_hFile;
     wchar_t m_lpszFileName[MAX_PATH];
-    int m_iKey;
+    int     m_iKey;
+
 public:
     void Create(const wchar_t* lpszFileName);
     void Destroy(void);
+
 protected:
-    void CutHead(void);
+    void  CutHead(void);
     char* CheckHeadToCut(char* lpszBuffer, DWORD dwNumber);
 
 protected:
-    BOOL WriteFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
+    BOOL WriteFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten,
+                   LPOVERLAPPED lpOverlapped);
+
 public:
     void WriteDebugInfoStr(wchar_t* lpszToWrite);
     void Write(const wchar_t* lpszFormat, ...);
@@ -53,4 +57,3 @@ public:
 extern CErrorReport g_ErrorReport;
 
 void GetSystemInfo(ER_SystemInfo* si);
-

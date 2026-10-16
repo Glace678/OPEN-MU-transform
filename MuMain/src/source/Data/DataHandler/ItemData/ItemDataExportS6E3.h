@@ -11,4 +11,4 @@ public:
     static bool SaveLegacy(wchar_t* fileName);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

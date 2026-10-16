@@ -3,7 +3,7 @@
 #include "UI/Dialogs/MessageBoxPointer.h"
 
 using Pointer = UI::Dialogs::MessageBoxPointer;
-using Event = Pointer::Event;
+using Event   = Pointer::Event;
 
 TEST_CASE("message box first touch activates without a preceding hover frame")
 {
@@ -92,15 +92,13 @@ TEST_CASE("message box same pump down and up retain both edges and their own coo
         pointer.Bind(1, false, false);
         pointer.RecordButton(left, true, true, 17, 24);
         pointer.RecordButton(left, false, true, 31, 38);
-        CHECK(pointer.Update(1, false, false, left, false, !left)
-            == (left ? Event::LeftDown : Event::RightDown));
+        CHECK(pointer.Update(1, false, false, left, false, !left) == (left ? Event::LeftDown : Event::RightDown));
         int x = 0, y = 0;
         CHECK(pointer.EventPosition(x, y));
         CHECK(x == 17);
         CHECK(y == 24);
         CHECK(pointer.CapturesPointer());
-        CHECK(pointer.Update(1, false, false, false, false, false)
-            == (left ? Event::LeftUp : Event::RightUp));
+        CHECK(pointer.Update(1, false, false, false, false, false) == (left ? Event::LeftUp : Event::RightUp));
         CHECK(pointer.EventPosition(x, y));
         CHECK(x == 31);
         CHECK(y == 38);
@@ -165,7 +163,8 @@ TEST_CASE("message box focus loss or multitouch cancel discard pending raw confi
         pointer.Bind(1, false, false);
         pointer.RecordButton(true, true, true, 17, 24);
         pointer.RecordButton(true, false, true, 17, 24);
-        if (afterDown) CHECK(pointer.Update(1, true, false, true, false, false) == Event::LeftDown);
+        if (afterDown)
+            CHECK(pointer.Update(1, true, false, true, false, false) == Event::LeftDown);
         pointer.Cancel();
         pointer.RecordButton(true, false, true, 17, 24);
         CHECK(pointer.Update(1, true, false, true, false, false) == Event::None);

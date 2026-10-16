@@ -16,16 +16,10 @@ class CSkillEditorTable
 public:
     CSkillEditorTable();
     ~CSkillEditorTable();
-    // Non-copyable (owns m_pColumns via raw new/delete).
-    CSkillEditorTable(const CSkillEditorTable&) = delete;
-    CSkillEditorTable& operator=(const CSkillEditorTable&) = delete;
 
     // Main render function
-    void Render(const std::string& searchFilter,
-                std::map<std::string, bool>& columnVisibility,
-                int& selectedRow,
-                bool freezeColumns,
-                bool showHoverTooltip);
+    void Render(const std::string& searchFilter, std::map<std::string, bool>& columnVisibility, int& selectedRow,
+                bool freezeColumns, bool showHoverTooltip);
 
     // Request scroll to a specific skill index
     static void RequestScrollToIndex(int index);
@@ -36,8 +30,8 @@ public:
 private:
     // Filter state
     std::vector<int> m_filteredSkills;
-    std::string m_lastSearchFilter;
-    bool m_isInitialized;
+    std::string      m_lastSearchFilter;
+    bool             m_isInitialized;
 
     // Column renderer
     CSkillEditorColumns* m_pColumns;
@@ -46,4 +40,4 @@ private:
     static int s_scrollToIndex;
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

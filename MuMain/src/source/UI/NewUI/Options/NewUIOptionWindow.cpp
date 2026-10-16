@@ -82,7 +82,7 @@ static const struct { const char* code; const wchar_t* label; const wchar_t* dat
     { "fr",    L"Fran\u00e7ais", L"Eng" },                                                  // Français
     { "id",    L"Bahasa Indonesia", L"Ind" },
     { "ja",    L"\u65E5\u672C\u8A9E", L"Jpn" },                                       // 日本語
-    { "ko",    L"\ud55c\uad6d\uc5b4", L"Eng" },                                      // Korean (Data/Local fallback)
+    { "ko",    L"\ud55c\uad6d\uc5b4", L"Eng" },                                      // 한국어 (Data/Local fallback)
     { "pl",    L"Polski", L"Pol" },
     { "pt",    L"Portugu\u00eas", L"Por" },                                                // Português
     { "ru",    L"\u0420\u0443\u0441\u0441\u043a\u0438\u0439", L"Rus" },                   // Русский
@@ -206,61 +206,25 @@ static const wchar_t* const* GetGamepadControlLabels()
 {
     // SDL names controls by physical position. Each label also shows the
     // familiar legends used by Xbox, PlayStation, and Nintendo controllers.
-    // Fully localized via resx (keys GamepadCtrl*); enum order matches
-    // Core::Input::GamepadControl in GamepadBindings.cpp.
-    static const wchar_t* labels[
-        static_cast<std::size_t>(Core::Input::GamepadControl::Count)] = {};
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::South)]        = I18N::Game::GamepadCtrlSouth;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::East)]         = I18N::Game::GamepadCtrlEast;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::West)]         = I18N::Game::GamepadCtrlWest;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::North)]        = I18N::Game::GamepadCtrlNorth;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::Back)]        = I18N::Game::GamepadCtrlBack;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::Start)]        = I18N::Game::GamepadCtrlStart;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftStick)]    = I18N::Game::GamepadCtrlLeftStick;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightStick)]   = I18N::Game::GamepadCtrlRightStick;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftShoulder)]  = I18N::Game::GamepadCtrlLeftShoulder;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightShoulder)]= I18N::Game::GamepadCtrlRightShoulder;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadUp)]       = I18N::Game::GamepadCtrlDpadUp;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadDown)]      = I18N::Game::GamepadCtrlDpadDown;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadLeft)]     = I18N::Game::GamepadCtrlDpadLeft;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadRight)]    = I18N::Game::GamepadCtrlDpadRight;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftTrigger)]  = I18N::Game::GamepadCtrlLeftTrigger;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightTrigger)] = I18N::Game::GamepadCtrlRightTrigger;
-    return labels;
-}
-
-// Compact labels for the 16-row "current mapping" summary column (narrow
-// right-aligned cell). Kept short so they never wrap or get cropped.
-static const wchar_t* const* GetGamepadControlShortLabels()
-{
-    static const wchar_t* labels[
-        static_cast<std::size_t>(Core::Input::GamepadControl::Count)] = {};
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::South)]        = I18N::Game::GamepadCtrlShortSouth;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::East)]         = I18N::Game::GamepadCtrlShortEast;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::West)]         = I18N::Game::GamepadCtrlShortWest;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::North)]        = I18N::Game::GamepadCtrlShortNorth;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::Back)]        = I18N::Game::GamepadCtrlShortBack;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::Start)]        = I18N::Game::GamepadCtrlShortStart;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftStick)]    = I18N::Game::GamepadCtrlShortLeftStick;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightStick)]   = I18N::Game::GamepadCtrlShortRightStick;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftShoulder)]  = I18N::Game::GamepadCtrlShortLeftShoulder;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightShoulder)]= I18N::Game::GamepadCtrlShortRightShoulder;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadUp)]       = I18N::Game::GamepadCtrlShortDpadUp;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadDown)]      = I18N::Game::GamepadCtrlShortDpadDown;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadLeft)]     = I18N::Game::GamepadCtrlShortDpadLeft;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::DpadRight)]    = I18N::Game::GamepadCtrlShortDpadRight;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::LeftTrigger)]  = I18N::Game::GamepadCtrlShortLeftTrigger;
-    labels[static_cast<std::size_t>(Core::Input::GamepadControl::RightTrigger)] = I18N::Game::GamepadCtrlShortRightTrigger;
-    return labels;
+    static constexpr const wchar_t* Labels[] = {
+        L"South: A / Cross / B", L"East: B / Circle / A",
+        L"West: X / Square / Y", L"North: Y / Triangle / X",
+        L"View / Share / Minus", L"Menu / Options / Plus",
+        L"L3", L"R3", L"LB / L1", L"RB / R1",
+        L"D-pad Up", L"D-pad Down", L"D-pad Left", L"D-pad Right",
+        L"LT / L2", L"RT / R2",
+    };
+    static_assert(std::size(Labels) == static_cast<std::size_t>(Core::Input::GamepadControl::Count));
+    return Labels;
 }
 
 static const wchar_t* GetGamepadFamilyLabel(Core::Input::GamepadIconFamily family)
 {
     switch (family)
     {
-    case Core::Input::GamepadIconFamily::Xbox: return I18N::Game::GamepadFamilyXbox;
-    case Core::Input::GamepadIconFamily::PlayStation: return I18N::Game::GamepadFamilyPlayStation;
-    case Core::Input::GamepadIconFamily::Nintendo: return I18N::Game::GamepadFamilyNintendo;
+    case Core::Input::GamepadIconFamily::Xbox: return L"Xbox A/B/X/Y";
+    case Core::Input::GamepadIconFamily::PlayStation: return L"PlayStation Cross/Circle";
+    case Core::Input::GamepadIconFamily::Nintendo: return L"Nintendo B/A/Y/X";
     default: return I18N::Game::GenericController;
     }
 }
@@ -387,12 +351,8 @@ namespace
     constexpr int POINTER_SPEED_SLIDER_Y_LOCAL = 258;
     constexpr int HAPTIC_INTENSITY_SLIDER_Y_LOCAL = 330;
 
-    // Two 70px test buttons centered in the advanced panel content gutter
-    // (190+21 .. 380-21 = 211..359). Previously +20/+100 put the long button
-    // edge at 360, overlapping the right decorative slat (359..380) and
-    // looking cropped. +21/+99 keeps both clear of the slats with an 8px gap.
-    constexpr int SHORT_TEST_X_LOCAL = ADVANCED_X_LOCAL + 21;
-    constexpr int LONG_TEST_X_LOCAL = ADVANCED_X_LOCAL + 99;
+    constexpr int SHORT_TEST_X_LOCAL = ADVANCED_X_LOCAL + 20;
+    constexpr int LONG_TEST_X_LOCAL = ADVANCED_X_LOCAL + 100;
     constexpr int TEST_BUTTON_Y_LOCAL = 390;
     constexpr int TEST_BUTTON_WIDTH = 70;
     constexpr int TEST_BUTTON_HEIGHT = 16;
@@ -882,7 +842,6 @@ void SEASON3B::CNewUIOptionWindow::InitGamepadMappingCombos()
 void SEASON3B::CNewUIOptionWindow::SetButtonInfo()
 {
     m_BtnClose.ChangeTextBackColor(RGBA(255, 255, 255, 0));
-    m_BtnClose.ChangeText(&I18N::Game::Close);
     m_BtnClose.ChangeButtonImgState(true, IMAGE_OPTION_BTN_CLOSE, true);
     m_BtnClose.ChangeButtonInfo(
         m_Pos.x + CLOSE_BUTTON_X_LOCAL,
@@ -1968,7 +1927,7 @@ void SEASON3B::CNewUIOptionWindow::RenderContents()
             g_pRenderText->SetTextColor(255, 255, 255, 255);
             g_pRenderText->RenderText(
                 mappingX + 117, rowY,
-                GetGamepadControlShortLabels()[static_cast<std::size_t>(bindings[index])],
+                Core::Input::GamepadControlConfigName(bindings[index]),
                 61, 0, RT3_SORT_RIGHT);
         }
     }

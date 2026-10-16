@@ -22,32 +22,30 @@
 #include "../MuEditor/Core/MuEditorCore.h"
 #endif
 
-#define	DOCK_EXTENT		10
+#define DOCK_EXTENT 10
 
 //#define	UIM_TS_BG_BLACK		0
-#define	UIM_TS_BACK0		0
-#define	UIM_TS_BACK1		1
-#define	UIM_TS_121518		3
-#define UIM_TS_BACK2		5
-#define UIM_TS_BACK3		6
-#define UIM_TS_BACK4		7
-#define UIM_TS_BACK5		8
-#define UIM_TS_BACK6		9
-#define UIM_TS_BACK7		10
-#define UIM_TS_BACK8		11
-#define UIM_TS_BACK9		12
-#define	UIM_TS_MAX			13
+#define UIM_TS_BACK0  0
+#define UIM_TS_BACK1  1
+#define UIM_TS_121518 3
+#define UIM_TS_BACK2  5
+#define UIM_TS_BACK3  6
+#define UIM_TS_BACK4  7
+#define UIM_TS_BACK5  8
+#define UIM_TS_BACK6  9
+#define UIM_TS_BACK7  10
+#define UIM_TS_BACK8  11
+#define UIM_TS_BACK9  12
+#define UIM_TS_MAX    13
 
 CUIMng::CUIMng()
 {
-    m_asprTitle = NULL;
-    m_pgbLoding = NULL;
+    m_asprTitle     = NULL;
+    m_pgbLoding     = NULL;
     m_pLoadingScene = NULL;
 }
 
-CUIMng::~CUIMng()
-{
-}
+CUIMng::~CUIMng() {}
 
 CUIMng& CUIMng::Instance()
 {
@@ -63,64 +61,48 @@ void CUIMng::CreateTitleSceneUI()
     // are 400-wide pieces, the middle art is 512-wide pieces). Map that whole
     // canvas into the 640x480 reference art space once; the resolution scale
     // then takes it crisply to the actual window size.
-    constexpr float kCanvasSX = (float)REFERENCE_WIDTH / 1280.0f;  // 0.5
-    constexpr float kCanvasSY = (float)REFERENCE_HEIGHT / 1024.0f; // 0.46875
+    constexpr float kCanvasSX = (float)REFERENCE_WIDTH / 1280.0f;   // 0.5
+    constexpr float kCanvasSY = (float)REFERENCE_HEIGHT / 1024.0f;  // 0.46875
 
     m_asprTitle = new CSprite[UIM_TS_MAX];
 
-    m_asprTitle[UIM_TS_BACK0].Create(int(400 * kCanvasSX), int(69 * kCanvasSY),
-        BITMAP_TITLE);
+    m_asprTitle[UIM_TS_BACK0].Create(int(400 * kCanvasSX), int(69 * kCanvasSY), BITMAP_TITLE);
     m_asprTitle[UIM_TS_BACK0].SetPositionArt(0, 0);
 
-    m_asprTitle[UIM_TS_BACK1].Create(int(400 * kCanvasSX), int(69 * kCanvasSY),
-        BITMAP_TITLE + 1);
+    m_asprTitle[UIM_TS_BACK1].Create(int(400 * kCanvasSX), int(69 * kCanvasSY), BITMAP_TITLE + 1);
     m_asprTitle[UIM_TS_BACK1].SetPositionArt(400 * kCanvasSX, 0);
 
-    m_asprTitle[UIM_TS_BACK2].Create(int(400 * kCanvasSX), int(100 * kCanvasSY),
-        BITMAP_TITLE + 6);
+    m_asprTitle[UIM_TS_BACK2].Create(int(400 * kCanvasSX), int(100 * kCanvasSY), BITMAP_TITLE + 6);
     m_asprTitle[UIM_TS_BACK2].SetPositionArt(0, 500 * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK3].Create(int(400 * kCanvasSX), int(100 * kCanvasSY),
-        BITMAP_TITLE + 7);
+    m_asprTitle[UIM_TS_BACK3].Create(int(400 * kCanvasSX), int(100 * kCanvasSY), BITMAP_TITLE + 7);
     m_asprTitle[UIM_TS_BACK3].SetPositionArt(400 * kCanvasSX, 500 * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK4].Create(int(512 * kCanvasSX), int(512 * kCanvasSY),
-        BITMAP_TITLE + 8);
+    m_asprTitle[UIM_TS_BACK4].Create(int(512 * kCanvasSX), int(512 * kCanvasSY), BITMAP_TITLE + 8);
     m_asprTitle[UIM_TS_BACK4].SetPositionArt(0, 119 * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK5].Create(int(512 * kCanvasSX), int(512 * kCanvasSY),
-        BITMAP_TITLE + 9);
+    m_asprTitle[UIM_TS_BACK5].Create(int(512 * kCanvasSX), int(512 * kCanvasSY), BITMAP_TITLE + 9);
     m_asprTitle[UIM_TS_BACK5].SetPositionArt(512 * kCanvasSX, 119 * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK6].Create(int(256 * kCanvasSX), int(512 * kCanvasSY),
-        BITMAP_TITLE + 10);
+    m_asprTitle[UIM_TS_BACK6].Create(int(256 * kCanvasSX), int(512 * kCanvasSY), BITMAP_TITLE + 10);
     m_asprTitle[UIM_TS_BACK6].SetPositionArt(1024 * kCanvasSX, 119 * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK7].Create(int(512 * kCanvasSX), int(223 * kCanvasSY),
-        BITMAP_TITLE + 11);
+    m_asprTitle[UIM_TS_BACK7].Create(int(512 * kCanvasSX), int(223 * kCanvasSY), BITMAP_TITLE + 11);
     m_asprTitle[UIM_TS_BACK7].SetPositionArt(0, (512 + 119) * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK8].Create(int(512 * kCanvasSX), int(223 * kCanvasSY),
-        BITMAP_TITLE + 12);
-    m_asprTitle[UIM_TS_BACK8].SetPositionArt(512 * kCanvasSX,
-        (512 + 119) * kCanvasSY);
+    m_asprTitle[UIM_TS_BACK8].Create(int(512 * kCanvasSX), int(223 * kCanvasSY), BITMAP_TITLE + 12);
+    m_asprTitle[UIM_TS_BACK8].SetPositionArt(512 * kCanvasSX, (512 + 119) * kCanvasSY);
 
-    m_asprTitle[UIM_TS_BACK9].Create(int(256 * kCanvasSX), int(223 * kCanvasSY),
-        BITMAP_TITLE + 13);
-    m_asprTitle[UIM_TS_BACK9].SetPositionArt(1024 * kCanvasSX,
-        (512 + 119) * kCanvasSY);
+    m_asprTitle[UIM_TS_BACK9].Create(int(256 * kCanvasSX), int(223 * kCanvasSY), BITMAP_TITLE + 13);
+    m_asprTitle[UIM_TS_BACK9].SetPositionArt(1024 * kCanvasSX, (512 + 119) * kCanvasSY);
 
-
-    m_asprTitle[UIM_TS_121518].Create(int(256 * kCanvasSX),
-        int(206 * kCanvasSY), BITMAP_TITLE + 3);
-    m_asprTitle[UIM_TS_121518].SetPositionArt(544 * kCanvasSX,
-        60 * kCanvasSY);
+    m_asprTitle[UIM_TS_121518].Create(int(256 * kCanvasSX), int(206 * kCanvasSY), BITMAP_TITLE + 3);
+    m_asprTitle[UIM_TS_121518].SetPositionArt(544 * kCanvasSX, 60 * kCanvasSY);
 
     m_pgbLoding = new CGaugeBar;
 
-    RECT rc = { 0, 0, int(656 * kCanvasSX), int(15 * kCanvasSY) };
-    m_pgbLoding->Create(int(4 * kCanvasSX), int(15 * kCanvasSY),
-        BITMAP_TITLE + 5, &rc);
+    RECT rc = {0, 0, int(656 * kCanvasSX), int(15 * kCanvasSY)};
+    m_pgbLoding->Create(int(4 * kCanvasSX), int(15 * kCanvasSY), BITMAP_TITLE + 5, &rc);
 
     m_pgbLoding->SetPositionArt(72 * kCanvasSX, 540 * kCanvasSY);
     for (int i = 0; i < UIM_TS_MAX; ++i)
@@ -168,10 +150,10 @@ void CUIMng::RenderTitleSceneUI(HDC hDC, DWORD dwNow, DWORD dwTotal)
 
 void CUIMng::Create()
 {
-    m_bCursorOnUI = false;
+    m_bCursorOnUI    = false;
     m_bBlockCharMove = false;
-    m_bWinActive = false;
-    m_nScene = UIM_SCENE_NONE;
+    m_bWinActive     = false;
+    m_nScene         = UIM_SCENE_NONE;
 
     return;
 }
@@ -201,17 +183,15 @@ void CUIMng::CreateLoginScene()
 
     m_CharInfoBalloonMng.Release();
 
-    CInput& rInput = CInput::Instance();
-    const float rateX = CSprite::ResolutionScaleX();
-    const float rateY = CSprite::ResolutionScaleY();
+    CInput&     rInput = CInput::Instance();
+    const float rateX  = CSprite::ResolutionScaleX();
+    const float rateY  = CSprite::ResolutionScaleY();
     // 800x600-authored constants mapped to the 640x480 art canvas.
     constexpr float kSceneCanvas = (float)REFERENCE_WIDTH / 800.0f;
 
     m_MsgWin.Create();
     m_WinList.AddHead(&m_MsgWin);
-    m_MsgWin.SetPosition(
-        int((REFERENCE_WIDTH - 352) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - 113) / 2.0f * rateY));
+    m_MsgWin.SetPosition(int((REFERENCE_WIDTH - 352) / 2.0f * rateX), int((REFERENCE_HEIGHT - 113) / 2.0f * rateY));
 
     m_SysMenuWin.Create();
     m_WinList.AddHead(&m_SysMenuWin);
@@ -224,40 +204,36 @@ void CUIMng::CreateLoginScene()
 
     const float artBaseY = 567.0f * kSceneCanvas;
     m_LoginMainWin.SetPositionArt(30.0f * kSceneCanvas,
-        artBaseY - m_LoginMainWin.GetHeight() / rateY - 11.0f * kSceneCanvas);
+                                  artBaseY - m_LoginMainWin.GetHeight() / rateY - 11.0f * kSceneCanvas);
 
     m_ServerSelWin.Create();
     m_WinList.AddHead(&m_ServerSelWin);
-    m_ServerSelWin.SetPosition(
-        int((REFERENCE_WIDTH - m_ServerSelWin.GetWidth() / rateX) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - m_ServerSelWin.GetHeight() / rateY) / 2.0f * rateY));
+    m_ServerSelWin.SetPosition(int((REFERENCE_WIDTH - m_ServerSelWin.GetWidth() / rateX) / 2.0f * rateX),
+                               int((REFERENCE_HEIGHT - m_ServerSelWin.GetHeight() / rateY) / 2.0f * rateY));
 
     m_LoginWin.Create();
     m_WinList.AddHead(&m_LoginWin);
     // Vertically centered in the art canvas.
-    m_LoginWin.SetPosition(
-        int((REFERENCE_WIDTH - m_LoginWin.GetWidth() / rateX) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - m_LoginWin.GetHeight() / rateY) / 2.0f * rateY));
+    m_LoginWin.SetPosition(int((REFERENCE_WIDTH - m_LoginWin.GetWidth() / rateX) / 2.0f * rateX),
+                           int((REFERENCE_HEIGHT - m_LoginWin.GetHeight() / rateY) / 2.0f * rateY));
 
     m_RegisterWin.Create();
     m_WinList.AddHead(&m_RegisterWin);
-    m_RegisterWin.SetPosition(
-        int((REFERENCE_WIDTH - m_RegisterWin.GetWidth() / rateX) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - m_RegisterWin.GetHeight() / rateY) / 2.0f * rateY));
+    m_RegisterWin.SetPosition(int((REFERENCE_WIDTH - m_RegisterWin.GetWidth() / rateX) / 2.0f * rateX),
+                              int((REFERENCE_HEIGHT - m_RegisterWin.GetHeight() / rateY) / 2.0f * rateY));
     m_RegisterWin.Show(FALSE);  // created hidden; opened from the server/login windows
 
     m_PasswordServiceWin.Create();
     m_WinList.AddHead(&m_PasswordServiceWin);
-    m_PasswordServiceWin.SetPosition(
-        int((REFERENCE_WIDTH - m_PasswordServiceWin.GetWidth() / rateX) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - m_PasswordServiceWin.GetHeight() / rateY) / 2.0f * rateY));
+    m_PasswordServiceWin.SetPosition(int((REFERENCE_WIDTH - m_PasswordServiceWin.GetWidth() / rateX) / 2.0f * rateX),
+                                     int((REFERENCE_HEIGHT - m_PasswordServiceWin.GetHeight() / rateY) / 2.0f * rateY));
     m_PasswordServiceWin.Show(FALSE);  // opened from the login window
 
     m_CreditWin.Create();
     m_WinList.AddHead(&m_CreditWin);
 
     m_bSysMenuWinShow = false;
-    m_nScene = UIM_SCENE_LOGIN;
+    m_nScene          = UIM_SCENE_LOGIN;
 }
 
 void CUIMng::CreateCharacterScene()
@@ -273,17 +249,13 @@ void CUIMng::CreateCharacterScene()
 
     m_MsgWin.Create();
     m_WinList.AddHead(&m_MsgWin);
-    m_MsgWin.SetPosition(
-        int((REFERENCE_WIDTH - 352) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - 113) / 2.0f * rateY));
+    m_MsgWin.SetPosition(int((REFERENCE_WIDTH - 352) / 2.0f * rateX), int((REFERENCE_HEIGHT - 113) / 2.0f * rateY));
 
     m_ServerMsgWin.Create();
     m_WinList.AddHead(&m_ServerMsgWin);
     // 800x600-authored constants mapped to the 640x480 art canvas.
     constexpr float kCharSceneCanvas = (float)REFERENCE_WIDTH / 800.0f;
-    m_ServerMsgWin.SetPosition(
-        int(10.0f * kCharSceneCanvas * rateX),
-        int((31.0f + 10.0f) * kCharSceneCanvas * rateY));
+    m_ServerMsgWin.SetPosition(int(10.0f * kCharSceneCanvas * rateX), int((31.0f + 10.0f) * kCharSceneCanvas * rateY));
 
     m_SysMenuWin.Create();
     m_WinList.AddHead(&m_SysMenuWin);
@@ -295,15 +267,14 @@ void CUIMng::CreateCharacterScene()
     m_WinList.AddHead(&m_CharSelMainWin);
     const float nArtBaseY = 567.0f * kCharSceneCanvas;
     m_CharSelMainWin.SetPositionArt(22.0f * kCharSceneCanvas,
-        nArtBaseY - m_CharSelMainWin.GetHeight() / CSprite::ResolutionScaleY()
-            - 11.0f * kCharSceneCanvas);
+                                    nArtBaseY - m_CharSelMainWin.GetHeight() / CSprite::ResolutionScaleY() -
+                                        11.0f * kCharSceneCanvas);
 
     m_CharMakeWin.Create();
     m_WinList.AddHead(&m_CharMakeWin);
 
-    m_CharMakeWin.SetPosition(
-        int((REFERENCE_WIDTH - 454) / 2.0f * rateX),
-        int((REFERENCE_HEIGHT - 406) / 2.0f * rateY));
+    m_CharMakeWin.SetPosition(int((REFERENCE_WIDTH - 454) / 2.0f * rateX),
+                              int((REFERENCE_HEIGHT - 406) / 2.0f * rateY));
 
     m_CharSelMainWin.UpdateDisplay();
     m_CharInfoBalloonMng.UpdateDisplay();
@@ -311,7 +282,7 @@ void CUIMng::CreateCharacterScene()
     ShowWin(&m_CharSelMainWin);
 
     m_bSysMenuWinShow = false;
-    m_nScene = UIM_SCENE_CHARACTER;
+    m_nScene          = UIM_SCENE_CHARACTER;
 }
 
 void CUIMng::CreateMainScene()
@@ -337,16 +308,16 @@ void CUIMng::RepositionSceneUI()
     // current visibility here and restore it right after.
     if (m_nScene == UIM_SCENE_LOGIN)
     {
-        const bool wasShown_MsgWin       = m_MsgWin.IsShow();
-        const bool wasShown_SysMenuWin   = m_SysMenuWin.IsShow();
-        const bool wasShown_OptionWin    = m_OptionWin.IsShow();
-        const bool wasShown_LoginMainWin = m_LoginMainWin.IsShow();
-        const bool wasShown_ServerSelWin = m_ServerSelWin.IsShow();
-        const bool wasShown_LoginWin     = m_LoginWin.IsShow();
-        const bool wasShown_RegisterWin  = m_RegisterWin.IsShow();
+        const bool wasShown_MsgWin             = m_MsgWin.IsShow();
+        const bool wasShown_SysMenuWin         = m_SysMenuWin.IsShow();
+        const bool wasShown_OptionWin          = m_OptionWin.IsShow();
+        const bool wasShown_LoginMainWin       = m_LoginMainWin.IsShow();
+        const bool wasShown_ServerSelWin       = m_ServerSelWin.IsShow();
+        const bool wasShown_LoginWin           = m_LoginWin.IsShow();
+        const bool wasShown_RegisterWin        = m_RegisterWin.IsShow();
         const bool wasShown_PasswordServiceWin = m_PasswordServiceWin.IsShow();
-        const bool wasShown_CreditWin    = m_CreditWin.IsShow();
-        const auto loginEntry = m_LoginWin.CaptureResizeState();
+        const bool wasShown_CreditWin          = m_CreditWin.IsShow();
+        const auto loginEntry                  = m_LoginWin.CaptureResizeState();
         if (loginEntry.focus != CLoginWin::EntryFocus::None)
             CUITextInputBox::ReleaseFocus();
 
@@ -356,15 +327,24 @@ void CUIMng::RepositionSceneUI()
         // elements like server/group buttons read `CWin::m_bShow` of their
         // parent when `UpdateDisplay()` decides which sub-elements to show.
         // If the parent is still hidden at that moment, nothing renders.
-        if (wasShown_MsgWin)       ShowWin(&m_MsgWin);
-        if (wasShown_SysMenuWin)   ShowWin(&m_SysMenuWin);
-        if (wasShown_OptionWin)    ShowWin(&m_OptionWin);
-        if (wasShown_LoginMainWin) ShowWin(&m_LoginMainWin);
-        if (wasShown_ServerSelWin) ShowWin(&m_ServerSelWin);
-        if (wasShown_LoginWin)     ShowWin(&m_LoginWin);
-        if (wasShown_RegisterWin)  ShowWin(&m_RegisterWin);
-        if (wasShown_PasswordServiceWin) ShowWin(&m_PasswordServiceWin);
-        if (wasShown_CreditWin)    ShowWin(&m_CreditWin);
+        if (wasShown_MsgWin)
+            ShowWin(&m_MsgWin);
+        if (wasShown_SysMenuWin)
+            ShowWin(&m_SysMenuWin);
+        if (wasShown_OptionWin)
+            ShowWin(&m_OptionWin);
+        if (wasShown_LoginMainWin)
+            ShowWin(&m_LoginMainWin);
+        if (wasShown_ServerSelWin)
+            ShowWin(&m_ServerSelWin);
+        if (wasShown_LoginWin)
+            ShowWin(&m_LoginWin);
+        if (wasShown_RegisterWin)
+            ShowWin(&m_RegisterWin);
+        if (wasShown_PasswordServiceWin)
+            ShowWin(&m_PasswordServiceWin);
+        if (wasShown_CreditWin)
+            ShowWin(&m_CreditWin);
         m_LoginWin.RestoreResizeState(loginEntry);
 
         // Re-populate the server / server-group buttons from the existing
@@ -441,27 +421,24 @@ void CUIMng::CheckDockWin()
 
     pMovWin->SetDocking(false);
 
-    RECT rcMovWin = { pMovWin->GetTempXPos(), pMovWin->GetTempYPos(),
-        pMovWin->GetTempXPos() + pMovWin->GetWidth(),
-        pMovWin->GetTempYPos() + pMovWin->GetHeight() };
+    RECT rcMovWin = {pMovWin->GetTempXPos(), pMovWin->GetTempYPos(), pMovWin->GetTempXPos() + pMovWin->GetWidth(),
+                     pMovWin->GetTempYPos() + pMovWin->GetHeight()};
 
-    RECT rcDock[4] =
-    {
-        { rcMovWin.left - DOCK_EXTENT, rcMovWin.top - DOCK_EXTENT,
-            rcMovWin.left + DOCK_EXTENT, rcMovWin.top + DOCK_EXTENT },
-        { rcMovWin.right - DOCK_EXTENT, rcMovWin.top - DOCK_EXTENT,
-            rcMovWin.right + DOCK_EXTENT, rcMovWin.top + DOCK_EXTENT },
-        { rcMovWin.left - DOCK_EXTENT, rcMovWin.bottom - DOCK_EXTENT,
-            rcMovWin.left + DOCK_EXTENT, rcMovWin.bottom + DOCK_EXTENT },
-        { rcMovWin.right - DOCK_EXTENT, rcMovWin.bottom - DOCK_EXTENT,
-            rcMovWin.right + DOCK_EXTENT, rcMovWin.bottom + DOCK_EXTENT }
-    };
+    RECT rcDock[4] = {{rcMovWin.left - DOCK_EXTENT, rcMovWin.top - DOCK_EXTENT, rcMovWin.left + DOCK_EXTENT,
+                       rcMovWin.top + DOCK_EXTENT},
+                      {rcMovWin.right - DOCK_EXTENT, rcMovWin.top - DOCK_EXTENT, rcMovWin.right + DOCK_EXTENT,
+                       rcMovWin.top + DOCK_EXTENT},
+                      {rcMovWin.left - DOCK_EXTENT, rcMovWin.bottom - DOCK_EXTENT, rcMovWin.left + DOCK_EXTENT,
+                       rcMovWin.bottom + DOCK_EXTENT},
+                      {rcMovWin.right - DOCK_EXTENT, rcMovWin.bottom - DOCK_EXTENT, rcMovWin.right + DOCK_EXTENT,
+                       rcMovWin.bottom + DOCK_EXTENT}};
 
     CInput& rInput = CInput::Instance();
 
-    POINT pt[4] = { { 0, 0 }, { rInput.GetScreenWidth(), 0 },
-        { 0, rInput.GetScreenHeight() },
-        { rInput.GetScreenWidth(), rInput.GetScreenHeight() } };
+    POINT pt[4] = {{0, 0},
+                   {rInput.GetScreenWidth(), 0},
+                   {0, rInput.GetScreenHeight()},
+                   {rInput.GetScreenWidth(), rInput.GetScreenHeight()}};
 
     if (::PtInRect(&rcDock[0], pt[0]))
     {
@@ -480,8 +457,7 @@ void CUIMng::CheckDockWin()
     }
     else if (::PtInRect(&rcDock[3], pt[3]))
     {
-        pMovWin->SetPosition(pt[3].x - pMovWin->GetWidth(),
-            pt[3].y - pMovWin->GetHeight());
+        pMovWin->SetPosition(pt[3].x - pMovWin->GetWidth(), pt[3].y - pMovWin->GetHeight());
         pMovWin->SetDocking(true);
     }
     else if (rcDock[0].top < 0 && rcDock[0].bottom > 0)
@@ -505,8 +481,8 @@ void CUIMng::CheckDockWin()
         pMovWin->SetDocking(true);
     }
 
-    BOOL bEdgeDocking = FALSE;
-    int i, j, nXCoord, nYCoord;
+    BOOL  bEdgeDocking = FALSE;
+    int   i, j, nXCoord, nYCoord;
     CWin* pWin;
 
     while (position)
@@ -546,8 +522,7 @@ void CUIMng::CheckDockWin()
             }
             else if (pt[0].y > rcDock[2].top && pt[0].y < rcDock[2].bottom)
             {
-                if (SetDockWinPosition(pMovWin,
-                    nXCoord, pt[0].y - pMovWin->GetHeight()))
+                if (SetDockWinPosition(pMovWin, nXCoord, pt[0].y - pMovWin->GetHeight()))
                     continue;
             }
         }
@@ -561,8 +536,7 @@ void CUIMng::CheckDockWin()
             }
             else if (pt[0].x > rcDock[1].left && pt[0].x < rcDock[1].right)
             {
-                if (SetDockWinPosition(pMovWin,
-                    pt[0].x - pMovWin->GetWidth(), nYCoord))
+                if (SetDockWinPosition(pMovWin, pt[0].x - pMovWin->GetWidth(), nYCoord))
                     continue;
             }
         }
@@ -573,76 +547,72 @@ DOCKING:
     {
         switch (j)
         {
-        case 0:
-            switch (i)
-            {
-            case 1:
-                nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos();
-                break;
-            case 2:
-                nXCoord = pWin->GetXPos();
-                nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
-                break;
-            case 3:
-                nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
-            }
-            break;
-
-        case 1:
-            switch (i)
-            {
             case 0:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth();
-                nYCoord = pWin->GetYPos();
+                switch (i)
+                {
+                    case 1:
+                        nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos();
+                        break;
+                    case 2:
+                        nXCoord = pWin->GetXPos();
+                        nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
+                        break;
+                    case 3:
+                        nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
+                }
                 break;
-            case 2:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth();
-                nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
-                break;
-            case 3:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth()
-                    - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
-            }
-            break;
 
-        case 2:
-            switch (i)
-            {
-            case 0:
-                nXCoord = pWin->GetXPos();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight();
-                break;
             case 1:
-                nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight();
+                switch (i)
+                {
+                    case 0:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth();
+                        nYCoord = pWin->GetYPos();
+                        break;
+                    case 2:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth();
+                        nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
+                        break;
+                    case 3:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos() - pMovWin->GetHeight();
+                }
                 break;
-            case 3:
-                nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight()
-                    - pMovWin->GetHeight();
-            }
-            break;
 
-        case 3:
-            switch (i)
-            {
-            case 0:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight();
-                break;
-            case 1:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth()
-                    - pMovWin->GetWidth();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight();
-                break;
             case 2:
-                nXCoord = pWin->GetXPos() + pWin->GetWidth();
-                nYCoord = pWin->GetYPos() + pWin->GetHeight()
-                    - pMovWin->GetHeight();
-            }
+                switch (i)
+                {
+                    case 0:
+                        nXCoord = pWin->GetXPos();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight();
+                        break;
+                    case 1:
+                        nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight();
+                        break;
+                    case 3:
+                        nXCoord = pWin->GetXPos() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight() - pMovWin->GetHeight();
+                }
+                break;
+
+            case 3:
+                switch (i)
+                {
+                    case 0:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight();
+                        break;
+                    case 1:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth() - pMovWin->GetWidth();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight();
+                        break;
+                    case 2:
+                        nXCoord = pWin->GetXPos() + pWin->GetWidth();
+                        nYCoord = pWin->GetYPos() + pWin->GetHeight() - pMovWin->GetHeight();
+                }
         }
         SetDockWinPosition(pMovWin, nXCoord, nYCoord);
     }
@@ -651,10 +621,9 @@ DOCKING:
 bool CUIMng::SetDockWinPosition(CWin* pMoveWin, int nDockX, int nDockY)
 {
     CInput& rInput = CInput::Instance();
-    RECT rcDummy;
-    RECT rcScreen = { 0, 0, rInput.GetScreenWidth(), rInput.GetScreenHeight() };
-    RECT rcMoveWin = { nDockX, nDockY,
-        nDockX + pMoveWin->GetWidth(), nDockY + pMoveWin->GetHeight() };
+    RECT    rcDummy;
+    RECT    rcScreen  = {0, 0, rInput.GetScreenWidth(), rInput.GetScreenHeight()};
+    RECT    rcMoveWin = {nDockX, nDockY, nDockX + pMoveWin->GetWidth(), nDockY + pMoveWin->GetHeight()};
 
     if (::IntersectRect(&rcDummy, &rcScreen, &rcMoveWin))
     {
@@ -693,9 +662,8 @@ void CUIMng::Update(double dDeltaTick)
             {
                 HideWin(&m_SysMenuWin);
             }
-            else if (!m_MsgWin.IsShow() && !m_OptionWin.IsShow()
-                     && !m_LoginWin.IsShow() && !m_CreditWin.IsShow()
-                     && !m_CharMakeWin.IsShow())
+            else if (!m_MsgWin.IsShow() && !m_OptionWin.IsShow() && !m_LoginWin.IsShow() && !m_CreditWin.IsShow() &&
+                     !m_CharMakeWin.IsShow())
             {
                 ::PlayBuffer(SOUND_CLICK01);
                 ShowWin(&m_SysMenuWin);
@@ -711,7 +679,7 @@ void CUIMng::Update(double dDeltaTick)
     if (rInput.IsLBtnDn())
     {
         bool bWinClick = false;
-        position = m_WinList.GetHeadPosition();
+        position       = m_WinList.GetHeadPosition();
         while (position)
         {
             pWin = (CWin*)m_WinList.GetNext(position);
@@ -734,7 +702,7 @@ void CUIMng::Update(double dDeltaTick)
     {
         m_bBlockCharMove = false;
     }
-    int nlist = m_WinList.GetCount();
+    int                nlist = m_WinList.GetCount();
     std::vector<CWin*> apTempWin(nlist);
 
     position = m_WinList.GetHeadPosition();
@@ -770,24 +738,24 @@ void CUIMng::Update(double dDeltaTick)
 
         switch (pWin->GetState())
         {
-        case WS_ETC:
-            m_bCursorOnUI = true;
-            break;
+            case WS_ETC:
+                m_bCursorOnUI = true;
+                break;
 
-        case WS_MOVE:
-            //			eCursorActType = CURSOR_M;
-            m_bCursorOnUI = true;
-            break;
+            case WS_MOVE:
+                //			eCursorActType = CURSOR_M;
+                m_bCursorOnUI = true;
+                break;
 
-        case WS_EXTEND_UP:
-            //			eCursorActType = CURSOR_V;
-            m_bCursorOnUI = true;
-            break;
+            case WS_EXTEND_UP:
+                //			eCursorActType = CURSOR_V;
+                m_bCursorOnUI = true;
+                break;
 
-        case WS_EXTEND_DN:
-            //			eCursorActType = CURSOR_V;
-            m_bCursorOnUI = true;
-            break;
+            case WS_EXTEND_DN:
+                //			eCursorActType = CURSOR_V;
+                m_bCursorOnUI = true;
+                break;
         }
 
         if (m_bCursorOnUI)
@@ -822,7 +790,8 @@ void CUIMng::PopUpMsgWin(int nMsgCode, wchar_t* pszMsg)
     if (UIM_SCENE_NONE == m_nScene || UIM_SCENE_TITLE == m_nScene || UIM_SCENE_LOADING == m_nScene)
         return;
 
-    if (UIM_SCENE_MAIN == m_nScene)	return;
+    if (UIM_SCENE_MAIN == m_nScene)
+        return;
 
     m_MsgWin.PopUp(nMsgCode, pszMsg);
 }

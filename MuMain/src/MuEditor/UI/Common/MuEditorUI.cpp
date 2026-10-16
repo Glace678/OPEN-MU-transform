@@ -14,11 +14,11 @@
 #include "../MuEditor/UI/Console/MuEditorConsoleUI.h"
 
 // UI Layout constants
-constexpr float TOOLBAR_HEIGHT = 40.0f;
-constexpr float TOOLBAR_PADDING = 8.0f;
-constexpr float TOOLBAR_INDENT = 10.0f;
+constexpr float TOOLBAR_HEIGHT      = 40.0f;
+constexpr float TOOLBAR_PADDING     = 8.0f;
+constexpr float TOOLBAR_INDENT      = 10.0f;
 constexpr float BUTTON_WIDTH_OFFSET = 110.0f;
-constexpr int MOUSE_BUTTON_LEFT = 0;
+constexpr int   MOUSE_BUTTON_LEFT   = 0;
 
 CMuEditorUI& CMuEditorUI::GetInstance()
 {
@@ -26,7 +26,8 @@ CMuEditorUI& CMuEditorUI::GetInstance()
     return instance;
 }
 
-void CMuEditorUI::RenderToolbar(bool& editorEnabled, bool& showItemEditor, bool& showSkillEditor, bool& showDevEditor, bool& showConsole)
+void CMuEditorUI::RenderToolbar(bool& editorEnabled, bool& showItemEditor, bool& showSkillEditor, bool& showDevEditor,
+                                bool& showConsole)
 {
     if (editorEnabled)
     {
@@ -45,15 +46,15 @@ void CMuEditorUI::RenderToolbarOpen(bool& editorEnabled)
     ImGuiIO& io = ImGui::GetIO();
 
     // Prevent ImGui from wanting mouse input when editor is closed
-    io.WantCaptureMouse = false;
+    io.WantCaptureMouse    = false;
     io.WantCaptureKeyboard = false;
 
     ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, TOOLBAR_HEIGHT), ImGuiCond_Always);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 
     // NoInputs prevents ImGui from capturing mouse/keyboard, allowing game cursor to work
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs;
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                             ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoInputs;
 
     // Use same window background and border as Toolbar but fully transparent
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.15f, 0.15f, 0.15f, 0.0f));
@@ -94,9 +95,9 @@ void CMuEditorUI::RenderToolbarOpen(bool& editorEnabled)
 
                 // Clear game mouse button states to prevent click from going through to game
                 extern bool MouseLButton, MouseLButtonPop, MouseLButtonPush, MouseLButtonDBClick;
-                MouseLButton = false;
-                MouseLButtonPop = false;
-                MouseLButtonPush = false;
+                MouseLButton        = false;
+                MouseLButtonPop     = false;
+                MouseLButtonPush    = false;
                 MouseLButtonDBClick = false;
             }
         }
@@ -112,13 +113,14 @@ void CMuEditorUI::RenderToolbarOpen(bool& editorEnabled)
     ImGui::PopStyleColor(2);
 }
 
-void CMuEditorUI::RenderToolbarFull(bool& editorEnabled, bool& showItemEditor, bool& showSkillEditor, bool& showDevEditor, bool& showConsole)
+void CMuEditorUI::RenderToolbarFull(bool& editorEnabled, bool& showItemEditor, bool& showSkillEditor,
+                                    bool& showDevEditor, bool& showConsole)
 {
     ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, TOOLBAR_HEIGHT), ImGuiCond_Always);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
 
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.15f, 0.15f, 0.15f, 0.95f));
 
@@ -164,7 +166,7 @@ void CMuEditorUI::RenderToolbarFull(bool& editorEnabled, bool& showItemEditor, b
         ImGui::SameLine();
         ImGui::SetNextItemWidth(100.0f);
 
-        const char* currentLocale = I18N::GetCurrentLocale();
+        const char*                  currentLocale    = I18N::GetCurrentLocale();
         std::span<const char* const> availableLocales = I18N::GetAvailableLocales();
 
         const char* currentLanguageName = I18N::GetLanguageDisplayName(currentLocale);
@@ -173,8 +175,8 @@ void CMuEditorUI::RenderToolbarFull(bool& editorEnabled, bool& showItemEditor, b
         {
             for (size_t i = 0; i < availableLocales.size(); i++)
             {
-                const char* locale = availableLocales[i];
-                const bool isSelected = (std::strcmp(locale, currentLocale) == 0);
+                const char* locale      = availableLocales[i];
+                const bool  isSelected  = (std::strcmp(locale, currentLocale) == 0);
                 const char* displayName = I18N::GetLanguageDisplayName(locale);
 
                 if (ImGui::Selectable(displayName, isSelected))
@@ -219,4 +221,4 @@ void CMuEditorUI::RenderCenterViewport()
     // No need to render anything here
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

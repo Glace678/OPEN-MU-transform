@@ -3,13 +3,12 @@
 
 #pragma once
 
-
 void SaveTextFile(wchar_t* FileName);
 
 extern wchar_t AbuseFilter[MAX_FILTERS][20];
 extern wchar_t AbuseNameFilter[MAX_NAMEFILTERS][20];
-extern int  AbuseFilterNumber;
-extern int  AbuseNameFilterNumber;
+extern int     AbuseFilterNumber;
+extern int     AbuseNameFilterNumber;
 
 void OpenFilterFile(const wchar_t* FileName);
 void OpenNameFilterFile(const wchar_t* FileName);
@@ -22,15 +21,15 @@ void OpenMonsterSkillScript(const wchar_t* FileName);
 extern ITEM_ATTRIBUTE* ItemAttribute;
 
 extern ActionSkillType GetSkillByBook(int Type);
-void SetItemAttributes(ITEM* ip);
+void                   SetItemAttributes(ITEM* ip);
 extern float CalcDurabilityPercent(BYTE dur, BYTE maxDur, int Level, int excellentFlags, int ancientDiscriminator = 0);
 extern int64_t ItemValue(ITEM* ip, int goldType = 1);
-extern void PrintItem(wchar_t* FileName);
+extern void    PrintItem(wchar_t* FileName);
 
 extern MONSTER_SCRIPT MonsterScript[MAX_MONSTER];
 
-extern void  OpenMonsterScript(wchar_t* FileName);
-extern void  MonsterConvert(MONSTER* m, int Level);
+extern void           OpenMonsterScript(wchar_t* FileName);
+extern void           MonsterConvert(MONSTER* m, int Level);
 extern const wchar_t* getMonsterName(int type);
 
 extern SKILL_ATTRIBUTE* SkillAttribute;
@@ -51,25 +50,25 @@ class CHARACTER_MACHINE
 public:
     //input
     CHARACTER_ATTRIBUTE Character;
-    ITEM				Equipment[MAX_EQUIPMENT];
-    DWORD				Gold;
+    ITEM                Equipment[MAX_EQUIPMENT];
+    DWORD               Gold;
     int                 StorageGold;
     MONSTER             Enemy;
     //output
-    WORD    AttackDamageRight;
-    WORD    AttackDamageLeft;
-    WORD    CriticalDamage;
+    WORD AttackDamageRight;
+    WORD AttackDamageLeft;
+    WORD CriticalDamage;
     //final output
-    WORD    FinalAttackDamageRight;
-    WORD    FinalAttackDamageLeft;
-    WORD    FinalHitPoint;
-    WORD    FinalAttackRating;
-    WORD    FinalDefenseRating;
-    bool    FinalSuccessAttack;
-    bool    FinalSuccessDefense;
+    WORD FinalAttackDamageRight;
+    WORD FinalAttackDamageLeft;
+    WORD FinalHitPoint;
+    WORD FinalAttackRating;
+    WORD FinalDefenseRating;
+    bool FinalSuccessAttack;
+    bool FinalSuccessDefense;
     // packet
-    BYTE	PacketSerial;
-    BYTE	InfinityArrowAdditionalMana;
+    BYTE PacketSerial;
+    BYTE InfinityArrowAdditionalMana;
 
     void Init();
     void InitAddValue();
@@ -91,32 +90,27 @@ public:
     void CalulateMasterLevelNextExperience();
     void CalculateAll();
     void CalculateBasicState();
-    void getAllAddStateOnlyExValues(int& iAddStrengthExValues, int& iAddDexterityExValues, int& iAddVitalityExValues, int& iAddEnergyExValues, int& iAddCharismaExValues);
+    void getAllAddStateOnlyExValues(int& iAddStrengthExValues, int& iAddDexterityExValues, int& iAddVitalityExValues,
+                                    int& iAddEnergyExValues, int& iAddCharismaExValues);
 };
 
 inline DWORD GenerateCheckSum2(const BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
 {
-    DWORD dwKey = (DWORD)wKey;
+    DWORD dwKey    = (DWORD)wKey;
     DWORD dwResult = dwKey << 9;
-    // C3-01: dwSize is unsigned; `dwSize - 4` underflows for dwSize < 4 and the
-    // loop would run to ~4GB. Bail out early and use a non-wrapping bound.
-    if (dwSize < 4)
-    {
-        return dwResult;
-    }
-    for (DWORD dwChecked = 0; dwChecked + 4 <= dwSize; dwChecked += 4)
+    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
     {
         DWORD dwTemp;
         memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));
 
         switch ((dwChecked / 4 + wKey) % 2)
         {
-        case 0:
-            dwResult ^= dwTemp;
-            break;
-        case 1:
-            dwResult += dwTemp;
-            break;
+            case 0:
+                dwResult ^= dwTemp;
+                break;
+            case 1:
+                dwResult += dwTemp;
+                break;
         }
         if (0 == (dwChecked % 16))
         {
@@ -127,8 +121,8 @@ inline DWORD GenerateCheckSum2(const BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
     return (dwResult);
 }
 
-bool IsCepterItem(int iType);
-extern CHARACTER_MACHINE* CharacterMachine;
+bool                        IsCepterItem(int iType);
+extern CHARACTER_MACHINE*   CharacterMachine;
 extern CHARACTER_ATTRIBUTE* CharacterAttribute;
 
 #endif

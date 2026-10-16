@@ -2,7 +2,7 @@
 //
 //  UIGateKeeper.h
 //
-// : ̽
+//  ��  �� : ������ �������̽�
 //
 //////////////////////////////////////////////////////////////////////////
 
@@ -26,31 +26,31 @@ public:
     virtual ~CUIGateKeeper();
 
 protected:
-    bool		m_bPublic;
-    BYTE        m_byType;
-    int			m_nEntranceFee;
-    int         m_iViewEntranceFee;
-    int         m_iAddEntranceFee;
-    int         m_iMaxEnteranceFee;
+    bool m_bPublic;
+    BYTE m_byType;
+    int  m_nEntranceFee;
+    int  m_iViewEntranceFee;
+    int  m_iAddEntranceFee;
+    int  m_iMaxEnteranceFee;
 
 public:
     void SetPublic(bool bPublic) { m_bPublic = bPublic; }
     void SetEntranceFee(int nEntranceFee) { m_nEntranceFee = nEntranceFee; }
     void SetInfo(BYTE byType, bool bPublic, int iEntranceFee, int iAddEntranceFee, int iMaxEntranceFee)
     {
-        m_byType = byType;
-        m_bPublic = bPublic;
-        m_nEntranceFee = iEntranceFee;
+        m_byType           = byType;
+        m_bPublic          = bPublic;
+        m_nEntranceFee     = iEntranceFee;
         m_iViewEntranceFee = m_nEntranceFee;
-        m_iAddEntranceFee = (iAddEntranceFee > 0 ? iAddEntranceFee : 0);  // #MG-12: sanitize hostile step
+        m_iAddEntranceFee  = (iAddEntranceFee > 0 ? iAddEntranceFee : 0);  // #MG-12: sanitize hostile step
         m_iMaxEnteranceFee = (iMaxEntranceFee > 0 ? iMaxEntranceFee : 0);
     }
     BYTE GetType() { return m_byType; }
     BOOL IsPublic() { return m_bPublic; }
-    int GetEnteranceFee() { return m_nEntranceFee; }
-    int GetViewEnteranceFee() { return m_iViewEntranceFee; }
-    int GetAddEnteranceFee() { return m_iAddEntranceFee; }
-    int GetMaxEnteranceFee() { return m_iMaxEnteranceFee; }
+    int  GetEnteranceFee() { return m_nEntranceFee; }
+    int  GetViewEnteranceFee() { return m_iViewEntranceFee; }
+    int  GetAddEnteranceFee() { return m_iAddEntranceFee; }
+    int  GetMaxEnteranceFee() { return m_iMaxEnteranceFee; }
 
     void SendPublicSetting();
     void SendEnteranceFee();
@@ -59,4 +59,4 @@ public:
     void EnteranceFeeDown();
 };
 
-#endif // !defined(AFX_UIGATEKEEPER_H__1EA5EC0A_1A31_4614_98D6_BC982443141B__INCLUDED_)
+#endif  // !defined(AFX_UIGATEKEEPER_H__1EA5EC0A_1A31_4614_98D6_BC982443141B__INCLUDED_)

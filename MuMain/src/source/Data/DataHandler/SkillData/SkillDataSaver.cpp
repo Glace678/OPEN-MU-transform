@@ -23,8 +23,8 @@
 extern SKILL_ATTRIBUTE* SkillAttribute;
 
 // Comparison function - uses field metadata (NO MACROS!)
-static void CompareSkills(const SKILL_ATTRIBUTE& oldSkill, const SKILL_ATTRIBUTE& newSkill,
-                         std::stringstream& changes, bool& changed)
+static void CompareSkills(const SKILL_ATTRIBUTE& oldSkill, const SKILL_ATTRIBUTE& newSkill, std::stringstream& changes,
+                          bool& changed)
 {
     // Compare Name field (wide string)
     if (wcscmp(oldSkill.Name, newSkill.Name) != 0)
@@ -39,44 +39,31 @@ static void CompareSkills(const SKILL_ATTRIBUTE& oldSkill, const SKILL_ATTRIBUTE
     }
 
     // Compare fields before arrays - simple loop!
-    CompareAllFieldsByMetadata(oldSkill, newSkill,
-                               SkillComparisonMetadata::FIELDS_BEFORE_ARRAYS,
-                               changes, changed);
+    CompareAllFieldsByMetadata(oldSkill, newSkill, SkillComparisonMetadata::FIELDS_BEFORE_ARRAYS, changes, changed);
 
     // Compare array fields - another simple loop!
-    CompareAllFieldsByMetadata(oldSkill, newSkill,
-                               SkillComparisonMetadata::ARRAY_FIELDS,
-                               changes, changed);
+    CompareAllFieldsByMetadata(oldSkill, newSkill, SkillComparisonMetadata::ARRAY_FIELDS, changes, changed);
 
     // Compare fields after arrays - one more simple loop!
-    CompareAllFieldsByMetadata(oldSkill, newSkill,
-                               SkillComparisonMetadata::FIELDS_AFTER_ARRAYS,
-                               changes, changed);
+    CompareAllFieldsByMetadata(oldSkill, newSkill, SkillComparisonMetadata::FIELDS_AFTER_ARRAYS, changes, changed);
 }
 
 bool SkillDataSaver::Save(wchar_t* fileName, std::string* outChangeLog)
 {
     // Create standard save config with skill-specific parameters
     auto config = CreateStandardSaveConfig<SKILL_ATTRIBUTE, SKILL_ATTRIBUTE_FILE>(
-        fileName,
-        MAX_SKILLS,
-        SkillAttribute,
-        [](SKILL_ATTRIBUTE_FILE& dest, const SKILL_ATTRIBUTE& src) {
-            CopySkillAttributeToDestination(dest, src);
-        },
-        [](SKILL_ATTRIBUTE& dest, const SKILL_ATTRIBUTE_FILE& src) {
-            CopySkillAttributeFromSource(dest, src);
-        },
+        fileName, MAX_SKILLS, SkillAttribute,
+        [](SKILL_ATTRIBUTE_FILE& dest, const SKILL_ATTRIBUTE& src) { CopySkillAttributeToDestination(dest, src); },
+        [](SKILL_ATTRIBUTE& dest, const SKILL_ATTRIBUTE_FILE& src) { CopySkillAttributeFromSource(dest, src); },
         CompareSkills,
         [](int index, const SKILL_ATTRIBUTE& skill) {
             return ChangeTracker::GetNameUtf8(index, skill, MAX_SKILL_NAME);
         },
         0x5A18,  // Skill-specific checksum key
-        outChangeLog
-    );
+        outChangeLog);
 
     // Add legacy format support for backwards compatibility with old Skill.bmd files
-    config.legacyFileStructSize = sizeof(SKILL_ATTRIBUTE_FILE_LEGACY);
+    config.legacyFileStructSize  = sizeof(SKILL_ATTRIBUTE_FILE_LEGACY);
     config.convertFromFileLegacy = [](SKILL_ATTRIBUTE& dest, BYTE* buffer, size_t size) {
         SKILL_ATTRIBUTE_FILE_LEGACY legacyStruct;
         memcpy(&legacyStruct, buffer, sizeof(legacyStruct));
@@ -99,4 +86,4 @@ bool SkillDataSaver::Save(wchar_t* fileName, std::string* outChangeLog)
     return result;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

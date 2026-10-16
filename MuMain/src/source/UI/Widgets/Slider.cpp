@@ -7,12 +7,10 @@
 #include "UI/Widgets/GaugeBar.h"
 #include "Core/Input/Input.h"
 
-#define SLD_FIRST_SLIDE_DELAY_TIME	500
-#define SLD_SLIDE_DELAY_TIME		50
+#define SLD_FIRST_SLIDE_DELAY_TIME 500
+#define SLD_SLIDE_DELAY_TIME       50
 
-CSlider::CSlider() : m_pGaugeBar(NULL), m_psprBack(NULL)
-{
-}
+CSlider::CSlider() : m_pGaugeBar(NULL), m_psprBack(NULL) {}
 
 CSlider::~CSlider()
 {
@@ -26,12 +24,12 @@ void CSlider::Create(SImgInfo* piiThumb, SImgInfo* piiBack, SImgInfo* piiGauge, 
 
     CreateBackground(piiBack, piiGauge, prcGauge);
 
-    m_bVertical = bVertical;
-    m_byState = SLD_STATE_IDLE;
-    m_nSlidePos = 0;
-    m_nSlideRange = 1;
-    m_ptPos.x = 0;
-    m_ptPos.y = 0;
+    m_bVertical      = bVertical;
+    m_byState        = SLD_STATE_IDLE;
+    m_nSlidePos      = 0;
+    m_nSlideRange    = 1;
+    m_ptPos.x        = 0;
+    m_ptPos.y        = 0;
     m_dThumbMoveTime = 0.0;
 
     int nThumbRange;
@@ -60,7 +58,8 @@ void CSlider::CreateBackground(SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcG
     if (piiGauge)
     {
         m_pGaugeBar = new CGaugeBar;
-        m_pGaugeBar->Create(piiGauge->nWidth, piiGauge->nHeight, piiGauge->nTexID, prcGauge, piiBack->nWidth, piiBack->nHeight, piiBack->nTexID);
+        m_pGaugeBar->Create(piiGauge->nWidth, piiGauge->nHeight, piiGauge->nTexID, prcGauge, piiBack->nWidth,
+                            piiBack->nHeight, piiBack->nTexID);
     }
     else if (-1 < piiBack->nTexID)
     {
@@ -100,8 +99,7 @@ void CSlider::SetThumbPosition()
 
 void CSlider::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CSlider::SetPositionArt(float fXCoord, float fYCoord)
@@ -154,7 +152,8 @@ void CSlider::LineDown()
     }
     else
     {
-        if (++m_nSlidePos == m_nSlideRange)	fThumbPos = float(m_ptPos.x + m_nThumbRange);
+        if (++m_nSlidePos == m_nSlideRange)
+            fThumbPos = float(m_ptPos.x + m_nThumbRange);
         else
             fThumbPos = float(m_ptPos.x) + (float)m_nThumbRange / m_nSlideRange * m_nSlidePos;
 
@@ -183,11 +182,11 @@ void CSlider::Update(double dDeltaTick)
     // All hit-test geometry is art space; convert the device cursor once.
     const int nCursorArtX = int(rInput.GetCursorX() / CSprite::ResolutionScaleX());
     const int nCursorArtY = int(rInput.GetCursorY() / CSprite::ResolutionScaleY());
-    const int nThumbArtX = m_btnThumb.GetXPos() / CSprite::ResolutionScaleX();
-    const int nThumbArtY = m_btnThumb.GetYPos() / CSprite::ResolutionScaleY();
-    const int nThumbArtW = m_btnThumb.GetWidth() / CSprite::ResolutionScaleX();
-    const int nThumbArtH = m_btnThumb.GetHeight() / CSprite::ResolutionScaleY();
-    POINT ptCursor = { nCursorArtX, nCursorArtY };
+    const int nThumbArtX  = m_btnThumb.GetXPos() / CSprite::ResolutionScaleX();
+    const int nThumbArtY  = m_btnThumb.GetYPos() / CSprite::ResolutionScaleY();
+    const int nThumbArtW  = m_btnThumb.GetWidth() / CSprite::ResolutionScaleX();
+    const int nThumbArtH  = m_btnThumb.GetHeight() / CSprite::ResolutionScaleY();
+    POINT     ptCursor    = {nCursorArtX, nCursorArtY};
 
     RECT rcUpperThumb, rcUnderThumb;
     if (m_bVertical)
@@ -249,12 +248,12 @@ void CSlider::Update(double dDeltaTick)
         if (m_bVertical)
         {
             m_nCapturePos = ptCursor.y;
-            m_nLimitPos = m_ptPos.y + m_nCapturePos - nThumbArtY;
+            m_nLimitPos   = m_ptPos.y + m_nCapturePos - nThumbArtY;
         }
         else
         {
             m_nCapturePos = ptCursor.x;
-            m_nLimitPos = m_ptPos.x + m_nCapturePos - nThumbArtX;
+            m_nLimitPos   = m_ptPos.x + m_nCapturePos - nThumbArtX;
         }
         m_byState |= SLD_STATE_THUMB_DRG;
     }
@@ -266,50 +265,54 @@ void CSlider::Update(double dDeltaTick)
         {
             if (m_nLimitPos < ptCursor.y && m_nLimitPos + m_nThumbRange > ptCursor.y)
             {
-                nThumbPos = nThumbArtY + ptCursor.y - m_nCapturePos;
+                nThumbPos     = nThumbArtY + ptCursor.y - m_nCapturePos;
                 m_nCapturePos = ptCursor.y;
             }
             else if (m_nLimitPos >= ptCursor.y)
             {
-                nThumbPos = m_ptPos.y;
+                nThumbPos     = m_ptPos.y;
                 m_nCapturePos = m_nLimitPos;
             }
             else
             {
-                nThumbPos = m_ptPos.y + m_nThumbRange;
+                nThumbPos     = m_ptPos.y + m_nThumbRange;
                 m_nCapturePos = m_nLimitPos + m_nThumbRange;
             }
             m_btnThumb.SetPositionArt((float)nThumbArtX, (float)nThumbPos);
             //			m_btnThumb.SetAction(BTN_HIGHLIGHT_DOWN, BTN_HIGHLIGHT_DOWN);
 
-                    // m_nSlidePosϱ.
+            // m_nSlidePos���ϱ�.
             float fPixelPerPos = (float)m_nThumbRange / m_nSlideRange;
-            m_nSlidePos = int((float(m_btnThumb.GetYPos() / CSprite::ResolutionScaleY() - m_ptPos.y) + (fPixelPerPos / 2)) / fPixelPerPos);
+            m_nSlidePos =
+                int((float(m_btnThumb.GetYPos() / CSprite::ResolutionScaleY() - m_ptPos.y) + (fPixelPerPos / 2)) /
+                    fPixelPerPos);
         }
         else
         {
             if (m_nLimitPos < ptCursor.x && m_nLimitPos + m_nThumbRange > ptCursor.x)
             {
-                nThumbPos = nThumbArtX + ptCursor.x - m_nCapturePos;
+                nThumbPos     = nThumbArtX + ptCursor.x - m_nCapturePos;
                 m_nCapturePos = ptCursor.x;
             }
             else if (m_nLimitPos >= ptCursor.x)
             {
-                nThumbPos = m_ptPos.x;
+                nThumbPos     = m_ptPos.x;
                 m_nCapturePos = m_nLimitPos;
             }
             else
             {
-                nThumbPos = m_ptPos.x + m_nThumbRange;
+                nThumbPos     = m_ptPos.x + m_nThumbRange;
                 m_nCapturePos = m_nLimitPos + m_nThumbRange;
             }
             m_btnThumb.SetPositionArt((float)nThumbPos, (float)nThumbArtY);
             //			m_btnThumb.SetAction(BTN_HIGHLIGHT_DOWN, BTN_HIGHLIGHT_DOWN);
 
             float fPixelPerPos = (float)m_nThumbRange / m_nSlideRange;
-            m_nSlidePos = int((float(m_btnThumb.GetXPos() / CSprite::ResolutionScaleX() - m_ptPos.x) + (fPixelPerPos / 2)) / fPixelPerPos);
+            m_nSlidePos =
+                int((float(m_btnThumb.GetXPos() / CSprite::ResolutionScaleX() - m_ptPos.x) + (fPixelPerPos / 2)) /
+                    fPixelPerPos);
             UpdateGaugeValue();
-        }
+        }  // if (m_bVertical) else�� ��.
     }
 }
 
@@ -346,11 +349,10 @@ BOOL CSlider::CursorInObject()
 {
     if (m_btnThumb.IsShow())
     {
-        RECT rcSlider = { m_ptPos.x, m_ptPos.y,	m_ptPos.x + m_Size.cx, m_ptPos.y + m_Size.cy };
-        CInput& rInput = CInput::Instance();
-        POINT ptCursorArt = {
-            int(rInput.GetCursorX() / CSprite::ResolutionScaleX()),
-            int(rInput.GetCursorY() / CSprite::ResolutionScaleY()) };
+        RECT    rcSlider    = {m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx, m_ptPos.y + m_Size.cy};
+        CInput& rInput      = CInput::Instance();
+        POINT   ptCursorArt = {int(rInput.GetCursorX() / CSprite::ResolutionScaleX()),
+                               int(rInput.GetCursorY() / CSprite::ResolutionScaleY())};
         return ::PtInRect(&rcSlider, ptCursorArt);
     }
 

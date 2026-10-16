@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "UI/NewUI/Dialogs/NewUIMessageBox.h"	// self
+#include "UI/NewUI/Dialogs/NewUIMessageBox.h"  // self
 #include "UI/NewUI/NewUIManager.h"
 #include "UI/Legacy/UIControls.h"
 #include "Render/Core/RenderConfig.h"
@@ -25,11 +25,11 @@ SEASON3B::CNewUIMessageBoxBase::~CNewUIMessageBoxBase()
     Release();
 }
 
-bool SEASON3B::CNewUIMessageBoxBase::Create(int x, int y, int width, int height, float fPriority/* = 3.f*/)
+bool SEASON3B::CNewUIMessageBoxBase::Create(int x, int y, int width, int height, float fPriority /* = 3.f*/)
 {
     SetPos(x, y);
     SetSize(width, height);
-    m_fPriority = fPriority;
+    m_fPriority     = fPriority;
     m_fOpacityAlpha = 0.5f;
     Vector(0.0f, 0.0f, 0.0f, m_vColor);
     return true;
@@ -39,8 +39,8 @@ void SEASON3B::CNewUIMessageBoxBase::Release()
 {
     m_Pos.x = m_Pos.y = 0;
     m_Size.cx = m_Size.cy = 0;
-    m_fPriority = 0.f;
-    m_bCanMove = false;
+    m_fPriority           = 0.f;
+    m_bCanMove            = false;
 
     RemoveAllCallbackFuncs();
 }
@@ -115,7 +115,8 @@ void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWO
     CNewUIMessageBoxMng::GetInstance()->SendEvent(pOwner, dwEvent);
 }
 
-void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent, const leaf::xstreambuf& xParam)
+void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent,
+                                               const leaf::xstreambuf& xParam)
 {
     CNewUIMessageBoxMng::GetInstance()->SendEvent(pOwner, dwEvent, xParam);
 }
@@ -154,9 +155,7 @@ void SEASON3B::CNewUIMessageBoxBase::SetMsgBackColor(vec3_t _vColor)
     }
 }
 
-SEASON3B::CNewUIMessageBoxMng::CNewUIMessageBoxMng() : m_pNewUIMng(NULL), m_pMsgBoxFactory(NULL)
-{
-}
+SEASON3B::CNewUIMessageBoxMng::CNewUIMessageBoxMng() : m_pNewUIMng(NULL), m_pMsgBoxFactory(NULL) {}
 
 SEASON3B::CNewUIMessageBoxMng::~CNewUIMessageBoxMng()
 {
@@ -205,18 +204,18 @@ void SEASON3B::CNewUIMessageBoxMng::SynchronizePointerOwner()
     const auto owner = m_vecMsgBoxes.front()->m_inputInstance;
     if (!m_pointer.IsOwner(owner))
         m_pointer.Bind(owner, MouseLButton, MouseRButton,
-            MouseLButtonPush || MouseLButtonPop || MouseRButtonPush || MouseRButtonPop);
+                       MouseLButtonPush || MouseLButtonPop || MouseRButtonPush || MouseRButtonPop);
 }
 
 void SEASON3B::CNewUIMessageBoxMng::RecordPointerButton(bool left, bool down, int x, int y)
 {
     SynchronizePointerOwner();
-    if (m_vecMsgBoxes.empty()) return;
-    auto* message = m_vecMsgBoxes.front();
+    if (m_vecMsgBoxes.empty())
+        return;
+    auto*       message  = m_vecMsgBoxes.front();
     const auto& position = message->GetPos();
-    const auto& size = message->GetSize();
-    const bool inside = x >= position.x && x < position.x + size.cx
-        && y >= position.y && y < position.y + size.cy;
+    const auto& size     = message->GetSize();
+    const bool  inside   = x >= position.x && x < position.x + size.cx && y >= position.y && y < position.y + size.cy;
     m_pointer.RecordButton(left, down, inside, x, y);
 }
 
@@ -231,25 +230,30 @@ void SEASON3B::CNewUIMessageBoxMng::SendPointerEvent(CNewUIMessageBoxBase* owner
     auto* queued = new CNewUIEvent(owner, event);
     queued->SetPointerEpoch(m_pointerEpoch);
     int x = 0, y = 0;
-    if (m_pointer.EventPosition(x, y)) queued->SetPointerPosition(x, y);
+    if (m_pointer.EventPosition(x, y))
+        queued->SetPointerPosition(x, y);
     m_queueEvents.push(queued);
 }
 
 bool SEASON3B::CNewUIMessageBoxMng::UpdateMouseEvent()
 {
     SynchronizePointerOwner();
-    if (m_vecMsgBoxes.empty()) return true;
-    auto* message = m_vecMsgBoxes.front();
-    const bool inside = SEASON3B::CheckMouseIn(message->GetPos().x, message->GetPos().y,
-        message->GetSize().cx, message->GetSize().cy);
-    using Event = UI::Dialogs::MessageBoxPointer::Event;
-    const Event event = m_pointer.Update(message->m_inputInstance, inside,
-        MouseLButtonPush, MouseLButtonPop, MouseRButtonPush, MouseRButtonPop);
-    static constexpr DWORD EventIds[] = {
-        MSGBOX_EVENT_NONE, MSGBOX_EVENT_MOUSE_HOVER,
-        MSGBOX_EVENT_MOUSE_LBUTTON_DOWN, MSGBOX_EVENT_MOUSE_LBUTTON_UP,
-        MSGBOX_EVENT_MOUSE_RBUTTON_DOWN, MSGBOX_EVENT_MOUSE_RBUTTON_UP};
-    if (event != Event::None) SendPointerEvent(message, EventIds[static_cast<std::size_t>(event)]);
+    if (m_vecMsgBoxes.empty())
+        return true;
+    auto*      message = m_vecMsgBoxes.front();
+    const bool inside =
+        SEASON3B::CheckMouseIn(message->GetPos().x, message->GetPos().y, message->GetSize().cx, message->GetSize().cy);
+    using Event                  = UI::Dialogs::MessageBoxPointer::Event;
+    const Event            event = m_pointer.Update(message->m_inputInstance, inside, MouseLButtonPush, MouseLButtonPop,
+                                                    MouseRButtonPush, MouseRButtonPop);
+    static constexpr DWORD EventIds[] = {MSGBOX_EVENT_NONE,
+                                         MSGBOX_EVENT_MOUSE_HOVER,
+                                         MSGBOX_EVENT_MOUSE_LBUTTON_DOWN,
+                                         MSGBOX_EVENT_MOUSE_LBUTTON_UP,
+                                         MSGBOX_EVENT_MOUSE_RBUTTON_DOWN,
+                                         MSGBOX_EVENT_MOUSE_RBUTTON_UP};
+    if (event != Event::None)
+        SendPointerEvent(message, EventIds[static_cast<std::size_t>(event)]);
     const bool buttonEvent = event != Event::None && event != Event::Hover;
     return !buttonEvent && !m_pointer.CapturesPointer() && message->CanMove();
 }
@@ -279,14 +283,18 @@ bool SEASON3B::CNewUIMessageBoxMng::UpdateKeyEvent()
     return true;
 }
 
-CALLBACK_RESULT SEASON3B::CNewUIMessageBoxMng::InvokeEventCallback(
-    CNewUIMessageBoxBase* owner, CNewUIEvent* event, EVENT_CALLBACK callback)
+CALLBACK_RESULT SEASON3B::CNewUIMessageBoxMng::InvokeEventCallback(CNewUIMessageBoxBase* owner, CNewUIEvent* event,
+                                                                   EVENT_CALLBACK callback)
 {
     struct RestorePosition
     {
         int x = MouseX;
         int y = MouseY;
-        ~RestorePosition() { MouseX = x; MouseY = y; }
+        ~RestorePosition()
+        {
+            MouseX = x;
+            MouseY = y;
+        }
     } restore;
     if (event->HasPointerPosition())
     {
@@ -306,8 +314,8 @@ bool SEASON3B::CNewUIMessageBoxMng::Update()
         return true;
     }
     CNewUIMessageBoxBase* pCurMsgBox = (*vi);
-    const auto instance = pCurMsgBox->m_inputInstance;
-    bool bResult = pCurMsgBox->Update();
+    const auto            instance   = pCurMsgBox->m_inputInstance;
+    bool                  bResult    = pCurMsgBox->Update();
 
     //. Event Processing
     while (!m_queueEvents.empty())
@@ -325,19 +333,21 @@ bool SEASON3B::CNewUIMessageBoxMng::Update()
             if (pCallback)
             {
                 CALLBACK_RESULT Result = InvokeEventCallback(pCurMsgBox, pEvent, pCallback);
-                if (std::find(m_vecMsgBoxes.begin(), m_vecMsgBoxes.end(), pCurMsgBox) == m_vecMsgBoxes.end()
-                    || pCurMsgBox->m_inputInstance != instance)
+                if (std::find(m_vecMsgBoxes.begin(), m_vecMsgBoxes.end(), pCurMsgBox) == m_vecMsgBoxes.end() ||
+                    pCurMsgBox->m_inputInstance != instance)
                 {
                     PopAllEvents();
                     return bResult;
                 }
                 if (CALLBACK_BREAK == Result)
                 {
-                    PopEvent(); break;
+                    PopEvent();
+                    break;
                 }
                 if (CALLBACK_POP_ALL_EVENTS == Result)
                 {
-                    PopAllEvents(); break;
+                    PopAllEvents();
+                    break;
                 }
             }
             if (pEvent->GetEvent() == MSGBOX_EVENT_DESTROY)
@@ -417,7 +427,8 @@ void SEASON3B::CNewUIMessageBoxMng::PopMessageBox()
 void SEASON3B::CNewUIMessageBoxMng::PopAllMessageBoxes()
 {
     m_pointer.Reset();
-    if (m_pMsgBoxFactory) m_pMsgBoxFactory->DeleteAllMessageBoxes();
+    if (m_pMsgBoxFactory)
+        m_pMsgBoxFactory->DeleteAllMessageBoxes();
     m_vecMsgBoxes.clear();
 }
 
@@ -432,7 +443,8 @@ void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWOR
     m_queueEvents.push(pEvent);
 }
 
-void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent, const leaf::xstreambuf& xParam)
+void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent,
+                                              const leaf::xstreambuf& xParam)
 {
     auto* pEvent = new CNewUIEvent(pOwner, dwEvent, xParam);
     m_queueEvents.push(pEvent);

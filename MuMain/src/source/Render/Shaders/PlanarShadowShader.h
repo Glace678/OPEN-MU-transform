@@ -18,7 +18,8 @@ public:
     // `mvp` is the camera view*projection matrix (DXP-06: replaces the old FFP
     // gl_ModelViewProjectionMatrix read) — callers already have this via BMD::RenderMesh()'s
     // GetCurrentMVP() cache, since shadow vertices are pre-transformed to world space on the CPU.
-    bool Begin(const float* bodyOrigin, const float mvp[16], float sx = 2000.0f, float sy = 4000.0f, float alpha = 0.45f);
+    bool Begin(const float* bodyOrigin, const float mvp[16], float sx = 2000.0f, float sy = 4000.0f,
+               float alpha = 0.45f);
     void End();
 
     // Uploads `vertexCount` positions (flat vec3 array, `vertexCount*3` floats, non-indexed
@@ -52,26 +53,26 @@ private:
     void EndGL();
     void DrawGL(const float* vertices, int vertexCount);
 
-    bool   m_bInitialized = false;
-    bool   m_bSupported   = false;
-    bool   m_bActive      = false;
+    bool m_bInitialized = false;
+    bool m_bSupported   = false;
+    bool m_bActive      = false;
 
     GLuint m_hProgram        = 0;
     GLuint m_hVertexShader   = 0;
     GLuint m_hFragmentShader = 0;
 
-    GLint  m_locBodyOrigin   = -1;
-    GLint  m_locSx           = -1;
-    GLint  m_locSy           = -1;
-    GLint  m_locShadowAlpha  = -1;
-    GLint  m_locMVP          = -1;
-    GLint  m_locUseGPUSkin   = -1; // DXP-20: 1 = skin a_Pos via BoneMatrices[a_BoneIndex] before the skew
-    GLint  m_locSkinOrigin   = -1; // DXP-20: mirrors RenderMesh's gpuBodyOrigin (world placement of skinned rest pose)
-    GLint  m_locSkinScale    = -1; // DXP-20: mirrors RenderMesh's gpuBodyScale
+    GLint m_locBodyOrigin  = -1;
+    GLint m_locSx          = -1;
+    GLint m_locSy          = -1;
+    GLint m_locShadowAlpha = -1;
+    GLint m_locMVP         = -1;
+    GLint m_locUseGPUSkin  = -1;  // DXP-20: 1 = skin a_Pos via BoneMatrices[a_BoneIndex] before the skew
+    GLint m_locSkinOrigin  = -1;  // DXP-20: mirrors RenderMesh's gpuBodyOrigin (world placement of skinned rest pose)
+    GLint m_locSkinScale   = -1;  // DXP-20: mirrors RenderMesh's gpuBodyScale
 
-    GLuint m_VAO = 0;
-    GLuint m_VBO = 0;
+    GLuint m_VAO         = 0;
+    GLuint m_VBO         = 0;
     size_t m_VBOCapacity = 0;
 };
 
-#endif // PLANAR_SHADOW_SHADER_H
+#endif  // PLANAR_SHADOW_SHADER_H

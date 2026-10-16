@@ -16,9 +16,7 @@ using namespace SEASON3B;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-SEASON3B::CNewUI3DCamera::CNewUI3DCamera()
-{
-}
+SEASON3B::CNewUI3DCamera::CNewUI3DCamera() {}
 
 SEASON3B::CNewUI3DCamera::~CNewUI3DCamera()
 {
@@ -30,9 +28,9 @@ bool SEASON3B::CNewUI3DCamera::Create(int iCameraIndex, UINT uiWidth, UINT uiHei
     Release();
 
     m_iCameraIndex = iCameraIndex;
-    m_uiWidth = uiWidth;
-    m_uiHeight = uiHeight;
-    m_fZOrder = fZOrder;
+    m_uiWidth      = uiWidth;
+    m_uiHeight     = uiHeight;
+    m_fZOrder      = fZOrder;
 
     return true;
 }
@@ -45,7 +43,7 @@ void SEASON3B::CNewUI3DCamera::Release()
 
 void SEASON3B::CNewUI3DCamera::UpdateDimensions(UINT uiWidth, UINT uiHeight)
 {
-    m_uiWidth = uiWidth;
+    m_uiWidth  = uiWidth;
     m_uiHeight = uiHeight;
 }
 
@@ -76,13 +74,14 @@ void SEASON3B::CNewUI3DCamera::RemoveAll3DRenderObjs()
     m_list3DObjs.clear();
 }
 
-void SEASON3B::CNewUI3DCamera::RenderUI2DEffect(UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA, DWORD dwParamB)
+void SEASON3B::CNewUI3DCamera::RenderUI2DEffect(UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA,
+                                                DWORD dwParamB)
 {
     UI_2DEFFECT_INFO UI2DEffectInfo;
     UI2DEffectInfo.pCallbackFunc = pCallbackFunc;
-    UI2DEffectInfo.pClass = pClass;
-    UI2DEffectInfo.dwParamA = dwParamA;
-    UI2DEffectInfo.dwParamB = dwParamB;
+    UI2DEffectInfo.pClass        = pClass;
+    UI2DEffectInfo.dwParamA      = dwParamA;
+    UI2DEffectInfo.dwParamB      = dwParamB;
 
     m_deque2DEffects.push_back(UI2DEffectInfo);
 }
@@ -143,14 +142,12 @@ bool SEASON3B::CNewUI3DCamera::Render()
     {
         float aspect = (float)m_uiWidth / (float)m_uiHeight;
         float fovRad = 1.f * 0.5f * Q_PI / 180.0f;
-        float f = 1.0f / tanf(fovRad);
-        float zNear = RENDER_ITEMVIEW_NEAR;
-        float zFar  = RENDER_ITEMVIEW_FAR;
+        float f      = 1.0f / tanf(fovRad);
+        float zNear  = RENDER_ITEMVIEW_NEAR;
+        float zFar   = RENDER_ITEMVIEW_FAR;
         float cpuProj[16];
         BuildPerspectiveProjection(f, aspect, zNear, zFar, cpuProj);
-        float cpuView[16] = {
-            1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f
-        };
+        float cpuView[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
 
         GlobalUBO::Instance().SetProj(cpuProj);
         GlobalUBO::Instance().SetView(cpuView);
@@ -158,8 +155,7 @@ bool SEASON3B::CNewUI3DCamera::Render()
         // g_Camera.Matrix (3x4 row-major, same layout CameraProjection::GetOpenGLMatrix() used to
         // produce from a GL_MODELVIEW_MATRIX read) is identity here, matching cpuView above.
         static const float s_IdentityCameraMatrix[3][4] = {
-            {1.f,0.f,0.f,0.f}, {0.f,1.f,0.f,0.f}, {0.f,0.f,1.f,0.f}
-        };
+            {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}};
         memcpy(g_Camera.Matrix, s_IdentityCameraMatrix, sizeof(g_Camera.Matrix));
     }
     EnableDepthTest();
@@ -213,9 +209,7 @@ bool SEASON3B::CNewUI3DCamera::UpdateKeyEvent()
     return true;
 }
 
-SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng()
-{
-}
+SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng() {}
 
 SEASON3B::CNewUI3DRenderMng::~CNewUI3DRenderMng()
 {
@@ -244,7 +238,8 @@ void SEASON3B::CNewUI3DRenderMng::UpdateAllCameraDimensions(UINT uiWidth, UINT u
     }
 }
 
-void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj, float fZOrder/* = INFORMATION_CAMERA_Z_ORDER*/)
+void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj,
+                                                 float              fZOrder /* = INFORMATION_CAMERA_Z_ORDER*/)
 {
     CNewUI3DCamera* pCamera = FindCamera(fZOrder);
     if (NULL == pCamera)
@@ -262,7 +257,7 @@ void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj, float 
         {
 #ifdef _DEBUG
             MU_DEBUG_BREAK();
-#endif // _DEBUG
+#endif  // _DEBUG
         }
     }
     else
@@ -297,7 +292,8 @@ void SEASON3B::CNewUI3DRenderMng::RemoveAll3DRenderObjs()
     m_listCamera.clear();
 }
 
-void SEASON3B::CNewUI3DRenderMng::RenderUI2DEffect(float fZOrder, UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA, DWORD dwParamB)
+void SEASON3B::CNewUI3DRenderMng::RenderUI2DEffect(float fZOrder, UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass,
+                                                   DWORD dwParamA, DWORD dwParamB)
 {
     CNewUI3DCamera* pCamera = FindCamera(fZOrder);
     if (pCamera)

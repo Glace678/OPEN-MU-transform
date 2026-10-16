@@ -14,4 +14,4 @@ private:
     static bool RenderSimplePopup(const char* popupId, const char* message);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

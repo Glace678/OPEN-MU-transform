@@ -14,27 +14,25 @@
 
 namespace
 {
-    void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
-    {
-        g_pRenderText->SetFont(g_hFont);
+void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
+{
+    g_pRenderText->SetFont(g_hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor     = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
 };
 
 using namespace SEASON3B;
 
-CNewUIGoldBowmanLena::CNewUIGoldBowmanLena()
-{
-}
+CNewUIGoldBowmanLena::CNewUIGoldBowmanLena() {}
 
 CNewUIGoldBowmanLena::~CNewUIGoldBowmanLena()
 {
@@ -43,7 +41,8 @@ CNewUIGoldBowmanLena::~CNewUIGoldBowmanLena()
 
 bool CNewUIGoldBowmanLena::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
-    if (NULL == pNewUIMng) {
+    if (NULL == pNewUIMng)
+    {
         return false;
     }
 
@@ -63,7 +62,7 @@ bool CNewUIGoldBowmanLena::Create(CNewUIManager* pNewUIMng, int x, int y)
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_GBL_BTN_EXIT, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
-    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);	// 1002 "Close"
+    m_BtnExit.ChangeToolTipText(&I18N::Game::Close388, true);  // 1002 "닫기"
 
     Show(false);
 
@@ -99,30 +98,32 @@ void CNewUIGoldBowmanLena::UnloadImages()
     DeleteBitmap(IMAGE_GBL_BACK);
 }
 
-void CNewUIGoldBowmanLena::OpeningProcess()
-{
-}
+void CNewUIGoldBowmanLena::OpeningProcess() {}
 
 void CNewUIGoldBowmanLena::ClosingProcess()
 {
     g_bEventChipDialogEnable = 0;
-    g_shEventChipCount = 0;
+    g_shEventChipCount       = 0;
     SocketClient->ToGameServer()->SendEventChipExitDialog();
 }
 
 bool CNewUIGoldBowmanLena::UpdateMouseEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false)
+    {
         return true;
     }
 
-    if (m_BtnRegister.UpdateMouseEvent()) {
+    if (m_BtnRegister.UpdateMouseEvent())
+    {
         int registerItem = g_pMyInventory->GetInventoryCtrl()->GetItemCount(ITEM_POTION + 21, 0);
 
-        if (registerItem != 0) {
+        if (registerItem != 0)
+        {
             int index = g_pMyInventory->GetInventoryCtrl()->FindItemIndex(ITEM_POTION + 21, 0);
 
-            if (index != -1) {
+            if (index != -1)
+            {
                 SocketClient->ToGameServer()->SendEventChipRegistrationRequest(0, index);
             }
         }
@@ -134,28 +135,32 @@ bool CNewUIGoldBowmanLena::UpdateMouseEvent()
         return false;
     }
 
-    if (m_BtnExit.UpdateMouseEvent()) {
+    if (m_BtnExit.UpdateMouseEvent())
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         return false;
     }
 
     if (CheckMouseIn(m_Pos.x, m_Pos.y, INVENTORY_WIDTH, INVENTORY_HEIGHT))
     {
-        if (SEASON3B::IsPress(VK_RBUTTON)) {
-            MouseRButton = false;
-            MouseRButtonPop = false;
+        if (SEASON3B::IsPress(VK_RBUTTON))
+        {
+            MouseRButton     = false;
+            MouseRButtonPop  = false;
             MouseRButtonPush = false;
             return false;
         }
 
-        if (SEASON3B::IsNone(VK_LBUTTON) == false) {
+        if (SEASON3B::IsNone(VK_LBUTTON) == false)
+        {
             return false;
         }
         return false;
     }
     else
     {
-        if (SEASON3B::IsNone(VK_LBUTTON) == false) {
+        if (SEASON3B::IsNone(VK_LBUTTON) == false)
+        {
             return false;
         }
         return false;
@@ -165,11 +170,13 @@ bool CNewUIGoldBowmanLena::UpdateMouseEvent()
 
 bool CNewUIGoldBowmanLena::UpdateKeyEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false)
+    {
         return true;
     }
 
-    if (SEASON3B::IsPress(VK_ESCAPE) == true) {
+    if (SEASON3B::IsPress(VK_ESCAPE) == true)
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         return false;
     }
@@ -217,7 +224,8 @@ void CNewUIGoldBowmanLena::RenderTexts()
 
     wchar_t Text[100];
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i)
+    {
         memset(&Text, 0, sizeof(wchar_t) * 100);
         mu_swprintf(Text, I18N::Game::Lookup(700 + i));
         RenderText(Text, m_Pos.x, m_Pos.y + 100 + (i * 15), 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
@@ -241,7 +249,8 @@ void CNewUIGoldBowmanLena::RenderTexts()
     mu_swprintf(Text, L"    X    %d", g_shEventChipCount);
     RenderText(Text, m_Pos.x + 5, m_Pos.y + 245, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    for (int j = 0; j < 2; ++j) {
+    for (int j = 0; j < 2; ++j)
+    {
         memset(&Text, 0, sizeof(wchar_t) * 100);
         mu_swprintf(Text, I18N::Game::Lookup(703 + j));
         RenderText(Text, m_Pos.x, m_Pos.y + 350 + (j * 15), 190, 0, 0xFFFA47D6, 0x00000000, RT3_SORT_CENTER);
@@ -254,7 +263,7 @@ void CNewUIGoldBowmanLena::RendeerButton()
     m_BtnExit.Render();
 }
 
-float CNewUIGoldBowmanLena::GetLayerDepth()	// 3.4f
+float CNewUIGoldBowmanLena::GetLayerDepth()  // 3.4f
 {
     return 3.4f;
 }
@@ -287,14 +296,12 @@ void CNewUIGoldBowmanLena::Render3D()
     {
         float aspect = (float)WindowWidth / (float)WindowHeight;
         float fovRad = 1.f * 0.5f * Q_PI / 180.0f;
-        float f = 1.0f / tanf(fovRad);
-        float zNear = RENDER_ITEMVIEW_NEAR;
-        float zFar  = RENDER_ITEMVIEW_FAR;
+        float f      = 1.0f / tanf(fovRad);
+        float zNear  = RENDER_ITEMVIEW_NEAR;
+        float zFar   = RENDER_ITEMVIEW_FAR;
         float cpuProj[16];
         BuildPerspectiveProjection(f, aspect, zNear, zFar, cpuProj);
-        float cpuView[16] = {
-            1.f,0.f,0.f,0.f,  0.f,1.f,0.f,0.f,  0.f,0.f,1.f,0.f,  0.f,0.f,0.f,1.f
-        };
+        float cpuView[16] = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f};
 
         GlobalUBO::Instance().SetProj(cpuProj);
         GlobalUBO::Instance().SetView(cpuView);
@@ -302,18 +309,17 @@ void CNewUIGoldBowmanLena::Render3D()
         // g_Camera.Matrix (3x4 row-major, same layout CameraProjection::GetOpenGLMatrix() used to
         // produce from a GL_MODELVIEW_MATRIX read) is identity here, matching cpuView above.
         static const float s_IdentityCameraMatrix[3][4] = {
-            {1.f,0.f,0.f,0.f}, {0.f,1.f,0.f,0.f}, {0.f,0.f,1.f,0.f}
-        };
+            {1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}};
         memcpy(g_Camera.Matrix, s_IdentityCameraMatrix, sizeof(g_Camera.Matrix));
     }
     EnableDepthTest();
     EnableDepthMask();
 
-    int Type = ITEM_POTION + 21;
-    int Level = 0;
-    float x = (float)REFERENCE_WIDTH - 120.f;
-    float y = 200.f;
-    float Width = (float)ItemAttribute[Type].Width * INVENTORY_SCALE;
+    int   Type   = ITEM_POTION + 21;
+    int   Level  = 0;
+    float x      = (float)REFERENCE_WIDTH - 120.f;
+    float y      = 200.f;
+    float Width  = (float)ItemAttribute[Type].Width * INVENTORY_SCALE;
     float Height = (float)ItemAttribute[Type].Height * INVENTORY_SCALE;
     RenderItem3D(x, y, Width, Height, Type, Level, 0, 0, false);
     RenderItem3D(x, y + 42, Width, Height, Type, Level, 0, 0, false);

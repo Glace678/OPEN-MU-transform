@@ -1,4 +1,4 @@
-﻿// <copyright file="PacketFunctions.h" company="MUnique">
+﻿  // <copyright file="PacketFunctions.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,15 +17,16 @@
 
 #include <coreclr_delegates.h>
 
-/// <summary>
-/// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
-/// </summary>
-class PacketFunctions_Base
+    /// <summary>
+    /// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
+    /// </summary>
+    class PacketFunctions_Base
 {
 private:
     int32_t _handle = -1;
+
 public:
-    void SetHandle(const int32_t handle) { _handle = handle; }
+    void    SetHandle(const int32_t handle) { _handle = handle; }
     int32_t GetHandle() const { return _handle; }
 };
 
@@ -33,7 +34,7 @@ public:
 struct AreaSkillHitTarget
 {
     uint16_t TargetId;
-    BYTE AnimationCounter;
+    BYTE     AnimationCounter;
 };
 #pragma pack(pop)
 
@@ -54,13 +55,15 @@ public:
     /// Is sent by the client when: The player tries to log into the game.
     /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLogin(const wchar_t* username, const wchar_t* password, const BYTE* clientVersion, const BYTE* clientSerial);
+    void SendLogin(const wchar_t* username, const wchar_t* password, const BYTE* clientVersion,
+                   const BYTE* clientSerial);
 };
 
 /// <summary>
 /// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.
 /// </summary>
-class PacketFunctions_ConnectServer_Custom : public PacketFunctions_Base { };
+class PacketFunctions_ConnectServer_Custom : public PacketFunctions_Base
+{};
 
 /// <summary>
 /// Extension methods to start writing messages of this namespace on a <see cref="Connection"/>.

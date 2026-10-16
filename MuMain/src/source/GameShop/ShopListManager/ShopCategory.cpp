@@ -15,19 +15,16 @@
 
 #include <iterator>
 
-CShopCategory::CShopCategory() // OK
+CShopCategory::CShopCategory()  // OK
 {
     this->CategoryList.clear();
     this->PackageList.clear();
-    this->Categoryiter = this->CategoryList.end();
-    this->Packageiter = this->PackageList.end();
 }
 
-CShopCategory::~CShopCategory() // OK
-{
-}
+CShopCategory::~CShopCategory()  // OK
+{}
 
-bool CShopCategory::SetCategory(std::wstring strdata) // OK
+bool CShopCategory::SetCategory(std::wstring strdata)  // OK
 {
     if (strdata.empty())
         return 0;
@@ -39,21 +36,21 @@ bool CShopCategory::SetCategory(std::wstring strdata) // OK
 
     this->ProductDisplaySeq = _wtoi(token.nextToken().c_str());
     StringCchCopy(this->CategroyName, std::size(this->CategroyName), token.nextToken().c_str());
-    this->EventFlag = _wtoi(token.nextToken().c_str());
-    this->OpenFlag = _wtoi(token.nextToken().c_str());
+    this->EventFlag               = _wtoi(token.nextToken().c_str());
+    this->OpenFlag                = _wtoi(token.nextToken().c_str());
     this->ParentProductDisplaySeq = _wtoi(token.nextToken().c_str());
-    this->DisplayOrder = _wtoi(token.nextToken().c_str());
-    this->Root = _wtoi(token.nextToken().c_str());
+    this->DisplayOrder            = _wtoi(token.nextToken().c_str());
+    this->Root                    = _wtoi(token.nextToken().c_str());
 
     return 1;
 }
 
-void CShopCategory::SetCategoryFirst() // OK
+void CShopCategory::SetCategoryFirst()  // OK
 {
     this->Categoryiter = this->CategoryList.begin();
 }
 
-bool CShopCategory::GetCategoryNext(int& CategorySeq) // OK
+bool CShopCategory::GetCategoryNext(int& CategorySeq)  // OK
 {
     if (this->Categoryiter == this->CategoryList.end())
         return 0;
@@ -63,12 +60,12 @@ bool CShopCategory::GetCategoryNext(int& CategorySeq) // OK
     return 1;
 }
 
-void CShopCategory::SetPackagSeqFirst() // OK
+void CShopCategory::SetPackagSeqFirst()  // OK
 {
     this->Packageiter = this->PackageList.begin();
 }
 
-bool CShopCategory::GetPackagSeqNext(int& PackagSeq) // OK
+bool CShopCategory::GetPackagSeqNext(int& PackagSeq)  // OK
 {
     if (this->Packageiter == this->PackageList.end())
         return 0;
@@ -78,7 +75,7 @@ bool CShopCategory::GetPackagSeqNext(int& PackagSeq) // OK
     return 1;
 }
 
-void CShopCategory::AddPackageSeq(int PackageSeq) // OK
+void CShopCategory::AddPackageSeq(int PackageSeq)  // OK
 {
     this->PackageList.push_back(PackageSeq);
 }

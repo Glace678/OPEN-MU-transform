@@ -36,28 +36,19 @@ void VectorInterpolation(vec3_t& v_out, const vec3_t& v_1, const vec3_t& v_2, co
     LInterpolationF(v_out[2], v_1[2], v_2[2], fWeight);
 }
 
-void VectorInterpolation_F(vec3_t& v_out,
-    const vec3_t& v_1,
-    const vec3_t& v_2,
-    const float fArea,
-    const float fCurrent)
+void VectorInterpolation_F(vec3_t& v_out, const vec3_t& v_1, const vec3_t& v_2, const float fArea, const float fCurrent)
 {
-    float	fWeight = fCurrent / fArea;
+    float fWeight = fCurrent / fArea;
 
     VectorInterpolation(v_out, v_1, v_2, fWeight);
 }
 
-void VectorInterpolation_W(vec3_t& v_out,
-    const vec3_t& v_1,
-    const vec3_t& v_2,
-    const float fWeight)
+void VectorInterpolation_W(vec3_t& v_out, const vec3_t& v_1, const vec3_t& v_2, const float fWeight)
 {
     VectorInterpolation(v_out, v_1, v_2, fWeight);
 }
 
-void VectorDistanceInterpolation_F(vec3_t& v_out,
-    const vec3_t& v_Distance,
-    const float fRate)
+void VectorDistanceInterpolation_F(vec3_t& v_out, const vec3_t& v_Distance, const float fRate)
 {
     v_out[0] = v_Distance[0] * fRate;
     v_out[1] = v_Distance[1] * fRate;
@@ -66,7 +57,7 @@ void VectorDistanceInterpolation_F(vec3_t& v_out,
 
 float VectorDistance3D(const vec3_t& vPosStart, const vec3_t& vPosEnd)
 {
-    vec3_t	v3Dist;
+    vec3_t v3Dist;
     VectorSubtract(vPosEnd, vPosStart, v3Dist);
     return sqrtf(v3Dist[0] * v3Dist[0] + v3Dist[1] * v3Dist[1] + v3Dist[2] * v3Dist[2]);
 }
@@ -108,7 +99,7 @@ void VectorDivF(const vec3_t vIn01, const float fIn01, vec3_t vOut)
     {
         assert(0);
     }
-#endif // _DEBUG
+#endif  // _DEBUG
     vOut[0] = vIn01[0] / fIn01;
     vOut[1] = vIn01[1] / fIn01;
     vOut[2] = vIn01[2] / fIn01;
@@ -121,7 +112,7 @@ void VectorDivFSelf(vec3_t vInOut, const float fIn01)
     {
         assert(0);
     }
-#endif // _DEBUG
+#endif  // _DEBUG
     vInOut[0] = vInOut[0] / fIn01;
     vInOut[1] = vInOut[1] / fIn01;
     vInOut[2] = vInOut[2] / fIn01;
@@ -178,8 +169,8 @@ void ClearBounds(vec3_t mins, vec3_t maxs)
 
 void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs)
 {
-    int		i;
-    vec_t	val;
+    int   i;
+    vec_t val;
 
     for (i = 0; i < 3; i++)
     {
@@ -191,20 +182,20 @@ void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs)
     }
 }
 
-void AngleMatrix(const vec3_t angles, float(*matrix)[4])
+void AngleMatrix(const vec3_t angles, float (*matrix)[4])
 {
-    float		angle;
-    float		sr, sp, sy, cr, cp, cy;
+    float angle;
+    float sr, sp, sy, cr, cp, cy;
 
     angle = angles[2] * (Q_PI * 2 / 360);
-    sy = sinf(angle);
-    cy = cosf(angle);
+    sy    = sinf(angle);
+    cy    = cosf(angle);
     angle = angles[1] * (Q_PI * 2 / 360);
-    sp = sinf(angle);
-    cp = cosf(angle);
+    sp    = sinf(angle);
+    cp    = cosf(angle);
     angle = angles[0] * (Q_PI * 2 / 360);
-    sr = sinf(angle);
-    cr = cosf(angle);
+    sr    = sinf(angle);
+    cr    = cosf(angle);
 
     // matrix = (Z * Y) * X
     matrix[0][0] = cp * cy;
@@ -223,18 +214,18 @@ void AngleMatrix(const vec3_t angles, float(*matrix)[4])
 
 void AngleIMatrix(const vec3_t angles, float matrix[3][4])
 {
-    float		angle;
-    float		sr, sp, sy, cr, cp, cy;
+    float angle;
+    float sr, sp, sy, cr, cp, cy;
 
     angle = angles[2] * (Q_PI * 2 / 360);
-    sy = sinf(angle);
-    cy = cosf(angle);
+    sy    = sinf(angle);
+    cy    = cosf(angle);
     angle = angles[1] * (Q_PI * 2 / 360);
-    sp = sinf(angle);
-    cp = cosf(angle);
+    sp    = sinf(angle);
+    cp    = cosf(angle);
     angle = angles[0] * (Q_PI * 2 / 360);
-    sr = sinf(angle);
-    cr = cosf(angle);
+    sr    = sinf(angle);
+    cr    = cosf(angle);
 
     // matrix = (Z * Y) * X
     matrix[0][0] = cp * cy;
@@ -253,30 +244,18 @@ void AngleIMatrix(const vec3_t angles, float matrix[3][4])
 
 void R_ConcatTransforms(const float in1[3][4], const float in2[3][4], float out[3][4])
 {
-    out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] +
-        in1[0][2] * in2[2][0];
-    out[0][1] = in1[0][0] * in2[0][1] + in1[0][1] * in2[1][1] +
-        in1[0][2] * in2[2][1];
-    out[0][2] = in1[0][0] * in2[0][2] + in1[0][1] * in2[1][2] +
-        in1[0][2] * in2[2][2];
-    out[0][3] = in1[0][0] * in2[0][3] + in1[0][1] * in2[1][3] +
-        in1[0][2] * in2[2][3] + in1[0][3];
-    out[1][0] = in1[1][0] * in2[0][0] + in1[1][1] * in2[1][0] +
-        in1[1][2] * in2[2][0];
-    out[1][1] = in1[1][0] * in2[0][1] + in1[1][1] * in2[1][1] +
-        in1[1][2] * in2[2][1];
-    out[1][2] = in1[1][0] * in2[0][2] + in1[1][1] * in2[1][2] +
-        in1[1][2] * in2[2][2];
-    out[1][3] = in1[1][0] * in2[0][3] + in1[1][1] * in2[1][3] +
-        in1[1][2] * in2[2][3] + in1[1][3];
-    out[2][0] = in1[2][0] * in2[0][0] + in1[2][1] * in2[1][0] +
-        in1[2][2] * in2[2][0];
-    out[2][1] = in1[2][0] * in2[0][1] + in1[2][1] * in2[1][1] +
-        in1[2][2] * in2[2][1];
-    out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] +
-        in1[2][2] * in2[2][2];
-    out[2][3] = in1[2][0] * in2[0][3] + in1[2][1] * in2[1][3] +
-        in1[2][2] * in2[2][3] + in1[2][3];
+    out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] + in1[0][2] * in2[2][0];
+    out[0][1] = in1[0][0] * in2[0][1] + in1[0][1] * in2[1][1] + in1[0][2] * in2[2][1];
+    out[0][2] = in1[0][0] * in2[0][2] + in1[0][1] * in2[1][2] + in1[0][2] * in2[2][2];
+    out[0][3] = in1[0][0] * in2[0][3] + in1[0][1] * in2[1][3] + in1[0][2] * in2[2][3] + in1[0][3];
+    out[1][0] = in1[1][0] * in2[0][0] + in1[1][1] * in2[1][0] + in1[1][2] * in2[2][0];
+    out[1][1] = in1[1][0] * in2[0][1] + in1[1][1] * in2[1][1] + in1[1][2] * in2[2][1];
+    out[1][2] = in1[1][0] * in2[0][2] + in1[1][1] * in2[1][2] + in1[1][2] * in2[2][2];
+    out[1][3] = in1[1][0] * in2[0][3] + in1[1][1] * in2[1][3] + in1[1][2] * in2[2][3] + in1[1][3];
+    out[2][0] = in1[2][0] * in2[0][0] + in1[2][1] * in2[1][0] + in1[2][2] * in2[2][0];
+    out[2][1] = in1[2][0] * in2[0][1] + in1[2][1] * in2[1][1] + in1[2][2] * in2[2][1];
+    out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] + in1[2][2] * in2[2][2];
+    out[2][3] = in1[2][0] * in2[0][3] + in1[2][1] * in2[1][3] + in1[2][2] * in2[2][3] + in1[2][3];
 }
 
 void VectorRotate(const vec3_t in1, const float in2[3][4], vec3_t out)
@@ -311,24 +290,24 @@ void VectorTransform(const vec3_t in1, const float in2[3][4], vec3_t out)
 
 void AngleQuaternion(const vec3_t angles, vec4_t quaternion)
 {
-    float		angle;
-    float		sr, sp, sy, cr, cp, cy;
+    float angle;
+    float sr, sp, sy, cr, cp, cy;
 
     // FIXME: rescale the inputs to 1/2 angle
     angle = angles[2] * 0.5;
-    sy = sinf(angle);
-    cy = cosf(angle);
+    sy    = sinf(angle);
+    cy    = cosf(angle);
     angle = angles[1] * 0.5;
-    sp = sinf(angle);
-    cp = cosf(angle);
+    sp    = sinf(angle);
+    cp    = cosf(angle);
     angle = angles[0] * 0.5;
-    sr = sinf(angle);
-    cr = cosf(angle);
+    sr    = sinf(angle);
+    cr    = cosf(angle);
 
-    quaternion[0] = sr * cp * cy - cr * sp * sy; // X
-    quaternion[1] = cr * sp * cy + sr * cp * sy; // Y
-    quaternion[2] = cr * cp * sy - sr * sp * cy; // Z
-    quaternion[3] = cr * cp * cy + sr * sp * sy; // W
+    quaternion[0] = sr * cp * cy - cr * sp * sy;  // X
+    quaternion[1] = cr * sp * cy + sr * cp * sy;  // Y
+    quaternion[2] = cr * cp * sy - sr * sp * cy;  // Z
+    quaternion[3] = cr * cp * cy + sr * sp * sy;  // W
 }
 
 void QuaternionMatrix(const vec4_t quaternion, float matrix[3][4])
@@ -348,47 +327,56 @@ void QuaternionMatrix(const vec4_t quaternion, float matrix[3][4])
 
 void QuaternionSlerp(const vec4_t p, vec4_t q, float t, vec4_t qt)
 {
-    int i;
+    int   i;
     float omega, cosom, sinom, sclp, sclq;
 
     // decide if one of the quaternions is backwards
     float a = 0;
     float b = 0;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         a += (p[i] - q[i]) * (p[i] - q[i]);
         b += (p[i] + q[i]) * (p[i] + q[i]);
     }
-    if (a > b) {
-        for (i = 0; i < 4; i++) {
+    if (a > b)
+    {
+        for (i = 0; i < 4; i++)
+        {
             q[i] = -q[i];
         }
     }
 
     cosom = p[0] * q[0] + p[1] * q[1] + p[2] * q[2] + p[3] * q[3];
 
-    if ((1.0 + cosom) > 0.00000001) {
-        if ((1.0 - cosom) > 0.00000001) {
+    if ((1.0 + cosom) > 0.00000001)
+    {
+        if ((1.0 - cosom) > 0.00000001)
+        {
             omega = acos(cosom);
             sinom = sinf(omega);
-            sclp = sinf((1.0 - t) * omega) / sinom;
-            sclq = sinf(t * omega) / sinom;
+            sclp  = sinf((1.0 - t) * omega) / sinom;
+            sclq  = sinf(t * omega) / sinom;
         }
-        else {
+        else
+        {
             sclp = 1.0f - t;
             sclq = t;
         }
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++)
+        {
             qt[i] = sclp * p[i] + sclq * q[i];
         }
     }
-    else {
+    else
+    {
         qt[0] = -p[1];
         qt[1] = p[0];
         qt[2] = -p[3];
         qt[3] = p[2];
-        sclp = sinf((1.0 - t) * 0.5 * Q_PI);
-        sclq = sinf(t * 0.5 * Q_PI);
-        for (i = 0; i < 3; i++) {
+        sclp  = sinf((1.0 - t) * 0.5 * Q_PI);
+        sclq  = sinf(t * 0.5 * Q_PI);
+        for (i = 0; i < 3; i++)
+        {
             qt[i] = sclp * p[i] + sclq * qt[i];
         }
     }
@@ -402,7 +390,8 @@ void FaceNormalize(vec3_t v1, vec3_t v2, vec3_t v3, vec3_t Normal)
     nz = (v2[0] - v1[0]) * (v3[1] - v1[1]) - (v3[0] - v1[0]) * (v2[1] - v1[1]);
     //if(nx==0.f || ny==0.f || nz==0.f) return;
     double dot = sqrt(nx * nx + ny * ny + nz * nz);
-    if (dot == 0) return;
+    if (dot == 0)
+        return;
     Normal[0] = (nx / dot);
     Normal[1] = (ny / dot);
     Normal[2] = (nz / dot);
@@ -418,7 +407,7 @@ float VectorDistance2D(vec3_t va, vec3_t vb)
 void QuaternionNLERP(const vec4_t p, const vec4_t q, float t, vec4_t qt)
 {
     // Ensure shortest path around 4D sphere
-    float cosom = p[0] * q[0] + p[1] * q[1] + p[2] * q[2] + p[3] * q[3];
+    float cosom  = p[0] * q[0] + p[1] * q[1] + p[2] * q[2] + p[3] * q[3];
     float scaleP = 1.0f - t;
     float scaleQ = (cosom < 0.0f) ? -t : t;
 
@@ -431,10 +420,10 @@ void QuaternionNLERP(const vec4_t p, const vec4_t q, float t, vec4_t qt)
     if (lenSq > 1e-6f)
     {
         float invLen = 1.0f / sqrtf(lenSq);
-        qt[0] = rx * invLen;
-        qt[1] = ry * invLen;
-        qt[2] = rz * invLen;
-        qt[3] = rw * invLen;
+        qt[0]        = rx * invLen;
+        qt[1]        = ry * invLen;
+        qt[2]        = rz * invLen;
+        qt[3]        = rw * invLen;
     }
     else
     {

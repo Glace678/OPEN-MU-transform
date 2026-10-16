@@ -13,20 +13,20 @@
 #include "UI/NewUI/NewUISystem.h"
 
 // External declarations
-extern EGameScene SceneFlag;
+extern EGameScene   SceneFlag;
 extern CErrorReport g_ErrorReport;
 
 // Constants for background image selection
 constexpr int BACKGROUND_SELECTION_PERCENTAGE = 100;
-constexpr int CLASSIC_BACKGROUND_PROBABILITY = 70;
+constexpr int CLASSIC_BACKGROUND_PROBABILITY  = 70;
 
 // Bitmap indices for title scene resources
-constexpr int TITLE_BITMAP_BASE = BITMAP_TITLE;
-constexpr int TITLE_BITMAP_BACK_02 = BITMAP_TITLE + 1;
-constexpr int TITLE_BITMAP_LOGO = BITMAP_TITLE + 3;
-constexpr int TITLE_BITMAP_PATTERN = BITMAP_TITLE + 5;
+constexpr int TITLE_BITMAP_BASE          = BITMAP_TITLE;
+constexpr int TITLE_BITMAP_BACK_02       = BITMAP_TITLE + 1;
+constexpr int TITLE_BITMAP_LOGO          = BITMAP_TITLE + 3;
+constexpr int TITLE_BITMAP_PATTERN       = BITMAP_TITLE + 5;
 constexpr int TITLE_BITMAP_DYNAMIC_START = BITMAP_TITLE + 6;
-constexpr int TITLE_BITMAP_DYNAMIC_END = BITMAP_TITLE + 14;
+constexpr int TITLE_BITMAP_DYNAMIC_END   = BITMAP_TITLE + 14;
 
 enum class BackgroundTheme
 {
@@ -124,10 +124,7 @@ void WebzenScene(HDC hDC)
     ::EnableAlphaTest();
     OpenBasicData(hDC);
 
-    if (!g_pNewUISystem->LoadMainSceneInterface())
-    {
-        g_ErrorReport.Write(L"> Failed to load the main scene interface; continuing without it.\r\n");
-    }
+    g_pNewUISystem->LoadMainSceneInterface();
 
     CUIMng::Instance().RenderTitleSceneUI(hDC, 11, 11);
 

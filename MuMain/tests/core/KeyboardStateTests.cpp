@@ -9,7 +9,7 @@ TEST_CASE("quick keyboard taps survive an event pump until a game frame consumes
     Core::Input::ClearVirtualKeys();
     Core::Input::RecordKeyboardPress(SDL_SCANCODE_I);
     CHECK(Core::Input::IsKeyDown('I'));
-    CHECK(Core::Input::IsKeyDown('I')); // More than one input consumer in a frame.
+    CHECK(Core::Input::IsKeyDown('I'));  // More than one input consumer in a frame.
     Core::Input::ClearKeyboardPresses();
     CHECK_FALSE(Core::Input::IsKeyDown('I'));
 }

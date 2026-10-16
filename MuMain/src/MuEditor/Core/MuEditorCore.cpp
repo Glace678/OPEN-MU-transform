@@ -25,24 +25,28 @@
 #include <vector>
 namespace
 {
-    // Resolve a font file via fontconfig (distro-agnostic), e.g.
-    // EditorFcMatch("sans-serif"). Empty if fc-match is unavailable.
-    std::string EditorFcMatch(const char* pattern)
-    {
-        const std::string cmd = std::string("fc-match -f '%{file}' '") + pattern + "' 2>/dev/null";
-        FILE* p = popen(cmd.c_str(), "r");
-        if (!p) return {};
-        std::string out;
-        char buf[4096];
-        size_t n;
-        while ((n = fread(buf, 1, sizeof(buf), p)) > 0)
-            out.append(buf, n);
-        pclose(p);
-        while (!out.empty() && (out.back() == '\n' || out.back() == '\r' || out.back() == ' '))
-            out.pop_back();
-        return out;
-    }
-    bool FontFileExists(const char* path) { return path && path[0] && ::access(path, R_OK) == 0; }
+// Resolve a font file via fontconfig (distro-agnostic), e.g.
+// EditorFcMatch("sans-serif"). Empty if fc-match is unavailable.
+std::string EditorFcMatch(const char* pattern)
+{
+    const std::string cmd = std::string("fc-match -f '%{file}' '") + pattern + "' 2>/dev/null";
+    FILE*             p   = popen(cmd.c_str(), "r");
+    if (!p)
+        return {};
+    std::string out;
+    char        buf[4096];
+    size_t      n;
+    while ((n = fread(buf, 1, sizeof(buf), p)) > 0)
+        out.append(buf, n);
+    pclose(p);
+    while (!out.empty() && (out.back() == '\n' || out.back() == '\r' || out.back() == ' '))
+        out.pop_back();
+    return out;
+}
+bool FontFileExists(const char* path)
+{
+    return path && path[0] && ::access(path, R_OK) == 0;
+}
 }
 #endif
 
@@ -53,23 +57,15 @@ constexpr int CURSOR_VISIBLE_THRESHOLD = 0;
 
 // "Open Editor" button layout constants
 constexpr float EDITOR_BTN_X_OFFSET = 110.0f;
-constexpr float EDITOR_BTN_Y = 8.0f;
-constexpr float EDITOR_BTN_WIDTH = 100.0f;
-constexpr float EDITOR_BTN_HEIGHT = 24.0f;
+constexpr float EDITOR_BTN_Y        = 8.0f;
+constexpr float EDITOR_BTN_WIDTH    = 100.0f;
+constexpr float EDITOR_BTN_HEIGHT   = 24.0f;
 
 CMuEditorCore::CMuEditorCore()
-    : m_bEditorMode(false)
-    , m_bInitialized(false)
-    , m_bFrameStarted(false)
-    , m_bShowItemEditor(false)
-    , m_bShowSkillEditor(false)
-    , m_bShowDevEditor(false)
-    , m_bShowConsole(true)
-    , m_bHoveringUI(false)
-    , m_bPreviousFrameHoveringUI(false)
-    , m_pActiveGamepad(nullptr)
-{
-}
+    : m_bEditorMode(false), m_bInitialized(false), m_bFrameStarted(false), m_bShowItemEditor(false),
+      m_bShowSkillEditor(false), m_bShowDevEditor(false), m_bShowConsole(true), m_bHoveringUI(false),
+      m_bPreviousFrameHoveringUI(false), m_pActiveGamepad(nullptr)
+{}
 
 CMuEditorCore::~CMuEditorCore()
 {
@@ -104,7 +100,7 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
 
     // Let ImGui manage the mouse cursor (Windows cursor) when editor is open
     // Game cursor is disabled when editor is open (see ZzzScene.cpp)
-    io.MouseDrawCursor = false; // Don't let ImGui draw its own cursor, use Windows cursor
+    io.MouseDrawCursor = false;  // Don't let ImGui draw its own cursor, use Windows cursor
 
     fwprintf(stderr, L"[MuEditor] ImGui context created\n");
     fflush(stderr);
@@ -114,22 +110,22 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
     ImFontConfig fontConfig;
     fontConfig.OversampleH = 2;
     fontConfig.OversampleV = 2;
-    fontConfig.PixelSnapH = true;
+    fontConfig.PixelSnapH  = true;
 
     // Build font atlas with multiple Unicode ranges
     // CJK ranges are handled by a separate merged font below — primary font
     // (e.g. Segoe UI) does not contain Han glyphs, so listing CJK here would
     // just rasterize empty glyphs.
     ImFontGlyphRangesBuilder builder;
-    builder.AddRanges(io.Fonts->GetGlyphRangesDefault());        // Basic Latin + Latin Supplement
-    builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());       // Cyrillic (Russian, Ukrainian, etc.)
-    builder.AddRanges(io.Fonts->GetGlyphRangesGreek());          // Greek
+    builder.AddRanges(io.Fonts->GetGlyphRangesDefault());   // Basic Latin + Latin Supplement
+    builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());  // Cyrillic (Russian, Ukrainian, etc.)
+    builder.AddRanges(io.Fonts->GetGlyphRangesGreek());     // Greek
 
     // Add additional specific characters if needed
     static const ImWchar additionalRanges[] = {
-        0x0100, 0x017F, // Latin Extended-A (Polish, etc.)
-        0x0180, 0x024F, // Latin Extended-B
-        0x1E00, 0x1EFF, // Latin Extended Additional (Vietnamese)
+        0x0100, 0x017F,  // Latin Extended-A (Polish, etc.)
+        0x0180, 0x024F,  // Latin Extended-B
+        0x1E00, 0x1EFF,  // Latin Extended Additional (Vietnamese)
         0,
     };
     builder.AddRanges(additionalRanges);
@@ -154,16 +150,16 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
     // Skip oversampling for CJK — ChineseFull rasterizes ~21k ideographs and 2x2
     // oversampling can blow past the GPU's max texture size.
     ImFontConfig cjkConfig = fontConfig;
-    cjkConfig.MergeMode = true;
-    cjkConfig.OversampleH = 1;
-    cjkConfig.OversampleV = 1;
+    cjkConfig.MergeMode    = true;
+    cjkConfig.OversampleH  = 1;
+    cjkConfig.OversampleV  = 1;
 
 #ifdef _WIN32
     // Windows: Get fonts directory dynamically
     wchar_t windowsDir[MAX_PATH];
     if (GetWindowsDirectoryW(windowsDir, MAX_PATH) > 0)
     {
-        std::wstring fontDirW = std::wstring(windowsDir) + L"\\Fonts\\";
+        std::wstring fontDirW  = std::wstring(windowsDir) + L"\\Fonts\\";
         std::wstring fontPathW = fontDirW + L"segoeui.ttf";
 
         // Convert to UTF-8 using StringUtils helper
@@ -181,8 +177,8 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
             // Try Traditional Chinese first (matches zh-TW translations), then
             // Simplified, then older fallbacks. First successful merge wins.
             const wchar_t* cjkFonts[] = {
-                L"msjh.ttc",   // Microsoft JhengHei (Traditional)
-                L"msyh.ttc",   // Microsoft YaHei (Simplified)
+                L"msjh.ttc",  // Microsoft JhengHei (Traditional)
+                L"msyh.ttc",  // Microsoft YaHei (Simplified)
                 L"mingliu.ttc",
                 L"simsun.ttc",
             };
@@ -199,11 +195,8 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
     }
 #elif __APPLE__
     // macOS: Try system fonts
-    const char* macFonts[] = {
-        "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
-        "/System/Library/Fonts/Helvetica.ttc",
-        "/Library/Fonts/Arial Unicode.ttf"
-    };
+    const char* macFonts[] = {"/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+                              "/System/Library/Fonts/Helvetica.ttc", "/Library/Fonts/Arial Unicode.ttf"};
     for (const char* fontPath : macFonts)
     {
         if (io.Fonts->AddFontFromFileTTF(fontPath, 16.0f, &fontConfig, ranges.Data) != nullptr)
@@ -233,11 +226,9 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
     std::vector<std::string> linuxFonts;
     if (std::string fc = EditorFcMatch("sans-serif"); !fc.empty())
         linuxFonts.push_back(std::move(fc));
-    for (const char* p : {
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-            "/usr/share/fonts/TTF/DejaVuSans.ttf",
-            "/usr/share/fonts/dejavu/DejaVuSans.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf" })
+    for (const char* p :
+         {"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/TTF/DejaVuSans.ttf",
+          "/usr/share/fonts/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"})
         linuxFonts.emplace_back(p);
     for (const std::string& fontPath : linuxFonts)
     {
@@ -260,8 +251,7 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
         };
         for (const char* path : cjkFonts)
         {
-            if (FontFileExists(path) &&
-                io.Fonts->AddFontFromFileTTF(path, 16.0f, &cjkConfig, cjkRanges) != nullptr)
+            if (FontFileExists(path) && io.Fonts->AddFontFromFileTTF(path, 16.0f, &cjkConfig, cjkRanges) != nullptr)
             {
                 break;
             }
@@ -283,8 +273,8 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
 
     // Dark theme
     ImGui::StyleColorsDark();
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 0.0f;
+    ImGuiStyle& style               = ImGui::GetStyle();
+    style.WindowRounding            = 0.0f;
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.12f, 0.12f, 0.12f, 1.0f);
 
     if (!ImGui_ImplSDL3_InitForOpenGL(window, glContext))
@@ -304,10 +294,8 @@ void CMuEditorCore::Initialize(SDL_Window* window, void* glContext)
     }
 
     m_pActiveGamepad = Core::Input::GamepadService::Instance().GetActiveGamepad();
-    ImGui_ImplSDL3_SetGamepadMode(
-        ImGui_ImplSDL3_GamepadMode_Manual,
-        m_pActiveGamepad ? &m_pActiveGamepad : nullptr,
-        m_pActiveGamepad ? 1 : 0);
+    ImGui_ImplSDL3_SetGamepadMode(ImGui_ImplSDL3_GamepadMode_Manual, m_pActiveGamepad ? &m_pActiveGamepad : nullptr,
+                                  m_pActiveGamepad ? 1 : 0);
 
     fwprintf(stderr, L"[MuEditor] ImGui backends initialized\n");
     fflush(stderr);
@@ -341,7 +329,7 @@ void CMuEditorCore::Shutdown()
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
 
-    m_bInitialized = false;
+    m_bInitialized   = false;
     m_pActiveGamepad = nullptr;
 }
 
@@ -357,10 +345,8 @@ void CMuEditorCore::Update()
         if (activeGamepad != m_pActiveGamepad)
         {
             m_pActiveGamepad = activeGamepad;
-            ImGui_ImplSDL3_SetGamepadMode(
-                ImGui_ImplSDL3_GamepadMode_Manual,
-                m_pActiveGamepad ? &m_pActiveGamepad : nullptr,
-                m_pActiveGamepad ? 1 : 0);
+            ImGui_ImplSDL3_SetGamepadMode(ImGui_ImplSDL3_GamepadMode_Manual,
+                                          m_pActiveGamepad ? &m_pActiveGamepad : nullptr, m_pActiveGamepad ? 1 : 0);
         }
 
         ImGui_ImplOpenGL2_NewFrame();
@@ -390,14 +376,14 @@ void CMuEditorCore::Update()
             // Check if mouse is over button area (top-right corner)
             RECT rect;
             GetClientRect(g_hWnd, &rect);
-            float screenWidth = (float)(rect.right - rect.left);
-            float buttonX = screenWidth - EDITOR_BTN_X_OFFSET;
-            float buttonY = EDITOR_BTN_Y;
-            float buttonWidth = EDITOR_BTN_WIDTH;
+            float screenWidth  = (float)(rect.right - rect.left);
+            float buttonX      = screenWidth - EDITOR_BTN_X_OFFSET;
+            float buttonY      = EDITOR_BTN_Y;
+            float buttonWidth  = EDITOR_BTN_WIDTH;
             float buttonHeight = EDITOR_BTN_HEIGHT;
 
-            if (mousePos.x >= buttonX && mousePos.x <= (buttonX + buttonWidth) &&
-                mousePos.y >= buttonY && mousePos.y <= (buttonY + buttonHeight))
+            if (mousePos.x >= buttonX && mousePos.x <= (buttonX + buttonWidth) && mousePos.y >= buttonY &&
+                mousePos.y <= (buttonY + buttonHeight))
             {
                 // Check for click
                 extern bool MouseLButtonPush;
@@ -407,9 +393,9 @@ void CMuEditorCore::Update()
 
                     // Clear the click so it doesn't go to game
                     extern bool MouseLButton, MouseLButtonPop, MouseLButtonDBClick;
-                    MouseLButton = false;
-                    MouseLButtonPop = false;
-                    MouseLButtonPush = false;
+                    MouseLButton        = false;
+                    MouseLButtonPop     = false;
+                    MouseLButtonPush    = false;
                     MouseLButtonDBClick = false;
                 }
             }
@@ -419,24 +405,24 @@ void CMuEditorCore::Update()
     // When editor is closed, handle "Open Editor" button hover to block game input
     if (!m_bEditorMode)
     {
-        ImGuiIO& io = ImGui::GetIO();
-        io.WantCaptureMouse = false;
+        ImGuiIO& io            = ImGui::GetIO();
+        io.WantCaptureMouse    = false;
         io.WantCaptureKeyboard = false;
 
         // Check if mouse is over button area (top-right corner)
-        float buttonX = io.DisplaySize.x - EDITOR_BTN_X_OFFSET;
-        float buttonY = EDITOR_BTN_Y;
-        float buttonWidth = EDITOR_BTN_WIDTH;
+        float buttonX      = io.DisplaySize.x - EDITOR_BTN_X_OFFSET;
+        float buttonY      = EDITOR_BTN_Y;
+        float buttonWidth  = EDITOR_BTN_WIDTH;
         float buttonHeight = EDITOR_BTN_HEIGHT;
 
-        if (io.MousePos.x >= buttonX && io.MousePos.x <= (buttonX + buttonWidth) &&
-            io.MousePos.y >= buttonY && io.MousePos.y <= (buttonY + buttonHeight))
+        if (io.MousePos.x >= buttonX && io.MousePos.x <= (buttonX + buttonWidth) && io.MousePos.y >= buttonY &&
+            io.MousePos.y <= (buttonY + buttonHeight))
         {
             // Mouse is over button - block game input for this frame
             extern bool MouseLButton, MouseLButtonPop, MouseLButtonPush, MouseLButtonDBClick;
-            MouseLButton = false;
-            MouseLButtonPop = false;
-            MouseLButtonPush = false;
+            MouseLButton        = false;
+            MouseLButtonPop     = false;
+            MouseLButtonPush    = false;
             MouseLButtonDBClick = false;
         }
     }
@@ -450,14 +436,14 @@ void CMuEditorCore::Update()
             extern bool MouseRButton, MouseRButtonPop, MouseRButtonPush;
             extern bool MouseMButton;
 
-            MouseLButton = false;
-            MouseLButtonPop = false;
-            MouseLButtonPush = false;
+            MouseLButton        = false;
+            MouseLButtonPop     = false;
+            MouseLButtonPush    = false;
             MouseLButtonDBClick = false;
-            MouseRButton = false;
-            MouseRButtonPop = false;
-            MouseRButtonPush = false;
-            MouseMButton = false;
+            MouseRButton        = false;
+            MouseRButtonPop     = false;
+            MouseRButtonPush    = false;
+            MouseMButton        = false;
         }
 
         // Process input blocking for editor UI (keyboard)
@@ -521,12 +507,14 @@ void CMuEditorCore::Render()
         if (m_bHoveringUI)
         {
             // Force cursor visible (counter >= CURSOR_VISIBLE_THRESHOLD)
-            while (ShowCursor(TRUE) < CURSOR_VISIBLE_THRESHOLD);
+            while (ShowCursor(TRUE) < CURSOR_VISIBLE_THRESHOLD)
+                ;
         }
         else
         {
             // Force cursor hidden (counter < CURSOR_VISIBLE_THRESHOLD)
-            while (ShowCursor(FALSE) >= CURSOR_VISIBLE_THRESHOLD);
+            while (ShowCursor(FALSE) >= CURSOR_VISIBLE_THRESHOLD)
+                ;
         }
         lastHoveringState = m_bHoveringUI;
     }
@@ -540,4 +528,4 @@ void CMuEditorCore::Render()
     m_bFrameStarted = false;
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

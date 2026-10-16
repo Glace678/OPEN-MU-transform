@@ -9,12 +9,15 @@
 namespace Core::Platform
 {
 #if defined(_WIN32)
-    void BeginNativeModal();
-    void EndNativeModal();
-    bool IsNativeModalActive();
+void BeginNativeModal();
+void EndNativeModal();
+bool IsNativeModalActive();
 #else
-    inline void BeginNativeModal() {}
-    inline void EndNativeModal() {}
-    inline bool IsNativeModalActive() { return false; }
+inline void BeginNativeModal() {}
+inline void EndNativeModal() {}
+inline bool IsNativeModalActive()
+{
+    return false;
+}
 #endif
 }

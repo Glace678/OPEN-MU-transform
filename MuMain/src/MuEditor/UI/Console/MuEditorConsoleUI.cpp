@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 
 #ifdef _EDITOR
 
@@ -17,67 +17,61 @@
 #include "../MuEditor/Core/MuEditorCore.h"
 
 // Mutex for thread-safe console access
-// Recursive: ConsoleStreamBuf::overflow holds this and calls LogGame/LogEditor,
-// which lock the same mutex. A plain std::mutex would self-deadlock on that
-// re-entrant path (the console freezes on the first redirected newline).
-static std::recursive_mutex g_consoleMutex;
+static std::mutex g_consoleMutex;
 
 // Replacement console output functions
 extern "C" {
-    int editor_wprintf(const wchar_t* format, ...)
-    {
-        wchar_t buffer[4096];
-        va_list args;
-        va_start(args, format);
-        int result = vswprintf_s(buffer, _countof(buffer), format, args);
-        va_end(args);
+int editor_wprintf(const wchar_t* format, ...)
+{
+    wchar_t buffer[4096];
+    va_list args;
+    va_start(args, format);
+    int result = vswprintf_s(buffer, _countof(buffer), format, args);
+    va_end(args);
 
-        // Send to ImGui console
-        char utf8Buffer[8192]{};
-        WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
+    // Send to ImGui console
+    char utf8Buffer[8192];
+    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
 
-        // Remove trailing newline
-        std::string str(utf8Buffer);
-        while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
-            str.pop_back();
+    // Remove trailing newline
+    std::string str(utf8Buffer);
+    while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
+        str.pop_back();
 
-        if (!str.empty())
-            g_MuEditorConsoleUI.LogGame(str);
+    if (!str.empty())
+        g_MuEditorConsoleUI.LogGame(str);
 
-        return result;
-    }
+    return result;
+}
 
-    int editor_fwprintf(FILE* stream, const wchar_t* format, ...)
-    {
-        wchar_t buffer[4096];
-        va_list args;
-        va_start(args, format);
-        int result = vswprintf_s(buffer, _countof(buffer), format, args);
-        va_end(args);
+int editor_fwprintf(FILE* stream, const wchar_t* format, ...)
+{
+    wchar_t buffer[4096];
+    va_list args;
+    va_start(args, format);
+    int result = vswprintf_s(buffer, _countof(buffer), format, args);
+    va_end(args);
 
-        // Send to ImGui console
-        char utf8Buffer[8192]{};
-        WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
+    // Send to ImGui console
+    char utf8Buffer[8192];
+    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
 
-        // Remove trailing newline
-        std::string str(utf8Buffer);
-        while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
-            str.pop_back();
+    // Remove trailing newline
+    std::string str(utf8Buffer);
+    while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
+        str.pop_back();
 
-        if (!str.empty())
-            g_MuEditorConsoleUI.LogGame(str);
+    if (!str.empty())
+        g_MuEditorConsoleUI.LogGame(str);
 
-        return result;
-    }
+    return result;
+}
 }
 
 // ConsoleStreamBuf implementation
 ConsoleStreamBuf::ConsoleStreamBuf(std::ostream& stream, bool isStdout)
-    : m_stream(stream)
-    , m_oldBuf(stream.rdbuf(this))
-    , m_isStdout(isStdout)
-{
-}
+    : m_stream(stream), m_oldBuf(stream.rdbuf(this)), m_isStdout(isStdout)
+{}
 
 ConsoleStreamBuf::~ConsoleStreamBuf()
 {
@@ -94,7 +88,7 @@ std::streambuf::int_type ConsoleStreamBuf::overflow(int_type c)
         // If we hit a newline, flush the buffer
         if (c == '\n')
         {
-            std::lock_guard<std::recursive_mutex> lock(g_consoleMutex);
+            std::lock_guard<std::mutex> lock(g_consoleMutex);
 
             // Remove trailing newline for our buffer
             std::string line = m_buffer;
@@ -125,9 +119,7 @@ std::streamsize ConsoleStreamBuf::xsputn(const char* s, std::streamsize n)
     return n;
 }
 
-CMuEditorConsoleUI::CMuEditorConsoleUI()
-    : m_pStdoutBuf(nullptr)
-    , m_pStderrBuf(nullptr)
+CMuEditorConsoleUI::CMuEditorConsoleUI() : m_pStdoutBuf(nullptr), m_pStderrBuf(nullptr)
 {
     Initialize();
 }
@@ -150,8 +142,8 @@ void CMuEditorConsoleUI::CleanupOldLogs()
         namespace fs = std::filesystem;
 
         // Get current time
-        time_t now = time(0);
-        const time_t maxAge = 14 * 24 * 60 * 60; // 14 days in seconds
+        time_t       now    = time(0);
+        const time_t maxAge = 14 * 24 * 60 * 60;  // 14 days in seconds
 
         // Ensure MuEditor directory exists
         fs::path logDir = "MuEditor";
@@ -178,7 +170,7 @@ void CMuEditorConsoleUI::CleanupOldLogs()
         for (const auto& logPath : logFiles)
         {
             auto ftime = fs::last_write_time(logPath);
-            auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+            auto sctp  = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                 ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
             time_t fileTime = std::chrono::system_clock::to_time_t(sctp);
 
@@ -198,15 +190,13 @@ void CMuEditorConsoleUI::Initialize()
 {
     // Create log file with date only (one log per day)
     time_t now = time(0);
-    tm timeinfo;
+    tm     timeinfo;
     localtime_s(&timeinfo, &now);
 
     std::ostringstream filename;
-    filename << "MuEditor\\MuEditor_"
-             << std::setfill('0') << std::setw(4) << (timeinfo.tm_year + 1900)
-             << std::setfill('0') << std::setw(2) << (timeinfo.tm_mon + 1)
-             << std::setfill('0') << std::setw(2) << timeinfo.tm_mday
-             << ".log";
+    filename << "MuEditor\\MuEditor_" << std::setfill('0') << std::setw(4) << (timeinfo.tm_year + 1900)
+             << std::setfill('0') << std::setw(2) << (timeinfo.tm_mon + 1) << std::setfill('0') << std::setw(2)
+             << timeinfo.tm_mday << ".log";
 
     m_strLogFilePath = filename.str();
 
@@ -263,7 +253,7 @@ void CMuEditorConsoleUI::LogEditor(const std::string& message)
 {
     // Add timestamp
     time_t now = time(0);
-    tm timeinfo;
+    tm     timeinfo;
     localtime_s(&timeinfo, &now);
     char timestamp[32];
     strftime(timestamp, sizeof(timestamp), "[%H:%M:%S]", &timeinfo);
@@ -279,7 +269,7 @@ void CMuEditorConsoleUI::LogEditor(const std::string& message)
 
 void CMuEditorConsoleUI::LogGame(const std::string& message)
 {
-    std::lock_guard<std::recursive_mutex> lock(g_consoleMutex);
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
 
     m_strGameConsole += message;
     m_strGameConsole += "\n";
@@ -288,18 +278,17 @@ void CMuEditorConsoleUI::LogGame(const std::string& message)
     WriteToLogFile("[GAME] " + message);
 }
 
-
 void CMuEditorConsoleUI::Render()
 {
-    ImGuiIO& io = ImGui::GetIO();
-    ImVec2 bottom_pos = ImVec2(0, io.DisplaySize.y - 200);
-    ImVec2 bottom_size = ImVec2(io.DisplaySize.x, 200);
+    ImGuiIO& io          = ImGui::GetIO();
+    ImVec2   bottom_pos  = ImVec2(0, io.DisplaySize.y - 200);
+    ImVec2   bottom_size = ImVec2(io.DisplaySize.x, 200);
 
     ImGui::SetNextWindowPos(bottom_pos, ImGuiCond_Always);
     ImGui::SetNextWindowSize(bottom_size, ImGuiCond_Always);
 
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
 
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 0.9f));
 
@@ -335,7 +324,7 @@ void CMuEditorConsoleUI::Render()
         // Scrollable content area
         ImGui::BeginChild("EditorConsoleContent", ImVec2(0, 0), false);
         ImGui::InputTextMultiline("##EditorConsoleText", const_cast<char*>(m_strEditorConsole.c_str()),
-            m_strEditorConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
+                                  m_strEditorConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
         ImGui::EndChild();
 
         ImGui::EndChild();
@@ -363,7 +352,7 @@ void CMuEditorConsoleUI::Render()
         // Scrollable content area
         ImGui::BeginChild("GameConsoleContent", ImVec2(0, 0), false);
         ImGui::InputTextMultiline("##GameConsoleText", const_cast<char*>(m_strGameConsole.c_str()),
-            m_strGameConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
+                                  m_strGameConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
         ImGui::EndChild();
 
         ImGui::EndChild();
@@ -376,4 +365,4 @@ void CMuEditorConsoleUI::Render()
     ImGui::PopStyleColor();
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

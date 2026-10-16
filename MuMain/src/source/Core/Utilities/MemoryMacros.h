@@ -6,8 +6,7 @@
 // are refactored (see docs/refactoring-plan.md). They mirror the old macro
 // semantics exactly: a null pointer is skipped, and the pointer is reset to
 // null after deletion.
-template <class T>
-inline void SafeDelete(T*& p)
+template <class T> inline void SafeDelete(T*& p)
 {
     if (p != nullptr)
     {
@@ -16,8 +15,7 @@ inline void SafeDelete(T*& p)
     }
 }
 
-template <class T>
-inline void SafeDeleteArray(T*& p)
+template <class T> inline void SafeDeleteArray(T*& p)
 {
     if (p != nullptr)
     {

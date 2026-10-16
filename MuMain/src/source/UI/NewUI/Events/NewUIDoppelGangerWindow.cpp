@@ -1,4 +1,4 @@
-﻿// NewUIDoppelGangerWindow.cpp: implementation of the CNewUIDoppelGangerWindow class.
+﻿  // NewUIDoppelGangerWindow.cpp: implementation of the CNewUIDoppelGangerWindow class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -16,14 +16,14 @@
 
 #include "Audio/DSPlaySound.h"
 
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 CNewUIDoppelGangerWindow::CNewUIDoppelGangerWindow()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
     m_pNewUI3DRenderMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_iRemainTime = 0;
+    m_Pos.x = m_Pos.y      = 0;
+    m_iRemainTime          = 0;
     m_bIsEnterButtonLocked = FALSE;
 }
 
@@ -133,7 +133,7 @@ bool CNewUIDoppelGangerWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT   ptOrigin = {m_Pos.x, m_Pos.y + 50};
     wchar_t szText[256];
 
     g_pRenderText->SetFont(g_hFont);
@@ -144,7 +144,8 @@ bool CNewUIDoppelGangerWindow::Render()
     CutStr(I18N::Game::MayPassThroughTheDoppelgangerGate, szTextOut[0], 100, 2, 300);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 30, szTextOut[0], 190, 0, RT3_SORT_CENTER);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 45, szTextOut[1], 190, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 60, I18N::Game::WillYouShowMeYourMirror, 190, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 60, I18N::Game::WillYouShowMeYourMirror, 190, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 120, I18N::Game::MirrorOfDimensions, 190, 0, RT3_SORT_CENTER);
@@ -195,9 +196,9 @@ void CNewUIDoppelGangerWindow::Render3D()
 
 void CNewUIDoppelGangerWindow::RenderItem3D()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
-    int nItemType = (14 * MAX_ITEM_INDEX) + 111;
+    int nItemType  = (14 * MAX_ITEM_INDEX) + 111;
     int nItemLevel = 0;
 
     ::RenderItem3D(ptOrigin.x + (190 - 20) / 2, ptOrigin.y + 75, 20.f, 27, nItemType, nItemLevel, 0, 0, false);
@@ -248,7 +249,9 @@ void CNewUIDoppelGangerWindow::RenderFrame()
     RenderImage(IMAGE_DOPPELGANGERWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_DOPPELGANGERWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 

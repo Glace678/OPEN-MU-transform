@@ -29,9 +29,7 @@ void CSkillEditorTable::InvalidateFilter()
     m_isInitialized = false;
 }
 
-CSkillEditorTable::CSkillEditorTable()
-    : m_isInitialized(false)
-    , m_pColumns(nullptr)
+CSkillEditorTable::CSkillEditorTable() : m_isInitialized(false), m_pColumns(nullptr)
 {
     m_pColumns = new CSkillEditorColumns();
     m_pColumns->SetTable(this);
@@ -46,18 +44,12 @@ CSkillEditorTable::~CSkillEditorTable()
     }
 }
 
-void CSkillEditorTable::Render(
-    const std::string& searchFilter,
-    std::map<std::string, bool>& columnVisibility,
-    int& selectedRow,
-    bool freezeColumns,
-    bool showHoverTooltip)
+void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::string, bool>& columnVisibility,
+                               int& selectedRow, bool freezeColumns, bool showHoverTooltip)
 {
-    if (!SkillAttribute) return;
-
     // Get metadata fields once at function scope
-    const SkillFieldDescriptor* fields = GetSkillFieldDescriptors();
-    const int fieldCount = GetSkillFieldCount();
+    const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
+    const int                   fieldCount = GetSkillFieldCount();
 
     // Count visible columns
     int visibleColumnCount = 0;
@@ -71,8 +63,7 @@ void CSkillEditorTable::Render(
     // Count metadata fields that are visible
     for (int i = 0; i < fieldCount; ++i)
     {
-        if (columnVisibility.find(fields[i].name) != columnVisibility.end() &&
-            columnVisibility[fields[i].name])
+        if (columnVisibility.find(fields[i].name) != columnVisibility.end() && columnVisibility[fields[i].name])
         {
             visibleColumnCount++;
         }
@@ -90,10 +81,11 @@ void CSkillEditorTable::Render(
         m_filteredSkills.clear();
         for (int i = 0; i < MAX_SKILLS; i++)
         {
-            char nameBuffer[256]{};
+            char nameBuffer[256];
             WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
 
-            if (nameBuffer[0] == '\0') continue;
+            if (nameBuffer[0] == '\0')
+                continue;
 
             if (searchFilter.length() > 0)
             {
@@ -107,23 +99,14 @@ void CSkillEditorTable::Render(
         }
 
         m_lastSearchFilter = searchFilter;
-        m_isInitialized = true;
+        m_isInitialized    = true;
     }
 
     // Setup table flags
-    ImGuiTableFlags flags =
-        ImGuiTableFlags_Resizable |
-        ImGuiTableFlags_Reorderable |
-        ImGuiTableFlags_Hideable |
-        ImGuiTableFlags_Sortable |
-        ImGuiTableFlags_SortMulti |
-        ImGuiTableFlags_RowBg |
-        ImGuiTableFlags_BordersOuter |
-        ImGuiTableFlags_BordersV |
-        ImGuiTableFlags_NoBordersInBody |
-        ImGuiTableFlags_ScrollY |
-        ImGuiTableFlags_ScrollX |
-        ImGuiTableFlags_SizingFixedFit;
+    ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable |
+                            ImGuiTableFlags_Sortable | ImGuiTableFlags_SortMulti | ImGuiTableFlags_RowBg |
+                            ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoBordersInBody |
+                            ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX | ImGuiTableFlags_SizingFixedFit;
 
     if (freezeColumns)
     {
@@ -154,8 +137,7 @@ void CSkillEditorTable::Render(
 
         for (int i = 0; i < fieldCount; ++i)
         {
-            if (columnVisibility.find(fields[i].name) != columnVisibility.end() &&
-                columnVisibility[fields[i].name])
+            if (columnVisibility.find(fields[i].name) != columnVisibility.end() && columnVisibility[fields[i].name])
             {
                 const char* displayName = GetSkillFieldDisplayName(fields[i]);
                 ImGui::TableSetupColumn(displayName, ImGuiTableColumnFlags_None, fields[i].width);
@@ -187,8 +169,8 @@ void CSkillEditorTable::Render(
         {
             for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++)
             {
-                int skillIndex = m_filteredSkills[row];
-                SKILL_ATTRIBUTE& skill = SkillAttribute[skillIndex];
+                int              skillIndex = m_filteredSkills[row];
+                SKILL_ATTRIBUTE& skill      = SkillAttribute[skillIndex];
 
                 ImGui::TableNextRow();
                 ImGui::PushID(skillIndex);
@@ -200,13 +182,13 @@ void CSkillEditorTable::Render(
                 ImGui::TableSetColumnIndex(0);
                 const float rowCursorY = ImGui::GetCursorPosY();
                 ImGui::Selectable("##rowhover", false,
-                    ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowOverlap,
-                    ImVec2(0, ImGui::GetTextLineHeight()));
+                                  ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowOverlap,
+                                  ImVec2(0, ImGui::GetTextLineHeight()));
                 const bool rowHovered = ImGui::IsItemHovered();
                 ImGui::SetCursorPosY(rowCursorY);
 
                 bool rowInteracted = false;
-                int colIdx = 0;
+                int  colIdx        = 0;
 
                 // Render Index column
                 if (indexVisible)
@@ -241,4 +223,4 @@ void CSkillEditorTable::Render(
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

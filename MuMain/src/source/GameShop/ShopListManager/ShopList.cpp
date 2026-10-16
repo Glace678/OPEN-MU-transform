@@ -15,21 +15,21 @@
 #include <filesystem>
 #include <fstream>
 
-CShopList::CShopList() // OK
+CShopList::CShopList()  // OK
 {
     this->m_CategoryListPtr = new CShopCategoryList;
-    this->m_PackageListPtr = new CShopPackageList;
-    this->m_ProductListPtr = new CShopProductList;
+    this->m_PackageListPtr  = new CShopPackageList;
+    this->m_ProductListPtr  = new CShopProductList;
 }
 
-CShopList::~CShopList() // OK
+CShopList::~CShopList()  // OK
 {
     SafeDelete(m_CategoryListPtr);
     SafeDelete(m_PackageListPtr);
     SafeDelete(m_ProductListPtr);
 }
 
-WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK
+WZResult CShopList::LoadCategroy(const wchar_t* szFilePath)  // OK
 {
     WZResult result;
 
@@ -48,13 +48,13 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
         this->GetCategoryListPtr()->Clear();
 
-        int linesRead = 0;
+        int linesRead  = 0;
         int rowsParsed = 0;
 
         while (true)
@@ -84,8 +84,8 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK
         // non-zero linesRead) will be obvious in muConsoleDebug instead of
         // silently producing an empty shop grid with no error dialog.
         g_ConsoleDebug->Write(MCD_NORMAL,
-            L"[XShop] LoadCategroy: parsed %d category rows from %d lines (encode=%d) <%ls>",
-            rowsParsed, linesRead, (int)enc, szFilePath);
+                              L"[XShop] LoadCategroy: parsed %d category rows from %d lines (encode=%d) <%ls>",
+                              rowsParsed, linesRead, (int)enc, szFilePath);
     }
     else
     {
@@ -95,7 +95,7 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK
     return result;
 }
 
-WZResult CShopList::LoadPackage(const wchar_t* szFilePath) // OK
+WZResult CShopList::LoadPackage(const wchar_t* szFilePath)  // OK
 {
     WZResult result;
 
@@ -114,7 +114,7 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
@@ -144,11 +144,11 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath) // OK
     return result;
 }
 
-WZResult CShopList::LoadProduct(const wchar_t* szFilePath) // OK
+WZResult CShopList::LoadProduct(const wchar_t* szFilePath)  // OK
 {
-    WZResult result;
+    static WZResult result;
 
-    result.SetSuccessResult();
+    result.BuildSuccessResult();
 
     FILE_ENCODE enc = this->IsFileEncodingUtf8(szFilePath);
 
@@ -165,7 +165,7 @@ WZResult CShopList::LoadProduct(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
@@ -198,22 +198,22 @@ WZResult CShopList::LoadProduct(const wchar_t* szFilePath) // OK
     return result;
 }
 
-void CShopList::SetCategoryListPtr(CShopCategoryList* CategoryListPtr) // OK
+void CShopList::SetCategoryListPtr(CShopCategoryList* CategoryListPtr)  // OK
 {
     m_CategoryListPtr = CategoryListPtr;
 }
 
-void CShopList::SetPackageListPtr(CShopPackageList* PackagePtr) // OK
+void CShopList::SetPackageListPtr(CShopPackageList* PackagePtr)  // OK
 {
     m_PackageListPtr = PackagePtr;
 }
 
-void CShopList::SetProductListPtr(CShopProductList* ProductListPtr) // OK
+void CShopList::SetProductListPtr(CShopProductList* ProductListPtr)  // OK
 {
     m_ProductListPtr = ProductListPtr;
 }
 
-FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath) // OK
+FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath)  // OK
 {
     std::ifstream ifs;
 
@@ -224,7 +224,7 @@ FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath) // OK
         return FE_ANSI;
     }
 
-    char buff[16] = { 0 };
+    char buff[16] = {0};
 
     ifs.getline(buff, sizeof(buff));
 
@@ -248,7 +248,7 @@ FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath) // OK
     return FE_ANSI;
 }
 
-std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode) // OK
+std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)  // OK
 {
     std::wstring result;
 
@@ -273,7 +273,7 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
     int cchWideChar = MultiByteToWideChar(codePage, 0, buffer, -1, 0, 0);
     if (cchWideChar <= 0)
     {
-        return result; // empty string on conversion failure
+        return result;  // empty string on conversion failure
     }
 
     auto lpWideCharStr = new WCHAR[cchWideChar];

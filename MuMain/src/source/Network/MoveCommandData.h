@@ -4,52 +4,55 @@
 
 namespace SEASON3B
 {
-    constexpr int MAX_MOVE_COMMAND_COUNT = 1024;
-
-    class CMoveCommandData
-    {
-    public:
-
+class CMoveCommandData
+{
+public:
 #pragma pack(push, 1)
-        typedef struct tagMOVEREQ
-        {
-            int		index;
-            wchar_t	szMainMapName[32];
-            wchar_t	szSubMapName[32];
-            int		iReqLevel;
-            int		m_iReqMaxLevel;
-            int		iReqZen;
-            int		iGateNum;
-        } MOVEREQINFO;
+    typedef struct tagMOVEREQ
+    {
+        int     index;
+        wchar_t szMainMapName[32];
+        wchar_t szSubMapName[32];
+        int     iReqLevel;
+        int     m_iReqMaxLevel;
+        int     iReqZen;
+        int     iGateNum;
+    } MOVEREQINFO;
 #pragma pack(pop)
 
-        typedef struct tagMOVEINFODATA
+    typedef struct tagMOVEINFODATA
+    {
+        MOVEREQINFO _ReqInfo;
+        bool        _bCanMove;
+        bool        _bStrife;
+        bool        _bSelected;
+
+        bool operator==(const int& iIndex) const
         {
-            MOVEREQINFO _ReqInfo;
-            bool		_bCanMove;
-            bool		_bStrife;
-            bool		_bSelected;
+            int iTempIndex = iIndex;
+            return _ReqInfo.index == iTempIndex;
+        };
+    } MOVEINFODATA;
 
-            bool HasIndex(int index) const { return _ReqInfo.index == index; }
-        } MOVEINFODATA;
-    private:
-        std::list<MOVEINFODATA*>	m_listMoveInfoData;
+private:
+    std::list<MOVEINFODATA*> m_listMoveInfoData;
 
-    protected:
-        CMoveCommandData();
-    public:
-        virtual ~CMoveCommandData();
+protected:
+    CMoveCommandData();
 
-    public:
-        static CMoveCommandData* GetInstance();
-        static bool OpenMoveReqScript(const std::wstring& filename);
+public:
+    virtual ~CMoveCommandData();
 
-        int GetNumMoveMap();
-        const MOVEINFODATA* GetMoveCommandDataByIndex(int iIndex);
-        const std::list<MOVEINFODATA*>& GetMoveCommandDatalist();
+public:
+    static CMoveCommandData* GetInstance();
+    static bool              OpenMoveReqScript(const std::wstring& filename);
 
-    protected:
-        bool Create(const std::wstring& filename);
-        void Release();
-    };
+    int                             GetNumMoveMap();
+    const MOVEINFODATA*             GetMoveCommandDataByIndex(int iIndex);
+    const std::list<MOVEINFODATA*>& GetMoveCommandDatalist();
+
+protected:
+    bool Create(const std::wstring& filename);
+    void Release();
+};
 }

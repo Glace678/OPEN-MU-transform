@@ -9,7 +9,6 @@
 
 #include "GameLogic/Items/ItemAddOptioninfo.h"
 
-
 #define ITEMADDOPTION_DATA_FILE L"Data\\Local\\ItemAddOption.bmd"
 
 ItemAddOptioninfo* ItemAddOptioninfo::MakeInfo()
@@ -34,9 +33,7 @@ ItemAddOptioninfo::ItemAddOptioninfo()
     }
 }
 
-ItemAddOptioninfo::~ItemAddOptioninfo()
-{
-}
+ItemAddOptioninfo::~ItemAddOptioninfo() {}
 
 const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& filename)
 {
@@ -45,14 +42,7 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
     {
         int nSize = sizeof(ITEM_ADD_OPTION) * MAX_ITEM;
 
-        // XC-12: a short read would feed uninitialized table memory into the
-        // item option system; treat it like a missing/corrupt file.
-        if (::fread(m_ItemAddOption, nSize, 1, fp) != 1)
-        {
-            ::fclose(fp);
-            return false;
-        }
-
+        ::fread(m_ItemAddOption, nSize, 1, fp);
         ::BuxConvert((BYTE*)m_ItemAddOption, nSize);
         ::fclose(fp);
 
@@ -63,46 +53,51 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
 
 void ItemAddOptioninfo::GetItemAddOtioninfoText(std::vector<std::wstring>& outtextlist, int type)
 {
-    int optiontype = 0;
+    int optiontype  = 0;
     int optionvalue = 0;
 
     for (int i = 0; i < 2; ++i)
     {
         std::wstring text;
-        // Zero-init: optiontype outside 1..8 hits no switch branch, leaving the
-        // buffer uninitialized before text = TempText (M-44). Empty/zero keeps
-        // it a valid NUL-terminated string instead of reading garbage.
-        wchar_t TempText[100] = {};
+        wchar_t      TempText[100];
 
         if (i == 0)
         {
-            optiontype = m_ItemAddOption[type].m_byOption1;
+            optiontype  = m_ItemAddOption[type].m_byOption1;
             optionvalue = m_ItemAddOption[type].m_byValue1;
         }
         else
         {
-            optiontype = m_ItemAddOption[type].m_byOption2;
+            optiontype  = m_ItemAddOption[type].m_byOption2;
             optionvalue = m_ItemAddOption[type].m_byValue2;
         }
 
         switch (optiontype)
         {
-        case 1: mu_swprintf(TempText, I18N::Game::AttackSucessRateIncreaseD, optionvalue);
-            break;
-        case 2: mu_swprintf(TempText, I18N::Game::AdditionalDamageD, optionvalue);
-            break;
-        case 3: mu_swprintf(TempText, I18N::Game::DefenseSuccessRateIncreaseD, optionvalue);
-            break;
-        case 4: mu_swprintf(TempText, I18N::Game::DefensiveSkillD, optionvalue);
-            break;
-        case 5: mu_swprintf(TempText, I18N::Game::MaxHPIncreaseD, optionvalue);
-            break;
-        case 6: mu_swprintf(TempText, I18N::Game::MaxSDIncreaseD, optionvalue);
-            break;
-        case 7: mu_swprintf(TempText, I18N::Game::SDAutoRecovery);
-            break;
-        case 8: mu_swprintf(TempText, I18N::Game::SDRecoveryRateIncreaseD, optionvalue);
-            break;
+            case 1:
+                mu_swprintf(TempText, I18N::Game::AttackSucessRateIncreaseD, optionvalue);
+                break;
+            case 2:
+                mu_swprintf(TempText, I18N::Game::AdditionalDamageD, optionvalue);
+                break;
+            case 3:
+                mu_swprintf(TempText, I18N::Game::DefenseSuccessRateIncreaseD, optionvalue);
+                break;
+            case 4:
+                mu_swprintf(TempText, I18N::Game::DefensiveSkillD, optionvalue);
+                break;
+            case 5:
+                mu_swprintf(TempText, I18N::Game::MaxHPIncreaseD, optionvalue);
+                break;
+            case 6:
+                mu_swprintf(TempText, I18N::Game::MaxSDIncreaseD, optionvalue);
+                break;
+            case 7:
+                mu_swprintf(TempText, I18N::Game::SDAutoRecovery);
+                break;
+            case 8:
+                mu_swprintf(TempText, I18N::Game::SDRecoveryRateIncreaseD, optionvalue);
+                break;
         }
 
         text = TempText;

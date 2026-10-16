@@ -22,14 +22,14 @@ class IInventoryActionContext
 public:
     virtual ~IInventoryActionContext() = default;
 
-    virtual REPAIR_MODE GetRepairMode() const = 0;
-    virtual bool IsEquipable(int iIndex, ITEM* pItem) const = 0;
-    virtual void ResetMouseRButton() = 0;
-    virtual void ResetMouseLButton() = 0;
-    virtual int  FindEmptySlot(ITEM* pItem) const = 0;
-    virtual bool IsRepairEnableLevel() const = 0;
+    virtual REPAIR_MODE GetRepairMode() const                      = 0;
+    virtual bool        IsEquipable(int iIndex, ITEM* pItem) const = 0;
+    virtual void        ResetMouseRButton()                        = 0;
+    virtual void        ResetMouseLButton()                        = 0;
+    virtual int         FindEmptySlot(ITEM* pItem) const           = 0;
+    virtual bool        IsRepairEnableLevel() const                = 0;
 };
 
-} // namespace SEASON3B
+}  // namespace SEASON3B
 
-#endif // !defined(AFX_IINVENTORYACTIONCONTEXT_H__INCLUDED_)
+#endif  // !defined(AFX_IINVENTORYACTIONCONTEXT_H__INCLUDED_)

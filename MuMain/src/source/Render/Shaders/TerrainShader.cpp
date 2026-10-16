@@ -14,86 +14,77 @@
 #define APIENTRY
 #endif
 
-typedef GLuint (APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
-typedef void   (APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
-typedef void   (APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef GLuint (APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
-typedef void   (APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef void   (APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
-typedef GLint  (APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
-typedef GLuint (APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
-typedef void   (APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
-typedef void   (APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
-typedef void   (APIENTRY* PFNGLUNIFORM2FPROC)(GLint, GLfloat, GLfloat);
-typedef void   (APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
+typedef GLuint(APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
+typedef void(APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+typedef void(APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef GLuint(APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
+typedef void(APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
+typedef void(APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef void(APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
+typedef GLint(APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
+typedef GLuint(APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
+typedef void(APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
+typedef void(APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
+typedef void(APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
+typedef void(APIENTRY* PFNGLUNIFORM2FPROC)(GLint, GLfloat, GLfloat);
+typedef void(APIENTRY* PFNGLACTIVETEXTUREPROC)(GLenum);
 
-static PFNGLCREATESHADERPROC       fn_glCreateShader       = nullptr;
-static PFNGLSHADERSOURCEPROC       fn_glShaderSource        = nullptr;
-static PFNGLCOMPILESHADERPROC      fn_glCompileShader       = nullptr;
-static PFNGLGETSHADERIVPROC        fn_glGetShaderiv         = nullptr;
-static PFNGLGETSHADERINFOLOGPROC   fn_glGetShaderInfoLog    = nullptr;
-static PFNGLCREATEPROGRAMPROC      fn_glCreateProgram       = nullptr;
-static PFNGLATTACHSHADERPROC       fn_glAttachShader        = nullptr;
-static PFNGLLINKPROGRAMPROC        fn_glLinkProgram         = nullptr;
-static PFNGLGETPROGRAMIVPROC       fn_glGetProgramiv        = nullptr;
-static PFNGLGETPROGRAMINFOLOGPROC  fn_glGetProgramInfoLog   = nullptr;
-static PFNGLDELETESHADERPROC       fn_glDeleteShader        = nullptr;
-static PFNGLDELETEPROGRAMPROC      fn_glDeleteProgram       = nullptr;
-static PFNGLGETUNIFORMLOCATIONPROC fn_glGetUniformLocation  = nullptr;
+static PFNGLCREATESHADERPROC         fn_glCreateShader         = nullptr;
+static PFNGLSHADERSOURCEPROC         fn_glShaderSource         = nullptr;
+static PFNGLCOMPILESHADERPROC        fn_glCompileShader        = nullptr;
+static PFNGLGETSHADERIVPROC          fn_glGetShaderiv          = nullptr;
+static PFNGLGETSHADERINFOLOGPROC     fn_glGetShaderInfoLog     = nullptr;
+static PFNGLCREATEPROGRAMPROC        fn_glCreateProgram        = nullptr;
+static PFNGLATTACHSHADERPROC         fn_glAttachShader         = nullptr;
+static PFNGLLINKPROGRAMPROC          fn_glLinkProgram          = nullptr;
+static PFNGLGETPROGRAMIVPROC         fn_glGetProgramiv         = nullptr;
+static PFNGLGETPROGRAMINFOLOGPROC    fn_glGetProgramInfoLog    = nullptr;
+static PFNGLDELETESHADERPROC         fn_glDeleteShader         = nullptr;
+static PFNGLDELETEPROGRAMPROC        fn_glDeleteProgram        = nullptr;
+static PFNGLGETUNIFORMLOCATIONPROC   fn_glGetUniformLocation   = nullptr;
 static PFNGLGETUNIFORMBLOCKINDEXPROC fn_glGetUniformBlockIndex = nullptr;
-static PFNGLUNIFORMBLOCKBINDINGPROC fn_glUniformBlockBinding = nullptr;
-static PFNGLUNIFORM1IPROC          fn_glUniform1i           = nullptr;
-static PFNGLUNIFORM1FPROC          fn_glUniform1f           = nullptr;
-static PFNGLUNIFORM2FPROC          fn_glUniform2f           = nullptr;
-static PFNGLACTIVETEXTUREPROC      fn_glActiveTexture       = nullptr;
+static PFNGLUNIFORMBLOCKBINDINGPROC  fn_glUniformBlockBinding  = nullptr;
+static PFNGLUNIFORM1IPROC            fn_glUniform1i            = nullptr;
+static PFNGLUNIFORM1FPROC            fn_glUniform1f            = nullptr;
+static PFNGLUNIFORM2FPROC            fn_glUniform2f            = nullptr;
+static PFNGLACTIVETEXTUREPROC        fn_glActiveTexture        = nullptr;
 
 static bool LoadGLShaderFunctions()
 {
     static bool loaded = false;
-    if (loaded) return true;
+    if (loaded)
+        return true;
 
-    fn_glCreateShader       = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
-    fn_glShaderSource        = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
-    fn_glCompileShader       = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
-    fn_glGetShaderiv         = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
-    fn_glGetShaderInfoLog    = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
-    fn_glCreateProgram       = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
-    fn_glAttachShader        = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
-    fn_glLinkProgram         = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
-    fn_glGetProgramiv        = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
-    fn_glGetProgramInfoLog   = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
-    fn_glDeleteShader        = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
-    fn_glDeleteProgram       = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
-    fn_glGetUniformLocation  = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
+    fn_glCreateShader         = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
+    fn_glShaderSource         = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
+    fn_glCompileShader        = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
+    fn_glGetShaderiv          = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
+    fn_glGetShaderInfoLog     = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
+    fn_glCreateProgram        = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
+    fn_glAttachShader         = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
+    fn_glLinkProgram          = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
+    fn_glGetProgramiv         = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
+    fn_glGetProgramInfoLog    = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
+    fn_glDeleteShader         = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
+    fn_glDeleteProgram        = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
+    fn_glGetUniformLocation   = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
     fn_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)MuGL::GetNativeProcAddress("glGetUniformBlockIndex");
-    fn_glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
-    fn_glUniform1i           = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
-    fn_glUniform1f           = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
-    fn_glUniform2f           = (PFNGLUNIFORM2FPROC)MuGL::GetProcAddress("glUniform2f");
-    fn_glActiveTexture       = (PFNGLACTIVETEXTUREPROC)MuGL::GetProcAddress("glActiveTexture");
+    fn_glUniformBlockBinding  = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
+    fn_glUniform1i            = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
+    fn_glUniform1f            = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
+    fn_glUniform2f            = (PFNGLUNIFORM2FPROC)MuGL::GetProcAddress("glUniform2f");
+    fn_glActiveTexture        = (PFNGLACTIVETEXTUREPROC)MuGL::GetProcAddress("glActiveTexture");
 
-    loaded = (fn_glCreateShader != nullptr &&
-              fn_glShaderSource != nullptr &&
-              fn_glCompileShader != nullptr &&
-              fn_glGetShaderiv != nullptr &&
-              fn_glCreateProgram != nullptr &&
-              fn_glAttachShader != nullptr &&
-              fn_glLinkProgram != nullptr &&
-              fn_glGetProgramiv != nullptr &&
-              fn_glDeleteShader != nullptr &&
-              fn_glDeleteProgram != nullptr &&
-              fn_glGetUniformLocation != nullptr &&
-              fn_glUniform1i != nullptr &&
-              fn_glUniform1f != nullptr &&
-              fn_glUniform2f != nullptr &&
-              fn_glActiveTexture != nullptr);
+    loaded = (fn_glCreateShader != nullptr && fn_glShaderSource != nullptr && fn_glCompileShader != nullptr &&
+              fn_glGetShaderiv != nullptr && fn_glCreateProgram != nullptr && fn_glAttachShader != nullptr &&
+              fn_glLinkProgram != nullptr && fn_glGetProgramiv != nullptr && fn_glDeleteShader != nullptr &&
+              fn_glDeleteProgram != nullptr && fn_glGetUniformLocation != nullptr && fn_glUniform1i != nullptr &&
+              fn_glUniform1f != nullptr && fn_glUniform2f != nullptr && fn_glActiveTexture != nullptr);
     return loaded;
 }
 
@@ -202,18 +193,22 @@ void TerrainShader::Unbind()
 
 void TerrainShader::CreateGL()
 {
-    if (m_Program != 0) return;
-    if (!LoadGLShaderFunctions()) return;
+    if (m_Program != 0)
+        return;
+    if (!LoadGLShaderFunctions())
+        return;
 
     GLint success = 0;
-    char infoLog[512] = {};
+    char  infoLog[512];
 
     m_VertShader = fn_glCreateShader(GL_VERTEX_SHADER);
     fn_glShaderSource(m_VertShader, 1, &g_szTerrainVert, nullptr);
     fn_glCompileShader(m_VertShader);
     fn_glGetShaderiv(m_VertShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
+    if (!success)
+    {
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
         SDL_Log("[TerrainShader] Vert compile error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         m_VertShader = 0;
@@ -224,8 +219,10 @@ void TerrainShader::CreateGL()
     fn_glShaderSource(m_FragShader, 1, &g_szTerrainFrag, nullptr);
     fn_glCompileShader(m_FragShader);
     fn_glGetShaderiv(m_FragShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
+    if (!success)
+    {
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
         SDL_Log("[TerrainShader] Frag compile error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         fn_glDeleteShader(m_FragShader);
@@ -238,8 +235,10 @@ void TerrainShader::CreateGL()
     fn_glAttachShader(m_Program, m_FragShader);
     fn_glLinkProgram(m_Program);
     fn_glGetProgramiv(m_Program, GL_LINK_STATUS, &success);
-    if (!success) {
-        if (fn_glGetProgramInfoLog) fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
+    if (!success)
+    {
+        if (fn_glGetProgramInfoLog)
+            fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
         SDL_Log("[TerrainShader] Program link error: %s", infoLog);
         fn_glDeleteProgram(m_Program);
         InvalidateProgramCache();
@@ -250,16 +249,18 @@ void TerrainShader::CreateGL()
     }
 
     // Bind GlobalMatrices uniform block to binding point 0
-    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr) {
+    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr)
+    {
         GLuint blockIdx = fn_glGetUniformBlockIndex(m_Program, "GlobalMatrices");
-        if (blockIdx != GL_INVALID_INDEX) {
+        if (blockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, blockIdx, 0);
         }
     }
 
     // Resolve uniform locations
-    m_LocBaseTex    = fn_glGetUniformLocation(m_Program, "u_BaseTex");
-    m_LocOverlayTex = fn_glGetUniformLocation(m_Program, "u_OverlayTex");
+    m_LocBaseTex        = fn_glGetUniformLocation(m_Program, "u_BaseTex");
+    m_LocOverlayTex     = fn_glGetUniformLocation(m_Program, "u_OverlayTex");
     m_LocWaterMove      = fn_glGetUniformLocation(m_Program, "u_WaterMove");
     m_LocBaseIsWater    = fn_glGetUniformLocation(m_Program, "u_BaseIsWater");
     m_LocOverlayIsWater = fn_glGetUniformLocation(m_Program, "u_OverlayIsWater");
@@ -269,45 +270,81 @@ void TerrainShader::CreateGL()
 
     // Assign default texture unit slots (u_BaseTex = 0, u_OverlayTex = 1)
     BindProgram(m_Program);
-    if (m_LocBaseTex != -1) { fn_glUniform1i(m_LocBaseTex, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocOverlayTex != -1) { fn_glUniform1i(m_LocOverlayTex, 1); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocWaterMove != -1) { fn_glUniform1f(m_LocWaterMove, 0.0f); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocBaseIsWater != -1) { fn_glUniform1i(m_LocBaseIsWater, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocOverlayIsWater != -1) { fn_glUniform1i(m_LocOverlayIsWater, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocAlphaRef != -1) { fn_glUniform1f(m_LocAlphaRef, -1.0f); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_LocBaseTex != -1)
+    {
+        fn_glUniform1i(m_LocBaseTex, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocOverlayTex != -1)
+    {
+        fn_glUniform1i(m_LocOverlayTex, 1);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocWaterMove != -1)
+    {
+        fn_glUniform1f(m_LocWaterMove, 0.0f);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocBaseIsWater != -1)
+    {
+        fn_glUniform1i(m_LocBaseIsWater, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocOverlayIsWater != -1)
+    {
+        fn_glUniform1i(m_LocOverlayIsWater, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocAlphaRef != -1)
+    {
+        fn_glUniform1f(m_LocAlphaRef, -1.0f);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
     m_LastAlphaRef = -1.0f;
     // GLP-04: reset to "unset", not 0 -- even though the default upload above sends 0/0, the
     // sentinel must not assume it always precedes the first real SetWaterFlags() call.
-    m_LastBaseIsWater = -1;
+    m_LastBaseIsWater    = -1;
     m_LastOverlayIsWater = -1;
 
     // Standard 64px-tile scale (64/64/TERRAIN_SCALE = 0.01) as a sane pre-first-draw default;
     // every real tile draw overwrites this via SetUVScale() before use.
-    if (m_LocBaseUVScale != -1) fn_glUniform2f(m_LocBaseUVScale, 0.01f, 0.01f);
-    if (m_LocOverlayUVScale != -1) fn_glUniform2f(m_LocOverlayUVScale, 0.01f, 0.01f);
+    if (m_LocBaseUVScale != -1)
+        fn_glUniform2f(m_LocBaseUVScale, 0.01f, 0.01f);
+    if (m_LocOverlayUVScale != -1)
+        fn_glUniform2f(m_LocOverlayUVScale, 0.01f, 0.01f);
     m_LastBaseUVScale[0] = m_LastBaseUVScale[1] = 0.01f;
     m_LastOverlayUVScale[0] = m_LastOverlayUVScale[1] = 0.01f;
     BindProgram(0);
 
-    g_ErrorReport.Write(L"[TerrainShader] Created program ID %d, u_BaseTex loc %d, u_OverlayTex loc %d\r\n", m_Program, m_LocBaseTex, m_LocOverlayTex);
+    g_ErrorReport.Write(L"[TerrainShader] Created program ID %d, u_BaseTex loc %d, u_OverlayTex loc %d\r\n", m_Program,
+                        m_LocBaseTex, m_LocOverlayTex);
 }
 
 void TerrainShader::DestroyGL()
 {
-    if (!m_Program) return;
+    if (!m_Program)
+        return;
 
     BindProgram(0);
-    if (fn_glDeleteProgram) { fn_glDeleteProgram(m_Program); InvalidateProgramCache(); }
-    if (fn_glDeleteShader) {
-        if (m_VertShader) fn_glDeleteShader(m_VertShader);
-        if (m_FragShader) fn_glDeleteShader(m_FragShader);
+    if (fn_glDeleteProgram)
+    {
+        fn_glDeleteProgram(m_Program);
+        InvalidateProgramCache();
+    }
+    if (fn_glDeleteShader)
+    {
+        if (m_VertShader)
+            fn_glDeleteShader(m_VertShader);
+        if (m_FragShader)
+            fn_glDeleteShader(m_FragShader);
     }
     m_Program = m_VertShader = m_FragShader = 0;
 }
 
 void TerrainShader::BindGL()
 {
-    if (m_Program != 0) {
+    if (m_Program != 0)
+    {
         BindProgram(m_Program);
     }
 }
@@ -317,7 +354,7 @@ extern int CachTexture;
 void TerrainShader::SetBaseTexture(GLuint texID)
 {
     BindTexture2D(0, texID);
-    CachTexture = -1; // Invalidate engine texture cache
+    CachTexture = -1;  // Invalidate engine texture cache
 }
 
 void TerrainShader::SetOverlayTexture(GLuint texID)
@@ -332,13 +369,15 @@ void TerrainShader::SetUVScale(float baseScaleX, float baseScaleY, float overlay
     // Dirty-checked like SyncAlphaRef -- adjacent tiles on the same map very often share both
     // textures, so this is usually a no-op glUniform-wise.
     if (m_LocBaseUVScale != -1 && fn_glUniform2f &&
-        (baseScaleX != m_LastBaseUVScale[0] || baseScaleY != m_LastBaseUVScale[1])) {
+        (baseScaleX != m_LastBaseUVScale[0] || baseScaleY != m_LastBaseUVScale[1]))
+    {
         fn_glUniform2f(m_LocBaseUVScale, baseScaleX, baseScaleY);
         m_LastBaseUVScale[0] = baseScaleX;
         m_LastBaseUVScale[1] = baseScaleY;
     }
     if (m_LocOverlayUVScale != -1 && fn_glUniform2f &&
-        (overlayScaleX != m_LastOverlayUVScale[0] || overlayScaleY != m_LastOverlayUVScale[1])) {
+        (overlayScaleX != m_LastOverlayUVScale[0] || overlayScaleY != m_LastOverlayUVScale[1]))
+    {
         fn_glUniform2f(m_LocOverlayUVScale, overlayScaleX, overlayScaleY);
         m_LastOverlayUVScale[0] = overlayScaleX;
         m_LastOverlayUVScale[1] = overlayScaleY;
@@ -347,7 +386,8 @@ void TerrainShader::SetUVScale(float baseScaleX, float baseScaleY, float overlay
 
 void TerrainShader::SetWaterMove(float waterMove)
 {
-    if (m_LocWaterMove != -1 && fn_glUniform1f) {
+    if (m_LocWaterMove != -1 && fn_glUniform1f)
+    {
         fn_glUniform1f(m_LocWaterMove, waterMove);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
     }
@@ -359,13 +399,15 @@ void TerrainShader::SetWaterFlags(bool baseIsWater, bool overlayIsWater)
     // called once per visible terrain tile and almost always 0/0, so an unconditional write
     // here was two redundant glUniform1i per tile for the overwhelming majority of tiles.
     const int base = baseIsWater ? 1 : 0;
-    if (m_LocBaseIsWater != -1 && fn_glUniform1i && base != m_LastBaseIsWater) {
+    if (m_LocBaseIsWater != -1 && fn_glUniform1i && base != m_LastBaseIsWater)
+    {
         fn_glUniform1i(m_LocBaseIsWater, base);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastBaseIsWater = base;
     }
     const int overlay = overlayIsWater ? 1 : 0;
-    if (m_LocOverlayIsWater != -1 && fn_glUniform1i && overlay != m_LastOverlayIsWater) {
+    if (m_LocOverlayIsWater != -1 && fn_glUniform1i && overlay != m_LastOverlayIsWater)
+    {
         fn_glUniform1i(m_LocOverlayIsWater, overlay);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastOverlayIsWater = overlay;
@@ -377,7 +419,8 @@ void TerrainShader::SyncAlphaRef()
     // Dirty-checked plain float compare — TerrainShader stays bound across many tile draws per
     // frustrum pass, so this must not cost a glUniform1f per tile (per the TASK-24 Lorencia FPS
     // lesson: per-tile GL calls are the enemy).
-    if (m_LocAlphaRef != -1 && fn_glUniform1f && g_AlphaRef != m_LastAlphaRef) {
+    if (m_LocAlphaRef != -1 && fn_glUniform1f && g_AlphaRef != m_LastAlphaRef)
+    {
         fn_glUniform1f(m_LocAlphaRef, g_AlphaRef);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastAlphaRef = g_AlphaRef;

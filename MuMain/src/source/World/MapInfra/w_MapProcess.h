@@ -8,11 +8,11 @@
 #include "World/MapInfra/MapManager.h"
 
 class MapProcess;
-using MapProcessPtr = std::shared_ptr<MapProcess>;class MapProcess
+using MapProcessPtr = std::shared_ptr<MapProcess>;
+class MapProcess
 {
 public:
     static MapProcessPtr Make();
-    friend MapProcess& TheMapProcess();  /* fallback singleton access to private ctor */
     virtual ~MapProcess();
 
 public:
@@ -28,11 +28,11 @@ public:
 
 public:
     CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
+    bool       MoveMonsterVisual(OBJECT* o, BMD* b);
+    void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+    bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public:
     bool PlayMonsterSound(OBJECT* o);
@@ -48,17 +48,17 @@ public:
     BaseMap& GetMap(int type);
 
 private:
-    bool FindMap(ENUM_WORLD type);
+    bool     FindMap(ENUM_WORLD type);
     BaseMap& FindBaseMap(ENUM_WORLD type);
-    void Init();
-    void Destroy();
+    void     Init();
+    void     Destroy();
     MapProcess();
 
 private:
-    typedef std::list< std::shared_ptr<BaseMap> >		MapList;
+    typedef std::list<std::shared_ptr<BaseMap>> MapList;
 
 private:
-    MapList				m_MapList;
+    MapList m_MapList;
 };
 
 extern MapProcessPtr g_MapProcess;

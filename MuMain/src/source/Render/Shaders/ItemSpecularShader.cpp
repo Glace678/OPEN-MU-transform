@@ -25,20 +25,22 @@ void CItemSpecularShader::Shutdown()
     m_activeVariant = SHADER_VARIANT_NONE;
 }
 
-bool CItemSpecularShader::Begin(EShaderVariant variant,
-                                GLuint /*baseTex*/, GLuint /*animChromeTex*/,
-                                GLuint /*metalTex*/, GLuint /*chrome1Tex*/,
-                                const float* bodyLight, const float* specularTint)
+bool CItemSpecularShader::Begin(EShaderVariant variant, GLuint /*baseTex*/, GLuint /*animChromeTex*/,
+                                GLuint /*metalTex*/, GLuint /*chrome1Tex*/, const float* bodyLight,
+                                const float* specularTint)
 {
     if (!IsSupported() || variant <= SHADER_VARIANT_NONE || variant >= SHADER_VARIANT_COUNT)
         return false;
 
     m_activeVariant = variant;
-    if (specularTint) {
+    if (specularTint)
+    {
         m_specularTint[0] = specularTint[0];
         m_specularTint[1] = specularTint[1];
         m_specularTint[2] = specularTint[2];
-    } else if (bodyLight) {
+    }
+    else if (bodyLight)
+    {
         m_specularTint[0] = bodyLight[0];
         m_specularTint[1] = bodyLight[1];
         m_specularTint[2] = bodyLight[2];

@@ -9,9 +9,8 @@ class CKeyGenerator
 public:
     CKeyGenerator();
     virtual ~CKeyGenerator();
-    DWORD		GenerateKeyValue(DWORD dwKeyValue);
-    bool		CheckKeyValue(DWORD* dwOldKeyValue, DWORD dwReceiveKeyValue);
-
+    DWORD GenerateKeyValue(DWORD dwKeyValue);
+    bool  CheckKeyValue(DWORD* dwOldKeyValue, DWORD dwReceiveKeyValue);
 };
 
 extern CKeyGenerator g_KeyGenerator;

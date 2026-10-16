@@ -23,7 +23,6 @@
 #include "UI/NewUI/Dialogs/NewUIMessageBox.h"
 #include "UI/Windows/RememberPasswordPrompt.h"
 
-
 #include "Network/Server/ServerListManager.h"
 #ifdef _WIN32
 #include <dpapi.h>
@@ -36,35 +35,31 @@
 #include <cstring>
 #include <string_view>
 
-#define	LIW_ACCOUNT		0
-#define	LIW_PASSWORD	1
+#define LIW_ACCOUNT  0
+#define LIW_PASSWORD 1
 
-#define LIW_OK			0
-#define LIW_CANCEL		1
+#define LIW_OK     0
+#define LIW_CANCEL 1
 
-
-
-extern int g_iChatInputType;
-extern int  LogIn;
+extern int     g_iChatInputType;
+extern int     LogIn;
 extern wchar_t LogInID[MAX_USERNAME_SIZE + 1];
-extern BYTE Version[SIZE_PROTOCOLVERSION];
-extern BYTE Serial[SIZE_PROTOCOLSERIAL + 1];
+extern BYTE    Version[SIZE_PROTOCOLVERSION];
+extern BYTE    Serial[SIZE_PROTOCOLSERIAL + 1];
 
 #if defined(__ANDROID__) || defined(__OHOS__)
 namespace
 {
-    void LogMobileLoginInput(CButton& ok)
-    {
-        const char* diagnostics = std::getenv("MU_INPUT_DIAGNOSTICS");
-        auto& input = CInput::Instance();
-        if (diagnostics == nullptr || std::strcmp(diagnostics, "1") != 0
-            || (!input.IsLBtnDn() && !input.IsLBtnUp()))
-            return;
-        SDL_Log("[Login] protocol=%d blocked=%d cursor=%ld,%ld ok=%d,%d %dx%d inside=%d click=%d",
-            CurrentProtocolState, !g_MessageBox->IsEmpty(),
-            input.GetCursorX(), input.GetCursorY(), ok.GetXPos(), ok.GetYPos(),
-            ok.GetWidth(), ok.GetHeight(), ok.CursorInObject(), ok.IsClick());
-    }
+void LogMobileLoginInput(CButton& ok)
+{
+    const char* diagnostics = std::getenv("MU_INPUT_DIAGNOSTICS");
+    auto&       input       = CInput::Instance();
+    if (diagnostics == nullptr || std::strcmp(diagnostics, "1") != 0 || (!input.IsLBtnDn() && !input.IsLBtnUp()))
+        return;
+    SDL_Log("[Login] protocol=%d blocked=%d cursor=%ld,%ld ok=%d,%d %dx%d inside=%d click=%d", CurrentProtocolState,
+            !g_MessageBox->IsEmpty(), input.GetCursorX(), input.GetCursorY(), ok.GetXPos(), ok.GetYPos(), ok.GetWidth(),
+            ok.GetHeight(), ok.CursorInObject(), ok.IsClick());
+}
 }
 #endif
 
@@ -86,7 +81,8 @@ void CLoginWin::Create()
     if (m_RememberMe)
     {
         // Use the helper we built to fill m_Username[11] and m_Password[21]
-        GameConfig::GetInstance().DecryptCredentials(m_Username, m_Password, _countof(m_Username), _countof(m_Password));
+        GameConfig::GetInstance().DecryptCredentials(m_Username, m_Password, _countof(m_Username),
+                                                     _countof(m_Password));
     }
     else
     {
@@ -125,7 +121,8 @@ void CLoginWin::Create()
     m_pUsernameInputBox->SetTextColor(255, 255, 230, 210);
     m_pUsernameInputBox->SetFont(g_hFixFont);
     m_pUsernameInputBox->SetState(UISTATE_NORMAL);
-    if (m_RememberMe) {
+    if (m_RememberMe)
+    {
         m_pUsernameInputBox->SetText(m_Username);
         m_aBtnRememberMe.SetCheck(true);
     }
@@ -142,7 +139,8 @@ void CLoginWin::Create()
     m_pUsernameInputBox->SetTabTarget(m_pPasswordInputBox);
     m_pPasswordInputBox->SetTabTarget(m_pUsernameInputBox);
 
-    if (m_RememberMe) {
+    if (m_RememberMe)
+    {
         m_pPasswordInputBox->SetText(m_Password);
         m_aBtnRememberMe.SetCheck(true);
     }
@@ -174,8 +172,8 @@ CLoginWin::ResizeState CLoginWin::CaptureResizeState()
         m_pPasswordInputBox->GetText(state.password, _countof(state.password));
     wcscpy_s(state.previousUsername, _countof(state.previousUsername), m_prevUsername);
     wcscpy_s(state.previousPassword, _countof(state.previousPassword), m_prevPassword);
-    state.rememberUsername = m_aBtnRememberMe.IsCheck();
-    state.savePassword = m_aBtnSavePassword.IsCheck();
+    state.rememberUsername    = m_aBtnRememberMe.IsCheck();
+    state.savePassword        = m_aBtnSavePassword.IsCheck();
     state.initialFocusPending = FirstLoad != 0;
     if (m_pUsernameInputBox && m_pUsernameInputBox->HaveFocus())
         state.focus = EntryFocus::Username;
@@ -202,16 +200,14 @@ void CLoginWin::RestoreResizeState(const ResizeState& state)
     if (!IsShow() || state.focus == EntryFocus::None)
         return;
 
-    FirstLoad = 0;
-    CUITextInputBox* field = state.focus == EntryFocus::Username
-        ? m_pUsernameInputBox : m_pPasswordInputBox;
+    FirstLoad              = 0;
+    CUITextInputBox* field = state.focus == EntryFocus::Username ? m_pUsernameInputBox : m_pPasswordInputBox;
     field->GiveFocus(FALSE, false);
 }
 
 void CLoginWin::SetPosition(int x, int y)
 {
-    SetPositionArt((float)x / CSprite::ResolutionScaleX(),
-        (float)y / CSprite::ResolutionScaleY());
+    SetPositionArt((float)x / CSprite::ResolutionScaleX(), (float)y / CSprite::ResolutionScaleY());
 }
 
 void CLoginWin::SetPositionArt(float fArtX, float fArtY)
@@ -258,8 +254,10 @@ void CLoginWin::Show(bool bShow)
     // Drive the text fields' state so a hidden login screen releases keyboard
     // focus (portable fields stop SDL text input when hidden, #447).
     const int iState = bShow ? UISTATE_NORMAL : UISTATE_HIDE;
-    if (m_pUsernameInputBox) m_pUsernameInputBox->SetState(iState);
-    if (m_pPasswordInputBox) m_pPasswordInputBox->SetState(iState);
+    if (m_pUsernameInputBox)
+        m_pUsernameInputBox->SetState(iState);
+    if (m_pPasswordInputBox)
+        m_pPasswordInputBox->SetState(iState);
 }
 
 bool CLoginWin::CursorInWin(int nArea)
@@ -269,8 +267,8 @@ bool CLoginWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -281,38 +279,39 @@ void CLoginWin::UpdateWhileActive(double)
 #if defined(__ANDROID__) || defined(__OHOS__)
     LogMobileLoginInput(m_aBtn[LIW_OK]);
 #endif
-	// While the "Remember Password" confirmation dialog is open, let it own the
-	// input so Enter/Esc/clicks don't also drive the login screen behind it. The
-	// dialog's outcome is applied on the next frame, once it has closed.
-	if (!g_MessageBox->IsEmpty())
-		return;
+    // While the "Remember Password" confirmation dialog is open, let it own the
+    // input so Enter/Esc/clicks don't also drive the login screen behind it. The
+    // dialog's outcome is applied on the next frame, once it has closed.
+    if (!g_MessageBox->IsEmpty())
+        return;
 
-	if (m_aBtn[LIW_OK].IsClick() || CInput::Instance().IsKeyDown(VK_RETURN))
-	{
-		PlayBuffer(SOUND_CLICK01);
-		RequestLogin();
-		return;
-	}
+    if (m_aBtn[LIW_OK].IsClick() || CInput::Instance().IsKeyDown(VK_RETURN))
+    {
+        PlayBuffer(SOUND_CLICK01);
+        RequestLogin();
+        return;
+    }
 
-	if (m_aBtn[LIW_CANCEL].IsClick() || CInput::Instance().IsKeyDown(VK_ESCAPE))
-	{
-		PlayBuffer(SOUND_CLICK01);
-		CancelLogin();
-		CUIMng::Instance().SetSysMenuWinShow(false);
-		return;
-	}
+    if (m_aBtn[LIW_CANCEL].IsClick() || CInput::Instance().IsKeyDown(VK_ESCAPE))
+    {
+        PlayBuffer(SOUND_CLICK01);
+        CancelLogin();
+        CUIMng::Instance().SetSysMenuWinShow(false);
+        return;
+    }
 
-    if (UpdateAccountPortalButtons()) return;
+    if (UpdateAccountPortalButtons())
+        return;
 
     UpdateRememberCheckboxes();
 }
 
 void CLoginWin::CreateAccountPortalButtons()
 {
-    static const DWORD colors[3] = { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE };
-    CButton* buttons[] = { &m_aBtnRegister, &m_aBtnChangePassword, &m_aBtnForgotPassword };
-    const wchar_t* labels[] = { I18N::Game::AccountRegister,
-        I18N::Game::AccountChangePassword, I18N::Game::AccountResetPassword };
+    static const DWORD colors[3] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE};
+    CButton*           buttons[] = {&m_aBtnRegister, &m_aBtnChangePassword, &m_aBtnForgotPassword};
+    const wchar_t*     labels[]  = {I18N::Game::AccountRegister, I18N::Game::AccountChangePassword,
+                                    I18N::Game::AccountResetPassword};
     for (std::size_t index = 0; index < std::size(buttons); ++index)
     {
         buttons[index]->Create(42, 26, BITMAP_LOG_IN + 1, 3, 2, 1);
@@ -324,12 +323,13 @@ void CLoginWin::CreateAccountPortalButtons()
 bool CLoginWin::UpdateAccountPortalButtons()
 {
     using Network::Login::AccountPortalView;
-    CButton* buttons[] = { &m_aBtnRegister, &m_aBtnChangePassword, &m_aBtnForgotPassword };
-    const AccountPortalView views[] = { AccountPortalView::Register,
-        AccountPortalView::ChangePassword, AccountPortalView::ResetPassword };
+    CButton*                buttons[] = {&m_aBtnRegister, &m_aBtnChangePassword, &m_aBtnForgotPassword};
+    const AccountPortalView views[]   = {AccountPortalView::Register, AccountPortalView::ChangePassword,
+                                         AccountPortalView::ResetPassword};
     for (std::size_t index = 0; index < std::size(buttons); ++index)
     {
-        if (!buttons[index]->IsClick()) continue;
+        if (!buttons[index]->IsClick())
+            continue;
         PlayBuffer(SOUND_CLICK01);
         OpenAccountService(views[index]);
         return true;
@@ -339,7 +339,7 @@ bool CLoginWin::UpdateAccountPortalButtons()
 
 void CLoginWin::OpenAccountService(Network::Login::AccountPortalView view)
 {
-    const auto& config = GameConfig::GetInstance();
+    const auto&  config = GameConfig::GetInstance();
     std::wstring origin = config.GetAccountPortalUrl();
     if (const char* configured = std::getenv("MU_ACCOUNT_PORTAL_URL"); configured != nullptr)
     {
@@ -347,65 +347,64 @@ void CLoginWin::OpenAccountService(Network::Login::AccountPortalView view)
         for (const unsigned char character : std::string_view(configured))
             origin.push_back(static_cast<wchar_t>(character));
     }
-    const char* paired = std::getenv("MU_MOBILE_LOCAL_AUTO_LOGIN");
-    const bool allowPrivateHttp = paired != nullptr && std::string_view(paired) == "1";
-    std::wstring culture = config.GetUILocale();
+    const char*  paired           = std::getenv("MU_MOBILE_LOCAL_AUTO_LOGIN");
+    const bool   allowPrivateHttp = paired != nullptr && std::string_view(paired) == "1";
+    std::wstring culture          = config.GetUILocale();
     if (const char* configured = std::getenv("MU_ACCOUNT_PORTAL_CULTURE"); configured != nullptr)
     {
         culture.clear();
         for (const unsigned char character : std::string_view(configured))
             culture.push_back(static_cast<wchar_t>(character));
     }
-    const auto url = Network::Login::BuildAccountPortalUrl(origin, view,
-        culture, allowPrivateHttp);
+    const auto url = Network::Login::BuildAccountPortalUrl(origin, view, culture, allowPrivateHttp);
     if (url.empty() || !SDL_OpenURL(url.c_str()))
         MessageBoxW(g_hWnd, I18N::Game::AccountPortalUnavailable, I18N::Game::Account, MB_OK | MB_ICONERROR);
 }
 
 void CLoginWin::UpdateRememberCheckboxes()
 {
-	GameConfig& config = GameConfig::GetInstance();
+    GameConfig& config = GameConfig::GetInstance();
 
-	if (m_aBtnRememberMe.IsClick())
-	{
-		m_RememberMe = m_aBtnRememberMe.IsCheck();
-		config.SetRememberMe(m_RememberMe != 0);
+    if (m_aBtnRememberMe.IsClick())
+    {
+        m_RememberMe = m_aBtnRememberMe.IsCheck();
+        config.SetRememberMe(m_RememberMe != 0);
 
-		// Switching off "remember me" revokes everything: drop the stored
-		// credentials from config.ini now so they can't linger if the game is
-		// closed before the next login.
-		if (!m_RememberMe)
-		{
-			m_aBtnSavePassword.SetCheck(false);
-			config.ClearCredentials();
-		}
-	}
+        // Switching off "remember me" revokes everything: drop the stored
+        // credentials from config.ini now so they can't linger if the game is
+        // closed before the next login.
+        if (!m_RememberMe)
+        {
+            m_aBtnSavePassword.SetCheck(false);
+            config.ClearCredentials();
+        }
+    }
 
-	if (!m_aBtnSavePassword.IsClick())
-		return;
+    if (!m_aBtnSavePassword.IsClick())
+        return;
 
-	if (!m_aBtnSavePassword.IsCheck())
-	{
-		// Player unticked it: drop the stored password from config.ini now.
-		config.SetSavePassword(false);
-		config.SetEncryptedPassword(L"");
-		config.Save();
-		return;
-	}
+    if (!m_aBtnSavePassword.IsCheck())
+    {
+        // Player unticked it: drop the stored password from config.ini now.
+        config.SetSavePassword(false);
+        config.SetEncryptedPassword(L"");
+        config.Save();
+        return;
+    }
 
-	// Enabling requires confirmation. Revert the tick immediately; it is
-	// re-applied only if the dialog is accepted, so a cancel (however the dialog
-	// closes) always leaves the box unchecked.
-	m_aBtnSavePassword.SetCheck(false);
+    // Enabling requires confirmation. Revert the tick immediately; it is
+    // re-applied only if the dialog is accepted, so a cancel (however the dialog
+    // closes) always leaves the box unchecked.
+    m_aBtnSavePassword.SetCheck(false);
 
-	// Storing the password implies remembering the account.
-	if (!m_RememberMe)
-	{
-		m_RememberMe = 1;
-		m_aBtnRememberMe.SetCheck(true);
-		config.SetRememberMe(true);
-	}
-	UI::Login::OpenRememberPasswordPrompt();
+    // Storing the password implies remembering the account.
+    if (!m_RememberMe)
+    {
+        m_RememberMe = 1;
+        m_aBtnRememberMe.SetCheck(true);
+        config.SetRememberMe(true);
+    }
+    UI::Login::OpenRememberPasswordPrompt();
 }
 
 void CLoginWin::UpdateWhileShow(double dDeltaTick)
@@ -423,8 +422,7 @@ void CLoginWin::ApplyRememberPasswordChoice()
     // leaves the login window inactive (so UpdateWhileActive stops running),
     // while UpdateWhileShow keeps being called.
     const UI::Login::RememberPasswordChoice choice = UI::Login::RememberPasswordChoiceState();
-    if (choice != UI::Login::RememberPasswordChoice::Ok
-        && choice != UI::Login::RememberPasswordChoice::Cancel)
+    if (choice != UI::Login::RememberPasswordChoice::Ok && choice != UI::Login::RememberPasswordChoice::Cancel)
         return;
 
     UI::Login::ClearRememberPasswordChoice();
@@ -447,10 +445,9 @@ void CLoginWin::RevokeSavedCredentialsIfEdited()
     if (wcscmp(curUser, m_prevUsername) == 0 && wcscmp(curPass, m_prevPassword) == 0)
         return;
 
-    GameConfig& config = GameConfig::GetInstance();
-    const bool bHadStored = m_aBtnSavePassword.IsCheck()
-        || !config.GetEncryptedUsername().empty()
-        || !config.GetEncryptedPassword().empty();
+    GameConfig& config     = GameConfig::GetInstance();
+    const bool  bHadStored = m_aBtnSavePassword.IsCheck() || !config.GetEncryptedUsername().empty() ||
+                            !config.GetEncryptedPassword().empty();
     if (bHadStored)
     {
         m_aBtnSavePassword.SetCheck(false);
@@ -481,15 +478,17 @@ void CLoginWin::RenderControls()
 
     const float rateX = CSprite::ResolutionScaleX();
     const float rateY = CSprite::ResolutionScaleY();
-    const int baseX = int(GetXPos() / rateX);
-    const int baseY = int(GetYPos() / rateY);
+    const int   baseX = int(GetXPos() / rateX);
+    const int   baseY = int(GetYPos() / rateY);
 
     g_pRenderText->RenderText(baseX + 30, baseY + 113, I18N::Game::Account);
     g_pRenderText->RenderText(baseX + 30, baseY + 139, I18N::Game::Password);
 
-    wchar_t szServerName[MAX_TEXT_LENGTH] = {};
-    const wchar_t* pServerStatus = g_ServerListManager->GetNonPVPInfo() ? I18N::Game::SDServer : I18N::Game::SDNonPvPServer;
-    mu_swprintf(szServerName, pServerStatus, g_ServerListManager->GetSelectServerName(), g_ServerListManager->GetSelectServerIndex());
+    wchar_t        szServerName[MAX_TEXT_LENGTH] = {};
+    const wchar_t* pServerStatus =
+        g_ServerListManager->GetNonPVPInfo() ? I18N::Game::SDServer : I18N::Game::SDNonPvPServer;
+    mu_swprintf(szServerName, pServerStatus, g_ServerListManager->GetSelectServerName(),
+                g_ServerListManager->GetSelectServerIndex());
     g_pRenderText->RenderText(baseX + 111, baseY + 80, szServerName);
 
     g_pRenderText->RenderText(baseX + 130, baseY + 159, I18N::Game::LoginRememberUsername);
@@ -543,10 +542,10 @@ bool CLoginWin::RequestAutomaticLogin()
         return false;
     }
 
-    m_Username[0] = L'\0';
-    m_Password[0] = L'\0';
-    const char* mobileEnabled = std::getenv(Network::Login::MobileLocalAutoLoginEnvironment);
-    const bool isMobileAutomaticLogin = mobileEnabled != nullptr && std::string_view(mobileEnabled) == "1";
+    m_Username[0]                      = L'\0';
+    m_Password[0]                      = L'\0';
+    const char* mobileEnabled          = std::getenv(Network::Login::MobileLocalAutoLoginEnvironment);
+    const bool  isMobileAutomaticLogin = mobileEnabled != nullptr && std::string_view(mobileEnabled) == "1";
     if (!isMobileAutomaticLogin && config.GetRememberMe() && !config.GetEncryptedUsername().empty())
     {
         // Never switch an existing player's saved account to an empty local account.
@@ -602,7 +601,7 @@ void CLoginWin::CancelLogin()
 
 void CLoginWin::ConnectConnectionServer()
 {
-    LogIn = 0;
+    LogIn                = 0;
     CurrentProtocolState = REQUEST_JOIN_SERVER;
     CreateSocket(szServerIpAddress, g_ServerPort);
 }

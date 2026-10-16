@@ -5,7 +5,8 @@
 #include "World/MapInfra/w_BaseMap.h"
 
 class CGMDuelArena;
-using CGMDuelArenaPtr = std::shared_ptr<CGMDuelArena>;class CGMDuelArena : public BaseMap
+using CGMDuelArenaPtr = std::shared_ptr<CGMDuelArena>;
+class CGMDuelArena : public BaseMap
 {
 public:
     static CGMDuelArenaPtr Make();
@@ -20,16 +21,16 @@ public:
 
 public:
     virtual CHARACTER* CreateMonster(int iType, int PosX, int PosY, int Key);
-    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
-    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
-    virtual bool SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
+    virtual bool       MoveMonsterVisual(OBJECT* o, BMD* b);
+    virtual void       MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool       SetCurrentActionMonster(CHARACTER* c, OBJECT* o);
 
 public:
     virtual bool PlayMonsterSound(OBJECT* o);
     virtual void PlayObjectSound(OBJECT* o);
-    void PlayBGM();
+    void         PlayBGM();
 
 public:
     void Init();

@@ -12,15 +12,15 @@ class CSenatusInfo
 private:
     enum NPC_NUMBERS
     {
-        GATENPC_NUMBER = 277,
+        GATENPC_NUMBER   = 277,
         STATUENPC_NUMBER = 283,
     };
     enum MAX_LEVELS
     {
-        GATE_MAX_HP_LEVEL = 3,
+        GATE_MAX_HP_LEVEL      = 3,
         GATE_MAX_DEFENSE_LEVEL = 3,
 
-        STATUE_MAX_HP_LEVEL = 3,
+        STATUE_MAX_HP_LEVEL      = 3,
         STATUE_MAX_DEFENSE_LEVEL = 3,
         STATUE_MAX_RECOVER_LEVEL = 3,
     };
@@ -52,15 +52,15 @@ private:
     };
     enum TAX_RATES
     {
-        MIN_TAX_RATE = 0,
-        MAX_TAX_RATE = 3,
+        MIN_TAX_RATE        = 0,
+        MAX_TAX_RATE        = 3,
         MAX_NORMAL_TAX_RATE = 3,
     };
     enum NPCUPGRADE_VALUES
     {
         NPCUPGRADE_DEFENSE = 1,
         NPCUPGRADE_RECOVER = 2,
-        NPCUPGRADE_HP = 3,
+        NPCUPGRADE_HP      = 3,
     };
 
 public:
@@ -88,23 +88,22 @@ public:
     void DoApplyTaxAction();
     void DoWithdrawAction(DWORD dwMoney);
 
-    void SetNPCInfo(LPPMSG_NPCDBLIST pInfo);
+    void             SetNPCInfo(LPPMSG_NPCDBLIST pInfo);
     LPPMSG_NPCDBLIST GetNPCInfo(int iNpcNumber, int iNpcIndex);
-    void SetTaxInfo(LPPMSG_ANS_TAXMONEYINFO pInfo);
-    void ChangeTaxInfo(LPPMSG_ANS_TAXRATECHANGE pInfo);
-    void ChangeCastleMoney(LPPMSG_ANS_MONEYDRAWOUT pInfo);
-    void BuyNewNPC(int iNpcNumber, int iNpcIndex);
+    void             SetTaxInfo(LPPMSG_ANS_TAXMONEYINFO pInfo);
+    void             ChangeTaxInfo(LPPMSG_ANS_TAXRATECHANGE pInfo);
+    void             ChangeCastleMoney(LPPMSG_ANS_MONEYDRAWOUT pInfo);
+    void             BuyNewNPC(int iNpcNumber, int iNpcIndex);
 
-    int GetCurrGate() { return m_iCurrGate; }
+    int  GetCurrGate() { return m_iCurrGate; }
     void SetCurrGate(int iCurrGate) { m_iCurrGate = iCurrGate; }
-    int GetCurrStatue() { return m_iCurrStatue; }
+    int  GetCurrStatue() { return m_iCurrStatue; }
     void SetCurrStatue(int iCurrStatue) { m_iCurrStatue = iCurrStatue; }
 
-    // 85-02: clamp 0-based array accessors so a stale/negative index can never underrun the arrays.
-    PMSG_NPCDBLIST& GetGateInfo(int iIndex) { if (iIndex < 0 || iIndex >= (int)_countof(m_GateInfo)) iIndex = 0; return m_GateInfo[iIndex]; }
-    PMSG_NPCDBLIST& GetStatueInfo(int iIndex) { if (iIndex < 0 || iIndex >= (int)_countof(m_StatueInfo)) iIndex = 0; return m_StatueInfo[iIndex]; }
-    PMSG_NPCDBLIST& GetCurrGateInfo() { int i = m_iCurrGate; if (i < 0 || i >= (int)_countof(m_GateInfo)) i = 0; return m_GateInfo[i]; }
-    PMSG_NPCDBLIST& GetCurrStatueInfo() { int i = m_iCurrStatue; if (i < 0 || i >= (int)_countof(m_StatueInfo)) i = 0; return m_StatueInfo[i]; }
+    PMSG_NPCDBLIST& GetGateInfo(int iIndex) { return m_GateInfo[iIndex]; }
+    PMSG_NPCDBLIST& GetStatueInfo(int iIndex) { return m_StatueInfo[iIndex]; }
+    PMSG_NPCDBLIST& GetCurrGateInfo() { return m_GateInfo[m_iCurrGate]; }
+    PMSG_NPCDBLIST& GetCurrStatueInfo() { return m_StatueInfo[m_iCurrStatue]; }
 
     BOOL IsGateRepairable() { return (GetCurrGateInfo().iNpcHp < GetCurrGateInfo().iNpcMaxHp); }
     BOOL IsGateHPUpgradable() { return (GetHPLevel(&GetCurrGateInfo()) < GATE_MAX_HP_LEVEL); }
@@ -115,14 +114,14 @@ public:
     BOOL IsStatueDefeseUpgradable() { return (GetDefenseLevel(&GetCurrStatueInfo()) < STATUE_MAX_DEFENSE_LEVEL); }
     BOOL IsStatueRecoverUpgradable() { return (GetRecoverLevel(&GetCurrStatueInfo()) < STATUE_MAX_RECOVER_LEVEL); }
 
-    int GetChaosTaxRate() { return m_iChaosTaxRate; }
-    void PlusChaosTaxRate(int iValue);
-    int GetNormalTaxRate() { return m_iNormalTaxRate; }
-    void PlusNormalTaxRate(int iValue);
-    int GetRealTaxRateChaos() { return m_iRealTaxRateChaos; }
-    int GetRealTaxRateStore() { return m_iRealTaxRateStore; }
+    int     GetChaosTaxRate() { return m_iChaosTaxRate; }
+    void    PlusChaosTaxRate(int iValue);
+    int     GetNormalTaxRate() { return m_iNormalTaxRate; }
+    void    PlusNormalTaxRate(int iValue);
+    int     GetRealTaxRateChaos() { return m_iRealTaxRateChaos; }
+    int     GetRealTaxRateStore() { return m_iRealTaxRateStore; }
     __int64 GetCastleMoney() { return m_i64CastleMoney; }
-    void RollbackTaxRates();
+    void    RollbackTaxRates();
 
     int GetMaxHPLevel() { return STATUE_MAX_HP_LEVEL; }
     int GetMaxDefenseLevel() { return STATUE_MAX_DEFENSE_LEVEL; }
@@ -132,18 +131,18 @@ public:
     BOOL IsStatue(LPPMSG_NPCDBLIST pInfo) { return (pInfo->iNpcNumber == STATUENPC_NUMBER); }
 
 protected:
-    int m_iCurrGate;
-    int m_iCurrStatue;
+    int            m_iCurrGate;
+    int            m_iCurrStatue;
     PMSG_NPCDBLIST m_GateInfo[6];
     PMSG_NPCDBLIST m_StatueInfo[4];
 
-    int m_iChaosTaxRate;
-    int m_iNormalTaxRate;
-    int m_iRealTaxRateChaos;
-    int m_iRealTaxRateStore;
+    int     m_iChaosTaxRate;
+    int     m_iNormalTaxRate;
+    int     m_iRealTaxRateChaos;
+    int     m_iRealTaxRateStore;
     __int64 m_i64CastleMoney;
 };
 
 extern CSenatusInfo g_SenatusInfo;
 
-#endif // !defined(AFX_UISENATUS_H__05379221_4D2C_472A_9048_8E9AB0A4367B__INCLUDED_)
+#endif  // !defined(AFX_UISENATUS_H__05379221_4D2C_472A_9048_8E9AB0A4367B__INCLUDED_)

@@ -18,12 +18,12 @@
 #include "Character/CharInfoBalloonMng.h"
 #include "UI/Windows/ServerMsgWin.h"
 
-#define	UIM_SCENE_NONE			0
-#define	UIM_SCENE_TITLE			1
-#define UIM_SCENE_LOGIN			2
-#define	UIM_SCENE_LOADING		3
-#define	UIM_SCENE_CHARACTER		4
-#define	UIM_SCENE_MAIN			5
+#define UIM_SCENE_NONE      0
+#define UIM_SCENE_TITLE     1
+#define UIM_SCENE_LOGIN     2
+#define UIM_SCENE_LOADING   3
+#define UIM_SCENE_CHARACTER 4
+#define UIM_SCENE_MAIN      5
 
 class CSprite;
 class CGaugeBar;
@@ -33,30 +33,30 @@ class CLoadingScene;
 class CUIMng
 {
 public:
-    CMsgWin			m_MsgWin;
-    CSysMenuWin		m_SysMenuWin;
-    COptionWin		m_OptionWin;
-    CLoginMainWin	m_LoginMainWin;
-    CServerSelWin	m_ServerSelWin;
-    CLoginWin		m_LoginWin;
-    CRegisterWin	m_RegisterWin;
+    CMsgWin             m_MsgWin;
+    CSysMenuWin         m_SysMenuWin;
+    COptionWin          m_OptionWin;
+    CLoginMainWin       m_LoginMainWin;
+    CServerSelWin       m_ServerSelWin;
+    CLoginWin           m_LoginWin;
+    CRegisterWin        m_RegisterWin;
     CPasswordServiceWin m_PasswordServiceWin;
-    CCreditWin		m_CreditWin;
-    CCharSelMainWin	m_CharSelMainWin;
-    CCharMakeWin	m_CharMakeWin;
-    CCharInfoBalloonMng	m_CharInfoBalloonMng;
-    CServerMsgWin	m_ServerMsgWin;
-    CLoadingScene* m_pLoadingScene;
+    CCreditWin          m_CreditWin;
+    CCharSelMainWin     m_CharSelMainWin;
+    CCharMakeWin        m_CharMakeWin;
+    CCharInfoBalloonMng m_CharInfoBalloonMng;
+    CServerMsgWin       m_ServerMsgWin;
+    CLoadingScene*      m_pLoadingScene;
 
 protected:
-    CSprite* m_asprTitle;
+    CSprite*   m_asprTitle;
     CGaugeBar* m_pgbLoding;
-    CPList			m_WinList;
-    bool			m_bCursorOnUI;
-    bool			m_bBlockCharMove;
-    int				m_nScene;
-    bool			m_bWinActive;
-    bool			m_bSysMenuWinShow;
+    CPList     m_WinList;
+    bool       m_bCursorOnUI;
+    bool       m_bBlockCharMove;
+    int        m_nScene;
+    bool       m_bWinActive;
+    bool       m_bSysMenuWinShow;
 
 public:
     virtual ~CUIMng();
@@ -98,8 +98,8 @@ public:
 protected:
     CUIMng();
 
-    void RemoveWinList();
+    void  RemoveWinList();
     CWin* SetActiveWin(CWin* pWin);
-    void CheckDockWin();
-    bool SetDockWinPosition(CWin* pMoveWin, int nDockX, int nDockY);
+    void  CheckDockWin();
+    bool  SetDockWinPosition(CWin* pMoveWin, int nDockX, int nDockY);
 };

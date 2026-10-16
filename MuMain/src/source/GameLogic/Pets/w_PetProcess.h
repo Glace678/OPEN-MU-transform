@@ -6,18 +6,19 @@
 #include "w_BasePet.h"
 #include "w_PetAction.h"
 
-#define PC4_ELF			1
-#define PC4_TEST		2
-#define PC4_SATAN		3
-#define XMAS_RUDOLPH	4
+#define PC4_ELF      1
+#define PC4_TEST     2
+#define PC4_SATAN    3
+#define XMAS_RUDOLPH 4
 #ifdef PJH_ADD_PANDA_PET
-#define PANDA			5
-#endif //PJH_ADD_PANDA_PET
-#define	UNICORN			6
-#define SKELETON		7
+#define PANDA 5
+#endif  //PJH_ADD_PANDA_PET
+#define UNICORN  6
+#define SKELETON 7
 
 class PetInfo;
-using PetInfoPtr = std::shared_ptr<PetInfo>;class PetInfo
+using PetInfoPtr = std::shared_ptr<PetInfo>;
+class PetInfo
 {
 public:
     static PetInfoPtr Make();
@@ -29,24 +30,24 @@ private:
 
 public:
     float GetScale() { return m_scale; }
-    void SetScale(float scale = 0.0f) { m_scale = scale; }
+    void  SetScale(float scale = 0.0f) { m_scale = scale; }
 
-    int GetBlendMesh() { return m_blendMesh; }
+    int  GetBlendMesh() { return m_blendMesh; }
     void SetBlendMesh(int blendMesh = -1) { m_blendMesh = blendMesh; }
 
     float* GetSpeeds() { return m_speeds; }
-    int* GetActions() { return m_actions; }
-    void SetActions(int count, int* actions, float* speeds);
+    int*   GetActions() { return m_actions; }
+    void   SetActions(int count, int* actions, float* speeds);
 
     int GetActionsCount() { return m_count; }
 
 private:
     //create
-    int m_blendMesh;
+    int   m_blendMesh;
     float m_scale;
 
     //action
-    int* m_actions;
+    int*   m_actions;
     float* m_speeds;
 
     //ex
@@ -58,9 +59,9 @@ using PetProcessPtr = std::shared_ptr<PetProcess>;
 class PetProcess
 {
 public:
-    typedef std::list< std::shared_ptr<PetObject> > PetList;
-    typedef std::map< int, std::shared_ptr<PetAction> > ActionMap;	//actionNum, actionClass
-    typedef std::map< int, std::shared_ptr<PetInfo> > InfoMap;		//PetType, PetInfo
+    typedef std::list<std::shared_ptr<PetObject>>     PetList;
+    typedef std::map<int, std::shared_ptr<PetAction>> ActionMap;  //actionNum, actionClass
+    typedef std::map<int, std::shared_ptr<PetInfo>>   InfoMap;    //PetType, PetInfo
 
 public:
     static PetProcessPtr Make();
@@ -86,10 +87,10 @@ public:
     void SetCommandPet(CHARACTER* Owner, int targetKey, PetObject::ActionType cmdType);
 
 private:
-    PetList m_petsList;
+    PetList   m_petsList;
     ActionMap m_petsAction;
-    InfoMap m_petsInfo;
+    InfoMap   m_petsInfo;
 };
 
 extern PetProcessPtr g_petProcess;
-extern PetProcess& ThePetProcess();
+extern PetProcess&   ThePetProcess();

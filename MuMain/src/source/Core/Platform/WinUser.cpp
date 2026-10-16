@@ -9,51 +9,55 @@
 
 namespace
 {
-    // wchar_t is UTF-32 on Linux; SDL wants UTF-8. Encode directly so non-ASCII
-    // (e.g. Korean) text survives instead of relying on the C locale.
-    std::string ToUtf8(LPCWSTR s)
-    {
-        std::string out;
-        if (s == nullptr) return out;
-        for (const wchar_t* p = s; *p; ++p)
-        {
-            unsigned int c = static_cast<unsigned int>(*p);
-            // Map surrogates and out-of-range values to U+FFFD so we never emit
-            // invalid UTF-8 to SDL / the font renderer.
-            if ((c >= 0xD800 && c <= 0xDFFF) || c > 0x10FFFF) c = 0xFFFD;
-
-            if (c < 0x80)
-            {
-                out.push_back(static_cast<char>(c));
-            }
-            else if (c < 0x800)
-            {
-                out.push_back(static_cast<char>(0xC0 | (c >> 6)));
-                out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
-            }
-            else if (c < 0x10000)
-            {
-                out.push_back(static_cast<char>(0xE0 | (c >> 12)));
-                out.push_back(static_cast<char>(0x80 | ((c >> 6) & 0x3F)));
-                out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
-            }
-            else
-            {
-                out.push_back(static_cast<char>(0xF0 | (c >> 18)));
-                out.push_back(static_cast<char>(0x80 | ((c >> 12) & 0x3F)));
-                out.push_back(static_cast<char>(0x80 | ((c >> 6) & 0x3F)));
-                out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
-            }
-        }
+// wchar_t is UTF-32 on Linux; SDL wants UTF-8. Encode directly so non-ASCII
+// (e.g. Korean) text survives instead of relying on the C locale.
+std::string ToUtf8(LPCWSTR s)
+{
+    std::string out;
+    if (s == nullptr)
         return out;
-    }
-
-    Uint32 IconFlags(UINT type)
+    for (const wchar_t* p = s; *p; ++p)
     {
-        if (type & (MB_ICONERROR | MB_ICONSTOP)) return SDL_MESSAGEBOX_ERROR;
-        if (type & MB_ICONEXCLAMATION)           return SDL_MESSAGEBOX_WARNING;
-        return SDL_MESSAGEBOX_INFORMATION;
+        unsigned int c = static_cast<unsigned int>(*p);
+        // Map surrogates and out-of-range values to U+FFFD so we never emit
+        // invalid UTF-8 to SDL / the font renderer.
+        if ((c >= 0xD800 && c <= 0xDFFF) || c > 0x10FFFF)
+            c = 0xFFFD;
+
+        if (c < 0x80)
+        {
+            out.push_back(static_cast<char>(c));
+        }
+        else if (c < 0x800)
+        {
+            out.push_back(static_cast<char>(0xC0 | (c >> 6)));
+            out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
+        }
+        else if (c < 0x10000)
+        {
+            out.push_back(static_cast<char>(0xE0 | (c >> 12)));
+            out.push_back(static_cast<char>(0x80 | ((c >> 6) & 0x3F)));
+            out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
+        }
+        else
+        {
+            out.push_back(static_cast<char>(0xF0 | (c >> 18)));
+            out.push_back(static_cast<char>(0x80 | ((c >> 12) & 0x3F)));
+            out.push_back(static_cast<char>(0x80 | ((c >> 6) & 0x3F)));
+            out.push_back(static_cast<char>(0x80 | (c & 0x3F)));
+        }
     }
+    return out;
+}
+
+Uint32 IconFlags(UINT type)
+{
+    if (type & (MB_ICONERROR | MB_ICONSTOP))
+        return SDL_MESSAGEBOX_ERROR;
+    if (type & MB_ICONEXCLAMATION)
+        return SDL_MESSAGEBOX_WARNING;
+    return SDL_MESSAGEBOX_INFORMATION;
+}
 }
 
 int MessageBoxW(HWND /*owner*/, LPCWSTR text, LPCWSTR caption, UINT type)
@@ -68,15 +72,13 @@ int MessageBoxW(HWND /*owner*/, LPCWSTR text, LPCWSTR caption, UINT type)
     if ((type & MB_YESNO) == MB_YESNO)
     {
         const SDL_MessageBoxButtonData buttons[2] = {
-            { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, IDYES, "Yes" },
-            { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, IDNO,  "No"  },
+            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, IDYES, "Yes"},
+            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, IDNO, "No"},
         };
-        const SDL_MessageBoxData data = {
-            IconFlags(type), parent, title.c_str(), message.c_str(),
-            2, buttons, nullptr
-        };
-        int buttonId = IDNO;
-        if (!SDL_ShowMessageBox(&data, &buttonId)) return IDNO;  // dialog failed/dismissed
+        const SDL_MessageBoxData data = {IconFlags(type), parent, title.c_str(), message.c_str(), 2, buttons, nullptr};
+        int                      buttonId = IDNO;
+        if (!SDL_ShowMessageBox(&data, &buttonId))
+            return IDNO;  // dialog failed/dismissed
         return (buttonId == IDYES) ? IDYES : IDNO;
     }
 
@@ -86,31 +88,36 @@ int MessageBoxW(HWND /*owner*/, LPCWSTR text, LPCWSTR caption, UINT type)
 
 namespace
 {
-    bool IsQuitMessage(UINT msg) { return msg == WM_DESTROY || msg == WM_CLOSE || msg == WM_QUIT; }
+bool IsQuitMessage(UINT msg)
+{
+    return msg == WM_DESTROY || msg == WM_CLOSE || msg == WM_QUIT;
+}
 
-    bool RequestQuit()
+bool RequestQuit()
+{
+    SDL_Event quit;
+    SDL_zero(quit);
+    quit.type = SDL_EVENT_QUIT;
+    if (!SDL_PushEvent(&quit))
     {
-        SDL_Event quit;
-        SDL_zero(quit);
-        quit.type = SDL_EVENT_QUIT;
-        if (!SDL_PushEvent(&quit))
-        {
-            SDL_Log("Failed to push quit event: %s", SDL_GetError());
-            return false;
-        }
-        return true;
+        SDL_Log("Failed to push quit event: %s", SDL_GetError());
+        return false;
     }
+    return true;
+}
 }
 
 LRESULT SendMessage(HWND /*hWnd*/, UINT Msg, WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-    if (IsQuitMessage(Msg)) RequestQuit();
+    if (IsQuitMessage(Msg))
+        RequestQuit();
     return 0;
 }
 
 BOOL PostMessage(HWND /*hWnd*/, UINT Msg, WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-    if (IsQuitMessage(Msg)) return RequestQuit() ? TRUE : FALSE;
+    if (IsQuitMessage(Msg))
+        return RequestQuit() ? TRUE : FALSE;
     return TRUE;
 }
 
@@ -121,7 +128,8 @@ void PostQuitMessage(int /*nExitCode*/)
 
 BOOL GetCursorPos(LPPOINT lpPoint)
 {
-    if (!lpPoint) return FALSE;
+    if (!lpPoint)
+        return FALSE;
     float x = 0.0f, y = 0.0f;
     SDL_GetMouseState(&x, &y);  // already window-relative
     lpPoint->x = static_cast<LONG>(x);
@@ -160,52 +168,53 @@ HWND GetFocus()
 
 namespace
 {
-    // Win32 keeps a process-wide cursor display counter; the cursor is shown
-    // while it is >= 0. The game and the editor toggle it to hide the OS cursor
-    // (they draw their own) and to reveal it over editor UI. Start at 0 to match
-    // the Win32 default (cursor visible).
-    int g_cursorDisplayCount = 0;
+// Win32 keeps a process-wide cursor display counter; the cursor is shown
+// while it is >= 0. The game and the editor toggle it to hide the OS cursor
+// (they draw their own) and to reveal it over editor UI. Start at 0 to match
+// the Win32 default (cursor visible).
+int g_cursorDisplayCount = 0;
 
-    // Some Wayland compositors (seen on KDE Plasma) do not reliably drop the
-    // pointer for SDL_HideCursor() alone, leaving the OS cursor composited over
-    // the game's own cursor sprite (issue #462). Committing an explicit blank
-    // (1x1 transparent) cursor in addition to hiding is honoured everywhere, so
-    // keep one around and set it whenever the cursor should be hidden.
-    SDL_Cursor* BlankCursor()
+// Some Wayland compositors (seen on KDE Plasma) do not reliably drop the
+// pointer for SDL_HideCursor() alone, leaving the OS cursor composited over
+// the game's own cursor sprite (issue #462). Committing an explicit blank
+// (1x1 transparent) cursor in addition to hiding is honoured everywhere, so
+// keep one around and set it whenever the cursor should be hidden.
+SDL_Cursor* BlankCursor()
+{
+    static SDL_Cursor* blank = nullptr;
+    if (blank == nullptr)
     {
-        static SDL_Cursor* blank = nullptr;
-        if (blank == nullptr)
+        Uint32       transparent = 0;  // single fully-transparent ARGB pixel
+        SDL_Surface* surface = SDL_CreateSurfaceFrom(1, 1, SDL_PIXELFORMAT_ARGB8888, &transparent, sizeof(transparent));
+        if (surface != nullptr)
         {
-            Uint32 transparent = 0;  // single fully-transparent ARGB pixel
-            SDL_Surface* surface = SDL_CreateSurfaceFrom(
-                1, 1, SDL_PIXELFORMAT_ARGB8888, &transparent, sizeof(transparent));
-            if (surface != nullptr)
-            {
-                blank = SDL_CreateColorCursor(surface, 0, 0);
-                SDL_DestroySurface(surface);  // cursor keeps its own copy
-            }
-        }
-        return blank;
-    }
-
-    void ApplyCursorVisibility()
-    {
-        // No-op until the SDL video subsystem is up; MuApplyCursorVisibility()
-        // re-applies the pending state once the window exists.
-        if (SDL_WasInit(SDL_INIT_VIDEO) == 0) return;
-        if (g_cursorDisplayCount >= 0)
-        {
-            // Restore a real cursor first: a prior hide may have left the blank
-            // one active, so SDL_ShowCursor() alone would show nothing.
-            SDL_SetCursor(SDL_GetDefaultCursor());
-            SDL_ShowCursor();
-        }
-        else
-        {
-            SDL_HideCursor();
-            if (SDL_Cursor* blank = BlankCursor()) SDL_SetCursor(blank);
+            blank = SDL_CreateColorCursor(surface, 0, 0);
+            SDL_DestroySurface(surface);  // cursor keeps its own copy
         }
     }
+    return blank;
+}
+
+void ApplyCursorVisibility()
+{
+    // No-op until the SDL video subsystem is up; MuApplyCursorVisibility()
+    // re-applies the pending state once the window exists.
+    if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
+        return;
+    if (g_cursorDisplayCount >= 0)
+    {
+        // Restore a real cursor first: a prior hide may have left the blank
+        // one active, so SDL_ShowCursor() alone would show nothing.
+        SDL_SetCursor(SDL_GetDefaultCursor());
+        SDL_ShowCursor();
+    }
+    else
+    {
+        SDL_HideCursor();
+        if (SDL_Cursor* blank = BlankCursor())
+            SDL_SetCursor(blank);
+    }
+}
 }
 
 int ShowCursor(BOOL bShow)
@@ -220,100 +229,4 @@ void MuApplyCursorVisibility()
     ApplyCursorVisibility();
 }
 
-// PLAT-7: cached process command line, rebuilt from argv at startup.
-namespace
-{
-    std::wstring g_processCommandLine;
-
-    void AppendUtf8Argument(std::wstring& target, const char* argument)
-    {
-        // Decode one UTF-8 argument into wchar_t (inverse of ToUtf8 above).
-        const auto* bytes = reinterpret_cast<const unsigned char*>(argument);
-        while (*bytes != '\0')
-        {
-            unsigned int codepoint = 0;
-            int expected = 0;
-            const unsigned char first = *bytes;
-
-            if (first < 0x80)
-            {
-                codepoint = first;
-                expected = 1;
-            }
-            else if ((first & 0xE0) == 0xC0)
-            {
-                codepoint = first & 0x1F;
-                expected = 2;
-            }
-            else if ((first & 0xF0) == 0xE0)
-            {
-                codepoint = first & 0x0F;
-                expected = 3;
-            }
-            else if ((first & 0xF8) == 0xF0)
-            {
-                codepoint = first & 0x07;
-                expected = 4;
-            }
-            else
-            {
-                // Stray continuation byte: one replacement char, one byte.
-                target.push_back(0xFFFD);
-                ++bytes;
-                continue;
-            }
-
-            // Incomplete or malformed continuation: replace the whole sequence.
-            bool valid = true;
-            for (int i = 1; i < expected; ++i)
-            {
-                if ((bytes[i] & 0xC0) != 0x80)
-                {
-                    valid = false;
-                    break;
-                }
-                codepoint = (codepoint << 6) | (bytes[i] & 0x3F);
-            }
-
-            if (valid)
-            {
-                target.push_back(static_cast<wchar_t>(codepoint));
-            }
-            else
-            {
-                target.push_back(0xFFFD);
-            }
-            bytes += expected;
-        }
-    }
-}
-
-void SetProcessCommandLine(int argc, char** argv)
-{
-    g_processCommandLine.clear();
-    if (argv == nullptr)
-    {
-        return;
-    }
-
-    // Join with single spaces, matching the Win32 GetCommandLine shape the
-    // parser (Util_CheckOption) expects. argv[0] is included; harmless.
-    for (int i = 0; i < argc; ++i)
-    {
-        if (i > 0)
-        {
-            g_processCommandLine.push_back(L' ');
-        }
-        if (argv[i] != nullptr)
-        {
-            AppendUtf8Argument(g_processCommandLine, argv[i]);
-        }
-    }
-}
-
-const wchar_t* GetCommandLineW()
-{
-    return g_processCommandLine.c_str();
-}
-
-#endif // !_WIN32
+#endif  // !_WIN32

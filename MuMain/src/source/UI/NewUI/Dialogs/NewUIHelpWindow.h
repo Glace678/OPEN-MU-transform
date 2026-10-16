@@ -11,46 +11,46 @@
 
 namespace SEASON3B
 {
-    class CNewUIHelpWindow : public CNewUIObj
-    {
-    public:
-        CNewUIHelpWindow();
-        virtual ~CNewUIHelpWindow();
+class CNewUIHelpWindow : public CNewUIObj
+{
+public:
+    CNewUIHelpWindow();
+    virtual ~CNewUIHelpWindow();
 
-        bool Create(CNewUIManager* pNewUIMng, int x, int y);
-        void Release();
+    bool Create(CNewUIManager* pNewUIMng, int x, int y);
+    void Release();
 
-        void SetPos(int x, int y);
+    void SetPos(int x, int y);
 
-        bool UpdateMouseEvent();
-        bool UpdateKeyEvent();
-        bool Update();
-        bool Render();
+    bool UpdateMouseEvent();
+    bool UpdateKeyEvent();
+    bool Update();
+    bool Render();
 
-        float GetLayerDepth();	//. 7.1f
-        float GetKeyEventOrder();	// 10.f;
+    float GetLayerDepth();     //. 7.1f
+    float GetKeyEventOrder();  // 10.f;
 
-        void OpenningProcess();
-        void ClosingProcess();
+    void OpenningProcess();
+    void ClosingProcess();
 
-        // Opens the onboarding sequence at the welcome page.
-        void StartTutorial();
+    // Opens the onboarding sequence at the welcome page.
+    void StartTutorial();
 
-        void AutoUpdateIndex();
-        void NextPage();
-        void PreviousPage();
+    void AutoUpdateIndex();
+    void NextPage();
+    void PreviousPage();
 
-    private:
-        bool HandleGamepadInput();
-        void Close();
-        void RenderTutorialPage();
+private:
+    bool HandleGamepadInput();
+    void Close();
+    void RenderTutorialPage();
 
-        CNewUIManager* m_pNewUIMng;
-        POINT			m_Pos;
+    CNewUIManager* m_pNewUIMng;
+    POINT          m_Pos;
 
-        int m_iIndex;
-        bool m_isOnboarding;
-    };
+    int  m_iIndex;
+    bool m_isOnboarding;
+};
 }
 
-#endif // !defined(AFX_NEWUIHELPWINDOW_H__9A918DE0_7707_456C_9E5B_89503F1936D1__INCLUDED_)
+#endif  // !defined(AFX_NEWUIHELPWINDOW_H__9A918DE0_7707_456C_9E5B_89503F1936D1__INCLUDED_)

@@ -35,10 +35,10 @@
     X(RequireClass[6], RequireClass, 6, Byte, 60.0f, RFFM)
 
 // Helper macro to convert TypeEnum to actual C++ type (same as ItemFieldDefs.h)
-#define SKILL_FIELD_TYPE_Bool bool
-#define SKILL_FIELD_TYPE_Byte BYTE
-#define SKILL_FIELD_TYPE_Word WORD
-#define SKILL_FIELD_TYPE_Int int
+#define SKILL_FIELD_TYPE_Bool  bool
+#define SKILL_FIELD_TYPE_Byte  BYTE
+#define SKILL_FIELD_TYPE_Word  WORD
+#define SKILL_FIELD_TYPE_Int   int
 #define SKILL_FIELD_TYPE_DWord DWORD
 
 // Generate struct field declarations from X-macro. The i18nName parameter

@@ -18,7 +18,7 @@
 #include "Core/Platform/WinCompat.h"  // UINT, DWORD, LPCSTR, LPWSTR, LPBOOL
 
 #ifndef CP_ACP
-#define CP_ACP  0
+#define CP_ACP 0
 #endif
 #ifndef CP_UTF8
 #define CP_UTF8 65001
@@ -27,11 +27,10 @@
 // Same contract as Win32: cbMultiByte/cchWideChar == -1 means the source is
 // null-terminated (the terminator is converted and counted); a zero output size
 // returns the required length without writing. Invalid input maps to U+FFFD.
-int MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCSTR lpMultiByteStr,
-                        int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
+int MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCSTR lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr,
+                        int cchWideChar);
 
-int WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWSTR lpWideCharStr,
-                        int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte,
-                        LPCSTR lpDefaultChar, LPBOOL lpUsedDefaultChar);
+int WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWSTR lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr,
+                        int cbMultiByte, LPCSTR lpDefaultChar, LPBOOL lpUsedDefaultChar);
 
-#endif // _WIN32
+#endif  // _WIN32

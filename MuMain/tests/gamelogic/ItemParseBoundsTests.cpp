@@ -22,7 +22,10 @@
 
 namespace
 {
-    std::span<const BYTE> sp(const std::vector<BYTE>& v) { return std::span<const BYTE>(v); }
+std::span<const BYTE> sp(const std::vector<BYTE>& v)
+{
+    return std::span<const BYTE>(v);
+}
 }
 
 TEST_SUITE("ParseItemDataBounds")
@@ -30,8 +33,8 @@ TEST_SUITE("ParseItemDataBounds")
     TEST_CASE("base 5-byte packet with no options parses and has no sockets")
     {
         // [0]=Group/NumberHi [1]=NumberLo [2]=Level [3]=Durability [4]=flags(0)
-        std::vector<BYTE> pkt = { 0x10, 0x05, 0x01, 0xFF, 0x00 };
-        auto p = ParseItemData(sp(pkt));
+        std::vector<BYTE> pkt = {0x10, 0x05, 0x01, 0xFF, 0x00};
+        auto              p   = ParseItemData(sp(pkt));
         CHECK(p.Group == 1);
         CHECK(p.Number == 5);
         CHECK(p.Level == 1);
@@ -44,8 +47,8 @@ TEST_SUITE("ParseItemDataBounds")
         // Exactly 5 bytes, but flags[4]=0x80 (HasSockets). The socket header
         // byte would live at index 5, i.e. past the span. Pre-fix this read
         // itemData[5] out of bounds; post-fix the block is skipped entirely.
-        std::vector<BYTE> pkt = { 0x10, 0x05, 0x01, 0xFF, 0x80 };
-        auto p = ParseItemData(sp(pkt));
+        std::vector<BYTE> pkt = {0x10, 0x05, 0x01, 0xFF, 0x80};
+        auto              p   = ParseItemData(sp(pkt));
         CHECK(p.Group == 1);
         CHECK(p.SocketCount == 0);
         CHECK(p.SocketBonusOption == 0);
@@ -57,12 +60,12 @@ TEST_SUITE("ParseItemDataBounds")
         // header[5]=0xF5 -> bonus=0xF, SocketCount nibble=0x5... use 0xF5? we
         // want SocketCount nibble = 0xF (15): header = 0xF0 | 0xF = 0xFF.
         std::vector<BYTE> pkt = {
-            0x10, 0x05, 0x01, 0xFF, 0x80,   // flags=HasSockets
-            0xFF,                            // bonus=0xF, SocketCount=15
-            10, 20, 30, 40, 50               // exactly 5 socket payload bytes
+            0x10, 0x05, 0x01, 0xFF, 0x80,  // flags=HasSockets
+            0xFF,                          // bonus=0xF, SocketCount=15
+            10,   20,   30,   40,   50     // exactly 5 socket payload bytes
         };
         auto p = ParseItemData(sp(pkt));
-        CHECK(p.SocketCount == MAX_SOCKETS);          // clamped from 15 -> 5
+        CHECK(p.SocketCount == MAX_SOCKETS);  // clamped from 15 -> 5
         CHECK(p.SocketBonusOption == 0xF);
         for (int i = 0; i < MAX_SOCKETS; ++i)
             CHECK(p.SocketOptions[i] == static_cast<BYTE>(10 + i * 10));
@@ -75,13 +78,13 @@ TEST_SUITE("ParseItemDataBounds")
         // ships. Pre-fix this read itemData[7..10] out of bounds.
         std::vector<BYTE> pkt = {
             0x10, 0x05, 0x01, 0xFF, 0x80,
-            0x05,   // bonus=0, SocketCount=5
-            77      // one and only payload byte
+            0x05,  // bonus=0, SocketCount=5
+            77     // one and only payload byte
         };
         auto p = ParseItemData(sp(pkt));
-        CHECK(p.SocketCount == MAX_SOCKETS);   // 5 (within cap)
+        CHECK(p.SocketCount == MAX_SOCKETS);  // 5 (within cap)
         CHECK(p.SocketOptions[0] == 77);
-        CHECK(p.SocketOptions[1] == 0);        // not read from OOB
+        CHECK(p.SocketOptions[1] == 0);  // not read from OOB
         CHECK(p.SocketOptions[4] == 0);
     }
 }
@@ -96,16 +99,16 @@ TEST_SUITE("CreateItemTypeBounds")
         // = 11775 >= MAX_ITEM (8192). Pre-fix this created an item and then
         // indexed ItemAttribute[11775] out of bounds.
         ItemCreationParams bad = {};
-        bad.Group = 15;
-        bad.Number = 4095;
-        ITEM* pBad = mgr.CreateItemByParameters(&bad);
+        bad.Group              = 15;
+        bad.Number             = 4095;
+        ITEM* pBad             = mgr.CreateItemByParameters(&bad);
         CHECK(pBad == nullptr);
 
         // Group=1, Number=5 -> Type = 517, within [0, MAX_ITEM). Must succeed.
         ItemCreationParams good = {};
-        good.Group = 1;
-        good.Number = 5;
-        ITEM* pGood = mgr.CreateItemByParameters(&good);
+        good.Group              = 1;
+        good.Number             = 5;
+        ITEM* pGood             = mgr.CreateItemByParameters(&good);
         REQUIRE(pGood != nullptr);
         CHECK(pGood->Type == 1 * MAX_ITEM_INDEX + 5);
     }

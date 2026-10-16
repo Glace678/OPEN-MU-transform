@@ -23,41 +23,41 @@ private:
     enum IMAGE_IGS_BUY_SELECT_ITEM
     {
         IMAGE_IGS_MGSBOX_BACK = BITMAP_IGS_MSGBOX_BUY_SELECT_ITEM,
-        IMAGE_IGS_BUTTON = BITMAP_IGS_MSGBOX_BUTTON,
+        IMAGE_IGS_BUTTON      = BITMAP_IGS_MSGBOX_BUTTON,
     };
 
     enum IMAGESIZE_IGS_BUY_SELECT_ITEM
     {
-        IMAGE_IGS_WINDOW_WIDTH = 640,
+        IMAGE_IGS_WINDOW_WIDTH  = 640,
         IMAGE_IGS_WINDOW_HEIGHT = 429,
-        IMAGE_IGS_FRAME_WIDTH = 215,
-        IMAGE_IGS_FRAME_HEIGHT = 346,
-        IMAGE_IGS_BTN_WIDTH = 52,
-        IMAGE_IGS_BTN_HEIGHT = 26,
+        IMAGE_IGS_FRAME_WIDTH   = 215,
+        IMAGE_IGS_FRAME_HEIGHT  = 346,
+        IMAGE_IGS_BTN_WIDTH     = 52,
+        IMAGE_IGS_BTN_HEIGHT    = 26,
     };
 
     enum IGS_BUY_SELECT_ITEM
     {
-        IGS_BTN_BUY_POS_X = 26,
-        IGS_BTN_PRESENT_POS_X = 82,
-        IGS_BTN_CANCEL_POS_X = 138,
-        IGS_BTN_POS_Y = 309,
-        IGS_TEXT_TITLE_POS_Y = 10,
-        IGS_TEXT_NAME_POS_X = 5,
-        IGS_TEXT_NAME_POS_Y = 100,
-        IGS_TEXT_ATTR_POS_X = 15,
-        IGS_TEXT_ATTR_POS_Y = 118,
-        IGS_TEXT_ATTR_WIDTH = 194,
-        IGS_TEXT_PRICE_POS_X = 129,
-        IGS_TEXT_PRICE_POX_Y = 288,
-        IGS_TEXT_PRICE_WIDTH = 66,
+        IGS_BTN_BUY_POS_X          = 26,
+        IGS_BTN_PRESENT_POS_X      = 82,
+        IGS_BTN_CANCEL_POS_X       = 138,
+        IGS_BTN_POS_Y              = 309,
+        IGS_TEXT_TITLE_POS_Y       = 10,
+        IGS_TEXT_NAME_POS_X        = 5,
+        IGS_TEXT_NAME_POS_Y        = 100,
+        IGS_TEXT_ATTR_POS_X        = 15,
+        IGS_TEXT_ATTR_POS_Y        = 118,
+        IGS_TEXT_ATTR_WIDTH        = 194,
+        IGS_TEXT_PRICE_POS_X       = 129,
+        IGS_TEXT_PRICE_POX_Y       = 288,
+        IGS_TEXT_PRICE_WIDTH       = 66,
         IGS_TEXT_DISCRIPTION_WIDTH = 185,
-        IGS_LISTBOX_POS_X = 17,
-        IGS_LISTBOX_POS_Y = 277,
-        IGS_3DITEM_POS_X = 60,
-        IGS_3DITEM_POS_Y = 33,
-        IGS_3DITEM_WIDTH = 96,
-        IGS_3DITEM_HEIGHT = 60,
+        IGS_LISTBOX_POS_X          = 17,
+        IGS_LISTBOX_POS_Y          = 277,
+        IGS_3DITEM_POS_X           = 60,
+        IGS_3DITEM_POS_Y           = 33,
+        IGS_3DITEM_WIDTH           = 96,
+        IGS_3DITEM_HEIGHT          = 60,
     };
 
 public:
@@ -88,19 +88,19 @@ private:
     void RenderListBox();
     void ReleaseListBox();
     void ListBoxDoAction();
-    void AddData(int iPackageSeq, int iDisplaySeq, int iPriceSeq, int iProductSeq, wchar_t* pszPriceUnit, int iCashType);
+    void AddData(int iPackageSeq, int iDisplaySeq, int iPriceSeq, int iProductSeq, wchar_t* pszPriceUnit,
+                 int iCashType);
 
 private:
-
-    CNewUIMessageBoxButton m_BtnBuy;
-    CNewUIMessageBoxButton m_BtnPresent;
-    CNewUIMessageBoxButton m_BtnCancel;
+    CNewUIMessageBoxButton    m_BtnBuy;
+    CNewUIMessageBoxButton    m_BtnPresent;
+    CNewUIMessageBoxButton    m_BtnCancel;
     CUIPackCheckBuyingListBox m_SelectBuyListBox;
 
-    int		m_iPackageSeq;
-    int		m_iDisplaySeq;
-    WORD	m_wItemCode;
-    int		m_iDescriptionLine;
+    int  m_iPackageSeq;
+    int  m_iDisplaySeq;
+    WORD m_wItemCode;
+    int  m_iDescriptionLine;
 
     wchar_t m_szPackageName[MAX_TEXT_LENGTH];
     wchar_t m_szPrice[MAX_TEXT_LENGTH];
@@ -113,6 +113,6 @@ public:
     bool SetLayout();
 };
 
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 
-#endif // !defined(AFX_MSGBOXIGSBUYSELECTITEM_H__96137D00_144C_4E10_B335_383E5DAB5D50__INCLUDED_)
+#endif  // !defined(AFX_MSGBOXIGSBUYSELECTITEM_H__96137D00_144C_4E10_B335_383E5DAB5D50__INCLUDED_)

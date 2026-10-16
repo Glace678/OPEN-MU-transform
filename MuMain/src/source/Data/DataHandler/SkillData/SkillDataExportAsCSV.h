@@ -12,4 +12,4 @@ public:
     static bool ExportToCsv(wchar_t* fileName);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

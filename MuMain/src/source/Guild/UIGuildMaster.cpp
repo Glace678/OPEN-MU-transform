@@ -18,20 +18,20 @@
 #include "Engine/Object/ZzzInterface.h"
 
 extern CUITextInputBox* g_pSingleTextInputBox;
-extern int				g_iChatInputType;
+extern int              g_iChatInputType;
 
-static eCurrentMode		m_nCurrMode;
-static eCurrentStep		m_eCurrStep;
-static GuildRelationshipType	m_byRelationShipType;
-static GuildRequestType	m_byRelationShipRequestType;
-static BYTE				m_byTargetUserIndexH;
-static BYTE				m_byTargetUserIndexL;
+static eCurrentMode          m_nCurrMode;
+static eCurrentStep          m_eCurrStep;
+static GuildRelationshipType m_byRelationShipType;
+static GuildRequestType      m_byRelationShipRequestType;
+static BYTE                  m_byTargetUserIndexH;
+static BYTE                  m_byTargetUserIndexL;
 
 void RenderGoldRect(float fPos_x, float fPos_y, float fWidth, float fHeight, int iFillType = 0);
 
 void EditGuildMarkMouseAction(int iPos_x, int iPos_y)
 {
-    int i, j;
+    int   i, j;
     float x, y;
     Hero->Object.Angle[2] = 90.f + 22.5f;
     for (i = 0; i < 8; ++i)
@@ -70,7 +70,7 @@ void EditGuildMarkMouseAction(int iPos_x, int iPos_y)
 
 void RenderGuildMark(int iPos_x, int iPos_y)
 {
-    int i, j;
+    int   i, j;
     float x, y;
     for (i = 0; i < 8; ++i)
     {
@@ -118,9 +118,7 @@ int DoEditGuildMarkConfirmAction(POPUP_RESULT Result)
 int DoGuildRelationReplyAction(POPUP_RESULT Result)
 {
     SocketClient->ToGameServer()->SendGuildRelationshipChangeResponse(
-        m_byRelationShipType,
-        m_byRelationShipRequestType,
-        Result == POPUP_RESULT_YES,
+        m_byRelationShipType, m_byRelationShipRequestType, Result == POPUP_RESULT_YES,
         MAKEWORD(m_byTargetUserIndexL, m_byTargetUserIndexH));
 
     return 1;
@@ -153,15 +151,13 @@ CUIGuildMaster::CUIGuildMaster()
     m_NextButton.SetSize(50, 18);
 
     m_dwGuildRelationShipReplyPopup = 0;
-    m_byRelationShipType = GuildRelationshipType::Undefined;
-    m_byRelationShipRequestType = GuildRequestType::Undefined;
-    m_byTargetUserIndexH = 0;
-    m_byTargetUserIndexL = 0;
+    m_byRelationShipType            = GuildRelationshipType::Undefined;
+    m_byRelationShipRequestType     = GuildRequestType::Undefined;
+    m_byTargetUserIndexH            = 0;
+    m_byTargetUserIndexL            = 0;
 }
 
-CUIGuildMaster::~CUIGuildMaster()
-{
-}
+CUIGuildMaster::~CUIGuildMaster() {}
 
 BOOL CUIGuildMaster::IsValidGuildName(const wchar_t* szName)
 {
@@ -188,25 +184,39 @@ void CUIGuildMaster::StepPrev()
 {
     switch (m_nCurrMode)
     {
-    case MODE_CREATE_GUILD:
-        switch (m_eCurrStep)
-        {
-        case STEP_CREATE_GUILDINFO:		m_nCurrMode = MODE_NONE;	m_eCurrStep = STEP_MAIN;	break;
-        case STEP_CONFIRM_GUILDINFO:	m_eCurrStep = STEP_CREATE_GUILDINFO;					break;
-        default:						assert(!"m_eCurrStep");		break;
-        }
-        break;
-    case MODE_EDIT_GUILDMARK:
-        switch (m_eCurrStep)
-        {
-        case STEP_EDIT_GUILD_MARK:		m_nCurrMode = MODE_NONE;	m_eCurrStep = STEP_MAIN;	break;
-        case STEP_CONFIRM_GUILDINFO:	m_eCurrStep = STEP_EDIT_GUILD_MARK;		break;
-        default:						assert(!"m_eCurrStep");		break;
-        }
-        break;
-    default:
-        assert(!"m_nCurrMode");
-        break;
+        case MODE_CREATE_GUILD:
+            switch (m_eCurrStep)
+            {
+                case STEP_CREATE_GUILDINFO:
+                    m_nCurrMode = MODE_NONE;
+                    m_eCurrStep = STEP_MAIN;
+                    break;
+                case STEP_CONFIRM_GUILDINFO:
+                    m_eCurrStep = STEP_CREATE_GUILDINFO;
+                    break;
+                default:
+                    assert(!"m_eCurrStep");
+                    break;
+            }
+            break;
+        case MODE_EDIT_GUILDMARK:
+            switch (m_eCurrStep)
+            {
+                case STEP_EDIT_GUILD_MARK:
+                    m_nCurrMode = MODE_NONE;
+                    m_eCurrStep = STEP_MAIN;
+                    break;
+                case STEP_CONFIRM_GUILDINFO:
+                    m_eCurrStep = STEP_EDIT_GUILD_MARK;
+                    break;
+                default:
+                    assert(!"m_eCurrStep");
+                    break;
+            }
+            break;
+        default:
+            assert(!"m_nCurrMode");
+            break;
     }
 }
 
@@ -214,25 +224,37 @@ void CUIGuildMaster::StepNext()
 {
     switch (m_nCurrMode)
     {
-    case MODE_CREATE_GUILD:
-        switch (m_eCurrStep)
-        {
-        case STEP_MAIN:					m_eCurrStep = STEP_CREATE_GUILDINFO;	break;
-        case STEP_CREATE_GUILDINFO:		m_eCurrStep = STEP_CONFIRM_GUILDINFO;	break;
-        default:						assert(!"Guild Error 1");		break;
-        }
-        break;
-    case MODE_EDIT_GUILDMARK:
-        switch (m_eCurrStep)
-        {
-        case STEP_MAIN:					m_eCurrStep = STEP_EDIT_GUILD_MARK;		break;
-        case STEP_EDIT_GUILD_MARK:		m_eCurrStep = STEP_CONFIRM_GUILDINFO;	break;
-        default:						assert(!"Guild Error 2");		break;
-        }
-        break;
-    default:
-        assert(!"m_nCurrMode");
-        break;
+        case MODE_CREATE_GUILD:
+            switch (m_eCurrStep)
+            {
+                case STEP_MAIN:
+                    m_eCurrStep = STEP_CREATE_GUILDINFO;
+                    break;
+                case STEP_CREATE_GUILDINFO:
+                    m_eCurrStep = STEP_CONFIRM_GUILDINFO;
+                    break;
+                default:
+                    assert(!"Guild Error 1");
+                    break;
+            }
+            break;
+        case MODE_EDIT_GUILDMARK:
+            switch (m_eCurrStep)
+            {
+                case STEP_MAIN:
+                    m_eCurrStep = STEP_EDIT_GUILD_MARK;
+                    break;
+                case STEP_EDIT_GUILD_MARK:
+                    m_eCurrStep = STEP_CONFIRM_GUILDINFO;
+                    break;
+                default:
+                    assert(!"Guild Error 2");
+                    break;
+            }
+            break;
+        default:
+            assert(!"m_nCurrMode");
+            break;
     }
 }
 
@@ -307,7 +329,7 @@ void CUIGuildMaster::DoCreateGuildAction()
             g_pSingleTextInputBox->SetState(UISTATE_HIDE);
         }
         memset(InputText[0], 0, MAX_USERNAME_SIZE);
-        InputLength[0] = 0;
+        InputLength[0]  = 0;
         InputTextMax[0] = MAX_USERNAME_SIZE;
         StepPrev();
     }
@@ -315,7 +337,7 @@ void CUIGuildMaster::DoCreateGuildAction()
 
 void CUIGuildMaster::RenderCreateGuild()
 {
-    POINT ptOrigin = { GetPosition_x() + 25, GetPosition_y() + 60 };
+    POINT ptOrigin = {GetPosition_x() + 25, GetPosition_y() + 60};
 
     RenderBitmap(BITMAP_INVENTORY + 11, ptOrigin.x + 33, ptOrigin.y - 4, 110, 18, 0.f, 0.f, 110.f / 128.f, 18.f / 32.f);
 
@@ -385,7 +407,7 @@ void CUIGuildMaster::DoCreateInfoAction()
 
 void CUIGuildMaster::RenderCreateInfo()
 {
-    POINT ptOrigin = { GetPosition_x() + 25, GetPosition_y() + 65 };
+    POINT ptOrigin = {GetPosition_x() + 25, GetPosition_y() + 65};
 
     g_pRenderText->SetFont(g_hFont);
 
@@ -431,7 +453,7 @@ void CUIGuildMaster::DoEditGuildMarkAction()
 
 void CUIGuildMaster::RenderEditGuildMark()
 {
-    POINT ptOrigin = { GetPosition_x() + 25, GetPosition_y() + 60 };
+    POINT ptOrigin = {GetPosition_x() + 25, GetPosition_y() + 60};
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(230, 230, 230, 255);
@@ -454,8 +476,8 @@ void CUIGuildMaster::DoGuildMasterMainAction()
 {
     if (m_CreateGuildButton.DoMouseAction())
     {
-        m_nCurrMode = MODE_CREATE_GUILD;
-        m_eCurrStep = STEP_CREATE_GUILDINFO;
+        m_nCurrMode      = MODE_CREATE_GUILD;
+        m_eCurrStep      = STEP_CREATE_GUILDINFO;
         GuildInputEnable = TRUE;
         SocketClient->ToGameServer()->SendGuildMasterAnswer(true);
     }
@@ -474,8 +496,8 @@ void CUIGuildMaster::DoGuildMasterMainAction()
 
     if (MouseLButtonPush && CheckMouseIn(GetPosition_x() + 25, GetPosition_y() + 395, 24, 24))
     {
-        MouseLButtonPush = FALSE;
-        MouseUpdateTime = 0;
+        MouseLButtonPush   = FALSE;
+        MouseUpdateTime    = 0;
         MouseUpdateTimeMax = 6;
         SocketClient->ToGameServer()->SendGuildMasterAnswer(false);
         PlayBuffer(SOUND_CLICK01);
@@ -487,7 +509,7 @@ void CUIGuildMaster::DoGuildMasterMainAction()
 
 void CUIGuildMaster::RenderGuildMasterMain()
 {
-    POINT ptOrigin = { GetPosition_x() + 25, GetPosition_y() + 60 };
+    POINT ptOrigin = {GetPosition_x() + 25, GetPosition_y() + 60};
 
     g_pRenderText->SetTextColor(230, 230, 230, 255);
     g_pRenderText->SetBgColor(0);
@@ -516,7 +538,10 @@ void CUIGuildMaster::RenderGuildMasterMain()
     m_EditGuildMarkButton.Render();
 
     glColor3f(1.f, 1.f, 1.f);
-    float Width = 24.f; float Height = 24.f; float x = (float)GetPosition_x() + 25; float y = (float)GetPosition_y() + 395;
+    float Width  = 24.f;
+    float Height = 24.f;
+    float x      = (float)GetPosition_x() + 25;
+    float y      = (float)GetPosition_y() + 395;
     RenderBitmap(BITMAP_INVENTORY_BUTTON, x, y, Width, Height, 0.f, 0.f, Width / 32.f, Height / 32.f);
     if (CheckMouseIn(x, y, Width, Height))
     {
@@ -528,54 +553,52 @@ void CUIGuildMaster::RenderGuildMasterMain()
     }
 }
 
-void CUIGuildMaster::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType, BYTE  byTargetUserIndexH, BYTE byTargetUserIndexL)
+void CUIGuildMaster::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
+                                              BYTE byTargetUserIndexH, BYTE byTargetUserIndexL)
 {
     if (g_pUIPopup->GetPopupID() != 0)
     {
         SocketClient->ToGameServer()->SendGuildRelationshipChangeResponse(
-            byRelationShipType,
-            byRequestType,
-            0x00,
-            MAKEWORD(byTargetUserIndexH, byTargetUserIndexL));
+            byRelationShipType, byRequestType, 0x00, MAKEWORD(byTargetUserIndexH, byTargetUserIndexL));
         return;
     }
 
-    m_byRelationShipType = byRelationShipType;
+    m_byRelationShipType        = byRelationShipType;
     m_byRelationShipRequestType = byRequestType;
-    m_byTargetUserIndexH = byTargetUserIndexH;
-    m_byTargetUserIndexL = byTargetUserIndexL;
+    m_byTargetUserIndexH        = byTargetUserIndexH;
+    m_byTargetUserIndexL        = byTargetUserIndexL;
 
     int nCharKey = MAKEWORD(m_byTargetUserIndexL, m_byTargetUserIndexH);
-    int nIndex = FindCharacterIndex(nCharKey);
+    int nIndex   = FindCharacterIndex(nCharKey);
     if (nIndex < 0 || nIndex >= MAX_CHARACTERS_CLIENT)
         return;
     CHARACTER* pPlayer = &CharactersClient[nIndex];
 
     wchar_t szText[3][64];
-    if (m_byRelationShipType == GuildRelationshipType::Alliance)			// Union
+    if (m_byRelationShipType == GuildRelationshipType::Alliance)  // Union
     {
-        if (m_byRelationShipRequestType == GuildRequestType::Join)	// Join
+        if (m_byRelationShipRequestType == GuildRequestType::Join)  // Join
         {
             mu_swprintf(szText[0], I18N::Game::FromSForAGuildAlliance);
             mu_swprintf(szText[1], I18N::Game::ReceivedARegistrationRequest, pPlayer->ID);
             mu_swprintf(szText[2], I18N::Game::Approve);
         }
-        else										// Break Off
+        else  // Break Off
         {
             mu_swprintf(szText[0], I18N::Game::FromSForAGuildAlliance);
             mu_swprintf(szText[1], I18N::Game::ReceivedAWithdrawalRequest, pPlayer->ID);
             mu_swprintf(szText[2], I18N::Game::Approve);
         }
     }
-    else if (m_byRelationShipType == GuildRelationshipType::Hostility) // Rival
+    else if (m_byRelationShipType == GuildRelationshipType::Hostility)  // Rival
     {
-        if (m_byRelationShipRequestType == GuildRequestType::Join)	// Join
+        if (m_byRelationShipRequestType == GuildRequestType::Join)  // Join
         {
             mu_swprintf(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
             mu_swprintf(szText[1], I18N::Game::ReceivedApprovalRequest);
             mu_swprintf(szText[2], I18N::Game::Approve);
         }
-        else										// Break Off
+        else  // Break Off
         {
             mu_swprintf(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
             mu_swprintf(szText[1], I18N::Game::ReceivedCancellationRequest);
@@ -583,7 +606,8 @@ void CUIGuildMaster::ReceiveGuildRelationShip(GuildRelationshipType byRelationSh
         }
     }
 
-    m_dwGuildRelationShipReplyPopup = g_pUIPopup->SetPopup(&szText[0][0], 3, 64, POPUP_YESNO, ::DoGuildRelationReplyAction);
+    m_dwGuildRelationShipReplyPopup =
+        g_pUIPopup->SetPopup(&szText[0][0], 3, 64, POPUP_YESNO, ::DoGuildRelationReplyAction);
 }
 
 BOOL CUIGuildMaster::DoMouseAction()
@@ -593,20 +617,20 @@ BOOL CUIGuildMaster::DoMouseAction()
 
     switch (m_eCurrStep)
     {
-    case STEP_MAIN:
-        DoGuildMasterMainAction();
-        break;
-    case STEP_CREATE_GUILDINFO:
-        DoCreateGuildAction();
-        break;
-    case STEP_EDIT_GUILD_MARK:
-        DoEditGuildMarkAction();
-        break;
-    case STEP_CONFIRM_GUILDINFO:
-        DoCreateInfoAction();
-        break;
-    default:
-        break;
+        case STEP_MAIN:
+            DoGuildMasterMainAction();
+            break;
+        case STEP_CREATE_GUILDINFO:
+            DoCreateGuildAction();
+            break;
+        case STEP_EDIT_GUILD_MARK:
+            DoEditGuildMarkAction();
+            break;
+        case STEP_CONFIRM_GUILDINFO:
+            DoCreateInfoAction();
+            break;
+        default:
+            break;
     };
 
     return FALSE;
@@ -616,45 +640,48 @@ void CUIGuildMaster::Render()
 {
     glColor3f(1.f, 1.f, 1.f);
 
-    POINT ptOrigin = { GetPosition_x(), GetPosition_y() };
+    POINT ptOrigin = {GetPosition_x(), GetPosition_y()};
 
     DisableAlphaBlend();
     RenderBitmap(BITMAP_INVENTORY, ptOrigin.x, ptOrigin.y, 190.f, 256.f, 0.f, 0.f, 190.f / 256.f, 256.f / 256.f);
-    RenderBitmap(BITMAP_INVENTORY + 1, ptOrigin.x, ptOrigin.y + 256, 190.f, 177.f, 0.f, 0.f, 190.f / 256.f, 177.f / 256.f);
+    RenderBitmap(BITMAP_INVENTORY + 1, ptOrigin.x, ptOrigin.y + 256, 190.f, 177.f, 0.f, 0.f, 190.f / 256.f,
+                 177.f / 256.f);
 
     EnableAlphaTest();
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(220, 220, 220, 255);
     g_pRenderText->SetBgColor(20, 20, 20, 255);
 
-    ptOrigin.x += 35;	ptOrigin.y += 12;
+    ptOrigin.x += 35;
+    ptOrigin.y += 12;
     switch (m_eCurrStep)
     {
-    case STEP_MAIN:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Guild, 120, 0, RT3_SORT_CENTER);
-        RenderGuildMasterMain();
-        break;
-    case STEP_CREATE_GUILDINFO:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::CreateGuild, 120, 0, RT3_SORT_CENTER);
-        RenderCreateGuild();
-        break;
-    case STEP_EDIT_GUILD_MARK:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ChangeGuildMark, 120, 0, RT3_SORT_CENTER);
-        RenderEditGuildMark();
-        break;
-    case STEP_CONFIRM_GUILDINFO:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::OK, 120, 0, RT3_SORT_CENTER);
-        RenderCreateInfo();
-        break;
-    default:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Guild, 120, 0, RT3_SORT_CENTER);
-        break;
+        case STEP_MAIN:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Guild, 120, 0, RT3_SORT_CENTER);
+            RenderGuildMasterMain();
+            break;
+        case STEP_CREATE_GUILDINFO:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::CreateGuild, 120, 0, RT3_SORT_CENTER);
+            RenderCreateGuild();
+            break;
+        case STEP_EDIT_GUILD_MARK:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ChangeGuildMark, 120, 0, RT3_SORT_CENTER);
+            RenderEditGuildMark();
+            break;
+        case STEP_CONFIRM_GUILDINFO:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::OK, 120, 0, RT3_SORT_CENTER);
+            RenderCreateInfo();
+            break;
+        default:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Guild, 120, 0, RT3_SORT_CENTER);
+            break;
     };
 }
 
 void CUIGuildMaster::Open()
 {
-    if (m_bOpened)	return;
+    if (m_bOpened)
+        return;
 
     m_bOpened = TRUE;
 }
@@ -666,15 +693,16 @@ bool CUIGuildMaster::IsOpen()
 
 void CUIGuildMaster::Close()
 {
-    if (!m_bOpened)	return;
+    if (!m_bOpened)
+        return;
 
     m_bOpened = FALSE;
 
     if (Hero->GuildMarkIndex == MARK_EDIT)
         Hero->GuildMarkIndex = -1;
     PlayBuffer(SOUND_INTERFACE01);
-    m_nCurrMode = MODE_NONE;
-    m_eCurrStep = STEP_MAIN;
+    m_nCurrMode      = MODE_NONE;
+    m_eCurrStep      = STEP_MAIN;
     GuildInputEnable = FALSE;
     CloseMyPopup();
 

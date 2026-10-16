@@ -332,9 +332,7 @@ bool Calc_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
             }
             else
             {
-                // o->Scale can be 0 on a not-yet-scaled object; guard the divide.
-                const float safeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
-                BoneScale = 1.f + (0.1f / safeScale);
+                BoneScale = 1.f + (0.1f / o->Scale);
             }
             if (o->m_fEdgeScale != 1.2f)
             {
@@ -359,8 +357,7 @@ bool Calc_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
             }
             else
             {
-                const float safeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
-                BoneScale = 1.f + (0.04f / safeScale);
+                BoneScale = 1.f + (0.04f / o->Scale);
             }
             if (o->m_fEdgeScale != 1.2f)
             {
@@ -870,7 +867,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
 
                         Vector(1.0f, 0.0f, 0.0f, vLight);
                         Vector((float)(rand() % 10 - 10) * 0.5f, 0.f, (float)(rand() % 40 - 20) * 0.5f, vPos);
-                        b->TransformPosition(BoneTransform[14], vPos, vPosition, false);	// jaw
+                        b->TransformPosition(BoneTransform[14], vPos, vPosition, false);	// 턱
                         CreateParticleFpsChecked(BITMAP_SPARK + 1, vPosition, o->Angle, vLight, 15, 0.7f + (fLuminosity * 0.05f));
                     }
                     b->StreamMesh = -1;
@@ -1275,13 +1272,9 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                                                         // here would trigger its materialization under the lazy gate.
                                                         b->EnsureCpuVertices(1);
                                                         auto* pSideHair = new CSideHair;
-                                                        if (pSideHair != nullptr)
-                                                        {
-                                                            pSideHair->Create(VertexTransform, b, o);
-                                                            pSideHair->Render(VertexTransform, LightTransform);
-                                                            pSideHair->Destroy();
-                                                            delete pSideHair;
-                                                        }
+                                                        pSideHair->Create(VertexTransform, b, o);
+                                                        pSideHair->Render(VertexTransform, LightTransform);
+                                                        pSideHair->Destroy();
                                                     }
                                                     else if (o->Type == MODEL_DRAKAN)
                                                     {
@@ -2331,7 +2324,7 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                     b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                     b->RenderMesh(3, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                     b->RenderMesh(4, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                    // wing
+                    // 날개
                     Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
                     b->RenderMesh(5, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                     b->RenderMesh(5, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 5, 0.1f, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
@@ -2754,10 +2747,9 @@ void RenderCharacter_AfterImage(CHARACTER* pCha, PART_t* pPart, bool Translate, 
     VectorCopy(pObj->Position, vPos);
     VectorCopy(pObj->StartPosition, vStartPos);
     VectorSubtract(vPos, vStartPos, vPos);
-    const int numAnimationKeys = Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
-    float fDis = (numAnimationKeys > 0) ? fAni1 / static_cast<float>(numAnimationKeys) : 0.0f;
+    float fDis = fAni1 / Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
 
-    if (fAni1 > 0.0f && numAnimationKeys > 0)
+    if (fAni1 > 0.0f)
     {
         pObj->Alpha = 0.3f;
         pObj->AnimationFrame = fAni1;
@@ -2771,9 +2763,9 @@ void RenderCharacter_AfterImage(CHARACTER* pCha, PART_t* pPart, bool Translate, 
     VectorCopy(vOrgPos, vPos);
     VectorCopy(pObj->StartPosition, vStartPos);
     VectorSubtract(vPos, vStartPos, vPos);
-    if (fAni2 > 0.0f && numAnimationKeys > 0)
+    if (fAni2 > 0.0f)
     {
-        fDis = fAni2 / static_cast<float>(numAnimationKeys);
+        fDis = fAni2 / Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
         pObj->Alpha = 0.5f;
         pObj->AnimationFrame = fAni2;
         VectorScale(vPos, fDis, vPos);
@@ -3445,47 +3437,41 @@ void RenderObjects()
                         if (o->Live)
                         {
                             o->Visible = TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, o->CollisionRange + range);
-                            const bool forceHiddenFor6thChar =
-                                gMapManager.WorldActive == WD_51HOME_6TH_CHAR &&
-                                ((o->Type >= 5 && o->Type <= 14) || (o->Type >= 87 && o->Type <= 88) ||
-                                 (o->Type == 4 || o->Type == 129));
-                            const bool forceHiddenForIceCity =
-                                (gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS) &&
-                                (o->Type == 30 || o->Type == 31 || o->Type == 76);
-                            const bool forceHiddenForPkOrDoppel =
-                                (gMapManager.IsPKField() || IsDoppelGanger2()) &&
-                                (o->Type == 16 || o->Type == 67 || o->Type == 68);
-                            const bool forceHiddenForLoginScene =
-                                gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE;
-                            const bool forceHiddenForCharacterScene =
-                                gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE &&
-                                (o->Type == 129 || o->Type == 98);
-                            const bool forceHidden =
-                                forceHiddenFor6thChar || forceHiddenForIceCity || forceHiddenForPkOrDoppel ||
-                                forceHiddenForLoginScene || forceHiddenForCharacterScene;
-                            if (!forceHidden && (o->Visible || g_Camera.TopViewEnable))
-                            {
-                                bool Success = false;
-                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
-                                {
-                                    int Level;
-                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
-                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
-                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
-                                        Level = 50 * 2 / 3;
-                                    else
-                                        Level = 50;
-                                    if (CharacterAttribute->Level >= Level)
-                                        Success = true;
-                                }
+                            if ((gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                                ) &&
+                                ((o->Type >= 5 && o->Type <= 14) || (o->Type >= 87 && o->Type <= 88) || (o->Type == 4 || o->Type == 129)));
+                            else
+                                if ((gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS) && (o->Type == 30 || o->Type == 31 || o->Type == 76));
                                 else
-                                    Success = true;
-                                if (Success)
-                                {
-                                    RenderObject(o);
-                                    RenderObjectVisual(o);
-                                }
-                            }
+                                    if ((gMapManager.IsPKField() || IsDoppelGanger2()) && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                    else
+                                        if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE);
+                                        else if ((gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE) && (o->Type == 129 || o->Type == 98));
+
+                                        else
+                                            if (o->Visible || g_Camera.TopViewEnable)
+                                            {
+                                                bool Success = false;
+                                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
+                                                {
+                                                    int Level;
+                                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+                                                        Level = 50 * 2 / 3;
+                                                    else
+                                                        Level = 50;
+                                                    if (CharacterAttribute->Level >= Level)
+                                                        Success = true;
+                                                }
+                                                else
+                                                    Success = true;
+                                                if (Success)
+                                                {
+                                                    RenderObject(o);
+                                                    RenderObjectVisual(o);
+                                                }
+                                            }
 #ifdef CSK_DEBUG_RENDER_BOUNDINGBOX
                             if (o->Visible == true && g_bRenderBoundingBox == true)
                             {
@@ -3645,40 +3631,38 @@ void RenderObjects_AfterCharacter()
                         if (o->Live && o->m_bRenderAfterCharacter == true)
                         {
                             o->Visible = TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, o->CollisionRange + range);
-                            const bool forceHiddenFor6thChar =
-                                gMapManager.WorldActive == WD_51HOME_6TH_CHAR && o->Type == 89;
-                            const bool forceHiddenForIceCity =
-                                IsIceCity() && o->Type == 76;
-                            const bool forceHiddenForPk =
-                                gMapManager.IsPKField() && (o->Type == 16 || o->Type == 67 || o->Type == 68);
-                            const bool forceHiddenForDoppel =
-                                IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68);
-                            const bool forceHidden =
-                                forceHiddenFor6thChar || forceHiddenForIceCity ||
-                                forceHiddenForPk || forceHiddenForDoppel;
-                            if (!forceHidden && (o->Visible || g_Camera.TopViewEnable))
-                            {
-                                bool Success = false;
-                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
-                                {
-                                    int Level;
-
-                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
-                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
-                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
-                                        Level = 80 * 2 / 3;
-                                    else
-                                        Level = 80;
-                                    if (CharacterAttribute->Level >= Level)
-                                        Success = true;
-                                }
+                            if ((gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                                ) && (o->Type == 89));
+                            else
+                                if (IsIceCity() && o->Type == 76);
                                 else
-                                    Success = true;
-                                if (Success)
-                                {
-                                    RenderObject_AfterCharacter(o);
-                                }
-                            }
+                                    if (gMapManager.IsPKField() && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                    else
+                                        if (IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                        else
+                                            if (o->Visible || g_Camera.TopViewEnable)
+                                            {
+                                                bool Success = false;
+                                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
+                                                {
+                                                    int Level;
+
+                                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+                                                        Level = 80 * 2 / 3;
+                                                    else
+                                                        Level = 80;
+                                                    if (CharacterAttribute->Level >= Level)
+                                                        Success = true;
+                                                }
+                                                else
+                                                    Success = true;
+                                                if (Success)
+                                                {
+                                                    RenderObject_AfterCharacter(o);
+                                                }
+                                            }
                         }
                         if (o->Next == NULL) break;
                         o = o->Next;
@@ -4654,7 +4638,7 @@ OBJECT* CreateObject(int Type, vec3_t Position, vec3_t Angle, float Scale)
             //case MODEL_TREE01+10:
             Vector(-150.f, -150.f, 0.f, o->BoundingBoxMin);
             Vector(150.f, 150.f, 500.f, o->BoundingBoxMax);
-            o->Velocity = 1.f / ((o->Scale != 0.f) ? o->Scale : 1.f) * 0.4f;
+            o->Velocity = 1.f / o->Scale * 0.4f;
             //o->AlphaEnable = true;
             break;
         case MODEL_STREET_LIGHT:
@@ -4980,7 +4964,8 @@ namespace
         {
             wchar_t message[256];
             mu_swprintf(message, L"%ls is missing, unreadable, or contains invalid world objects.", fileName);
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%ls", message);
+            MessageBox(g_hWnd, message, nullptr, MB_OK);
+            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
             return -1;
         }
 
@@ -6644,7 +6629,7 @@ void PartObjectColor(int Type, float Alpha, float Bright, vec3_t Light, bool Ext
         Color = 29;
     else if (Type == MODEL_STINGER_BOW)
         Color = 35;
-    else if (Type == MODEL_GUARDIAN_SHIELD)
+    else if (Type == MODEL_GUARDIAN_SHILED)
         Color = 36;
     else if (Type == MODEL_CROSS_SHIELD)
         Color = 30;
@@ -6953,7 +6938,7 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 1, o->BlendMeshLight, fU, o->BlendMeshTexCoordV, o->HiddenMesh);
         Vector(1.f, 1.f, 1.f, b->BodyLight);
     }
-    // 	else if( Type==MODEL_WING+37 )	// Dimension wing (Wizard)
+    // 	else if( Type==MODEL_WING+37 )	// 시공날개(법사)
     //     {
     // 		Vector(1.f,1.f,1.f,b->BodyLight);
     // 		b->RenderBody(RENDER_TEXTURE,o->Alpha,o->BlendMesh,o->BlendMeshLight,o->BlendMeshTexCoordU,o->BlendMeshTexCoordV,o->HiddenMesh);
@@ -7204,7 +7189,7 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         o->BlendMeshLight = absf((sinf(WorldTime * 0.001f)));
         b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
-    else if (Type == MODEL_GUARDIAN_SHIELD)
+    else if (Type == MODEL_GUARDIAN_SHILED)
     {
         b->RenderBody(RENDER_TEXTURE, Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
         b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
@@ -7585,7 +7570,7 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         float Luminosity = sinf(WorldTime * 0.0008f) * 0.7f + 0.5f;
         b->RenderMesh(2, RENDER_TEXTURE, Alpha, 2, Luminosity, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
         b->RenderMesh(1, RENDER_TEXTURE, Alpha, 1, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        //. wing
+        //. 날
         glColor3f(0.43f, 0.14f, 0.6f);
 
         b->RenderMesh(3, RENDER_BRIGHT | RENDER_CHROME, Alpha, 3, o->BlendMeshLight, WorldTime * 0.0001f, WorldTime * 0.0005f);
@@ -7810,8 +7795,8 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
     {
         bIsNotRendered = TRUE;
     }
-    if (bIsNotRendered != FALSE &&
-        (Type == MODEL_FAITH_ARMOR || Type == MODEL_FAITH_PANTS || Type == MODEL_ARMOR + 53 || Type == MODEL_PANTS + 53))
+    if (bIsNotRendered == FALSE);
+    else if (Type == MODEL_FAITH_ARMOR || Type == MODEL_FAITH_PANTS || Type == MODEL_ARMOR + 53 || Type == MODEL_PANTS + 53)
     {
         int nTexture = 0;
         switch (Type)
@@ -8657,12 +8642,12 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, 0.2f, 0, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
-    else if (o->Type >= MODEL_HELPER + 109 && o->Type <= MODEL_HELPER + 112)	// InGameShop equipped item : ring (Sapphire, Ruby, Topaz, Amethyst)
+    else if (o->Type >= MODEL_HELPER + 109 && o->Type <= MODEL_HELPER + 112)	// InGameShop 장착 아이템 : 반지 (사파이어, 루비, 토파즈, 자수정)
     {
         b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         b->RenderMesh(1, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
-    else if (o->Type >= MODEL_HELPER + 113 && o->Type <= MODEL_HELPER + 115)// InGameShop equipped item : pendant (Sapphire, Ruby, Emerald)
+    else if (o->Type >= MODEL_HELPER + 113 && o->Type <= MODEL_HELPER + 115)// InGameShop 장착 아이템 : 목걸이 (사파이어, 루비, 에메랄드)
     {
         b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         b->RenderMesh(1, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, 0, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
@@ -9086,7 +9071,7 @@ void RenderPartObjectBodyColor(BMD* b, OBJECT* o, int Type, float Alpha, int Ren
     {
         b->RenderMesh(0, RenderType, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
-    else if (Type == MODEL_GUARDIAN_SHIELD)
+    else if (Type == MODEL_GUARDIAN_SHILED)
     {
         b->RenderMesh(0, RenderType, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
@@ -10704,8 +10689,7 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
         if (gMapManager.InChaosCastle())
         {
             Vector(0.1f, 0.01f, 0.f, b->BodyLight);
-            const float edgeSafeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
-            Scale = 1.f + 0.1f / edgeSafeScale;
+            Scale = 1.f + 0.1f / o->Scale;
         }
 
         RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale);
@@ -10721,8 +10705,7 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
         if (gMapManager.InChaosCastle())
         {
             Vector(0.7f, 0.07f, 0.f, b->BodyLight);
-            const float edgeSafeScale = (o->Scale != 0.f) ? o->Scale : 1.f;
-            Scale = 1.f + 0.04f / edgeSafeScale + 0.02f;
+            Scale = 1.f + 0.04f / o->Scale + 0.02f;
         }
         RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale - 0.02f);
     }

@@ -20,21 +20,19 @@ using SkillFieldDescriptor = FieldDescriptor<SKILL_ATTRIBUTE>;
 
 // Macros for descriptor generation
 #define MAKE_SKILL_FIELD_DESCRIPTOR(name, type, arraySize, width, i18nName) \
-    { #name, &I18N::Metadata::i18nName, EFieldType::type, offsetof(SKILL_ATTRIBUTE, name), width },
+    {#name, &I18N::Metadata::i18nName, EFieldType::type, offsetof(SKILL_ATTRIBUTE, name), width},
 
 #define MAKE_SKILL_ARRAY_DESCRIPTOR(nameWithIndex, baseName, index, type, width, i18nName) \
-    { #nameWithIndex, &I18N::Metadata::i18nName, EFieldType::type, offsetof(SKILL_ATTRIBUTE, baseName[index]), width },
+    {#nameWithIndex, &I18N::Metadata::i18nName, EFieldType::type, offsetof(SKILL_ATTRIBUTE, baseName[index]), width},
 
 // Static descriptor array - automatically generated from X-macros
 namespace SkillFieldMetadataInternal
 {
-    static const SkillFieldDescriptor s_descriptors[] = {
-        // Name field is special (UTF-16 string) and stands outside the X-macros.
-        { "Name", &I18N::Metadata::Name, EFieldType::WCharArray, offsetof(SKILL_ATTRIBUTE, Name), 150.0f },
-        SKILL_FIELDS_SIMPLE(MAKE_SKILL_FIELD_DESCRIPTOR)
-        SKILL_FIELDS_ARRAYS(MAKE_SKILL_ARRAY_DESCRIPTOR)
-        SKILL_FIELDS_AFTER_ARRAYS(MAKE_SKILL_FIELD_DESCRIPTOR)
-    };
+static const SkillFieldDescriptor s_descriptors[] = {
+    // Name field is special (UTF-16 string) and stands outside the X-macros.
+    {"Name", &I18N::Metadata::Name, EFieldType::WCharArray, offsetof(SKILL_ATTRIBUTE, Name), 150.0f},
+    SKILL_FIELDS_SIMPLE(MAKE_SKILL_FIELD_DESCRIPTOR) SKILL_FIELDS_ARRAYS(MAKE_SKILL_ARRAY_DESCRIPTOR)
+        SKILL_FIELDS_AFTER_ARRAYS(MAKE_SKILL_FIELD_DESCRIPTOR)};
 }
 
 // Accessor functions
@@ -55,11 +53,11 @@ inline const char* GetSkillFieldDisplayName(const SkillFieldDescriptor& desc)
 }
 
 // Helper to render a skill field by descriptor (uses generic helper)
-template<typename TColumns>
+template <typename TColumns>
 inline void RenderSkillFieldByDescriptor(const SkillFieldDescriptor& desc, TColumns* cols, SKILL_ATTRIBUTE& skill,
-                                          int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
+                                         int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
 {
     ::RenderFieldByDescriptor(desc, cols, skill, colIdx, skillIndex, rowInteracted, isVisible, MAX_SKILL_NAME);
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

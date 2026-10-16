@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ImmediateRenderer.h"
 #include "Render/Shaders/PassthroughShader.h"
-#include "Render/Textures/ZzzOpenglUtil.h" // GLP-19 -- GetRenderStateSnapshot()
+#include "Render/Textures/ZzzOpenglUtil.h"  // GLP-19 -- GetRenderStateSnapshot()
 #include "Render/RHI/RHI.h"
 #include "Core/Utilities/Log/ErrorReport.h"
 #include "Core/Utilities/FrameProfiler.h"
@@ -13,7 +13,8 @@
 // This file's job is CPU-side vertex accumulation (Begin/Color/TexCoord/Vertex*/quad-and-fan
 // decomposition) plus handing the finished vertex list to RHI:: in End().
 
-struct IRVertex {
+struct IRVertex
+{
     float x, y, z;
     float u, v;
     float r, g, b, a;
@@ -21,8 +22,8 @@ struct IRVertex {
 
 static RHI::BufferHandle g_VBO;
 
-static IRVertex g_CurrentVertex = { 0.f, 0.f, 0.f,  0.f, 0.f,  1.f, 1.f, 1.f, 1.f };
-static GLenum   g_CurrentMode   = 0;
+static IRVertex              g_CurrentVertex = {0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f};
+static GLenum                g_CurrentMode   = 0;
 static std::vector<IRVertex> g_VertexBuffer;
 
 // GLP-29 2a: a fixed array, not a std::vector. This is a 4-element scratch buffer that never grows,
@@ -50,59 +51,58 @@ static int      g_FanCount = 0;
 // intercepting every writer of it -- the wrapper family in ZzzOpenglUtil.cpp mutates four or five
 // independently-cached sub-states per call and is invoked per particle, so hooking its entry points
 // would flush on every quad and win nothing.
-namespace {
-    struct IRBatchKey
-    {
-        GLRenderStateSnapshot            gl{};
-        PassthroughShader::StateSnapshot ps{};
+namespace
+{
+struct IRBatchKey
+{
+    GLRenderStateSnapshot            gl{};
+    PassthroughShader::StateSnapshot ps{};
 
-        bool operator==(const IRBatchKey& o) const
-        {
-            return gl.alphaBlendType  == o.gl.alphaBlendType
-                && gl.alphaTestEnable == o.gl.alphaTestEnable
-                && gl.alphaRef        == o.gl.alphaRef
-                && gl.depthTestEnable == o.gl.depthTestEnable
-                && gl.depthMaskEnable == o.gl.depthMaskEnable
-                && gl.cullFaceEnable  == o.gl.cullFaceEnable
-                && gl.textureEnable   == o.gl.textureEnable
-                && gl.fogEnable       == o.gl.fogEnable
-                && gl.cachTexture     == o.gl.cachTexture
-                && ps.useTexture      == o.ps.useTexture
-                && ps.useFog          == o.ps.useFog
-                && ps.texCombineAdd   == o.ps.texCombineAdd;
-        }
-        bool operator!=(const IRBatchKey& o) const { return !(*this == o); }
-    };
-
-    // Field-wise, never hashed: a hash collision here draws a quad with the wrong texture or blend
-    // mode, scene-dependent and near-impossible to reproduce. The struct is small; compare it.
-    IRBatchKey CaptureKey()
+    bool operator==(const IRBatchKey& o) const
     {
-        IRBatchKey k;
-        k.gl = GetRenderStateSnapshot();
-        k.ps = PassthroughShader::Instance().GetStateSnapshot();
-        return k;
+        return gl.alphaBlendType == o.gl.alphaBlendType && gl.alphaTestEnable == o.gl.alphaTestEnable &&
+               gl.alphaRef == o.gl.alphaRef && gl.depthTestEnable == o.gl.depthTestEnable &&
+               gl.depthMaskEnable == o.gl.depthMaskEnable && gl.cullFaceEnable == o.gl.cullFaceEnable &&
+               gl.textureEnable == o.gl.textureEnable && gl.fogEnable == o.gl.fogEnable &&
+               gl.cachTexture == o.gl.cachTexture && ps.useTexture == o.ps.useTexture && ps.useFog == o.ps.useFog &&
+               ps.texCombineAdd == o.ps.texCombineAdd;
     }
+    bool operator!=(const IRBatchKey& o) const { return !(*this == o); }
+};
 
-    RHI::Topology TopologyFor(GLenum mode)
-    {
-        if (mode == GL_LINES)      return RHI::Topology::LineList;
-        if (mode == GL_LINE_STRIP) return RHI::Topology::LineStrip;
-        // GL_TRIANGLES, plus GL_QUADS and GL_TRIANGLE_FAN, both decomposed to a triangle list in
-        // Vertex3f() -- which is what makes most consecutive batches mergeable at all.
-        return RHI::Topology::TriangleList;
-    }
+// Field-wise, never hashed: a hash collision here draws a quad with the wrong texture or blend
+// mode, scene-dependent and near-impossible to reproduce. The struct is small; compare it.
+IRBatchKey CaptureKey()
+{
+    IRBatchKey k;
+    k.gl = GetRenderStateSnapshot();
+    k.ps = PassthroughShader::Instance().GetStateSnapshot();
+    return k;
 }
 
-static bool          g_BatchPending    = false;
+RHI::Topology TopologyFor(GLenum mode)
+{
+    if (mode == GL_LINES)
+        return RHI::Topology::LineList;
+    if (mode == GL_LINE_STRIP)
+        return RHI::Topology::LineStrip;
+    // GL_TRIANGLES, plus GL_QUADS and GL_TRIANGLE_FAN, both decomposed to a triangle list in
+    // Vertex3f() -- which is what makes most consecutive batches mergeable at all.
+    return RHI::Topology::TriangleList;
+}
+}
+
+static bool          g_BatchPending = false;
 static IRBatchKey    g_PendingKey;
 static RHI::Topology g_PendingTopology = RHI::Topology::TriangleList;
 
-namespace IR {
+namespace IR
+{
 
 void Create()
 {
-    if (g_VBO.IsValid()) return;
+    if (g_VBO.IsValid())
+        return;
 
     // GLP-25: 4096 vertices (~144 KB) was far too small for a frame's streaming volume -- one
     // decomposed quad is 6 vertices, so it held ~680 quads, while an effect-dense frame on Intel
@@ -111,7 +111,7 @@ void Create()
     // 65536 vertices (~2.25 MB) covers ~10,900 quads per wrap -- comfortably a busy cast frame,
     // and a rounding error against this client's texture budget.
     const size_t initialCapacity = 65536 * sizeof(IRVertex);
-    g_VBO = RHI::CreateVertexBuffer(nullptr, initialCapacity, RHI::BufferUsage::Dynamic);
+    g_VBO                        = RHI::CreateVertexBuffer(nullptr, initialCapacity, RHI::BufferUsage::Dynamic);
 
     // GLP-29 2b: reserve the CPU-side accumulation buffer once, to the same high-water mark as the
     // GPU ring above. Flush() clears it every batch, so without this it regrows from nothing and
@@ -119,12 +119,14 @@ void Create()
     // clear() keeps capacity, so this reserve survives for the process lifetime.
     g_VertexBuffer.reserve(65536);
 
-    g_ErrorReport.Write(L"[ImmediateRenderer] Created RHI streaming vertex buffer, Initial Capacity %zu bytes\r\n", initialCapacity);
+    g_ErrorReport.Write(L"[ImmediateRenderer] Created RHI streaming vertex buffer, Initial Capacity %zu bytes\r\n",
+                        initialCapacity);
 }
 
 void Destroy()
 {
-    if (g_VBO.IsValid()) {
+    if (g_VBO.IsValid())
+    {
         RHI::DestroyBuffer(g_VBO);
         g_VBO = {};
     }
@@ -162,8 +164,8 @@ void Begin(GLenum mode)
     // NOT clear g_VertexBuffer -- that is the whole optimisation.
 
     g_CurrentMode = mode;
-    g_QuadCount = 0; // GLP-29 2a
-    g_FanCount = 0;
+    g_QuadCount   = 0;  // GLP-29 2a
+    g_FanCount    = 0;
     // g_CurrentVertex is deliberately NOT reset, unchanged from before: RenderJoints() sets colors
     // BEFORE Begin() and relies on them surviving (ZzzEffectJoint.cpp:7025-7061 -> :7066).
 }
@@ -194,7 +196,8 @@ void Color3f(float r, float g, float b)
 
 void Color3fv(const float* c)
 {
-    if (!c) return;
+    if (!c)
+        return;
     g_CurrentVertex.r = c[0];
     g_CurrentVertex.g = c[1];
     g_CurrentVertex.b = c[2];
@@ -213,9 +216,11 @@ void Vertex3f(float x, float y, float z)
     g_CurrentVertex.y = y;
     g_CurrentVertex.z = z;
 
-    if (g_CurrentMode == GL_QUADS) {
+    if (g_CurrentMode == GL_QUADS)
+    {
         g_QuadTemp[g_QuadCount++] = g_CurrentVertex;
-        if (g_QuadCount == 4) {
+        if (g_QuadCount == 4)
+        {
             // Decompose quad to 2 triangles: 0,1,2 and 0,2,3
             g_VertexBuffer.push_back(g_QuadTemp[0]);
             g_VertexBuffer.push_back(g_QuadTemp[1]);
@@ -225,30 +230,40 @@ void Vertex3f(float x, float y, float z)
             g_VertexBuffer.push_back(g_QuadTemp[2]);
             g_VertexBuffer.push_back(g_QuadTemp[3]);
 
-            g_QuadCount = 0; // GLP-29 2a -- index reset, was g_QuadTemp.clear()
+            g_QuadCount = 0;  // GLP-29 2a -- index reset, was g_QuadTemp.clear()
         }
-    } else if (g_CurrentMode == GL_TRIANGLE_FAN) {
+    }
+    else if (g_CurrentMode == GL_TRIANGLE_FAN)
+    {
         // Decompose fan to a triangle list: vertex i>=2 emits [first, prev, current] -- the
         // same winding a real GL_TRIANGLE_FAN produces.
-        if (g_FanCount == 0) {
+        if (g_FanCount == 0)
+        {
             g_FanFirst = g_CurrentVertex;
-        } else if (g_FanCount == 1) {
+        }
+        else if (g_FanCount == 1)
+        {
             g_FanPrev = g_CurrentVertex;
-        } else {
+        }
+        else
+        {
             g_VertexBuffer.push_back(g_FanFirst);
             g_VertexBuffer.push_back(g_FanPrev);
             g_VertexBuffer.push_back(g_CurrentVertex);
             g_FanPrev = g_CurrentVertex;
         }
         g_FanCount++;
-    } else {
+    }
+    else
+    {
         g_VertexBuffer.push_back(g_CurrentVertex);
     }
 }
 
 void Vertex3fv(const float* p)
 {
-    if (!p) return;
+    if (!p)
+        return;
     Vertex3f(p[0], p[1], p[2]);
 }
 
@@ -259,7 +274,8 @@ void Vertex2f(float x, float y)
 
 void End()
 {
-    if (!g_VBO.IsValid() || g_VertexBuffer.empty()) return;
+    if (!g_VBO.IsValid() || g_VertexBuffer.empty())
+        return;
 
     // GLP-19: mark pending instead of drawing. The key is captured HERE rather than at Begin() so
     // it reflects any state the caller set BETWEEN Begin() and End() -- the SetUseTexture(false)
@@ -278,25 +294,34 @@ void End()
 
 namespace
 {
-    FrameProfiler::Counter FlushCauseCounter(FlushCause cause)
+FrameProfiler::Counter FlushCauseCounter(FlushCause cause)
+{
+    switch (cause)
     {
-        switch (cause)
-        {
-        case FlushCause::Texture: return FrameProfiler::Counter::IRBreakTexture;
-        case FlushCause::Blend:   return FrameProfiler::Counter::IRBreakBlend;
-        case FlushCause::Depth:   return FrameProfiler::Counter::IRBreakDepth;
-        case FlushCause::Program: return FrameProfiler::Counter::IRBreakProgram;
-        case FlushCause::Uniform: return FrameProfiler::Counter::IRBreakUniform;
-        case FlushCause::Matrix:  return FrameProfiler::Counter::IRBreakMatrix;
-        case FlushCause::Draw:    return FrameProfiler::Counter::IRBreakDraw;
-        default:                  return FrameProfiler::Counter::IRBreakOther;
-        }
+        case FlushCause::Texture:
+            return FrameProfiler::Counter::IRBreakTexture;
+        case FlushCause::Blend:
+            return FrameProfiler::Counter::IRBreakBlend;
+        case FlushCause::Depth:
+            return FrameProfiler::Counter::IRBreakDepth;
+        case FlushCause::Program:
+            return FrameProfiler::Counter::IRBreakProgram;
+        case FlushCause::Uniform:
+            return FrameProfiler::Counter::IRBreakUniform;
+        case FlushCause::Matrix:
+            return FrameProfiler::Counter::IRBreakMatrix;
+        case FlushCause::Draw:
+            return FrameProfiler::Counter::IRBreakDraw;
+        default:
+            return FrameProfiler::Counter::IRBreakOther;
     }
+}
 }
 
 void Flush(FlushCause cause)
 {
-    if (!g_BatchPending) return;
+    if (!g_BatchPending)
+        return;
     // Cleared before the draw, not after, so a re-entrant call can never see a batch that is
     // already being submitted.
     g_BatchPending = false;
@@ -334,4 +359,4 @@ void Flush(FlushCause cause)
     g_VertexBuffer.clear();
 }
 
-} // namespace IR
+}  // namespace IR

@@ -20,30 +20,16 @@
 #include "Network/Login/LocalAutoLogin.h"
 #include "Audio/DSPlaySound.h"
 
-#define	SSW_GAP_WIDTH	28
-#define	SSW_GAP_HEIGHT	5
-#define	SSW_GB_POS_X	16
-#define	SSW_GB_POS_Y	19
-
-
-
+#define SSW_GAP_WIDTH  28
+#define SSW_GAP_HEIGHT 5
+#define SSW_GB_POS_X   16
+#define SSW_GB_POS_Y   19
 
 using namespace SEASON3A;
 
-CServerSelWin::CServerSelWin()
-{
-    m_icntServerGroup = 0;
-    m_icntLeftServerGroup = 0;
-    m_icntRightServerGroup = 0;
-    m_icntServer = 0;
-    m_bTestServerBtn = false;
-    m_iSelectServerBtnIndex = -1;
-    m_pSelectServerGroup = NULL;
-}
+CServerSelWin::CServerSelWin() {}
 
-CServerSelWin::~CServerSelWin()
-{
-}
+CServerSelWin::~CServerSelWin() {}
 
 void CServerSelWin::Create()
 {
@@ -66,38 +52,24 @@ void CServerSelWin::Create()
         m_aServerGauge[i].Create(160, 4, BITMAP_LOG_IN + 2);
     }
 
-    SImgInfo aiiDeco[2] =
-    {
-        { BITMAP_LOG_IN + 3, 0, 0, 68, 95 },
-        { BITMAP_LOG_IN + 3, 68, 0, 68, 95 }
-    };
+    SImgInfo aiiDeco[2] = {{BITMAP_LOG_IN + 3, 0, 0, 68, 95}, {BITMAP_LOG_IN + 3, 68, 0, 68, 95}};
     m_aBtnDeco[0].Create(&aiiDeco[0], 8, 19);
     m_aBtnDeco[1].Create(&aiiDeco[1], 60, 19);
 
-    SImgInfo aiiArrow[2] =
-    {
-        { BITMAP_LOG_IN + 3, 136, 0, 23, 29 },
-        { BITMAP_LOG_IN + 3, 136, 30, 23, 29 }
-    };
+    SImgInfo aiiArrow[2] = {{BITMAP_LOG_IN + 3, 136, 0, 23, 29}, {BITMAP_LOG_IN + 3, 136, 30, 23, 29}};
     m_aArrowDeco[0].Create(&aiiArrow[0], 1, 2);
     m_aArrowDeco[1].Create(&aiiArrow[1], 23, 2);
 
-    SImgInfo aiiDescBg[WE_BG_MAX] =
-    {
-        { BITMAP_LOG_IN + 11, 0, 0, 4, 4 },
-        { BITMAP_LOG_IN + 12, 0, 0, 512, 6 },
-        { BITMAP_LOG_IN + 12, 0, 6, 512, 6 },
-        { BITMAP_LOG_IN + 13, 0, 0, 3, 4 },
-        { BITMAP_LOG_IN + 13, 3, 0, 3, 4 }
-    };
+    SImgInfo aiiDescBg[WE_BG_MAX] = {{BITMAP_LOG_IN + 11, 0, 0, 4, 4},
+                                     {BITMAP_LOG_IN + 12, 0, 0, 512, 6},
+                                     {BITMAP_LOG_IN + 12, 0, 6, 512, 6},
+                                     {BITMAP_LOG_IN + 13, 0, 0, 3, 4},
+                                     {BITMAP_LOG_IN + 13, 3, 0, 3, 4}};
     m_winDescription.Create(aiiDescBg, 1, 10);
     m_winDescription.SetLine(10);
 
     {
-        static const DWORD registerBtnColors[3] =
-        {
-            CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE
-        };
+        static const DWORD registerBtnColors[3] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE};
         m_aBtnRegister.Create(86, 26, BITMAP_LOG_IN + 1, 3, 2, 1);
         m_aBtnRegister.SetText(I18N::Game::AccountRegister, const_cast<DWORD*>(registerBtnColors));
         CWin::RegisterButton(&m_aBtnRegister);
@@ -105,8 +77,8 @@ void CServerSelWin::Create()
 
     const float descriptionArtHeight = m_winDescription.GetHeight() / CSprite::ResolutionScaleY();
     CWin::SetSizeArt((SERVER_GROUP_BTN_WIDTH + SSW_GAP_WIDTH) * 2 + SERVER_BTN_WIDTH,
-        SERVER_BTN_HEIGHT * SSW_SERVER_MAX + SSW_GAP_HEIGHT * 2 + SERVER_GROUP_BTN_HEIGHT
-            + descriptionArtHeight);
+                     SERVER_BTN_HEIGHT * SSW_SERVER_MAX + SSW_GAP_HEIGHT * 2 + SERVER_GROUP_BTN_HEIGHT +
+                         descriptionArtHeight);
 }
 
 void CServerSelWin::PreRelease()
@@ -129,8 +101,7 @@ void CServerSelWin::PreRelease()
 
 void CServerSelWin::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CServerSelWin::SetPositionArt(float fArtX, float fArtY)
@@ -140,25 +111,22 @@ void CServerSelWin::SetPositionArt(float fArtX, float fArtY)
     const float rateX = CSprite::ResolutionScaleX();
     const float rateY = CSprite::ResolutionScaleY();
 
-    const float nServerGBtnWidth = m_aServerGroupBtn[0].GetWidth() / rateX;
+    const float nServerGBtnWidth  = m_aServerGroupBtn[0].GetWidth() / rateX;
     const float nServerGBtnHeight = m_aServerGroupBtn[0].GetHeight() / rateY;
-    const float nServerBtnWidth = m_aServerBtn[0].GetWidth() / rateX;
-    const float nServerBtnHeight = m_aServerBtn[0].GetHeight() / rateY;
-    const float nDescGgHeight = m_winDescription.GetHeight() / rateY;
-    const float winW = CWin::GetWidth() / rateX;
-    const float winH = CWin::GetHeight() / rateY;
-    float nBtnPosY;
-    int i;
+    const float nServerBtnWidth   = m_aServerBtn[0].GetWidth() / rateX;
+    const float nServerBtnHeight  = m_aServerBtn[0].GetHeight() / rateY;
+    const float nDescGgHeight     = m_winDescription.GetHeight() / rateY;
+    const float winW              = CWin::GetWidth() / rateX;
+    const float winH              = CWin::GetHeight() / rateY;
+    float       nBtnPosY;
+    int         i;
 
-    const float nServerGBtnBasePosY = fArtY + winH
-        - (nServerGBtnHeight * 11 + SSW_GAP_HEIGHT * 2 + nDescGgHeight);
-    const float nRServerGBtnPosX = fArtX + nServerGBtnWidth + nServerBtnWidth
-        + (SSW_GAP_WIDTH * 2);
+    const float nServerGBtnBasePosY = fArtY + winH - (nServerGBtnHeight * 11 + SSW_GAP_HEIGHT * 2 + nDescGgHeight);
+    const float nRServerGBtnPosX    = fArtX + nServerGBtnWidth + nServerBtnWidth + (SSW_GAP_WIDTH * 2);
 
     int icntServreGroup = 0;
     m_aServerGroupBtn[icntServreGroup++].SetPositionArt(
-        fArtX + (winW - nServerGBtnWidth) / 2,
-        fArtY + winH - nServerGBtnHeight - SSW_GAP_HEIGHT - nDescGgHeight);
+        fArtX + (winW - nServerGBtnWidth) / 2, fArtY + winH - nServerGBtnHeight - SSW_GAP_HEIGHT - nDescGgHeight);
 
     for (i = 0; i < SSW_LEFT_SERVER_G_MAX; i++)
     {
@@ -172,17 +140,12 @@ void CServerSelWin::SetPositionArt(float fArtX, float fArtY)
         m_aServerGroupBtn[icntServreGroup++].SetPositionArt(nRServerGBtnPosX, nBtnPosY);
     }
 
-    m_winDescription.SetPositionArt(
-        fArtX - ((m_winDescription.GetWidth() / rateX - winW) / 2),
-        fArtY + winH - nDescGgHeight);
+    m_winDescription.SetPositionArt(fArtX - ((m_winDescription.GetWidth() / rateX - winW) / 2),
+                                    fArtY + winH - nDescGgHeight);
 
-    m_aBtnDeco[0].SetPositionArt(
-        m_aServerGroupBtn[1].GetXPos() / rateX,
-        m_aServerGroupBtn[1].GetYPos() / rateY);
-    m_aBtnDeco[1].SetPositionArt(
-        m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetXPos() / rateX
-            + nServerGBtnWidth,
-        m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetYPos() / rateY);
+    m_aBtnDeco[0].SetPositionArt(m_aServerGroupBtn[1].GetXPos() / rateX, m_aServerGroupBtn[1].GetYPos() / rateY);
+    m_aBtnDeco[1].SetPositionArt(m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetXPos() / rateX + nServerGBtnWidth,
+                                 m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetYPos() / rateY);
 
     // Empty top-left corner of the window frame.
     m_aBtnRegister.SetPositionArt(fArtX + 16, fArtY + 12);
@@ -196,8 +159,8 @@ void CServerSelWin::SetServerBtnPosition()
     const float rateX = CSprite::ResolutionScaleX();
     const float rateY = CSprite::ResolutionScaleY();
 
-    float nServerBtnPosX = m_aServerGroupBtn[1].GetXPos() / rateX
-        + m_aServerGroupBtn[0].GetWidth() / rateX + SSW_GAP_WIDTH;
+    float nServerBtnPosX =
+        m_aServerGroupBtn[1].GetXPos() / rateX + m_aServerGroupBtn[0].GetWidth() / rateX + SSW_GAP_WIDTH;
 
     float nServerBtnHeight = m_aServerBtn[0].GetHeight() / rateY;
 
@@ -208,16 +171,14 @@ void CServerSelWin::SetServerBtnPosition()
     float nLServerGBtnTop = m_aServerGroupBtn[1].GetYPos() / rateY;
 
     float nServerBtnBasePosY = nLServerGBtnHeightSum > nServerBtnHeightSum
-        ? nLServerGBtnTop
-        : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
+                                   ? nLServerGBtnTop
+                                   : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
 
-    for (int i = 0; i < m_pSelectServerGroup->GetServerSize() && i < SSW_SERVER_MAX; i++)
+    for (int i = 0; i < m_pSelectServerGroup->GetServerSize(); i++)
     {
-        m_aServerBtn[i].SetPositionArt(
-            nServerBtnPosX, nServerBtnBasePosY + nServerBtnHeight * i);
-        m_aServerGauge[i].SetPositionArt(
-            m_aServerBtn[i].GetXPos() / rateX + SSW_GB_POS_X,
-            m_aServerBtn[i].GetYPos() / rateY + SSW_GB_POS_Y);
+        m_aServerBtn[i].SetPositionArt(nServerBtnPosX, nServerBtnBasePosY + nServerBtnHeight * i);
+        m_aServerGauge[i].SetPositionArt(m_aServerBtn[i].GetXPos() / rateX + SSW_GB_POS_X,
+                                         m_aServerBtn[i].GetYPos() / rateY + SSW_GB_POS_Y);
     }
 }
 
@@ -226,45 +187,39 @@ void CServerSelWin::SetArrowSpritePosition()
     if (m_iSelectServerBtnIndex == -1)
         return;
 
-    const float rateX = CSprite::ResolutionScaleX();
-    const float rateY = CSprite::ResolutionScaleY();
+    const float rateX            = CSprite::ResolutionScaleX();
+    const float rateY            = CSprite::ResolutionScaleY();
     const float groupBtnArtWidth = SERVER_GROUP_BTN_WIDTH;
 
     if ((m_iSelectServerBtnIndex >= 0) && (m_iSelectServerBtnIndex <= SSW_LEFT_SERVER_G_MAX))
     {
-        m_aArrowDeco[0].SetPositionArt(
-            m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() / rateX + groupBtnArtWidth,
-            m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos() / rateY);
+        m_aArrowDeco[0].SetPositionArt(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() / rateX + groupBtnArtWidth,
+                                       m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos() / rateY);
     }
     else if ((m_iSelectServerBtnIndex > SSW_LEFT_SERVER_G_MAX) && (m_iSelectServerBtnIndex < SSW_SERVER_G_MAX))
     {
-        m_aArrowDeco[1].SetPositionArt(
-            m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() / rateX,
-            m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos() / rateY);
+        m_aArrowDeco[1].SetPositionArt(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() / rateX,
+                                       m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos() / rateY);
     }
 }
 
 void CServerSelWin::UpdateDisplay()
 {
-    m_pSelectServerGroup = NULL;
-    m_icntServerGroup = 0;
-    m_icntServer = 0;
-    m_icntLeftServerGroup = 0;
+    m_pSelectServerGroup   = NULL;
+    m_icntServerGroup      = 0;
+    m_icntServer           = 0;
+    m_icntLeftServerGroup  = 0;
     m_icntRightServerGroup = 0;
-    m_bTestServerBtn = false;
+    m_bTestServerBtn       = false;
 
-    DWORD adwServerGBtnClr[BTN_IMG_MAX] =
-    {
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0,
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0
-    };
+    DWORD adwServerGBtnClr[BTN_IMG_MAX] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0,
+                                           CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0};
 
-    DWORD adwServerBtnClr[4][4] =
-    {
-        { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0 },
-        { CLRDW_YELLOW, CLRDW_YELLOW, CLRDW_BR_YELLOW, 0 },
-        { CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0 },
-        { CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0 },
+    DWORD adwServerBtnClr[4][4] = {
+        {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0},
+        {CLRDW_YELLOW, CLRDW_YELLOW, CLRDW_BR_YELLOW, 0},
+        {CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0},
+        {CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0},
     };
 
     m_icntServerGroup = g_ServerListManager->GetServerGroupSize();
@@ -287,7 +242,7 @@ void CServerSelWin::UpdateDisplay()
 
             m_aServerGroupBtn[0].SetText(pServerGroup->m_szName, adwServerGBtnClr);
             pServerGroup->m_iBtnPos = 0;
-            m_bTestServerBtn = true;
+            m_bTestServerBtn        = true;
         }
         else if (pServerGroup->m_iWidthPos == CServerGroup::SBP_LEFT)
         {
@@ -304,7 +259,8 @@ void CServerSelWin::UpdateDisplay()
             if (m_icntRightServerGroup >= SSW_RIGHT_SERVER_G_MAX)
                 continue;
 
-            m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1].SetText(pServerGroup->m_szName, adwServerGBtnClr);
+            m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1].SetText(pServerGroup->m_szName,
+                                                                                          adwServerGBtnClr);
             pServerGroup->m_iBtnPos = SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1;
 
             m_icntRightServerGroup++;
@@ -314,7 +270,7 @@ void CServerSelWin::UpdateDisplay()
     ShowServerGBtns();
     ShowDecoSprite();
 
-    memset(m_szDescription, 0, sizeof(m_szDescription));
+    memset(m_szDescription, 0, sizeof(char) * SSW_DESC_LINE_MAX * SSW_DESC_ROW_MAX);
 
     if (m_iSelectServerBtnIndex != -1)
     {
@@ -327,9 +283,6 @@ void CServerSelWin::UpdateDisplay()
     }
 
     m_icntServer = m_pSelectServerGroup->GetServerSize();
-    // P1 hardening: clamp to button array capacity (MAX_SERVER_PER_GROUP=20 > SSW_SERVER_MAX=16)
-    if (m_icntServer > SSW_SERVER_MAX)
-        m_icntServer = SSW_SERVER_MAX;
 
     if (m_icntServer < 1)
         return;
@@ -341,14 +294,13 @@ void CServerSelWin::UpdateDisplay()
     int icntServer = 0;
     while (m_pSelectServerGroup->GetNext(pServerInfo))
     {
-        if (icntServer >= SSW_SERVER_MAX)
-            break;
         m_aServerBtn[icntServer].SetText(pServerInfo->m_bName, adwServerBtnClr[pServerInfo->m_byNonPvP]);
         m_aServerGauge[icntServer].SetValue(pServerInfo->m_iPercent, 100);
         icntServer++;
     }
 
-    ::SeparateTextIntoLines(m_pSelectServerGroup->m_szDescription, m_szDescription[0], SSW_DESC_LINE_MAX, SSW_DESC_ROW_MAX);
+    ::SeparateTextIntoLines(m_pSelectServerGroup->m_szDescription, m_szDescription[0], SSW_DESC_LINE_MAX,
+                            SSW_DESC_ROW_MAX);
 
     SetArrowSpritePosition();
     SetServerBtnPosition();
@@ -464,8 +416,8 @@ bool CServerSelWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);
@@ -502,7 +454,7 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
         return;
 
     CServerInfo* pServerInfo = NULL;
-    for (i = 0; i < m_icntServer && i < SSW_SERVER_MAX; i++)
+    for (i = 0; i < m_icntServer; i++)
     {
         if (m_aServerBtn[i].IsClick())
         {
@@ -519,7 +471,8 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
                 // otherwise it stays in SelectingServer and the account/password
                 // window appears after choosing the (localhost) server.
                 Network::Login::LocalAutoLogin::Instance().ServerSelected();
-                SocketClient->ToConnectServer()->SendConnectionInfoRequest(static_cast<uint16_t>(pServerInfo->m_iConnectIndex));
+                SocketClient->ToConnectServer()->SendConnectionInfoRequest(
+                    static_cast<uint16_t>(pServerInfo->m_iConnectIndex));
                 g_pSystemLogBox->AddText(I18N::Game::ConnectingToTheServer, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 g_pSystemLogBox->AddText(I18N::Game::PleaseWait, SEASON3B::TYPE_SYSTEM_MESSAGE);
 
@@ -528,7 +481,8 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
                 //    bTestServer = true;
                 //}
 
-                g_ServerListManager->SetSelectServerInfo(m_pSelectServerGroup->m_szName, pServerInfo->m_iIndex, pServerInfo->m_byNonPvP);
+                g_ServerListManager->SetSelectServerInfo(m_pSelectServerGroup->m_szName, pServerInfo->m_iIndex,
+                                                         pServerInfo->m_byNonPvP);
 
                 break;
             }

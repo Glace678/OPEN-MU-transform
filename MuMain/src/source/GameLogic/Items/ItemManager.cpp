@@ -6,10 +6,8 @@
 
 CItemManager gItemManager;
 
-CItemManager::CItemManager() // OK
-{
-}
+CItemManager::CItemManager()  // OK
+{}
 
-CItemManager::~CItemManager() // OK
-{
-}
+CItemManager::~CItemManager()  // OK
+{}

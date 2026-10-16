@@ -21,43 +21,43 @@
 
 namespace
 {
-    struct FakeEntry
-    {
-        bool live;
-        int key;
-        int monsterIndex;
-    };
+struct FakeEntry
+{
+    bool live;
+    int  key;
+    int  monsterIndex;
+};
 
-    // Exact copy of the production loop (ZzzCharacter.cpp TryFindCharacterIndex).
-    bool TryFindKey(const FakeEntry* roster, int capacity, int key, int& outIndex)
+// Exact copy of the production loop (ZzzCharacter.cpp TryFindCharacterIndex).
+bool TryFindKey(const FakeEntry* roster, int capacity, int key, int& outIndex)
+{
+    for (int i = 0; i < capacity; ++i)
     {
-        for (int i = 0; i < capacity; ++i)
+        const FakeEntry& e = roster[i];
+        if (e.live && e.key == key)
         {
-            const FakeEntry& e = roster[i];
-            if (e.live && e.key == key)
-            {
-                outIndex = i;
-                return true;
-            }
+            outIndex = i;
+            return true;
         }
-        outIndex = -1;
-        return false;
     }
+    outIndex = -1;
+    return false;
+}
 
-    bool TryFindMonster(const FakeEntry* roster, int capacity, int monsterIndex, int& outIndex)
+bool TryFindMonster(const FakeEntry* roster, int capacity, int monsterIndex, int& outIndex)
+{
+    for (int i = 0; i < capacity; ++i)
     {
-        for (int i = 0; i < capacity; ++i)
+        const FakeEntry& e = roster[i];
+        if (e.live && e.monsterIndex == monsterIndex)
         {
-            const FakeEntry& e = roster[i];
-            if (e.live && e.monsterIndex == monsterIndex)
-            {
-                outIndex = i;
-                return true;
-            }
+            outIndex = i;
+            return true;
         }
-        outIndex = -1;
-        return false;
     }
+    outIndex = -1;
+    return false;
+}
 }
 
 TEST_SUITE("DispatchLookupContract")
@@ -100,8 +100,8 @@ TEST_SUITE("DispatchLookupContract")
     {
         // Roster of 8 slots; only slot 5 is live with key=100 / monster=216.
         FakeEntry roster[8]{};
-        roster[5].live = true;
-        roster[5].key = 100;
+        roster[5].live         = true;
+        roster[5].key          = 100;
         roster[5].monsterIndex = 216;
 
         int out = -999;
@@ -109,9 +109,9 @@ TEST_SUITE("DispatchLookupContract")
         bool found = TryFindKey(roster, 8, 999, out);
         CHECK_FALSE(found);
         CHECK(out == -1);
-        CHECK(out == -1); // out on miss is never a valid index
+        CHECK(out == -1);  // out on miss is never a valid index
 
-        out = -999;
+        out   = -999;
         found = TryFindMonster(roster, 8, 9999, out);
         CHECK_FALSE(found);
         CHECK(out == -1);
@@ -120,14 +120,15 @@ TEST_SUITE("DispatchLookupContract")
     TEST_CASE("lookup contract: hit returns true and the live slot")
     {
         FakeEntry roster[8]{};
-        roster[5].live = true;
-        roster[5].key = 100;
+        roster[5].live         = true;
+        roster[5].key          = 100;
         roster[5].monsterIndex = 216;
 
         int out = -999;
         CHECK(TryFindKey(roster, 8, 100, out));
         CHECK(out == 5);
-        bool inRange = (out >= 0 && out < 8); CHECK(inRange);
+        bool inRange = (out >= 0 && out < 8);
+        CHECK(inRange);
 
         out = -999;
         CHECK(TryFindMonster(roster, 8, 216, out));

@@ -18,10 +18,10 @@ SEASON3B::CNewUISiegeWarBase::CNewUISiegeWarBase()
     m_iMiniMapScale = 1;
     m_fMiniMapAlpha = 1.f;
 
-    m_bSecond = true;
-    m_fTime = 0.f;
-    m_iHour = 0;
-    m_iMinute = 0;
+    m_bSecond        = true;
+    m_fTime          = 0.f;
+    m_iHour          = 0;
+    m_iMinute        = 0;
     m_bRenderSkillUI = false;
     m_bRenderToolTip = false;
 
@@ -42,9 +42,7 @@ SEASON3B::CNewUISiegeWarBase::CNewUISiegeWarBase()
     memset(&m_MiniMapScaleOffset, 0, sizeof(POINT));
 }
 
-SEASON3B::CNewUISiegeWarBase::~CNewUISiegeWarBase()
-{
-}
+SEASON3B::CNewUISiegeWarBase::~CNewUISiegeWarBase() {}
 
 bool SEASON3B::CNewUISiegeWarBase::Create(int x, int y)
 {
@@ -95,7 +93,9 @@ bool SEASON3B::CNewUISiegeWarBase::Update()
 
 bool SEASON3B::CNewUISiegeWarBase::Render()
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, m_fMiniMapAlpha);
@@ -103,9 +103,11 @@ bool SEASON3B::CNewUISiegeWarBase::Render()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    RenderBitmap(IMAGE_MINIMAP, (float)(m_MiniMapPos.x), (float)(m_MiniMapPos.y), 128.f, 128.f, m_fMiniMapTexU, m_fMiniMapTexV, 0.5f * m_iMiniMapScale, 0.5f * m_iMiniMapScale);
+    RenderBitmap(IMAGE_MINIMAP, (float)(m_MiniMapPos.x), (float)(m_MiniMapPos.y), 128.f, 128.f, m_fMiniMapTexU,
+                 m_fMiniMapTexV, 0.5f * m_iMiniMapScale, 0.5f * m_iMiniMapScale);
 
-    RenderImage(IMAGE_MINIMAP_FRAME, m_MiniMapFramePos.x, m_MiniMapFramePos.y, MINIMAP_FRAME_WIDTH, MINIMAP_FRAME_HEIGHT);
+    RenderImage(IMAGE_MINIMAP_FRAME, m_MiniMapFramePos.x, m_MiniMapFramePos.y, MINIMAP_FRAME_WIDTH,
+                MINIMAP_FRAME_HEIGHT);
     RenderImage(IMAGE_TIME_FRAME, m_TimeUIPos.x, m_TimeUIPos.y, TIME_FRAME_WIDTH, TIME_FRAME_HEIGHT);
 
     glColor4f(1.f, 1.f, 1.f, m_fMiniMapAlpha);
@@ -115,7 +117,7 @@ bool SEASON3B::CNewUISiegeWarBase::Render()
 
         if ((WorldTime - m_fTime) > 500)
         {
-            m_fTime = WorldTime;
+            m_fTime   = WorldTime;
             m_bSecond = true;
         }
 
@@ -156,8 +158,8 @@ bool SEASON3B::CNewUISiegeWarBase::Render()
 
     if (m_bRenderSkillUI == true)
     {
-        RenderImage(IMAGE_BATTLESKILL_FRAME, m_SkillFramePos.x, m_SkillFramePos.y,
-            BATTLESKILL_FRAME_WIDTH, BATTLESKILL_FRAME_HEIGHT);
+        RenderImage(IMAGE_BATTLESKILL_FRAME, m_SkillFramePos.x, m_SkillFramePos.y, BATTLESKILL_FRAME_WIDTH,
+                    BATTLESKILL_FRAME_HEIGHT);
 
         RenderSkillIcon();
 
@@ -180,45 +182,45 @@ bool SEASON3B::CNewUISiegeWarBase::InitBattleSkill()
 {
     ReleaseBattleSkill();
 
-    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3
-        || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-        || Hero->GuildStatus == G_PERSON)
+    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+          Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3 || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK) ||
+        Hero->GuildStatus == G_PERSON)
     {
         return false;
     }
 
     m_BtnSkillScroll[0].ChangeButtonImgState(true, IMAGE_SKILL_BTN_SCROLL_UP, true);
-    m_BtnSkillScroll[0].ChangeButtonInfo(m_BtnSkillScrollUpPos.x, m_BtnSkillScrollUpPos.y, SKILL_BTN_SCROLL_WIDTH, SKILL_BTN_SCROLL_HEIGHT);
+    m_BtnSkillScroll[0].ChangeButtonInfo(m_BtnSkillScrollUpPos.x, m_BtnSkillScrollUpPos.y, SKILL_BTN_SCROLL_WIDTH,
+                                         SKILL_BTN_SCROLL_HEIGHT);
     m_BtnSkillScroll[1].ChangeButtonImgState(true, IMAGE_SKILL_BTN_SCROLL_DN, true);
-    m_BtnSkillScroll[1].ChangeButtonInfo(m_BtnSkillScrollDnPos.x, m_BtnSkillScrollDnPos.y, SKILL_BTN_SCROLL_WIDTH, SKILL_BTN_SCROLL_HEIGHT);
+    m_BtnSkillScroll[1].ChangeButtonInfo(m_BtnSkillScrollDnPos.x, m_BtnSkillScrollDnPos.y, SKILL_BTN_SCROLL_WIDTH,
+                                         SKILL_BTN_SCROLL_HEIGHT);
 
     switch (Hero->GuildStatus)
     {
-    case G_MASTER:
-    {
-        m_listBattleSkill.push_back(AT_SKILL_INVISIBLE);
-        m_listBattleSkill.push_back(AT_SKILL_REMOVAL_INVISIBLE);
-        if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD)
-        {
-            m_listBattleSkill.push_back(AT_SKILL_REMOVAL_BUFF);
+        case G_MASTER: {
+            m_listBattleSkill.push_back(AT_SKILL_INVISIBLE);
+            m_listBattleSkill.push_back(AT_SKILL_REMOVAL_INVISIBLE);
+            if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD)
+            {
+                m_listBattleSkill.push_back(AT_SKILL_REMOVAL_BUFF);
+            }
+            m_bRenderSkillUI = true;
         }
-        m_bRenderSkillUI = true;
-    }break;
-    case G_SUB_MASTER:
-    {
-        m_listBattleSkill.push_back(AT_SKILL_INVISIBLE);
-        m_listBattleSkill.push_back(AT_SKILL_REMOVAL_INVISIBLE);
-        m_bRenderSkillUI = true;
-    }break;
-    case G_BATTLE_MASTER:
-    {
-        m_listBattleSkill.push_back(AT_SKILL_STUN);
-        m_listBattleSkill.push_back(AT_SKILL_REMOVAL_STUN);
-        m_listBattleSkill.push_back(AT_SKILL_MANA);
-        m_bRenderSkillUI = true;
-    }break;
+        break;
+        case G_SUB_MASTER: {
+            m_listBattleSkill.push_back(AT_SKILL_INVISIBLE);
+            m_listBattleSkill.push_back(AT_SKILL_REMOVAL_INVISIBLE);
+            m_bRenderSkillUI = true;
+        }
+        break;
+        case G_BATTLE_MASTER: {
+            m_listBattleSkill.push_back(AT_SKILL_STUN);
+            m_listBattleSkill.push_back(AT_SKILL_REMOVAL_STUN);
+            m_listBattleSkill.push_back(AT_SKILL_MANA);
+            m_bRenderSkillUI = true;
+        }
+        break;
     }
 
     m_iterCurBattleSkill = m_listBattleSkill.begin();
@@ -264,8 +266,8 @@ bool SEASON3B::CNewUISiegeWarBase::UpdateMouseEvent()
     if (BtnProcess())
         return false;
 
-    if (CheckMouseIn(m_MiniMapFramePos.x, m_MiniMapFramePos.y, MINIMAP_FRAME_WIDTH, MINIMAP_FRAME_HEIGHT)
-        || CheckMouseIn(m_TimeUIPos.x, m_TimeUIPos.y, TIME_FRAME_WIDTH, TIME_FRAME_HEIGHT))
+    if (CheckMouseIn(m_MiniMapFramePos.x, m_MiniMapFramePos.y, MINIMAP_FRAME_WIDTH, MINIMAP_FRAME_HEIGHT) ||
+        CheckMouseIn(m_TimeUIPos.x, m_TimeUIPos.y, TIME_FRAME_WIDTH, TIME_FRAME_HEIGHT))
         return false;
 
     if (m_bRenderSkillUI == true)
@@ -297,7 +299,7 @@ bool SEASON3B::CNewUISiegeWarBase::UpdateKeyEvent()
 
 bool SEASON3B::CNewUISiegeWarBase::BtnProcess()
 {
-    POINT ptScaleBtn = { m_MiniMapFramePos.x + 134, m_MiniMapFramePos.y + 7 };
+    POINT ptScaleBtn = {m_MiniMapFramePos.x + 134, m_MiniMapFramePos.y + 7};
 
     if (m_BtnAlpha.UpdateMouseEvent())
     {
@@ -400,33 +402,35 @@ void SEASON3B::CNewUISiegeWarBase::UpdateHeroPos()
 bool SEASON3B::CNewUISiegeWarBase::GetCommandIconSize(int command, int& width, int& height, int& textureWidth)
 {
     constexpr int SmallTextureWidth = 16;
-    constexpr int WideTextureWidth = 32;
+    constexpr int WideTextureWidth  = 32;
     switch (command)
     {
-    case 0:
-        width = COMMAND_ATTACK_WIDTH;
-        height = COMMAND_ATTACK_HEIGHT;
-        textureWidth = SmallTextureWidth;
-        return true;
-    case 1:
-        width = COMMAND_DEFENCE_WIDTH;
-        height = COMMAND_DEFENCE_HEIGHT;
-        textureWidth = WideTextureWidth;
-        return true;
-    case 2:
-        width = COMMAND_WAIT_WIDTH;
-        height = COMMAND_WAIT_HEIGHT;
-        textureWidth = SmallTextureWidth;
-        return true;
-    default:
-        return false;
+        case 0:
+            width        = COMMAND_ATTACK_WIDTH;
+            height       = COMMAND_ATTACK_HEIGHT;
+            textureWidth = SmallTextureWidth;
+            return true;
+        case 1:
+            width        = COMMAND_DEFENCE_WIDTH;
+            height       = COMMAND_DEFENCE_HEIGHT;
+            textureWidth = WideTextureWidth;
+            return true;
+        case 2:
+            width        = COMMAND_WAIT_WIDTH;
+            height       = COMMAND_WAIT_HEIGHT;
+            textureWidth = SmallTextureWidth;
+            return true;
+        default:
+            return false;
     }
 }
 
 void SEASON3B::CNewUISiegeWarBase::RenderCmdIconInMiniMap()
 {
-    int iWidth, iHeight;
-    wchar_t szText[256] = { 0, };
+    int     iWidth, iHeight;
+    wchar_t szText[256] = {
+        0,
+    };
     POINT Pos;
     memset(&Pos, 0, sizeof(POINT));
 
@@ -441,12 +445,14 @@ void SEASON3B::CNewUISiegeWarBase::RenderCmdIconInMiniMap()
             Pos.x = (m_CmdBuffer[i].byX) / m_iMiniMapScale - m_MiniMapScaleOffset.x + m_MiniMapPos.x;
             Pos.y = (256 - m_CmdBuffer[i].byY) / m_iMiniMapScale - m_MiniMapScaleOffset.y + m_MiniMapPos.y;
 
-            if (Pos.x<m_MiniMapPos.x || Pos.x>m_MiniMapPos.x + 128 || Pos.y<m_MiniMapPos.y || Pos.y>m_MiniMapPos.y + 128)
+            if (Pos.x < m_MiniMapPos.x || Pos.x > m_MiniMapPos.x + 128 || Pos.y < m_MiniMapPos.y ||
+                Pos.y > m_MiniMapPos.y + 128)
                 continue;
 
             if (m_CmdBuffer[i].byLifeTime > 0)
             {
-                glColor4f(1.f, 1.f + sinf(m_CmdBuffer[i].byLifeTime * 0.2f), 1.f + sinf(m_CmdBuffer[i].byLifeTime * 0.2f), m_fMiniMapAlpha);
+                glColor4f(1.f, 1.f + sinf(m_CmdBuffer[i].byLifeTime * 0.2f),
+                          1.f + sinf(m_CmdBuffer[i].byLifeTime * 0.2f), m_fMiniMapAlpha);
                 m_CmdBuffer[i].byLifeTime--;
             }
             else
@@ -455,7 +461,8 @@ void SEASON3B::CNewUISiegeWarBase::RenderCmdIconInMiniMap()
             }
             mu_swprintf(szText, L"%d", m_CmdBuffer[i].byTeam + 1);
             g_pRenderText->RenderText(Pos.x - 12, Pos.y - 5, szText);
-            RenderBitmap(IMAGE_COMMAND_ATTACK + m_CmdBuffer[i].byCmd, Pos.x - 7, Pos.y - 7, 11.f, 11.f, 0.f, 0.f, ((float)iWidth - 1.f) / (float)iBWidth, ((float)iHeight - 1.f) / 16.f);
+            RenderBitmap(IMAGE_COMMAND_ATTACK + m_CmdBuffer[i].byCmd, Pos.x - 7, Pos.y - 7, 11.f, 11.f, 0.f, 0.f,
+                         ((float)iWidth - 1.f) / (float)iBWidth, ((float)iHeight - 1.f) / 16.f);
         }
     }
 }
@@ -470,7 +477,7 @@ void SEASON3B::CNewUISiegeWarBase::RenderSkillIcon()
 
     iUseSkillDestKill = SkillAttribute[Hero->GuildSkill].KillCount;
 
-    iSelectSkill = (*m_iterCurBattleSkill);
+    iSelectSkill  = (*m_iterCurBattleSkill);
     iCurKillCount = Hero->GuildMasterKillCount;
 
     if (Hero->GuildMasterKillCount < iUseSkillDestKill)
@@ -482,7 +489,8 @@ void SEASON3B::CNewUISiegeWarBase::RenderSkillIcon()
     src_x = ((iSelectSkill - 57) % 8) * 20.f;
     src_y = ((iSelectSkill - 57) / 8) * 28.f;
 
-    RenderImage(IMAGE_SKILL_ICON, m_SkillIconPos.x + 1, m_SkillIconPos.y, (float)SKILL_ICON_WIDTH, (float)SKILL_ICON_HEIGHT, src_x, src_y);
+    RenderImage(IMAGE_SKILL_ICON, m_SkillIconPos.x + 1, m_SkillIconPos.y, (float)SKILL_ICON_WIDTH,
+                (float)SKILL_ICON_HEIGHT, src_x, src_y);
 
     glColor4f(1.f, 1.f, 1.f, m_fMiniMapAlpha);
 
@@ -494,7 +502,8 @@ void SEASON3B::CNewUISiegeWarBase::RenderSkillIcon()
 
     if (m_bRenderToolTip == true)
     {
-        UI::Skills::Tooltip::Render(m_SkillTooltipPos.x, m_SkillTooltipPos.y, FindHotKey(Hero->GuildSkill), Hero->GuildSkill, STRP_BOTTOMCENTER);
+        UI::Skills::Tooltip::Render(m_SkillTooltipPos.x, m_SkillTooltipPos.y, FindHotKey(Hero->GuildSkill),
+                                    Hero->GuildSkill, STRP_BOTTOMCENTER);
     }
 }
 
@@ -502,26 +511,26 @@ void SEASON3B::CNewUISiegeWarBase::RenderSkillIcon()
 // SetPos
 void SEASON3B::CNewUISiegeWarBase::SetPos(int x, int y)
 {
-    m_MiniMapFramePos.x = x;
-    m_MiniMapFramePos.y = y;
-    m_MiniMapPos.x = m_MiniMapFramePos.x + 25;
-    m_MiniMapPos.y = m_MiniMapFramePos.y + 28;
-    m_TimeUIPos.x = m_MiniMapFramePos.x + 20;
-    m_TimeUIPos.y = m_MiniMapFramePos.y + MINIMAP_FRAME_HEIGHT - 4;
-    m_SkillFramePos.x = x + 26;
-    m_SkillFramePos.y = y - BATTLESKILL_FRAME_HEIGHT;
+    m_MiniMapFramePos.x     = x;
+    m_MiniMapFramePos.y     = y;
+    m_MiniMapPos.x          = m_MiniMapFramePos.x + 25;
+    m_MiniMapPos.y          = m_MiniMapFramePos.y + 28;
+    m_TimeUIPos.x           = m_MiniMapFramePos.x + 20;
+    m_TimeUIPos.y           = m_MiniMapFramePos.y + MINIMAP_FRAME_HEIGHT - 4;
+    m_SkillFramePos.x       = x + 26;
+    m_SkillFramePos.y       = y - BATTLESKILL_FRAME_HEIGHT;
     m_BtnSkillScrollUpPos.x = m_SkillFramePos.x + 48;
     m_BtnSkillScrollUpPos.y = m_SkillFramePos.y + 21;
     m_BtnSkillScrollDnPos.x = m_BtnSkillScrollUpPos.x;
     m_BtnSkillScrollDnPos.y = m_BtnSkillScrollUpPos.y + 15;
-    m_SkillIconPos.x = m_SkillFramePos.x + 25;
-    m_SkillIconPos.y = m_SkillFramePos.y + 21;
+    m_SkillIconPos.x        = m_SkillFramePos.x + 25;
+    m_SkillIconPos.y        = m_SkillFramePos.y + 21;
     m_UseSkillDestKillPos.x = m_SkillFramePos.x + 78;
     m_UseSkillDestKillPos.y = m_SkillFramePos.y + 28;
-    m_CurKillCountPos.x = m_SkillFramePos.x + 97;
-    m_CurKillCountPos.y = m_UseSkillDestKillPos.y;
-    m_BtnAlphaPos.x = m_MiniMapFramePos.x + 58;
-    m_BtnAlphaPos.y = m_MiniMapFramePos.y + 4;
+    m_CurKillCountPos.x     = m_SkillFramePos.x + 97;
+    m_CurKillCountPos.y     = m_UseSkillDestKillPos.y;
+    m_BtnAlphaPos.x         = m_MiniMapFramePos.x + 58;
+    m_BtnAlphaPos.y         = m_MiniMapFramePos.y + 4;
 
     m_SkillTooltipPos.y = m_SkillFramePos.y + 16;
     m_SkillTooltipPos.x = m_SkillFramePos.x + 30;
@@ -529,22 +538,18 @@ void SEASON3B::CNewUISiegeWarBase::SetPos(int x, int y)
     OnSetPos(x, y);
 }
 
-void  SEASON3B::CNewUISiegeWarBase::SetTime(int iHour, int iMinute)
+void SEASON3B::CNewUISiegeWarBase::SetTime(int iHour, int iMinute)
 {
-    m_iHour = iHour;
+    m_iHour   = iHour;
     m_iMinute = iMinute;
 }
 
 void SEASON3B::CNewUISiegeWarBase::SetMapInfo(GuildCommander& data)
 {
-    // 85-03: byTeam is a raw wire BYTE; reject anything outside the m_CmdBuffer
-    // capacity [0, MAX_COMMANDGROUP) instead of writing past the fixed array.
-    if (data.byTeam >= MAX_COMMANDGROUP)
-        return;
-    m_CmdBuffer[data.byTeam].byCmd = data.byCmd;
-    m_CmdBuffer[data.byTeam].byTeam = data.byTeam;
-    m_CmdBuffer[data.byTeam].byX = data.byX;
-    m_CmdBuffer[data.byTeam].byY = data.byY;
+    m_CmdBuffer[data.byTeam].byCmd      = data.byCmd;
+    m_CmdBuffer[data.byTeam].byTeam     = data.byTeam;
+    m_CmdBuffer[data.byTeam].byX        = data.byX;
+    m_CmdBuffer[data.byTeam].byY        = data.byY;
     m_CmdBuffer[data.byTeam].byLifeTime = 100;
 }
 

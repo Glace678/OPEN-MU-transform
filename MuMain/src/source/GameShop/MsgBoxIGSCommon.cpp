@@ -15,7 +15,7 @@ CMsgBoxIGSCommon::CMsgBoxIGSCommon()
     memset(m_szText, 0, sizeof(m_szText));
     m_iMiddleCount = 0;
 
-    m_iMsgBoxWidth = IMAGE_IGS_FRAME_WIDTH;
+    m_iMsgBoxWidth  = IMAGE_IGS_FRAME_WIDTH;
     m_iMsgBoxHeight = IMAGE_IGS_FRAME_HEIGHT;
 }
 
@@ -31,8 +31,8 @@ bool CMsgBoxIGSCommon::Create(float fPriority)
     SetAddCallbackFunc();
 
     CNewUIMessageBoxBase::Create((IMAGE_IGS_WINDOW_WIDTH / 2) - (IMAGE_IGS_FRAME_WIDTH / 2),
-        (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2),
-        m_iMsgBoxWidth, m_iMsgBoxHeight, fPriority);
+                                 (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2), m_iMsgBoxWidth,
+                                 m_iMsgBoxHeight, fPriority);
 
     SetButtonInfo();
 
@@ -45,14 +45,15 @@ void CMsgBoxIGSCommon::Initialize(const wchar_t* pszTitle, const wchar_t* pszTex
 {
     wcscpy(m_szTitle, pszTitle);
 
-    m_iNumTextLine = ::DivideStringByPixel(&m_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, pszText, IGS_TEXT_ITEM_INFO_WIDTH, true, '#');
+    m_iNumTextLine = ::DivideStringByPixel(&m_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, pszText,
+                                           IGS_TEXT_ITEM_INFO_WIDTH, true, '#');
 
     if (m_iNumTextLine > IGS_NUM_TEXT_LIMIT_RENDER_MIDDLE_LINE)
     {
         m_iMiddleCount = m_iNumTextLine - IGS_NUM_TEXT_LIMIT_RENDER_MIDDLE_LINE;
     }
 
-    m_iMsgBoxWidth = IMAGE_IGS_FRAME_WIDTH;
+    m_iMsgBoxWidth  = IMAGE_IGS_FRAME_WIDTH;
     m_iMsgBoxHeight = IMAGE_IGS_FRAME_HEIGHT + (m_iMiddleCount * IMAGE_IGS_LINE_HEIGHT);
 
     CNewUIMessageBoxBase::SetSize(m_iMsgBoxWidth, m_iMsgBoxHeight);
@@ -118,7 +119,9 @@ void CMsgBoxIGSCommon::SetAddCallbackFunc()
 
 void CMsgBoxIGSCommon::SetButtonInfo()
 {
-    m_BtnOk.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + (IMAGE_IGS_FRAME_WIDTH / 2) - (IMAGE_IGS_BTN_WIDTH / 2), (GetPos().y + m_iMsgBoxHeight) - (static_cast<int>(IMAGE_IGS_BTN_HEIGHT) + IGS_BTN_POS_Y), IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
+    m_BtnOk.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + (IMAGE_IGS_FRAME_WIDTH / 2) - (IMAGE_IGS_BTN_WIDTH / 2),
+                    (GetPos().y + m_iMsgBoxHeight) - (static_cast<int>(IMAGE_IGS_BTN_HEIGHT) + IGS_BTN_POS_Y),
+                    IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnOk.MoveTextPos(0, -1);
     m_BtnOk.SetText(I18N::Game::OK);
 }
@@ -134,7 +137,7 @@ void CMsgBoxIGSCommon::RenderFrame()
     {
         RenderImage(IMAGE_IGS_LEFTLINE, GetPos().x, iY, IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
         RenderImage(IMAGE_IGS_RIGHTLINE, GetPos().x + IMAGE_IGS_FRAME_WIDTH - IMAGE_IGS_LINE_WIDTH, iY,
-            IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
+                    IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
         iY += IMAGE_IGS_LINE_HEIGHT;
     }
     RenderImage(IMAGE_IGS_DOWN, GetPos().x, iY, IMAGE_IGS_FRAME_WIDTH, IMAGE_IGS_DOWN_HEIGHT);
@@ -147,7 +150,8 @@ void CMsgBoxIGSCommon::RenderTexts()
     g_pRenderText->SetFont(g_hFontBold);
 
     // Title
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_POS_Y, m_szTitle, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_POS_Y, m_szTitle, IMAGE_IGS_FRAME_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
 
@@ -160,7 +164,8 @@ void CMsgBoxIGSCommon::RenderTexts()
 
     for (int j = 0; j < m_iNumTextLine; ++j)
     {
-        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + iY + j * 12, m_szText[j], IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + iY + j * 12, m_szText[j],
+                                  IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_CENTER);
     }
 }
 
@@ -201,4 +206,4 @@ bool CMsgBoxIGSCommonLayout::SetLayout()
     return true;
 }
 
-#endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM

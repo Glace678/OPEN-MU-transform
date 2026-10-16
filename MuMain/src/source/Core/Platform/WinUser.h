@@ -66,7 +66,8 @@ HWND GetFocus();
 // Display settings (winuser.h / wingdi.h). Only the fields the resolution code
 // touches are provided; layout is irrelevant since ChangeDisplaySettings is a
 // no-op here.
-typedef struct _devicemodeW {
+typedef struct _devicemodeW
+{
     WCHAR dmDeviceName[32];
     WORD  dmSpecVersion, dmDriverVersion, dmSize, dmDriverExtra;
     DWORD dmFields;
@@ -76,70 +77,137 @@ typedef struct _devicemodeW {
     WCHAR dmFormName[32];
     WORD  dmLogPixels;
     DWORD dmBitsPerPel, dmPelsWidth, dmPelsHeight, dmDisplayFlags, dmDisplayFrequency;
-} DEVMODEW, DEVMODE, * LPDEVMODE, * PDEVMODE;
+} DEVMODEW, DEVMODE, *LPDEVMODE, *PDEVMODE;
 
-typedef struct tagMSG {
+typedef struct tagMSG
+{
     HWND   hwnd;
     UINT   message;
     WPARAM wParam;
     LPARAM lParam;
     DWORD  time;
     POINT  pt;
-} MSG, * LPMSG, * PMSG;
+} MSG, *LPMSG, *PMSG;
 
-inline HWND     SetFocus(HWND hWnd)                                  { return hWnd; }
-inline BOOL     SetForegroundWindow(HWND)                            { return TRUE; }
-inline BOOL     SetWindowPos(HWND, HWND, int, int, int, int, UINT)   { return TRUE; }
-inline LONG_PTR SetWindowLongPtr(HWND, int, LONG_PTR)                { return 0; }
-inline BOOL     SetCursorPos(int, int)                              { return TRUE; }
-inline BOOL     AdjustWindowRect(LPRECT, DWORD, BOOL)               { return TRUE; }
-inline BOOL     ShowWindow(HWND, int)                              { return TRUE; }
-inline LONG     ChangeDisplaySettings(DEVMODE*, DWORD)             { return DISP_CHANGE_SUCCESSFUL; }
+inline HWND SetFocus(HWND hWnd)
+{
+    return hWnd;
+}
+inline BOOL SetForegroundWindow(HWND)
+{
+    return TRUE;
+}
+inline BOOL SetWindowPos(HWND, HWND, int, int, int, int, UINT)
+{
+    return TRUE;
+}
+inline LONG_PTR SetWindowLongPtr(HWND, int, LONG_PTR)
+{
+    return 0;
+}
+inline BOOL SetCursorPos(int, int)
+{
+    return TRUE;
+}
+inline BOOL AdjustWindowRect(LPRECT, DWORD, BOOL)
+{
+    return TRUE;
+}
+inline BOOL ShowWindow(HWND, int)
+{
+    return TRUE;
+}
+inline LONG ChangeDisplaySettings(DEVMODE*, DWORD)
+{
+    return DISP_CHANGE_SUCCESSFUL;
+}
 
 // The legacy code pumps the Win32 queue after a resolution change; SDL drives
 // the real loop, so there is never anything to peek here.
-inline BOOL    PeekMessage(LPMSG, HWND, UINT, UINT, UINT)          { return FALSE; }
-inline BOOL    TranslateMessage(const MSG*)                        { return FALSE; }
-inline LRESULT DispatchMessage(const MSG*)                         { return 0; }
+inline BOOL PeekMessage(LPMSG, HWND, UINT, UINT, UINT)
+{
+    return FALSE;
+}
+inline BOOL TranslateMessage(const MSG*)
+{
+    return FALSE;
+}
+inline LRESULT DispatchMessage(const MSG*)
+{
+    return 0;
+}
 
-inline int     FillRect(HDC, const RECT*, HBRUSH)                  { return 1; }
+inline int FillRect(HDC, const RECT*, HBRUSH)
+{
+    return 1;
+}
 
 // Cursor / capture / client-rect helpers -- SDL owns the cursor and input.
 // ShowCursor keeps Win32 display-counter semantics (visible iff counter >= 0)
 // and drives SDL's cursor to match, so the game's "hide the OS cursor, draw my
 // own" calls actually take effect. Defined in WinUser.cpp (needs SDL).
-int  ShowCursor(BOOL bShow);
+int ShowCursor(BOOL bShow);
 // Re-apply the current cursor visibility to SDL. The engine hides the cursor
 // before the SDL video subsystem exists; call this once the window is up so the
 // pending state takes effect.
-void MuApplyCursorVisibility();
-inline HWND  SetCapture(HWND)                      { return nullptr; }
-inline BOOL  ReleaseCapture()                      { return TRUE; }
-inline BOOL  ClipCursor(const RECT*)               { return TRUE; }
-inline BOOL  GetClientRect(HWND, LPRECT lpRect)    { if (lpRect) { lpRect->left = lpRect->top = lpRect->right = lpRect->bottom = 0; } return TRUE; }
-inline BOOL  ClientToScreen(HWND, LPPOINT)         { return TRUE; }
-inline HWND  FindWindowW(LPCWSTR, LPCWSTR)         { return nullptr; }
+void        MuApplyCursorVisibility();
+inline HWND SetCapture(HWND)
+{
+    return nullptr;
+}
+inline BOOL ReleaseCapture()
+{
+    return TRUE;
+}
+inline BOOL ClipCursor(const RECT*)
+{
+    return TRUE;
+}
+inline BOOL GetClientRect(HWND, LPRECT lpRect)
+{
+    if (lpRect)
+    {
+        lpRect->left = lpRect->top = lpRect->right = lpRect->bottom = 0;
+    }
+    return TRUE;
+}
+inline BOOL ClientToScreen(HWND, LPPOINT)
+{
+    return TRUE;
+}
+inline HWND FindWindowW(LPCWSTR, LPCWSTR)
+{
+    return nullptr;
+}
 #ifndef FindWindow
 #define FindWindow FindWindowW
 #endif
-inline HDC   GetDC(HWND)                           { return nullptr; }
-inline int   ReleaseDC(HWND, HDC)                  { return 1; }
+inline HDC GetDC(HWND)
+{
+    return nullptr;
+}
+inline int ReleaseDC(HWND, HDC)
+{
+    return 1;
+}
 
 // Display enumeration (winuser.h). No legacy enumeration off Windows; SDL owns
 // the modes. ENUM_CURRENT_SETTINGS-style queries report failure.
 #ifndef ENUM_CURRENT_SETTINGS
 #define ENUM_CURRENT_SETTINGS (static_cast<DWORD>(-1))
 #endif
-inline BOOL  EnumDisplaySettingsW(LPCWSTR, DWORD, DEVMODE*) { return FALSE; }
+inline BOOL EnumDisplaySettingsW(LPCWSTR, DWORD, DEVMODE*)
+{
+    return FALSE;
+}
 #ifndef EnumDisplaySettings
 #define EnumDisplaySettings EnumDisplaySettingsW
 #endif
-// PLAT-7: off Windows the platform entry stores its argv here
-// (SetProcessCommandLine, called from Linux/macOS main), so the same command-
-// line parsing the Windows path performs (/u, /p, --enable-taskpool, --editor)
-// works on every platform instead of always seeing an empty string.
-const wchar_t* GetCommandLineW();
-void SetProcessCommandLine(int argc, char** argv);
+inline LPWSTR GetCommandLineW()
+{
+    static wchar_t empty[1] = {0};
+    return empty;
+}
 #ifndef GetCommandLine
 #define GetCommandLine GetCommandLineW
 #endif
@@ -153,4 +221,4 @@ inline HINSTANCE ShellExecuteW(HWND, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, int)
 #define ShellExecute ShellExecuteW
 #endif
 
-#endif // _WIN32
+#endif  // _WIN32

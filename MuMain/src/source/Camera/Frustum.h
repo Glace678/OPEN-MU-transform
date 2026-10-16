@@ -38,7 +38,7 @@ public:
     struct Plane
     {
         vec3_t normal;    // Plane normal (normalized)
-        float distance;   // Distance from origin (D in plane equation Ax + By + Cz + D = 0)
+        float  distance;  // Distance from origin (D in plane equation Ax + By + Cz + D = 0)
 
         Plane()
         {
@@ -62,9 +62,8 @@ public:
      * @param farDist Far clipping plane distance
      * @param terrainCullDist Distance for terrain tile culling (defaults to farDist if not specified)
      */
-    void BuildFromCamera(const vec3_t position, const vec3_t forward, const vec3_t up,
-                         float fovDegrees, float aspectRatio, float nearDist, float farDist,
-                         float terrainCullDist = -1.0f);
+    void BuildFromCamera(const vec3_t position, const vec3_t forward, const vec3_t up, float fovDegrees,
+                         float aspectRatio, float nearDist, float farDist, float terrainCullDist = -1.0f);
 
     /**
      * @brief Tests if a sphere is inside or intersecting the frustum
@@ -160,13 +159,13 @@ private:
     // 2D ground-plane projection (convex hull of vertices projected to XY, in tile coords)
     // 8 frustum corners + up to 4 terrain-cull far corners
     static constexpr int MAX_2D_HULL_POINTS = 12;
-    float m_2DX[MAX_2D_HULL_POINTS];
-    float m_2DY[MAX_2D_HULL_POINTS];
-    int m_2DCount;
+    float                m_2DX[MAX_2D_HULL_POINTS];
+    float                m_2DY[MAX_2D_HULL_POINTS];
+    int                  m_2DCount;
 
     // Extended terrain cull far vertices (when terrainCullDist > farDist)
     vec3_t m_TerrainFarVertices[4];
-    bool m_bHasTerrainExtension = false;
+    bool   m_bHasTerrainExtension = false;
 
     // Helper methods
     void CalculateBoundingBox();
@@ -174,14 +173,9 @@ private:
 
     // BuildFromCamera helpers. Inputs are logically const but declared non-const because
     // the project's vec3_t helpers don't accept const; these methods copy to locals internally.
-    void CalculateFrustumVertices(const vec3_t position, const vec3_t forward,
-                                  const vec3_t up, const vec3_t right,
-                                  float tanHalfFov, float aspectRatio,
-                                  float nearDist, float farDist);
-    void CalculateTerrainExtension(const vec3_t position, const vec3_t forward,
-                                    const vec3_t up, const vec3_t right,
-                                    float tanHalfFov, float aspectRatio,
-                                    float farDist, float terrainCullDist);
-    void CalculatePlanes(const vec3_t position, const vec3_t forward,
-                         const vec3_t nearCenter, const vec3_t farCenter);
+    void CalculateFrustumVertices(const vec3_t position, const vec3_t forward, const vec3_t up, const vec3_t right,
+                                  float tanHalfFov, float aspectRatio, float nearDist, float farDist);
+    void CalculateTerrainExtension(const vec3_t position, const vec3_t forward, const vec3_t up, const vec3_t right,
+                                   float tanHalfFov, float aspectRatio, float farDist, float terrainCullDist);
+    void CalculatePlanes(const vec3_t position, const vec3_t forward, const vec3_t nearCenter, const vec3_t farCenter);
 };

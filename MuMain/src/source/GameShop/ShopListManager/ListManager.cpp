@@ -17,7 +17,7 @@
 
 #include <iterator>
 
-CListManager::CListManager() // OK
+CListManager::CListManager()  // OK
 {
     this->m_pFTPDownLoader = NULL;
     this->m_ListManagerInfo.m_strServerIP.clear();
@@ -28,48 +28,38 @@ CListManager::CListManager() // OK
     this->m_vScriptFiles.clear();
 }
 
-CListManager::~CListManager() // OK
+CListManager::~CListManager()  // OK
 {
     SafeDelete(m_pFTPDownLoader);
 }
 
-void			CListManager::SetListManagerInfo(DownloaderType type,
-    const wchar_t* ServerIP,
-    const wchar_t* UserID,
-    const wchar_t* Pwd,
-    const wchar_t* RemotePath,
-    const wchar_t* LocalPath,
-    CListVersionInfo Version,
-    DWORD dwDownloadMaxTime)
+void CListManager::SetListManagerInfo(DownloaderType type, const wchar_t* ServerIP, const wchar_t* UserID,
+                                      const wchar_t* Pwd, const wchar_t* RemotePath, const wchar_t* LocalPath,
+                                      CListVersionInfo Version, DWORD dwDownloadMaxTime)
 {
     unsigned short port = 80;
 
     if (type == FTP)
         port = 21;
 
-    this->SetListManagerInfo(type, ServerIP, port, UserID, Pwd, RemotePath, LocalPath, FTP_MODE_ACTIVE, Version, dwDownloadMaxTime);
+    this->SetListManagerInfo(type, ServerIP, port, UserID, Pwd, RemotePath, LocalPath, FTP_MODE_ACTIVE, Version,
+                             dwDownloadMaxTime);
 }
 
-void			CListManager::SetListManagerInfo(DownloaderType type,
-    const wchar_t* ServerIP,
-    unsigned short PortNum,
-    const wchar_t* UserID,
-    const wchar_t* Pwd,
-    const wchar_t* RemotePath,
-    const wchar_t* LocalPath,
-    FTP_SERVICE_MODE ftpMode,
-    CListVersionInfo Version,
-    DWORD dwDownloadMaxTime) // OK
+void CListManager::SetListManagerInfo(DownloaderType type, const wchar_t* ServerIP, unsigned short PortNum,
+                                      const wchar_t* UserID, const wchar_t* Pwd, const wchar_t* RemotePath,
+                                      const wchar_t* LocalPath, FTP_SERVICE_MODE ftpMode, CListVersionInfo Version,
+                                      DWORD dwDownloadMaxTime)  // OK
 {
-    this->m_ListManagerInfo.m_DownloaderType = type;
-    this->m_ListManagerInfo.m_nPortNum = PortNum;
-    this->m_ListManagerInfo.m_ftpMode = ftpMode;
-    this->m_ListManagerInfo.m_strLocalPath = LocalPath;
-    this->m_ListManagerInfo.m_strRemotePath = RemotePath;
-    this->m_ListManagerInfo.m_strPWD = Pwd;
-    this->m_ListManagerInfo.m_strServerIP = ServerIP;
-    this->m_ListManagerInfo.m_strUserID = UserID;
-    this->m_ListManagerInfo.m_Version = Version;
+    this->m_ListManagerInfo.m_DownloaderType    = type;
+    this->m_ListManagerInfo.m_nPortNum          = PortNum;
+    this->m_ListManagerInfo.m_ftpMode           = ftpMode;
+    this->m_ListManagerInfo.m_strLocalPath      = LocalPath;
+    this->m_ListManagerInfo.m_strRemotePath     = RemotePath;
+    this->m_ListManagerInfo.m_strPWD            = Pwd;
+    this->m_ListManagerInfo.m_strServerIP       = ServerIP;
+    this->m_ListManagerInfo.m_strUserID         = UserID;
+    this->m_ListManagerInfo.m_Version           = Version;
     this->m_ListManagerInfo.m_dwDownloadMaxTime = dwDownloadMaxTime;
 
     if (GetFileAttributes(LocalPath) == INVALID_FILE_ATTRIBUTES)
@@ -86,9 +76,9 @@ void			CListManager::SetListManagerInfo(DownloaderType type,
     }
 }
 
-WZResult		CListManager::LoadScriptList(bool bDonwLoad) // OK
+WZResult CListManager::LoadScriptList(bool bDonwLoad)  // OK
 {
-    this->m_Result.SetSuccessResult();
+    this->m_Result.BuildSuccessResult();
 
     if (!bDonwLoad && this->IsScriptFileExist())
     {
@@ -121,7 +111,7 @@ WZResult		CListManager::LoadScriptList(bool bDonwLoad) // OK
     return this->m_Result;
 }
 
-bool			CListManager::IsScriptFileExist() // OK
+bool CListManager::IsScriptFileExist()  // OK
 {
     std::wstring path = this->GetScriptPath();
 
@@ -138,14 +128,12 @@ bool			CListManager::IsScriptFileExist() // OK
     return 1;
 }
 
-std::wstring		CListManager::GetScriptPath() // OK
+std::wstring CListManager::GetScriptPath()  // OK
 {
-    TCHAR buff[MAX_PATH] = { 0 };
+    TCHAR buff[MAX_PATH] = {0};
 
-    StringCchPrintf(buff, std::size(buff), L"%03d.%04d.%03d",
-        m_ListManagerInfo.m_Version.Zone,
-        m_ListManagerInfo.m_Version.year,
-        m_ListManagerInfo.m_Version.yearId);
+    StringCchPrintf(buff, std::size(buff), L"%03d.%04d.%03d", m_ListManagerInfo.m_Version.Zone,
+                    m_ListManagerInfo.m_Version.year, m_ListManagerInfo.m_Version.yearId);
 
     std::wstring path = this->m_ListManagerInfo.m_strLocalPath;
     path += buff;
@@ -154,7 +142,7 @@ std::wstring		CListManager::GetScriptPath() // OK
     return path;
 }
 
-void			CListManager::DeleteScriptFiles() // OK
+void CListManager::DeleteScriptFiles()  // OK
 {
     std::wstring path = this->GetScriptPath();
 
@@ -166,7 +154,7 @@ void			CListManager::DeleteScriptFiles() // OK
     }
 }
 
-WZResult		CListManager::FileDownLoad() // OK
+WZResult CListManager::FileDownLoad()  // OK
 {
 #ifndef _WIN32
     // The watchdog thread guards a WinInet download that is excluded off
@@ -182,7 +170,7 @@ WZResult		CListManager::FileDownLoad() // OK
 
         if (hHandle == INVALID_HANDLE_VALUE)
         {
-            this->m_Result = WZResult::BuildResult(8, GetLastError(), L"Fail : _beginthreadex");
+            this->m_Result.BuildResult(8, GetLastError(), L"Fail : _beginthreadex");
         }
         else if (WaitForSingleObject(hHandle, this->m_ListManagerInfo.m_dwDownloadMaxTime) == WAIT_TIMEOUT)
         {
@@ -199,7 +187,7 @@ WZResult		CListManager::FileDownLoad() // OK
 
             CloseHandle(hHandle);
 
-            this->m_Result = WZResult::BuildResult(1, 0, L"Time Out!");
+            this->m_Result.BuildResult(1, 0, L"Time Out!");
         }
         else
         {
@@ -210,12 +198,12 @@ WZResult		CListManager::FileDownLoad() // OK
     {
         this->m_Result = this->FileDownLoadImpl();
     }
-#endif // _WIN32
+#endif  // _WIN32
 
     return this->m_Result;
 }
 
-WZResult		CListManager::FileDownLoadImpl() // OK
+WZResult CListManager::FileDownLoadImpl()  // OK
 {
     if (m_pFTPDownLoader != NULL)
     {
@@ -229,27 +217,20 @@ WZResult		CListManager::FileDownLoadImpl() // OK
 #endif
     }
 
-    SafeDelete(m_pFTPDownLoader); // FIX THIS
+    SafeDelete(m_pFTPDownLoader);  // FIX THIS
 
     this->m_pFTPDownLoader = new CFTPFileDownLoader;
 
     this->m_Result = this->m_pFTPDownLoader->DownLoadFiles(
-        this->m_ListManagerInfo.m_DownloaderType,
-        this->m_ListManagerInfo.m_strServerIP,
-        this->m_ListManagerInfo.m_nPortNum,
-        this->m_ListManagerInfo.m_strUserID,
-        this->m_ListManagerInfo.m_strPWD,
-        this->m_ListManagerInfo.m_strRemotePath,
-        this->m_ListManagerInfo.m_strLocalPath,
-        this->m_ListManagerInfo.m_ftpMode == FTP_MODE_PASSIVE,
-        this->m_ListManagerInfo.m_Version,
-        this->m_vScriptFiles
-    );
+        this->m_ListManagerInfo.m_DownloaderType, this->m_ListManagerInfo.m_strServerIP,
+        this->m_ListManagerInfo.m_nPortNum, this->m_ListManagerInfo.m_strUserID, this->m_ListManagerInfo.m_strPWD,
+        this->m_ListManagerInfo.m_strRemotePath, this->m_ListManagerInfo.m_strLocalPath,
+        this->m_ListManagerInfo.m_ftpMode == FTP_MODE_PASSIVE, this->m_ListManagerInfo.m_Version, this->m_vScriptFiles);
 
     return this->m_Result;
 }
 
-unsigned int __stdcall CListManager::RunFileDownLoadThread(LPVOID pParam) // OK
+unsigned int __stdcall CListManager::RunFileDownLoadThread(LPVOID pParam)  // OK
 {
     auto* p = reinterpret_cast<CListManager*>(pParam);
 

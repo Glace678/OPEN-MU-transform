@@ -16,9 +16,7 @@ BuffStateSystemPtr BuffStateSystem::Make()
     return buffstatesystem;
 }
 
-BuffStateSystem::BuffStateSystem()
-{
-}
+BuffStateSystem::BuffStateSystem() {}
 
 BuffStateSystem::~BuffStateSystem()
 {
@@ -27,12 +25,10 @@ BuffStateSystem::~BuffStateSystem()
 
 void BuffStateSystem::Initialize()
 {
-    // ӽ ڵ
-    m_BuffInfo = BuffScriptLoader::Make();
-    m_BuffTimeControl = BuffTimeControl::Make();
+    // �ӽ� �ڵ�
+    m_BuffInfo              = BuffScriptLoader::Make();
+    m_BuffTimeControl       = BuffTimeControl::Make();
     m_BuffStateValueControl = BuffStateValueControl::Make();
 }
 
-void BuffStateSystem::Destroy()
-{
-}
+void BuffStateSystem::Destroy() {}

@@ -22,10 +22,7 @@
 #include "imgui_internal.h"
 #include "../MuEditor/UI/Console/MuEditorConsoleUI.h"
 
-CMuItemEditorUI::CMuItemEditorUI()
-    : m_selectedRow(-1)
-    , m_bFreezeColumns(false)
-    , m_pTable(nullptr)
+CMuItemEditorUI::CMuItemEditorUI() : m_selectedRow(-1), m_bFreezeColumns(false), m_pTable(nullptr)
 {
     memset(m_szItemSearchBuffer, 0, sizeof(m_szItemSearchBuffer));
     m_pTable = new CItemEditorTable();
@@ -34,25 +31,20 @@ CMuItemEditorUI::CMuItemEditorUI()
     m_columnVisibility["Index"] = true;  // Special column (not in metadata)
 
     // Get all fields from metadata and set default visibility
-    const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+    const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+    const int                  fieldCount = GetFieldCount();
     for (int i = 0; i < fieldCount; ++i)
     {
         // Default commonly used columns to visible, rest to hidden
         bool defaultVisible = false;
 
         // Check for commonly used fields
-        if (strcmp(fields[i].name, "Name") == 0 ||
-            strcmp(fields[i].name, "Level") == 0 ||
-            strcmp(fields[i].name, "DamageMin") == 0 ||
-            strcmp(fields[i].name, "DamageMax") == 0 ||
-            strcmp(fields[i].name, "Defense") == 0 ||
-            strcmp(fields[i].name, "WeaponSpeed") == 0 ||
-            strcmp(fields[i].name, "Durability") == 0 ||
-            strcmp(fields[i].name, "RequireStrength") == 0 ||
-            strcmp(fields[i].name, "RequireDexterity") == 0 ||
-            strcmp(fields[i].name, "RequireEnergy") == 0 ||
-            strcmp(fields[i].name, "RequireVitality") == 0 ||
-            strcmp(fields[i].name, "RequireCharisma") == 0)
+        if (strcmp(fields[i].name, "Name") == 0 || strcmp(fields[i].name, "Level") == 0 ||
+            strcmp(fields[i].name, "DamageMin") == 0 || strcmp(fields[i].name, "DamageMax") == 0 ||
+            strcmp(fields[i].name, "Defense") == 0 || strcmp(fields[i].name, "WeaponSpeed") == 0 ||
+            strcmp(fields[i].name, "Durability") == 0 || strcmp(fields[i].name, "RequireStrength") == 0 ||
+            strcmp(fields[i].name, "RequireDexterity") == 0 || strcmp(fields[i].name, "RequireEnergy") == 0 ||
+            strcmp(fields[i].name, "RequireVitality") == 0 || strcmp(fields[i].name, "RequireCharisma") == 0)
         {
             defaultVisible = true;
         }
@@ -96,21 +88,20 @@ void CMuItemEditorUI::Render(bool& showEditor)
     ImGuiIO& io = ImGui::GetIO();
 
     // Calculate available space between toolbar and console
-    float availableTop = TOOLBAR_HEIGHT;
+    float availableTop    = TOOLBAR_HEIGHT;
     float availableBottom = io.DisplaySize.y - CONSOLE_HEIGHT;
     float availableHeight = availableBottom - availableTop;
 
     // Set initial window size and constraints
-    ImGui::SetNextWindowSizeConstraints(
-        ImVec2(400, 300),  // Min size
-        ImVec2(io.DisplaySize.x, availableHeight)  // Max size
+    ImGui::SetNextWindowSizeConstraints(ImVec2(400, 300),                          // Min size
+                                        ImVec2(io.DisplaySize.x, availableHeight)  // Max size
     );
 
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     if (ImGui::Begin(I18N::Editor::ItemEditor, &showEditor, flags))
     {
         // Clamp window position to stay within bounds
-        ImVec2 windowPos = ImGui::GetWindowPos();
+        ImVec2 windowPos  = ImGui::GetWindowPos();
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         // Clamp to keep window between toolbar and console
@@ -134,9 +125,10 @@ void CMuItemEditorUI::Render(bool& showEditor)
         }
 
         // Check if hovering this window OR any popup
-        bool isHovering = ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup) ||
-                         ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) ||
-                         ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId);
+        bool isHovering =
+            ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup) ||
+            ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) ||
+            ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId);
 
         if (isHovering)
         {
@@ -144,9 +136,10 @@ void CMuItemEditorUI::Render(bool& showEditor)
         }
 
         // Render action buttons (Save, Export S6E3, Export CSV)
-        CItemEditorActions::RenderAllButtons();;
+        CItemEditorActions::RenderAllButtons();
+        ;
         ImGui::Separator();
-        
+
         RenderSearchBar();
         ImGui::SameLine();
         RenderColumnVisibilityMenu();
@@ -188,7 +181,7 @@ void CMuItemEditorUI::RenderColumnVisibilityMenu()
 
     // Track if popup was open in previous frame
     static bool wasPopupOpen = false;
-    bool isPopupOpen = ImGui::IsPopupOpen("ColumnVisibility");
+    bool        isPopupOpen  = ImGui::IsPopupOpen("ColumnVisibility");
 
     if (ImGui::BeginPopup("ColumnVisibility"))
     {
@@ -222,7 +215,8 @@ void CMuItemEditorUI::RenderColumnVisibilityMenu()
         changed |= ImGui::Checkbox(I18N::Editor::Index, &m_columnVisibility["Index"]);
 
         // Get all fields from metadata and render checkboxes
-        const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+        const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+        const int                  fieldCount = GetFieldCount();
         for (int i = 0; i < fieldCount; ++i)
         {
             const char* displayName = GetFieldDisplayName(fields[i]);
@@ -269,4 +263,4 @@ void CMuItemEditorUI::LoadColumnPreferences()
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

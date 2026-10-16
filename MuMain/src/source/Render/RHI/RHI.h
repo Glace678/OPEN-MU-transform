@@ -13,16 +13,17 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace RHI {
+namespace RHI
+{
 
 // Opaque, backend-owned handles. Strongly typed so a BufferHandle can't be
 // passed where a TextureHandle is expected -- catches backend-swap mistakes
 // at compile time, not runtime.
-template<typename Tag>
-struct Handle {
+template <typename Tag> struct Handle
+{
     uint32_t id = 0;
-    bool IsValid() const { return id != 0; }
-    bool operator==(const Handle&) const = default;
+    bool     IsValid() const { return id != 0; }
+    bool     operator==(const Handle&) const = default;
 };
 using BufferHandle  = Handle<struct BufferTag>;
 using TextureHandle = Handle<struct TextureTag>;
@@ -35,14 +36,16 @@ using TextureHandle = Handle<struct TextureTag>;
 // Each bool requires BOTH the version/extension being present AND the entry points that
 // capability needs actually resolving via SDL_GL_GetProcAddress -- a driver can report a high
 // version and still hand back null for a symbol on a bad install.
-struct Caps {
+struct Caps
+{
     int  glMajor = 0, glMinor = 0;
-    bool bufferStorage        = false;  // ARB_buffer_storage / core 4.4       -> GLP-09
-    bool vertexAttribBinding  = false;  // ARB_vertex_attrib_binding / core 4.3 -> GLP-22
-    bool programBinary        = false;  // ARB_get_program_binary / core 4.1   -> GLP-15
-    bool timerQuery           = false;  // ARB_timer_query / core 3.3          -> GLP-01
-    int  uboOffsetAlignment   = 256;    // GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT -- GLP-09 ring stride, do not hardcode 256 elsewhere
-    int  maxUniformBlockSize  = 16384;  // GL_MAX_UNIFORM_BLOCK_SIZE
+    bool bufferStorage       = false;  // ARB_buffer_storage / core 4.4       -> GLP-09
+    bool vertexAttribBinding = false;  // ARB_vertex_attrib_binding / core 4.3 -> GLP-22
+    bool programBinary       = false;  // ARB_get_program_binary / core 4.1   -> GLP-15
+    bool timerQuery          = false;  // ARB_timer_query / core 3.3          -> GLP-01
+    int  uboOffsetAlignment =
+        256;  // GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT -- GLP-09 ring stride, do not hardcode 256 elsewhere
+    int maxUniformBlockSize = 16384;  // GL_MAX_UNIFORM_BLOCK_SIZE
 };
 const Caps& GetCaps();
 
@@ -50,7 +53,7 @@ const Caps& GetCaps();
 bool Init(void* nativeWindowHandle, int width, int height);
 void Shutdown();
 void BeginFrame();
-void EndFrame();                          // Present() -- wraps PlatformSwapBuffers()
+void EndFrame();  // Present() -- wraps PlatformSwapBuffers()
 void SetViewport(int x, int y, int w, int h);
 void Clear(bool color, bool depth, float r = 0, float g = 0, float b = 0, float a = 1);
 // Window resize/alt-tab hook. GL is a no-op today (nothing GL-specific happens at resize
@@ -61,10 +64,17 @@ void OnResize(int width, int height);
 // Static: immutable after creation. Dynamic: UpdateBuffer uses map-discard semantics
 // (orphan-then-glBufferSubData) -- IR::'s existing streaming VBO pattern and
 // PlanarShadowShader's own VBO both become Dynamic buffers, unchanged behavior.
-enum class BufferUsage { Static, Dynamic };
+enum class BufferUsage
+{
+    Static,
+    Dynamic
+};
 BufferHandle CreateVertexBuffer(const void* initialData, size_t sizeBytes, BufferUsage);
-BufferHandle CreateIndexBuffer(const void* initialData, size_t sizeBytes, BufferUsage); // GL_UNSIGNED_INT only -- the one indexed site in the tree uses no other type
-void UpdateBuffer(BufferHandle, const void* data, size_t sizeBytes);   // Dynamic only; MAY exceed creation size (backends re-allocate)
+BufferHandle
+     CreateIndexBuffer(const void* initialData, size_t sizeBytes,
+                       BufferUsage);  // GL_UNSIGNED_INT only -- the one indexed site in the tree uses no other type
+void UpdateBuffer(BufferHandle, const void* data,
+                  size_t sizeBytes);  // Dynamic only; MAY exceed creation size (backends re-allocate)
 // Discard semantics: each call may assume the buffer's previous contents are gone. Correct
 // for a buffer that's fully rewritten once per use (a UBO, a per-frame full-geometry upload)
 // -- wrong for a buffer written many times per frame at growing offsets, where a discard-per-
@@ -80,7 +90,7 @@ void UpdateBuffer(BufferHandle, const void* data, size_t sizeBytes);   // Dynami
 // UpdateBuffer on the same handle -- UpdateBuffer's discard-and-reset-to-0 would corrupt
 // AppendBuffer's offset bookkeeping.
 size_t AppendBuffer(BufferHandle, const void* data, size_t sizeBytes);
-void DestroyBuffer(BufferHandle);
+void   DestroyBuffer(BufferHandle);
 
 // ---- Uniform blocks (the 3 existing UBOs become opaque handles; std140 layout stays the
 // caller's contract -- RHI does not know or care about field layout, just byte size) ----
@@ -93,8 +103,11 @@ void DestroyBuffer(BufferHandle);
 // tree today updates immediately after creating (GlobalUBO/SceneUBO/BoneUBO/BMDMeshShader) --
 // keep that invariant for any future caller.
 BufferHandle CreateUniformBlock(size_t sizeBytes, int bindingSlot);
-void UpdateUniformBlock(BufferHandle, const void* data, size_t sizeBytes);  // whole-block; callers keep their own dirty-checking (e.g. BoneUBO's ptr+version check)
-void DestroyUniformBlock(BufferHandle);  // GLP-09: frees a slot reservation, not the shared ring -- the ring itself is torn down at Shutdown()
+void         UpdateUniformBlock(
+            BufferHandle, const void* data,
+            size_t sizeBytes);  // whole-block; callers keep their own dirty-checking (e.g. BoneUBO's ptr+version check)
+void DestroyUniformBlock(
+    BufferHandle);  // GLP-09: frees a slot reservation, not the shared ring -- the ring itself is torn down at Shutdown()
 
 // ---- Textures ----
 // Format is fixed at RGBA8 -- no other internal format exists anywhere in the tree today.
@@ -102,13 +115,27 @@ void DestroyUniformBlock(BufferHandle);  // GLP-09: frees a slot reservation, no
 // claim originally rested on -- ZzzBMD.cpp's BindLightMaps() still uploads GL_RGB, fixed via
 // the same CPU-side 3->4 expansion already planned for GlobalBitmap.cpp's JPEG path
 // (alpha=255), not a second RHI format. This "RGBA8 always" contract is true tree-wide.
-enum class TexFilter { Nearest, Linear };
-enum class TexWrap   { Clamp, Repeat };        // no Mirror in use
-struct TextureDesc { int width, height; TexFilter filter = TexFilter::Nearest; TexWrap wrap = TexWrap::Clamp; };
+enum class TexFilter
+{
+    Nearest,
+    Linear
+};
+enum class TexWrap
+{
+    Clamp,
+    Repeat
+};  // no Mirror in use
+struct TextureDesc
+{
+    int       width, height;
+    TexFilter filter = TexFilter::Nearest;
+    TexWrap   wrap   = TexWrap::Clamp;
+};
 TextureHandle CreateTexture(const TextureDesc&, const void* initialPixelsRGBA);
-void UpdateTexture(TextureHandle, int x, int y, int w, int h, const void* pixelsRGBA); // sub-rect; full re-upload = (0,0,Width,Height)
-void DestroyTexture(TextureHandle);
-void BindTexture(TextureHandle, int slot);     // slots 0-3 (BMDMeshShader's max observed usage)
+void          UpdateTexture(TextureHandle, int x, int y, int w, int h,
+                            const void* pixelsRGBA);  // sub-rect; full re-upload = (0,0,Width,Height)
+void          DestroyTexture(TextureHandle);
+void          BindTexture(TextureHandle, int slot);  // slots 0-3 (BMDMeshShader's max observed usage)
 
 // ---- Pipeline / blend-mode state ----
 // Promotes ZzzOpenglUtil.cpp's existing internal AlphaBlendType cache (0-7) to a
@@ -116,7 +143,8 @@ void BindTexture(TextureHandle, int slot);     // slots 0-3 (BMDMeshShader's max
 // GL_ALPHA_TEST as side effects: fog is already a SceneUBO uniform (fogEnabled) and
 // alpha-test is already a shader-side discard (g_AlphaRef), so SetBlendMode's GL
 // implementation sets blend/cull/depth-mask state and mirrors those same uniform writes.
-enum class BlendMode : uint8_t {
+enum class BlendMode : uint8_t
+{
     Opaque    = 0,  // DisableAlphaBlend()      no blend; cull+depthmask on
     LightMap  = 1,  // EnableLightMap()         ZERO, SRC_COLOR;               cull+depthmask on
     AlphaTest = 2,  // EnableAlphaTest()        SRC_ALPHA, ONE_MINUS_SRC_ALPHA; cull off, alpha-test on
@@ -141,7 +169,7 @@ void SetCullEnabled(bool);
 void SetDepthWriteEnabled(bool);
 
 void SetFogEnabled(bool);
-void SetPolygonOffset(bool enabled, float factor = -1.f, float units = -1.f); // PlanarShadowShader's one caller
+void SetPolygonOffset(bool enabled, float factor = -1.f, float units = -1.f);  // PlanarShadowShader's one caller
 
 // ---- Shaders ----
 // The 5 existing shader classes KEEP their bespoke Bind(...) signatures (design doc Q1,
@@ -155,29 +183,41 @@ void SetPolygonOffset(bool enabled, float factor = -1.f, float units = -1.f); //
 // increment). BMDMesh/Terrain/PosOnly land with their own subsystem-conversion increments
 // (Approach step 3) -- calling BindVertexBuffer with one of those before then is a no-op
 // logged to MuError.log, not a silent wrong-format bind.
-enum class VertexLayout {
-    PosUvColor,   // IR:: / PassthroughShader -- pos3+uv2+rgba4, ImmediateRenderer.cpp -- IMPLEMENTED
-    BMDMesh,      // BMDMeshShader's mesh vertex format
-    Terrain,      // TerrainShader's mesh vertex format
-    PosOnly,      // PlanarShadowShader -- position-only
+enum class VertexLayout
+{
+    PosUvColor,  // IR:: / PassthroughShader -- pos3+uv2+rgba4, ImmediateRenderer.cpp -- IMPLEMENTED
+    BMDMesh,     // BMDMeshShader's mesh vertex format
+    Terrain,     // TerrainShader's mesh vertex format
+    PosOnly,     // PlanarShadowShader -- position-only
 };
 void BindVertexBuffer(BufferHandle, VertexLayout);
-void BindIndexBuffer(BufferHandle);   // GL_UNSIGNED_INT only -- GLP-16: implemented, binds GL_ELEMENT_ARRAY_BUFFER (captured into the currently-bound VAO's state)
+void BindIndexBuffer(
+    BufferHandle);  // GL_UNSIGNED_INT only -- GLP-16: implemented, binds GL_ELEMENT_ARRAY_BUFFER (captured into the currently-bound VAO's state)
 
 // ---- Draw ----
 // No strips/fans/points anywhere post-DXP-09; no instancing anywhere in the tree.
-enum class Topology { TriangleList, LineList, LineStrip };
+enum class Topology
+{
+    TriangleList,
+    LineList,
+    LineStrip
+};
 void Draw(Topology, uint32_t vertexCount, uint32_t firstVertex = 0);
-void DrawIndexed(Topology, uint32_t indexCount, uint32_t firstIndex = 0); // GLP-16: implemented. firstIndex is an element offset, not bytes; requires a prior BindIndexBuffer call, same two-call shape as BindVertexBuffer+Draw
+void DrawIndexed(
+    Topology, uint32_t indexCount,
+    uint32_t firstIndex =
+        0);  // GLP-16: implemented. firstIndex is an element offset, not bytes; requires a prior BindIndexBuffer call, same two-call shape as BindVertexBuffer+Draw
 
 // ---- Readback (DXP-12) ----
-bool ReadDepthPixel(int x, int y, float* outDepth);                   // CameraProjection::TestDepthBuffer, until DXP-16
+bool ReadDepthPixel(int x, int y, float* outDepth);  // CameraProjection::TestDepthBuffer, until DXP-16
 // outRGB: 3 bytes/pixel (matches Winmain.cpp/SceneManager.cpp's existing PPM writer -- no RGBA
 // readback caller exists). Row order is TOP-DOWN by contract (matches D3D and image-file
 // convention) regardless of backend -- GL's native glReadPixels is bottom-up, so RHI_GL flips
 // rows before returning. Any caller relying on this row order (screenshots, and
 // ReconnectDialog::CaptureBackground's planned ReadColorFramebuffer+CreateTexture composition,
 // DXP-12) gets consistent top-down data on both backends without its own flip logic.
-bool ReadColorFramebuffer(int x, int y, int w, int h, void* outRGB);   // screenshot / MU_CAPTURE_FRAME debug capture / CaptureBackground compose source
+bool ReadColorFramebuffer(
+    int x, int y, int w, int h,
+    void* outRGB);  // screenshot / MU_CAPTURE_FRAME debug capture / CaptureBackground compose source
 
-} // namespace RHI
+}  // namespace RHI

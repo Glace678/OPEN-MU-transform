@@ -1,11 +1,11 @@
-﻿// NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
+﻿  // NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "UI/NewUI/Inventory/NewUIMyInventory.h"
 #include "UI/NewUI/NewUISystem.h"
 #include "I18N/All.h"
-extern bool SelectFlag;
+    extern bool SelectFlag;
 #ifdef _EDITOR
 #include "UI/Console/MuEditorConsoleUI.h"
 #endif
@@ -28,7 +28,7 @@ extern bool SelectFlag;
 #include "World/MapInfra/PortalMgr.h"
 #ifdef CSK_FIX_BLUELUCKYBAG_MOVECOMMAND
 #include "GameLogic/Events/Event.h"
-#endif // CSK_FIX_BLUELUCKYBAG_MOVECOMMAND
+#endif  // CSK_FIX_BLUELUCKYBAG_MOVECOMMAND
 #include "GameLogic/Items/ChangeRingManager.h"
 #include "GameLogic/Social/MonkSystem.h"
 #include "Character/CharacterManager.h"
@@ -39,7 +39,7 @@ using namespace SEASON3B;
 
 CNewUIMyInventory::CNewUIMyInventory()
 {
-    m_pNewUIMng = nullptr;
+    m_pNewUIMng         = nullptr;
     m_pNewUI3DRenderMng = nullptr;
     m_pNewInventoryCtrl = nullptr;
     m_Pos.x = m_Pos.y = 0;
@@ -47,12 +47,12 @@ CNewUIMyInventory::CNewUIMyInventory()
     memset(&m_EquipmentSlots, 0, sizeof(EQUIPMENT_ITEM) * MAX_EQUIPMENT_INDEX);
     m_iPointedSlot = -1;
 
-    m_MyShopMode = MYSHOP_MODE_OPEN;
-    m_RepairMode = REPAIR_MODE_OFF;
+    m_MyShopMode       = MYSHOP_MODE_OPEN;
+    m_RepairMode       = REPAIR_MODE_OFF;
     m_dwStandbyItemKey = 0;
 
     m_bRepairEnableLevel = false;
-    m_bMyShopOpen = false;
+    m_bMyShopOpen        = false;
 }
 
 CNewUIMyInventory::~CNewUIMyInventory()
@@ -72,13 +72,14 @@ bool CNewUIMyInventory::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNew
     m_pNewUI3DRenderMng->Add3DRenderObj(this, INVENTORY_CAMERA_Z_ORDER);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::INVENTORY, m_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 200, 8, 8, MAX_EQUIPMENT))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::INVENTORY, m_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 200, 8, 8, MAX_EQUIPMENT))
     {
         SafeDelete(m_pNewInventoryCtrl);
         return false;
     }
 
-    m_ActionController.SetContext(this); 
+    m_ActionController.SetContext(this);
 
     SetPos(x, y);
     LoadImages();
@@ -143,7 +144,7 @@ bool CNewUIMyInventory::EquipItem(int iIndex, std::span<const BYTE> pbyItemPacke
         SocketClient->ToGameServer()->SendPetInfoRequest(PetType::DarkRaven, StorageType::Inventory, iIndex);
     }
 
-    pTempItem->lineal_pos = iIndex;
+    pTempItem->lineal_pos  = iIndex;
     pTempItem->ex_src_type = ITEM_EX_SRC_EQUIPMENT;
     memcpy(pTargetItemSlot, pTempItem, sizeof(ITEM));
     g_pNewItemMng->DeleteItem(pTempItem);
@@ -174,17 +175,17 @@ void CNewUIMyInventory::UnequipItem(int iIndex)
             if (pEquippedItem->Type != ITEM_DARK_RAVEN_ITEM)
                 DeleteEquippingEffectBug(pEquippedItem);
 
-            pEquippedItem->Type = -1;
-            pEquippedItem->Level = 0;
-            pEquippedItem->Number = -1;
-            pEquippedItem->ExcellentFlags = 0;
-            pEquippedItem->Durability = 0;
+            pEquippedItem->Type                 = -1;
+            pEquippedItem->Level                = 0;
+            pEquippedItem->Number               = -1;
+            pEquippedItem->ExcellentFlags       = 0;
+            pEquippedItem->Durability           = 0;
             pEquippedItem->AncientDiscriminator = 0;
-            pEquippedItem->AncientBonusOption = 0;
-            pEquippedItem->SocketCount = 0;
+            pEquippedItem->AncientBonusOption   = 0;
+            pEquippedItem->SocketCount          = 0;
             for (int i = 0; i < MAX_SOCKETS; ++i)
             {
-                pEquippedItem->SocketSeedID[i] = SOCKET_EMPTY;
+                pEquippedItem->SocketSeedID[i]   = SOCKET_EMPTY;
                 pEquippedItem->SocketSphereLv[i] = 0;
             }
             pEquippedItem->SocketSeedSetOption = 0;
@@ -209,17 +210,17 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
     if (pItem == nullptr)
         return false;
 
-    const ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItem->Type];
-    bool bEquipable = false;
+    const ITEM_ATTRIBUTE* pItemAttr  = &ItemAttribute[pItem->Type];
+    bool                  bEquipable = false;
     if (pItemAttr->RequireClass[gCharacterManager.GetBaseClass(Hero->Class)])
         bEquipable = true;
 
-    else if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK && pItemAttr->RequireClass[CLASS_WIZARD]
-        && pItemAttr->RequireClass[CLASS_KNIGHT])
+    else if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK && pItemAttr->RequireClass[CLASS_WIZARD] &&
+             pItemAttr->RequireClass[CLASS_KNIGHT])
         bEquipable = true;
 
     const BYTE byFirstClass = gCharacterManager.GetBaseClass(Hero->Class);
-    const BYTE byStepClass = gCharacterManager.GetStepClass(Hero->Class);
+    const BYTE byStepClass  = gCharacterManager.GetStepClass(Hero->Class);
     if (pItemAttr->RequireClass[byFirstClass] > byStepClass)
     {
         return false;
@@ -234,8 +235,9 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
 
     else if (pItemAttr->m_byItemSlot == EQUIPMENT_WEAPON_RIGHT && iIndex == EQUIPMENT_WEAPON_LEFT)
     {
-        if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_KNIGHT || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
-            || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+        if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_KNIGHT ||
+            gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK ||
+            gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
         {
             if (!pItemAttr->TwoHand)
                 bEquipable = true;
@@ -245,10 +247,10 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
                 bEquipable = false;
                 return false;
             }
-#endif //PBG_FIX_EQUIP_TWOHANDSWORD
+#endif  //PBG_FIX_EQUIP_TWOHANDSWORD
         }
         else if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_SUMMONER &&
-            !(pItem->Type >= ITEM_STAFF && pItem->Type <= ITEM_STAFF + MAX_ITEM_INDEX))
+                 !(pItem->Type >= ITEM_STAFF && pItem->Type <= ITEM_STAFF + MAX_ITEM_INDEX))
             bEquipable = true;
     }
     else if (pItemAttr->m_byItemSlot == EQUIPMENT_RING_RIGHT && iIndex == EQUIPMENT_RING_LEFT)
@@ -257,8 +259,8 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
     if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_ELF)
     {
         const ITEM* l = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
-        if (iIndex == EQUIPMENT_WEAPON_RIGHT && l->Type != ITEM_BOLT
-            && (l->Type >= ITEM_BOW && l->Type < ITEM_BOW + MAX_ITEM_INDEX))
+        if (iIndex == EQUIPMENT_WEAPON_RIGHT && l->Type != ITEM_BOLT &&
+            (l->Type >= ITEM_BOW && l->Type < ITEM_BOW + MAX_ITEM_INDEX))
         {
             if (pItem->Type != ITEM_ARROWS)
                 bEquipable = false;
@@ -276,12 +278,12 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
     if (bEquipable == false)
         return false;
 
-    const WORD wStrength = CharacterAttribute->Strength + CharacterAttribute->AddStrength;
+    const WORD wStrength  = CharacterAttribute->Strength + CharacterAttribute->AddStrength;
     const WORD wDexterity = CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
-    const WORD wEnergy = CharacterAttribute->Energy + CharacterAttribute->AddEnergy;
-    const WORD wVitality = CharacterAttribute->Vitality + CharacterAttribute->AddVitality;
-    const WORD wCharisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
-    const WORD wLevel = CharacterAttribute->Level;
+    const WORD wEnergy    = CharacterAttribute->Energy + CharacterAttribute->AddEnergy;
+    const WORD wVitality  = CharacterAttribute->Vitality + CharacterAttribute->AddVitality;
+    const WORD wCharisma  = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
+    const WORD wLevel     = CharacterAttribute->Level;
 
     const int iItemLevel = pItem->Level;
 
@@ -296,7 +298,7 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
         if (SC.SI_isNB)
         {
             iDecNeedStrength = SC.SI_NB.SI_force;
-            iDecNeedDex = SC.SI_NB.SI_activity;
+            iDecNeedDex      = SC.SI_NB.SI_activity;
         }
     }
     if (pItem->SocketCount > 0)
@@ -344,7 +346,8 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
         }
     }
 
-    if (gMapManager.WorldActive == WD_7ATLANSE && (pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_HORN_OF_DINORANT))
+    if (gMapManager.WorldActive == WD_7ATLANSE &&
+        (pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_HORN_OF_DINORANT))
     {
         return false;
     }
@@ -356,14 +359,16 @@ bool CNewUIMyInventory::IsEquipable(int iIndex, ITEM* pItem) const
     {
         return false;
     }
-    if (gMapManager.InChaosCastle() || (Get_State_Only_Elf()
-        && g_isCharacterBuff((&Hero->Object), eBuff_CrywolfHeroContracted)))
+    if (gMapManager.InChaosCastle() ||
+        (Get_State_Only_Elf() && g_isCharacterBuff((&Hero->Object), eBuff_CrywolfHeroContracted)))
     {
-        if ((pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_DARK_RAVEN_ITEM) || pItem->Type == ITEM_HORN_OF_FENRIR)
+        if ((pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_DARK_RAVEN_ITEM) ||
+            pItem->Type == ITEM_HORN_OF_FENRIR)
             return false;
     }
-    else if ((pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_DARK_HORSE_ITEM || pItem->Type == ITEM_HORN_OF_FENRIR)
-        && Hero->Object.CurrentAction >= PLAYER_SIT1 && Hero->Object.CurrentAction <= PLAYER_SIT_FEMALE2)
+    else if ((pItem->Type >= ITEM_HORN_OF_UNIRIA && pItem->Type <= ITEM_DARK_HORSE_ITEM ||
+              pItem->Type == ITEM_HORN_OF_FENRIR) &&
+             Hero->Object.CurrentAction >= PLAYER_SIT1 && Hero->Object.CurrentAction <= PLAYER_SIT_FEMALE2)
     {
         return false;
     }
@@ -470,15 +475,15 @@ bool CNewUIMyInventory::UpdateMouseEvent()
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
     if (pPickedItem && IsPress(VK_LBUTTON) && CheckMouseIn(0, 0, GetScreenWidth(), 429))
     {
-        if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_TRADE) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_MYSHOP_INVENTORY) == true
-            || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == true
-            || g_pNewUISystem->IsVisible(INTERFACE_PURCHASESHOP_INVENTORY) == true)
+        if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_TRADE) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_MYSHOP_INVENTORY) == true ||
+            g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == true ||
+            g_pNewUISystem->IsVisible(INTERFACE_PURCHASESHOP_INVENTORY) == true)
         {
             ResetMouseLButton();
             return false;
@@ -517,20 +522,21 @@ bool CNewUIMyInventory::UpdateMouseEvent()
 #ifdef _EDITOR
         {
             char dbg[256];
-            sprintf_s(dbg, "[DROP] SelectFlag=%d SelectXF=%.1f SelectYF=%.1f "
-                           "CollisionPos=(%.0f,%.0f,%.0f)",
-                      (int)SelectFlag, SelectXF, SelectYF,
-                      CollisionPosition[0], CollisionPosition[1], CollisionPosition[2]);
+            sprintf_s(dbg,
+                      "[DROP] SelectFlag=%d SelectXF=%.1f SelectYF=%.1f "
+                      "CollisionPos=(%.0f,%.0f,%.0f)",
+                      (int)SelectFlag, SelectXF, SelectYF, CollisionPosition[0], CollisionPosition[1],
+                      CollisionPosition[2]);
             g_MuEditorConsoleUI.LogEditor(dbg);
         }
 #endif
         if (SelectFlag)
         {
             const int iSourceIndex = pPickedItem->GetSourceLinealPos();
-            const int tx = (int)(CollisionPosition[0] / TERRAIN_SCALE);
-            const int ty = (int)(CollisionPosition[1] / TERRAIN_SCALE);
-            if (pPickedItem->GetOwnerInventory() == m_pNewInventoryCtrl
-                || g_pMyInventoryExt->GetOwnerOf(pPickedItem) != nullptr)
+            const int tx           = (int)(CollisionPosition[0] / TERRAIN_SCALE);
+            const int ty           = (int)(CollisionPosition[1] / TERRAIN_SCALE);
+            if (pPickedItem->GetOwnerInventory() == m_pNewInventoryCtrl ||
+                g_pMyInventoryExt->GetOwnerOf(pPickedItem) != nullptr)
             {
                 if (Hero->Dead == 0)
                 {
@@ -543,7 +549,7 @@ bool CNewUIMyInventory::UpdateMouseEvent()
                 SocketClient->ToGameServer()->SendDropItemRequest(tx, ty, iSourceIndex);
                 SendDropItem = iSourceIndex;
             }
-            MouseUpdateTime = 0;
+            MouseUpdateTime    = 0;
             MouseUpdateTimeMax = 6;
 
             ResetMouseLButton();
@@ -594,10 +600,9 @@ bool CNewUIMyInventory::UpdateKeyEvent()
 
     if (IsPress('L') == true)
     {
-        if (m_bRepairEnableLevel == true && g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false
-            && g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false
-            && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false
-            )
+        if (m_bRepairEnableLevel == true && g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false &&
+            g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false &&
+            g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false)
         {
             ToggleRepairMode();
 
@@ -688,8 +693,8 @@ bool CNewUIMyInventory::Update()
         m_iPointedSlot = -1;
         for (int i = 0; i < MAX_EQUIPMENT_INDEX; i++)
         {
-            if (CheckMouseIn(m_EquipmentSlots[i].x + 1, m_EquipmentSlots[i].y,
-                m_EquipmentSlots[i].width - 4, m_EquipmentSlots[i].height - 4))
+            if (CheckMouseIn(m_EquipmentSlots[i].x + 1, m_EquipmentSlots[i].y, m_EquipmentSlots[i].width - 4,
+                             m_EquipmentSlots[i].height - 4))
             {
                 m_iPointedSlot = i;
                 break;
@@ -732,7 +737,8 @@ void CNewUIMyInventory::RenderSetOption()
 
     wchar_t strText[128];
     mu_swprintf(strText, L"[%ls]", I18N::Game::SetOption);
-    g_pRenderText->RenderText(m_Pos.x + INVENTORY_WIDTH * 0.2f, m_Pos.y + 25, strText, INVENTORY_WIDTH * 0.3f, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + INVENTORY_WIDTH * 0.2f, m_Pos.y + 25, strText, INVENTORY_WIDTH * 0.3f, 0,
+                              RT3_SORT_CENTER);
 
     if (g_csItemOption.IsViewOptionList() == true)
     {
@@ -756,11 +762,13 @@ void CNewUIMyInventory::RenderSocketOption()
 
     wchar_t strText[128];
     mu_swprintf(strText, L"[%ls]", I18N::Game::SocketOption);
-    g_pRenderText->RenderText(m_Pos.x + INVENTORY_WIDTH * 0.5f, m_Pos.y + 25, strText, INVENTORY_WIDTH * 0.3f, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + INVENTORY_WIDTH * 0.5f, m_Pos.y + 25, strText, INVENTORY_WIDTH * 0.3f, 0,
+                              RT3_SORT_CENTER);
 
     if (CheckMouseIn(m_Pos.x + INVENTORY_WIDTH * 0.5f, m_Pos.y + 20, INVENTORY_WIDTH * 0.5f, 15) == true)
     {
-        m_pNewUI3DRenderMng->RenderUI2DEffect(INVENTORY_CAMERA_Z_ORDER, UI2DEffectCallback, this, -1, ITEM_SOCKET_SET_OPTION);
+        m_pNewUI3DRenderMng->RenderUI2DEffect(INVENTORY_CAMERA_Z_ORDER, UI2DEffectCallback, this, -1,
+                                              ITEM_SOCKET_SET_OPTION);
     }
 }
 
@@ -782,16 +790,9 @@ void CNewUIMyInventory::Render3D()
             }
 
             glColor4f(1.f, 1.f, 1.f, 1.f);
-            RenderItem3D(
-                m_EquipmentSlots[i].x + 1,
-                y,
-                m_EquipmentSlots[i].width - 4,
-                m_EquipmentSlots[i].height - 4,
-                pEquippedItem->Type,
-                pEquippedItem->Level,
-                pEquippedItem->ExcellentFlags,
-                pEquippedItem->AncientDiscriminator,
-                false);
+            RenderItem3D(m_EquipmentSlots[i].x + 1, y, m_EquipmentSlots[i].width - 4, m_EquipmentSlots[i].height - 4,
+                         pEquippedItem->Type, pEquippedItem->Level, pEquippedItem->ExcellentFlags,
+                         pEquippedItem->AncientDiscriminator, false);
         }
     }
 }
@@ -991,66 +992,70 @@ void CNewUIMyInventory::CreateEquippingEffect(ITEM* pItem)
     {
         switch (pItem->Type)
         {
-        case ITEM_HELPER:
-            CreateMount(MODEL_HELPER, pHeroObject->Position, pHeroObject);
-            break;
-        case ITEM_HORN_OF_UNIRIA:
-            CreateMount(MODEL_UNICON, pHeroObject->Position, pHeroObject);
-            if (!Hero->SafeZone)
-                CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1, pHeroObject);
-            break;
-        case ITEM_HORN_OF_DINORANT:
-            CreateMount(MODEL_PEGASUS, pHeroObject->Position, pHeroObject);
-            if (!Hero->SafeZone)
-                CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1, pHeroObject);
-            break;
-        case ITEM_DARK_HORSE_ITEM:
-            CreateMount(MODEL_DARK_HORSE, pHeroObject->Position, pHeroObject);
-            if (!Hero->SafeZone)
-                CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1, pHeroObject);
-            break;
-        case ITEM_HORN_OF_FENRIR:
-            Hero->Helper.ExcellentFlags = pItem->ExcellentFlags;
-            if (pItem->ExcellentFlags == 0x01)
-            {
-                CreateMount(MODEL_FENRIR_BLACK, pHeroObject->Position, pHeroObject);
-            }
-            else if (pItem->ExcellentFlags == 0x02)
-            {
-                CreateMount(MODEL_FENRIR_BLUE, pHeroObject->Position, pHeroObject);
-            }
-            else if (pItem->ExcellentFlags == 0x04)
-            {
-                CreateMount(MODEL_FENRIR_GOLD, pHeroObject->Position, pHeroObject);
-            }
-            else
-            {
-                CreateMount(MODEL_FENRIR_RED, pHeroObject->Position, pHeroObject);
-            }
+            case ITEM_HELPER:
+                CreateMount(MODEL_HELPER, pHeroObject->Position, pHeroObject);
+                break;
+            case ITEM_HORN_OF_UNIRIA:
+                CreateMount(MODEL_UNICON, pHeroObject->Position, pHeroObject);
+                if (!Hero->SafeZone)
+                    CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1,
+                                 pHeroObject);
+                break;
+            case ITEM_HORN_OF_DINORANT:
+                CreateMount(MODEL_PEGASUS, pHeroObject->Position, pHeroObject);
+                if (!Hero->SafeZone)
+                    CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1,
+                                 pHeroObject);
+                break;
+            case ITEM_DARK_HORSE_ITEM:
+                CreateMount(MODEL_DARK_HORSE, pHeroObject->Position, pHeroObject);
+                if (!Hero->SafeZone)
+                    CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1,
+                                 pHeroObject);
+                break;
+            case ITEM_HORN_OF_FENRIR:
+                Hero->Helper.ExcellentFlags = pItem->ExcellentFlags;
+                if (pItem->ExcellentFlags == 0x01)
+                {
+                    CreateMount(MODEL_FENRIR_BLACK, pHeroObject->Position, pHeroObject);
+                }
+                else if (pItem->ExcellentFlags == 0x02)
+                {
+                    CreateMount(MODEL_FENRIR_BLUE, pHeroObject->Position, pHeroObject);
+                }
+                else if (pItem->ExcellentFlags == 0x04)
+                {
+                    CreateMount(MODEL_FENRIR_GOLD, pHeroObject->Position, pHeroObject);
+                }
+                else
+                {
+                    CreateMount(MODEL_FENRIR_RED, pHeroObject->Position, pHeroObject);
+                }
 
-            if (!Hero->SafeZone)
-            {
-                CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1, pHeroObject);
-            }
-            break;
-        case ITEM_DEMON:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_DEMON, pHeroObject->Position, Hero);
-            break;
-        case ITEM_SPIRIT_OF_GUARDIAN:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_SPIRIT_OF_GUARDIAN, pHeroObject->Position, Hero);
-            break;
-        case ITEM_PET_RUDOLF:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_PET_RUDOLF, pHeroObject->Position, Hero);
-            break;
-        case ITEM_PET_PANDA:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_PET_PANDA, pHeroObject->Position, Hero);
-            break;
-        case ITEM_PET_UNICORN:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_PET_UNICORN, pHeroObject->Position, Hero);
-            break;
-        case ITEM_PET_SKELETON:
-            ThePetProcess().CreatePet(pItem->Type, MODEL_PET_SKELETON, pHeroObject->Position, Hero);
-            break;
+                if (!Hero->SafeZone)
+                {
+                    CreateEffect(BITMAP_MAGIC + 1, pHeroObject->Position, pHeroObject->Angle, pHeroObject->Light, 1,
+                                 pHeroObject);
+                }
+                break;
+            case ITEM_DEMON:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_DEMON, pHeroObject->Position, Hero);
+                break;
+            case ITEM_SPIRIT_OF_GUARDIAN:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_SPIRIT_OF_GUARDIAN, pHeroObject->Position, Hero);
+                break;
+            case ITEM_PET_RUDOLF:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_PET_RUDOLF, pHeroObject->Position, Hero);
+                break;
+            case ITEM_PET_PANDA:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_PET_PANDA, pHeroObject->Position, Hero);
+                break;
+            case ITEM_PET_UNICORN:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_PET_UNICORN, pHeroObject->Position, Hero);
+                break;
+            case ITEM_PET_SKELETON:
+                ThePetProcess().CreatePet(pItem->Type, MODEL_PET_SKELETON, pHeroObject->Position, Hero);
+                break;
         }
     }
     if (Hero->EtcPart <= 0 || Hero->EtcPart > 3)
@@ -1061,11 +1066,9 @@ void CNewUIMyInventory::CreateEquippingEffect(ITEM* pItem)
             Hero->EtcPart = PARTS_LION;
         }
     }
-    if (pItem->Type == ITEM_WING_OF_RUIN || pItem->Type == ITEM_CAPE_OF_LORD ||
-        pItem->Type == ITEM_WING + 130 ||
+    if (pItem->Type == ITEM_WING_OF_RUIN || pItem->Type == ITEM_CAPE_OF_LORD || pItem->Type == ITEM_WING + 130 ||
         (pItem->Type >= ITEM_CAPE_OF_FIGHTER && pItem->Type <= ITEM_CAPE_OF_OVERRULE) ||
-        (pItem->Type == ITEM_WING + 135) ||
-        pItem->Type == ITEM_CAPE_OF_EMPEROR)
+        (pItem->Type == ITEM_WING + 135) || pItem->Type == ITEM_CAPE_OF_EMPEROR)
     {
         DeleteCloth(Hero, &Hero->Object);
     }
@@ -1080,15 +1083,15 @@ void CNewUIMyInventory::DeleteEquippingEffectBug(ITEM* pItem)
 
     switch (pItem->Type)
     {
-    case ITEM_CAPE_OF_LORD:
-    case ITEM_WING_OF_RUIN:
-    case ITEM_CAPE_OF_EMPEROR:
-    case ITEM_WING + 130:
-    case ITEM_CAPE_OF_FIGHTER:
-    case ITEM_CAPE_OF_OVERRULE:
-    case ITEM_WING + 135:
-        DeleteCloth(Hero, &Hero->Object);
-        return;
+        case ITEM_CAPE_OF_LORD:
+        case ITEM_WING_OF_RUIN:
+        case ITEM_CAPE_OF_EMPEROR:
+        case ITEM_WING + 130:
+        case ITEM_CAPE_OF_FIGHTER:
+        case ITEM_CAPE_OF_OVERRULE:
+        case ITEM_WING + 135:
+            DeleteCloth(Hero, &Hero->Object);
+            return;
     }
 
     if (IsMount(pItem) == true)
@@ -1113,76 +1116,76 @@ void CNewUIMyInventory::DeleteEquippingEffect()
 
 void CNewUIMyInventory::SetEquipmentSlotInfo()
 {
-    m_EquipmentSlots[EQUIPMENT_HELPER].x = m_Pos.x + 15;
-    m_EquipmentSlots[EQUIPMENT_HELPER].y = m_Pos.y + 44;
-    m_EquipmentSlots[EQUIPMENT_HELPER].width = 46;
-    m_EquipmentSlots[EQUIPMENT_HELPER].height = 46;
+    m_EquipmentSlots[EQUIPMENT_HELPER].x         = m_Pos.x + 15;
+    m_EquipmentSlots[EQUIPMENT_HELPER].y         = m_Pos.y + 44;
+    m_EquipmentSlots[EQUIPMENT_HELPER].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_HELPER].height    = 46;
     m_EquipmentSlots[EQUIPMENT_HELPER].dwBgImage = IMAGE_INVENTORY_ITEM_FAIRY;
 
-    m_EquipmentSlots[EQUIPMENT_HELM].x = m_Pos.x + 75;
-    m_EquipmentSlots[EQUIPMENT_HELM].y = m_Pos.y + 44;
-    m_EquipmentSlots[EQUIPMENT_HELM].width = 46;
-    m_EquipmentSlots[EQUIPMENT_HELM].height = 46;
+    m_EquipmentSlots[EQUIPMENT_HELM].x         = m_Pos.x + 75;
+    m_EquipmentSlots[EQUIPMENT_HELM].y         = m_Pos.y + 44;
+    m_EquipmentSlots[EQUIPMENT_HELM].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_HELM].height    = 46;
     m_EquipmentSlots[EQUIPMENT_HELM].dwBgImage = IMAGE_INVENTORY_ITEM_HELM;
 
-    m_EquipmentSlots[EQUIPMENT_WING].x = m_Pos.x + 120;
-    m_EquipmentSlots[EQUIPMENT_WING].y = m_Pos.y + 44;
-    m_EquipmentSlots[EQUIPMENT_WING].width = 61;
-    m_EquipmentSlots[EQUIPMENT_WING].height = 46;
+    m_EquipmentSlots[EQUIPMENT_WING].x         = m_Pos.x + 120;
+    m_EquipmentSlots[EQUIPMENT_WING].y         = m_Pos.y + 44;
+    m_EquipmentSlots[EQUIPMENT_WING].width     = 61;
+    m_EquipmentSlots[EQUIPMENT_WING].height    = 46;
     m_EquipmentSlots[EQUIPMENT_WING].dwBgImage = IMAGE_INVENTORY_ITEM_WING;
 
-    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].x = m_Pos.x + 135;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].y = m_Pos.y + 87;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].width = 46;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].height = 66;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].x         = m_Pos.x + 135;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].y         = m_Pos.y + 87;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].height    = 66;
     m_EquipmentSlots[EQUIPMENT_WEAPON_LEFT].dwBgImage = IMAGE_INVENTORY_ITEM_LEFT;
 
-    m_EquipmentSlots[EQUIPMENT_ARMOR].x = m_Pos.x + 75;
-    m_EquipmentSlots[EQUIPMENT_ARMOR].y = m_Pos.y + 87;
-    m_EquipmentSlots[EQUIPMENT_ARMOR].width = 46;
-    m_EquipmentSlots[EQUIPMENT_ARMOR].height = 66;
+    m_EquipmentSlots[EQUIPMENT_ARMOR].x         = m_Pos.x + 75;
+    m_EquipmentSlots[EQUIPMENT_ARMOR].y         = m_Pos.y + 87;
+    m_EquipmentSlots[EQUIPMENT_ARMOR].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_ARMOR].height    = 66;
     m_EquipmentSlots[EQUIPMENT_ARMOR].dwBgImage = IMAGE_INVENTORY_ITEM_ARMOR;
 
-    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].x = m_Pos.x + 15;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].y = m_Pos.y + 87;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].width = 46;
-    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].height = 66;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].x         = m_Pos.x + 15;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].y         = m_Pos.y + 87;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].height    = 66;
     m_EquipmentSlots[EQUIPMENT_WEAPON_RIGHT].dwBgImage = IMAGE_INVENTORY_ITEM_RIGHT;
 
-    m_EquipmentSlots[EQUIPMENT_GLOVES].x = m_Pos.x + 15;
-    m_EquipmentSlots[EQUIPMENT_GLOVES].y = m_Pos.y + 150;
-    m_EquipmentSlots[EQUIPMENT_GLOVES].width = 46;
-    m_EquipmentSlots[EQUIPMENT_GLOVES].height = 46;
+    m_EquipmentSlots[EQUIPMENT_GLOVES].x         = m_Pos.x + 15;
+    m_EquipmentSlots[EQUIPMENT_GLOVES].y         = m_Pos.y + 150;
+    m_EquipmentSlots[EQUIPMENT_GLOVES].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_GLOVES].height    = 46;
     m_EquipmentSlots[EQUIPMENT_GLOVES].dwBgImage = IMAGE_INVENTORY_ITEM_GLOVES;
 
-    m_EquipmentSlots[EQUIPMENT_PANTS].x = m_Pos.x + 75;
-    m_EquipmentSlots[EQUIPMENT_PANTS].y = m_Pos.y + 150;
-    m_EquipmentSlots[EQUIPMENT_PANTS].width = 46;
-    m_EquipmentSlots[EQUIPMENT_PANTS].height = 46;
+    m_EquipmentSlots[EQUIPMENT_PANTS].x         = m_Pos.x + 75;
+    m_EquipmentSlots[EQUIPMENT_PANTS].y         = m_Pos.y + 150;
+    m_EquipmentSlots[EQUIPMENT_PANTS].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_PANTS].height    = 46;
     m_EquipmentSlots[EQUIPMENT_PANTS].dwBgImage = IMAGE_INVENTORY_ITEM_PANTS;
 
-    m_EquipmentSlots[EQUIPMENT_BOOTS].x = m_Pos.x + 135;
-    m_EquipmentSlots[EQUIPMENT_BOOTS].y = m_Pos.y + 150;
-    m_EquipmentSlots[EQUIPMENT_BOOTS].width = 46;
-    m_EquipmentSlots[EQUIPMENT_BOOTS].height = 46;
+    m_EquipmentSlots[EQUIPMENT_BOOTS].x         = m_Pos.x + 135;
+    m_EquipmentSlots[EQUIPMENT_BOOTS].y         = m_Pos.y + 150;
+    m_EquipmentSlots[EQUIPMENT_BOOTS].width     = 46;
+    m_EquipmentSlots[EQUIPMENT_BOOTS].height    = 46;
     m_EquipmentSlots[EQUIPMENT_BOOTS].dwBgImage = IMAGE_INVENTORY_ITEM_BOOT;
 
-    m_EquipmentSlots[EQUIPMENT_RING_LEFT].x = m_Pos.x + 114;
-    m_EquipmentSlots[EQUIPMENT_RING_LEFT].y = m_Pos.y + 150;
-    m_EquipmentSlots[EQUIPMENT_RING_LEFT].width = 28;
-    m_EquipmentSlots[EQUIPMENT_RING_LEFT].height = 28;
+    m_EquipmentSlots[EQUIPMENT_RING_LEFT].x         = m_Pos.x + 114;
+    m_EquipmentSlots[EQUIPMENT_RING_LEFT].y         = m_Pos.y + 150;
+    m_EquipmentSlots[EQUIPMENT_RING_LEFT].width     = 28;
+    m_EquipmentSlots[EQUIPMENT_RING_LEFT].height    = 28;
     m_EquipmentSlots[EQUIPMENT_RING_LEFT].dwBgImage = IMAGE_INVENTORY_ITEM_RING;
 
-    m_EquipmentSlots[EQUIPMENT_AMULET].x = m_Pos.x + 54;
-    m_EquipmentSlots[EQUIPMENT_AMULET].y = m_Pos.y + 87;
-    m_EquipmentSlots[EQUIPMENT_AMULET].width = 28;
-    m_EquipmentSlots[EQUIPMENT_AMULET].height = 28;
+    m_EquipmentSlots[EQUIPMENT_AMULET].x         = m_Pos.x + 54;
+    m_EquipmentSlots[EQUIPMENT_AMULET].y         = m_Pos.y + 87;
+    m_EquipmentSlots[EQUIPMENT_AMULET].width     = 28;
+    m_EquipmentSlots[EQUIPMENT_AMULET].height    = 28;
     m_EquipmentSlots[EQUIPMENT_AMULET].dwBgImage = IMAGE_INVENTORY_ITEM_NECKLACE;
 
-    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].x = m_Pos.x + 54;
-    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].y = m_Pos.y + 150;
-    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].width = 28;
-    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].height = 28;
+    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].x         = m_Pos.x + 54;
+    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].y         = m_Pos.y + 150;
+    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].width     = 28;
+    m_EquipmentSlots[EQUIPMENT_RING_RIGHT].height    = 28;
     m_EquipmentSlots[EQUIPMENT_RING_RIGHT].dwBgImage = IMAGE_INVENTORY_ITEM_RING;
 }
 
@@ -1288,20 +1291,19 @@ void CNewUIMyInventory::RenderEquippedItem()
         EnableAlphaTest();
 
         RenderImage(m_EquipmentSlots[i].dwBgImage, m_EquipmentSlots[i].x, m_EquipmentSlots[i].y,
-            m_EquipmentSlots[i].width, m_EquipmentSlots[i].height);
+                    m_EquipmentSlots[i].width, m_EquipmentSlots[i].height);
         DisableAlphaBlend();
 
         ITEM* pEquipmentItemSlot = &CharacterMachine->Equipment[i];
         if (pEquipmentItemSlot->Type != -1)
         {
-            ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pEquipmentItemSlot->Type];
-            const int iLevel = pEquipmentItemSlot->Level;
-            const int iMaxDurability = CalcMaxDurability(pEquipmentItemSlot, pItemAttr, iLevel);
+            ITEM_ATTRIBUTE* pItemAttr      = &ItemAttribute[pEquipmentItemSlot->Type];
+            const int       iLevel         = pEquipmentItemSlot->Level;
+            const int       iMaxDurability = CalcMaxDurability(pEquipmentItemSlot, pItemAttr, iLevel);
 
             if (i == EQUIPMENT_RING_LEFT || i == EQUIPMENT_RING_RIGHT)
             {
-                if (pEquipmentItemSlot->Type == ITEM_WIZARDS_RING && iLevel == 1
-                    || iLevel == 2)
+                if (pEquipmentItemSlot->Type == ITEM_WIZARDS_RING && iLevel == 1 || iLevel == 2)
                 {
                     continue;
                 }
@@ -1326,22 +1328,24 @@ void CNewUIMyInventory::RenderEquippedItem()
             }
 
             EnableAlphaTest();
-            RenderColor(m_EquipmentSlots[i].x + 1, m_EquipmentSlots[i].y, m_EquipmentSlots[i].width - 4, m_EquipmentSlots[i].height - 4);
+            RenderColor(m_EquipmentSlots[i].x + 1, m_EquipmentSlots[i].y, m_EquipmentSlots[i].width - 4,
+                        m_EquipmentSlots[i].height - 4);
             EndRenderColor();
         }
     }
 
     if (CNewUIInventoryCtrl::GetPickedItem() && m_iPointedSlot != -1)
     {
-        ITEM* pItemObj = CNewUIInventoryCtrl::GetPickedItem()->GetItem();
+        ITEM*       pItemObj           = CNewUIInventoryCtrl::GetPickedItem()->GetItem();
         const ITEM* pEquipmentItemSlot = &CharacterMachine->Equipment[m_iPointedSlot];
-        if (pItemObj && (pEquipmentItemSlot->Type != -1 || false == IsEquipable(m_iPointedSlot, pItemObj))
-            && !((gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER) && (m_iPointedSlot == EQUIPMENT_GLOVES)))
+        if (pItemObj && (pEquipmentItemSlot->Type != -1 || false == IsEquipable(m_iPointedSlot, pItemObj)) &&
+            !((gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER) &&
+              (m_iPointedSlot == EQUIPMENT_GLOVES)))
         {
             glColor4f(0.9f, 0.1f, 0.1f, 0.4f);
             EnableAlphaTest();
             RenderColor(m_EquipmentSlots[m_iPointedSlot].x + 1, m_EquipmentSlots[m_iPointedSlot].y,
-                m_EquipmentSlots[m_iPointedSlot].width - 4, m_EquipmentSlots[m_iPointedSlot].height - 4);
+                        m_EquipmentSlots[m_iPointedSlot].width - 4, m_EquipmentSlots[m_iPointedSlot].height - 4);
             EndRenderColor();
         }
     }
@@ -1356,13 +1360,12 @@ void CNewUIMyInventory::RenderButtons()
 {
     EnableAlphaTest();
 
-    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_TRADE) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false
-        && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == false)
+    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false && g_pNewUISystem->IsVisible(INTERFACE_TRADE) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false &&
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == false)
     {
         if (m_bRepairEnableLevel == true)
         {
@@ -1392,7 +1395,9 @@ void CNewUIMyInventory::RenderInventoryDetails() const
 
     const DWORD dwZen = CharacterMachine->Gold;
 
-    wchar_t Text[256] = { 0, };
+    wchar_t Text[256] = {
+        0,
+    };
     ConvertGold(dwZen, Text);
 
     g_pRenderText->SetTextColor(getGoldColor(dwZen));
@@ -1409,7 +1414,7 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
     {
         if (CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem())
         {
-            ITEM* pItemObj = pPickedItem->GetItem();
+            ITEM*     pItemObj     = pPickedItem->GetItem();
             const int iSourceIndex = pPickedItem->GetSourceLinealPos();
             const int iTargetIndex = m_iPointedSlot;
             if (pItemObj->bPeriodItem && pItemObj->bExpiredPeriod)
@@ -1429,10 +1434,11 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
 
             if (g_ChangeRingMgr->CheckChangeRing(pPickedItem->GetItem()->Type))
             {
-                ITEM* pItemRingLeft = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
+                ITEM* pItemRingLeft  = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
                 ITEM* pItemRingRight = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
 
-                if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type) || g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
+                if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type) ||
+                    g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
                 {
                     g_pSystemLogBox->AddText(I18N::Game::CanTWearItem, TYPE_ERROR_MESSAGE);
                     CNewUIInventoryCtrl::BackupPickedItem();
@@ -1457,7 +1463,7 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
                 }
             }
         }
-        else // pPickedItem == NULL
+        else  // pPickedItem == NULL
         {
             if (GetRepairMode() == REPAIR_MODE_ON)
             {
@@ -1491,7 +1497,7 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
                 if (gMapManager.WorldActive == WD_10HEAVEN)
                 {
                     const ITEM* pEquippedPetItem = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
-                    bool bPicked = true;
+                    bool        bPicked          = true;
 
                     if (m_iPointedSlot == EQUIPMENT_HELPER || m_iPointedSlot == EQUIPMENT_WING)
                     {
@@ -1499,8 +1505,10 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
                         {
                             bPicked = false;
                         }
-                        else if (((m_iPointedSlot == EQUIPMENT_WING) && !((pEquippedPetItem->Type == ITEM_HORN_OF_DINORANT) || (pEquippedPetItem->Type == ITEM_DARK_HORSE_ITEM) || (pEquippedPetItem->Type == ITEM_HORN_OF_FENRIR)))
-                            )
+                        else if (((m_iPointedSlot == EQUIPMENT_WING) &&
+                                  !((pEquippedPetItem->Type == ITEM_HORN_OF_DINORANT) ||
+                                    (pEquippedPetItem->Type == ITEM_DARK_HORSE_ITEM) ||
+                                    (pEquippedPetItem->Type == ITEM_HORN_OF_FENRIR))))
                         {
                             bPicked = false;
                         }
@@ -1530,10 +1538,8 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
         const CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
 
         const int iSourceIndex = m_iPointedSlot;
-        if (GetRepairMode() != REPAIR_MODE_ON && EquipmentItem == false
-            && pPickedItem == nullptr
-            && iSourceIndex != -1
-            && !g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP))  // Don't unequip when NPC shop is open
+        if (GetRepairMode() != REPAIR_MODE_ON && EquipmentItem == false && pPickedItem == nullptr &&
+            iSourceIndex != -1 && !g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP))  // Don't unequip when NPC shop is open
         {
             ResetMouseRButton();
 
@@ -1554,7 +1560,8 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
                         pPickedItem->HidePickedItem();
                     }
 
-                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pEquippedItem, STORAGE_TYPE::INVENTORY, emptySlotIndex);
+                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pEquippedItem,
+                                             STORAGE_TYPE::INVENTORY, emptySlotIndex);
                     return true;
                 }
             }
@@ -1599,13 +1606,12 @@ bool CNewUIMyInventory::BtnProcess()
         return true;
     }
 
-    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_TRADE) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == false
-        && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false
-        && g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == false)
+    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == false && g_pNewUISystem->IsVisible(INTERFACE_TRADE) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_DEVILSQUARE) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_BLOODCASTLE) == false &&
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) == false &&
+        g_pNewUISystem->IsVisible(INTERFACE_STORAGE) == false)
     {
         if (m_bRepairEnableLevel == true && m_BtnRepair.UpdateMouseEvent() == true)
         {
@@ -1662,42 +1668,42 @@ bool CNewUIMyInventory::CanRegisterItemHotKey(int iType)
 {
     switch (iType)
     {
-    case ITEM_APPLE:
-    case ITEM_SMALL_HEALING_POTION:
-    case ITEM_MEDIUM_HEALING_POTION:
-    case ITEM_LARGE_HEALING_POTION:
-    case ITEM_SMALL_MANA_POTION:
-    case ITEM_MEDIUM_MANA_POTION:
-    case ITEM_LARGE_MANA_POTION:
-    case ITEM_SIEGE_POTION:
-    case ITEM_ANTIDOTE:
-    case ITEM_ALE:
-    case ITEM_TOWN_PORTAL_SCROLL:
-    case ITEM_POTION + 20:
-    case ITEM_SMALL_SHIELD_POTION:
-    case ITEM_MEDIUM_SHIELD_POTION:
-    case ITEM_LARGE_SHIELD_POTION:
-    case ITEM_SMALL_COMPLEX_POTION:
-    case ITEM_MEDIUM_COMPLEX_POTION:
-    case ITEM_LARGE_COMPLEX_POTION:
-    case ITEM_JACK_OLANTERN_BLESSINGS:
-    case ITEM_JACK_OLANTERN_WRATH:
-    case ITEM_JACK_OLANTERN_CRY:
-    case ITEM_JACK_OLANTERN_FOOD:
-    case ITEM_JACK_OLANTERN_DRINK:
-    case ITEM_POTION + 70:
-    case ITEM_POTION + 71:
-    case ITEM_POTION + 78:
-    case ITEM_POTION + 79:
-    case ITEM_POTION + 80:
-    case ITEM_POTION + 81:
-    case ITEM_POTION + 82:
-    case ITEM_POTION + 94:
-    case ITEM_CHERRY_BLOSSOM_WINE:
-    case ITEM_CHERRY_BLOSSOM_RICE_CAKE:
-    case ITEM_CHERRY_BLOSSOM_FLOWER_PETAL:
-    case ITEM_POTION + 133:
-        return true;
+        case ITEM_APPLE:
+        case ITEM_SMALL_HEALING_POTION:
+        case ITEM_MEDIUM_HEALING_POTION:
+        case ITEM_LARGE_HEALING_POTION:
+        case ITEM_SMALL_MANA_POTION:
+        case ITEM_MEDIUM_MANA_POTION:
+        case ITEM_LARGE_MANA_POTION:
+        case ITEM_SIEGE_POTION:
+        case ITEM_ANTIDOTE:
+        case ITEM_ALE:
+        case ITEM_TOWN_PORTAL_SCROLL:
+        case ITEM_POTION + 20:
+        case ITEM_SMALL_SHIELD_POTION:
+        case ITEM_MEDIUM_SHIELD_POTION:
+        case ITEM_LARGE_SHIELD_POTION:
+        case ITEM_SMALL_COMPLEX_POTION:
+        case ITEM_MEDIUM_COMPLEX_POTION:
+        case ITEM_LARGE_COMPLEX_POTION:
+        case ITEM_JACK_OLANTERN_BLESSINGS:
+        case ITEM_JACK_OLANTERN_WRATH:
+        case ITEM_JACK_OLANTERN_CRY:
+        case ITEM_JACK_OLANTERN_FOOD:
+        case ITEM_JACK_OLANTERN_DRINK:
+        case ITEM_POTION + 70:
+        case ITEM_POTION + 71:
+        case ITEM_POTION + 78:
+        case ITEM_POTION + 79:
+        case ITEM_POTION + 80:
+        case ITEM_POTION + 81:
+        case ITEM_POTION + 82:
+        case ITEM_POTION + 94:
+        case ITEM_CHERRY_BLOSSOM_WINE:
+        case ITEM_CHERRY_BLOSSOM_RICE_CAKE:
+        case ITEM_CHERRY_BLOSSOM_FLOWER_PETAL:
+        case ITEM_POTION + 133:
+            return true;
     }
 
     return false;
@@ -1714,13 +1720,10 @@ bool CNewUIMyInventory::HandleInventoryActions(CNewUIInventoryCtrl* targetContro
 
 bool CNewUIMyInventory::CanOpenMyShopInterface()
 {
-    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP)
-        || g_pNewUISystem->IsVisible(INTERFACE_STORAGE)
-        || g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        || g_pNewUISystem->IsVisible(INTERFACE_TRADE)
-        || gMapManager.IsCursedTemple()
-        )
+    if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) || g_pNewUISystem->IsVisible(INTERFACE_STORAGE) ||
+        g_pNewUISystem->IsVisible(INTERFACE_MIXINVENTORY) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND) || g_pNewUISystem->IsVisible(INTERFACE_TRADE) ||
+        gMapManager.IsCursedTemple())
     {
         return false;
     }
@@ -1795,13 +1798,15 @@ bool CNewUIMyInventory::IsItem(short int siType, bool bcheckPick) const
         {
             const ITEM* pItemObj = pPickedItem->GetItem();
 
-            if (pItemObj->Type == siType) return true;
+            if (pItemObj->Type == siType)
+                return true;
         }
     }
 
     const ITEM* pholyitemObj = m_pNewInventoryCtrl->FindTypeItem(siType);
 
-    if (pholyitemObj) return true;
+    if (pholyitemObj)
+        return true;
 
     return false;
 }
@@ -1822,7 +1827,7 @@ BYTE CNewUIMyInventory::GetDurabilityPointedItem() const
 
     if (m_iPointedSlot != -1)
     {
-        pItem = &CharacterMachine->Equipment[m_iPointedSlot];
+        pItem                   = &CharacterMachine->Equipment[m_iPointedSlot];
         const BYTE byDurability = pItem->Durability;
 
         return byDurability;
@@ -1878,15 +1883,15 @@ int CNewUIMyInventory::FindHealingItemIndex() const
 
 void CNewUIMyInventory::ResetMouseLButton()
 {
-    MouseLButton = false;
-    MouseLButtonPop = false;
+    MouseLButton     = false;
+    MouseLButtonPop  = false;
     MouseLButtonPush = false;
 }
 
 void CNewUIMyInventory::ResetMouseRButton()
 {
-    MouseRButton = false;
-    MouseRButtonPop = false;
+    MouseRButton     = false;
+    MouseRButtonPop  = false;
     MouseRButtonPush = false;
 }
 
@@ -1898,13 +1903,13 @@ BOOL SEASON3B::CNewUIMyInventory::IsInvenItem(const short sType)
     if (FALSE
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
         || (sType == ITEM_HELPER + 128 || sType == ITEM_HELPER + 129 || sType == ITEM_HELPER + 134)
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
+#endif  //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
         || (sType >= ITEM_HELPER + 130 && sType <= ITEM_HELPER + 133)
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
-        )
+#endif  //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+    )
         bInvenItem = TRUE;
 
     return bInvenItem;
 }
-#endif //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
+#endif  //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY

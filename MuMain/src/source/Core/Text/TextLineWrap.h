@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef> // size_t
+#include <cstddef>  // size_t
 #include <functional>
 #include <string>
 #include <vector>
@@ -39,14 +39,14 @@ using MeasureTextWidth = std::function<int(const wchar_t* text, size_t length)>;
 std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth, const MeasureTextWidth& measureWidth);
 
 // Keep the three-argument symbol available for existing callers and objects.
-std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth,
-    const MeasureTextWidth& measureWidth, int firstLineInset);
+std::vector<std::wstring> WrapTextToWidth(const std::wstring& text, int maxWidth, const MeasureTextWidth& measureWidth,
+                                          int firstLineInset);
 
 // Writes measured lines into a bounded legacy 2D buffer. Every row is terminated
 // and unused rows are cleared, including when the input contains many paragraphs.
-int WrapTextToBuffer(const wchar_t* text, wchar_t* output, int rows, int columns,
-    int maxWidth, const MeasureTextWidth& measureWidth, bool indentParagraphs = false,
-    wchar_t paragraphSeparator = L'\n', int firstLineInset = 0);
+int WrapTextToBuffer(const wchar_t* text, wchar_t* output, int rows, int columns, int maxWidth,
+                     const MeasureTextWidth& measureWidth, bool indentParagraphs = false,
+                     wchar_t paragraphSeparator = L'\n', int firstLineInset = 0);
 
 /**
  * @brief Splits Text into two parts near its midpoint at a space.

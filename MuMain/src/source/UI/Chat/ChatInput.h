@@ -4,5 +4,5 @@
 // command, a whisper, or a normal message. Extracted from ZzzInterface.cpp.
 namespace UI::Chat
 {
-    void CheckChatText(wchar_t* Text);
+void CheckChatText(wchar_t* Text);
 }

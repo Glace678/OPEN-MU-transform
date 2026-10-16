@@ -1,4 +1,4 @@
-﻿// <copyright file="PacketBindings.h" company="MUnique">
+﻿  // <copyright file="PacketBindings.h" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -20,20 +20,26 @@
 #include "PacketFunctions_CommonEnums.h"
 #include "PacketFunctions_ChatServer_Enums.h"
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendAuthenticate)(int32_t, uint16_t , const BYTE* , uint32_t);
-inline SendAuthenticate dotnet_SendAuthenticate = reinterpret_cast<SendAuthenticate>(symLoad(munique_client_library_handle, "SendAuthenticate"));
+    typedef void(CORECLR_DELEGATE_CALLTYPE* SendAuthenticate)(int32_t, uint16_t, const BYTE*, uint32_t);
+inline SendAuthenticate dotnet_SendAuthenticate =
+    reinterpret_cast<SendAuthenticate>(symLoad(munique_client_library_handle, "SendAuthenticate"));
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatRoomClientJoined)(int32_t, BYTE , const wchar_t* );
-inline SendChatRoomClientJoined dotnet_SendChatRoomClientJoined = reinterpret_cast<SendChatRoomClientJoined>(symLoad(munique_client_library_handle, "SendChatRoomClientJoined"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatRoomClientJoined)(int32_t, BYTE, const wchar_t*);
+inline SendChatRoomClientJoined dotnet_SendChatRoomClientJoined =
+    reinterpret_cast<SendChatRoomClientJoined>(symLoad(munique_client_library_handle, "SendChatRoomClientJoined"));
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendLeaveChatRoom)(int32_t);
-inline SendLeaveChatRoom dotnet_SendLeaveChatRoom = reinterpret_cast<SendLeaveChatRoom>(symLoad(munique_client_library_handle, "SendLeaveChatRoom"));
+inline SendLeaveChatRoom dotnet_SendLeaveChatRoom =
+    reinterpret_cast<SendLeaveChatRoom>(symLoad(munique_client_library_handle, "SendLeaveChatRoom"));
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatRoomClientLeft)(int32_t, BYTE , const wchar_t* );
-inline SendChatRoomClientLeft dotnet_SendChatRoomClientLeft = reinterpret_cast<SendChatRoomClientLeft>(symLoad(munique_client_library_handle, "SendChatRoomClientLeft"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatRoomClientLeft)(int32_t, BYTE, const wchar_t*);
+inline SendChatRoomClientLeft dotnet_SendChatRoomClientLeft =
+    reinterpret_cast<SendChatRoomClientLeft>(symLoad(munique_client_library_handle, "SendChatRoomClientLeft"));
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatMessage)(int32_t, BYTE , BYTE , const BYTE* , uint32_t);
-inline SendChatMessage dotnet_SendChatMessage = reinterpret_cast<SendChatMessage>(symLoad(munique_client_library_handle, "SendChatMessage"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatMessage)(int32_t, BYTE, BYTE, const BYTE*, uint32_t);
+inline SendChatMessage dotnet_SendChatMessage =
+    reinterpret_cast<SendChatMessage>(symLoad(munique_client_library_handle, "SendChatMessage"));
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendKeepAlive)(int32_t);
-inline SendKeepAlive dotnet_SendKeepAlive = reinterpret_cast<SendKeepAlive>(symLoad(munique_client_library_handle, "SendKeepAlive"));
+inline SendKeepAlive dotnet_SendKeepAlive =
+    reinterpret_cast<SendKeepAlive>(symLoad(munique_client_library_handle, "SendKeepAlive"));

@@ -121,13 +121,12 @@ bool CursedTemple::GetInterfaceState(int type, int subtype)
     return result;
 }
 
-bool CursedTemple::IsPartyMember(int selectcharacterindex)
+bool CursedTemple::IsPartyMember(DWORD selectcharacterindex)
 {
     if (PartyNumber == 0) return false;
 
-    if (selectcharacterindex < 0 || selectcharacterindex >= MAX_CHARACTERS_CLIENT) return false;
-
     CHARACTER* c = &CharactersClient[selectcharacterindex];
+    if (c == NULL) return false;
 
     for (int i = 0; i < PartyNumber; ++i)
     {
@@ -1198,9 +1197,9 @@ void CursedTemple::ReceiveCursedTempleInfo(const BYTE* ReceiveBuffer)
     if (data->btUserIndex != 0xffff)
     {
         WORD holyitemkey = data->btUserIndex;
-        int holyitemcharacterindex = FindCharacterIndex(holyitemkey);
+        WORD holyitemcharacterindex = FindCharacterIndex(holyitemkey);
 
-        if (holyitemcharacterindex >= 0 && holyitemcharacterindex < MAX_CHARACTERS_CLIENT)
+        if (holyitemcharacterindex != MAX_CHARACTERS_CLIENT)
         {
             CHARACTER* c = &CharactersClient[holyitemcharacterindex];
             OBJECT* o = &c->Object;

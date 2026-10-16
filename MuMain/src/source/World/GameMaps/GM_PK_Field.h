@@ -30,9 +30,9 @@ public:
     void RenderAfterObjectMesh(OBJECT* object, BMD* bmd, bool extraMon = false) override;
 
     CHARACTER* CreateMonster(int type, int positionX, int positionY, int key) override;
-    bool MoveMonsterVisual(OBJECT* object, BMD* bmd) override;
-    void MoveBlurEffect(CHARACTER* character, OBJECT* object, BMD* bmd) override;
-    bool RenderMonsterVisual(CHARACTER* character, OBJECT* object, BMD* bmd) override;
+    bool       MoveMonsterVisual(OBJECT* object, BMD* bmd) override;
+    void       MoveBlurEffect(CHARACTER* character, OBJECT* object, BMD* bmd) override;
+    bool       RenderMonsterVisual(CHARACTER* character, OBJECT* object, BMD* bmd) override;
 
     bool PlayMonsterSound(OBJECT* object) override;
     void PlayObjectSound(OBJECT* object) override;

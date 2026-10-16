@@ -8,9 +8,7 @@
 
 using namespace SEASON3B;
 
-CNewUIDuelWatchUserListWindow::CNewUIDuelWatchUserListWindow()
-{
-}
+CNewUIDuelWatchUserListWindow::CNewUIDuelWatchUserListWindow() {}
 
 CNewUIDuelWatchUserListWindow::~CNewUIDuelWatchUserListWindow()
 {
@@ -56,8 +54,8 @@ bool CNewUIDuelWatchUserListWindow::UpdateMouseEvent()
     if (true == BtnProcess())
         return false;
 
-    POINT ptSize = { 57, 17 };
-    POINT ptOrigin = { m_Pos.x, m_Pos.y - (ptSize.y + 1) * g_DuelMgr.GetDuelWatchUserCount() };
+    POINT ptSize   = {57, 17};
+    POINT ptOrigin = {m_Pos.x, m_Pos.y - (ptSize.y + 1) * g_DuelMgr.GetDuelWatchUserCount()};
 
     if (CheckMouseIn(ptOrigin.x, ptOrigin.y, ptSize.x, (ptSize.y + 1) * g_DuelMgr.GetDuelWatchUserCount() + 10))
         return false;
@@ -85,15 +83,15 @@ bool CNewUIDuelWatchUserListWindow::Render()
 
     RenderFrame();
 
-    
-
     SIZE TextSize;
 
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), L"Q", 1, &TextSize);
     float fFontHeight = TextSize.cy / g_fScreenRate_y;
 
-    POINT ptSize = { 57, 17 };
-    POINT ptOrigin = Core::Platform::MakePoint(m_Pos.x, m_Pos.y - (ptSize.y + 1) * (long)g_DuelMgr.GetDuelWatchUserCount() + (ptSize.y - (long)fFontHeight) / 2 + 1);
+    POINT ptSize = {57, 17};
+    POINT ptOrigin =
+        Core::Platform::MakePoint(m_Pos.x, m_Pos.y - (ptSize.y + 1) * (long)g_DuelMgr.GetDuelWatchUserCount() +
+                                               (ptSize.y - (long)fFontHeight) / 2 + 1);
 
     for (int i = 0; i < g_DuelMgr.GetDuelWatchUserCount(); ++i)
     {
@@ -106,13 +104,9 @@ bool CNewUIDuelWatchUserListWindow::Render()
     return true;
 }
 
-void CNewUIDuelWatchUserListWindow::OpeningProcess()
-{
-}
+void CNewUIDuelWatchUserListWindow::OpeningProcess() {}
 
-void CNewUIDuelWatchUserListWindow::ClosingProcess()
-{
-}
+void CNewUIDuelWatchUserListWindow::ClosingProcess() {}
 
 float CNewUIDuelWatchUserListWindow::GetLayerDepth()
 {
@@ -131,7 +125,7 @@ void CNewUIDuelWatchUserListWindow::UnloadImages()
 
 void CNewUIDuelWatchUserListWindow::RenderFrame()
 {
-    POINT ptSize = { 57, 17 };
+    POINT ptSize = {57, 17};
 
     int i;
     glColor4f(0.f, 0.f, 0.f, 0.8f);

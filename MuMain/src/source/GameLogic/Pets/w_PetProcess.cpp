@@ -15,20 +15,13 @@
 #include "w_PetProcess.h"
 #include "Core/Utilities/ReadScript.h"
 
-
 PetInfoPtr PetInfo::Make()
 {
     PetInfoPtr petInfo(new PetInfo);
     return petInfo;
 }
 
-PetInfo::PetInfo() :
-    m_scale(0.0f),
-    m_actions(NULL),
-    m_speeds(NULL),
-    m_count(0)
-{
-}
+PetInfo::PetInfo() : m_scale(0.0f), m_actions(NULL), m_speeds(NULL), m_count(0) {}
 
 PetInfo::~PetInfo()
 {
@@ -55,7 +48,7 @@ void PetInfo::SetActions(int count, int* actions, float* speeds)
 
     Destroy();
 
-    m_count = count;
+    m_count   = count;
     m_actions = new int[count]();
     memcpy(m_actions, actions, sizeof(int) * m_count);
 
@@ -78,9 +71,7 @@ PetProcessPtr PetProcess::Make()
     return petprocess;
 }
 
-PetProcess::PetProcess()
-{
-}
+PetProcess::PetProcess() {}
 
 PetProcess::~PetProcess()
 {
@@ -105,7 +96,7 @@ void PetProcess::Init()
 #ifdef PJH_ADD_PANDA_PET
     PetActionCollecterAddPtr actionCollecter_Add = PetActionCollecterAdd::Make();
     m_petsAction.insert(make_pair(PANDA, actionCollecter_Add));
-#endif //#ifdef PJH_ADD_PANDA_PET
+#endif  //#ifdef PJH_ADD_PANDA_PET
 
     PetActionUnicornPtr actionUnicorn = PetActionUnicorn::Make();
     m_petsAction.insert(make_pair(UNICORN, actionUnicorn));
@@ -113,15 +104,12 @@ void PetProcess::Init()
     PetActionCollecterSkeletonPtr actionCollecter_Skeleton = PetActionCollecterSkeleton::Make();
     m_petsAction.insert(make_pair(SKELETON, actionCollecter_Skeleton));
 
-    if (!LoadData())
-    {
-        std::exit(EXIT_FAILURE);
-    }
+    LoadData();
 }
 
 void PetProcess::Destroy()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -159,9 +147,10 @@ void PetProcess::Register(std::shared_ptr<PetObject> pPet)
 
 void PetProcess::UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -169,13 +158,14 @@ void PetProcess::UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll)
 
         if (basepet.expired() == FALSE)
         {
-            if ((-1 == itemType && basepet.lock()->IsSameOwner(&Owner->Object))
-                || basepet.lock()->IsSameObject(&Owner->Object, itemType))
+            if ((-1 == itemType && basepet.lock()->IsSameOwner(&Owner->Object)) ||
+                basepet.lock()->IsSameObject(&Owner->Object, itemType))
             {
                 basepet.lock()->Release();
                 m_petsList.erase(tempiter);
 
-                if (-1 == itemType || !isUnregistAll) return;
+                if (-1 == itemType || !isUnregistAll)
+                    return;
             }
         }
     }
@@ -183,80 +173,83 @@ void PetProcess::UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll)
 
 namespace
 {
-    std::optional<Data::Pets::PetDataLayout> ReadPetData(FILE* file, std::vector<BYTE>& payload)
-    {
-        if (fseek(file, 0, SEEK_END) != 0)
-            return std::nullopt;
-        const auto fileSize = ftell(file);
-        if (fileSize < 0 || fseek(file, 0, SEEK_SET) != 0)
-            return std::nullopt;
-        std::array<std::int32_t, 3> header {};
-        if (fread(header.data(), sizeof(header), 1, file) != 1)
-            return std::nullopt;
-        const auto layout = Data::Pets::PetDataLayout::Validate(header[1], header[2], static_cast<std::size_t>(fileSize));
-        if (!layout)
-            return std::nullopt;
-        payload.resize(layout->payloadSize);
-        DWORD checksum = 0;
-        if (fread(payload.data(), 1, payload.size(), file) != payload.size()
-            || fread(&checksum, sizeof(checksum), 1, file) != 1
-            || checksum != GenerateCheckSum2(payload.data(), layout->payloadSize, 0x7F1D))
-            return std::nullopt;
-        return layout;
-    }
+std::optional<Data::Pets::PetDataLayout> ReadPetData(FILE* file, std::vector<BYTE>& payload)
+{
+    if (fseek(file, 0, SEEK_END) != 0)
+        return std::nullopt;
+    const auto fileSize = ftell(file);
+    if (fileSize < 0 || fseek(file, 0, SEEK_SET) != 0)
+        return std::nullopt;
+    std::array<std::int32_t, 3> header{};
+    if (fread(header.data(), sizeof(header), 1, file) != 1)
+        return std::nullopt;
+    const auto layout = Data::Pets::PetDataLayout::Validate(header[1], header[2], static_cast<std::size_t>(fileSize));
+    if (!layout)
+        return std::nullopt;
+    payload.resize(layout->payloadSize);
+    DWORD checksum = 0;
+    if (fread(payload.data(), 1, payload.size(), file) != payload.size() ||
+        fread(&checksum, sizeof(checksum), 1, file) != 1 ||
+        checksum != GenerateCheckSum2(payload.data(), layout->payloadSize, 0x7F1D))
+        return std::nullopt;
+    return layout;
+}
 
-    PetInfoPtr ReadPetRecord(BYTE* record, const Data::Pets::PetDataLayout& layout,
-        int& type, std::vector<int>& actions, std::vector<float>& speeds)
-    {
-        BuxConvert(record, layout.recordSize);
-        int blendMesh = -1;
-        float scale = 0;
-        int count = 0;
-        constexpr int BlendMeshOffset = sizeof(std::int32_t);
-        constexpr int ScaleOffset = 2 * sizeof(std::int32_t);
-        constexpr int CountOffset = 3 * sizeof(std::int32_t);
-        memcpy(&type, record, sizeof(type));
-        memcpy(&blendMesh, record + BlendMeshOffset, sizeof(blendMesh));
-        memcpy(&scale, record + ScaleOffset, sizeof(scale));
-        memcpy(&count, record + CountOffset, sizeof(count));
-        constexpr int MaximumPetActions = 100;
-        constexpr int MaximumPetType = 10000;
-        if (type < 0 || type > MaximumPetType || count <= 0 || count > layout.actionSlots
-            || count > MaximumPetActions || !std::isfinite(scale))
-            return {};
+PetInfoPtr ReadPetRecord(BYTE* record, const Data::Pets::PetDataLayout& layout, int& type, std::vector<int>& actions,
+                         std::vector<float>& speeds)
+{
+    BuxConvert(record, layout.recordSize);
+    int           blendMesh       = -1;
+    float         scale           = 0;
+    int           count           = 0;
+    constexpr int BlendMeshOffset = sizeof(std::int32_t);
+    constexpr int ScaleOffset     = 2 * sizeof(std::int32_t);
+    constexpr int CountOffset     = 3 * sizeof(std::int32_t);
+    memcpy(&type, record, sizeof(type));
+    memcpy(&blendMesh, record + BlendMeshOffset, sizeof(blendMesh));
+    memcpy(&scale, record + ScaleOffset, sizeof(scale));
+    memcpy(&count, record + CountOffset, sizeof(count));
+    constexpr int MaximumPetActions = 100;
+    constexpr int MaximumPetType    = 10000;
+    if (type < 0 || type > MaximumPetType || count <= 0 || count > layout.actionSlots || count > MaximumPetActions ||
+        !std::isfinite(scale))
+        return {};
 
-        constexpr int RecordHeaderSize = 4 * sizeof(std::int32_t);
-        memcpy(actions.data(), record + RecordHeaderSize, sizeof(int) * layout.actionSlots);
-        memcpy(speeds.data(), record + RecordHeaderSize + sizeof(int) * layout.actionSlots, sizeof(float) * layout.actionSlots);
-        if (!std::all_of(speeds.begin(), speeds.begin() + count, [](float speed) { return std::isfinite(speed); }))
-            return {};
-        auto info = PetInfo::Make();
-        info->SetBlendMesh(blendMesh);
-        info->SetScale(scale);
-        info->SetActions(count, actions.data(), speeds.data());
-        return info;
-    }
+    constexpr int RecordHeaderSize = 4 * sizeof(std::int32_t);
+    memcpy(actions.data(), record + RecordHeaderSize, sizeof(int) * layout.actionSlots);
+    memcpy(speeds.data(), record + RecordHeaderSize + sizeof(int) * layout.actionSlots,
+           sizeof(float) * layout.actionSlots);
+    if (!std::all_of(speeds.begin(), speeds.begin() + count, [](float speed) { return std::isfinite(speed); }))
+        return {};
+    auto info = PetInfo::Make();
+    info->SetBlendMesh(blendMesh);
+    info->SetScale(scale);
+    info->SetActions(count, actions.data(), speeds.data());
+    return info;
+}
 }
 
 bool PetProcess::LoadData()
 {
     constexpr auto FileName = L"Data\\Local\\pet.bmd";
-    using FileHandle = std::unique_ptr<FILE, decltype(&fclose)>;
-    FileHandle file(_wfopen(FileName, L"rb"), &fclose);
+    using FileHandle        = std::unique_ptr<FILE, decltype(&fclose)>;
+    FileHandle        file(_wfopen(FileName, L"rb"), &fclose);
     std::vector<BYTE> payload;
-    const auto layout = file ? ReadPetData(file.get(), payload) : std::nullopt;
+    const auto        layout = file ? ReadPetData(file.get(), payload) : std::nullopt;
     if (!layout)
     {
         constexpr auto Message = L"Data\\Local\\pet.bmd is missing, truncated, or corrupt.";
         g_ErrorReport.Write(Message);
+        MessageBox(g_hWnd, Message, nullptr, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
 
-    std::vector<int> actions(layout->actionSlots);
+    std::vector<int>   actions(layout->actionSlots);
     std::vector<float> speeds(layout->actionSlots);
     for (int index = 0; index < layout->recordCount; ++index)
     {
-        int type = 0;
+        int  type = 0;
         auto info = ReadPetRecord(payload.data() + index * layout->recordSize, *layout, type, actions, speeds);
         if (info)
             m_petsInfo.insert(make_pair(ITEM_HELPER + type, info));
@@ -267,34 +260,38 @@ bool PetProcess::LoadData()
 bool PetProcess::IsPet(int itemType)
 {
     auto iter = m_petsInfo.find(itemType);
-    if (iter == m_petsInfo.end()) return FALSE;
+    if (iter == m_petsInfo.end())
+        return FALSE;
 
     std::weak_ptr<PetInfo> petInfo = (*iter).second;
-    if (petInfo.expired()) return FALSE;
+    if (petInfo.expired())
+        return FALSE;
 
     return TRUE;
 }
 
 bool PetProcess::CreatePet(int itemType, int modelType, vec3_t Position, CHARACTER* Owner, int SubType, int LinkBone)
 {
-    if (NULL == Owner) return FALSE;
+    if (NULL == Owner)
+        return FALSE;
 
     PetObjectPtr _tempPet = PetObject::Make();
     if (_tempPet->Create(itemType, modelType, Position, Owner, SubType, LinkBone))
     {
         auto iter = m_petsInfo.find(itemType);
-        if (iter == m_petsInfo.end()) return FALSE;
+        if (iter == m_petsInfo.end())
+            return FALSE;
 
         std::weak_ptr<PetInfo> petInfo = (*iter).second;
 
-        int _count = 0;
-        int* action = NULL;
-        float* speed = NULL;
+        int    _count = 0;
+        int*   action = NULL;
+        float* speed  = NULL;
         if (petInfo.expired() == FALSE)
         {
             _count = petInfo.lock()->GetActionsCount();
             action = petInfo.lock()->GetActions();
-            speed = petInfo.lock()->GetSpeeds();
+            speed  = petInfo.lock()->GetSpeeds();
 
             _tempPet->SetScale(petInfo.lock()->GetScale());
             _tempPet->SetBlendMesh(petInfo.lock()->GetBlendMesh());
@@ -313,16 +310,18 @@ bool PetProcess::CreatePet(int itemType, int modelType, vec3_t Position, CHARACT
 
 void PetProcess::DeletePet(CHARACTER* Owner, int itemType, bool allDelete)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
     UnRegister(Owner, itemType, allDelete);
 }
 
 void PetProcess::SetCommandPet(CHARACTER* Owner, int targetKey, PetObject::ActionType cmdType)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -340,7 +339,7 @@ void PetProcess::SetCommandPet(CHARACTER* Owner, int targetKey, PetObject::Actio
 
 void PetProcess::UpdatePets()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -355,7 +354,7 @@ void PetProcess::UpdatePets()
 
 void PetProcess::RenderPets()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;

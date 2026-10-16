@@ -22,11 +22,11 @@ public:
     ~OrbitalCamera() override = default;
 
     // ICamera interface
-    bool Update() override;
-    void Reset() override;
-    void OnActivate(const CameraState& previousState) override;
-    void OnDeactivate() override;
-    void ResetView() override;
+    bool        Update() override;
+    void        Reset() override;
+    void        OnActivate(const CameraState& previousState) override;
+    void        OnDeactivate() override;
+    void        ResetView() override;
     const char* GetName() const override { return "Orbital"; }
 
     // Phase 5: Scene-specific reset
@@ -42,8 +42,8 @@ public:
 
     // Phase 1: Configuration & Frustum Management
     const CameraConfig& GetConfig() const override { return m_Config; }
-    void SetConfig(const CameraConfig& config) override;
-    const Frustum& GetFrustum() const override { return m_Frustum; }
+    void                SetConfig(const CameraConfig& config) override;
+    const Frustum&      GetFrustum() const override { return m_Frustum; }
 
     bool ShouldCullObject(const vec3_t position, float radius) const override
     {
@@ -68,26 +68,26 @@ public:
     }
 
 private:
-    CameraState& m_State;
+    CameraState&                   m_State;
     std::unique_ptr<DefaultCamera> m_pDefaultCamera;  // Internal default camera for base calculation
 
     // Phase 1: Configuration and frustum
     CameraConfig m_Config;
-    Frustum m_Frustum;
+    Frustum      m_Frustum;
 
     // Orbital parameters
     vec3_t m_InitialCameraOffset;  // Saved offset from character on first frame
-    bool m_bInitialOffsetSet;      // Has initial offset been captured?
-    vec3_t m_Target;              // Orbit center (character position)
-    float m_BaseYaw;              // Initial yaw when activated
-    float m_BasePitch;            // Initial pitch when activated
-    float m_DeltaYaw;             // User rotation delta from base
-    float m_DeltaPitch;           // User pitch delta from base
-    float m_Radius;               // Distance from target
+    bool   m_bInitialOffsetSet;    // Has initial offset been captured?
+    vec3_t m_Target;               // Orbit center (character position)
+    float  m_BaseYaw;              // Initial yaw when activated
+    float  m_BasePitch;            // Initial pitch when activated
+    float  m_DeltaYaw;             // User rotation delta from base
+    float  m_DeltaPitch;           // User pitch delta from base
+    float  m_Radius;               // Distance from target
 
     // Phase 5: Scene transition tracking
-    int m_LastSceneFlag;          // Track scene changes to reset target
-    bool m_bJustActivated;        // Skip DefaultCamera update on first frame after activation
+    int  m_LastSceneFlag;   // Track scene changes to reset target
+    bool m_bJustActivated;  // Skip DefaultCamera update on first frame after activation
 
     // Mount offset that was baked into the inherited position at activation time.
     // We subtract this so only the DELTA is applied, avoiding double-offset.
@@ -105,24 +105,24 @@ private:
     // actual camera-to-Hero distance of ~sqrt(919² + 919² + 1150²) ≈ 1735.
     // DEFAULT matches that so orbital starts at exactly the Default cam's
     // position. MIN/MAX bracket how far the player can move from there.
-    static constexpr float MIN_RADIUS = 600.0f;
-    static constexpr float MAX_RADIUS = 3000.0f;
+    static constexpr float MIN_RADIUS     = 600.0f;
+    static constexpr float MAX_RADIUS     = 3000.0f;
     static constexpr float DEFAULT_RADIUS = 1735.0f;
 
     // Input state (middle-mouse drag tracking)
     struct InputState
     {
-        bool Rotating = false;             // Middle mouse button held?
-        int LastMouseX = 0;
-        int LastMouseY = 0;
-        float LastEffectivePitch = 0.0f;   // Last effective pitch applied (after constraints)
+        bool  Rotating           = false;  // Middle mouse button held?
+        int   LastMouseX         = 0;
+        int   LastMouseY         = 0;
+        float LastEffectivePitch = 0.0f;  // Last effective pitch applied (after constraints)
     } m_Input;
 
     // Helper methods
     void HandleInput();
     void UpdateTarget();
     void ComputeCameraTransform();
-    void UpdateFrustum();  // Phase 1: Rebuild frustum from current state
+    void UpdateFrustum();        // Phase 1: Rebuild frustum from current state
     void UpdateConfigForView();  // Phase 1: Adjust config based on zoom level and pitch
 
     // OnActivate / ResetForScene helpers

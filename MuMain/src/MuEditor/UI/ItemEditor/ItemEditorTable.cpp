@@ -29,9 +29,7 @@ void CItemEditorTable::InvalidateFilter()
     m_isInitialized = false;
 }
 
-CItemEditorTable::CItemEditorTable()
-    : m_isInitialized(false)
-    , m_pColumns(nullptr)
+CItemEditorTable::CItemEditorTable() : m_isInitialized(false), m_pColumns(nullptr)
 {
     m_pColumns = new CItemEditorColumns();
     m_pColumns->SetTable(this);
@@ -46,16 +44,12 @@ CItemEditorTable::~CItemEditorTable()
     }
 }
 
-void CItemEditorTable::Render(
-    const std::string& searchFilter,
-    std::map<std::string, bool>& columnVisibility,
-    int& selectedRow,
-    bool freezeColumns)
+void CItemEditorTable::Render(const std::string& searchFilter, std::map<std::string, bool>& columnVisibility,
+                              int& selectedRow, bool freezeColumns)
 {
-    if (!ItemAttribute) return;
-
     // Get metadata fields once at function scope
-    const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+    const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+    const int                  fieldCount = GetFieldCount();
 
     // Count visible columns - only count columns that actually exist
     int visibleColumnCount = 0;
@@ -69,8 +63,7 @@ void CItemEditorTable::Render(
     // Count metadata fields that are visible
     for (int i = 0; i < fieldCount; ++i)
     {
-        if (columnVisibility.find(fields[i].name) != columnVisibility.end() &&
-            columnVisibility[fields[i].name])
+        if (columnVisibility.find(fields[i].name) != columnVisibility.end() && columnVisibility[fields[i].name])
         {
             visibleColumnCount++;
         }
@@ -88,10 +81,11 @@ void CItemEditorTable::Render(
         m_filteredItems.clear();
         for (int i = 0; i < MAX_ITEM; i++)
         {
-            char nameBuffer[256]{};
+            char nameBuffer[256];
             WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
 
-            if (nameBuffer[0] == '\0') continue;
+            if (nameBuffer[0] == '\0')
+                continue;
 
             if (searchFilter.length() > 0)
             {
@@ -104,7 +98,7 @@ void CItemEditorTable::Render(
             m_filteredItems.push_back(i);
         }
         m_lastSearchFilter = searchFilter;
-        m_isInitialized = true;
+        m_isInitialized    = true;
     }
 
     // Push style to reduce input field padding
@@ -112,7 +106,9 @@ void CItemEditorTable::Render(
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(4, 2));
 
     // Create a table with scrolling
-    if (!ImGui::BeginTable("ItemTable", visibleColumnCount, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_ScrollX | ImGuiTableFlags_Resizable))
+    if (!ImGui::BeginTable("ItemTable", visibleColumnCount,
+                           ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY |
+                               ImGuiTableFlags_ScrollX | ImGuiTableFlags_Resizable))
     {
         ImGui::PopStyleVar(2);
         return;
@@ -120,19 +116,19 @@ void CItemEditorTable::Render(
 
     // Setup frozen columns based on toggle state
     bool hasIndex = columnVisibility.find("Index") != columnVisibility.end() && columnVisibility["Index"];
-    bool hasName = columnVisibility.find("Name") != columnVisibility.end() && columnVisibility["Name"];
+    bool hasName  = columnVisibility.find("Name") != columnVisibility.end() && columnVisibility["Name"];
 
     if (freezeColumns && hasIndex && hasName)
     {
-        ImGui::TableSetupScrollFreeze(2, 1); // Freeze first 2 columns + header row
+        ImGui::TableSetupScrollFreeze(2, 1);  // Freeze first 2 columns + header row
     }
     else if (freezeColumns && hasIndex)
     {
-        ImGui::TableSetupScrollFreeze(1, 1); // Freeze first column + header row
+        ImGui::TableSetupScrollFreeze(1, 1);  // Freeze first column + header row
     }
     else
     {
-        ImGui::TableSetupScrollFreeze(0, 1); // Freeze header row only
+        ImGui::TableSetupScrollFreeze(0, 1);  // Freeze header row only
     }
 
     // Setup columns based on visibility - METADATA-DRIVEN
@@ -143,12 +139,9 @@ void CItemEditorTable::Render(
 
     for (int i = 0; i < fieldCount; ++i)
     {
-        if (columnVisibility.find(fields[i].name) != columnVisibility.end() &&
-            columnVisibility[fields[i].name])
+        if (columnVisibility.find(fields[i].name) != columnVisibility.end() && columnVisibility[fields[i].name])
         {
-            ImGui::TableSetupColumn(GetFieldDisplayName(fields[i]),
-                                   ImGuiTableColumnFlags_WidthFixed,
-                                   fields[i].width);
+            ImGui::TableSetupColumn(GetFieldDisplayName(fields[i]), ImGuiTableColumnFlags_WidthFixed, fields[i].width);
         }
     }
 
@@ -167,12 +160,12 @@ void CItemEditorTable::Render(
             if (m_filteredItems[row] == s_scrollToIndex)
             {
                 // Force the clipper to include this row and scroll to it
-                ImGui::SetScrollY(ImGui::GetTextLineHeightWithSpacing() * (row + 1)); // +1 for header
+                ImGui::SetScrollY(ImGui::GetTextLineHeightWithSpacing() * (row + 1));  // +1 for header
                 selectedRow = s_scrollToIndex;
                 break;
             }
         }
-        s_scrollToIndex = -1; // Reset
+        s_scrollToIndex = -1;  // Reset
     }
 
     while (clipper.Step())
@@ -187,7 +180,7 @@ void CItemEditorTable::Render(
                 ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg1, ImGui::GetColorU32(ImVec4(0.3f, 0.5f, 0.8f, 0.3f)));
             }
 
-            int colIdx = 0;
+            int  colIdx        = 0;
             bool rowInteracted = false;
 
             // Render Index column (special - not in metadata)
@@ -204,7 +197,8 @@ void CItemEditorTable::Render(
 
                 if (isVisible)
                 {
-                    m_pColumns->RenderFieldByDescriptor(fields[fieldIdx], colIdx, i, ItemAttribute[i], rowInteracted, true);
+                    m_pColumns->RenderFieldByDescriptor(fields[fieldIdx], colIdx, i, ItemAttribute[i], rowInteracted,
+                                                        true);
                 }
             }
 
@@ -220,11 +214,12 @@ void CItemEditorTable::Render(
     ImGui::PopStyleVar(2);
 
     // Handle Ctrl+C to copy selected row as CSV
-    if (selectedRow >= 0 && selectedRow < MAX_ITEM && ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyPressed(ImGuiKey_C))
+    if (selectedRow >= 0 && selectedRow < MAX_ITEM && ImGui::IsKeyDown(ImGuiKey_LeftCtrl) &&
+        ImGui::IsKeyPressed(ImGuiKey_C))
     {
         std::string output = CItemEditorActions::ExportItemCombined(selectedRow, ItemAttribute[selectedRow]);
         ImGui::SetClipboardText(output.c_str());
     }
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

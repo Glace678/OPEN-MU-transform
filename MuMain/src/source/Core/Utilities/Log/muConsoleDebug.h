@@ -10,7 +10,8 @@ enum MSG_TYPE
 
 class CmuConsoleDebug
 {
-    bool	m_bInit;
+    bool m_bInit;
+
 public:
     virtual ~CmuConsoleDebug();
     static CmuConsoleDebug* GetInstance();
@@ -23,5 +24,4 @@ protected:
     CmuConsoleDebug();
 };
 
-#define g_ConsoleDebug	CmuConsoleDebug::GetInstance()
-
+#define g_ConsoleDebug CmuConsoleDebug::GetInstance()

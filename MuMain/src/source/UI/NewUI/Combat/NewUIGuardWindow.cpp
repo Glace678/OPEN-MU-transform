@@ -26,17 +26,7 @@ CNewUIGuardWindow::CNewUIGuardWindow()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    m_iNumCurOpenTab = TAB_SIEGE_INFO;
-    // T0 same-pattern fix: siege time/state members are filled only by the castle-siege info
-    // packet (SetInfo ~:633). RenderSeigeInfoTab() reads them unconditionally; zero-init so a
-    // Render before the packet arrives never prints garbage or switches on a bogus enum.
-    m_eTimeType = CASTLESIEGE_STATE_NONE;
-    ZeroMemory(m_szOwnerGuild, sizeof(m_szOwnerGuild));
-    ZeroMemory(m_szOwnerGuildMaster, sizeof(m_szOwnerGuildMaster));
-    m_wStartYear = 0; m_byStartMonth = 0; m_byStartDay = 0; m_byStartHour = 0; m_byStartMinute = 0;
-    m_wEndYear = 0; m_byEndMonth = 0; m_byEndDay = 0; m_byEndHour = 0; m_byEndMinute = 0;
-    m_wSiegeStartYear = 0; m_bySiegeStartMonth = 0; m_bySiegeStartDay = 0; m_bySiegeStartHour = 0; m_bySiegeStartMinute = 0;
-    m_dwStateLeftSec = 0;
+    m_iNumCurOpenTab  = TAB_SIEGE_INFO;
 }
 
 CNewUIGuardWindow::~CNewUIGuardWindow()
@@ -79,7 +69,8 @@ bool CNewUIGuardWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
     return true;
 }
 
-void CNewUIGuardWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y, const wchar_t* const* pCaptionSlot)
+void CNewUIGuardWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y,
+                                   const wchar_t* const* pCaptionSlot)
 {
     pNewUIButton->ChangeText(pCaptionSlot);
     pNewUIButton->ChangeTextBackColor(RGBA(255, 255, 255, 0));
@@ -110,15 +101,15 @@ bool CNewUIGuardWindow::UpdateMouseEvent()
 {
     switch (m_iNumCurOpenTab)
     {
-    case TAB_SIEGE_INFO:
-        UpdateSeigeInfoTab();
-        break;
-    case TAB_REGISTER:
-        UpdateRegisterTab();
-        break;
-    case TAB_REGISTER_INFO:
-        UpdateRegisterInfoTab();
-        break;
+        case TAB_SIEGE_INFO:
+            UpdateSeigeInfoTab();
+            break;
+        case TAB_REGISTER:
+            UpdateRegisterTab();
+            break;
+        case TAB_REGISTER_INFO:
+            UpdateRegisterInfoTab();
+            break;
     }
 
     if (true == BtnProcess())
@@ -196,15 +187,15 @@ bool CNewUIGuardWindow::Render()
 
     switch (m_iNumCurOpenTab)
     {
-    case TAB_SIEGE_INFO:
-        RenderSeigeInfoTab();
-        break;
-    case TAB_REGISTER:
-        RenderRegisterTab();
-        break;
-    case TAB_REGISTER_INFO:
-        RenderRegisterInfoTab();
-        break;
+        case TAB_SIEGE_INFO:
+            RenderSeigeInfoTab();
+            break;
+        case TAB_REGISTER:
+            RenderRegisterTab();
+            break;
+        case TAB_REGISTER_INFO:
+            RenderRegisterInfoTab();
+            break;
     }
 
     m_BtnExit.Render();
@@ -287,7 +278,9 @@ void CNewUIGuardWindow::RenderFrame()
     RenderImage(IMAGE_GUARDWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_GUARDWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -298,7 +291,7 @@ void CNewUIGuardWindow::RenderFrame()
     mu_swprintf(szText, L"%ls", I18N::Game::GuardNPC);
     g_pRenderText->RenderText(fPos_x, fPos_y + fLine_y, szText, 160.0f, 0, RT3_SORT_CENTER);
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     g_pRenderText->SetFont(g_hFontBold);
 
     if (m_szOwnerGuildMaster[0])
@@ -338,37 +331,35 @@ bool CNewUIGuardWindow::BtnProcess()
     return false;
 }
 
-void CNewUIGuardWindow::UpdateSeigeInfoTab()
-{
-}
+void CNewUIGuardWindow::UpdateSeigeInfoTab() {}
 
 void CNewUIGuardWindow::UpdateRegisterTab()
 {
     switch (m_eTimeType)
     {
-    case CASTLESIEGE_STATE_REGSIEGE:
-        if (m_BtnProclaim.UpdateMouseEvent() == true)
-        {
-            if (g_GuardsMan.IsSufficentDeclareLevel())
+        case CASTLESIEGE_STATE_REGSIEGE:
+            if (m_BtnProclaim.UpdateMouseEvent() == true)
             {
-                SocketClient->ToGameServer()->SendCastleSiegeRegistrationRequest();
+                if (g_GuardsMan.IsSufficentDeclareLevel())
+                {
+                    SocketClient->ToGameServer()->SendCastleSiegeRegistrationRequest();
+                }
+                else
+                {
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSiegeLevelMsgBoxLayout));
+                }
             }
-            else
+            break;
+        case CASTLESIEGE_STATE_REGMARK:
+            if (m_BtnRegister.UpdateMouseEvent() == true)
             {
-                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CSiegeLevelMsgBoxLayout));
+                int nMarkSlot = g_GuardsMan.GetMyMarkSlotIndex();
+                if (nMarkSlot != -1)
+                {
+                    SocketClient->ToGameServer()->SendCastleSiegeMarkRegistration(nMarkSlot);
+                }
             }
-        }
-        break;
-    case CASTLESIEGE_STATE_REGMARK:
-        if (m_BtnRegister.UpdateMouseEvent() == true)
-        {
-            int nMarkSlot = g_GuardsMan.GetMyMarkSlotIndex();
-            if (nMarkSlot != -1)
-            {
-                SocketClient->ToGameServer()->SendCastleSiegeMarkRegistration(nMarkSlot);
-            }
-        }
-        break;
+            break;
     }
 }
 
@@ -395,9 +386,8 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
             m_GuildListBox.Scrolling(m_GuildListBox.GetBoxSize());
     }
 
-    if (g_GuardsMan.HasRegistered() &&
-        CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType && m_eTimeType <= CASTLESIEGE_STATE_REGMARK
-        && Hero->GuildStatus == G_MASTER)
+    if (g_GuardsMan.HasRegistered() && CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType &&
+        m_eTimeType <= CASTLESIEGE_STATE_REGMARK && Hero->GuildStatus == G_MASTER)
     {
         if (m_BtnGiveUp.UpdateMouseEvent() == true)
         {
@@ -408,11 +398,12 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
 
 void CNewUIGuardWindow::RenderSeigeInfoTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT   ptOrigin = {m_Pos.x, m_Pos.y + 125};
     wchar_t szTemp[256];
 
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szTemp, I18N::Game::StartingUUUUU, m_wStartYear, m_byStartMonth, m_byStartDay, m_byStartHour, m_byStartMinute);
+    mu_swprintf(szTemp, I18N::Game::StartingUUUUU, m_wStartYear, m_byStartMonth, m_byStartDay, m_byStartHour,
+                m_byStartMinute);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 14;
@@ -422,37 +413,42 @@ void CNewUIGuardWindow::RenderSeigeInfoTab()
     ptOrigin.y += 14;
     switch (m_eTimeType)
     {
-    case CASTLESIEGE_STATE_NONE:
-    case CASTLESIEGE_STATE_IDLE_1:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriodIsOver, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_REGSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeRegistrationPeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_IDLE_2:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForSignRegistration, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_REGMARK:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::PeriodForSignRegistration, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_IDLE_3:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForAnnouncement, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_NOTIFY:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementPeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_READYSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePreparationPeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_STARTSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_ENDSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::TrucePeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_ENDCYCLE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeIsOver, 190, 0, RT3_SORT_CENTER);
-        break;
+        case CASTLESIEGE_STATE_NONE:
+        case CASTLESIEGE_STATE_IDLE_1:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriodIsOver, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_REGSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeRegistrationPeriod, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_IDLE_2:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForSignRegistration, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_REGMARK:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::PeriodForSignRegistration, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_IDLE_3:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForAnnouncement, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_NOTIFY:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementPeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_READYSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePreparationPeriod, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_STARTSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_ENDSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::TrucePeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_ENDCYCLE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeIsOver, 190, 0, RT3_SORT_CENTER);
+            break;
     }
 
     if (m_eTimeType < CASTLESIEGE_STATE_STARTSIEGE)
@@ -461,123 +457,129 @@ void CNewUIGuardWindow::RenderSeigeInfoTab()
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ExpectedSiegePeriodIs, 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 14;
-        mu_swprintf(szTemp, I18N::Game::UUUUU, m_wSiegeStartYear, m_bySiegeStartMonth, m_bySiegeStartDay, m_bySiegeStartHour, m_bySiegeStartMinute);
+        mu_swprintf(szTemp, I18N::Game::UUUUU, m_wSiegeStartYear, m_bySiegeStartMonth, m_bySiegeStartDay,
+                    m_bySiegeStartHour, m_bySiegeStartMinute);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 35;
-        mu_swprintf(szTemp, I18N::Game::UUURemainedForTheNextStage, m_dwStateLeftSec / 3600, (m_dwStateLeftSec % 3600) / 60, (m_dwStateLeftSec % 3600) % 60);
+        mu_swprintf(szTemp, I18N::Game::UUURemainedForTheNextStage, m_dwStateLeftSec / 3600,
+                    (m_dwStateLeftSec % 3600) / 60, (m_dwStateLeftSec % 3600) % 60);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
     }
 }
 
 void CNewUIGuardWindow::RenderRegisterTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 125};
     g_pRenderText->SetFont(g_hFont);
 
     switch (m_eTimeType)
     {
-    case CASTLESIEGE_STATE_NONE:
-    case CASTLESIEGE_STATE_IDLE_1:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriodIsOver, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_REGSIEGE:
-        if (Hero->GuildStatus == G_MASTER)
-        {
-            if (!g_GuardsMan.HasRegistered())
+        case CASTLESIEGE_STATE_NONE:
+        case CASTLESIEGE_STATE_IDLE_1:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriodIsOver, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_REGSIEGE:
+            if (Hero->GuildStatus == G_MASTER)
             {
-                if (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild)
-                    || !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild))
+                if (!g_GuardsMan.HasRegistered())
                 {
-                    m_BtnProclaim.Lock();
-                    m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
-                    m_BtnProclaim.ChangeTextColor(RGBA(100, 100, 100, 255));
+                    if (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild) ||
+                        !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild))
+                    {
+                        m_BtnProclaim.Lock();
+                        m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
+                        m_BtnProclaim.ChangeTextColor(RGBA(100, 100, 100, 255));
+                    }
+                    else
+                    {
+                        m_BtnProclaim.UnLock();
+                        m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
+                        m_BtnProclaim.ChangeTextColor(RGBA(255, 255, 255, 255));
+                    }
+                    m_BtnProclaim.Render();
                 }
                 else
                 {
-                    m_BtnProclaim.UnLock();
-                    m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
-                    m_BtnProclaim.ChangeTextColor(RGBA(255, 255, 255, 255));
+                    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Announced, 190, 0, RT3_SORT_CENTER);
                 }
-                m_BtnProclaim.Render();
             }
             else
             {
-                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::Announced, 190, 0, RT3_SORT_CENTER);
+                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::NotAGuildMaster, 190, 0, RT3_SORT_CENTER);
+            }
+            break;
+        case CASTLESIEGE_STATE_IDLE_2:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForSignRegistration, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_REGMARK: {
+            if (g_GuardsMan.HasRegistered())
+            {
+                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::RegisterTheAcquiredSign, 190, 0,
+                                          RT3_SORT_CENTER);
+                ptOrigin.y += 30;
+
+                int     nMarkCount = g_GuardsMan.GetMyMarkCount();
+                wchar_t szBuffer[256];
+                mu_swprintf(szBuffer, I18N::Game::AcquiredNoOfSignU, nMarkCount);
+                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
+
+                ptOrigin.y += 14;
+                mu_swprintf(szBuffer, I18N::Game::RegisteredNoOfSignU, g_GuardsMan.GetRegMarkCount());
+                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
+
+                if (nMarkCount > 0)
+                {
+                    m_BtnRegister.UnLock();
+                    m_BtnRegister.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
+                    m_BtnRegister.ChangeTextColor(RGBA(255, 255, 255, 255));
+                }
+                else
+                {
+                    m_BtnRegister.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
+                    m_BtnRegister.ChangeTextColor(RGBA(100, 100, 100, 255));
+                    m_BtnRegister.Lock();
+                }
+                m_BtnRegister.Render();
+            }
+            else
+            {
+                g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ThisGuildIsNotRegisteredInCastleSiege,
+                                          190, 0, RT3_SORT_CENTER);
             }
         }
-        else
-        {
-            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::NotAGuildMaster, 190, 0, RT3_SORT_CENTER);
-        }
         break;
-    case CASTLESIEGE_STATE_IDLE_2:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::StandbyPeriodForSignRegistration, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_REGMARK:
-    {
-        if (g_GuardsMan.HasRegistered())
-        {
-            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::RegisterTheAcquiredSign, 190, 0, RT3_SORT_CENTER);
-            ptOrigin.y += 30;
-
-            int nMarkCount = g_GuardsMan.GetMyMarkCount();
-            wchar_t szBuffer[256];
-            mu_swprintf(szBuffer, I18N::Game::AcquiredNoOfSignU, nMarkCount);
-            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
-
+        case CASTLESIEGE_STATE_IDLE_3:
+            g_pRenderText->SetFont(g_hFontBold);
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementAndRegistrationPeriod, 190, 0,
+                                      RT3_SORT_CENTER);
             ptOrigin.y += 14;
-            mu_swprintf(szBuffer, I18N::Game::RegisteredNoOfSignU, g_GuardsMan.GetRegMarkCount());
-            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
-
-            if (nMarkCount > 0)
-            {
-                m_BtnRegister.UnLock();
-                m_BtnRegister.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
-                m_BtnRegister.ChangeTextColor(RGBA(255, 255, 255, 255));
-            }
-            else
-            {
-                m_BtnRegister.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
-                m_BtnRegister.ChangeTextColor(RGBA(100, 100, 100, 255));
-                m_BtnRegister.Lock();
-            }
-            m_BtnRegister.Render();
-        }
-        else
-        {
-            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ThisGuildIsNotRegisteredInCastleSiege, 190, 0, RT3_SORT_CENTER);
-        }
-    }
-    break;
-    case CASTLESIEGE_STATE_IDLE_3:
-        g_pRenderText->SetFont(g_hFontBold);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementAndRegistrationPeriod, 190, 0, RT3_SORT_CENTER);
-        ptOrigin.y += 14;
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::HasEnded, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_NOTIFY:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementPeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_READYSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePreparationPeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_STARTSIEGE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_ENDSIEGE:
-        g_pRenderText->SetFont(g_hFontBold);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::TrucePeriod, 190, 0, RT3_SORT_CENTER);
-        break;
-    case CASTLESIEGE_STATE_ENDCYCLE:
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeIsOver, 190, 0, RT3_SORT_CENTER);
-        break;
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::HasEnded, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_NOTIFY:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::AnnouncementPeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_READYSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePreparationPeriod, 190, 0,
+                                      RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_STARTSIEGE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegePeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_ENDSIEGE:
+            g_pRenderText->SetFont(g_hFontBold);
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::TrucePeriod, 190, 0, RT3_SORT_CENTER);
+            break;
+        case CASTLESIEGE_STATE_ENDCYCLE:
+            g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::SiegeIsOver, 190, 0, RT3_SORT_CENTER);
+            break;
     }
 }
 
 void CNewUIGuardWindow::RenderRegisterInfoTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 125};
     g_pRenderText->SetFont(g_hFontBold);
 
     if (m_eTimeType == CASTLESIEGE_STATE_REGSIEGE || m_eTimeType == CASTLESIEGE_STATE_REGMARK)
@@ -620,9 +622,8 @@ void CNewUIGuardWindow::RenderRegisterInfoTab()
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::TrucePeriod, 190, 0, RT3_SORT_CENTER);
     }
 
-    if (g_GuardsMan.HasRegistered() &&
-        CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType && m_eTimeType <= CASTLESIEGE_STATE_REGMARK
-        && Hero->GuildStatus == G_MASTER)
+    if (g_GuardsMan.HasRegistered() && CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType &&
+        m_eTimeType <= CASTLESIEGE_STATE_REGMARK && Hero->GuildStatus == G_MASTER)
     {
         m_BtnGiveUp.Render();
     }
@@ -630,31 +631,33 @@ void CNewUIGuardWindow::RenderRegisterInfoTab()
 
 void CNewUIGuardWindow::SetData(LPPMSG_ANS_CASTLESIEGESTATE Info)
 {
-    if (!Info)	return;
+    if (!Info)
+        return;
 
-    memset(m_szOwnerGuild, 0, sizeof(m_szOwnerGuild));
-    memset(m_szOwnerGuildMaster, 0, sizeof(m_szOwnerGuildMaster));
+    memset(m_szOwnerGuild, 0, sizeof(char) * 9);
+    memset(m_szOwnerGuildMaster, 0, sizeof(char) * 11);
 
     m_eTimeType = (CASTLESIEGE_STATE)Info->cCastleSiegeState;
     CMultiLanguage::ConvertFromUtf8(m_szOwnerGuild, Info->cOwnerGuild, MAX_GUILDNAME);
     CMultiLanguage::ConvertFromUtf8(m_szOwnerGuildMaster, Info->cOwnerGuildMaster, MAX_USERNAME_SIZE);
 
-    m_wStartYear = MAKEWORD(Info->btStartYearL, Info->btStartYearH);
-    m_byStartMonth = Info->btStartMonth;
-    m_byStartDay = Info->btStartDay;
-    m_byStartHour = Info->btStartHour;
-    m_byStartMinute = Info->btStartMinute;
-    m_wEndYear = MAKEWORD(Info->btEndYearL, Info->btEndYearH);
-    m_byEndMonth = Info->btEndMonth;
-    m_byEndDay = Info->btEndDay;
-    m_byEndHour = Info->btEndHour;
-    m_byEndMinute = Info->btEndMinute;
-    m_wSiegeStartYear = MAKEWORD(Info->btSiegeStartYearL, Info->btSiegeStartYearH);
-    m_bySiegeStartMonth = Info->btSiegeStartMonth;
-    m_bySiegeStartDay = Info->btSiegeStartDay;
-    m_bySiegeStartHour = Info->btSiegeStartHour;
+    m_wStartYear         = MAKEWORD(Info->btStartYearL, Info->btStartYearH);
+    m_byStartMonth       = Info->btStartMonth;
+    m_byStartDay         = Info->btStartDay;
+    m_byStartHour        = Info->btStartHour;
+    m_byStartMinute      = Info->btStartMinute;
+    m_wEndYear           = MAKEWORD(Info->btEndYearL, Info->btEndYearH);
+    m_byEndMonth         = Info->btEndMonth;
+    m_byEndDay           = Info->btEndDay;
+    m_byEndHour          = Info->btEndHour;
+    m_byEndMinute        = Info->btEndMinute;
+    m_wSiegeStartYear    = MAKEWORD(Info->btSiegeStartYearL, Info->btSiegeStartYearH);
+    m_bySiegeStartMonth  = Info->btSiegeStartMonth;
+    m_bySiegeStartDay    = Info->btSiegeStartDay;
+    m_bySiegeStartHour   = Info->btSiegeStartHour;
     m_bySiegeStartMinute = Info->btSiegeStartMinute;
-    m_dwStateLeftSec = MAKELONG(MAKEWORD(Info->btStateLeftSec4, Info->btStateLeftSec3), MAKEWORD(Info->btStateLeftSec2, Info->btStateLeftSec1));
+    m_dwStateLeftSec     = MAKELONG(MAKEWORD(Info->btStateLeftSec4, Info->btStateLeftSec3),
+                                    MAKEWORD(Info->btStateLeftSec2, Info->btStateLeftSec1));
     //m_dwStateLeftSec = Info->btStateLeftSec1<<24 | Info->btStateLeftSec2<<16 | Info->btStateLeftSec3<<8 | Info->btStateLeftSec4;
 }
 
@@ -688,19 +691,20 @@ void CNewUIGuardWindow::RenderScrollBarFrame(int iPos_x, int iPos_y, int iHeight
     RenderImage(IMAGE_GUARDWINDOW_SCROLL_TOP, iPos_x, iPos_y, 7, 3);
 #ifdef PBG_ADD_INGAMESHOP_UI_ITEMSHOP
 
-    BITMAP_t* pImage = &Bitmaps[IMAGE_GUARDWINDOW_SCROLL_MIDDLE];
-    float _Temp = pImage->Height - 1;
-    float _fMiddle_Cnt = (iHeight - 6) / _Temp;
-    int _iMiddle_Cnt = (int)_fMiddle_Cnt;
-    float _Middle_rest = _fMiddle_Cnt - _iMiddle_Cnt;
+    BITMAP_t* pImage       = &Bitmaps[IMAGE_GUARDWINDOW_SCROLL_MIDDLE];
+    float     _Temp        = pImage->Height - 1;
+    float     _fMiddle_Cnt = (iHeight - 6) / _Temp;
+    int       _iMiddle_Cnt = (int)_fMiddle_Cnt;
+    float     _Middle_rest = _fMiddle_Cnt - _iMiddle_Cnt;
 
     for (int i = 0; i < _iMiddle_Cnt; i++)
         RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(i * _Temp + 3), 7, _Temp);
 
-    RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(_iMiddle_Cnt * _Temp + 3), 7, _Temp * _Middle_rest);
-#else //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+    RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(_iMiddle_Cnt * _Temp + 3), 7,
+                _Temp * _Middle_rest);
+#else   //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     RenderBitmap(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + 3, 7.f, iHeight - 6, 0, 0, 7.f / 8.f, 15.f / 16.f);
-#endif //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+#endif  //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     RenderImage(IMAGE_GUARDWINDOW_SCROLL_BOTTOM, iPos_x, iPos_y + iHeight - 3, 7, 3);
 }
 

@@ -12,8 +12,8 @@
 
 using namespace SEASON3B;
 
-extern int g_iNumLineMessageBoxCustom;
-extern int g_iNumAnswer;
+extern int     g_iNumLineMessageBoxCustom;
+extern int     g_iNumAnswer;
 extern wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
 
 SEASON3B::CNewUIMyQuestInfoWindow::CNewUIMyQuestInfoWindow()
@@ -265,8 +265,7 @@ void SEASON3B::CNewUIMyQuestInfoWindow::RenderQuestInfo()
         g_pRenderText->SetBgColor(0);
         int i;
         for (i = 0; i < m_nMsgLine; ++i)
-            g_pRenderText->RenderText(m_Pos.x + 23, m_Pos.y + 96 + 18 * i,
-                m_aszMsg[i], 0, 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 23, m_Pos.y + 96 + 18 * i, m_aszMsg[i], 0, 0, RT3_SORT_LEFT);
     }
     else
         m_CurQuestListBox.Render();
@@ -453,7 +452,7 @@ void CNewUIMyQuestInfoWindow::SetCurQuestList(DWordList* pDWordList)
     wchar_t szOutput[64];
     g_pRenderText->SetFont(g_hFont);
 
-    int i;
+    int                 i;
     DWordList::iterator iter;
     for (iter = pDWordList->begin(), i = 1; iter != pDWordList->end(); advance(iter, 1), ++i)
     {
@@ -481,14 +480,12 @@ void CNewUIMyQuestInfoWindow::SetSelQuestSummary()
     if (0 == dwSelQuestIndex)
         return;
 
-    m_QuestContentsListBox.AddText(
-        g_hFontBold, 0xff0ab9ff, RT3_SORT_CENTER, g_QuestMng.GetSubject(dwSelQuestIndex));
+    m_QuestContentsListBox.AddText(g_hFontBold, 0xff0ab9ff, RT3_SORT_CENTER, g_QuestMng.GetSubject(dwSelQuestIndex));
 
     g_pRenderText->SetFont(g_hFont);
     wchar_t aszSummary[8][64];
-    int nLine = ::DivideStringByPixel(
-        &aszSummary[0][0], 8, 64, g_QuestMng.GetSummary(dwSelQuestIndex), 150);
-    int i;
+    int     nLine = ::DivideStringByPixel(&aszSummary[0][0], 8, 64, g_QuestMng.GetSummary(dwSelQuestIndex), 150);
+    int     i;
     for (i = 0; i < nLine; ++i)
         m_QuestContentsListBox.AddText(g_hFont, 0xffd2e6ff, RT3_SORT_LEFT, aszSummary[i]);
 }

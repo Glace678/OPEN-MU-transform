@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////
+﻿  //////////////////////////////////////////////////////////////////////
 // NewUIKanturu2ndEnterNpc.cpp: implementation of the CNewUIKanturu2ndEnterNpc class.
 //////////////////////////////////////////////////////////////////////
 
@@ -14,12 +14,12 @@
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "Audio/DSPlaySound.h"
 
-SEASON3B::CNewUIKanturu2ndEnterNpc::CNewUIKanturu2ndEnterNpc()
+    SEASON3B::CNewUIKanturu2ndEnterNpc::CNewUIKanturu2ndEnterNpc()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_pNpcObject = NULL;
-    m_dwRefreshTime = 0;
+    m_Pos.x = m_Pos.y        = 0;
+    m_pNpcObject             = NULL;
+    m_dwRefreshTime          = 0;
     m_dwRefreshButtonGapTime = 0;
 
     Initialize();
@@ -194,7 +194,8 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::CreateMessageBox(BYTE btResult)
     SEASON3B::CreateOkMessageBox(strMessage);
 }
 
-void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYTE btDetailState, BYTE btEnter, BYTE btUserCount, int iRemainTime)
+void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYTE btDetailState, BYTE btEnter,
+                                                               BYTE btUserCount, int iRemainTime)
 {
     if (m_pNpcObject && m_pNpcObject->CurrentAction == KANTURU2ND_NPC_ANI_ROT)
     {
@@ -242,9 +243,8 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     }
     else if (btState == KANTURU_STATE_MAYA_BATTLE)
     {
-        if (btDetailState != KANTURU_MAYA_DIRECTION_STANBY1
-            && btDetailState != KANTURU_MAYA_DIRECTION_STANBY2
-            && btDetailState != KANTURU_MAYA_DIRECTION_STANBY3)
+        if (btDetailState != KANTURU_MAYA_DIRECTION_STANBY1 && btDetailState != KANTURU_MAYA_DIRECTION_STANBY2 &&
+            btDetailState != KANTURU_MAYA_DIRECTION_STANBY3)
         {
             wcscpy(m_strSubject, I18N::Game::BattleWithMayaIsOngoing);
             mu_swprintf(m_strStateText[0], I18N::Game::DPlayersAreTryingToOpen, btUserCount);
@@ -315,26 +315,29 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             }
         }
 
-        if (btDetailState == KANTURU_MAYA_DIRECTION_NOTIFY || btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA1
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA1 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA1)
+        if (btDetailState == KANTURU_MAYA_DIRECTION_NOTIFY || btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1 ||
+            btDetailState == KANTURU_MAYA_DIRECTION_MAYA1 || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA1 ||
+            btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA1)
         {
             mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSLefeHand, btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA2
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA2 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA2)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA2 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA2 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA2)
         {
             mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSRightHand, btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA3
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA3 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA3 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA3 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3)
         {
             mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSBothHands, btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_NONE || btDetailState == KANTURU_MAYA_DIRECTION_END
-            || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_NONE || btDetailState == KANTURU_MAYA_DIRECTION_END ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE)
         {
             m_iStateTextNum = 1;
         }
@@ -349,11 +352,11 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     else if (btState == KANTURU_STATE_STANDBY)
     {
         wcscpy(m_strSubject, I18N::Game::BossBattleWillStartSoon);
-        if (btDetailState == 1)	// STANBY_START
+        if (btDetailState == 1)  // STANBY_START
         {
             mu_swprintf(m_strStateText[0], I18N::Game::ForceOfTheNightmareHasInvaded, iRemainTime / 60);
         }
-        else // STANBY_NONE || STANBY_NOTIFY || STANBY_END || STANBY_ENDCYCLE
+        else  // STANBY_NONE || STANBY_NOTIFY || STANBY_END || STANBY_ENDCYCLE
         {
             mu_swprintf(m_strStateText[0], I18N::Game::YouWillBeAbleToApproachMayaShortly);
         }
@@ -378,7 +381,7 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdEnter(BYTE btResult)
     CreateMessageBox(btResult);
 
     m_pNpcObject->AnimationFrame = 0;
-    m_bNpcAnimation = false;
+    m_bNpcAnimation              = false;
     SetAction(m_pNpcObject, KANTURU2ND_NPC_ANI_STOP);
 
     DeleteJoint(BITMAP_JOINT_ENERGY, NULL);
@@ -476,11 +479,11 @@ bool SEASON3B::CNewUIKanturu2ndEnterNpc::BtnProcess()
                 return true;
             }
 
-            ITEM* pItemHelper, * pItemRingLeft, * pItemRingRight, * pItemWing;
-            pItemHelper = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
-            pItemRingLeft = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
+            ITEM *pItemHelper, *pItemRingLeft, *pItemRingRight, *pItemWing;
+            pItemHelper    = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
+            pItemRingLeft  = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
             pItemRingRight = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
-            pItemWing = &CharacterMachine->Equipment[EQUIPMENT_WING];
+            pItemWing      = &CharacterMachine->Equipment[EQUIPMENT_WING];
 
             if (pItemHelper->Type == ITEM_HORN_OF_UNIRIA)
             {
@@ -488,22 +491,20 @@ bool SEASON3B::CNewUIKanturu2ndEnterNpc::BtnProcess()
                 return true;
             }
 
-            if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type)
-                || g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
+            if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type) ||
+                g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
             {
                 CreateMessageBox(POPUP_CHANGERING);
                 return true;
             }
 
-            if (!((pItemWing->Type >= ITEM_WINGS_OF_ELF && pItemWing->Type <= ITEM_WINGS_OF_DARKNESS)
-                || (pItemWing->Type >= ITEM_WING_OF_STORM && pItemWing->Type <= ITEM_WING_OF_DIMENSION)
-                || (ITEM_WING + 130 <= pItemWing->Type && pItemWing->Type <= ITEM_WING + 134)
-                || pItemHelper->Type == ITEM_HORN_OF_DINORANT
-                || pItemHelper->Type == ITEM_DARK_HORSE_ITEM
-                || pItemWing->Type == ITEM_CAPE_OF_LORD
-                || pItemHelper->Type == ITEM_HORN_OF_FENRIR
-                || (pItemWing->Type >= ITEM_CAPE_OF_FIGHTER && pItemWing->Type <= ITEM_CAPE_OF_OVERRULE)
-                || (pItemWing->Type == ITEM_WING + 135)))
+            if (!((pItemWing->Type >= ITEM_WINGS_OF_ELF && pItemWing->Type <= ITEM_WINGS_OF_DARKNESS) ||
+                  (pItemWing->Type >= ITEM_WING_OF_STORM && pItemWing->Type <= ITEM_WING_OF_DIMENSION) ||
+                  (ITEM_WING + 130 <= pItemWing->Type && pItemWing->Type <= ITEM_WING + 134) ||
+                  pItemHelper->Type == ITEM_HORN_OF_DINORANT || pItemHelper->Type == ITEM_DARK_HORSE_ITEM ||
+                  pItemWing->Type == ITEM_CAPE_OF_LORD || pItemHelper->Type == ITEM_HORN_OF_FENRIR ||
+                  (pItemWing->Type >= ITEM_CAPE_OF_FIGHTER && pItemWing->Type <= ITEM_CAPE_OF_OVERRULE) ||
+                  (pItemWing->Type == ITEM_WING + 135)))
             {
                 CreateMessageBox(POPUP_NOT_HELPER);
                 return true;
@@ -537,20 +538,29 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::RenderFrame()
 {
     float x, y, width, height;
 
-    x = m_Pos.x; y = m_Pos.y + 2.f, width = KANTURU2ND_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH; height = KANTURU2ND_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
+    x = m_Pos.x;
+    y = m_Pos.y + 2.f, width = KANTURU2ND_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH;
+    height = KANTURU2ND_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_BACK, x, y, width, height);
 
-    x = m_Pos.x; y = m_Pos.y, width = MSGBOX_WIDTH; height = MSGBOX_TOP_HEIGHT;
+    x = m_Pos.x;
+    y = m_Pos.y, width = MSGBOX_WIDTH;
+    height = MSGBOX_TOP_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_TOP, x, y, width, height);
 
-    x = m_Pos.x; y += MSGBOX_TOP_HEIGHT; width = MSGBOX_WIDTH; height = MSGBOX_MIDDLE_HEIGHT;
+    x = m_Pos.x;
+    y += MSGBOX_TOP_HEIGHT;
+    width  = MSGBOX_WIDTH;
+    height = MSGBOX_MIDDLE_HEIGHT;
     for (int i = 0; i < 10; ++i)
     {
         RenderImage(IMAGE_KANTURU2ND_MIDDLE, x, y, width, height);
         y += height;
     }
 
-    x = m_Pos.x; width = MSGBOX_WIDTH; height = MSGBOX_BOTTOM_HEIGHT;
+    x      = m_Pos.x;
+    width  = MSGBOX_WIDTH;
+    height = MSGBOX_BOTTOM_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_BOTTOM, x, y, width, height);
 }
 
@@ -567,8 +577,8 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::RenderTexts()
     g_pRenderText->SetTextColor(0xFF49B0FF);
     g_pRenderText->SetBgColor(0);
 
-    int iTextY = m_Pos.y + 30;
-    int iLine;
+    int     iTextY = m_Pos.y + 30;
+    int     iLine;
     wchar_t strTemp[3][52];
     ZeroMemory(strTemp, sizeof(strTemp));
     iLine = SeparateTextIntoLines(m_strSubject, strTemp[0], 3, 52);
@@ -605,8 +615,8 @@ SEASON3B::CNewUIKanturuInfoWindow::CNewUIKanturuInfoWindow()
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
 
-    m_iMinute = 0;
-    m_iSecond = 0;
+    m_iMinute    = 0;
+    m_iSecond    = 0;
     m_dwSyncTime = 0;
 }
 
@@ -700,9 +710,9 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
     g_pRenderText->SetTextColor(134, 134, 199, 255);
     g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 15, strText);
 
-    if (g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA1
-        || g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA2
-        || g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA3)
+    if (g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA1 ||
+        g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA2 ||
+        g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA3)
     {
         g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 35, I18N::Game::MonsterBoss2182);
     }
@@ -713,7 +723,7 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
     }
 
     int iCurrentTime = (GetTickCount() - m_dwSyncTime) / 1000;
-    int iPastSecond = m_iSecond - iCurrentTime;
+    int iPastSecond  = m_iSecond - iCurrentTime;
 
     m_iMinute = iPastSecond / 60;
     int iSecond;
@@ -727,11 +737,11 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
         iSecond = iPastSecond % (60 * m_iMinute);
     }
 
-    static DWORD dwTime = timeGetTime();
-    static bool bRender = true;
+    static DWORD dwTime  = timeGetTime();
+    static bool  bRender = true;
     if (timeGetTime() - dwTime > 500)
     {
-        dwTime = timeGetTime();
+        dwTime  = timeGetTime();
         bRender = !bRender;
     }
 
@@ -767,7 +777,7 @@ void SEASON3B::CNewUIKanturuInfoWindow::UnloadImages()
 
 void SEASON3B::CNewUIKanturuInfoWindow::SetTime(int iTimeLimit)
 {
-    m_iMinute = 0;
-    m_iSecond = iTimeLimit / 1000;
+    m_iMinute    = 0;
+    m_iSecond    = iTimeLimit / 1000;
     m_dwSyncTime = GetTickCount();
 }

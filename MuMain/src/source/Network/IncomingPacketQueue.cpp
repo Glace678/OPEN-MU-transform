@@ -1,69 +1,62 @@
 #include "stdafx.h"
 #include "Network/IncomingPacketQueue.h"
-#include "Network/Server/WSclient.h" // PacketInfo (complete type for the queued unique_ptr)
+#include "Network/Server/WSclient.h"  // PacketInfo (complete type for the queued unique_ptr)
 
 namespace Network
 {
-    IncomingPacketQueue::~IncomingPacketQueue() = default;
+IncomingPacketQueue::~IncomingPacketQueue() = default;
 
-    IncomingPacketQueue& IncomingPacketQueue::Instance()
+IncomingPacketQueue& IncomingPacketQueue::Instance()
+{
+    // Intentionally leaked: the instance is never destroyed at process exit,
+    // so a network thread still winding down during shutdown can call Push()
+    // without racing a destroyed static. The OS reclaims the memory on exit.
+    static IncomingPacketQueue* instance = new IncomingPacketQueue();
+    return *instance;
+}
+
+void IncomingPacketQueue::Push(std::unique_ptr<PacketInfo> packet)
+{
+    if (!packet)
     {
-        // Intentionally leaked: the instance is never destroyed at process exit,
-        // so a network thread still winding down during shutdown can call Push()
-        // without racing a destroyed static. The OS reclaims the memory on exit.
-        static IncomingPacketQueue* instance = new IncomingPacketQueue();
-        return *instance;
+        return;
     }
 
-    void IncomingPacketQueue::Push(std::unique_ptr<PacketInfo> packet)
-    {
-        if (!packet)
-        {
-            return;
-        }
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_queue.push(std::move(packet));
+}
 
+void IncomingPacketQueue::DrainTo(Processor process)
+{
+    if (!process)
+    {
+        return;
+    }
+
+    // Push rejects null packets, so every entry here is non-null; no
+    // per-packet guard is needed.
+    std::queue<std::unique_ptr<PacketInfo>> pending;
+    {
         std::lock_guard<std::mutex> lock(m_mutex);
-
-        // N2-02: drop the oldest frame once the depth cap is reached so a flood
-        // of tiny packets from a hostile server cannot exhaust client memory.
-        if (m_queue.size() >= kMaxQueuedPackets)
-        {
-            m_queue.pop();
-        }
-        m_queue.push(std::move(packet));
+        std::swap(pending, m_queue);
     }
 
-    void IncomingPacketQueue::DrainTo(Processor process)
+    while (!pending.empty())
     {
-        if (!process)
-        {
-            return;
-        }
-
-        // Push rejects null packets, so every entry here is non-null; no
-        // per-packet guard is needed.
-        std::queue<std::unique_ptr<PacketInfo>> pending;
-        {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            std::swap(pending, m_queue);
-        }
-
-        while (!pending.empty())
-        {
-            process(pending.front().get());
-            pending.pop();
-        }
+        process(pending.front().get());
+        pending.pop();
     }
+}
 
-    void IncomingPacketQueue::Clear()
+void IncomingPacketQueue::Clear()
+{
+    // Discard packets queued before a session teardown so they are not
+    // processed against freed world data on the next frame. Swap under the
+    // lock and let the packets destruct after releasing it.
+    std::queue<std::unique_ptr<PacketInfo>> discarded;
     {
-        // Discard packets queued before a session teardown so they are not
-        // processed against freed world data on the next frame. Swap under the
-        // lock and let the packets destruct after releasing it.
-        std::queue<std::unique_ptr<PacketInfo>> discarded;
-        {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            std::swap(discarded, m_queue);
-        }
+        std::lock_guard<std::mutex> lock(m_mutex);
+        std::swap(discarded, m_queue);
     }
+}
 }

@@ -16,14 +16,9 @@ class CItemEditorTable
 public:
     CItemEditorTable();
     ~CItemEditorTable();
-    // Non-copyable (owns m_pColumns via raw new/delete).
-    CItemEditorTable(const CItemEditorTable&) = delete;
-    CItemEditorTable& operator=(const CItemEditorTable&) = delete;
 
     // Main render function
-    void Render(const std::string& searchFilter,
-                std::map<std::string, bool>& columnVisibility,
-                int& selectedRow,
+    void Render(const std::string& searchFilter, std::map<std::string, bool>& columnVisibility, int& selectedRow,
                 bool freezeColumns);
 
     // Request scroll to a specific item index
@@ -35,8 +30,8 @@ public:
 private:
     // Filter state
     std::vector<int> m_filteredItems;
-    std::string m_lastSearchFilter;
-    bool m_isInitialized;
+    std::string      m_lastSearchFilter;
+    bool             m_isInitialized;
 
     // Column renderer
     CItemEditorColumns* m_pColumns;
@@ -45,4 +40,4 @@ private:
     static int s_scrollToIndex;
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

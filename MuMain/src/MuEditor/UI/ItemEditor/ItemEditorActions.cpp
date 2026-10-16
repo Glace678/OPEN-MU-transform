@@ -26,35 +26,33 @@ std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item
     std::stringstream ss;
 
     // Get pointer to the field using offset
-    const BYTE* itemPtr = reinterpret_cast<const BYTE*>(&item);
+    const BYTE* itemPtr  = reinterpret_cast<const BYTE*>(&item);
     const void* fieldPtr = itemPtr + desc.offset;
 
     switch (desc.type)
     {
-    case EItemFieldType::Bool:
-        // Read as BYTE (the on-disk field is Win32 BOOL/BYTE, not C++ bool) to avoid UB.
-        ss << (*reinterpret_cast<const BYTE*>(fieldPtr) ? 1 : 0);
-        break;
+        case EItemFieldType::Bool:
+            ss << (*reinterpret_cast<const bool*>(fieldPtr) ? 1 : 0);
+            break;
 
-    case EItemFieldType::Byte:
-        ss << (int)*reinterpret_cast<const BYTE*>(fieldPtr);
-        break;
+        case EItemFieldType::Byte:
+            ss << (int)*reinterpret_cast<const BYTE*>(fieldPtr);
+            break;
 
-    case EItemFieldType::Word:
-        ss << *reinterpret_cast<const WORD*>(fieldPtr);
-        break;
+        case EItemFieldType::Word:
+            ss << *reinterpret_cast<const WORD*>(fieldPtr);
+            break;
 
-    case EItemFieldType::Int:
-        ss << *reinterpret_cast<const int*>(fieldPtr);
-        break;
+        case EItemFieldType::Int:
+            ss << *reinterpret_cast<const int*>(fieldPtr);
+            break;
 
-    case EItemFieldType::WCharArray:
-    {
-        char buffer[256]{};
-        ConvertItemName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
-        ss << buffer;
-        break;
-    }
+        case EItemFieldType::WCharArray: {
+            char buffer[256];
+            ConvertItemName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
+            ss << buffer;
+            break;
+        }
     }
 
     return ss.str();
@@ -64,8 +62,9 @@ std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item
 
 std::string CItemEditorActions::GetCSVHeader()
 {
-    std::stringstream ss;
-    const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+    std::stringstream          ss;
+    const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+    const int                  fieldCount = GetFieldCount();
 
     ss << "Index";
     for (int i = 0; i < fieldCount; ++i)
@@ -78,8 +77,9 @@ std::string CItemEditorActions::GetCSVHeader()
 
 std::string CItemEditorActions::ExportItemToReadable(int itemIndex, ITEM_ATTRIBUTE& item)
 {
-    std::stringstream ss;
-    const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+    std::stringstream          ss;
+    const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+    const int                  fieldCount = GetFieldCount();
 
     ss << "Row " << itemIndex << "\n";
     ss << "Index = " << itemIndex;
@@ -95,8 +95,9 @@ std::string CItemEditorActions::ExportItemToReadable(int itemIndex, ITEM_ATTRIBU
 
 std::string CItemEditorActions::ExportItemToCSV(int itemIndex, ITEM_ATTRIBUTE& item)
 {
-    std::stringstream ss;
-    const ItemFieldDescriptor* fields = GetFieldDescriptors(); const int fieldCount = GetFieldCount();
+    std::stringstream          ss;
+    const ItemFieldDescriptor* fields     = GetFieldDescriptors();
+    const int                  fieldCount = GetFieldCount();
 
     ss << itemIndex;
 
@@ -133,7 +134,8 @@ void CItemEditorActions::RenderSaveButton()
     if (ImGui::Button(I18N::Editor::SaveItems))
     {
         wchar_t fileName[256];
-        swprintf_s(fileName, _countof(fileName), L"Data\\Local\\%ls\\Item_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+        swprintf_s(fileName, _countof(fileName), L"Data\\Local\\%ls\\Item_%ls.bmd", g_strSelectedML.c_str(),
+                   g_strSelectedML.c_str());
 
         std::string changeLog;
         if (g_ItemDataHandler.Save(fileName, &changeLog))
@@ -173,7 +175,8 @@ void CItemEditorActions::RenderExportS6E3Button()
 
         if (g_ItemDataHandler.ExportAsS6E3(fileName))
         {
-            std::string filename_str = "Item_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_S6E3.bmd";
+            std::string filename_str =
+                "Item_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_S6E3.bmd";
             g_MuEditorConsoleUI.LogEditor("Exported items as S6E3 legacy format: " + filename_str);
             ImGui::OpenPopup("Export S6E3 Success");
         }
@@ -199,7 +202,8 @@ void CItemEditorActions::RenderExportCSVButton()
 
         if (g_ItemDataHandler.ExportToCsv(csvFileName))
         {
-            std::string filename_str = "Item_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_export.csv";
+            std::string filename_str =
+                "Item_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_export.csv";
             g_MuEditorConsoleUI.LogEditor("Exported items as CSV: " + filename_str);
             ImGui::OpenPopup("Export CSV Success");
         }
@@ -222,4 +226,4 @@ void CItemEditorActions::RenderAllButtons()
     RenderExportCSVButton();
 }
 
-#endif // _EDITOR
+#endif  // _EDITOR

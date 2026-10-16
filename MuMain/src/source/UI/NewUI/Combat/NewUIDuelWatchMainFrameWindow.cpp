@@ -7,22 +7,21 @@
 #include "GameLogic/Combat/DuelMgr.h"
 #include "I18N/All.h"
 
-
 using namespace SEASON3B;
 
 CNewUIDuelWatchMainFrameWindow::CNewUIDuelWatchMainFrameWindow()
 {
     m_pNewUIMng = NULL;
 
-    m_bHasHPReceived = FALSE;
-    m_fPrevHPRate1 = 0;
-    m_fPrevHPRate2 = 0;
-    m_fPrevSDRate1 = 0;
-    m_fPrevSDRate2 = 0;
-    m_fLastHPRate1 = 0;
-    m_fLastHPRate2 = 0;
-    m_fLastSDRate1 = 0;
-    m_fLastSDRate2 = 0;
+    m_bHasHPReceived   = FALSE;
+    m_fPrevHPRate1     = 0;
+    m_fPrevHPRate2     = 0;
+    m_fPrevSDRate1     = 0;
+    m_fPrevSDRate2     = 0;
+    m_fLastHPRate1     = 0;
+    m_fLastHPRate2     = 0;
+    m_fLastSDRate1     = 0;
+    m_fLastSDRate2     = 0;
     m_fReceivedHPRate1 = 0;
     m_fReceivedHPRate2 = 0;
     m_fReceivedSDRate1 = 0;
@@ -103,11 +102,13 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
     if (g_DuelMgr.GetCurrentChannel() == -1)
         return true;
 
-    POINT ptOrigin = { 0, (long)((float)REFERENCE_HEIGHT - 51.f) };
+    POINT ptOrigin = {0, (long)((float)REFERENCE_HEIGHT - 51.f)};
 
     g_pRenderText->SetFont(g_hFontBold);
-    g_pRenderText->RenderText(ptOrigin.x + 320 - 80, ptOrigin.y + 36, g_DuelMgr.GetDuelPlayerID(DUEL_HERO), 55, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(ptOrigin.x + 320 + 25, ptOrigin.y + 36, g_DuelMgr.GetDuelPlayerID(DUEL_ENEMY), 55, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(ptOrigin.x + 320 - 80, ptOrigin.y + 36, g_DuelMgr.GetDuelPlayerID(DUEL_HERO), 55, 0,
+                              RT3_SORT_CENTER);
+    g_pRenderText->RenderText(ptOrigin.x + 320 + 25, ptOrigin.y + 36, g_DuelMgr.GetDuelPlayerID(DUEL_ENEMY), 55, 0,
+                              RT3_SORT_CENTER);
 
     int i;
     for (i = 0; i < g_DuelMgr.GetScore(DUEL_HERO); ++i)
@@ -129,41 +130,49 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
         m_fPrevSDRate2 = m_fLastSDRate2 = m_fReceivedSDRate2 = g_DuelMgr.GetSD(DUEL_ENEMY);
     }
 
-    if (m_fLastHPRate1 != g_DuelMgr.GetHP(DUEL_HERO) || m_fLastHPRate2 != g_DuelMgr.GetHP(DUEL_ENEMY) || m_fLastSDRate1 != g_DuelMgr.GetSD(DUEL_HERO) || m_fLastSDRate2 != g_DuelMgr.GetSD(DUEL_ENEMY))
+    if (m_fLastHPRate1 != g_DuelMgr.GetHP(DUEL_HERO) || m_fLastHPRate2 != g_DuelMgr.GetHP(DUEL_ENEMY) ||
+        m_fLastSDRate1 != g_DuelMgr.GetSD(DUEL_HERO) || m_fLastSDRate2 != g_DuelMgr.GetSD(DUEL_ENEMY))
     {
-        m_fLastHPRate1 = g_DuelMgr.GetHP(DUEL_HERO);
-        m_fLastHPRate2 = g_DuelMgr.GetHP(DUEL_ENEMY);
-        m_fLastSDRate1 = g_DuelMgr.GetSD(DUEL_HERO);
-        m_fLastSDRate2 = g_DuelMgr.GetSD(DUEL_ENEMY);
+        m_fLastHPRate1     = g_DuelMgr.GetHP(DUEL_HERO);
+        m_fLastHPRate2     = g_DuelMgr.GetHP(DUEL_ENEMY);
+        m_fLastSDRate1     = g_DuelMgr.GetSD(DUEL_HERO);
+        m_fLastSDRate2     = g_DuelMgr.GetSD(DUEL_ENEMY);
         m_fReceivedHPRate1 = m_fPrevHPRate1;
         m_fReceivedHPRate2 = m_fPrevHPRate2;
         m_fReceivedSDRate1 = m_fPrevSDRate1;
         m_fReceivedSDRate2 = m_fPrevSDRate2;
     }
 
-    int iDamageGap = int(absf(m_fReceivedHPRate1 - g_DuelMgr.GetHP(DUEL_HERO)) * 5.0f) + 2;
+    int   iDamageGap      = int(absf(m_fReceivedHPRate1 - g_DuelMgr.GetHP(DUEL_HERO)) * 5.0f) + 2;
     float fHPRatePerPixel = 1.0f / 236.f * iDamageGap;
 
     float fHPRate = g_DuelMgr.GetHP(DUEL_HERO);
     if (m_fPrevHPRate1 > fHPRate + fHPRatePerPixel)
     {
         m_fPrevHPRate1 -= fHPRatePerPixel;
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE_FX, 60 + 236.f * (1.f - m_fPrevHPRate1), 440, 236.f * m_fPrevHPRate1, 7.f, 235.f / 256.f * m_fPrevHPRate1, 0, -235.f / 256.f * m_fPrevHPRate1, 6.f / 8.f);
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f, 235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE_FX, 60 + 236.f * (1.f - m_fPrevHPRate1), 440,
+                    236.f * m_fPrevHPRate1, 7.f, 235.f / 256.f * m_fPrevHPRate1, 0, -235.f / 256.f * m_fPrevHPRate1,
+                    6.f / 8.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f,
+                    235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
     }
     else if (m_fPrevHPRate1 < fHPRate - fHPRatePerPixel)
     {
         m_fPrevHPRate1 += fHPRatePerPixel;
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE_FX, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f, 235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - m_fPrevHPRate1), 440, 236.f * m_fPrevHPRate1, 7.f, 235.f / 256.f * m_fPrevHPRate1, 0, -235.f / 256.f * m_fPrevHPRate1, 6.f / 8.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE_FX, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f,
+                    235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - m_fPrevHPRate1), 440,
+                    236.f * m_fPrevHPRate1, 7.f, 235.f / 256.f * m_fPrevHPRate1, 0, -235.f / 256.f * m_fPrevHPRate1,
+                    6.f / 8.f);
     }
     else
     {
         m_fPrevHPRate1 = fHPRate;
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f, 235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 60 + 236.f * (1.f - fHPRate), 440, 236.f * fHPRate, 7.f,
+                    235.f / 256.f * fHPRate, 0, -235.f / 256.f * fHPRate, 6.f / 8.f);
     }
 
-    iDamageGap = int(absf(m_fReceivedHPRate2 - g_DuelMgr.GetHP(DUEL_ENEMY)) * 5.0f) + 2;
+    iDamageGap      = int(absf(m_fReceivedHPRate2 - g_DuelMgr.GetHP(DUEL_ENEMY)) * 5.0f) + 2;
     fHPRatePerPixel = 1.0f / 236.f * iDamageGap;
 
     fHPRate = g_DuelMgr.GetHP(DUEL_ENEMY);
@@ -185,21 +194,23 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
         RenderImage(IMAGE_DUELWATCH_MAINFRAME_HP_GAUGE, 580 - 236, 440, 236.f * fHPRate, 7.f);
     }
 
-    iDamageGap = int(absf(m_fReceivedSDRate1 - g_DuelMgr.GetSD(DUEL_HERO)) * 5.0f) + 2;
+    iDamageGap            = int(absf(m_fReceivedSDRate1 - g_DuelMgr.GetSD(DUEL_HERO)) * 5.0f) + 2;
     float fSDRatePerPixel = 1.0f / 154.f * iDamageGap;
 
     float fSDRate = g_DuelMgr.GetSD(DUEL_HERO);
     if (m_fPrevSDRate1 > fSDRate + fSDRatePerPixel)
     {
         m_fPrevSDRate1 -= fSDRatePerPixel;
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE_FX, 142 + 154.f * (1.f - m_fPrevSDRate1), 450, 154.f * m_fPrevSDRate1, 4.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE_FX, 142 + 154.f * (1.f - m_fPrevSDRate1), 450,
+                    154.f * m_fPrevSDRate1, 4.f);
         RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE, 142 + 154.f * (1.f - fSDRate), 450, 154.f * fSDRate, 4.f);
     }
     else if (m_fPrevSDRate1 < fSDRate - fSDRatePerPixel)
     {
         m_fPrevSDRate1 += fSDRatePerPixel;
         RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE_FX, 142 + 154.f * (1.f - fSDRate), 450, 154.f * fSDRate, 4.f);
-        RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE, 142 + 154.f * (1.f - m_fPrevSDRate1), 450, 154.f * m_fPrevSDRate1, 4.f);
+        RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE, 142 + 154.f * (1.f - m_fPrevSDRate1), 450,
+                    154.f * m_fPrevSDRate1, 4.f);
     }
     else
     {
@@ -207,7 +218,8 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
         RenderImage(IMAGE_DUELWATCH_MAINFRAME_SD_GAUGE, 142 + 154.f * (1.f - fSDRate), 450, 154.f * fSDRate, 4.f);
     }
 
-    iDamageGap = int(absf(m_fReceivedSDRate2 - g_DuelMgr.GetSD(DUEL_ENEMY)) * 5.0f) + 2;  // #23: enemy SD uses DUEL_ENEMY
+    iDamageGap =
+        int(absf(m_fReceivedSDRate2 - g_DuelMgr.GetSD(DUEL_ENEMY)) * 5.0f) + 2;  // #23: enemy SD uses DUEL_ENEMY
     fSDRatePerPixel = 1.0f / 154.f * iDamageGap;
 
     fSDRate = g_DuelMgr.GetSD(DUEL_ENEMY);
@@ -234,9 +246,7 @@ bool CNewUIDuelWatchMainFrameWindow::Render()
     return true;
 }
 
-void CNewUIDuelWatchMainFrameWindow::Render3D()
-{
-}
+void CNewUIDuelWatchMainFrameWindow::Render3D() {}
 
 bool CNewUIDuelWatchMainFrameWindow::IsVisible() const
 {
@@ -289,14 +299,16 @@ void CNewUIDuelWatchMainFrameWindow::RenderFrame()
     float width, height;
     float x, y;
 
-    width = 256.f; height = 51.f;
-    x = 0.f; y = (float)REFERENCE_HEIGHT - height;
+    width  = 256.f;
+    height = 51.f;
+    x      = 0.f;
+    y      = (float)REFERENCE_HEIGHT - height;
     SEASON3B::RenderImage(IMAGE_DUELWATCH_MAINFRAME_BACK1, x, y, width, height);
     width = 128.f;
-    x = 256.f;
+    x     = 256.f;
     SEASON3B::RenderImage(IMAGE_DUELWATCH_MAINFRAME_BACK2, x, y, width, height);
     width = 256.f;
-    x = 256.f + 128.f;
+    x     = 256.f + 128.f;
     SEASON3B::RenderImage(IMAGE_DUELWATCH_MAINFRAME_BACK3, x, y, width, height);
 }
 
@@ -306,7 +318,7 @@ bool CNewUIDuelWatchMainFrameWindow::BtnProcess()
     {
         if (g_DuelMgr.GetCurrentChannel() >= 0)
         {
-            SocketClient->ToGameServer()->SendDuelChannelQuitRequest();//g_DuelMgr.GetCurrentChannel());
+            SocketClient->ToGameServer()->SendDuelChannelQuitRequest();  //g_DuelMgr.GetCurrentChannel());
         }
         return true;
     }

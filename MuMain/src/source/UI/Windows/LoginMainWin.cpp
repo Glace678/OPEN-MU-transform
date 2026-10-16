@@ -13,18 +13,13 @@
 // Global Variables
 //=============================================================================
 
-
 //=============================================================================
 // Constructor / Destructor
 //=============================================================================
 
-CLoginMainWin::CLoginMainWin()
-{
-}
+CLoginMainWin::CLoginMainWin() {}
 
-CLoginMainWin::~CLoginMainWin()
-{
-}
+CLoginMainWin::~CLoginMainWin() {}
 
 //=============================================================================
 // Public Methods
@@ -36,7 +31,7 @@ void CLoginMainWin::Create()
         m_aBtn[i].Create(54, 30, BITMAP_LOG_IN + 4 + i, 3, 2, 1);
 
     // Width spans the canvas with 30-art margins; CWin hit size is device space.
-    constexpr int kArtWidth = REFERENCE_WIDTH - 30 * 2;
+    constexpr int kArtWidth  = REFERENCE_WIDTH - 30 * 2;
     constexpr int kArtHeight = 30;
     CWin::Create(kArtWidth, kArtHeight, -2);
     m_Size.cx = int(kArtWidth * CSprite::ResolutionScaleX());
@@ -55,29 +50,23 @@ void CLoginMainWin::PreRelease()
 
 void CLoginMainWin::SetPosition(int nXCoord, int nYCoord)
 {
-    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(),
-        (float)nYCoord / CSprite::ResolutionScaleY());
+    SetPositionArt((float)nXCoord / CSprite::ResolutionScaleX(), (float)nYCoord / CSprite::ResolutionScaleY());
 }
 
 void CLoginMainWin::SetPositionArt(float fArtX, float fArtY)
 {
     CWin::SetPositionArt(fArtX, fArtY);
 
-    const float rateX = CSprite::ResolutionScaleX();
-    const float winArtWidth = CWin::GetWidth() / rateX;
+    const float rateX          = CSprite::ResolutionScaleX();
+    const float winArtWidth    = CWin::GetWidth() / rateX;
     const float creditArtWidth = m_aBtn[LMW_BTN_CREDIT].GetWidth() / rateX;
 
     m_aBtn[LMW_BTN_MENU].SetPositionArt(fArtX, fArtY);
 
-    m_aBtn[LMW_BTN_CREDIT].SetPositionArt(
-        fArtX + winArtWidth - creditArtWidth,
-        fArtY
-    );
+    m_aBtn[LMW_BTN_CREDIT].SetPositionArt(fArtX + winArtWidth - creditArtWidth, fArtY);
 
-    m_sprDeco.SetPositionArt(
-        m_aBtn[LMW_BTN_CREDIT].GetXPos() / rateX,
-        m_aBtn[LMW_BTN_CREDIT].GetYPos() / CSprite::ResolutionScaleY()
-    );
+    m_sprDeco.SetPositionArt(m_aBtn[LMW_BTN_CREDIT].GetXPos() / rateX,
+                             m_aBtn[LMW_BTN_CREDIT].GetYPos() / CSprite::ResolutionScaleY());
 }
 
 void CLoginMainWin::Show(bool bShow)
@@ -97,8 +86,8 @@ bool CLoginMainWin::CursorInWin(int nArea)
 
     switch (nArea)
     {
-    case WA_MOVE:
-        return false;
+        case WA_MOVE:
+            return false;
     }
 
     return CWin::CursorInWin(nArea);

@@ -7,7 +7,8 @@
 // Layout matches GLSL layout(std140, binding=1) uniform SceneData.
 // DXP-14: backed by RHI::CreateUniformBlock/UpdateUniformBlock instead of raw GL calls (see
 // GlobalUBO.h's equivalent note).
-class SceneUBO {
+class SceneUBO
+{
 public:
     static SceneUBO& Instance();
 
@@ -24,13 +25,14 @@ private:
     SceneUBO() = default;
     ~SceneUBO();
 
-    SceneUBO(const SceneUBO&) = delete;
+    SceneUBO(const SceneUBO&)            = delete;
     SceneUBO& operator=(const SceneUBO&) = delete;
 
     RHI::BufferHandle m_UBOHandle;
 
-    struct {
-        float fogColor[4] = { 0.f, 0.f, 0.f, 0.f };
+    struct
+    {
+        float fogColor[4] = {0.f, 0.f, 0.f, 0.f};
         float fogStart    = 0.f;
         float fogEnd      = 0.f;
         float fogEnabled  = 0.f;

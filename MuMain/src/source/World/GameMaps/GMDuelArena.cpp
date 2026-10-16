@@ -12,8 +12,6 @@
 #include "Engine/Object/ZzzOpenData.h"
 #include "Render/Terrain/ZzzLodTerrain.h"
 
-
-
 CGMDuelArenaPtr CGMDuelArena::Make()
 {
     CGMDuelArenaPtr duelarena(new CGMDuelArena);
@@ -21,30 +19,26 @@ CGMDuelArenaPtr CGMDuelArena::Make()
     return duelarena;
 }
 
-CGMDuelArena::CGMDuelArena()
-{
-}
+CGMDuelArena::CGMDuelArena() {}
 
 CGMDuelArena::~CGMDuelArena()
 {
     Destroy();
 }
 
-void CGMDuelArena::Init()
-{
-}
+void CGMDuelArena::Init() {}
 
-void CGMDuelArena::Destroy()
-{
-}
+void CGMDuelArena::Destroy() {}
 
 bool CGMDuelArena::CreateObject(OBJECT* o)
 {
     switch (o->Type)
     {
-    case 0: case 1: case 32:
-        o->CollisionRange = -300;
-        return true;
+        case 0:
+        case 1:
+        case 32:
+            o->CollisionRange = -300;
+            return true;
     }
 
     return false;
@@ -68,21 +62,19 @@ bool CGMDuelArena::MoveObject(OBJECT* o)
 
     switch (o->Type)
     {
-    case 35:
-    case 36:
-    {
-        o->HiddenMesh = -2;
-    }
-    break;
-    case 34:
-    {
-        float Luminosity = (float)(rand() % 3 + 5) * 0.1f;
-        vec3_t Light;
-        Vector(Luminosity * 0.9f, Luminosity * 0.2f, Luminosity * 0.1f, Light);
-        AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
-        o->HiddenMesh = -2;
-    }
-    break;
+        case 35:
+        case 36: {
+            o->HiddenMesh = -2;
+        }
+        break;
+        case 34: {
+            float  Luminosity = (float)(rand() % 3 + 5) * 0.1f;
+            vec3_t Light;
+            Vector(Luminosity * 0.9f, Luminosity * 0.2f, Luminosity * 0.1f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+            o->HiddenMesh = -2;
+        }
+        break;
     }
 
     return false;
@@ -123,41 +115,39 @@ bool CGMDuelArena::RenderObjectVisual(OBJECT* o, BMD* b)
 {
     switch (o->Type)
     {
-    case 34:
+        case 34:
+            break;
+        case 35: {
+            vec3_t vLight;
+            if (rand_fps_check(3))
+            {
+                Vector(1.f, 1.f, 1.f, vLight);
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, vLight, 14, o->Scale, o);
+            }
+        }
         break;
-    case 35:
-    {
-        vec3_t vLight;
-        if (rand_fps_check(3))
-        {
-            Vector(1.f, 1.f, 1.f, vLight);
-            CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, vLight, 14, o->Scale, o);
-        }
-    }
-    break;
-    case 36:
-    {
-        vec3_t vLightFire;
-        Vector(1.0f, 0.2f, 0.0f, vLightFire);
-        CreateSprite(BITMAP_LIGHT, o->Position, 2.0f * o->Scale, vLightFire, o);
+        case 36: {
+            vec3_t vLightFire;
+            Vector(1.0f, 0.2f, 0.0f, vLightFire);
+            CreateSprite(BITMAP_LIGHT, o->Position, 2.0f * o->Scale, vLightFire, o);
 
-        vec3_t vLight;
-        Vector(1.0f, 1.0f, 1.0f, vLight);
+            vec3_t vLight;
+            Vector(1.0f, 1.0f, 1.0f, vLight);
 
-        switch (rand() % 3)
-        {
-        case 0:
-            CreateParticleFpsChecked(BITMAP_FIRE_HIK1, o->Position, o->Angle, vLight, 0, o->Scale);
-            break;
-        case 1:
-            CreateParticleFpsChecked(BITMAP_FIRE_CURSEDLICH, o->Position, o->Angle, vLight, 4, o->Scale);
-            break;
-        case 2:
-            CreateParticleFpsChecked(BITMAP_FIRE_HIK3, o->Position, o->Angle, vLight, 0, o->Scale);
-            break;
+            switch (rand() % 3)
+            {
+                case 0:
+                    CreateParticleFpsChecked(BITMAP_FIRE_HIK1, o->Position, o->Angle, vLight, 0, o->Scale);
+                    break;
+                case 1:
+                    CreateParticleFpsChecked(BITMAP_FIRE_CURSEDLICH, o->Position, o->Angle, vLight, 4, o->Scale);
+                    break;
+                case 2:
+                    CreateParticleFpsChecked(BITMAP_FIRE_HIK3, o->Position, o->Angle, vLight, 0, o->Scale);
+                    break;
+            }
         }
-    }
-    break;
+        break;
     }
 
     return false;
@@ -174,9 +164,7 @@ bool CGMDuelArena::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
     return true;
 }
 
-void CGMDuelArena::RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
-{
-}
+void CGMDuelArena::RenderAfterObjectMesh(OBJECT* o, BMD* b, bool ExtraMon) {}
 
 bool IsDuelArena()
 {
@@ -219,9 +207,7 @@ bool CGMDuelArena::PlayMonsterSound(OBJECT* o)
     return false;
 }
 
-void CGMDuelArena::PlayObjectSound(OBJECT* o)
-{
-}
+void CGMDuelArena::PlayObjectSound(OBJECT* o) {}
 
 void CGMDuelArena::PlayBGM()
 {

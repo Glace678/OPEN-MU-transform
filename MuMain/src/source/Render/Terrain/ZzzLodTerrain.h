@@ -1,10 +1,10 @@
 #pragma once
 
-extern vec3_t		 PrimaryTerrainLight[];
-extern vec3_t		 BackTerrainLight[];
-extern vec3_t		 TerrainLight[];
-extern float		 PrimaryTerrainHeight[];
-extern float		 BackTerrainHeight[];
+extern vec3_t        PrimaryTerrainLight[];
+extern vec3_t        BackTerrainLight[];
+extern vec3_t        TerrainLight[];
+extern float         PrimaryTerrainHeight[];
+extern float         BackTerrainHeight[];
 extern unsigned char TerrainMappingLayer1[];
 extern unsigned char TerrainMappingLayer2[];
 extern float         TerrainMappingAlpha[];
@@ -12,7 +12,7 @@ extern WORD          TerrainWall[];
 
 inline int TERRAIN_INDEX(int x, int y)
 {
-    return (y) * TERRAIN_SIZE + (x);
+    return (y)*TERRAIN_SIZE + (x);
 }
 
 inline int TERRAIN_INDEX_REPEAT(int x, int y)
@@ -38,16 +38,16 @@ void CreateTerrainLight();
 void CreateTerrainNormal_Part(int xi, int yi);
 void CreateTerrainLight_Part(int xi, int yi);
 
-bool CreateTerrain(wchar_t* FileName, bool bNew = false);
+void CreateTerrain(wchar_t* FileName, bool bNew = false);
 
 bool IsTerrainHeightExtMap(int iWorld);
 
-int OpenTerrainMapping(wchar_t* FileName);
+int  OpenTerrainMapping(wchar_t* FileName);
 bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber);
-int OpenTerrainAttribute(wchar_t* FileName);
+int  OpenTerrainAttribute(wchar_t* FileName);
 bool SaveTerrainAttribute(wchar_t* FileName, int iMapNumber);
 
-//  Property change.
+//  속성 변경.
 void AddTerrainAttribute(int x, int y, BYTE att);
 void SubTerrainAttribute(int x, int y, BYTE att);
 void AddTerrainAttributeRange(int x, int y, int dx, int dy, BYTE att, BYTE Add = 0);
@@ -71,21 +71,21 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position);
 void CreateFrustrum2D(vec3_t Position);
 bool TestFrustrum(vec3_t Position, float Range);
 bool TestFrustrum2D(float x, float y, float Range);
-void CacheActiveFrustum();   // Call once per frame after camera update
+void CacheActiveFrustum();  // Call once per frame after camera update
 void UpdateFrustrumBounds();
 void ResetFrustrumBoundsFullTerrain();  // Set bounds to cover entire terrain (for scenes without CreateFrustrum)
 
 void CreateLodBuffer();
 
-void CreateTerrainVBO();
-void DestroyTerrainVBO();
-void UploadTerrainLightVBO();
+void          CreateTerrainVBO();
+void          DestroyTerrainVBO();
+void          UploadTerrainLightVBO();
 extern GLuint g_VBO_TerrainPosition;
 extern GLuint g_EBO_Terrain;
 extern GLuint g_VAO_Terrain;
 extern GLuint g_VBO_TerrainLight[2];
 extern GLuint g_VBO_TerrainAlpha;
-extern int g_TerrainLightBufIdx;
+extern int    g_TerrainLightBufIdx;
 
 float RequestTerrainHeight(float xf, float yf);
 
@@ -101,7 +101,8 @@ void RenderTerrainTile_After(float xf, float yf, int xi, int yi, float lodf, int
 void RenderTerrain_After(bool EditFlag);
 
 void RenderTerrainBitmap(int Texture, int mxi, int myi, float Rotation);
-void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light, float Rotation = 0.f, float Alpha = 1.f, float Height = 5.f);
+void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light,
+                              float Rotation = 0.f, float Alpha = 1.f, float Height = 5.f);
 
 void CreateSun();
 void RenderSky();
@@ -120,13 +121,13 @@ extern const float g_fMaxHeight;
 class CFrustrum
 {
 private:
-    float m_FrustrumD[5];
+    float  m_FrustrumD[5];
     vec3_t m_FrustrumNorm[5];
 
-    vec3_t	m_vEye;
-    float	m_fFov;
-    float	m_fAspect;
-    float	m_fDist;
+    vec3_t m_vEye;
+    float  m_fFov;
+    float  m_fAspect;
+    float  m_fDist;
 
     void Make(vec3_t vEye, float fFov, float fAspect, float fDist);
 
@@ -134,7 +135,7 @@ public:
     CFrustrum() {}
     ~CFrustrum() {}
 
-    //3D frustum encapsulation
+    //3D프러스텀 캡슐화
     void Create(vec3_t vEye, float fFov, float fAspect, float fDist);
     bool Test(vec3_t vPos, float fRange);
     void Reset();
@@ -145,12 +146,12 @@ public:
     inline void SetDist(float fDist) { m_fDist = fDist; }
 };
 
-void ResetAllFrustrum();
-void DeleteAllFrustrum();
-CFrustrum* FindFrustrum(unsigned int iID);
-typedef std::map<unsigned int, CFrustrum* > FrustrumMap_t;
-extern FrustrumMap_t g_FrustrumMap; //A frustum that can be set by ID separately from the whole frustum
-#endif //DYNAMIC_FRUSTRUM
+void                                       ResetAllFrustrum();
+void                                       DeleteAllFrustrum();
+CFrustrum*                                 FindFrustrum(unsigned int iID);
+typedef std::map<unsigned int, CFrustrum*> FrustrumMap_t;
+extern FrustrumMap_t                       g_FrustrumMap;  //전체 프러스텀과 별개로 아이디로 지정할 수 있는 프러스텀
+#endif                                                     //DYNAMIC_FRUSTRUM
 
 inline int MapFileEncrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
 {
@@ -158,8 +159,8 @@ inline int MapFileEncrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
     {
         return (iSize);
     }
-    BYTE byMapXorKey[16] = { 0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
-                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2 };
+    BYTE byMapXorKey[16] = {0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
+                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2};
 
     WORD wMapKey = 0x5E;
     for (int i = 0; i < iSize; ++i)
@@ -179,15 +180,15 @@ inline int MapFileDecrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
     {
         return (iSize);
     }
-    BYTE byMapXorKey[16] = { 0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
-                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2 };
+    BYTE byMapXorKey[16] = {0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
+                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2};
 
     WORD wMapKey = 0x5E;
     for (int i = 0; i < iSize; ++i)
     {
         pbyDst[i] = (pbySrc[i] ^ byMapXorKey[i % 16]) - (BYTE)wMapKey;
-        wMapKey = pbySrc[i] + 0x3D;
-        wMapKey = wMapKey & 0xFF;
+        wMapKey   = pbySrc[i] + 0x3D;
+        wMapKey   = wMapKey & 0xFF;
     }
     return (iSize);
 }

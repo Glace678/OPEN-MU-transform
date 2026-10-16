@@ -20,10 +20,10 @@ using namespace SEASON3B;
 
 CNewUIUnitedMarketPlaceWindow::CNewUIUnitedMarketPlaceWindow()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
     m_pNewUI3DRenderMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_iRemainTime = 0;
+    m_Pos.x = m_Pos.y      = 0;
+    m_iRemainTime          = 0;
     m_bIsEnterButtonLocked = FALSE;
 }
 
@@ -58,7 +58,8 @@ bool CNewUIUnitedMarketPlaceWindow::Create(CNewUIManager* pNewUIMng, CNewUI3DRen
     return true;
 }
 
-void CNewUIUnitedMarketPlaceWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y, const wchar_t* pCaption)
+void CNewUIUnitedMarketPlaceWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y,
+                                               const wchar_t* pCaption)
 {
     pNewUIButton->ChangeText(pCaption);
     pNewUIButton->ChangeTextBackColor(RGBA(255, 255, 255, 0));
@@ -127,7 +128,7 @@ bool CNewUIUnitedMarketPlaceWindow::Update()
         // 			else
         // 				m_bChannelEnable[i] = FALSE;
         //
-        // // ư 
+        // 			// ��ư ���
         // 			if (m_bChannelEnable[i] == TRUE && g_DuelMgr.IsDuelChannelJoinable(i))
         // 			{
         // 				m_BtnChannel[i].UnLock();
@@ -157,28 +158,37 @@ bool CNewUIUnitedMarketPlaceWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     //char szText[256];
 
     if (gMapManager.WorldActive == WD_79UNITEDMARKETPLACE)
     {
         g_pRenderText->SetFont(g_hFont);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 10, I18N::Game::WillYouBeGoingBackToTownNow, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 30, I18N::Game::HaveAnotherGreatDay, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 50, I18N::Game::AndStayPositiveAtAllTimes, 190, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 10, I18N::Game::WillYouBeGoingBackToTownNow, 190, 0,
+                                  RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 30, I18N::Game::HaveAnotherGreatDay, 190, 0,
+                                  RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 50, I18N::Game::AndStayPositiveAtAllTimes, 190, 0,
+                                  RT3_SORT_CENTER);
 
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 130, I18N::Game::WouldYouLikeToGoToTown, 190, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 130, I18N::Game::WouldYouLikeToGoToTown, 190, 0,
+                                  RT3_SORT_CENTER);
     }
     else
     {
         g_pRenderText->SetFont(g_hFont);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 10, I18N::Game::IfYouGoToTheMarketInLorencia, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 30, I18N::Game::YouLlFindManyItemsYouNeed, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 50, I18N::Game::AvailableForPurchase, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 70, I18N::Game::IfYouHaveItemsYouWantToSell, 190, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 10, I18N::Game::IfYouGoToTheMarketInLorencia, 190, 0,
+                                  RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 30, I18N::Game::YouLlFindManyItemsYouNeed, 190, 0,
+                                  RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 50, I18N::Game::AvailableForPurchase, 190, 0,
+                                  RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 70, I18N::Game::IfYouHaveItemsYouWantToSell, 190, 0,
+                                  RT3_SORT_CENTER);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 90, I18N::Game::YouCanSellThem, 190, 0, RT3_SORT_CENTER);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 110, I18N::Game::AtTheMarket, 190, 0, RT3_SORT_CENTER);
-        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 130, I18N::Game::WouldYouLikeToGoToTheMarket, 190, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 130, I18N::Game::WouldYouLikeToGoToTheMarket, 190, 0,
+                                  RT3_SORT_CENTER);
     }
 
     if (m_bIsEnterButtonLocked == TRUE)
@@ -265,7 +275,9 @@ void CNewUIUnitedMarketPlaceWindow::RenderFrame()
     RenderImage(IMAGE_UNITEDMARKETPLACEWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_UNITEDMARKETPLACEWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 

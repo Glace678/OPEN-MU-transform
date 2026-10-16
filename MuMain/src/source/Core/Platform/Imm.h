@@ -34,23 +34,38 @@
 #define IME_SMODE_AUTOMATIC 0x0004
 #endif
 
-typedef struct tagCOMPOSITIONFORM {
+typedef struct tagCOMPOSITIONFORM
+{
     DWORD dwStyle;
     POINT ptCurrentPos;
     RECT  rcArea;
-} COMPOSITIONFORM, * LPCOMPOSITIONFORM;
+} COMPOSITIONFORM, *LPCOMPOSITIONFORM;
 
 // No IMM context exists off Windows; SDL handles composition and conversion.
-inline HIMC ImmGetContext(HWND)              { return nullptr; }
-inline BOOL ImmReleaseContext(HWND, HIMC)    { return TRUE; }
-inline HWND ImmGetDefaultIMEWnd(HWND)        { return nullptr; }
+inline HIMC ImmGetContext(HWND)
+{
+    return nullptr;
+}
+inline BOOL ImmReleaseContext(HWND, HIMC)
+{
+    return TRUE;
+}
+inline HWND ImmGetDefaultIMEWnd(HWND)
+{
+    return nullptr;
+}
 
 inline BOOL ImmGetConversionStatus(HIMC, LPDWORD lpfdwConversion, LPDWORD lpfdwSentence)
 {
-    if (lpfdwConversion) *lpfdwConversion = 0;
-    if (lpfdwSentence)   *lpfdwSentence = 0;
+    if (lpfdwConversion)
+        *lpfdwConversion = 0;
+    if (lpfdwSentence)
+        *lpfdwSentence = 0;
     return TRUE;
 }
-inline BOOL ImmSetConversionStatus(HIMC, DWORD, DWORD) { return TRUE; }
+inline BOOL ImmSetConversionStatus(HIMC, DWORD, DWORD)
+{
+    return TRUE;
+}
 
-#endif // _WIN32
+#endif  // _WIN32

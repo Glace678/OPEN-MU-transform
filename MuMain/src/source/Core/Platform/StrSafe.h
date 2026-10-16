@@ -12,21 +12,22 @@
 #else  // ---- non-Windows ----------------------------------------------------
 
 #include <cstdarg>
-#include <cstring>   // strnlen
-#include <cwchar>    // wcslen, wmemcpy, wcsnlen
-#include "Core/Platform/WinCompat.h"   // HRESULT, S_OK
-#include "Core/Platform/SecureCrt.h"   // _vsnwprintf
+#include <cstring>                    // strnlen
+#include <cwchar>                     // wcslen, wmemcpy, wcsnlen
+#include "Core/Platform/WinCompat.h"  // HRESULT, S_OK
+#include "Core/Platform/SecureCrt.h"  // _vsnwprintf
 
 #ifndef STRSAFE_E_INSUFFICIENT_BUFFER
 #define STRSAFE_E_INSUFFICIENT_BUFFER (static_cast<HRESULT>(0x8007007AL))
 #endif
 #ifndef STRSAFE_E_INVALID_PARAMETER
-#define STRSAFE_E_INVALID_PARAMETER   (static_cast<HRESULT>(0x80070057L))
+#define STRSAFE_E_INVALID_PARAMETER (static_cast<HRESULT>(0x80070057L))
 #endif
 
 inline HRESULT StringCchCopyW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc)
 {
-    if (!pszDest || !pszSrc || cchDest == 0) return STRSAFE_E_INVALID_PARAMETER;
+    if (!pszDest || !pszSrc || cchDest == 0)
+        return STRSAFE_E_INVALID_PARAMETER;
     const size_t len = wcslen(pszSrc);
     if (len >= cchDest)
     {
@@ -40,7 +41,8 @@ inline HRESULT StringCchCopyW(wchar_t* pszDest, size_t cchDest, const wchar_t* p
 
 inline HRESULT StringCchVPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, va_list args)
 {
-    if (!pszDest || !pszFormat || cchDest == 0) return STRSAFE_E_INVALID_PARAMETER;
+    if (!pszDest || !pszFormat || cchDest == 0)
+        return STRSAFE_E_INVALID_PARAMETER;
     const int r = _vsnwprintf(pszDest, cchDest, pszFormat, args);
     if (r < 0 || static_cast<size_t>(r) >= cchDest)
     {
@@ -63,19 +65,25 @@ inline HRESULT StringCchPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_t*
 
 inline HRESULT StringCchLengthW(const wchar_t* psz, size_t cchMax, size_t* pcchLength)
 {
-    if (!psz || cchMax == 0) return STRSAFE_E_INVALID_PARAMETER;
+    if (!psz || cchMax == 0)
+        return STRSAFE_E_INVALID_PARAMETER;
     const size_t len = wcsnlen(psz, cchMax);
-    if (len >= cchMax) return STRSAFE_E_INVALID_PARAMETER;
-    if (pcchLength) *pcchLength = len;
+    if (len >= cchMax)
+        return STRSAFE_E_INVALID_PARAMETER;
+    if (pcchLength)
+        *pcchLength = len;
     return S_OK;
 }
 
 inline HRESULT StringCchLengthA(const char* psz, size_t cchMax, size_t* pcchLength)
 {
-    if (!psz || cchMax == 0) return STRSAFE_E_INVALID_PARAMETER;
+    if (!psz || cchMax == 0)
+        return STRSAFE_E_INVALID_PARAMETER;
     const size_t len = strnlen(psz, cchMax);
-    if (len >= cchMax) return STRSAFE_E_INVALID_PARAMETER;
-    if (pcchLength) *pcchLength = len;
+    if (len >= cchMax)
+        return STRSAFE_E_INVALID_PARAMETER;
+    if (pcchLength)
+        *pcchLength = len;
     return S_OK;
 }
 
@@ -87,4 +95,4 @@ inline HRESULT StringCchLengthA(const char* psz, size_t cchMax, size_t* pcchLeng
 #define StringCchLength  StringCchLengthW
 #endif
 
-#endif // _WIN32
+#endif  // _WIN32

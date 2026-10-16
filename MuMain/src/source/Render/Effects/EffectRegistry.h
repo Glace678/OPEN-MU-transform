@@ -8,7 +8,7 @@
 // to the legacy switch statements, so migration can proceed effect by effect.
 namespace Render::Effects
 {
-    // Returns the descriptor for an effect type, or nullptr if the type has not
-    // been migrated to the registry yet. Lookup is O(1) (type-indexed table).
-    const EffectDescriptor* Lookup(int type);
+// Returns the descriptor for an effect type, or nullptr if the type has not
+// been migrated to the registry yet. Lookup is O(1) (type-indexed table).
+const EffectDescriptor* Lookup(int type);
 }

@@ -12,13 +12,9 @@ PetActionDemonPtr PetActionDemon::Make()
     return petAction;
 }
 
-PetActionDemon::PetActionDemon()
-{
-}
+PetActionDemon::PetActionDemon() {}
 
-PetActionDemon::~PetActionDemon()
-{
-}
+PetActionDemon::~PetActionDemon() {}
 
 bool PetActionDemon::Release(OBJECT* obj, CHARACTER* Owner)
 {
@@ -40,7 +36,7 @@ bool PetActionDemon::Model(OBJECT* obj, CHARACTER* Owner, int targetKey, double 
 
 bool PetActionDemon::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    float FlyRange = 50.f;
+    float  FlyRange = 50.f;
     vec3_t Range, Direction;
 
     obj->Position[2] = obj->Owner->Position[2] + (230.0f * obj->Owner->Scale);
@@ -55,7 +51,7 @@ bool PetActionDemon::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double t
     }
     else if (Distance >= FlyRange * FlyRange)
     {
-        float Angle = CreateAngle2D(obj->Position, obj->Owner->Position);
+        float Angle   = CreateAngle2D(obj->Position, obj->Owner->Position);
         obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 10.0f * FPS_ANIMATION_FACTOR);
     }
 
@@ -74,17 +70,17 @@ bool PetActionDemon::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double t
 
 bool PetActionDemon::Effect(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    BMD* b = &Models[obj->Type];
+    BMD*   b = &Models[obj->Type];
     vec3_t Position, vRelativePos;
     vec3_t Light, Light2;
-    float fRad = ((Q_PI / 2500.0f) * fmodf(tick, 25000));
-    float temp = sinf(fRad) + 0.4f;
+    float  fRad = ((Q_PI / 2500.0f) * fmodf(tick, 25000));
+    float  temp = sinf(fRad) + 0.4f;
 
     Vector(0.f, 0.f, 0.f, vRelativePos);
     Vector(temp * 0.7f, temp * 0.5f, temp * 0.6f, Light);
     Vector(0.7f, 0.3f, 0.3f, Light2);
 
-    int itemp[] = { 8, 34, 51, 61, 56, 66, 52, 58, 44 };
+    int itemp[] = {8, 34, 51, 61, 56, 66, 52, 58, 44};
 
     for (int i = 0; i < 9; i++)
     {
@@ -92,29 +88,29 @@ bool PetActionDemon::Effect(OBJECT* obj, CHARACTER* Owner, int targetKey, double
 
         switch (i)
         {
-        case 0:
-            CreateSprite(BITMAP_LIGHTMARKS_FOREIGN, Position, 1.0f, Light, obj);
-            CreateSprite(BITMAP_FLARE, Position, 0.5f, Light, obj);
-            break;
+            case 0:
+                CreateSprite(BITMAP_LIGHTMARKS_FOREIGN, Position, 1.0f, Light, obj);
+                CreateSprite(BITMAP_FLARE, Position, 0.5f, Light, obj);
+                break;
 
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-            CreateParticleFpsChecked(BITMAP_CLUD64, Position, obj->Angle, Light, 11, 0.5f);
-            break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                CreateParticleFpsChecked(BITMAP_CLUD64, Position, obj->Angle, Light, 11, 0.5f);
+                break;
 
-        case 6:
-        case 7:
-            CreateSprite(BITMAP_LIGHTMARKS_FOREIGN, Position, 0.5f, Light, obj);
-            break;
+            case 6:
+            case 7:
+                CreateSprite(BITMAP_LIGHTMARKS_FOREIGN, Position, 0.5f, Light, obj);
+                break;
 
-        case 8:
-            CreateParticleFpsChecked(BITMAP_FIRE_HIK3, Position, obj->Angle, Light, 1, 0.4f);
-            CreateSprite(BITMAP_FLARE, Position, 1.5f, Light, obj);
-            CreateSprite(BITMAP_FLARE, Position, 0.5f, Light2, obj);
-            break;
+            case 8:
+                CreateParticleFpsChecked(BITMAP_FIRE_HIK3, Position, obj->Angle, Light, 1, 0.4f);
+                CreateSprite(BITMAP_FLARE, Position, 1.5f, Light, obj);
+                CreateSprite(BITMAP_FLARE, Position, 0.5f, Light2, obj);
+                break;
         }
     }
     return TRUE;

@@ -53,7 +53,7 @@ private:
     AnimationTaskPool() = default;
     ~AnimationTaskPool() { Shutdown(); }
 
-    AnimationTaskPool(const AnimationTaskPool&) = delete;
+    AnimationTaskPool(const AnimationTaskPool&)            = delete;
     AnimationTaskPool& operator=(const AnimationTaskPool&) = delete;
 
     void WorkerLoop(size_t workerIndex);
@@ -62,18 +62,18 @@ private:
 
     struct WorkerQueue
     {
-        std::deque<Task> queue;
+        std::deque<Task>   queue;
         mutable std::mutex mutex;
     };
 
-    std::vector<std::thread> m_workers;
+    std::vector<std::thread>                  m_workers;
     std::vector<std::unique_ptr<WorkerQueue>> m_queues;
-    
-    std::atomic<int> m_remainingTasks{ 0 };
-    std::atomic<bool> m_running{ false };
-    size_t m_workerCount{ 0 };
 
-    std::mutex m_cvMutex;
+    std::atomic<int>  m_remainingTasks{0};
+    std::atomic<bool> m_running{false};
+    size_t            m_workerCount{0};
+
+    std::mutex              m_cvMutex;
     std::condition_variable m_workerCV;
     std::condition_variable m_waiterCV;
 };

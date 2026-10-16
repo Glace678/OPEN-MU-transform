@@ -15,13 +15,13 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>    // htons
-#include <netdb.h>        // getaddrinfo / addrinfo
-#include <unistd.h>       // close
-#include <sys/ioctl.h>    // ioctl, FIONBIO
-#include <sys/select.h>   // select, fd_set
+#include <arpa/inet.h>   // htons
+#include <netdb.h>       // getaddrinfo / addrinfo
+#include <unistd.h>      // close
+#include <sys/ioctl.h>   // ioctl, FIONBIO
+#include <sys/select.h>  // select, fd_set
 #include <cerrno>
-#include <cwchar>         // wcstombs
+#include <cwchar>  // wcstombs
 
 #include "Core/Platform/WinCompat.h"  // WORD, MAKEWORD
 
@@ -38,12 +38,27 @@ typedef int SOCKET;
 #endif
 
 // Winsock startup is a no-op on BSD sockets.
-typedef struct { WORD wVersion; } WSADATA, * LPWSADATA;
-inline int WSAStartup(WORD, LPWSADATA) { return 0; }
-inline int WSACleanup() { return 0; }
-inline int WSAGetLastError() { return errno; }
+typedef struct
+{
+    WORD wVersion;
+} WSADATA, *LPWSADATA;
+inline int WSAStartup(WORD, LPWSADATA)
+{
+    return 0;
+}
+inline int WSACleanup()
+{
+    return 0;
+}
+inline int WSAGetLastError()
+{
+    return errno;
+}
 
-inline int closesocket(SOCKET s) { return ::close(s); }
+inline int closesocket(SOCKET s)
+{
+    return ::close(s);
+}
 
 inline int ioctlsocket(SOCKET s, long cmd, u_long* argp)
 {
@@ -59,17 +74,21 @@ inline int ioctlsocket(SOCKET s, long cmd, u_long* argp)
 
 // Wide name resolution. The probe only reads ai_addr/ai_family, so map the wide
 // addrinfo onto POSIX addrinfo and convert the node/service to the locale bytes.
-typedef struct addrinfo addrinfoW, ADDRINFOW, * PADDRINFOW;
+typedef struct addrinfo addrinfoW, ADDRINFOW, *PADDRINFOW;
 
-inline int GetAddrInfoW(const wchar_t* node, const wchar_t* service,
-                        const addrinfoW* hints, addrinfoW** result)
+inline int GetAddrInfoW(const wchar_t* node, const wchar_t* service, const addrinfoW* hints, addrinfoW** result)
 {
-    char n[256] = { 0 };
-    char sv[64] = { 0 };
-    if (node && wcstombs(n, node, sizeof(n) - 1) == static_cast<size_t>(-1)) return EAI_FAIL;
-    if (service && wcstombs(sv, service, sizeof(sv) - 1) == static_cast<size_t>(-1)) return EAI_FAIL;
+    char n[256] = {0};
+    char sv[64] = {0};
+    if (node && wcstombs(n, node, sizeof(n) - 1) == static_cast<size_t>(-1))
+        return EAI_FAIL;
+    if (service && wcstombs(sv, service, sizeof(sv) - 1) == static_cast<size_t>(-1))
+        return EAI_FAIL;
     return ::getaddrinfo(node ? n : nullptr, service ? sv : nullptr, hints, result);
 }
-inline void FreeAddrInfoW(addrinfo* p) { ::freeaddrinfo(p); }
+inline void FreeAddrInfoW(addrinfo* p)
+{
+    ::freeaddrinfo(p);
+}
 
-#endif // _WIN32
+#endif  // _WIN32

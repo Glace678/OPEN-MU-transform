@@ -17,11 +17,11 @@ enum ITEM_EX_SRC_TYPE
 
 enum ENUM_KEYPADMODE
 {
-    KPM_MOVE = 1,
-    KPM_LOCK3 = 2,
-    KPM_UNLOCK = 3,
-    KPM_LOCK1 = 4,
-    KPM_LOCK2 = 5,
+    KPM_MOVE                     = 1,
+    KPM_LOCK3                    = 2,
+    KPM_UNLOCK                   = 3,
+    KPM_LOCK1                    = 4,
+    KPM_LOCK2                    = 5,
     KPM_SERVER_IMMIGRATION_CHECK = 6,
 };
 
@@ -246,7 +246,7 @@ enum
     PLAYER_ATTACK_SKILL_WHEEL_UNI,
     PLAYER_ATTACK_SKILL_WHEEL_DINO,
     PLAYER_ATTACK_SKILL_WHEEL_FENRIR,
-#endif	// YDG_ADD_SKILL_RIDING_ANIMATIONS
+#endif  // YDG_ADD_SKILL_RIDING_ANIMATIONS
     PLAYER_DEFENSE1,
     PLAYER_GREETING1,
     PLAYER_GREETING_FEMALE1,

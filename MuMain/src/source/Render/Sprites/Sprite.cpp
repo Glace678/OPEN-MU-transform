@@ -19,7 +19,7 @@ std::set<CSprite*> CSprite::s_registry;
 CSprite::CSprite()
 {
     m_aFrameTexCoord = NULL;
-    m_pTexture = NULL;
+    m_pTexture       = NULL;
 
     m_fArtScaleX = m_fArtScaleY = 1.0f;
     m_fScaleX = m_fScaleY = 1.0f;
@@ -45,31 +45,31 @@ void CSprite::RefreshAllResolutionScales()
 {
     for (CSprite* pSprite : s_registry)
     {
-        pSprite->m_fScaleX = pSprite->m_fArtScaleX * ResolutionScaleX();
-        pSprite->m_fScaleY = pSprite->m_fArtScaleY * ResolutionScaleY();
+        pSprite->m_fScaleX    = pSprite->m_fArtScaleX * ResolutionScaleX();
+        pSprite->m_fScaleY    = pSprite->m_fArtScaleY * ResolutionScaleY();
         pSprite->m_fScrHeight = (float)REFERENCE_HEIGHT / pSprite->m_fArtScaleY;
 
         // Rebuild the quad from stored art position/size. Texture coordinates
         // are left untouched (tile expansion was applied once at SetSize).
         pSprite->ApplyArtPosition(pSprite->m_fArtPosX, pSprite->m_fArtPosY, XY);
-        pSprite->ApplyArtSize(pSprite->m_fArtWidth, pSprite->m_fArtHeight, XY,
-            false);
+        pSprite->ApplyArtSize(pSprite->m_fArtWidth, pSprite->m_fArtHeight, XY, false);
     }
 }
 
-void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, SFrameCoord* aFrameCoord, int nDatumX, int nDatumY, bool bTile, int nSizingDatums, float fScaleX, float fScaleY)
+void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, SFrameCoord* aFrameCoord, int nDatumX,
+                     int nDatumY, bool bTile, int nSizingDatums, float fScaleX, float fScaleY)
 {
     Release();
 
-    m_fOrgWidth = (float)nOrgWidth;
+    m_fOrgWidth  = (float)nOrgWidth;
     m_fOrgHeight = (float)nOrgHeight;
-    m_nTexID = nTexID;
-    m_pTexture = Bitmaps.FindTexture(m_nTexID);
+    m_nTexID     = nTexID;
+    m_pTexture   = Bitmaps.FindTexture(m_nTexID);
 
     m_fArtScaleX = fScaleX;
     m_fArtScaleY = fScaleY;
-    m_fScaleX = m_fArtScaleX * ResolutionScaleX();
-    m_fScaleY = m_fArtScaleY * ResolutionScaleY();
+    m_fScaleX    = m_fArtScaleX * ResolutionScaleX();
+    m_fScaleY    = m_fArtScaleY * ResolutionScaleY();
 
     // Art-space screen height: REFERENCE_HEIGHT divided by the owner-requested
     // art Y multiplier. (Equivalent to the legacy WindowHeight / effective Y.)
@@ -85,8 +85,8 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
     m_aScrCoord[RT].fY = m_fScrHeight;
 
     m_fArtPosX = m_fArtPosY = 0.0f;
-    m_fArtWidth = m_fOrgWidth;
-    m_fArtHeight = m_fOrgHeight;
+    m_fArtWidth             = m_fOrgWidth;
+    m_fArtHeight            = m_fOrgHeight;
 
     m_nNowFrame = -1;
 
@@ -121,18 +121,18 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
         }
         else
         {
-            m_nMaxFrame = 0;
+            m_nMaxFrame   = 0;
             m_nStartFrame = m_nEndFrame = -1;
-            m_bTile = bTile;
+            m_bTile                     = bTile;
         }
     }
     else
     {
         ::memset(m_aTexCoord, 0, sizeof(STexCoord) * POS_MAX);
 
-        m_nMaxFrame = 0;
+        m_nMaxFrame   = 0;
         m_nStartFrame = m_nEndFrame = -1;
-        m_bTile = false;
+        m_bTile                     = false;
     }
 
     m_byAlpha = m_byRed = m_byGreen = m_byBlue = 255;
@@ -140,23 +140,23 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
     m_fDatumX = (float)nDatumX;
     m_fDatumY = (float)nDatumY;
 
-    m_bRepeat = false;
+    m_bRepeat    = false;
     m_dDelayTime = m_dDeltaTickSum = 0.0;
-    m_nSizingDatums = nSizingDatums;
-    m_bShow = false;
+    m_nSizingDatums                = nSizingDatums;
+    m_bShow                        = false;
 }
 
-void CSprite::Create(SImgInfo* pImgInfo, int nDatumX, int nDatumY, bool bTile,
-    int nSizingDatums, float fScaleX, float fScaleY)
+void CSprite::Create(SImgInfo* pImgInfo, int nDatumX, int nDatumY, bool bTile, int nSizingDatums, float fScaleX,
+                     float fScaleY)
 {
     if (pImgInfo->nX == 0 && pImgInfo->nY == 0)
-        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 0, NULL, nDatumX, nDatumY, bTile, nSizingDatums, fScaleX, fScaleY);
+        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 0, NULL, nDatumX, nDatumY, bTile, nSizingDatums,
+               fScaleX, fScaleY);
     else
     {
-        SFrameCoord frameCoord = { pImgInfo->nX, pImgInfo->nY };
-        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 1,
-            &frameCoord, nDatumX, nDatumY, bTile, nSizingDatums, fScaleX,
-            fScaleY);
+        SFrameCoord frameCoord = {pImgInfo->nX, pImgInfo->nY};
+        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 1, &frameCoord, nDatumX, nDatumY, bTile,
+               nSizingDatums, fScaleX, fScaleY);
     }
 }
 
@@ -215,8 +215,7 @@ void CSprite::ApplyArtPosition(float fXCoord, float fYCoord, CHANGE_PRAM eChange
 
 void CSprite::SetSize(int nWidth, int nHeight, CHANGE_PRAM eChangedPram)
 {
-    SetSizeArt((float)nWidth / ResolutionScaleX(),
-        (float)nHeight / ResolutionScaleY(), eChangedPram);
+    SetSizeArt((float)nWidth / ResolutionScaleX(), (float)nHeight / ResolutionScaleY(), eChangedPram);
 }
 
 void CSprite::SetSizeArt(float fWidth, float fHeight, CHANGE_PRAM eChangedPram)
@@ -229,8 +228,7 @@ void CSprite::SetSizeArt(float fWidth, float fHeight, CHANGE_PRAM eChangedPram)
     ApplyArtSize(fWidth, fHeight, eChangedPram, true);
 }
 
-void CSprite::ApplyArtSize(float fWidth, float fHeight, CHANGE_PRAM eChangedPram,
-    bool bAdjustTexCoords)
+void CSprite::ApplyArtSize(float fWidth, float fHeight, CHANGE_PRAM eChangedPram, bool bAdjustTexCoords)
 {
     if (eChangedPram & X)
     {
@@ -272,11 +270,8 @@ BOOL CSprite::PtInSprite(long lXPos, long lYPos)
     POINT pt = Core::Platform::MakePoint(lXPos, lYPos);
 
     RECT rc = Core::Platform::MakeRect(
-        long(m_aScrCoord[LT].fX * m_fScaleX),
-        long((m_fScrHeight - m_aScrCoord[LT].fY) * m_fScaleY),
-        long(m_aScrCoord[RB].fX * m_fScaleX),
-        long((m_fScrHeight - m_aScrCoord[RB].fY) * m_fScaleY)
-    );
+        long(m_aScrCoord[LT].fX * m_fScaleX), long((m_fScrHeight - m_aScrCoord[LT].fY) * m_fScaleY),
+        long(m_aScrCoord[RB].fX * m_fScaleX), long((m_fScrHeight - m_aScrCoord[RB].fY) * m_fScaleY));
 
     return ::PtInRect(&rc, pt);
 }
@@ -288,19 +283,17 @@ BOOL CSprite::CursorInObject()
     return PtInSprite(rInput.GetCursorX(), rInput.GetCursorY());
 }
 
-void CSprite::SetAction(int nStartFrame, int nEndFrame, double dDelayTime,
-    bool bRepeat)
+void CSprite::SetAction(int nStartFrame, int nEndFrame, double dDelayTime, bool bRepeat)
 {
     if (1 >= m_nMaxFrame)
         return;
 
-    _ASSERT(nStartFrame <= nEndFrame && nStartFrame >= 0
-        && nEndFrame < m_nMaxFrame);
+    _ASSERT(nStartFrame <= nEndFrame && nStartFrame >= 0 && nEndFrame < m_nMaxFrame);
 
     m_nStartFrame = m_nNowFrame = nStartFrame;
-    m_nEndFrame = nEndFrame;
-    m_bRepeat = bRepeat;
-    m_dDelayTime = dDelayTime;
+    m_nEndFrame                 = nEndFrame;
+    m_bRepeat                   = bRepeat;
+    m_dDelayTime                = dDelayTime;
 }
 
 void CSprite::SetNowFrame(int nFrame)
@@ -313,7 +306,7 @@ void CSprite::SetNowFrame(int nFrame)
 
     m_nNowFrame = nFrame;
 
-    float fTUWidth = m_aTexCoord[RT].fTU - m_aTexCoord[LT].fTU;
+    float fTUWidth  = m_aTexCoord[RT].fTU - m_aTexCoord[LT].fTU;
     float fTVHeight = m_aTexCoord[LB].fTV - m_aTexCoord[LT].fTV;
 
     m_aTexCoord[LT] = m_aFrameTexCoord[m_nNowFrame];
@@ -367,8 +360,7 @@ void CSprite::Render()
         for (int i = LT; i < POS_MAX; ++i)
         {
             IR::TexCoord2f(m_aTexCoord[i].fTU, m_aTexCoord[i].fTV);
-            IR::Vertex2f(m_aScrCoord[i].fX * m_fScaleX,
-                m_aScrCoord[i].fY * m_fScaleY);
+            IR::Vertex2f(m_aScrCoord[i].fX * m_fScaleX, m_aScrCoord[i].fY * m_fScaleY);
         }
         IR::End();
     }
@@ -379,8 +371,7 @@ void CSprite::Render()
         IR::Color4ub(m_byRed, m_byGreen, m_byBlue, m_byAlpha);
         for (int i = LT; i < POS_MAX; ++i)
         {
-            IR::Vertex2f(m_aScrCoord[i].fX * m_fScaleX,
-                m_aScrCoord[i].fY * m_fScaleY);
+            IR::Vertex2f(m_aScrCoord[i].fX * m_fScaleX, m_aScrCoord[i].fY * m_fScaleY);
         }
         IR::End();
     }

@@ -19,30 +19,28 @@ using namespace SEASON3B;
 
 namespace
 {
-    constexpr int FirstHelpPage = 0;
+constexpr int FirstHelpPage = 0;
 
-    // Page order: reference pages 0..3, then the onboarding sequence:
-    // welcome, keyboard/mouse, touch, gamepad, and a closing page.
-    constexpr int TutorialWelcomePage = 4;
-    constexpr int TutorialDesktopPage = 5;
-    constexpr int TutorialTouchPage = 6;
-    constexpr int TutorialGamepadPage = 7;
-    constexpr int TutorialFinishPage = 8;
-    constexpr int LastHelpPage = TutorialFinishPage;
+// Page order: reference pages 0..3, then the onboarding sequence:
+// welcome, keyboard/mouse, touch, gamepad, and a closing page.
+constexpr int TutorialWelcomePage = 4;
+constexpr int TutorialDesktopPage = 5;
+constexpr int TutorialTouchPage   = 6;
+constexpr int TutorialGamepadPage = 7;
+constexpr int TutorialFinishPage  = 8;
+constexpr int LastHelpPage        = TutorialFinishPage;
 
-    void PublishHelpHaptic(Core::Haptics::HapticEvent event)
-    {
-        Core::Input::GamepadService::Instance().PublishHaptic(
-            event, static_cast<double>(SDL_GetTicks()));
-    }
+void PublishHelpHaptic(Core::Haptics::HapticEvent event)
+{
+    Core::Input::GamepadService::Instance().PublishHaptic(event, static_cast<double>(SDL_GetTicks()));
+}
 }
 
-SEASON3B::CNewUIHelpWindow::CNewUIHelpWindow()
-    : m_iIndex(0), m_isOnboarding(false)
+SEASON3B::CNewUIHelpWindow::CNewUIHelpWindow() : m_iIndex(0), m_isOnboarding(false)
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = 0;
-    m_Pos.y = 0;
+    m_Pos.x     = 0;
+    m_Pos.y     = 0;
 }
 
 SEASON3B::CNewUIHelpWindow::~CNewUIHelpWindow()
@@ -129,9 +127,9 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     // SEASON3B::TextList (the reference defined in UIManager.cpp) because
     // this function is in the SEASON3B namespace -- and the linker stores
     // that reference as a 4-byte read-only pointer, so writing to it crashes.
-    wchar_t (&TextList)[50][100] = ::TextList;
-    int (&TextListColor)[50] = ::TextListColor;
-    int (&TextBold)[50] = ::TextBold;
+    wchar_t(&TextList)[50][100] = ::TextList;
+    int (&TextListColor)[50]    = ::TextListColor;
+    int (&TextBold)[50]         = ::TextBold;
 
     if (m_iIndex >= TutorialWelcomePage)
     {
@@ -146,7 +144,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
 
         wcscpy(TextList[iTextNum], I18N::Game::KeyFunction);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = true;
+        TextBold[iTextNum]      = true;
         iTextNum++;
 
         mu_swprintf(TextList[iTextNum], L"\n");
@@ -157,25 +155,21 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         {
             wcscpy(TextList[iTextNum], I18N::Game::Lookup(121 + i));
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
         // Insert engine-added camera and MU Helper hotkey entries between F4
         // and the rest of the shipped entries.
         const wchar_t* const extraHelpLines[] = {
-            I18N::Game::F8ToggleMonsterHPBar,
-            I18N::Game::F9Toggle3DCamera,
-            I18N::Game::F10LockUnlockCameraZoom,
-            I18N::Game::F11ResetCameraView,
-            I18N::Game::HomeToggleMUHelper,
-            I18N::Game::JToggleChatCommands,
+            I18N::Game::F8ToggleMonsterHPBar, I18N::Game::F9Toggle3DCamera,   I18N::Game::F10LockUnlockCameraZoom,
+            I18N::Game::F11ResetCameraView,   I18N::Game::HomeToggleMUHelper, I18N::Game::JToggleChatCommands,
         };
         for (const wchar_t* line : extraHelpLines)
         {
             wcsncpy_s(TextList[iTextNum], line, 99);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
@@ -184,7 +178,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         {
             wcscpy(TextList[iTextNum], I18N::Game::Lookup(121 + i));
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
@@ -202,7 +196,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
 
         wcscpy(TextList[iTextNum], I18N::Game::ChattingInstructions);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = true;
+        TextBold[iTextNum]      = true;
         iTextNum++;
 
         mu_swprintf(TextList[iTextNum], L"\n");
@@ -212,7 +206,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         {
             wcscpy(TextList[iTextNum], I18N::Game::Lookup(141 + i));
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
@@ -230,14 +224,14 @@ bool SEASON3B::CNewUIHelpWindow::Render()
 
         wcscpy(TextList[iTextNum], I18N::Game::AMPM);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = true;
+        TextBold[iTextNum]      = true;
         iTextNum++;
 
         for (int i = 0; i < 24; ++i)
         {
             wcscpy(TextList[iTextNum], I18N::Game::Lookup(2422 + i));
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-            TextBold[iTextNum] = false;
+            TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
@@ -255,7 +249,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
 
         wcscpy(TextList[iTextNum], I18N::Game::ChaosCastleDevilSSquare);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-        TextBold[iTextNum] = true;
+        TextBold[iTextNum]      = true;
         iTextNum++;
 
         for (int i = 0; i < 18; ++i)
@@ -264,13 +258,13 @@ bool SEASON3B::CNewUIHelpWindow::Render()
             if (i == 0 || i == 8 || i == 9)
             {
                 TextListColor[iTextNum] = TEXT_COLOR_BLUE;
-                TextBold[iTextNum] = true;
+                TextBold[iTextNum]      = true;
                 iTextNum++;
             }
             else
             {
                 TextListColor[iTextNum] = TEXT_COLOR_WHITE;
-                TextBold[iTextNum] = false;
+                TextBold[iTextNum]      = false;
                 iTextNum++;
             }
         }
@@ -299,17 +293,15 @@ void SEASON3B::CNewUIHelpWindow::OpenningProcess()
 {
     // Manual Help always opens at the reference index and never marks onboarding.
     m_isOnboarding = false;
-    m_iIndex = 0;
+    m_iIndex       = 0;
 }
 
-void SEASON3B::CNewUIHelpWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIHelpWindow::ClosingProcess() {}
 
 void SEASON3B::CNewUIHelpWindow::StartTutorial()
 {
     m_isOnboarding = true;
-    m_iIndex = TutorialWelcomePage;
+    m_iIndex       = TutorialWelcomePage;
 }
 
 void SEASON3B::CNewUIHelpWindow::AutoUpdateIndex()
@@ -367,10 +359,8 @@ void SEASON3B::CNewUIHelpWindow::Close()
 
 bool SEASON3B::CNewUIHelpWindow::HandleGamepadInput()
 {
-    const auto& frame = Core::Input::GamepadService::Instance().LastFrameState();
-    const auto action = [&frame](Core::Input::InputAction inputAction)
-        -> const Core::Input::InputActionState&
-    {
+    const auto& frame  = Core::Input::GamepadService::Instance().LastFrameState();
+    const auto  action = [&frame](Core::Input::InputAction inputAction) -> const Core::Input::InputActionState& {
         return frame.actions[static_cast<std::size_t>(inputAction)];
     };
 
@@ -384,8 +374,7 @@ bool SEASON3B::CNewUIHelpWindow::HandleGamepadInput()
         PreviousPage();
         return true;
     }
-    if (action(Core::Input::InputAction::NextPage).pressed
-        || action(Core::Input::InputAction::Confirm).pressed)
+    if (action(Core::Input::InputAction::NextPage).pressed || action(Core::Input::InputAction::Confirm).pressed)
     {
         NextPage();
         return true;
@@ -395,31 +384,28 @@ bool SEASON3B::CNewUIHelpWindow::HandleGamepadInput()
 
 void SEASON3B::CNewUIHelpWindow::RenderTutorialPage()
 {
-    wchar_t (&textList)[50][100] = ::TextList;
-    int (&textListColor)[50] = ::TextListColor;
-    int (&textBold)[50] = ::TextBold;
+    wchar_t(&textList)[50][100] = ::TextList;
+    int (&textListColor)[50]    = ::TextListColor;
+    int (&textBold)[50]         = ::TextBold;
 
     constexpr int HeadingColor = TEXT_COLOR_BLUE;
-    constexpr int BodyColor = TEXT_COLOR_WHITE;
-    int textNumber = 0;
+    constexpr int BodyColor    = TEXT_COLOR_WHITE;
+    int           textNumber   = 0;
 
-    auto blank = [&]()
-    {
+    auto blank = [&]() {
         mu_swprintf(textList[textNumber], L"\n");
         ++textNumber;
     };
-    auto heading = [&](const wchar_t* text)
-    {
+    auto heading = [&](const wchar_t* text) {
         wcscpy(textList[textNumber], text);
         textListColor[textNumber] = HeadingColor;
-        textBold[textNumber] = true;
+        textBold[textNumber]      = true;
         ++textNumber;
     };
-    auto body = [&](const wchar_t* text)
-    {
+    auto body = [&](const wchar_t* text) {
         wcsncpy_s(textList[textNumber], text, 99);
         textListColor[textNumber] = BodyColor;
-        textBold[textNumber] = false;
+        textBold[textNumber]      = false;
         ++textNumber;
     };
 
@@ -429,27 +415,27 @@ void SEASON3B::CNewUIHelpWindow::RenderTutorialPage()
 
     switch (m_iIndex)
     {
-    case TutorialWelcomePage:
-        body(I18N::Game::TutorialWelcome);
-        break;
-    case TutorialDesktopPage:
-        body(I18N::Game::TutorialDesktopControls);
-        blank();
-        body(I18N::Game::TutorialKeyboardControls);
-        break;
-    case TutorialTouchPage:
-        body(I18N::Game::TutorialTouchControls);
-        blank();
-        body(I18N::Game::TutorialTouchGestures);
-        break;
-    case TutorialGamepadPage:
-        body(I18N::Game::TutorialGamepadControls);
-        blank();
-        body(I18N::Game::TutorialGamepadSettings);
-        break;
-    case TutorialFinishPage:
-        body(I18N::Game::TutorialFinish);
-        break;
+        case TutorialWelcomePage:
+            body(I18N::Game::TutorialWelcome);
+            break;
+        case TutorialDesktopPage:
+            body(I18N::Game::TutorialDesktopControls);
+            blank();
+            body(I18N::Game::TutorialKeyboardControls);
+            break;
+        case TutorialTouchPage:
+            body(I18N::Game::TutorialTouchControls);
+            blank();
+            body(I18N::Game::TutorialTouchGestures);
+            break;
+        case TutorialGamepadPage:
+            body(I18N::Game::TutorialGamepadControls);
+            blank();
+            body(I18N::Game::TutorialGamepadSettings);
+            break;
+        case TutorialFinishPage:
+            body(I18N::Game::TutorialFinish);
+            break;
     }
 
     blank();

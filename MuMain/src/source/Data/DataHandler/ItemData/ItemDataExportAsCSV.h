@@ -10,4 +10,4 @@ public:
     // Future: static bool ImportFromCsv(wchar_t* fileName);
 };
 
-#endif // _EDITOR
+#endif  // _EDITOR

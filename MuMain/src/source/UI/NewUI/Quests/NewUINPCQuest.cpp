@@ -12,18 +12,18 @@
 #include "Character/CharacterManager.h"
 #include "Audio/DSPlaySound.h"
 
-extern bool bCheckNPC;
-extern int g_iNumLineMessageBoxCustom;
-extern int g_iNumAnswer;
+extern bool    bCheckNPC;
+extern int     g_iNumLineMessageBoxCustom;
+extern int     g_iNumAnswer;
 extern wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
 extern wchar_t g_lpszDialogAnswer[MAX_ANSWER_FOR_DIALOG][NUM_LINE_DA][MAX_LENGTH_CMB];
-extern int g_iCurrentDialogScript;
+extern int     g_iCurrentDialogScript;
 
 using namespace SEASON3B;
 
 CNewUINPCQuest::CNewUINPCQuest()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
     m_pNewUI3DRenderMng = NULL;
     m_Pos.x = m_Pos.y = 0;
 }
@@ -33,11 +33,9 @@ CNewUINPCQuest::~CNewUINPCQuest()
     Release();
 }
 
-bool CNewUINPCQuest::Create(CNewUIManager* pNewUIMng,
-    CNewUI3DRenderMng* pNewUI3DRenderMng, int x, int y)
+bool CNewUINPCQuest::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNewUI3DRenderMng, int x, int y)
 {
-    if (NULL == pNewUIMng || NULL == pNewUI3DRenderMng
-        || NULL == g_pNewItemMng)
+    if (NULL == pNewUIMng || NULL == pNewUI3DRenderMng || NULL == g_pNewItemMng)
         return false;
 
     m_pNewUIMng = pNewUIMng;
@@ -106,9 +104,9 @@ bool CNewUINPCQuest::UpdateSelTextMouseEvent()
     BYTE byCurQuestState = g_csQuest.getQuestState2(int(byCurQuestIndex));
 
     bool bErrorMessage = false;
-    int iButtonPush = -1;
-    int iTotalLine = g_iNumLineMessageBoxCustom + g_iNumAnswer;
-    int yPos = m_Pos.y + 66 + (NUM_LINE_CMB - iTotalLine) * 18 / 2;
+    int  iButtonPush   = -1;
+    int  iTotalLine    = g_iNumLineMessageBoxCustom + g_iNumAnswer;
+    int  yPos          = m_Pos.y + 66 + (NUM_LINE_CMB - iTotalLine) * 18 / 2;
 
     yPos += 18 * g_iNumLineMessageBoxCustom;
 
@@ -119,15 +117,16 @@ bool CNewUINPCQuest::UpdateSelTextMouseEvent()
 
     if (SEASON3B::IsRelease(VK_LBUTTON))
     {
-        if (MouseY >= 0 && (MouseY - yPos) < (18 * g_iNumAnswer)
-            && abs(m_Pos.x + NPCQUEST_WIDTH / 2 - MouseX) <= (NPCQUEST_WIDTH / 2))
+        if (MouseY >= 0 && (MouseY - yPos) < (18 * g_iNumAnswer) &&
+            abs(m_Pos.x + NPCQUEST_WIDTH / 2 - MouseX) <= (NPCQUEST_WIDTH / 2))
         {
             iButtonPush = (MouseY - yPos) / 18;
 
             if (iButtonPush >= 0)
             {
                 const auto& entry = GameLogic::Quests::Dialog::GetEntry(g_iCurrentDialogScript);
-                if (iButtonPush >= entry.numAnswer) return false;
+                if (iButtonPush >= entry.numAnswer)
+                    return false;
 
                 int nAnswer = entry.answers[iButtonPush].returnCode;
 
@@ -136,7 +135,8 @@ bool CNewUINPCQuest::UpdateSelTextMouseEvent()
                 else if (2 == nAnswer)
                     g_pNewUISystem->Hide(SEASON3B::INTERFACE_NPCQUEST);
                 else if (3 == nAnswer)
-                    SocketClient->ToGameServer()->SendLegacyQuestStateSetRequest(byCurQuestIndex, LegacyQuestState::Active);
+                    SocketClient->ToGameServer()->SendLegacyQuestStateSetRequest(byCurQuestIndex,
+                                                                                 LegacyQuestState::Active);
 
                 ::PlayBuffer(SOUND_INTERFACE01);
 
@@ -205,7 +205,7 @@ bool CNewUINPCQuest::Render()
     }
     else if (QUEST_NO == byCurQuestState)
     {
-        // ʿ .
+        // �ʿ� ��.
         RenderImage(IMAGE_NPCQUEST_ZEN, m_Pos.x + 11, m_Pos.y + 361, 170.f, 24.f);
 
         g_pRenderText->SetFont(g_hFontBold);
@@ -231,16 +231,11 @@ bool CNewUINPCQuest::Render()
 
 void CNewUINPCQuest::RenderBackImage()
 {
-    RenderImage(IMAGE_NPCQUEST_BACK,
-        m_Pos.x, m_Pos.y, float(NPCQUEST_WIDTH), float(NPCQUEST_HEIGHT));
-    RenderImage(IMAGE_NPCQUEST_TOP,
-        m_Pos.x, m_Pos.y, float(NPCQUEST_WIDTH), 64.f);
-    RenderImage(IMAGE_NPCQUEST_LEFT,
-        m_Pos.x, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_NPCQUEST_RIGHT,
-        m_Pos.x + NPCQUEST_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_NPCQUEST_BOTTOM,
-        m_Pos.x, m_Pos.y + NPCQUEST_HEIGHT - 45, float(NPCQUEST_WIDTH), 45.f);
+    RenderImage(IMAGE_NPCQUEST_BACK, m_Pos.x, m_Pos.y, float(NPCQUEST_WIDTH), float(NPCQUEST_HEIGHT));
+    RenderImage(IMAGE_NPCQUEST_TOP, m_Pos.x, m_Pos.y, float(NPCQUEST_WIDTH), 64.f);
+    RenderImage(IMAGE_NPCQUEST_LEFT, m_Pos.x, m_Pos.y + 64, 21.f, 320.f);
+    RenderImage(IMAGE_NPCQUEST_RIGHT, m_Pos.x + NPCQUEST_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
+    RenderImage(IMAGE_NPCQUEST_BOTTOM, m_Pos.x, m_Pos.y + NPCQUEST_HEIGHT - 45, float(NPCQUEST_WIDTH), 45.f);
 
     RenderImage(IMAGE_NPCQUEST_LINE, m_Pos.x + 1, m_Pos.y + 220, 188.f, 21.f);
 }
@@ -257,9 +252,7 @@ void CNewUINPCQuest::RenderText()
     //const auto name = new wchar_t[MAX_MONSTER_NAME];
     const wchar_t* name = nullptr;
 
-    if ((Hero->Class == CLASS_DARK_LORD || Hero->Class == CLASS_DARK
-        || Hero->Class == CLASS_RAGEFIGHTER)
-        && bCheckNPC)
+    if ((Hero->Class == CLASS_DARK_LORD || Hero->Class == CLASS_DARK || Hero->Class == CLASS_RAGEFIGHTER) && bCheckNPC)
     {
         name = g_csQuest.GetNPCName(2);
     }
@@ -270,20 +263,16 @@ void CNewUINPCQuest::RenderText()
 
     g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 16, name, NPCQUEST_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetTextColor(200, 220, 255, 255);
-    if ((Hero->Class != CLASS_DARK_LORD && Hero->Class != CLASS_DARK
-        && Hero->Class != CLASS_RAGEFIGHTER)
-        || !bCheckNPC)
-        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 29,
-            g_csQuest.getQuestTitle(), NPCQUEST_WIDTH, 0, RT3_SORT_CENTER);
+    if ((Hero->Class != CLASS_DARK_LORD && Hero->Class != CLASS_DARK && Hero->Class != CLASS_RAGEFIGHTER) || !bCheckNPC)
+        g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 29, g_csQuest.getQuestTitle(), NPCQUEST_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetTextColor(255, 230, 210, 255);
     int iTotalLine = g_iNumLineMessageBoxCustom + g_iNumAnswer;
-    int xPos = m_Pos.x + NPCQUEST_WIDTH / 2;
-    int yPos = m_Pos.y + 66 + (NUM_LINE_CMB - iTotalLine) * 18 / 2;
+    int xPos       = m_Pos.x + NPCQUEST_WIDTH / 2;
+    int yPos       = m_Pos.y + 66 + (NUM_LINE_CMB - iTotalLine) * 18 / 2;
     for (int j = 0; j < g_iNumLineMessageBoxCustom; ++j)
     {
-        g_pRenderText->RenderText(xPos, yPos, g_lpszMessageBoxCustom[j], 0, 0,
-            RT3_WRITE_CENTER);
+        g_pRenderText->RenderText(xPos, yPos, g_lpszMessageBoxCustom[j], 0, 0, RT3_WRITE_CENTER);
         yPos += 18;
     }
 
@@ -303,8 +292,7 @@ void CNewUINPCQuest::RenderText()
 
         for (int k = 0; k < NUM_LINE_DA && g_lpszDialogAnswer[j][k][0]; ++k)
         {
-            g_pRenderText->RenderText(xPos, yPos, g_lpszDialogAnswer[j][k],
-                0, 0, RT3_WRITE_CENTER);
+            g_pRenderText->RenderText(xPos, yPos, g_lpszDialogAnswer[j][k], 0, 0, RT3_WRITE_CENTER);
             yPos += 18;
         }
     }
@@ -315,13 +303,13 @@ bool CNewUINPCQuest::RenderItemMobText()
     bool bCompletion = true;
 
     wchar_t szTemp[128];
-    int nPosY = m_Pos.y + 244;
+    int     nPosY = m_Pos.y + 244;
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetBgColor(0);
 
     QUEST_ATTRIBUTE* pQuest = g_csQuest.GetCurQuestAttribute();
-    int nClass = gCharacterManager.GetBaseClass(Hero->Class);
+    int              nClass = gCharacterManager.GetBaseClass(Hero->Class);
 
     for (int i = 0; i < pQuest->shQuestConditionNum; ++i)
     {
@@ -330,50 +318,46 @@ bool CNewUINPCQuest::RenderItemMobText()
 
         switch (pQuest->QuestAct[i].byQuestType)
         {
-        case QUEST_ITEM:
-        {
-            int nItemType = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX)
-                + pQuest->QuestAct[i].byItemSubType;
-            int nItemNum = pQuest->QuestAct[i].byItemNum;
-            int nItemLevel = pQuest->QuestAct[i].byItemLevel;
+            case QUEST_ITEM: {
+                int nItemType  = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX) + pQuest->QuestAct[i].byItemSubType;
+                int nItemNum   = pQuest->QuestAct[i].byItemNum;
+                int nItemLevel = pQuest->QuestAct[i].byItemLevel;
 
-            if (!g_csQuest.FindQuestItemsInInven(nItemType, nItemNum, nItemLevel))
-                g_pRenderText->SetTextColor(223, 191, 103, 255);
-            else
-            {
-                g_pRenderText->SetTextColor(255, 30, 30, 255);
-                bCompletion = false;
+                if (!g_csQuest.FindQuestItemsInInven(nItemType, nItemNum, nItemLevel))
+                    g_pRenderText->SetTextColor(223, 191, 103, 255);
+                else
+                {
+                    g_pRenderText->SetTextColor(255, 30, 30, 255);
+                    bCompletion = false;
+                }
+
+                wchar_t szItemName[128];
+                GetItemName(nItemType, nItemLevel, szItemName);
+                mu_swprintf(szTemp, L"%ls x %d", szItemName, nItemNum);
+                g_pRenderText->RenderText(m_Pos.x + 60, nPosY, szTemp);
             }
+            break;
 
-            wchar_t szItemName[128];
-            GetItemName(nItemType, nItemLevel, szItemName);
-            mu_swprintf(szTemp, L"%ls x %d", szItemName, nItemNum);
-            g_pRenderText->RenderText(m_Pos.x + 60, nPosY, szTemp);
-        }
-        break;
+            case QUEST_MONSTER: {
+                int nKillMobCount = g_csQuest.GetKillMobCount(int(pQuest->QuestAct[i].wItemType));
 
-        case QUEST_MONSTER:
-        {
-            int nKillMobCount
-                = g_csQuest.GetKillMobCount(int(pQuest->QuestAct[i].wItemType));
+                if (int(pQuest->QuestAct[i].byItemNum) <= nKillMobCount)
+                {
+                    g_pRenderText->SetTextColor(223, 191, 103, 255);
+                    nKillMobCount = int(pQuest->QuestAct[i].byItemNum);
+                }
+                else
+                {
+                    g_pRenderText->SetTextColor(255, 30, 30, 255);
+                    bCompletion = false;
+                }
 
-            if (int(pQuest->QuestAct[i].byItemNum) <= nKillMobCount)
-            {
-                g_pRenderText->SetTextColor(223, 191, 103, 255);
-                nKillMobCount = int(pQuest->QuestAct[i].byItemNum);
+                auto name = getMonsterName(int(pQuest->QuestAct[i].wItemType));
+                mu_swprintf(szTemp, L"%ls x %d/%d", name, nKillMobCount, int(pQuest->QuestAct[i].byItemNum));
+
+                g_pRenderText->RenderText(m_Pos.x + 50, nPosY, szTemp);
             }
-            else
-            {
-                g_pRenderText->SetTextColor(255, 30, 30, 255);
-                bCompletion = false;
-            }
-
-            auto name = getMonsterName(int(pQuest->QuestAct[i].wItemType));
-            mu_swprintf(szTemp, L"%ls x %d/%d", name, nKillMobCount, int(pQuest->QuestAct[i].byItemNum));
-
-            g_pRenderText->RenderText(m_Pos.x + 50, nPosY, szTemp);
-        }
-        break;
+            break;
         }
 
         nPosY += 32;
@@ -390,12 +374,12 @@ void CNewUINPCQuest::RenderItem3D()
     if (QUEST_ING != byCurQuestState)
         return;
 
-    auto x = float(m_Pos.x + 30);
-    auto y = float(m_Pos.y + 235);
+    auto        x      = float(m_Pos.x + 30);
+    auto        y      = float(m_Pos.y + 235);
     const float Height = 27.f;
 
     QUEST_ATTRIBUTE* pQuest = g_csQuest.GetCurQuestAttribute();
-    int nClass = gCharacterManager.GetBaseClass(Hero->Class);
+    int              nClass = gCharacterManager.GetBaseClass(Hero->Class);
 
     for (int i = 0; i < pQuest->shQuestConditionNum; ++i)
     {
@@ -404,8 +388,7 @@ void CNewUINPCQuest::RenderItem3D()
 
         if (QUEST_ITEM == pQuest->QuestAct[i].byQuestType)
         {
-            int nItemType = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX)
-                + pQuest->QuestAct[i].byItemSubType;
+            int nItemType = (pQuest->QuestAct[i].wItemType * MAX_ITEM_INDEX) + pQuest->QuestAct[i].byItemSubType;
 
             int nItemLevel = pQuest->QuestAct[i].byItemLevel;
 
@@ -484,7 +467,8 @@ bool CNewUINPCQuest::ProcessBtns()
     {
         if (m_btnComplete.UpdateMouseEvent())
         {
-            SocketClient->ToGameServer()->SendLegacyQuestStateSetRequest(g_csQuest.GetCurrQuestIndex(), LegacyQuestState::Active);
+            SocketClient->ToGameServer()->SendLegacyQuestStateSetRequest(g_csQuest.GetCurrQuestIndex(),
+                                                                         LegacyQuestState::Active);
             PlayBuffer(SOUND_INTERFACE01);
             return true;
         }

@@ -11,40 +11,40 @@
 class CInput
 {
 protected:
-    HWND	m_hWnd;
+    HWND m_hWnd;
 
-    POINT	m_ptCursor;
-    POINT   m_ptCursorOverride = { 0, 0 };
-    bool    m_bHasCursorOverride = false;
-    long	m_lDX;
-    long	m_lDY;
+    POINT m_ptCursor;
+    POINT m_ptCursorOverride   = {0, 0};
+    bool  m_bHasCursorOverride = false;
+    long  m_lDX;
+    long  m_lDY;
     //	long	m_lDZ;
-    bool	m_bLBtnDn;
-    bool	m_bLBtnHeldDn;
-    bool	m_bLBtnUp;
-    bool	m_bLBtnDbl;
-    bool	m_bRBtnDn;
-    bool	m_bRBtnHeldDn;
-    bool	m_bRBtnUp;
-    bool	m_bRBtnDbl;
-    bool	m_bMBtnDn;
-    bool	m_bMBtnHeldDn;
-    bool	m_bMBtnUp;
-    bool	m_bMBtnDbl;
+    bool m_bLBtnDn;
+    bool m_bLBtnHeldDn;
+    bool m_bLBtnUp;
+    bool m_bLBtnDbl;
+    bool m_bRBtnDn;
+    bool m_bRBtnHeldDn;
+    bool m_bRBtnUp;
+    bool m_bRBtnDbl;
+    bool m_bMBtnDn;
+    bool m_bMBtnHeldDn;
+    bool m_bMBtnUp;
+    bool m_bMBtnDbl;
 
-    long	m_lScreenWidth;
-    long	m_lScreenHeight;
-    bool	m_bLeftHand;
-    bool	m_bTextEditMode;
+    long m_lScreenWidth;
+    long m_lScreenHeight;
+    bool m_bLeftHand;
+    bool m_bTextEditMode;
 
-    POINT	m_ptFormerCursor;
-    double	m_dDoubleClickTime;
-    double	m_dBtn0LastClickTime;
-    double	m_dBtn1LastClickTime;
-    double	m_dBtn2LastClickTime;
-    bool	m_bFormerBtn0Dn;
-    bool	m_bFormerBtn1Dn;
-    bool	m_bFormerBtn2Dn;
+    POINT  m_ptFormerCursor;
+    double m_dDoubleClickTime;
+    double m_dBtn0LastClickTime;
+    double m_dBtn1LastClickTime;
+    double m_dBtn2LastClickTime;
+    bool   m_bFormerBtn0Dn;
+    bool   m_bFormerBtn1Dn;
+    bool   m_bFormerBtn2Dn;
 
 protected:
     CInput();
@@ -53,12 +53,13 @@ public:
     virtual ~CInput();
 
     static CInput& Instance();
-    bool Create(HWND hWnd, long lScreenWidth, long lScreenHeight);
-    void Update();
-    void ResizeScreen(long width, long height)
+    bool           Create(HWND hWnd, long lScreenWidth, long lScreenHeight);
+    void           Update();
+    void           ResizeScreen(long width, long height)
     {
-        if (width <= 0 || height <= 0) return;
-        m_lScreenWidth = width;
+        if (width <= 0 || height <= 0)
+            return;
+        m_lScreenWidth  = width;
         m_lScreenHeight = height;
     }
     // Legacy CWin/CButton controls read this object instead of the
@@ -66,7 +67,7 @@ public:
     // so their clickable position matches the cursor drawn on screen.
     void OverrideCursorPositionForNextUpdate(LONG x, LONG y)
     {
-        m_ptCursorOverride = { x, y };
+        m_ptCursorOverride   = {x, y};
         m_bHasCursorOverride = true;
     }
 
@@ -84,22 +85,22 @@ public:
     }
 
     POINT GetCursorPos() { return m_ptCursor; }
-    long GetCursorX() { return m_ptCursor.x; }
-    long GetCursorY() { return m_ptCursor.y; }
-    long GetDX() { return m_lDX; }
-    long GetDY() { return m_lDY; }
-    bool IsLBtnDn() { return m_bLBtnDn; }
-    bool IsLBtnHeldDn() { return m_bLBtnHeldDn; }
-    bool IsLBtnUp() { return m_bLBtnUp; }
-    bool IsLBtnDbl() { return m_bLBtnDbl; }
-    bool IsRBtnDn() { return m_bRBtnDn; }
-    bool IsRBtnHeldDn() { return m_bRBtnHeldDn; }
-    bool IsRBtnUp() { return m_bRBtnUp; }
-    bool IsRBtnDbl() { return m_bRBtnDbl; }
-    bool IsMBtnDn() { return m_bMBtnDn; }
-    bool IsMBtnHeldDn() { return m_bMBtnHeldDn; }
-    bool IsMBtnUp() { return m_bMBtnUp; }
-    bool IsMBtnDbl() { return m_bMBtnDbl; }
+    long  GetCursorX() { return m_ptCursor.x; }
+    long  GetCursorY() { return m_ptCursor.y; }
+    long  GetDX() { return m_lDX; }
+    long  GetDY() { return m_lDY; }
+    bool  IsLBtnDn() { return m_bLBtnDn; }
+    bool  IsLBtnHeldDn() { return m_bLBtnHeldDn; }
+    bool  IsLBtnUp() { return m_bLBtnUp; }
+    bool  IsLBtnDbl() { return m_bLBtnDbl; }
+    bool  IsRBtnDn() { return m_bRBtnDn; }
+    bool  IsRBtnHeldDn() { return m_bRBtnHeldDn; }
+    bool  IsRBtnUp() { return m_bRBtnUp; }
+    bool  IsRBtnDbl() { return m_bRBtnDbl; }
+    bool  IsMBtnDn() { return m_bMBtnDn; }
+    bool  IsMBtnHeldDn() { return m_bMBtnHeldDn; }
+    bool  IsMBtnUp() { return m_bMBtnUp; }
+    bool  IsMBtnDbl() { return m_bMBtnDbl; }
 
     LONG GetScreenWidth() { return static_cast<LONG>(m_lScreenWidth); }
     LONG GetScreenHeight() { return static_cast<LONG>(m_lScreenHeight); }

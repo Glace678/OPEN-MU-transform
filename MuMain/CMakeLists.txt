@@ -26,6 +26,15 @@ if(ENABLE_CLANG_TIDY AND NOT CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 include("cmake/StaticAnalysis.cmake")
+# Every engine, tool and test source is UTF-8 (verified across the tree).
+# Force MSVC to read both source and execution charset as UTF-8 so Korean
+# comments and string literals are handled deterministically regardless of the
+# system codepage (otherwise the compiler defaults to the ANSI codepage, and
+# multi-byte UTF-8 sequences can swallow newlines/closure braces and produce
+# C4819). This also keeps UTF-8 string bytes identical in the binary.
+if(MSVC)
+    add_compile_options(/utf-8)
+endif()
 
 add_subdirectory("src")
 

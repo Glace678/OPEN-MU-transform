@@ -41,54 +41,53 @@ extern "C" void DevEditor_GetDefaultCameraOffset(float* outX, float* outY, float
 
 namespace
 {
-    // LoginScene fallback when no tour waypoints available
-    constexpr float LOGIN_SCENE_FALLBACK_Z = 500.0f;
-    constexpr float LOGIN_SCENE_FALLBACK_PITCH = -80.0f;
+// LoginScene fallback when no tour waypoints available
+constexpr float LOGIN_SCENE_FALLBACK_Z     = 500.0f;
+constexpr float LOGIN_SCENE_FALLBACK_PITCH = -80.0f;
 
-    // Sentinel value used to invalidate the frustum cache (forces next-frame rebuild)
-    constexpr float CACHE_INVALIDATE_SENTINEL = -999999.0f;
+// Sentinel value used to invalidate the frustum cache (forces next-frame rebuild)
+constexpr float CACHE_INVALIDATE_SENTINEL = -999999.0f;
 
-    // Camera position tuning constants. The values were inherited as magic
-    // numbers in the legacy code; they're kept identical here, just named.
-    constexpr float TOUR_VIEWFAR_PER_LEVEL = 390.f;          // ViewFar = 390 * tourLevel
-    constexpr float DIRECTION_MODE_HERO_Z = 300.0f;          // Hero Z when in direction mode
-    constexpr float TW_HEIGHT_CAMERA_Z = 1200.f;             // Camera Z on tiles flagged TW_HEIGHT
-    constexpr float CAMERA_DISTANCE_HEIGHT_OFFSET = 150.f;   // Subtracted from Distance for Z
-    constexpr float CUSTOM_DISTANCE_PITCH_DEG = -45.f;       // Pitch used for custom-distance offset
+// Camera position tuning constants. The values were inherited as magic
+// numbers in the legacy code; they're kept identical here, just named.
+constexpr float TOUR_VIEWFAR_PER_LEVEL        = 390.f;   // ViewFar = 390 * tourLevel
+constexpr float DIRECTION_MODE_HERO_Z         = 300.0f;  // Hero Z when in direction mode
+constexpr float TW_HEIGHT_CAMERA_Z            = 1200.f;  // Camera Z on tiles flagged TW_HEIGHT
+constexpr float CAMERA_DISTANCE_HEIGHT_OFFSET = 150.f;   // Subtracted from Distance for Z
+constexpr float CUSTOM_DISTANCE_PITCH_DEG     = -45.f;   // Pitch used for custom-distance offset
 
-    constexpr float TOUR_BASE_DISTANCE = 1100.f;             // Base distance in tour & Battle Castle
+constexpr float TOUR_BASE_DISTANCE = 1100.f;  // Base distance in tour & Battle Castle
 
-    // Player-controlled zoom ladder. Single source of truth for both the
-    // hero-camera distance and the far-plane multiplier per step. Add or
-    // remove entries here to change the ladder; the bounds and the
-    // F8/Ctrl+wheel handlers index into this table directly.
-    //
-    // viewFarMult holds at 1.00 through the default level (1300) — pulling
-    // closer doesn't need more far plane — and ramps up beyond it so the
-    // far clip keeps up with the camera as it pulls back. The 4..7
-    // multipliers are inherited from the legacy curve.
-    struct ZoomLevel
-    {
-        float distance;     // distance from hero in world units
-        float viewFarMult;  // multiplier on m_Config.farPlane
-    };
-    constexpr ZoomLevel PLAYER_ZOOM_LADDER[] = {
-        { 1000.f, 1.00f },  // 0
-        { 1100.f, 1.00f },  // 1
-        { 1200.f, 1.00f },  // 2
-        { 1300.f, 1.00f },  // 3 — default (F11 reset target)
-        { 1400.f, 1.04f },  // 4
-        { 1500.f, 1.08f },  // 5
-        { 1600.f, 1.23f },  // 6
-        { 1700.f, 1.33f },  // 7
-    };
-    constexpr int PLAYER_ZOOM_LEVEL_DEFAULT = 3;
-    constexpr int PLAYER_ZOOM_LEVEL_COUNT   = static_cast<int>(std::size(PLAYER_ZOOM_LADDER));
+// Player-controlled zoom ladder. Single source of truth for both the
+// hero-camera distance and the far-plane multiplier per step. Add or
+// remove entries here to change the ladder; the bounds and the
+// F8/Ctrl+wheel handlers index into this table directly.
+//
+// viewFarMult holds at 1.00 through the default level (1300) — pulling
+// closer doesn't need more far plane — and ramps up beyond it so the
+// far clip keeps up with the camera as it pulls back. The 4..7
+// multipliers are inherited from the legacy curve.
+struct ZoomLevel
+{
+    float distance;     // distance from hero in world units
+    float viewFarMult;  // multiplier on m_Config.farPlane
+};
+constexpr ZoomLevel PLAYER_ZOOM_LADDER[] = {
+    {1000.f, 1.00f},  // 0
+    {1100.f, 1.00f},  // 1
+    {1200.f, 1.00f},  // 2
+    {1300.f, 1.00f},  // 3 — default (F11 reset target)
+    {1400.f, 1.04f},  // 4
+    {1500.f, 1.08f},  // 5
+    {1600.f, 1.23f},  // 6
+    {1700.f, 1.33f},  // 7
+};
+constexpr int PLAYER_ZOOM_LEVEL_DEFAULT = 3;
+constexpr int PLAYER_ZOOM_LEVEL_COUNT   = static_cast<int>(std::size(PLAYER_ZOOM_LADDER));
 }
 
 DefaultCamera::DefaultCamera(CameraState& state)
-    : m_State(state)
-    , m_Config(CameraConfig::ForMainSceneOrbitalCamera())  // Phase 1: Initialize with gameplay config
+    : m_State(state), m_Config(CameraConfig::ForMainSceneOrbitalCamera())  // Phase 1: Initialize with gameplay config
 {
     m_FrustumCache = {};
 }
@@ -110,21 +109,21 @@ void DefaultCamera::ApplyConfigToState()
 {
     // Apply the loaded m_Config to m_State (FOV/ViewFar/TopViewEnable).
     extern unsigned int WindowWidth, WindowHeight;
-    float aspect = (float)WindowWidth / (float)WindowHeight;
-    m_State.ViewFar = m_Config.farPlane;
-    m_State.FOV = HFovToVFov(m_Config.hFov, aspect);
-    m_State.TopViewEnable = false;
+    float               aspect = (float)WindowWidth / (float)WindowHeight;
+    m_State.ViewFar            = m_Config.farPlane;
+    m_State.FOV                = HFovToVFov(m_Config.hFov, aspect);
+    m_State.TopViewEnable      = false;
 }
 
 void DefaultCamera::InvalidateFrustumCache()
 {
     m_FrustumCache.Position[0] = m_FrustumCache.Position[1] = m_FrustumCache.Position[2] = CACHE_INVALIDATE_SENTINEL;
     m_FrustumCache.Angle[0] = m_FrustumCache.Angle[1] = m_FrustumCache.Angle[2] = CACHE_INVALIDATE_SENTINEL;
-    m_FrustumCache.ViewFar = CACHE_INVALIDATE_SENTINEL;
+    m_FrustumCache.ViewFar                                                      = CACHE_INVALIDATE_SENTINEL;
 #ifdef _EDITOR
-    m_FrustumCache.EditorFOV = -1.0f;
-    m_FrustumCache.EditorFarPlane = -1.0f;
-    m_FrustumCache.EditorNearPlane = -1.0f;
+    m_FrustumCache.EditorFOV              = -1.0f;
+    m_FrustumCache.EditorFarPlane         = -1.0f;
+    m_FrustumCache.EditorNearPlane        = -1.0f;
     m_FrustumCache.EditorTerrainCullRange = -1.0f;
 #endif
 }
@@ -134,9 +133,9 @@ void DefaultCamera::InitCharacterScene()
     m_Config = CameraConfig::ForCharacterScene();
     ApplyConfigToState();
 
-    m_State.Angle[0] = CharacterSceneCamera::ANGLE_PITCH;
-    m_State.Angle[1] = 0.0f;
-    m_State.Angle[2] = CharacterSceneCamera::ANGLE_ROLL;
+    m_State.Angle[0]    = CharacterSceneCamera::ANGLE_PITCH;
+    m_State.Angle[1]    = 0.0f;
+    m_State.Angle[2]    = CharacterSceneCamera::ANGLE_ROLL;
     m_State.Position[0] = CharacterSceneCamera::POSITION_X;
     m_State.Position[1] = CharacterSceneCamera::POSITION_Y;
     m_State.Position[2] = CharacterSceneCamera::POSITION_Z;
@@ -177,10 +176,10 @@ void DefaultCamera::InitLoginScene()
     }
 
     // Fallback: Use WALK_PATHS[0] with transformation
-    vec3_t startPos = {0.f, 0.f, LOGIN_SCENE_FALLBACK_Z};
-    vec3_t startAngle = {LOGIN_SCENE_FALLBACK_PITCH, 0.f, 0.f};
-    float tempAngle[3] = {0.f, 0.f, startAngle[2]};
-    float Matrix[3][4];
+    vec3_t startPos     = {0.f, 0.f, LOGIN_SCENE_FALLBACK_Z};
+    vec3_t startAngle   = {LOGIN_SCENE_FALLBACK_PITCH, 0.f, 0.f};
+    float  tempAngle[3] = {0.f, 0.f, startAngle[2]};
+    float  Matrix[3][4];
     AngleMatrix(tempAngle, Matrix);
     VectorIRotate(startPos, Matrix, m_State.Position);
     VectorCopy(startAngle, m_State.Angle);
@@ -203,7 +202,7 @@ void DefaultCamera::ResetForScene(EGameScene scene)
         case WEBZEN_SCENE:
         case LOADING_SCENE:
         default:
-            m_Config = CameraConfig::ForMainSceneOrbitalCamera();
+            m_Config              = CameraConfig::ForMainSceneOrbitalCamera();
             m_State.TopViewEnable = false;
             break;
     }
@@ -216,16 +215,15 @@ void DefaultCamera::OnActivate(const CameraState& previousState)
     // Phase 5: When activating, ensure camera is configured for current scene
     extern EGameScene SceneFlag;
 
-    CAMERA_LOG("[CAM] DefaultCamera::OnActivate - Scene=%d, PrevPos=(%.1f,%.1f,%.1f), PrevAngle=(%.1f,%.1f,%.1f), PrevDist=%.0f",
-               (int)SceneFlag,
-               previousState.Position[0], previousState.Position[1], previousState.Position[2],
-               previousState.Angle[0], previousState.Angle[1], previousState.Angle[2],
-               previousState.Distance);
+    CAMERA_LOG(
+        "[CAM] DefaultCamera::OnActivate - Scene=%d, PrevPos=(%.1f,%.1f,%.1f), PrevAngle=(%.1f,%.1f,%.1f), PrevDist=%.0f",
+        (int)SceneFlag, previousState.Position[0], previousState.Position[1], previousState.Position[2],
+        previousState.Angle[0], previousState.Angle[1], previousState.Angle[2], previousState.Distance);
 
     // FIX: Save previousState before ResetForScene overwrites m_State
     vec3_t savedPosition, savedAngle;
-    float savedDistance = previousState.Distance;
-    float savedDistanceTarget = previousState.DistanceTarget;
+    float  savedDistance       = previousState.Distance;
+    float  savedDistanceTarget = previousState.DistanceTarget;
     VectorCopy(previousState.Position, savedPosition);
     VectorCopy(previousState.Angle, savedAngle);
 
@@ -234,18 +232,17 @@ void DefaultCamera::OnActivate(const CameraState& previousState)
     // ResetForScene also handles position/angle initialization for each scene
     ResetForScene(SceneFlag);
 
-    CAMERA_LOG("[CAM]   Config: Far=%.0f, hFOV=%.1f, TerrainCull=%.0f",
-               m_Config.farPlane, m_Config.hFov, m_Config.terrainCullRange);
+    CAMERA_LOG("[CAM]   Config: Far=%.0f, hFOV=%.1f, TerrainCull=%.0f", m_Config.farPlane, m_Config.hFov,
+               m_Config.terrainCullRange);
 
     // FIX: Inherit position and angles from previous camera for seamless transition
     VectorCopy(savedPosition, m_State.Position);
     VectorCopy(savedAngle, m_State.Angle);
-    m_State.Distance = savedDistance;
+    m_State.Distance       = savedDistance;
     m_State.DistanceTarget = savedDistanceTarget;
 
-    CAMERA_LOG("[CAM]   After inherit: Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f), Dist=%.0f",
-               m_State.Position[0], m_State.Position[1], m_State.Position[2],
-               m_State.Angle[0], m_State.Angle[1], m_State.Angle[2],
+    CAMERA_LOG("[CAM]   After inherit: Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f), Dist=%.0f", m_State.Position[0],
+               m_State.Position[1], m_State.Position[2], m_State.Angle[0], m_State.Angle[1], m_State.Angle[2],
                m_State.Distance);
 
     // Pre-compute the target pose so frame 1 already renders at the
@@ -263,8 +260,8 @@ void DefaultCamera::OnActivate(const CameraState& previousState)
     // doesn't match the default camera's canonical pose.
     if (SceneFlag == MAIN_SCENE && IsHeroValid())
     {
-        g_shCameraLevel = static_cast<short>(m_PlayerZoomLevel);
-        m_State.Distance = PLAYER_ZOOM_LADDER[m_PlayerZoomLevel].distance;
+        g_shCameraLevel        = static_cast<short>(m_PlayerZoomLevel);
+        m_State.Distance       = PLAYER_ZOOM_LADDER[m_PlayerZoomLevel].distance;
         m_State.DistanceTarget = m_State.Distance;
 
         m_State.Angle[0] = 0.f;
@@ -282,7 +279,7 @@ void DefaultCamera::OnActivate(const CameraState& previousState)
     m_LastSceneFlag = (int)SceneFlag;
 
     // FIX: Mark as just activated to skip first frame position recalculation and disable smoothing
-    m_bJustActivated = true;
+    m_bJustActivated        = true;
     m_FramesSinceActivation = 0;
 }
 
@@ -366,9 +363,8 @@ bool DefaultCamera::Update()
         // Still need to call SetCameraFOV for proper FOV setup
         SetCameraFOV();
 
-        CAMERA_LOG("[CAM] DefaultCamera first frame: Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)",
-                   m_State.Position[0], m_State.Position[1], m_State.Position[2],
-                   m_State.Angle[0], m_State.Angle[1], m_State.Angle[2]);
+        CAMERA_LOG("[CAM] DefaultCamera first frame: Pos=(%.1f,%.1f,%.1f), Angle=(%.1f,%.1f,%.1f)", m_State.Position[0],
+                   m_State.Position[1], m_State.Position[2], m_State.Angle[0], m_State.Angle[1], m_State.Angle[2]);
 
         m_bJustActivated = false;
     }
@@ -393,8 +389,8 @@ bool DefaultCamera::Update()
         g_pRenderText->SetTextColor(255, 255, 0, 255);  // Yellow text
         g_pRenderText->SetBgColor(0, 0, 0, 180);        // Semi-transparent black background
 
-        wchar_t debugText[256];
-        int yPos = 10;
+        wchar_t   debugText[256];
+        int       yPos       = 10;
         const int lineHeight = 15;
 
         // Camera type and scene
@@ -413,8 +409,8 @@ bool DefaultCamera::Update()
         yPos += lineHeight;
 
         // Near plane and culling
-        swprintf(debugText, 256, L"Config.nearPlane: %.0f | Config.terrainCullRange: %.0f",
-                 m_Config.nearPlane, m_Config.terrainCullRange);
+        swprintf(debugText, 256, L"Config.nearPlane: %.0f | Config.terrainCullRange: %.0f", m_Config.nearPlane,
+                 m_Config.terrainCullRange);
         g_pRenderText->RenderText(10, yPos, debugText);
         yPos += lineHeight;
 
@@ -479,20 +475,20 @@ void DefaultCamera::CalculateCameraViewFar()
 
 namespace
 {
-    // Per-mount Z offsets (world units above terrain).
-    // Camera lift for ground mounts (character stays on terrain, camera rises
-    // for a better vantage point). Dinorant gets 0 because MoveCharacterPosition
-    // already lifts the character model (+30 normal, +90 sky maps).
-    constexpr float MOUNT_OFFSET_GROUND         = 30.0f;
+// Per-mount Z offsets (world units above terrain).
+// Camera lift for ground mounts (character stays on terrain, camera rises
+// for a better vantage point). Dinorant gets 0 because MoveCharacterPosition
+// already lifts the character model (+30 normal, +90 sky maps).
+constexpr float MOUNT_OFFSET_GROUND = 30.0f;
 
-    // Time-based smooth transition for mount/dismount (frame-rate independent).
-    // Uses exponential decay: reaches ~95% of target in MOUNT_TRANSITION_MS.
-    constexpr float MOUNT_TRANSITION_MS         = 500.0f;
-    constexpr float MOUNT_LERP_TAU              = MOUNT_TRANSITION_MS / 3000.0f;  // time constant (seconds)
+// Time-based smooth transition for mount/dismount (frame-rate independent).
+// Uses exponential decay: reaches ~95% of target in MOUNT_TRANSITION_MS.
+constexpr float MOUNT_TRANSITION_MS = 500.0f;
+constexpr float MOUNT_LERP_TAU      = MOUNT_TRANSITION_MS / 3000.0f;  // time constant (seconds)
 
-    // Snap threshold — when the offset is close enough, snap to target
-    // to avoid endless micro-oscillation.
-    constexpr float MOUNT_LERP_SNAP_THRESHOLD   = 0.5f;
+// Snap threshold — when the offset is close enough, snap to target
+// to avoid endless micro-oscillation.
+constexpr float MOUNT_LERP_SNAP_THRESHOLD = 0.5f;
 }
 
 float DefaultCamera::GetTargetMountOffset() const
@@ -502,21 +498,21 @@ float DefaultCamera::GetTargetMountOffset() const
 
     switch (Hero->Helper.Type)
     {
-    case MODEL_HORN_OF_DINORANT:
-        return 0.0f;  // Character model already floats via MoveCharacterPosition
-    case MODEL_HORN_OF_UNIRIA:
-    case MODEL_DARK_HORSE_ITEM:
-    case MODEL_HORN_OF_FENRIR:
-        return MOUNT_OFFSET_GROUND;
-    default:
-        return 0.0f;
+        case MODEL_HORN_OF_DINORANT:
+            return 0.0f;  // Character model already floats via MoveCharacterPosition
+        case MODEL_HORN_OF_UNIRIA:
+        case MODEL_DARK_HORSE_ITEM:
+        case MODEL_HORN_OF_FENRIR:
+            return MOUNT_OFFSET_GROUND;
+        default:
+            return 0.0f;
     }
 }
 
 void DefaultCamera::SyncMountOffset()
 {
     m_CurrentMountOffset = GetTargetMountOffset();
-    m_LastMountType = IsHeroValid() ? Hero->Helper.Type : -1;
+    m_LastMountType      = IsHeroValid() ? Hero->Helper.Type : -1;
 }
 
 void DefaultCamera::AdjustHeroHeight()
@@ -554,8 +550,8 @@ void DefaultCamera::AdjustHeroHeight()
 
     // Time-based exponential lerp (frame-rate independent).
     extern float FPS_ANIMATION_FACTOR;
-    float dt = FPS_ANIMATION_FACTOR / 25.0f;  // REFERENCE_FPS = 25
-    float delta = targetOffset - m_CurrentMountOffset;
+    float        dt    = FPS_ANIMATION_FACTOR / 25.0f;  // REFERENCE_FPS = 25
+    float        delta = targetOffset - m_CurrentMountOffset;
     if (fabsf(delta) < MOUNT_LERP_SNAP_THRESHOLD)
         m_CurrentMountOffset = targetOffset;
     else
@@ -565,7 +561,7 @@ void DefaultCamera::AdjustHeroHeight()
 void DefaultCamera::CalculateCameraPosition()
 {
     vec3_t Position, TransformPosition;
-    float Matrix[3][4];
+    float  Matrix[3][4];
 
     CalculateCameraViewFar();
 
@@ -603,7 +599,7 @@ void DefaultCamera::CalculateCameraPosition()
     if (g_Direction.IsDirection() && !g_Direction.m_bDownHero)
     {
         Hero->Object.Position[2] = DIRECTION_MODE_HERO_Z;
-        g_shCameraLevel = g_Direction.GetCameraPosition(Position);
+        g_shCameraLevel          = g_Direction.GetCameraPosition(Position);
     }
     else if (SceneFlag == MAIN_SCENE)
     {
@@ -621,7 +617,7 @@ void DefaultCamera::CalculateCameraPosition()
 
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
-        vec3_t temp = { 0.0f, 0.0f, -100.0f };
+        vec3_t temp = {0.0f, 0.0f, -100.0f};
         VectorAdd(TransformPosition, temp, TransformPosition);
     }
 
@@ -645,7 +641,7 @@ void DefaultCamera::CalculateCameraPosition()
     // Apply custom camera distance for special terrain
     if (m_State.CustomDistance != 0.f)
     {
-        vec3_t angle = { 0.f, 0.f, CUSTOM_DISTANCE_PITCH_DEG };
+        vec3_t angle = {0.f, 0.f, CUSTOM_DISTANCE_PITCH_DEG};
         Vector(0.f, m_State.CustomDistance, 0.f, Position);
         AngleMatrix(angle, Matrix);
         VectorIRotate(Position, Matrix, TransformPosition);
@@ -667,8 +663,8 @@ void DefaultCamera::SetCameraAngle()
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
         // Apply angle offsets for LoginScene camera tuning
-        extern float g_LoginSceneAnglePitch;
-        extern float g_LoginSceneAngleYaw;
+        extern float       g_LoginSceneAnglePitch;
+        extern float       g_LoginSceneAngleYaw;
         extern CMapManager gMapManager;
 
         CCameraMove::GetInstancePtr()->SetAngleFrustum(-112.5f);
@@ -685,9 +681,9 @@ void DefaultCamera::SetCameraAngle()
     }
     else if (SceneFlag == CHARACTER_SCENE)
     {
-        m_State.Angle[0] = -84.5f;
-        m_State.Angle[1] = 0.0f;
-        m_State.Angle[2] = -75.0f;
+        m_State.Angle[0]    = -84.5f;
+        m_State.Angle[1]    = 0.0f;
+        m_State.Angle[2]    = -75.0f;
         m_State.Position[0] = 9758.93f;
         m_State.Position[1] = 18913.11f;
         m_State.Position[2] = 675.5f;
@@ -712,7 +708,7 @@ void DefaultCamera::UpdateCustomCameraDistance()
     // takes the same wall-clock time at any refresh rate (CustomDistance is
     // float, so the fractional per-frame step accumulates exactly).
     extern float FPS_ANIMATION_FACTOR;
-    const float rampStep = 10.0f * FPS_ANIMATION_FACTOR;
+    const float  rampStep = 10.0f * FPS_ANIMATION_FACTOR;
 
     if ((TerrainWall[iIndex] & TW_CAMERA_UP) == TW_CAMERA_UP)
     {
@@ -745,7 +741,7 @@ void DefaultCamera::HandleWheelZoom()
     // received while locked stays in MouseWheel and fires the moment the
     // player unlocks (looks like a phantom zoom on F10 release).
     const int wheel = MouseWheel;
-    MouseWheel = 0;
+    MouseWheel      = 0;
 
     if (CameraManager::Instance().IsZoomLocked())
         return;
@@ -765,7 +761,8 @@ void DefaultCamera::UpdateCameraDistance()
 {
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
-        m_State.DistanceTarget = TOUR_BASE_DISTANCE * CCameraMove::GetInstancePtr()->GetCurrentCameraDistanceLevel() * 0.1f;
+        m_State.DistanceTarget =
+            TOUR_BASE_DISTANCE * CCameraMove::GetInstancePtr()->GetCurrentCameraDistanceLevel() * 0.1f;
         m_State.Distance = m_State.DistanceTarget;
         return;
     }
@@ -788,11 +785,11 @@ void DefaultCamera::UpdateCameraDistance()
         // 144fps, turning the zoom glide into a snap on high-refresh screens.
         // Tau reproduces that 1/3 per-frame alpha exactly at the 25fps
         // reference (exp(-dt/tau) = 2/3) and is independent of fps above it.
-        extern float FPS_ANIMATION_FACTOR;
-        constexpr float ZOOM_DISTANCE_TAU = 0.0986f;  // seconds; matches 1/3 @ 25fps
+        extern float    FPS_ANIMATION_FACTOR;
+        constexpr float ZOOM_DISTANCE_TAU   = 0.0986f;  // seconds; matches 1/3 @ 25fps
         constexpr float ZOOM_SNAP_THRESHOLD = 0.5f;
-        const float dt = FPS_ANIMATION_FACTOR / 25.0f;  // REFERENCE_FPS = 25
-        const float delta = m_State.DistanceTarget - m_State.Distance;
+        const float     dt                  = FPS_ANIMATION_FACTOR / 25.0f;  // REFERENCE_FPS = 25
+        const float     delta               = m_State.DistanceTarget - m_State.Distance;
         if (fabsf(delta) < ZOOM_SNAP_THRESHOLD)
             m_State.Distance = m_State.DistanceTarget;  // avoid endless micro-ease
         else
@@ -803,10 +800,9 @@ void DefaultCamera::UpdateCameraDistance()
 void DefaultCamera::SetCameraFOV()
 {
     extern unsigned int WindowWidth, WindowHeight;
-    float aspect = (float)WindowWidth / (float)WindowHeight;
+    float               aspect = (float)WindowWidth / (float)WindowHeight;
 
-    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE
-        && CCameraMove::GetInstancePtr()->IsTourMode())
+    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE && CCameraMove::GetInstancePtr()->IsTourMode())
     {
         // Tour mode uses wider FOV for cinematic feel
         m_State.FOV = HFovToVFov(m_Config.hFov, aspect);
@@ -840,18 +836,17 @@ void DefaultCamera::HandleEditorMode()
         Vector(0.f, 0.f, 0.f, p1);
         FLOAT Velocity = TERRAIN_SCALE * 1.25f * FPS_ANIMATION_FACTOR;
 
-        struct KeyMapping {
-            int vKey;
+        struct KeyMapping
+        {
+            int   vKey;
             float x;
             float y;
         };
 
-        const KeyMapping keyMappings[] = {
-            {VK_LEFT,  -Velocity, -Velocity},
-            {VK_RIGHT,  Velocity,  Velocity},
-            {VK_UP,    -Velocity,  Velocity},
-            {VK_DOWN,   Velocity, -Velocity}
-        };
+        const KeyMapping keyMappings[] = {{VK_LEFT, -Velocity, -Velocity},
+                                          {VK_RIGHT, Velocity, Velocity},
+                                          {VK_UP, -Velocity, Velocity},
+                                          {VK_DOWN, Velocity, -Velocity}};
 
         for (const auto& mapping : keyMappings)
         {
@@ -867,8 +862,8 @@ void DefaultCamera::HandleEditorMode()
         if (IsHeroValid())
         {
             // Apply rotation and movement
-            vec3_t z_angle = { 0.f, 0.f, -m_State.Angle[2] };
-            float Matrix[3][4];
+            vec3_t z_angle = {0.f, 0.f, -m_State.Angle[2]};
+            float  Matrix[3][4];
             AngleMatrix(z_angle, Matrix);
             VectorRotate(p1, Matrix, p2);
             VectorAdd(Hero->Object.Position, p2, Hero->Object.Position);
@@ -889,7 +884,7 @@ void DefaultCamera::HandleEditorMode()
         Hero->Path.PathNum = 0;
     }
 }
-#endif //ENABLE_EDIT2
+#endif  //ENABLE_EDIT2
 
 // ========== Phase 1: Configuration & Frustum Management ==========
 
@@ -931,39 +926,31 @@ void DefaultCamera::UpdateFrustum()
     // Build frustum from current configuration
     extern unsigned int WindowWidth;
     extern unsigned int WindowHeight;
-    float aspectRatio = (float)WindowWidth / (float)WindowHeight;
+    float               aspectRatio = (float)WindowWidth / (float)WindowHeight;
 
     // Phase 5 FIX: ALWAYS use m_Config values for frustum culling
     // (Override was already applied at the top of this function.)
-    float effectiveFarPlane = m_Config.farPlane;
+    float effectiveFarPlane         = m_Config.farPlane;
     float effectiveTerrainCullRange = m_Config.terrainCullRange;
 
     // Convert horizontal FOV to vertical FOV for frustum building
     float vFov = HFovToVFov(m_Config.hFov, aspectRatio);
 
-    m_Frustum.BuildFromCamera(
-        m_State.Position,
-        forward,
-        up,
-        vFov,
-        aspectRatio,
-        m_Config.nearPlane,
-        effectiveFarPlane,
-        effectiveTerrainCullRange
-    );
+    m_Frustum.BuildFromCamera(m_State.Position, forward, up, vFov, aspectRatio, m_Config.nearPlane, effectiveFarPlane,
+                              effectiveTerrainCullRange);
 
     // Phase 5: Cache current state for next frame's comparison
     VectorCopy(m_State.Position, m_FrustumCache.Position);
     VectorCopy(m_State.Angle, m_FrustumCache.Angle);
-    m_FrustumCache.ViewFar = effectiveFarPlane;
+    m_FrustumCache.ViewFar     = effectiveFarPlane;
     m_FrustumCache.AspectRatio = aspectRatio;
 
 #ifdef _EDITOR
     if (DevEditor_IsCameraOverrideEnabled("Default"))
     {
-        m_FrustumCache.EditorFOV = m_Config.hFov;
-        m_FrustumCache.EditorFarPlane = m_Config.farPlane;
-        m_FrustumCache.EditorNearPlane = m_Config.nearPlane;
+        m_FrustumCache.EditorFOV              = m_Config.hFov;
+        m_FrustumCache.EditorFarPlane         = m_Config.farPlane;
+        m_FrustumCache.EditorNearPlane        = m_Config.nearPlane;
         m_FrustumCache.EditorTerrainCullRange = m_Config.terrainCullRange;
     }
 #endif
@@ -1008,7 +995,7 @@ bool DefaultCamera::NeedsFrustumUpdate() const
     // through a resize and culling at the screen edges would go stale.
     extern unsigned int WindowWidth;
     extern unsigned int WindowHeight;
-    const float aspectRatio = (float)WindowWidth / (float)WindowHeight;
+    const float         aspectRatio = (float)WindowWidth / (float)WindowHeight;
     if (fabs(aspectRatio - m_FrustumCache.AspectRatio) > EPSILON)
     {
         return true;

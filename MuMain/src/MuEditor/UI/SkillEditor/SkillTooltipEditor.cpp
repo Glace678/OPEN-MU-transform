@@ -24,25 +24,32 @@ using UI::Skills::Tooltip::Model;
 
 namespace
 {
-const ImVec4 IMGUI_COLOR_WHITE = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-const ImVec4 IMGUI_COLOR_BLUE = ImVec4(0.4f, 0.6f, 1.0f, 1.0f);
-const ImVec4 IMGUI_COLOR_RED = ImVec4(0.95f, 0.35f, 0.35f, 1.0f);   // plain red text
-const ImVec4 IMGUI_COLOR_DARKRED_FG = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);  // white text on red background
-const ImU32 IMGUI_BG_DARKRED = IM_COL32(170, 30, 30, 255);
+const ImVec4 IMGUI_COLOR_WHITE      = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+const ImVec4 IMGUI_COLOR_BLUE       = ImVec4(0.4f, 0.6f, 1.0f, 1.0f);
+const ImVec4 IMGUI_COLOR_RED        = ImVec4(0.95f, 0.35f, 0.35f, 1.0f);  // plain red text
+const ImVec4 IMGUI_COLOR_DARKRED_FG = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);     // white text on red background
+const ImU32  IMGUI_BG_DARKRED       = IM_COL32(170, 30, 30, 255);
 
 ImVec4 ImGuiColor(LineColor c)
 {
     switch (c)
     {
-    case LineColor::White:    return IMGUI_COLOR_WHITE;
-    case LineColor::Blue:     return IMGUI_COLOR_BLUE;
-    case LineColor::Red:      return IMGUI_COLOR_RED;
-    case LineColor::DarkRed:  return IMGUI_COLOR_DARKRED_FG;
+        case LineColor::White:
+            return IMGUI_COLOR_WHITE;
+        case LineColor::Blue:
+            return IMGUI_COLOR_BLUE;
+        case LineColor::Red:
+            return IMGUI_COLOR_RED;
+        case LineColor::DarkRed:
+            return IMGUI_COLOR_DARKRED_FG;
     }
     return IMGUI_COLOR_WHITE;
 }
 
-bool HasRedBackground(LineColor c) { return c == LineColor::DarkRed; }
+bool HasRedBackground(LineColor c)
+{
+    return c == LineColor::DarkRed;
+}
 
 void RenderModelCentered(const Model& model)
 {
@@ -63,7 +70,8 @@ void RenderModelCentered(const Model& model)
         }
         utf8Lines.emplace_back(StringUtils::WideToNarrow(model.lines[i].text));
         const float w = ImGui::CalcTextSize(utf8Lines.back().c_str()).x;
-        if (w > maxWidth) maxWidth = w;
+        if (w > maxWidth)
+            maxWidth = w;
     }
 
     for (int i = 0; i < model.count; ++i)
@@ -75,9 +83,9 @@ void RenderModelCentered(const Model& model)
             continue;
         }
 
-        const std::string& utf8 = utf8Lines[i];
-        const ImVec2 textSize = ImGui::CalcTextSize(utf8.c_str());
-        const float indent = (maxWidth - textSize.x) * 0.5f;
+        const std::string& utf8     = utf8Lines[i];
+        const ImVec2       textSize = ImGui::CalcTextSize(utf8.c_str());
+        const float        indent   = (maxWidth - textSize.x) * 0.5f;
         if (indent > 0.0f)
         {
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + indent);
@@ -86,15 +94,14 @@ void RenderModelCentered(const Model& model)
         if (HasRedBackground(line.color))
         {
             const ImVec2 cursorScreen = ImGui::GetCursorScreenPos();
-            const float padX = 4.0f;
-            const float padY = 1.0f;
+            const float  padX         = 4.0f;
+            const float  padY         = 1.0f;
             // Stretch the background to the tooltip's content width (maxWidth)
             // so every banner looks the same regardless of its text length.
             const float leftEdge = cursorScreen.x - indent;
             ImGui::GetWindowDrawList()->AddRectFilled(
                 ImVec2(leftEdge - padX, cursorScreen.y - padY),
-                ImVec2(leftEdge + maxWidth + padX, cursorScreen.y + textSize.y + padY),
-                IMGUI_BG_DARKRED);
+                ImVec2(leftEdge + maxWidth + padX, cursorScreen.y + textSize.y + padY), IMGUI_BG_DARKRED);
         }
 
         ImGui::TextColored(ImGuiColor(line.color), "%s", utf8.c_str());
@@ -105,14 +112,15 @@ void RenderModelCentered(const Model& model)
 void Render(int skillIndex)
 {
     BuildOptions options;
-    options.skillType = skillIndex;
-    options.skillSlotIndex = -1;
+    options.skillType                = skillIndex;
+    options.skillSlotIndex           = -1;
     options.includeCharacterSpecific = false;
 
     Model model;
     BuildModel(options, model);
 
-    if (model.count == 0) return;
+    if (model.count == 0)
+        return;
 
     ImGui::BeginTooltip();
     RenderModelCentered(model);
@@ -121,4 +129,4 @@ void Render(int skillIndex)
 
 }  // namespace MuEditor::Skills::Tooltip
 
-#endif // _EDITOR
+#endif  // _EDITOR

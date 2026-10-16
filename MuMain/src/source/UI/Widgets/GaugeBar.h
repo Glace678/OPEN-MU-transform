@@ -27,29 +27,28 @@ protected:
         int height{0};
     };
 
-    CSprite		m_sprGauge;
-    Rect        m_gaugeRect;
+    CSprite                  m_sprGauge;
+    Rect                     m_gaugeRect;
     std::unique_ptr<CSprite> m_backgroundSprite;
     std::optional<GaugeSize> m_responseSize;
-    int			m_nXPos{0};
-    int			m_nYPos{0};
+    int                      m_nXPos{0};
+    int                      m_nYPos{0};
 
 public:
     CGaugeBar();
     virtual ~CGaugeBar();
 
-    void Create(int nGaugeWidth, int nGaugeHeight, int nGaugeTexID,
-        const RECT* prcGauge = nullptr, int nBackWidth = 0, int nBackHeight = 0,
-        int nBackTexID = -1, bool bShortenLeft = true, float fScaleX = 1.0f,
-        float fScaleY = 1.0f);
+    void Create(int nGaugeWidth, int nGaugeHeight, int nGaugeTexID, const RECT* prcGauge = nullptr, int nBackWidth = 0,
+                int nBackHeight = 0, int nBackTexID = -1, bool bShortenLeft = true, float fScaleX = 1.0f,
+                float fScaleY = 1.0f);
 
     void Release();
     void SetPosition(int nXCoord, int nYCoord);
     void SetPositionArt(float fXCoord, float fYCoord);
-    int	GetXPos() const { return m_nXPos; }
-    int	GetYPos() const { return m_nYPos; }
-    int GetWidth() const;
-    int GetHeight() const;
+    int  GetXPos() const { return m_nXPos; }
+    int  GetYPos() const { return m_nYPos; }
+    int  GetWidth() const;
+    int  GetHeight() const;
     void SetValue(std::uint32_t dwNow, std::uint32_t dwTotal);
     bool CursorInObject();
     void SetAlpha(std::uint8_t dwAlpha);

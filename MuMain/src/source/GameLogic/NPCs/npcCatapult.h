@@ -2,14 +2,14 @@
 //
 //  npcCatapult.h
 //
-//  Handles the catapult, a siege weapon.
+//  공성 무기인 투석기 처리.
 //
-//  Date : 2004/10/18
+//  날  짜 : 2004/10/18
 //
-//  Author : Cho Kyu-ha.
+//  작성자 : 조규하.
 //
 //////////////////////////////////////////////////////////////////////////
 #ifndef __NPC_CATAPULT_H__
 #define __NPC_CATAPULT_H__
 
-#endif// __NPC_CATAPULT_H__
+#endif  // __NPC_CATAPULT_H__

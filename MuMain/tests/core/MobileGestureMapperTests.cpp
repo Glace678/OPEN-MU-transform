@@ -11,18 +11,16 @@ using Core::Input::TouchSample;
 
 namespace
 {
-    bool Has(const Core::Input::MobileGestureActions& actions,
-        MobileGestureActionType type)
-    {
-        return std::any_of(actions.begin(), actions.end(),
-            [type](const auto& action) { return action.type == type; });
-    }
+bool Has(const Core::Input::MobileGestureActions& actions, MobileGestureActionType type)
+{
+    return std::any_of(actions.begin(), actions.end(), [type](const auto& action) { return action.type == type; });
+}
 }
 
 TEST_CASE("single-finger drag preserves the legacy left mouse contract")
 {
     MobileGestureMapper mapper;
-    auto down = mapper.Handle({1, TouchPhase::Down, 0.2f, 0.6f, 100});
+    auto                down = mapper.Handle({1, TouchPhase::Down, 0.2f, 0.6f, 100});
     CHECK(Has(down, MobileGestureActionType::PointerMove));
     CHECK(Has(down, MobileGestureActionType::LeftButtonDown));
 
@@ -42,8 +40,9 @@ TEST_CASE("gesture action batches remain bounded when a caller appends too many 
     actions.push_back({MobileGestureActionType::RightButtonDown, 0.0f, 0.0f});
 
     CHECK(actions.size() == 3);
-    CHECK(std::count_if(actions.begin(), actions.end(),
-        [](const auto& action) { return action.type == MobileGestureActionType::RightButtonDown; }) == 0);
+    CHECK(std::count_if(actions.begin(), actions.end(), [](const auto& action) {
+              return action.type == MobileGestureActionType::RightButtonDown;
+          }) == 0);
 }
 
 TEST_CASE("right-half double tap casts with the legacy right mouse button")

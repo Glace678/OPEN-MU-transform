@@ -10,13 +10,13 @@ constexpr int MAX_SERVER_PER_GROUP = 20;
 enum EGameScene
 {
     SERVER_LIST_SCENE = 0,
-    WEBZEN_SCENE = 1,
-    LOG_IN_SCENE = 2,
-    LOADING_SCENE = 3,
-    CHARACTER_SCENE = 4,
-    MAIN_SCENE = 5,
+    WEBZEN_SCENE      = 1,
+    LOG_IN_SCENE      = 2,
+    LOADING_SCENE     = 3,
+    CHARACTER_SCENE   = 4,
+    MAIN_SCENE        = 5,
 };
 
-constexpr auto NUM_LINE_CMB = (7);
-constexpr auto NUM_BUTTON_CMB = (2);
+constexpr auto NUM_LINE_CMB       = (7);
+constexpr auto NUM_BUTTON_CMB     = (2);
 constexpr auto NUM_PAR_BUTTON_CMB = (5);

@@ -6,34 +6,34 @@
 
 CTimer::CTimer()
 {
-    m_startTime = Clock::now();
+    m_startTime    = Clock::now();
     m_absStartTime = m_startTime;
 }
 
 double CTimer::GetTimeElapsed()
 {
-    auto now = Clock::now();
+    auto now     = Clock::now();
     auto elapsed = std::chrono::duration<double, std::milli>(now - m_startTime);
-    return elapsed.count(); // Return elapsed time in milliseconds
+    return elapsed.count();  // Return elapsed time in milliseconds
 }
 
 double CTimer::GetAbsTime()
 {
-    auto now = Clock::now();
+    auto now     = Clock::now();
     auto elapsed = std::chrono::duration<double, std::milli>(now - m_absStartTime);
-    return elapsed.count(); // Return absolute time in milliseconds
+    return elapsed.count();  // Return absolute time in milliseconds
 }
 
 void CTimer::ResetTimer()
 {
-    m_startTime = Clock::now(); // Reset start time to now
+    m_startTime = Clock::now();  // Reset start time to now
 }
 
 void CTimer2::SetTimer(unsigned int delay)
 {
-    m_delay = delay;
+    m_delay        = delay;
     m_timerStarted = false;
-    m_timeReached = false;
+    m_timeReached  = false;
 }
 
 unsigned int CTimer2::GetDelay() const
@@ -44,7 +44,7 @@ unsigned int CTimer2::GetDelay() const
 void CTimer2::ResetTimer()
 {
     m_timerStarted = false;
-    m_timeReached = false;
+    m_timeReached  = false;
 }
 
 void CTimer2::UpdateTime()
@@ -58,12 +58,12 @@ void CTimer2::UpdateTime()
     }
 
     m_timeReached = false;
-    auto now = SteadyClock::now();
+    auto now      = SteadyClock::now();
 
     if (!m_timerStarted)
     {
         m_startTickTime = now;
-        m_timerStarted = true;
+        m_timerStarted  = true;
         return;
     }
 
@@ -71,7 +71,7 @@ void CTimer2::UpdateTime()
     if (elapsed.count() > static_cast<long long>(m_delay))
     {
         m_startTickTime = now;
-        m_timeReached = true;
+        m_timeReached   = true;
     }
 }
 

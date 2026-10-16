@@ -1,8 +1,8 @@
 /**************************************************************************************************
 
-Top-level object for the script list.
+스크립트 목록 최 상위 객체
 
-Holds the category list, package list, and product (attribute) list.
+카테고리 목록, 패키지 목록, 상품(속성) 목록을 가지고 있다.
 
 **************************************************************************************************/
 
@@ -25,9 +25,9 @@ public:
     WZResult LoadPackage(const wchar_t* szFilePath);
     WZResult LoadProduct(const wchar_t* szFilePath);
 
-    CShopCategoryList* GetCategoryListPtr() { return m_CategoryListPtr; };	// Gets the category list.
-    CShopPackageList* GetPackageListPtr() { return m_PackageListPtr; };		// Gets the package list.
-    CShopProductList* GetProductListPtr() { return m_ProductListPtr; };		// Gets the product (attribute) list.
+    CShopCategoryList* GetCategoryListPtr() { return m_CategoryListPtr; };  // 카테고리 목록 가져온다.
+    CShopPackageList*  GetPackageListPtr() { return m_PackageListPtr; };    // 패키지 목록 가져온다.
+    CShopProductList*  GetProductListPtr() { return m_ProductListPtr; };    // 상품(속성) 목록 가져온다.
 
     void SetCategoryListPtr(CShopCategoryList* CategoryListPtr);
     void SetPackageListPtr(CShopPackageList* PackagePtr);
@@ -35,9 +35,9 @@ public:
 
 private:
     CShopCategoryList* m_CategoryListPtr;
-    CShopPackageList* m_PackageListPtr;
-    CShopProductList* m_ProductListPtr;
+    CShopPackageList*  m_PackageListPtr;
+    CShopProductList*  m_ProductListPtr;
 
-    FILE_ENCODE IsFileEncodingUtf8(const wchar_t* szFilePath);
+    FILE_ENCODE  IsFileEncodingUtf8(const wchar_t* szFilePath);
     std::wstring GetDecodedString(const char* buffer, FILE_ENCODE encode);
 };

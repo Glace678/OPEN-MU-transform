@@ -17,86 +17,79 @@
 #define APIENTRY
 #endif
 
-typedef GLuint (APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
-typedef void   (APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
-typedef void   (APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef GLuint (APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
-typedef void   (APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
-typedef void   (APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
-typedef void   (APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
-typedef void   (APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
-typedef GLint  (APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
-typedef GLuint (APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
-typedef void   (APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
-typedef void   (APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
-typedef void   (APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
-typedef void   (APIENTRY* PFNGLUNIFORM2FPROC)(GLint, GLfloat, GLfloat);
-typedef void   (APIENTRY* PFNGLUNIFORM3FVPROC)(GLint, GLsizei, const GLfloat*);
-typedef void   (APIENTRY* PFNGLUNIFORMMATRIX4FVPROC)(GLint, GLsizei, GLboolean, const GLfloat*);
+typedef GLuint(APIENTRY* PFNGLCREATESHADERPROC)(GLenum);
+typedef void(APIENTRY* PFNGLSHADERSOURCEPROC)(GLuint, GLsizei, const GLchar* const*, const GLint*);
+typedef void(APIENTRY* PFNGLCOMPILESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETSHADERIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETSHADERINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef GLuint(APIENTRY* PFNGLCREATEPROGRAMPROC)(void);
+typedef void(APIENTRY* PFNGLATTACHSHADERPROC)(GLuint, GLuint);
+typedef void(APIENTRY* PFNGLLINKPROGRAMPROC)(GLuint);
+typedef void(APIENTRY* PFNGLGETPROGRAMIVPROC)(GLuint, GLenum, GLint*);
+typedef void(APIENTRY* PFNGLGETPROGRAMINFOLOGPROC)(GLuint, GLsizei, GLsizei*, GLchar*);
+typedef void(APIENTRY* PFNGLDELETESHADERPROC)(GLuint);
+typedef void(APIENTRY* PFNGLDELETEPROGRAMPROC)(GLuint);
+typedef GLint(APIENTRY* PFNGLGETUNIFORMLOCATIONPROC)(GLuint, const GLchar*);
+typedef GLuint(APIENTRY* PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint, const GLchar*);
+typedef void(APIENTRY* PFNGLUNIFORMBLOCKBINDINGPROC)(GLuint, GLuint, GLuint);
+typedef void(APIENTRY* PFNGLUNIFORM1IPROC)(GLint, GLint);
+typedef void(APIENTRY* PFNGLUNIFORM1FPROC)(GLint, GLfloat);
+typedef void(APIENTRY* PFNGLUNIFORM2FPROC)(GLint, GLfloat, GLfloat);
+typedef void(APIENTRY* PFNGLUNIFORM3FVPROC)(GLint, GLsizei, const GLfloat*);
+typedef void(APIENTRY* PFNGLUNIFORMMATRIX4FVPROC)(GLint, GLsizei, GLboolean, const GLfloat*);
 
-static PFNGLCREATESHADERPROC       fn_glCreateShader       = nullptr;
-static PFNGLSHADERSOURCEPROC       fn_glShaderSource        = nullptr;
-static PFNGLCOMPILESHADERPROC      fn_glCompileShader       = nullptr;
-static PFNGLGETSHADERIVPROC        fn_glGetShaderiv         = nullptr;
-static PFNGLGETSHADERINFOLOGPROC   fn_glGetShaderInfoLog    = nullptr;
-static PFNGLCREATEPROGRAMPROC      fn_glCreateProgram       = nullptr;
-static PFNGLATTACHSHADERPROC       fn_glAttachShader        = nullptr;
-static PFNGLLINKPROGRAMPROC        fn_glLinkProgram         = nullptr;
-static PFNGLGETPROGRAMIVPROC       fn_glGetProgramiv        = nullptr;
-static PFNGLGETPROGRAMINFOLOGPROC  fn_glGetProgramInfoLog   = nullptr;
-static PFNGLDELETESHADERPROC       fn_glDeleteShader        = nullptr;
-static PFNGLDELETEPROGRAMPROC      fn_glDeleteProgram       = nullptr;
-static PFNGLGETUNIFORMLOCATIONPROC fn_glGetUniformLocation  = nullptr;
+static PFNGLCREATESHADERPROC         fn_glCreateShader         = nullptr;
+static PFNGLSHADERSOURCEPROC         fn_glShaderSource         = nullptr;
+static PFNGLCOMPILESHADERPROC        fn_glCompileShader        = nullptr;
+static PFNGLGETSHADERIVPROC          fn_glGetShaderiv          = nullptr;
+static PFNGLGETSHADERINFOLOGPROC     fn_glGetShaderInfoLog     = nullptr;
+static PFNGLCREATEPROGRAMPROC        fn_glCreateProgram        = nullptr;
+static PFNGLATTACHSHADERPROC         fn_glAttachShader         = nullptr;
+static PFNGLLINKPROGRAMPROC          fn_glLinkProgram          = nullptr;
+static PFNGLGETPROGRAMIVPROC         fn_glGetProgramiv         = nullptr;
+static PFNGLGETPROGRAMINFOLOGPROC    fn_glGetProgramInfoLog    = nullptr;
+static PFNGLDELETESHADERPROC         fn_glDeleteShader         = nullptr;
+static PFNGLDELETEPROGRAMPROC        fn_glDeleteProgram        = nullptr;
+static PFNGLGETUNIFORMLOCATIONPROC   fn_glGetUniformLocation   = nullptr;
 static PFNGLGETUNIFORMBLOCKINDEXPROC fn_glGetUniformBlockIndex = nullptr;
-static PFNGLUNIFORMBLOCKBINDINGPROC fn_glUniformBlockBinding = nullptr;
-static PFNGLUNIFORM1IPROC          fn_glUniform1i           = nullptr;
-static PFNGLUNIFORM1FPROC          fn_glUniform1f           = nullptr;
-static PFNGLUNIFORM2FPROC          fn_glUniform2f           = nullptr;
-static PFNGLUNIFORM3FVPROC         fn_glUniform3fv          = nullptr;
-static PFNGLUNIFORMMATRIX4FVPROC   fn_glUniformMatrix4fv    = nullptr;
+static PFNGLUNIFORMBLOCKBINDINGPROC  fn_glUniformBlockBinding  = nullptr;
+static PFNGLUNIFORM1IPROC            fn_glUniform1i            = nullptr;
+static PFNGLUNIFORM1FPROC            fn_glUniform1f            = nullptr;
+static PFNGLUNIFORM2FPROC            fn_glUniform2f            = nullptr;
+static PFNGLUNIFORM3FVPROC           fn_glUniform3fv           = nullptr;
+static PFNGLUNIFORMMATRIX4FVPROC     fn_glUniformMatrix4fv     = nullptr;
 
 static bool LoadGLShaderFunctions()
 {
     static bool loaded = false;
-    if (loaded) return true;
+    if (loaded)
+        return true;
 
-    fn_glCreateShader       = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
-    fn_glShaderSource        = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
-    fn_glCompileShader       = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
-    fn_glGetShaderiv         = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
-    fn_glGetShaderInfoLog    = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
-    fn_glCreateProgram       = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
-    fn_glAttachShader        = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
-    fn_glLinkProgram         = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
-    fn_glGetProgramiv        = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
-    fn_glGetProgramInfoLog   = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
-    fn_glDeleteShader        = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
-    fn_glDeleteProgram       = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
-    fn_glGetUniformLocation  = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
+    fn_glCreateShader         = (PFNGLCREATESHADERPROC)MuGL::GetProcAddress("glCreateShader");
+    fn_glShaderSource         = (PFNGLSHADERSOURCEPROC)MuGL::GetProcAddress("glShaderSource");
+    fn_glCompileShader        = (PFNGLCOMPILESHADERPROC)MuGL::GetProcAddress("glCompileShader");
+    fn_glGetShaderiv          = (PFNGLGETSHADERIVPROC)MuGL::GetProcAddress("glGetShaderiv");
+    fn_glGetShaderInfoLog     = (PFNGLGETSHADERINFOLOGPROC)MuGL::GetProcAddress("glGetShaderInfoLog");
+    fn_glCreateProgram        = (PFNGLCREATEPROGRAMPROC)MuGL::GetProcAddress("glCreateProgram");
+    fn_glAttachShader         = (PFNGLATTACHSHADERPROC)MuGL::GetProcAddress("glAttachShader");
+    fn_glLinkProgram          = (PFNGLLINKPROGRAMPROC)MuGL::GetProcAddress("glLinkProgram");
+    fn_glGetProgramiv         = (PFNGLGETPROGRAMIVPROC)MuGL::GetProcAddress("glGetProgramiv");
+    fn_glGetProgramInfoLog    = (PFNGLGETPROGRAMINFOLOGPROC)MuGL::GetProcAddress("glGetProgramInfoLog");
+    fn_glDeleteShader         = (PFNGLDELETESHADERPROC)MuGL::GetProcAddress("glDeleteShader");
+    fn_glDeleteProgram        = (PFNGLDELETEPROGRAMPROC)MuGL::GetProcAddress("glDeleteProgram");
+    fn_glGetUniformLocation   = (PFNGLGETUNIFORMLOCATIONPROC)MuGL::GetProcAddress("glGetUniformLocation");
     fn_glGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)MuGL::GetNativeProcAddress("glGetUniformBlockIndex");
-    fn_glUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
-    fn_glUniform1i           = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
-    fn_glUniform1f           = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
-    fn_glUniform2f           = (PFNGLUNIFORM2FPROC)MuGL::GetProcAddress("glUniform2f");
-    fn_glUniform3fv          = (PFNGLUNIFORM3FVPROC)MuGL::GetProcAddress("glUniform3fv");
-    fn_glUniformMatrix4fv    = (PFNGLUNIFORMMATRIX4FVPROC)MuGL::GetProcAddress("glUniformMatrix4fv");
+    fn_glUniformBlockBinding  = (PFNGLUNIFORMBLOCKBINDINGPROC)MuGL::GetNativeProcAddress("glUniformBlockBinding");
+    fn_glUniform1i            = (PFNGLUNIFORM1IPROC)MuGL::GetProcAddress("glUniform1i");
+    fn_glUniform1f            = (PFNGLUNIFORM1FPROC)MuGL::GetProcAddress("glUniform1f");
+    fn_glUniform2f            = (PFNGLUNIFORM2FPROC)MuGL::GetProcAddress("glUniform2f");
+    fn_glUniform3fv           = (PFNGLUNIFORM3FVPROC)MuGL::GetProcAddress("glUniform3fv");
+    fn_glUniformMatrix4fv     = (PFNGLUNIFORMMATRIX4FVPROC)MuGL::GetProcAddress("glUniformMatrix4fv");
 
-    loaded = (fn_glCreateShader != nullptr &&
-              fn_glShaderSource != nullptr &&
-              fn_glCompileShader != nullptr &&
-              fn_glGetShaderiv != nullptr &&
-              fn_glCreateProgram != nullptr &&
-              fn_glAttachShader != nullptr &&
-              fn_glLinkProgram != nullptr &&
-              fn_glGetProgramiv != nullptr &&
-              fn_glDeleteShader != nullptr &&
-              fn_glDeleteProgram != nullptr &&
-              fn_glGetUniformLocation != nullptr &&
-              fn_glUniform1i != nullptr &&
+    loaded = (fn_glCreateShader != nullptr && fn_glShaderSource != nullptr && fn_glCompileShader != nullptr &&
+              fn_glGetShaderiv != nullptr && fn_glCreateProgram != nullptr && fn_glAttachShader != nullptr &&
+              fn_glLinkProgram != nullptr && fn_glGetProgramiv != nullptr && fn_glDeleteShader != nullptr &&
+              fn_glDeleteProgram != nullptr && fn_glGetUniformLocation != nullptr && fn_glUniform1i != nullptr &&
               fn_glUniform1f != nullptr);
     return loaded;
 }
@@ -410,11 +403,16 @@ void BMDMeshShader::Destroy()
     DestroyGL();
 }
 
-void BMDMeshShader::Bind(int renderMode, float waveOffsetU, float waveOffsetV, GLuint texID, const float mvp[16], int useGPUSkin, const float bodyOrigin[3], float bodyScale, float chromeWave, GLuint chromeTex1ID, const float specularTint[3], GLuint metalTexID, GLuint chromeTex2ID, float chromeWave2, float chromeLightVecX, float chromeLightVecY, const float lightDir[3], const float bodyLight[3], int lightEnable, float alpha, int chromeVariant, float chromeTimeTerm)
+void BMDMeshShader::Bind(int renderMode, float waveOffsetU, float waveOffsetV, GLuint texID, const float mvp[16],
+                         int useGPUSkin, const float bodyOrigin[3], float bodyScale, float chromeWave,
+                         GLuint chromeTex1ID, const float specularTint[3], GLuint metalTexID, GLuint chromeTex2ID,
+                         float chromeWave2, float chromeLightVecX, float chromeLightVecY, const float lightDir[3],
+                         const float bodyLight[3], int lightEnable, float alpha, int chromeVariant,
+                         float chromeTimeTerm)
 {
     BindGL(renderMode, waveOffsetU, waveOffsetV, texID, mvp, useGPUSkin, bodyOrigin, bodyScale, chromeWave,
-        chromeTex1ID, specularTint, metalTexID, chromeTex2ID, chromeWave2, chromeLightVecX, chromeLightVecY,
-        lightDir, bodyLight, lightEnable, alpha, chromeVariant, chromeTimeTerm);
+           chromeTex1ID, specularTint, metalTexID, chromeTex2ID, chromeWave2, chromeLightVecX, chromeLightVecY,
+           lightDir, bodyLight, lightEnable, alpha, chromeVariant, chromeTimeTerm);
 }
 
 void BMDMeshShader::Unbind()
@@ -424,8 +422,10 @@ void BMDMeshShader::Unbind()
 
 void BMDMeshShader::CreateGL()
 {
-    if (m_Program != 0) return;
-    if (!LoadGLShaderFunctions()) return;
+    if (m_Program != 0)
+        return;
+    if (!LoadGLShaderFunctions())
+        return;
 
     // Compile Vertex Shader
     m_VertShader = fn_glCreateShader(GL_VERTEX_SHADER);
@@ -434,9 +434,11 @@ void BMDMeshShader::CreateGL()
 
     GLint compiled = 0;
     fn_glGetShaderiv(m_VertShader, GL_COMPILE_STATUS, &compiled);
-    if (!compiled) {
-        char infoLog[512] = {};
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
+    if (!compiled)
+    {
+        char infoLog[512];
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_VertShader, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Vertex compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         m_VertShader = 0;
@@ -449,9 +451,11 @@ void BMDMeshShader::CreateGL()
     fn_glCompileShader(m_FragShader);
 
     fn_glGetShaderiv(m_FragShader, GL_COMPILE_STATUS, &compiled);
-    if (!compiled) {
-        char infoLog[512] = {};
-        if (fn_glGetShaderInfoLog) fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
+    if (!compiled)
+    {
+        char infoLog[512];
+        if (fn_glGetShaderInfoLog)
+            fn_glGetShaderInfoLog(m_FragShader, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Fragment compilation error: %s", infoLog);
         fn_glDeleteShader(m_VertShader);
         fn_glDeleteShader(m_FragShader);
@@ -467,9 +471,11 @@ void BMDMeshShader::CreateGL()
 
     GLint linked = 0;
     fn_glGetProgramiv(m_Program, GL_LINK_STATUS, &linked);
-    if (!linked) {
-        char infoLog[512] = {};
-        if (fn_glGetProgramInfoLog) fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
+    if (!linked)
+    {
+        char infoLog[512];
+        if (fn_glGetProgramInfoLog)
+            fn_glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
         SDL_Log("[BMDMeshShader] Program link error: %s", infoLog);
         fn_glDeleteProgram(m_Program);
         InvalidateProgramCache();
@@ -481,21 +487,26 @@ void BMDMeshShader::CreateGL()
 
     // Bind GlobalMatrices uniform block to binding point 0, BoneMatrices to binding point 2,
     // and BMDFlags (GLS-09) to binding point 6.
-    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr) {
+    if (fn_glGetUniformBlockIndex != nullptr && fn_glUniformBlockBinding != nullptr)
+    {
         GLuint globalBlockIdx = fn_glGetUniformBlockIndex(m_Program, "GlobalMatrices");
-        if (globalBlockIdx != GL_INVALID_INDEX) {
+        if (globalBlockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, globalBlockIdx, 0);
         }
         GLuint boneBlockIdx = fn_glGetUniformBlockIndex(m_Program, "BoneMatrices");
-        if (boneBlockIdx != GL_INVALID_INDEX) {
+        if (boneBlockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, boneBlockIdx, 2);
         }
         GLuint bmdFlagsBlockIdx = fn_glGetUniformBlockIndex(m_Program, "BMDFlags");
-        if (bmdFlagsBlockIdx != GL_INVALID_INDEX) {
+        if (bmdFlagsBlockIdx != GL_INVALID_INDEX)
+        {
             fn_glUniformBlockBinding(m_Program, bmdFlagsBlockIdx, 6);
         }
     }
-    if (!m_BMDFlagsUBO.IsValid()) {
+    if (!m_BMDFlagsUBO.IsValid())
+    {
         m_BMDFlagsUBO = RHI::CreateUniformBlock(sizeof(BMDFlagsCB), 6);
     }
 
@@ -507,10 +518,26 @@ void BMDMeshShader::CreateGL()
     m_LocChromeTex2 = fn_glGetUniformLocation(m_Program, "u_ChromeTex2");
 
     BindProgram(m_Program);
-    if (m_LocTex != -1) { fn_glUniform1i(m_LocTex, 0); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocChromeTex1 != -1) { fn_glUniform1i(m_LocChromeTex1, 1); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocMetalTex != -1) { fn_glUniform1i(m_LocMetalTex, 2); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
-    if (m_LocChromeTex2 != -1) { fn_glUniform1i(m_LocChromeTex2, 3); FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites); }
+    if (m_LocTex != -1)
+    {
+        fn_glUniform1i(m_LocTex, 0);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocChromeTex1 != -1)
+    {
+        fn_glUniform1i(m_LocChromeTex1, 1);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocMetalTex != -1)
+    {
+        fn_glUniform1i(m_LocMetalTex, 2);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
+    if (m_LocChromeTex2 != -1)
+    {
+        fn_glUniform1i(m_LocChromeTex2, 3);
+        FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
+    }
     BindProgram(0);
 
     g_ErrorReport.Write(L"[BMDMeshShader] Created program ID %d\r\n", m_Program);
@@ -518,25 +545,40 @@ void BMDMeshShader::CreateGL()
 
 void BMDMeshShader::DestroyGL()
 {
-    if (m_Program != 0) {
+    if (m_Program != 0)
+    {
         BindProgram(0);
-        if (m_VertShader) fn_glDeleteShader(m_VertShader);
-        if (m_FragShader) fn_glDeleteShader(m_FragShader);
-        if (fn_glDeleteProgram) { fn_glDeleteProgram(m_Program); InvalidateProgramCache(); }
+        if (m_VertShader)
+            fn_glDeleteShader(m_VertShader);
+        if (m_FragShader)
+            fn_glDeleteShader(m_FragShader);
+        if (fn_glDeleteProgram)
+        {
+            fn_glDeleteProgram(m_Program);
+            InvalidateProgramCache();
+        }
         m_Program = m_VertShader = m_FragShader = 0;
     }
-    if (m_BMDFlagsUBO.IsValid()) {
+    if (m_BMDFlagsUBO.IsValid())
+    {
         RHI::DestroyUniformBlock(m_BMDFlagsUBO);
         m_BMDFlagsUBO = {};
     }
 }
 
-void BMDMeshShader::BindGL(int renderMode, float waveOffsetU, float waveOffsetV, GLuint texID, const float mvp[16], int useGPUSkin, const float bodyOrigin[3], float bodyScale, float chromeWave, GLuint chromeTex1ID, const float specularTint[3], GLuint metalTexID, GLuint chromeTex2ID, float chromeWave2, float chromeLightVecX, float chromeLightVecY, const float lightDir[3], const float bodyLight[3], int lightEnable, float alpha, int chromeVariant, float chromeTimeTerm)
+void BMDMeshShader::BindGL(int renderMode, float waveOffsetU, float waveOffsetV, GLuint texID, const float mvp[16],
+                           int useGPUSkin, const float bodyOrigin[3], float bodyScale, float chromeWave,
+                           GLuint chromeTex1ID, const float specularTint[3], GLuint metalTexID, GLuint chromeTex2ID,
+                           float chromeWave2, float chromeLightVecX, float chromeLightVecY, const float lightDir[3],
+                           const float bodyLight[3], int lightEnable, float alpha, int chromeVariant,
+                           float chromeTimeTerm)
 {
-    if (m_Program == 0) {
+    if (m_Program == 0)
+    {
         CreateGL();
     }
-    if (m_Program == 0) {
+    if (m_Program == 0)
+    {
         return;
     }
 
@@ -549,9 +591,12 @@ void BMDMeshShader::BindGL(int renderMode, float waveOffsetU, float waveOffsetV,
     // g_szBMDMeshVert/g_szBMDMeshFrag above) -- whatever an irrelevant field holds doesn't
     // matter, so there's no need to preserve "previous call's leftover value" semantics.
     BMDFlagsCB cb = {};
-    if (mvp != nullptr) {
+    if (mvp != nullptr)
+    {
         memcpy(cb.mvpDraw, mvp, sizeof(cb.mvpDraw));
-    } else {
+    }
+    else
+    {
         // DXP-07d increment 0, stage 2: no caller currently passes mvp==nullptr (both
         // ZzzBMD.cpp call sites always supply GetCurrentMVP()'s result), so this branch is
         // presently unreachable -- kept correct and consistent with the primary path's source
@@ -559,35 +604,36 @@ void BMDMeshShader::BindGL(int renderMode, float waveOffsetU, float waveOffsetV,
         // a soak history with.
         memcpy(cb.mvpDraw, GlobalUBO::Instance().GetMVP(), sizeof(cb.mvpDraw));
     }
-    cb.useGPUSkin = useGPUSkin;
-    cb.renderMode = renderMode;
+    cb.useGPUSkin  = useGPUSkin;
+    cb.renderMode  = renderMode;
     cb.waveOffsetU = waveOffsetU;
     cb.waveOffsetV = waveOffsetV;
 
-    static const float zeroOrigin[3] = { 0.f, 0.f, 0.f };
-    static const float whiteLight[3] = { 1.f, 1.f, 1.f };
-    static const float whiteTint[3]  = { 1.f, 1.f, 1.f };
+    static const float zeroOrigin[3] = {0.f, 0.f, 0.f};
+    static const float whiteLight[3] = {1.f, 1.f, 1.f};
+    static const float whiteTint[3]  = {1.f, 1.f, 1.f};
 
     // GPU skinning: BodyOrigin/BodyScale so vertices land at world position (mirrors
     // BMD::Transform VectorMA(BodyOrigin, BodyScale, bonePos, vertexTransform)), plus
     // DXP-20's in-shader per-vertex lighting (BMD::Transform's IntensityTransform /
     // RenderMesh's useLight, ported to GLSL -- see the vertex shader above).
     memcpy(cb.bodyOrigin, bodyOrigin ? bodyOrigin : zeroOrigin, sizeof(cb.bodyOrigin));
-    cb.bodyScale = bodyScale;
-    cb.chromeWave = chromeWave;
-    cb.chromeWave2 = chromeWave2;
+    cb.bodyScale         = bodyScale;
+    cb.chromeWave        = chromeWave;
+    cb.chromeWave2       = chromeWave2;
     cb.chromeLightVec[0] = chromeLightVecX;
     cb.chromeLightVec[1] = chromeLightVecY;
-    cb.chromeVariant = chromeVariant;
-    cb.chromeTimeTerm = chromeTimeTerm;
-    cb.alpha = alpha;
-    cb.alphaRef = g_AlphaRef; // was always set unconditionally in the old code too
+    cb.chromeVariant     = chromeVariant;
+    cb.chromeTimeTerm    = chromeTimeTerm;
+    cb.alpha             = alpha;
+    cb.alphaRef          = g_AlphaRef;  // was always set unconditionally in the old code too
     memcpy(cb.lightDir, lightDir ? lightDir : zeroOrigin, sizeof(cb.lightDir));
     cb.lightEnable = lightEnable;
     memcpy(cb.bodyLight, bodyLight ? bodyLight : whiteLight, sizeof(cb.bodyLight));
     memcpy(cb.specularTint, specularTint ? specularTint : whiteTint, sizeof(cb.specularTint));
 
-    if (m_BMDFlagsUBO.IsValid()) {
+    if (m_BMDFlagsUBO.IsValid())
+    {
         RHI::UpdateUniformBlock(m_BMDFlagsUBO, &cb, sizeof(cb));
     }
 
@@ -595,16 +641,20 @@ void BMDMeshShader::BindGL(int renderMode, float waveOffsetU, float waveOffsetV,
     // u_MetalTex/u_ChromeTex2 are all assigned once, permanently, at CreateGL() time (:494-499)
     // and SetTexture() no longer rewrites u_Tex per call -- so unlike before, these four calls
     // can run in any order.
-    if (renderMode == 4 || renderMode == 5 || renderMode == 6 || renderMode == 7) {
+    if (renderMode == 4 || renderMode == 5 || renderMode == 6 || renderMode == 7)
+    {
         SetTexture(chromeTex1ID, 1);
     }
-    if (renderMode == 5 || renderMode == 6 || renderMode == 7) {
+    if (renderMode == 5 || renderMode == 6 || renderMode == 7)
+    {
         SetTexture(metalTexID, 2);
     }
-    if (renderMode == 6 || renderMode == 7) {
+    if (renderMode == 6 || renderMode == 7)
+    {
         SetTexture(chromeTex2ID, 3);
     }
-    if (texID != 0) {
+    if (texID != 0)
+    {
         SetTexture(texID, 0);
     }
 }
@@ -613,4 +663,3 @@ void BMDMeshShader::SetTexture(GLuint texID, int slot)
 {
     BindTexture2D(slot, texID);
 }
-

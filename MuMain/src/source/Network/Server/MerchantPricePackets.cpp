@@ -2,9 +2,9 @@
 
 namespace Network::MerchantPrices
 {
-    QuoteCache& Cache()
-    {
-        static QuoteCache cache;
-        return cache;
-    }
+QuoteCache& Cache()
+{
+    static QuoteCache cache;
+    return cache;
+}
 }

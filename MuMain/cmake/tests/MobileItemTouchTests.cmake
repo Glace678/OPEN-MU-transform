@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.24)
 get_filename_component(REPO_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 
+# Contract checks compare source *semantics*, not formatting. Collapse every
+# whitespace run (including newlines) so that clang-format re-wrapping /
+# alignment (e.g. one-line "if" statements, aligned assignments) cannot cause
+# a spurious contract failure.
+function(normalize_ws text out)
+    string(REGEX REPLACE "[ \t\r\n]+" " " normalized "${text}")
+    string(STRIP "${normalized}" normalized)
+    set(${out} "${normalized}" PARENT_SCOPE)
+endfunction()
+
 function(assert_contains text needle context)
-    string(FIND "${text}" "${needle}" position)
+    normalize_ws("${text}" text_n)
+    normalize_ws("${needle}" needle_n)
+    string(FIND "${text_n}" "${needle_n}" position)
     if(position LESS 0)
         message(FATAL_ERROR "${context}: missing ${needle}")
     endif()
@@ -18,11 +30,13 @@ endforeach()
 
 file(READ "${REPO_ROOT}/src/source/UI/Items/Touch/InventoryTouchOperations.cpp" operations)
 assert_contains("${operations}" "TryConsumeItem(control, control->FindItem(index), index)" "Consume/learn-only touch use")
-if(operations MATCHES "HandleRightClick|HandleItemDrop|SellItem|TryEquip")
+normalize_ws("${operations}" operations_ws)
+if(operations_ws MATCHES "HandleRightClick|HandleItemDrop|SellItem|TryEquip")
     message(FATAL_ERROR "Dedicated touch use must not contain an equip/sell/drop/right-click fallback")
 endif()
 
 file(READ "${REPO_ROOT}/src/source/UI/NewUI/Inventory/NewUIInventoryCtrl.cpp" control)
+normalize_ws("${control}" control)
 assert_contains("${control}" "if (g_pNewUI3DRenderMng) g_pNewUI3DRenderMng->Remove3DRenderObj(this)" "Failed pick must not dereference an absent renderer")
 assert_contains("${control}" "if (m_pNewItemMng) m_pNewItemMng->DeleteDuplicatedItem(m_pPickedItem)" "Failed pick must not dereference an absent item manager")
 foreach(method "Release()" "HideInventory()" "LockInventory()" "SetRepairMode(bool bRepair)")
@@ -52,8 +66,9 @@ foreach(button CREATE MENU CONNECT DELETE)
     assert_contains("${character}" "m_aBtn[CSMW_BTN_${button}].Create(kButtonSourceWidth, kButtonSourceHeight" "Preserve full texture and original frame stride")
 endforeach()
 assert_contains("${character}" "m_aBtn[i].SetSizeArt(btnArtW, btnArtH)" "Resize the button quad instead of cropping its texture")
-string(FIND "${character}" "CWin::Create(artWinW, btnArtH, -2)" parent_create)
-string(FIND "${character}" "m_asprBack[CSMW_SPR_DECO].Create(" child_create)
+normalize_ws("${character}" character_ws)
+string(FIND "${character_ws}" "CWin::Create(artWinW, btnArtH, -2)" parent_create)
+string(FIND "${character_ws}" "m_asprBack[CSMW_SPR_DECO].Create(" child_create)
 if(NOT parent_create LESS child_create)
     message(FATAL_ERROR "CWin recreation must release old children before their new resources are created")
 endif()

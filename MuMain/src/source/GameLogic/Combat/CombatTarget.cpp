@@ -33,7 +33,7 @@
 #include "GameLogic/NPCs/npcBreeder.h"
 #include "GameLogic/Pets/GIPetManager.h"
 #include "Character/CSParts.h"
-#include "UI/Legacy/UIMapName.h"	// rozy
+#include "UI/Legacy/UIMapName.h"  // rozy
 #include "GameLogic/Events/Cinematic/CDirection.h"
 #include "World/MapInfra/MapManager.h"
 #include "GameLogic/Events/Event.h"
@@ -46,7 +46,7 @@
 #include "GameLogic/Skills/SkillManager.h"
 #include "World/MapInfra/w_MapHeaders.h"
 
-extern int SelectedCharacter, TargetX, TargetY;
+extern int  SelectedCharacter, TargetX, TargetY;
 extern bool SelectFlag;
 
 namespace GameLogic::Combat

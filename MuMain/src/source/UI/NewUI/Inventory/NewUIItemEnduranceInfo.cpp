@@ -1,4 +1,4 @@
-﻿// NewUIItemEnduranceInfo.cpp: implementation of the CNewUIItemEnduranceInfo class.
+﻿  // NewUIItemEnduranceInfo.cpp: implementation of the CNewUIItemEnduranceInfo class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -10,17 +10,15 @@
 
 #ifdef PJH_FIX_SPRIT
 #include "GameLogic/Pets/GIPetManager.h"
-#endif //PJH_FIX_SPRIT
+#endif  //PJH_FIX_SPRIT
 
-
-
-using namespace SEASON3B;
+    using namespace SEASON3B;
 
 CNewUIItemEnduranceInfo::CNewUIItemEnduranceInfo()
 {
     memset(&m_UIStartPos, 0, sizeof(POINT));
     memset(&m_ItemDurUIStartPos, 0, sizeof(POINT));
-    m_iTextEndPosX = 0;
+    m_iTextEndPosX  = 0;
     m_iCurArrowType = ARROWTYPE_NONE;
     m_iTooltipIndex = -1;
 }
@@ -80,14 +78,11 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
 
     int iNextPosY = m_UIStartPos.y;
 
-    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM
-        || Hero->Helper.Type == MODEL_DEMON
-        || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN
-        || Hero->Helper.Type == MODEL_PET_RUDOLF
-        || Hero->Helper.Type == MODEL_PET_PANDA
-        || Hero->Helper.Type == MODEL_PET_UNICORN
-        || Hero->Helper.Type == MODEL_PET_SKELETON
-        || Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
+    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM ||
+        Hero->Helper.Type == MODEL_DEMON || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN ||
+        Hero->Helper.Type == MODEL_PET_RUDOLF || Hero->Helper.Type == MODEL_PET_PANDA ||
+        Hero->Helper.Type == MODEL_PET_UNICORN || Hero->Helper.Type == MODEL_PET_SKELETON ||
+        Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
     {
         if (CheckMouseIn(m_UIStartPos.x, iNextPosY, PETHP_FRAME_WIDTH, PETHP_FRAME_HEIGHT))
             return false;
@@ -118,8 +113,8 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
     }
 
     bool bRenderRingWarning = false;
-    int	icntItemDurIcon = 0;
-    auto ItemDurPos = POINT(m_ItemDurUIStartPos);
+    int  icntItemDurIcon    = 0;
+    auto ItemDurPos         = POINT(m_ItemDurUIStartPos);
 
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
     {
@@ -159,15 +154,14 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
 
         if (i == EQUIPMENT_RING_LEFT || i == EQUIPMENT_RING_RIGHT)
         {
-            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1
-                || iLevel == 2)
+            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1 || iLevel == 2)
             {
                 continue;
             }
         }
 
-        ITEM_ATTRIBUTE* pItemAtt = &ItemAttribute[pItem->Type];
-        int iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
+        ITEM_ATTRIBUTE* pItemAtt       = &ItemAttribute[pItem->Type];
+        int             iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
 
         if (pItem->Durability <= iMaxDurability * 0.5f)
         {
@@ -182,7 +176,8 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
             }
             else if (i == EQUIPMENT_RING_LEFT)
             {
-                if (CheckMouseIn(ItemDurPos.x + (ITEM_DUR_WIDTH / 2), ItemDurPos.y, ITEM_DUR_WIDTH / 2, ITEM_DUR_HEIGHT))
+                if (CheckMouseIn(ItemDurPos.x + (ITEM_DUR_WIDTH / 2), ItemDurPos.y, ITEM_DUR_WIDTH / 2,
+                                 ITEM_DUR_HEIGHT))
                 {
                     m_iTooltipIndex = i;
                     return false;
@@ -308,31 +303,28 @@ float SEASON3B::CNewUIItemEnduranceInfo::GetLayerDepth()
     return 3.5f;
 }
 
-void SEASON3B::CNewUIItemEnduranceInfo::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIItemEnduranceInfo::OpenningProcess() {}
 
-void SEASON3B::CNewUIItemEnduranceInfo::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIItemEnduranceInfo::ClosingProcess() {}
 
 void SEASON3B::CNewUIItemEnduranceInfo::InitImageIndex()
 {
     m_iItemDurImageIndex[EQUIPMENT_WEAPON_RIGHT] = IMAGE_ITEM_DUR_WEAPON;
-    m_iItemDurImageIndex[EQUIPMENT_WEAPON_LEFT] = IMAGE_ITEM_DUR_SHIELD;
-    m_iItemDurImageIndex[EQUIPMENT_HELM] = IMAGE_ITEM_DUR_CAP;
-    m_iItemDurImageIndex[EQUIPMENT_ARMOR] = IMAGE_ITEM_DUR_UPPER;
-    m_iItemDurImageIndex[EQUIPMENT_PANTS] = IMAGE_ITEM_DUR_LOWER;
-    m_iItemDurImageIndex[EQUIPMENT_GLOVES] = IMAGE_ITEM_DUR_GLOVES;
-    m_iItemDurImageIndex[EQUIPMENT_BOOTS] = IMAGE_ITEM_DUR_BOOTS;
-    m_iItemDurImageIndex[EQUIPMENT_WING] = IMAGE_ITEM_DUR_WING;
-    m_iItemDurImageIndex[EQUIPMENT_HELPER] = -1;
-    m_iItemDurImageIndex[EQUIPMENT_AMULET] = IMAGE_ITEM_DUR_NECKLACE;
-    m_iItemDurImageIndex[EQUIPMENT_RING_RIGHT] = IMAGE_ITEM_DUR_RING;
-    m_iItemDurImageIndex[EQUIPMENT_RING_LEFT] = IMAGE_ITEM_DUR_RING;
+    m_iItemDurImageIndex[EQUIPMENT_WEAPON_LEFT]  = IMAGE_ITEM_DUR_SHIELD;
+    m_iItemDurImageIndex[EQUIPMENT_HELM]         = IMAGE_ITEM_DUR_CAP;
+    m_iItemDurImageIndex[EQUIPMENT_ARMOR]        = IMAGE_ITEM_DUR_UPPER;
+    m_iItemDurImageIndex[EQUIPMENT_PANTS]        = IMAGE_ITEM_DUR_LOWER;
+    m_iItemDurImageIndex[EQUIPMENT_GLOVES]       = IMAGE_ITEM_DUR_GLOVES;
+    m_iItemDurImageIndex[EQUIPMENT_BOOTS]        = IMAGE_ITEM_DUR_BOOTS;
+    m_iItemDurImageIndex[EQUIPMENT_WING]         = IMAGE_ITEM_DUR_WING;
+    m_iItemDurImageIndex[EQUIPMENT_HELPER]       = -1;
+    m_iItemDurImageIndex[EQUIPMENT_AMULET]       = IMAGE_ITEM_DUR_NECKLACE;
+    m_iItemDurImageIndex[EQUIPMENT_RING_RIGHT]   = IMAGE_ITEM_DUR_RING;
+    m_iItemDurImageIndex[EQUIPMENT_RING_LEFT]    = IMAGE_ITEM_DUR_RING;
 }
 
-void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszName, int iLife, int iMaxLife/*=255*/, bool bWarning/*=false*/)
+void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszName, int iLife, int iMaxLife /*=255*/,
+                                                   bool bWarning /*=false*/)
 {
     EnableAlphaTest();
 
@@ -355,7 +347,7 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszN
 #ifdef PJH_FIX_SPRIT
     if (wcscmp(pszName, I18N::Game::DarkRaven) == 0)
     {
-        int iCharisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
+        int      iCharisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
         PET_INFO PetInfo;
         giPetManager::GetPetInfo(PetInfo, 421 - PET_TYPE_DARK_SPIRIT);
         int RequireCharisma = (185 + (PetInfo.m_wLevel * 15));
@@ -365,7 +357,7 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszN
             glColor4f(1.f, 1.f, 1.f, 1.f);
     }
     else
-#endif //#ifdef PJH_FIX_SPRIT
+#endif  //#ifdef PJH_FIX_SPRIT
 
         glColor4f(1.f, 1.f, 1.f, 1.f);
     RenderImage(IMAGE_PETHP_FRAME, iX, iY, PETHP_FRAME_WIDTH, PETHP_FRAME_HEIGHT);
@@ -381,9 +373,9 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszN
 void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM* pItem, const DWORD& dwTextColor)
 {
     ITEM_ATTRIBUTE* pItemAtt = &ItemAttribute[pItem->Type];
-    SIZE TextSize = { 0, 0 };
+    SIZE            TextSize = {0, 0};
 
-    int iLevel = pItem->Level;
+    int iLevel         = pItem->Level;
     int iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
 
     wchar_t szText[256] = {};
@@ -395,7 +387,7 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM
     g_pRenderText->SetTextColor(dwTextColor);
     int iTextlen = wcslen(szText);
 
-    int iTooltipWidth = (/*TextSize.cx*/7 * iTextlen) / g_fScreenRate_x;
+    int iTooltipWidth = (/*TextSize.cx*/ 7 * iTextlen) / g_fScreenRate_x;
 
     if (iX + (iTooltipWidth / 2) > GetScreenWidth())
     {
@@ -407,80 +399,65 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM
 
 bool SEASON3B::CNewUIItemEnduranceInfo::RenderEquipedHelperLife(int iX, int iY)
 {
-    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM
-        || Hero->Helper.Type == MODEL_DEMON
-        || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN
-        || Hero->Helper.Type == MODEL_PET_RUDOLF
-        || Hero->Helper.Type == MODEL_PET_PANDA
-        || Hero->Helper.Type == MODEL_PET_UNICORN
-        || Hero->Helper.Type == MODEL_PET_SKELETON
-        || Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
+    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM ||
+        Hero->Helper.Type == MODEL_DEMON || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN ||
+        Hero->Helper.Type == MODEL_PET_RUDOLF || Hero->Helper.Type == MODEL_PET_PANDA ||
+        Hero->Helper.Type == MODEL_PET_UNICORN || Hero->Helper.Type == MODEL_PET_SKELETON ||
+        Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
     {
         wchar_t szText[256] = {};
 
         switch (Hero->Helper.Type)
         {
-        case MODEL_HELPER:
-        {
-            mu_swprintf(szText, I18N::Game::GuardianAngel);
-        }
-        break;
-        case MODEL_IMP:
-        {
-            ITEM_ATTRIBUTE* p = &ItemAttribute[Hero->Helper.Type - MODEL_SWORD];
-            mu_swprintf(szText, p->Name);
-        }
-        break;
-        case MODEL_HORN_OF_UNIRIA:
-        {
-            mu_swprintf(szText, I18N::Game::Uniria);
-        }
-        break;
-        case MODEL_HORN_OF_DINORANT:
-        {
-            mu_swprintf(szText, I18N::Game::Dinorant);
-        }
-        break;
-        case MODEL_DARK_HORSE_ITEM:
-        {
-            mu_swprintf(szText, I18N::Game::DarkHorse);
-        }
-        break;
-        case MODEL_HORN_OF_FENRIR:
-        {
-            mu_swprintf(szText, I18N::Game::Fenrir);
-        }
-        break;
-        case MODEL_DEMON:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_DEMON].Name);
-        }
-        break;
-        case MODEL_SPIRIT_OF_GUARDIAN:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_SPIRIT_OF_GUARDIAN].Name);
-        }
-        break;
-        case MODEL_PET_RUDOLF:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_PET_RUDOLF].Name);
-        }
-        break;
-        case MODEL_PET_PANDA:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_PET_PANDA].Name);
-        }
-        break;
-        case MODEL_PET_UNICORN:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_PET_UNICORN].Name);
-        }
-        break;
-        case MODEL_PET_SKELETON:
-        {
-            mu_swprintf(szText, ItemAttribute[ITEM_PET_SKELETON].Name);
-        }
-        break;
+            case MODEL_HELPER: {
+                mu_swprintf(szText, I18N::Game::GuardianAngel);
+            }
+            break;
+            case MODEL_IMP: {
+                ITEM_ATTRIBUTE* p = &ItemAttribute[Hero->Helper.Type - MODEL_SWORD];
+                mu_swprintf(szText, p->Name);
+            }
+            break;
+            case MODEL_HORN_OF_UNIRIA: {
+                mu_swprintf(szText, I18N::Game::Uniria);
+            }
+            break;
+            case MODEL_HORN_OF_DINORANT: {
+                mu_swprintf(szText, I18N::Game::Dinorant);
+            }
+            break;
+            case MODEL_DARK_HORSE_ITEM: {
+                mu_swprintf(szText, I18N::Game::DarkHorse);
+            }
+            break;
+            case MODEL_HORN_OF_FENRIR: {
+                mu_swprintf(szText, I18N::Game::Fenrir);
+            }
+            break;
+            case MODEL_DEMON: {
+                mu_swprintf(szText, ItemAttribute[ITEM_DEMON].Name);
+            }
+            break;
+            case MODEL_SPIRIT_OF_GUARDIAN: {
+                mu_swprintf(szText, ItemAttribute[ITEM_SPIRIT_OF_GUARDIAN].Name);
+            }
+            break;
+            case MODEL_PET_RUDOLF: {
+                mu_swprintf(szText, ItemAttribute[ITEM_PET_RUDOLF].Name);
+            }
+            break;
+            case MODEL_PET_PANDA: {
+                mu_swprintf(szText, ItemAttribute[ITEM_PET_PANDA].Name);
+            }
+            break;
+            case MODEL_PET_UNICORN: {
+                mu_swprintf(szText, ItemAttribute[ITEM_PET_UNICORN].Name);
+            }
+            break;
+            case MODEL_PET_SKELETON: {
+                mu_swprintf(szText, ItemAttribute[ITEM_PET_SKELETON].Name);
+            }
+            break;
         }
 
         int iLife = CharacterMachine->Equipment[EQUIPMENT_HELPER].Durability;
@@ -525,9 +502,9 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderNumArrow(int iX, int iY)
     if (m_iCurArrowType == ARROWTYPE_NONE)
         return false;
 
-    wchar_t szText[256] = {};
-    int iNumEquipedArrowDurability = 0;
-    int iNumArrowSetInInven = 0;
+    wchar_t szText[256]                = {};
+    int     iNumEquipedArrowDurability = 0;
+    int     iNumArrowSetInInven        = 0;
 
     if (m_iCurArrowType == ARROWTYPE_BOW)
     {
@@ -572,9 +549,9 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
 
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    auto ItemDurPos = POINT(m_ItemDurUIStartPos);
-    int icntItemDurIcon = 0;
-    int iTempImageIndex;
+    auto ItemDurPos      = POINT(m_ItemDurUIStartPos);
+    int  icntItemDurIcon = 0;
+    int  iTempImageIndex;
     bool bRenderRingWarning = false;
 
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
@@ -622,15 +599,14 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
 
         if (i == EQUIPMENT_RING_LEFT || i == EQUIPMENT_RING_RIGHT)
         {
-            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1
-                || iLevel == 2)
+            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1 || iLevel == 2)
             {
                 continue;
             }
         }
 
-        ITEM_ATTRIBUTE* pItemAtt = &ItemAttribute[pItem->Type];
-        int iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
+        ITEM_ATTRIBUTE* pItemAtt       = &ItemAttribute[pItem->Type];
+        int             iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
 
         if (pItem->Durability > iMaxDurability * 0.5f)
         {
@@ -699,12 +675,12 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
 
     if (m_iTooltipIndex != -1)
     {
-        ITEM* pItem = &CharacterMachine->Equipment[m_iTooltipIndex];
+        ITEM* pItem   = &CharacterMachine->Equipment[m_iTooltipIndex];
         DWORD dwColor = 0xFFFFFFFF;
 
-        ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItem->Type];
-        int iLevel = pItem->Level;
-        int iMaxDurability = CalcMaxDurability(pItem, pItemAttr, iLevel);
+        ITEM_ATTRIBUTE* pItemAttr      = &ItemAttribute[pItem->Type];
+        int             iLevel         = pItem->Level;
+        int             iMaxDurability = CalcMaxDurability(pItem, pItemAttr, iLevel);
 
         if (pItem->Durability <= (iMaxDurability * 0.5f))
         {
