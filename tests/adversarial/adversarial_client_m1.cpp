@@ -125,13 +125,13 @@ void TestNetworkDispatchPolicy()
         {0xF3, 0x03, 13, 14}, // PRECEIVE_JOIN_MAP_SERVER
         {0xF3, 0x04, 10, 11}, // PRECEIVE_REVIVAL
         {0xF3, 0x05, 17, 18}, // PRECEIVE_LEVEL_UP
-        {0xF3, 0x06, 17, 18}, // PRECEIVE_ADD_POINT
-        {0xF3, 0x07, 9, 10},  // PRECEIVE_DAMAGE
-        {0xF3, 0x08, 6, 7},   // PMSG_RECEIVE_HPBAR
+        {0xF3, 0x06, 11, 12}, // PRECEIVE_ADD_POINT
+        {0xF3, 0x07, 8, 9},   // PRECEIVE_DAMAGE / PoisonDamage
+        {0xF3, 0x08, 6, 7},   // PRECEIVE_PK / HeroStateChanged
         {0xF3, 0x10, 5, 6},   // PRECEIVE_INVENTORY
-        {0xF3, 0x30, 19, 20}, // PMSG_MASTER_LEVEL_UP_SEND
-        {0xF4, 0x03, 6, 7},   // PRECEIVE_SERVER_LIST
-        {0xF4, 0x06, 13, 14}, // PRECEIVE_SERVER_INFO
+        {0xF3, 0x30, 19, 20}, // PRECEIVE_OPTION
+        {0xF4, 0x03, 13, 14}, // PRECEIVE_SERVER_ADDRESS / ConnectionInfo
+        {0xF4, 0x06, 6, 7},   // PRECEIVE_SERVER_LIST / ServerListResponse
         {0x11, 0x00, 7, 8},   // Attack
         {0x15, 0x00, 5, 6},   // Position
         {0x16, 0x00, 7, 8},   // Die character
@@ -140,7 +140,7 @@ void TestNetworkDispatchPolicy()
         {0x19, 0x00, 7, 8},   // Magic
         {0x20, 0x00, 10, 11}, // Create item
         {0x21, 0x00, 4, 5},   // Delete item
-        {0x22, 0x00, 7, 8},   // Get item
+        {0x22, 0x00, 4, 5},   // Get item / ItemPickUpRequestFailed
         {0x23, 0x00, 5, 6},   // Drop item
         {0x24, 0x00, 7, 8},   // Equipment item
         {0x26, 0x00, 6, 7},   // Inventory item use

@@ -167,15 +167,15 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
                     return 10 + headerDelta;
                 case 0x05:  // PRECEIVE_LEVEL_UP (17 bytes C1)
                     return 17 + headerDelta;
-                case 0x06:  // PRECEIVE_ADD_POINT (17 bytes C1)
-                    return 17 + headerDelta;
-                case 0x07:  // PRECEIVE_DAMAGE (9 bytes C1)
-                    return 9 + headerDelta;
-                case 0x08:  // PMSG_RECEIVE_HPBAR (6 bytes C1)
+                case 0x06:  // PRECEIVE_ADD_POINT (11 bytes C1, 24 bytes Extended)
+                    return 11 + headerDelta;
+                case 0x07:  // PRECEIVE_DAMAGE / PoisonDamage (8 bytes C1)
+                    return 8 + headerDelta;
+                case 0x08:  // PRECEIVE_PK / HeroStateChanged (7 bytes C1)
                     return 6 + headerDelta;
-                case 0x10:  // PRECEIVE_INVENTORY (5 bytes C1)
+                case 0x10:  // PRECEIVE_INVENTORY (5 bytes C1 / 6 bytes C2)
                     return 5 + headerDelta;
-                case 0x30:  // PMSG_MASTER_LEVEL_UP_SEND (19 bytes C1)
+                case 0x30:  // PRECEIVE_OPTION (19+ bytes C1)
                     return 19 + headerDelta;
                 default:
                     return minBytes;
@@ -184,10 +184,10 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
         case 0xF4:
             switch (subCode)
             {
-                case 0x03:  // PRECEIVE_SERVER_LIST (6 bytes C1)
-                    return 6 + headerDelta;
-                case 0x06:  // PRECEIVE_SERVER_INFO (13 bytes C1)
+                case 0x03:  // PRECEIVE_SERVER_ADDRESS / ConnectionInfo (22 bytes C1)
                     return 13 + headerDelta;
+                case 0x06:  // PRECEIVE_SERVER_LIST / ServerListResponse (6 bytes C1 / 7 bytes C2)
+                    return 6 + headerDelta;
                 default:
                     return minBytes;
             }
@@ -214,8 +214,8 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
             return 10 + headerDelta;
         case 0x21:  // Delete item (4 bytes C1)
             return 4 + headerDelta;
-        case 0x22:  // Get item (7 bytes C1)
-            return 7 + headerDelta;
+        case 0x22:  // Get item / ItemPickUpRequestFailed (4 bytes C1)
+            return 4 + headerDelta;
         case 0x23:  // Drop item (5 bytes C1)
             return 5 + headerDelta;
         case 0x24:  // Equipment item (7 bytes C1)
