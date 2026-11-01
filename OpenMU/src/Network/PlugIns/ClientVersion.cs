@@ -57,16 +57,21 @@ public record struct ClientVersion(byte Season, byte Episode, ClientLanguage Lan
     /// <inheritdoc />
     public int CompareTo(ClientVersion other)
     {
-        if (other.Language != ClientLanguage.Invariant && this.Language != other.Language)
+        var result = (this.CombinedVersion - other.CombinedVersion) * 10;
+        if (this.Language != other.Language)
         {
-            return int.MinValue;
-        }
-
-        var result = this.CombinedVersion - other.CombinedVersion;
-        result *= 10;
-        if (this.Language != ClientLanguage.Invariant && other.Language == ClientLanguage.Invariant)
-        {
-            result++;
+            if (this.Language != ClientLanguage.Invariant && other.Language == ClientLanguage.Invariant)
+            {
+                result++;
+            }
+            else if (this.Language == ClientLanguage.Invariant && other.Language != ClientLanguage.Invariant)
+            {
+                result--;
+            }
+            else
+            {
+                result += Math.Sign(this.Language.CompareTo(other.Language));
+            }
         }
 
         return result;
@@ -75,12 +80,17 @@ public record struct ClientVersion(byte Season, byte Episode, ClientLanguage Lan
     /// <inheritdoc/>
     public int CompareTo(object? obj)
     {
+        if (obj is null)
+        {
+            return 1;
+        }
+
         if (obj is ClientVersion other)
         {
             return this.CompareTo(other);
         }
 
-        return int.MinValue;
+        throw new ArgumentException($"Object must be of type {nameof(ClientVersion)}", nameof(obj));
     }
 
     /// <inheritdoc />

@@ -1,4 +1,4 @@
-﻿// <copyright file="DroppedItem.cs" company="MUnique">
+// <copyright file="DroppedItem.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -92,19 +92,41 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
 
     /// <summary>
     /// Tries to pick the item up by the specified player.
+    /// 尝试由指定玩家拾取地图上的掉落物。
     /// </summary>
-    /// <param name="player">The player.</param>
+    /// <param name="player">The player attempting to pick up the item / 尝试拾取掉落物的玩家.</param>
     /// <returns>
-    /// The success.
-    /// StackTarget: If the success is <c>true</c>, and this is not <c>null</c>, this dropped item was stacked on an existing item of the player inventory.
+    /// A tuple containing:
+    /// - Success: <c>true</c> if the item was successfully picked up or stacked; otherwise, <c>false</c>.
+    /// - StackTarget: If success is <c>true</c> and this is not <c>null</c>, the dropped item was merged onto this existing inventory item.
+    /// 返回包含拾取结果与堆叠目标的元组：Success 表示是否成功拾取；StackTarget 若非空则表示合并的目标物品。
     /// </returns>
     /// <remarks>
-    /// Can be overwritten, for example, for quest items which dropped only for a specific player.
+    /// Ownership and Anti-Theft Contract (GL-01 / R2-GL01) / 掉落物归属与防盗契约:
+    /// 1. Availability: Atomically checks <c>_availableToPick</c> to prevent concurrent double-pickup.
+    ///    可用性：原子检查可用标志，规避并发重复拾取。
+    /// 2. Character Binding: If <see cref="ItemDefinition.IsBoundToCharacter"/> is true, only the owner can pick it up.
+    ///    角色专属绑定：专属物品仅限拥有者拾取，非拥有者即使保护期结束亦不可拾取。
+    /// 3. Ownership Window: Non-owners cannot pick up or stack items during the 10-second priority window (<see cref="TimeUntilDropIsFree"/>).
+    ///    保护期机制：在 10 秒保护期倒计时内，严格阻断非拥有者的任何拾取与堆叠尝试。
+    /// 4. Stack Precedence: Stacking onto inventory items is only permitted AFTER passing character binding and ownership guards.
+    ///    堆叠时序：仅在通过所有权与绑定检查后，方可尝试与背包中的可堆叠物品合并。
     /// </remarks>
     public async ValueTask<(bool Success, Item? StackTarget)> TryPickUpByAsync(Player player)
     {
         Item? stackTarget = null;
         if (!this._availableToPick)
+        {
+            return (false, stackTarget);
+        }
+
+        if (this.Item.Definition!.IsBoundToCharacter && !this.IsPlayerAnOwner(player))
+        {
+            return (false, stackTarget);
+        }
+
+        if (!this.IsPlayerAnOwner(player)
+            && DateTime.UtcNow < this._dropTimestamp.Add(TimeUntilDropIsFree))
         {
             return (false, stackTarget);
         }
@@ -121,17 +143,6 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return (true, stackTarget);
             }
 
-            return (false, stackTarget);
-        }
-
-        if (this.Item.Definition!.IsBoundToCharacter && !this.IsPlayerAnOwner(player))
-        {
-            return (false, stackTarget);
-        }
-
-        if (!this.IsPlayerAnOwner(player)
-            && DateTime.UtcNow < this._dropTimestamp.Add(TimeUntilDropIsFree))
-        {
             return (false, stackTarget);
         }
 
@@ -274,7 +285,7 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
                 return false;
             }
 
-            stackTarget.Durability += this.Item.Durability;
+            stackTarget.Durability = (byte)Math.Min((int)stackTarget.Durability + this.Item.Durability, byte.MaxValue);
             this._availableToPick = false;
         }
 

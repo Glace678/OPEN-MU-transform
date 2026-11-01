@@ -1,4 +1,4 @@
-﻿// <copyright file="ExperienceRateSplitTest.cs" company="MUnique">
+// <copyright file="ExperienceRateSplitTest.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -40,7 +40,7 @@ public class ExperienceRateSplitTest
 
         await player.AddExperienceAsync((int)context.ExperienceTable[2], null).ConfigureAwait(false);
 
-        Assert.That(player.SelectedCharacter.LevelUpPoints, Is.EqualTo(previousPoints + 8));
+        Assert.That(player.SelectedCharacter.LevelUpPoints, Is.EqualTo(previousPoints + 5));
         Assert.That(player.Attributes[Stats.PointsPerLevelUp], Is.EqualTo(5));
     }
 

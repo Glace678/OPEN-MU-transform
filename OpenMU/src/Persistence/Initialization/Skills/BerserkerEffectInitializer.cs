@@ -1,4 +1,4 @@
-﻿// <copyright file="BerserkerEffectInitializer.cs" company="MUnique">
+// <copyright file="BerserkerEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -41,7 +41,7 @@ public class BerserkerEffectInitializer : InitializerBase
         var durationPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         durationPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         durationPerEnergy.InputOperator = InputOperator.Multiply;
-        durationPerEnergy.InputOperand = 1f / 20f; // 20 energy adds 1 second duration
+        durationPerEnergy.InputOperand = 0.0512f;
         magicEffect.Duration.RelatedValues.Add(durationPerEnergy);
 
         // Mana (and damage) multiplier (buff)
@@ -54,7 +54,7 @@ public class BerserkerEffectInitializer : InitializerBase
         var manaMultiplier = this.Context.CreateNew<AttributeRelationship>();
         manaMultiplier.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         manaMultiplier.InputOperator = InputOperator.Multiply;
-        manaMultiplier.InputOperand = 1f / 3000f;
+        manaMultiplier.InputOperand = 0.000338f;
         manaPowerUpDefinition.Boost.RelatedValues.Add(manaMultiplier);
 
         // Health (and defense) multiplier factor (debuff)
@@ -67,7 +67,7 @@ public class BerserkerEffectInitializer : InitializerBase
         var healthMultiplier = this.Context.CreateNew<AttributeRelationship>();
         healthMultiplier.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         healthMultiplier.InputOperator = InputOperator.Multiply;
-        healthMultiplier.InputOperand = 1f / 6000f;
+        healthMultiplier.InputOperand = 0.000168f;
         healthPowerUpDefinition.Boost.RelatedValues.Add(healthMultiplier);
 
         // Min physical damage bonus (later gets multiplied by the mana multiplier)
@@ -80,7 +80,7 @@ public class BerserkerEffectInitializer : InitializerBase
         var minDmgPerStrengthAndAgility = this.Context.CreateNew<AttributeRelationship>();
         minDmgPerStrengthAndAgility.InputAttribute = Stats.TotalStrengthAndAgility.GetPersistent(this.GameConfiguration);
         minDmgPerStrengthAndAgility.InputOperator = InputOperator.Multiply;
-        minDmgPerStrengthAndAgility.InputOperand = 1.0f / 50;
+        minDmgPerStrengthAndAgility.InputOperand = 0.0208f;
         minPhysPowerUpDefinition.Boost.RelatedValues.Add(minDmgPerStrengthAndAgility);
 
         // Max physical damage bonus (later gets multiplied by the mana multiplier)
@@ -93,7 +93,7 @@ public class BerserkerEffectInitializer : InitializerBase
         var maxDmgPerStrengthAndAgility = this.Context.CreateNew<AttributeRelationship>();
         maxDmgPerStrengthAndAgility.InputAttribute = Stats.TotalStrengthAndAgility.GetPersistent(this.GameConfiguration);
         maxDmgPerStrengthAndAgility.InputOperator = InputOperator.Multiply;
-        maxDmgPerStrengthAndAgility.InputOperand = 1.0f / 30;
+        maxDmgPerStrengthAndAgility.InputOperand = 0.0338f;
         maxPhysPowerUpDefinition.Boost.RelatedValues.Add(maxDmgPerStrengthAndAgility);
 
         // Placeholder for the Berserker Strengthener master skill

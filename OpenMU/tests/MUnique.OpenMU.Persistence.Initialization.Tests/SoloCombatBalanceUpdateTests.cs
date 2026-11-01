@@ -47,6 +47,9 @@ public class SoloCombatBalanceUpdateTests
         Assert.That(MonsterAttr(configuration, 3, MaximumHealthId), Is.Not.EqualTo(360f).Within(1), "red: spider drifted");
         var dk = configuration.CharacterClasses.Single(c => c.Number == 4);
         Assert.That(RelOperand(dk, Stats.MinimumPhysBaseDmg, Stats.TotalStrength), Is.Not.EqualTo(0.7f).Within(0.01), "red: DK coefficient drifted");
+        Assert.That(BaseValueOrNaN(dk, Stats.MinimumPhysBaseDmg), Is.EqualTo(5f).Within(0.01), "red: DK base min dmg drifted");
+        var mg = configuration.CharacterClasses.Single(c => c.Number == 12);
+        Assert.That(double.IsNaN(BaseValueOrNaN(mg, Stats.MinimumPhysBaseDmg)), Is.True, "red: MG base min dmg missing before v110");
 
         await new SoloCombatBalanceSeason6UpdatePlugIn().ApplyUpdateAsync(context, configuration).ConfigureAwait(false);
 
@@ -73,28 +76,40 @@ public class SoloCombatBalanceUpdateTests
 
         Assert.That(matched, Is.GreaterThan(50), "full-segment replay should cover most of the ~150 seed monsters");
 
-        // Class constants: all 7 classes, 4 constants each.
-        foreach (var (number, physMin) in new (short, bool)[] { (4, true), (0, false), (8, true), (12, true), (16, true), (20, false), (24, true) })
+        // Class constants: all 7 lineages across all 18 stages, 4 constants each, no duplicate definitions.
+        var allStages = new (short Number, bool PhysMin)[]
+        {
+            (4, true), (6, true), (7, true),
+            (0, false), (2, false), (3, false),
+            (8, true), (10, true), (11, true),
+            (12, true), (13, true),
+            (16, true), (17, true),
+            (20, false), (22, false), (23, false),
+            (24, true), (25, true),
+        };
+        foreach (var (number, physMin) in allStages)
         {
             var cc = configuration.CharacterClasses.FirstOrDefault(c => c.Number == number);
-            if (cc is null)
-            {
-                continue;
-            }
+            Assert.That(cc, Is.Not.Null, $"class {number} exists");
 
-            Assert.That(BaseValueOrNaN(cc, physMin ? Stats.MinimumPhysBaseDmg : Stats.MinimumWizBaseDmg), Is.EqualTo(10f).Within(0.01), $"class {number} min dmg");
-            Assert.That(BaseValueOrNaN(cc, physMin ? Stats.MaximumPhysBaseDmg : Stats.MaximumWizBaseDmg), Is.EqualTo(15f).Within(0.01), $"class {number} max dmg");
-            Assert.That(BaseValueOrNaN(cc, Stats.AttackRatePvm), Is.EqualTo(70f).Within(0.01), $"class {number} atk rate");
-            Assert.That(BaseValueOrNaN(cc, Stats.DefenseRatePvm), Is.EqualTo(95f).Within(0.01), $"class {number} def rate");
+            Assert.That(BaseValueOrNaN(cc!, physMin ? Stats.MinimumPhysBaseDmg : Stats.MinimumWizBaseDmg), Is.EqualTo(10f).Within(0.01), $"class {number} min dmg");
+            Assert.That(BaseValueOrNaN(cc!, physMin ? Stats.MaximumPhysBaseDmg : Stats.MaximumWizBaseDmg), Is.EqualTo(15f).Within(0.01), $"class {number} max dmg");
+            Assert.That(BaseValueOrNaN(cc!, Stats.AttackRatePvm), Is.EqualTo(70f).Within(0.01), $"class {number} atk rate");
+            Assert.That(BaseValueOrNaN(cc!, Stats.DefenseRatePvm), Is.EqualTo(95f).Within(0.01), $"class {number} def rate");
+            var defKeys = cc!.BaseAttributeValues.Select(a => (a.Definition?.Id, a.AggregateType)).ToList();
+            Assert.That(defKeys.Distinct().Count(), Is.EqualTo(defKeys.Count), $"class {number} must not have duplicate BaseAttributeValues definitions");
         }
 
         Assert.That(RelOperand(dk, Stats.MinimumPhysBaseDmg, Stats.TotalStrength), Is.EqualTo(0.7f).Within(0.01));
         Assert.That(RelOperand(dk, Stats.MaximumPhysBaseDmg, Stats.TotalStrength), Is.EqualTo(1.05f).Within(0.01));
 
-        // Idempotent.
+        // Idempotent: second run must keep the exact same ConstValueAttribute instances when values already match.
         var snapshot = Snapshot(configuration);
+        var beforeRefs = configuration.CharacterClasses.SelectMany(c => c.BaseAttributeValues).ToList();
         await new SoloCombatBalanceSeason6UpdatePlugIn().ApplyUpdateAsync(context, configuration).ConfigureAwait(false);
+        var afterRefs = configuration.CharacterClasses.SelectMany(c => c.BaseAttributeValues).ToList();
         Assert.That(Snapshot(configuration), Is.EqualTo(snapshot), "second run must not change values");
+        Assert.That(afterRefs, Is.EqualTo(beforeRefs), "second run must not recreate already-matching ConstValueAttribute instances");
         Assert.That(dk.AttributeCombinations.Count(r => r.TargetAttribute == Stats.MinimumPhysBaseDmg && r.InputAttribute == Stats.TotalStrength), Is.EqualTo(1));
 
         // Consistency with a fresh initialization.
@@ -102,6 +117,15 @@ public class SoloCombatBalanceUpdateTests
         await new DataInitialization(controlProvider, NullLoggerFactory.Instance).CreateInitialDataAsync(1, false).ConfigureAwait(false);
         using var controlRead = controlProvider.CreateNewConfigurationContext();
         var control = (await controlRead.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single();
+        foreach (var (number, physMin) in allStages)
+        {
+            var freshClass = control.CharacterClasses.Single(c => c.Number == number);
+            Assert.That(BaseValueOrNaN(freshClass, physMin ? Stats.MinimumPhysBaseDmg : Stats.MinimumWizBaseDmg), Is.EqualTo(10f).Within(0.01), $"fresh class {number} min dmg");
+            Assert.That(BaseValueOrNaN(freshClass, physMin ? Stats.MaximumPhysBaseDmg : Stats.MaximumWizBaseDmg), Is.EqualTo(15f).Within(0.01), $"fresh class {number} max dmg");
+            Assert.That(BaseValueOrNaN(freshClass, Stats.AttackRatePvm), Is.EqualTo(70f).Within(0.01), $"fresh class {number} atk rate");
+            Assert.That(BaseValueOrNaN(freshClass, Stats.DefenseRatePvm), Is.EqualTo(95f).Within(0.01), $"fresh class {number} def rate");
+        }
+
         using var controlContext = controlProvider.CreateNewContext(control);
         await new SoloCombatBalanceSeason6UpdatePlugIn().ApplyUpdateAsync(controlContext, control).ConfigureAwait(false);
         Assert.That(MonsterAttr(configuration, 3, MaximumHealthId), Is.EqualTo(MonsterAttr(control, 3, MaximumHealthId)).Within(1), "migrated spider HP == fresh-after-v110");
@@ -183,6 +207,16 @@ public class SoloCombatBalanceUpdateTests
         MonsterAttr(configuration, 26, MaximumHealthId, 45f);
         var dk = configuration.CharacterClasses.Single(c => c.Number == 4);
         dk.AttributeCombinations.First(r => r.TargetAttribute == Stats.MinimumPhysBaseDmg && r.InputAttribute == Stats.TotalStrength).InputOperand = 1f / 6;
+        var dkMin = dk.BaseAttributeValues.First(a => a.Definition == Stats.MinimumPhysBaseDmg);
+        dk.BaseAttributeValues.Remove(dkMin);
+        dk.BaseAttributeValues.Add(context.CreateNew<ConstValueAttribute>(5f, Stats.MinimumPhysBaseDmg.GetPersistent(configuration) ?? Stats.MinimumPhysBaseDmg, AggregateType.AddRaw));
+
+        var mg = configuration.CharacterClasses.Single(c => c.Number == 12);
+        var mgMin = mg.BaseAttributeValues.FirstOrDefault(a => a.Definition == Stats.MinimumPhysBaseDmg);
+        if (mgMin is not null)
+        {
+            mg.BaseAttributeValues.Remove(mgMin);
+        }
     }
 
     private static double ComputeTtkDK(double level, double postHp, double postDef)

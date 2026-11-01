@@ -1,4 +1,4 @@
-﻿// <copyright file="TargetedSkillDefaultPlugin.cs" company="MUnique">
+// <copyright file="TargetedSkillDefaultPlugin.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -275,13 +275,14 @@ public class TargetedSkillDefaultPlugin : TargetedSkillPluginBase
 
                 if (!target.IsAtSafezone() && !player.IsAtSafezone() && target != player)
                 {
-                    var hitInfo = await target.AttackByAsync(player, skillEntry, isCombo, 1, skill.NumberOfHitsPerAttack > 1 ? false : null).ConfigureAwait(false);
+                    var hitWeight = skill.NumberOfHitsPerAttack > 1 ? (1.0 / skill.NumberOfHitsPerAttack) : 1.0;
+                    var hitInfo = await target.AttackByAsync(player, skillEntry, isCombo, hitWeight, skill.NumberOfHitsPerAttack > 1 ? false : null).ConfigureAwait(false);
                     player.LastAttackedTarget.SetTarget(target);
                     success = await target.TryApplyElementalEffectsAsync(player, skillEntry, hitInfo).ConfigureAwait(false) || success;
 
                     for (int hit = 2; hit <= skill.NumberOfHitsPerAttack; hit++)
                     {
-                        await target.AttackByAsync(player, skillEntry, isCombo, 1, hit == skill.NumberOfHitsPerAttack).ConfigureAwait(false);
+                        await target.AttackByAsync(player, skillEntry, isCombo, hitWeight, hit == skill.NumberOfHitsPerAttack).ConfigureAwait(false);
                     }
                 }
             }

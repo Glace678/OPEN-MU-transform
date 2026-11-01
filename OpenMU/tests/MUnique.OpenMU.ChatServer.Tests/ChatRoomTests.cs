@@ -1,4 +1,4 @@
-﻿// <copyright file="ChatRoomTests.cs" company="MUnique">
+// <copyright file="ChatRoomTests.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -266,5 +266,55 @@ public class ChatRoomTests
         await room.LeaveAsync(chatClient0.Object).ConfigureAwait(false);
         await room.LeaveAsync(chatClient1.Object).ConfigureAwait(false);
         Assert.That(eventCalled, Is.True);
+    }
+
+    /// <summary>
+    /// Stress tests ChatRoom with high-concurrency join, leave, and message broadcast operations
+    /// across threadpool threads, ensuring SemaphoreSlim completely prevents SynchronizationLockException.
+    /// </summary>
+    [Test]
+    public async Task ChatRoom_HighConcurrencyAsyncStress_NoSynchronizationLockExceptionAsync()
+    {
+        const ushort roomId = 8888;
+        var room = new ChatRoom(roomId, new NullLogger<ChatRoom>());
+        const int clientCount = 40;
+        var registeredClients = new List<(byte Index, ChatServerAuthenticationInfo Auth, Mock<IChatClient> MockClient)>();
+
+        for (int i = 0; i < clientCount; i++)
+        {
+            var idx = room.GetNextClientIndex();
+            var auth = new ChatServerAuthenticationInfo(idx, roomId, $"User_{idx}", ChatServerHost, $"token_{idx}");
+            room.RegisterClient(auth);
+
+            var mockClient = new Mock<IChatClient>();
+            mockClient.SetupAllProperties();
+            mockClient.Setup(c => c.AuthenticationToken).Returns(auth.AuthenticationToken);
+            mockClient.Setup(c => c.SendMessageAsync(It.IsAny<byte>(), It.IsAny<string>()))
+                .Returns(async () => await Task.Yield());
+            mockClient.Setup(c => c.SendChatRoomClientListAsync(It.IsAny<IReadOnlyCollection<IChatClient>>()))
+                .Returns(async () => await Task.Yield());
+            mockClient.Setup(c => c.SendChatRoomClientUpdateAsync(It.IsAny<byte>(), It.IsAny<string>(), It.IsAny<ChatRoomClientUpdateType>()))
+                .Returns(async () => await Task.Yield());
+            mockClient.Setup(c => c.LogOffAsync())
+                .Returns(async () => await Task.Yield());
+
+            registeredClients.Add((idx, auth, mockClient));
+        }
+
+        var tasks = registeredClients.Select(async item =>
+        {
+            await Task.Yield();
+            var joined = await room.TryJoinAsync(item.MockClient.Object).ConfigureAwait(false);
+            Assert.That(joined, Is.True);
+
+            for (int m = 0; m < 5; m++)
+            {
+                await room.SendMessageAsync(item.Index, $"Broadcast message {m} from client {item.Index}").ConfigureAwait(false);
+            }
+
+            await room.LeaveAsync(item.MockClient.Object).ConfigureAwait(false);
+        });
+
+        Assert.DoesNotThrowAsync(async () => await Task.WhenAll(tasks).ConfigureAwait(false));
     }
 }

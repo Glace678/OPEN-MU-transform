@@ -184,7 +184,18 @@ public sealed class OfflinePlayerMuHelper : AsyncDisposable
         {
             if (this._player.Account?.LoginName is { } loginName)
             {
-                await this._player.GameContext.OfflinePlayerManager.StopAsync(loginName).ConfigureAwait(false);
+                await this._cts.CancelAsync().ConfigureAwait(false);
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await this._player.GameContext.OfflinePlayerManager.StopAsync(loginName).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        this._player.Logger.LogError(ex, "Error stopping offline player session for {0}.", loginName);
+                    }
+                });
             }
 
             return;
@@ -247,7 +258,18 @@ public sealed class OfflinePlayerMuHelper : AsyncDisposable
             if (this._player.Account?.LoginName is { } loginName)
             {
                 this._player.Logger.LogInformation("Offline player died and successfully respawned. Stopping session for {0}.", loginName);
-                await this._player.GameContext.OfflinePlayerManager.StopAsync(loginName).ConfigureAwait(false);
+                await this._cts.CancelAsync().ConfigureAwait(false);
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await this._player.GameContext.OfflinePlayerManager.StopAsync(loginName).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        this._player.Logger.LogError(ex, "Error stopping offline player session for {0}.", loginName);
+                    }
+                });
             }
 
             return true;

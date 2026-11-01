@@ -389,7 +389,7 @@ public readonly ref struct ServerListResponseRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -600,7 +600,7 @@ public readonly ref struct ServerListResponseOldRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }

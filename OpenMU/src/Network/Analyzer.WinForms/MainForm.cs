@@ -1,4 +1,4 @@
-﻿// <copyright file="MainForm.cs" company="MUnique">
+// <copyright file="MainForm.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -166,7 +166,8 @@ public partial class MainForm : Form
                 }
                 else
                 {
-                    result.Append(".Contains(\"").Append(filterValue).Append("\")");
+                    var escapedValue = filterValue.Replace("\\", "\\\\").Replace("\"", "\\\"");
+                    result.Append(".Contains(\"").Append(escapedValue).Append("\")");
                 }
 
                 orOperator = " OR ";

@@ -794,7 +794,7 @@ public readonly struct AddCharacterToScopeExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -972,7 +972,7 @@ public readonly partial struct AddCharactersToScope
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -1216,7 +1216,7 @@ public readonly struct AddCharactersToScope075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -1452,7 +1452,7 @@ public readonly struct AddCharactersToScope095
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -1688,7 +1688,7 @@ public readonly struct AddNpcsToScope
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -1872,7 +1872,7 @@ public readonly struct AddNpcsToScope075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -2083,7 +2083,7 @@ public readonly struct AddNpcsToScope095
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -2294,7 +2294,7 @@ public readonly partial struct AddSummonedMonstersToScope
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -2522,7 +2522,7 @@ public readonly struct AddSummonedMonstersToScope075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -2742,7 +2742,7 @@ public readonly struct AddSummonedMonstersToScope095
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -2962,7 +2962,7 @@ public readonly struct MapObjectOutOfScope
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -4339,7 +4339,7 @@ public readonly struct AppearanceChanged
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -4570,7 +4570,7 @@ public readonly struct ObjectMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -4744,7 +4744,7 @@ public readonly struct PartyList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -4926,7 +4926,7 @@ public readonly struct PartyList075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -5169,7 +5169,7 @@ public readonly struct PartyHealthUpdate
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -5937,7 +5937,7 @@ public readonly struct TradeItemAdded
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -6374,7 +6374,7 @@ public readonly struct ChatMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -6911,7 +6911,7 @@ public readonly struct ObjectWalked
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -7045,7 +7045,7 @@ public readonly struct ObjectWalkedExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -7790,7 +7790,7 @@ public readonly struct ApplyKeyConfiguration
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -7877,7 +7877,7 @@ public readonly struct ItemsDropped
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -8420,7 +8420,7 @@ public readonly struct ItemDropRemoved
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -8541,7 +8541,7 @@ public readonly struct ItemAddedToInventory
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -8904,7 +8904,7 @@ public readonly struct ItemMoved
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -9002,7 +9002,7 @@ public readonly struct ItemMoveRequestFailed
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -10978,7 +10978,7 @@ public readonly struct StoreItemList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -11151,7 +11151,7 @@ public readonly struct ItemBought
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -11757,7 +11757,7 @@ public readonly struct PlayerShopItemList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
             this.Success = true;
         }
@@ -12123,7 +12123,7 @@ public readonly struct PlayerShopBuyResultExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -12253,7 +12253,7 @@ public readonly struct PlayerShopItemListExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
             this.Success = true;
         }
@@ -12393,7 +12393,7 @@ public readonly struct PlayerShops
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -12530,7 +12530,7 @@ public readonly struct AddTransformedCharactersToScope075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -12767,7 +12767,7 @@ public readonly partial struct AddTransformedCharactersToScope
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -13051,7 +13051,7 @@ public readonly struct ChangeTerrainAttributes
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             this.Type = false;
         }
     }
@@ -13336,7 +13336,7 @@ public readonly struct CharacterList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -13544,7 +13544,7 @@ public readonly struct CharacterListExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -13838,7 +13838,7 @@ public readonly struct CharacterList075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -14010,7 +14010,7 @@ public readonly struct CharacterList095
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -15323,7 +15323,7 @@ public readonly struct SkillAdded
 
 /// <summary>
 /// Is sent by the server when: After a skill got removed from the skill list, e.g. by removing an equipped item.
-/// Causes reaction on client side: The skill is added to the skill list on client side.
+/// Causes reaction on client side: The skill is removed from the skill list on client side.
 /// </summary>
 public readonly struct SkillRemoved
 {
@@ -15456,7 +15456,7 @@ public readonly struct SkillListUpdate
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -15679,7 +15679,7 @@ public readonly struct SkillAdded075
 
 /// <summary>
 /// Is sent by the server when: After a skill got removed from the skill list, e.g. by removing an equipped item.
-/// Causes reaction on client side: The skill is added to the skill list on client side.
+/// Causes reaction on client side: The skill is removed from the skill list on client side.
 /// </summary>
 public readonly struct SkillRemoved075
 {
@@ -15889,7 +15889,7 @@ public readonly struct SkillAdded095
 
 /// <summary>
 /// Is sent by the server when: After a skill got removed from the skill list, e.g. by removing an equipped item.
-/// Causes reaction on client side: The skill is added to the skill list on client side.
+/// Causes reaction on client side: The skill is removed from the skill list on client side.
 /// </summary>
 public readonly struct SkillRemoved095
 {
@@ -16022,7 +16022,7 @@ public readonly struct SkillListUpdate075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -18129,7 +18129,7 @@ public readonly struct CharacterInventory
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -18223,7 +18223,7 @@ public readonly struct InventoryItemUpgraded
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -19855,7 +19855,7 @@ public readonly struct MasterSkillList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -20031,7 +20031,7 @@ public readonly struct ServerMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -20330,7 +20330,7 @@ public readonly struct GuildList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -20514,7 +20514,7 @@ public readonly struct GuildList075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -21958,7 +21958,7 @@ public readonly struct AllianceList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -22227,7 +22227,7 @@ public readonly struct AssignCharacterToGuild
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -22375,7 +22375,7 @@ public readonly struct AssignCharacterToGuild075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -22619,7 +22619,7 @@ public readonly struct GuildInformations075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -23196,7 +23196,7 @@ public readonly struct ItemCraftingResult
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -23355,7 +23355,7 @@ public readonly partial struct LegacyQuestStateList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             this.QuestCount = 6;
             this.ScrollOfEmperorState = LegacyQuestState.Inactive;
             this.ThreeTreasuresOfMuState = LegacyQuestState.Inactive;
@@ -25895,7 +25895,7 @@ public readonly struct IllusionTempleState
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -25935,8 +25935,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public ushort PlayerIndex
     {
-        get => ReadUInt16LittleEndian(this._data.Span[4..]);
-        set => WriteUInt16LittleEndian(this._data.Span[4..], value);
+        get => ReadUInt16LittleEndian(this._data.Span[6..]);
+        set => WriteUInt16LittleEndian(this._data.Span[6..], value);
     }
 
     /// <summary>
@@ -25944,8 +25944,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte PositionX
     {
-        get => this._data.Span[6];
-        set => this._data.Span[6] = value;
+        get => this._data.Span[8];
+        set => this._data.Span[8] = value;
     }
 
     /// <summary>
@@ -25953,8 +25953,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte PositionY
     {
-        get => this._data.Span[7];
-        set => this._data.Span[7] = value;
+        get => this._data.Span[9];
+        set => this._data.Span[9] = value;
     }
 
     /// <summary>
@@ -25962,8 +25962,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte Team1Points
     {
-        get => this._data.Span[8];
-        set => this._data.Span[8] = value;
+        get => this._data.Span[10];
+        set => this._data.Span[10] = value;
     }
 
     /// <summary>
@@ -25971,8 +25971,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte Team2Points
     {
-        get => this._data.Span[9];
-        set => this._data.Span[9] = value;
+        get => this._data.Span[11];
+        set => this._data.Span[11] = value;
     }
 
     /// <summary>
@@ -25980,8 +25980,8 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte MyTeam
     {
-        get => this._data.Span[10];
-        set => this._data.Span[10] = value;
+        get => this._data.Span[12];
+        set => this._data.Span[12] = value;
     }
 
     /// <summary>
@@ -25989,17 +25989,17 @@ public readonly struct IllusionTempleState
     /// </summary>
     public byte PartyCount
     {
-        get => this._data.Span[11];
-        set => this._data.Span[11] = value;
+        get => this._data.Span[13];
+        set => this._data.Span[13] = value;
     }
 
     /// <summary>
     /// Gets the <see cref="IllusionTemplePartyEntry"/> of the specified index.
     /// </summary>
         public IllusionTemplePartyEntry this[int index] =>
-            (index < 0 || 12 + index * IllusionTemplePartyEntry.Length + IllusionTemplePartyEntry.Length > this._data.Length)
+            (index < 0 || 14 + index * IllusionTemplePartyEntry.Length + IllusionTemplePartyEntry.Length > this._data.Length)
                 ? throw new ArgumentOutOfRangeException(nameof(index))
-                : new IllusionTemplePartyEntry(this._data.Slice(12 + index * IllusionTemplePartyEntry.Length));
+                : new IllusionTemplePartyEntry(this._data.Slice(14 + index * IllusionTemplePartyEntry.Length));
 
     /// <summary>
     /// Performs an implicit conversion from a Memory of bytes to a <see cref="IllusionTempleState"/>.
@@ -26020,7 +26020,7 @@ public readonly struct IllusionTempleState
     /// </summary>
     /// <param name="partyMembersCount">The count of <see cref="IllusionTemplePartyEntry"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int partyMembersCount) => partyMembersCount * IllusionTemplePartyEntry.Length + 12;
+    public static int GetRequiredSize(int partyMembersCount) => partyMembersCount * IllusionTemplePartyEntry.Length + 14;
 
 
 /// <summary>
@@ -26357,7 +26357,7 @@ public readonly struct IllusionTempleResult
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -26466,8 +26466,8 @@ public readonly struct PlayerResult
     /// </summary>
     public string Name
     {
-        get => this._data.Span.ExtractString(0, this._data.Length - 0, System.Text.Encoding.UTF8);
-        set => this._data.Slice(0).Span.WriteString(value, System.Text.Encoding.UTF8);
+        get => this._data.Span.ExtractString(0, 10, System.Text.Encoding.UTF8);
+        set => this._data.Slice(0, 10).Span.WriteString(value, System.Text.Encoding.UTF8);
     }
 
     /// <summary>
@@ -26505,18 +26505,6 @@ public readonly struct PlayerResult
         get => ReadUInt32LittleEndian(this._data.Span[13..]);
         set => WriteUInt32LittleEndian(this._data.Span[13..], value);
     }
-
-    /// <summary>
-    /// Calculates the size of the packet for the specified field content.
-    /// </summary>
-    /// <param name="content">The content of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(string content) => Math.Max(System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 0, Length);
-
-    /// <summary>
-    /// Calculates the size of the packet for the specified field content.
-    /// </summary>
-    /// <param name="contentLength">The content length in bytes of the variable 'Name' field from which the size will be calculated.</param>
-    public static int GetRequiredSize(int contentLength) => Math.Max(contentLength + 1 + 0, Length);
 }
 }
 
@@ -26934,7 +26922,7 @@ public readonly struct ChainLightningHitInfo
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -27262,7 +27250,7 @@ public readonly struct MessengerInitialization
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -28019,7 +28007,7 @@ public readonly struct OpenLetter
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -28149,7 +28137,7 @@ public readonly struct OpenLetterExtended
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -28657,7 +28645,7 @@ public readonly struct AvailableQuests
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -29337,7 +29325,7 @@ public readonly struct QuestStateList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -30184,7 +30172,7 @@ public readonly struct MiniGameScoreTable
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -30987,7 +30975,7 @@ public readonly struct AvailableChatCommand
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -34096,7 +34084,7 @@ public readonly struct CastleSiegeNpcList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -34298,7 +34286,7 @@ public readonly struct CastleSiegeRegisteredGuildList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -34455,7 +34443,7 @@ public readonly struct CastleSiegeGuildList
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -34612,7 +34600,7 @@ public readonly struct CastleSiegeMiniMapPlayerPositions
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -35460,7 +35448,7 @@ public readonly struct CastleSiegeMiniMapNpcPositions
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 

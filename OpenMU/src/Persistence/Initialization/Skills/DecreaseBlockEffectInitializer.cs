@@ -1,4 +1,4 @@
-﻿// <copyright file="DecreaseBlockEffectInitializer.cs" company="MUnique">
+// <copyright file="DecreaseBlockEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -48,7 +48,7 @@ public class DecreaseBlockEffectInitializer : InitializerBase
 
         var decDefRatePowerUpDefinitionPvp = this.Context.CreateNew<PowerUpDefinition>();
         magicEffect.PowerUpDefinitionsPvp.Add(decDefRatePowerUpDefinitionPvp);
-        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvm.GetPersistent(this.GameConfiguration);
+        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvp.GetPersistent(this.GameConfiguration);
         decDefRatePowerUpDefinitionPvp.Boost = this.Context.CreateNew<PowerUpDefinitionValue>();
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.Value = -20f;
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.AggregateType = AggregateType.AddFinal;

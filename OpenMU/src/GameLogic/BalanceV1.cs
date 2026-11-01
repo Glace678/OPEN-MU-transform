@@ -26,6 +26,9 @@ public static class BalanceV1
     /// <summary>The encounter experience added for each extra nearby party member.</summary>
     public const double PartyExperiencePerExtraMember = 0.90;
 
+    /// <summary>The vitality-to-power weight bonus applied to DK Guard for 15-hour solo route convergence.</summary>
+    public const double DkGuardVitalityScalingBonus = 0.07;
+
     // Solo-fun (v2) runtime profile. Keep these constants in lockstep with
     // OpenMU-数值重设计/design/balance.v2.json. The public helpers below are
     // deliberately pure so the live combat path and the balance verifier can

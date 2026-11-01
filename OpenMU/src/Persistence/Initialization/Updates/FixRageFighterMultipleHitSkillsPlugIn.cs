@@ -1,4 +1,4 @@
-﻿// <copyright file="FixRageFighterMultipleHitSkillsPlugIn.cs" company="MUnique">
+// <copyright file="FixRageFighterMultipleHitSkillsPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -226,7 +226,7 @@ public class FixRageFighterMultipleHitSkillsPlugIn : UpdatePlugInBase
 
         var decDefRatePowerUpDefinitionPvp = context.CreateNew<PowerUpDefinition>();
         magicEffect.PowerUpDefinitionsPvp.Add(decDefRatePowerUpDefinitionPvp);
-        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvm.GetPersistent(gameConfiguration);
+        decDefRatePowerUpDefinitionPvp.TargetAttribute = Stats.DefenseRatePvp.GetPersistent(gameConfiguration);
         decDefRatePowerUpDefinitionPvp.Boost = context.CreateNew<PowerUpDefinitionValue>();
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.Value = -20f;
         decDefRatePowerUpDefinitionPvp.Boost.ConstantValue.AggregateType = AggregateType.AddFinal;

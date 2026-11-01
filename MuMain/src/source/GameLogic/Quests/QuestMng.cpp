@@ -183,7 +183,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     }
     else
     {
-        sRequestReward.m_byRequestCount = pRequestRewardPacket->m_byRequestCount;
+        sRequestReward.m_byRequestCount = std::min<BYTE>(pRequestRewardPacket->m_byRequestCount, 5);
         for (i = 0; i < sRequestReward.m_byRequestCount; ++i)
         {
             sRequestReward.m_aRequest[i].m_dwType  = pRequestPacket->m_dwType;
@@ -216,26 +216,35 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
         SQuestReward aTempRandReward[5];
         ::memset(aTempRandReward, 0, sizeof(SQuestReward) * 5);
 
-        for (i = 0; i < pRequestRewardPacket->m_byRewardCount; ++i)
+        const BYTE byRewardCount = std::min<BYTE>(pRequestRewardPacket->m_byRewardCount, 5);
+
+        for (i = 0; i < byRewardCount; ++i)
         {
             if (QUEST_REWARD_TYPE(pRewardPacket->m_dwType & 0xFFE0) == QUEST_REWARD_RANDOM)
             {
-                aTempRandReward[byRandCount].m_dwType  = pRewardPacket->m_dwType & 0x1F;
-                aTempRandReward[byRandCount].m_wIndex  = pRewardPacket->m_wIndex;
-                aTempRandReward[byRandCount].m_dwValue = pRewardPacket->m_dwValue;
-                if (aTempRandReward[byRandCount].m_dwType == QUEST_REWARD_ITEM)
-                    aTempRandReward[byRandCount].m_pItem = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
-                ++byRandCount;
+                if (byRandCount < 5)
+                {
+                    aTempRandReward[byRandCount].m_dwType  = pRewardPacket->m_dwType & 0x1F;
+                    aTempRandReward[byRandCount].m_wIndex  = pRewardPacket->m_wIndex;
+                    aTempRandReward[byRandCount].m_dwValue = pRewardPacket->m_dwValue;
+                    if (aTempRandReward[byRandCount].m_dwType == QUEST_REWARD_ITEM)
+                        aTempRandReward[byRandCount].m_pItem =
+                            g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    ++byRandCount;
+                }
             }
             else
             {
-                sRequestReward.m_aReward[byGeneralCount].m_dwType  = pRewardPacket->m_dwType;
-                sRequestReward.m_aReward[byGeneralCount].m_wIndex  = pRewardPacket->m_wIndex;
-                sRequestReward.m_aReward[byGeneralCount].m_dwValue = pRewardPacket->m_dwValue;
-                if (pRewardPacket->m_dwType == QUEST_REWARD_ITEM)
-                    sRequestReward.m_aReward[byGeneralCount].m_pItem =
-                        g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
-                ++byGeneralCount;
+                if (byGeneralCount < 5)
+                {
+                    sRequestReward.m_aReward[byGeneralCount].m_dwType  = pRewardPacket->m_dwType;
+                    sRequestReward.m_aReward[byGeneralCount].m_wIndex  = pRewardPacket->m_wIndex;
+                    sRequestReward.m_aReward[byGeneralCount].m_dwValue = pRewardPacket->m_dwValue;
+                    if (pRewardPacket->m_dwType == QUEST_REWARD_ITEM)
+                        sRequestReward.m_aReward[byGeneralCount].m_pItem =
+                            g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    ++byGeneralCount;
+                }
             }
 
             ++pRewardPacket;
@@ -244,7 +253,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
         sRequestReward.m_byGeneralRewardCount = byGeneralCount;
         sRequestReward.m_byRandRewardCount    = byRandCount;
 
-        for (i = 0; i < sRequestReward.m_byRandRewardCount; ++i)
+        for (i = 0; i < sRequestReward.m_byRandRewardCount && byGeneralCount < 5; ++i)
             sRequestReward.m_aReward[byGeneralCount++] = aTempRandReward[i];
     }
 

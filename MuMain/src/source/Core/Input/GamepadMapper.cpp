@@ -126,8 +126,10 @@ GamepadMapper::ProcessedAxes GamepadMapper::ProcessAxes(const GamepadSnapshot& s
     if (std::abs(pointerLeftY) > std::abs(axes.pointerY))
         axes.pointerY = pointerLeftY;
 
-    const float dpadX = static_cast<float>(ButtonDown(snapshot, GamepadButton::DpadRight) - ButtonDown(snapshot, GamepadButton::DpadLeft));
-    const float dpadY = static_cast<float>(ButtonDown(snapshot, GamepadButton::DpadDown) - ButtonDown(snapshot, GamepadButton::DpadUp));
+    const float dpadX = static_cast<float>(ButtonDown(snapshot, GamepadButton::DpadRight) -
+                                           ButtonDown(snapshot, GamepadButton::DpadLeft));
+    const float dpadY =
+        static_cast<float>(ButtonDown(snapshot, GamepadButton::DpadDown) - ButtonDown(snapshot, GamepadButton::DpadUp));
     if (dpadX != 0.0f)
         axes.pointerX = dpadX;
     if (dpadY != 0.0f)

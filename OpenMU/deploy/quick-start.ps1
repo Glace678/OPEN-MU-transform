@@ -50,9 +50,16 @@ function New-AdminSecret {
         $lower = [char](97 + ($b[1] % 26))
         $digit = [char](48 + ($b[2] % 10))
         $chars = ($rest + $upper + $lower + $digit + '-').ToCharArray()
-        # Fisher-Yates shuffle.
+        # Fisher-Yates shuffle with cross-version RNG compatible with Windows PowerShell 5.1 and PowerShell Core.
+        $randBytes = New-Object byte[] 4
         for ($i = $chars.Length - 1; $i -gt 0; $i--) {
-            $j = $generator.GetInt32(0, $i + 1)
+            $max = $i + 1
+            $limit = [uint32]::MaxValue - ([uint32]::MaxValue % [uint32]$max)
+            do {
+                $generator.GetBytes($randBytes)
+                $val = [BitConverter]::ToUInt32($randBytes, 0)
+            } while ($val -ge $limit)
+            $j = [int]($val % [uint32]$max)
             ($chars[$i], $chars[$j]) = ($chars[$j], $chars[$i])
         }
 

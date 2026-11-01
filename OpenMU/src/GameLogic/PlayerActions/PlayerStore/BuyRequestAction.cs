@@ -135,15 +135,18 @@ public class BuyRequestAction
                 || !await player.Inventory.AddItemAsync(item).ConfigureAwait(false))
             {
                 // Refund the buyer and debit the seller back, then return the item to its shop slot.
-                if (!player.TryRemoveMoney(itemPrice))
+                if (!player.TryAddMoney(itemPrice))
                 {
-                    player.Logger.LogError("Could not debit back the buyer while compensating a failed shop purchase of item {Item}.", item);
+                    player.Logger.LogError("Could not refund the buyer while compensating a failed shop purchase of item {Item}.", item);
                 }
 
                 if (!requestedPlayer.TryRemoveMoney(itemPrice))
                 {
-                    player.Logger.LogError("Could not refund the seller while compensating a failed shop purchase of item {Item}; manual intervention required.", item);
+                    player.Logger.LogError("Could not debit back the seller while compensating a failed shop purchase of item {Item}; manual intervention required.", item);
                 }
+
+                await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                await requestedPlayer.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
 
                 item.StorePrice = itemPrice;
                 item.ItemSlot = slot;

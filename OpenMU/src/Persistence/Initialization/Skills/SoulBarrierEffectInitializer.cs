@@ -1,4 +1,4 @@
-﻿// <copyright file="SoulBarrierEffectInitializer.cs" company="MUnique">
+// <copyright file="SoulBarrierEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -40,7 +40,7 @@ public class SoulBarrierEffectInitializer : InitializerBase
         var durationPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         durationPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         durationPerEnergy.InputOperator = InputOperator.Multiply;
-        durationPerEnergy.InputOperand = 1f / 40f; // 40 energy adds 1 second duration
+        durationPerEnergy.InputOperand = 0.0256f;
         magicEffect.Duration.RelatedValues.Add(durationPerEnergy);
 
         // Soul barrier dmg decrease % = 10 + (Agility/50) + (Energy/200)
@@ -53,13 +53,13 @@ public class SoulBarrierEffectInitializer : InitializerBase
         var boostPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         boostPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         boostPerEnergy.InputOperator = InputOperator.Multiply;
-        boostPerEnergy.InputOperand = 1f / 20000f;  // one percent per 200 energy
+        boostPerEnergy.InputOperand = 0.000052f;
         damageDecrement.Boost.RelatedValues.Add(boostPerEnergy);
 
         var boostPerAgility = this.Context.CreateNew<AttributeRelationship>();
         boostPerAgility.InputAttribute = Stats.TotalAgility.GetPersistent(this.GameConfiguration);
         boostPerAgility.InputOperator = InputOperator.Multiply;
-        boostPerAgility.InputOperand = 1f / 5000f; // one percent per 50 agility
+        boostPerAgility.InputOperand = 0.000208f;
         damageDecrement.Boost.RelatedValues.Add(boostPerAgility);
 
         // Mana toll = 2% + 0.1% per SB strengthener level (added in skill action plugin)
@@ -71,7 +71,7 @@ public class SoulBarrierEffectInitializer : InitializerBase
         var manaToll = this.Context.CreateNew<AttributeRelationship>();
         manaToll.InputAttribute = Stats.MaximumMana.GetPersistent(this.GameConfiguration);
         manaToll.InputOperator = InputOperator.Multiply;
-        manaToll.InputOperand = 0.02f; // two percent of total mana
+        manaToll.InputOperand = 0.0195f;
         manaTollPerHit.Boost.RelatedValues.Add(manaToll);
     }
 }

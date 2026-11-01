@@ -3054,8 +3054,8 @@ void MoveJoint(JOINT* o, int iIndex)
     vec3_t Position, p;
 
     float Distance = 1.0e30f;
-    float dx = o->Position[0] - o->TargetPosition[0];
-    float dy = o->Position[1] - o->TargetPosition[1];
+    float dx       = o->Position[0] - o->TargetPosition[0];
+    float dy       = o->Position[1] - o->TargetPosition[1];
 
     float Matrix[3][4];
 

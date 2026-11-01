@@ -132,14 +132,48 @@ public class SoloCombatBalancePgUpgradeTests
             Assert.That(ttk, Is.InRange(4.0, 8.0), $"newbie #{num} DK TTK in 4-8s");
         }
 
-        // Idempotent: run v110 a second time, values must not change.
-        using var again = provider.CreateNewContext(configuration);
-        again.Attach(configuration);
-        await new SoloCombatBalanceSeason6UpdatePlugIn().ApplyUpdateAsync(again, configuration).ConfigureAwait(false);
+        // Verify all 18 character stages persisted the 4 combat base constants (10/15/70/95) with no duplicates.
+        var allStages = new (short Number, bool PhysMin)[]
+        {
+            (4, true), (6, true), (7, true),
+            (0, false), (2, false), (3, false),
+            (8, true), (10, true), (11, true),
+            (12, true), (13, true),
+            (16, true), (17, true),
+            (20, false), (22, false), (23, false),
+            (24, true), (25, true),
+        };
+        foreach (var (number, physMin) in allStages)
+        {
+            var cc = verify.CharacterClasses.Single(c => c.Number == number);
+            var minId = physMin ? MinAtkId : MUnique.OpenMU.GameLogic.Attributes.Stats.MinimumWizBaseDmg.Id;
+            var maxId = physMin ? MaxAtkId : MUnique.OpenMU.GameLogic.Attributes.Stats.MaximumWizBaseDmg.Id;
+            Assert.That(cc.BaseAttributeValues.Single(a => a.Definition!.Id == minId).Value, Is.EqualTo(10f).Within(0.01f), $"PG class {number} min dmg");
+            Assert.That(cc.BaseAttributeValues.Single(a => a.Definition!.Id == maxId).Value, Is.EqualTo(15f).Within(0.01f), $"PG class {number} max dmg");
+            Assert.That(cc.BaseAttributeValues.Single(a => a.Definition!.Id == AtkRatePvmId).Value, Is.EqualTo(70f).Within(0.01f), $"PG class {number} atk rate");
+            Assert.That(cc.BaseAttributeValues.Single(a => a.Definition!.Id == DefRatePvmId).Value, Is.EqualTo(95f).Within(0.01f), $"PG class {number} def rate");
+            var defKeys = cc.BaseAttributeValues.Select(a => (a.Definition!.Id, a.AggregateType)).ToList();
+            Assert.That(defKeys.Distinct().Count(), Is.EqualTo(defKeys.Count), $"PG class {number} duplicate BaseAttributeValues");
+        }
+
+        var firstRunAttrIds = verify.CharacterClasses
+            .OrderBy(c => c.Number)
+            .SelectMany(c => c.BaseAttributeValues.OrderBy(a => a.Definition!.Id).ThenBy(a => a.AggregateType).Select(a => (c.Number, a.Definition!.Id, a.AggregateType, a.Value)))
+            .ToList();
+
+        // Idempotent: run v110 a second time, values and persisted attribute rows must not change.
+        using var again = provider.CreateNewContext(verify);
+        again.Attach(verify);
+        await new SoloCombatBalanceSeason6UpdatePlugIn().ApplyUpdateAsync(again, verify).ConfigureAwait(false);
         await again.SaveChangesAsync().ConfigureAwait(false);
         using var verify2 = provider.CreateNewConfigurationContext();
         var verify2Cfg = (await verify2.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single();
         Assert.That(MonsterAttr(verify2Cfg, 3, MaximumHealthId), Is.EqualTo(VHp(3)).Within(1), "second v110 run must be idempotent");
+        var secondRunAttrIds = verify2Cfg.CharacterClasses
+            .OrderBy(c => c.Number)
+            .SelectMany(c => c.BaseAttributeValues.OrderBy(a => a.Definition!.Id).ThenBy(a => a.AggregateType).Select(a => (c.Number, a.Definition!.Id, a.AggregateType, a.Value)))
+            .ToList();
+        Assert.That(secondRunAttrIds, Is.EqualTo(firstRunAttrIds), "second v110 run must preserve character class BaseAttributeValues");
     }
 
     private static JsonDocument LoadMonsterTable()

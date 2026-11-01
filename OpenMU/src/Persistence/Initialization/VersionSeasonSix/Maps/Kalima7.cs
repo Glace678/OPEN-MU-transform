@@ -1,4 +1,4 @@
-﻿// <copyright file="Kalima7.cs" company="MUnique">
+// <copyright file="Kalima7.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -357,16 +357,16 @@ internal class Kalima7 : KalimaBase
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 140 },
-                { Stats.MaximumHealth, 140000 },
-                { Stats.MinimumPhysBaseDmg, 1070 },
-                { Stats.MaximumPhysBaseDmg, 1105 },
-                { Stats.DefenseBase, 892 },
-                { Stats.AttackRatePvm, 1200 },
-                { Stats.DefenseRatePvm, 450 },
-                { Stats.PoisonResistance, 60f / 255 },
-                { Stats.IceResistance, 60f / 255 },
-                { Stats.LightningResistance, 60f / 255 },
-                { Stats.FireResistance, 60f / 255 },
+                { Stats.MaximumHealth, 6842.5f },
+                { Stats.MinimumPhysBaseDmg, 232.4f },
+                { Stats.MaximumPhysBaseDmg, 246.5f },
+                { Stats.DefenseBase, 297.0f },
+                { Stats.AttackRatePvm, 1185.6f },
+                { Stats.DefenseRatePvm, 312.4f },
+                { Stats.PoisonResistance, 42.8f / 255f },
+                { Stats.IceResistance, 45.2f / 255f },
+                { Stats.LightningResistance, 43.6f / 255f },
+                { Stats.FireResistance, 44.8f / 255f },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

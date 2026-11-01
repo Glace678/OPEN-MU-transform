@@ -1,4 +1,4 @@
-﻿// <copyright file="LifeSwellEffectInitializer.cs" company="MUnique">
+// <copyright file="LifeSwellEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -42,7 +42,7 @@ public class LifeSwellEffectInitializer : InitializerBase
         var durationPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         durationPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         durationPerEnergy.InputOperator = InputOperator.Multiply;
-        durationPerEnergy.InputOperand = 1f / 180f; // 180 energy adds 1 second duration
+        durationPerEnergy.InputOperand = 0.00558f;
         magicEffect.Duration.RelatedValues.Add(durationPerEnergy);
 
         var healthPowerUpDefinition = this.Context.CreateNew<PowerUpDefinition>();
@@ -53,19 +53,19 @@ public class LifeSwellEffectInitializer : InitializerBase
         var boostPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         boostPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         boostPerEnergy.InputOperator = InputOperator.Multiply;
-        boostPerEnergy.InputOperand = 1f / 2000;
+        boostPerEnergy.InputOperand = 0.000525f;
 
         // one percent per 100 vitality
         var boostPerVitality = this.Context.CreateNew<AttributeRelationship>();
         boostPerVitality.InputAttribute = Stats.TotalVitality.GetPersistent(this.GameConfiguration);
         boostPerVitality.InputOperator = InputOperator.Multiply;
-        boostPerVitality.InputOperand = 1f / 10000;
+        boostPerVitality.InputOperand = 0.000108f;
 
         // one percent per party member in view
         var boostPerPartyMember = this.Context.CreateNew<AttributeRelationship>();
         boostPerPartyMember.InputAttribute = Stats.NearbyPartyMemberCount.GetPersistent(this.GameConfiguration);
         boostPerPartyMember.InputOperator = InputOperator.Multiply;
-        boostPerPartyMember.InputOperand = 1f / 100;
+        boostPerPartyMember.InputOperand = 0.0105f;
 
         healthPowerUpDefinition.Boost = this.Context.CreateNew<PowerUpDefinitionValue>();
         healthPowerUpDefinition.Boost.ConstantValue.Value = 0.12f;

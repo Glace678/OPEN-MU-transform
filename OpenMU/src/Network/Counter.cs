@@ -1,4 +1,4 @@
-﻿// <copyright file="Counter.cs" company="MUnique">
+// <copyright file="Counter.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -31,8 +31,14 @@ public class Counter
     /// <param name="max">The maximum counter value.</param>
     public Counter(byte min, byte max)
     {
+        if (min > max)
+        {
+            throw new ArgumentException($"Minimum count ({min}) must be less than or equal to maximum count ({max}).", nameof(min));
+        }
+
         this._minCount = min;
         this._maxCount = max;
+        this._counter = min;
     }
 
     /// <summary>
@@ -69,7 +75,7 @@ public class Counter
     {
         lock (this._lockObject)
         {
-            if (this._counter == this._maxCount)
+            if (this._counter >= this._maxCount || this._counter < this._minCount)
             {
                 this._counter = this._minCount;
             }

@@ -121,14 +121,29 @@ public class SkillHitValidator
     }
 
     /// <summary>
-    /// Determines whether a hit request is valid for the specified skill identifier.
+    /// Determines whether a skill hit request is valid with respect to previous animation records and anti-cheat timing invariants.
+    /// 根据历史动画注册记录与反作弊时序契约，判定技能伤害命中请求是否合法。
     /// </summary>
-    /// <param name="skillId">The skill identifier.</param>
-    /// <param name="animationCounter">The animation counter.</param>
-    /// <param name="hitCounter">The hit counter.</param>
+    /// <param name="skillId">The skill identifier being executed / 施展的技能标识符.</param>
+    /// <param name="animationCounter">The animation counter provided by the client / 客户端传入的动画序列计数器.</param>
+    /// <param name="hitCounter">The hit counter provided by the client / 客户端传入的伤害命中计数器.</param>
     /// <returns>
-    ///   <c>true</c> if a hit request is valid for the specified skill identifier; otherwise, <c>false</c>.
+    /// A tuple where:
+    /// - IsValid: <c>true</c> if the hit satisfies all security and synchronization checks; otherwise, <c>false</c>.
+    /// - IncreaseCounter: <c>true</c> if internal sequence counters should advance to stay in sync with the client.
+    /// 返回元组：IsValid 表示该次命中判定是否合法生效；IncreaseCounter 表示是否推进内部期望计数器以保持同步。
     /// </returns>
+    /// <remarks>
+    /// Multi-Hit Anti-Cheat Contract (GL-10 / R2-GL02) / 多段技能反作弊时序契约:
+    /// 1. Client Quirk Compensation: Twister and Multishot omit animation counters in hit packets; falls back to cached indices.
+    ///    协议缺陷补偿：针对客户端在旋风斩 (Twister) 与多重箭 (Multishot) 命中包中丢失动画序号的历史缺陷，采用缓存的最近动画索引补偿。
+    /// 2. Array Boundary Guard: Strict bounds check (<c>MaximumCounterValue</c> = 0x32) prevents untrusted client integers from triggering <see cref="IndexOutOfRangeException"/>.
+    ///    数组越界防护：对客户端上报的计数值实施严格上界裁定，防止恶意构造的数据包引发索引越界异常。
+    /// 3. Animation Precedence: Rejects hits if no matching registered animation exists or if the registered skill ID mismatches.
+    ///    前置动画验证：严禁无前置动画发起的凭空命中，严格比对动画记录与当前命中技能标识符的一致性。
+    /// 4. Time Window Clamp: Enforces <see cref="MaxAnimationToHitDelay"/> (10s) window to block replayed or stale hits.
+    ///    时效窗口校验：命中与前置动画的时间差超过 10 秒即视作非法重放或挂起作弊，拒绝该次伤害。
+    /// </remarks>
     public (bool IsValid, bool IncreaseCounter) IsHitValid(ushort skillId, byte animationCounter, byte hitCounter)
     {
         if (animationCounter == 0 && skillId == TwisterSkillId)
@@ -152,61 +167,57 @@ public class SkillHitValidator
             return (false, false);
         }
 
-        if (this._hits[animationCounter] is { } animationEntry)
+        if (hitCounter > MaximumCounterValue)
         {
-            /*
-            if (this._hits[hitCounter] is { } currentHitEntry && currentHitEntry.TimeStamp >= DateTime.UtcNow.AddSeconds(-1))
-            {
-                // probably speed too high to allow any check
-                this._hits[animationCounter] = animationEntry with
-                {
-                    Skill = skillId,
-                    IsAnimation = true,
-                    HitCount = animationEntry.HitCount + 1,
-                };
-                this._logger.LogDebug($"Hits are too fast, skipping validity check.");
-                this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
-                return (true, true);
-            }
-
-            if (!animationEntry.IsAnimation)
-            {
-                this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because the given animation counter wasn't registered as animation.");
-                return (false, false);
-            }
-
-            var expectedCount = this._counter.Count;
-            if (expectedCount != hitCounter)
-            {
-                this._logger.LogWarning($"Hit count out of sync - hacker? Expected: {this._counter.Count}, Actual: {hitCounter}.");
-                return (false, false);
-            }
-
-            if (animationEntry.Skill != skillId)
-            {
-                this._logger.LogWarning($"Wrong skill in referenced animation - hacker?");
-                return (false, false);
-            }
-
-            var newCount = animationEntry.HitCount + 1;
-
-            this._hits[animationCounter] = animationEntry with { HitCount = newCount };
-            this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
-
-            var timestampDiff = DateTime.UtcNow - animationEntry.TimeStamp;
-            if (timestampDiff > MaxAnimationToHitDelay)
-            {
-                this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because of too high time difference between animation and hit");
-                return (false, true);
-            }
-            */
-            return (true, true);
+            this._logger.LogWarning($"Hit counter out of range: {hitCounter} (max {MaximumCounterValue}).");
+            return (false, false);
         }
-        else
+
+        var animationEntry = this._hits[animationCounter];
+        if (!animationEntry.IsAnimation)
         {
             this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because of missing previous animation.");
             return (false, false);
         }
+
+        if (animationEntry.Skill != skillId)
+        {
+            this._logger.LogWarning($"Wrong skill in referenced animation - hacker? Expected skill: {animationEntry.Skill}, actual: {skillId}.");
+            return (false, false);
+        }
+
+        var expectedCount = this._counter.Count;
+        if (expectedCount != hitCounter)
+        {
+            this._logger.LogWarning($"Hit count out of sync - hacker? Expected: {this._counter.Count}, Actual: {hitCounter}.");
+            return (false, false);
+        }
+
+        var currentHitEntry = this._hits[hitCounter];
+        if (!currentHitEntry.IsAnimation && currentHitEntry.TimeStamp != default && currentHitEntry.TimeStamp >= DateTime.UtcNow.AddSeconds(-1))
+        {
+            // probably speed too high to allow any check
+            this._hits[animationCounter] = animationEntry with
+            {
+                HitCount = animationEntry.HitCount + 1,
+            };
+            this._logger.LogDebug($"Hits are too fast, skipping validity check.");
+            this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
+            return (true, true);
+        }
+
+        var newCount = animationEntry.HitCount + 1;
+        this._hits[animationCounter] = animationEntry with { HitCount = newCount };
+        this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
+
+        var timestampDiff = DateTime.UtcNow - animationEntry.TimeStamp;
+        if (timestampDiff > MaxAnimationToHitDelay)
+        {
+            this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because of too high time difference between animation and hit.");
+            return (false, true);
+        }
+
+        return (true, true);
     }
 
     private record struct HitEntry(ushort Skill, DateTime TimeStamp, bool IsAnimation, int HitCount);

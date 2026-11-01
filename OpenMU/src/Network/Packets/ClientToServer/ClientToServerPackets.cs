@@ -219,7 +219,7 @@ public readonly struct PublicChatMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -314,7 +314,7 @@ public readonly struct WhisperMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -7812,7 +7812,7 @@ public readonly struct WalkRequest
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -7928,7 +7928,7 @@ public readonly struct WalkRequest075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -8928,7 +8928,7 @@ public readonly struct SaveKeyConfiguration
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -9674,7 +9674,7 @@ public readonly struct AreaSkillHit
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -9946,7 +9946,7 @@ public readonly struct AreaSkillHit075
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -10200,7 +10200,7 @@ public readonly struct AreaSkillHit095
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -11068,7 +11068,7 @@ public readonly struct LetterSendRequest
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -11287,7 +11287,7 @@ public readonly struct GuildKickPlayerRequest
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -16583,7 +16583,7 @@ public readonly struct ServerImmigrationRequest
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 

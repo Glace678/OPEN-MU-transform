@@ -1,7 +1,17 @@
 # -*- coding: utf-8 -*-
-import os as _os, sys as _sys
+"""Streamingly calculates SHA256 hashes and syncs server manifest entries.
+
+Avoids loading large binary executables into memory by streaming in 1MB chunks.
+Ensures manifest updates are atomic by validating all target binaries before writing.
+"""
+
+import hashlib
+import json
+import os
+import shutil
+import sys
+
 import config
-import json, hashlib, os, shutil, sys
 
 try:
     MANIFEST = os.path.join(config.PUBLISH, 'Server', 'manifest.json')  # not used; patch the live one
@@ -9,6 +19,7 @@ try:
     ROOT = config.SERVER()
 except FileNotFoundError as exc:
     sys.exit(str(exc))
+
 TARGETS = ['App/Game/Main.exe', 'App/Game/MUnique.Client.Library.dll']
 _CHUNK = 1024 * 1024
 

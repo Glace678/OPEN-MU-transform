@@ -218,9 +218,12 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
         -->
         <xsl:with-param name="HeaderType" select="number(substring(pd:HeaderType,2,1))"/>
       </xsl:call-template>
+        <xsl:variable name="HeaderTypeNumber" select="number(substring(pd:HeaderType,2,1))"/>
+        <xsl:variable name="isByteHeader" select="$HeaderTypeNumber mod 2 = 1" />
         <xsl:choose>
           <xsl:when test="pd:Length">Math.Min(data.Length, Length);</xsl:when>
-          <xsl:otherwise>data.Length;</xsl:otherwise>
+          <xsl:when test="$isByteHeader">Math.Min(data.Length, (int)byte.MaxValue);</xsl:when>
+          <xsl:otherwise>Math.Min(data.Length, (int)ushort.MaxValue);</xsl:otherwise>
         </xsl:choose>
         <xsl:if test="pd:SubCode">
           <xsl:text>

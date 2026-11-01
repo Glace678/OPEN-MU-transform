@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="LifeJewelConsumeHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -22,7 +22,7 @@ public class LifeJewelConsumeHandlerPlugIn : ItemUpgradeConsumeHandlerPlugIn
     /// Initializes a new instance of the <see cref="LifeJewelConsumeHandlerPlugIn" /> class.
     /// </summary>
     public LifeJewelConsumeHandlerPlugIn()
-        : base(new ItemUpgradeConfiguration(ItemOptionTypes.Option, true, true, 0.5, ItemFailResult.RemoveOption))
+        : base(new ItemUpgradeConfiguration(ItemOptionTypes.Option, true, true, 0.585, ItemFailResult.RemoveOption))
     {
     }
 

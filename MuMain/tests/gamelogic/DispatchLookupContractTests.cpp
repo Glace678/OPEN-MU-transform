@@ -96,6 +96,30 @@ TEST_SUITE("DispatchLookupContract")
         CHECK(PacketDispatchPolicy::PassesDispatchGate(true, 0xF3, 4));
     }
 
+    TEST_CASE("dispatch gate: subcode expected min sizes protect against truncation")
+    {
+        // 0xF1 subcode 0x00 (JoinServer) requires 12 bytes for C1
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0xF1, 0x00) == 12);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF1, 0x00, 4));
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF1, 0x00, 11));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF1, 0x00, 12));
+
+        // 0xF3 subcode 0x00 (CharacterList) requires 8 bytes for C1
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0xF3, 0x00) == 8);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x00, 7));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x00, 8));
+
+        // 0xF3 subcode 0x03 (JoinMapServer) requires 13 bytes for C1
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0xF3, 0x03) == 13);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x03, 12));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x03, 13));
+
+        // Attack (0x11) requires 7 bytes for C1
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0x11) == 7);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 6));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 7));
+    }
+
     TEST_CASE("lookup contract: miss returns false and out=-1, never out of range")
     {
         // Roster of 8 slots; only slot 5 is live with key=100 / monster=216.

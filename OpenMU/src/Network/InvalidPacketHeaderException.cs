@@ -1,4 +1,4 @@
-﻿// <copyright file="InvalidPacketHeaderException.cs" company="MUnique">
+// <copyright file="InvalidPacketHeaderException.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -23,12 +23,6 @@ public class InvalidPacketHeaderException : Exception
     /// </summary>
     private string? _message;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="InvalidPacketHeaderException"/> class.
-    /// </summary>
-    /// <param name="header">The header which is invalid.</param>
-    /// <param name="bufferContent">Content of the buffer when the header was read. With this information you can e.g. find out if a previous packet was malformed.</param>
-    /// <param name="position">The position of the <paramref name="header"/> in the <paramref name="bufferContent"/>.</param>
     /// <summary>
     /// Maximum number of leading buffer bytes retained in the exception/log. The
     /// receive pipe can hold a large backlog; copying and logging the whole buffer

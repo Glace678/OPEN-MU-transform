@@ -79,7 +79,7 @@ public class PacketDefinitions
     {
         var fileInfo = new FileInfo(filePath);
         var settings = new XmlWriterSettings { Indent = true };
-        using var fileStream = fileInfo.OpenWrite();
+        using var fileStream = fileInfo.Open(FileMode.Create, FileAccess.Write, FileShare.None);
         using var xmlWriter = XmlWriter.Create(fileStream, settings);
         var serializer = new XmlSerializer(typeof(PacketDefinitions));
         serializer.Serialize(xmlWriter, this);

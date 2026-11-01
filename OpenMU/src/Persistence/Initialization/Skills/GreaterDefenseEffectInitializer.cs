@@ -1,4 +1,4 @@
-﻿// <copyright file="GreaterDefenseEffectInitializer.cs" company="MUnique">
+// <copyright file="GreaterDefenseEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -48,7 +48,7 @@ public class GreaterDefenseEffectInitializer : InitializerBase
         var boostPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         boostPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         boostPerEnergy.InputOperator = InputOperator.Multiply;
-        boostPerEnergy.InputOperand = 1f / 8f; // one defense per 8 energy
+        boostPerEnergy.InputOperand = 0.1265f;
         powerUpDefinition.Boost.RelatedValues.Add(boostPerEnergy);
 
         // Placeholder for DefenseIncreaseStr and DefenseIncreaseMastery master skills

@@ -81,7 +81,8 @@ public class PublicIpResolver : IIpAddressResolver
             return address;
         }
 
-        this._logger.LogDebug("Request of public ip answered with unknown format: {response}", response);
-        throw new FormatException($"Request of public ip answered with unknown format: {response}");
+        var safeResponse = response.Length > 256 ? response[..256] + "..." : response;
+        this._logger.LogDebug("Request of public ip answered with unknown format: {response}", safeResponse);
+        throw new FormatException($"Request of public ip answered with unknown format: {safeResponse}");
     }
 }

@@ -31,9 +31,17 @@ try {
             throw 'Read-only engine catalog probe failed. No live configuration was changed.'
         }
     }
-    & $dotnet.Source run --project src\BalanceLab -- report design\balance.v1.json artifacts
+    if (Test-Path -LiteralPath 'artifacts\engine-catalog.json' -PathType Leaf) {
+        New-Item -ItemType Directory -Path 'artifacts\l7-balancelab' -Force | Out-Null
+        Copy-Item -LiteralPath 'artifacts\engine-catalog.json' -Destination 'artifacts\l7-balancelab\engine-catalog.json' -Force
+    }
+    & $dotnet.Source run --project src\BalanceLab -- report design\balance.v1.json artifacts\l7-balancelab
     if ($LASTEXITCODE -ne 0) {
-        throw 'Candidate balance checks failed. Inspect artifacts\verification.json and the report.'
+        throw 'Candidate balance v1 checks failed. Inspect artifacts\l7-balancelab\verification.json and the report.'
+    }
+    & $dotnet.Source run --project src\BalanceLab -- report design\balance.v2.json artifacts
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Candidate balance v2 checks failed. Inspect artifacts\verification.json and the report.'
     }
     $sourceChecks = foreach ($relative in $before.Keys) {
         $after = (Get-FileHash -LiteralPath (Join-Path $engineRoot $relative) -Algorithm SHA256).Hash
@@ -43,7 +51,8 @@ try {
         Kind = 'isolated-candidate-verification'
         CompletedUtc = [DateTime]::UtcNow.ToString('O')
         DotnetVersion = (& $dotnet.Source --version)
-        DesignSha256 = (Get-FileHash -LiteralPath 'design\balance.v1.json' -Algorithm SHA256).Hash
+        DesignSha256 = (Get-FileHash -LiteralPath 'design\balance.v2.json' -Algorithm SHA256).Hash
+        DesignV1Sha256 = (Get-FileHash -LiteralPath 'design\balance.v1.json' -Algorithm SHA256).Hash
         ContentPoliciesSha256 = (Get-FileHash -LiteralPath 'design\content-policies.v1.json' -Algorithm SHA256).Hash
         LiveProfileInstalled = $false
         DatabaseOpened = $false

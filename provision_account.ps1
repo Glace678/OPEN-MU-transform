@@ -1,10 +1,16 @@
-# Provisions the local solo game account exactly like SoloAccountInitializer.EnsureAsync:
-# BCrypt hash, State=Normal(0), LanguageIsoCode='zh', empty security/email/vault fields.
-# Writes a parameter-free SQL file that psql can execute. ASCII-only on purpose.
-#
-# The login name/password are DERIVED from the DPAPI-protected local-secrets file
-# (same algorithm as LocalGameLogin.FromSecrets) so that this script, the server,
-# and start_client.ps1 can never drift apart. No credentials are hardcoded here.
+<#
+.SYNOPSIS
+    Provisions the local solo game account in PostgreSQL.
+.DESCRIPTION
+    Generates a parameter-free SQL script using BCrypt hashing matching SoloAccountInitializer.
+    Credentials are derived from DPAPI-protected local secrets via HMAC-SHA256 to prevent drifting.
+.OUTPUTS
+    SQL_WRITTEN=[Path to generated SQL file]
+    ID=[Generated Account GUID]
+#>
+[CmdletBinding()]
+param()
+
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'local-credentials.ps1')
 

@@ -620,7 +620,15 @@ public class DefaultDropGenerator : IDropGenerator
         var item = this.GenerateSpecialItem(monster, selectedGroup);
         if (item is null && selectedGroup.ItemType == SpecialItemType.Money)
         {
-            droppedMoney = (uint)(gainedExperience + BaseMoneyDrop);
+            if (this._balanceV1Enabled)
+            {
+                var rank = (double)monster[Stats.Level];
+                droppedMoney = (uint)Math.Max(1, Math.Round(8.0 + (1.6 * rank) + (0.006 * rank * rank)));
+            }
+            else
+            {
+                droppedMoney = (uint)(gainedExperience + BaseMoneyDrop);
+            }
         }
 
         return item;
@@ -628,7 +636,7 @@ public class DefaultDropGenerator : IDropGenerator
 
     private Item? GenerateItemFromGroup(MonsterDefinition monster, DropItemGroup selectedGroup)
     {
-        var isDropSpecificForMonster = monster.DropItemGroups.Contains(selectedGroup);
+        var isDropSpecificForMonster = monster.DropItemGroups != null && monster.DropItemGroups.Contains(selectedGroup);
         if (isDropSpecificForMonster)
         {
             return this.GenerateItemDrop(selectedGroup, selectedGroup.PossibleItems!);

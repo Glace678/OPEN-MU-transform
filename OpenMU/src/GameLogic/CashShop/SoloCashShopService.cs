@@ -232,24 +232,35 @@ public sealed class SoloCashShopService
 
         // Avoid publishing a new gold balance before the transaction is committed.
         player.SelectedCharacter!.Inventory!.Money -= goldCost;
+        bool saved;
         try
         {
-            if (await player.SaveProgressAsync().ConfigureAwait(false))
-            {
-                // The deduction wrote Inventory.Money directly (it bypasses Player.Money setter,
-                // which is what publishes the balance), so refresh the client view explicitly.
-                if (goldCost > 0)
-                {
-                    await player.InvokeViewPlugInAsync<MUnique.OpenMU.GameLogic.Views.Inventory.IUpdateMoneyPlugIn>(
-                        p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-                }
-
-                return SoloCashShopResult.Success;
-            }
+            saved = await player.SaveProgressAsync().ConfigureAwait(false);
         }
         catch (Exception exception)
         {
             player.Logger.LogError(exception, "Solo shop transaction could not be saved.");
+            saved = false;
+        }
+
+        if (saved)
+        {
+            // The deduction wrote Inventory.Money directly (it bypasses Player.Money setter,
+            // which is what publishes the balance), so refresh the client view explicitly.
+            if (goldCost > 0)
+            {
+                try
+                {
+                    await player.InvokeViewPlugInAsync<MUnique.OpenMU.GameLogic.Views.Inventory.IUpdateMoneyPlugIn>(
+                        p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    player.Logger.LogWarning(exception, "Failed to send money update to client after successful solo cash shop transaction.");
+                }
+            }
+
+            return SoloCashShopResult.Success;
         }
 
         player.Account.SoloCashShopData = previousData;

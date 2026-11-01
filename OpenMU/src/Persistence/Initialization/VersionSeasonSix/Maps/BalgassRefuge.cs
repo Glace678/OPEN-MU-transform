@@ -1,4 +1,4 @@
-﻿// <copyright file="BalgassRefuge.cs" company="MUnique">
+// <copyright file="BalgassRefuge.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -74,16 +74,16 @@ internal class BalgassRefuge : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 128 },
-                { Stats.MaximumHealth, 1500000 },
-                { Stats.MinimumPhysBaseDmg, 800 },
-                { Stats.MaximumPhysBaseDmg, 900 },
-                { Stats.DefenseBase, 900 },
-                { Stats.AttackRatePvm, 1500 },
-                { Stats.DefenseRatePvm, 400 },
-                { Stats.PoisonResistance, 254f / 255 },
-                { Stats.IceResistance, 23f / 255 },
-                { Stats.LightningResistance, 23f / 255 },
-                { Stats.FireResistance, 23f / 255 },
+                { Stats.MaximumHealth, 5184.6f },
+                { Stats.MinimumPhysBaseDmg, 184.2f },
+                { Stats.MaximumPhysBaseDmg, 198.8f },
+                { Stats.DefenseBase, 240.0f },
+                { Stats.AttackRatePvm, 1124.5f },
+                { Stats.DefenseRatePvm, 264.8f },
+                { Stats.PoisonResistance, 252.4f / 255f },
+                { Stats.IceResistance, 24.6f / 255f },
+                { Stats.LightningResistance, 24.6f / 255f },
+                { Stats.FireResistance, 24.6f / 255f },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

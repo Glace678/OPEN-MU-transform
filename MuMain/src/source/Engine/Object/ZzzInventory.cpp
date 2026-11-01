@@ -2930,8 +2930,8 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
 
     if (ip->Type == ITEM_WEAPON_OF_ARCHANGEL)
     {
-        int iMana        = 0;
-        int iWeaponSpeed = 0;
+        int iMana         = 0;
+        int iWeaponSpeed  = 0;
         int iNeedStrength = 0;
         int iNeedDex      = 0;
 

@@ -43,6 +43,7 @@
 #include "Network/Server/SoloCashShopPackets.h"
 #include "Network/Server/MerchantPricePackets.h"
 #include "Network/Server/ItemWireLayout.h"
+#include "Network/Server/PacketDispatchPolicy.h"
 #include "Data/GameConfig/GameConfig.h"
 #include "GameLogic/NPCs/npcGateSwitch.h"
 #include "GameLogic/Items/CComGem.h"
@@ -10035,8 +10036,9 @@ void ReceiveLetterText(std::span<const BYTE> ReceiveBuffer, bool isCached)
     if (!isCached)
     {
         // Cache it if you can :)
-        auto CopiedData = new FS_LETTER_TEXT();
-        memcpy(CopiedData, ReceiveBuffer.data(), ReceiveBuffer.size());
+        auto         CopiedData = new FS_LETTER_TEXT();
+        const size_t copySize   = std::min(ReceiveBuffer.size(), sizeof(FS_LETTER_TEXT));
+        memcpy(CopiedData, ReceiveBuffer.data(), copySize);
         g_pLetterList->CacheLetterText(Data->Index, CopiedData);
     }
 
@@ -13469,7 +13471,7 @@ void ReceiveDarkside(const BYTE* ReceiveBuffer)
 
 static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
 {
-    constexpr int MinimumC1PacketSize = 4;
+    constexpr int MinimumC1PacketSize = 3;
     constexpr int MinimumC2PacketSize = 4;
     if (ReceiveBuffer == nullptr || Size < MinimumC1PacketSize)
     {
@@ -13494,6 +13496,30 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
         }
 
         HeadCode = ReceiveBuffer[3];
+    }
+
+    // Gate check: ensure framing and HeadCode satisfy minimum dispatch bytes
+    if (!PacketDispatchPolicy::PassesDispatchGate(bIsC1C3, HeadCode, Size))
+    {
+        g_ErrorReport.Write(L"Rejected packet with HeadCode 0x%02X: size %d is less than required %d header bytes.\r\n",
+                            HeadCode, Size, PacketDispatchPolicy::MinimumDispatchBytes(bIsC1C3, HeadCode));
+        return;
+    }
+
+    // Gate check: validate declared size against expected minimum structure size for opcode/subcode
+    BYTE SubCode = 0;
+    if (PacketDispatchPolicy::IsMultiplexedHeadCode(HeadCode))
+    {
+        SubCode = bIsC1C3 ? ReceiveBuffer[3] : ReceiveBuffer[4];
+    }
+
+    const int expectedMinSize = PacketDispatchPolicy::ExpectedPacketMinSize(bIsC1C3, HeadCode, SubCode);
+    if (Size < expectedMinSize)
+    {
+        g_ErrorReport.Write(
+            L"Rejected truncated packet [HeadCode 0x%02X, SubCode 0x%02X]: size %d is less than expected minimum structure size %d.\r\n",
+            HeadCode, SubCode, Size, expectedMinSize);
+        return;
     }
     switch (HeadCode)
     {

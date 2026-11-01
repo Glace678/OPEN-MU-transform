@@ -1,4 +1,4 @@
-﻿// <copyright file="AsyncDisposable.cs" company="MUnique">
+// <copyright file="AsyncDisposable.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -33,6 +33,7 @@ public class AsyncDisposable : Disposable, IAsyncDisposable
             {
                 await this.DisposeAsyncCore().ConfigureAwait(false);
                 this.Dispose(true);
+                this.IsDisposed = true;
                 GC.SuppressFinalize(this);
             }
             finally

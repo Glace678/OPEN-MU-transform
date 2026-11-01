@@ -26,6 +26,34 @@ public static class BalanceV1NormalMonsterBudget
 
     private static readonly HashSet<short> BossNumbers = [38, 49, 77, 275, 412, 459];
 
+    private static readonly Dictionary<short, double> BossRanks = new()
+    {
+        { 38, 150.0 },
+        { 49, 190.0 },
+        { 77, 265.0 },
+        { 275, 400.0 },
+        { 412, 350.0 },
+        { 459, 450.0 },
+    };
+
+    /// <summary>Computes the health cap for boss monsters to prevent legacy hyper-inflation.</summary>
+    public static double GetBossHealthCap(short monsterNumber, double rank)
+    {
+        return monsterNumber switch
+        {
+            38 => 3200.0,
+            49 => 4200.0,
+            77 => 6100.0,
+            275 => 6900.0,
+            412 => 5200.0,
+            459 => 8500.0,
+            _ => 8500.0,
+        };
+    }
+
+    /// <summary>Computes the physical maximum attack cap for boss monsters.</summary>
+    public static double GetBossPhysicalMaximumCap(double rank) => 60.0 + (0.50 * rank);
+
     /// <summary>Computes the conservative common-gear HP cap for a fixed ordinary content rank.</summary>
     /// <param name="rank">The fixed normal-route content rank.</param>
     public static int GetHealthCap(double rank)
@@ -53,14 +81,45 @@ public static class BalanceV1NormalMonsterBudget
         if (configuration is null || !BalanceV1.IsEnabled(configuration)
             || eventSpawn || monster.Definition.ObjectKind != NpcObjectKind.Monster
             || monster.SpawnArea.SpawnTrigger != SpawnTrigger.Automatic
-            || monster.SpawnArea.MaximumHealthOverride.HasValue
-            || BossNumbers.Contains(monster.Definition.Number)
-            || monster.CurrentMap.Definition is not PersistentIdentity mapIdentity
+            || monster.SpawnArea.MaximumHealthOverride.HasValue)
+        {
+            return;
+        }
+
+        if (BossNumbers.Contains(monster.Definition.Number))
+        {
+            var rank = BossRanks.TryGetValue(monster.Definition.Number, out var bRank) ? bRank : monster.Definition[Stats.Level];
+            var originalHealth = monster.Attributes[Stats.MaximumHealth];
+            if (originalHealth > 0 && float.IsFinite(originalHealth))
+            {
+                var ratio = Math.Min(1, GetBossHealthCap(monster.Definition.Number, rank) / originalHealth);
+                if (ratio < 1)
+                {
+                    monster.Attributes.AddElement(new SimpleElement((float)ratio, AggregateType.Multiplicate), Stats.MaximumHealth);
+                }
+            }
+
+            var originalMaximum = monster.Attributes[Stats.MaximumPhysBaseDmg];
+            if (originalMaximum > 0 && float.IsFinite(originalMaximum))
+            {
+                var ratio = Math.Min(1, GetBossPhysicalMaximumCap(rank) / originalMaximum);
+                if (ratio < 1)
+                {
+                    var element = new SimpleElement((float)ratio, AggregateType.Multiplicate);
+                    monster.Attributes.AddElement(element, Stats.MinimumPhysBaseDmg);
+                    monster.Attributes.AddElement(element, Stats.MaximumPhysBaseDmg);
+                }
+            }
+
+            return;
+        }
+
+        if (monster.CurrentMap.Definition is not PersistentIdentity mapIdentity
             || !BalanceV1ContentRank.TryGetRank(
                 mapIdentity.Id,
                 monster.Definition.Number,
                 BalanceV1ContentRank.NormalDifficulty,
-                out var rank))
+                out var normalRank))
         {
             return;
         }
@@ -73,31 +132,31 @@ public static class BalanceV1NormalMonsterBudget
         // The high-rank route of a monster that is shared across several routes starts from its low-rank home
         // definition; scale it up to its fixed rank combat budget. Single-route monsters already carry their own
         // authored stats, so they are left untouched.
-        if (IsHighestRankSharedRoute(monster.Definition.Number, rank))
+        if (IsHighestRankSharedRoute(monster.Definition.Number, normalRank))
         {
-            ApplySharedInstanceScaleUp(monster, rank);
+            ApplySharedInstanceScaleUp(monster, normalRank);
         }
 
         // The cap-down below only reins in mid/end-route originals that already exceed their rank budget.
-        if (rank < FirstAdjustedRank)
+        if (normalRank < FirstAdjustedRank)
         {
             return;
         }
 
-        var originalHealth = monster.Attributes[Stats.MaximumHealth];
-        if (originalHealth > 0 && float.IsFinite(originalHealth))
+        var mobOriginalHealth = monster.Attributes[Stats.MaximumHealth];
+        if (mobOriginalHealth > 0 && float.IsFinite(mobOriginalHealth))
         {
-            var ratio = Math.Min(1, GetHealthCap(rank) / originalHealth);
+            var ratio = Math.Min(1, GetHealthCap(normalRank) / mobOriginalHealth);
             if (ratio < 1)
             {
                 monster.Attributes.AddElement(new SimpleElement((float)ratio, AggregateType.Multiplicate), Stats.MaximumHealth);
             }
         }
 
-        var originalMaximum = monster.Attributes[Stats.MaximumPhysBaseDmg];
-        if (originalMaximum > 0 && float.IsFinite(originalMaximum))
+        var mobOriginalMaximum = monster.Attributes[Stats.MaximumPhysBaseDmg];
+        if (mobOriginalMaximum > 0 && float.IsFinite(mobOriginalMaximum))
         {
-            var ratio = Math.Min(1, GetPhysicalMaximumCap(rank) / originalMaximum);
+            var ratio = Math.Min(1, GetPhysicalMaximumCap(normalRank) / mobOriginalMaximum);
             if (ratio < 1)
             {
                 var element = new SimpleElement((float)ratio, AggregateType.Multiplicate);

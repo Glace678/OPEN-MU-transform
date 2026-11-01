@@ -1,4 +1,4 @@
-﻿// <copyright file="MasterSkillExtensions.cs" company="MUnique">
+// <copyright file="MasterSkillExtensions.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -14,7 +14,7 @@ public static class MasterSkillExtensions
 {
     private const string FormulaManaRateIncrease = "(2 + (((((((level - 30) ^ 3) + 25000) / 499) / 6)))) * 1.5";
 
-    private static readonly ConcurrentDictionary<string, float[]> ValueResultCache = new();
+    private static readonly ConcurrentDictionary<(string Formula, int MaximumLevel), float[]> ValueResultCache = new();
 
     /// <summary>
     /// Calculates the effective value of the specified skill, depending on its formula and level.
@@ -106,7 +106,7 @@ public static class MasterSkillExtensions
             return 0f;
         }
 
-        if (!ValueResultCache.TryGetValue(formula, out var results))
+        if (!ValueResultCache.TryGetValue((formula, maximumLevel), out var results))
         {
             results = new float[maximumLevel];
 
@@ -119,7 +119,7 @@ public static class MasterSkillExtensions
                 results[i] = (float)expression.calculate();
             }
 
-            ValueResultCache.TryAdd(formula, results);
+            ValueResultCache.TryAdd((formula, maximumLevel), results);
         }
 
         return results[level - 1];

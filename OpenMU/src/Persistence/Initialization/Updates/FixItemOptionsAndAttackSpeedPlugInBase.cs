@@ -1,4 +1,4 @@
-﻿// <copyright file="FixItemOptionsAndAttackSpeedPlugInBase.cs" company="MUnique">
+// <copyright file="FixItemOptionsAndAttackSpeedPlugInBase.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -223,7 +223,7 @@ public abstract class FixItemOptionsAndAttackSpeedPlugInBase : UpdatePlugInBase
         var excCurseAttackOpts = gameConfiguration.ItemOptions.FirstOrDefault(io => io.GetId() == new Guid("00000083-0015-0000-0000-000000000000"));
         var attackSpeedAny = Stats.AttackSpeedAny.GetPersistent(gameConfiguration);
         var physicalBaseDmg = Stats.PhysicalBaseDmg.GetPersistent(gameConfiguration);
-        var wizardryBaseDmg = Stats.PhysicalBaseDmg.GetPersistent(gameConfiguration);
+        var wizardryBaseDmg = Stats.WizardryBaseDmg.GetPersistent(gameConfiguration);
 
         if (excPhysAttackOpts?.PossibleOptions.FirstOrDefault(opt => opt.PowerUpDefinition?.TargetAttribute == Stats.AttackSpeed) is { } physOptAttackSpeed)
         {

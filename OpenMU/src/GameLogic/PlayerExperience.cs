@@ -240,8 +240,7 @@ internal sealed class PlayerExperience
             }
 
             player.Attributes[Stats.Level]++;
-            player.SelectedCharacter.LevelUpPoints += (int)player.Attributes[Stats.PointsPerLevelUp]
-                + SoloBalance.GetLevelUpPointBonus(player.GameContext.Configuration);
+            player.SelectedCharacter.LevelUpPoints += (int)player.Attributes[Stats.PointsPerLevelUp];
             player.SetReclaimableAttributesToMaximum();
             player.Logger.LogDebug("Character {0} leveled up to {1}", player.SelectedCharacter.Name, player.Attributes[Stats.Level]);
 

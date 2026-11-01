@@ -1,4 +1,4 @@
-﻿// <copyright file="DictionaryAdapter.cs" company="MUnique">
+// <copyright file="DictionaryAdapter.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -53,7 +53,17 @@ public class DictionaryAdapter<TKey, TClass, TPersistent> : IDictionary<TKey, TC
             throw new KeyNotFoundException($"No value found for key {key}.");
         }
 
-        set => this.Add(key, value);
+        set
+        {
+            if (value is TPersistent persistentValue)
+            {
+                this._innerDictionary[key] = persistentValue;
+            }
+            else
+            {
+                throw new ArgumentException($"{nameof(value)} is not of type {typeof(TPersistent)}");
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -99,7 +109,9 @@ public class DictionaryAdapter<TKey, TClass, TPersistent> : IDictionary<TKey, TC
     /// <inheritdoc/>
     public bool Contains(KeyValuePair<TKey, TClass> item)
     {
-        return this.ContainsKey(item.Key);
+        return item.Value is TPersistent persistentValue
+            && this._innerDictionary.TryGetValue(item.Key, out var actualValue)
+            && EqualityComparer<TPersistent>.Default.Equals(actualValue, persistentValue);
     }
 
     /// <inheritdoc/>
@@ -112,7 +124,14 @@ public class DictionaryAdapter<TKey, TClass, TPersistent> : IDictionary<TKey, TC
     /// <inheritdoc/>
     public bool Remove(KeyValuePair<TKey, TClass> item)
     {
-        return this.Remove(item.Key);
+        if (item.Value is TPersistent persistentValue
+            && this._innerDictionary.TryGetValue(item.Key, out var actualValue)
+            && EqualityComparer<TPersistent>.Default.Equals(actualValue, persistentValue))
+        {
+            return this._innerDictionary.Remove(item.Key);
+        }
+
+        return false;
     }
 
     /// <inheritdoc/>

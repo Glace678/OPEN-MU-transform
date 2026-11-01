@@ -18,6 +18,15 @@ public class SimpleModulusKeys
     /// <param name="decryptKey">The decrypt key.</param>
     public SimpleModulusKeys(uint[] modulusKey, uint[] xorKey, uint[] encryptKey, uint[] decryptKey)
     {
+        ArgumentNullException.ThrowIfNull(modulusKey);
+        ArgumentNullException.ThrowIfNull(xorKey);
+        ArgumentNullException.ThrowIfNull(encryptKey);
+        ArgumentNullException.ThrowIfNull(decryptKey);
+        if (modulusKey.Length < 4 || xorKey.Length < 4 || encryptKey.Length < 4 || decryptKey.Length < 4)
+        {
+            throw new ArgumentException("All keys must have a length of at least 4 integers.");
+        }
+
         this.ModulusKey = modulusKey;
         this.XorKey = xorKey;
         this.EncryptKey = encryptKey;
@@ -58,6 +67,12 @@ public class SimpleModulusKeys
     /// <returns>An instance of <see cref="SimpleModulusKeys"/> with the crypt key as <see cref="DecryptKey"/>.</returns>
     public static SimpleModulusKeys CreateDecryptionKeys(uint[] decryptionKey)
     {
+        ArgumentNullException.ThrowIfNull(decryptionKey);
+        if (decryptionKey.Length < 12)
+        {
+            throw new ArgumentException("Decryption key must contain at least 12 integers.", nameof(decryptionKey));
+        }
+
         var keys = new SimpleModulusKeys();
         keys.ModulusKey[0] = decryptionKey[0];
         keys.ModulusKey[1] = decryptionKey[1];
@@ -81,6 +96,12 @@ public class SimpleModulusKeys
     /// <returns>An instance of <see cref="SimpleModulusKeys"/> with the crypt key as <see cref="EncryptKey"/>.</returns>
     public static SimpleModulusKeys CreateEncryptionKeys(uint[] encryptionKey)
     {
+        ArgumentNullException.ThrowIfNull(encryptionKey);
+        if (encryptionKey.Length < 12)
+        {
+            throw new ArgumentException("Encryption key must contain at least 12 integers.", nameof(encryptionKey));
+        }
+
         var keys = new SimpleModulusKeys();
         keys.ModulusKey[0] = encryptionKey[0];
         keys.ModulusKey[1] = encryptionKey[1];

@@ -1,4 +1,4 @@
-﻿// <copyright file="MoneyDropped.cs" company="MUnique">
+// <copyright file="MoneyDropped.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -17,14 +17,14 @@ public readonly partial struct MoneyDropped
         get
         {
             var data = this._data.Span;
-            return (uint)(data[10] << 16 | data[11] << 8 | data[13]);
+            return (uint)(data[10] << 16 | data[11] << 8 | data[12]);
         }
         set
         {
             var data = this._data.Span;
             data[10] = (byte)(value >> 16 & 0xFF);
             data[11] = (byte)(value >> 8 & 0xFF);
-            data[13] = (byte)(value & 0xFF);
+            data[12] = (byte)(value & 0xFF);
         }
     }
 }
@@ -64,12 +64,12 @@ public readonly ref partial struct MoneyDroppedRef
     /// </summary>
     public uint Amount
     {
-        get => (uint)(this._data[10] << 16 | this._data[11] << 8 | this._data[13]);
+        get => (uint)(this._data[10] << 16 | this._data[11] << 8 | this._data[12]);
         set
         {
             this._data[10] = (byte)(value >> 16 & 0xFF);
             this._data[11] = (byte)(value >> 8 & 0xFF);
-            this._data[13] = (byte)(value & 0xFF);
+            this._data[12] = (byte)(value & 0xFF);
         }
     }
 }

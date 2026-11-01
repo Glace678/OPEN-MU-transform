@@ -18,12 +18,6 @@
           "Microsoft.AspNetCore.Components.Web": "3.1.0-preview3.19555.2"
         }
       },
-      "BuildWebCompiler2022": {
-        "type": "Direct",
-        "requested": "[1.14.15, )",
-        "resolved": "1.14.15",
-        "contentHash": "/bfbMI6LBrLX5kn0sOVqscfe2kbsS0nUtIsKUUJg/puL4ey9J0y4DdGA+YaCAsu4Vi5tyNM8wWjlSOgjywxpzg=="
-      },
       "Mapster": {
         "type": "Direct",
         "requested": "[7.4.0, )",

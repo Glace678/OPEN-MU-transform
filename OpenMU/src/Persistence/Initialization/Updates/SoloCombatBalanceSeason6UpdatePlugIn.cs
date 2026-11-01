@@ -37,13 +37,21 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
     private static readonly Guid AttackRatePvmId = new("1129442A-E1C7-4240-8866-B781C2838C25");
     private static readonly Guid DefenseRatePvmId = new("C520DD2D-1B06-4392-95EE-3C41F33E68DA");
 
-    // Unlock classes that only receive base constants (their existing relationships are left unchanged per B2).
-    private static readonly IReadOnlyDictionary<string, short> UnlockClassNumbers = new Dictionary<string, short>
+    // Starter lineages and unlock lineages across all promoted/master stages.
+    private static readonly IReadOnlyDictionary<short, short[]> StarterLineageNumbers = new Dictionary<short, short[]>
     {
-        ["Magic Gladiator"] = 12,
-        ["Dark Lord"] = 16,
-        ["Summoner"] = 20,
-        ["Rage Fighter"] = 24,
+        [4] = [4, 6, 7],
+        [0] = [0, 2, 3],
+        [8] = [8, 10, 11],
+    };
+
+    // Unlock classes that only receive base constants (their existing relationships are left unchanged per B2).
+    private static readonly IReadOnlyDictionary<string, short[]> UnlockClassNumbers = new Dictionary<string, short[]>
+    {
+        ["Magic Gladiator"] = [12, 13],
+        ["Dark Lord"] = [16, 17],
+        ["Summoner"] = [20, 22, 23],
+        ["Rage Fighter"] = [24, 25],
     };
 
     private static readonly IReadOnlyDictionary<string, AttributeDefinition> StatByName = new Dictionary<string, AttributeDefinition>
@@ -75,13 +83,12 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
     public override DateTime CreatedAt => new(2026, 10, 10, 0, 0, 0, DateTimeKind.Utc);
 
     /// <inheritdoc />
-    protected override ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
+    protected override async ValueTask ApplyAsync(IContext context, GameConfiguration gameConfiguration)
     {
         var soloEnabled = SoloBalance.IsEnabled(gameConfiguration);
         this.ReplayMonsterTargets(gameConfiguration, soloEnabled);
-        this.ReplayClassConstants(context, gameConfiguration);
+        await this.ReplayClassConstantsAsync(context, gameConfiguration).ConfigureAwait(false);
         this.AlignCharacterDamageRelationships(context, gameConfiguration);
-        return ValueTask.CompletedTask;
     }
 
     private static JsonDocument LoadEmbeddedJson(string fileName)
@@ -104,13 +111,21 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
         }
     }
 
-    private static void SetBaseValue(IContext context, GameConfiguration gameConfiguration, CharacterClass characterClass, AttributeDefinition stat, float value)
+    private static async ValueTask SetBaseValueAsync(IContext context, GameConfiguration gameConfiguration, CharacterClass characterClass, AttributeDefinition stat, float value)
     {
         var definition = stat.GetPersistent(gameConfiguration) ?? stat;
-        var existing = characterClass.BaseAttributeValues.FirstOrDefault(attr => attr.Definition == definition);
-        if (existing is not null)
+        var existingList = characterClass.BaseAttributeValues
+            .Where(attr => attr.Definition == definition && attr.AggregateType == AggregateType.AddRaw)
+            .ToList();
+        if (existingList.Count == 1 && Math.Abs(existingList[0].Value - value) < 0.0001f)
+        {
+            return;
+        }
+
+        foreach (var existing in existingList)
         {
             characterClass.BaseAttributeValues.Remove(existing);
+            await context.DeleteAsync(existing).ConfigureAwait(false);
         }
 
         characterClass.BaseAttributeValues.Add(context.CreateNew<ConstValueAttribute>(value, definition, AggregateType.AddRaw));
@@ -160,7 +175,7 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
         }
     }
 
-    private void ReplayClassConstants(IContext context, GameConfiguration gameConfiguration)
+    private async ValueTask ReplayClassConstantsAsync(IContext context, GameConfiguration gameConfiguration)
     {
         using var doc = LoadEmbeddedJson("ClassTargets.json");
         var root = doc.RootElement;
@@ -168,17 +183,22 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
         // DK / DW / FE: constBaseValues already carry the exact attribute names.
         foreach (var cls in root.GetProperty("classes").EnumerateArray())
         {
-            var characterClass = gameConfiguration.CharacterClasses.FirstOrDefault(c => c.Number == cls.GetProperty("number").GetInt32());
-            if (characterClass is null)
+            var rootNumber = (short)cls.GetProperty("number").GetInt32();
+            var numbers = StarterLineageNumbers.TryGetValue(rootNumber, out var lineage) ? lineage : [rootNumber];
+            foreach (var number in numbers)
             {
-                continue;
-            }
-
-            foreach (var prop in cls.GetProperty("constBaseValues").EnumerateObject())
-            {
-                if (StatByName.TryGetValue(prop.Name, out var stat))
+                var characterClass = gameConfiguration.CharacterClasses.FirstOrDefault(c => c.Number == number);
+                if (characterClass is null)
                 {
-                    SetBaseValue(context, gameConfiguration, characterClass, stat, prop.Value.GetSingle());
+                    continue;
+                }
+
+                foreach (var prop in cls.GetProperty("constBaseValues").EnumerateObject())
+                {
+                    if (StatByName.TryGetValue(prop.Name, out var stat))
+                    {
+                        await SetBaseValueAsync(context, gameConfiguration, characterClass, stat, prop.Value.GetSingle()).ConfigureAwait(false);
+                    }
                 }
             }
         }
@@ -187,13 +207,7 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
         var unlock = root.GetProperty("patchForUnlockClasses");
         foreach (var prop in unlock.EnumerateObject())
         {
-            if (!UnlockClassNumbers.TryGetValue(prop.Name, out var number))
-            {
-                continue;
-            }
-
-            var characterClass = gameConfiguration.CharacterClasses.FirstOrDefault(c => c.Number == number);
-            if (characterClass is null)
+            if (!UnlockClassNumbers.TryGetValue(prop.Name, out var numbers))
             {
                 continue;
             }
@@ -201,10 +215,19 @@ public class SoloCombatBalanceSeason6UpdatePlugIn : UpdatePlugInBase
             var isWiz = string.Equals(prop.Value.GetProperty("dmgStat").GetString(), "wiz", StringComparison.OrdinalIgnoreCase);
             var minAttr = isWiz ? Stats.MinimumWizBaseDmg : Stats.MinimumPhysBaseDmg;
             var maxAttr = isWiz ? Stats.MaximumWizBaseDmg : Stats.MaximumPhysBaseDmg;
-            SetBaseValue(context, gameConfiguration, characterClass, minAttr, prop.Value.GetProperty("constMin").GetSingle());
-            SetBaseValue(context, gameConfiguration, characterClass, maxAttr, prop.Value.GetProperty("constMax").GetSingle());
-            SetBaseValue(context, gameConfiguration, characterClass, Stats.AttackRatePvm, prop.Value.GetProperty("atkRatePvm").GetSingle());
-            SetBaseValue(context, gameConfiguration, characterClass, Stats.DefenseRatePvm, prop.Value.GetProperty("defRatePvm").GetSingle());
+            foreach (var number in numbers)
+            {
+                var characterClass = gameConfiguration.CharacterClasses.FirstOrDefault(c => c.Number == number);
+                if (characterClass is null)
+                {
+                    continue;
+                }
+
+                await SetBaseValueAsync(context, gameConfiguration, characterClass, minAttr, prop.Value.GetProperty("constMin").GetSingle()).ConfigureAwait(false);
+                await SetBaseValueAsync(context, gameConfiguration, characterClass, maxAttr, prop.Value.GetProperty("constMax").GetSingle()).ConfigureAwait(false);
+                await SetBaseValueAsync(context, gameConfiguration, characterClass, Stats.AttackRatePvm, prop.Value.GetProperty("atkRatePvm").GetSingle()).ConfigureAwait(false);
+                await SetBaseValueAsync(context, gameConfiguration, characterClass, Stats.DefenseRatePvm, prop.Value.GetProperty("defRatePvm").GetSingle()).ConfigureAwait(false);
+            }
         }
     }
 

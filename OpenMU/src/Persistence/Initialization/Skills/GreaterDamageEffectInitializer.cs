@@ -1,4 +1,4 @@
-﻿// <copyright file="GreaterDamageEffectInitializer.cs" company="MUnique">
+// <copyright file="GreaterDamageEffectInitializer.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -48,7 +48,7 @@ public class GreaterDamageEffectInitializer : InitializerBase
         var boostPerEnergy = this.Context.CreateNew<AttributeRelationship>();
         boostPerEnergy.InputAttribute = Stats.TotalEnergy.GetPersistent(this.GameConfiguration);
         boostPerEnergy.InputOperator = InputOperator.Multiply;
-        boostPerEnergy.InputOperand = 1f / 7f; // one damage per 7 energy
+        boostPerEnergy.InputOperand = 0.1445f;
         powerUpDefinition.Boost.RelatedValues.Add(boostPerEnergy);
 
         // Placeholder for AttackIncreaseStr and AttackIncreaseMastery master skills

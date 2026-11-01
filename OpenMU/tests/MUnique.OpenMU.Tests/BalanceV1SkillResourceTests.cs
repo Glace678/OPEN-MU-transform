@@ -24,6 +24,7 @@ using Probe = MUnique.OpenMU.Tests.BalanceV1CombatProbeTests;
 
 /// <summary>Full S6 in-memory skill/resource callers, with no server or database.</summary>
 [TestFixture]
+[NonParallelizable]
 public class BalanceV1SkillResourceTests
 {
     private InMemoryPersistenceContextProvider _provider = null!;

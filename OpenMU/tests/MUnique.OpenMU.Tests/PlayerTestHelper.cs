@@ -51,6 +51,7 @@ public static class PlayerTestHelper
         // (e.g. trade settlement) behave like a real configuration instead of an unset 0.
         gameConfig.Object.MaximumInventoryMoney = int.MaxValue;
         gameConfig.Object.MaximumVaultMoney = int.MaxValue;
+        gameConfig.Object.ItemDropDuration = TimeSpan.FromSeconds(60);
         gameConfig.Object.Maps.Add(map.Object);
 
         var mapInitializer = new MapInitializer(gameConfig.Object, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);

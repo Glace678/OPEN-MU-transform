@@ -1,4 +1,4 @@
-﻿// <copyright file="Disposable.cs" company="MUnique">
+// <copyright file="Disposable.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -23,7 +23,7 @@ public class Disposable : IDisposable
     /// <value>
     ///   <c>true</c> if this instance is disposed; otherwise, <c>false</c>.
     /// </value>
-    public bool IsDisposed { get; private set; }
+    public bool IsDisposed { get; protected set; }
 
     /// <summary>
     /// Gets a value indicating whether this instance is disposing.

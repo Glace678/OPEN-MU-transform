@@ -1,4 +1,4 @@
-﻿// <copyright file="Atlans.cs" company="MUnique">
+// <copyright file="Atlans.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -546,16 +546,16 @@ internal class Atlans : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 74 },
-                { Stats.MaximumHealth, 19000 },
-                { Stats.MinimumPhysBaseDmg, 250 },
-                { Stats.MaximumPhysBaseDmg, 310 },
-                { Stats.DefenseBase, 200 },
-                { Stats.AttackRatePvm, 430 },
-                { Stats.DefenseRatePvm, 125 },
-                { Stats.PoisonResistance, 12f / 255 },
-                { Stats.IceResistance, 12f / 255 },
-                { Stats.WaterResistance, 12f / 255 },
-                { Stats.FireResistance, 12f / 255 },
+                { Stats.MaximumHealth, 4185.6f },
+                { Stats.MinimumPhysBaseDmg, 114.2f },
+                { Stats.MaximumPhysBaseDmg, 121.5f },
+                { Stats.DefenseBase, 146.8f },
+                { Stats.AttackRatePvm, 422.4f },
+                { Stats.DefenseRatePvm, 122.8f },
+                { Stats.PoisonResistance, 11.8f / 255f },
+                { Stats.IceResistance, 12.4f / 255f },
+                { Stats.WaterResistance, 13.6f / 255f },
+                { Stats.FireResistance, 12.2f / 255f },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

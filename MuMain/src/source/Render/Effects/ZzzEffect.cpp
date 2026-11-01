@@ -7765,8 +7765,8 @@ void MoveEffect(OBJECT* o, int iIndex)
                 if (o->SubType == 0 || o->SubType == 2 || o->SubType == 4 || o->SubType == 6 || o->SubType == 7 ||
                     o->SubType == 8)
                 {
-                    bool  success    = false;
-                    float Height     = 0.0f;
+                    bool  success = false;
+                    float Height  = 0.0f;
                     if (o->SubType == 4)
                     {
                         int PositionX = (int)(o->Position[0] / TERRAIN_SCALE);

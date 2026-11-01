@@ -1,4 +1,4 @@
-﻿// <copyright file="MiniGameScoreTableViewPlugin.cs" company="MUnique">
+// <copyright file="MiniGameScoreTableViewPlugin.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -37,12 +37,13 @@ public class MiniGameScoreTableViewPlugin : IMiniGameScoreTableViewPlugin
         const int maxScores = 10;
         int Write()
         {
-            var size = MiniGameScoreTableRef.GetRequiredSize(Math.Min(maxScores, scores.Count));
+            var resultCount = (byte)Math.Min(maxScores, scores.Count);
+            var size = MiniGameScoreTableRef.GetRequiredSize(resultCount);
             var span = connection.Output.GetSpan(size)[..size];
             var message = new MiniGameScoreTableRef(span)
             {
                 PlayerRank = playerRank,
-                ResultCount = (byte)scores.Count,
+                ResultCount = resultCount,
             };
             var i = 0;
             foreach (var (playerName, totalScore, bonusExp, bonusMoney) in scores.Take(maxScores))

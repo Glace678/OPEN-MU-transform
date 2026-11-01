@@ -17,8 +17,10 @@ using System.Threading;
 /// </remarks>
 public class IdGenerator
 {
+    private readonly int _firstValue;
     private readonly int _maxValue;
     private readonly ConcurrentQueue<int> _givenBack = new();
+    private readonly object _lock = new();
     private int _currentValue;
 
     /// <summary>
@@ -28,6 +30,7 @@ public class IdGenerator
     /// <param name="maxValue">The maximum value.</param>
     public IdGenerator(int firstValue, int maxValue)
     {
+        this._firstValue = firstValue;
         this._maxValue = maxValue;
         this._currentValue = firstValue - 1; // will be increased by 1 by GenerateId
     }
@@ -80,14 +83,31 @@ public class IdGenerator
     }
 
     /// <summary>
-    /// Gives the id back for further usage by the next object.
+    /// Recycles an identifier for subsequent reuse by another game object.
+    /// 将废弃的对象标识符回收至生成器池中，供后续新加入的对象复用.
     /// </summary>
-    /// <param name="id">The identifier.</param>
+    /// <param name="id">The identifier to recycle / 待回收的标识符数值.</param>
+    /// <remarks>
+    /// Id Recycling and Boundary Contract (PER-13 / PER-17 / R2-PER13) / ID 回收与边界安全契约:
+    /// 1. Lower and Upper Bounds Check: Only identifiers within [<c>_firstValue</c>, <c>_maxValue</c>] are accepted.
+    ///    Negative or out-of-range IDs injected by rogue or erroneous callers are silently rejected.
+    ///    数值范围边界校验：仅接受位于起始值与最大值有效闭区间内的 ID；拒绝负数及越界数值回收.
+    /// 2. De-duplication: Guarantees that the same identifier cannot be enqueued multiple times concurrently.
+    ///    队列去重保护：加锁校验队列内是否已存在相同 ID，规避重复回收造成的并发发号冲突.
+    /// 3. Thread Safety: Synchronizes enqueue access via internal lock object (<c>_lock</c>).
+    ///    线程同步：通过专用内部锁对象确保多线程回收操作的原子性与内存可见性.
+    /// </remarks>
     public void GiveBack(int id)
     {
-        if (id <= this._maxValue)
+        if (id >= this._firstValue && id <= this._maxValue)
         {
-            this._givenBack.Enqueue(id);
+            lock (this._lock)
+            {
+                if (!this._givenBack.Contains(id))
+                {
+                    this._givenBack.Enqueue(id);
+                }
+            }
         }
     }
 }

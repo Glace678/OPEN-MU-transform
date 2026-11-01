@@ -1,4 +1,4 @@
-﻿// <copyright file="LostTower.cs" company="MUnique">
+// <copyright file="LostTower.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -802,16 +802,16 @@ internal class LostTower : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 66 },
-                { Stats.MaximumHealth, 9000 },
-                { Stats.MinimumPhysBaseDmg, 220 },
-                { Stats.MaximumPhysBaseDmg, 240 },
-                { Stats.DefenseBase, 160 },
-                { Stats.AttackRatePvm, 330 },
-                { Stats.DefenseRatePvm, 99 },
-                { Stats.PoisonResistance, 10f / 255 },
-                { Stats.IceResistance, 10f / 255 },
-                { Stats.WaterResistance, 10f / 255 },
-                { Stats.FireResistance, 15f / 255 },
+                { Stats.MaximumHealth, 3185.4f },
+                { Stats.MinimumPhysBaseDmg, 91.6f },
+                { Stats.MaximumPhysBaseDmg, 97.8f },
+                { Stats.DefenseBase, 118.3f },
+                { Stats.AttackRatePvm, 324.6f },
+                { Stats.DefenseRatePvm, 96.4f },
+                { Stats.PoisonResistance, 11.4f / 255f },
+                { Stats.IceResistance, 9.8f / 255f },
+                { Stats.WaterResistance, 10.6f / 255f },
+                { Stats.FireResistance, 16.2f / 255f },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

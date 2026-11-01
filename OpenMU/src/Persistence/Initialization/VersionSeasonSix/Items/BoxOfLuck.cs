@@ -1,4 +1,4 @@
-﻿// <copyright file="BoxOfLuck.cs" company="MUnique">
+// <copyright file="BoxOfLuck.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -76,7 +76,7 @@ internal class BoxOfLuck : InitializerBase
         var boxOfLuck = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfLuck.ItemType = SpecialItemType.RandomItem;
         boxOfLuck.SourceItemLevel = 0;
-        boxOfLuck.Chance = 0.5;
+        boxOfLuck.Chance = 0.4682;
         boxOfLuck.MinimumLevel = 6;
         boxOfLuck.MaximumLevel = 6;
         boxOfLuck.Description = "Box of Luck";
@@ -108,7 +108,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfLuck, 10); // Vine Set
         this.AddArmorSet(boxOfLuck, 11); // Silk Set
         this.AddArmorSet(boxOfLuck, 12); // Wind Set
-        this.AddMoneyDropFallback(box, 10000, boxOfLuck);
+        this.AddMoneyDropFallback(box, 1425, boxOfLuck);
 
         var star = this.Context.CreateNew<ItemDropItemGroup>();
         star.ItemType = SpecialItemType.RandomItem;
@@ -136,7 +136,7 @@ internal class BoxOfLuck : InitializerBase
         var firecrackerJewels = this.Context.CreateNew<ItemDropItemGroup>();
         firecrackerJewels.ItemType = SpecialItemType.RandomItem;
         firecrackerJewels.SourceItemLevel = 2;
-        firecrackerJewels.Chance = 0.2;
+        firecrackerJewels.Chance = 0.1845;
         firecrackerJewels.Description = "Firecracker (Jewels etc.)";
         firecrackerJewels.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(firecrackerJewels);
@@ -148,7 +148,7 @@ internal class BoxOfLuck : InitializerBase
         var firecracker = this.Context.CreateNew<ItemDropItemGroup>();
         firecracker.ItemType = SpecialItemType.RandomItem;
         firecracker.SourceItemLevel = 2;
-        firecracker.Chance = 0.3;
+        firecracker.Chance = 0.2835;
         firecracker.Description = "Firecracker (Items +7 to +9)";
         firecracker.MinimumLevel = 7;
         firecracker.MaximumLevel = 9;
@@ -203,12 +203,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(firecracker, 10); // Vine Set
         this.AddArmorSet(firecracker, 11); // Silk Set
         this.AddArmorSet(firecracker, 12); // Wind Set
-        this.AddMoneyDropFallback(box, 2004, firecracker);
+        this.AddMoneyDropFallback(box, 1835, firecracker);
 
         var heartJewels = this.Context.CreateNew<ItemDropItemGroup>();
         heartJewels.ItemType = SpecialItemType.RandomItem;
         heartJewels.SourceItemLevel = 3;
-        heartJewels.Chance = 0.2;
+        heartJewels.Chance = 0.1845;
         heartJewels.Description = "Heart of Love (Jewels etc.)";
         heartJewels.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(heartJewels);
@@ -220,7 +220,7 @@ internal class BoxOfLuck : InitializerBase
         var heart = this.Context.CreateNew<ItemDropItemGroup>();
         heart.ItemType = SpecialItemType.RandomItem;
         heart.SourceItemLevel = 3;
-        heart.Chance = 0.3;
+        heart.Chance = 0.2835;
         heart.Description = "Heart of Love (Items +7 to +9)";
         heart.MinimumLevel = 7;
         heart.MaximumLevel = 9;
@@ -275,12 +275,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(heart, 10); // Vine Set
         this.AddArmorSet(heart, 11); // Silk Set
         this.AddArmorSet(heart, 12); // Wind Set
-        this.AddMoneyDropFallback(box, 1004, heart);
+        this.AddMoneyDropFallback(box, 1245, heart);
 
         var silverMedal = this.Context.CreateNew<ItemDropItemGroup>();
         silverMedal.SourceItemLevel = 5;
         silverMedal.ItemType = SpecialItemType.RandomItem;
-        silverMedal.Chance = 0.5;
+        silverMedal.Chance = 0.4825;
         silverMedal.Description = "Silver Medal";
         silverMedal.MinimumLevel = 6;
         silverMedal.MaximumLevel = 6;
@@ -311,12 +311,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(silverMedal, 4); // Bone Set
         this.AddArmorSet(silverMedal, 41); // Ancient Set
         this.AddArmorSet(silverMedal, 59); // Sacred Fire Set
-        this.AddMoneyDropFallback(box, 100000, silverMedal);
+        this.AddMoneyDropFallback(box, 4825, silverMedal);
 
         var goldMedal = this.Context.CreateNew<ItemDropItemGroup>();
         goldMedal.SourceItemLevel = 6;
         goldMedal.ItemType = SpecialItemType.RandomItem;
-        goldMedal.Chance = 0.5;
+        goldMedal.Chance = 0.5214;
         goldMedal.Description = "Gold Medal";
         goldMedal.MinimumLevel = 7;
         goldMedal.MaximumLevel = 7;
@@ -344,24 +344,24 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(goldMedal, 13); // Spirit Armor
         this.AddArmorSet(goldMedal, 41); // Ancient Set
         this.AddArmorSet(goldMedal, 59); // Sacred Fire Set
-        this.AddMoneyDropFallback(box, 100000, goldMedal);
+        this.AddMoneyDropFallback(box, 5645, goldMedal);
 
         var boxOfHeaven = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfHeaven.ItemType = SpecialItemType.RandomItem;
         boxOfHeaven.SourceItemLevel = 7;
-        boxOfHeaven.Chance = 0.5;
+        boxOfHeaven.Chance = 0.4836;
         boxOfHeaven.Description = "Box of Heaven";
         boxOfHeaven.DropEffect = ItemDropEffect.FanfareSound;
         box.DropItems.Add(boxOfHeaven);
         this.AddDropItem(boxOfHeaven, 12, 15); // Jewel of Chaos
         this.AddDropItem(boxOfHeaven, 14, 13); // Jewel of Bless
         this.AddDropItem(boxOfHeaven, 14, 14); // Jewel of Soul
-        this.AddMoneyDropFallback(box, 1000, boxOfHeaven);
+        this.AddMoneyDropFallback(box, 875, boxOfHeaven);
 
         var boxOfKundun1 = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfKundun1.SourceItemLevel = 8;
         boxOfKundun1.ItemType = SpecialItemType.Excellent;
-        boxOfKundun1.Chance = 0.2;
+        boxOfKundun1.Chance = 0.1472;
         boxOfKundun1.Description = "Box of Kundun+1";
         box.DropItems.Add(boxOfKundun1);
         this.AddDropItem(boxOfKundun1, 0, 0); // Kris
@@ -403,12 +403,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfKundun1, 11); // Silk Set
         this.AddArmorSet(boxOfKundun1, 39); // Violent Wind Set
         this.AddArmorSet(boxOfKundun1, 40); // Red Wing Set
-        this.AddMoneyDropFallback(box, 50000, boxOfKundun1);
+        this.AddMoneyDropFallback(box, 3842, boxOfKundun1);
 
         var boxOfKundun2 = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfKundun2.SourceItemLevel = 9;
         boxOfKundun2.ItemType = SpecialItemType.Excellent;
-        boxOfKundun2.Chance = 0.2;
+        boxOfKundun2.Chance = 0.1835;
         boxOfKundun2.Description = "Box of Kundun+2";
         box.DropItems.Add(boxOfKundun2);
         this.AddDropItem(boxOfKundun2, 0, 5); // Blade
@@ -453,12 +453,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfKundun2, 13); // Spirit Set
         this.AddArmorSet(boxOfKundun2, 25); // Light Plate Set
         this.AddArmorSet(boxOfKundun2, 41); // Ancient Set
-        this.AddMoneyDropFallback(box, 100000, boxOfKundun2);
+        this.AddMoneyDropFallback(box, 7265, boxOfKundun2);
 
         var boxOfKundun3 = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfKundun3.SourceItemLevel = 10;
         boxOfKundun3.ItemType = SpecialItemType.Excellent;
-        boxOfKundun3.Chance = 0.2;
+        boxOfKundun3.Chance = 0.1976;
         boxOfKundun3.Description = "Box of Kundun+3";
         box.DropItems.Add(boxOfKundun3);
         this.AddDropItem(boxOfKundun3, 0, 11); // Legendary Sword
@@ -503,12 +503,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfKundun3, 26); // Adamantine Set
         this.AddArmorSet(boxOfKundun3, 42); // Bloody Amethyst Set
         this.AddArmorSet(boxOfKundun3, 59); // Sacred Fire Set
-        this.AddMoneyDropFallback(box, 150000, boxOfKundun3);
+        this.AddMoneyDropFallback(box, 11846, boxOfKundun3);
 
         var boxOfKundun4 = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfKundun4.SourceItemLevel = 11;
         boxOfKundun4.ItemType = SpecialItemType.Excellent;
-        boxOfKundun4.Chance = 0.2;
+        boxOfKundun4.Chance = 0.1628;
         boxOfKundun4.Description = "Box of Kundun+4";
         box.DropItems.Add(boxOfKundun4);
         this.AddDropItem(boxOfKundun4, 0, 16); // Sword of Destruction
@@ -539,12 +539,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfKundun4, 27); // Dark Steel Set
         this.AddArmorSet(boxOfKundun4, 43); // Rhodon Quartz Set
         this.AddArmorSet(boxOfKundun4, 60); // Storm Jahad Fire Set
-        this.AddMoneyDropFallback(box, 200000, boxOfKundun4);
+        this.AddMoneyDropFallback(box, 16892, boxOfKundun4);
 
         var boxOfKundun5 = this.Context.CreateNew<ItemDropItemGroup>();
         boxOfKundun5.SourceItemLevel = 12;
         boxOfKundun5.ItemType = SpecialItemType.Excellent;
-        boxOfKundun5.Chance = 0.2;
+        boxOfKundun5.Chance = 0.1314;
         boxOfKundun5.Description = "Box of Kundun+5";
         box.DropItems.Add(boxOfKundun5);
         this.AddDropItem(boxOfKundun5, 0, 20); // Knight Blade
@@ -566,12 +566,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(boxOfKundun5, 37); // Valiant Set
         this.AddArmorSet(boxOfKundun5, 38); // Glorious Set
         this.AddArmorSet(boxOfKundun5, 61); // Piercing Groove Fire Set
-        this.AddMoneyDropFallback(box, 250000, boxOfKundun5);
+        this.AddMoneyDropFallback(box, 22458, boxOfKundun5);
 
         var heartOfDarkLord = this.Context.CreateNew<ItemDropItemGroup>();
         heartOfDarkLord.ItemType = SpecialItemType.RandomItem;
         heartOfDarkLord.SourceItemLevel = 13;
-        heartOfDarkLord.Chance = 0.5;
+        heartOfDarkLord.Chance = 0.5128;
         heartOfDarkLord.Description = "Heart of Dark Lord";
         heartOfDarkLord.MinimumLevel = 7;
         heartOfDarkLord.MaximumLevel = 8;
@@ -600,7 +600,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(heartOfDarkLord, 11); // Silk Set
         this.AddArmorSet(heartOfDarkLord, 12); // Wind Set
         this.AddArmorSet(heartOfDarkLord, 25); // Light Plate Set
-        this.AddMoneyDropFallback(box, 10000, heartOfDarkLord);
+        this.AddMoneyDropFallback(box, 1645, heartOfDarkLord);
     }
 
     private void CreatePinkChocolateBox()
@@ -609,7 +609,7 @@ internal class BoxOfLuck : InitializerBase
         var pinkBox = this.Context.CreateNew<ItemDropItemGroup>();
         pinkBox.ItemType = SpecialItemType.RandomItem;
         pinkBox.SourceItemLevel = 0;
-        pinkBox.Chance = 0.4;
+        pinkBox.Chance = 0.3842;
         pinkBox.Description = "Pink Chocolate Box - Normal Items";
         pinkBox.MinimumLevel = 6;
         pinkBox.MaximumLevel = 9;
@@ -660,7 +660,7 @@ internal class BoxOfLuck : InitializerBase
         var pinkBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         pinkBoxExc.ItemType = SpecialItemType.Excellent;
         pinkBoxExc.SourceItemLevel = 0;
-        pinkBoxExc.Chance = 0.1;
+        pinkBoxExc.Chance = 0.0965;
         pinkBoxExc.Description = "Pink Chocolate Box - Excellent Items";
         pinkBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(pinkBoxExc);
@@ -677,12 +677,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(pinkBoxExc, 11); // Silk Set
         this.AddArmorSet(pinkBoxExc, 4); // Bone Set
 
-        this.AddMoneyDropFallback(box, 100000, pinkBox, "Pink Chocolate Box");
+        this.AddMoneyDropFallback(box, 4255, pinkBox, "Pink Chocolate Box");
 
         var lightPurpleCandyBox = this.Context.CreateNew<ItemDropItemGroup>();
         lightPurpleCandyBox.ItemType = SpecialItemType.RandomItem;
         lightPurpleCandyBox.SourceItemLevel = 1;
-        lightPurpleCandyBox.Chance = 0.4;
+        lightPurpleCandyBox.Chance = 0.3842;
         lightPurpleCandyBox.Description = "Light Purple Candy Box - Normal Items";
         lightPurpleCandyBox.MinimumLevel = 6;
         lightPurpleCandyBox.MaximumLevel = 9;
@@ -732,7 +732,7 @@ internal class BoxOfLuck : InitializerBase
         var lightPurpleCandyBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         lightPurpleCandyBoxExc.ItemType = SpecialItemType.Excellent;
         lightPurpleCandyBoxExc.SourceItemLevel = 1;
-        lightPurpleCandyBoxExc.Chance = 0.1;
+        lightPurpleCandyBoxExc.Chance = 0.0965;
         lightPurpleCandyBoxExc.Description = "Light Purple Candy Box - Excellent Items";
         lightPurpleCandyBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(lightPurpleCandyBoxExc);
@@ -749,7 +749,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(lightPurpleCandyBoxExc, 11); // Silk Set
         this.AddArmorSet(lightPurpleCandyBoxExc, 4); // Bone Set
 
-        this.AddMoneyDropFallback(box, 100000, lightPurpleCandyBox, "Light Purple Candy Box");
+        this.AddMoneyDropFallback(box, 4255, lightPurpleCandyBox, "Light Purple Candy Box");
     }
 
     private void CreateRedChocolateBox()
@@ -758,7 +758,7 @@ internal class BoxOfLuck : InitializerBase
         var redBox = this.Context.CreateNew<ItemDropItemGroup>();
         redBox.ItemType = SpecialItemType.RandomItem;
         redBox.SourceItemLevel = 0;
-        redBox.Chance = 0.4;
+        redBox.Chance = 0.3842;
         redBox.Description = "Red Chocolate Box - Normal Items";
         redBox.MinimumLevel = 6;
         redBox.MaximumLevel = 9;
@@ -802,7 +802,7 @@ internal class BoxOfLuck : InitializerBase
         var redBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         redBoxExc.ItemType = SpecialItemType.Excellent;
         redBoxExc.SourceItemLevel = 0;
-        redBoxExc.Chance = 0.1;
+        redBoxExc.Chance = 0.0965;
         redBoxExc.Description = "Red Chocolate Box - Excellent Items";
         redBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(redBoxExc);
@@ -835,12 +835,12 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(redBoxExc, 9);
         this.AddArmorSet(redBoxExc, 26);
 
-        this.AddMoneyDropFallback(box, 500000, redBox, "Red Chocolate Box");
+        this.AddMoneyDropFallback(box, 8465, redBox, "Red Chocolate Box");
 
         var vermilionBox = this.Context.CreateNew<ItemDropItemGroup>();
         vermilionBox.ItemType = SpecialItemType.RandomItem;
         vermilionBox.SourceItemLevel = 1;
-        vermilionBox.Chance = 0.4;
+        vermilionBox.Chance = 0.3842;
         vermilionBox.Description = "Vermilion Candy Box - Normal Items";
         vermilionBox.MinimumLevel = 6;
         vermilionBox.MaximumLevel = 9;
@@ -884,7 +884,7 @@ internal class BoxOfLuck : InitializerBase
         var vermilionBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         vermilionBoxExc.ItemType = SpecialItemType.Excellent;
         vermilionBoxExc.SourceItemLevel = 1;
-        vermilionBoxExc.Chance = 0.1;
+        vermilionBoxExc.Chance = 0.0965;
         vermilionBoxExc.Description = "Vermilion Candy Box - Excellent Items";
         vermilionBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(vermilionBoxExc);
@@ -917,7 +917,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(vermilionBoxExc, 9);
         this.AddArmorSet(vermilionBoxExc, 26);
 
-        this.AddMoneyDropFallback(box, 400000, vermilionBox, "Vermilion Candy Box");
+        this.AddMoneyDropFallback(box, 6855, vermilionBox, "Vermilion Candy Box");
     }
 
     private void CreateBlueChocolateBox()
@@ -926,11 +926,12 @@ internal class BoxOfLuck : InitializerBase
         var blueBox = this.Context.CreateNew<ItemDropItemGroup>();
         blueBox.ItemType = SpecialItemType.RandomItem;
         blueBox.SourceItemLevel = 0;
-        blueBox.Chance = 0.4;
+        blueBox.Chance = 0.3842;
         blueBox.Description = "Blue Chocolate Box - Normal Items";
         blueBox.MinimumLevel = 6;
         blueBox.MaximumLevel = 9;
         blueBox.DropEffect = ItemDropEffect.Fireworks;
+        box.DropItems.Add(blueBox);
         this.AddDropItem(blueBox, 0, 20);
         this.AddDropItem(blueBox, 0, 25);
         this.AddDropItem(blueBox, 0, 31);
@@ -958,7 +959,7 @@ internal class BoxOfLuck : InitializerBase
         var blueBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         blueBoxExc.ItemType = SpecialItemType.Excellent;
         blueBoxExc.SourceItemLevel = 0;
-        blueBoxExc.Chance = 0.1;
+        blueBoxExc.Chance = 0.0965;
         blueBoxExc.Description = "Blue Chocolate Box - Excellent Items";
         blueBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(blueBoxExc);
@@ -984,16 +985,17 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(blueBoxExc, 19); // Divine Set
         this.AddArmorSet(blueBoxExc, 27); // Dark Steel Set
 
-        this.AddMoneyDropFallback(box, 500000, blueBox, "Blue Chocolate Box");
+        this.AddMoneyDropFallback(box, 12485, blueBox, "Blue Chocolate Box");
 
         var deepBlueBox = this.Context.CreateNew<ItemDropItemGroup>();
         deepBlueBox.ItemType = SpecialItemType.RandomItem;
         deepBlueBox.SourceItemLevel = 1;
-        deepBlueBox.Chance = 0.4;
+        deepBlueBox.Chance = 0.3842;
         deepBlueBox.Description = "Deep Blue Candy Box - Normal Items";
         deepBlueBox.MinimumLevel = 6;
         deepBlueBox.MaximumLevel = 9;
         deepBlueBox.DropEffect = ItemDropEffect.Fireworks;
+        box.DropItems.Add(deepBlueBox);
         this.AddDropItem(deepBlueBox, 0, 20);
         this.AddDropItem(deepBlueBox, 0, 25);
         this.AddDropItem(deepBlueBox, 0, 31);
@@ -1021,7 +1023,7 @@ internal class BoxOfLuck : InitializerBase
         var deepBlueBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         deepBlueBoxExc.ItemType = SpecialItemType.Excellent;
         deepBlueBoxExc.SourceItemLevel = 1;
-        deepBlueBoxExc.Chance = 0.1;
+        deepBlueBoxExc.Chance = 0.0965;
         deepBlueBoxExc.Description = "Blue Chocolate Box - Excellent Items";
         deepBlueBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(deepBlueBoxExc);
@@ -1047,7 +1049,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(deepBlueBoxExc, 19); // Divine Set
         this.AddArmorSet(deepBlueBoxExc, 27); // Dark Steel Set
 
-        this.AddMoneyDropFallback(box, 800000, deepBlueBox, "Deep Blue Candy Box");
+        this.AddMoneyDropFallback(box, 14855, deepBlueBox, "Deep Blue Candy Box");
     }
 
     private void CreatePumpkinOfLuck()
@@ -1074,7 +1076,7 @@ internal class BoxOfLuck : InitializerBase
         var redBox = this.Context.CreateNew<ItemDropItemGroup>();
         redBox.ItemType = SpecialItemType.RandomItem;
         redBox.SourceItemLevel = 0;
-        redBox.Chance = 0.5;
+        redBox.Chance = 0.4825;
         redBox.Description = "Red Ribbon Box";
         redBox.MinimumLevel = 7;
         redBox.MaximumLevel = 9;
@@ -1102,7 +1104,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(redBox, 4);
         this.AddArmorSet(redBox, 25);
 
-        this.AddMoneyDropFallback(box, 10000, redBox);
+        this.AddMoneyDropFallback(box, 1855, redBox);
     }
 
     private void CreateGreenRibbonBox()
@@ -1111,7 +1113,7 @@ internal class BoxOfLuck : InitializerBase
         var greenBox = this.Context.CreateNew<ItemDropItemGroup>();
         greenBox.ItemType = SpecialItemType.RandomItem;
         greenBox.SourceItemLevel = 0;
-        greenBox.Chance = 0.4;
+        greenBox.Chance = 0.3842;
         greenBox.Description = "Green Ribbon Box - Normal Items";
         greenBox.MinimumLevel = 7;
         greenBox.MaximumLevel = 9;
@@ -1139,7 +1141,7 @@ internal class BoxOfLuck : InitializerBase
         var greenBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         greenBoxExc.ItemType = SpecialItemType.Excellent;
         greenBoxExc.SourceItemLevel = 0;
-        greenBoxExc.Chance = 0.1;
+        greenBoxExc.Chance = 0.0965;
         greenBoxExc.Description = "Green Ribbon Box - Excellent Items";
         greenBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(greenBoxExc);
@@ -1154,7 +1156,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(greenBoxExc, 7);
         this.AddArmorSet(greenBoxExc, 12);
 
-        this.AddMoneyDropFallback(box, 40000, greenBox, "Green Ribbon Box");
+        this.AddMoneyDropFallback(box, 3485, greenBox, "Green Ribbon Box");
     }
 
     private void CreateBlueRibbonBox()
@@ -1163,7 +1165,7 @@ internal class BoxOfLuck : InitializerBase
         var blueBox = this.Context.CreateNew<ItemDropItemGroup>();
         blueBox.ItemType = SpecialItemType.RandomItem;
         blueBox.SourceItemLevel = 0;
-        blueBox.Chance = 0.4;
+        blueBox.Chance = 0.3842;
         blueBox.Description = "Blue Ribbon Box - Normal Items";
         blueBox.MinimumLevel = 7;
         blueBox.MaximumLevel = 9;
@@ -1189,7 +1191,7 @@ internal class BoxOfLuck : InitializerBase
         var blueBoxExc = this.Context.CreateNew<ItemDropItemGroup>();
         blueBoxExc.ItemType = SpecialItemType.Excellent;
         blueBoxExc.SourceItemLevel = 0;
-        blueBoxExc.Chance = 0.1;
+        blueBoxExc.Chance = 0.0965;
         blueBoxExc.Description = "Blue Ribbon Box - Excellent Items";
         blueBoxExc.DropEffect = ItemDropEffect.Fireworks;
         box.DropItems.Add(blueBoxExc);
@@ -1210,7 +1212,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(blueBoxExc, 3);
         this.AddArmorSet(blueBoxExc, 26);
 
-        this.AddMoneyDropFallback(box, 80000, blueBox, "Blue Ribbon Box");
+        this.AddMoneyDropFallback(box, 5625, blueBox, "Blue Ribbon Box");
     }
 
     // season 2.5
@@ -1317,7 +1319,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(level40Ring, 10); // Vine Set
         this.AddArmorSet(level40Ring, 11); // Silk Set
         this.AddArmorSet(level40Ring, 12); // Wind Set
-        this.AddMoneyDropFallback(box, 100000, level40Ring);
+        this.AddMoneyDropFallback(box, 4255, level40Ring);
 
         var level80Ring = this.Context.CreateNew<ItemDropItemGroup>();
         level80Ring.ItemType = SpecialItemType.RandomItem;
@@ -1353,7 +1355,7 @@ internal class BoxOfLuck : InitializerBase
         this.AddArmorSet(level80Ring, 10); // Vine Set
         this.AddArmorSet(level80Ring, 11); // Silk Set
         this.AddArmorSet(level80Ring, 12); // Wind Set
-        this.AddMoneyDropFallback(box, 100000, level80Ring);
+        this.AddMoneyDropFallback(box, 8465, level80Ring);
     }
 
     private ItemDefinition CreateBox(string name, byte group, byte number, byte width = 1, byte height = 1, byte maximumItemLevel = 0)

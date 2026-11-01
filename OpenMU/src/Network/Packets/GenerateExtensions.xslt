@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
     xmlns:pd="http://www.munique.net/OpenMU/PacketDefinitions"
@@ -99,11 +99,19 @@ public static class ConnectionExtensions
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text>;</xsl:text>
-    <xsl:if test="pd:HeaderType[starts-with(., 'C1')]">
+    <xsl:if test="pd:HeaderType[starts-with(., 'C1') or starts-with(., 'C3')]">
       <xsl:text>
             if (length > byte.MaxValue)
             {
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");
+            }
+      </xsl:text>
+    </xsl:if>
+    <xsl:if test="pd:HeaderType[starts-with(., 'C2') or starts-with(., 'C4')]">
+      <xsl:text>
+            if (length > ushort.MaxValue)
+            {
+                throw new ArgumentException($"The packet length {length} exceeds the two-byte header maximum ({ushort.MaxValue}).");
             }
       </xsl:text>
     </xsl:if>

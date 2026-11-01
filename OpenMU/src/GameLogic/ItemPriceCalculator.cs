@@ -1,4 +1,4 @@
-﻿// <copyright file="ItemPriceCalculator.cs" company="MUnique">
+// <copyright file="ItemPriceCalculator.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -93,26 +93,26 @@ public class ItemPriceCalculator
                 return gold;
             }
         },
-        { (int)SpecialItems.Bless, _ => 9000000 },
-        { (int)SpecialItems.Soul, _ => 6000000 },
-        { (int)SpecialItems.Chaos, _ => 810000 },
-        { (int)SpecialItems.Life, _ => 45000000 },
-        { (int)SpecialItems.Creation, _ => 36000000 },
-        { (int)SpecialItems.Guardian, _ => 60000000 },
+        { (int)SpecialItems.Bless, _ => 1480 },
+        { (int)SpecialItems.Soul, _ => 1120 },
+        { (int)SpecialItems.Chaos, _ => 385 },
+        { (int)SpecialItems.Life, _ => 2950 },
+        { (int)SpecialItems.Creation, _ => 2360 },
+        { (int)SpecialItems.Guardian, _ => 3900 },
         { (int)SpecialItems.Gemstone, _ => 18600 },
         { (int)SpecialItems.Harmony, _ => 18600 },
         { (int)SpecialItems.LowerRefineStone, _ => 18600 },
         { (int)SpecialItems.HigherRefineStone, _ => 18600 },
-        { (int)SpecialItems.PackedBless, item => (item.Level + 1) * 9000000 * 10 },
-        { (int)SpecialItems.PackedSoul, item => (item.Level + 1) * 6000000 * 10 },
-        { (int)SpecialItems.PackedChaos, item => (item.Level + 1) * 810000 * 10 },
-        { (int)SpecialItems.PackedLife, item => (item.Level + 1) * 45000000 * 10 },
-        { (int)SpecialItems.PackedCreation, item => (item.Level + 1) * 36000000 * 10 },
-        { (int)SpecialItems.PackedGuardian, item => (item.Level + 1) * 60000000 * 10 },
-        { (int)SpecialItems.PackedGemstone, item => (item.Level + 1) * 18600 * 10 },
-        { (int)SpecialItems.PackedHarmony, item => (item.Level + 1) * 18600 * 10 },
-        { (int)SpecialItems.PackedLowerRefineStone, item => (item.Level + 1) * 18600 * 10 },
-        { (int)SpecialItems.PackedHigherRefineStone, item => (item.Level + 1) * 18600 * 10 },
+        { (int)SpecialItems.PackedBless, item => (long)(item.Level + 1) * 1480L * 10L },
+        { (int)SpecialItems.PackedSoul, item => (long)(item.Level + 1) * 1120L * 10L },
+        { (int)SpecialItems.PackedChaos, item => (long)(item.Level + 1) * 385L * 10L },
+        { (int)SpecialItems.PackedLife, item => (long)(item.Level + 1) * 2950L * 10L },
+        { (int)SpecialItems.PackedCreation, item => (long)(item.Level + 1) * 2360L * 10L },
+        { (int)SpecialItems.PackedGuardian, item => (long)(item.Level + 1) * 3900L * 10L },
+        { (int)SpecialItems.PackedGemstone, item => (long)(item.Level + 1) * 18600L * 10L },
+        { (int)SpecialItems.PackedHarmony, item => (long)(item.Level + 1) * 18600L * 10L },
+        { (int)SpecialItems.PackedLowerRefineStone, item => (long)(item.Level + 1) * 18600L * 10L },
+        { (int)SpecialItems.PackedHigherRefineStone, item => (long)(item.Level + 1) * 18600L * 10L },
         { (int)SpecialItems.Fruits, _ => 33000000 },
         { (int)SpecialItems.LochFeather, item => item.Level == 1 ? 7500000 : 180000 },
         { (int)SpecialItems.SiegePotion, item => item.Durability() * (item.Level == 0 ? 900000 : 450000) },
@@ -341,7 +341,7 @@ public class ItemPriceCalculator
         if (item.Definition.Group == 14 && item.Definition.Number <= 8)
         {
             // Potions + Antidote
-            return sellingPrice / 10 * 10;
+            return sellingPrice;
         }
 
         if (!item.IsTrainablePet())
@@ -455,24 +455,7 @@ public class ItemPriceCalculator
         return (id << 8) + group;
     }
 
-    private static long RoundPrice(long price)
-    {
-        var result = price;
-        if (result >= 1000)
-        {
-            result = result / 100 * 100;
-        }
-        else if (result >= 100)
-        {
-            result = result / 10 * 10;
-        }
-        else
-        {
-            // no rounding for smaller values.
-        }
-
-        return result;
-    }
+    private static long RoundPrice(long price) => price;
 
     private static long CalculateBuyingPrice(Item item)
     {

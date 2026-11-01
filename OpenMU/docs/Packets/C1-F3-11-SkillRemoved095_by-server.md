@@ -6,7 +6,7 @@ After a skill got removed from the skill list, e.g. by removing an equipped item
 
 ## Causes the following actions on the client side
 
-The skill is added to the skill list on client side.
+The skill is removed from the skill list on client side.
 
 ## Structure
 

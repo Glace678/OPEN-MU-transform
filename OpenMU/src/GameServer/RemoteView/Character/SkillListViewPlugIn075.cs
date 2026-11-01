@@ -1,4 +1,4 @@
-﻿// <copyright file="SkillListViewPlugIn075.cs" company="MUnique">
+// <copyright file="SkillListViewPlugIn075.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -38,8 +38,18 @@ public class SkillListViewPlugIn075 : SkillListViewPlugIn
     /// <inheritdoc/>
     public override async ValueTask RemoveSkillAsync(Skill skill)
     {
-        var skillIndex = (byte)this.SkillList.IndexOf(skill);
-        await this.Player.Connection.SendSkillRemoved075Async(skillIndex, this.GetSkillNumberAndLevel(skill)).ConfigureAwait(false);
+        var rawIndex = this.SkillList.IndexOf(skill);
+        if (rawIndex < 0)
+        {
+            return;
+        }
+
+        var skillIndex = (byte)rawIndex;
+        if (this.Player.Connection is { } connection)
+        {
+            await connection.SendSkillRemoved075Async(skillIndex, this.GetSkillNumberAndLevel(skill)).ConfigureAwait(false);
+        }
+
         this.SkillList[skillIndex] = null;
     }
 

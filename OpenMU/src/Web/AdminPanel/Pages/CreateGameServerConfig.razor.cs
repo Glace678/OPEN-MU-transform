@@ -1,4 +1,4 @@
-﻿// <copyright file="CreateGameServerConfig.razor.cs" company="MUnique">
+// <copyright file="CreateGameServerConfig.razor.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -114,7 +114,16 @@ public partial class CreateGameServerConfig : ComponentBase, IAsyncDisposable
         var networkPort = 55901;
         if (existingServerDefinitions.Count > 0)
         {
-            nextServerId = existingServerDefinitions.Max(s => s.ServerID) + 1;
+            var usedIds = existingServerDefinitions.Select(s => (int)s.ServerID).ToHashSet();
+            for (int i = 0; i <= byte.MaxValue; i++)
+            {
+                if (!usedIds.Contains(i))
+                {
+                    nextServerId = i;
+                    break;
+                }
+            }
+
             networkPort = existingServerDefinitions.Max(s => s.Endpoints.FirstOrDefault()?.NetworkPort ?? 55900) + 1;
         }
 

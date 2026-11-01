@@ -1,4 +1,4 @@
-﻿// <copyright file="ItemStackAction.cs" company="MUnique">
+// <copyright file="ItemStackAction.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -25,6 +25,12 @@ public class ItemStackAction
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         if (!this.IsCorrectNpcOpened(player))
         {
+            return;
+        }
+
+        if (stackSize is not (10 or 20 or 30))
+        {
+            player.Logger.LogWarning("Invalid jewel stack size {stackSize}. Player: [{characterName}]", stackSize, player.SelectedCharacter?.Name);
             return;
         }
 

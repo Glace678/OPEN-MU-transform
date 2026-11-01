@@ -26,7 +26,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     /// </summary>
     private readonly List<IChatClient> _connectedClients;
 
-    private ReaderWriterLockSlim? _lockSlim = new();
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
     private int _lastUsedClientIndex = -1;
 
@@ -86,8 +86,21 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
                 $"The RoomId of the authentication info ({authenticationInfo.RoomId}) does not match with this RoomId ({this.RoomId}).");
         }
 
-        this.AuthenticationRequiredUntil = authenticationInfo.AuthenticationRequiredUntil;
-        this._registeredClients.Add(authenticationInfo);
+        this._lock.Wait();
+        try
+        {
+            if (this._isClosing)
+            {
+                throw new ObjectDisposedException("Chat room is already disposed.");
+            }
+
+            this.AuthenticationRequiredUntil = authenticationInfo.AuthenticationRequiredUntil;
+            this._registeredClients.Add(authenticationInfo);
+        }
+        finally
+        {
+            this._lock.Release();
+        }
     }
 
     /// <summary>
@@ -111,7 +124,6 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "lockSlim", Justification = "Null-conditional confuses the code analysis.")]
     public void Dispose()
     {
         Task.Run(() => this.DisposeAsync().AsTask()).WaitAndUnwrapException();
@@ -120,27 +132,29 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        var localLockSlim = this._lockSlim;
-        if (this._isClosing || localLockSlim is null)
+        if (this._isClosing)
         {
             return;
         }
 
-        this._isClosing = true;
-        this._lockSlim = null;
-        this._logger.LogDebug("Disposing room {RoomId}...", this.RoomId);
-        this._registeredClients.Clear();
-
+        await this._lock.WaitAsync().ConfigureAwait(false);
         List<IChatClient> connectedClients;
-        localLockSlim.EnterWriteLock();
         try
         {
+            if (this._isClosing)
+            {
+                return;
+            }
+
+            this._isClosing = true;
+            this._logger.LogDebug("Disposing room {RoomId}...", this.RoomId);
+            this._registeredClients.Clear();
             connectedClients = this._connectedClients.ToList();
             this._connectedClients.Clear();
         }
         finally
         {
-            localLockSlim.ExitWriteLock();
+            this._lock.Release();
         }
 
         try
@@ -155,7 +169,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            localLockSlim.Dispose();
+            this._lock.Dispose();
             this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
         }
     }
@@ -179,16 +193,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
 
         this._logger.LogDebug("Client {ChatClientIndex} is trying to join the room {RoomId}.", chatClient.Index, this.RoomId);
 
-        // Capture a stable reference: DisposeAsync nulls the field while an
-        // in-flight operation holds the lock, so releasing via the field would
-        // skip ExitWriteLock and deadlock disposal's EnterWriteLock forever.
-        var lockSlim = this._lockSlim;
-        if (lockSlim is null)
-        {
-            throw new ObjectDisposedException("Chat room is already disposed.");
-        }
-
-        lockSlim.EnterWriteLock();
+        await this._lock.WaitAsync().ConfigureAwait(false);
         try
         {
             if (this._isClosing)
@@ -225,7 +230,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            lockSlim.ExitWriteLock();
+            this._lock.Release();
         }
 
         return false;
@@ -244,26 +249,17 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
 
         this._logger.LogDebug($"Chat client ({chatClient}) is leaving.");
-        var lockSlim = this._lockSlim;
-        if (lockSlim is null)
-        {
-            return;
-        }
-
-        lockSlim.EnterWriteLock();
-        try
-        {
-            this._connectedClients.Remove(chatClient);
-        }
-        finally
-        {
-            lockSlim.ExitWriteLock();
-        }
 
         bool roomIsEmpty;
-        lockSlim.EnterReadLock();
+        await this._lock.WaitAsync().ConfigureAwait(false);
         try
         {
+            if (this._isClosing)
+            {
+                return;
+            }
+
+            this._connectedClients.Remove(chatClient);
             roomIsEmpty = this._connectedClients.Count < 1;
             if (!roomIsEmpty)
             {
@@ -272,7 +268,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            lockSlim.ExitReadLock();
+            this._lock.Release();
         }
 
         if (roomIsEmpty)
@@ -293,23 +289,25 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             return;
         }
 
-        var lockSlim = this._lockSlim;
-        if (lockSlim is null)
-        {
-            return;
-        }
-
-        lockSlim.EnterReadLock();
+        List<IChatClient> clients;
+        await this._lock.WaitAsync().ConfigureAwait(false);
         try
         {
-            foreach (var connectedClient in this._connectedClients)
+            if (this._isClosing)
             {
-                await connectedClient.SendMessageAsync(senderId, message).ConfigureAwait(false);
+                return;
             }
+
+            clients = this._connectedClients.ToList();
         }
         finally
         {
-            lockSlim.ExitReadLock();
+            this._lock.Release();
+        }
+
+        foreach (var connectedClient in clients)
+        {
+            await connectedClient.SendMessageAsync(senderId, message).ConfigureAwait(false);
         }
     }
 

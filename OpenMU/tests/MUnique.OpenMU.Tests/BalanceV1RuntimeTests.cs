@@ -168,7 +168,8 @@ public class BalanceV1RuntimeTests
     [Test]
     public async ValueTask GeneratedZenDoesNotDependOnAwardedExperienceAsync()
     {
-        var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var context = (IAsyncDisposable)player.GameContext;
         var randomizer = new Mock<IRandomizer>();
         randomizer.Setup(value => value.NextDouble()).Returns(0.5);
         var generator = new DefaultDropGenerator(player.GameContext.Configuration, randomizer.Object);
@@ -194,7 +195,8 @@ public class BalanceV1RuntimeTests
     [Test]
     public async ValueTask PotionCooldownsAreSeparatedByResourceAsync()
     {
-        var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var context = (IAsyncDisposable)player.GameContext;
         player.Attributes![Stats.Level] = 100;
         player.Attributes[Stats.CurrentHealth] = 0;
         player.Attributes[Stats.CurrentMana] = 0;
@@ -227,7 +229,8 @@ public class BalanceV1RuntimeTests
         var randomizer = new Mock<IRandomizer>();
         randomizer.Setup(value => value.NextRandomBool(90)).Returns(false);
         var handler = new SoulJewelConsumeHandlerPlugIn(randomizer.Object);
-        var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var player = await CreateBalancePlayerAsync().ConfigureAwait(false);
+        await using var context = (IAsyncDisposable)player.GameContext;
         var target = CreateUpgradeableItem(level: 6);
         var jewel = CreateConsumable(14, 14, 1);
         await player.Inventory!.AddItemAsync(SourceSlot, jewel).ConfigureAwait(false);

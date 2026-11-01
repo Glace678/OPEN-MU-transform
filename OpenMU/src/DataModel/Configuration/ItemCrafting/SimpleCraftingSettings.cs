@@ -1,9 +1,10 @@
-﻿// <copyright file="SimpleCraftingSettings.cs" company="MUnique">
+// <copyright file="SimpleCraftingSettings.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.OpenMU.DataModel.Configuration.ItemCrafting;
 
+using System.ComponentModel.DataAnnotations.Schema;
 using MUnique.OpenMU.Annotations;
 
 /// <summary>
@@ -37,6 +38,26 @@ public partial class SimpleCraftingSettings
     /// Gets or sets the maximum success percent.
     /// </summary>
     public byte MaximumSuccessPercent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the success rate as a normalized decimal in the range [0.0, 1.0].
+    /// </summary>
+    [NotMapped]
+    public double SuccessRate
+    {
+        get => this.SuccessPercent / 100.0;
+        set => this.SuccessPercent = (byte)Math.Clamp(Math.Round(value * 100), 0, 100);
+    }
+
+    /// <summary>
+    /// Gets or sets the maximum success rate as a normalized decimal in the range [0.0, 1.0].
+    /// </summary>
+    [NotMapped]
+    public double MaximumSuccessRate
+    {
+        get => this.MaximumSuccessPercent / 100.0;
+        set => this.MaximumSuccessPercent = (byte)Math.Clamp(Math.Round(value * 100), 0, 100);
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether multiple crafting at the same time are allowed for this crafting.

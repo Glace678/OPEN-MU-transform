@@ -1,4 +1,4 @@
-﻿// <copyright file="AttackableExtensions.cs" company="MUnique">
+// <copyright file="AttackableExtensions.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -99,12 +99,12 @@ public static class AttackableExtensions
                 defense = 0;
             }
 
-            if (balanceV1Enabled)
-            {
-                var attackerRank = GetBalanceCombatRank(attacker);
-                balanceDamageMultiplier = 1 - BalanceV1.CalculateDamageReduction(defense, attackerRank);
-                defense = 0;
-            }
+            var attackerRank = GetBalanceCombatRank(attacker);
+            double reduction = balanceV1Enabled
+                ? BalanceV1.CalculateDamageReduction(defense, attackerRank)
+                : CalculateArmorMitigation(defense, attackerRank);
+            balanceDamageMultiplier = 1.0 - reduction;
+            defense = 0;
         }
 
         attacker.GetBaseDmg(skill, out int baseMinDamage, out int baseMaxDamage, out DamageType damageType);
@@ -146,9 +146,7 @@ public static class AttackableExtensions
                 dmg += dmg;
             }
 
-            dmg = balanceV1Enabled
-                ? (int)(dmg * duelDmgDec * balanceDamageMultiplier)
-                : (int)((dmg * duelDmgDec) - defense);
+            dmg = (int)(dmg * duelDmgDec * balanceDamageMultiplier);
             dmg += GetMasterSkillTreePhysicalPassiveDamageBonus(attacker, true);
 
             if (attacker.Attributes[Stats.IsTwoHandedWeaponEquipped] > 0)
@@ -171,17 +169,13 @@ public static class AttackableExtensions
             // Wizardry, Curse, and Fenrir.
             if (isExcellentHit)
             {
-                dmg = balanceV1Enabled
-                    ? (int)(baseMaxDamage * duelDmgDec * balanceDamageMultiplier)
-                    : (int)((baseMaxDamage * duelDmgDec) - defense);
+                dmg = (int)(baseMaxDamage * duelDmgDec * balanceDamageMultiplier);
                 dmg = (int)((dmg * 1.2) + attacker.Attributes[Stats.ExcellentDamageBonus]);
                 attributes |= DamageAttributes.Excellent;
             }
             else if (isCriticalHit)
             {
-                dmg = balanceV1Enabled
-                    ? (int)(baseMaxDamage * duelDmgDec * balanceDamageMultiplier)
-                    : (int)((baseMaxDamage * duelDmgDec) - defense);
+                dmg = (int)(baseMaxDamage * duelDmgDec * balanceDamageMultiplier);
                 dmg += (int)attacker.Attributes[Stats.CriticalDamageBonus];
                 attributes |= DamageAttributes.Critical;
             }
@@ -196,9 +190,7 @@ public static class AttackableExtensions
                     dmg = Rand.NextInt(baseMinDamage, baseMaxDamage);
                 }
 
-                dmg = balanceV1Enabled
-                    ? (int)(dmg * duelDmgDec * balanceDamageMultiplier)
-                    : (int)((dmg * duelDmgDec) - defense);
+                dmg = (int)(dmg * duelDmgDec * balanceDamageMultiplier);
             }
         }
 
@@ -771,21 +763,67 @@ public static class AttackableExtensions
             return (float)BalanceV1.CalculateHitChance(attackRate, defenseRate);
         }
 
-        float legacyHitChance = 0.03f;
-        if (defenseRate < attackRate)
-        {
-            legacyHitChance = 1.0f - (defenseRate / attackRate);
-        }
+        var hitChance = CalculateHitChance(attackRate, defenseRate);
 
         var isPlayerVersusMonster = attacker is Player && defender is not Player;
         if (!isPlayerVersusMonster)
         {
-            return legacyHitChance;
+            return hitChance;
         }
 
         var attackerLevel = EarlyGameBalance.GetAttackerLevel(attacker);
-        return EarlyGameBalance.AdjustHitChance(attackerLevel, legacyHitChance);
+        return EarlyGameBalance.AdjustHitChance(attackerLevel, hitChance);
     }
+
+    /// <summary>
+    /// Calculates the hyperbolic armor mitigation fraction: Armor / (Armor + 70 + 2.4 * rank).
+    /// </summary>
+    /// <param name="armor">The defender's effective armor/defense.</param>
+    /// <param name="attackerRank">The attacker's combat rank or level.</param>
+    /// <returns>Damage reduction fraction in [0, 0.70].</returns>
+    public static double CalculateArmorMitigation(double armor, double attackerRank)
+    {
+        var safeArmor = Math.Max(0, double.IsFinite(armor) ? armor : 0);
+        var safeRank = Math.Max(1, double.IsFinite(attackerRank) ? attackerRank : 1);
+        var armorReduction = safeArmor / (safeArmor + 70.0 + (2.4 * safeRank));
+        return Math.Clamp(armorReduction, 0.0, 0.60);
+    }
+
+    /// <summary>
+    /// Calculates the damage after hyperbolic armor mitigation.
+    /// </summary>
+    /// <param name="baseDamage">The incoming base damage.</param>
+    /// <param name="armor">The defender's effective armor/defense.</param>
+    /// <param name="attackerRank">The attacker's combat rank or level.</param>
+    /// <returns>Mitigated damage amount.</returns>
+    public static double CalculateDamage(double baseDamage, double armor, double attackerRank)
+    {
+        var mitigation = CalculateArmorMitigation(armor, attackerRank);
+        return Math.Max(1.0, baseDamage * (1.0 - mitigation));
+    }
+
+    /// <summary>
+    /// Calculates a continuous monotonic hit rate bounded between 0.05 and 0.95.
+    /// </summary>
+    /// <param name="attackRate">The attacker's accuracy/attack rate.</param>
+    /// <param name="defenseRate">The defender's evasion/defense rate.</param>
+    /// <returns>Hit rate bounded in [0.05, 0.95].</returns>
+    public static float CalculateHitChance(float attackRate, float defenseRate)
+    {
+        var safeAttack = Math.Max(1.0f, float.IsFinite(attackRate) ? attackRate : 1.0f);
+        var safeDefense = Math.Max(1.0f, float.IsFinite(defenseRate) ? defenseRate : 1.0f);
+        var ratio = safeAttack / (safeAttack + safeDefense);
+        return Math.Clamp(ratio, 0.05f, 0.95f);
+    }
+
+    /// <summary>
+    /// Calculates a continuous monotonic hit rate bounded between 0.05 and 0.95.
+    /// </summary>
+    /// <param name="attackRate">The attacker's accuracy/attack rate.</param>
+    /// <param name="defenseRate">The defender's evasion/defense rate.</param>
+    /// <returns>Hit rate bounded in [0.05, 0.95].</returns>
+    public static double CalculateHitChance(double attackRate, double defenseRate) =>
+        (double)CalculateHitChance((float)attackRate, (float)defenseRate);
 
     private static bool IsBalanceV1Enabled(IAttacker attacker, IAttackable defender)
     {

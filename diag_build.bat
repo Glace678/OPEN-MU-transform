@@ -5,10 +5,15 @@ rem whatever is the current working directory.
 setlocal
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if not exist "%VSWHERE%" (
-    echo error: vswhere not found at "%VSWHERE%". 1>&2
-    exit /b 9009
+    if exist "D:\Microsoft Visual Studio" (
+        set "VSPATH=D:\Microsoft Visual Studio"
+    ) else (
+        echo error: vswhere not found at "%VSWHERE%". 1>&2
+        exit /b 9009
+    )
 )
-for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSPATH=%%i"
+if not defined VSPATH for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSPATH=%%i"
+if not defined VSPATH if exist "D:\Microsoft Visual Studio" set "VSPATH=D:\Microsoft Visual Studio"
 if not defined VSPATH (
     echo error: no Visual Studio with the VC++ toolset was found. 1>&2
     exit /b 9009

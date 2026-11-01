@@ -1,4 +1,4 @@
-﻿// <copyright file="Packet.cs" company="MUnique">
+// <copyright file="Packet.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -57,17 +57,17 @@ public sealed class Packet : INotifyPropertyChanged
     /// <summary>
     /// Gets the type of the packet, which is the first byte of the packet byte array.
     /// </summary>
-    public byte Type => this._innerData[0];
+    public byte Type => this._innerData.Length > 0 ? this._innerData[0] : (byte)0;
 
     /// <summary>
     /// Gets the code of the packet, which specifies the kind of the message.
     /// </summary>
-    public byte Code => this._innerData.AsSpan().GetPacketType();
+    public byte Code => this._innerData.Length > 0 ? this._innerData.AsSpan().GetPacketType() : (byte)0;
 
     /// <summary>
     /// Gets the sub code of the packet, which further specifies the kind of the message, if specified.
     /// </summary>
-    public byte? SubCode => this._innerData.AsSpan().GetPacketSubType();
+    public byte? SubCode => this._innerData.Length > 0 ? this._innerData.AsSpan().GetPacketSubType() : null;
 
     /// <summary>
     /// Gets the display code of the packet, which specifies the kind of the message.

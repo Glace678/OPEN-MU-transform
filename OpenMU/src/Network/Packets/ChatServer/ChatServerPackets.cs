@@ -392,7 +392,7 @@ public readonly struct ChatRoomClients
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)data.Length;
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
         }
     }
 
@@ -522,7 +522,7 @@ public readonly struct ChatMessage
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)data.Length;
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="ItemMoveHandlerPlugIn.cs" company="MUnique">
+// <copyright file="ItemMoveHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -39,6 +39,11 @@ internal class ItemMoveHandlerPlugIn : IPacketHandlerPlugIn
         if (player is RemotePlayer remotePlayer)
         {
             itemSize = remotePlayer.ItemSerializer.NeededSpace;
+        }
+
+        if (packet.Length < 7 + itemSize)
+        {
+            return;
         }
 
         var toStorage = (ItemStorageKind)packet.Span[5 + itemSize];

@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.IO;
-
 namespace MUnique.OpenMU.Network.Packets.ServerToClient;
+
+using System.IO;
 
 /// <summary>
 /// This part contains the custom indexer.
@@ -18,6 +18,11 @@ public readonly ref partial struct AddTransformedCharactersToScopeRef
     {
         get
         {
+            if (this.CharacterCount <= 0)
+            {
+                return 5;
+            }
+
             // we can take the next potential index of the last character also as the size of the packet.
             _ = this.GetIndexOfCharacter(this.CharacterCount - 1, out int finalSize);
             return finalSize;

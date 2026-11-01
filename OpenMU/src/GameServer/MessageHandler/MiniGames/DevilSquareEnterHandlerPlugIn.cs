@@ -1,10 +1,11 @@
-﻿// <copyright file="DevilSquareEnterHandlerPlugIn.cs" company="MUnique">
+// <copyright file="DevilSquareEnterHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
 namespace MUnique.OpenMU.GameServer.MessageHandler.MiniGames;
 
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
@@ -41,6 +42,12 @@ internal class DevilSquareEnterHandlerPlugIn : IPacketHandlerPlugIn
         }
 
         DevilSquareEnterRequest request = packet;
+        if (request.TicketItemInventoryIndex < InventoryConstants.EquippableSlotsCount)
+        {
+            player.Logger.LogWarning("Player {0} sent invalid devil square ticket item inventory index {1}", player, request.TicketItemInventoryIndex);
+            return;
+        }
+
         var actualLevel = request.SquareLevel + 1;
         var ticketIndex = request.TicketItemInventoryIndex - InventoryConstants.EquippableSlotsCount;
         await this._enterAction.TryEnterMiniGameAsync(player, MiniGameType.DevilSquare, actualLevel, (byte)ticketIndex).ConfigureAwait(false);

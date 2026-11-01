@@ -1,4 +1,4 @@
-﻿@typeparam TNumber where TNumber : struct
+@typeparam TNumber where TNumber : struct
 
 @using System.Diagnostics.CodeAnalysis
 @using Microsoft.CodeAnalysis.CSharp.Syntax
@@ -42,14 +42,19 @@
         {
             return typeof(TNumber) switch
             {
+                var t when t == typeof(byte) => (TNumber)(object)byte.MinValue,
+                var t when t == typeof(sbyte) => (TNumber)(object)sbyte.MinValue,
+                var t when t == typeof(short) => (TNumber)(object)short.MinValue,
+                var t when t == typeof(ushort) => (TNumber)(object)ushort.MinValue,
                 var t when t == typeof(int) => (TNumber)(object)int.MinValue,
+                var t when t == typeof(uint) => (TNumber)(object)uint.MinValue,
                 var t when t == typeof(long) => (TNumber)(object)long.MinValue,
-                var t when t == typeof(short) => (TNumber)(object)int.MinValue,
+                var t when t == typeof(ulong) => (TNumber)(object)ulong.MinValue,
                 var t when t == typeof(float) => (TNumber)(object)float.MinValue,
                 var t when t == typeof(double) => (TNumber)(object)double.MinValue,
                 var t when t == typeof(decimal) => (TNumber)(object)decimal.MinValue,
                 _ => default,
-                };
+            };
         }
     }
 
@@ -59,9 +64,14 @@
         {
             return typeof(TNumber) switch
             {
+                var t when t == typeof(byte) => (TNumber)(object)byte.MaxValue,
+                var t when t == typeof(sbyte) => (TNumber)(object)sbyte.MaxValue,
+                var t when t == typeof(short) => (TNumber)(object)short.MaxValue,
+                var t when t == typeof(ushort) => (TNumber)(object)ushort.MaxValue,
                 var t when t == typeof(int) => (TNumber)(object)int.MaxValue,
+                var t when t == typeof(uint) => (TNumber)(object)uint.MaxValue,
                 var t when t == typeof(long) => (TNumber)(object)long.MaxValue,
-                var t when t == typeof(short) => (TNumber)(object)int.MaxValue,
+                var t when t == typeof(ulong) => (TNumber)(object)ulong.MaxValue,
                 var t when t == typeof(float) => (TNumber)(object)float.MaxValue,
                 var t when t == typeof(double) => (TNumber)(object)double.MaxValue,
                 var t when t == typeof(decimal) => (TNumber)(object)decimal.MaxValue,

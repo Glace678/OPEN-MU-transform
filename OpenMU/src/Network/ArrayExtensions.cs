@@ -1,4 +1,4 @@
-﻿// <copyright file="ArrayExtensions.cs" company="MUnique">
+// <copyright file="ArrayExtensions.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -105,7 +105,7 @@ public static class ArrayExtensions
     /// <returns>An unsigned short.</returns>
     public static ushort TryMakeWordBigEndian(this Span<byte> array, int startIndex)
     {
-        return array.Length > startIndex + 1 ? array.MakeWordBigEndian(startIndex) : default;
+        return startIndex >= 0 && array.Length > startIndex + 1 ? array.MakeWordBigEndian(startIndex) : default;
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public static class ArrayExtensions
     /// <returns>The size of the header.</returns>
     public static int GetPacketHeaderSize(this byte[] packet)
     {
-        return GetPacketHeaderSize(packet[0]);
+        return packet.Length > 0 ? GetPacketHeaderSize(packet[0]) : 0;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public static class ArrayExtensions
     /// <returns>The size of the header.</returns>
     public static int GetPacketHeaderSize(this Span<byte> packet)
     {
-        return GetPacketHeaderSize(packet[0]);
+        return packet.Length > 0 ? GetPacketHeaderSize(packet[0]) : 0;
     }
 
     /// <summary>
@@ -155,7 +155,8 @@ public static class ArrayExtensions
     /// <returns>The type of the packet.</returns>
     public static byte GetPacketType(this Span<byte> packet)
     {
-        return packet[packet.GetPacketHeaderSize()];
+        var headerSize = packet.GetPacketHeaderSize();
+        return packet.Length > headerSize ? packet[headerSize] : (byte)0;
     }
 
     /// <summary>

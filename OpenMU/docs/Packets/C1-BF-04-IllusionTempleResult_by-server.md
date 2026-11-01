@@ -29,7 +29,7 @@ Length: 17 Bytes
 
 | Index | Length | Data Type | Value | Description |
 |-------|--------|-----------|-------|-------------|
-| 0 |  | String |  | Name |
+| 0 | 10 | String |  | Name |
 | 10 | 1 | Byte |  | MapNumber |
 | 11 | 1 | Byte |  | Team |
 | 12 | 1 | Byte |  | Class |

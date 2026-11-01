@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.IO;
-
 namespace MUnique.OpenMU.Network.Packets.ServerToClient;
+
+using System.IO;
 
 /// <summary>
 /// This part implements the indexer and size calculation for the message.

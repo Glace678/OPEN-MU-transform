@@ -1,4 +1,4 @@
-﻿// <copyright file="Player.cs" company="MUnique">
+// <copyright file="Player.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -1427,12 +1427,28 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         }
     }
 
+    /// <summary>
+    /// Regenerates the hero and outlaw (PK) state of the character monotonically based on real-time elapsed intervals.
+    /// 根据实际流逝的时间间隔，单调衰减并逐步恢复角色的英雄与罪恶 (PK) 状态。
+    /// </summary>
+    /// <remarks>
+    /// Hero/PK State Monotonicity Contract (GL-03 / R2-GL03) / 状态机衰减单调性契约:
+    /// 1. Time Delta Calculation: Must compute <c>DateTime.UtcNow.Subtract(this._lastRegenerate)</c> (positive delta),
+    ///    subtracting elapsed seconds from <see cref="Character.StateRemainingSeconds"/> so that remaining time monotonically counts down to 0.
+    ///    时间差值方向：必须严格采用当前时间减去上次刷新时间计算正向流逝秒数，使得剩余等待时间持续单调递减归零。
+    /// 2. State Step Transitions: When <see cref="Character.StateRemainingSeconds"/> drops to 0 or below:
+    ///    - If <c>State > HeroState.Normal</c>, the character moves one step down towards <see cref="HeroState.Normal"/>.
+    ///    - If <c>State &lt; HeroState.Normal</c>, the character moves one step up towards <see cref="HeroState.Normal"/>.
+    ///    状态跃迁阶段：倒计时归零时按阶段朝 Normal (正常状态) 靠拢，每次跃迁重新赋予 1 小时阶段倒计时，直至恢复为普通玩家。
+    /// 3. Observer Synchronization: Broadcasts <see cref="IUpdateCharacterHeroStatePlugIn"/> to notify all observing clients in scope.
+    ///    视野同步：状态跃迁即时向周围视距内的所有观察者客户端广播最新状态。
+    /// </remarks>
     private async ValueTask RegenerateHeroStateAsync()
     {
         var currentCharacter = this._selectedCharacter;
         if (currentCharacter?.StateRemainingSeconds > 0)
         {
-            var secondsSinceLastRegenerate = this._lastRegenerate.Subtract(DateTime.UtcNow).TotalSeconds;
+            var secondsSinceLastRegenerate = DateTime.UtcNow.Subtract(this._lastRegenerate).TotalSeconds;
             currentCharacter.StateRemainingSeconds -= (int)Math.Round(secondsSinceLastRegenerate);
             if (currentCharacter.StateRemainingSeconds <= 0)
             {

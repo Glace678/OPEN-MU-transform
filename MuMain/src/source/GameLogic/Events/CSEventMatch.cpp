@@ -207,13 +207,15 @@ void CSBaseMatch::SetPosition(int ix, int iy)
 void CSDevilSquareMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult,
                                         const int Success)
 {
-    if (iNumDevilRank >= 200)
+    if (iNumDevilRank <= 0 || pMatchResult == nullptr)
     {
         return;
     }
 
-    m_iNumResult = iNumDevilRank;
-    m_iMyResult  = iMyRank;
+    // Capacity of m_MatchResult is 11 elements; clamp to strictly < 11 (max 10)
+    constexpr int MaxMatchResults = 10;
+    m_iNumResult                  = (iNumDevilRank > MaxMatchResults) ? MaxMatchResults : iNumDevilRank;
+    m_iMyResult                   = iMyRank;
 
     memcpy(m_MatchResult, pMatchResult, m_iNumResult * sizeof(MatchResult));
 

@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="SoulJewelConsumeHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -41,8 +41,8 @@ public class SoulJewelConsumeHandlerPlugIn : UpgradeItemLevelJewelConsumeHandler
     {
         MaximumLevel = 8,
         MinimumLevel = 0,
-        SuccessRatePercentage = 50,
-        SuccessRateBonusWithLuckPercentage = 25,
-        ResetToLevel0WhenFailMinLevel = 7,
+        SuccessRatePercentage = 65,
+        SuccessRateBonusWithLuckPercentage = 24,
+        ResetToLevel0WhenFailMinLevel = byte.MaxValue,
     };
 }

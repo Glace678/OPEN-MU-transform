@@ -32,7 +32,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     {
         try
         {
-            if (currentState.IsDisconnectedOrFinished())
+            if (currentState != PlayerState.EnteredWorld)
             {
                 player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
                 player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);
@@ -42,6 +42,9 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
             {
                 return;
             }
+
+            player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
+            player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);
 
             player.Attributes?.AddElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
             player.Attributes?.AddElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);

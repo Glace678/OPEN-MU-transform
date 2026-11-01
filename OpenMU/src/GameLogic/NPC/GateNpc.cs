@@ -1,4 +1,4 @@
-﻿// <copyright file="GateNpc.cs" company="MUnique">
+// <copyright file="GateNpc.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -57,10 +57,29 @@ public class GateNpc : NonPlayerCharacter, ISummonable
     /// <inheritdoc />
     protected override async ValueTask DisposeAsyncCore()
     {
-        await this._cts.CancelAsync().ConfigureAwait(false);
+        try
+        {
+            await this._cts.CancelAsync().ConfigureAwait(false);
+        }
+        catch (ObjectDisposedException)
+        {
+            // Already disposed
+        }
+
         this._cts.Dispose();
 
-        await this._warpTask.ConfigureAwait(false);
+        if (this._warpTask is { } warpTask && !warpTask.IsCompleted)
+        {
+            try
+            {
+                await warpTask.ConfigureAwait(false);
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or ObjectDisposedException)
+            {
+                // Expected during cancellation
+            }
+        }
+
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
@@ -119,7 +138,17 @@ public class GateNpc : NonPlayerCharacter, ISummonable
         }
         finally
         {
-            await this.DisposeAsync().ConfigureAwait(false);
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await this.DisposeAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogError(ex, "Error disposing GateNpc.");
+                }
+            });
         }
     }
 

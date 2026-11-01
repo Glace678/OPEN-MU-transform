@@ -1,4 +1,4 @@
-﻿// <copyright file="Icarus.cs" company="MUnique">
+// <copyright file="Icarus.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -400,16 +400,16 @@ internal class Icarus : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 108 },
-                { Stats.MaximumHealth, 95000 },
-                { Stats.MinimumPhysBaseDmg, 950 },
-                { Stats.MaximumPhysBaseDmg, 1000 },
-                { Stats.DefenseBase, 600 },
-                { Stats.AttackRatePvm, 900 },
-                { Stats.DefenseRatePvm, 350 },
-                { Stats.PoisonResistance, 30f / 255 },
-                { Stats.IceResistance, 30f / 255 },
-                { Stats.WaterResistance, 35f / 255 },
-                { Stats.FireResistance, 30f / 255 },
+                { Stats.MaximumHealth, 6088.4f },
+                { Stats.MinimumPhysBaseDmg, 154.6f },
+                { Stats.MaximumPhysBaseDmg, 166.2f },
+                { Stats.DefenseBase, 200.5f },
+                { Stats.AttackRatePvm, 684.5f },
+                { Stats.DefenseRatePvm, 256.4f },
+                { Stats.PoisonResistance, 31.2f / 255f },
+                { Stats.IceResistance, 29.4f / 255f },
+                { Stats.WaterResistance, 34.8f / 255f },
+                { Stats.FireResistance, 32.6f / 255f },
             };
 
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

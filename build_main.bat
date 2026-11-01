@@ -1,13 +1,20 @@
 @echo off
-rem Locate Visual Studio and its bundled CMake via vswhere instead of a hardcoded
-rem D:\ path, so the build works regardless of where VS is installed.
+rem ===========================================================================
+rem build_main.bat - Build script for the MuMain C++ client engine (Main.exe).
+rem Automatically detects Visual Studio installation and MSVC x86 toolset.
+rem ===========================================================================
 setlocal
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if not exist "%VSWHERE%" (
-    echo error: vswhere not found at "%VSWHERE%" - install Visual Studio with the C++ workload. 1>&2
-    exit /b 9009
+    if exist "D:\Microsoft Visual Studio" (
+        set "VSPATH=D:\Microsoft Visual Studio"
+    ) else (
+        echo error: vswhere not found at "%VSWHERE%" - install Visual Studio with the C++ workload. 1>&2
+        exit /b 9009
+    )
 )
-for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSPATH=%%i"
+if not defined VSPATH for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSPATH=%%i"
+if not defined VSPATH if exist "D:\Microsoft Visual Studio" set "VSPATH=D:\Microsoft Visual Studio"
 if not defined VSPATH (
     echo error: no Visual Studio with the VC++ x86 toolset was found. 1>&2
     exit /b 9009

@@ -1,4 +1,4 @@
-﻿// <copyright file="RaklionBoss.cs" company="MUnique">
+// <copyright file="RaklionBoss.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -99,16 +99,16 @@ internal class RaklionBoss : BaseMapInitializer
             var attributes = new Dictionary<AttributeDefinition, float>
             {
                 { Stats.Level, 145 },
-                { Stats.MaximumHealth, 4800000 },
-                { Stats.MinimumPhysBaseDmg, 2500 },
-                { Stats.MaximumPhysBaseDmg, 3000 },
-                { Stats.DefenseBase, 1250 },
-                { Stats.AttackRatePvm, 2200 },
-                { Stats.DefenseRatePvm, 1800 },
-                { Stats.PoisonResistance, 254f / 255 },
-                { Stats.IceResistance, 254f / 255 },
-                { Stats.WaterResistance, 150f / 255 },
-                { Stats.FireResistance, 150f / 255 },
+                { Stats.MaximumHealth, 8486.4f },
+                { Stats.MinimumPhysBaseDmg, 254.8f },
+                { Stats.MaximumPhysBaseDmg, 276.2f },
+                { Stats.DefenseBase, 332.8f },
+                { Stats.AttackRatePvm, 1420.5f },
+                { Stats.DefenseRatePvm, 342.6f },
+                { Stats.PoisonResistance, 253.2f / 255f },
+                { Stats.IceResistance, 253.8f / 255f },
+                { Stats.WaterResistance, 152.4f / 255f },
+                { Stats.FireResistance, 148.6f / 255f },
                 { Stats.SkillMultiplier, 2 },
             };
             monster.AddAttributes(attributes, this.Context, this.GameConfiguration);

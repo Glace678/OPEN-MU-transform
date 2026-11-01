@@ -1,4 +1,4 @@
-﻿// <copyright file="IpAddressResolverFactory.cs" company="MUnique">
+// <copyright file="IpAddressResolverFactory.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -67,9 +67,9 @@ public static class IpAddressResolverFactory
         {
             return resolveIp switch
             {
-                "local" => (IpResolverType.Local, null),
-                "public" => (IpResolverType.Public, null),
-                "loopback" => (IpResolverType.Loopback, null),
+                { } when resolveIp.Equals("local", StringComparison.OrdinalIgnoreCase) => (IpResolverType.Local, null),
+                { } when resolveIp.Equals("public", StringComparison.OrdinalIgnoreCase) => (IpResolverType.Public, null),
+                { } when resolveIp.Equals("loopback", StringComparison.OrdinalIgnoreCase) => (IpResolverType.Loopback, null),
                 _ => (IpResolverType.Custom, resolveIp),
             };
         }

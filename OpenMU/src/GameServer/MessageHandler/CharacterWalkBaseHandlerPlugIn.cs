@@ -1,4 +1,4 @@
-﻿// <copyright file="CharacterWalkBaseHandlerPlugIn.cs" company="MUnique">
+// <copyright file="CharacterWalkBaseHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -36,8 +36,14 @@ internal abstract class CharacterWalkBaseHandlerPlugIn : IPacketHandlerPlugIn
     {
         if (request.Header.Length > 6)
         {
+            var directions = this.DecodePayload(request, out _);
+            if (directions.IsEmpty)
+            {
+                return;
+            }
+
             // in a walk packet, x and y are the current coordinates and the steps are leading us to the target
-            var steps = this.GetSteps(sourcePoint, this.DecodePayload(request, out _));
+            var steps = this.GetSteps(sourcePoint, directions);
             var target = this.GetTarget(steps.Span, sourcePoint);
 
             await player.WalkToAsync(target, steps).ConfigureAwait(false);
@@ -93,8 +99,14 @@ internal abstract class CharacterWalkBaseHandlerPlugIn : IPacketHandlerPlugIn
     {
         var stepsCount = walkRequest.StepCount;
         rotation = walkRequest.TargetRotation.ParseAsDirection();
-        var directions = new Direction[stepsCount];
         var payload = walkRequest.Directions;
+        var requiredBytes = (stepsCount + 1) / 2;
+        if (stepsCount <= 0 || payload.Length < requiredBytes)
+        {
+            return Span<Direction>.Empty;
+        }
+
+        var directions = new Direction[stepsCount];
         for (int i = 0; i < stepsCount; i++)
         {
             var val = payload[i / 2];

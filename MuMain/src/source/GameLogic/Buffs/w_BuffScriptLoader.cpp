@@ -6,6 +6,7 @@
 #include "Core/Utilities/ReadScript.h"
 #include "UI/Legacy/UIManager.h"
 #include "GameLogic/Items/ItemAddOptioninfo.h"
+#include "GameLogic/Buffs/BuffScriptValidation.h"
 #include "w_BuffScriptLoader.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -75,17 +76,59 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
     {
         DWORD structsize = sizeof(_BUFFINFO);
 
-        DWORD listsize;
-        fread(&listsize, sizeof(DWORD), 1, fp);
+        DWORD listsize = 0;
+        if (fread(&listsize, sizeof(DWORD), 1, fp) != 1)
+        {
+            fclose(fp);
+            return false;
+        }
 
-        BYTE* Buffer = new BYTE[structsize * listsize];
-        fread(Buffer, structsize * listsize, 1, fp);
+        if (!BuffScriptValidation::IsValidRecordCount(listsize, structsize))
+        {
+            fclose(fp);
+            wchar_t Text[256];
+            mu_swprintf(Text, L"%ls - Invalid buff record count (%u).", pchFileName.c_str(), listsize);
+            g_ErrorReport.Write(Text);
+            MessageBox(g_hWnd, Text, NULL, MB_OK);
+            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            return false;
+        }
 
-        DWORD dwCheckSum;
-        fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+        uint64_t totalBytes64 = static_cast<uint64_t>(structsize) * static_cast<uint64_t>(listsize);
+
+        _fseeki64(fp, 0, SEEK_END);
+        int64_t fileSize = _ftelli64(fp);
+        _fseeki64(fp, sizeof(DWORD), SEEK_SET);
+
+        if (fileSize < static_cast<int64_t>(sizeof(DWORD) + totalBytes64 + sizeof(DWORD)))
+        {
+            fclose(fp);
+            wchar_t Text[256];
+            mu_swprintf(Text, L"%ls - File size smaller than declared records.", pchFileName.c_str());
+            g_ErrorReport.Write(Text);
+            MessageBox(g_hWnd, Text, NULL, MB_OK);
+            SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            return false;
+        }
+
+        BYTE* Buffer = new BYTE[totalBytes64];
+        if (fread(Buffer, static_cast<size_t>(totalBytes64), 1, fp) != 1)
+        {
+            delete[] Buffer;
+            fclose(fp);
+            return false;
+        }
+
+        DWORD dwCheckSum = 0;
+        if (fread(&dwCheckSum, sizeof(DWORD), 1, fp) != 1)
+        {
+            delete[] Buffer;
+            fclose(fp);
+            return false;
+        }
 
         fclose(fp);
-        if (dwCheckSum != GenerateCheckSum2(Buffer, structsize * listsize, 0xE2F1))
+        if (dwCheckSum != GenerateCheckSum2(Buffer, static_cast<DWORD>(totalBytes64), 0xE2F1))
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - File corrupted.", pchFileName.c_str());

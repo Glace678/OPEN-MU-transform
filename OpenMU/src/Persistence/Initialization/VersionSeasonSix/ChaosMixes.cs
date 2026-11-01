@@ -1,4 +1,4 @@
-﻿// <copyright file="ChaosMixes.cs" company="MUnique">
+// <copyright file="ChaosMixes.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -91,12 +91,21 @@ public class ChaosMixes : InitializerBase
 
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.Money = 2_000_000 * (targetLevel - 9);
-        craftingSettings.SuccessPercent = (byte)(60 - ((targetLevel - 10) / 2 * 5));
-        craftingSettings.SuccessPercentageAdditionForLuck = 25;
-        craftingSettings.SuccessPercentageAdditionForExcellentItem = -10;
-        craftingSettings.SuccessPercentageAdditionForAncientItem = -10;
-        craftingSettings.SuccessPercentageAdditionForGuardianItem = -10;
-        craftingSettings.SuccessPercentageAdditionForSocketItem = -20;
+        craftingSettings.SuccessPercent = targetLevel switch
+        {
+            10 => 64,
+            11 => 58,
+            12 => 52,
+            13 => 46,
+            14 => 41,
+            15 => 36,
+            _ => (byte)Math.Clamp(64 - ((targetLevel - 10) * 6), 20, 100),
+        };
+        craftingSettings.SuccessPercentageAdditionForLuck = 24;
+        craftingSettings.SuccessPercentageAdditionForExcellentItem = -9;
+        craftingSettings.SuccessPercentageAdditionForAncientItem = -9;
+        craftingSettings.SuccessPercentageAdditionForGuardianItem = -9;
+        craftingSettings.SuccessPercentageAdditionForSocketItem = -18;
 
         // Requirements:
         var item = this.Context.CreateNew<ItemCraftingRequiredItem>();
@@ -293,7 +302,7 @@ public class ChaosMixes : InitializerBase
         var craftingSettings = this.Context.CreateNew<SimpleCraftingSettings>();
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.Money = 5_000_000;
-        craftingSettings.MaximumSuccessPercent = 90;
+        craftingSettings.MaximumSuccessPercent = 88;
 
         // Requirements:
         var firstWing = this.Context.CreateNew<ItemCraftingRequiredItem>();
@@ -374,7 +383,7 @@ public class ChaosMixes : InitializerBase
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.MoneyPerFinalSuccessPercentage = 200_000;
         craftingSettings.SuccessPercent = 1;
-        craftingSettings.MaximumSuccessPercent = 60;
+        craftingSettings.MaximumSuccessPercent = 58;
 
         // Requirements:
         var secondWing = this.Context.CreateNew<ItemCraftingRequiredItem>();
@@ -447,7 +456,7 @@ public class ChaosMixes : InitializerBase
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.MoneyPerFinalSuccessPercentage = 200_000;
         craftingSettings.SuccessPercent = 1;
-        craftingSettings.MaximumSuccessPercent = 40;
+        craftingSettings.MaximumSuccessPercent = 42;
 
         // Requirements:
         var randomExcItem = this.Context.CreateNew<ItemCraftingRequiredItem>();
@@ -553,7 +562,7 @@ public class ChaosMixes : InitializerBase
         var craftingSettings = this.Context.CreateNew<SimpleCraftingSettings>();
         crafting.SimpleCraftingSettings = craftingSettings;
         craftingSettings.Money = 5_000_000;
-        craftingSettings.MaximumSuccessPercent = 90;
+        craftingSettings.MaximumSuccessPercent = 88;
 
         // Requirements:
         var firstWing = this.Context.CreateNew<ItemCraftingRequiredItem>();

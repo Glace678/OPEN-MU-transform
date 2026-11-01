@@ -395,13 +395,14 @@ void CPersonalShopTitleImp::CheckKeyIntegrity()
         CHARACTER*         pPlayer  = (*mi).first;
         CShopTitleDrawObj* pDrawObj = (*mi).second;
 
-        if (pPlayer->Key != pDrawObj->GetKey())
+        const int drawObjKey = pDrawObj->GetKey();
+        if (pPlayer->Key != drawObjKey)
         {
             delete pDrawObj;
             mi = m_listShopTitleDrawObj.erase(mi);
             g_ErrorReport.Write(
                 L"@ CheckKeyIntegrity - player key-value dismatch(id : %ls, server's key : %d, client array's key : %d) \n",
-                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
+                pPlayer->ID, drawObjKey, pPlayer->Key);
         }
         else if (pPlayer->Object.Kind != KIND_PLAYER)
         {
@@ -409,7 +410,7 @@ void CPersonalShopTitleImp::CheckKeyIntegrity()
             mi = m_listShopTitleDrawObj.erase(mi);
             g_ErrorReport.Write(
                 L"@ CheckKeyIntegrity - player type invalid(id : %ls, server's key : %d, client array's key : %d) \n",
-                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
+                pPlayer->ID, drawObjKey, pPlayer->Key);
         }
         else
         {

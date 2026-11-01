@@ -114,18 +114,29 @@ public sealed class SkillList : ISkillList, IDisposable
     /// <inheritdoc/>
     public async ValueTask<bool> RemoveItemSkillAsync(ushort skillId)
     {
-        this._availableSkills.TryGetValue(skillId, out var skillEntry);
-        if (skillEntry is null)
+        var itemSkillEntry = this._itemSkills.FirstOrDefault(s => s.Skill!.Number == skillId);
+        if (itemSkillEntry is null)
         {
             return false;
         }
 
-        // We need to take into account that we there might be multiple items equipped with the same skill
-        var skillRemoved = this._itemSkills.Remove(skillEntry);
-        if (skillRemoved && this._itemSkills.All(s => s.Skill!.Number != skillId))
+        // We need to take into account that there might be multiple items equipped with the same skill
+        this._itemSkills.Remove(itemSkillEntry);
+        if (this._itemSkills.All(s => s.Skill!.Number != skillId))
         {
-            await this._player.InvokeViewPlugInAsync<ISkillListViewPlugIn>(p => p.RemoveSkillAsync(skillEntry.Skill!)).ConfigureAwait(false);
-            this._availableSkills.Remove(skillId);
+            var learnedSkill = this._learnedSkills.FirstOrDefault(s => s.Skill!.Number == skillId);
+            if (learnedSkill is not null)
+            {
+                this._availableSkills[skillId] = learnedSkill;
+            }
+            else
+            {
+                if (this._availableSkills.TryGetValue(skillId, out var availableEntry))
+                {
+                    await this._player.InvokeViewPlugInAsync<ISkillListViewPlugIn>(p => p.RemoveSkillAsync(availableEntry.Skill!)).ConfigureAwait(false);
+                    this._availableSkills.Remove(skillId);
+                }
+            }
         }
 
         return true;

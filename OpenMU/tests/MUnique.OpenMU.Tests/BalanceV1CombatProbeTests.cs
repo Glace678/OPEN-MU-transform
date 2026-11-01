@@ -27,6 +27,7 @@ using PersistentIdentity = MUnique.OpenMU.Persistence.IIdentifiable;
 
 /// <summary>An explicit database-free probe, not real-time/client combat acceptance.</summary>
 [TestFixture]
+[NonParallelizable]
 public class BalanceV1CombatProbeTests
 {
     private static readonly int[] Levels = [1, 11, 50, 51, 100, 200, 300, 400];

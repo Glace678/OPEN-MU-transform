@@ -5679,7 +5679,7 @@
       <Length>10</Length>
       <Direction>ServerToClient</Direction>
       <SentWhen>After a skill got removed from the skill list, e.g. by removing an equipped item.</SentWhen>
-      <CausedReaction>The skill is added to the skill list on client side.</CausedReaction>
+      <CausedReaction>The skill is removed from the skill list on client side.</CausedReaction>
       <Fields>
         <Field>
           <Index>4</Index>
@@ -5783,7 +5783,7 @@
       <Length>10</Length>
       <Direction>ServerToClient</Direction>
       <SentWhen>After a skill got removed from the skill list, e.g. by removing an equipped item.</SentWhen>
-      <CausedReaction>The skill is added to the skill list on client side.</CausedReaction>
+      <CausedReaction>The skill is removed from the skill list on client side.</CausedReaction>
       <Fields>
         <Field>
           <Index>4</Index>
@@ -5839,7 +5839,7 @@
       <Length>10</Length>
       <Direction>ServerToClient</Direction>
       <SentWhen>After a skill got removed from the skill list, e.g. by removing an equipped item.</SentWhen>
-      <CausedReaction>The skill is added to the skill list on client side.</CausedReaction>
+      <CausedReaction>The skill is removed from the skill list on client side.</CausedReaction>
       <Fields>
         <Field>
           <Index>4</Index>
@@ -9363,42 +9363,42 @@
           <Name>RemainingSeconds</Name>
         </Field>
         <Field>
-          <Index>4</Index>
+          <Index>6</Index>
           <Type>ShortLittleEndian</Type>
           <Name>PlayerIndex</Name>
         </Field>
         <Field>
-          <Index>6</Index>
+          <Index>8</Index>
           <Type>Byte</Type>
           <Name>PositionX</Name>
         </Field>
         <Field>
-          <Index>7</Index>
+          <Index>9</Index>
           <Type>Byte</Type>
           <Name>PositionY</Name>
         </Field>
         <Field>
-          <Index>8</Index>
+          <Index>10</Index>
           <Type>Byte</Type>
           <Name>Team1Points</Name>
         </Field>
         <Field>
-          <Index>9</Index>
+          <Index>11</Index>
           <Type>Byte</Type>
           <Name>Team2Points</Name>
         </Field>
         <Field>
-          <Index>10</Index>
+          <Index>12</Index>
           <Type>Byte</Type>
           <Name>MyTeam</Name>
         </Field>
         <Field>
-          <Index>11</Index>
+          <Index>13</Index>
           <Type>Byte</Type>
           <Name>PartyCount</Name>
         </Field>
         <Field>
-          <Index>12</Index>
+          <Index>14</Index>
           <Type>Structure[]</Type>
           <TypeName>IllusionTemplePartyEntry</TypeName>
           <Name>PartyMembers</Name>
@@ -9550,6 +9550,7 @@
               <Index>0</Index>
               <Type>String</Type>
               <Name>Name</Name>
+              <Length>10</Length>
             </Field>
             <Field>
               <Index>10</Index>

@@ -1,4 +1,4 @@
-﻿// <copyright file="PlayerShopSetItemPricePacketHandlerPlugIn.cs" company="MUnique">
+// <copyright file="PlayerShopSetItemPricePacketHandlerPlugIn.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -32,6 +32,13 @@ internal class PlayerShopSetItemPricePacketHandlerPlugIn : ISubPacketHandlerPlug
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
         PlayerShopSetItemPrice message = packet;
+        if (message.Price > int.MaxValue)
+        {
+            player.Logger.LogWarning("Player [{0}] attempted to set invalid item price {1} on slot {2}", player.SelectedCharacter?.Name, message.Price, message.ItemSlot);
+            await this._setPriceAction.SetPriceAsync(player, message.ItemSlot, -1).ConfigureAwait(false);
+            return;
+        }
+
         player.Logger.LogDebug("Player [{0}] sets price of slot {1} to {2}", player.SelectedCharacter?.Name, message.ItemSlot, message.Price);
         await this._setPriceAction.SetPriceAsync(player, message.ItemSlot, (int)message.Price).ConfigureAwait(false);
     }

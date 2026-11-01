@@ -91,7 +91,16 @@ AttributeSystem BuildSystem(CharacterClass cls)
     var stats = cls.StatAttributes.Where(sa => sa.Attribute is not null)
         .Select(sa => new StatAttribute(sa.Attribute!, sa.BaseValue)).ToList();
     var bases = cls.BaseAttributeValues.ToList();
-    if (ExtraLookup.TryGetValue(cls.Name.ToString(), out var extra)) bases.AddRange(extra);
+    if (ExtraLookup.TryGetValue(cls.Name.ToString(), out var extra))
+    {
+        foreach (var attr in extra)
+        {
+            if (bases.All(b => b.Definition?.Id != attr.Definition?.Id))
+            {
+                bases.Add(attr);
+            }
+        }
+    }
     return new AttributeSystem(stats, bases, cls.AttributeCombinations.ToList());
 }
 bool IsCaster(CharacterClass cls) => cls.Name.ToString() is "Dark Wizard" or "Summoner";

@@ -26,43 +26,67 @@ ItemCreationParams ParseItemData(std::span<const BYTE> itemData)
     params.WithLuck   = flags & ItemOptionFlags::HasLuck;
     params.WithSkill  = flags & ItemOptionFlags::HasSkill;
 
-    int offset = 0;
+    size_t currentOffset = 5;
     if (flags & ItemOptionFlags::HasOption)
     {
-        params.OptionLevel = itemData[5] & 0xF;
-        params.OptionType  = (itemData[5] >> 4) & 0xF;
-        offset++;
+        if (currentOffset < itemData.size())
+        {
+            params.OptionLevel = itemData[currentOffset] & 0xF;
+            params.OptionType  = (itemData[currentOffset] >> 4) & 0xF;
+            currentOffset++;
+        }
     }
 
     if (flags & ItemOptionFlags::HasExcellent)
     {
-        params.ExcellentFlags = itemData[5 + offset];
-        offset++;
+        if (currentOffset < itemData.size())
+        {
+            params.ExcellentFlags = itemData[currentOffset];
+            currentOffset++;
+        }
     }
 
     if (flags & ItemOptionFlags::HasAncient)
     {
-        params.AncientDiscriminator = itemData[5 + offset] & 0xF;
-        params.AncientBonusOption   = (itemData[5 + offset] >> 4) & 0xF;
-        offset++;
+        if (currentOffset < itemData.size())
+        {
+            params.AncientDiscriminator = itemData[currentOffset] & 0xF;
+            params.AncientBonusOption   = (itemData[currentOffset] >> 4) & 0xF;
+            currentOffset++;
+        }
     }
 
     if (flags & ItemOptionFlags::HasHarmony)
     {
-        params.HasHarmonyOption   = true;
-        params.HarmonyOptionLevel = itemData[5 + offset] & 0xF;
-        params.HarmonyOptionType  = (itemData[5 + offset] >> 4) & 0xF;
-        offset++;
+        if (currentOffset < itemData.size())
+        {
+            params.HasHarmonyOption   = true;
+            params.HarmonyOptionLevel = itemData[currentOffset] & 0xF;
+            params.HarmonyOptionType  = (itemData[currentOffset] >> 4) & 0xF;
+            currentOffset++;
+        }
     }
 
     if (flags & ItemOptionFlags::HasSockets)
     {
-        params.SocketBonusOption = (itemData[5 + offset] >> 4) & 0xF;
-        params.SocketCount       = itemData[5 + offset] & 0xF;
-
-        for (int i = 0; i < params.SocketCount; ++i)
+        if (currentOffset < itemData.size())
         {
-            params.SocketOptions[i] = itemData[6 + offset + i];
+            params.SocketBonusOption = (itemData[currentOffset] >> 4) & 0xF;
+            BYTE rawCount            = itemData[currentOffset] & 0xF;
+            params.SocketCount       = std::min<BYTE>(rawCount, MAX_SOCKETS);
+            currentOffset++;
+
+            for (int i = 0; i < params.SocketCount; ++i)
+            {
+                if (currentOffset + i < itemData.size())
+                {
+                    params.SocketOptions[i] = itemData[currentOffset + i];
+                }
+                else
+                {
+                    params.SocketOptions[i] = 0;
+                }
+            }
         }
     }
 
@@ -143,6 +167,12 @@ ITEM* SEASON3B::CNewUIItemMng::CreateItemOld(std::span<const BYTE> pbyItemPacket
 ITEM* SEASON3B::CNewUIItemMng::CreateItemByParameters(const ItemCreationParams* parameters)
 {
     if (parameters == nullptr)
+    {
+        return nullptr;
+    }
+
+    int itemType = parameters->Group * MAX_ITEM_INDEX + parameters->Number;
+    if (itemType < 0 || itemType >= MAX_ITEM)
     {
         return nullptr;
     }
