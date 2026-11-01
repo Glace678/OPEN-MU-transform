@@ -1,4 +1,4 @@
-﻿// <copyright file="ConfigFileDatabaseConnectionStringProvider.cs" company="MUnique">
+// <copyright file="ConfigFileDatabaseConnectionStringProvider.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -192,7 +192,7 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         {
             csb.Password = resolvedPassword;
         }
-        else
+        else if (Environment.GetEnvironmentVariable(ConnectionSettingsFileVariableName) is not { Length: > 0 } || string.IsNullOrEmpty(csb.Password) || csb.Password == "__SET_BY_ENV__")
         {
             var triedVariables = role == DbRole.Admin
                 ? $"{passwordVariableName} (or legacy {DbAdminPasswordVariableName})"

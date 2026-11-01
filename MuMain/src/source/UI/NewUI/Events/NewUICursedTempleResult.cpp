@@ -291,11 +291,11 @@ void SEASON3B::CNewUICursedTempleResult::RenderText()
     DrawText(Text, m_Pos.x, m_Pos.y + 13, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH,
              false);
 
-    memset(&Text, 0, sizeof(wchar_t) * 200);
-    mu_swprintf(Text, L"  %ls           %ls        %ls     %ls    %ls", I18N::Game::Camp, I18N::Game::Character,
-                I18N::Game::Class, I18N::Game::EXP, I18N::Game::Point);
-    DrawText(Text, m_Pos.x, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_RESULT_WINDOW_WIDTH,
-             false);
+    DrawText(I18N::Game::Camp, m_Pos.x + 5, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT, 0, false);
+    DrawText(I18N::Game::Character, m_Pos.x + 56, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT, 0, false);
+    DrawText(I18N::Game::Class, m_Pos.x + 106, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT, 0, false);
+    DrawText(I18N::Game::EXP, m_Pos.x + 150, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT, 0, false);
+    DrawText(I18N::Game::Point, m_Pos.x + 190, m_Pos.y + 38, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT, 0, false);
 
     int i = 0;
     for (auto iter = m_AlliedTeamGameResult.begin(); iter != m_AlliedTeamGameResult.end();)

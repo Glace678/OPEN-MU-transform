@@ -276,7 +276,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
                     // ones such as zh-CN), so ResourceManager falls back to invariant English resources and the
                     // player would see English even though a translated satellite exists. Map the neutral
                     // simplified-Chinese culture to the zh-CN satellite that is actually shipped.
-                    if (culture.IsNeutralCulture && culture.Name == "zh")
+                    if ((culture.IsNeutralCulture && culture.Name == "zh") || (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "zh" && (string.IsNullOrWhiteSpace(account.LanguageIsoCode) || account.LanguageIsoCode is "en" or "uk" or "zh")))
                     {
                         culture = new CultureInfo("zh-CN");
                     }

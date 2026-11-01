@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //  GMHellas.cpp
 //////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
@@ -222,14 +222,14 @@ int RenderHellasItemInfo(ITEM* ip, int textNum)
             int ItemLevel = ip->Level;
 
             TextListColor[TextNum] = TEXT_COLOR_WHITE;
-            mu_swprintf(TextList[TextNum], L"%ls %ls       %ls    ", I18N::Game::Kalima, I18N::Game::Level,
+            mu_swprintf(TextList[TextNum], L"%ls%ls\t%ls", I18N::Game::Kalima, I18N::Game::Level,
                         I18N::Game::MinLevel);
             TextListColor[TextNum] = TEXT_COLOR_WHITE;
             TextBold[TextNum]      = false;
             TextNum++;
             for (int i = 0; i < NUM_HELLAS; i++)
             {
-                mu_swprintf(TextList[TextNum], L"        %d             %3d~%3d     ", i + 1,
+                mu_swprintf(TextList[TextNum], L"%d\t%d ~ %d", i + 1,
                             g_iKalimaLevel[startIndex + i][0], std::min<int>(400, g_iKalimaLevel[startIndex + i][1]));
 
                 if (ItemLevel == i + 1)

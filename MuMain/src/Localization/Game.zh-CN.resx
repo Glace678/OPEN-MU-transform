@@ -3204,7 +3204,7 @@
     <comment>legacy_id=852</comment>
   </data>
   <data name="The maximum capacity of %s has been reached. The max. number allowed is %d." xml:space="preserve">
-    <value>已达到%s的最大容量。最大。允许的号码是 %d。</value>
+    <value>已达到%s的最大容量，最多允许 %d 人。</value>
     <comment>legacy_id=853</comment>
   </data>
   <data name="The level of the Cloak of Invisibility is incorrect." xml:space="preserve">
@@ -3512,7 +3512,7 @@
     <comment>legacy_id=934</comment>
   </data>
   <data name="Min. Level" xml:space="preserve">
-    <value>分钟。等级</value>
+    <value>最低等级</value>
     <comment>legacy_id=935</comment>
   </data>
   <data name="You must be in a party" xml:space="preserve">
@@ -4860,7 +4860,7 @@
     <comment>legacy_id=1300,1745</comment>
   </data>
   <data name="Assist. M." xml:space="preserve">
-    <value>协助。 M。</value>
+    <value>副盟主</value>
     <comment>legacy_id=1301</comment>
   </data>
   <data name="Battle M." xml:space="preserve">
@@ -5364,11 +5364,11 @@
     <comment>legacy_id=1436</comment>
   </data>
   <data name="Acquired no. of sign: %u" xml:space="preserve">
-    <value>获得编号。符号：%u</value>
+    <value>已获得标识数量：%u</value>
     <comment>legacy_id=1437</comment>
   </data>
   <data name="Registered no. of sign: %u" xml:space="preserve">
-    <value>注册号码符号：%u</value>
+    <value>已登记标识数量：%u</value>
     <comment>legacy_id=1438</comment>
   </data>
   <data name="Register" xml:space="preserve">
@@ -6672,11 +6672,11 @@
     <comment>legacy_id=1777</comment>
   </data>
   <data name="Square no. %d (Master Level)" xml:space="preserve">
-    <value>方号%d（大师级）</value>
+    <value>恶魔广场 %d（大师级）</value>
     <comment>legacy_id=1778</comment>
   </data>
   <data name="Castle no. %d (Master Level)" xml:space="preserve">
-    <value>城堡号%d（大师级）</value>
+    <value>血色城堡 %d（大师级）</value>
     <comment>legacy_id=1779</comment>
   </data>
   <data name="Maximum Mana/%d recovery" xml:space="preserve">
@@ -6804,7 +6804,7 @@
     <comment>legacy_id=1820</comment>
   </data>
   <data name="Current no. of possible dismantling: %d" xml:space="preserve">
-    <value>目前编号可能拆解：%d</value>
+    <value>当前可拆解数量：%d</value>
     <comment>legacy_id=1821</comment>
   </data>
   <data name="After selecting press the 'Dismantle' button." xml:space="preserve">
@@ -7876,11 +7876,11 @@
     <comment>legacy_id=2187</comment>
   </data>
   <data name="Max. HP increase +%d" xml:space="preserve">
-    <value>最大限度。生命值增加+%d</value>
+    <value>最大生命值增加 +%d</value>
     <comment>legacy_id=2188</comment>
   </data>
   <data name="Max. SD increase +%d" xml:space="preserve">
-    <value>最大限度。 SD增加+%d</value>
+    <value>最大SD增加 +%d</value>
     <comment>legacy_id=2189</comment>
   </data>
   <data name="SD auto recovery" xml:space="preserve">
@@ -7948,7 +7948,7 @@
     <comment>legacy_id=2206</comment>
   </data>
   <data name="I.D. of Kantur Chief Scientist. You can enter the Refinery Tower." xml:space="preserve">
-    <value>ID。坎图尔首席科学家。您可以进入精炼之塔。</value>
+    <value>坎特鲁首席科学家的身份牌。可凭此进入提炼之塔。</value>
     <comment>legacy_id=2207</comment>
   </data>
   <data name="Jewel with impurities" xml:space="preserve">
@@ -7976,7 +7976,7 @@
     <comment>legacy_id=2214</comment>
   </data>
   <data name="Max. level for reinforcement is applied. It can't no longer be reinforced." xml:space="preserve">
-    <value>最大限度。应用加固等级。已经不能再强化了。</value>
+    <value>已达到最高强化等级，无法继续强化。</value>
     <comment>legacy_id=2215</comment>
   </data>
   <data name="Item level is lower than the required reinforcement option." xml:space="preserve">
@@ -10360,11 +10360,11 @@
     <comment>legacy_id=2967</comment>
   </data>
   <data name="Increase Max. AG + Level" xml:space="preserve">
-    <value>增加最大。 AG+等级</value>
+    <value>最大AG增加 +等级</value>
     <comment>legacy_id=2968</comment>
   </data>
   <data name="Increase Max. SD + Levelx10" xml:space="preserve">
-    <value>增加最大。 SD + 等级x10</value>
+    <value>最大SD增加 +等级x10</value>
     <comment>legacy_id=2969</comment>
   </data>
   <data name="Up to %d%% EXP gain increase, depending on the number of members in your party." xml:space="preserve">
@@ -11165,7 +11165,7 @@
     <comment>legacy_id=3268</comment>
   </data>
   <data name="Lv. 350 - 400" xml:space="preserve">
-    <value>LV。 350 - 400</value>
+    <value>等级 350 - 400</value>
     <comment>legacy_id=3269</comment>
   </data>
   <data name="Bring it to Tercia to get the deposit back." xml:space="preserve">

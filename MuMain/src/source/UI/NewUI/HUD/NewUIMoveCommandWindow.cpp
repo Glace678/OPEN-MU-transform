@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // NewUIMoveCommandWindow.cpp: implementation of the CNewUIMoveCommandWindow class.
 //////////////////////////////////////////////////////////////////////
 
@@ -109,69 +109,11 @@ void SEASON3B::CNewUIMoveCommandWindow::SetPos(int x, int y)
     m_Pos.x = x;
     m_Pos.y = y;
 
-    m_StrifePos.x = m_Pos.x + 20;
-    switch (WindowWidth)
-    {
-        case REFERENCE_WIDTH:
-            m_MapNameUISize.x = 220;
-            m_MapNamePos.x    = m_Pos.x + 62;
-            m_ReqLevelPos.x   = m_Pos.x + 119;
-            m_ReqZenPos.x     = m_Pos.x + 159;
-            break;
-        case 800:
-            m_MapNameUISize.x = 200;
-            m_MapNamePos.x    = m_Pos.x + 69;
-            m_ReqLevelPos.x   = m_Pos.x + 129;
-            m_ReqZenPos.x     = m_Pos.x + 174;
-            break;
-        case 1024:
-            m_MapNameUISize.x = 180;
-            m_MapNamePos.x    = m_Pos.x + 64;
-            m_ReqLevelPos.x   = m_Pos.x + 119;
-            m_ReqZenPos.x     = m_Pos.x + 159;
-            break;
-        case 1280:
-            m_MapNameUISize.x = 160;
-            m_MapNamePos.x    = m_Pos.x + 59;
-            m_ReqLevelPos.x   = m_Pos.x + 104;
-            m_ReqZenPos.x     = m_Pos.x + 139;
-            break;
-        case 1366:
-            m_MapNameUISize.x = 150;
-            m_MapNamePos.x    = m_Pos.x + 56;
-            m_ReqLevelPos.x   = m_Pos.x + 101;
-            m_ReqZenPos.x     = m_Pos.x + 134;
-            break;
-        case 1440:
-            m_MapNameUISize.x = 140;
-            m_MapNamePos.x    = m_Pos.x + 53;
-            m_ReqLevelPos.x   = m_Pos.x + 97;
-            m_ReqZenPos.x     = m_Pos.x + 129;
-            break;
-        case 1600:
-            m_MapNameUISize.x = 120;
-            m_MapNamePos.x    = m_Pos.x + 46;
-            m_ReqLevelPos.x   = m_Pos.x + 86;
-            m_ReqZenPos.x     = m_Pos.x + 114;
-            break;
-        case 1680:
-            m_MapNameUISize.x = 115;
-            m_MapNamePos.x    = m_Pos.x + 44;
-            m_ReqLevelPos.x   = m_Pos.x + 83;
-            m_ReqZenPos.x     = m_Pos.x + 110;
-            break;
-        case 1920:
-            m_MapNameUISize.x = 110;
-            m_MapNamePos.x    = m_Pos.x + 38;
-            m_ReqLevelPos.x   = m_Pos.x + 70;
-            m_ReqZenPos.x     = m_Pos.x + 93;
-            break;
-        default:
-            // handle unsupported resolutions here
-            break;
-    }
-
-    m_MapNameUISize.x += 10;
+    m_MapNameUISize.x = 230;
+    m_StrifePos.x     = m_Pos.x + 24;
+    m_MapNamePos.x    = m_Pos.x + 76;
+    m_ReqLevelPos.x   = m_Pos.x + 136;
+    m_ReqZenPos.x     = m_Pos.x + 186;
 
     m_listMoveInfoData = CMoveCommandData::GetInstance()->GetMoveCommandDatalist();
     m_iRealFontHeight  = FontHeight * REFERENCE_HEIGHT / WindowHeight + 2;

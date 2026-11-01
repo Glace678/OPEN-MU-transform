@@ -48,6 +48,27 @@ std::wstring LocalizeServerNotice(std::wstring_view text)
         return I18N::Game::HappyHourStartedNotice;
     if (text == L"Happy Hour event has ended!")
         return I18N::Game::HappyHourEndedNotice;
+    if (text == L"You don't have enough Money" || text == L"You don't have enough Money.")
+        return L"你的金币不足。";
+    if (text == L"Inventory is full" || text == L"Inventory is full.")
+        return L"背包已满。";
+    if (text == L"Inventory got not enough space.")
+        return L"背包空间不足。";
+    if (text == L"You can't buy anymore.")
+        return L"无法再购买更多物品。";
+    if (text == L"No item there to repair.")
+        return L"没有找到需要修理的物品。";
+    if (text == L"Item cannot be repaired.")
+        return L"该物品无法修理。";
+    if (text == L"You don't have enough money to repair.")
+        return L"你的金币不足以修理该物品。";
+
+    constexpr std::wstring_view enteredGameSuffix = L" entered the game.";
+    if (text.ends_with(enteredGameSuffix) && text.size() > enteredGameSuffix.size())
+    {
+        std::wstring playerName(text.substr(0, text.size() - enteredGameSuffix.size()));
+        return playerName + L" 进入了游戏。";
+    }
 
     constexpr std::wstring_view bloodCastle = L"Blood Castle";
     constexpr std::wstring_view chaosCastle = L"Chaos Castle";

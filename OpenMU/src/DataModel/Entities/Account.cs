@@ -1,4 +1,4 @@
-﻿// <copyright file="Account.cs" company="MUnique">
+// <copyright file="Account.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -88,7 +88,7 @@ public class Account
     /// Gets or sets the iso code (ISO 639-2/3) of the preferred language of the player.
     /// </summary>
     [DefaultValue("en")]
-    public string LanguageIsoCode { get; set; } = "en";
+    public string LanguageIsoCode { get; set; } = "zh";
 
     /// <summary>
     /// Gets or sets the date and time until which the chat ban is in effect.

@@ -346,8 +346,12 @@ void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSo
     TextNum                                         = std::clamp(TextNum, 0, static_cast<int>(std::size(TextList)));
     SIZE                                   TextSize = {0, 0};
     std::array<float, std::size(TextList)> lineHeights{};
-    float                                  fWidth  = 0;
-    float                                  fHeight = 0;
+    float                                  fWidth       = 0;
+    float                                  fHeight      = 0;
+    constexpr int                          kMaxCols     = 4;
+    int                                    numTableCols = 0;
+    std::array<int, kMaxCols>              maxColWidthPx{};
+
     for (int i = 0; i < TextNum; ++i)
     {
         if (TextList[i][0] == '\0')
@@ -357,10 +361,43 @@ void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSo
         }
 
         SelectTooltipLineFont(i);
-        GetTextExtentPoint32(g_pRenderText->GetFontDC(), TextList[i], lstrlen(TextList[i]), &TextSize);
-
-        if (fWidth < TextSize.cx)
-            fWidth = TextSize.cx;
+        if (wcschr(TextList[i], L'\t') != nullptr)
+        {
+            TextSize = {0, 0};
+            const wchar_t* start  = TextList[i];
+            int            colIdx = 0;
+            while (*start != L'\0' && colIdx < kMaxCols)
+            {
+                const wchar_t* tabPos = wcschr(start, L'\t');
+                const int      len    = tabPos ? static_cast<int>(tabPos - start) : lstrlen(start);
+                SIZE           cellSz = {0, 0};
+                if (len > 0)
+                {
+                    GetTextExtentPoint32(g_pRenderText->GetFontDC(), start, len, &cellSz);
+                }
+                else
+                {
+                    GetTextExtentPoint32(g_pRenderText->GetFontDC(), L" ", 1, &cellSz);
+                    cellSz.cx = 0;
+                }
+                if (maxColWidthPx[colIdx] < cellSz.cx)
+                    maxColWidthPx[colIdx] = cellSz.cx;
+                if (TextSize.cy < cellSz.cy)
+                    TextSize.cy = cellSz.cy;
+                ++colIdx;
+                if (!tabPos)
+                    break;
+                start = tabPos + 1;
+            }
+            if (numTableCols < colIdx)
+                numTableCols = colIdx;
+        }
+        else
+        {
+            GetTextExtentPoint32(g_pRenderText->GetFontDC(), TextList[i], lstrlen(TextList[i]), &TextSize);
+            if (fWidth < TextSize.cx)
+                fWidth = TextSize.cx;
+        }
 
         constexpr float lineSpacing    = 1.1f;
         const float     heightFraction = TextList[i][0] == L'\n' ? 0.5f : 1.f;
@@ -368,17 +405,27 @@ void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSo
         fHeight += lineHeights[i];
     }
 
+    const int colGapPx = static_cast<int>(14.0f * g_fScreenRate_x);
+    if (numTableCols > 1)
+    {
+        int tableRowPx = (numTableCols - 1) * colGapPx;
+        for (int c = 0; c < numTableCols; ++c)
+            tableRowPx += maxColWidthPx[c];
+        if (fWidth < tableRowPx)
+            fWidth = static_cast<float>(tableRowPx);
+    }
+
     EnableAlphaTest();
     fWidth /= g_fScreenRate_x;
     if (Tab > 0)
         fWidth = Tab / g_fScreenRate_x * 2;
-    fWidth += 4;
+    fWidth += 10;
     int iPos_x = sx - fWidth / 2;
-    if (iPos_x < 0)
-        iPos_x = 0;
-    if (iPos_x + fWidth > (int)WindowWidth / g_fScreenRate_x)
+    if (iPos_x < 2)
+        iPos_x = 2;
+    if (iPos_x + fWidth > (int)WindowWidth / g_fScreenRate_x - 2)
     {
-        iPos_x = ((int)WindowWidth) / g_fScreenRate_x - fWidth - 1;
+        iPos_x = ((int)WindowWidth) / g_fScreenRate_x - fWidth - 2;
     }
 
     float fsx = iPos_x + 1;
@@ -467,29 +514,72 @@ void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSo
                     glColor3f(0.9f, 0.42f, 0.04f);
                     break;
             }
+            bool hasRowBg = false;
             if (TEXT_COLOR_DARKRED == TextListColor[i])
             {
                 g_pRenderText->SetBgColor(160, 0, 0, 255);
+                hasRowBg = true;
             }
             else if (TEXT_COLOR_DARKBLUE == TextListColor[i])
             {
                 g_pRenderText->SetBgColor(0, 0, 160, 255);
+                hasRowBg = true;
             }
             else if (TEXT_COLOR_DARKYELLOW == TextListColor[i])
             {
                 g_pRenderText->SetBgColor(160, 102, 0, 255);
+                hasRowBg = true;
             }
             else if (TEXT_COLOR_GREEN_BLUE == TextListColor[i])
             {
                 g_pRenderText->SetBgColor(60, 60, 200, 255);
                 g_pRenderText->SetTextColor(0, 255, 0, 255);
+                hasRowBg = true;
             }
             else
             {
                 g_pRenderText->SetBgColor(0);
             }
             SIZE TextSize;
-            g_pRenderText->RenderText(fsx, fsy, TextList[i], (fWidth - 2), 0, iSort, &TextSize);
+            if (wcschr(TextList[i], L'\t') != nullptr && numTableCols > 1)
+            {
+                if (hasRowBg)
+                {
+                    g_pRenderText->RenderText(fsx, fsy, L" ", (fWidth - 2), 0, RT3_SORT_LEFT, &TextSize);
+                    g_pRenderText->SetBgColor(0);
+                }
+                const float                  colGapVirt     = 14.0f;
+                float                        totalTableVirt = (numTableCols - 1) * colGapVirt;
+                std::array<float, kMaxCols>  colWidthVirt{};
+                for (int c = 0; c < numTableCols; ++c)
+                {
+                    colWidthVirt[c] = maxColWidthPx[c] / g_fScreenRate_x;
+                    totalTableVirt += colWidthVirt[c];
+                }
+                float          colX   = fsx + ((fWidth - 2.0f) - totalTableVirt) * 0.5f;
+                const wchar_t* start  = TextList[i];
+                int            colIdx = 0;
+                while (*start != L'\0' && colIdx < numTableCols)
+                {
+                    const wchar_t* tabPos = wcschr(start, L'\t');
+                    const int      len    = tabPos ? static_cast<int>(tabPos - start) : lstrlen(start);
+                    wchar_t        cellBuf[128]{};
+                    if (len > 0)
+                    {
+                        wcsncpy_s(cellBuf, start, std::min<size_t>(len, std::size(cellBuf) - 1));
+                        g_pRenderText->RenderText(colX, fsy, cellBuf, colWidthVirt[colIdx], 0, RT3_SORT_CENTER, &TextSize);
+                    }
+                    colX += colWidthVirt[colIdx] + colGapVirt;
+                    ++colIdx;
+                    if (!tabPos)
+                        break;
+                    start = tabPos + 1;
+                }
+            }
+            else
+            {
+                g_pRenderText->RenderText(fsx, fsy, TextList[i], (fWidth - 2), 0, iSort, &TextSize);
+            }
         }
         fsy += lineHeights[i];
     }
@@ -2754,13 +2844,14 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type == ITEM_SPIRIT)
     {
+        const wchar_t* spiritFormat = (std::strcmp(I18N::GetCurrentLocale(), "zh-CN") == 0) ? L"%ls·%ls" : L"%ls of %ls";
         switch (Level)
         {
             case 0:
-                mu_swprintf(TextList[TextNum], L"%ls of %ls", p->Name, I18N::Game::DarkHorse);
+                mu_swprintf(TextList[TextNum], spiritFormat, p->Name, I18N::Game::DarkHorse);
                 break;
             case 1:
-                mu_swprintf(TextList[TextNum], L"%ls of %ls", p->Name, I18N::Game::DarkRaven);
+                mu_swprintf(TextList[TextNum], spiritFormat, p->Name, I18N::Game::DarkRaven);
                 break;
         }
     }
@@ -4987,7 +5078,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         int HeroLevel = CharacterAttribute->Level;
 
         TextListColor[TextNum] = TEXT_COLOR_WHITE;
-        mu_swprintf(TextList[TextNum], L"%ls %ls    %ls      %ls    ", I18N::Game::ChaosCastle, I18N::Game::Level,
+        mu_swprintf(TextList[TextNum], L"%ls%ls\t%ls\t%ls", I18N::Game::ChaosCastle, I18N::Game::Level,
                     I18N::Game::MinLevel, I18N::Game::Cost);
         TextListColor[TextNum] = TEXT_COLOR_WHITE;
         TextBold[TextNum]      = false;
@@ -4997,7 +5088,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         {
             int Zen = g_iChaosCastleZen[i];
 
-            mu_swprintf(TextList[TextNum], L"        %d             %3d~%3d     %3d,000", i + 1,
+            mu_swprintf(TextList[TextNum], L"%d\t%d ~ %d\t%d,000", i + 1,
                         g_iChaosCastleLevel[startIndex + i][0],
                         std::min<int>(400, g_iChaosCastleLevel[startIndex + i][1]), Zen);
             if ((HeroLevel >= g_iChaosCastleLevel[startIndex + i][0] &&
@@ -5013,7 +5104,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
             TextBold[TextNum] = false;
             TextNum++;
         }
-        mu_swprintf(TextList[TextNum], L"         %d          %ls   %3d,000", 7, I18N::Game::MasterLevel, 1000);
+        mu_swprintf(TextList[TextNum], L"%d\t%ls\t1,000,000", 7, I18N::Game::MasterLevel);
         if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
         {
             TextListColor[TextNum] = TEXT_COLOR_DARKYELLOW;
