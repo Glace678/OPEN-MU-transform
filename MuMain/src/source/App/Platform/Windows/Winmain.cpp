@@ -753,17 +753,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             MessageBox(nullptr, I18N::Game::Error9AHackingToolHasBeen, L"Error", MB_OK);
             PostMessage(g_hWnd, WM_CLOSE, 0, 0);
             break;
-        case WM_ERASEBKGND:
-            return TRUE;
-            break;
-        // WM_SIZE is handled via SDL window resize events (issue #442).
-        case WM_PAINT: {
-            PAINTSTRUCT ps;
-            HDC         hDC = BeginPaint(hwnd, &ps);
-            EndPaint(hwnd, &ps);
-        }
-            return 0;
-            break;
+        // WM_ERASEBKGND, WM_PAINT, and WM_SIZE are owned by SDL's window proc.
         case WM_DESTROY: {
             // Just request shutdown; the main loop exits on Destroy and the teardown
             // (sound, GL, window) runs after it. SDL owns the window now, so the GL
@@ -782,21 +772,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 // A same-thread native dialog (e.g. the restart confirmation) is up:
                 // keep the real arrow visible even while the pointer crosses the
                 // game window behind it, instead of hiding it again.
+                while (::ShowCursor(TRUE) < 0)
+                {
+                }
                 ::SetCursor(::LoadCursorW(nullptr, IDC_ARROW));
                 return TRUE;
+            }
+            if (LOWORD(lParam) != HTCLIENT)
+            {
+                // Over title bar, maximize/minimize buttons, or resize borders:
+                // ensure the OS cursor is visible and let SDL/DefWindowProc set the appropriate cursor.
+                while (::ShowCursor(TRUE) < 0)
+                {
+                }
+                return 0;
             }
 #ifdef _EDITOR
             // When hovering UI (including Open Editor button), let Windows show cursor
             // Otherwise hide Windows cursor for game cursor
             if (g_MuEditorCore.IsHoveringUI())
             {
-                // Let Windows cursor show - don't hide it
-                return DefWindowProc(hwnd, msg, wParam, lParam);
+                while (::ShowCursor(TRUE) < 0)
+                {
+                }
+                return 0;
             }
             else
 #endif
             {
-                ShowCursor(false);
+                while (::ShowCursor(FALSE) >= 0)
+                {
+                }
             }
             break;
             //-----------------------------
@@ -842,7 +848,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    return DefWindowProc(hwnd, msg, wParam, lParam);
+    // IMPORTANT: Never call DefWindowProc here! WndProc is invoked from
+    // SDL_SetWindowsMessageHook BEFORE DispatchMessage reaches SDL's own
+    // WIN_WindowProc. Calling DefWindowProc here causes non-client actions
+    // (clicking Maximize, dragging the title bar or resize borders) to enter
+    // duplicate Win32 modal tracking loops, freezing the window on maximize.
+    return 0;
 }
 #endif  // _WIN32 (WndProc)
 
@@ -1003,6 +1014,14 @@ static bool SDLCALL Win32MessageHook(void* /*userdata*/, MSG* msg)
         return true;
 
     WndProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+
+    // Suppress default OS menu activation / system beep on F10 or Alt+Enter.
+    if ((msg->message == WM_SYSKEYDOWN || msg->message == WM_SYSKEYUP || msg->message == WM_SYSCHAR) &&
+        (msg->wParam == VK_F10 || msg->wParam == VK_RETURN))
+    {
+        return false;
+    }
+
     return true;
 }
 #endif
@@ -1945,21 +1964,112 @@ void HandleWindowResize(int width, int height)
 {
     if (width <= 0 || height <= 0)
         return;
-    UI::Items::Touch::CancelItemContact();
+    const bool sizeChanged =
+        (WindowWidth != static_cast<unsigned int>(width) || WindowHeight != static_cast<unsigned int>(height));
+    if (sizeChanged)
+        UI::Items::Touch::CancelItemContact();
     WindowWidth  = width;
     WindowHeight = height;
+    if (g_sdlWindow != nullptr)
+    {
+        const bool isFullscreen = (SDL_GetWindowFlags(g_sdlWindow) & SDL_WINDOW_FULLSCREEN) != 0;
+        g_bUseWindowMode        = isFullscreen ? FALSE : TRUE;
+        g_bUseFullscreenMode    = isFullscreen ? TRUE : FALSE;
+    }
     CInput::Instance().ResizeScreen(width, height);
     g_fScreenRate_x    = static_cast<float>(WindowWidth) / static_cast<float>(REFERENCE_WIDTH);
     g_fScreenRate_y    = static_cast<float>(WindowHeight) / static_cast<float>(REFERENCE_HEIGHT);
     OpenglWindowWidth  = WindowWidth;
     OpenglWindowHeight = WindowHeight;
+    if (g_sdlGLContext != nullptr)
+    {
+        glViewport2(0, 0, WindowWidth, WindowHeight);
+        if (sizeChanged)
+        {
+            SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            ClearColorAndDepthBuffers();
+        }
+    }
     RHI::OnResize(WindowWidth, WindowHeight);  // no-op on GL
-    ReinitializeFonts();
-    // Refresh sprites that persist across scenes (world item labels,
-    // balloons, in-world effects) before scene owners reposition/recreate.
-    CSprite::RefreshAllResolutionScales();
-    UpdateResolutionDependentSystems();
+    if (sizeChanged && g_hFont != nullptr)
+    {
+        ReinitializeFonts();
+        // Refresh sprites that persist across scenes (world item labels,
+        // balloons, in-world effects) before scene owners reposition/recreate.
+        CSprite::RefreshAllResolutionScales();
+        UpdateResolutionDependentSystems();
+    }
     UpdateCursorClip();
+}
+
+void SyncWindowSizeFromSDL()
+{
+    if (!g_sdlWindow)
+        return;
+    int actualW = 0, actualH = 0;
+    SDL_GetWindowSizeInPixels(g_sdlWindow, &actualW, &actualH);
+    if (actualW <= 0 || actualH <= 0)
+        SDL_GetWindowSize(g_sdlWindow, &actualW, &actualH);
+    if (actualW > 0 && actualH > 0)
+        HandleWindowResize(actualW, actualH);
+}
+
+bool SDLCALL WindowResizeEventWatch(void* /*userdata*/, SDL_Event* event)
+{
+    if (!event)
+        return true;
+    switch (event->type)
+    {
+        case SDL_EVENT_WINDOW_RESIZED:
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+            HandleWindowResize(event->window.data1, event->window.data2);
+            break;
+        case SDL_EVENT_WINDOW_MAXIMIZED:
+        case SDL_EVENT_WINDOW_RESTORED:
+        case SDL_EVENT_WINDOW_ENTER_FULLSCREEN:
+        case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN:
+            SyncWindowSizeFromSDL();
+            break;
+        default:
+            break;
+    }
+    return true;
+}
+
+}
+void MuApplyWindowResolution(unsigned int width, unsigned int height, bool windowed);
+namespace
+{
+
+void ToggleFullscreenMode()
+{
+    if (!g_sdlWindow)
+        return;
+    static unsigned int s_savedWindowedW = 1280;
+    static unsigned int s_savedWindowedH = 720;
+    const bool          isFullscreen     = (SDL_GetWindowFlags(g_sdlWindow) & SDL_WINDOW_FULLSCREEN) != 0;
+    if (!isFullscreen)
+    {
+        if (WindowWidth >= REFERENCE_WIDTH && WindowHeight >= REFERENCE_HEIGHT)
+        {
+            s_savedWindowedW = WindowWidth;
+            s_savedWindowedH = WindowHeight;
+        }
+        SDL_DisplayID          display = SDL_GetDisplayForWindow(g_sdlWindow);
+        const SDL_DisplayMode* desktop =
+            SDL_GetDesktopDisplayMode(display != 0 ? display : SDL_GetPrimaryDisplay());
+        const unsigned int targetW = (desktop && desktop->w > 0) ? static_cast<unsigned int>(desktop->w) : 1920u;
+        const unsigned int targetH = (desktop && desktop->h > 0) ? static_cast<unsigned int>(desktop->h) : 1080u;
+        MuApplyWindowResolution(targetW, targetH, false);
+        GameConfig::GetInstance().SetWindowMode(false);
+        GameConfig::GetInstance().SetWindowSize(WindowWidth, WindowHeight);
+    }
+    else
+    {
+        MuApplyWindowResolution(s_savedWindowedW, s_savedWindowedH, true);
+        GameConfig::GetInstance().SetWindowMode(true);
+        GameConfig::GetInstance().SetWindowSize(WindowWidth, WindowHeight);
+    }
 }
 
 void HandleFocusChange(bool active)
@@ -2161,31 +2271,51 @@ void MuApplyWindowResolution(unsigned int width, unsigned int height, bool windo
 {
     if (!g_sdlWindow || width == 0 || height == 0)
         return;
-    const int w = static_cast<int>(width);
-    const int h = static_cast<int>(height);
+    int w = static_cast<int>(width);
+    int h = static_cast<int>(height);
 
     if (windowed)
     {
         SDL_SetWindowFullscreen(g_sdlWindow, false);
+        SDL_SetWindowResizable(g_sdlWindow, true);
+
+        const SDL_DisplayID display   = SDL_GetDisplayForWindow(g_sdlWindow);
+        const SDL_DisplayID targetDsp = (display != 0) ? display : SDL_GetPrimaryDisplay();
+        SDL_Rect            usable{};
+        if (SDL_GetDisplayUsableBounds(targetDsp, &usable) && usable.w > 0 && usable.h > 0)
+        {
+            int top = 0, left = 0, bottom = 0, right = 0;
+            if (!SDL_GetWindowBordersSize(g_sdlWindow, &top, &left, &bottom, &right) || top <= 0)
+            {
+#ifdef _WIN32
+                top    = GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYSIZEFRAME);
+                bottom = GetSystemMetrics(SM_CYSIZEFRAME);
+                left   = GetSystemMetrics(SM_CXSIZEFRAME);
+                right  = GetSystemMetrics(SM_CXSIZEFRAME);
+#else
+                top = 32;
+#endif
+            }
+            const int maxClientW = std::max(static_cast<int>(REFERENCE_WIDTH), usable.w - left - right);
+            const int maxClientH = std::max(static_cast<int>(REFERENCE_HEIGHT), usable.h - top - bottom);
+            w                    = std::min(w, maxClientW);
+            h                    = std::min(h, maxClientH);
+        }
+
         SDL_SetWindowSize(g_sdlWindow, w, h);
         SDL_SetWindowPosition(g_sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        g_bUseWindowMode     = TRUE;
+        g_bUseFullscreenMode = FALSE;
     }
     else
     {
-        // Pick the closest real fullscreen mode so the monitor switches
-        // resolution; fall back to borderless desktop if none matches.
-        SDL_DisplayMode     mode;
-        const SDL_DisplayID display          = SDL_GetDisplayForWindow(g_sdlWindow);
-        const auto&         timing           = GameConfig::GetInstance().GetFrameTimingSettings();
-        const float         requestedRefresh = timing.mode == Core::Time::FrameRateMode::DisplayMaximum
-                                                   ? static_cast<float>(GetMaximumRefreshForResolution(w, h).hertz)
-                                                   : 0.0f;
-        if (SDL_GetClosestFullscreenDisplayMode(display, w, h, requestedRefresh, false, &mode))
-            SDL_SetWindowFullscreenMode(g_sdlWindow, &mode);
-        else
-            SDL_SetWindowFullscreenMode(g_sdlWindow, nullptr);
-        SDL_SetWindowSize(g_sdlWindow, w, h);
+        // Always use borderless fullscreen desktop mode (nullptr) so switching from
+        // any windowed resolution to fullscreen is instantaneous at native desktop
+        // resolution without display-mode hangs, black borders, or DWM desync.
+        SDL_SetWindowFullscreenMode(g_sdlWindow, nullptr);
         SDL_SetWindowFullscreen(g_sdlWindow, true);
+        g_bUseWindowMode     = FALSE;
+        g_bUseFullscreenMode = TRUE;
     }
 
     // The request is not a guarantee: the closest fullscreen mode can differ
@@ -2193,10 +2323,12 @@ void MuApplyWindowResolution(unsigned int width, unsigned int height, bool windo
     // switches are asynchronous on some window managers. Settle the request,
     // then resize the game to the size the window really got - callers persist
     // WindowWidth/Height, and config must record what happened, not what was
-    // asked for. Logical size, matching what SDL_EVENT_WINDOW_RESIZED carries.
+    // asked for.
     SDL_SyncWindow(g_sdlWindow);
     int actualW = w, actualH = h;
-    SDL_GetWindowSize(g_sdlWindow, &actualW, &actualH);
+    SDL_GetWindowSizeInPixels(g_sdlWindow, &actualW, &actualH);
+    if (actualW <= 0 || actualH <= 0)
+        SDL_GetWindowSize(g_sdlWindow, &actualW, &actualH);
     HandleWindowResize(actualW, actualH);
 }
 
@@ -2247,6 +2379,14 @@ void UpdatePortableTextInput()
 
 void HandleKeyboardDown(const SDL_KeyboardEvent& key)
 {
+    // Alt+Enter toggles fullscreen / windowed mode cleanly from any scene.
+    if ((key.scancode == SDL_SCANCODE_RETURN || key.scancode == SDL_SCANCODE_KP_ENTER) &&
+        (key.mod & SDL_KMOD_ALT) != 0 && !key.repeat)
+    {
+        ToggleFullscreenMode();
+        return;
+    }
+
     if (!key.repeat)
         Core::Input::RecordKeyboardPress(key.scancode);
 #ifndef _WIN32
@@ -2339,10 +2479,19 @@ MSG MainLoop()
                     break;
 #endif
                 case SDL_EVENT_WINDOW_RESIZED:
+                case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
                     HandleWindowResize(event.window.data1, event.window.data2);
+                    break;
+                case SDL_EVENT_WINDOW_MAXIMIZED:
+                case SDL_EVENT_WINDOW_RESTORED:
+                case SDL_EVENT_WINDOW_ENTER_FULLSCREEN:
+                case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN:
+                case SDL_EVENT_WINDOW_EXPOSED:
+                    SyncWindowSizeFromSDL();
                     break;
                 case SDL_EVENT_WINDOW_DISPLAY_CHANGED:
                     ApplyFrameTimingConfiguration(g_bWndActive);
+                    SyncWindowSizeFromSDL();
                     break;
                 case SDL_EVENT_WINDOW_FOCUS_GAINED:
                     HandleFocusChange(true);
@@ -3396,8 +3545,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     }
 #endif  // _WIN32
 
+    SDL_AddEventWatch(WindowResizeEventWatch, nullptr);
     std::thread cpuUsageRecorder(RecordCpuUsage);
     const MSG   msg = MainLoop();
+    SDL_RemoveEventWatch(WindowResizeEventWatch, nullptr);
 
     // Teardown that used to run in WM_DESTROY, now after the loop exits (SDL owns
     // the window/GL context, so they must not be destroyed from a message).

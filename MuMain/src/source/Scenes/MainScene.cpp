@@ -208,7 +208,7 @@ static void UpdateUIAndInput()
     if (g_Camera.TopViewEnable || LoadingWorld >= 30)
         return;
 
-    if (MouseY >= (int)(REFERENCE_HEIGHT - 48))
+    if (SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(MouseX, MouseY))
         MouseOnWindow = true;
 
     g_pPartyManager->Update();
@@ -346,18 +346,7 @@ void MoveMainScene()
 static void SetupMainSceneViewport(int& outWidth, int& outHeight, BYTE& outByWaterMap, vec3_t cameraPos)
 {
     outByWaterMap = 0;
-
-    if (g_Camera.TopViewEnable == false)
-    {
-        // Use hardcoded value from original game (in 640×480 reference coordinates)
-        // This is then scaled by BeginOpengl() to actual window size
-        outHeight = REFERENCE_HEIGHT - 48;
-    }
-    else
-    {
-        outHeight = REFERENCE_HEIGHT;
-    }
-
+    outHeight = REFERENCE_HEIGHT;
     outWidth = GetScreenWidth();
 
     // NOTE: Clear color is set by SceneManager::SetWorldClearColor() before this function is called

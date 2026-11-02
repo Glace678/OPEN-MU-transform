@@ -81,7 +81,8 @@ bool TryProjectGamepadTarget(int index, int& outScreenX, int& outScreenY)
     VectorCopy(object->Position, targetPoint);
     targetPoint[2] += 120.0f;
     CameraProjection::WorldToScreen(g_Camera, targetPoint, &outScreenX, &outScreenY);
-    return outScreenX >= 0 && outScreenX < GetScreenWidth() && outScreenY >= 0 && outScreenY < 429;
+    return outScreenX >= 0 && outScreenX < GetScreenWidth() && outScreenY >= 0 && outScreenY < REFERENCE_HEIGHT &&
+           !SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(outScreenX, outScreenY);
 }
 }
 
@@ -387,7 +388,8 @@ void SelectObjects()
     SelectedOperate = -1;
 
     if (!MouseOnWindow && false == g_pNewUISystem->CheckMouseUse() &&
-        SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), 429))
+        SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), REFERENCE_HEIGHT) &&
+        !SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(MouseX, MouseY))
     {
         if (Core::Input::IsKeyDown(VK_MENU))
         {

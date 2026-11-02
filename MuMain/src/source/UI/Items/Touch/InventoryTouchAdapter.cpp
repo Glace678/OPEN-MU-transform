@@ -165,7 +165,8 @@ private:
     {
         if (!g_pMainFrame || !g_pMainFrame->IsVisible())
             return std::nullopt;
-        const int slot = QuickItemSlotAt(x, y);
+        const int slot =
+            QuickItemSlotAt(CNewUIMainFrameWindow::MapScreenToHudX(x), CNewUIMainFrameWindow::MapScreenToHudY(y));
         if (slot < 0)
             return std::nullopt;
         ItemTouchToken token;

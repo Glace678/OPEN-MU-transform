@@ -55,12 +55,14 @@ void SEASON3B::CNewUIWindowMenu::Release()
 
 void SEASON3B::CNewUIWindowMenu::SetPos(int x, int y)
 {
-    m_Pos.x = STANDARD_POS_X;
-    m_Pos.y = STANDARD_POS_Y - (20 * (MENU_MAX_INDEX - 4));
+    const int height = 105 + (MENU_MAX_INDEX - 4) * 20;
+    m_Pos.x          = static_cast<int>(std::lround(CNewUIMainFrameWindow::GetHudRight())) - 112;
+    m_Pos.y          = static_cast<int>(std::lround(CNewUIMainFrameWindow::GetHudTop())) - height;
 }
 
 bool SEASON3B::CNewUIWindowMenu::UpdateMouseEvent()
 {
+    SetPos(0, 0);
     POINT pt = {m_Pos.x, m_Pos.y + 20};
 
     for (int i = 0; i < MENU_MAX_INDEX; ++i)
@@ -165,6 +167,7 @@ bool SEASON3B::CNewUIWindowMenu::Update()
 
 bool SEASON3B::CNewUIWindowMenu::Render()
 {
+    SetPos(0, 0);
     EnableAlphaTest();
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -201,7 +204,7 @@ void SEASON3B::CNewUIWindowMenu::RenderFrame()
         y += 15.f;
     }
 
-    y = REFERENCE_HEIGHT - 50 - 45;
+    y = m_Pos.y + height - 45.f;
 
     RenderImage(IMAGE_WINDOW_MENU_FRAME_DOWN, m_Pos.x, y, 112.f, 45.f);
 

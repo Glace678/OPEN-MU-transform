@@ -312,9 +312,6 @@ void CPersonalShopTitleImp::UpdatePosition()
 {
     float Width = GetScreenWidth(), Height = REFERENCE_HEIGHT;
 
-    if (!g_Camera.TopViewEnable)
-        Height = REFERENCE_HEIGHT - 48;
-
     EndBitmap();
     BeginOpengl(0, 0, Width, Height);
 

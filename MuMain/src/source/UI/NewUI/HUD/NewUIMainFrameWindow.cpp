@@ -1,4 +1,4 @@
-﻿//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // NewUIMainFrameWindow.cpp: implementation of the CNewUIMainFrameWindow class.
 //////////////////////////////////////////////////////////////////////
 
@@ -7,6 +7,7 @@
 #include "I18N/All.h"
 
 #include "UI/NewUI/HUD/NewUIMainFrameWindow.h"  // self
+#include "UI/NewUI/Widgets/NewUIRenderNumber.h"
 #include "UI/NewUI/Options/NewUIOptionWindow.h"
 #include "UI/NewUI/NewUISystem.h"
 #include "UI/Widgets/UIBaseDef.h"
@@ -30,6 +31,121 @@
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #include "GameShop/InGameShopSystem.h"
 #endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+
+namespace
+{
+inline float GetHudScaleY()
+{
+    // Scale down the bottom HUD bar at high resolutions (> 768p, e.g. 1080p fullscreen)
+    // so it is compact and well-proportioned instead of oversized.
+    return (WindowHeight > 768) ? 0.78f : 1.0f;
+}
+
+inline float GetHudScaleX()
+{
+    const float scaleY = GetHudScaleY();
+    // Preserve the 4:3 reference aspect ratio on widescreen (16:9 / 16:10 / 21:9)
+    // so the HUD bar is centered at the bottom instead of stretched across 1920px.
+    const float aspectCorrection =
+        (g_fScreenRate_x > g_fScreenRate_y && g_fScreenRate_x > 0.0f) ? (g_fScreenRate_y / g_fScreenRate_x) : 1.0f;
+    return scaleY * aspectCorrection;
+}
+
+inline float HudX(float x)
+{
+    return 320.0f + (x - 320.0f) * GetHudScaleX();
+}
+
+inline float HudY(float y)
+{
+    return static_cast<float>(REFERENCE_HEIGHT) - (static_cast<float>(REFERENCE_HEIGHT) - y) * GetHudScaleY();
+}
+
+inline float HudW(float w)
+{
+    return w * GetHudScaleX();
+}
+
+inline float HudH(float h)
+{
+    return h * GetHudScaleY();
+}
+
+inline bool CheckHudMouseIn(float x, float y, float w, float h)
+{
+    return SEASON3B::CheckMouseIn(static_cast<int>(std::lround(HudX(x))), static_cast<int>(std::lround(HudY(y))),
+                                  static_cast<int>(std::lround(HudW(w))), static_cast<int>(std::lround(HudH(h))));
+}
+
+inline void RenderHudImage(GLuint uiImageType, float x, float y, float width, float height)
+{
+    SEASON3B::RenderImageStretch(uiImageType, HudX(x), HudY(y), HudW(width), HudH(height), 0.0f, 0.0f, width, height);
+}
+
+inline void RenderHudImageSub(GLuint uiImageType, float x, float y, float width, float height, float su, float sv)
+{
+    SEASON3B::RenderImageStretch(uiImageType, HudX(x), HudY(y), HudW(width), HudH(height), su, sv, width, height);
+}
+
+inline void RenderHudNumber(float baseX, float baseY, int iNum)
+{
+    (void)SEASON3B::CNewUIRenderNumber::GetInstance();
+    EnableAlphaTest();
+
+    const float width  = HudW(8.4f);
+    const float height = HudH(11.2f);
+    const float y      = HudY(baseY);
+
+    wchar_t strText[32]{};
+    _itow(iNum, strText, 10);
+    const int iLength = static_cast<int>(wcslen(strText));
+
+    float x = HudX(baseX) - width * static_cast<float>(iLength) * 0.5f;
+    for (int i = 0; i < iLength; ++i)
+    {
+        const float fU = static_cast<float>(strText[i] - L'0') * 12.0f / 128.0f;
+        RenderBitmap(SEASON3B::CNewUIRenderNumber::IMAGE_NUMBER1, x, y, width, height, fU, 0.0f, 12.0f / 128.0f,
+                     14.0f / 16.0f);
+        x += width * 0.8f;
+    }
+}
+}
+
+bool SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(int mouseX, int mouseY)
+{
+    const int left  = static_cast<int>(std::floor(HudX(0.0f)));
+    const int right = static_cast<int>(std::ceil(HudX(640.0f)));
+    const int top   = static_cast<int>(std::floor(HudY(static_cast<float>(REFERENCE_HEIGHT) - 51.0f)));
+    return mouseX >= left && mouseX <= right && mouseY >= top;
+}
+
+float SEASON3B::CNewUIMainFrameWindow::MapScreenToHudX(float screenX)
+{
+    const float scaleX = GetHudScaleX();
+    return (scaleX > 0.0f) ? (320.0f + (screenX - 320.0f) / scaleX) : screenX;
+}
+
+float SEASON3B::CNewUIMainFrameWindow::MapScreenToHudY(float screenY)
+{
+    const float scaleY = GetHudScaleY();
+    const float refH   = static_cast<float>(REFERENCE_HEIGHT);
+    return (scaleY > 0.0f) ? (refH - (refH - screenY) / scaleY) : screenY;
+}
+
+float SEASON3B::CNewUIMainFrameWindow::GetHudLeft()
+{
+    return HudX(0.0f);
+}
+
+float SEASON3B::CNewUIMainFrameWindow::GetHudRight()
+{
+    return HudX(640.0f);
+}
+
+float SEASON3B::CNewUIMainFrameWindow::GetHudTop()
+{
+    return HudY(static_cast<float>(REFERENCE_HEIGHT) - 51.0f);
+}
 
 SEASON3B::CNewUIMainFrameWindow::CNewUIMainFrameWindow()
 {
@@ -103,50 +219,69 @@ bool SEASON3B::CNewUIMainFrameWindow::Create(CNewUIManager* pNewUIMng, CNewUI3DR
     return true;
 }
 
+void SEASON3B::CNewUIMainFrameWindow::UpdateButtonPositions()
+{
+    const float baseY = static_cast<float>(REFERENCE_HEIGHT - 51);
+    const float btnW  = 30.0f;
+    const float btnH  = 41.0f;
+    const int   scaledY = static_cast<int>(std::lround(HudY(baseY)));
+    const int   scaledW = std::max(1, static_cast<int>(std::lround(HudW(btnW))));
+    const int   scaledH = std::max(1, static_cast<int>(std::lround(HudH(btnH))));
+
+    float x_Next = 489.0f;
+    m_BtnCShop.SetSourceSize(30, 41);
+    m_BtnCShop.ChangeButtonInfo(static_cast<int>(std::lround(HudX(x_Next))), scaledY, scaledW, scaledH);
+    x_Next += btnW;
+
+    m_BtnChaInfo.SetSourceSize(30, 41);
+    m_BtnChaInfo.ChangeButtonInfo(static_cast<int>(std::lround(HudX(x_Next))), scaledY, scaledW, scaledH);
+    x_Next += btnW;
+
+    m_BtnMyInven.SetSourceSize(30, 41);
+    m_BtnMyInven.ChangeButtonInfo(static_cast<int>(std::lround(HudX(x_Next))), scaledY, scaledW, scaledH);
+    x_Next += btnW;
+
+    m_BtnFriend.SetSourceSize(30, 41);
+    m_BtnFriend.ChangeButtonInfo(static_cast<int>(std::lround(HudX(x_Next))), scaledY, scaledW, scaledH);
+    x_Next += btnW;
+
+    m_BtnWindow.SetSourceSize(30, 41);
+    m_BtnWindow.ChangeButtonInfo(static_cast<int>(std::lround(HudX(x_Next))), scaledY, scaledW, scaledH);
+}
+
 void SEASON3B::CNewUIMainFrameWindow::SetButtonInfo()
 {
-    int x_Next = 489;
-    int y_Next = REFERENCE_HEIGHT - 51;
-    int x_Add  = 30;
-    int y_Add  = 41;
     m_BtnCShop.ChangeTextBackColor(RGBA(255, 255, 255, 0));
     m_BtnCShop.ChangeButtonImgState(true, IMAGE_MENU_BTN_CSHOP, true);
-    m_BtnCShop.ChangeButtonInfo(x_Next, y_Next, x_Add, y_Add);
-    x_Next += x_Add;
     m_BtnCShop.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
     m_BtnCShop.ChangeImgColor(BUTTON_STATE_DOWN, RGBA(255, 255, 255, 255));
     m_BtnCShop.ChangeToolTipText(&I18N::Game::MUItemShopX, true);
 
     m_BtnChaInfo.ChangeTextBackColor(RGBA(255, 255, 255, 0));
     m_BtnChaInfo.ChangeButtonImgState(true, IMAGE_MENU_BTN_CHAINFO, true);
-    m_BtnChaInfo.ChangeButtonInfo(x_Next, y_Next, x_Add, y_Add);
-    x_Next += x_Add;
     m_BtnChaInfo.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
     m_BtnChaInfo.ChangeImgColor(BUTTON_STATE_DOWN, RGBA(255, 255, 255, 255));
     m_BtnChaInfo.ChangeToolTipText(&I18N::Game::CharacterC, true);
 
     m_BtnMyInven.ChangeTextBackColor(RGBA(255, 255, 255, 0));
     m_BtnMyInven.ChangeButtonImgState(true, IMAGE_MENU_BTN_MYINVEN, true);
-    m_BtnMyInven.ChangeButtonInfo(x_Next, y_Next, x_Add, y_Add);
-    x_Next += x_Add;
     m_BtnMyInven.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
     m_BtnMyInven.ChangeImgColor(BUTTON_STATE_DOWN, RGBA(255, 255, 255, 255));
     m_BtnMyInven.ChangeToolTipText(&I18N::Game::InventoryIV, true);
 
     m_BtnFriend.ChangeTextBackColor(RGBA(255, 255, 255, 0));
     m_BtnFriend.ChangeButtonImgState(true, IMAGE_MENU_BTN_FRIEND, true);
-    m_BtnFriend.ChangeButtonInfo(x_Next, y_Next, x_Add, y_Add);
-    x_Next += x_Add;
     m_BtnFriend.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
     m_BtnFriend.ChangeImgColor(BUTTON_STATE_DOWN, RGBA(255, 255, 255, 255));
     m_BtnFriend.ChangeToolTipText(&I18N::Game::FriendF, true);
 
     m_BtnWindow.ChangeTextBackColor(RGBA(255, 255, 255, 0));
     m_BtnWindow.ChangeButtonImgState(true, IMAGE_MENU_BTN_WINDOW, true);
-    m_BtnWindow.ChangeButtonInfo(x_Next, y_Next, x_Add, y_Add);
     m_BtnWindow.ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
     m_BtnWindow.ChangeImgColor(BUTTON_STATE_DOWN, RGBA(255, 255, 255, 255));
     m_BtnWindow.ChangeToolTipText(&I18N::Game::MenuU, true);
+
+    UpdateButtonPositions();
 }
 
 void SEASON3B::CNewUIMainFrameWindow::Release()
@@ -168,6 +303,8 @@ void SEASON3B::CNewUIMainFrameWindow::Release()
 
 bool SEASON3B::CNewUIMainFrameWindow::Render()
 {
+    UpdateButtonPositions();
+
     EnableAlphaTest();
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -212,20 +349,20 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFrame()
     height = 51.f;
     x      = 0.f;
     y      = (float)REFERENCE_HEIGHT - height;
-    SEASON3B::RenderImage(IMAGE_MENU_1, x, y, width, height);
+    RenderHudImage(IMAGE_MENU_1, x, y, width, height);
     width = 128.f;
     x     = 256.f;
-    SEASON3B::RenderImage(IMAGE_MENU_2, x, y, width, height);
+    RenderHudImage(IMAGE_MENU_2, x, y, width, height);
     width = 256.f;
     x     = 256.f + 128.f;
-    SEASON3B::RenderImage(IMAGE_MENU_3, x, y, width, height);
+    RenderHudImage(IMAGE_MENU_3, x, y, width, height);
 
     if (g_pSkillList->IsSkillListUp() == true)
     {
         width  = 160.f;
         height = 40.f;
         x      = 222.f;
-        SEASON3B::RenderImage(IMAGE_MENU_2_1, x, y, width, height);
+        RenderHudImage(IMAGE_MENU_2_1, x, y, width, height);
     }
 }
 
@@ -283,22 +420,22 @@ void SEASON3B::CNewUIMainFrameWindow::RenderLifeMana()
     fV = fLife;
     if (g_isCharacterBuff((&Hero->Object), eDeBuff_Poison))
     {
-        RenderBitmap(IMAGE_GAUGE_GREEN, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
-                     (1.0f - fV) * height / 64.f);
+        RenderBitmap(IMAGE_GAUGE_GREEN, HudX(x), HudY(fY), HudW(width), HudH(fH), 0.f, fV * height / 64.f,
+                     width / 64.f, (1.0f - fV) * height / 64.f);
     }
     else
     {
-        RenderBitmap(IMAGE_GAUGE_RED, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
+        RenderBitmap(IMAGE_GAUGE_RED, HudX(x), HudY(fY), HudW(width), HudH(fH), 0.f, fV * height / 64.f, width / 64.f,
                      (1.0f - fV) * height / 64.f);
     }
 
-    SEASON3B::RenderNumber(x + 25, REFERENCE_HEIGHT - 18, wLife);
+    RenderHudNumber(x + 25.f, static_cast<float>(REFERENCE_HEIGHT) - 18.f, wLife);
 
     wchar_t strTipText[256];
-    if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (CheckHudMouseIn(x, y, width, height) == true)
     {
         mu_swprintf(strTipText, I18N::Game::LifeDD, wLife, wLifeMax);
-        RenderTipText((int)x, (int)418, strTipText);
+        RenderTipText((int)HudX(x), (int)HudY(418), strTipText);
     }
 
     // mana
@@ -310,16 +447,16 @@ void SEASON3B::CNewUIMainFrameWindow::RenderLifeMana()
     fY = y + (fMana * height);
     fH = height - (fMana * height);
     fV = fMana;
-    RenderBitmap(IMAGE_GAUGE_BLUE, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
+    RenderBitmap(IMAGE_GAUGE_BLUE, HudX(x), HudY(fY), HudW(width), HudH(fH), 0.f, fV * height / 64.f, width / 64.f,
                  (1.0f - fV) * height / 64.f);
 
-    SEASON3B::RenderNumber(x + 30, REFERENCE_HEIGHT - 18, wMana);
+    RenderHudNumber(x + 30.f, static_cast<float>(REFERENCE_HEIGHT) - 18.f, wMana);
 
     // mana
-    if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (CheckHudMouseIn(x, y, width, height) == true)
     {
         mu_swprintf(strTipText, I18N::Game::ManaDD359, wMana, wManaMax);
-        RenderTipText((int)x, (int)418, strTipText);
+        RenderTipText((int)HudX(x), (int)HudY(418), strTipText);
     }
 }
 
@@ -355,15 +492,16 @@ void SEASON3B::CNewUIMainFrameWindow::RenderGuageAG()
     fH = height - (fSkillMana * height);
     fV = fSkillMana;
 
-    RenderBitmap(IMAGE_GAUGE_AG, x, fY, width, fH, 0.f, fV * height / 64.f, width / 16.f, (1.0f - fV) * height / 64.f);
-    SEASON3B::RenderNumber(x + 10, REFERENCE_HEIGHT - 18, (int)dwSkillMana);
+    RenderBitmap(IMAGE_GAUGE_AG, HudX(x), HudY(fY), HudW(width), HudH(fH), 0.f, fV * height / 64.f, width / 16.f,
+                 (1.0f - fV) * height / 64.f);
+    RenderHudNumber(x + 10.f, static_cast<float>(REFERENCE_HEIGHT) - 18.f, (int)dwSkillMana);
 
-    if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (CheckHudMouseIn(x, y, width, height) == true)
     {
         wchar_t strTipText[256];
 
         mu_swprintf(strTipText, I18N::Game::AGDD, dwSkillMana, dwMaxSkillMana);
-        RenderTipText((int)x - 20, (int)418, strTipText);
+        RenderTipText((int)HudX(x - 20), (int)HudY(418), strTipText);
     }
 }
 
@@ -399,17 +537,18 @@ void SEASON3B::CNewUIMainFrameWindow::RenderGuageSD()
     fH = height - (fShield * height);
     fV = fShield;
 
-    RenderBitmap(IMAGE_GAUGE_SD, x, fY, width, fH, 0.f, fV * height / 64.f, width / 16.f, (1.0f - fV) * height / 64.f);
-    SEASON3B::RenderNumber(x + 15, REFERENCE_HEIGHT - 18, (int)wShield);
+    RenderBitmap(IMAGE_GAUGE_SD, HudX(x), HudY(fY), HudW(width), HudH(fH), 0.f, fV * height / 64.f, width / 16.f,
+                 (1.0f - fV) * height / 64.f);
+    RenderHudNumber(x + 15.f, static_cast<float>(REFERENCE_HEIGHT) - 18.f, (int)wShield);
 
     height = 39.f;
     y      = (float)REFERENCE_HEIGHT - 10.f - 39.f;
-    if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (CheckHudMouseIn(x, y, width, height) == true)
     {
         wchar_t strTipText[256];
 
         mu_swprintf(strTipText, I18N::Game::SDDD, wShield, wMaxShield);
-        RenderTipText((int)x - 20, (int)418, strTipText);
+        RenderTipText((int)HudX(x - 20), (int)HudY(418), strTipText);
     }
 }
 
@@ -488,9 +627,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 y      = 473.f;
                 width  = fProgress * 629.f;
                 height = 4.f;
-                RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                RenderBitmap(IMAGE_MASTER_GAUGE_BAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                             4.f / 4.f);
                 glColor4f(1.f, 1.f, 1.f, 0.6f);
-                RenderColor(x, y, width, height);
+                RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                 EndRenderColor();
             }
             else
@@ -512,9 +652,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                     y      = 473.f;
                     width  = fProgress * 629.f;
                     height = 4.f;
-                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f,
+                                 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.6f);
-                    RenderColor(x, y, width, height);
+                    RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                     EndRenderColor();
                 }
                 else
@@ -525,13 +666,15 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                     y                   = 473.f;
                     width               = (double)fPreProgress * (double)629.f;
                     height              = 4.f;
-                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f,
+                                 6.f / 8.f, 4.f / 4.f);
 
                     x += width;
                     width = (double)fGapProgress * (double)629.f;
-                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_MASTER_GAUGE_BAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f,
+                                 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.6f);
-                    RenderColor(x, y, width, height);
+                    RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                     EndRenderColor();
                 }
             }
@@ -542,23 +685,24 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
             y      = 473.f;
             width  = fProgress * 629.f;
             height = 4.f;
-            RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+            RenderBitmap(IMAGE_MASTER_GAUGE_BAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                         4.f / 4.f);
         }
 
         x = 635.f;
         y = 469.f;
-        SEASON3B::RenderNumber(x, y, iExp);
+        RenderHudNumber(static_cast<float>(x), static_cast<float>(y), iExp);
 
         x      = 2.f;
         y      = 473.f;
         width  = 629.f;
         height = 4.f;
-        if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (CheckHudMouseIn(x, y, width, height) == true)
         {
             wchar_t strTipText[256];
 
             mu_swprintf(strTipText, I18N::Game::EXPI64dI64d, dwExperience, dwNexExperience);
-            RenderTipText(280, 418, strTipText);
+            RenderTipText((int)HudX(280), (int)HudY(418), strTipText);
         }
     }
     else
@@ -607,9 +751,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 y      = 473.f;
                 width  = fProgress * 629.f;
                 height = 4.f;
-                RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                RenderBitmap(IMAGE_GAUGE_EXBAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                             4.f / 4.f);
                 glColor4f(1.f, 1.f, 1.f, 0.4f);
-                RenderColor(x, y, width, height);
+                RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                 EndRenderColor();
             }
             else
@@ -631,9 +776,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                     y      = 473.f;
                     width  = fProgress * 629.f;
                     height = 4.f;
-                    RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_GAUGE_EXBAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                                 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.4f);
-                    RenderColor(x, y, width, height);
+                    RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                     EndRenderColor();
                 }
                 else
@@ -644,12 +790,14 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                     y                   = 473.f;
                     width               = fPreProgress * 629.f;
                     height              = 4.f;
-                    RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_GAUGE_EXBAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                                 4.f / 4.f);
                     x += width;
                     width = fGapProgress * 629.f;
-                    RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+                    RenderBitmap(IMAGE_GAUGE_EXBAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                                 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.4f);
-                    RenderColor(x, y, width, height);
+                    RenderColor(HudX(x), HudY(y), HudW(width), HudH(height));
                     EndRenderColor();
                 }
             }
@@ -660,23 +808,24 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
             y      = 473.f;
             width  = fProgress * 629.f;
             height = 4.f;
-            RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
+            RenderBitmap(IMAGE_GAUGE_EXBAR, HudX(x), HudY(y), HudW(width), HudH(height), 0.f, 0.f, 6.f / 8.f,
+                         4.f / 4.f);
         }
 
         x = 635.f;
         y = 469.f;
-        SEASON3B::RenderNumber(x, y, iExp);
+        RenderHudNumber(static_cast<float>(x), static_cast<float>(y), iExp);
 
         x      = 2.f;
         y      = 473.f;
         width  = 629.f;
         height = 4.f;
-        if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (CheckHudMouseIn(x, y, width, height) == true)
         {
             wchar_t strTipText[256];
 
             mu_swprintf(strTipText, I18N::Game::EXPI64dI64d, dwExperience, dwNexExperience);
-            RenderTipText(280, 418, strTipText);
+            RenderTipText((int)HudX(280), (int)HudY(418), strTipText);
         }
     }
 }
@@ -714,7 +863,7 @@ void SEASON3B::CNewUIMainFrameWindow::RenderCharInfoButton()
     {
         if (!(g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC) ||
               g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHARACTER)))
-            RenderImage(IMAGE_MENU_BTN_CHAINFO, 489 + 30, REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 41.f);
+            RenderHudImageSub(IMAGE_MENU_BTN_CHAINFO, 489 + 30, REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 41.f);
     }
 }
 
@@ -754,20 +903,20 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFriendButtonState()
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_FRIEND) == true)
     {
-        RenderImage(IMAGE_MENU_BTN_FRIEND, 489 + (30 * 3), REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 123.f);
+        RenderHudImageSub(IMAGE_MENU_BTN_FRIEND, 489 + (30 * 3), REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 123.f);
     }
     else
     {
-        RenderImage(IMAGE_MENU_BTN_FRIEND, 489 + (30 * 3), REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 41.f);
+        RenderHudImageSub(IMAGE_MENU_BTN_FRIEND, 489 + (30 * 3), REFERENCE_HEIGHT - 51, 30, 41, 0.0f, 41.f);
     }
 #else   //defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_FRIEND) == true)
     {
-        RenderImage(IMAGE_MENU_BTN_FRIEND, 488 + 76, REFERENCE_HEIGHT - 51, 38, 42, 0.0f, 126.f);
+        RenderHudImageSub(IMAGE_MENU_BTN_FRIEND, 488 + 76, REFERENCE_HEIGHT - 51, 38, 42, 0.0f, 126.f);
     }
     else
     {
-        RenderImage(IMAGE_MENU_BTN_FRIEND, 488 + 76, REFERENCE_HEIGHT - 51, 38, 42, 0.0f, 42.f);
+        RenderHudImageSub(IMAGE_MENU_BTN_FRIEND, 488 + 76, REFERENCE_HEIGHT - 51, 38, 42, 0.0f, 42.f);
     }
 #endif  //defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
 }
@@ -778,6 +927,8 @@ bool SEASON3B::CNewUIMainFrameWindow::UpdateMouseEvent()
     {
         return true;
     }
+
+    UpdateButtonPositions();
 
     if (BtnProcess() == true)
     {
@@ -1306,7 +1457,7 @@ void SEASON3B::CNewUIItemHotKey::RenderItems()
                 y      = 443;
                 width  = 20;
                 height = 20;
-                RenderItem3D(x, y, width, height, pItem->Type, pItem->Level, 0, 0);
+                RenderItem3D(HudX(x), HudY(y), HudW(width), HudH(height), pItem->Type, pItem->Level, 0, 0);
             }
         }
     }
@@ -1327,7 +1478,7 @@ void SEASON3B::CNewUIItemHotKey::RenderItemCount()
             y      = 457;
             width  = 8;
             height = 9;
-            SEASON3B::RenderNumber(x, y, iCount);
+            RenderHudNumber(x, y, iCount);
         }
     }
 }
@@ -1342,7 +1493,8 @@ void SEASON3B::CNewUIItemHotKey::UseItemRButton()
         y      = 445;
         width  = 20;
         height = 20;
-        if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (CheckHudMouseIn(static_cast<float>(x), static_cast<float>(y), static_cast<float>(width),
+                            static_cast<float>(height)) == true)
         {
             if (MouseRButtonPush)
             {
@@ -1477,19 +1629,19 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     y      = 431.f;
     width  = 32.f;
     height = 38.f;
-    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && CheckHudMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_HOVER_CURRENTSKILL;
         return true;
     }
     if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && MouseLButtonPush == false &&
-        SEASON3B::CheckMouseIn(x, y, width, height) == false)
+        CheckHudMouseIn(x, y, width, height) == false)
     {
         m_EventState = EVENT_NONE;
         return true;
     }
     if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && (MouseLButtonPush == true || MouseLButtonDBClick == true) &&
-        SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        CheckHudMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_DOWN_CURRENTSKILL;
         return false;
@@ -1498,7 +1650,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     {
         if (MouseLButtonPush == false && MouseLButtonDBClick == false)
         {
-            if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+            if (CheckHudMouseIn(x, y, width, height) == true)
             {
                 m_bSkillList = !m_bSkillList;
                 PlayBuffer(SOUND_CLICK01);
@@ -1514,8 +1666,8 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     {
         m_bRenderSkillInfo     = true;
         m_iRenderSkillInfoType = Hero->CurrentSkill;
-        m_iRenderSkillInfoPosX = x - 5;
-        m_iRenderSkillInfoPosY = y;
+        m_iRenderSkillInfoPosX = static_cast<int>(HudX(x - 5.f));
+        m_iRenderSkillInfoPosY = static_cast<int>(HudY(y));
 
         return false;
     }
@@ -1528,19 +1680,19 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     y      = 431.f;
     width  = 32.f * 5.f;
     height = 38.f;
-    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && CheckHudMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_HOVER_SKILLHOTKEY;
         return true;
     }
     if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == false &&
-        SEASON3B::CheckMouseIn(x, y, width, height) == false)
+        CheckHudMouseIn(x, y, width, height) == false)
     {
         m_EventState = EVENT_NONE;
         return true;
     }
     if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == true &&
-        SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        CheckHudMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_DOWN_SKILLHOTKEY;
         return false;
@@ -1559,7 +1711,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         {
             iIndex = 0;
         }
-        if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (CheckHudMouseIn(x, y, width, height) == true)
         {
             if (m_iHotKeySkillType[iIndex] == -1)
             {
@@ -1591,8 +1743,8 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
             {
                 m_bRenderSkillInfo     = true;
                 m_iRenderSkillInfoType = m_iHotKeySkillType[iIndex];
-                m_iRenderSkillInfoPosX = x - 5;
-                m_iRenderSkillInfoPosY = y;
+                m_iRenderSkillInfoPosX = static_cast<int>(HudX(x - 5.f));
+                m_iRenderSkillInfoPosY = static_cast<int>(HudY(y));
                 return true;
             }
             if (m_EventState == EVENT_BTN_DOWN_SKILLHOTKEY)
@@ -1622,7 +1774,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     height = 38.f;
     if (m_EventState == EVENT_BTN_DOWN_SKILLHOTKEY)
     {
-        if (MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == false)
+        if (MouseLButtonPush == false && CheckHudMouseIn(x, y, width, height) == false)
         {
             m_EventState = EVENT_NONE;
             return true;
@@ -1690,7 +1842,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
 
         iSkillCount++;
 
-        if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (CheckHudMouseIn(x, y, width, height) == true)
         {
             bMouseOnSkillList = true;
             if (m_EventState == EVENT_NONE && MouseLButtonPush == false)
@@ -1701,23 +1853,23 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         }
 
         if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == true &&
-            SEASON3B::CheckMouseIn(x, y, width, height) == true)
+            CheckHudMouseIn(x, y, width, height) == true)
         {
             m_EventState = EVENT_BTN_DOWN_SKILLLIST;
             break;
         }
 
         if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == false &&
-            SEASON3B::CheckMouseIn(x, y, width, height) == true)
+            CheckHudMouseIn(x, y, width, height) == true)
         {
             m_bRenderSkillInfo     = true;
             m_iRenderSkillInfoType = i;
-            m_iRenderSkillInfoPosX = x;
-            m_iRenderSkillInfoPosY = y;
+            m_iRenderSkillInfoPosX = static_cast<int>(HudX(x));
+            m_iRenderSkillInfoPosY = static_cast<int>(HudY(y));
         }
 
         if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false && m_iRenderSkillInfoType == i &&
-            SEASON3B::CheckMouseIn(x, y, width, height) == true)
+            CheckHudMouseIn(x, y, width, height) == true)
         {
             m_EventState = EVENT_NONE;
 
@@ -1746,7 +1898,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         height = 38;
         for (int i = AT_PET_COMMAND_DEFAULT; i < AT_PET_COMMAND_END; ++i)
         {
-            if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
+            if (CheckHudMouseIn(x, y, width, height) == true)
             {
                 bMouseOnSkillList = true;
 
@@ -1765,8 +1917,8 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
                 {
                     m_bRenderSkillInfo     = true;
                     m_iRenderSkillInfoType = i;
-                    m_iRenderSkillInfoPosX = x;
-                    m_iRenderSkillInfoPosY = y;
+                    m_iRenderSkillInfoPosX = static_cast<int>(HudX(x));
+                    m_iRenderSkillInfoPosY = static_cast<int>(HudY(y));
                 }
                 if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false &&
                     m_iRenderSkillInfoType == i)
@@ -2072,7 +2224,7 @@ void SEASON3B::CNewUISkillList::RenderCurrentSkillAndHotSkillList()
 
             if (Hero->CurrentSkill == m_iHotKeySkillType[iIndex])
             {
-                SEASON3B::RenderImage(IMAGE_SKILLBOX_USE, x, y, width, height);
+                RenderHudImage(IMAGE_SKILLBOX_USE, x, y, width, height);
             }
             RenderSkillIcon(m_iHotKeySkillType[iIndex], x + 6, y + 6, 20, 28);
         }
@@ -2149,11 +2301,11 @@ bool SEASON3B::CNewUISkillList::Render()
 
                     if (i == Hero->CurrentSkill)
                     {
-                        SEASON3B::RenderImage(IMAGE_SKILLBOX_USE, x, y, width, height);
+                        RenderHudImage(IMAGE_SKILLBOX_USE, x, y, width, height);
                     }
                     else
                     {
-                        SEASON3B::RenderImage(IMAGE_SKILLBOX, x, y, width, height);
+                        RenderHudImage(IMAGE_SKILLBOX, x, y, width, height);
                     }
 
                     RenderSkillIcon(i, x + 6, y + 6, 20, 28);
@@ -2218,11 +2370,11 @@ void SEASON3B::CNewUISkillList::RenderPetSkill()
     {
         if (i == Hero->CurrentSkill)
         {
-            SEASON3B::RenderImage(IMAGE_SKILLBOX_USE, x, y, width, height);
+            RenderHudImage(IMAGE_SKILLBOX_USE, x, y, width, height);
         }
         else
         {
-            SEASON3B::RenderImage(IMAGE_SKILLBOX, x, y, width, height);
+            RenderHudImage(IMAGE_SKILLBOX, x, y, width, height);
         }
 
         RenderSkillIcon(i, x + 6, y + 6, 20, 28);
@@ -2595,16 +2747,21 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         break;
     }
 
+    const float drawX = HudX(x);
+    const float drawY = HudY(y);
+    const float drawW = HudW(width);
+    const float drawH = HudH(height);
+
     if (bySkillType >= AT_SKILL_MASTER_BEGIN)
     {
         if (bCantSkill)
         {
-            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 3, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 3, drawX, drawY, drawW, drawH, (20.f / 512.f) * (Skill_Icon % 25),
                         ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
         }
         else
         {
-            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, drawX, drawY, drawW, drawH, (20.f / 512.f) * (Skill_Icon % 25),
                         ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
         }
     }
@@ -2617,7 +2774,7 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
 
         if (iSkillIndex != 0)
         {
-            RenderBitmap(iSkillIndex, x, y, width, height, fU, fV, width / 256.f, height / 256.f);
+            RenderBitmap(iSkillIndex, drawX, drawY, drawW, drawH, fU, fV, width / 256.f, height / 256.f);
         }
     }
 
@@ -2634,7 +2791,7 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
     if (iHotKey != -1)
     {
         glColor3f(1.f, 0.9f, 0.8f);
-        SEASON3B::RenderNumber(x + 20, y + 20, iHotKey);
+        RenderHudNumber(x + 20.f, y + 20.f, iHotKey);
         glColor3f(1.f, 1.f, 1.f);
     }
 
@@ -2648,7 +2805,7 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY) && (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_STR) &&
         (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY))
     {
-        RenderSkillDelay(iIndex, x, y, width, height);
+        RenderSkillDelay(iIndex, drawX, drawY, drawW, drawH);
     }
 }
 

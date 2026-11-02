@@ -2680,7 +2680,9 @@ bool SkillKeyPush(int Skill)
 
 void Attack(CHARACTER* c)
 {
-    if ((MouseOnWindow || !SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), 429)) && MouseLButtonPush)
+    if ((MouseOnWindow || !SEASON3B::CheckMouseIn(0, 0, GetScreenWidth(), REFERENCE_HEIGHT) ||
+         SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(MouseX, MouseY)) &&
+        MouseLButtonPush)
     {
         MouseRButtonPop   = false;
         MouseRButtonPush  = false;

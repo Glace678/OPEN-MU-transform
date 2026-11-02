@@ -2777,9 +2777,7 @@ void CreateFrustrum2D(vec3_t Position)
             extern EGameScene   SceneFlag;
             int                 refWidth  = GetScreenWidth();
             int                 refHeight = REFERENCE_HEIGHT;
-            if (SceneFlag == MAIN_SCENE && !g_Camera.TopViewEnable)
-                refHeight = REFERENCE_HEIGHT - 48;
-            else if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
+            if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
                 refHeight = 430;
             float vpW    = (float)(refWidth * WindowWidth) / (float)REFERENCE_WIDTH;
             float vpH    = (float)(refHeight * WindowHeight) / (float)REFERENCE_HEIGHT;

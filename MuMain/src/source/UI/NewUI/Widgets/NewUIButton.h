@@ -118,6 +118,11 @@ public:
     void ChangeButtonImgState(bool imgregister, int imgindex, bool overflg = false, bool isimgwidth = false);
 #endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
     void ChangeButtonInfo(int x, int y, int sx, int sy);
+    void SetSourceSize(int sw, int sh)
+    {
+        m_SrcSize.x = sw;
+        m_SrcSize.y = sh;
+    }
 
 private:
     void Initialize();
@@ -190,8 +195,9 @@ private:
     int m_CurImgIndex;
     int m_CurImgState;
 
-    WORD m_ImgWidth;
-    WORD m_ImgHeight;
+    WORD  m_ImgWidth;
+    WORD  m_ImgHeight;
+    POINT m_SrcSize{0, 0};
 
     unsigned int m_CurImgColor;
     bool         m_IsTopPos;

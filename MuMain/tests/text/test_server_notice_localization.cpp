@@ -29,6 +29,22 @@ TEST_CASE("Simplified Chinese translates event closures and happy hour")
     CHECK(LocalizeServerNotice(L"Happy Hour event has ended!") == L"欢乐时光活动已结束！");
 }
 
+TEST_CASE("Simplified Chinese translates bracketed map names in invasion notices")
+{
+    I18N::SetLocale("zh-CN");
+    CHECK(LocalizeServerNotice(L"[Devias] 黄金入侵！") == L"[冰风谷] 黄金入侵！");
+    CHECK(LocalizeServerNotice(L"[Devias] 白巫师军团入侵！") == L"[冰风谷] 白巫师军团入侵！");
+    CHECK(LocalizeServerNotice(L"[Lorencia, Devias, Noria] 黄金入侵！") == L"[勇者大陆，冰风谷，仙踪林] 黄金入侵！");
+    CHECK(LocalizeServerNotice(L"[Devias] Golden invasion!") == L"[冰风谷] 黄金入侵！");
+    CHECK(LocalizeServerNotice(L"[Devias] Golden invasion has ended.") == L"[冰风谷] 黄金入侵已结束。");
+    CHECK(LocalizeServerNotice(L"[Lorencia] Red Dragon invasion!") == L"[勇者大陆] 红龙入侵！");
+    CHECK(LocalizeServerNotice(L"[Noria] White Wizard corps invasion!") == L"[仙踪林] 白巫师军团入侵！");
+    CHECK(LocalizeServerNotice(L"[Noria] White Wizard corps invasion has ended.") == L"[仙踪林] 白巫师军团入侵已结束。");
+    CHECK(LocalizeServerNotice(L"[Devias] Golden Invasion!") == L"[冰风谷] 黄金入侵！");
+    CHECK(LocalizeServerNotice(L"[Noria] White Wizard Invasion has ended.") == L"[仙踪林] 白巫师军团入侵已结束。");
+    CHECK(LocalizeServerNotice(L"[Admin] Welcome to server!") == L"[Admin] Welcome to server!");
+}
+
 TEST_CASE("Custom and malformed notices remain verbatim")
 {
     I18N::SetLocale("zh-CN");

@@ -137,15 +137,15 @@ struct CameraConfig
     static CameraConfig ForMainSceneDefaultCamera()
     {
         CameraConfig config;
-        config.hFov = 40.0f;  // ~30° vFOV on 4:3, preserves original game look
+        config.hFov = 46.0f;  // Wider field of view for modern fullscreen/widescreen displays
         // Match the projection's near plane (g_Camera.ViewNear = 20). Higher
         // values here would CPU-cull objects that the GPU still renders,
         // making them vanish as they approach the camera.
         config.nearPlane = 20.0f;
-        config.farPlane  = 3000.0f;
+        config.farPlane  = 3800.0f;
         // Use RENDER_DISTANCE_MULTIPLIER to ensure terrain culling matches rendering/picking distance
-        config.terrainCullRange = 3000.0f * RENDER_DISTANCE_MULTIPLIER;  // = 4200.0f
-        config.objectCullRange  = 3000.0f;
+        config.terrainCullRange = 3800.0f * RENDER_DISTANCE_MULTIPLIER;
+        config.objectCullRange  = 3800.0f;
         config.fogStart         = config.farPlane * 1.0f;
         config.fogEnd           = config.farPlane * 1.25f;
         return config;
@@ -166,7 +166,7 @@ struct CameraConfig
     static CameraConfig ForMainSceneOrbitalCamera()
     {
         CameraConfig config;
-        config.hFov = 40.0f;  // Match Default cam so orbital looks identical at activation
+        config.hFov = 46.0f;  // Match Default cam so orbital looks identical at activation
         // Match the projection's near plane (g_Camera.ViewNear = 20). Higher
         // values here would CPU-cull objects the GPU still renders — visible
         // in zoomed-in orbital where the camera sits ~200 units from hero.

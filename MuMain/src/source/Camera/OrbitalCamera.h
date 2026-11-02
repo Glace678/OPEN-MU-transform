@@ -107,7 +107,7 @@ private:
     // position. MIN/MAX bracket how far the player can move from there.
     static constexpr float MIN_RADIUS     = 600.0f;
     static constexpr float MAX_RADIUS     = 3000.0f;
-    static constexpr float DEFAULT_RADIUS = 1735.0f;
+    static constexpr float DEFAULT_RADIUS = 1950.0f;
 
     // Input state (middle-mouse drag tracking)
     struct InputState

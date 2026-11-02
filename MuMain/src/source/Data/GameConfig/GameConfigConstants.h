@@ -82,8 +82,8 @@ inline constexpr wchar_t CfgKeyTutorialCompleted[] = L"TutorialCompleted";
 
 namespace CfgDefaults
 {
-inline constexpr int  CfgDefaultWindowWidth  = 1024;
-inline constexpr int  CfgDefaultWindowHeight = 768;
+inline constexpr int  CfgDefaultWindowWidth  = 1920;
+inline constexpr int  CfgDefaultWindowHeight = 1080;
 inline constexpr bool CfgDefaultWindowed     = false;
 
 inline constexpr int CfgDefaultSoundVolume = 5;
@@ -99,7 +99,7 @@ inline constexpr wchar_t CfgDefaultServerIP[] = L"127.0.0.1";
 inline constexpr int     CfgDefaultServerPort = 44406;
 
 inline constexpr int CfgDefaultZoom =
-    1735;  // OrbitalCamera DEFAULT_RADIUS — matches Default-cam camera-to-Hero distance
+    1950;  // OrbitalCamera DEFAULT_RADIUS — matches Default-cam camera-to-Hero distance
 
 // I18N locale code. English remains the resource fallback, while this
 // Mainland-local package starts new profiles in Simplified Chinese.

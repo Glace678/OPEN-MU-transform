@@ -444,7 +444,8 @@ bool SEASON3B::CNewUIHotKey::IsStateGameOver()
 bool SEASON3B::CNewUIHotKey::AutoGetItem()
 {
     if (CNewUIInventoryCtrl::GetPickedItem() == NULL && SEASON3B::IsPress(VK_SPACE) &&
-        g_pChatInputBox->HaveFocus() == false && CheckMouseIn(0, 0, GetScreenWidth(), 429))
+        g_pChatInputBox->HaveFocus() == false && CheckMouseIn(0, 0, GetScreenWidth(), REFERENCE_HEIGHT) &&
+        !SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(MouseX, MouseY))
     {
         for (int i = 0; i < MAX_ITEMS; ++i)
         {

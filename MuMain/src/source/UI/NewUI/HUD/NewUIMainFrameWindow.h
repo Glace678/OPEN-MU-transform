@@ -231,10 +231,18 @@ public:
     // buttons
     void SetBtnState(int iBtnType, bool bStateDown);
 
+    static bool  IsMouseInHudBar(int mouseX, int mouseY);
+    static float MapScreenToHudX(float screenX);
+    static float MapScreenToHudY(float screenY);
+    static float GetHudLeft();
+    static float GetHudRight();
+    static float GetHudTop();
+
     static void UI2DEffectCallback(LPVOID pClass, DWORD dwParamA, DWORD dwParamB);
 
 private:
     void SetButtonInfo();
+    void UpdateButtonPositions();
 
     void LoadImages();
     void UnloadImages();

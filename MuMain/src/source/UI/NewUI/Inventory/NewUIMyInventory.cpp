@@ -1,4 +1,4 @@
-﻿// NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
+// NewUIMyInventory.cpp: implementation of the CNewUIMyInventory class.
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -473,7 +473,8 @@ bool CNewUIMyInventory::UpdateMouseEvent()
         return false;
 
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
-    if (pPickedItem && IsPress(VK_LBUTTON) && CheckMouseIn(0, 0, GetScreenWidth(), 429))
+    if (pPickedItem && IsPress(VK_LBUTTON) && CheckMouseIn(0, 0, GetScreenWidth(), REFERENCE_HEIGHT) &&
+        !SEASON3B::CNewUIMainFrameWindow::IsMouseInHudBar(MouseX, MouseY))
     {
         if (g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP) == true ||
             g_pNewUISystem->IsVisible(INTERFACE_TRADE) == true ||

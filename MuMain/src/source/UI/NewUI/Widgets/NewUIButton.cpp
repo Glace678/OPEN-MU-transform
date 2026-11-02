@@ -454,25 +454,36 @@ bool SEASON3B::CNewUIButton::Render(bool RendOption)
 {
     if (!m_ButtonInfo.empty())
     {
+        if (m_SrcSize.x > 0 && m_SrcSize.y > 0)
+        {
+            const float sx = m_IsImgWidth ? static_cast<float>(m_CurImgState * m_SrcSize.x) : 0.0f;
+            const float sy = m_IsImgWidth ? 0.0f : static_cast<float>(m_CurImgState * m_SrcSize.y);
+            RenderImageStretch(m_CurImgIndex, static_cast<float>(m_Pos.x), static_cast<float>(m_Pos.y),
+                               static_cast<float>(m_Size.x), static_cast<float>(m_Size.y), sx, sy,
+                               static_cast<float>(m_SrcSize.x), static_cast<float>(m_SrcSize.y), m_CurImgColor);
+        }
+        else
+        {
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
-        if (RendOption == true)
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.f, m_CurImgState * m_Size.y, 36.f / 64.f,
-                        (29.f / 32.f) / 2.f);
-        else
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
-                        m_CurImgColor);
+            if (RendOption == true)
+                RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.f, m_CurImgState * m_Size.y,
+                            36.f / 64.f, (29.f / 32.f) / 2.f);
+            else
+                RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                            m_CurImgColor);
 #else   // KJH_ADD_INGAMESHOP_UI_SYSTEM
-        if (m_IsImgWidth)
-        {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f,
-                        m_CurImgColor);
-        }
-        else
-        {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
-                        m_CurImgColor);
-        }
+            if (m_IsImgWidth)
+            {
+                RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f,
+                            m_CurImgColor);
+            }
+            else
+            {
+                RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                            m_CurImgColor);
+            }
 #endif  // KJH_ADD_INGAMESHOP_UI_SYSTEM
+        }
     }
 
     RenderLabel();

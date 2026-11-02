@@ -73,14 +73,14 @@ struct ZoomLevel
     float viewFarMult;  // multiplier on m_Config.farPlane
 };
 constexpr ZoomLevel PLAYER_ZOOM_LADDER[] = {
-    {1000.f, 1.00f},  // 0
-    {1100.f, 1.00f},  // 1
-    {1200.f, 1.00f},  // 2
-    {1300.f, 1.00f},  // 3 — default (F11 reset target)
-    {1400.f, 1.04f},  // 4
-    {1500.f, 1.08f},  // 5
-    {1600.f, 1.23f},  // 6
-    {1700.f, 1.33f},  // 7
+    {1150.f, 1.00f},  // 0
+    {1300.f, 1.00f},  // 1
+    {1450.f, 1.00f},  // 2
+    {1650.f, 1.00f},  // 3 — default (F11 reset target)
+    {1800.f, 1.08f},  // 4
+    {1950.f, 1.16f},  // 5
+    {2100.f, 1.25f},  // 6
+    {2250.f, 1.35f},  // 7
 };
 constexpr int PLAYER_ZOOM_LEVEL_DEFAULT = 3;
 constexpr int PLAYER_ZOOM_LEVEL_COUNT   = static_cast<int>(std::size(PLAYER_ZOOM_LADDER));
@@ -429,8 +429,7 @@ bool DefaultCamera::Update()
     // CameraConfig nearPlane is for frustum culling; gluPerspective uses the
     // legacy ViewNear (20.0) for depth precision. Syncing would clip geometry.
 
-    // FIX Issue #1: Use m_Config.farPlane for rendering, not zoom-adjusted m_State.ViewFar
-    float effectiveFarPlane = m_Config.farPlane;
+    float effectiveFarPlane = (m_State.ViewFar > m_Config.farPlane) ? m_State.ViewFar : m_Config.farPlane;
 
 #ifdef _EDITOR
     // Log only when the value changes
@@ -928,10 +927,11 @@ void DefaultCamera::UpdateFrustum()
     extern unsigned int WindowHeight;
     float               aspectRatio = (float)WindowWidth / (float)WindowHeight;
 
-    // Phase 5 FIX: ALWAYS use m_Config values for frustum culling
-    // (Override was already applied at the top of this function.)
-    float effectiveFarPlane         = m_Config.farPlane;
-    float effectiveTerrainCullRange = m_Config.terrainCullRange;
+    float effectiveFarPlane = (m_State.ViewFar > m_Config.farPlane) ? m_State.ViewFar : m_Config.farPlane;
+    float effectiveTerrainCullRange =
+        (effectiveFarPlane * RENDER_DISTANCE_MULTIPLIER > m_Config.terrainCullRange)
+            ? (effectiveFarPlane * RENDER_DISTANCE_MULTIPLIER)
+            : m_Config.terrainCullRange;
 
     // Convert horizontal FOV to vertical FOV for frustum building
     float vFov = HFovToVFov(m_Config.hFov, aspectRatio);

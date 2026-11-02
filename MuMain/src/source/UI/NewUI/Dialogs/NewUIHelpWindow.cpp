@@ -139,9 +139,6 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     {
         int iTextNum = 0;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
-        iTextNum++;
-
         wcscpy(TextList[iTextNum], I18N::Game::KeyFunction);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         TextBold[iTextNum]      = true;
@@ -182,10 +179,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
             iTextNum++;
         }
 
-        mu_swprintf(TextList[iTextNum], L"\n");
-        iTextNum++;
-
-        RenderTipTextList(1, 1, iTextNum, 0, RT3_SORT_CENTER);
+        RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_CENTER);
     }
     else if (m_iIndex == 1)
     {
@@ -213,7 +207,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         mu_swprintf(TextList[iTextNum], L"\n");
         iTextNum++;
 
-        RenderTipTextList(1, 1, iTextNum, 0, RT3_SORT_CENTER);
+        RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_CENTER);
     }
     else if (m_iIndex == 2)
     {
@@ -238,7 +232,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         mu_swprintf(TextList[iTextNum], L"\n");
         iTextNum++;
 
-        RenderTipTextList(1, 1, iTextNum, 0, RT3_SORT_LEFT);
+        RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_LEFT);
     }
     else if (m_iIndex == 3)
     {
@@ -272,7 +266,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         mu_swprintf(TextList[iTextNum], L"\n");
         iTextNum++;
 
-        RenderTipTextList(1, 1, iTextNum, 0, RT3_SORT_LEFT);
+        RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_LEFT);
     }
 
     DisableAlphaBlend();

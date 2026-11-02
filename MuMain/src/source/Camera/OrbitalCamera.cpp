@@ -829,7 +829,7 @@ void OrbitalCamera::UpdateFrustum()
     if (SceneFlag == MAIN_SCENE)
     {
         refWidth  = GetScreenWidth();
-        refHeight = g_Camera.TopViewEnable ? REFERENCE_HEIGHT : (REFERENCE_HEIGHT - 48);
+        refHeight = REFERENCE_HEIGHT;
     }
     else if (SceneFlag == CHARACTER_SCENE || SceneFlag == LOG_IN_SCENE)
     {
