@@ -2,6 +2,8 @@
 
 **现代化跨设备 3D 虚拟世界引擎与分布式客户端-服务端生态**
 
+[简体中文](README.zh-CN.md) · [English](README.md)
+
 面向经典等轴角虚拟世界架构的高性能系统重构、统一输入抽象与六端原生移植：Windows · Android · HarmonyOS · iOS · macOS · Linux。
 
 ![移动端双分区手势 HUD 与背包系统](assets/mobile-client.png)
@@ -15,7 +17,7 @@
 [![Client](https://img.shields.io/badge/Client-C%2B%2B20%20%2F%20SDL3%20%2F%20OpenGL%203.3-00599c?style=flat-square)](#系统技术架构)
 [![Server](https://img.shields.io/badge/Server-C%23%20%2F%20.NET%2010%20Native%20AOT-512bd4?style=flat-square)](#系统技术架构)
 [![Localization](https://img.shields.io/badge/Localization-15%20种语言支持%20(全链路%20Unicode)-d69e2e?style=flat-square)](#全链路国际化支持)
-[![Tests](https://img.shields.io/badge/Testing-4-Tier%20自动化回归与对抗性测试通过-success?style=flat-square)](#质量保证与自动化测试体系)
+[![Tests](https://img.shields.io/badge/Testing-4--Tier%20自动化回归与对抗性测试通过-success?style=flat-square)](#质量保证与自动化测试体系)
 
 ---
 
@@ -170,6 +172,12 @@ Android 与鸿蒙端并非简单的鼠标指针模拟，而是专门研发的原
 ```powershell
 python -m unittest discover -s tests/e2e/tier1_features -p "test_*.py"
 ```
+
+### 智能化维护与开源工程实践
+为以独立维护者精力持续支撑覆盖 6 大平台的跨设备原生系统工程，本项目在架构上深度拥抱测试自动化与现代 AI 辅助研发工作流（如 OpenAI Codex / ChatGPT Pro）：
+- **全自动化回归分析**：420+ 项自动化端到端与单元测试用例，持续守护协议序列化、实体状态机、防作弊不变式及多线程生命周期。
+- **智能化代码诊断与重构**：清晰的架构分层与显式类型约束，便于借助大语言模型与智能编程助手进行多平台交叉编译报错诊断、边缘用例生成与内存安全审计。
+- **严格干净室开源设计**：协议抽象与分布式状态机均为独立干净室设计实现，专注于开源系统工程研究，完全零商业专有依赖。
 
 ---
 

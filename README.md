@@ -2,6 +2,8 @@
 
 **High-Performance, Cross-Platform 3D Isometric World Engine & Distributed Runtime**
 
+[English](README.md) · [简体中文](README.zh-CN.md)
+
 A clean-room systems engineering initiative modernizing classic isometric virtual world architectures with native cross-device execution: Windows · Android · HarmonyOS · iOS · macOS · Linux.
 
 ![Cross-Platform Mobile Client](assets/mobile-client.png)
@@ -171,6 +173,12 @@ To run the verification suite:
 ```powershell
 python -m unittest discover -s tests/e2e/tier1_features -p "test_*.py"
 ```
+
+### AI-Assisted Maintenance & Open-Source Engineering
+To sustain multi-platform portability across six operating systems as an independent maintainer, the codebase is engineered for deep test automation and modern AI-assisted developer workflows (e.g. OpenAI Codex / ChatGPT Pro):
+- **Automated Regression Analysis**: Over 420+ automated test cases continuously validate protocol serialization, movement state machines, and concurrency boundaries.
+- **AI-Driven Code Diagnostics**: Clean architectural separation and explicit contract boundaries facilitate LLM-driven cross-platform build triage, ASan/Clang-Tidy diagnostic analysis, and protocol edge-case fuzzing.
+- **Strict Clean-Room Architecture**: Protocol definitions and server synchronization are clean-room reimplementations, enabling open systems research without proprietary commercial dependencies.
 
 ---
 
