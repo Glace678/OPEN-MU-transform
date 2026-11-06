@@ -5,6 +5,7 @@
 
 #include "Engine/Object/TextListSafe.h"
 
+#include <cstring>
 #include <string>
 
 // Definitions matching the (real) extern declarations.

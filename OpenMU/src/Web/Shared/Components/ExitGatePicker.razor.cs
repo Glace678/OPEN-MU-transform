@@ -1,4 +1,4 @@
-﻿// <copyright file="ExitGatePicker.razor.cs" company="MUnique">
+// <copyright file="ExitGatePicker.razor.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -9,20 +9,17 @@ using Microsoft.AspNetCore.Components;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.Persistence;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
 
 /// <summary>
 /// Blazor component which allows to select an exit gate.
 /// </summary>
-public partial class ExitGatePicker : IDisposable
+public partial class ExitGatePicker
 {
     private const int SideLength = 256;
 
     private readonly float _scale = 3;
 
-    private Image<Rgba32> _terrainImage = null!;
+    private RgbaImage _terrainImage = null!;
     private GameMapDefinition? _map;
 
     private IList<GameMapDefinition> _maps = new List<GameMapDefinition>();
@@ -53,7 +50,6 @@ public partial class ExitGatePicker : IDisposable
             if (this._map != value)
             {
                 this._map = value;
-                this._terrainImage?.Dispose();
                 this._terrainImage = null!;
                 if (this._map is { })
                 {
@@ -63,7 +59,7 @@ public partial class ExitGatePicker : IDisposable
         }
     }
 
-    private string ImageData => this._terrainImage.ToBase64String(PngFormat.Instance);
+    private string ImageData => this._terrainImage.ToPngDataUrl();
 
     /// <inheritdoc />
     protected override void OnParametersSet()
@@ -123,11 +119,5 @@ public partial class ExitGatePicker : IDisposable
         {
             this.Map = await this.PersistenceContext.GetByIdAsync<GameMapDefinition>(mapId).ConfigureAwait(false);
         }
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        this._terrainImage?.Dispose();
     }
 }

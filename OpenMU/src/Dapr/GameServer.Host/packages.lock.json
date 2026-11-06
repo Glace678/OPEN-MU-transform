@@ -362,11 +362,6 @@
           "Microsoft.IdentityModel.Tokens": "7.1.2"
         }
       },
-      "System.IO.Hashing": {
-        "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA=="
-      },
       "TimeZoneConverter": {
         "type": "Transitive",
         "resolved": "6.1.0",
@@ -811,8 +806,7 @@
         "dependencies": {
           "MUnique.OpenMU.GameLogic": "[1.0.0, )",
           "MUnique.OpenMU.Web.Shared": "[1.0.0, )",
-          "Nito.AsyncEx": "[5.1.2, )",
-          "SixLabors.ImageSharp": "[4.1.3, )"
+          "Nito.AsyncEx": "[5.1.2, )"
         }
       },
       "munique.openmu.web.shared": {
@@ -827,7 +821,6 @@
           "Mapster": "[7.4.0, )",
           "Microsoft.AspNetCore.Components.QuickGrid": "[10.0.2, )",
           "Nito.AsyncEx": "[5.1.2, )",
-          "SixLabors.ImageSharp": "[4.1.3, )",
           "System.Security.Cryptography.Pkcs": "[10.0.13, )"
         }
       },
@@ -1084,15 +1077,6 @@
           "OpenTelemetry.Exporter.Prometheus.AspNetCore": "1.9.0-beta.1",
           "SharpAbp.Abp.OpenTelemetry": "3.5.3",
           "Volo.Abp.AspNetCore": "[8.3.4, 9.0.0)"
-        }
-      },
-      "SixLabors.ImageSharp": {
-        "type": "CentralTransitive",
-        "requested": "[4.1.3, )",
-        "resolved": "4.1.3",
-        "contentHash": "VzzKPgdC0ZupEg937iKpg2cEGXudnFyQRwiHfIvtCKSlFUaxVbLjW3AztDhyk06z+4NzD7IAlMf7fqU57WXyBQ==",
-        "dependencies": {
-          "System.IO.Hashing": "8.0.0"
         }
       },
       "Swashbuckle.AspNetCore": {

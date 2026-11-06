@@ -216,10 +216,10 @@ public class ItemPriceCalculatorTest
     /// boots           370.
     /// </remarks>
     [TestCase(7, 5, 28, 480, Description = "Pad Helm")]
-    [TestCase(8, 10, 28, 1400, Description = "Pad Armor")]
-    [TestCase(9, 8, 28, 960, Description = "Pad Pants")]
-    [TestCase(10, 3, 28, 290, Description = "Pad Gloves")]
-    [TestCase(11, 4, 28, 370, Description = "Pad Boots")]
+    [TestCase(8, 10, 28, 1449, Description = "Pad Armor")]
+    [TestCase(9, 8, 28, 968, Description = "Pad Pants")]
+    [TestCase(10, 3, 28, 296, Description = "Pad Gloves")]
+    [TestCase(11, 4, 28, 376, Description = "Pad Boots")]
     public void PadSetItem_0_4_Luck(byte group, byte dropLevel, byte maxDurability, long price)
     {
         this.CheckPrice(2, dropLevel, maxDurability, 2, 2, group, 0, 0, price, true, true);
@@ -239,9 +239,9 @@ public class ItemPriceCalculatorTest
     /// gloves              6200
     /// boots               7700.
     /// </remarks>
-    [TestCase(7, 18, 30, 9400, Description = "Bone Helm")]
-    [TestCase(8, 22, 30, 13500, Description = "Bone Armor")]
-    [TestCase(9, 20, 30, 11300, Description = "Bone Pants")]
+    [TestCase(7, 18, 30, 9416, Description = "Bone Helm")]
+    [TestCase(8, 22, 30, 13528, Description = "Bone Armor")]
+    [TestCase(9, 20, 30, 11353, Description = "Bone Pants")]
     [TestCase(10, 14, 30, 6200, Description = "Bone Gloves")]
     [TestCase(11, 16, 30, 7700, Description = "Bone Boots")]
     public void BoneSetItem_2_4_Luck(byte group, byte dropLevel, byte maxDurability, long price)
@@ -263,11 +263,11 @@ public class ItemPriceCalculatorTest
     /// gloves           26500
     /// boots            30200.
     /// </remarks>
-    [TestCase(7, 32, 36, 34200, Description = "Sphinx Mask")]
-    [TestCase(8, 38, 36, 48200, Description = "Sphinx Armor")]
-    [TestCase(9, 34, 36, 38500, Description = "Sphinx Pants")]
-    [TestCase(10, 28, 36, 26500, Description = "Sphinx Gloves")]
-    [TestCase(11, 30, 36, 30200, Description = "Sphinx Boots")]
+    [TestCase(7, 32, 36, 34240, Description = "Sphinx Mask")]
+    [TestCase(8, 38, 36, 48243, Description = "Sphinx Armor")]
+    [TestCase(9, 34, 36, 38564, Description = "Sphinx Pants")]
+    [TestCase(10, 28, 36, 26552, Description = "Sphinx Gloves")]
+    [TestCase(11, 30, 36, 30236, Description = "Sphinx Boots")]
     public void SphinxSetItem_3_4_Luck(byte group, byte dropLevel, byte maxDurability, long price)
     {
         this.CheckPrice(7, dropLevel, maxDurability, 2, 2, group, 0, 3, price, true, true);
@@ -289,10 +289,10 @@ public class ItemPriceCalculatorTest
     /// serpent+3+4+l        30200
     /// thunder+3+4+l        59300.
     /// </remarks>
-    [TestCase(0, 0, 6, 20, 1, 3, 480, Description = "skull+0+4+l")]
-    [TestCase(1, 2, 18, 38, 2, 3, 9400, Description = "angelic+2+4+l")]
-    [TestCase(2, 3, 30, 50, 2, 3, 30200, Description = "serpent+3+4+l")]
-    [TestCase(3, 3, 42, 60, 2, 4, 59300, Description = "thunder+3+4+l")]
+    [TestCase(0, 0, 6, 20, 1, 3, 489, Description = "skull+0+4+l")]
+    [TestCase(1, 2, 18, 38, 2, 3, 9416, Description = "angelic+2+4+l")]
+    [TestCase(2, 3, 30, 50, 2, 3, 30236, Description = "serpent+3+4+l")]
+    [TestCase(3, 3, 42, 60, 2, 4, 59371, Description = "thunder+3+4+l")]
     public void Staffs(byte id, byte level, byte dropLevel, byte maxDurability, byte width, byte heigth, long price)
     {
         this.CheckPrice(id, dropLevel, maxDurability, heigth, width, 5, 0, level, price, true, true);
@@ -316,11 +316,11 @@ public class ItemPriceCalculatorTest
     /// kite+3+5+l       5500
     /// skull+3+5+s+l        18800.
     /// </remarks>
-    [TestCase(0, 0, 3, 22, 2, 2, false, 230, Description = "small shield+0+5+l")]
-    [TestCase(4, 1, 6, 24, 2, 2, true, 2300, Description = "buckler+1+5+s+l")]
-    [TestCase(1, 2, 9, 28, 2, 2, false, 2600, Description = "horn+2+5+l")]
-    [TestCase(2, 3, 12, 32, 2, 2, false, 5500, Description = "kite+3+5+l")]
-    [TestCase(6, 3, 15, 34, 2, 2, true, 18800, Description = "skull+3+5+s+l")]
+    [TestCase(0, 0, 3, 22, 2, 2, false, 235, Description = "small shield+0+5+l")]
+    [TestCase(4, 1, 6, 24, 2, 2, true, 2379, Description = "buckler+1+5+s+l")]
+    [TestCase(1, 2, 9, 28, 2, 2, false, 2632, Description = "horn+2+5+l")]
+    [TestCase(2, 3, 12, 32, 2, 2, false, 5537, Description = "kite+3+5+l")]
+    [TestCase(6, 3, 15, 34, 2, 2, true, 18828, Description = "skull+3+5+s+l")]
     public void Shields(byte id, byte level, byte dropLevel, byte maxDurability, byte width, byte heigth, bool skill, long price)
     {
         this.CheckPrice(id, dropLevel, maxDurability, heigth, width, 6, 0, level, price, true, true, skill);
@@ -331,22 +331,22 @@ public class ItemPriceCalculatorTest
     /// </summary>
     /// <param name="level">The level.</param>
     /// <param name="price">The price.</param>
-    [TestCase(0, 110)]
-    [TestCase(1, 240)]
-    [TestCase(2, 470)]
-    [TestCase(3, 820)]
-    [TestCase(4, 1300)]
-    [TestCase(5, 3000)]
-    [TestCase(6, 6900)]
-    [TestCase(7, 21400)]
-    [TestCase(8, 58100)]
-    [TestCase(9, 121900)]
-    [TestCase(10, 275300)]
-    [TestCase(11, 617000)]
-    [TestCase(12, 1324700)]
-    [TestCase(13, 2693500)]
-    [TestCase(14, 4777500)]
-    [TestCase(15, 7726800)]
+    [TestCase(0, 118)]
+    [TestCase(1, 245)]
+    [TestCase(2, 476)]
+    [TestCase(3, 828)]
+    [TestCase(4, 1316)]
+    [TestCase(5, 3080)]
+    [TestCase(6, 6902)]
+    [TestCase(7, 21448)]
+    [TestCase(8, 58140)]
+    [TestCase(9, 121916)]
+    [TestCase(10, 275331)]
+    [TestCase(11, 617064)]
+    [TestCase(12, 1324726)]
+    [TestCase(13, 2693545)]
+    [TestCase(14, 4777580)]
+    [TestCase(15, 7726855)]
     public void SmallShield(byte level, long price)
     {
         this.CheckPrice(0, 3, 22, 2, 2, 6, 0, level, price);
@@ -372,10 +372,10 @@ public class ItemPriceCalculatorTest
     /// double+2+4+s+l       12400
     /// blade+3+4+s+l        86400.
     /// </remarks>
-    [TestCase(1, 0, 3, 22, 1, 2, false, 230, Description = "short sword+0+4+l")]
-    [TestCase(0, 2, 6, 20, 1, 2, false, 1600, Description = "kris+2+4+l")]
-    [TestCase(2, 2, 9, 23, 1, 3, false, 2600, Description = "rapier+2+4+l")]
-    [TestCase(5, 3, 36, 39, 1, 3, true, 86400, Description = "blade+3+4+s+l")]
+    [TestCase(1, 0, 3, 22, 1, 2, false, 235, Description = "short sword+0+4+l")]
+    [TestCase(0, 2, 6, 20, 1, 2, false, 1656, Description = "kris+2+4+l")]
+    [TestCase(2, 2, 9, 23, 1, 3, false, 2632, Description = "rapier+2+4+l")]
+    [TestCase(5, 3, 36, 39, 1, 3, true, 86459, Description = "blade+3+4+s+l")]
     public void Swords(byte id, byte level, byte dropLevel, byte maxDurability, byte width, byte heigth, bool skill, long price)
     {
         this.CheckPrice(id, dropLevel, maxDurability, heigth, width, 0, 0, level, price, true, true, skill);

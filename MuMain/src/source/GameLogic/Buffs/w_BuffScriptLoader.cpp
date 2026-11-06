@@ -15,6 +15,26 @@
 
 namespace
 {
+// 64-bit file positioning: MSVC/MinGW expose _fseeki64/_ftelli64, POSIX uses
+// fseeko/ftello (off_t is 64-bit on the supported Linux/Apple/Android targets).
+int SeekFile64(FILE* fp, int64_t offset, int origin)
+{
+#ifdef _WIN32
+    return _fseeki64(fp, offset, origin);
+#else
+    return fseeko(fp, static_cast<off_t>(offset), origin);
+#endif
+}
+
+int64_t TellFile64(FILE* fp)
+{
+#ifdef _WIN32
+    return _ftelli64(fp);
+#else
+    return static_cast<int64_t>(ftello(fp));
+#endif
+}
+
 void CutTokenString(wchar_t* pcCuttoken, std::list<std::wstring>& out)
 {
     if (wcslen(pcCuttoken) == 0)
@@ -96,9 +116,9 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
 
         uint64_t totalBytes64 = static_cast<uint64_t>(structsize) * static_cast<uint64_t>(listsize);
 
-        _fseeki64(fp, 0, SEEK_END);
-        int64_t fileSize = _ftelli64(fp);
-        _fseeki64(fp, sizeof(DWORD), SEEK_SET);
+        SeekFile64(fp, 0, SEEK_END);
+        int64_t fileSize = TellFile64(fp);
+        SeekFile64(fp, sizeof(DWORD), SEEK_SET);
 
         if (fileSize < static_cast<int64_t>(sizeof(DWORD) + totalBytes64 + sizeof(DWORD)))
         {

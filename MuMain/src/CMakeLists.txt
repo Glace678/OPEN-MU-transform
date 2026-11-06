@@ -1298,7 +1298,7 @@ add_dependencies(MuClient CheckGLWrapperMonopoly)
 # system libraries so that gl*, wgl*, Imm*, timeGetTime, etc. resolve.
 # For turbojpeg and wzAudio we link against the logically named libraries,
 # which must be provided as MinGW-compatible .a import libraries.
-if (CMAKE_CXX_COMPILER MATCHES "mingw32" OR CMAKE_CXX_COMPILER MATCHES "w64-mingw32")
+if (MINGW OR CMAKE_CXX_COMPILER MATCHES "mingw32" OR CMAKE_CXX_COMPILER MATCHES "w64-mingw32")
   target_link_directories(MuClient PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib"
   )

@@ -237,7 +237,9 @@ public class AdversarialAntiCheatVerificationTests
     {
         var calculator = new ItemPriceCalculator();
 
-        // 1. PackedLife at Level 4: 5 * 45M * 10 = 2,250,000,000L (> int.MaxValue)
+        // Balance redesign: jewel base prices are Life 2,950 and Guardian 3,900; the packed
+        // price formula (level + 1) * base * 10 is still evaluated in 64-bit arithmetic.
+        // 1. PackedLife at Level 4: 5 * 2,950 * 10 = 147,500
         var itemDefLife = new Mock<ItemDefinition>();
         itemDefLife.SetupAllProperties();
         itemDefLife.Object.Group = 12;
@@ -245,29 +247,29 @@ public class AdversarialAntiCheatVerificationTests
 
         var itemLifeL4 = CreateItemMock(itemDefLife.Object, level: 4);
         var priceLifeL4 = calculator.CalculateFinalBuyingPrice(itemLifeL4);
-        Assert.That(priceLifeL4, Is.EqualTo(2_250_000_000L), "Packed life level 4 must not overflow to negative integer.");
+        Assert.That(priceLifeL4, Is.EqualTo(147_500L), "Packed life level 4 must use the 64-bit packed price formula.");
 
-        // Level 5: 6 * 45M * 10 = 2,700,000,000L (> int.MaxValue)
+        // Level 5: 6 * 2,950 * 10 = 177,000
         var itemLifeL5 = CreateItemMock(itemDefLife.Object, level: 5);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL5), Is.EqualTo(2_700_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL5), Is.EqualTo(177_000L));
 
-        // Level 10: 11 * 45M * 10 = 4,950,000,000L -> Capped at MaximumPrice (3,000,000,000L)
+        // Level 10: 11 * 2,950 * 10 = 324,500
         var itemLifeL10 = CreateItemMock(itemDefLife.Object, level: 10);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL10), Is.EqualTo(3_000_000_000L), "Packed life level 10 capped at MaximumPrice.");
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL10), Is.EqualTo(324_500L), "Packed life level 10 must use the packed price formula.");
 
-        // 2. PackedGuardian: 60,000,000 base
+        // 2. PackedGuardian: 3,900 base
         var itemDefGuardian = new Mock<ItemDefinition>();
         itemDefGuardian.SetupAllProperties();
         itemDefGuardian.Object.Group = 12;
         itemDefGuardian.Object.Number = 138; // PackedGuardian
 
-        // Level 4: 5 * 60M * 10 = 3,000,000,000L
+        // Level 4: 5 * 3,900 * 10 = 195,000
         var itemGuardL4 = CreateItemMock(itemDefGuardian.Object, level: 4);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL4), Is.EqualTo(3_000_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL4), Is.EqualTo(195_000L));
 
-        // Level 10: 11 * 60M * 10 = 6,600,000,000L -> Capped at MaximumPrice (3,000,000,000L)
+        // Level 10: 11 * 3,900 * 10 = 429,000
         var itemGuardL10 = CreateItemMock(itemDefGuardian.Object, level: 10);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL10), Is.EqualTo(3_000_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL10), Is.EqualTo(429_000L));
     }
 
     [Test]

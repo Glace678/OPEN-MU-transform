@@ -84,12 +84,12 @@ public class ItemConsumptionTest
     [TestCase(4, true, false, 3)]
     [TestCase(5, true, false, 4)]
     [TestCase(6, true, false, 5)]
-    [TestCase(7, true, false, 0)]
-    [TestCase(8, true, false, 0)]
+    [TestCase(7, true, false, 6)] // the balance redesign no longer resets +7/+8 items to +0 on failure
+    [TestCase(8, true, false, 7)]
     public async ValueTask JewelOfSoulAsync(byte itemLevel, bool consumptionExpectation, bool success, byte expectedItemLevel)
     {
         var randomizer = new Mock<IRandomizer>();
-        randomizer.Setup(r => r.NextRandomBool(50)).Returns(success);
+        randomizer.Setup(r => r.NextRandomBool(It.IsAny<int>())).Returns(success);
         var consumeHandler = new SoulJewelConsumeHandlerPlugIn(randomizer.Object);
 
         var player = await this.GetPlayerAsync().ConfigureAwait(false);

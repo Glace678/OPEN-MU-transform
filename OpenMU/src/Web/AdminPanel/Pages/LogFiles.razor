@@ -210,13 +210,24 @@
 
     private static string FormatFileSize(long size)
     {
-        return size switch
+        // Note: inside a Razor @code block, a line starting with '<' is parsed as markup,
+        // so relational switch patterns (e.g. "< 1024 => ...") must not be used here.
+        if (size < 1024)
         {
-            < 1024 => $"{size} bytes",
-            < 1024 * 1024 => $"{Math.Round(size / 1024D, 2)} KiB",
-            < 1024L * 1024 * 1024 => $"{Math.Round(size / (1024D * 1024D), 2)} MiB",
-            _ => $"{Math.Round(size / (1024D * 1024D * 1024D), 2)} GiB",
-        };
+            return $"{size} bytes";
+        }
+
+        if (size < 1024 * 1024)
+        {
+            return $"{Math.Round(size / 1024D, 2)} KiB";
+        }
+
+        if (size < 1024L * 1024 * 1024)
+        {
+            return $"{Math.Round(size / (1024D * 1024D), 2)} MiB";
+        }
+
+        return $"{Math.Round(size / (1024D * 1024D * 1024D), 2)} GiB";
     }
 
     private static List<string> ReadLastLines(string path, int maxLines)
