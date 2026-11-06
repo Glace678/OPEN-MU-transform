@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.LocalLauncher.Tests;
 /// <summary>
 /// Tests the protected ASCII path boundary used by PostgreSQL on Windows.
 /// </summary>
+[Platform("Win")]
 public class PostgreSqlExecutionPathsTests
 {
     private string _testRoot = null!;

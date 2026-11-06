@@ -17,8 +17,8 @@
 #endif
 #include "Core/Platform/StrSafe.h"
 
-#include "GameShop\ShopListManager\interface\WZResult/WZResult.h"
-#include "GameShop\ShopListManager\interface\DownloadInfo.h"
-#include "GameShop\ShopListManager\interface\IDownloaderStateEvent.h"
+#include "GameShop/ShopListManager/interface/WZResult/WZResult.h"
+#include "GameShop/ShopListManager/interface/DownloadInfo.h"
+#include "GameShop/ShopListManager/interface/IDownloaderStateEvent.h"
 
 #pragma comment(lib, L"Wininet.lib")
